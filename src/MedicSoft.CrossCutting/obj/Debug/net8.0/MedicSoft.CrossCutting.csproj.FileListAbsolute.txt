@@ -1,0 +1,12 @@
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/bin/Debug/net8.0/MedicSoft.CrossCutting.deps.json
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/bin/Debug/net8.0/MedicSoft.CrossCutting.dll
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/bin/Debug/net8.0/MedicSoft.CrossCutting.pdb
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/MedicSoft.CrossCutting.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/MedicSoft.CrossCutting.AssemblyInfoInputs.cache
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/MedicSoft.CrossCutting.AssemblyInfo.cs
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/MedicSoft.CrossCutting.csproj.CoreCompileInputs.cache
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/MedicSoft.CrossCutting.sourcelink.json
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/MedicSoft.CrossCutting.dll
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/refint/MedicSoft.CrossCutting.dll
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/MedicSoft.CrossCutting.pdb
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.CrossCutting/obj/Debug/net8.0/ref/MedicSoft.CrossCutting.dll

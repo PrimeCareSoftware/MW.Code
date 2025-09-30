@@ -1,0 +1,12 @@
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/bin/Debug/net8.0/MedicSoft.Application.deps.json
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/bin/Debug/net8.0/MedicSoft.Application.dll
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/bin/Debug/net8.0/MedicSoft.Application.pdb
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/MedicSoft.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/MedicSoft.Application.AssemblyInfoInputs.cache
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/MedicSoft.Application.AssemblyInfo.cs
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/MedicSoft.Application.csproj.CoreCompileInputs.cache
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/MedicSoft.Application.sourcelink.json
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/MedicSoft.Application.dll
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/refint/MedicSoft.Application.dll
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/MedicSoft.Application.pdb
+/home/runner/work/MW.Code/MW.Code/src/MedicSoft.Application/obj/Debug/net8.0/ref/MedicSoft.Application.dll
