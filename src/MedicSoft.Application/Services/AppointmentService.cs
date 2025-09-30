@@ -1,0 +1,49 @@
+using MediatR;
+using MedicSoft.Application.Commands.Appointments;
+using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Queries.Appointments;
+
+namespace MedicSoft.Application.Services
+{
+    public interface IAppointmentService
+    {
+        Task<AppointmentDto> CreateAppointmentAsync(CreateAppointmentDto createAppointmentDto, string tenantId);
+        Task<bool> CancelAppointmentAsync(Guid appointmentId, string cancellationReason, string tenantId);
+        Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId);
+        Task<IEnumerable<AvailableSlotDto>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, int durationMinutes, string tenantId);
+    }
+
+    public class AppointmentService : IAppointmentService
+    {
+        private readonly IMediator _mediator;
+
+        public AppointmentService(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        public async Task<AppointmentDto> CreateAppointmentAsync(CreateAppointmentDto createAppointmentDto, string tenantId)
+        {
+            var command = new CreateAppointmentCommand(createAppointmentDto, tenantId);
+            return await _mediator.Send(command);
+        }
+
+        public async Task<bool> CancelAppointmentAsync(Guid appointmentId, string cancellationReason, string tenantId)
+        {
+            var command = new CancelAppointmentCommand(appointmentId, cancellationReason, tenantId);
+            return await _mediator.Send(command);
+        }
+
+        public async Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId)
+        {
+            var query = new GetDailyAgendaQuery(date, clinicId, tenantId);
+            return await _mediator.Send(query);
+        }
+
+        public async Task<IEnumerable<AvailableSlotDto>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, int durationMinutes, string tenantId)
+        {
+            var query = new GetAvailableSlotsQuery(date, clinicId, durationMinutes, tenantId);
+            return await _mediator.Send(query);
+        }
+    }
+}
