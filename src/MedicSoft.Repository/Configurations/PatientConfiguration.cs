@@ -108,10 +108,6 @@ namespace MedicSoft.Repository.Configurations
                 .IsUnique()
                 .HasDatabaseName("IX_Patients_TenantId_Document");
 
-            builder.HasIndex(p => new { p.TenantId, p.Email.Value })
-                .IsUnique()
-                .HasDatabaseName("IX_Patients_TenantId_Email");
-
             builder.HasIndex(p => p.TenantId)
                 .HasDatabaseName("IX_Patients_TenantId");
 
