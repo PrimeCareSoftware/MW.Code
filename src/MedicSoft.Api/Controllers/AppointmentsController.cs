@@ -1,0 +1,106 @@
+using Microsoft.AspNetCore.Mvc;
+using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Identity;
+
+namespace MedicSoft.Api.Controllers
+{
+    public class AppointmentsController : BaseController
+    {
+        private readonly IAppointmentService _appointmentService;
+
+        public AppointmentsController(IAppointmentService appointmentService, ITenantContext tenantContext) 
+            : base(tenantContext)
+        {
+            _appointmentService = appointmentService;
+        }
+
+        /// <summary>
+        /// Create a new appointment
+        /// </summary>
+        [HttpPost]
+        public async Task<ActionResult<AppointmentDto>> Create([FromBody] CreateAppointmentDto createAppointmentDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var appointment = await _appointmentService.CreateAppointmentAsync(createAppointmentDto, GetTenantId());
+                return CreatedAtAction(nameof(GetDailyAgenda), 
+                    new { date = appointment.ScheduledDate, clinicId = appointment.ClinicId }, 
+                    appointment);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Cancel an appointment
+        /// </summary>
+        [HttpPut("{id}/cancel")]
+        public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelAppointmentRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _appointmentService.CancelAppointmentAsync(id, request.CancellationReason, GetTenantId());
+                
+                if (!result)
+                    return NotFound($"Appointment with ID {id} not found");
+
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get daily agenda for a clinic
+        /// </summary>
+        [HttpGet("agenda")]
+        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgenda([FromQuery] DateTime date, [FromQuery] Guid clinicId)
+        {
+            try
+            {
+                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId());
+                return Ok(agenda);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get available time slots for a specific date and clinic
+        /// </summary>
+        [HttpGet("available-slots")]
+        public async Task<ActionResult<IEnumerable<AvailableSlotDto>>> GetAvailableSlots(
+            [FromQuery] DateTime date, 
+            [FromQuery] Guid clinicId, 
+            [FromQuery] int durationMinutes = 30)
+        {
+            try
+            {
+                var slots = await _appointmentService.GetAvailableSlotsAsync(date, clinicId, durationMinutes, GetTenantId());
+                return Ok(slots);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+
+    public class CancelAppointmentRequest
+    {
+        public string CancellationReason { get; set; } = string.Empty;
+    }
+}

@@ -1,0 +1,119 @@
+using System;
+using MedicSoft.Domain.Common;
+
+namespace MedicSoft.Domain.Entities
+{
+    public class Clinic : BaseEntity
+    {
+        public string Name { get; private set; }
+        public string TradeName { get; private set; }
+        public string Document { get; private set; } // CNPJ
+        public string Phone { get; private set; }
+        public string Email { get; private set; }
+        public string Address { get; private set; }
+        public TimeSpan OpeningTime { get; private set; }
+        public TimeSpan ClosingTime { get; private set; }
+        public int AppointmentDurationMinutes { get; private set; } = 30;
+        public bool AllowEmergencySlots { get; private set; } = true;
+        public bool IsActive { get; private set; } = true;
+
+        private Clinic() { } // EF Constructor
+
+        public Clinic(string name, string tradeName, string document, string phone,
+            string email, string address, TimeSpan openingTime, TimeSpan closingTime,
+            string tenantId, int appointmentDurationMinutes = 30) : base(tenantId)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name cannot be empty", nameof(name));
+            
+            if (string.IsNullOrWhiteSpace(tradeName))
+                throw new ArgumentException("Trade name cannot be empty", nameof(tradeName));
+            
+            if (string.IsNullOrWhiteSpace(document))
+                throw new ArgumentException("Document cannot be empty", nameof(document));
+            
+            if (string.IsNullOrWhiteSpace(phone))
+                throw new ArgumentException("Phone cannot be empty", nameof(phone));
+            
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email cannot be empty", nameof(email));
+            
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException("Address cannot be empty", nameof(address));
+
+            if (appointmentDurationMinutes <= 0)
+                throw new ArgumentException("Appointment duration must be positive", nameof(appointmentDurationMinutes));
+
+            if (openingTime >= closingTime)
+                throw new ArgumentException("Opening time must be before closing time");
+
+            Name = name.Trim();
+            TradeName = tradeName.Trim();
+            Document = document.Trim();
+            Phone = phone.Trim();
+            Email = email.Trim();
+            Address = address.Trim();
+            OpeningTime = openingTime;
+            ClosingTime = closingTime;
+            AppointmentDurationMinutes = appointmentDurationMinutes;
+        }
+
+        public void UpdateInfo(string name, string tradeName, string phone, string email, string address)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name cannot be empty", nameof(name));
+            
+            if (string.IsNullOrWhiteSpace(tradeName))
+                throw new ArgumentException("Trade name cannot be empty", nameof(tradeName));
+            
+            if (string.IsNullOrWhiteSpace(phone))
+                throw new ArgumentException("Phone cannot be empty", nameof(phone));
+            
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email cannot be empty", nameof(email));
+            
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException("Address cannot be empty", nameof(address));
+
+            Name = name.Trim();
+            TradeName = tradeName.Trim();
+            Phone = phone.Trim();
+            Email = email.Trim();
+            Address = address.Trim();
+            UpdateTimestamp();
+        }
+
+        public void UpdateScheduleSettings(TimeSpan openingTime, TimeSpan closingTime, 
+            int appointmentDurationMinutes, bool allowEmergencySlots)
+        {
+            if (openingTime >= closingTime)
+                throw new ArgumentException("Opening time must be before closing time");
+
+            if (appointmentDurationMinutes <= 0)
+                throw new ArgumentException("Appointment duration must be positive", nameof(appointmentDurationMinutes));
+
+            OpeningTime = openingTime;
+            ClosingTime = closingTime;
+            AppointmentDurationMinutes = appointmentDurationMinutes;
+            AllowEmergencySlots = allowEmergencySlots;
+            UpdateTimestamp();
+        }
+
+        public void Deactivate()
+        {
+            IsActive = false;
+            UpdateTimestamp();
+        }
+
+        public void Activate()
+        {
+            IsActive = true;
+            UpdateTimestamp();
+        }
+
+        public bool IsWithinWorkingHours(TimeSpan time)
+        {
+            return time >= OpeningTime && time <= ClosingTime;
+        }
+    }
+}
