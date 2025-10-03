@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.ValueObjects;
 
@@ -16,6 +18,10 @@ namespace MedicSoft.Domain.Entities
         public string? MedicalHistory { get; private set; }
         public string? Allergies { get; private set; }
         public bool IsActive { get; private set; } = true;
+
+        // Navigation property for health insurance plans (0..N relationship)
+        private readonly List<HealthInsurancePlan> _healthInsurancePlans = new();
+        public IReadOnlyCollection<HealthInsurancePlan> HealthInsurancePlans => _healthInsurancePlans.AsReadOnly();
 
         private Patient() { } // EF Constructor
 
@@ -83,6 +89,33 @@ namespace MedicSoft.Domain.Entities
             var age = today.Year - DateOfBirth.Year;
             if (DateOfBirth.Date > today.AddYears(-age)) age--;
             return age;
+        }
+
+        public void AddHealthInsurancePlan(HealthInsurancePlan plan)
+        {
+            if (plan == null)
+                throw new ArgumentNullException(nameof(plan));
+
+            if (plan.PatientId != Id)
+                throw new ArgumentException("Health insurance plan does not belong to this patient", nameof(plan));
+
+            _healthInsurancePlans.Add(plan);
+            UpdateTimestamp();
+        }
+
+        public void RemoveHealthInsurancePlan(Guid planId)
+        {
+            var plan = _healthInsurancePlans.FirstOrDefault(p => p.Id == planId);
+            if (plan != null)
+            {
+                _healthInsurancePlans.Remove(plan);
+                UpdateTimestamp();
+            }
+        }
+
+        public IEnumerable<HealthInsurancePlan> GetActiveHealthInsurancePlans()
+        {
+            return _healthInsurancePlans.Where(p => p.IsValid());
         }
     }
 }

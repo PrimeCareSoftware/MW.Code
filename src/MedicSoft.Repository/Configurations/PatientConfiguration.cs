@@ -113,6 +113,12 @@ namespace MedicSoft.Repository.Configurations
 
             builder.HasIndex(p => p.Name)
                 .HasDatabaseName("IX_Patients_Name");
+
+            // Relationship with HealthInsurancePlans (0..N)
+            builder.HasMany(p => p.HealthInsurancePlans)
+                .WithOne(h => h.Patient)
+                .HasForeignKey(h => h.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
