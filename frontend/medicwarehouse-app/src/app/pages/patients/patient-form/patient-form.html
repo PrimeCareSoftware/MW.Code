@@ -1,0 +1,120 @@
+<app-navbar></app-navbar>
+
+<div class="patient-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode() ? 'Editar Paciente' : 'Novo Paciente' }}</h1>
+    <button class="btn btn-secondary" routerLink="/patients">Voltar</button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form">
+    <div class="form-section">
+      <h3>Dados Pessoais</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Nome Completo *</label>
+          <input type="text" id="name" formControlName="name" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="document">CPF *</label>
+          <input type="text" id="document" formControlName="document" class="form-control" [readonly]="isEditMode()" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="dateOfBirth">Data de Nascimento *</label>
+          <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control" [readonly]="isEditMode()" />
+        </div>
+        <div class="form-group">
+          <label for="gender">Gênero *</label>
+          <select id="gender" formControlName="gender" class="form-control" [disabled]="isEditMode()">
+            <option value="">Selecione</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+            <option value="O">Outro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Contato</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">E-mail *</label>
+          <input type="email" id="email" formControlName="email" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Telefone *</label>
+          <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section" formGroupName="address">
+      <h3>Endereço</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="zipCode">CEP *</label>
+          <input type="text" id="zipCode" formControlName="zipCode" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="street">Rua *</label>
+          <input type="text" id="street" formControlName="street" class="form-control" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="number">Número *</label>
+          <input type="text" id="number" formControlName="number" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="complement">Complemento</label>
+          <input type="text" id="complement" formControlName="complement" class="form-control" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="neighborhood">Bairro *</label>
+          <input type="text" id="neighborhood" formControlName="neighborhood" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="city">Cidade *</label>
+          <input type="text" id="city" formControlName="city" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="state">Estado *</label>
+          <input type="text" id="state" formControlName="state" class="form-control" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Informações Médicas</h3>
+      <div class="form-group">
+        <label for="medicalHistory">Histórico Médico</label>
+        <textarea id="medicalHistory" formControlName="medicalHistory" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="allergies">Alergias</label>
+        <textarea id="allergies" formControlName="allergies" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" routerLink="/patients">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="patientForm.invalid || isLoading()">
+        {{ isLoading() ? 'Salvando...' : 'Salvar' }}
+      </button>
+    </div>
+  </form>
+</div>

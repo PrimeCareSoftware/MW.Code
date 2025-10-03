@@ -1,0 +1,70 @@
+<app-navbar></app-navbar>
+
+<div class="appointment-form-container">
+  <div class="page-header">
+    <h1>Novo Agendamento</h1>
+    <button class="btn btn-secondary" routerLink="/appointments">Voltar</button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="appointment-form">
+    <div class="form-section">
+      <h3>Informações do Agendamento</h3>
+      
+      <div class="form-group">
+        <label for="patientId">Paciente *</label>
+        <select id="patientId" formControlName="patientId" class="form-control">
+          <option value="">Selecione um paciente</option>
+          @for (patient of patients(); track patient.id) {
+            <option [value]="patient.id">{{ patient.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="scheduledDate">Data *</label>
+          <input type="date" id="scheduledDate" formControlName="scheduledDate" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="scheduledTime">Horário *</label>
+          <input type="time" id="scheduledTime" formControlName="scheduledTime" class="form-control" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="durationMinutes">Duração (minutos) *</label>
+          <input type="number" id="durationMinutes" formControlName="durationMinutes" class="form-control" min="15" step="15" />
+        </div>
+        <div class="form-group">
+          <label for="type">Tipo *</label>
+          <select id="type" formControlName="type" class="form-control">
+            <option value="Regular">Regular</option>
+            <option value="Emergency">Emergência</option>
+            <option value="FollowUp">Retorno</option>
+            <option value="Consultation">Consulta</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Observações</label>
+        <textarea id="notes" formControlName="notes" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" routerLink="/appointments">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="appointmentForm.invalid || isLoading()">
+        {{ isLoading() ? 'Criando...' : 'Criar Agendamento' }}
+      </button>
+    </div>
+  </form>
+</div>
