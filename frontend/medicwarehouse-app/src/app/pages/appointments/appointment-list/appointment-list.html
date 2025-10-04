@@ -6,25 +6,92 @@
       <h1>Agendamentos</h1>
       <p>Agenda diária de consultas</p>
     </div>
-    <button class="btn btn-primary" routerLink="/appointments/new">
-      + Novo Agendamento
-    </button>
-  </div>
-
-  <div class="date-selector">
-    <label for="date">Selecionar Data:</label>
-    <input 
-      type="date" 
-      id="date" 
-      [value]="selectedDate()" 
-      (change)="onDateChange($event)"
-      class="date-input"
-    />
+    <div class="header-actions">
+      <button class="btn btn-outline" (click)="toggleView()">
+        @if (viewMode() === 'list') {
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Ver Calendário
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          Ver Lista
+        }
+      </button>
+      <button class="btn btn-primary" routerLink="/appointments/new">
+        + Novo Agendamento
+      </button>
+    </div>
   </div>
 
   @if (errorMessage()) {
     <div class="alert alert-error">{{ errorMessage() }}</div>
   }
+
+  @if (viewMode() === 'calendar') {
+    <!-- Calendar View -->
+    <div class="calendar-view">
+      <div class="calendar-header">
+        <button class="btn-nav" (click)="previousMonth()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <h2>{{ getMonthName() }}</h2>
+        <button class="btn-nav" (click)="nextMonth()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="calendar-grid">
+        <div class="calendar-day-header">Dom</div>
+        <div class="calendar-day-header">Seg</div>
+        <div class="calendar-day-header">Ter</div>
+        <div class="calendar-day-header">Qua</div>
+        <div class="calendar-day-header">Qui</div>
+        <div class="calendar-day-header">Sex</div>
+        <div class="calendar-day-header">Sáb</div>
+
+        @for (day of calendarDays(); track day.date.getTime()) {
+          <div 
+            class="calendar-day"
+            [class.other-month]="!day.isCurrentMonth"
+            [class.today]="day.isToday"
+            [class.has-appointments]="day.hasAppointments"
+            (click)="selectCalendarDate(day)"
+          >
+            <span class="day-number">{{ day.day }}</span>
+            @if (day.hasAppointments) {
+              <span class="appointment-badge">{{ day.appointmentCount }}</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <!-- List View -->
+    <div class="date-selector">
+      <label for="date">Selecionar Data:</label>
+      <input 
+        type="date" 
+        id="date" 
+        [value]="selectedDate()" 
+        (change)="onDateChange($event)"
+        class="date-input"
+      />
+    </div>
 
   @if (isLoading()) {
     <div class="loading">Carregando...</div>
@@ -84,5 +151,6 @@
         }
       </div>
     }
+  }
   }
 </div>
