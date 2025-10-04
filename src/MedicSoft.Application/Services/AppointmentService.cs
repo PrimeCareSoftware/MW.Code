@@ -11,6 +11,7 @@ namespace MedicSoft.Application.Services
         Task<bool> CancelAppointmentAsync(Guid appointmentId, string cancellationReason, string tenantId);
         Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId);
         Task<IEnumerable<AvailableSlotDto>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, int durationMinutes, string tenantId);
+        Task<AppointmentDto?> GetByIdAsync(Guid appointmentId, string tenantId);
     }
 
     public class AppointmentService : IAppointmentService
@@ -43,6 +44,12 @@ namespace MedicSoft.Application.Services
         public async Task<IEnumerable<AvailableSlotDto>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, int durationMinutes, string tenantId)
         {
             var query = new GetAvailableSlotsQuery(date, clinicId, durationMinutes, tenantId);
+            return await _mediator.Send(query);
+        }
+
+        public async Task<AppointmentDto?> GetByIdAsync(Guid appointmentId, string tenantId)
+        {
+            var query = new GetAppointmentByIdQuery(appointmentId, tenantId);
             return await _mediator.Send(query);
         }
     }

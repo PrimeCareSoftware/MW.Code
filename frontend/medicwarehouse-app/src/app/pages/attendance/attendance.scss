@@ -1,0 +1,316 @@
+.attendance-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      color: #2c3e50;
+      margin: 0;
+    }
+
+    p {
+      color: #7f8c8d;
+      margin: 0.5rem 0 0;
+    }
+  }
+
+  .attendance-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      font-size: 1.25rem;
+      color: #2c3e50;
+      margin: 0 0 1rem;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  .patient-info {
+    .patient-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #ecf0f1;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &.highlight {
+          background: #fff3cd;
+          padding: 0.75rem;
+          border-radius: 4px;
+          border: 1px solid #ffc107;
+        }
+
+        .label {
+          font-weight: 600;
+          color: #7f8c8d;
+        }
+
+        .value {
+          color: #2c3e50;
+        }
+      }
+    }
+  }
+
+  .timer-card {
+    text-align: center;
+
+    .timer-display {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #3498db;
+      font-family: 'Courier New', monospace;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #ecf0f1;
+      border-radius: 8px;
+    }
+
+    .timer-info {
+      color: #7f8c8d;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  .patient-history {
+    .history-list {
+      max-height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .history-item {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+        border-left: 3px solid #3498db;
+
+        .history-date {
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 0.5rem;
+        }
+
+        .history-info {
+          p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+
+            strong {
+              color: #2c3e50;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .right-panel {
+    .medical-record-form {
+      .form-group {
+        margin-bottom: 1.5rem;
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+          color: #2c3e50;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 1rem;
+          font-family: inherit;
+          resize: vertical;
+
+          &:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+          }
+        }
+
+        .prescription-area {
+          font-family: 'Courier New', monospace;
+          font-size: 0.95rem;
+        }
+
+        .btn-print {
+          margin-top: 0.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        padding-top: 1rem;
+        border-top: 2px solid #ecf0f1;
+      }
+    }
+  }
+
+  .text-muted {
+    color: #7f8c8d;
+    font-style: italic;
+  }
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+
+  &.alert-error {
+    background: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+  }
+
+  &.alert-success {
+    background: #efe;
+    color: #3c3;
+    border: 1px solid #cfc;
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.btn-primary {
+    background: #3498db;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background: #2980b9;
+    }
+  }
+
+  &.btn-secondary {
+    background: #95a5a6;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background: #7f8c8d;
+    }
+  }
+
+  &.btn-outline {
+    background: white;
+    color: #3498db;
+    border: 1px solid #3498db;
+
+    &:hover:not(:disabled) {
+      background: #3498db;
+      color: white;
+    }
+  }
+}
+
+// Print styles
+.print-only {
+  display: none;
+}
+
+@media print {
+  .attendance-container {
+    display: none;
+  }
+
+  .print-only {
+    display: block;
+    padding: 2rem;
+
+    .prescription-print {
+      h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .prescription-header {
+        margin-bottom: 2rem;
+        
+        p {
+          margin: 0.5rem 0;
+          font-size: 1rem;
+        }
+      }
+
+      .prescription-content {
+        white-space: pre-wrap;
+        font-family: 'Courier New', monospace;
+        font-size: 1rem;
+        line-height: 1.6;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        min-height: 200px;
+      }
+    }
+  }
+}

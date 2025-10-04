@@ -37,4 +37,8 @@ export class AppointmentService {
       .set('durationMinutes', duration.toString());
     return this.http.get<AvailableSlot[]>(`${this.apiUrl}/available-slots`, { params });
   }
+
+  getById(id: string): Observable<Appointment> {
+    return this.http.get<Appointment>(`${this.apiUrl}/${id}`);
+  }
 }

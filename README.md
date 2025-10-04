@@ -19,6 +19,12 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **CRUD de Pacientes**: Cadastro completo com validações
 - ✅ **Agendamento de Consultas**: Sistema completo de agendamentos
 - ✅ **Agenda Diária**: Visualização da agenda com slots disponíveis
+- ✅ **Visualização em Calendário**: Navegação mensal com indicadores de agendamentos
+- ✅ **Atendimento ao Paciente**: Tela completa de atendimento com prontuário
+- ✅ **Timer de Consulta**: Cronômetro automático para controle do tempo
+- ✅ **Prontuário Médico**: Registro de diagnóstico, prescrição e observações
+- ✅ **Histórico do Paciente**: Visualização de consultas anteriores
+- ✅ **Prescrição Médica**: Área de texto com impressão otimizada
 - ✅ **Encaixes**: Permite agendamentos de emergência
 - ✅ **Autenticação JWT**: API segura com tokens JWT
 - ✅ **Swagger**: Documentação interativa da API
@@ -134,9 +140,17 @@ Use o token retornado no header `Authorization: Bearer {token}` nas demais requi
 
 - **Agendamentos**:
   - `POST /api/appointments` - Criar agendamento
+  - `GET /api/appointments/{id}` - Obter agendamento por ID
   - `PUT /api/appointments/{id}/cancel` - Cancelar agendamento
   - `GET /api/appointments/agenda` - Agenda diária
   - `GET /api/appointments/available-slots` - Horários disponíveis
+
+- **Prontuários Médicos**:
+  - `POST /api/medical-records` - Criar prontuário
+  - `PUT /api/medical-records/{id}` - Atualizar prontuário
+  - `POST /api/medical-records/{id}/complete` - Finalizar atendimento
+  - `GET /api/medical-records/appointment/{appointmentId}` - Buscar por agendamento
+  - `GET /api/medical-records/patient/{patientId}` - Histórico do paciente
 
 ## 🧪 Testes
 
@@ -155,6 +169,7 @@ dotnet test --collect:"XPlat Code Coverage"
 - **Patients**: Dados dos pacientes
 - **Clinics**: Informações dos consultórios
 - **Appointments**: Agendamentos de consultas
+- **MedicalRecords**: Prontuários médicos e histórico de atendimentos
 
 ### Multitenancy
 
