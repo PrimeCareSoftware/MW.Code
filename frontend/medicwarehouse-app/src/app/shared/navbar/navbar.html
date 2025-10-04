@@ -1,0 +1,32 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <h2>MedicWarehouse</h2>
+    </div>
+    
+    <ul class="navbar-menu">
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active">
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a routerLink="/patients" routerLinkActive="active">
+          Pacientes
+        </a>
+      </li>
+      <li>
+        <a routerLink="/appointments" routerLinkActive="active">
+          Agendamentos
+        </a>
+      </li>
+    </ul>
+
+    <div class="navbar-user">
+      @if (authService.currentUser(); as user) {
+        <span class="user-name">{{ user.username }}</span>
+        <button class="btn-logout" (click)="logout()">Sair</button>
+      }
+    </div>
+  </div>
+</nav>

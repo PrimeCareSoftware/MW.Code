@@ -1,0 +1,125 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>Cadastro</h1>
+      <p>Crie sua conta no MedicWarehouse</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      @if (errorMessage()) {
+        <div class="alert alert-error">
+          {{ errorMessage() }}
+        </div>
+      }
+      @if (successMessage()) {
+        <div class="alert alert-success">
+          {{ successMessage() }}
+        </div>
+      }
+
+      <div class="form-group">
+        <label for="username">Usuário</label>
+        <input 
+          type="text" 
+          id="username" 
+          formControlName="username"
+          placeholder="Digite seu usuário"
+          class="form-control"
+        />
+        @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
+          <span class="error-text">
+            @if (registerForm.get('username')?.errors?.['required']) {
+              Usuário é obrigatório
+            } @else if (registerForm.get('username')?.errors?.['minlength']) {
+              Usuário deve ter pelo menos 3 caracteres
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email"
+          placeholder="Digite seu e-mail"
+          class="form-control"
+        />
+        @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+          <span class="error-text">
+            @if (registerForm.get('email')?.errors?.['required']) {
+              E-mail é obrigatório
+            } @else if (registerForm.get('email')?.errors?.['email']) {
+              E-mail inválido
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          placeholder="Digite sua senha"
+          class="form-control"
+        />
+        @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+          <span class="error-text">
+            @if (registerForm.get('password')?.errors?.['required']) {
+              Senha é obrigatória
+            } @else if (registerForm.get('password')?.errors?.['minlength']) {
+              Senha deve ter pelo menos 6 caracteres
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Senha</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          formControlName="confirmPassword"
+          placeholder="Confirme sua senha"
+          class="form-control"
+        />
+        @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) {
+          <span class="error-text">Confirmação de senha é obrigatória</span>
+        }
+        @if (registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched) {
+          <span class="error-text">As senhas não coincidem</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="tenantId">Tenant ID</label>
+        <input 
+          type="text" 
+          id="tenantId" 
+          formControlName="tenantId"
+          placeholder="Digite o tenant ID"
+          class="form-control"
+        />
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary" 
+        [disabled]="registerForm.invalid || isLoading()"
+      >
+        @if (isLoading()) {
+          <span>Cadastrando...</span>
+        } @else {
+          <span>Cadastrar</span>
+        }
+      </button>
+
+      <div class="register-footer">
+        <p>Já tem uma conta? <a routerLink="/login">Faça login</a></p>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<app-navbar></app-navbar>
+
+<div class="patient-list-container">
+  <div class="page-header">
+    <div>
+      <h1>Pacientes</h1>
+      <p>Gerenciamento de pacientes</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/patients/new">
+      + Novo Paciente
+    </button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading">Carregando...</div>
+  } @else {
+    @if (patients().length === 0) {
+      <div class="empty-state">
+        <p>Nenhum paciente cadastrado</p>
+        <button class="btn btn-primary" routerLink="/patients/new">
+          Cadastrar primeiro paciente
+        </button>
+      </div>
+    } @else {
+      <div class="table-container">
+        <table class="patients-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Documento</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Idade</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (patient of patients(); track patient.id) {
+              <tr>
+                <td>{{ patient.name }}</td>
+                <td>{{ patient.document }}</td>
+                <td>{{ patient.email }}</td>
+                <td>{{ patient.phone }}</td>
+                <td>{{ patient.age }} anos</td>
+                <td class="actions">
+                  <button 
+                    class="btn-action btn-edit" 
+                    [routerLink]="['/patients', patient.id]"
+                    title="Editar"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    class="btn-action btn-delete" 
+                    (click)="deletePatient(patient.id)"
+                    title="Excluir"
+                  >
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>

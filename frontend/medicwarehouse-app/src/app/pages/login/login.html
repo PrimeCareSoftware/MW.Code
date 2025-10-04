@@ -1,0 +1,71 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>MedicWarehouse</h1>
+      <p>Sistema de Gestão para Consultórios Médicos</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      @if (errorMessage()) {
+        <div class="alert alert-error">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <div class="form-group">
+        <label for="username">Usuário</label>
+        <input 
+          type="text" 
+          id="username" 
+          formControlName="username"
+          placeholder="Digite seu usuário"
+          class="form-control"
+        />
+        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+          <span class="error-text">Usuário é obrigatório</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          placeholder="Digite sua senha"
+          class="form-control"
+        />
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <span class="error-text">Senha é obrigatória</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="tenantId">Tenant ID</label>
+        <input 
+          type="text" 
+          id="tenantId" 
+          formControlName="tenantId"
+          placeholder="Digite o tenant ID"
+          class="form-control"
+        />
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary" 
+        [disabled]="loginForm.invalid || isLoading()"
+      >
+        @if (isLoading()) {
+          <span>Entrando...</span>
+        } @else {
+          <span>Entrar</span>
+        }
+      </button>
+
+      <div class="login-footer">
+        <p>Não tem uma conta? <a routerLink="/register">Cadastre-se</a></p>
+      </div>
+    </form>
+  </div>
+</div>
