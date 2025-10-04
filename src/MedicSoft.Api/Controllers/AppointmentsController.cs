@@ -79,6 +79,27 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Get appointment by ID
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AppointmentDto>> GetById(Guid id)
+        {
+            try
+            {
+                var appointment = await _appointmentService.GetByIdAsync(id, GetTenantId());
+                
+                if (appointment == null)
+                    return NotFound($"Appointment with ID {id} not found");
+
+                return Ok(appointment);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get available time slots for a specific date and clinic
         /// </summary>
         [HttpGet("available-slots")]

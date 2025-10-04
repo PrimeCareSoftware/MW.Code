@@ -59,10 +59,23 @@
               }
             </div>
             <div class="appointment-actions">
+              @if (appointment.status === 'Scheduled' || appointment.status === 'Confirmed') {
+                <button class="btn btn-primary btn-sm" [routerLink]="['/appointments', appointment.id, 'attendance']">
+                  Iniciar Atendimento
+                </button>
+              }
+              @if (appointment.status === 'InProgress') {
+                <button class="btn btn-success btn-sm" [routerLink]="['/appointments', appointment.id, 'attendance']">
+                  Continuar Atendimento
+                </button>
+              }
+              @if (appointment.status === 'Completed') {
+                <span class="badge badge-completed">Atendimento Concluído</span>
+              }
               <button 
                 class="btn-cancel" 
                 (click)="cancelAppointment(appointment.id)"
-                [disabled]="appointment.status === 'Cancelled'"
+                [disabled]="appointment.status === 'Cancelled' || appointment.status === 'Completed'"
               >
                 Cancelar
               </button>

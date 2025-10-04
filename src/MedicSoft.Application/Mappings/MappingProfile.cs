@@ -73,6 +73,9 @@ namespace MedicSoft.Application.Mappings
                         src.AppointmentDurationMinutes
                     );
                 });
+
+            CreateMap<MedicalRecord, MedicalRecordDto>()
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name));
         }
     }
 }

@@ -100,10 +100,12 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();
