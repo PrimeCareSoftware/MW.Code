@@ -17,7 +17,12 @@ namespace MedicSoft.Domain.Entities
         // Navigation property
         public Patient Patient { get; private set; } = null!;
 
-        private HealthInsurancePlan() { } // EF Constructor
+        private HealthInsurancePlan() 
+        { 
+            // EF Constructor - nullable warnings suppressed as EF Core sets these via reflection
+            InsuranceName = null!;
+            PlanNumber = null!;
+        }
 
         public HealthInsurancePlan(Guid patientId, string insuranceName, string planNumber, 
             DateTime validFrom, string tenantId, string? planType = null, 

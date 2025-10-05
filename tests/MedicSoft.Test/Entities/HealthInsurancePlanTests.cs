@@ -355,7 +355,7 @@ namespace MedicSoft.Test.Entities
             
             var patient = new Patient(
                 "Test Patient",
-                "12345678900",
+                "11144477735", // Valid CPF
                 DateTime.Now.AddYears(-30),
                 "Male",
                 email,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.ValueObjects;
+using MedicSoft.Domain.Services;
 
 namespace MedicSoft.Domain.Entities
 {
@@ -23,7 +24,16 @@ namespace MedicSoft.Domain.Entities
         private readonly List<HealthInsurancePlan> _healthInsurancePlans = new();
         public IReadOnlyCollection<HealthInsurancePlan> HealthInsurancePlans => _healthInsurancePlans.AsReadOnly();
 
-        private Patient() { } // EF Constructor
+        private Patient() 
+        { 
+            // EF Constructor - nullable warnings suppressed as EF Core sets these via reflection
+            Name = null!;
+            Document = null!;
+            Gender = null!;
+            Email = null!;
+            Phone = null!;
+            Address = null!;
+        }
 
         public Patient(string name, string document, DateTime dateOfBirth, string gender,
             Email email, Phone phone, Address address, string tenantId,
@@ -40,6 +50,11 @@ namespace MedicSoft.Domain.Entities
 
             if (dateOfBirth >= DateTime.Now)
                 throw new ArgumentException("Date of birth must be in the past", nameof(dateOfBirth));
+
+            // Validate CPF format if document appears to be a CPF (11 digits)
+            var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
+            if (cleanDocument.Length == 11 && !DocumentValidator.IsValidCpf(document))
+                throw new ArgumentException("Invalid CPF format", nameof(document));
 
             Name = name.Trim();
             Document = document.Trim();
