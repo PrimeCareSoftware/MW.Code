@@ -1,20 +1,26 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: medicwarehouse-postgres
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: medicwarehouse-sqlserver
     environment:
-      POSTGRES_DB: medicwarehouse
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: MedicW@rehouse2024!
+      MSSQL_PID: Developer
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - sqlserver_data:/var/opt/mssql
+      - ./scripts/init-db-sqlserver.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
       - medicwarehouse-network
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "MedicW@rehouse2024!" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   api:
     build:
@@ -25,9 +31,10 @@ services:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Database=medicwarehouse;Username=postgres;Password=postgres123
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true
     depends_on:
-      - postgres
+      sqlserver:
+        condition: service_healthy
     networks:
       - medicwarehouse-network
 
@@ -46,7 +53,7 @@ services:
       - medicwarehouse-network
 
 volumes:
-  postgres_data:
+  sqlserver_data:
 
 networks:
   medicwarehouse-network:

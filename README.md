@@ -32,13 +32,15 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 🔧 Tecnologias
 
-- **Backend**: .NET 8, Entity Framework Core, PostgreSQL
+- **Backend**: .NET 8, Entity Framework Core, SQL Server
 - **Frontend**: Angular 18, TypeScript, SCSS
-- **Banco de Dados**: PostgreSQL 15
+- **Banco de Dados**: SQL Server 2022 (via Docker)
 - **Containerização**: Docker e Docker Compose
 - **Autenticação**: JWT Bearer Tokens
 
 ## 🏃‍♂️ Como Executar
+
+> 📖 **Para um guia completo e detalhado passo a passo**, consulte o arquivo [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
 
 ### Pré-requisitos
 
@@ -91,17 +93,22 @@ ng serve
 # O frontend estará disponível em: http://localhost:4200
 ```
 
-#### Banco de Dados (PostgreSQL)
+#### Banco de Dados (SQL Server)
 
 ```bash
-# Executar apenas o PostgreSQL
+# Executar apenas o SQL Server
 docker run -d \
-  --name medicwarehouse-postgres \
-  -e POSTGRES_DB=medicwarehouse \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres123 \
-  -p 5432:5432 \
-  postgres:15-alpine
+  --name medicwarehouse-sqlserver \
+  -e "ACCEPT_EULA=Y" \
+  -e "MSSQL_SA_PASSWORD=MedicW@rehouse2024!" \
+  -e "MSSQL_PID=Developer" \
+  -p 1433:1433 \
+  mcr.microsoft.com/mssql/server:2022-latest
+
+# Criar o banco de dados
+docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
+  -S localhost -U sa -P "MedicW@rehouse2024!" \
+  -Q "CREATE DATABASE MedicWarehouse;"
 ```
 
 ## 📖 Documentação da API

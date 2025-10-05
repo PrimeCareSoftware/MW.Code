@@ -60,7 +60,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Configure database
 builder.Services.AddDbContext<MedicSoftDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
