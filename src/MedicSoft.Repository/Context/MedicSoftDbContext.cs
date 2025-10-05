@@ -39,7 +39,7 @@ namespace MedicSoft.Repository.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql();
+                optionsBuilder.UseSqlServer();
             }
         }
 
