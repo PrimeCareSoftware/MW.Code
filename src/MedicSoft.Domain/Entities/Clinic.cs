@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Services;
 
 namespace MedicSoft.Domain.Entities
 {
@@ -17,7 +19,16 @@ namespace MedicSoft.Domain.Entities
         public bool AllowEmergencySlots { get; private set; } = true;
         public bool IsActive { get; private set; } = true;
 
-        private Clinic() { } // EF Constructor
+        private Clinic() 
+        { 
+            // EF Constructor - nullable warnings suppressed as EF Core sets these via reflection
+            Name = null!;
+            TradeName = null!;
+            Document = null!;
+            Phone = null!;
+            Email = null!;
+            Address = null!;
+        }
 
         public Clinic(string name, string tradeName, string document, string phone,
             string email, string address, TimeSpan openingTime, TimeSpan closingTime,
@@ -46,6 +57,11 @@ namespace MedicSoft.Domain.Entities
 
             if (openingTime >= closingTime)
                 throw new ArgumentException("Opening time must be before closing time");
+
+            // Validate CNPJ format if document appears to be a CNPJ (14 digits)
+            var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
+            if (cleanDocument.Length == 14 && !DocumentValidator.IsValidCnpj(document))
+                throw new ArgumentException("Invalid CNPJ format", nameof(document));
 
             Name = name.Trim();
             TradeName = tradeName.Trim();

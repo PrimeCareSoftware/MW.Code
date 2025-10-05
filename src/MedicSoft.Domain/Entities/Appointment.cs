@@ -39,7 +39,10 @@ namespace MedicSoft.Domain.Entities
         public Patient Patient { get; private set; } = null!;
         public Clinic Clinic { get; private set; } = null!;
 
-        private Appointment() { } // EF Constructor
+        private Appointment() 
+        { 
+            // EF Constructor - nullable warnings suppressed as EF Core sets these via reflection
+        }
 
         public Appointment(Guid patientId, Guid clinicId, DateTime scheduledDate, 
             TimeSpan scheduledTime, int durationMinutes, AppointmentType type, 
