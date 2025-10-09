@@ -1,5 +1,7 @@
 # MedicWarehouse - Sistema de Gestão para Consultórios Médicos
 
+[![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
+
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
 
 ## 🏗️ Arquitetura
@@ -209,6 +211,22 @@ Atualize as seguintes configurações para produção:
 - `appsettings.Production.json`: String de conexão e chave JWT
 - `docker-compose.yml`: Variáveis de ambiente de produção
 - Nginx: Configuração SSL/TLS
+
+## 🔄 CI/CD
+
+O projeto utiliza **GitHub Actions** para integração e entrega contínuas. O workflow executa automaticamente:
+
+- ✅ **Testes Backend**: Executa todos os 305 testes unitários do .NET
+- ✅ **Testes Frontend**: Executa testes do Angular com Karma/Jasmine
+- ✅ **Build Verification**: Verifica se o build está funcional
+- ✅ **Code Coverage**: Gera relatórios de cobertura de código
+
+O workflow é executado automaticamente em:
+- Push para as branches `main` e `develop`
+- Pull Requests para as branches `main` e `develop`
+- Execução manual via GitHub Actions
+
+Para mais detalhes, consulte: [CI_CD_DOCUMENTATION.md](CI_CD_DOCUMENTATION.md)
 
 ## 🤝 Contribuição
 
