@@ -1,0 +1,447 @@
+# Regras de Negócio - MedicWarehouse
+
+## Visão Geral
+
+O MedicWarehouse é um sistema multitenant de gestão para consultórios e clínicas médicas (SaaS) que implementa regras de negócio específicas para garantir a privacidade dos dados médicos e a flexibilidade de vínculos entre pacientes e clínicas.
+
+## 1. Gestão de Pacientes e Vínculos com Clínicas
+
+### 1.1 Cadastro e Vínculo de Pacientes
+
+**Regra Principal**: Na primeira consulta, caso o paciente possua cadastro em outras clínicas, o sistema deve obter os dados pré-existentes do paciente e vincular à clínica atual.
+
+#### Implementação
+
+- **Entidade PatientClinicLink**: Representa o vínculo N:N entre pacientes e clínicas
+  - Um paciente pode estar vinculado a múltiplas clínicas (N:N)
+  - Cada vínculo possui data de criação e status ativo/inativo
+  - O vínculo mantém o `TenantId` para isolamento de dados
+
+#### Fluxo de Cadastro
+
+1. **Novo Paciente sem Cadastro Prévio**:
+   ```
+   - Usuário acessa o formulário de cadastro de paciente
+   - Preenche os dados (Nome, CPF, Data de Nascimento, etc.)
+   - Sistema valida CPF (formato brasileiro de 11 dígitos)
+   - Sistema verifica se CPF já existe no sistema (busca global)
+   - Se não existir: cria novo paciente e vincula à clínica atual
+   - Se existir: reutiliza dados existentes e cria vínculo com clínica atual
+   ```
+
+2. **Paciente com Cadastro em Outra Clínica**:
+   ```
+   - Sistema busca paciente por CPF usando endpoint GET /api/patients/by-document/{cpf}
+   - Se encontrado: retorna dados do paciente
+   - Clínica pode revisar e atualizar dados se necessário
+   - Sistema cria vínculo usando POST /api/patients/{patientId}/link-clinic/{clinicId}
+   - Paciente fica disponível para agendamentos na nova clínica
+   ```
+
+3. **Atualização de Dados**:
+   ```
+   - Qualquer clínica vinculada pode atualizar dados cadastrais do paciente
+   - Alterações ficam disponíveis para todas as clínicas vinculadas
+   - Histórico de alterações é mantido com timestamps (CreatedAt, UpdatedAt)
+   ```
+
+### 1.2 Busca de Pacientes
+
+**Regra**: A consulta de pacientes deve ser feita por CPF, Nome ou Telefone.
+
+#### Endpoints Implementados
+
+1. **Busca Geral** (GET `/api/patients/search?searchTerm={termo}`):
+   - Busca por CPF, Nome ou Telefone simultaneamente
+   - Retorna pacientes vinculados à clínica atual (tenant)
+   - Resultados ordenados por nome
+
+2. **Busca por CPF Global** (GET `/api/patients/by-document/{cpf}`):
+   - Busca paciente por CPF em todas as clínicas
+   - Usado para verificar cadastro prévio
+   - Permite reutilizar dados existentes
+
+3. **Busca por Nome** (GET `/api/patients/search?searchTerm={nome}`):
+   - Busca case-insensitive
+   - Suporta busca parcial (ex: "Silva" encontra "João Silva")
+
+4. **Busca por Telefone** (GET `/api/patients/search?searchTerm={telefone}`):
+   - Aceita diferentes formatos: (11) 98765-4321, 11987654321, etc.
+   - Busca apenas os dígitos do número
+
+## 2. Isolamento de Prontuários e Histórico Médico
+
+### 2.1 Privacidade e Segurança
+
+**Regra Principal**: O paciente pode estar vinculado a N consultórios/clínicas, porém o prontuário e histórico médico deve estar disponível somente para a clínica respectiva. Outras clínicas não podem ter acesso ao prontuário e histórico do mesmo paciente.
+
+#### Implementação Técnica
+
+1. **Isolamento por Tenant (TenantId)**:
+   ```csharp
+   // Todos os prontuários possuem TenantId
+   public class MedicalRecord : BaseEntity
+   {
+       public string TenantId { get; private set; }
+       // ... outros campos
+   }
+   ```
+
+2. **Filtros Globais no Entity Framework**:
+   ```csharp
+   // DbContext aplica filtro automático
+   modelBuilder.Entity<MedicalRecord>()
+       .HasQueryFilter(mr => EF.Property<string>(mr, "TenantId") == GetTenantId());
+   ```
+
+3. **Consultas Isoladas**:
+   - GET `/api/medical-records/patient/{patientId}`: Retorna apenas prontuários da clínica atual
+   - Não há endpoint cross-tenant para prontuários
+   - Cada consulta é filtrada automaticamente pelo TenantId
+
+### 2.2 Dados Compartilhados vs. Isolados
+
+#### Dados Compartilhados (Visíveis por Todas as Clínicas Vinculadas)
+- Nome do paciente
+- CPF/Documento
+- Data de nascimento
+- Gênero
+- Email
+- Telefone
+- Endereço
+- Alergias (informação crítica de segurança)
+- Status ativo/inativo
+
+#### Dados Isolados (Apenas Clínica Específica)
+- Prontuários médicos (MedicalRecord)
+- Diagnósticos
+- Prescrições
+- Observações de consulta
+- Histórico de atendimentos
+- Tempo de consulta
+- Datas de consultas
+
+## 3. Adaptabilidade para Diferentes Tipos de Clínicas
+
+**Regra**: O sistema deve ser adaptável para todo tipo de clínica médica, odontológica, psicológica, etc.
+
+### 3.1 Implementação Flexível
+
+1. **Templates de Prontuário** (MedicalRecordTemplate):
+   ```csharp
+   - Nome do template
+   - Descrição
+   - Conteúdo do template (campos personalizáveis)
+   - Categoria (Médico, Odontológico, Psicológico, Fisioterapia, etc.)
+   - Status ativo/inativo
+   ```
+
+2. **Templates de Receita** (PrescriptionTemplate):
+   ```csharp
+   - Nome do template
+   - Descrição
+   - Conteúdo da receita (formato personalizável)
+   - Categoria (por especialidade)
+   - Status ativo/inativo
+   ```
+
+3. **Categorias Suportadas**:
+   - Clínica Médica Geral
+   - Odontologia
+   - Psicologia
+   - Fisioterapia
+   - Nutrição
+   - Cardiologia
+   - Pediatria
+   - Outras especialidades médicas
+
+### 3.2 Personalização por Clínica
+
+Cada clínica (tenant) pode:
+- Criar seus próprios templates de prontuário
+- Definir templates de prescrição específicos
+- Customizar campos de acordo com sua especialidade
+- Manter biblioteca de templates reutilizáveis
+
+## 4. Sistema de Templates
+
+### 4.1 Templates de Prontuário Médico
+
+**Funcionalidade**: O sistema deve permitir o cadastro de templates de prontuário.
+
+#### Características
+
+- **Categorização por Especialidade**: Templates organizados por categoria médica
+- **Reutilização**: Templates podem ser aplicados a múltiplos atendimentos
+- **Versionamento**: Histórico de alterações mantido
+- **Personalização**: Cada clínica mantém seus próprios templates
+
+#### Endpoints
+
+- POST `/api/medical-record-templates`: Criar novo template
+- GET `/api/medical-record-templates`: Listar templates da clínica
+- GET `/api/medical-record-templates/category/{category}`: Filtrar por categoria
+- PUT `/api/medical-record-templates/{id}`: Atualizar template
+- DELETE `/api/medical-record-templates/{id}`: Desativar template
+
+### 4.2 Templates de Receita Médica
+
+**Funcionalidade**: O sistema deve permitir o cadastro de templates de receitas médicas.
+
+#### Características
+
+- **Prescrições Pré-formatadas**: Templates com formato padronizado
+- **Campos Dinâmicos**: Suporte a placeholders (ex: {nome_paciente}, {data})
+- **Impressão Otimizada**: Layout preparado para impressão
+- **Biblioteca de Medicamentos**: Templates com medicamentos comuns
+
+#### Endpoints
+
+- POST `/api/prescription-templates`: Criar novo template
+- GET `/api/prescription-templates`: Listar templates da clínica
+- GET `/api/prescription-templates/category/{category}`: Filtrar por categoria
+- PUT `/api/prescription-templates/{id}`: Atualizar template
+- DELETE `/api/prescription-templates/{id}`: Desativar template
+
+## 5. Timeline/Feed do Histórico do Paciente
+
+**Regra**: O histórico do paciente deve ser exibido como um feed/timeline dentro do cadastro do mesmo.
+
+### 5.1 Visualização Timeline
+
+#### Estrutura do Feed
+
+```
+┌─────────────────────────────────────────┐
+│ Histórico do Paciente - João Silva     │
+├─────────────────────────────────────────┤
+│ 🕐 15/01/2024 14:30                    │
+│ Consulta de Rotina (30 min)            │
+│ Diagnóstico: Hipertensão controlada     │
+│ Prescrição: Losartana 50mg              │
+├─────────────────────────────────────────┤
+│ 🕐 10/12/2023 10:00                    │
+│ Consulta de Emergência (45 min)        │
+│ Diagnóstico: Gripe comum                │
+│ Prescrição: Paracetamol 750mg           │
+├─────────────────────────────────────────┤
+│ 🕐 05/11/2023 16:15                    │
+│ Exame de Rotina (20 min)                │
+│ Observações: Pressão arterial normal    │
+└─────────────────────────────────────────┘
+```
+
+### 5.2 Informações Exibidas no Timeline
+
+Cada entrada mostra:
+- Data e hora da consulta
+- Tipo de atendimento
+- Duração da consulta
+- Diagnóstico resumido
+- Prescrição (se houver)
+- Observações relevantes
+- Status (Concluída/Em andamento)
+
+### 5.3 Ordenação e Filtros
+
+- **Ordenação padrão**: Mais recente primeiro (DESC)
+- **Filtros disponíveis**:
+  - Por período (últimos 30 dias, 6 meses, 1 ano)
+  - Por tipo de atendimento
+  - Por diagnóstico
+  - Busca por texto livre
+
+### 5.4 Implementação Técnica
+
+```typescript
+// Frontend - Componente de Timeline
+interface TimelineEntry {
+  date: Date;
+  type: string;
+  duration: number;
+  diagnosis: string;
+  prescription: string;
+  notes: string;
+  status: string;
+}
+
+// Endpoint
+GET /api/medical-records/patient/{patientId}
+// Retorna array ordenado de prontuários para exibição em timeline
+```
+
+## 6. Fluxos de Trabalho
+
+### 6.1 Fluxo Completo de Primeiro Atendimento
+
+```
+1. Recepção registra novo paciente
+   ├─ Busca por CPF (GET /api/patients/by-document/{cpf})
+   ├─ Se encontrado: vincula à clínica atual
+   └─ Se não encontrado: cria novo cadastro
+
+2. Sistema valida dados
+   ├─ CPF válido
+   ├─ Email único (por tenant)
+   └─ Campos obrigatórios preenchidos
+
+3. Paciente vinculado à clínica
+   ├─ POST /api/patients/{patientId}/link-clinic/{clinicId}
+   └─ Registro salvo com TenantId
+
+4. Agendamento criado
+   └─ Paciente disponível para consultas na clínica
+
+5. Durante atendimento
+   ├─ Médico acessa prontuário (vazio se primeira consulta)
+   ├─ Visualiza dados cadastrais e alergias
+   ├─ Preenche diagnóstico, prescrição e observações
+   └─ Salva prontuário (isolado por TenantId)
+
+6. Após atendimento
+   ├─ Timeline atualizada com nova consulta
+   ├─ Prescrição disponível para impressão
+   └─ Histórico acessível apenas na clínica atual
+```
+
+### 6.2 Fluxo de Atendimento em Clínica Secundária
+
+```
+1. Paciente já cadastrado busca atendimento em nova clínica
+
+2. Nova clínica busca por CPF
+   ├─ GET /api/patients/by-document/{cpf}
+   └─ Encontra paciente com dados existentes
+
+3. Sistema exibe dados cadastrais
+   ├─ Nome, CPF, contato (compartilhados)
+   ├─ Alergias (importante para segurança)
+   └─ Histórico médico VAZIO (isolado por clínica)
+
+4. Clínica pode atualizar dados se paciente solicitar
+   └─ PUT /api/patients/{id}
+
+5. Vínculo criado
+   └─ POST /api/patients/{patientId}/link-clinic/{clinicId}
+
+6. Novo histórico independente inicia
+   └─ Prontuários desta clínica isolados das outras
+```
+
+## 7. Segurança e Privacidade
+
+### 7.1 Princípios de Privacidade
+
+1. **Isolamento Total de Prontuários**:
+   - Nenhuma clínica acessa prontuários de outra
+   - Filtros automáticos garantem isolamento
+   - Auditorias de acesso mantidas
+
+2. **Compartilhamento Controlado**:
+   - Apenas dados cadastrais básicos compartilhados
+   - Informações de segurança (alergias) visíveis
+   - Histórico médico sempre isolado
+
+3. **LGPD Compliance**:
+   - Consentimento do paciente para vínculo
+   - Direito ao esquecimento implementado
+   - Portabilidade de dados cadastrais
+   - Histórico médico permanece na clínica origem
+
+### 7.2 Auditoria e Rastreabilidade
+
+Todos os registros mantêm:
+- `CreatedAt`: Data/hora de criação
+- `UpdatedAt`: Data/hora de última alteração
+- `TenantId`: Identificador da clínica
+- Logs de acesso e modificações
+
+## 8. Boas Práticas de Uso
+
+### 8.1 Para Recepcionistas
+
+1. **Sempre buscar por CPF primeiro** antes de criar novo cadastro
+2. Confirmar dados com paciente antes de vincular
+3. Atualizar informações de contato se mudaram
+4. Registrar alergias imediatamente (informação crítica)
+
+### 8.2 Para Médicos
+
+1. Revisar alergias antes de prescrever
+2. Usar templates para agilizar preenchimento
+3. Preencher diagnóstico completo para histórico
+4. Utilizar timeline para consultar atendimentos anteriores
+5. Lembrar que histórico não inclui outras clínicas
+
+### 8.3 Para Administradores
+
+1. Criar templates padrão para especialidade da clínica
+2. Revisar e atualizar templates periodicamente
+3. Treinar equipe sobre privacidade de dados
+4. Monitorar vínculos de pacientes
+5. Realizar backups regulares dos dados
+
+## 9. Benefícios do Sistema
+
+### 9.1 Para Pacientes
+
+- Cadastro único reutilizável em múltiplas clínicas
+- Não precisa repetir dados básicos
+- Privacidade do histórico médico garantida
+- Fácil portabilidade entre clínicas
+
+### 9.2 Para Clínicas
+
+- Redução de tempo no cadastro de pacientes
+- Dados sempre atualizados
+- Histórico organizado em timeline
+- Templates agilizam atendimento
+- Sistema adaptável à especialidade
+
+### 9.3 Para o Sistema de Saúde
+
+- Dados mais precisos e consistentes
+- Redução de duplicidade
+- Privacidade respeitada conforme LGPD
+- Interoperabilidade entre clínicas (dados cadastrais)
+- Histórico médico protegido por isolamento
+
+## 10. Perguntas Frequentes (FAQ)
+
+### Q1: O que acontece se um paciente quiser que uma clínica acesse seu histórico de outra clínica?
+
+**R**: Por questões de privacidade e LGPD, cada clínica mantém seu próprio prontuário isolado. O paciente pode solicitar uma cópia do prontuário de uma clínica e apresentar à outra clínica, que pode registrar as informações relevantes em seu próprio sistema.
+
+### Q2: Posso desvincular um paciente de uma clínica?
+
+**R**: Sim, o vínculo pode ser desativado, mas o histórico médico da clínica é mantido para fins de auditoria e conformidade legal.
+
+### Q3: Como funcionam as alergias se são compartilhadas?
+
+**R**: As alergias são informações críticas de segurança e são compartilhadas entre todas as clínicas vinculadas para prevenir prescrições perigosas. Qualquer clínica pode atualizar as alergias do paciente.
+
+### Q4: Posso criar templates específicos para minha especialidade?
+
+**R**: Sim! Cada clínica pode criar quantos templates desejar, organizados por categoria. Os templates são isolados por clínica (tenant).
+
+### Q5: O sistema funciona offline?
+
+**R**: Não, o sistema requer conexão com internet para funcionar, pois é uma aplicação web SaaS baseada em nuvem.
+
+### Q6: Como faço para migrar dados de outro sistema?
+
+**R**: O sistema oferece APIs REST que podem ser usadas para importação de dados. Contate o suporte técnico para assistência na migração.
+
+## 11. Suporte e Contato
+
+Para dúvidas, sugestões ou suporte técnico:
+
+- **Email**: contato@medicwarehouse.com
+- **Documentação Técnica**: Consulte README.md e IMPLEMENTATION.md
+- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+
+---
+
+**Última Atualização**: Janeiro 2025  
+**Versão do Documento**: 1.0  
+**Autor**: Equipe MedicWarehouse

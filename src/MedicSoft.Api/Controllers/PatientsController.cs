@@ -26,6 +26,33 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Search patients by CPF, Name or Phone
+        /// </summary>
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<PatientDto>>> Search([FromQuery] string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return BadRequest("Search term cannot be empty");
+
+            var patients = await _patientService.SearchPatientsAsync(searchTerm, GetTenantId());
+            return Ok(patients);
+        }
+
+        /// <summary>
+        /// Get patient by document (CPF) across all clinics
+        /// </summary>
+        [HttpGet("by-document/{document}")]
+        public async Task<ActionResult<PatientDto>> GetByDocument(string document)
+        {
+            var patient = await _patientService.GetPatientByDocumentGlobalAsync(document);
+            
+            if (patient == null)
+                return NotFound($"Patient with document {document} not found");
+
+            return Ok(patient);
+        }
+
+        /// <summary>
         /// Get patient by ID
         /// </summary>
         [HttpGet("{id}")]
@@ -93,6 +120,23 @@ namespace MedicSoft.Api.Controllers
                     return NotFound($"Patient with ID {id} not found");
 
                 return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Link patient to a clinic
+        /// </summary>
+        [HttpPost("{patientId}/link-clinic/{clinicId}")]
+        public async Task<ActionResult> LinkToClinic(Guid patientId, Guid clinicId)
+        {
+            try
+            {
+                var result = await _patientService.LinkPatientToClinicAsync(patientId, clinicId, GetTenantId());
+                return Ok(new { success = result });
             }
             catch (InvalidOperationException ex)
             {

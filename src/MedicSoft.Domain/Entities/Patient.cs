@@ -24,6 +24,10 @@ namespace MedicSoft.Domain.Entities
         private readonly List<HealthInsurancePlan> _healthInsurancePlans = new();
         public IReadOnlyCollection<HealthInsurancePlan> HealthInsurancePlans => _healthInsurancePlans.AsReadOnly();
 
+        // Navigation property for clinic links (N:N relationship)
+        private readonly List<PatientClinicLink> _clinicLinks = new();
+        public IReadOnlyCollection<PatientClinicLink> ClinicLinks => _clinicLinks.AsReadOnly();
+
         private Patient() 
         { 
             // EF Constructor - nullable warnings suppressed as EF Core sets these via reflection
@@ -131,6 +135,38 @@ namespace MedicSoft.Domain.Entities
         public IEnumerable<HealthInsurancePlan> GetActiveHealthInsurancePlans()
         {
             return _healthInsurancePlans.Where(p => p.IsValid());
+        }
+
+        public void AddClinicLink(PatientClinicLink clinicLink)
+        {
+            if (clinicLink == null)
+                throw new ArgumentNullException(nameof(clinicLink));
+
+            if (clinicLink.PatientId != Id)
+                throw new ArgumentException("Clinic link does not belong to this patient", nameof(clinicLink));
+
+            _clinicLinks.Add(clinicLink);
+            UpdateTimestamp();
+        }
+
+        public void RemoveClinicLink(Guid clinicId)
+        {
+            var link = _clinicLinks.FirstOrDefault(l => l.ClinicId == clinicId);
+            if (link != null)
+            {
+                link.Deactivate();
+                UpdateTimestamp();
+            }
+        }
+
+        public IEnumerable<PatientClinicLink> GetActiveClinicLinks()
+        {
+            return _clinicLinks.Where(l => l.IsActive);
+        }
+
+        public bool IsLinkedToClinic(Guid clinicId)
+        {
+            return _clinicLinks.Any(l => l.ClinicId == clinicId && l.IsActive);
         }
     }
 }

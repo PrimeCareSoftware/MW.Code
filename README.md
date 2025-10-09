@@ -18,6 +18,11 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ## 🚀 Funcionalidades
 
 - ✅ **Multitenant**: Isolamento de dados por consultório
+- ✅ **Vínculo Multi-Clínica**: Paciente pode estar vinculado a múltiplas clínicas (N:N)
+- ✅ **Busca Inteligente**: Busca de pacientes por CPF, Nome ou Telefone
+- ✅ **Reutilização de Cadastro**: Sistema detecta cadastro prévio e vincula à nova clínica
+- ✅ **Privacidade de Prontuários**: Cada clínica acessa apenas seus próprios prontuários
+- ✅ **Templates**: Templates reutilizáveis para prontuários e prescrições médicas
 - ✅ **CRUD de Pacientes**: Cadastro completo com validações
 - ✅ **Agendamento de Consultas**: Sistema completo de agendamentos
 - ✅ **Agenda Diária**: Visualização da agenda com slots disponíveis
@@ -25,7 +30,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Atendimento ao Paciente**: Tela completa de atendimento com prontuário
 - ✅ **Timer de Consulta**: Cronômetro automático para controle do tempo
 - ✅ **Prontuário Médico**: Registro de diagnóstico, prescrição e observações
-- ✅ **Histórico do Paciente**: Visualização de consultas anteriores
+- ✅ **Histórico do Paciente**: Visualização de consultas anteriores em formato timeline
 - ✅ **Prescrição Médica**: Área de texto com impressão otimizada
 - ✅ **Encaixes**: Permite agendamentos de emergência
 - ✅ **Autenticação JWT**: API segura com tokens JWT
@@ -143,9 +148,12 @@ Use o token retornado no header `Authorization: Bearer {token}` nas demais requi
 - **Pacientes**:
   - `GET /api/patients` - Listar pacientes
   - `GET /api/patients/{id}` - Obter paciente por ID
+  - `GET /api/patients/search?searchTerm={termo}` - Buscar por CPF, Nome ou Telefone
+  - `GET /api/patients/by-document/{cpf}` - Buscar por CPF em todas as clínicas
   - `POST /api/patients` - Criar novo paciente
   - `PUT /api/patients/{id}` - Atualizar paciente
   - `DELETE /api/patients/{id}` - Excluir paciente
+  - `POST /api/patients/{patientId}/link-clinic/{clinicId}` - Vincular paciente à clínica
 
 - **Agendamentos**:
   - `POST /api/appointments` - Criar agendamento
@@ -177,12 +185,23 @@ dotnet test --collect:"XPlat Code Coverage"
 
 - **Patients**: Dados dos pacientes
 - **Clinics**: Informações dos consultórios
+- **PatientClinicLinks**: Vínculos N:N entre pacientes e clínicas
 - **Appointments**: Agendamentos de consultas
-- **MedicalRecords**: Prontuários médicos e histórico de atendimentos
+- **MedicalRecords**: Prontuários médicos e histórico de atendimentos (isolados por clínica)
+- **MedicalRecordTemplates**: Templates reutilizáveis para prontuários
+- **PrescriptionTemplates**: Templates reutilizáveis para prescrições
 
 ### Multitenancy
 
 O sistema utiliza **multitenancy** por coluna `TenantId`, garantindo isolamento de dados entre diferentes consultórios.
+
+**Importante**: 
+- Pacientes podem estar vinculados a múltiplas clínicas (N:N)
+- Dados cadastrais são compartilhados entre clínicas vinculadas
+- Prontuários médicos são **isolados por clínica** - cada clínica vê apenas seus próprios registros
+- Sistema detecta cadastro prévio por CPF e reutiliza dados, criando novo vínculo
+
+Para mais detalhes sobre as regras de negócio, consulte [BUSINESS_RULES.md](BUSINESS_RULES.md)
 
 ## 🔐 Segurança
 
