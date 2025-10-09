@@ -3,8 +3,8 @@
 ## Estatísticas Gerais
 
 ```
-✅ Total de Testes: 425
-✅ Aprovados: 425 (100%)
+✅ Total de Testes: 507
+✅ Aprovados: 507 (100%)
 ❌ Reprovados: 0
 ⏱️ Tempo de Execução: ~2 segundos
 ```
@@ -22,7 +22,7 @@
 | PhoneTests | 5 | Validação de telefone com código de país |
 | AddressTests | 16 | Validação completa de endereço |
 
-### 2. Entidades (236 testes)
+### 2. Entidades (318 testes)
 
 | Classe | Testes | Descrição |
 |--------|--------|-----------|
@@ -31,11 +31,13 @@
 | AppointmentTests | 20 | Agendamentos: estados, cancelamento, remarcação, sobreposição |
 | MedicalRecordTests | 22 | Prontuários: diagnóstico, prescrição, duração, finalização |
 | HealthInsurancePlanTests | 18 | Planos de saúde: validade, ativação, múltiplos planos |
-| MedicationTests | 20 | **NOVO**: Medicamentos, classificação ANVISA, categorias |
-| PrescriptionItemTests | 18 | **NOVO**: Itens de prescrição, dosagem, frequência |
-| SubscriptionPlanTests | 18 | **NOVO**: Planos de assinatura, trial de 15 dias |
-| ClinicSubscriptionTests | 27 | **NOVO**: Assinaturas, ciclo de vida, pagamentos |
-| NotificationTests | 18 | **NOVO**: Notificações SMS/WhatsApp, retry logic |
+| MedicationTests | 20 | Medicamentos, classificação ANVISA, categorias |
+| PrescriptionItemTests | 18 | Itens de prescrição, dosagem, frequência |
+| SubscriptionPlanTests | 18 | Planos de assinatura, trial de 15 dias |
+| ClinicSubscriptionTests | 27 | Assinaturas, ciclo de vida, pagamentos |
+| NotificationTests | 18 | Notificações SMS/WhatsApp, retry logic |
+| PaymentTests | 42 | **NOVO**: Pagamentos (Cartão, Dinheiro, PIX), fluxos de pagamento |
+| InvoiceTests | 40 | **NOVO**: Notas fiscais, emissão, cancelamento, vencimento |
 | MedicalRecordTemplateTests | 14 | Templates de prontuário |
 | PrescriptionTemplateTests | 14 | Templates de prescrição |
 | PatientClinicLinkTests | 5 | Vínculo N:N entre pacientes e clínicas |
