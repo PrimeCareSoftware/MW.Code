@@ -244,6 +244,18 @@ O sistema utiliza **multitenancy** por coluna `TenantId`, garantindo isolamento 
 
 Para mais detalhes sobre as regras de negócio, consulte [BUSINESS_RULES.md](BUSINESS_RULES.md)
 
+## 📱 Interface e Telas
+
+Para visualizar todas as telas do sistema com descrições detalhadas e fluxos de navegação, consulte:
+- **[SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md)** - Documentação completa de todas as interfaces com diagramas de fluxo
+
+Este documento inclui:
+- Mockups ASCII de todas as telas
+- Diagramas Mermaid de fluxos de navegação
+- Descrição detalhada de funcionalidades
+- Estados e transições de agendamentos
+- Padrões de interface e componentes
+
 ## 🔐 Segurança
 
 - **JWT Authentication**: Autenticação baseada em tokens

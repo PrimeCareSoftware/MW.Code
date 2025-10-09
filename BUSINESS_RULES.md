@@ -515,3 +515,32 @@ Estados da Assinatura: **Trial** → **Active** → **Suspended/PaymentOverdue**
 - Gestão de assinaturas e planos
 - Analytics e BI global
 - Acesso cross-tenant para auditoria
+
+---
+
+## 📱 Documentação Visual de Interfaces
+
+Para visualizar os fluxos de trabalho completos com mockups de telas e diagramas interativos, consulte:
+
+### [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md)
+
+Este documento complementar contém:
+- **Mockups ASCII** de todas as telas do sistema
+- **Diagramas Mermaid** com fluxos de navegação
+- **Descrição detalhada** de cada interface
+- **Estados e transições** dos agendamentos
+- **Validações** e regras de cada formulário
+
+**Principais fluxos visuais documentados:**
+1. Fluxo de Primeiro Atendimento (novo paciente)
+2. Fluxo de Atendimento Recorrente (paciente existente)
+3. Fluxo de Busca e Vínculo (paciente de outra clínica)
+4. Estados dos Agendamentos (Agendado → Em Atendimento → Concluído)
+
+A documentação visual complementa as regras de negócio descritas neste documento, mostrando como elas se manifestam na interface do usuário.
+
+---
+
+**Data**: Janeiro 2025  
+**Versão**: 1.0  
+**Equipe**: MedicWarehouse
