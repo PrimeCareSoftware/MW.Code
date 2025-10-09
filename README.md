@@ -244,6 +244,24 @@ O sistema utiliza **multitenancy** por coluna `TenantId`, garantindo isolamento 
 
 Para mais detalhes sobre as regras de negócio, consulte [BUSINESS_RULES.md](BUSINESS_RULES.md)
 
+## 📱 Interface e Telas
+
+Para visualizar todas as telas do sistema com descrições detalhadas e fluxos de navegação, consulte:
+- **[SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md)** - Documentação completa de todas as interfaces com diagramas de fluxo
+- **[docs/VISUAL_FLOW_SUMMARY.md](docs/VISUAL_FLOW_SUMMARY.md)** - Resumo visual rápido com diagramas Mermaid interativos
+
+Este documento inclui:
+- Mockups ASCII de todas as telas
+- Diagramas Mermaid de fluxos de navegação (renderizados automaticamente pelo GitHub)
+- Descrição detalhada de funcionalidades
+- Estados e transições de agendamentos
+- Padrões de interface e componentes
+
+### Principais Fluxos Documentados:
+1. **Fluxo de Primeiro Atendimento**: Dashboard → Novo Paciente → Cadastro → Agendamento → Atendimento
+2. **Fluxo de Paciente Recorrente**: Dashboard → Agenda → Atendimento (com histórico visível)
+3. **Fluxo de Vínculo Multi-Clínica**: Busca por CPF → Detecta cadastro existente → Vincula à clínica atual
+
 ## 🔐 Segurança
 
 - **JWT Authentication**: Autenticação baseada em tokens

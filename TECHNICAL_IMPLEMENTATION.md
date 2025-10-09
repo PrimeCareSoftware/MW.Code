@@ -580,6 +580,55 @@ FROM sys.indexes
 WHERE object_id = OBJECT_ID('PatientClinicLinks');
 ```
 
+## Fluxos Visuais e Interface
+
+Para uma compreensão completa dos fluxos de usuário e interface do sistema, consulte:
+
+### 📱 Documentação de Telas e Fluxos
+
+**[SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md)** contém:
+
+- **Mockups de todas as telas**: Representação visual de cada interface
+- **Diagramas de fluxo Mermaid**: Fluxos de navegação interativos
+- **Descrição detalhada**: Funcionalidades e validações de cada tela
+- **Estados e transições**: Máquina de estados dos agendamentos
+- **Padrões de interface**: Guidelines de UI/UX
+
+#### Principais Fluxos Documentados:
+
+```mermaid
+graph LR
+    A[Login] --> B[Dashboard]
+    B --> C[Pacientes]
+    B --> D[Agendamentos]
+    C --> E[Form. Paciente]
+    D --> F[Form. Agendamento]
+    D --> G[Atendimento]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff4e1
+    style G fill:#e8f5e9
+```
+
+**Fluxo 1: Primeiro Atendimento**
+1. Dashboard → Novo Paciente → Cadastro
+2. Lista Pacientes → Novo Agendamento
+3. Agenda → Iniciar Atendimento → Prontuário
+
+**Fluxo 2: Paciente Recorrente**
+1. Dashboard → Agendamentos
+2. Seleciona agendamento existente
+3. Iniciar Atendimento (histórico visível)
+4. Finalizar e retornar para agenda
+
+**Fluxo 3: Busca e Vínculo**
+1. Busca paciente por CPF (global)
+2. Sistema detecta cadastro existente
+3. Vincula à clínica atual
+4. Paciente disponível para agendamento
+
+Para detalhes completos e representações visuais de cada tela, consulte [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md).
+
 ## Próximos Passos
 
 1. **API de Templates**: Implementar controllers completos para templates
@@ -593,6 +642,7 @@ WHERE object_id = OBJECT_ID('PatientClinicLinks');
 ## Referências
 
 - [BUSINESS_RULES.md](BUSINESS_RULES.md) - Regras de negócio detalhadas
+- [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md) - **Documentação visual de telas e fluxos**
 - [README.md](README.md) - Documentação geral do projeto
 - [IMPLEMENTATION.md](IMPLEMENTATION.md) - Implementação original do sistema
 
