@@ -119,6 +119,12 @@ namespace MedicSoft.Repository.Configurations
                 .WithOne(h => h.Patient)
                 .HasForeignKey(h => h.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Relationship with PatientClinicLinks (N:N through link entity)
+            builder.HasMany(p => p.ClinicLinks)
+                .WithOne(l => l.Patient)
+                .HasForeignKey(l => l.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -18,6 +18,13 @@ namespace MedicSoft.Repository.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Patient?> GetByDocumentGlobalAsync(string document)
+        {
+            return await _dbSet
+                .Where(p => p.Document == document)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Patient?> GetByEmailAsync(string email, string tenantId)
         {
             return await _dbSet
@@ -29,6 +36,25 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _dbSet
                 .Where(p => p.Name.Contains(name) && p.TenantId == tenantId)
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Patient>> SearchByPhoneAsync(string phoneNumber, string tenantId)
+        {
+            return await _dbSet
+                .Where(p => p.Phone.Number.Contains(phoneNumber) && p.TenantId == tenantId)
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Patient>> SearchAsync(string searchTerm, string tenantId)
+        {
+            return await _dbSet
+                .Where(p => (p.Name.Contains(searchTerm) || 
+                            p.Document.Contains(searchTerm) || 
+                            p.Phone.Number.Contains(searchTerm)) && 
+                            p.TenantId == tenantId)
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
