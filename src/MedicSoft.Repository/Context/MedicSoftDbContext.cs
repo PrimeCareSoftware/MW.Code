@@ -18,6 +18,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<PatientClinicLink> PatientClinicLinks { get; set; } = null!;
         public DbSet<MedicalRecordTemplate> MedicalRecordTemplates { get; set; } = null!;
         public DbSet<PrescriptionTemplate> PrescriptionTemplates { get; set; } = null!;
+        public DbSet<Medication> Medications { get; set; } = null!;
+        public DbSet<PrescriptionItem> PrescriptionItems { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +34,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new PatientClinicLinkConfiguration());
             modelBuilder.ApplyConfiguration(new MedicalRecordTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new PrescriptionTemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicationConfiguration());
+            modelBuilder.ApplyConfiguration(new PrescriptionItemConfiguration());
 
             // Global query filters for tenant isolation
             modelBuilder.Entity<Patient>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
@@ -42,6 +46,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.Entity<PatientClinicLink>().HasQueryFilter(l => EF.Property<string>(l, "TenantId") == GetTenantId());
             modelBuilder.Entity<MedicalRecordTemplate>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
             modelBuilder.Entity<PrescriptionTemplate>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
+            modelBuilder.Entity<Medication>().HasQueryFilter(m => EF.Property<string>(m, "TenantId") == GetTenantId());
+            modelBuilder.Entity<PrescriptionItem>().HasQueryFilter(pi => EF.Property<string>(pi, "TenantId") == GetTenantId());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

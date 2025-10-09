@@ -3,8 +3,8 @@
 ## Estatísticas Gerais
 
 ```
-✅ Total de Testes: 305
-✅ Aprovados: 305 (100%)
+✅ Total de Testes: 425
+✅ Aprovados: 425 (100%)
 ❌ Reprovados: 0
 ⏱️ Tempo de Execução: ~2 segundos
 ```
@@ -22,7 +22,7 @@
 | PhoneTests | 5 | Validação de telefone com código de país |
 | AddressTests | 16 | Validação completa de endereço |
 
-### 2. Entidades (116 testes)
+### 2. Entidades (236 testes)
 
 | Classe | Testes | Descrição |
 |--------|--------|-----------|
@@ -31,6 +31,14 @@
 | AppointmentTests | 20 | Agendamentos: estados, cancelamento, remarcação, sobreposição |
 | MedicalRecordTests | 22 | Prontuários: diagnóstico, prescrição, duração, finalização |
 | HealthInsurancePlanTests | 18 | Planos de saúde: validade, ativação, múltiplos planos |
+| MedicationTests | 20 | **NOVO**: Medicamentos, classificação ANVISA, categorias |
+| PrescriptionItemTests | 18 | **NOVO**: Itens de prescrição, dosagem, frequência |
+| SubscriptionPlanTests | 18 | **NOVO**: Planos de assinatura, trial de 15 dias |
+| ClinicSubscriptionTests | 27 | **NOVO**: Assinaturas, ciclo de vida, pagamentos |
+| NotificationTests | 18 | **NOVO**: Notificações SMS/WhatsApp, retry logic |
+| MedicalRecordTemplateTests | 14 | Templates de prontuário |
+| PrescriptionTemplateTests | 14 | Templates de prescrição |
+| PatientClinicLinkTests | 5 | Vínculo N:N entre pacientes e clínicas |
 
 ### 3. Services (14 testes)
 
@@ -56,6 +64,11 @@
 - [x] Appointment: ciclo de vida, estados, sobreposição
 - [x] MedicalRecord: consulta, prescrição, duração
 - [x] HealthInsurancePlan: validade, ativação, múltiplos planos
+- [x] **Medication**: cadastro, categorias, ANVISA, autocomplete
+- [x] **PrescriptionItem**: vínculo com medicamentos, dosagem, frequência
+- [x] **SubscriptionPlan**: planos de assinatura, trial 15 dias, recursos
+- [x] **ClinicSubscription**: ciclo de vida, pagamentos, suspensão
+- [x] **Notification**: SMS/WhatsApp/Email, retry logic, status tracking
 
 ### ✅ Cenários de Erro Testados
 

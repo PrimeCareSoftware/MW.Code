@@ -203,6 +203,27 @@ Cada clínica (tenant) pode:
 - PUT `/api/prescription-templates/{id}`: Atualizar template
 - DELETE `/api/prescription-templates/{id}`: Desativar template
 
+## 4.3 Gestão de Medicamentos
+
+**Funcionalidade**: O sistema deve permitir o cadastro de medicamentos com autocomplete nas receitas.
+
+#### Características
+
+- **Cadastro Completo**: Nome comercial, genérico, princípio ativo, dosagem, forma farmacêutica
+- **Classificação ANVISA**: Registro ANVISA, código de barras, medicamento controlado
+- **Categorias**: Analgésico, Antibiótico, Anti-inflamatório, Anti-hipertensivo, etc.
+- **Autocomplete**: Busca inteligente ao digitar receitas médicas
+- **Itens de Prescrição**: Vínculo de medicamentos a prontuários com dosagem, frequência e duração
+
+#### Endpoints
+
+- POST `/api/medications`: Criar novo medicamento
+- GET `/api/medications`: Listar medicamentos da clínica
+- GET `/api/medications/search?term={termo}`: Buscar medicamentos (autocomplete)
+- GET `/api/medications/category/{category}`: Filtrar por categoria
+- PUT `/api/medications/{id}`: Atualizar medicamento
+- DELETE `/api/medications/{id}`: Desativar medicamento
+
 ## 5. Timeline/Feed do Histórico do Paciente
 
 **Regra**: O histórico do paciente deve ser exibido como um feed/timeline dentro do cadastro do mesmo.
@@ -445,3 +466,52 @@ Para dúvidas, sugestões ou suporte técnico:
 **Última Atualização**: Janeiro 2025  
 **Versão do Documento**: 1.0  
 **Autor**: Equipe MedicWarehouse
+
+## 6. Sistema de Assinaturas e Cobrança
+
+**Regra**: O sistema deve oferecer período de teste gratuito de 15 dias e planos pagos com diferentes recursos.
+
+### 6.1 Planos de Assinatura
+
+- **Trial (Teste)**: 15 dias gratuitos com recursos limitados
+- **Basic**: Plano básico para pequenas clínicas
+- **Standard**: Plano padrão com recursos intermediários
+- **Premium**: Plano completo com todos os recursos
+- **Enterprise**: Plano customizado para grandes organizações
+
+### 6.2 Gestão de Assinaturas
+
+Estados da Assinatura: **Trial** → **Active** → **Suspended/PaymentOverdue** → **Cancelled**
+
+## 7. Sistema de Notificações
+
+**Regra**: O sistema deve enviar notificações automáticas via SMS e WhatsApp para confirmar agendamentos.
+
+### 7.1 Canais: SMS, WhatsApp, Email, Push
+
+### 7.2 Tipos: Lembrete de Consulta (24h antes), Confirmação, Cancelamento, Reagendamento
+
+### 7.3 Máximo de 3 tentativas para notificações falhadas com log completo
+
+## 8. Procedimentos e Serviços
+
+**Regra**: Cadastro de procedimentos/serviços, vínculo com materiais e registro na consulta.
+
+### 8.1 Procedimentos: Nome, código, categoria, preço, duração, materiais
+
+### 8.2 Materiais: Controle de estoque com entrada/saída e alertas
+
+### 8.3 Vínculo: Procedimento + Consulta + Paciente com dedução de estoque
+
+## 9. Painel de Administração
+
+### 9.1 Painel do Dono da Clínica
+- Gestão de usuários e permissões
+- Configurações da clínica
+- Relatórios gerenciais e financeiros
+
+### 9.2 Painel do Administrador do Sistema
+- Gestão de todas as clínicas
+- Gestão de assinaturas e planos
+- Analytics e BI global
+- Acesso cross-tenant para auditoria

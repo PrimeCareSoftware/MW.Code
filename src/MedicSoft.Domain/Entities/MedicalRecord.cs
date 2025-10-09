@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.Entities
@@ -17,6 +19,10 @@ namespace MedicSoft.Domain.Entities
         // Navigation properties
         public Appointment Appointment { get; private set; } = null!;
         public Patient Patient { get; private set; } = null!;
+        
+        // Navigation property for prescription items
+        private readonly List<PrescriptionItem> _prescriptionItems = new();
+        public IReadOnlyCollection<PrescriptionItem> PrescriptionItems => _prescriptionItems.AsReadOnly();
 
         private MedicalRecord() 
         { 

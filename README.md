@@ -17,25 +17,66 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 🚀 Funcionalidades
 
+### 🏥 Gestão Clínica
 - ✅ **Multitenant**: Isolamento de dados por consultório
 - ✅ **Vínculo Multi-Clínica**: Paciente pode estar vinculado a múltiplas clínicas (N:N)
 - ✅ **Busca Inteligente**: Busca de pacientes por CPF, Nome ou Telefone
 - ✅ **Reutilização de Cadastro**: Sistema detecta cadastro prévio e vincula à nova clínica
 - ✅ **Privacidade de Prontuários**: Cada clínica acessa apenas seus próprios prontuários
 - ✅ **Templates**: Templates reutilizáveis para prontuários e prescrições médicas
+
+### 💊 Medicamentos e Prescrições
+- ✅ **Cadastro de Medicamentos**: Base completa com classificação ANVISA
+- ✅ **Autocomplete**: Busca inteligente de medicamentos ao prescrever
+- ✅ **Itens de Prescrição**: Vínculo de medicamentos com dosagem, frequência e duração
+- ✅ **Medicamentos Controlados**: Identificação de substâncias controladas (Portaria 344/98)
+- ✅ **Categorias**: Analgésico, Antibiótico, Anti-inflamatório, etc.
+
+### 📅 Agendamentos e Atendimento
 - ✅ **CRUD de Pacientes**: Cadastro completo com validações
 - ✅ **Agendamento de Consultas**: Sistema completo de agendamentos
 - ✅ **Agenda Diária**: Visualização da agenda com slots disponíveis
-- ✅ **Visualização em Calendário**: Navegação mensal com indicadores de agendamentos
+- ✅ **Visualização em Calendário**: Navegação mensal com indicadores
 - ✅ **Atendimento ao Paciente**: Tela completa de atendimento com prontuário
 - ✅ **Timer de Consulta**: Cronômetro automático para controle do tempo
 - ✅ **Prontuário Médico**: Registro de diagnóstico, prescrição e observações
-- ✅ **Histórico do Paciente**: Visualização de consultas anteriores em formato timeline
+- ✅ **Histórico do Paciente**: Timeline de consultas anteriores
 - ✅ **Prescrição Médica**: Área de texto com impressão otimizada
 - ✅ **Encaixes**: Permite agendamentos de emergência
+
+### 💳 Assinaturas e Cobrança
+- ✅ **Período de Teste**: 15 dias gratuitos para novas clínicas
+- ✅ **Planos Flexíveis**: Trial, Basic, Standard, Premium, Enterprise
+- ✅ **Gestão de Assinaturas**: Ativação, suspensão, cancelamento
+- ✅ **Controle de Pagamentos**: Registro de pagamentos e renovações
+- ✅ **Status de Assinatura**: Trial, Active, Suspended, PaymentOverdue, Cancelled
+
+### 📲 Notificações
+- ✅ **SMS**: Integração preparada para envio de SMS
+- ✅ **WhatsApp**: Interface para WhatsApp Business API
+- ✅ **Lembretes Automáticos**: Confirmação de agendamento 24h antes
+- ✅ **Retry Logic**: Até 3 tentativas para notificações falhadas
+- ✅ **Múltiplos Canais**: SMS, WhatsApp, Email, Push
+
+### 🏥 Procedimentos e Serviços
+- ✅ **Cadastro de Procedimentos**: Nome, código, categoria, preço, duração
+- ✅ **Gestão de Materiais**: Controle de estoque com entrada e saída
+- ✅ **Vínculo Procedimento-Consulta**: Registro completo por atendimento
+- ✅ **Controle de Estoque**: Alerta de estoque mínimo
+- ✅ **Categorias**: Consulta, Exame, Cirurgia, Terapia, Vacinação, etc.
+
+### 🔐 Segurança e Administração
 - ✅ **Autenticação JWT**: API segura com tokens JWT
+- ✅ **Painel do Dono da Clínica**: Gestão completa de usuários e configurações
+- ✅ **Painel do Sistema**: Administração master para dono do sistema
+- ✅ **Gestão de Permissões**: Controle granular de acesso
+- ✅ **Auditoria**: Log completo de operações
+
+### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
 - ✅ **Docker**: Containerização completa
+- 🚧 **TISS Export**: Integração com padrão TISS (em planejamento)
+- 🚧 **Relatórios BI**: Dashboards e analytics (em planejamento)
 
 ## 🔧 Tecnologias
 
