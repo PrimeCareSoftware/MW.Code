@@ -76,6 +76,19 @@ namespace MedicSoft.Application.Mappings
 
             CreateMap<MedicalRecord, MedicalRecordDto>()
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name));
+
+            // Payment mappings
+            CreateMap<Payment, PaymentDto>()
+                .ForMember(dest => dest.Method, opt => opt.MapFrom(src => src.Method.ToString()))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
+            // Invoice mappings
+            CreateMap<Invoice, InvoiceDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.DaysUntilDue, opt => opt.MapFrom(src => src.DaysUntilDue()))
+                .ForMember(dest => dest.DaysOverdue, opt => opt.MapFrom(src => src.DaysOverdue()))
+                .ForMember(dest => dest.IsOverdue, opt => opt.MapFrom(src => src.IsOverdue()));
         }
     }
 }
