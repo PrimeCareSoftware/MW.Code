@@ -23,6 +23,10 @@ namespace MedicSoft.Repository.Context
         public DbSet<Payment> Payments { get; set; } = null!;
         public DbSet<Invoice> Invoices { get; set; } = null!;
         public DbSet<NotificationRoutine> NotificationRoutines { get; set; } = null!;
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; } = null!;
+        public DbSet<ClinicSubscription> ClinicSubscriptions { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<ModuleConfiguration> ModuleConfigurations { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +46,10 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationRoutineConfiguration());
+            modelBuilder.ApplyConfiguration(new SubscriptionPlanConfiguration());
+            modelBuilder.ApplyConfiguration(new ClinicSubscriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ModuleConfigurationConfiguration());
 
             // Global query filters for tenant isolation
             modelBuilder.Entity<Patient>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
@@ -57,6 +65,10 @@ namespace MedicSoft.Repository.Context
             modelBuilder.Entity<Payment>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
             modelBuilder.Entity<Invoice>().HasQueryFilter(i => EF.Property<string>(i, "TenantId") == GetTenantId());
             modelBuilder.Entity<NotificationRoutine>().HasQueryFilter(nr => EF.Property<string>(nr, "TenantId") == GetTenantId());
+            modelBuilder.Entity<SubscriptionPlan>().HasQueryFilter(sp => EF.Property<string>(sp, "TenantId") == GetTenantId());
+            modelBuilder.Entity<ClinicSubscription>().HasQueryFilter(cs => EF.Property<string>(cs, "TenantId") == GetTenantId());
+            modelBuilder.Entity<User>().HasQueryFilter(u => EF.Property<string>(u, "TenantId") == GetTenantId());
+            modelBuilder.Entity<ModuleConfiguration>().HasQueryFilter(mc => EF.Property<string>(mc, "TenantId") == GetTenantId());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

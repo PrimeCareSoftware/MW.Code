@@ -18,5 +18,19 @@ namespace MedicSoft.Repository.Repositories
                 .OrderBy(p => p.MonthlyPrice)
                 .ToListAsync();
         }
+
+        public async Task<SubscriptionPlan?> GetByTypeAsync(PlanType type, string tenantId)
+        {
+            return await _dbSet
+                .FirstOrDefaultAsync(p => p.Type == type && p.TenantId == tenantId && p.IsActive);
+        }
+
+        public async Task<IEnumerable<SubscriptionPlan>> GetAllActiveAsync(string tenantId)
+        {
+            return await _dbSet
+                .Where(p => p.IsActive && p.TenantId == tenantId)
+                .OrderBy(p => p.MonthlyPrice)
+                .ToListAsync();
+        }
     }
 }

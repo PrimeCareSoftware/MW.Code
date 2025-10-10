@@ -4,6 +4,18 @@
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
 
+## 📚 Documentação Completa
+
+Toda a documentação detalhada do projeto está disponível no **projeto web de documentação**:
+- 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
+- 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
+- 📖 **Principais Documentos**:
+  - `BUSINESS_RULES.md` - Regras de negócio
+  - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas (NOVO!)
+  - `API_QUICK_GUIDE.md` - Guia rápido da API
+  - `SECURITY_GUIDE.md` - Guia de segurança
+  - `GUIA_EXECUCAO.md` - Como executar o projeto
+
 ## 🏗️ Arquitetura
 
 O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em camadas:
@@ -16,6 +28,26 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - **MedicSoft.Test**: Testes unitários e de integração
 
 ## 🚀 Funcionalidades
+
+### 💳 Sistema de Assinaturas SaaS (NOVO!)
+- ✅ **Planos de Assinatura**: Trial, Basic, Standard, Premium, Enterprise
+- ✅ **Upgrade/Downgrade**: Upgrade cobra diferença imediata, downgrade na próxima cobrança
+- ✅ **Congelamento de Plano**: Suspende cobrança e acesso por 1 mês
+- ✅ **Validação de Pagamento**: Notificações automáticas via SMS, Email e WhatsApp
+- ✅ **Bloqueio por Inadimplência**: Acesso bloqueado até regularização
+- ✅ **Restauração Automática**: Acesso liberado após confirmação de pagamento
+
+### 👥 Gestão de Usuários e Permissões (NOVO!)
+- ✅ **Múltiplos Perfis**: SystemAdmin, ClinicOwner, Doctor, Dentist, Nurse, Receptionist, Secretary
+- ✅ **Controle de Acesso**: Permissões granulares por role
+- ✅ **Limite de Usuários**: Validação automática baseada no plano
+- ✅ **Administrador da Clínica**: Cadastro do dono com poderes completos
+- ✅ **Cadastro de Médicos**: Suporte para CRM, especialidade, etc.
+
+### 🎛️ Configuração de Módulos (NOVO!)
+- ✅ **Módulos por Plano**: Recursos habilitados conforme o plano
+- ✅ **Habilitar/Desabilitar**: Controle de módulos por clínica
+- ✅ **Configuração Personalizada**: Parâmetros específicos por módulo
 
 ### 🏥 Gestão Clínica
 - ✅ **Multitenant**: Isolamento de dados por consultório
