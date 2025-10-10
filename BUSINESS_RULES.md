@@ -17,6 +17,43 @@ O MedicWarehouse é um sistema multitenant de gestão para consultórios e clín
   - Cada vínculo possui data de criação e status ativo/inativo
   - O vínculo mantém o `TenantId` para isolamento de dados
 
+### 1.1.1 Regras de Responsáveis para Crianças
+
+**Regra Principal**: Pacientes menores de 18 anos (crianças) devem ter um responsável cadastrado.
+
+#### Implementação
+
+- **Relacionamento Guardian-Child**: Implementado como auto-relacionamento na entidade Patient
+  - Uma criança pode ter um responsável (GuardianId)
+  - Um responsável pode ter múltiplas crianças
+  - O sistema valida automaticamente a idade para determinar se é criança (< 18 anos)
+
+#### Validações
+
+1. **Criação de Paciente Criança**:
+   ```
+   - Sistema calcula idade com base na data de nascimento
+   - Se idade < 18: campo responsável torna-se obrigatório
+   - Sistema valida que o responsável existe e não é criança
+   - Sistema cria vínculo guardian-child automaticamente
+   ```
+
+2. **Atendimento de Crianças**:
+   ```
+   - Uma mãe pode levar dois filhos para consulta simultânea
+   - Sistema permite visualizar todas as crianças de um responsável
+   - Endpoint: GET /api/patients/{guardianId}/children
+   - Facilita agendamento e atendimento conjunto
+   ```
+
+3. **Proteções do Sistema**:
+   ```
+   - Criança não pode ser responsável por outra criança
+   - Paciente não pode ser responsável de si mesmo
+   - Apenas adultos (18+) podem ser responsáveis
+   - Sistema remove automaticamente vínculo quando criança completa 18 anos
+   ```
+
 #### Fluxo de Cadastro
 
 1. **Novo Paciente sem Cadastro Prévio**:
@@ -304,13 +341,20 @@ GET /api/medical-records/patient/{patientId}
 2. Sistema valida dados
    ├─ CPF válido
    ├─ Email único (por tenant)
-   └─ Campos obrigatórios preenchidos
+   ├─ Campos obrigatórios preenchidos
+   └─ Se menor de 18: responsável obrigatório
 
-3. Paciente vinculado à clínica
+3. Se paciente é criança (< 18 anos)
+   ├─ Sistema exibe campo de busca de responsável
+   ├─ Recepcionista busca e seleciona responsável adulto
+   ├─ Sistema valida que responsável não é criança
+   └─ Vínculo guardian-child criado automaticamente
+
+4. Paciente vinculado à clínica
    ├─ POST /api/patients/{patientId}/link-clinic/{clinicId}
    └─ Registro salvo com TenantId
 
-4. Agendamento criado
+5. Agendamento criado
    └─ Paciente disponível para consultas na clínica
 
 5. Durante atendimento
@@ -594,6 +638,99 @@ Estados da Nota Fiscal: **Draft** → **Issued** → **Sent** → **Paid** | **C
 
 ---
 
+## 7. Fluxo de Atendimento de Crianças com Responsável
+
+### 7.1 Cenário: Mãe com Dois Filhos
+
+**Situação**: Uma mãe leva seus dois filhos menores para consulta.
+
+#### Fluxo Detalhado
+
+```
+1. Cadastro do Responsável (Mãe)
+   ├─ Recepção cadastra a mãe como paciente adulto
+   ├─ CPF, nome, dados de contato, endereço
+   └─ Paciente ID: [GUID-MAE]
+
+2. Cadastro da Primeira Criança
+   ├─ Sistema calcula idade: 8 anos (< 18)
+   ├─ Campo "Responsável" torna-se obrigatório
+   ├─ Recepcionista busca e seleciona a mãe
+   ├─ Sistema cria vínculo: GuardianId = [GUID-MAE]
+   └─ Criança ID: [GUID-FILHO1]
+
+3. Cadastro da Segunda Criança
+   ├─ Sistema calcula idade: 5 anos (< 18)
+   ├─ Recepcionista busca e seleciona a mãe
+   ├─ Sistema cria vínculo: GuardianId = [GUID-MAE]
+   └─ Criança ID: [GUID-FILHO2]
+
+4. Agendamento Conjunto
+   ├─ Sistema permite visualizar filhos da mãe
+   ├─ GET /api/patients/{GUID-MAE}/children
+   ├─ Retorna lista: [FILHO1, FILHO2]
+   ├─ Recepcionista agenda consultas próximas
+   └─ Facilita atendimento sequencial ou simultâneo
+
+5. Durante o Atendimento
+   ├─ Médico pode ver que são irmãos (mesmo GuardianId)
+   ├─ Informações do responsável disponíveis
+   ├─ Histórico mantido separado por criança
+   └─ Prescrições individuais por paciente
+```
+
+### 7.2 Endpoints para Responsáveis
+
+1. **Vincular Criança a Responsável**:
+   ```
+   POST /api/patients/{childId}/link-guardian/{guardianId}
+   
+   Validações:
+   - Criança deve ter menos de 18 anos
+   - Responsável deve ter 18 anos ou mais
+   - Ambos devem estar no mesmo tenant
+   ```
+
+2. **Listar Filhos de um Responsável**:
+   ```
+   GET /api/patients/{guardianId}/children
+   
+   Retorna:
+   - Array de pacientes menores de 18 anos
+   - Dados completos de cada criança
+   - Ordenados por idade (mais velho primeiro)
+   ```
+
+3. **Criar Paciente com Responsável**:
+   ```
+   POST /api/patients
+   Body: {
+     name: "João Silva",
+     dateOfBirth: "2015-03-10",
+     guardianId: "[GUID-DO-RESPONSAVEL]",
+     ...outros campos
+   }
+   ```
+
+### 7.3 Benefícios do Sistema
+
+1. **Organização Familiar**:
+   - Visualização clara de vínculos familiares
+   - Facilita agendamento de consultas conjuntas
+   - Responsável recebe notificações de todos os filhos
+
+2. **Segurança e Compliance**:
+   - Garantia de que crianças têm responsável identificado
+   - Rastreabilidade de autorização de atendimento
+   - Contato de emergência sempre disponível
+
+3. **Eficiência Operacional**:
+   - Atendimento mais rápido de famílias
+   - Dados do responsável compartilhados entre filhos
+   - Redução de duplicação de informações
+
+---
+
 ## 📱 Documentação Visual de Interfaces
 
 Para visualizar os fluxos de trabalho completos com mockups de telas e diagramas interativos, consulte:
@@ -612,11 +749,12 @@ Este documento complementar contém:
 2. Fluxo de Atendimento Recorrente (paciente existente)
 3. Fluxo de Busca e Vínculo (paciente de outra clínica)
 4. Estados dos Agendamentos (Agendado → Em Atendimento → Concluído)
+5. **NOVO**: Cadastro de Crianças com Responsável
 
 A documentação visual complementa as regras de negócio descritas neste documento, mostrando como elas se manifestam na interface do usuário.
 
 ---
 
 **Data**: Janeiro 2025  
-**Versão**: 1.0  
+**Versão**: 1.1  
 **Equipe**: MedicWarehouse

@@ -12,6 +12,10 @@ Este documento descreve a implementação técnica das regras de negócio do Med
 
 ```
 Patient (1) ←→ (N) PatientClinicLink (N) ←→ (1) Clinic
+
+Patient (Guardian/Responsável)
+  └─ GuardianId → Patient (Child/Criança)
+     (Self-referencing relationship)
 ```
 
 **PatientClinicLink**:
@@ -19,6 +23,16 @@ Patient (1) ←→ (N) PatientClinicLink (N) ←→ (1) Clinic
 - Suporta N:N relationship
 - Mantém TenantId para isolamento
 - Campos: PatientId, ClinicId, LinkedAt, IsActive
+
+**Patient - Guardian/Child Relationship** (🆕):
+- Auto-relacionamento na entidade Patient
+- GuardianId (nullable): FK para outro Patient (responsável)
+- Um adulto (Guardian) pode ter múltiplas crianças
+- Uma criança pode ter apenas um responsável
+- Validações:
+  - Criança: idade < 18 anos
+  - Guardian: idade >= 18 anos
+  - Patient não pode ser responsável de si mesmo
 
 #### Fluxo de Cadastro
 
@@ -29,13 +43,29 @@ GET /api/patients/by-document/{cpf}
 
 // 2a. Se paciente não existe
 POST /api/patients
+Body: {
+  name: "...",
+  dateOfBirth: "2015-01-01",  // Se < 18 anos
+  guardianId: "{GUID}",        // Obrigatório para crianças
+  ...
+}
 → CreatePatientCommand
-→ Cria Patient com TenantId da clínica atual
+→ Cria Patient com TenantId e GuardianId
 
 // 2b. Se paciente existe
 POST /api/patients/{patientId}/link-clinic/{clinicId}
 → LinkPatientToClinicCommand
 → Cria PatientClinicLink
+
+// 3. Vincular criança a responsável (🆕)
+POST /api/patients/{childId}/link-guardian/{guardianId}
+→ LinkChildToGuardianCommand
+→ Define GuardianId na criança
+
+// 4. Listar filhos de um responsável (🆕)
+GET /api/patients/{guardianId}/children
+→ GetChildrenOfGuardianQuery
+→ Retorna todas as crianças do responsável
 ```
 
 ### 2. Isolamento de Prontuários
@@ -578,6 +608,62 @@ GROUP BY TenantId;
 SELECT name, type_desc 
 FROM sys.indexes 
 WHERE object_id = OBJECT_ID('PatientClinicLinks');
+
+-- 🆕 Verificar vínculos guardian-child
+SELECT 
+    c.Name as ChildName,
+    c.DateOfBirth,
+    DATEDIFF(YEAR, c.DateOfBirth, GETDATE()) as Age,
+    g.Name as GuardianName
+FROM Patients c
+LEFT JOIN Patients g ON c.GuardianId = g.Id
+WHERE c.GuardianId IS NOT NULL
+ORDER BY c.Name;
+
+-- 🆕 Verificar crianças sem responsável (alerta)
+SELECT 
+    Name,
+    DateOfBirth,
+    DATEDIFF(YEAR, DateOfBirth, GETDATE()) as Age
+FROM Patients
+WHERE DATEDIFF(YEAR, DateOfBirth, GETDATE()) < 18
+  AND GuardianId IS NULL
+  AND IsActive = 1;
+```
+
+### 3. Migração Guardian-Child (🆕)
+
+Se o sistema já possui pacientes cadastrados, adicionar coluna GuardianId:
+
+```sql
+-- Adicionar coluna GuardianId à tabela Patients
+ALTER TABLE Patients
+ADD GuardianId uniqueidentifier NULL;
+
+-- Criar índice
+CREATE NONCLUSTERED INDEX IX_Patients_GuardianId
+ON Patients (GuardianId);
+
+-- Adicionar constraint de FK com restrição
+ALTER TABLE Patients
+ADD CONSTRAINT FK_Patients_Guardian
+FOREIGN KEY (GuardianId) REFERENCES Patients(Id)
+ON DELETE NO ACTION;
+
+-- Script de validação: Listar crianças sem responsável
+SELECT 
+    Id, 
+    Name, 
+    Document,
+    DateOfBirth,
+    DATEDIFF(YEAR, DateOfBirth, GETDATE()) as Age
+FROM Patients
+WHERE DATEDIFF(YEAR, DateOfBirth, GETDATE()) < 18
+  AND GuardianId IS NULL
+ORDER BY Age DESC;
+
+-- Nota: Administradores devem vincular manualmente 
+-- crianças existentes aos seus responsáveis
 ```
 
 ## Fluxos Visuais e Interface
