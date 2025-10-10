@@ -29,5 +29,14 @@ namespace MedicSoft.Repository.Repositories
 
             return !await query.AnyAsync();
         }
+
+        public async Task<Clinic?> GetByCNPJAsync(string cnpj)
+        {
+            // Remove formatting from CNPJ
+            var cleanCnpj = new string(cnpj.Where(char.IsDigit).ToArray());
+            
+            return await _dbSet
+                .FirstOrDefaultAsync(c => c.Document.Replace(".", "").Replace("/", "").Replace("-", "") == cleanCnpj);
+        }
     }
 }
