@@ -69,7 +69,7 @@ namespace MedicSoft.CrossCutting.Security
 
             // Remove invalid filename characters
             var invalidChars = Path.GetInvalidFileNameChars();
-            var sanitized = string.Join("_", fileName.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries));
+            var sanitized = new string(fileName.Where(c => !invalidChars.Contains(c)).ToArray());
 
             // Remove potentially dangerous patterns
             sanitized = Regex.Replace(sanitized, @"\.\.+", "");  // Remove directory traversal
@@ -92,7 +92,7 @@ namespace MedicSoft.CrossCutting.Security
             var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             var isValid = Regex.IsMatch(trimmed, emailPattern);
 
-            return (isValid, trimmed);
+            return isValid ? (true, trimmed) : (false, string.Empty);
         }
 
         /// <summary>
