@@ -36,6 +36,16 @@ namespace MedicSoft.Application.Handlers.Commands.Patients
             var patient = _mapper.Map<Domain.Entities.Patient>(request.Patient, opt => 
                 opt.Items["TenantId"] = request.TenantId);
 
+            // If guardian is specified, validate and set
+            if (request.Patient.GuardianId.HasValue)
+            {
+                var guardian = await _patientRepository.GetByIdAsync(request.Patient.GuardianId.Value, request.TenantId);
+                if (guardian == null)
+                    throw new InvalidOperationException("Guardian patient not found");
+
+                patient.SetGuardian(request.Patient.GuardianId.Value);
+            }
+
             var createdPatient = await _patientRepository.AddAsync(patient);
             return _mapper.Map<PatientDto>(createdPatient);
         }

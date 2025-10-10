@@ -15,6 +15,8 @@ namespace MedicSoft.Application.Services
         Task<IEnumerable<PatientDto>> SearchPatientsAsync(string searchTerm, string tenantId);
         Task<PatientDto?> GetPatientByDocumentGlobalAsync(string document);
         Task<bool> LinkPatientToClinicAsync(Guid patientId, Guid clinicId, string tenantId);
+        Task<bool> LinkChildToGuardianAsync(Guid childId, Guid guardianId, string tenantId);
+        Task<IEnumerable<PatientDto>> GetChildrenOfGuardianAsync(Guid guardianId, string tenantId);
     }
 
     public class PatientService : IPatientService
@@ -72,6 +74,18 @@ namespace MedicSoft.Application.Services
         {
             var command = new LinkPatientToClinicCommand(patientId, clinicId, tenantId);
             return await _mediator.Send(command);
+        }
+
+        public async Task<bool> LinkChildToGuardianAsync(Guid childId, Guid guardianId, string tenantId)
+        {
+            var command = new LinkChildToGuardianCommand(childId, guardianId, tenantId);
+            return await _mediator.Send(command);
+        }
+
+        public async Task<IEnumerable<PatientDto>> GetChildrenOfGuardianAsync(Guid guardianId, string tenantId)
+        {
+            var query = new GetChildrenOfGuardianQuery(guardianId, tenantId);
+            return await _mediator.Send(query);
         }
     }
 }

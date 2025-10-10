@@ -82,5 +82,13 @@ namespace MedicSoft.Repository.Repositories
 
             return !await query.AnyAsync();
         }
+
+        public async Task<IEnumerable<Patient>> GetChildrenOfGuardianAsync(Guid guardianId, string tenantId)
+        {
+            return await _dbSet
+                .Where(p => p.GuardianId == guardianId && p.TenantId == tenantId && p.IsActive)
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
     }
 }
