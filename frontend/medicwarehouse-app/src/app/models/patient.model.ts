@@ -22,6 +22,9 @@ export interface Patient {
   allergies?: string;
   isActive: boolean;
   age: number;
+  isChild: boolean;
+  guardianId?: string;
+  guardianName?: string;
   createdAt: string;
   updatedAt?: string;
 }
@@ -37,6 +40,7 @@ export interface CreatePatient {
   address: Address;
   medicalHistory?: string;
   allergies?: string;
+  guardianId?: string;
 }
 
 export interface UpdatePatient {

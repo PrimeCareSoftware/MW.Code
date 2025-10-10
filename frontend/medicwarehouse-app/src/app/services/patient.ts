@@ -31,4 +31,16 @@ export class PatientService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  linkChildToGuardian(childId: string, guardianId: string): Observable<{ success: boolean }> {
+    return this.http.post<{ success: boolean }>(`${this.apiUrl}/${childId}/link-guardian/${guardianId}`, {});
+  }
+
+  getChildren(guardianId: string): Observable<Patient[]> {
+    return this.http.get<Patient[]>(`${this.apiUrl}/${guardianId}/children`);
+  }
+
+  search(searchTerm: string): Observable<Patient[]> {
+    return this.http.get<Patient[]>(`${this.apiUrl}/search?searchTerm=${encodeURIComponent(searchTerm)}`);
+  }
 }
