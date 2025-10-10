@@ -340,6 +340,7 @@ O projeto utiliza **GitHub Actions** para integração e entrega contínuas. O w
 - ✅ **Testes Frontend**: Executa testes do Angular com Karma/Jasmine
 - ✅ **Build Verification**: Verifica se o build está funcional
 - ✅ **Code Coverage**: Gera relatórios de cobertura de código
+- ✅ **SonarCloud Analysis**: Análise de qualidade de código para backend e frontend
 
 O workflow é executado automaticamente em:
 - Push para as branches `main` e `develop`
