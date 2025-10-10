@@ -163,3 +163,33 @@
     }
   }
 }
+
+.child-patient {
+  background-color: #fafcff !important;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+
+  &.badge-child {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+}
+
+.guardian-info {
+  color: #666;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.no-info {
+  color: #ccc;
+}

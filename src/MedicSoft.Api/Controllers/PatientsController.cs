@@ -143,5 +143,32 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Link child to guardian
+        /// </summary>
+        [HttpPost("{childId}/link-guardian/{guardianId}")]
+        public async Task<ActionResult> LinkChildToGuardian(Guid childId, Guid guardianId)
+        {
+            try
+            {
+                var result = await _patientService.LinkChildToGuardianAsync(childId, guardianId, GetTenantId());
+                return Ok(new { success = result });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get children of a guardian
+        /// </summary>
+        [HttpGet("{guardianId}/children")]
+        public async Task<ActionResult<IEnumerable<PatientDto>>> GetChildren(Guid guardianId)
+        {
+            var children = await _patientService.GetChildrenOfGuardianAsync(guardianId, GetTenantId());
+            return Ok(children);
+        }
     }
 }

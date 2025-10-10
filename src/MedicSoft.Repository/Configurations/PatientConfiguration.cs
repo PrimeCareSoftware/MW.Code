@@ -125,6 +125,15 @@ namespace MedicSoft.Repository.Configurations
                 .WithOne(l => l.Patient)
                 .HasForeignKey(l => l.PatientId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Self-referencing relationship for Guardian-Child
+            builder.HasOne(p => p.Guardian)
+                .WithMany(p => p.Children)
+                .HasForeignKey(p => p.GuardianId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(p => p.GuardianId)
+                .HasDatabaseName("IX_Patients_GuardianId");
         }
     }
 }

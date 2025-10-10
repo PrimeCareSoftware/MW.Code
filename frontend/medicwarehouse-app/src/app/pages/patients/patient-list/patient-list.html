@@ -37,17 +37,30 @@
               <th>E-mail</th>
               <th>Telefone</th>
               <th>Idade</th>
+              <th>Responsável</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             @for (patient of patients(); track patient.id) {
-              <tr>
-                <td>{{ patient.name }}</td>
+              <tr [class.child-patient]="patient.isChild">
+                <td>
+                  {{ patient.name }}
+                  @if (patient.isChild) {
+                    <span class="badge badge-child">Criança</span>
+                  }
+                </td>
                 <td>{{ patient.document }}</td>
                 <td>{{ patient.email }}</td>
                 <td>{{ patient.phone }}</td>
                 <td>{{ patient.age }} anos</td>
+                <td>
+                  @if (patient.guardianName) {
+                    <span class="guardian-info">👤 {{ patient.guardianName }}</span>
+                  } @else {
+                    <span class="no-info">-</span>
+                  }
+                </td>
                 <td class="actions">
                   <button 
                     class="btn-action btn-edit" 

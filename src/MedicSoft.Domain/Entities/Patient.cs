@@ -20,6 +20,12 @@ namespace MedicSoft.Domain.Entities
         public string? Allergies { get; private set; }
         public bool IsActive { get; private set; } = true;
 
+        // Guardian-Child relationship properties
+        public Guid? GuardianId { get; private set; }
+        public Patient? Guardian { get; private set; }
+        private readonly List<Patient> _children = new();
+        public IReadOnlyCollection<Patient> Children => _children.AsReadOnly();
+
         // Navigation property for health insurance plans (0..N relationship)
         private readonly List<HealthInsurancePlan> _healthInsurancePlans = new();
         public IReadOnlyCollection<HealthInsurancePlan> HealthInsurancePlans => _healthInsurancePlans.AsReadOnly();
@@ -167,6 +173,65 @@ namespace MedicSoft.Domain.Entities
         public bool IsLinkedToClinic(Guid clinicId)
         {
             return _clinicLinks.Any(l => l.ClinicId == clinicId && l.IsActive);
+        }
+
+        public bool IsChild()
+        {
+            return GetAge() < 18;
+        }
+
+        public void SetGuardian(Guid guardianId)
+        {
+            if (guardianId == Guid.Empty)
+                throw new ArgumentException("Guardian ID cannot be empty", nameof(guardianId));
+
+            if (guardianId == Id)
+                throw new ArgumentException("Patient cannot be their own guardian", nameof(guardianId));
+
+            if (!IsChild())
+                throw new InvalidOperationException("Only children (under 18) can have a guardian");
+
+            GuardianId = guardianId;
+            UpdateTimestamp();
+        }
+
+        public void RemoveGuardian()
+        {
+            GuardianId = null;
+            UpdateTimestamp();
+        }
+
+        public void AddChild(Patient child)
+        {
+            if (child == null)
+                throw new ArgumentNullException(nameof(child));
+
+            if (child.Id == Id)
+                throw new ArgumentException("Patient cannot be their own child", nameof(child));
+
+            if (!child.IsChild())
+                throw new ArgumentException("Only children (under 18) can be added as dependents", nameof(child));
+
+            if (child.GuardianId.HasValue && child.GuardianId != Id)
+                throw new InvalidOperationException("Child already has a different guardian");
+
+            _children.Add(child);
+            UpdateTimestamp();
+        }
+
+        public void RemoveChild(Guid childId)
+        {
+            var child = _children.FirstOrDefault(c => c.Id == childId);
+            if (child != null)
+            {
+                _children.Remove(child);
+                UpdateTimestamp();
+            }
+        }
+
+        public IEnumerable<Patient> GetChildren()
+        {
+            return _children.Where(c => c.IsActive);
         }
     }
 }

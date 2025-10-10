@@ -348,5 +348,169 @@ namespace MedicSoft.Test.Entities
         {
             return new Address("Main St", "123", "Downtown", "São Paulo", "SP", "01234-567", "Brazil");
         }
+
+        [Fact]
+        public void IsChild_WhenUnder18_ReturnsTrue()
+        {
+            // Arrange
+            var dateOfBirth = DateTime.Today.AddYears(-10); // 10 years old
+            var patient = CreateValidPatient(dateOfBirth: dateOfBirth);
+
+            // Act
+            var isChild = patient.IsChild();
+
+            // Assert
+            Assert.True(isChild);
+        }
+
+        [Fact]
+        public void IsChild_When18OrOver_ReturnsFalse()
+        {
+            // Arrange
+            var dateOfBirth = DateTime.Today.AddYears(-20); // 20 years old
+            var patient = CreateValidPatient(dateOfBirth: dateOfBirth);
+
+            // Act
+            var isChild = patient.IsChild();
+
+            // Assert
+            Assert.False(isChild);
+        }
+
+        [Fact]
+        public void SetGuardian_WithValidGuardianId_SetsGuardian()
+        {
+            // Arrange
+            var child = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+            var guardianId = Guid.NewGuid();
+
+            // Act
+            child.SetGuardian(guardianId);
+
+            // Assert
+            Assert.Equal(guardianId, child.GuardianId);
+        }
+
+        [Fact]
+        public void SetGuardian_WhenNotChild_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var adult = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-30));
+            var guardianId = Guid.NewGuid();
+
+            // Act & Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => adult.SetGuardian(guardianId));
+            Assert.Equal("Only children (under 18) can have a guardian", exception.Message);
+        }
+
+        [Fact]
+        public void SetGuardian_WithEmptyGuid_ThrowsArgumentException()
+        {
+            // Arrange
+            var child = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => child.SetGuardian(Guid.Empty));
+            Assert.Equal("Guardian ID cannot be empty (Parameter 'guardianId')", exception.Message);
+        }
+
+        [Fact]
+        public void SetGuardian_WithSelfId_ThrowsArgumentException()
+        {
+            // Arrange
+            var child = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => child.SetGuardian(child.Id));
+            Assert.Equal("Patient cannot be their own guardian (Parameter 'guardianId')", exception.Message);
+        }
+
+        [Fact]
+        public void RemoveGuardian_RemovesGuardianId()
+        {
+            // Arrange
+            var child = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+            var guardianId = Guid.NewGuid();
+            child.SetGuardian(guardianId);
+
+            // Act
+            child.RemoveGuardian();
+
+            // Assert
+            Assert.Null(child.GuardianId);
+        }
+
+        [Fact]
+        public void AddChild_WithValidChild_AddsChild()
+        {
+            // Arrange
+            var guardian = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-35));
+            var child = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+
+            // Act
+            guardian.AddChild(child);
+
+            // Assert
+            Assert.Single(guardian.Children);
+            Assert.Contains(child, guardian.Children);
+        }
+
+        [Fact]
+        public void AddChild_WhenNotChild_ThrowsArgumentException()
+        {
+            // Arrange
+            var guardian = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-35));
+            var adult = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-30));
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => guardian.AddChild(adult));
+            Assert.Equal("Only children (under 18) can be added as dependents (Parameter 'child')", exception.Message);
+        }
+
+        [Fact]
+        public void AddChild_WithSelf_ThrowsArgumentException()
+        {
+            // Arrange
+            var patient = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => patient.AddChild(patient));
+            Assert.Equal("Patient cannot be their own child (Parameter 'child')", exception.Message);
+        }
+
+        [Fact]
+        public void RemoveChild_RemovesChildFromCollection()
+        {
+            // Arrange
+            var guardian = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-35));
+            var child = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+            guardian.AddChild(child);
+
+            // Act
+            guardian.RemoveChild(child.Id);
+
+            // Assert
+            Assert.Empty(guardian.Children);
+        }
+
+        [Fact]
+        public void GetChildren_ReturnsOnlyActiveChildren()
+        {
+            // Arrange
+            var guardian = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-35));
+            var child1 = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+            var child2 = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-8));
+            guardian.AddChild(child1);
+            guardian.AddChild(child2);
+            child2.Deactivate();
+
+            // Act
+            var activeChildren = guardian.GetChildren();
+
+            // Assert
+            Assert.Single(activeChildren);
+            Assert.Contains(child1, activeChildren);
+            Assert.DoesNotContain(child2, activeChildren);
+        }
     }
 }

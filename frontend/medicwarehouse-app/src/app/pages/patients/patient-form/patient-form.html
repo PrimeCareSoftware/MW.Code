@@ -30,7 +30,7 @@
       <div class="form-row">
         <div class="form-group">
           <label for="dateOfBirth">Data de Nascimento *</label>
-          <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control" [readonly]="isEditMode()" />
+          <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control" [readonly]="isEditMode()" (change)="onDateOfBirthChange()" />
         </div>
         <div class="form-group">
           <label for="gender">Gênero *</label>
@@ -42,6 +42,45 @@
           </select>
         </div>
       </div>
+
+      @if (isChildPatient()) {
+        <div class="form-row guardian-section">
+          <div class="form-group full-width">
+            <label for="guardianSearch">Responsável *</label>
+            <div class="guardian-search">
+              <input 
+                type="text" 
+                id="guardianSearch" 
+                [(ngModel)]="guardianSearchTerm"
+                [ngModelOptions]="{standalone: true}"
+                (input)="searchGuardian()"
+                placeholder="Digite o nome ou CPF do responsável"
+                class="form-control" 
+              />
+              @if (guardianSearchResults().length > 0) {
+                <div class="search-results">
+                  @for (patient of guardianSearchResults(); track patient.id) {
+                    <div class="search-result-item" (click)="selectGuardian(patient)">
+                      <div class="patient-info">
+                        <strong>{{ patient.name }}</strong>
+                        <span class="document">CPF: {{ patient.document }}</span>
+                        <span class="age">{{ patient.age }} anos</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+              @if (selectedGuardian()) {
+                <div class="selected-guardian">
+                  <strong>Responsável selecionado:</strong> {{ selectedGuardian()!.name }}
+                  <button type="button" class="btn-remove" (click)="clearGuardian()">✕</button>
+                </div>
+              }
+            </div>
+            <small class="form-text">Crianças menores de 18 anos devem ter um responsável cadastrado.</small>
+          </div>
+        </div>
+      }
     </div>
 
     <div class="form-section">

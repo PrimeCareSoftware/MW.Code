@@ -1,14 +1,15 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-patient-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, Navbar],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.scss'
 })
@@ -19,6 +20,11 @@ export class PatientForm implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
+  isChildPatient = signal<boolean>(false);
+  guardianSearchTerm = '';
+  guardianSearchResults = signal<Patient[]>([]);
+  selectedGuardian = signal<Patient | null>(null);
+  private searchSubject = new Subject<string>();
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +53,23 @@ export class PatientForm implements OnInit {
       medicalHistory: [''],
       allergies: ['']
     });
+
+    // Setup debounced search
+    this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+      if (term.length >= 3) {
+        this.patientService.search(term).subscribe({
+          next: (results) => {
+            // Filter out children - guardians must be adults
+            this.guardianSearchResults.set(results.filter(p => !p.isChild));
+          },
+          error: (error) => {
+            console.error('Error searching patients:', error);
+          }
+        });
+      } else {
+        this.guardianSearchResults.set([]);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -56,6 +79,44 @@ export class PatientForm implements OnInit {
       this.patientId.set(id);
       this.loadPatient(id);
     }
+  }
+
+  onDateOfBirthChange(): void {
+    const dateOfBirth = this.patientForm.get('dateOfBirth')?.value;
+    if (dateOfBirth) {
+      const age = this.calculateAge(new Date(dateOfBirth));
+      this.isChildPatient.set(age < 18);
+      
+      // If not a child anymore, clear guardian
+      if (age >= 18) {
+        this.selectedGuardian.set(null);
+      }
+    }
+  }
+
+  calculateAge(birthDate: Date): number {
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  searchGuardian(): void {
+    this.searchSubject.next(this.guardianSearchTerm);
+  }
+
+  selectGuardian(patient: Patient): void {
+    this.selectedGuardian.set(patient);
+    this.guardianSearchResults.set([]);
+    this.guardianSearchTerm = patient.name;
+  }
+
+  clearGuardian(): void {
+    this.selectedGuardian.set(null);
+    this.guardianSearchTerm = '';
   }
 
   loadPatient(id: string): void {
@@ -74,6 +135,35 @@ export class PatientForm implements OnInit {
           medicalHistory: patient.medicalHistory,
           allergies: patient.allergies
         });
+        
+        // Check if child and load guardian if exists
+        this.isChildPatient.set(patient.isChild);
+        if (patient.guardianId && patient.guardianName) {
+          this.selectedGuardian.set({
+            id: patient.guardianId,
+            name: patient.guardianName,
+            document: '',
+            dateOfBirth: '',
+            gender: '',
+            email: '',
+            phone: '',
+            address: {
+              street: '',
+              number: '',
+              neighborhood: '',
+              city: '',
+              state: '',
+              zipCode: '',
+              country: ''
+            },
+            isActive: true,
+            age: 0,
+            isChild: false,
+            createdAt: ''
+          } as Patient);
+          this.guardianSearchTerm = patient.guardianName;
+        }
+        
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -86,6 +176,12 @@ export class PatientForm implements OnInit {
 
   onSubmit(): void {
     if (this.patientForm.valid) {
+      // Validate guardian for children
+      if (this.isChildPatient() && !this.selectedGuardian() && !this.isEditMode()) {
+        this.errorMessage.set('Crianças menores de 18 anos devem ter um responsável');
+        return;
+      }
+
       this.isLoading.set(true);
       this.errorMessage.set('');
       this.successMessage.set('');
@@ -116,7 +212,12 @@ export class PatientForm implements OnInit {
           }
         });
       } else {
-        this.patientService.create(formValue).subscribe({
+        const createData = {
+          ...formValue,
+          guardianId: this.selectedGuardian()?.id
+        };
+
+        this.patientService.create(createData).subscribe({
           next: () => {
             this.successMessage.set('Paciente cadastrado com sucesso!');
             this.isLoading.set(false);

@@ -13,7 +13,9 @@ namespace MedicSoft.Application.Mappings
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Value))
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone.ToString()))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-                .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.GetAge()));
+                .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.GetAge()))
+                .ForMember(dest => dest.IsChild, opt => opt.MapFrom(src => src.IsChild()))
+                .ForMember(dest => dest.GuardianName, opt => opt.MapFrom(src => src.Guardian != null ? src.Guardian.Name : null));
 
             CreateMap<Address, AddressDto>();
 

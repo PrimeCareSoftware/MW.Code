@@ -16,6 +16,9 @@ namespace MedicSoft.Application.DTOs
         public string? Allergies { get; set; }
         public bool IsActive { get; set; } = true;
         public int Age { get; set; }
+        public bool IsChild { get; set; }
+        public Guid? GuardianId { get; set; }
+        public string? GuardianName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
@@ -44,6 +47,7 @@ namespace MedicSoft.Application.DTOs
         public AddressDto Address { get; set; } = new();
         public string? MedicalHistory { get; set; }
         public string? Allergies { get; set; }
+        public Guid? GuardianId { get; set; }
     }
 
     public class UpdatePatientDto

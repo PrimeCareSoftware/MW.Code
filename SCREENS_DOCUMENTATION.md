@@ -231,16 +231,21 @@ Exibe todos os pacientes cadastrados na clínica com opções de gerenciamento.
 │  Pacientes                         [+ Novo Paciente]      │
 │  Gerenciamento de pacientes                               │
 │                                                            │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │ Nome     │ CPF        │ Email      │ Telefone │ Ações│  │
-│  ├────────────────────────────────────────────────────┤  │
-│  │ João S.  │ 123.456... │ joao@...   │ (11)9... │✏️ 🗑️│  │
-│  │ Maria O. │ 987.654... │ maria@...  │ (21)8... │✏️ 🗑️│  │
-│  │ Pedro C. │ 456.789... │ pedro@...  │ (11)7... │✏️ 🗑️│  │
-│  └────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐│
+│  │ Nome      │ CPF      │ Email    │ Tel    │ Resp.│ Ações││
+│  ├──────────────────────────────────────────────────────┤│
+│  │ João S.   │ 123.456..│ joao@... │(11)9...│  -   │✏️ 🗑️││
+│  │ Maria O.  │ 987.654..│ maria@...│(21)8...│  -   │✏️ 🗑️││
+│  │ 🧒Ana S.  │ 456.789..│ ana@...  │(11)7...│👤Maria│✏️ 🗑️││
+│  │ 🧒Pedro S.│ 789.123..│ pedro@...│(11)9...│👤Maria│✏️ 🗑️││
+│  └──────────────────────────────────────────────────────┘│
 │                                                            │
 └────────────────────────────────────────────────────────────┘
 ```
+
+**Legenda:**
+- 🧒 = Badge indicando que é criança (menor de 18 anos)
+- 👤 = Ícone de responsável seguido do nome
 
 ### ⚙️ Funcionalidades
 - **Listagem de pacientes**: Exibe todos os pacientes do tenant atual
@@ -262,6 +267,8 @@ Exibe todos os pacientes cadastrados na clínica com opções de gerenciamento.
 - E-mail
 - Telefone
 - Idade
+- **🆕 Responsável**: Nome do responsável (se o paciente for criança)
+- **🆕 Badge visual**: Indicação clara quando o paciente é menor de 18 anos
 
 ---
 
@@ -287,6 +294,17 @@ Formulário completo para cadastro ou edição de dados do paciente.
 │                                                            │
 │  Data de Nascimento *     Gênero *                        │
 │  [__________]             [▼ Selecione]                   │
+│                                                            │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │ 🧒 Responsável *                                    │ │
+│  │ ──────────────────────────────────────────────────  │ │
+│  │ [Digite nome ou CPF do responsável___________]     │ │
+│  │                                                     │ │
+│  │ ✓ Responsável selecionado: Maria Silva            │ │
+│  │                                                     │ │
+│  │ ℹ️ Crianças menores de 18 anos devem ter um        │ │
+│  │   responsável cadastrado.                          │ │
+│  └─────────────────────────────────────────────────────┘ │
 │                                                            │
 │  ═══════════════════════════════════════════════════      │
 │  Contato                                                  │
@@ -321,6 +339,8 @@ Formulário completo para cadastro ou edição de dados do paciente.
 └────────────────────────────────────────────────────────────┘
 ```
 
+**Nota**: A seção de Responsável aparece automaticamente quando a idade calculada é menor que 18 anos.
+
 ### ⚙️ Funcionalidades
 - **Modo Criação**: Cadastra novo paciente
 - **Modo Edição**: Atualiza dados de paciente existente
@@ -328,6 +348,12 @@ Formulário completo para cadastro ou edição de dados do paciente.
 - **Campos obrigatórios**: Marcados com asterisco (*)
 - **Campos imutáveis em edição**: CPF, Data de Nascimento e Gênero não podem ser alterados
 - **Informações médicas**: Histórico e alergias importantes para atendimento
+- **🆕 Seleção de Responsável para Crianças**:
+  - Sistema calcula idade automaticamente ao informar data de nascimento
+  - Se idade < 18 anos, campo de responsável aparece automaticamente
+  - Busca de responsável por nome ou CPF
+  - Apenas adultos (18+) podem ser selecionados como responsáveis
+  - Validação obrigatória para crianças
 
 ### 🔗 Navegação
 - **Para Lista de Pacientes**: Botão "Voltar" ou "Cancelar"
@@ -339,6 +365,7 @@ Formulário completo para cadastro ou edição de dados do paciente.
 - CPF: Obrigatório, formato válido, único no tenant
 - Data de Nascimento: Obrigatório, imutável após criação
 - Gênero: Obrigatório, imutável após criação
+- **🆕 Responsável**: Obrigatório se idade < 18 anos, deve ser adulto (18+)
 
 **Contato:**
 - E-mail: Obrigatório, formato válido, único no tenant
@@ -682,6 +709,52 @@ sequenceDiagram
     U->>PF: Atualiza dados
     Note over PF: CPF, Data Nasc. e Gênero imutáveis
     PF->>PL: Salvar → Dados atualizados
+```
+
+### Fluxo 4: Cadastro de Criança com Responsável
+
+```mermaid
+sequenceDiagram
+    actor R as Recepcionista
+    participant PL as Lista Pacientes
+    participant PF as Form. Paciente
+    participant API as Backend
+    
+    R->>PL: Acessa Pacientes
+    PL->>PF: + Novo Paciente
+    R->>PF: Preenche nome, CPF
+    R->>PF: Informa data nascimento (< 18 anos)
+    Note over PF: Sistema calcula idade
+    Note over PF: Exibe campo Responsável
+    R->>PF: Busca responsável por nome/CPF
+    API-->>PF: Lista adultos encontrados
+    R->>PF: Seleciona mãe/pai
+    R->>PF: Completa demais dados
+    PF->>API: Salvar paciente + vínculo
+    API-->>PF: Criança criada com GuardianId
+    PF->>PL: Retorna à lista
+    Note over PL: Criança exibida com badge 🧒<br/>e nome do responsável
+```
+
+### Fluxo 5: Atendimento de Múltiplas Crianças
+
+```mermaid
+sequenceDiagram
+    actor R as Recepcionista
+    actor M as Mãe
+    participant PL as Lista Pacientes
+    participant API as Backend
+    participant AG as Agendamento
+    
+    M->>R: Chega com 2 filhos
+    R->>PL: Busca paciente (mãe)
+    R->>API: GET /patients/{maeId}/children
+    API-->>R: [Filho1, Filho2]
+    R->>AG: Agenda consulta Filho1 - 14h
+    R->>AG: Agenda consulta Filho2 - 14h30
+    Note over AG: Consultas próximas facilitam<br/>atendimento familiar
+    AG->>R: Agendamentos confirmados
+    R->>M: "Filho1 às 14h, Filho2 às 14h30"
 ```
 
 ---

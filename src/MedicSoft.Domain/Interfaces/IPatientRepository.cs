@@ -15,5 +15,6 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<Patient>> SearchAsync(string searchTerm, string tenantId);
         Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null);
         Task<bool> IsEmailUniqueAsync(string email, string tenantId, Guid? excludeId = null);
+        Task<IEnumerable<Patient>> GetChildrenOfGuardianAsync(Guid guardianId, string tenantId);
     }
 }
