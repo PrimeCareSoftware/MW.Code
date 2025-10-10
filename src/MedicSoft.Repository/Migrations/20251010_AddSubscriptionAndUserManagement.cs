@@ -193,11 +193,56 @@ namespace MedicSoft.Repository.Migrations
                 name: "IX_ClinicSubscriptions_PendingPlanId",
                 table: "ClinicSubscriptions",
                 column: "PendingPlanId");
+
+            // Create ModuleConfigurations table
+            migrationBuilder.CreateTable(
+                name: "ModuleConfigurations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClinicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModuleName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    Configuration = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    TenantId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ModuleConfigurations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ModuleConfigurations_Clinics_ClinicId",
+                        column: x => x.ClinicId,
+                        principalTable: "Clinics",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            // Create indexes for ModuleConfigurations
+            migrationBuilder.CreateIndex(
+                name: "IX_ModuleConfigurations_ClinicId",
+                table: "ModuleConfigurations",
+                column: "ClinicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ModuleConfigurations_ClinicId_ModuleName",
+                table: "ModuleConfigurations",
+                columns: new[] { "ClinicId", "ModuleName" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ModuleConfigurations_TenantId_IsEnabled",
+                table: "ModuleConfigurations",
+                columns: new[] { "TenantId", "IsEnabled" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ModuleConfigurations");
+
             migrationBuilder.DropTable(
                 name: "ClinicSubscriptions");
 
