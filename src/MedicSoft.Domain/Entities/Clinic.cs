@@ -58,9 +58,9 @@ namespace MedicSoft.Domain.Entities
             if (openingTime >= closingTime)
                 throw new ArgumentException("Opening time must be before closing time");
 
-            // Validate CNPJ format if document appears to be a CNPJ (14 digits)
+            // Validate CNPJ format if document appears to be a CNPJ
             var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
-            if (cleanDocument.Length == 14 && !DocumentValidator.IsValidCnpj(document))
+            if (cleanDocument.Length == DocumentConstants.CnpjLength && !DocumentValidator.IsValidCnpj(document))
                 throw new ArgumentException("Invalid CNPJ format", nameof(document));
 
             Name = name.Trim();

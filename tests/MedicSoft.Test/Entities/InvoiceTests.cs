@@ -102,7 +102,7 @@ namespace MedicSoft.Test.Entities
 
             // Assert
             Assert.Equal(InvoiceStatus.Issued, invoice.Status);
-            Assert.NotNull(invoice.IssueDate);
+            Assert.NotEqual(default(DateTime), invoice.IssueDate);
         }
 
         [Fact]

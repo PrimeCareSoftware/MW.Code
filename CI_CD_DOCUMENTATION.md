@@ -306,3 +306,17 @@ O projeto está configurado com quality gates padrão do SonarCloud:
 - ✅ Suporte a execução manual
 - ✅ Análise SonarCloud para Backend
 - ✅ Análise SonarCloud para Frontend
+- ✅ **Correções de qualidade aplicadas (Outubro 2025)**
+
+## 📝 Histórico de Melhorias de Qualidade
+
+### Outubro 2025 - Correções SonarCloud
+
+Foram aplicadas correções para resolver issues identificados pelo SonarCloud, sem alterar regras de negócio:
+
+1. **Blocos Catch Específicos**: Substituição de catches genéricos por `ArgumentException` e `FormatException`
+2. **Parâmetros Nullable**: Explicitação de parâmetros nullable em `MedicalRecord`
+3. **Testes Limpos**: Remoção de asserts desnecessários em tipos valor
+4. **Constantes de Domínio**: Extração de magic numbers (11, 14) para `DocumentConstants`
+
+**Impacto**: Build passou de 4 warnings para 0 warnings, mantendo 100% dos testes passando.

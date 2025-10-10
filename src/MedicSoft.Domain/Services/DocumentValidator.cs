@@ -21,7 +21,7 @@ namespace MedicSoft.Domain.Services
                 var cpfObj = new Cpf(cpf);
                 return true;
             }
-            catch
+            catch (ArgumentException)
             {
                 return false;
             }
@@ -40,7 +40,7 @@ namespace MedicSoft.Domain.Services
                 var cnpjObj = new Cnpj(cnpj);
                 return true;
             }
-            catch
+            catch (ArgumentException)
             {
                 return false;
             }
@@ -59,7 +59,11 @@ namespace MedicSoft.Domain.Services
                 var crmObj = Crm.Parse(crm);
                 return true;
             }
-            catch
+            catch (ArgumentException)
+            {
+                return false;
+            }
+            catch (FormatException)
             {
                 return false;
             }

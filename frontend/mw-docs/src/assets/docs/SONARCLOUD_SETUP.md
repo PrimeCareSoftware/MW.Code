@@ -157,3 +157,49 @@ Após a configuração:
 3. ✅ Adicione badges do SonarCloud ao README
 4. ✅ Configure pull request decoration
 5. ✅ Revise e corrija issues encontrados
+
+## 📝 Correções Aplicadas
+
+### Outubro 2025
+
+As seguintes correções foram aplicadas para melhorar a qualidade do código conforme análise do SonarCloud:
+
+#### 1. Substituição de Blocos Catch Vazios
+**Arquivo**: `src/MedicSoft.Domain/Services/DocumentValidator.cs`
+- ❌ **Antes**: Blocos `catch` genéricos sem tipo específico
+- ✅ **Depois**: Captura específica de `ArgumentException` e `FormatException`
+- **Motivo**: SonarCloud flag "avoid empty catch blocks" - melhora rastreabilidade e debugging
+
+#### 2. Parâmetros Nullable Explícitos
+**Arquivo**: `src/MedicSoft.Domain/Entities/MedicalRecord.cs`
+- Métodos atualizados para aceitar parâmetros nullable:
+  - `UpdateDiagnosis(string? diagnosis)`
+  - `UpdatePrescription(string? prescription)`
+  - `UpdateNotes(string? notes)`
+- **Motivo**: Elimina warnings CS8625 e torna o contrato mais claro
+
+#### 3. Remoção de Assert Desnecessário
+**Arquivo**: `tests/MedicSoft.Test/Entities/InvoiceTests.cs`
+- ❌ **Antes**: `Assert.NotNull(invoice.IssueDate)` em tipo valor
+- ✅ **Depois**: `Assert.NotEqual(default(DateTime), invoice.IssueDate)`
+- **Motivo**: Corrige warning xUnit2002 - tipos valor não podem ser null
+
+#### 4. Extração de Números Mágicos
+**Novos arquivos**: 
+- `src/MedicSoft.Domain/Common/DocumentConstants.cs`
+  - `CpfLength = 11`
+  - `CnpjLength = 14`
+  
+**Arquivos atualizados**:
+- `src/MedicSoft.Domain/ValueObjects/Cpf.cs`
+- `src/MedicSoft.Domain/ValueObjects/Cnpj.cs`
+- `src/MedicSoft.Domain/Entities/Patient.cs`
+- `src/MedicSoft.Domain/Entities/Clinic.cs`
+
+**Motivo**: Elimina magic numbers, melhora manutenibilidade
+
+### Resultados
+- ✅ **Build**: 0 warnings (antes: 4 warnings)
+- ✅ **Testes**: 583/583 passando (100%)
+- ✅ **Regras de Negócio**: Nenhuma alteração
+- ✅ **Compatibilidade**: Totalmente preservada

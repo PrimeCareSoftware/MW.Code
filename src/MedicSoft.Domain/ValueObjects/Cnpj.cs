@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.ValueObjects
 {
@@ -19,8 +20,8 @@ namespace MedicSoft.Domain.ValueObjects
             // Remove non-numeric characters
             var cleanCnpj = new string(value.Where(char.IsDigit).ToArray());
 
-            if (cleanCnpj.Length != 14)
-                throw new ArgumentException("CNPJ must have 14 digits", nameof(value));
+            if (cleanCnpj.Length != DocumentConstants.CnpjLength)
+                throw new ArgumentException($"CNPJ must have {DocumentConstants.CnpjLength} digits", nameof(value));
 
             // Check for known invalid CNPJs (all same digit)
             if (cleanCnpj.Distinct().Count() == 1)
