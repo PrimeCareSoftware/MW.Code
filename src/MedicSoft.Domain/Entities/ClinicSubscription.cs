@@ -20,10 +20,22 @@ namespace MedicSoft.Domain.Entities
         public decimal CurrentPrice { get; private set; }
         public string? CancellationReason { get; private set; }
         public DateTime? CancellationDate { get; private set; }
+        
+        // Freeze functionality
+        public bool IsFrozen { get; private set; }
+        public DateTime? FrozenStartDate { get; private set; }
+        public DateTime? FrozenEndDate { get; private set; }
+        
+        // Upgrade/Downgrade tracking
+        public Guid? PendingPlanId { get; private set; }
+        public decimal? PendingPlanPrice { get; private set; }
+        public DateTime? PlanChangeDate { get; private set; }
+        public bool IsUpgrade { get; private set; }
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }
         public SubscriptionPlan? SubscriptionPlan { get; private set; }
+        public SubscriptionPlan? PendingPlan { get; private set; }
 
         private ClinicSubscription()
         {
@@ -149,6 +161,140 @@ namespace MedicSoft.Domain.Entities
             var daysLeft = (TrialEndDate.Value - DateTime.UtcNow).Days;
             return Math.Max(0, daysLeft);
         }
+
+        /// <summary>
+        /// Freeze subscription for 1 month - suspends billing and access
+        /// </summary>
+        public void Freeze()
+        {
+            if (Status == SubscriptionStatus.Cancelled)
+                throw new InvalidOperationException("Cannot freeze a cancelled subscription");
+
+            if (IsFrozen)
+                throw new InvalidOperationException("Subscription is already frozen");
+
+            IsFrozen = true;
+            FrozenStartDate = DateTime.UtcNow;
+            FrozenEndDate = DateTime.UtcNow.AddMonths(1);
+            Status = SubscriptionStatus.Frozen;
+            
+            // Extend next payment date by 1 month
+            if (NextPaymentDate.HasValue)
+                NextPaymentDate = NextPaymentDate.Value.AddMonths(1);
+            
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Unfreeze subscription - reactivates billing and access
+        /// </summary>
+        public void Unfreeze()
+        {
+            if (!IsFrozen)
+                throw new InvalidOperationException("Subscription is not frozen");
+
+            IsFrozen = false;
+            FrozenStartDate = null;
+            FrozenEndDate = null;
+            Status = SubscriptionStatus.Active;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Schedule plan upgrade - charges difference immediately
+        /// </summary>
+        public void ScheduleUpgrade(Guid newPlanId, decimal newPlanPrice)
+        {
+            if (newPlanPrice <= CurrentPrice)
+                throw new ArgumentException("New plan price must be higher for upgrade", nameof(newPlanPrice));
+
+            if (Status == SubscriptionStatus.Cancelled)
+                throw new InvalidOperationException("Cannot upgrade a cancelled subscription");
+
+            PendingPlanId = newPlanId;
+            PendingPlanPrice = newPlanPrice;
+            PlanChangeDate = DateTime.UtcNow;
+            IsUpgrade = true;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Apply upgrade immediately - used after payment of difference
+        /// </summary>
+        public void ApplyUpgrade()
+        {
+            if (!PendingPlanId.HasValue || !IsUpgrade)
+                throw new InvalidOperationException("No pending upgrade found");
+
+            SubscriptionPlanId = PendingPlanId.Value;
+            CurrentPrice = PendingPlanPrice ?? CurrentPrice;
+            PendingPlanId = null;
+            PendingPlanPrice = null;
+            PlanChangeDate = null;
+            IsUpgrade = false;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Schedule plan downgrade - applies in next billing cycle
+        /// </summary>
+        public void ScheduleDowngrade(Guid newPlanId, decimal newPlanPrice)
+        {
+            if (newPlanPrice >= CurrentPrice)
+                throw new ArgumentException("New plan price must be lower for downgrade", nameof(newPlanPrice));
+
+            if (Status == SubscriptionStatus.Cancelled)
+                throw new InvalidOperationException("Cannot downgrade a cancelled subscription");
+
+            PendingPlanId = newPlanId;
+            PendingPlanPrice = newPlanPrice;
+            PlanChangeDate = NextPaymentDate ?? DateTime.UtcNow.AddMonths(1);
+            IsUpgrade = false;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Apply downgrade in next billing cycle
+        /// </summary>
+        public void ApplyDowngrade()
+        {
+            if (!PendingPlanId.HasValue || IsUpgrade)
+                throw new InvalidOperationException("No pending downgrade found");
+
+            if (PlanChangeDate.HasValue && DateTime.UtcNow < PlanChangeDate.Value)
+                throw new InvalidOperationException("Cannot apply downgrade before scheduled date");
+
+            SubscriptionPlanId = PendingPlanId.Value;
+            CurrentPrice = PendingPlanPrice ?? CurrentPrice;
+            PendingPlanId = null;
+            PendingPlanPrice = null;
+            PlanChangeDate = null;
+            IsUpgrade = false;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Cancel any pending plan changes
+        /// </summary>
+        public void CancelPendingPlanChange()
+        {
+            PendingPlanId = null;
+            PendingPlanPrice = null;
+            PlanChangeDate = null;
+            IsUpgrade = false;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Get the amount to charge for an upgrade (difference between plans)
+        /// </summary>
+        public decimal GetUpgradeAmount()
+        {
+            if (!PendingPlanPrice.HasValue || !IsUpgrade)
+                return 0;
+
+            return PendingPlanPrice.Value - CurrentPrice;
+        }
     }
 
     public enum SubscriptionStatus
@@ -157,6 +303,7 @@ namespace MedicSoft.Domain.Entities
         Active,          // Active paid subscription
         Suspended,       // Temporarily suspended
         PaymentOverdue,  // Payment is overdue
+        Frozen,          // Frozen for 1 month
         Cancelled        // Cancelled subscription
     }
 }

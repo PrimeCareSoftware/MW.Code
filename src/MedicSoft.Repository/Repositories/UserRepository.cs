@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Repository.Context;
 
@@ -15,10 +20,49 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<object?> GetByUsernameAsync(string username)
         {
-            // Placeholder implementation since User entity doesn't exist yet
-            // In a real implementation, this would query the User table
-            await Task.CompletedTask;
-            return null;
+            // Legacy method for compatibility
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == username.ToLowerInvariant());
+        }
+
+        public async Task<User?> GetUserByUsernameAsync(string username, string tenantId)
+        {
+            return await _context.Users
+                .Include(u => u.Clinic)
+                .FirstOrDefaultAsync(u => u.Username == username.ToLowerInvariant() && u.TenantId == tenantId);
+        }
+
+        public async Task<User?> GetByIdAsync(Guid id, string tenantId)
+        {
+            return await _context.Users
+                .Include(u => u.Clinic)
+                .FirstOrDefaultAsync(u => u.Id == id && u.TenantId == tenantId);
+        }
+
+        public async Task<IEnumerable<User>> GetByClinicIdAsync(Guid clinicId, string tenantId)
+        {
+            return await _context.Users
+                .Where(u => u.ClinicId == clinicId && u.TenantId == tenantId && u.IsActive)
+                .OrderBy(u => u.FullName)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetUserCountByClinicIdAsync(Guid clinicId, string tenantId)
+        {
+            return await _context.Users
+                .CountAsync(u => u.ClinicId == clinicId && u.TenantId == tenantId && u.IsActive);
+        }
+
+        public async Task AddAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }
