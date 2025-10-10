@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.ValueObjects
 {
@@ -19,8 +20,8 @@ namespace MedicSoft.Domain.ValueObjects
             // Remove non-numeric characters
             var cleanCpf = new string(value.Where(char.IsDigit).ToArray());
 
-            if (cleanCpf.Length != 11)
-                throw new ArgumentException("CPF must have 11 digits", nameof(value));
+            if (cleanCpf.Length != DocumentConstants.CpfLength)
+                throw new ArgumentException($"CPF must have {DocumentConstants.CpfLength} digits", nameof(value));
 
             // Check for known invalid CPFs (all same digit)
             if (cleanCpf.Distinct().Count() == 1)

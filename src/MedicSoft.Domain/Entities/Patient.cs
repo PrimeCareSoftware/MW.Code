@@ -61,9 +61,9 @@ namespace MedicSoft.Domain.Entities
             if (dateOfBirth >= DateTime.Now)
                 throw new ArgumentException("Date of birth must be in the past", nameof(dateOfBirth));
 
-            // Validate CPF format if document appears to be a CPF (11 digits)
+            // Validate CPF format if document appears to be a CPF
             var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
-            if (cleanDocument.Length == 11 && !DocumentValidator.IsValidCpf(document))
+            if (cleanDocument.Length == DocumentConstants.CpfLength && !DocumentValidator.IsValidCpf(document))
                 throw new ArgumentException("Invalid CPF format", nameof(document));
 
             Name = name.Trim();

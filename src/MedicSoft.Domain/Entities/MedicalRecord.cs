@@ -51,19 +51,19 @@ namespace MedicSoft.Domain.Entities
             ConsultationDurationMinutes = 0;
         }
 
-        public void UpdateDiagnosis(string diagnosis)
+        public void UpdateDiagnosis(string? diagnosis)
         {
             Diagnosis = diagnosis?.Trim() ?? string.Empty;
             UpdateTimestamp();
         }
 
-        public void UpdatePrescription(string prescription)
+        public void UpdatePrescription(string? prescription)
         {
             Prescription = prescription?.Trim() ?? string.Empty;
             UpdateTimestamp();
         }
 
-        public void UpdateNotes(string notes)
+        public void UpdateNotes(string? notes)
         {
             Notes = notes?.Trim() ?? string.Empty;
             UpdateTimestamp();
