@@ -91,6 +91,13 @@ namespace MedicSoft.Application.Mappings
                 .ForMember(dest => dest.DaysUntilDue, opt => opt.MapFrom(src => src.DaysUntilDue()))
                 .ForMember(dest => dest.DaysOverdue, opt => opt.MapFrom(src => src.DaysOverdue()))
                 .ForMember(dest => dest.IsOverdue, opt => opt.MapFrom(src => src.IsOverdue()));
+
+            // NotificationRoutine mappings
+            CreateMap<NotificationRoutine, NotificationRoutineDto>()
+                .ForMember(dest => dest.Channel, opt => opt.MapFrom(src => src.Channel.ToString()))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.ScheduleType, opt => opt.MapFrom(src => src.ScheduleType.ToString()))
+                .ForMember(dest => dest.Scope, opt => opt.MapFrom(src => src.Scope.ToString()));
         }
     }
 }

@@ -613,6 +613,60 @@ Estados da Nota Fiscal: **Draft** → **Issued** → **Sent** → **Paid** | **C
 
 ### 7.3 Máximo de 3 tentativas para notificações falhadas com log completo
 
+### 7.4 Rotinas de Notificação Configuráveis
+
+**Funcionalidade**: Sistema de rotinas automatizadas e personalizáveis para envio de notificações.
+
+#### Características
+
+- **Múltiplos Canais**: SMS, WhatsApp, Email, Push
+- **Tipos de Notificação**: Lembretes, confirmações, cancelamentos, avisos de pagamento
+- **Agendamento Flexível**: Diário, semanal, mensal, customizado, antes/depois de eventos
+- **Templates Personalizáveis**: Mensagens com placeholders dinâmicos
+- **Filtros de Destinatários**: Segmentação baseada em critérios configuráveis
+- **Escopo Configurável**: Clínica ou Sistema (admin)
+- **Retentativas**: Até 10 tentativas configuráveis
+- **Multi-tenant**: Isolamento por clínica
+
+#### Tipos de Agendamento
+
+1. **Daily**: Execução diária em horário específico
+2. **Weekly**: Execução em dias específicos da semana
+3. **Monthly**: Execução em dia específico do mês
+4. **Custom**: Expressão customizada (tipo cron)
+5. **BeforeAppointment**: X horas/dias antes da consulta
+6. **AfterAppointment**: X horas/dias depois da consulta
+
+#### Endpoints
+
+- POST `/api/notificationroutines`: Criar nova rotina
+- GET `/api/notificationroutines`: Listar todas as rotinas
+- GET `/api/notificationroutines/active`: Listar rotinas ativas
+- GET `/api/notificationroutines/{id}`: Obter rotina específica
+- PUT `/api/notificationroutines/{id}`: Atualizar rotina
+- DELETE `/api/notificationroutines/{id}`: Excluir rotina
+- POST `/api/notificationroutines/{id}/activate`: Ativar rotina
+- POST `/api/notificationroutines/{id}/deactivate`: Desativar rotina
+
+#### Exemplo de Uso
+
+```json
+{
+  "name": "Lembrete WhatsApp 24h Antes",
+  "description": "Envia lembrete via WhatsApp 24 horas antes da consulta",
+  "channel": "WhatsApp",
+  "type": "AppointmentReminder",
+  "messageTemplate": "Olá {patientName}! Lembrete: você tem consulta amanhã às {appointmentTime} com Dr(a). {doctorName}.",
+  "scheduleType": "Daily",
+  "scheduleConfiguration": "{\"time\":\"18:00\"}",
+  "scope": "Clinic",
+  "maxRetries": 3,
+  "recipientFilter": "{\"hasAppointmentNextDay\":true}"
+}
+```
+
+Para documentação completa, consulte: [NOTIFICATION_ROUTINES_DOCUMENTATION.md](NOTIFICATION_ROUTINES_DOCUMENTATION.md)
+
 ## 8. Procedimentos e Serviços
 
 **Regra**: Cadastro de procedimentos/serviços, vínculo com materiais e registro na consulta.

@@ -24,6 +24,11 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Reutilização de Cadastro**: Sistema detecta cadastro prévio e vincula à nova clínica
 - ✅ **Privacidade de Prontuários**: Cada clínica acessa apenas seus próprios prontuários
 - ✅ **Templates**: Templates reutilizáveis para prontuários e prescrições médicas
+- ✅ **Gestão Familiar**: Sistema de vínculo Responsável-Criança
+  - Cadastro de crianças vinculadas a responsáveis adultos
+  - Validações de idade e obrigatoriedade de responsável
+  - Contato de emergência e autorização de atendimento
+  - Visualização de vínculos familiares
 
 ### 💊 Medicamentos e Prescrições
 - ✅ **Cadastro de Medicamentos**: Base completa com classificação ANVISA
@@ -65,9 +70,18 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
 - ✅ **WhatsApp**: Interface para WhatsApp Business API
+- ✅ **Email**: Envio de emails transacionais
 - ✅ **Lembretes Automáticos**: Confirmação de agendamento 24h antes
 - ✅ **Retry Logic**: Até 3 tentativas para notificações falhadas
 - ✅ **Múltiplos Canais**: SMS, WhatsApp, Email, Push
+- ✅ **Rotinas Configuráveis**: Sistema completo de automação de notificações
+  - Agendamento Flexível: Diário, Semanal, Mensal, Custom, Antes/Depois de Eventos
+  - Templates Personalizáveis: Mensagens com placeholders dinâmicos
+  - Filtros de Destinatários: Segmentação baseada em critérios configuráveis
+  - Escopo Multi-nível: Clínica ou Sistema (admin)
+  - Até 10 retentativas configuráveis
+  - [📚 Documentação Completa](NOTIFICATION_ROUTINES_DOCUMENTATION.md)
+  - [💡 Exemplos de Uso](NOTIFICATION_ROUTINES_EXAMPLE.md)
 
 ### 🏥 Procedimentos e Serviços
 - ✅ **Cadastro de Procedimentos**: Nome, código, categoria, preço, duração
