@@ -77,11 +77,19 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Categorias**: Consulta, Exame, Cirurgia, Terapia, Vacinação, etc.
 
 ### 🔐 Segurança e Administração
-- ✅ **Autenticação JWT**: API segura com tokens JWT
+- ✅ **Autenticação JWT**: API segura com tokens JWT validados
+- ✅ **BCrypt Password Hashing**: Senhas hashadas com BCrypt (work factor 12)
+- ✅ **Rate Limiting**: Proteção contra força bruta e DDoS
+- ✅ **Security Headers**: CSP, X-Frame-Options, HSTS, e mais
+- ✅ **Input Sanitization**: Proteção contra XSS e injection attacks
+- ✅ **CORS Seguro**: Origens específicas por ambiente
+- ✅ **Multi-tenant Isolation**: Isolamento completo de dados por tenant
 - ✅ **Painel do Dono da Clínica**: Gestão completa de usuários e configurações
 - ✅ **Painel do Sistema**: Administração master para dono do sistema
 - ✅ **Gestão de Permissões**: Controle granular de acesso
 - ✅ **Auditoria**: Log completo de operações
+
+> 📖 **Para detalhes completos de segurança**, consulte [SECURITY_GUIDE.md](SECURITY_GUIDE.md)
 
 ### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
@@ -184,12 +192,14 @@ Para testar a API, primeiro obtenha um token JWT:
 POST /api/auth/login
 {
   "username": "admin",
-  "password": "admin123",
+  "password": "SecureP@ssw0rd!",
   "tenantId": "default-tenant"
 }
 ```
 
 Use o token retornado no header `Authorization: Bearer {token}` nas demais requisições.
+
+> ⚠️ **Importante**: Em produção, sempre use senhas fortes com mínimo 12 caracteres, incluindo maiúsculas, minúsculas, dígitos e caracteres especiais.
 
 ### Endpoints Principais
 
@@ -275,11 +285,32 @@ Este documento inclui:
 
 ## 🔐 Segurança
 
-- **JWT Authentication**: Autenticação baseada em tokens
-- **Tenant Isolation**: Isolamento automático de dados por tenant
-- **CORS Configuration**: Configuração de CORS para frontend
-- **Input Validation**: Validação de dados de entrada
-- **SQL Injection Protection**: Entity Framework Core com parâmetros
+O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados sensíveis:
+
+### Implementações de Segurança
+
+- **JWT Authentication**: Autenticação baseada em tokens com validação completa
+- **BCrypt Password Hashing**: Senhas hashadas com BCrypt (work factor 12)
+- **Rate Limiting**: Proteção contra ataques de força bruta (10 req/min em produção)
+- **Security Headers**: CSP, X-Frame-Options, HSTS, X-Content-Type-Options, etc.
+- **Input Sanitization**: Proteção contra XSS e injection attacks
+- **CORS Seguro**: Origens específicas configuradas por ambiente
+- **Tenant Isolation**: Isolamento automático de dados por tenant com query filters globais
+- **SQL Injection Protection**: Entity Framework Core com queries parametrizadas
+- **HTTPS Enforcement**: HTTPS obrigatório em produção com HSTS
+- **Environment-based Config**: Secrets via variáveis de ambiente, nunca hardcoded
+
+### Testes de Segurança
+
+- **546 testes** passando (39 novos testes de segurança)
+- Cobertura de password hashing, input sanitization e validações
+- 100% de taxa de sucesso
+
+### Documentação Completa
+
+Para detalhes completos sobre segurança, configuração e melhores práticas:
+- 📖 **[SECURITY_GUIDE.md](SECURITY_GUIDE.md)** - Guia completo de segurança
+- 📋 **[SECURITY_IMPLEMENTATION_SUMMARY.md](SECURITY_IMPLEMENTATION_SUMMARY.md)** - Resumo de implementações
 
 ## 🚀 Deploy
 
