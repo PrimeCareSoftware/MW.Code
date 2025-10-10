@@ -483,6 +483,82 @@ Para dúvidas, sugestões ou suporte técnico:
 
 Estados da Assinatura: **Trial** → **Active** → **Suspended/PaymentOverdue** → **Cancelled**
 
+## 6.5 Sistema de Pagamentos para Consultas
+
+**Regra**: O sistema deve permitir registro de pagamentos de consultas com múltiplos métodos de pagamento.
+
+### 6.5.1 Métodos de Pagamento Suportados
+
+- **Dinheiro (Cash)**: Pagamento em espécie
+- **Cartão de Crédito (CreditCard)**: Com armazenamento dos últimos 4 dígitos
+- **Cartão de Débito (DebitCard)**: Com armazenamento dos últimos 4 dígitos
+- **PIX**: Com chave PIX e ID da transação
+- **Transferência Bancária (BankTransfer)**
+- **Cheque (Check)**
+
+### 6.5.2 Fluxo de Pagamento
+
+Estados do Pagamento: **Pending** → **Processing** → **Paid** | **Failed** | **Refunded** | **Cancelled**
+
+- Pagamentos começam como **Pending** ao serem criados
+- Podem ser marcados como **Processing** durante o processamento
+- Mudam para **Paid** quando confirmados com Transaction ID
+- Podem ser **Refunded** apenas se estiverem **Paid**
+- Podem ser **Cancelled** apenas se estiverem **Pending** ou **Failed**
+
+### 6.5.3 Regras de Negócio para Pagamentos
+
+1. Todo pagamento deve estar vinculado a uma consulta ou assinatura
+2. O valor do pagamento deve ser maior que zero
+3. Pagamentos pagos não podem ser cancelados (apenas reembolsados)
+4. Reembolsos exigem motivo obrigatório
+5. Cancelamentos exigem motivo obrigatório
+6. Pagamentos com cartão devem armazenar apenas os últimos 4 dígitos
+7. Pagamentos PIX devem armazenar a chave PIX utilizada
+
+## 6.6 Sistema de Emissão de Nota Fiscal
+
+**Regra**: O sistema deve emitir notas fiscais para pagamentos de consultas e assinaturas.
+
+### 6.6.1 Tipos de Nota Fiscal
+
+- **Appointment**: Nota fiscal de consulta médica
+- **Subscription**: Nota fiscal de assinatura do sistema
+- **Service**: Nota fiscal de serviços adicionais
+
+### 6.6.2 Fluxo de Nota Fiscal
+
+Estados da Nota Fiscal: **Draft** → **Issued** → **Sent** → **Paid** | **Cancelled** | **Overdue**
+
+- Notas fiscais começam como **Draft** ao serem criadas
+- Devem ser **Issued** (emitidas) para serem válidas
+- Podem ser marcadas como **Sent** quando enviadas ao cliente
+- Mudam para **Paid** quando o pagamento é confirmado
+- Tornam-se **Overdue** automaticamente após a data de vencimento
+- Podem ser **Cancelled** se não estiverem pagas
+
+### 6.6.3 Regras de Negócio para Nota Fiscal
+
+1. Toda nota fiscal deve estar vinculada a um pagamento único
+2. Não pode haver mais de uma nota fiscal para o mesmo pagamento
+3. Número da nota fiscal deve ser único no sistema
+4. Notas pagas não podem ser canceladas
+5. Notas em rascunho podem ter valor e descrição alterados
+6. Notas emitidas não podem ser editadas
+7. Sistema calcula automaticamente dias até vencimento e dias vencidos
+8. Campos do cliente (nome, documento, endereço) são desnormalizados para histórico
+
+### 6.6.4 Informações da Nota Fiscal
+
+- Número da nota fiscal (único)
+- Data de emissão
+- Data de vencimento
+- Valor base
+- Valor de impostos
+- Valor total (base + impostos)
+- Descrição do serviço
+- Dados do cliente (nome, documento, endereço)
+
 ## 7. Sistema de Notificações
 
 **Regra**: O sistema deve enviar notificações automáticas via SMS e WhatsApp para confirmar agendamentos.

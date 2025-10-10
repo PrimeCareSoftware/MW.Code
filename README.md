@@ -51,6 +51,17 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Controle de Pagamentos**: Registro de pagamentos e renovações
 - ✅ **Status de Assinatura**: Trial, Active, Suspended, PaymentOverdue, Cancelled
 
+### 💰 Sistema de Pagamentos e Nota Fiscal
+- ✅ **Múltiplos Métodos de Pagamento**: Dinheiro, Cartão de Crédito, Cartão de Débito, PIX, Transferência Bancária, Cheque
+- ✅ **Fluxo de Pagamento Completo**: Pendente → Processando → Pago → Reembolsado/Cancelado
+- ✅ **Gestão de Pagamentos**: Processar, reembolsar, cancelar pagamentos
+- ✅ **Emissão de Notas Fiscais**: Criar, emitir, enviar, cancelar nota fiscal
+- ✅ **Ciclo de Vida de NF**: Rascunho → Emitida → Enviada → Paga → Cancelada
+- ✅ **Controle de Vencimento**: Identificação de notas vencidas com cálculo de dias
+- ✅ **Vínculo Automático**: Pagamento vinculado à consulta ou assinatura
+- ✅ **Histórico Completo**: Rastreamento de todas as transações financeiras
+- ✅ **API RESTful**: Endpoints completos para integração de pagamentos
+
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
 - ✅ **WhatsApp**: Interface para WhatsApp Business API
