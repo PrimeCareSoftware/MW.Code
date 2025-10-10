@@ -1,0 +1,29 @@
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <a routerLink="/" class="logo">
+        <h1>MedicWarehouse</h1>
+      </a>
+
+      <button class="menu-toggle" (click)="toggleMenu()" [class.active]="isMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav" [class.open]="isMenuOpen">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/pricing" routerLinkActive="active">Planos</a>
+        <a routerLink="/testimonials" routerLinkActive="active">Depoimentos</a>
+        <a routerLink="/contact" routerLinkActive="active">Contato</a>
+        <a routerLink="/cart" class="cart-link">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-count" *ngIf="cartService.getItemCount() > 0">
+            {{ cartService.getItemCount() }}
+          </span>
+        </a>
+        <a routerLink="/register" class="btn btn-primary">Cadastre-se</a>
+      </nav>
+    </div>
+  </div>
+</header>

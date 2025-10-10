@@ -334,3 +334,71 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 - **Projeto**: MedicWarehouse
 - **Email**: contato@medicwarehouse.com
 - **GitHub**: [https://github.com/MedicWarehouse/MW.Code](https://github.com/MedicWarehouse/MW.Code)
+## 🌐 MW.Site - Marketing Website
+
+**Novo!** Site de marketing e contratação do MedicWarehouse SaaS.
+
+### Características
+
+- **Angular 20**: Framework moderno e performático
+- **Landing Page**: Home page com hero, features e benefícios
+- **Pricing Page**: 4 planos disponíveis (Básico, Médio, Premium, Personalizado)
+- **Registro Completo**: Wizard de 5 etapas para cadastro de clínicas
+- **Período de Teste**: 15 dias gratuitos automaticamente
+- **Integração WhatsApp**: Contato direto via WhatsApp
+- **Carrinho de Compras**: Visualização antes de finalizar cadastro
+- **Responsive Design**: Funciona perfeitamente em mobile, tablet e desktop
+
+### Planos Disponíveis
+
+| Plano | Preço | Usuários | Pacientes | Recursos |
+|-------|-------|----------|-----------|----------|
+| **Básico** | R$ 190/mês | 2 | 100 | Funcionalidades básicas |
+| **Médio** ⭐ | R$ 240/mês | 3 | 300 | WhatsApp + Relatórios |
+| **Premium** | R$ 320/mês | 5 | Ilimitados | Todos os recursos + SMS + TISS |
+| **Personalizado** | Sob consulta | Customizado | Ilimitados | Recursos exclusivos |
+
+### Como Executar MW.Site
+
+```bash
+# Navegar para o diretório
+cd frontend/mw-site
+
+# Instalar dependências
+npm install
+
+# Executar em modo de desenvolvimento
+npm start
+
+# Build para produção
+npm run build
+```
+
+Acesse: `http://localhost:4200`
+
+### Documentação Completa
+
+Para informações detalhadas sobre MW.Site, consulte: [MW_SITE_DOCUMENTATION.md](MW_SITE_DOCUMENTATION.md)
+
+### API Endpoints para MW.Site
+
+#### Registro de Nova Clínica
+```bash
+POST /api/registration
+```
+
+#### Verificar CNPJ
+```bash
+GET /api/registration/check-cnpj/{cnpj}
+```
+
+#### Verificar Username
+```bash
+GET /api/registration/check-username/{username}
+```
+
+#### Enviar Formulário de Contato
+```bash
+POST /api/contact
+```
+

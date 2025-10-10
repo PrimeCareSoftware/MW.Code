@@ -64,3 +64,7 @@ logs
 .env.development.local
 .env.test.local
 .env.production.local
+# MW.Site Frontend
+frontend/mw-site/node_modules/
+frontend/mw-site/dist/
+frontend/mw-site/.angular/

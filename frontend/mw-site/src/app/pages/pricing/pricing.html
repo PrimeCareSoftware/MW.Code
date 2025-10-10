@@ -1,0 +1,72 @@
+<div class="pricing">
+  <section class="pricing-header">
+    <div class="container">
+      <h1>Escolha o Plano Ideal</h1>
+      <p>Todos os planos incluem 15 dias de teste gratuito. Sem cartão de crédito.</p>
+    </div>
+  </section>
+
+  <section class="pricing-plans">
+    <div class="container">
+      <div class="plans-grid">
+        <div class="plan-card" *ngFor="let plan of plans" [class.recommended]="plan.isRecommended">
+          <div class="plan-badge" *ngIf="plan.isRecommended">
+            Mais Indicado
+          </div>
+          
+          <div class="plan-header">
+            <h2>{{ plan.name }}</h2>
+            <p class="plan-description">{{ plan.description }}</p>
+          </div>
+
+          <div class="plan-price">
+            <span class="currency" *ngIf="plan.monthlyPrice > 0">R$</span>
+            <span class="amount" *ngIf="plan.monthlyPrice > 0">{{ plan.monthlyPrice }}</span>
+            <span class="amount custom-price" *ngIf="plan.monthlyPrice === 0">Sob Consulta</span>
+            <span class="period" *ngIf="plan.monthlyPrice > 0">/mês</span>
+          </div>
+
+          <div class="trial-info" *ngIf="plan.trialDays > 0">
+            ✨ {{ plan.trialDays }} dias grátis
+          </div>
+
+          <ul class="plan-features">
+            <li *ngFor="let feature of plan.features">
+              <span class="check">✓</span>
+              {{ feature }}
+            </li>
+          </ul>
+
+          <button class="btn btn-plan" (click)="selectPlan(plan)" [class.btn-recommended]="plan.isRecommended">
+            <span *ngIf="plan.monthlyPrice > 0">Começar Agora</span>
+            <span *ngIf="plan.monthlyPrice === 0">Fale Conosco</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-faq">
+    <div class="container">
+      <h2>Perguntas Frequentes</h2>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h3>Como funciona o período de teste?</h3>
+          <p>Você tem 15 dias para testar todas as funcionalidades do plano escolhido sem qualquer cobrança. Não é necessário cartão de crédito para começar.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Posso mudar de plano depois?</h3>
+          <p>Sim! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento. A mudança é imediata e o valor é ajustado proporcionalmente.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Há taxa de cancelamento?</h3>
+          <p>Não cobramos nenhuma taxa de cancelamento. Você pode cancelar seu plano a qualquer momento sem custo adicional.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Os dados ficam seguros?</h3>
+          <p>Sim! Utilizamos criptografia de ponta a ponta e backup diário automático. Todos os dados são armazenados em servidores seguros em conformidade com a LGPD.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
