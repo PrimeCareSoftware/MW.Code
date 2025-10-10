@@ -99,6 +99,25 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Histórico Completo**: Rastreamento de todas as transações financeiras
 - ✅ **API RESTful**: Endpoints completos para integração de pagamentos
 
+### 💼 Gestão Financeira e Contas a Pagar
+- ✅ **Controle de Despesas**: CRUD completo de contas a pagar
+- ✅ **Categorias de Despesas**: Aluguel, Utilidades, Materiais, Equipamentos, Salários, Impostos, etc.
+- ✅ **Status de Despesas**: Pendente, Pago, Vencido, Cancelado
+- ✅ **Controle de Vencimento**: Alertas automáticos de despesas vencidas
+- ✅ **Fornecedores**: Cadastro de fornecedores com documento
+- ✅ **Múltiplos Métodos de Pagamento**: Suporte a todos os métodos de pagamento
+
+### 📊 Relatórios e Dashboards Financeiros
+- ✅ **Resumo Financeiro**: Receitas, despesas e lucro líquido por período
+- ✅ **Relatórios de Receita**: Breakdown diário de faturamento
+- ✅ **Relatórios de Agendamentos**: Estatísticas de consultas por status e tipo
+- ✅ **Relatórios de Pacientes**: Crescimento de base de pacientes
+- ✅ **Contas a Receber**: Controle de pagamentos pendentes e vencidos
+- ✅ **Contas a Pagar**: Controle de despesas pendentes e vencidas
+- ✅ **Análise por Método de Pagamento**: Distribuição de receitas por forma de pagamento
+- ✅ **Análise por Categoria**: Distribuição de despesas por categoria
+- ✅ **API RESTful**: Endpoints completos para geração de relatórios
+
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
 - ✅ **WhatsApp**: Interface para WhatsApp Business API
@@ -140,8 +159,10 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
 - ✅ **Docker**: Containerização completa
+- ✅ **Relatórios Financeiros**: Dashboards completos de receitas, despesas e lucro
+- ✅ **Relatórios Operacionais**: Agendamentos, pacientes e performance
+- ✅ **Contas a Receber e Pagar**: Controle completo de fluxo de caixa
 - 🚧 **TISS Export**: Integração com padrão TISS (em planejamento)
-- 🚧 **Relatórios BI**: Dashboards e analytics (em planejamento)
 
 ## 🔧 Tecnologias
 
@@ -278,6 +299,23 @@ Use o token retornado no header `Authorization: Bearer {token}` nas demais requi
   - `POST /api/medical-records/{id}/complete` - Finalizar atendimento
   - `GET /api/medical-records/appointment/{appointmentId}` - Buscar por agendamento
   - `GET /api/medical-records/patient/{patientId}` - Histórico do paciente
+
+- **Despesas (Contas a Pagar)**:
+  - `GET /api/expenses` - Listar despesas (filtros: clinicId, status, category)
+  - `GET /api/expenses/{id}` - Obter despesa por ID
+  - `POST /api/expenses` - Criar nova despesa
+  - `PUT /api/expenses/{id}` - Atualizar despesa
+  - `PUT /api/expenses/{id}/pay` - Marcar despesa como paga
+  - `PUT /api/expenses/{id}/cancel` - Cancelar despesa
+  - `DELETE /api/expenses/{id}` - Excluir despesa
+
+- **Relatórios e Dashboards**:
+  - `GET /api/reports/financial-summary` - Resumo financeiro completo (receitas, despesas, lucro)
+  - `GET /api/reports/revenue` - Relatório de receita com breakdown diário
+  - `GET /api/reports/appointments` - Relatório de agendamentos (estatísticas, status, tipos)
+  - `GET /api/reports/patients` - Relatório de crescimento de pacientes
+  - `GET /api/reports/accounts-receivable` - Contas a receber (pendentes e vencidas)
+  - `GET /api/reports/accounts-payable` - Contas a pagar (pendentes e vencidas)
 
 ## 🧪 Testes
 
