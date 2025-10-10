@@ -3,10 +3,10 @@
 ## Estatísticas Gerais
 
 ```
-✅ Total de Testes: 507
-✅ Aprovados: 507 (100%)
+✅ Total de Testes: 558
+✅ Aprovados: 558 (100%)
 ❌ Reprovados: 0
-⏱️ Tempo de Execução: ~2 segundos
+⏱️ Tempo de Execução: ~4 segundos
 ```
 
 ## Distribuição dos Testes
@@ -26,7 +26,7 @@
 
 | Classe | Testes | Descrição |
 |--------|--------|-----------|
-| PatientTests | 22 | Pacientes: criação, atualização, validação CPF, planos de saúde |
+| PatientTests | 38 | **ATUALIZADO**: Pacientes com 12 novos testes para guardian-child (criação, atualização, validação CPF, planos de saúde, responsáveis) |
 | ClinicTests | 20 | Clínicas: criação, validação CNPJ, horários, configurações |
 | AppointmentTests | 20 | Agendamentos: estados, cancelamento, remarcação, sobreposição |
 | MedicalRecordTests | 22 | Prontuários: diagnóstico, prescrição, duração, finalização |
@@ -80,6 +80,11 @@
 - [x] Estados de transição inválidos
 - [x] GUIDs vazios
 - [x] Valores negativos ou zero onde inapropriado
+- [x] **🆕 Validações Guardian-Child**:
+  - [x] Criança sem responsável (< 18 anos)
+  - [x] Adulto não pode ter responsável
+  - [x] Paciente não pode ser responsável de si mesmo
+  - [x] Criança não pode ser responsável de outra criança
 
 ## Exemplos de Testes
 
@@ -168,15 +173,71 @@ dotnet test --collect:"XPlat Code Coverage"
 dotnet test --verbosity detailed
 ```
 
+## 🆕 Novos Testes Guardian-Child
+
+### Validação de Idade e Responsável
+
+```csharp
+[Fact]
+public void IsChild_WhenUnder18_ReturnsTrue()
+{
+    var dateOfBirth = DateTime.Today.AddYears(-10);
+    var patient = CreateValidPatient(dateOfBirth: dateOfBirth);
+    
+    Assert.True(patient.IsChild());
+}
+
+[Fact]
+public void SetGuardian_WithValidGuardianId_SetsGuardian()
+{
+    var child = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-10));
+    var guardianId = Guid.NewGuid();
+    
+    child.SetGuardian(guardianId);
+    
+    Assert.Equal(guardianId, child.GuardianId);
+}
+```
+
+### Validações de Negócio
+
+```csharp
+[Fact]
+public void SetGuardian_WhenNotChild_ThrowsInvalidOperationException()
+{
+    var adult = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-30));
+    
+    var exception = Assert.Throws<InvalidOperationException>(
+        () => adult.SetGuardian(Guid.NewGuid()));
+    
+    Assert.Equal("Only children (under 18) can have a guardian", 
+        exception.Message);
+}
+
+[Fact]
+public void AddChild_WhenNotChild_ThrowsArgumentException()
+{
+    var guardian = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-35));
+    var adult = CreateValidPatient(dateOfBirth: DateTime.Now.AddYears(-30));
+    
+    var exception = Assert.Throws<ArgumentException>(
+        () => guardian.AddChild(adult));
+    
+    Assert.Equal("Only children (under 18) can be added as dependents", 
+        exception.Message);
+}
+```
+
 ## Conclusão
 
 A suite de testes garante:
 
-✅ **Qualidade do Código**: 305 testes verificam comportamento esperado
-✅ **Segurança**: Validações rigorosas de CPF, CNPJ, CRM, email
-✅ **Integridade**: Proteção contra null pointer e dados inválidos
-✅ **Manutenibilidade**: Testes documentam o comportamento esperado
-✅ **Confiabilidade**: 100% de sucesso em todos os testes
+✅ **Qualidade do Código**: 558 testes verificam comportamento esperado  
+✅ **Segurança**: Validações rigorosas de CPF, CNPJ, CRM, email  
+✅ **Integridade**: Proteção contra null pointer e dados inválidos  
+✅ **Manutenibilidade**: Testes documentam o comportamento esperado  
+✅ **Confiabilidade**: 100% de sucesso em todos os testes  
+✅ **🆕 Guardian-Child**: 12 novos testes para vínculos familiares  
 
 ---
-*Última atualização: Implementação completa de segurança e validações*
+*Última atualização: Implementação completa de guardian-child relationships*

@@ -212,10 +212,12 @@ Use o token retornado no header `Authorization: Bearer {token}` nas demais requi
   - `GET /api/patients/{id}` - Obter paciente por ID
   - `GET /api/patients/search?searchTerm={termo}` - Buscar por CPF, Nome ou Telefone
   - `GET /api/patients/by-document/{cpf}` - Buscar por CPF em todas as clínicas
-  - `POST /api/patients` - Criar novo paciente
+  - `POST /api/patients` - Criar novo paciente (com suporte a guardianId para crianças)
   - `PUT /api/patients/{id}` - Atualizar paciente
   - `DELETE /api/patients/{id}` - Excluir paciente
   - `POST /api/patients/{patientId}/link-clinic/{clinicId}` - Vincular paciente à clínica
+  - `POST /api/patients/{childId}/link-guardian/{guardianId}` - 🆕 Vincular criança a responsável
+  - `GET /api/patients/{guardianId}/children` - 🆕 Listar filhos de um responsável
 
 - **Agendamentos**:
   - `POST /api/appointments` - Criar agendamento
@@ -245,7 +247,7 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ### Tabelas Principais
 
-- **Patients**: Dados dos pacientes
+- **Patients**: Dados dos pacientes (🆕 incluindo GuardianId para crianças)
 - **Clinics**: Informações dos consultórios
 - **PatientClinicLinks**: Vínculos N:N entre pacientes e clínicas
 - **Appointments**: Agendamentos de consultas
