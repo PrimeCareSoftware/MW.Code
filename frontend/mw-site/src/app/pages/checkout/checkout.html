@@ -1,1 +1,67 @@
-<p>checkout works!</p>
+<div class="checkout">
+  <div class="container">
+    <div class="success-card" *ngIf="success">
+      <div class="success-icon">✓</div>
+      <h1>Cadastro Realizado com Sucesso!</h1>
+      <p class="success-message">
+        Parabéns! Sua clínica foi cadastrada e seu período de teste gratuito de 15 dias começou agora.
+      </p>
+
+      <div class="next-steps">
+        <h2>Próximos Passos</h2>
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Acesse sua conta</h3>
+            <p>Use o usuário e senha que você cadastrou para fazer login no sistema</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Configure sua clínica</h3>
+            <p>Adicione médicos, configure horários de atendimento e personalize seu sistema</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Comece a atender</h3>
+            <p>Cadastre pacientes, agende consultas e aproveite todos os recursos</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="trial-info">
+        <h3>🎉 Período de Teste Gratuito</h3>
+        <p>
+          Você tem <strong>15 dias</strong> para testar todas as funcionalidades sem custo algum.
+          Não é necessário cartão de crédito e você pode cancelar a qualquer momento.
+        </p>
+      </div>
+
+      <div class="action-buttons">
+        <a href="http://localhost:4200" class="btn btn-primary btn-large">
+          Acessar o Sistema
+        </a>
+        <a routerLink="/" class="btn btn-secondary btn-large">
+          Voltar ao Site
+        </a>
+      </div>
+
+      <div class="support-info">
+        <h3>Precisa de Ajuda?</h3>
+        <p>Nossa equipe está pronta para ajudar você a começar</p>
+        <p>📧 contato@medicwarehouse.com</p>
+        <p>📞 (11) 99999-9999</p>
+      </div>
+    </div>
+
+    <div class="error-card" *ngIf="!success">
+      <div class="error-icon">✗</div>
+      <h1>Ops! Algo deu errado</h1>
+      <p>Não foi possível completar seu cadastro. Por favor, tente novamente.</p>
+      <a routerLink="/register" class="btn btn-primary">Tentar Novamente</a>
+    </div>
+  </div>
+</div>
