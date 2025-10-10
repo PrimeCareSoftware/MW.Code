@@ -1,0 +1,42 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>MedicWarehouse</h3>
+        <p>Sistema completo de gestão para consultórios médicos. Simplifique sua rotina e foque no que importa: o cuidado com seus pacientes.</p>
+      </div>
+
+      <div class="footer-section">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/pricing">Planos</a></li>
+          <li><a routerLink="/testimonials">Depoimentos</a></li>
+          <li><a routerLink="/contact">Contato</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contato</h4>
+        <ul>
+          <li>📧 {{ companyEmail }}</li>
+          <li>📞 {{ companyPhone }}</li>
+          <li><a (click)="openWhatsApp()" style="cursor: pointer;">💬 WhatsApp</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">LGPD</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ currentYear }} MedicWarehouse. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>
