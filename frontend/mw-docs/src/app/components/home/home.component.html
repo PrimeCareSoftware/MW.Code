@@ -1,0 +1,58 @@
+<div class="container">
+  <header class="header">
+    <h1>📚 MedicWarehouse - Documentação</h1>
+    <p class="subtitle">Central de Documentação Técnica e de Negócios</p>
+    <div class="stats">
+      <span class="stat-item">
+        <strong>{{ getTotalDocs() }}</strong> documentos
+      </span>
+      <span class="stat-item">
+        <strong>{{ categories.length }}</strong> categorias
+      </span>
+    </div>
+  </header>
+
+  <div class="search-section">
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        (input)="onSearch()"
+        placeholder="🔍 Buscar documentação..."
+        class="search-input"
+      >
+      <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-btn">✕</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div *ngIf="filteredCategories.length === 0" class="no-results">
+      <p>Nenhum documento encontrado para "{{ searchQuery }}"</p>
+    </div>
+
+    <section *ngFor="let category of filteredCategories" class="category-section">
+      <h2 class="category-title">{{ category.name }}</h2>
+      <div class="docs-grid">
+        <a 
+          *ngFor="let doc of category.docs" 
+          [routerLink]="['/doc', doc.id]"
+          class="doc-card"
+        >
+          <div class="doc-card-header">
+            <h3>{{ doc.title }}</h3>
+            <span class="category-badge">{{ doc.category }}</span>
+          </div>
+          <p class="doc-description">{{ doc.description }}</p>
+          <div class="doc-meta">
+            <span *ngIf="doc.size" class="meta-item">📊 {{ doc.size }}</span>
+            <span *ngIf="doc.idealFor" class="meta-item">👥 {{ doc.idealFor }}</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p>MedicWarehouse © 2025 - Sistema de Gestão Médica</p>
+  </footer>
+</div>
