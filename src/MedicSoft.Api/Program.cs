@@ -1,11 +1,14 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MedicSoft.Application.Mappings;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Extensions;
+using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.Services;
 using MedicSoft.Repository.Context;
@@ -64,7 +67,12 @@ builder.Services.AddDbContext<MedicSoftDbContext>(options =>
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"] ?? "MedicWarehouse-SuperSecretKey-2024-Development";
+var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is not configured");
+
+// Validate JWT key length (minimum 32 characters for security)
+if (secretKey.Length < 32)
+    throw new InvalidOperationException("JWT SecretKey must be at least 32 characters long");
+
 var key = Encoding.ASCII.GetBytes(secretKey);
 
 builder.Services.AddAuthentication(options =>
@@ -74,20 +82,49 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false;
+    var requireHttps = builder.Configuration.GetValue<bool>("Security:RequireHttps", true);
+    
+    options.RequireHttpsMetadata = requireHttps;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSettings["Audience"],
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
 });
 
 builder.Services.AddAuthorization();
+
+// Configure Rate Limiting
+var rateLimitEnabled = builder.Configuration.GetValue<bool>("RateLimiting:EnableRateLimiting", true);
+if (rateLimitEnabled)
+{
+    builder.Services.AddRateLimiter(options =>
+    {
+        var permitLimit = builder.Configuration.GetValue<int>("RateLimiting:PermitLimit", 10);
+        var windowSeconds = builder.Configuration.GetValue<int>("RateLimiting:WindowSeconds", 60);
+        var queueLimit = builder.Configuration.GetValue<int>("RateLimiting:QueueLimit", 0);
+
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+            RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+                factory: partition => new FixedWindowRateLimiterOptions
+                {
+                    AutoReplenishment = true,
+                    PermitLimit = permitLimit,
+                    QueueLimit = queueLimit,
+                    Window = TimeSpan.FromSeconds(windowSeconds)
+                }));
+
+        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    });
+}
 
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -112,17 +149,21 @@ builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();
 
-// Register cross-cutting services
+// Register cross-cutting services (includes security services)
 builder.Services.AddMedicSoftCrossCutting();
 
-// Configure CORS
+// Configure CORS with secure settings
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+    ?? new[] { "http://localhost:4200" };
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("SecurePolicy", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -138,9 +179,25 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty; // Set Swagger UI at app root
     });
 }
+else
+{
+    // Enable HSTS in production
+    app.UseHsts();
+}
+
+// Add security headers
+app.UseSecurityHeaders();
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+
+// Use secure CORS policy
+app.UseCors("SecurePolicy");
+
+// Enable rate limiting
+if (rateLimitEnabled)
+{
+    app.UseRateLimiter();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
