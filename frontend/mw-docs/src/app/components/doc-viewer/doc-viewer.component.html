@@ -1,0 +1,38 @@
+<div class="doc-viewer">
+  <header class="doc-header">
+    <button class="back-btn" (click)="goBack()">
+      ← Voltar
+    </button>
+    <div *ngIf="currentDoc" class="doc-info">
+      <h1>{{ currentDoc.title }}</h1>
+      <div class="doc-badges">
+        <span class="badge category">{{ currentDoc.category }}</span>
+        <span *ngIf="currentDoc.size" class="badge size">{{ currentDoc.size }}</span>
+      </div>
+      <p class="doc-description">{{ currentDoc.description }}</p>
+      <p *ngIf="currentDoc.idealFor" class="ideal-for">
+        <strong>Ideal para:</strong> {{ currentDoc.idealFor }}
+      </p>
+    </div>
+  </header>
+
+  <div class="doc-content">
+    <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+      <p>Carregando documento...</p>
+    </div>
+
+    <div *ngIf="error" class="error">
+      <p>{{ error }}</p>
+      <button (click)="goBack()" class="btn-primary">Voltar para início</button>
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="markdown-content">
+      <markdown 
+        [data]="docContent"
+        [mermaid]="true"
+        [mermaidOptions]="{ theme: 'default' }"
+      ></markdown>
+    </div>
+  </div>
+</div>
