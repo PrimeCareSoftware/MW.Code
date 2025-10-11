@@ -41,6 +41,18 @@ namespace MedicSoft.WhatsAppAgent.Services
         {
             try
             {
+                // Validate webhook data
+                if (string.IsNullOrWhiteSpace(webhook.To) || 
+                    string.IsNullOrWhiteSpace(webhook.From) || 
+                    string.IsNullOrWhiteSpace(webhook.Body))
+                {
+                    return new WhatsAppResponseDto
+                    {
+                        Success = false,
+                        Message = "Invalid webhook data"
+                    };
+                }
+
                 // Get configuration for the WhatsApp number
                 var config = await _configRepository.GetByWhatsAppNumberAsync(webhook.To);
                 if (config == null || !config.IsActive)
@@ -70,7 +82,8 @@ namespace MedicSoft.WhatsAppAgent.Services
                 // Security: Check for prompt injection
                 if (PromptInjectionGuard.IsSuspicious(webhook.Body))
                 {
-                    await SendWhatsAppMessageAsync(config, webhook.From, config.FallbackMessage);
+                    await SendWhatsAppMessageAsync(config, webhook.From, 
+                        config.FallbackMessage ?? "Desculpe, não consegui processar sua solicitação.");
                     
                     return new WhatsAppResponseDto
                     {
@@ -109,10 +122,10 @@ namespace MedicSoft.WhatsAppAgent.Services
                 var aiResponse = await _aiService.SendMessageAsync(
                     safeSystemPrompt,
                     sanitizedMessage,
-                    session.Context);
+                    session.Context ?? "{}");
 
                 // Update conversation context
-                var updatedContext = UpdateConversationContext(session.Context, sanitizedMessage, aiResponse);
+                var updatedContext = UpdateConversationContext(session.Context ?? "{}", sanitizedMessage, aiResponse);
                 session.UpdateContext(updatedContext);
                 await _sessionRepository.UpdateAsync(session);
 
@@ -220,8 +233,8 @@ namespace MedicSoft.WhatsAppAgent.Services
 
     internal class ConversationMessage
     {
-        public string Role { get; set; }
-        public string Content { get; set; }
+        public string? Role { get; set; }
+        public string? Content { get; set; }
         public DateTime Timestamp { get; set; }
     }
 }

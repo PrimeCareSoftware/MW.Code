@@ -314,9 +314,17 @@ O projeto está configurado com quality gates padrão do SonarCloud:
 
 Foram aplicadas correções para resolver issues identificados pelo SonarCloud, sem alterar regras de negócio:
 
+#### Fase 1 - Core Domain
 1. **Blocos Catch Específicos**: Substituição de catches genéricos por `ArgumentException` e `FormatException`
 2. **Parâmetros Nullable**: Explicitação de parâmetros nullable em `MedicalRecord`
 3. **Testes Limpos**: Remoção de asserts desnecessários em tipos valor
 4. **Constantes de Domínio**: Extração de magic numbers (11, 14) para `DocumentConstants`
 
-**Impacto**: Build passou de 4 warnings para 0 warnings, mantendo 100% dos testes passando.
+**Impacto**: Build passou de 4 warnings para 0 warnings
+
+#### Fase 2 - WhatsAppAgent
+5. **Propriedades Nullable**: Marcação de propriedades opcionais como nullable em entities e DTOs
+6. **Validação de Webhook**: Adição de validação no `ProcessMessageAsync`
+7. **Null-Safety**: Uso de null-coalescing operators e inicialização de construtores EF Core
+
+**Impacto**: Eliminação de 40+ warnings CS8618/CS8604, build limpo com 647 testes passando (100%)

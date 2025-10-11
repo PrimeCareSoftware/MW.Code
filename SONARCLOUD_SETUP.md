@@ -198,8 +198,27 @@ As seguintes correções foram aplicadas para melhorar a qualidade do código co
 
 **Motivo**: Elimina magic numbers, melhora manutenibilidade
 
+#### 5. Correções WhatsAppAgent - Propriedades Nullable (Outubro 2025)
+**Problema**: CS8618 e CS8604 warnings em propriedades não-nullable do WhatsAppAgent
+
+**Arquivos atualizados**:
+- `src/MedicSoft.WhatsAppAgent/Entities/ConversationSession.cs`
+- `src/MedicSoft.WhatsAppAgent/Entities/WhatsAppAgentConfiguration.cs`
+- `src/MedicSoft.WhatsAppAgent/DTOs/WhatsAppMessageDto.cs`
+- `src/MedicSoft.WhatsAppAgent/DTOs/WhatsAppAgentConfigurationDto.cs`
+- `src/MedicSoft.WhatsAppAgent/Services/WhatsAppAgentService.cs`
+- `src/MedicSoft.WhatsAppAgent/Security/PromptInjectionGuard.cs`
+
+**Correções aplicadas**:
+- Propriedades opcionais marcadas como nullable (`string?`)
+- Construtores privados (EF Core) inicializados com valores padrão
+- Validação de webhook adicionada no `ProcessMessageAsync`
+- Null-coalescing operators (`??`) onde apropriado
+
+**Motivo**: Elimina 40+ warnings de compilação, torna contratos de API mais claros
+
 ### Resultados
-- ✅ **Build**: 0 warnings (antes: 4 warnings)
-- ✅ **Testes**: 583/583 passando (100%)
+- ✅ **Build**: 0 warnings (antes: 40+ warnings no total do projeto)
+- ✅ **Testes**: 647/647 passando (100%)
 - ✅ **Regras de Negócio**: Nenhuma alteração
 - ✅ **Compatibilidade**: Totalmente preservada

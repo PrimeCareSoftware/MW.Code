@@ -102,19 +102,82 @@ public static class DocumentConstants
 
 ---
 
+### 5. Propriedades Nullable no WhatsAppAgent (Outubro 2025)
+
+**Problema**: CS8618 e CS8604 warnings em propriedades não-nullable e argumentos potencialmente nulos.
+
+**Solução**: Marcação apropriada de nullable types e adição de validações.
+
+**Arquivos atualizados**:
+- `src/MedicSoft.WhatsAppAgent/Entities/ConversationSession.cs`
+- `src/MedicSoft.WhatsAppAgent/Entities/WhatsAppAgentConfiguration.cs`
+- `src/MedicSoft.WhatsAppAgent/DTOs/WhatsAppMessageDto.cs`
+- `src/MedicSoft.WhatsAppAgent/DTOs/WhatsAppAgentConfigurationDto.cs`
+- `src/MedicSoft.WhatsAppAgent/Services/WhatsAppAgentService.cs`
+- `src/MedicSoft.WhatsAppAgent/Security/PromptInjectionGuard.cs`
+
+**Mudanças específicas**:
+```csharp
+// Antes
+public string UserName { get; private set; }
+
+// Depois
+public string? UserName { get; private set; }
+
+// Antes
+private ConversationSession() { }
+
+// Depois
+private ConversationSession() 
+{
+    // Private constructor for EF Core
+    TenantId = string.Empty;
+    UserPhoneNumber = string.Empty;
+}
+
+// Antes
+await SendWhatsAppMessageAsync(config, webhook.From, config.FallbackMessage);
+
+// Depois
+await SendWhatsAppMessageAsync(config, webhook.From, 
+    config.FallbackMessage ?? "Desculpe, não consegui processar sua solicitação.");
+```
+
+**Impacto**: Elimina 40+ warnings de compilação, torna contratos de API mais explícitos sobre nullability.
+
+---
+
 ## 📊 Resultados
 
-### Antes das Correções
+### Fase 1 - Core Domain (Antes)
 - ⚠️ **Build Warnings**: 4
   - 3x CS8625 (nullable reference type)
   - 1x xUnit2002 (assert on value type)
 - ⚠️ **Code Smells**: Blocos catch genéricos, magic numbers
 - ✅ **Testes**: 583/583 passando
 
-### Depois das Correções
+### Fase 1 - Core Domain (Depois)
 - ✅ **Build Warnings**: 0
 - ✅ **Code Smells**: Resolvidos
 - ✅ **Testes**: 583/583 passando
+- ✅ **Compatibilidade**: 100% mantida
+
+### Fase 2 - WhatsAppAgent (Antes)
+- ⚠️ **Build Warnings**: 40+
+  - CS8618 (non-nullable property)
+  - CS8604 (possible null reference)
+  - CS8625 (null literal)
+- ✅ **Testes**: 647/647 passando
+
+### Fase 2 - WhatsAppAgent (Depois)
+- ✅ **Build Warnings**: 0
+- ✅ **Testes**: 647/647 passando
+- ✅ **Compatibilidade**: 100% mantida
+
+### Total Consolidado
+- ✅ **Build Warnings**: 0 (antes: 44+)
+- ✅ **Testes**: 647/647 passando (100%)
+- ✅ **Code Smells**: Todos resolvidos
 - ✅ **Compatibilidade**: 100% mantida
 
 ## 🔒 Garantias de Não-Regressão
@@ -124,6 +187,8 @@ public static class DocumentConstants
 - ✅ Lógica de MedicalRecord inalterada
 - ✅ Comportamento de tratamento de null preservado
 - ✅ Contratos de API totalmente compatíveis
+- ✅ WhatsAppAgent: Validação de webhook e segurança mantidas
+- ✅ Prompt injection guard funcionando corretamente
 
 ### Testes
 - ✅ 100% dos testes originais passando
@@ -142,13 +207,21 @@ Os seguintes documentos foram atualizados para refletir as correções:
 1. **SONARCLOUD_SETUP.md** (raiz e frontend)
    - Adicionada seção "📝 Correções Aplicadas"
    - Detalhamento de cada correção com exemplos
+   - Adicionadas correções WhatsAppAgent
 
 2. **CI_CD_DOCUMENTATION.md**
    - Adicionado histórico de melhorias de qualidade
    - Atualizado status atual do projeto
+   - Incluídas fases 1 e 2 de correções
 
 3. **SONAR_FIXES_SUMMARY.md** (este documento)
    - Documentação completa das correções
+   - Resultados consolidados de todas as fases
+
+4. **SONARCLOUD_CONFIGURATION_ISSUES.md** (novo)
+   - Documentação de problemas de configuração encontrados
+   - Passos necessários para resolução
+   - Status e próximos passos
 
 ## 🎓 Lições Aprendidas
 

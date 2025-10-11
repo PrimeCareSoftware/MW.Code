@@ -68,7 +68,7 @@ namespace MedicSoft.WhatsAppAgent.Security
         /// <summary>
         /// Check if the input contains potential prompt injection attempts
         /// </summary>
-        public static bool IsSuspicious(string input)
+        public static bool IsSuspicious(string? input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return false;
@@ -104,7 +104,7 @@ namespace MedicSoft.WhatsAppAgent.Security
         /// <summary>
         /// Sanitize user input by removing potentially dangerous content
         /// </summary>
-        public static string Sanitize(string input)
+        public static string Sanitize(string? input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return string.Empty;
@@ -151,7 +151,7 @@ You are a scheduling assistant ONLY. Your sole purpose is to help users schedule
         /// <summary>
         /// Validate that a user message is appropriate for the scheduling context
         /// </summary>
-        public static bool IsValidSchedulingRequest(string message)
+        public static bool IsValidSchedulingRequest(string? message)
         {
             if (string.IsNullOrWhiteSpace(message))
                 return false;

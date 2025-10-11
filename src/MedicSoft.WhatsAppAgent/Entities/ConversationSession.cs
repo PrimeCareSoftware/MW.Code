@@ -23,19 +23,19 @@ namespace MedicSoft.WhatsAppAgent.Entities
         public string UserPhoneNumber { get; private set; }
         
         [MaxLength(200)]
-        public string UserName { get; private set; }
+        public string? UserName { get; private set; }
         
         /// <summary>
         /// Conversation context in JSON format
         /// </summary>
         [MaxLength(8000)]
-        public string Context { get; private set; }
+        public string? Context { get; private set; }
         
         /// <summary>
         /// Current state of the conversation
         /// </summary>
         [MaxLength(50)]
-        public string State { get; private set; }
+        public string? State { get; private set; }
         
         /// <summary>
         /// Number of messages in current hour
@@ -62,13 +62,18 @@ namespace MedicSoft.WhatsAppAgent.Entities
         
         public bool IsActive { get; private set; }
 
-        private ConversationSession() { }
+        private ConversationSession() 
+        {
+            // Private constructor for EF Core
+            TenantId = string.Empty;
+            UserPhoneNumber = string.Empty;
+        }
 
         public ConversationSession(
             Guid configurationId,
             string tenantId,
             string userPhoneNumber,
-            string userName = null)
+            string? userName = null)
         {
             if (configurationId == Guid.Empty)
                 throw new ArgumentException("ConfigurationId is required", nameof(configurationId));

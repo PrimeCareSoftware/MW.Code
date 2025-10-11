@@ -65,30 +65,40 @@ namespace MedicSoft.WhatsAppAgent.Entities
         /// Business hours start time (e.g., "08:00")
         /// </summary>
         [MaxLength(5)]
-        public string BusinessHoursStart { get; private set; }
+        public string? BusinessHoursStart { get; private set; }
         
         /// <summary>
         /// Business hours end time (e.g., "18:00")
         /// </summary>
         [MaxLength(5)]
-        public string BusinessHoursEnd { get; private set; }
+        public string? BusinessHoursEnd { get; private set; }
         
         /// <summary>
         /// Days of the week the agent is active (comma-separated: "Mon,Tue,Wed,Thu,Fri")
         /// </summary>
         [MaxLength(100)]
-        public string ActiveDays { get; private set; }
+        public string? ActiveDays { get; private set; }
         
         /// <summary>
         /// Fallback message when agent cannot handle the request
         /// </summary>
         [MaxLength(500)]
-        public string FallbackMessage { get; private set; }
+        public string? FallbackMessage { get; private set; }
         
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
-        private WhatsAppAgentConfiguration() { }
+        private WhatsAppAgentConfiguration() 
+        {
+            // Private constructor for EF Core
+            TenantId = string.Empty;
+            ClinicName = string.Empty;
+            WhatsAppNumber = string.Empty;
+            WhatsAppApiKey = string.Empty;
+            AiApiKey = string.Empty;
+            AiModel = string.Empty;
+            SystemPrompt = string.Empty;
+        }
 
         public WhatsAppAgentConfiguration(
             string tenantId,
