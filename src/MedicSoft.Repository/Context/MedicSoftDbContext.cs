@@ -32,6 +32,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<AppointmentProcedure> AppointmentProcedures { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<ProcedureMaterial> ProcedureMaterials { get; set; } = null!;
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +61,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new AppointmentProcedureConfiguration());
             modelBuilder.ApplyConfiguration(new MaterialConfiguration());
             modelBuilder.ApplyConfiguration(new ProcedureMaterialConfiguration());
+            modelBuilder.ApplyConfiguration(new PasswordResetTokenConfiguration());
 
             // Global query filters for tenant isolation
             modelBuilder.Entity<Patient>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
@@ -83,6 +85,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.Entity<Procedure>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
             modelBuilder.Entity<AppointmentProcedure>().HasQueryFilter(ap => EF.Property<string>(ap, "TenantId") == GetTenantId());
             modelBuilder.Entity<Material>().HasQueryFilter(m => EF.Property<string>(m, "TenantId") == GetTenantId());
+            modelBuilder.Entity<PasswordResetToken>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
             modelBuilder.Entity<ProcedureMaterial>().HasQueryFilter(pm => EF.Property<string>(pm, "TenantId") == GetTenantId());
         }
 

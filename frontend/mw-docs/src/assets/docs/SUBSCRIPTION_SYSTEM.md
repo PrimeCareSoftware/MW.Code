@@ -158,10 +158,27 @@ Quando o pagamento não é realizado:
 ### 4.2 Permissões por Role
 
 #### SystemAdmin (Administrador do Sistema)
-- ✅ Acesso completo a todas as clínicas
+- ✅ Acesso completo a todas as clínicas (cross-tenant)
 - ✅ Gerenciar assinaturas e planos
 - ✅ Analytics e BI global
 - ✅ Acesso cross-tenant para auditoria
+- ✅ Criar outros System Admins
+- ✅ Ativar/Desativar clínicas
+- ✅ Modificar preços e planos
+- ✅ Acesso a todos os endpoints do sistema
+
+**API Endpoints Exclusivos**:
+```bash
+GET /api/system-admin/clinics
+GET /api/system-admin/clinics/{id}
+PUT /api/system-admin/clinics/{id}/subscription
+POST /api/system-admin/clinics/{id}/toggle-status
+GET /api/system-admin/analytics
+POST /api/system-admin/users
+GET /api/system-admin/plans
+```
+
+**Documentação Completa**: Ver [SYSTEM_ADMIN_DOCUMENTATION.md](SYSTEM_ADMIN_DOCUMENTATION.md)
 
 #### ClinicOwner (Dono da Clínica)
 - ✅ Gerenciar usuários da clínica
