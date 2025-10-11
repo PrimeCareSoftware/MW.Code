@@ -170,6 +170,8 @@ builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddScoped<IPatientClinicLinkRepository, PatientClinicLinkRepository>();
 builder.Services.AddScoped<IProcedureRepository, ProcedureRepository>();
 builder.Services.AddScoped<IAppointmentProcedureRepository, AppointmentProcedureRepository>();
+builder.Services.AddScoped<IClinicSubscriptionRepository, ClinicSubscriptionRepository>();
+builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
