@@ -11,7 +11,10 @@ Toda a documentação detalhada do projeto está disponível no **projeto web de
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
 - 📖 **Principais Documentos**:
   - `BUSINESS_RULES.md` - Regras de negócio
-  - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas (NOVO!)
+  - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas
+  - `SYSTEM_ADMIN_DOCUMENTATION.md` - Área do administrador do sistema (NOVO!)
+  - `PASSWORD_RECOVERY_FLOW.md` - Recuperação de senha com 2FA (NOVO!)
+  - `PENDING_TASKS.md` - Pendências e integrações futuras (NOVO!)
   - `API_QUICK_GUIDE.md` - Guia rápido da API
   - `SECURITY_GUIDE.md` - Guia de segurança
   - `GUIA_EXECUCAO.md` - Como executar o projeto
@@ -37,12 +40,23 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Bloqueio por Inadimplência**: Acesso bloqueado até regularização
 - ✅ **Restauração Automática**: Acesso liberado após confirmação de pagamento
 
-### 👥 Gestão de Usuários e Permissões (NOVO!)
+### 👥 Gestão de Usuários e Permissões
 - ✅ **Múltiplos Perfis**: SystemAdmin, ClinicOwner, Doctor, Dentist, Nurse, Receptionist, Secretary
 - ✅ **Controle de Acesso**: Permissões granulares por role
 - ✅ **Limite de Usuários**: Validação automática baseada no plano
 - ✅ **Administrador da Clínica**: Cadastro do dono com poderes completos
 - ✅ **Cadastro de Médicos**: Suporte para CRM, especialidade, etc.
+- ✅ **Área do System Owner**: Gestão completa de todas as clínicas (NOVO!)
+  - Listagem de todas as clínicas com paginação
+  - Analytics do sistema (MRR, churn, etc)
+  - Gerenciamento de assinaturas
+  - Ativação/Desativação de clínicas
+  - Criação de administradores do sistema
+- ✅ **Recuperação de Senha com 2FA**: (NOVO!)
+  - Autenticação em duas etapas via SMS ou Email
+  - Códigos de verificação de 6 dígitos
+  - Tokens seguros com expiração de 15 minutos
+  - Validação de força de senha
 
 ### 🎛️ Configuração de Módulos (NOVO!)
 - ✅ **Módulos por Plano**: Recursos habilitados conforme o plano
