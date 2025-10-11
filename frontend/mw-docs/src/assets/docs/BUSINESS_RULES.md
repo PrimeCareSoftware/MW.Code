@@ -673,6 +673,139 @@ Para documentação completa, consulte: [NOTIFICATION_ROUTINES_DOCUMENTATION.md]
 
 ### 8.1 Procedimentos: Nome, código, categoria, preço, duração, materiais
 
+**Entidade**: `Procedure`
+
+Representa um procedimento/serviço oferecido pela clínica.
+
+#### Propriedades:
+- **Name**: Nome do procedimento (ex: "Consulta Médica Geral")
+- **Code**: Código único (ex: "CONS-001")
+- **Description**: Descrição detalhada
+- **Category**: Categoria do procedimento
+  - Consultation (Consulta)
+  - Exam (Exame)
+  - Surgery (Cirurgia)
+  - Therapy (Terapia)
+  - Vaccination (Vacinação)
+  - Diagnostic (Diagnóstico)
+  - Treatment (Tratamento)
+  - Emergency (Emergência)
+  - Prevention (Prevenção)
+  - Aesthetic (Estética)
+  - FollowUp (Retorno)
+  - Other (Outros)
+- **Price**: Preço padrão do procedimento
+- **DurationMinutes**: Duração estimada em minutos
+- **RequiresMaterials**: Indica se requer materiais
+- **IsActive**: Status ativo/inativo
+
+#### Endpoints API:
+```
+GET    /api/procedures                           # Listar procedimentos
+GET    /api/procedures/{id}                      # Obter por ID
+POST   /api/procedures                           # Criar novo
+PUT    /api/procedures/{id}                      # Atualizar
+DELETE /api/procedures/{id}                      # Desativar
+```
+
+### 8.2 Materiais: Controle de estoque com entrada/saída e alertas
+
+**Entidade**: `Material`
+
+Representa materiais/insumos utilizados em procedimentos.
+
+#### Propriedades:
+- **Name**: Nome do material
+- **Code**: Código único
+- **Unit**: Unidade de medida (caixa, frasco, unidade, etc.)
+- **UnitPrice**: Preço unitário
+- **StockQuantity**: Quantidade em estoque
+- **MinimumStock**: Estoque mínimo para alertas
+
+### 8.3 Vínculo: Procedimento + Consulta + Paciente com dedução de estoque
+
+**Entidade**: `AppointmentProcedure`
+
+Vincula procedimentos realizados durante um atendimento.
+
+#### Propriedades:
+- **AppointmentId**: ID do agendamento
+- **ProcedureId**: ID do procedimento realizado
+- **PatientId**: ID do paciente
+- **PriceCharged**: Preço cobrado (pode ser diferente do padrão)
+- **PerformedAt**: Data/hora da realização
+- **Notes**: Observações
+
+#### Endpoints API:
+```
+POST /api/procedures/appointments/{appointmentId}/procedures     # Adicionar procedimento
+GET  /api/procedures/appointments/{appointmentId}/procedures     # Listar procedimentos
+GET  /api/procedures/appointments/{appointmentId}/billing-summary # Resumo de cobrança
+```
+
+### 8.4 Fechamento de Atendimento e Billing
+
+**Regra**: Ao finalizar um atendimento, o sistema deve calcular o total baseado nos procedimentos realizados.
+
+#### Fluxo de Fechamento:
+
+```
+1. Durante o Atendimento
+   ├─ Médico/Dentista realiza procedimentos
+   ├─ POST /api/procedures/appointments/{id}/procedures
+   ├─ Sistema registra cada procedimento com preço
+   └─ Procedimentos vinculados ao atendimento
+
+2. Fechamento por Médico ou Recepcionista
+   ├─ Acessa resumo de cobrança
+   ├─ GET /api/procedures/appointments/{id}/billing-summary
+   └─ Sistema retorna:
+      ├─ Lista de procedimentos realizados
+      ├─ Subtotal (soma dos procedimentos)
+      ├─ Impostos (se aplicável)
+      ├─ Total a pagar
+      └─ Status do pagamento
+
+3. Exemplo de Resposta:
+{
+  "appointmentId": "guid",
+  "patientId": "guid",
+  "patientName": "João Silva",
+  "appointmentDate": "2024-01-15T10:00:00Z",
+  "procedures": [
+    {
+      "procedureName": "Consulta Médica Geral",
+      "procedureCode": "CONS-001",
+      "priceCharged": 150.00,
+      "performedAt": "2024-01-15T10:00:00Z",
+      "notes": "Consulta realizada"
+    },
+    {
+      "procedureName": "Eletrocardiograma",
+      "procedureCode": "EXAM-002",
+      "priceCharged": 120.00,
+      "performedAt": "2024-01-15T10:30:00Z",
+      "notes": "ECG normal"
+    }
+  ],
+  "subTotal": 270.00,
+  "taxAmount": 0.00,
+  "total": 270.00,
+  "paymentStatus": "Pending"
+}
+
+4. Processamento do Pagamento
+   ├─ POST /api/payments
+   ├─ Vincula ao appointmentId
+   ├─ Registra método de pagamento
+   └─ Atualiza status para "Paid"
+```
+
+#### Permissões:
+- **Médico/Dentista**: Pode adicionar procedimentos e fechar atendimento
+- **Recepcionista**: Pode visualizar resumo e processar pagamento
+- **Secretário**: Pode visualizar resumo e processar pagamento
+
 ### 8.2 Materiais: Controle de estoque com entrada/saída e alertas
 
 ### 8.3 Vínculo: Procedimento + Consulta + Paciente com dedução de estoque

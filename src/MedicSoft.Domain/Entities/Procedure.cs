@@ -104,6 +104,7 @@ namespace MedicSoft.Domain.Entities
         Emergency,         // Emergência
         Prevention,        // Prevenção
         Aesthetic,         // Estética
+        FollowUp,          // Retorno
         Other              // Outros
     }
 }

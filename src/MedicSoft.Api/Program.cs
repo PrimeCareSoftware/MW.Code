@@ -168,11 +168,14 @@ builder.Services.AddScoped<INotificationRoutineRepository, NotificationRoutineRe
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddScoped<IPatientClinicLinkRepository, PatientClinicLinkRepository>();
+builder.Services.AddScoped<IProcedureRepository, ProcedureRepository>();
+builder.Services.AddScoped<IAppointmentProcedureRepository, AppointmentProcedureRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();

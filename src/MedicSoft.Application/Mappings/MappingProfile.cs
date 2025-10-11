@@ -98,6 +98,15 @@ namespace MedicSoft.Application.Mappings
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
                 .ForMember(dest => dest.ScheduleType, opt => opt.MapFrom(src => src.ScheduleType.ToString()))
                 .ForMember(dest => dest.Scope, opt => opt.MapFrom(src => src.Scope.ToString()));
+
+            // Procedure mappings
+            CreateMap<Procedure, ProcedureDto>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category));
+
+            // AppointmentProcedure mappings
+            CreateMap<AppointmentProcedure, AppointmentProcedureDto>()
+                .ForMember(dest => dest.ProcedureName, opt => opt.MapFrom(src => src.Procedure != null ? src.Procedure.Name : string.Empty))
+                .ForMember(dest => dest.ProcedureCode, opt => opt.MapFrom(src => src.Procedure != null ? src.Procedure.Code : string.Empty));
         }
     }
 }
