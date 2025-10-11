@@ -136,10 +136,14 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ### 🏥 Procedimentos e Serviços
 - ✅ **Cadastro de Procedimentos**: Nome, código, categoria, preço, duração
+- ✅ **CRUD Completo**: API RESTful para gerenciar procedimentos
 - ✅ **Gestão de Materiais**: Controle de estoque com entrada e saída
 - ✅ **Vínculo Procedimento-Consulta**: Registro completo por atendimento
+- ✅ **Fechamento de Conta**: Resumo de billing com valores discriminados
 - ✅ **Controle de Estoque**: Alerta de estoque mínimo
-- ✅ **Categorias**: Consulta, Exame, Cirurgia, Terapia, Vacinação, etc.
+- ✅ **Categorias**: Consulta, Exame, Cirurgia, Terapia, Vacinação, Retorno, etc.
+- ✅ **Múltiplos Procedimentos**: Adicionar vários procedimentos ao mesmo atendimento
+- ✅ **Cálculo Automático**: Total calculado automaticamente baseado nos procedimentos
 
 ### 🔐 Segurança e Administração
 - ✅ **Autenticação JWT**: API segura com tokens JWT validados
@@ -302,6 +306,16 @@ Use o token retornado no header `Authorization: Bearer {token}` nas demais requi
   - `GET /api/medical-records/appointment/{appointmentId}` - Buscar por agendamento
   - `GET /api/medical-records/patient/{patientId}` - Histórico do paciente
 
+- **Procedimentos e Serviços** 🆕:
+  - `GET /api/procedures` - Listar todos os procedimentos da clínica
+  - `GET /api/procedures/{id}` - Obter procedimento por ID
+  - `POST /api/procedures` - Criar novo procedimento
+  - `PUT /api/procedures/{id}` - Atualizar procedimento
+  - `DELETE /api/procedures/{id}` - Desativar procedimento
+  - `POST /api/procedures/appointments/{appointmentId}/procedures` - Adicionar procedimento ao atendimento
+  - `GET /api/procedures/appointments/{appointmentId}/procedures` - Listar procedimentos do atendimento
+  - `GET /api/procedures/appointments/{appointmentId}/billing-summary` - 💰 Resumo de cobrança com total
+
 - **Despesas (Contas a Pagar)**:
   - `GET /api/expenses` - Listar despesas (filtros: clinicId, status, category)
   - `GET /api/expenses/{id}` - Obter despesa por ID
@@ -319,7 +333,19 @@ Use o token retornado no header `Authorization: Bearer {token}` nas demais requi
   - `GET /api/reports/accounts-receivable` - Contas a receber (pendentes e vencidas)
   - `GET /api/reports/accounts-payable` - Contas a pagar (pendentes e vencidas)
 
+- **Data Seeding (Dados de Teste)** 🆕:
+  - `GET /api/data-seeder/demo-info` - Informações sobre os dados demo
+  - `POST /api/data-seeder/seed-demo` - 🔧 Gerar dados de teste completos
+    - Cria clínica demo com TenantId: `demo-clinic-001`
+    - Cria 3 usuários: Admin, Médico e Recepcionista
+    - Cria 6 pacientes (incluindo 2 crianças com responsável)
+    - Cria 8 procedimentos diversos
+    - Cria 5 agendamentos com histórico
+    - Cria pagamentos de exemplo
+
 ## 🧪 Testes
+
+O projeto possui ampla cobertura de testes unitários e de integração.
 
 ```bash
 # Executar todos os testes
@@ -327,7 +353,21 @@ dotnet test
 
 # Executar testes com cobertura
 dotnet test --collect:"XPlat Code Coverage"
+
+# Executar testes específicos
+dotnet test --filter "FullyQualifiedName~ProcedureTests"
 ```
+
+### Estatísticas de Testes
+
+- ✅ **670+ testes** implementados
+- ✅ **100% de cobertura** nas entidades de domínio
+- ✅ **Testes de Validação**: Regras de negócio e validações
+- ✅ **Testes de Comportamento**: Fluxos e estados das entidades
+- ✅ **Novos Testes** 🆕:
+  - 23 testes para entidade Procedure
+  - 15 testes para entidade AppointmentProcedure
+  - Validações de preços, durações e vínculos
 
 ## 🗃️ Estrutura do Banco de Dados
 
@@ -340,6 +380,12 @@ dotnet test --collect:"XPlat Code Coverage"
 - **MedicalRecords**: Prontuários médicos e histórico de atendimentos (isolados por clínica)
 - **MedicalRecordTemplates**: Templates reutilizáveis para prontuários
 - **PrescriptionTemplates**: Templates reutilizáveis para prescrições
+- **Procedures** 🆕: Procedimentos/serviços oferecidos pela clínica
+- **AppointmentProcedures** 🆕: Vínculo de procedimentos realizados em atendimentos
+- **Materials**: Materiais e insumos com controle de estoque
+- **ProcedureMaterials**: Vínculo de materiais necessários para procedimentos
+- **Payments**: Pagamentos de consultas e assinaturas
+- **Invoices**: Notas fiscais e comprovantes
 
 ### Multitenancy
 
