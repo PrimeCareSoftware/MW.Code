@@ -175,6 +175,7 @@ builder.Services.AddScoped<IAppointmentProcedureRepository, AppointmentProcedure
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();
