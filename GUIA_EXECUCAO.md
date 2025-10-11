@@ -292,8 +292,9 @@ dotnet restore
 dotnet run
 
 # A API estará disponível em:
-# - https://localhost:7100 (HTTPS)
-# - http://localhost:5000 (HTTP)
+# - https://localhost:7107 (HTTPS)
+# - http://localhost:5293 (HTTP)
+# - Swagger UI: https://localhost:7107/swagger ou http://localhost:5293/swagger
 ```
 
 ### 6.3. Executar o Frontend Angular
@@ -322,7 +323,8 @@ ng serve
 
 ### 7.1. Swagger API (Documentação Interativa)
 
-- **URL**: http://localhost:5000
+- **URL (Docker)**: http://localhost:5000/swagger
+- **URL (Desenvolvimento local)**: https://localhost:7107/swagger ou http://localhost:5293/swagger
 - Aqui você pode testar todos os endpoints da API
 - Para endpoints protegidos, você precisa fazer login primeiro
 
@@ -351,7 +353,7 @@ Você pode conectar ao SQL Server usando ferramentas como:
 
 #### 1. Obter Token de Autenticação
 
-Abra o Swagger (http://localhost:5000) e execute:
+Abra o Swagger (http://localhost:5000/swagger para Docker ou https://localhost:7107/swagger para desenvolvimento local) e execute:
 
 ```
 POST /api/auth/login

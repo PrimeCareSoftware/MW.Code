@@ -351,7 +351,7 @@ Você pode conectar ao SQL Server usando ferramentas como:
 
 #### 1. Obter Token de Autenticação
 
-Abra o Swagger (http://localhost:5000) e execute:
+Abra o Swagger (http://localhost:5000/swagger para Docker ou https://localhost:7107/swagger para desenvolvimento local) e execute:
 
 ```
 POST /api/auth/login
