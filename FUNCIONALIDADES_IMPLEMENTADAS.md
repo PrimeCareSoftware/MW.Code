@@ -32,6 +32,22 @@ Este documento responde diretamente às funcionalidades solicitadas no problema 
 - [NOTIFICATION_ROUTINES_DOCUMENTATION.md](NOTIFICATION_ROUTINES_DOCUMENTATION.md)
 - [NOTIFICATION_ROUTINES_EXAMPLE.md](NOTIFICATION_ROUTINES_EXAMPLE.md)
 
+### 🆕 Agente de IA via WhatsApp (NOVO - Fase 1 Completa)
+- ✅ Agendamento automático via WhatsApp com IA
+- ✅ Configuração independente por clínica
+- ✅ Proteção contra prompt injection (15+ padrões)
+- ✅ Rate limiting por usuário (configurável)
+- ✅ Controle de horário comercial
+- ✅ Multi-tenant seguro com isolamento completo
+- ✅ Gerenciamento de sessões de conversa
+- ✅ 64 testes unitários (100% passing)
+- ⏳ Fase 2: Repositórios e API Controllers (pendente)
+
+**Documentação:**
+- [WHATSAPP_AI_AGENT_DOCUMENTATION.md](frontend/mw-docs/src/assets/docs/WHATSAPP_AI_AGENT_DOCUMENTATION.md)
+- [WHATSAPP_AI_AGENT_SECURITY.md](frontend/mw-docs/src/assets/docs/WHATSAPP_AI_AGENT_SECURITY.md)
+- [IMPLEMENTATION_WHATSAPP_AI_AGENT.md](frontend/mw-docs/src/assets/docs/IMPLEMENTATION_WHATSAPP_AI_AGENT.md)
+
 ### Visualização de Horários
 - ✅ Visualização em lista (agenda diária)
 - ✅ Visualização em calendário mensal
