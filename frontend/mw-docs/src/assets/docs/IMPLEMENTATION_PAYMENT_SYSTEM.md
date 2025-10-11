@@ -266,7 +266,7 @@ docker-compose up -d
 - **[BUSINESS_RULES.md](BUSINESS_RULES.md)** - Regras de negócio
 - **[README.md](README.md)** - Visão geral do projeto
 - **[TEST_SUMMARY.md](TEST_SUMMARY.md)** - Resumo dos testes
-- **Swagger UI** - http://localhost:5000 (quando rodando)
+- **Swagger UI** - http://localhost:5000/swagger (quando rodando com Docker) ou https://localhost:7107/swagger (desenvolvimento local)
 
 ## ⚠️ Pendente (Frontend)
 

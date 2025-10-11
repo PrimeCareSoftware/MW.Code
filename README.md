@@ -194,7 +194,7 @@ docker-compose up -d
 
 # A API estará disponível em: http://localhost:5000
 # O Frontend estará disponível em: http://localhost:4200
-# Swagger UI estará disponível em: http://localhost:5000
+# Swagger UI estará disponível em: http://localhost:5000/swagger
 ```
 
 ### Executar para Desenvolvimento
@@ -209,7 +209,8 @@ dotnet restore
 cd src/MedicSoft.Api
 dotnet run
 
-# A API estará disponível em: https://localhost:7100
+# A API estará disponível em: https://localhost:7107
+# Swagger UI estará disponível em: https://localhost:7107/swagger
 ```
 
 #### Frontend (Angular)
@@ -249,7 +250,8 @@ docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
 
 Após executar a aplicação, acesse a documentação interativa do Swagger:
 
-- **Swagger UI**: http://localhost:5000
+- **Swagger UI (Docker)**: http://localhost:5000/swagger
+- **Swagger UI (Desenvolvimento local)**: https://localhost:7107/swagger
 
 ### Autenticação
 
