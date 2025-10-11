@@ -221,6 +221,69 @@ export class DocumentationService {
       ]
     },
     {
+      name: '📊 Gestão Financeira',
+      icon: '📊',
+      docs: [
+        {
+          id: 'financial-reports-documentation',
+          title: 'FINANCIAL_REPORTS_DOCUMENTATION.md',
+          category: 'Financeiro',
+          path: 'FINANCIAL_REPORTS_DOCUMENTATION.md',
+          description: 'Sistema completo de gestão financeira, relatórios e controle de despesas',
+          size: '11KB / 497 linhas',
+          idealFor: 'Gestores financeiros, contadores, administradores'
+        }
+      ]
+    },
+    {
+      name: '💳 Sistema de Assinaturas',
+      icon: '💳',
+      docs: [
+        {
+          id: 'subscription-system',
+          title: 'SUBSCRIPTION_SYSTEM.md',
+          category: 'Assinaturas',
+          path: 'SUBSCRIPTION_SYSTEM.md',
+          description: 'Sistema SaaS de assinaturas com planos, permissões e controle de acesso',
+          size: '14KB / 612 linhas',
+          idealFor: 'Product managers, desenvolvedores, administradores'
+        }
+      ]
+    },
+    {
+      name: '🤖 WhatsApp AI Agent',
+      icon: '🤖',
+      docs: [
+        {
+          id: 'whatsapp-ai-agent-documentation',
+          title: 'WHATSAPP_AI_AGENT_DOCUMENTATION.md',
+          category: 'WhatsApp AI',
+          path: 'WHATSAPP_AI_AGENT_DOCUMENTATION.md',
+          description: 'Documentação completa do agente de IA para agendamento via WhatsApp',
+          size: '15KB / 448 linhas',
+          idealFor: 'Desenvolvedores, product managers'
+        },
+        {
+          id: 'implementation-whatsapp-ai-agent',
+          title: 'IMPLEMENTATION_WHATSAPP_AI_AGENT.md',
+          category: 'WhatsApp AI',
+          path: 'IMPLEMENTATION_WHATSAPP_AI_AGENT.md',
+          description: 'Resumo da implementação do WhatsApp AI Agent (Fase 1 completa)',
+          size: '12KB / 408 linhas',
+          idealFor: 'Desenvolvedores, arquitetos'
+        },
+        {
+          id: 'whatsapp-ai-agent-security',
+          title: 'WHATSAPP_AI_AGENT_SECURITY.md',
+          category: 'WhatsApp AI',
+          path: 'WHATSAPP_AI_AGENT_SECURITY.md',
+          description: 'Guia de segurança do WhatsApp AI Agent com proteção contra prompt injection',
+          size: '12KB / 436 linhas',
+          idealFor: 'Security engineers, desenvolvedores'
+        }
+      ]
+    },
+    {
       name: '🔔 Notificações',
       icon: '🔔',
       docs: [
