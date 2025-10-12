@@ -1,12 +1,10 @@
 using System.Text;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MedicSoft.Api.Authentication;
 using MedicSoft.Application.Mappings;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Extensions;
@@ -22,9 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Check authentication mode for Swagger configuration
-var disableAuthForSwagger = builder.Configuration.GetValue<bool>("Authentication:DisableAuthentication", false);
-
 // Configure Swagger with JWT authentication
 builder.Services.AddSwaggerGen(c =>
 {
@@ -32,9 +27,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "MedicWarehouse API",
         Version = "v1",
-        Description = disableAuthForSwagger 
-            ? "MedicWarehouse - Sistema de Gestão para Consultórios Médicos (⚠️ Authentication DISABLED for development)"
-            : "MedicWarehouse - Sistema de Gestão para Consultórios Médicos",
+        Description = "MedicWarehouse - Sistema de Gestão para Consultórios Médicos",
         Contact = new OpenApiContact
         {
             Name = "MedicWarehouse",
@@ -42,86 +35,69 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    // Add JWT authentication to Swagger only if authentication is enabled
-    if (!disableAuthForSwagger)
+    // Add JWT authentication to Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        {
-            Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-            Name = "Authorization",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
-            Scheme = "Bearer"
-        });
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
 
-        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
+            new OpenApiSecurityScheme
             {
-                new OpenApiSecurityScheme
+                Reference = new OpenApiReference
                 {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
-        });
-    }
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 // Configure database
 builder.Services.AddDbContext<MedicSoftDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configure Authentication
-var disableAuthentication = builder.Configuration.GetValue<bool>("Authentication:DisableAuthentication", false);
+// Configure JWT Authentication
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is not configured");
 
-if (disableAuthentication)
+// Validate JWT key length (minimum 32 characters for security)
+if (secretKey.Length < 32)
+    throw new InvalidOperationException("JWT SecretKey must be at least 32 characters long");
+
+var key = Encoding.ASCII.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(options =>
 {
-    // Development mode: Bypass JWT authentication
-    builder.Services.AddAuthentication("DevBypass")
-        .AddScheme<AuthenticationSchemeOptions, DevBypassAuthenticationHandler>("DevBypass", options => { });
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var requireHttps = builder.Configuration.GetValue<bool>("Security:RequireHttps", true);
     
-    Console.WriteLine("⚠️  WARNING: Authentication is DISABLED for development purposes");
-}
-else
-{
-    // Production mode: Use JWT authentication
-    var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-    var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is not configured");
-
-    // Validate JWT key length (minimum 32 characters for security)
-    if (secretKey.Length < 32)
-        throw new InvalidOperationException("JWT SecretKey must be at least 32 characters long");
-
-    var key = Encoding.ASCII.GetBytes(secretKey);
-
-    builder.Services.AddAuthentication(options =>
+    options.RequireHttpsMetadata = requireHttps;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        var requireHttps = builder.Configuration.GetValue<bool>("Security:RequireHttps", true);
-        
-        options.RequireHttpsMetadata = requireHttps;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidateAudience = true,
-            ValidAudience = jwtSettings["Audience"],
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-    });
-}
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSettings["Audience"],
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
 
 builder.Services.AddAuthorization();
 
