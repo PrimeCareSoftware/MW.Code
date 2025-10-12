@@ -113,7 +113,7 @@ POST /api/system-admin/users (create system admins)
 
 ## Database Changes
 
-### Migration: 20251012_AddManualOverrideToSubscriptions
+### Migration: 20251012195249_AddOwnerEntity
 
 ```sql
 ALTER TABLE ClinicSubscriptions
@@ -271,7 +271,7 @@ Authorization: Bearer {token}
 
 ### Repository Layer
 - `src/MedicSoft.Repository/Configurations/ClinicSubscriptionConfiguration.cs` - Updated EF configuration
-- `src/MedicSoft.Repository/Migrations/20251012_AddManualOverrideToSubscriptions.cs` - New migration
+- `src/MedicSoft.Repository/Migrations/20251012195249_AddOwnerEntity.cs` - New migration
 
 ### Tests
 - `tests/MedicSoft.Test/Entities/ClinicSubscriptionManualOverrideTests.cs` - 12 new tests

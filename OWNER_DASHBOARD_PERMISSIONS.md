@@ -232,7 +232,7 @@ Execute a migration para adicionar os novos campos:
 dotnet ef database update
 
 # Ou manualmente via SQL:
-# /src/MedicSoft.Repository/Migrations/20251012_AddManualOverrideToSubscriptions.cs
+# /src/MedicSoft.Repository/Migrations/20251012195249_AddOwnerEntity.cs
 ```
 
 ## Exemplos de Uso
