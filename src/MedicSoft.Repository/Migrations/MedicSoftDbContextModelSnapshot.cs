@@ -968,7 +968,6 @@ namespace MedicSoft.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ClinicId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -1777,8 +1776,7 @@ namespace MedicSoft.Repository.Migrations
                     b.HasOne("MedicSoft.Domain.Entities.Clinic", "Clinic")
                         .WithMany()
                         .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Clinic");
                 });
