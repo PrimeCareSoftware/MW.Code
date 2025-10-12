@@ -15,11 +15,16 @@ namespace MedicSoft.Api.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IUserRepository _userRepository;
 
-        public AuthController(IConfiguration configuration, IPasswordHasher passwordHasher)
+        public AuthController(
+            IConfiguration configuration, 
+            IPasswordHasher passwordHasher,
+            IUserRepository userRepository)
         {
             _configuration = configuration;
             _passwordHasher = passwordHasher;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -27,7 +32,7 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpPost("login")]
         [AllowAnonymous]
-        public ActionResult<AuthResponse> Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
         {
             // Sanitize inputs
             var username = InputSanitizer.TrimAndLimit(request.Username, 100);
@@ -38,28 +43,42 @@ namespace MedicSoft.Api.Controllers
                 return Unauthorized(new { message = "Invalid credentials" });
             }
 
-            // In a real application, you would:
-            // 1. Query user from database by username
-            // 2. Verify password hash using _passwordHasher.VerifyPassword()
-            // 3. Check if account is locked
-            // 4. Update last login timestamp
-            // 5. Log the login attempt
-
-            // Simplified validation for demo
-            if (IsValidUser(username, request.Password))
+            // Get user from database
+            var user = await _userRepository.GetUserByUsernameAsync(username, tenantId);
+            
+            if (user == null)
             {
-                var token = GenerateJwtToken(username, tenantId);
-                return Ok(new AuthResponse
-                {
-                    Token = token,
-                    Username = username,
-                    TenantId = tenantId,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(60)
-                });
+                // Don't reveal whether username or password was incorrect
+                return Unauthorized(new { message = "Invalid credentials" });
             }
 
-            // Important: Don't reveal whether username or password was incorrect
-            return Unauthorized(new { message = "Invalid credentials" });
+            // Verify password
+            if (!_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
+            {
+                // Don't reveal whether username or password was incorrect
+                return Unauthorized(new { message = "Invalid credentials" });
+            }
+
+            // Check if user is active
+            if (!user.IsActive)
+            {
+                return Unauthorized(new { message = "Account is disabled. Please contact your administrator." });
+            }
+
+            // Update last login timestamp
+            user.RecordLogin();
+            await _userRepository.UpdateAsync(user);
+
+            // Generate JWT token
+            var token = GenerateJwtToken(user.Username, tenantId, user.Id.ToString(), user.Role.ToString());
+            
+            return Ok(new AuthResponse
+            {
+                Token = token,
+                Username = user.Username,
+                TenantId = tenantId,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(60)
+            });
         }
 
         /// <summary>
@@ -147,18 +166,7 @@ namespace MedicSoft.Api.Controllers
             });
         }
 
-        private bool IsValidUser(string username, string password)
-        {
-            // Demo validation - in real app, validate against database with hashed passwords
-            // Example:
-            // var user = await _userRepository.GetByUsernameAsync(username);
-            // if (user == null) return false;
-            // return _passwordHasher.VerifyPassword(password, user.PasswordHash);
-            
-            return !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password);
-        }
-
-        private string GenerateJwtToken(string username, string tenantId)
+        private string GenerateJwtToken(string username, string tenantId, string userId, string role)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"];
@@ -176,7 +184,8 @@ namespace MedicSoft.Api.Controllers
                 {
                     new Claim(ClaimTypes.Name, username),
                     new Claim("tenant_id", tenantId),
-                    new Claim("user_id", Guid.NewGuid().ToString())
+                    new Claim("user_id", userId),
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(jwtSettings.GetValue<int>("ExpiryMinutes", 60)),
                 Issuer = jwtSettings["Issuer"],

@@ -17,15 +17,21 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicRepository _clinicRepository;
         private readonly IUserRepository _userRepository;
         private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
+        private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
+        private readonly IPasswordHasher _passwordHasher;
 
         public RegistrationController(
             IClinicRepository clinicRepository,
             IUserRepository userRepository,
-            ISubscriptionPlanRepository subscriptionPlanRepository)
+            ISubscriptionPlanRepository subscriptionPlanRepository,
+            IClinicSubscriptionRepository clinicSubscriptionRepository,
+            IPasswordHasher passwordHasher)
         {
             _clinicRepository = clinicRepository;
             _userRepository = userRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;
+            _clinicSubscriptionRepository = clinicSubscriptionRepository;
+            _passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -47,6 +53,17 @@ namespace MedicSoft.Api.Controllers
                     {
                         Success = false,
                         Message = "You must accept the terms and conditions"
+                    });
+                }
+
+                // Validate password strength
+                var (isValidPassword, passwordError) = _passwordHasher.ValidatePasswordStrength(request.Password, 8);
+                if (!isValidPassword)
+                {
+                    return BadRequest(new RegistrationResponseDto
+                    {
+                        Success = false,
+                        Message = $"Password validation failed: {passwordError}"
                     });
                 }
 
@@ -103,6 +120,23 @@ namespace MedicSoft.Api.Controllers
 
                 await _clinicRepository.AddAsync(clinic);
 
+                // Hash the password
+                var passwordHash = _passwordHasher.HashPassword(request.Password);
+
+                // Create owner user
+                var user = new User(
+                    request.Username,
+                    request.OwnerEmail,
+                    passwordHash,
+                    request.OwnerName,
+                    request.OwnerPhone,
+                    UserRole.ClinicOwner,
+                    tenantId,
+                    clinic.Id
+                );
+
+                await _userRepository.AddAsync(user);
+
                 // Create subscription
                 var trialDays = request.UseTrial ? plan.TrialDays : 0;
                 var subscription = new ClinicSubscription(
@@ -114,21 +148,16 @@ namespace MedicSoft.Api.Controllers
                     tenantId
                 );
 
-                // In a real implementation, you would also:
-                // 1. Create User entity
-                // 2. Hash password
-                // 3. Assign owner role
-                // 4. Link to clinic
-                // 5. Send welcome email
+                await _clinicSubscriptionRepository.AddAsync(subscription);
 
                 var trialEndDate = request.UseTrial ? DateTime.UtcNow.AddDays(trialDays) : (DateTime?)null;
 
                 return Ok(new RegistrationResponseDto
                 {
                     Success = true,
-                    Message = "Registration successful! Welcome to MedicWarehouse",
+                    Message = "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
                     ClinicId = clinic.Id,
-                    UserId = Guid.NewGuid(), // Placeholder
+                    UserId = user.Id,
                     TrialEndDate = trialEndDate
                 });
             }
