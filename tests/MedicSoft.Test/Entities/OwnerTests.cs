@@ -74,14 +74,6 @@ namespace MedicSoft.Test.Entities
         }
 
         [Fact]
-        public void Constructor_WithEmptyClinicId_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            Assert.Throws<ArgumentException>(() =>
-                new Owner("username", "email@test.com", "hash", "Name", "Phone", _tenantId, Guid.Empty));
-        }
-
-        [Fact]
         public void UpdateProfile_WithValidData_UpdatesOwner()
         {
             // Arrange
@@ -213,6 +205,62 @@ namespace MedicSoft.Test.Entities
 
             // Assert
             Assert.Equal("email@test.com", owner.Email);
+        }
+
+        [Fact]
+        public void Constructor_WithNullClinicId_CreatesSystemOwner()
+        {
+            // Arrange
+            var username = "igor";
+            var email = "igor@medicwarehouse.com";
+            var passwordHash = "hashed_password_123";
+            var fullName = "Igor Leessa";
+            var phone = "+5511999999999";
+
+            // Act
+            var owner = new Owner(username, email, passwordHash, fullName, phone, "system", null);
+
+            // Assert
+            Assert.NotEqual(Guid.Empty, owner.Id);
+            Assert.Equal(username, owner.Username);
+            Assert.Equal(email, owner.Email);
+            Assert.Equal(passwordHash, owner.PasswordHash);
+            Assert.Equal(fullName, owner.FullName);
+            Assert.Equal(phone, owner.Phone);
+            Assert.Null(owner.ClinicId);
+            Assert.True(owner.IsSystemOwner);
+            Assert.True(owner.IsActive);
+            Assert.Null(owner.LastLoginAt);
+        }
+
+        [Fact]
+        public void IsSystemOwner_WithClinicId_ReturnsFalse()
+        {
+            // Arrange & Act
+            var owner = new Owner("username", "email@test.com", "hash", "Name", "Phone", _tenantId, _clinicId);
+
+            // Assert
+            Assert.False(owner.IsSystemOwner);
+            Assert.Equal(_clinicId, owner.ClinicId);
+        }
+
+        [Fact]
+        public void IsSystemOwner_WithNullClinicId_ReturnsTrue()
+        {
+            // Arrange & Act
+            var owner = new Owner("username", "email@test.com", "hash", "Name", "Phone", "system", null);
+
+            // Assert
+            Assert.True(owner.IsSystemOwner);
+            Assert.Null(owner.ClinicId);
+        }
+
+        [Fact]
+        public void Constructor_WithEmptyGuidClinicId_ThrowsArgumentException()
+        {
+            // Arrange & Act & Assert
+            Assert.Throws<ArgumentException>(() =>
+                new Owner("username", "email@test.com", "hash", "Name", "Phone", _tenantId, Guid.Empty));
         }
 
         // Helper methods
