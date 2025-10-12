@@ -271,6 +271,27 @@ Após executar a aplicação, acesse a documentação interativa do Swagger:
 - **Swagger UI (Docker)**: http://localhost:5000/swagger
 - **Swagger UI (Desenvolvimento local)**: https://localhost:7107/swagger
 
+### 📮 Coleção Postman
+
+Para facilitar o teste e integração, todas as APIs foram exportadas para o Postman:
+
+- 📥 **Arquivo**: [`MedicWarehouse-Postman-Collection.json`](MedicWarehouse-Postman-Collection.json)
+- 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](POSTMAN_IMPORT_GUIDE.md)
+- ✨ **Recursos incluídos**:
+  - Todos os endpoints organizados por funcionalidade
+  - Variáveis pré-configuradas (base_url, bearer_token, tenant_id)
+  - Autenticação JWT automática
+  - Headers pré-configurados
+  - Exemplos de requests prontos para uso
+
+**Como usar:**
+1. Importe o arquivo no Postman
+2. Execute o endpoint de Login
+3. Cole o token nas variáveis da coleção
+4. Teste os endpoints!
+
+Para instruções detalhadas, consulte o [Guia de Importação do Postman](POSTMAN_IMPORT_GUIDE.md).
+
 ### Autenticação
 
 Para testar a API, primeiro obtenha um token JWT:

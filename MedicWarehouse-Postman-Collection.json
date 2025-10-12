@@ -1,0 +1,1232 @@
+{
+  "info": {
+    "name": "MedicWarehouse API",
+    "_postman_id": "medicwarehouse-api-collection",
+    "description": "# MedicWarehouse API - Coleção Completa\n\nEsta coleção contém todos os endpoints da API MedicWarehouse para teste e integração.\n\n## 🔐 Autenticação\n\nA API usa autenticação JWT (Bearer Token). Para usar os endpoints protegidos:\n\n1. Execute o endpoint **POST /api/auth/login** da pasta \"Auth\"\n2. Copie o token JWT retornado no campo \"token\"\n3. Vá em \"Variables\" (na aba desta coleção)\n4. Cole o token no valor da variável \"bearer_token\"\n5. Os requests já estão configurados para usar automaticamente o token\n\n### Credenciais Padrão (Após Data Seeding)\n\n- **Username**: admin\n- **Password**: admin123\n- **TenantId**: demo-clinic-001\n\n## 🌐 Ambientes\n\nVocê pode configurar diferentes ambientes usando as variáveis:\n\n- **base_url**: URL base da API (padrão: http://localhost:5000)\n- **bearer_token**: Token JWT obtido após login\n- **tenant_id**: ID do tenant/clínica (padrão: demo-clinic-001)\n\n## 📚 Documentação\n\nPara mais informações:\n- Swagger UI: http://localhost:5000/swagger\n- Repositório: https://github.com/MedicWarehouse/MW.Code\n- README: https://github.com/MedicWarehouse/MW.Code/blob/main/README.md",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "bearer_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tenant_id",
+      "value": "demo-clinic-001",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearer_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Endpoints de autenticação e gerenciamento de usuários",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\",\n  \"tenantId\": \"{{tenant_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Autentica um usuário e retorna um token JWT"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Obtém informações do usuário autenticado"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "description": "Endpoints para gerenciamento de pacientes",
+      "item": [
+        {
+          "name": "List Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients"]
+            },
+            "description": "Lista todos os pacientes da clínica"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Obtém um paciente específico por ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/search?searchTerm=",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", "search"],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "",
+                  "description": "CPF, Nome ou Telefone"
+                }
+              ]
+            },
+            "description": "Busca pacientes por CPF, Nome ou Telefone"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient by Document (CPF)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/by-document/:cpf",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", "by-document", ":cpf"],
+              "variable": [
+                {
+                  "key": "cpf",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Busca paciente por CPF em todas as clínicas"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"document\": \"123.456.789-00\",\n  \"dateOfBirth\": \"1990-01-15\",\n  \"phone\": \"+55 11 98765-4321\",\n  \"email\": \"joao@email.com\",\n  \"address\": \"Rua Exemplo, 123\",\n  \"guardianId\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/patients",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients"]
+            },
+            "description": "Cria um novo paciente (guardianId opcional para crianças)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"document\": \"123.456.789-00\",\n  \"dateOfBirth\": \"1990-01-15\",\n  \"phone\": \"+55 11 98765-4321\",\n  \"email\": \"joao@email.com\",\n  \"address\": \"Rua Exemplo, 123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/patients/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Atualiza um paciente existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Exclui um paciente"
+          },
+          "response": []
+        },
+        {
+          "name": "Link Patient to Clinic",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/:patientId/link-clinic/:clinicId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":patientId", "link-clinic", ":clinicId"],
+              "variable": [
+                {
+                  "key": "patientId",
+                  "value": ""
+                },
+                {
+                  "key": "clinicId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Vincula um paciente a uma clínica"
+          },
+          "response": []
+        },
+        {
+          "name": "Link Child to Guardian",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/:childId/link-guardian/:guardianId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":childId", "link-guardian", ":guardianId"],
+              "variable": [
+                {
+                  "key": "childId",
+                  "value": ""
+                },
+                {
+                  "key": "guardianId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Vincula uma criança a um responsável"
+          },
+          "response": []
+        },
+        {
+          "name": "List Children of Guardian",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/:guardianId/children",
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":guardianId", "children"],
+              "variable": [
+                {
+                  "key": "guardianId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Lista todos os filhos de um responsável"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "description": "Endpoints para gerenciamento de agendamentos",
+      "item": [
+        {
+          "name": "Create Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"\",\n  \"doctorId\": \"\",\n  \"clinicId\": \"{{tenant_id}}\",\n  \"scheduledDate\": \"2024-12-01T10:00:00\",\n  \"appointmentType\": \"Consulta\",\n  \"notes\": \"Consulta de rotina\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments"]
+            },
+            "description": "Cria um novo agendamento"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Appointment by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/appointments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Obtém um agendamento específico por ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Appointment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/appointments/:id/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", ":id", "cancel"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Cancela um agendamento"
+          },
+          "response": []
+        },
+        {
+          "name": "Daily Agenda",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/appointments/agenda",
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", "agenda"]
+            },
+            "description": "Obtém a agenda diária"
+          },
+          "response": []
+        },
+        {
+          "name": "Available Time Slots",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/appointments/available-slots",
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", "available-slots"]
+            },
+            "description": "Lista horários disponíveis para agendamento"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Medical Records",
+      "description": "Endpoints para prontuários médicos",
+      "item": [
+        {
+          "name": "Create Medical Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointmentId\": \"\",\n  \"symptoms\": \"Dor de cabeça\",\n  \"diagnosis\": \"Enxaqueca\",\n  \"treatment\": \"Repouso e analgésicos\",\n  \"prescription\": \"Paracetamol 500mg\",\n  \"notes\": \"Paciente relata melhora\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/medical-records",
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records"]
+            },
+            "description": "Cria um novo prontuário médico"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Medical Record",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symptoms\": \"Dor de cabeça\",\n  \"diagnosis\": \"Enxaqueca\",\n  \"treatment\": \"Repouso e analgésicos\",\n  \"prescription\": \"Paracetamol 500mg\",\n  \"notes\": \"Paciente relata melhora\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/medical-records/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Atualiza um prontuário médico"
+          },
+          "response": []
+        },
+        {
+          "name": "Complete Medical Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/medical-records/:id/complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", ":id", "complete"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Finaliza o atendimento"
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Appointment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/medical-records/appointment/:appointmentId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", "appointment", ":appointmentId"],
+              "variable": [
+                {
+                  "key": "appointmentId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Busca prontuário por agendamento"
+          },
+          "response": []
+        },
+        {
+          "name": "Patient History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/medical-records/patient/:patientId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", "patient", ":patientId"],
+              "variable": [
+                {
+                  "key": "patientId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Obtém histórico médico do paciente"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Procedures",
+      "description": "Endpoints para procedimentos e serviços",
+      "item": [
+        {
+          "name": "List Procedures",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/procedures",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures"]
+            },
+            "description": "Lista todos os procedimentos da clínica"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Procedure by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/procedures/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Obtém um procedimento por ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Procedure",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Consulta Clínica\",\n  \"description\": \"Consulta médica geral\",\n  \"price\": 150.00,\n  \"duration\": 30,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/procedures",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures"]
+            },
+            "description": "Cria um novo procedimento"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Procedure",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Consulta Clínica\",\n  \"description\": \"Consulta médica geral\",\n  \"price\": 150.00,\n  \"duration\": 30,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/procedures/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Atualiza um procedimento"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Procedure",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/procedures/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Desativa um procedimento"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Procedure to Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"procedureId\": \"\",\n  \"quantity\": 1,\n  \"price\": 150.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/procedures/appointments/:appointmentId/procedures",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", "appointments", ":appointmentId", "procedures"],
+              "variable": [
+                {
+                  "key": "appointmentId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Adiciona procedimento a um atendimento"
+          },
+          "response": []
+        },
+        {
+          "name": "List Appointment Procedures",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/procedures/appointments/:appointmentId/procedures",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", "appointments", ":appointmentId", "procedures"],
+              "variable": [
+                {
+                  "key": "appointmentId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Lista procedimentos de um atendimento"
+          },
+          "response": []
+        },
+        {
+          "name": "Billing Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/procedures/appointments/:appointmentId/billing-summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", "appointments", ":appointmentId", "billing-summary"],
+              "variable": [
+                {
+                  "key": "appointmentId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Resumo de cobrança com total"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Expenses",
+      "description": "Endpoints para gerenciamento de despesas (contas a pagar)",
+      "item": [
+        {
+          "name": "List Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/expenses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses"],
+              "query": [
+                {
+                  "key": "clinicId",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Lista despesas com filtros opcionais"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expense by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/expenses/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Obtém uma despesa por ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Expense",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Aluguel\",\n  \"amount\": 2000.00,\n  \"dueDate\": \"2024-12-05\",\n  \"category\": \"Aluguel\",\n  \"notes\": \"Pagamento mensal\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/expenses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses"]
+            },
+            "description": "Cria uma nova despesa"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Expense",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Aluguel\",\n  \"amount\": 2000.00,\n  \"dueDate\": \"2024-12-05\",\n  \"category\": \"Aluguel\",\n  \"notes\": \"Pagamento mensal\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/expenses/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Atualiza uma despesa"
+          },
+          "response": []
+        },
+        {
+          "name": "Pay Expense",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/expenses/:id/pay",
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id", "pay"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Marca despesa como paga"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Expense",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/expenses/:id/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id", "cancel"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Cancela uma despesa"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/expenses/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Exclui uma despesa"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "description": "Endpoints para relatórios e dashboards",
+      "item": [
+        {
+          "name": "Financial Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/financial-summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "financial-summary"]
+            },
+            "description": "Resumo financeiro completo (receitas, despesas, lucro)"
+          },
+          "response": []
+        },
+        {
+          "name": "Revenue Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/revenue",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "revenue"]
+            },
+            "description": "Relatório de receita com breakdown diário"
+          },
+          "response": []
+        },
+        {
+          "name": "Appointments Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "appointments"]
+            },
+            "description": "Relatório de agendamentos (estatísticas, status, tipos)"
+          },
+          "response": []
+        },
+        {
+          "name": "Patients Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/patients",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "patients"]
+            },
+            "description": "Relatório de crescimento de pacientes"
+          },
+          "response": []
+        },
+        {
+          "name": "Accounts Receivable",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/accounts-receivable",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "accounts-receivable"]
+            },
+            "description": "Contas a receber (pendentes e vencidas)"
+          },
+          "response": []
+        },
+        {
+          "name": "Accounts Payable",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenant_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/accounts-payable",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "accounts-payable"]
+            },
+            "description": "Contas a pagar (pendentes e vencidas)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Data Seeder",
+      "description": "Endpoints para geração de dados de teste",
+      "item": [
+        {
+          "name": "Get Demo Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/data-seeder/demo-info",
+              "host": ["{{base_url}}"],
+              "path": ["api", "data-seeder", "demo-info"]
+            },
+            "description": "Informações sobre os dados demo disponíveis"
+          },
+          "response": []
+        },
+        {
+          "name": "Seed Demo Data",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/data-seeder/seed-demo",
+              "host": ["{{base_url}}"],
+              "path": ["api", "data-seeder", "seed-demo"]
+            },
+            "description": "Gera dados de teste completos: clínica, usuários, pacientes, procedimentos, agendamentos e pagamentos"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
