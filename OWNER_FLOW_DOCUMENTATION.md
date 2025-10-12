@@ -273,7 +273,7 @@ CREATE TABLE Owners (
     PasswordHash nvarchar(500) NOT NULL,
     FullName nvarchar(200) NOT NULL,
     Phone nvarchar(20) NOT NULL,
-    ClinicId uniqueidentifier NOT NULL,
+    ClinicId uniqueidentifier NULL,  -- Nullable to support system owners
     IsActive bit NOT NULL,
     LastLoginAt datetime2 NULL,
     ProfessionalId nvarchar(50) NULL,
@@ -294,7 +294,9 @@ CREATE INDEX IX_Owners_TenantId_IsActive ON Owners(TenantId, IsActive);
 ### Migração
 A migração `AddOwnerEntity` foi criada e adiciona a tabela `Owners` ao banco de dados.
 
-Para aplicar a migração:
+A migração `MakeOwnerClinicIdNullableForSystemOwners` atualiza a coluna `ClinicId` para permitir valores NULL, possibilitando a criação de proprietários de sistema (system owners).
+
+Para aplicar as migrações:
 ```bash
 dotnet ef database update --project src/MedicSoft.Repository --startup-project src/MedicSoft.Api
 ```

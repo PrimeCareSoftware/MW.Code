@@ -179,8 +179,10 @@ The system now properly separates system owners from clinic owners:
    - Old endpoint: `POST /api/system-admin/users` - Marked as obsolete
 
 4. **Database Migration**:
-   - Created migration: `20251012204930_MakeOwnerClinicIdNullableForSystemOwners`
+   - Created and implemented migration: `20251012204930_MakeOwnerClinicIdNullableForSystemOwners`
    - Updates `Owners` table schema to allow `NULL` for `ClinicId`
+   - Drops and recreates the foreign key constraint to support nullable clinic references
+   - Updated Entity Framework model snapshot to reflect the nullable constraint
 
 ### Usage
 
