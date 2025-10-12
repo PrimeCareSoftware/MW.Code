@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
-using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -16,25 +16,19 @@ namespace MedicSoft.Api.Controllers
     [Route("api/[controller]")]
     public class UsersController : BaseController
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IClinicRepository _clinicRepository;
+        private readonly IUserService _userService;
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
-        private readonly IPasswordHasher _passwordHasher;
 
         public UsersController(
             ITenantContext tenantContext,
-            IUserRepository userRepository,
-            IClinicRepository clinicRepository,
+            IUserService userService,
             IClinicSubscriptionRepository subscriptionRepository,
-            ISubscriptionPlanRepository planRepository,
-            IPasswordHasher passwordHasher) : base(tenantContext)
+            ISubscriptionPlanRepository planRepository) : base(tenantContext)
         {
-            _userRepository = userRepository;
-            _clinicRepository = clinicRepository;
+            _userService = userService;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
-            _passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -46,7 +40,7 @@ namespace MedicSoft.Api.Controllers
             var tenantId = GetTenantId();
             var clinicId = GetClinicIdFromToken();
 
-            var users = await _userRepository.GetByClinicIdAsync(clinicId, tenantId);
+            var users = await _userService.GetUsersByClinicIdAsync(clinicId, tenantId);
 
             return Ok(users.Select(u => new UserDto
             {
@@ -70,7 +64,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<UserDto>> GetUser(Guid id)
         {
             var tenantId = GetTenantId();
-            var user = await _userRepository.GetByIdAsync(id, tenantId);
+            var user = await _userService.GetUserByIdAsync(id, tenantId);
 
             if (user == null)
                 return NotFound(new { message = "User not found" });
@@ -98,61 +92,58 @@ namespace MedicSoft.Api.Controllers
         [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody] CreateUserRequest request)
         {
-            var tenantId = GetTenantId();
-            var clinicId = GetClinicIdFromToken();
-
-            // Check if username already exists
-            var existingUser = await _userRepository.GetUserByUsernameAsync(request.Username, tenantId);
-            if (existingUser != null)
-                return BadRequest(new { message = "Username already exists" });
-
-            // Validate subscription limits
-            var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
-            if (subscription == null)
-                return BadRequest(new { message = "No active subscription found" });
-
-            var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
-            if (plan == null)
-                return BadRequest(new { message = "Invalid subscription plan" });
-
-            var currentUserCount = await _userRepository.GetUserCountByClinicIdAsync(clinicId, tenantId);
-            if (currentUserCount >= plan.MaxUsers)
-                return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
-
-            // Hash password
-            var passwordHash = _passwordHasher.HashPassword(request.Password);
-
-            // Parse role
-            if (!Enum.TryParse<UserRole>(request.Role, out var role))
-                return BadRequest(new { message = "Invalid role" });
-
-            var user = new User(
-                request.Username,
-                request.Email,
-                passwordHash,
-                request.FullName,
-                request.Phone,
-                role,
-                tenantId,
-                clinicId,
-                request.ProfessionalId,
-                request.Specialty
-            );
-
-            await _userRepository.AddAsync(user);
-
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, new UserDto
+            try
             {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FullName = user.FullName,
-                Phone = user.Phone,
-                Role = user.Role.ToString(),
-                IsActive = user.IsActive,
-                ProfessionalId = user.ProfessionalId,
-                Specialty = user.Specialty
-            });
+                var tenantId = GetTenantId();
+                var clinicId = GetClinicIdFromToken();
+
+                // Validate subscription limits
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
+                if (subscription == null)
+                    return BadRequest(new { message = "No active subscription found" });
+
+                var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+                if (plan == null)
+                    return BadRequest(new { message = "Invalid subscription plan" });
+
+                var currentUserCount = await _userService.GetUserCountByClinicIdAsync(clinicId, tenantId);
+                if (currentUserCount >= plan.MaxUsers)
+                    return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
+
+                // Parse role
+                if (!Enum.TryParse<UserRole>(request.Role, out var role))
+                    return BadRequest(new { message = "Invalid role" });
+
+                var user = await _userService.CreateUserAsync(
+                    request.Username,
+                    request.Email,
+                    request.Password,
+                    request.FullName,
+                    request.Phone,
+                    role,
+                    tenantId,
+                    clinicId,
+                    request.ProfessionalId,
+                    request.Specialty
+                );
+
+                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Email = user.Email,
+                    FullName = user.FullName,
+                    Phone = user.Phone,
+                    Role = user.Role.ToString(),
+                    IsActive = user.IsActive,
+                    ProfessionalId = user.ProfessionalId,
+                    Specialty = user.Specialty
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         /// <summary>
@@ -161,23 +152,25 @@ namespace MedicSoft.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request)
         {
-            var tenantId = GetTenantId();
-            var user = await _userRepository.GetByIdAsync(id, tenantId);
+            try
+            {
+                var tenantId = GetTenantId();
+                await _userService.UpdateUserProfileAsync(
+                    id,
+                    request.Email,
+                    request.FullName,
+                    request.Phone,
+                    tenantId,
+                    request.ProfessionalId,
+                    request.Specialty
+                );
 
-            if (user == null)
-                return NotFound(new { message = "User not found" });
-
-            user.UpdateProfile(
-                request.Email,
-                request.FullName,
-                request.Phone,
-                request.ProfessionalId,
-                request.Specialty
-            );
-
-            await _userRepository.UpdateAsync(user);
-
-            return Ok(new { message = "User updated successfully" });
+                return Ok(new { message = "User updated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         /// <summary>
@@ -188,19 +181,21 @@ namespace MedicSoft.Api.Controllers
         [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> ChangeRole(Guid id, [FromBody] ChangeRoleRequest request)
         {
-            var tenantId = GetTenantId();
-            var user = await _userRepository.GetByIdAsync(id, tenantId);
+            try
+            {
+                var tenantId = GetTenantId();
 
-            if (user == null)
-                return NotFound(new { message = "User not found" });
+                if (!Enum.TryParse<UserRole>(request.NewRole, out var newRole))
+                    return BadRequest(new { message = "Invalid role" });
 
-            if (!Enum.TryParse<UserRole>(request.NewRole, out var newRole))
-                return BadRequest(new { message = "Invalid role" });
+                await _userService.ChangeUserRoleAsync(id, newRole, tenantId);
 
-            user.ChangeRole(newRole);
-            await _userRepository.UpdateAsync(user);
-
-            return Ok(new { message = "Role changed successfully" });
+                return Ok(new { message = "Role changed successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         /// <summary>
@@ -210,16 +205,16 @@ namespace MedicSoft.Api.Controllers
         [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> DeactivateUser(Guid id)
         {
-            var tenantId = GetTenantId();
-            var user = await _userRepository.GetByIdAsync(id, tenantId);
-
-            if (user == null)
-                return NotFound(new { message = "User not found" });
-
-            user.Deactivate();
-            await _userRepository.UpdateAsync(user);
-
-            return Ok(new { message = "User deactivated successfully" });
+            try
+            {
+                var tenantId = GetTenantId();
+                await _userService.DeactivateUserAsync(id, tenantId);
+                return Ok(new { message = "User deactivated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         /// <summary>
@@ -229,16 +224,16 @@ namespace MedicSoft.Api.Controllers
         [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> ActivateUser(Guid id)
         {
-            var tenantId = GetTenantId();
-            var user = await _userRepository.GetByIdAsync(id, tenantId);
-
-            if (user == null)
-                return NotFound(new { message = "User not found" });
-
-            user.Activate();
-            await _userRepository.UpdateAsync(user);
-
-            return Ok(new { message = "User activated successfully" });
+            try
+            {
+                var tenantId = GetTenantId();
+                await _userService.ActivateUserAsync(id, tenantId);
+                return Ok(new { message = "User activated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         /// <summary>
