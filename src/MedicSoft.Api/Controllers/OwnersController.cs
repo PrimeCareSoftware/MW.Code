@@ -44,7 +44,8 @@ namespace MedicSoft.Api.Controllers
                 IsActive = o.IsActive,
                 LastLoginAt = o.LastLoginAt,
                 ProfessionalId = o.ProfessionalId,
-                Specialty = o.Specialty
+                Specialty = o.Specialty,
+                IsSystemOwner = o.IsSystemOwner
             }));
         }
 
@@ -71,7 +72,8 @@ namespace MedicSoft.Api.Controllers
                 IsActive = owner.IsActive,
                 LastLoginAt = owner.LastLoginAt,
                 ProfessionalId = owner.ProfessionalId,
-                Specialty = owner.Specialty
+                Specialty = owner.Specialty,
+                IsSystemOwner = owner.IsSystemOwner
             });
         }
 
@@ -98,7 +100,8 @@ namespace MedicSoft.Api.Controllers
                 IsActive = owner.IsActive,
                 LastLoginAt = owner.LastLoginAt,
                 ProfessionalId = owner.ProfessionalId,
-                Specialty = owner.Specialty
+                Specialty = owner.Specialty,
+                IsSystemOwner = owner.IsSystemOwner
             });
         }
 
@@ -134,7 +137,8 @@ namespace MedicSoft.Api.Controllers
                     ClinicId = owner.ClinicId,
                     IsActive = owner.IsActive,
                     ProfessionalId = owner.ProfessionalId,
-                    Specialty = owner.Specialty
+                    Specialty = owner.Specialty,
+                    IsSystemOwner = owner.IsSystemOwner
                 });
             }
             catch (InvalidOperationException ex)
@@ -216,7 +220,7 @@ namespace MedicSoft.Api.Controllers
         public string Password { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public Guid ClinicId { get; set; }
+        public Guid? ClinicId { get; set; }
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
     }
@@ -237,10 +241,11 @@ namespace MedicSoft.Api.Controllers
         public string Email { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public Guid ClinicId { get; set; }
+        public Guid? ClinicId { get; set; }
         public bool IsActive { get; set; }
         public DateTime? LastLoginAt { get; set; }
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
+        public bool IsSystemOwner { get; set; }
     }
 }

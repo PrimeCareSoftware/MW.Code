@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
@@ -9,11 +10,12 @@ namespace MedicSoft.Application.Services
     public interface IOwnerService
     {
         Task<Owner> CreateOwnerAsync(string username, string email, string password, string fullName,
-            string phone, string tenantId, Guid clinicId, string? professionalId = null, string? specialty = null);
+            string phone, string tenantId, Guid? clinicId = null, string? professionalId = null, string? specialty = null);
         Task<Owner?> GetOwnerByIdAsync(Guid id, string tenantId);
         Task<Owner?> GetOwnerByUsernameAsync(string username, string tenantId);
         Task<Owner?> GetOwnerByClinicIdAsync(Guid clinicId, string tenantId);
         Task<IEnumerable<Owner>> GetAllOwnersAsync(string tenantId);
+        Task<IEnumerable<Owner>> GetSystemOwnersAsync(string tenantId);
         Task UpdateOwnerProfileAsync(Guid id, string email, string fullName, string phone, 
             string tenantId, string? professionalId = null, string? specialty = null);
         Task ActivateOwnerAsync(Guid id, string tenantId);
@@ -34,7 +36,7 @@ namespace MedicSoft.Application.Services
         }
 
         public async Task<Owner> CreateOwnerAsync(string username, string email, string password, string fullName,
-            string phone, string tenantId, Guid clinicId, string? professionalId = null, string? specialty = null)
+            string phone, string tenantId, Guid? clinicId = null, string? professionalId = null, string? specialty = null)
         {
             // Check if username or email already exists
             if (await _ownerRepository.ExistsByUsernameAsync(username, tenantId))
@@ -68,6 +70,12 @@ namespace MedicSoft.Application.Services
         public async Task<IEnumerable<Owner>> GetAllOwnersAsync(string tenantId)
         {
             return await _ownerRepository.GetAllAsync(tenantId);
+        }
+
+        public async Task<IEnumerable<Owner>> GetSystemOwnersAsync(string tenantId)
+        {
+            var allOwners = await _ownerRepository.GetAllAsync(tenantId);
+            return allOwners.Where(o => o.IsSystemOwner);
         }
 
         public async Task UpdateOwnerProfileAsync(Guid id, string email, string fullName, string phone, 

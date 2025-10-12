@@ -4,8 +4,9 @@ using MedicSoft.Domain.Common;
 namespace MedicSoft.Domain.Entities
 {
     /// <summary>
-    /// Represents an owner/proprietor of a clinic in the system.
-    /// Owners have administrative privileges for their clinic.
+    /// Represents an owner/proprietor in the system.
+    /// Clinic owners have administrative privileges for their clinic.
+    /// System owners (ClinicId = null) have system-wide administrative privileges.
     /// </summary>
     public class Owner : BaseEntity
     {
@@ -14,7 +15,7 @@ namespace MedicSoft.Domain.Entities
         public string PasswordHash { get; private set; }
         public string FullName { get; private set; }
         public string Phone { get; private set; }
-        public Guid ClinicId { get; private set; }
+        public Guid? ClinicId { get; private set; }
         public bool IsActive { get; private set; }
         public DateTime? LastLoginAt { get; private set; }
         public string? ProfessionalId { get; private set; } // CRM, CRO, etc. (if owner is also a professional)
@@ -22,6 +23,11 @@ namespace MedicSoft.Domain.Entities
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }
+
+        /// <summary>
+        /// Indicates whether this owner is a system-level owner (not tied to a specific clinic)
+        /// </summary>
+        public bool IsSystemOwner => !ClinicId.HasValue;
 
         private Owner()
         {
@@ -34,7 +40,7 @@ namespace MedicSoft.Domain.Entities
         }
 
         public Owner(string username, string email, string passwordHash, string fullName,
-            string phone, string tenantId, Guid clinicId,
+            string phone, string tenantId, Guid? clinicId = null,
             string? professionalId = null, string? specialty = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(username))
@@ -52,8 +58,8 @@ namespace MedicSoft.Domain.Entities
             if (string.IsNullOrWhiteSpace(phone))
                 throw new ArgumentException("Phone cannot be empty", nameof(phone));
 
-            if (clinicId == Guid.Empty)
-                throw new ArgumentException("ClinicId cannot be empty", nameof(clinicId));
+            if (clinicId.HasValue && clinicId.Value == Guid.Empty)
+                throw new ArgumentException("ClinicId cannot be empty Guid", nameof(clinicId));
 
             Username = username.Trim().ToLowerInvariant();
             Email = email.Trim().ToLowerInvariant();
