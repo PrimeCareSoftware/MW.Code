@@ -94,6 +94,55 @@ namespace MedicSoft.Repository.Migrations
                     b.ToTable("Appointments", (string)null);
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.AppointmentProcedure", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppointmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PerformedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PriceCharged")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProcedureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId")
+                        .HasDatabaseName("IX_AppointmentProcedures_AppointmentId");
+
+                    b.HasIndex("PatientId")
+                        .HasDatabaseName("IX_AppointmentProcedures_PatientId");
+
+                    b.HasIndex("ProcedureId");
+
+                    b.ToTable("AppointmentProcedures", (string)null);
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.Clinic", b =>
                 {
                     b.Property<Guid>("Id")
@@ -177,7 +226,8 @@ namespace MedicSoft.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CancellationReason")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<Guid>("ClinicId")
                         .HasColumnType("uniqueidentifier");
@@ -191,10 +241,31 @@ namespace MedicSoft.Repository.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("FrozenEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FrozenStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsFrozen")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUpgrade")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastPaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("NextPaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("PendingPlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("PendingPlanPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("PlanChangeDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("StartDate")
@@ -208,7 +279,8 @@ namespace MedicSoft.Repository.Migrations
 
                     b.Property<string>("TenantId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("TrialEndDate")
                         .HasColumnType("datetime2");
@@ -220,9 +292,95 @@ namespace MedicSoft.Repository.Migrations
 
                     b.HasIndex("ClinicId");
 
+                    b.HasIndex("NextPaymentDate");
+
+                    b.HasIndex("PendingPlanId");
+
+                    b.HasIndex("Status");
+
                     b.HasIndex("SubscriptionPlanId");
 
-                    b.ToTable("ClinicSubscription");
+                    b.HasIndex("TenantId", "Status");
+
+                    b.ToTable("ClinicSubscriptions", (string)null);
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.Expense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CancellationReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ClinicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentReference")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierDocument")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("SupplierName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Category");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("DueDate");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Expenses", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.HealthInsurancePlan", b =>
@@ -382,6 +540,64 @@ namespace MedicSoft.Repository.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Invoices", (string)null);
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.Material", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MinimumStock")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code", "TenantId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Materials_Code_TenantId");
+
+                    b.ToTable("Materials", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.MedicalRecord", b =>
@@ -593,6 +809,210 @@ namespace MedicSoft.Repository.Migrations
                     b.ToTable("Medications", (string)null);
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.ModuleConfiguration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClinicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Configuration")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModuleName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("ClinicId", "ModuleName")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId", "IsEnabled");
+
+                    b.ToTable("ModuleConfigurations", (string)null);
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.NotificationRoutine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastExecutedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MaxRetries")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MessageTemplate")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("NextExecutionAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RecipientFilter")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ScheduleConfiguration")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ScheduleType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NextExecutionAt")
+                        .HasDatabaseName("IX_NotificationRoutines_NextExecutionAt");
+
+                    b.HasIndex("Channel", "TenantId")
+                        .HasDatabaseName("IX_NotificationRoutines_Channel_TenantId");
+
+                    b.HasIndex("Scope", "IsActive")
+                        .HasDatabaseName("IX_NotificationRoutines_Scope_IsActive");
+
+                    b.HasIndex("TenantId", "IsActive")
+                        .HasDatabaseName("IX_NotificationRoutines_TenantId_IsActive");
+
+                    b.HasIndex("Type", "TenantId")
+                        .HasDatabaseName("IX_NotificationRoutines_Type_TenantId");
+
+                    b.ToTable("NotificationRoutines", (string)null);
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.PasswordResetToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UsedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("VerificationAttempts")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VerificationCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("TenantId", "IsUsed", "ExpiresAt");
+
+                    b.ToTable("PasswordResetTokens", (string)null);
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.Patient", b =>
                 {
                     b.Property<Guid>("Id")
@@ -618,6 +1038,9 @@ namespace MedicSoft.Repository.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<Guid?>("GuardianId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -639,6 +1062,9 @@ namespace MedicSoft.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GuardianId")
+                        .HasDatabaseName("IX_Patients_GuardianId");
 
                     b.HasIndex("Name")
                         .HasDatabaseName("IX_Patients_Name");
@@ -883,6 +1309,98 @@ namespace MedicSoft.Repository.Migrations
                     b.ToTable("PrescriptionTemplates", (string)null);
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.Procedure", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("RequiresMaterials")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code", "TenantId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Procedures_Code_TenantId");
+
+                    b.ToTable("Procedures", (string)null);
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.ProcedureMaterial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProcedureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialId");
+
+                    b.HasIndex("ProcedureId", "MaterialId", "TenantId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_ProcedureMaterials_ProcedureId_MaterialId_TenantId");
+
+                    b.ToTable("ProcedureMaterials", (string)null);
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.SubscriptionPlan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -894,7 +1412,8 @@ namespace MedicSoft.Repository.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("HasReports")
                         .HasColumnType("bit");
@@ -922,11 +1441,13 @@ namespace MedicSoft.Repository.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("TrialDays")
                         .HasColumnType("int");
@@ -939,7 +1460,91 @@ namespace MedicSoft.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SubscriptionPlan");
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Type");
+
+                    b.HasIndex("TenantId", "Type");
+
+                    b.ToTable("SubscriptionPlans", (string)null);
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClinicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ProfessionalId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Specialty")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("Role");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId", "IsActive");
+
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.Appointment", b =>
@@ -961,23 +1566,68 @@ namespace MedicSoft.Repository.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.AppointmentProcedure", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicSoft.Domain.Entities.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MedicSoft.Domain.Entities.Procedure", "Procedure")
+                        .WithMany()
+                        .HasForeignKey("ProcedureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Procedure");
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.ClinicSubscription", b =>
                 {
                     b.HasOne("MedicSoft.Domain.Entities.Clinic", "Clinic")
                         .WithMany()
                         .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("MedicSoft.Domain.Entities.SubscriptionPlan", "PendingPlan")
+                        .WithMany()
+                        .HasForeignKey("PendingPlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MedicSoft.Domain.Entities.SubscriptionPlan", "SubscriptionPlan")
                         .WithMany()
                         .HasForeignKey("SubscriptionPlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Clinic");
 
+                    b.Navigation("PendingPlan");
+
                     b.Navigation("SubscriptionPlan");
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.Expense", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.Clinic", "Clinic")
+                        .WithMany()
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.HealthInsurancePlan", b =>
@@ -1021,8 +1671,35 @@ namespace MedicSoft.Repository.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.ModuleConfiguration", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.Clinic", "Clinic")
+                        .WithMany()
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.PasswordResetToken", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.Patient", b =>
                 {
+                    b.HasOne("MedicSoft.Domain.Entities.Patient", "Guardian")
+                        .WithMany("Children")
+                        .HasForeignKey("GuardianId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.OwnsOne("MedicSoft.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("PatientId")
@@ -1133,6 +1810,8 @@ namespace MedicSoft.Repository.Migrations
                     b.Navigation("Email")
                         .IsRequired();
 
+                    b.Navigation("Guardian");
+
                     b.Navigation("Phone")
                         .IsRequired();
                 });
@@ -1192,6 +1871,35 @@ namespace MedicSoft.Repository.Migrations
                     b.Navigation("Medication");
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.ProcedureMaterial", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.Material", "Material")
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MedicSoft.Domain.Entities.Procedure", "Procedure")
+                        .WithMany("Materials")
+                        .HasForeignKey("ProcedureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Material");
+
+                    b.Navigation("Procedure");
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.User", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.Clinic", "Clinic")
+                        .WithMany()
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Clinic");
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.MedicalRecord", b =>
                 {
                     b.Navigation("PrescriptionItems");
@@ -1199,6 +1907,8 @@ namespace MedicSoft.Repository.Migrations
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.Patient", b =>
                 {
+                    b.Navigation("Children");
+
                     b.Navigation("ClinicLinks");
 
                     b.Navigation("HealthInsurancePlans");
@@ -1207,6 +1917,11 @@ namespace MedicSoft.Repository.Migrations
             modelBuilder.Entity("MedicSoft.Domain.Entities.Payment", b =>
                 {
                     b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.Procedure", b =>
+                {
+                    b.Navigation("Materials");
                 });
 #pragma warning restore 612, 618
         }

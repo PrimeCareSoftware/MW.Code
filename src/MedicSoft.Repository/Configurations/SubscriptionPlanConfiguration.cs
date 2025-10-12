@@ -58,7 +58,7 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired();
 
             builder.Property(sp => sp.UpdatedAt)
-                .IsRequired();
+                .IsRequired(false);
 
             // Indexes
             builder.HasIndex(sp => sp.Type);
