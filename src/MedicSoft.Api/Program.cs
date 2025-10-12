@@ -162,6 +162,12 @@ builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();
+builder.Services.AddScoped<ISubscriptionService>(provider =>
+{
+    var notificationService = provider.GetRequiredService<INotificationService>();
+    var environment = builder.Environment.EnvironmentName;
+    return new SubscriptionService(notificationService, environment);
+});
 
 // Register cross-cutting services (includes security services)
 builder.Services.AddMedicSoftCrossCutting();

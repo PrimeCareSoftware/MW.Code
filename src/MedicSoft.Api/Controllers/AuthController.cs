@@ -69,14 +69,16 @@ namespace MedicSoft.Api.Controllers
             user.RecordLogin();
             await _userRepository.UpdateAsync(user);
 
-            // Generate JWT token
-            var token = GenerateJwtToken(user.Username, tenantId, user.Id.ToString(), user.Role.ToString());
+            // Generate JWT token with clinic_id for authorization
+            var token = GenerateJwtToken(user.Username, tenantId, user.Id.ToString(), user.Role.ToString(), user.ClinicId?.ToString());
             
             return Ok(new AuthResponse
             {
                 Token = token,
                 Username = user.Username,
                 TenantId = tenantId,
+                Role = user.Role.ToString(),
+                ClinicId = user.ClinicId,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(60)
             });
         }
@@ -166,7 +168,7 @@ namespace MedicSoft.Api.Controllers
             });
         }
 
-        private string GenerateJwtToken(string username, string tenantId, string userId, string role)
+        private string GenerateJwtToken(string username, string tenantId, string userId, string role, string? clinicId = null)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"];
@@ -178,15 +180,23 @@ namespace MedicSoft.Api.Controllers
 
             var key = Encoding.ASCII.GetBytes(secretKey);
 
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim("tenant_id", tenantId),
+                new Claim("user_id", userId),
+                new Claim(ClaimTypes.Role, role)
+            };
+
+            // Add clinic_id claim if user belongs to a clinic
+            if (!string.IsNullOrEmpty(clinicId))
+            {
+                claims.Add(new Claim("clinic_id", clinicId));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, username),
-                    new Claim("tenant_id", tenantId),
-                    new Claim("user_id", userId),
-                    new Claim(ClaimTypes.Role, role)
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(jwtSettings.GetValue<int>("ExpiryMinutes", 60)),
                 Issuer = jwtSettings["Issuer"],
                 Audience = jwtSettings["Audience"],
@@ -213,6 +223,8 @@ namespace MedicSoft.Api.Controllers
         public string Token { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public string TenantId { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public Guid? ClinicId { get; set; }
         public DateTime ExpiresAt { get; set; }
     }
 

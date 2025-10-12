@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Entities;
@@ -91,8 +92,10 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Create new user (requires ClinicOwner or SystemAdmin role)
+        /// ClinicOwner can manage users in their clinic
         /// </summary>
         [HttpPost]
+        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody] CreateUserRequest request)
         {
             var tenantId = GetTenantId();
@@ -179,8 +182,10 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Change user role (requires ClinicOwner or SystemAdmin)
+        /// Only ClinicOwner and SystemAdmin can change user roles
         /// </summary>
         [HttpPut("{id}/role")]
+        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> ChangeRole(Guid id, [FromBody] ChangeRoleRequest request)
         {
             var tenantId = GetTenantId();
@@ -199,9 +204,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Deactivate user
+        /// Deactivate user (requires ManageUsers permission)
         /// </summary>
         [HttpPost("{id}/deactivate")]
+        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> DeactivateUser(Guid id)
         {
             var tenantId = GetTenantId();
@@ -217,9 +223,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Activate user
+        /// Activate user (requires ManageUsers permission)
         /// </summary>
         [HttpPost("{id}/activate")]
+        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> ActivateUser(Guid id)
         {
             var tenantId = GetTenantId();
