@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Entities;
@@ -11,7 +10,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for subscription management - upgrades, downgrades, freeze
     /// </summary>
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class SubscriptionsController : BaseController
     {

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs.Registration;
 
@@ -8,7 +7,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for handling contact form submissions
     /// </summary>
     [ApiController]
-    [AllowAnonymous]
     [Route("api/[controller]")]
     public class ContactController : ControllerBase
     {

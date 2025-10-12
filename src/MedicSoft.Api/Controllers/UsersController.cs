@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
@@ -12,7 +11,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for user management - create, update, manage roles
     /// </summary>
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : BaseController
     {
@@ -89,7 +87,6 @@ namespace MedicSoft.Api.Controllers
         /// ClinicOwner can manage users in their clinic
         /// </summary>
         [HttpPost]
-        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody] CreateUserRequest request)
         {
             try
@@ -178,7 +175,6 @@ namespace MedicSoft.Api.Controllers
         /// Only ClinicOwner and SystemAdmin can change user roles
         /// </summary>
         [HttpPut("{id}/role")]
-        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> ChangeRole(Guid id, [FromBody] ChangeRoleRequest request)
         {
             try
@@ -202,7 +198,6 @@ namespace MedicSoft.Api.Controllers
         /// Deactivate user (requires ManageUsers permission)
         /// </summary>
         [HttpPost("{id}/deactivate")]
-        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> DeactivateUser(Guid id)
         {
             try
@@ -221,7 +216,6 @@ namespace MedicSoft.Api.Controllers
         /// Activate user (requires ManageUsers permission)
         /// </summary>
         [HttpPost("{id}/activate")]
-        [RequirePermission(Permission.ManageUsers)]
         public async Task<ActionResult> ActivateUser(Guid id)
         {
             try

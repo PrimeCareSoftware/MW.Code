@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.Services;
@@ -17,12 +16,9 @@ namespace MedicSoft.Api.Controllers
 {
     /// <summary>
     /// Controller for System Owner/Admin to manage all clinics and system-wide operations
-    /// Requires SystemAdmin role
     /// </summary>
     [ApiController]
-    [Authorize]
     [Route("api/system-admin")]
-    [RequirePermission(Permission.ViewAllClinics)] // Only SystemAdmin can access these endpoints
     public class SystemAdminController : BaseController
     {
         private readonly IClinicRepository _clinicRepository;

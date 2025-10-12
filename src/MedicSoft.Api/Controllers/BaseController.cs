@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public abstract class BaseController : ControllerBase
     {

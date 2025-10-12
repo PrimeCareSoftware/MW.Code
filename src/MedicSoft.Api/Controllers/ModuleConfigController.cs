@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.CrossCutting.Identity;
@@ -12,7 +11,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for module configuration and access management
     /// </summary>
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class ModuleConfigController : BaseController
     {

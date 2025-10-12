@@ -1,9 +1,6 @@
-using System.Text;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MedicSoft.Application.Mappings;
 using MedicSoft.Application.Services;
@@ -20,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configure Swagger with JWT authentication
+// Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -34,72 +31,11 @@ builder.Services.AddSwaggerGen(c =>
             Email = "contato@medicwarehouse.com"
         }
     });
-
-    // Add JWT authentication to Swagger
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
 });
 
 // Configure database
 builder.Services.AddDbContext<MedicSoftDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Configure JWT Authentication
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is not configured");
-
-// Validate JWT key length (minimum 32 characters for security)
-if (secretKey.Length < 32)
-    throw new InvalidOperationException("JWT SecretKey must be at least 32 characters long");
-
-var key = Encoding.ASCII.GetBytes(secretKey);
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    var requireHttps = builder.Configuration.GetValue<bool>("Security:RequireHttps", true);
-    
-    options.RequireHttpsMetadata = requireHttps;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = true,
-        ValidIssuer = jwtSettings["Issuer"],
-        ValidateAudience = true,
-        ValidAudience = jwtSettings["Audience"],
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
-    };
-});
-
-builder.Services.AddAuthorization();
 
 // Configure Rate Limiting
 var rateLimitEnabled = builder.Configuration.GetValue<bool>("RateLimiting:EnableRateLimiting", true);
@@ -154,6 +90,7 @@ builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IPrescriptionItemRepository, PrescriptionItemRepository>();
 builder.Services.AddScoped<IPrescriptionTemplateRepository, PrescriptionTemplateRepository>();
 builder.Services.AddScoped<IMedicalRecordTemplateRepository, MedicalRecordTemplateRepository>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
@@ -163,6 +100,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
@@ -223,9 +161,6 @@ if (rateLimitEnabled)
 {
     app.UseRateLimiter();
 }
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 

@@ -2,7 +2,6 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.CrossCutting.Security;
@@ -15,7 +14,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for password recovery with 2FA verification
     /// </summary>
     [ApiController]
-    [AllowAnonymous]
     [Route("api/password-recovery")]
     public class PasswordRecoveryController : BaseController
     {

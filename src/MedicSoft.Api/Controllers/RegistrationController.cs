@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs.Registration;
 using MedicSoft.Application.Services;
@@ -9,7 +8,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for clinic registration and subscription management
     /// </summary>
     [ApiController]
-    [AllowAnonymous]
     [Route("api/[controller]")]
     public class RegistrationController : ControllerBase
     {

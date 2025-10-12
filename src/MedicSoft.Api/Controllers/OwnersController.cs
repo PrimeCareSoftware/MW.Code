@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
@@ -11,7 +10,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for owner management - create, update, activate/deactivate owners
     /// </summary>
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class OwnersController : BaseController
     {
@@ -27,7 +25,6 @@ namespace MedicSoft.Api.Controllers
         /// Get all owners (SystemAdmin only)
         /// </summary>
         [HttpGet]
-        [RequirePermission(Permission.ViewAllClinics)]
         public async Task<ActionResult<IEnumerable<OwnerDto>>> GetAllOwners()
         {
             var tenantId = GetTenantId();
@@ -109,7 +106,6 @@ namespace MedicSoft.Api.Controllers
         /// Create new owner (SystemAdmin only)
         /// </summary>
         [HttpPost]
-        [RequirePermission(Permission.ViewAllClinics)]
         public async Task<ActionResult<OwnerDto>> CreateOwner([FromBody] CreateOwnerRequest request)
         {
             try
@@ -178,7 +174,6 @@ namespace MedicSoft.Api.Controllers
         /// Activate owner (SystemAdmin only)
         /// </summary>
         [HttpPost("{id}/activate")]
-        [RequirePermission(Permission.ViewAllClinics)]
         public async Task<ActionResult> ActivateOwner(Guid id)
         {
             try
@@ -197,7 +192,6 @@ namespace MedicSoft.Api.Controllers
         /// Deactivate owner (SystemAdmin only)
         /// </summary>
         [HttpPost("{id}/deactivate")]
-        [RequirePermission(Permission.ViewAllClinics)]
         public async Task<ActionResult> DeactivateOwner(Guid id)
         {
             try

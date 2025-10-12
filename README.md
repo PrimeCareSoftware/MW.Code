@@ -27,7 +27,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - **MedicSoft.Domain**: Entidades, Value Objects, Domain Services e Events
 - **MedicSoft.Application**: CQRS com Commands/Queries, DTOs e Application Services  
 - **MedicSoft.Repository**: Implementação do repositório com Entity Framework Core
-- **MedicSoft.Api**: API RESTful com autenticação JWT e Swagger
+- **MedicSoft.Api**: API RESTful com Swagger
 - **MedicSoft.CrossCutting**: Serviços transversais (logging, segurança, etc.)
 - **MedicSoft.Test**: Testes unitários e de integração
 
@@ -161,7 +161,6 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Cálculo Automático**: Total calculado automaticamente baseado nos procedimentos
 
 ### 🔐 Segurança e Administração
-- ✅ **Autenticação JWT**: API segura com tokens JWT validados
 - ✅ **BCrypt Password Hashing**: Senhas hashadas com BCrypt (work factor 12)
 - ✅ **Rate Limiting**: Proteção contra força bruta e DDoS
 - ✅ **Security Headers**: CSP, X-Frame-Options, HSTS, e mais
@@ -189,7 +188,6 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - **Frontend**: Angular 18, TypeScript, SCSS
 - **Banco de Dados**: SQL Server 2022 (via Docker)
 - **Containerização**: Docker e Docker Compose
-- **Autenticação**: JWT Bearer Tokens
 
 ## 🏃‍♂️ Como Executar
 
@@ -280,45 +278,25 @@ Para facilitar o teste e integração, todas as APIs foram exportadas para o Pos
 - 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](POSTMAN_IMPORT_GUIDE.md)
 - ✨ **Recursos incluídos**:
   - Todos os endpoints organizados por funcionalidade
-  - Variáveis pré-configuradas (base_url, bearer_token, tenant_id)
-  - Autenticação JWT automática
+  - Variáveis pré-configuradas (base_url, tenant_id)
   - Headers pré-configurados
   - Exemplos de requests prontos para uso
 
 **Como usar:**
 1. Importe o arquivo no Postman
-2. Execute o endpoint de Login
-3. Cole o token nas variáveis da coleção
-4. Teste os endpoints!
+2. Configure as variáveis da coleção
+3. Teste os endpoints!
 
 Para instruções detalhadas, consulte o [Guia de Importação do Postman](POSTMAN_IMPORT_GUIDE.md).
-
-### Autenticação
-
-**🔐 Autenticação Sempre Obrigatória**: O sistema sempre requer autenticação JWT para garantir máxima segurança.
-
-Para testar a API, primeiro obtenha um token JWT:
-
-```bash
-POST /api/auth/login
-{
-  "username": "admin",
-  "password": "SecureP@ssw0rd!",
-  "tenantId": "default-tenant"
-}
-```
-
-Use o token retornado no header `Authorization: Bearer {token}` nas demais requisições.
-
-> ⚠️ **Importante**: Em produção, sempre use senhas fortes com mínimo 12 caracteres, incluindo maiúsculas, minúsculas, dígitos e caracteres especiais.
 
 > 📖 **Guia Completo**: Para um passo a passo detalhado de como configurar e cadastrar tudo no sistema, consulte o [Guia de Configuração do Sistema](frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md).
 
 ### Endpoints Principais
 
-- **Autenticação**:
-  - `POST /api/auth/login` - Login e obtenção do token
-  - `GET /api/auth/me` - Informações do usuário atual
+- **Registro e Configuração**:
+  - `POST /api/registration` - Registro de nova clínica
+  - `GET /api/registration/check-cnpj/{cnpj}` - Verificar disponibilidade de CNPJ
+  - `GET /api/registration/check-username/{username}` - Verificar disponibilidade de username
 
 - **Pacientes**:
   - `GET /api/patients` - Listar pacientes

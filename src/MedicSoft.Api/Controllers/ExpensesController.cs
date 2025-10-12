@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
-using MedicSoft.Domain.Entities;
-using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -14,12 +12,12 @@ namespace MedicSoft.Api.Controllers
     [Route("api/[controller]")]
     public class ExpensesController : BaseController
     {
-        private readonly MedicSoftDbContext _context;
+        private readonly IExpenseService _expenseService;
 
-        public ExpensesController(MedicSoftDbContext context, ITenantContext tenantContext) 
+        public ExpensesController(IExpenseService expenseService, ITenantContext tenantContext) 
             : base(tenantContext)
         {
-            _context = context;
+            _expenseService = expenseService;
         }
 
         /// <summary>
@@ -36,41 +34,8 @@ namespace MedicSoft.Api.Controllers
             [FromQuery] string? status = null,
             [FromQuery] string? category = null)
         {
-            var query = _context.Expenses.AsQueryable();
-
-            if (clinicId.HasValue)
-                query = query.Where(e => e.ClinicId == clinicId.Value);
-
-            if (!string.IsNullOrEmpty(status) && Enum.TryParse<ExpenseStatus>(status, out var expenseStatus))
-                query = query.Where(e => e.Status == expenseStatus);
-
-            if (!string.IsNullOrEmpty(category) && Enum.TryParse<ExpenseCategory>(category, out var expenseCategory))
-                query = query.Where(e => e.Category == expenseCategory);
-
-            var expenses = await query
-                .OrderByDescending(e => e.DueDate)
-                .Select(e => new ExpenseDto
-                {
-                    Id = e.Id,
-                    ClinicId = e.ClinicId,
-                    Description = e.Description,
-                    Category = e.Category.ToString(),
-                    Amount = e.Amount,
-                    DueDate = e.DueDate,
-                    PaidDate = e.PaidDate,
-                    Status = e.Status.ToString(),
-                    PaymentMethod = e.PaymentMethod != null ? e.PaymentMethod.ToString() : null,
-                    PaymentReference = e.PaymentReference,
-                    SupplierName = e.SupplierName,
-                    SupplierDocument = e.SupplierDocument,
-                    Notes = e.Notes,
-                    CancellationReason = e.CancellationReason,
-                    CreatedAt = e.CreatedAt,
-                    UpdatedAt = e.UpdatedAt,
-                    DaysOverdue = e.IsOverdue() ? e.DaysOverdue() : null
-                })
-                .ToListAsync();
-
+            var tenantId = GetTenantId();
+            var expenses = await _expenseService.GetAllExpensesAsync(tenantId, clinicId, status, category);
             return Ok(expenses);
         }
 
@@ -84,31 +49,13 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ExpenseDto>> GetById(Guid id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
+            var tenantId = GetTenantId();
+            var expense = await _expenseService.GetExpenseByIdAsync(id, tenantId);
 
             if (expense == null)
                 return NotFound("Expense not found");
 
-            return Ok(new ExpenseDto
-            {
-                Id = expense.Id,
-                ClinicId = expense.ClinicId,
-                Description = expense.Description,
-                Category = expense.Category.ToString(),
-                Amount = expense.Amount,
-                DueDate = expense.DueDate,
-                PaidDate = expense.PaidDate,
-                Status = expense.Status.ToString(),
-                PaymentMethod = expense.PaymentMethod?.ToString(),
-                PaymentReference = expense.PaymentReference,
-                SupplierName = expense.SupplierName,
-                SupplierDocument = expense.SupplierDocument,
-                Notes = expense.Notes,
-                CancellationReason = expense.CancellationReason,
-                CreatedAt = expense.CreatedAt,
-                UpdatedAt = expense.UpdatedAt,
-                DaysOverdue = expense.IsOverdue() ? expense.DaysOverdue() : null
-            });
+            return Ok(expense);
         }
 
         /// <summary>
@@ -124,43 +71,11 @@ namespace MedicSoft.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!Enum.TryParse<ExpenseCategory>(dto.Category, out var category))
-                return BadRequest("Invalid expense category");
-
             try
             {
-                var expense = new Expense(
-                    dto.ClinicId,
-                    dto.Description,
-                    category,
-                    dto.Amount,
-                    dto.DueDate,
-                    GetTenantId(),
-                    dto.SupplierName,
-                    dto.SupplierDocument,
-                    dto.Notes
-                );
-
-                _context.Expenses.Add(expense);
-                await _context.SaveChangesAsync();
-
-                var result = new ExpenseDto
-                {
-                    Id = expense.Id,
-                    ClinicId = expense.ClinicId,
-                    Description = expense.Description,
-                    Category = expense.Category.ToString(),
-                    Amount = expense.Amount,
-                    DueDate = expense.DueDate,
-                    PaidDate = expense.PaidDate,
-                    Status = expense.Status.ToString(),
-                    SupplierName = expense.SupplierName,
-                    SupplierDocument = expense.SupplierDocument,
-                    Notes = expense.Notes,
-                    CreatedAt = expense.CreatedAt
-                };
-
-                return CreatedAtAction(nameof(GetById), new { id = expense.Id }, result);
+                var tenantId = GetTenantId();
+                var result = await _expenseService.CreateExpenseAsync(dto, tenantId);
+                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
             }
             catch (ArgumentException ex)
             {
@@ -183,27 +98,19 @@ namespace MedicSoft.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null)
-                return NotFound("Expense not found");
-
-            if (!Enum.TryParse<ExpenseCategory>(dto.Category, out var category))
-                return BadRequest("Invalid expense category");
-
             try
             {
-                expense.Update(
-                    dto.Description,
-                    category,
-                    dto.Amount,
-                    dto.DueDate,
-                    dto.SupplierName,
-                    dto.SupplierDocument,
-                    dto.Notes
-                );
-
-                await _context.SaveChangesAsync();
+                var tenantId = GetTenantId();
+                await _expenseService.UpdateExpenseAsync(id, dto, tenantId);
                 return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (InvalidOperationException ex)
             {
@@ -226,18 +133,19 @@ namespace MedicSoft.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null)
-                return NotFound("Expense not found");
-
-            if (!Enum.TryParse<PaymentMethod>(dto.PaymentMethod, out var paymentMethod))
-                return BadRequest("Invalid payment method");
-
             try
             {
-                expense.MarkAsPaid(paymentMethod, dto.PaymentReference);
-                await _context.SaveChangesAsync();
+                var tenantId = GetTenantId();
+                await _expenseService.MarkExpenseAsPaidAsync(id, dto, tenantId);
                 return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (InvalidOperationException ex)
             {
@@ -260,15 +168,15 @@ namespace MedicSoft.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null)
-                return NotFound("Expense not found");
-
             try
             {
-                expense.Cancel(dto.Reason);
-                await _context.SaveChangesAsync();
+                var tenantId = GetTenantId();
+                await _expenseService.CancelExpenseAsync(id, dto, tenantId);
                 return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (InvalidOperationException ex)
             {
@@ -286,13 +194,16 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null)
+            try
+            {
+                var tenantId = GetTenantId();
+                await _expenseService.DeleteExpenseAsync(id, tenantId);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
                 return NotFound("Expense not found");
-
-            _context.Expenses.Remove(expense);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            }
         }
     }
 }
