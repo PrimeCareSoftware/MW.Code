@@ -31,6 +31,8 @@ Bem-vindo à documentação completa do sistema MedicWarehouse. Use este índice
 | Documento | Descrição | Tamanho | Ideal Para |
 |-----------|-----------|---------|------------|
 | **[README.md](../README.md)** | Visão geral do projeto, funcionalidades, como executar, tecnologias | Médio | Todos os usuários, primeira leitura |
+| **[SYSTEM_SETUP_GUIDE.md](../frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md)** | 🆕 **Guia completo de configuração e ordem correta de cadastro** | Grande | Desenvolvedores, administradores, essencial para setup inicial |
+| **[ORDEM_CORRETA_CADASTRO.md](ORDEM_CORRETA_CADASTRO.md)** | 🆕 **Referência rápida da ordem de cadastro** | Pequeno | Quick reference, consulta rápida |
 | **[GUIA_EXECUCAO.md](../GUIA_EXECUCAO.md)** | Guia passo a passo para executar o projeto localmente | Médio | Desenvolvedores, configuração inicial |
 | **[API_QUICK_GUIDE.md](../API_QUICK_GUIDE.md)** | Guia rápido dos endpoints da API com exemplos | Médio | Desenvolvedores de integração, testes |
 
@@ -60,20 +62,22 @@ Bem-vindo à documentação completa do sistema MedicWarehouse. Use este índice
 ```mermaid
 graph LR
     A[📖 README.md] --> B[🔧 GUIA_EXECUCAO.md]
-    B --> C[📱 VISUAL_FLOW_SUMMARY.md]
-    C --> D[🏗️ TECHNICAL_IMPLEMENTATION.md]
-    D --> E[📋 BUSINESS_RULES.md]
+    B --> C[🚀 SYSTEM_SETUP_GUIDE.md]
+    C --> D[📱 VISUAL_FLOW_SUMMARY.md]
+    D --> E[🏗️ TECHNICAL_IMPLEMENTATION.md]
+    E --> F[📋 BUSINESS_RULES.md]
     
     style A fill:#e1f5ff
     style C fill:#fff4e1
-    style E fill:#e8f5e9
+    style F fill:#e8f5e9
 ```
 
 1. **README.md** - Entenda o que é o projeto
 2. **GUIA_EXECUCAO.md** - Configure e execute localmente
-3. **VISUAL_FLOW_SUMMARY.md** - Veja como o sistema funciona visualmente
-4. **TECHNICAL_IMPLEMENTATION.md** - Aprenda a arquitetura técnica
-5. **BUSINESS_RULES.md** - Domine as regras de negócio
+3. **SYSTEM_SETUP_GUIDE.md** - 🆕 Aprenda a ordem correta de cadastro
+4. **VISUAL_FLOW_SUMMARY.md** - Veja como o sistema funciona visualmente
+5. **TECHNICAL_IMPLEMENTATION.md** - Aprenda a arquitetura técnica
+6. **BUSINESS_RULES.md** - Domine as regras de negócio
 
 ### 🎨 Para Designers e UX
 
@@ -158,6 +162,7 @@ graph LR
 
 ### 🔐 Segurança e Autenticação
 - [SECURITY_VALIDATIONS.md](../SECURITY_VALIDATIONS.md)
+- [SYSTEM_SETUP_GUIDE.md](../frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md) - 🆕 Seção de Autenticação
 - [TECHNICAL_IMPLEMENTATION.md](../TECHNICAL_IMPLEMENTATION.md)
 - [README.md](../README.md) - Seção Segurança
 
@@ -189,12 +194,17 @@ graph LR
 
 ## 🆕 Última Atualização
 
-**Data**: Janeiro 2025  
-**Versão**: 1.0  
+**Data**: Outubro 2025  
+**Versão**: 2.0  
 **Novos Documentos Adicionados**:
+- ✅ SYSTEM_SETUP_GUIDE.md (17KB, 500+ linhas) - **Guia completo de setup**
+- ✅ ORDEM_CORRETA_CADASTRO.md (3KB, 100+ linhas) - **Referência rápida**
 - ✅ SCREENS_DOCUMENTATION.md (40KB, 813 linhas)
 - ✅ VISUAL_FLOW_SUMMARY.md (12KB, 387 linhas)
 - ✅ docs/INDEX.md (este documento)
+
+**Removidos**:
+- ❌ DISABLE_JWT_AUTH_DEV.md - Funcionalidade de desabilitar autenticação removida por segurança
 
 ---
 

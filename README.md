@@ -10,11 +10,12 @@ Toda a documentação detalhada do projeto está disponível no **projeto web de
 - 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
 - 📖 **Principais Documentos**:
+  - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema** (NOVO!)
   - `BUSINESS_RULES.md` - Regras de negócio
   - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas
-  - `SYSTEM_ADMIN_DOCUMENTATION.md` - Área do administrador do sistema (NOVO!)
-  - `PASSWORD_RECOVERY_FLOW.md` - Recuperação de senha com 2FA (NOVO!)
-  - `PENDING_TASKS.md` - Pendências e integrações futuras (NOVO!)
+  - `SYSTEM_ADMIN_DOCUMENTATION.md` - Área do administrador do sistema
+  - `PASSWORD_RECOVERY_FLOW.md` - Recuperação de senha com 2FA
+  - `PENDING_TASKS.md` - Pendências e integrações futuras
   - `API_QUICK_GUIDE.md` - Guia rápido da API
   - `SECURITY_GUIDE.md` - Guia de segurança
   - `GUIA_EXECUCAO.md` - Como executar o projeto
@@ -294,6 +295,8 @@ Para instruções detalhadas, consulte o [Guia de Importação do Postman](POSTM
 
 ### Autenticação
 
+**🔐 Autenticação Sempre Obrigatória**: O sistema sempre requer autenticação JWT para garantir máxima segurança.
+
 Para testar a API, primeiro obtenha um token JWT:
 
 ```bash
@@ -308,6 +311,8 @@ POST /api/auth/login
 Use o token retornado no header `Authorization: Bearer {token}` nas demais requisições.
 
 > ⚠️ **Importante**: Em produção, sempre use senhas fortes com mínimo 12 caracteres, incluindo maiúsculas, minúsculas, dígitos e caracteres especiais.
+
+> 📖 **Guia Completo**: Para um passo a passo detalhado de como configurar e cadastrar tudo no sistema, consulte o [Guia de Configuração do Sistema](frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md).
 
 ### Endpoints Principais
 
