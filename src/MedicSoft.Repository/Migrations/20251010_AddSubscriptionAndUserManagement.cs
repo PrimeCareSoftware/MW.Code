@@ -30,7 +30,7 @@ namespace MedicSoft.Repository.Migrations
                     Type = table.Column<int>(type: "int", nullable: false),
                     TenantId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,7 +56,7 @@ namespace MedicSoft.Repository.Migrations
                     Specialty = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     TenantId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -95,7 +95,7 @@ namespace MedicSoft.Repository.Migrations
                     IsUpgrade = table.Column<bool>(type: "bit", nullable: false),
                     TenantId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
