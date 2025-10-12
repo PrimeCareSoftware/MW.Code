@@ -33,7 +33,7 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired();
 
             builder.Property(mc => mc.UpdatedAt)
-                .IsRequired();
+                .IsRequired(false);
 
             // Relationships
             builder.HasOne(mc => mc.Clinic)
