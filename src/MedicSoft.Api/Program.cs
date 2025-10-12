@@ -90,6 +90,7 @@ builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IPrescriptionItemRepository, PrescriptionItemRepository>();
 builder.Services.AddScoped<IPrescriptionTemplateRepository, PrescriptionTemplateRepository>();
 builder.Services.AddScoped<IMedicalRecordTemplateRepository, MedicalRecordTemplateRepository>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
@@ -99,6 +100,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
