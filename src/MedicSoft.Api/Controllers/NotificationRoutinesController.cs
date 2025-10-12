@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Commands.NotificationRoutines;
 using MedicSoft.Application.DTOs;
@@ -12,7 +11,6 @@ namespace MedicSoft.Api.Controllers
     /// Controller for managing notification routines - automated notification scheduling
     /// </summary>
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class NotificationRoutinesController : BaseController
     {
