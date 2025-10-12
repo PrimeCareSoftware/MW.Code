@@ -18,16 +18,19 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly ISubscriptionService _subscriptionService;
+        private readonly IConfiguration _configuration;
 
         public SubscriptionsController(
             ITenantContext tenantContext,
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
-            ISubscriptionService subscriptionService) : base(tenantContext)
+            ISubscriptionService subscriptionService,
+            IConfiguration configuration) : base(tenantContext)
         {
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _subscriptionService = subscriptionService;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -46,6 +49,8 @@ namespace MedicSoft.Api.Controllers
             if (subscription == null)
                 return NotFound(new { message = "Subscription not found" });
 
+            var environment = _configuration["ASPNETCORE_ENVIRONMENT"] ?? "Production";
+
             return Ok(new SubscriptionDto
             {
                 Id = subscription.Id,
@@ -62,7 +67,9 @@ namespace MedicSoft.Api.Controllers
                 PendingPlanName = subscription.PendingPlan?.Name,
                 IsUpgrade = subscription.IsUpgrade,
                 PlanChangeDate = subscription.PlanChangeDate,
-                CanAccess = _subscriptionService.CanAccessSystem(subscription)
+                CanAccess = _subscriptionService.CanAccessSystem(subscription, environment),
+                ManualOverrideActive = subscription.ManualOverrideActive,
+                ManualOverrideReason = subscription.ManualOverrideReason
             });
         }
 
@@ -264,5 +271,7 @@ namespace MedicSoft.Api.Controllers
         public bool IsUpgrade { get; set; }
         public DateTime? PlanChangeDate { get; set; }
         public bool CanAccess { get; set; }
+        public bool ManualOverrideActive { get; set; }
+        public string? ManualOverrideReason { get; set; }
     }
 }

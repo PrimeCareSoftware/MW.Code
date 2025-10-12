@@ -27,7 +27,7 @@ namespace MedicSoft.Domain.Services
         /// <summary>
         /// Validate if clinic can access based on subscription status
         /// </summary>
-        bool CanAccessSystem(ClinicSubscription subscription);
+        bool CanAccessSystem(ClinicSubscription subscription, string environment);
 
         /// <summary>
         /// Validate if user count is within plan limits
@@ -43,10 +43,12 @@ namespace MedicSoft.Domain.Services
     public class SubscriptionService : ISubscriptionService
     {
         private readonly INotificationService _notificationService;
+        private readonly string _environment;
 
-        public SubscriptionService(INotificationService notificationService)
+        public SubscriptionService(INotificationService notificationService, string environment = "Production")
         {
             _notificationService = notificationService;
+            _environment = environment;
         }
 
         public Task CheckAndNotifyOverduePayments()
@@ -92,8 +94,22 @@ Equipe MedicWarehouse";
             await _notificationService.SendWhatsApp(subscription.Clinic.Phone, message);
         }
 
-        public bool CanAccessSystem(ClinicSubscription subscription)
+        public bool CanAccessSystem(ClinicSubscription subscription, string environment)
         {
+            // In Development or Staging, always allow access (no payment enforcement)
+            if (environment.Equals("Development", StringComparison.OrdinalIgnoreCase) ||
+                environment.Equals("Staging", StringComparison.OrdinalIgnoreCase) ||
+                environment.Equals("Homologacao", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            // Manual override allows access regardless of payment status
+            // Used for giving free access to friends or special cases
+            if (subscription.ManualOverrideActive)
+                return true;
+
+            // Regular subscription rules for Production
             if (subscription.IsFrozen)
                 return false;
 

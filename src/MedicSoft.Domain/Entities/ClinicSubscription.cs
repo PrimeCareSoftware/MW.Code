@@ -31,6 +31,12 @@ namespace MedicSoft.Domain.Entities
         public decimal? PendingPlanPrice { get; private set; }
         public DateTime? PlanChangeDate { get; private set; }
         public bool IsUpgrade { get; private set; }
+        
+        // Manual override for keeping clinic active (for friends/special cases)
+        public bool ManualOverrideActive { get; private set; }
+        public string? ManualOverrideReason { get; private set; }
+        public DateTime? ManualOverrideSetAt { get; private set; }
+        public string? ManualOverrideSetBy { get; private set; }
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }
@@ -294,6 +300,50 @@ namespace MedicSoft.Domain.Entities
                 return 0;
 
             return PendingPlanPrice.Value - CurrentPrice;
+        }
+
+        /// <summary>
+        /// Enable manual override to keep clinic active regardless of payment status
+        /// Used for special cases like free access for friends
+        /// </summary>
+        public void EnableManualOverride(string reason, string setByUsername)
+        {
+            if (string.IsNullOrWhiteSpace(reason))
+                throw new ArgumentException("Override reason is required", nameof(reason));
+            
+            if (string.IsNullOrWhiteSpace(setByUsername))
+                throw new ArgumentException("Username who set the override is required", nameof(setByUsername));
+
+            ManualOverrideActive = true;
+            ManualOverrideReason = reason.Trim();
+            ManualOverrideSetAt = DateTime.UtcNow;
+            ManualOverrideSetBy = setByUsername.Trim();
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Disable manual override and return to normal subscription rules
+        /// </summary>
+        public void DisableManualOverride()
+        {
+            ManualOverrideActive = false;
+            ManualOverrideReason = null;
+            ManualOverrideSetAt = null;
+            ManualOverrideSetBy = null;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Check if clinic can access system considering manual override
+        /// </summary>
+        public bool CanAccessWithOverride()
+        {
+            // Manual override allows access regardless of payment status
+            if (ManualOverrideActive)
+                return true;
+
+            // Otherwise use normal rules
+            return IsActive();
         }
     }
 

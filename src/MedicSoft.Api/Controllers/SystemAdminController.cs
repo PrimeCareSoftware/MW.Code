@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Entities;
@@ -20,6 +21,7 @@ namespace MedicSoft.Api.Controllers
     [ApiController]
     [Authorize]
     [Route("api/system-admin")]
+    [RequirePermission(Permission.ViewAllClinics)] // Only SystemAdmin can access these endpoints
     public class SystemAdminController : BaseController
     {
         private readonly IClinicRepository _clinicRepository;
@@ -366,6 +368,62 @@ namespace MedicSoft.Api.Controllers
 
             return Ok(plans);
         }
+
+        /// <summary>
+        /// Enable manual override for a clinic subscription
+        /// Allows keeping clinic active even if payment is overdue or not registered via website
+        /// Used for giving free access to friends or special cases
+        /// </summary>
+        [HttpPost("clinics/{id}/subscription/manual-override/enable")]
+        public async Task<ActionResult> EnableManualOverride(
+            Guid id,
+            [FromBody] ManualOverrideRequest request)
+        {
+            var subscription = await _context.ClinicSubscriptions
+                .IgnoreQueryFilters()
+                .Where(s => s.ClinicId == id)
+                .OrderByDescending(s => s.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (subscription == null)
+                return NotFound(new { message = "Assinatura não encontrada" });
+
+            var username = User.Identity?.Name ?? "System";
+            subscription.EnableManualOverride(request.Reason, username);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = "Override manual ativado com sucesso",
+                reason = subscription.ManualOverrideReason,
+                setBy = subscription.ManualOverrideSetBy,
+                setAt = subscription.ManualOverrideSetAt
+            });
+        }
+
+        /// <summary>
+        /// Disable manual override for a clinic subscription
+        /// Returns to normal subscription payment rules
+        /// </summary>
+        [HttpPost("clinics/{id}/subscription/manual-override/disable")]
+        public async Task<ActionResult> DisableManualOverride(Guid id)
+        {
+            var subscription = await _context.ClinicSubscriptions
+                .IgnoreQueryFilters()
+                .Where(s => s.ClinicId == id)
+                .OrderByDescending(s => s.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (subscription == null)
+                return NotFound(new { message = "Assinatura não encontrada" });
+
+            subscription.DisableManualOverride();
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Override manual desativado com sucesso" });
+        }
     }
 
     public class ClinicSummaryDto
@@ -418,5 +476,10 @@ namespace MedicSoft.Api.Controllers
         public string Password { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+    }
+
+    public class ManualOverrideRequest
+    {
+        public string Reason { get; set; } = string.Empty;
     }
 }

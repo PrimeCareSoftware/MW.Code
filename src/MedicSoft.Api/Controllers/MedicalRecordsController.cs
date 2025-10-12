@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Entities;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -17,8 +19,10 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Create a new medical record for an appointment
+        /// Requires ManageMedicalRecords permission (Doctor, Dentist, Nurse have this)
         /// </summary>
         [HttpPost]
+        [RequirePermission(Permission.ManageMedicalRecords)]
         public async Task<ActionResult<MedicalRecordDto>> Create([FromBody] CreateMedicalRecordDto createDto)
         {
             if (!ModelState.IsValid)
@@ -39,8 +43,10 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Update a medical record
+        /// Requires ManageMedicalRecords permission (Secretary does NOT have this)
         /// </summary>
         [HttpPut("{id}")]
+        [RequirePermission(Permission.ManageMedicalRecords)]
         public async Task<ActionResult<MedicalRecordDto>> Update(Guid id, [FromBody] UpdateMedicalRecordDto updateDto)
         {
             if (!ModelState.IsValid)

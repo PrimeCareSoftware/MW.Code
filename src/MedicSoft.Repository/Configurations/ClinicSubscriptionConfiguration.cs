@@ -58,6 +58,19 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(cs => cs.IsUpgrade)
                 .IsRequired();
 
+            // Manual override properties
+            builder.Property(cs => cs.ManualOverrideActive)
+                .IsRequired()
+                .HasDefaultValue(false);
+
+            builder.Property(cs => cs.ManualOverrideReason)
+                .HasMaxLength(500);
+
+            builder.Property(cs => cs.ManualOverrideSetAt);
+
+            builder.Property(cs => cs.ManualOverrideSetBy)
+                .HasMaxLength(100);
+
             builder.Property(cs => cs.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);
