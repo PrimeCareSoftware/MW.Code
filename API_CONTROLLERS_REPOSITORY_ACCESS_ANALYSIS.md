@@ -1,10 +1,15 @@
 # API Controllers - Repository Access Analysis
 
 **Date**: October 12, 2024
+**Last Updated**: October 12, 2025
 
 ## Summary
 
 This document provides an analysis of all API controllers in the MedicSoft system, identifying which ones access repositories or DbContext directly, and documenting the refactoring status.
+
+**Recent Updates:**
+- ✅ JWT Authentication removed from all controllers
+- ✅ ExpensesController refactored to use ExpenseService
 
 ## Controllers with Proper Service Layer ✅
 
@@ -14,17 +19,18 @@ These controllers follow the clean architecture pattern and only use Application
    - Uses: `IAppointmentService`
    - Status: ✅ Clean - no direct repository access
 
-2. **AuthController**
-   - Uses: `IAuthService`
-   - Status: ✅ Clean - no direct repository access
-
-3. **ContactController**
+2. **ContactController**
    - Uses: No service dependencies
    - Status: ✅ Clean - minimal controller
 
-4. **DataSeederController**
+3. **DataSeederController**
    - Uses: `DataSeederService`
    - Status: ✅ Clean - uses service layer
+
+4. **ExpensesController** ✅ **REFACTORED**
+   - Uses: `IExpenseService`
+   - Status: ✅ Clean - refactored to use service layer
+   - Recent changes: Moved all database access to ExpenseService
 
 5. **InvoicesController**
    - Uses: Unknown (need to verify)
@@ -35,8 +41,8 @@ These controllers follow the clean architecture pattern and only use Application
    - Status: ✅ Clean - no direct repository access
 
 7. **NotificationRoutinesController**
-   - Uses: Unknown (need to verify)
-   - Status: ✅ Clean - no direct repository access visible
+   - Uses: MediatR with Commands/Queries
+   - Status: ✅ Clean - uses CQRS pattern
 
 8. **OwnersController**
    - Uses: `IOwnerService`
@@ -84,20 +90,6 @@ These controllers still access repositories or DbContext directly:
   - Create `ISystemAdminService` to handle system-wide operations
   - Move clinic queries and analytics logic to service layer
   - Keep repository access in service layer only
-
-### 2. **ExpensesController** ⚠️
-- **Direct Dependencies**:
-  - `MedicSoftDbContext`
-  
-- **Refactoring Status**: Not refactored
-  - Uses DbContext directly for all CRUD operations on expenses
-  
-- **Recommendation**: 
-  - Create `IExpenseRepository` interface
-  - Create `IExpenseService` in Application layer
-  - Refactor controller to use service
-
-### 3. **ModuleConfigController** ⚠️
 - **Direct Dependencies**:
   - `MedicSoftDbContext`
   - `IClinicSubscriptionRepository`
@@ -111,7 +103,7 @@ These controllers still access repositories or DbContext directly:
   - Create `IModuleConfigService` in Application layer
   - Refactor controller to use service
 
-### 4. **PasswordRecoveryController** ⚠️
+### 3. **PasswordRecoveryController** ⚠️
 - **Direct Dependencies**:
   - `IUserRepository`
   - `IPasswordResetTokenRepository`
@@ -125,7 +117,7 @@ These controllers still access repositories or DbContext directly:
   - Move password reset logic to service
   - Controller should only handle HTTP concerns
 
-### 5. **ReportsController** ⚠️
+### 4. **ReportsController** ⚠️
 - **Direct Dependencies**:
   - `MedicSoftDbContext`
   
@@ -137,7 +129,7 @@ These controllers still access repositories or DbContext directly:
   - Move report generation logic to service
   - Consider using repository pattern for complex queries
 
-### 6. **SubscriptionsController** ⚠️
+### 5. **SubscriptionsController** ⚠️
 - **Direct Dependencies**:
   - `IClinicSubscriptionRepository`
   - `ISubscriptionPlanRepository`
@@ -152,7 +144,7 @@ These controllers still access repositories or DbContext directly:
   - Remove direct repository dependencies
   - Use service for all operations
 
-### 7. **UsersController** ⚠️
+### 6. **UsersController** ⚠️
 - **Direct Dependencies**:
   - `IUserService` ✅
   - `IClinicSubscriptionRepository` ⚠️
