@@ -21,6 +21,12 @@ namespace MedicSoft.Application.Services
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IAppointmentProcedureRepository _appointmentProcedureRepository;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IMedicalRecordRepository _medicalRecordRepository;
+        private readonly IMedicationRepository _medicationRepository;
+        private readonly IPrescriptionItemRepository _prescriptionItemRepository;
+        private readonly IPrescriptionTemplateRepository _prescriptionTemplateRepository;
+        private readonly IMedicalRecordTemplateRepository _medicalRecordTemplateRepository;
+        private readonly INotificationRepository _notificationRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly string _demoTenantId = "demo-clinic-001";
 
@@ -33,6 +39,12 @@ namespace MedicSoft.Application.Services
             IAppointmentRepository appointmentRepository,
             IAppointmentProcedureRepository appointmentProcedureRepository,
             IPaymentRepository paymentRepository,
+            IMedicalRecordRepository medicalRecordRepository,
+            IMedicationRepository medicationRepository,
+            IPrescriptionItemRepository prescriptionItemRepository,
+            IPrescriptionTemplateRepository prescriptionTemplateRepository,
+            IMedicalRecordTemplateRepository medicalRecordTemplateRepository,
+            INotificationRepository notificationRepository,
             IPasswordHasher passwordHasher)
         {
             _clinicRepository = clinicRepository;
@@ -43,6 +55,12 @@ namespace MedicSoft.Application.Services
             _appointmentRepository = appointmentRepository;
             _appointmentProcedureRepository = appointmentProcedureRepository;
             _paymentRepository = paymentRepository;
+            _medicalRecordRepository = medicalRecordRepository;
+            _medicationRepository = medicationRepository;
+            _prescriptionItemRepository = prescriptionItemRepository;
+            _prescriptionTemplateRepository = prescriptionTemplateRepository;
+            _medicalRecordTemplateRepository = medicalRecordTemplateRepository;
+            _notificationRepository = notificationRepository;
             _passwordHasher = passwordHasher;
         }
 
@@ -106,6 +124,48 @@ namespace MedicSoft.Application.Services
             foreach (var payment in payments)
             {
                 await _paymentRepository.AddAsync(payment);
+            }
+
+            // 9. Create Medications
+            var medications = CreateDemoMedications();
+            foreach (var medication in medications)
+            {
+                await _medicationRepository.AddAsync(medication);
+            }
+
+            // 10. Create Medical Records for completed appointments
+            var medicalRecords = CreateDemoMedicalRecords(appointments, patients);
+            foreach (var record in medicalRecords)
+            {
+                await _medicalRecordRepository.AddAsync(record);
+            }
+
+            // 11. Create Prescription Items
+            var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications, patients);
+            foreach (var item in prescriptionItems)
+            {
+                await _prescriptionItemRepository.AddAsync(item);
+            }
+
+            // 12. Create Prescription Templates
+            var prescriptionTemplates = CreateDemoPrescriptionTemplates();
+            foreach (var template in prescriptionTemplates)
+            {
+                await _prescriptionTemplateRepository.AddAsync(template);
+            }
+
+            // 13. Create Medical Record Templates
+            var medicalRecordTemplates = CreateDemoMedicalRecordTemplates();
+            foreach (var template in medicalRecordTemplates)
+            {
+                await _medicalRecordTemplateRepository.AddAsync(template);
+            }
+
+            // 14. Create Notifications for appointments
+            var notifications = CreateDemoNotifications(appointments, patients);
+            foreach (var notification in notifications)
+            {
+                await _notificationRepository.AddAsync(notification);
             }
         }
 
@@ -500,6 +560,504 @@ namespace MedicSoft.Application.Services
             payments.Add(payment2);
 
             return payments;
+        }
+
+        private List<Medication> CreateDemoMedications()
+        {
+            return new List<Medication>
+            {
+                new Medication(
+                    "Amoxicilina",
+                    "500mg",
+                    "Cápsula",
+                    MedicationCategory.Antibiotic,
+                    true,
+                    _demoTenantId,
+                    "Amoxicillin",
+                    "EMS",
+                    "Amoxicilina tri-hidratada",
+                    "500mg",
+                    "Oral",
+                    false,
+                    "123456789",
+                    null,
+                    "Antibiótico de amplo espectro"
+                ),
+                new Medication(
+                    "Dipirona Sódica",
+                    "500mg",
+                    "Comprimido",
+                    MedicationCategory.Analgesic,
+                    false,
+                    _demoTenantId,
+                    "Dipyrone",
+                    "Novartis",
+                    "Dipirona sódica mono-hidratada",
+                    "500mg",
+                    "Oral",
+                    false,
+                    null,
+                    null,
+                    "Analgésico e antitérmico"
+                ),
+                new Medication(
+                    "Ibuprofeno",
+                    "600mg",
+                    "Comprimido",
+                    MedicationCategory.AntiInflammatory,
+                    false,
+                    _demoTenantId,
+                    "Ibuprofen",
+                    "Pfizer",
+                    "Ibuprofeno",
+                    "600mg",
+                    "Oral",
+                    false,
+                    null,
+                    null,
+                    "Anti-inflamatório não esteroidal"
+                ),
+                new Medication(
+                    "Losartana Potássica",
+                    "50mg",
+                    "Comprimido",
+                    MedicationCategory.Antihypertensive,
+                    true,
+                    _demoTenantId,
+                    "Losartan",
+                    "Merck",
+                    "Losartana potássica",
+                    "50mg",
+                    "Oral",
+                    false,
+                    null,
+                    null,
+                    "Anti-hipertensivo"
+                ),
+                new Medication(
+                    "Omeprazol",
+                    "20mg",
+                    "Cápsula",
+                    MedicationCategory.Antacid,
+                    true,
+                    _demoTenantId,
+                    "Omeprazole",
+                    "AstraZeneca",
+                    "Omeprazol",
+                    "20mg",
+                    "Oral",
+                    false,
+                    null,
+                    null,
+                    "Inibidor da bomba de prótons"
+                ),
+                new Medication(
+                    "Loratadina",
+                    "10mg",
+                    "Comprimido",
+                    MedicationCategory.Antihistamine,
+                    false,
+                    _demoTenantId,
+                    "Loratadine",
+                    "Schering-Plough",
+                    "Loratadina",
+                    "10mg",
+                    "Oral",
+                    false,
+                    null,
+                    null,
+                    "Anti-histamínico de 2ª geração"
+                ),
+                new Medication(
+                    "Metformina",
+                    "850mg",
+                    "Comprimido",
+                    MedicationCategory.Antidiabetic,
+                    true,
+                    _demoTenantId,
+                    "Metformin",
+                    "Bristol-Myers Squibb",
+                    "Cloridrato de metformina",
+                    "850mg",
+                    "Oral",
+                    false,
+                    null,
+                    null,
+                    "Antidiabético oral"
+                ),
+                new Medication(
+                    "Vitamina D3",
+                    "7000 UI",
+                    "Cápsula",
+                    MedicationCategory.Vitamin,
+                    false,
+                    _demoTenantId,
+                    "Cholecalciferol",
+                    "Sanofi",
+                    "Colecalciferol",
+                    "7000 UI",
+                    "Oral",
+                    false,
+                    null,
+                    null,
+                    "Suplemento vitamínico"
+                )
+            };
+        }
+
+        private List<MedicalRecord> CreateDemoMedicalRecords(List<Appointment> appointments, List<Patient> patients)
+        {
+            var medicalRecords = new List<MedicalRecord>();
+
+            // Medical record for first completed appointment (Carlos)
+            var record1 = new MedicalRecord(
+                appointments[0].Id,
+                patients[0].Id,
+                _demoTenantId,
+                DateTime.UtcNow.AddDays(-7).AddHours(9),
+                "Hipertensão arterial controlada. Paciente apresenta bom estado geral.",
+                "Manter medicação atual. Orientado sobre dieta e exercícios.",
+                "Paciente relata controle adequado da pressão arterial. PA: 120/80 mmHg"
+            );
+            record1.CompleteConsultation(
+                "Hipertensão arterial sistêmica (CID I10)",
+                "Losartana Potássica 50mg - 1 comprimido ao dia\nDieta hipossódica\nExercícios físicos leves",
+                "Retorno em 3 meses para reavaliação"
+            );
+            medicalRecords.Add(record1);
+
+            // Medical record for second completed appointment (Ana)
+            var record2 = new MedicalRecord(
+                appointments[1].Id,
+                patients[1].Id,
+                _demoTenantId,
+                DateTime.UtcNow.AddDays(-5).AddHours(10),
+                "Diabetes tipo 2. Queixa de palpitações ocasionais.",
+                "Solicitado ECG. Ajuste de medicação para controle glicêmico.",
+                "Paciente relata episódios de palpitação. Glicemia: 145 mg/dL. ECG normal."
+            );
+            record2.CompleteConsultation(
+                "Diabetes mellitus tipo 2 (CID E11) + Arritmia cardíaca não especificada (CID I49.9)",
+                "Metformina 850mg - 2x ao dia\nOmeprazol 20mg - 1x ao dia em jejum\nDieta para diabéticos",
+                "Retorno em 1 mês com exames de glicemia e HbA1c"
+            );
+            medicalRecords.Add(record2);
+
+            return medicalRecords;
+        }
+
+        private List<PrescriptionItem> CreateDemoPrescriptionItems(
+            List<MedicalRecord> medicalRecords,
+            List<Medication> medications,
+            List<Patient> patients)
+        {
+            var items = new List<PrescriptionItem>();
+
+            // Prescription items for first medical record (Carlos - Hypertension)
+            items.Add(new PrescriptionItem(
+                medicalRecords[0].Id,
+                medications[3].Id, // Losartana
+                "50mg",
+                "1 comprimido ao dia pela manhã em jejum",
+                30,
+                30,
+                _demoTenantId,
+                "Tomar pela manhã em jejum"
+            ));
+
+            // Prescription items for second medical record (Ana - Diabetes)
+            items.Add(new PrescriptionItem(
+                medicalRecords[1].Id,
+                medications[6].Id, // Metformina
+                "850mg",
+                "1 comprimido 2x ao dia",
+                30,
+                60,
+                _demoTenantId,
+                "Tomar junto com as refeições (almoço e jantar)"
+            ));
+
+            items.Add(new PrescriptionItem(
+                medicalRecords[1].Id,
+                medications[4].Id, // Omeprazol
+                "20mg",
+                "1 cápsula ao dia",
+                30,
+                30,
+                _demoTenantId,
+                "Tomar em jejum, 30 minutos antes do café da manhã"
+            ));
+
+            return items;
+        }
+
+        private List<PrescriptionTemplate> CreateDemoPrescriptionTemplates()
+        {
+            return new List<PrescriptionTemplate>
+            {
+                new PrescriptionTemplate(
+                    "Receita Antibiótico Amoxicilina",
+                    "Template padrão para prescrição de Amoxicilina",
+                    @"Medicamento: {{medication_name}}
+Dosagem: {{dosage}}
+Posologia: {{frequency}}
+Via de administração: {{route}}
+Duração do tratamento: {{duration}}
+
+Orientações:
+- Tomar conforme orientação médica
+- Não interromper o tratamento mesmo se houver melhora dos sintomas
+- Em caso de efeitos adversos, procurar atendimento médico",
+                    "Antibióticos",
+                    _demoTenantId
+                ),
+                new PrescriptionTemplate(
+                    "Receita Anti-hipertensivo",
+                    "Template para medicamentos de controle de pressão arterial",
+                    @"Medicamento: {{medication_name}}
+Dosagem: {{dosage}}
+Posologia: {{frequency}}
+
+Orientações importantes:
+- Manter uso contínuo conforme prescrição
+- Monitorar pressão arterial regularmente
+- Dieta hipossódica
+- Atividade física regular
+- Retorno conforme agendado",
+                    "Cardiologia",
+                    _demoTenantId
+                ),
+                new PrescriptionTemplate(
+                    "Receita Analgésico Simples",
+                    "Template para prescrição de analgésicos de venda livre",
+                    @"Medicamento: {{medication_name}}
+Dosagem: {{dosage}}
+Posologia: Tomar {{frequency}}
+Duração: {{duration}}
+
+Observações:
+- Tomar preferencialmente após as refeições
+- Não ultrapassar a dose máxima diária
+- Se persistirem os sintomas, procurar atendimento médico",
+                    "Analgésicos",
+                    _demoTenantId
+                ),
+                new PrescriptionTemplate(
+                    "Receita Diabetes",
+                    "Template para controle de diabetes",
+                    @"Medicamento: {{medication_name}}
+Dosagem: {{dosage}}
+Posologia: {{frequency}}
+
+Plano terapêutico:
+- Dieta para diabéticos (acompanhamento nutricional)
+- Exercícios físicos regulares
+- Monitoramento de glicemia conforme orientado
+- Controle de peso
+- Hidratação adequada
+
+Retorno: {{return_date}} para reavaliação e ajuste de dose se necessário",
+                    "Endocrinologia",
+                    _demoTenantId
+                )
+            };
+        }
+
+        private List<MedicalRecordTemplate> CreateDemoMedicalRecordTemplates()
+        {
+            return new List<MedicalRecordTemplate>
+            {
+                new MedicalRecordTemplate(
+                    "Consulta Clínica Geral",
+                    "Template para consultas de clínica geral",
+                    @"IDENTIFICAÇÃO DO PACIENTE:
+Nome: {{patient_name}}
+Data de Nascimento: {{patient_dob}}
+CPF: {{patient_cpf}}
+
+ANAMNESE:
+Queixa Principal: {{chief_complaint}}
+História da Doença Atual: {{hda}}
+História Patológica Pregressa: {{hpp}}
+Medicações em uso: {{current_medications}}
+Alergias: {{allergies}}
+
+EXAME FÍSICO:
+Estado Geral: {{general_state}}
+PA: {{blood_pressure}} | FC: {{heart_rate}} | FR: {{respiratory_rate}} | Tax: {{temperature}}
+Peso: {{weight}} kg | Altura: {{height}} cm | IMC: {{bmi}}
+
+HIPÓTESE DIAGNÓSTICA:
+{{diagnosis}}
+
+CONDUTA:
+{{treatment_plan}}
+
+OBSERVAÇÕES:
+{{notes}}",
+                    "Clínica Geral",
+                    _demoTenantId
+                ),
+                new MedicalRecordTemplate(
+                    "Consulta Cardiológica",
+                    "Template para consultas de cardiologia",
+                    @"CONSULTA CARDIOLÓGICA
+
+PACIENTE: {{patient_name}}
+DATA: {{date}}
+
+MOTIVO DA CONSULTA:
+{{reason}}
+
+HISTÓRIA CARDIOVASCULAR:
+{{cardiovascular_history}}
+
+FATORES DE RISCO:
+- HAS: {{has_hypertension}}
+- DM: {{has_diabetes}}
+- Tabagismo: {{smoking}}
+- Dislipidemia: {{dyslipidemia}}
+- História Familiar: {{family_history}}
+
+EXAME FÍSICO:
+PA: {{blood_pressure}}
+FC: {{heart_rate}}
+Ausculta Cardíaca: {{heart_auscultation}}
+Ausculta Pulmonar: {{lung_auscultation}}
+Edema: {{edema}}
+
+EXAMES COMPLEMENTARES:
+ECG: {{ecg_result}}
+Eco: {{echo_result}}
+
+DIAGNÓSTICO:
+{{diagnosis}}
+
+CONDUTA:
+{{treatment}}
+
+RETORNO: {{return_date}}",
+                    "Cardiologia",
+                    _demoTenantId
+                ),
+                new MedicalRecordTemplate(
+                    "Consulta Pediátrica",
+                    "Template para consultas pediátricas",
+                    @"CONSULTA PEDIÁTRICA
+
+IDENTIFICAÇÃO:
+Nome: {{patient_name}}
+Idade: {{patient_age}}
+Responsável: {{guardian_name}}
+
+QUEIXA:
+{{chief_complaint}}
+
+DESENVOLVIMENTO:
+Peso: {{weight}} kg (P{{weight_percentile}})
+Altura: {{height}} cm (P{{height_percentile}})
+IMC: {{bmi}}
+
+ALIMENTAÇÃO:
+{{feeding_info}}
+
+DESENVOLVIMENTO NEUROPSICOMOTOR:
+{{development}}
+
+VACINAÇÃO:
+{{vaccination_status}}
+
+EXAME FÍSICO:
+{{physical_exam}}
+
+DIAGNÓSTICO:
+{{diagnosis}}
+
+ORIENTAÇÕES:
+{{guidance}}
+
+PRESCRIÇÃO:
+{{prescription}}
+
+RETORNO: {{return_date}}",
+                    "Pediatria",
+                    _demoTenantId
+                )
+            };
+        }
+
+        private List<Notification> CreateDemoNotifications(List<Appointment> appointments, List<Patient> patients)
+        {
+            var notifications = new List<Notification>();
+
+            // Notification for past appointment 1 (sent and delivered)
+            var notif1 = new Notification(
+                patients[0].Id,
+                NotificationType.AppointmentReminder,
+                NotificationChannel.SMS,
+                "+5511987654321",
+                "Lembrete: Você tem consulta agendada para amanhã às 09:00. Clínica Demo MedicWarehouse.",
+                _demoTenantId,
+                appointments[0].Id
+            );
+            notif1.MarkAsSent();
+            notif1.MarkAsDelivered();
+            notifications.Add(notif1);
+
+            // Notification for past appointment 2 (sent, delivered and read)
+            var notif2 = new Notification(
+                patients[1].Id,
+                NotificationType.AppointmentReminder,
+                NotificationChannel.WhatsApp,
+                "+5511987654322",
+                "Olá Ana! Lembrete de consulta cardiológica amanhã às 10:00. Clínica Demo MedicWarehouse.",
+                _demoTenantId,
+                appointments[1].Id
+            );
+            notif2.MarkAsSent();
+            notif2.MarkAsDelivered();
+            notif2.MarkAsRead();
+            notifications.Add(notif2);
+
+            // Notification for today's appointment (sent)
+            var notif3 = new Notification(
+                patients[2].Id,
+                NotificationType.AppointmentConfirmation,
+                NotificationChannel.SMS,
+                "+5511987654323",
+                "Consulta confirmada para hoje às 14:00. Por favor, chegue 15 minutos antes. Clínica Demo.",
+                _demoTenantId,
+                appointments[2].Id
+            );
+            notif3.MarkAsSent();
+            notifications.Add(notif3);
+
+            // Notification for future appointment (pending)
+            var notif4 = new Notification(
+                patients[4].Id,
+                NotificationType.AppointmentReminder,
+                NotificationChannel.WhatsApp,
+                "+5511987654325",
+                "Olá! Lucas tem consulta pediátrica agendada para " + DateTime.Today.AddDays(3).ToString("dd/MM/yyyy") + " às 15:00.",
+                _demoTenantId,
+                appointments[3].Id
+            );
+            notifications.Add(notif4);
+
+            // Payment reminder notification
+            var notif5 = new Notification(
+                patients[0].Id,
+                NotificationType.PaymentReminder,
+                NotificationChannel.Email,
+                "carlos.santos@email.com",
+                "Lembrete: Pagamento da consulta realizada em " + DateTime.Today.AddDays(-7).ToString("dd/MM/yyyy") + " foi confirmado. Obrigado!",
+                _demoTenantId
+            );
+            notif5.MarkAsSent();
+            notif5.MarkAsDelivered();
+            notifications.Add(notif5);
+
+            return notifications;
         }
     }
 }

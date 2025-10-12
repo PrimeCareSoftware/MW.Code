@@ -65,14 +65,39 @@ namespace MedicSoft.Api.Controllers
                 },
                 users = new[]
                 {
-                    new { username = "admin", role = "SystemAdmin", email = "admin@clinicademo.com.br" },
-                    new { username = "dr.silva", role = "Doctor", email = "joao.silva@clinicademo.com.br" },
-                    new { username = "recep.maria", role = "Receptionist", email = "maria.santos@clinicademo.com.br" }
+                    new { username = "admin", role = "SystemAdmin", email = "admin@clinicademo.com.br", crm = (string?)null, specialty = (string?)null },
+                    new { username = "dr.silva", role = "Doctor", email = "joao.silva@clinicademo.com.br", crm = (string?)"CRM-123456", specialty = (string?)"Clínico Geral" },
+                    new { username = "recep.maria", role = "Receptionist", email = "maria.santos@clinicademo.com.br", crm = (string?)null, specialty = (string?)null }
                 },
-                patientsCount = 6,
-                proceduresCount = 8,
-                appointmentsCount = 5,
-                note = "Use POST /api/data-seeder/seed-demo to create this demo data"
+                dataSeeded = new
+                {
+                    patients = 6,
+                    procedures = 8,
+                    appointments = 5,
+                    payments = 2,
+                    medications = 8,
+                    medicalRecords = 2,
+                    prescriptionItems = 3,
+                    prescriptionTemplates = 4,
+                    medicalRecordTemplates = 3,
+                    notifications = 5
+                },
+                entities = new[]
+                {
+                    "✅ 1 Clínica Demo",
+                    "✅ 3 Usuários (Admin, Médico, Recepcionista)",
+                    "✅ 6 Pacientes (incluindo 2 crianças com responsável)",
+                    "✅ 8 Procedimentos diversos (consultas, exames, vacinas, etc.)",
+                    "✅ 5 Agendamentos (passados, hoje e futuros)",
+                    "✅ 2 Pagamentos processados",
+                    "✅ 8 Medicamentos (antibióticos, analgésicos, anti-hipertensivos, etc.)",
+                    "✅ 2 Prontuários médicos com consultas finalizadas",
+                    "✅ 3 Itens de prescrição vinculados aos prontuários",
+                    "✅ 4 Templates de prescrição (antibióticos, anti-hipertensivos, analgésicos, diabetes)",
+                    "✅ 3 Templates de prontuário (clínica geral, cardiologia, pediatria)",
+                    "✅ 5 Notificações (SMS, WhatsApp, Email) em diversos estados"
+                },
+                note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features"
             });
         }
     }
