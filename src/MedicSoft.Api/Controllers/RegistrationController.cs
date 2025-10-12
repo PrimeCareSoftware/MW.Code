@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs.Registration;
-using MedicSoft.Domain.Entities;
-using MedicSoft.Domain.Interfaces;
+using MedicSoft.Application.Services;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -14,24 +13,11 @@ namespace MedicSoft.Api.Controllers
     [Route("api/[controller]")]
     public class RegistrationController : ControllerBase
     {
-        private readonly IClinicRepository _clinicRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
-        private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IRegistrationService _registrationService;
 
-        public RegistrationController(
-            IClinicRepository clinicRepository,
-            IUserRepository userRepository,
-            ISubscriptionPlanRepository subscriptionPlanRepository,
-            IClinicSubscriptionRepository clinicSubscriptionRepository,
-            IPasswordHasher passwordHasher)
+        public RegistrationController(IRegistrationService registrationService)
         {
-            _clinicRepository = clinicRepository;
-            _userRepository = userRepository;
-            _subscriptionPlanRepository = subscriptionPlanRepository;
-            _clinicSubscriptionRepository = clinicSubscriptionRepository;
-            _passwordHasher = passwordHasher;
+            _registrationService = registrationService;
         }
 
         /// <summary>
@@ -46,119 +32,23 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                // Validate required fields
-                if (!request.AcceptTerms)
+                var (success, message, clinicId, ownerId) = await _registrationService.RegisterClinicWithOwnerAsync(request);
+
+                if (!success)
                 {
                     return BadRequest(new RegistrationResponseDto
                     {
                         Success = false,
-                        Message = "You must accept the terms and conditions"
+                        Message = message
                     });
                 }
-
-                // Validate password strength
-                var (isValidPassword, passwordError) = _passwordHasher.ValidatePasswordStrength(request.Password, 8);
-                if (!isValidPassword)
-                {
-                    return BadRequest(new RegistrationResponseDto
-                    {
-                        Success = false,
-                        Message = $"Password validation failed: {passwordError}"
-                    });
-                }
-
-                // Check if CNPJ already exists
-                var existingClinic = await _clinicRepository.GetByCNPJAsync(request.ClinicCNPJ);
-                if (existingClinic != null)
-                {
-                    return BadRequest(new RegistrationResponseDto
-                    {
-                        Success = false,
-                        Message = "CNPJ already registered"
-                    });
-                }
-
-                // Check if username already exists
-                var existingUser = await _userRepository.GetByUsernameAsync(request.Username);
-                if (existingUser != null)
-                {
-                    return BadRequest(new RegistrationResponseDto
-                    {
-                        Success = false,
-                        Message = "Username already taken"
-                    });
-                }
-
-                // Get subscription plan
-                var tenantId = Guid.NewGuid().ToString();
-                var plan = await _subscriptionPlanRepository.GetByIdAsync(Guid.Parse(request.PlanId), tenantId);
-                if (plan == null)
-                {
-                    return BadRequest(new RegistrationResponseDto
-                    {
-                        Success = false,
-                        Message = "Invalid subscription plan"
-                    });
-                }
-
-                // Build full address
-                var fullAddress = $"{request.Street}, {request.Number} {request.Complement}, {request.Neighborhood} - {request.City}/{request.State} - CEP: {request.ZipCode}";
-
-                // Create clinic with default schedule (8AM to 6PM)
-                var clinic = new Clinic(
-                    request.ClinicName,
-                    request.ClinicName, // TradeName same as Name
-                    request.ClinicCNPJ,
-                    request.ClinicPhone,
-                    request.ClinicEmail,
-                    fullAddress,
-                    new TimeSpan(8, 0, 0), // 8 AM
-                    new TimeSpan(18, 0, 0), // 6 PM
-                    tenantId,
-                    30 // 30 minute appointments
-                );
-
-                await _clinicRepository.AddAsync(clinic);
-
-                // Hash the password
-                var passwordHash = _passwordHasher.HashPassword(request.Password);
-
-                // Create owner user
-                var user = new User(
-                    request.Username,
-                    request.OwnerEmail,
-                    passwordHash,
-                    request.OwnerName,
-                    request.OwnerPhone,
-                    UserRole.ClinicOwner,
-                    tenantId,
-                    clinic.Id
-                );
-
-                await _userRepository.AddAsync(user);
-
-                // Create subscription
-                var trialDays = request.UseTrial ? plan.TrialDays : 0;
-                var subscription = new ClinicSubscription(
-                    clinic.Id,
-                    plan.Id,
-                    DateTime.UtcNow,
-                    trialDays,
-                    plan.MonthlyPrice,
-                    tenantId
-                );
-
-                await _clinicSubscriptionRepository.AddAsync(subscription);
-
-                var trialEndDate = request.UseTrial ? DateTime.UtcNow.AddDays(trialDays) : (DateTime?)null;
 
                 return Ok(new RegistrationResponseDto
                 {
                     Success = true,
                     Message = "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
-                    ClinicId = clinic.Id,
-                    UserId = user.Id,
-                    TrialEndDate = trialEndDate
+                    ClinicId = clinicId,
+                    UserId = ownerId
                 });
             }
             catch (Exception ex)
@@ -180,8 +70,8 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(typeof(CheckCNPJResponseDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<CheckCNPJResponseDto>> CheckCNPJ(string cnpj)
         {
-            var exists = await _clinicRepository.GetByCNPJAsync(cnpj);
-            return Ok(new CheckCNPJResponseDto { Exists = exists != null });
+            var exists = await _registrationService.CheckCNPJExistsAsync(cnpj);
+            return Ok(new CheckCNPJResponseDto { Exists = exists });
         }
 
         /// <summary>
@@ -193,8 +83,9 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(typeof(CheckUsernameResponseDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<CheckUsernameResponseDto>> CheckUsername(string username)
         {
-            var exists = await _userRepository.GetByUsernameAsync(username);
-            return Ok(new CheckUsernameResponseDto { Available = exists == null });
+            // Use default tenant for registration check
+            var available = await _registrationService.CheckUsernameAvailableAsync(username, "default-tenant");
+            return Ok(new CheckUsernameResponseDto { Available = available });
         }
     }
 }

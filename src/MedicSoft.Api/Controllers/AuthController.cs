@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Interfaces;
 
@@ -14,17 +15,17 @@ namespace MedicSoft.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly IAuthService _authService;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly IUserRepository _userRepository;
 
         public AuthController(
             IConfiguration configuration, 
-            IPasswordHasher passwordHasher,
-            IUserRepository userRepository)
+            IAuthService authService,
+            IPasswordHasher passwordHasher)
         {
             _configuration = configuration;
+            _authService = authService;
             _passwordHasher = passwordHasher;
-            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -43,44 +44,52 @@ namespace MedicSoft.Api.Controllers
                 return Unauthorized(new { message = "Invalid credentials" });
             }
 
-            // Get user from database
-            var user = await _userRepository.GetUserByUsernameAsync(username, tenantId);
+            // Try to authenticate as user
+            var user = await _authService.AuthenticateUserAsync(username, request.Password, tenantId);
             
-            if (user == null)
+            if (user != null)
             {
-                // Don't reveal whether username or password was incorrect
-                return Unauthorized(new { message = "Invalid credentials" });
+                // Update last login timestamp
+                await _authService.RecordUserLoginAsync(user.Id, tenantId);
+
+                // Generate JWT token with clinic_id for authorization
+                var token = GenerateJwtToken(user.Username, tenantId, user.Id.ToString(), user.Role.ToString(), user.ClinicId?.ToString());
+                
+                return Ok(new AuthResponse
+                {
+                    Token = token,
+                    Username = user.Username,
+                    TenantId = tenantId,
+                    Role = user.Role.ToString(),
+                    UserId = user.Id,
+                    ClinicId = user.ClinicId
+                });
             }
 
-            // Verify password
-            if (!_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
-            {
-                // Don't reveal whether username or password was incorrect
-                return Unauthorized(new { message = "Invalid credentials" });
-            }
-
-            // Check if user is active
-            if (!user.IsActive)
-            {
-                return Unauthorized(new { message = "Account is disabled. Please contact your administrator." });
-            }
-
-            // Update last login timestamp
-            user.RecordLogin();
-            await _userRepository.UpdateAsync(user);
-
-            // Generate JWT token with clinic_id for authorization
-            var token = GenerateJwtToken(user.Username, tenantId, user.Id.ToString(), user.Role.ToString(), user.ClinicId?.ToString());
+            // Try to authenticate as owner
+            var owner = await _authService.AuthenticateOwnerAsync(username, request.Password, tenantId);
             
-            return Ok(new AuthResponse
+            if (owner != null)
             {
-                Token = token,
-                Username = user.Username,
-                TenantId = tenantId,
-                Role = user.Role.ToString(),
-                ClinicId = user.ClinicId,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(60)
-            });
+                // Update last login timestamp
+                await _authService.RecordOwnerLoginAsync(owner.Id, tenantId);
+
+                // Generate JWT token with clinic_id for authorization
+                var token = GenerateJwtToken(owner.Username, tenantId, owner.Id.ToString(), "ClinicOwner", owner.ClinicId.ToString());
+                
+                return Ok(new AuthResponse
+                {
+                    Token = token,
+                    Username = owner.Username,
+                    TenantId = tenantId,
+                    Role = "ClinicOwner",
+                    UserId = owner.Id,
+                    ClinicId = owner.ClinicId
+                });
+            }
+
+            // Don't reveal whether username or password was incorrect
+            return Unauthorized(new { message = "Invalid credentials" });
         }
 
         /// <summary>
@@ -224,6 +233,7 @@ namespace MedicSoft.Api.Controllers
         public string Username { get; set; } = string.Empty;
         public string TenantId { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
+        public Guid UserId { get; set; }
         public Guid? ClinicId { get; set; }
         public DateTime ExpiresAt { get; set; }
     }

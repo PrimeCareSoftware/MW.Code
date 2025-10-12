@@ -26,6 +26,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; } = null!;
         public DbSet<ClinicSubscription> ClinicSubscriptions { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Owner> Owners { get; set; } = null!;
         public DbSet<ModuleConfiguration> ModuleConfigurations { get; set; } = null!;
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Procedure> Procedures { get; set; } = null!;
@@ -55,6 +56,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new SubscriptionPlanConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicSubscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new OwnerConfiguration());
             modelBuilder.ApplyConfiguration(new ModuleConfigurationConfiguration());
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
             modelBuilder.ApplyConfiguration(new ProcedureConfiguration());
@@ -80,6 +82,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.Entity<SubscriptionPlan>().HasQueryFilter(sp => EF.Property<string>(sp, "TenantId") == GetTenantId());
             modelBuilder.Entity<ClinicSubscription>().HasQueryFilter(cs => EF.Property<string>(cs, "TenantId") == GetTenantId());
             modelBuilder.Entity<User>().HasQueryFilter(u => EF.Property<string>(u, "TenantId") == GetTenantId());
+            modelBuilder.Entity<Owner>().HasQueryFilter(o => EF.Property<string>(o, "TenantId") == GetTenantId());
             modelBuilder.Entity<ModuleConfiguration>().HasQueryFilter(mc => EF.Property<string>(mc, "TenantId") == GetTenantId());
             modelBuilder.Entity<Expense>().HasQueryFilter(e => EF.Property<string>(e, "TenantId") == GetTenantId());
             modelBuilder.Entity<Procedure>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
