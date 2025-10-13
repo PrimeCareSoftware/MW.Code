@@ -263,6 +263,56 @@ namespace MedicSoft.Test.Entities
                 new Owner("username", "email@test.com", "hash", "Name", "Phone", _tenantId, Guid.Empty));
         }
 
+        [Fact]
+        public void SystemOwner_CannotBeAssignedToClinic_ClinicIdIsReadonlyAfterCreation()
+        {
+            // Arrange - Create a system owner (no clinic)
+            var systemOwner = new Owner("sysowner", "sys@medicwarehouse.com", "hash", "System Owner", "123456789", "system", null);
+            
+            // Assert - System owner should not have a clinic
+            Assert.True(systemOwner.IsSystemOwner);
+            Assert.Null(systemOwner.ClinicId);
+            
+            // Business Rule: There is NO method to assign a clinic to a system owner after creation
+            // The ClinicId property is readonly and can only be set via constructor
+            // UpdateProfile() does NOT allow changing ClinicId
+            
+            // Act - Try to update profile (this should NOT change ClinicId)
+            systemOwner.UpdateProfile("newemail@test.com", "New Name", "987654321");
+            
+            // Assert - ClinicId should still be null after profile update
+            Assert.Null(systemOwner.ClinicId);
+            Assert.True(systemOwner.IsSystemOwner);
+            
+            // Note: This test documents the business rule that system owners cannot "join" a clinic
+            // Once created as a system owner (ClinicId=null), they remain a system owner forever
+        }
+
+        [Fact]
+        public void ClinicOwner_CannotBecomeSystemOwner_ClinicIdIsReadonlyAfterCreation()
+        {
+            // Arrange - Create a clinic owner
+            var clinicOwner = new Owner("clinicowner", "owner@clinic.com", "hash", "Clinic Owner", "123456789", _tenantId, _clinicId);
+            
+            // Assert - Clinic owner should have a clinic
+            Assert.False(clinicOwner.IsSystemOwner);
+            Assert.Equal(_clinicId, clinicOwner.ClinicId);
+            
+            // Business Rule: There is NO method to remove a clinic from a clinic owner
+            // The ClinicId property is readonly and can only be set via constructor
+            // UpdateProfile() does NOT allow changing ClinicId
+            
+            // Act - Try to update profile (this should NOT change ClinicId)
+            clinicOwner.UpdateProfile("newemail@test.com", "New Name", "987654321");
+            
+            // Assert - ClinicId should still be the same after profile update
+            Assert.Equal(_clinicId, clinicOwner.ClinicId);
+            Assert.False(clinicOwner.IsSystemOwner);
+            
+            // Note: This test documents the business rule that clinic owners cannot become system owners
+            // Once created with a clinic, they remain tied to that clinic forever
+        }
+
         // Helper methods
         private Owner CreateValidOwner(string? professionalId = null, string? specialty = null)
         {
