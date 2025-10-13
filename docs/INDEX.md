@@ -31,6 +31,7 @@ Bem-vindo à documentação completa do sistema MedicWarehouse. Use este índice
 | Documento | Descrição | Tamanho | Ideal Para |
 |-----------|-----------|---------|------------|
 | **[README.md](../README.md)** | Visão geral do projeto, funcionalidades, como executar, tecnologias | Médio | Todos os usuários, primeira leitura |
+| **[GUIA_TESTES_PASSO_A_PASSO.md](GUIA_TESTES_PASSO_A_PASSO.md)** | 🆕 **Guia completo de testes passo a passo para todas as telas e APIs** | Grande / 1000+ linhas | Testadores, desenvolvedores, usuários finais testando o sistema |
 | **[SYSTEM_SETUP_GUIDE.md](../frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md)** | 🆕 **Guia completo de configuração e ordem correta de cadastro** | Grande | Desenvolvedores, administradores, essencial para setup inicial |
 | **[ORDEM_CORRETA_CADASTRO.md](ORDEM_CORRETA_CADASTRO.md)** | 🆕 **Referência rápida da ordem de cadastro** | Pequeno | Quick reference, consulta rápida |
 | **[GUIA_EXECUCAO.md](../GUIA_EXECUCAO.md)** | Guia passo a passo para executar o projeto localmente | Médio | Desenvolvedores, configuração inicial |
@@ -63,21 +64,24 @@ Bem-vindo à documentação completa do sistema MedicWarehouse. Use este índice
 graph LR
     A[📖 README.md] --> B[🔧 GUIA_EXECUCAO.md]
     B --> C[🚀 SYSTEM_SETUP_GUIDE.md]
-    C --> D[📱 VISUAL_FLOW_SUMMARY.md]
-    D --> E[🏗️ TECHNICAL_IMPLEMENTATION.md]
-    E --> F[📋 BUSINESS_RULES.md]
+    C --> D[🧪 GUIA_TESTES_PASSO_A_PASSO.md]
+    D --> E[📱 VISUAL_FLOW_SUMMARY.md]
+    E --> F[🏗️ TECHNICAL_IMPLEMENTATION.md]
+    F --> G[📋 BUSINESS_RULES.md]
     
     style A fill:#e1f5ff
     style C fill:#fff4e1
-    style F fill:#e8f5e9
+    style D fill:#ffe1e1
+    style G fill:#e8f5e9
 ```
 
 1. **README.md** - Entenda o que é o projeto
 2. **GUIA_EXECUCAO.md** - Configure e execute localmente
 3. **SYSTEM_SETUP_GUIDE.md** - 🆕 Aprenda a ordem correta de cadastro
-4. **VISUAL_FLOW_SUMMARY.md** - Veja como o sistema funciona visualmente
-5. **TECHNICAL_IMPLEMENTATION.md** - Aprenda a arquitetura técnica
-6. **BUSINESS_RULES.md** - Domine as regras de negócio
+4. **GUIA_TESTES_PASSO_A_PASSO.md** - 🆕 Teste cada tela e API do sistema
+5. **VISUAL_FLOW_SUMMARY.md** - Veja como o sistema funciona visualmente
+6. **TECHNICAL_IMPLEMENTATION.md** - Aprenda a arquitetura técnica
+7. **BUSINESS_RULES.md** - Domine as regras de negócio
 
 ### 🎨 Para Designers e UX
 
@@ -194,9 +198,10 @@ graph LR
 
 ## 🆕 Última Atualização
 
-**Data**: Outubro 2025  
-**Versão**: 2.0  
+**Data**: Janeiro 2025  
+**Versão**: 2.1  
 **Novos Documentos Adicionados**:
+- ✅ **GUIA_TESTES_PASSO_A_PASSO.md** (50KB, 1000+ linhas) - **Guia completo de testes para todas as telas e APIs**
 - ✅ SYSTEM_SETUP_GUIDE.md (17KB, 500+ linhas) - **Guia completo de setup**
 - ✅ ORDEM_CORRETA_CADASTRO.md (3KB, 100+ linhas) - **Referência rápida**
 - ✅ SCREENS_DOCUMENTATION.md (40KB, 813 linhas)
