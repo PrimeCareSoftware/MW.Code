@@ -1,5 +1,7 @@
 # 🚀 Deploy da Documentação MW.Docs no GitHub Pages
 
+> ⚠️ **IMPORTANTE**: Se o deploy está falando com erro 404, GitHub Pages precisa ser habilitado primeiro. [Ver instruções detalhadas →](../../GITHUB_PAGES_SETUP_REQUIRED.md)
+
 Este documento explica como configurar e usar o deploy automático do projeto de documentação MW.Docs no GitHub Pages.
 
 ## 📋 Visão Geral
@@ -126,13 +128,19 @@ Após o deploy ser concluído (geralmente leva 2-3 minutos), acesse:
 
 ## 🔍 Troubleshooting
 
-### Erro: "Pages deployment failed"
+### Erro: "Pages deployment failed" ou "HttpError: Not Found (404)"
 
-**Causa**: GitHub Pages não está habilitado ou configurado incorretamente.
+**Causa**: GitHub Pages **NÃO está habilitado** no repositório.
 
 **Solução**: 
-1. Vá em **Settings** → **Pages**
-2. Verifique se **Source** está configurado como **GitHub Actions**
+1. **PRIMEIRO**: Habilite GitHub Pages em **Settings** → **Pages**
+2. Em **Source**, selecione: **GitHub Actions** (não "Deploy from a branch")
+3. Aguarde alguns segundos para o GitHub processar
+4. Execute o workflow novamente em **Actions**
+
+📖 **Ver guia completo**: [GITHUB_PAGES_SETUP_REQUIRED.md](../../GITHUB_PAGES_SETUP_REQUIRED.md)
+
+🔗 **Link direto**: https://github.com/MedicWarehouse/MW.Code/settings/pages
 
 ### Erro: "Permission denied"
 

@@ -1,5 +1,7 @@
 # 📝 Implementação do Deploy Automático da Documentação MW.Docs
 
+> ⚠️ **AÇÃO NECESSÁRIA ANTES DO DEPLOY**: GitHub Pages precisa ser habilitado manualmente. [Ver instruções →](GITHUB_PAGES_SETUP_REQUIRED.md)
+
 ## ✅ Resumo da Implementação
 
 Foi criado um workflow no GitHub Actions para realizar o deploy automático do projeto de documentação **MW.Docs** no **GitHub Pages**.
@@ -151,11 +153,27 @@ Performance:
 
 ## 📝 Próximos Passos (Para o Usuário)
 
+> ⚠️ **ATENÇÃO**: O deploy falhará até que GitHub Pages seja habilitado!
+
+### Passo 1: Habilitar GitHub Pages (OBRIGATÓRIO)
+
+**Antes de fazer qualquer deploy**, você DEVE:
+
+1. **Ir em Settings → Pages**: https://github.com/MedicWarehouse/MW.Code/settings/pages
+2. **Selecionar Source**: GitHub Actions (NÃO "Deploy from a branch")
+3. **Aguardar**: Alguns segundos para processar
+
+📖 **Guia completo**: [GITHUB_PAGES_SETUP_REQUIRED.md](GITHUB_PAGES_SETUP_REQUIRED.md)
+
+### Passo 2: Executar o Deploy
+
+Após habilitar GitHub Pages:
+
 1. **Merge deste PR** para a branch `main`
-2. **Habilitar GitHub Pages**:
-   - Ir em Settings → Pages
-   - Source: GitHub Actions
-3. **Aguardar o primeiro deploy** (será executado automaticamente após o merge)
+2. **Executar o workflow** manualmente:
+   - Ir em Actions → Deploy MW.Docs to GitHub Pages
+   - Clicar em "Run workflow"
+3. **Aguardar o deploy** (será executado automaticamente)
 4. **Acessar a documentação** em: https://medicwarehouse.github.io/MW.Code/
 
 ## 📚 Documentação Disponível
