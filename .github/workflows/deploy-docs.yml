@@ -1,5 +1,9 @@
 name: Deploy MW.Docs to GitHub Pages
 
+# ⚠️ IMPORTANT: GitHub Pages must be enabled in repository settings
+# Go to: Settings → Pages → Source: GitHub Actions
+# See: GITHUB_PAGES_SETUP_REQUIRED.md for detailed instructions
+
 on:
   push:
     branches: [ main ]
@@ -64,3 +68,16 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+      continue-on-error: true
+      
+    - name: Provide helpful error message if deployment fails
+      if: failure()
+      run: |
+        echo "::error::GitHub Pages deployment failed!"
+        echo "::error::This usually means GitHub Pages is not enabled in the repository settings."
+        echo "::error::To fix this:"
+        echo "::error::1. Go to: https://github.com/${{ github.repository }}/settings/pages"
+        echo "::error::2. Set 'Source' to 'GitHub Actions'"
+        echo "::error::3. Re-run this workflow"
+        echo "::error::For detailed instructions, see: GITHUB_PAGES_SETUP_REQUIRED.md"
+        exit 1
