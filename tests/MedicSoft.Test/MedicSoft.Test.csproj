@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\src\MedicSoft.Domain\MedicSoft.Domain.csproj" />
     <ProjectReference Include="..\..\src\MedicSoft.CrossCutting\MedicSoft.CrossCutting.csproj" />
     <ProjectReference Include="..\..\src\MedicSoft.WhatsAppAgent\MedicSoft.WhatsAppAgent.csproj" />
+    <ProjectReference Include="..\..\src\MedicSoft.Application\MedicSoft.Application.csproj" />
   </ItemGroup>
 
 </Project>
