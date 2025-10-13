@@ -293,6 +293,12 @@ Para instruções detalhadas, consulte o [Guia de Importação do Postman](POSTM
 
 ### Endpoints Principais
 
+- **Autenticação** 🔐:
+  - `POST /api/auth/login` - Login de usuários (doctors, secretaries, etc.)
+  - `POST /api/auth/owner-login` - Login de proprietários (clinic owners e system owners)
+  - `POST /api/auth/validate` - Validar token JWT
+  - 📖 **Veja**: [`AUTHENTICATION_GUIDE.md`](AUTHENTICATION_GUIDE.md) para detalhes completos
+
 - **Registro e Configuração**:
   - `POST /api/registration` - Registro de nova clínica
   - `GET /api/registration/check-cnpj/{cnpj}` - Verificar disponibilidade de CNPJ
@@ -441,7 +447,12 @@ O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados
 
 ### Implementações de Segurança
 
-- **JWT Authentication**: Autenticação baseada em tokens com validação completa
+- **JWT Authentication**: Autenticação baseada em tokens com HMAC-SHA256 encryption
+  - Endpoints: `POST /api/auth/login` e `POST /api/auth/owner-login`
+  - Token expiration: 60 minutos (configurável)
+  - Zero clock skew - tokens expirados são rejeitados imediatamente
+  - Claims incluem: username, role, tenant_id, clinic_id, is_system_owner
+  - Validação completa: issuer, audience, signature, lifetime
 - **BCrypt Password Hashing**: Senhas hashadas com BCrypt (work factor 12)
 - **Rate Limiting**: Proteção contra ataques de força bruta (10 req/min em produção)
 - **Security Headers**: CSP, X-Frame-Options, HSTS, X-Content-Type-Options, etc.
@@ -454,15 +465,15 @@ O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados
 
 ### Testes de Segurança
 
-- **546 testes** passando (39 novos testes de segurança)
-- Cobertura de password hashing, input sanitization e validações
+- **719 testes** passando (incluindo 6 novos testes de JWT)
+- Cobertura de JWT token generation/validation, password hashing, input sanitization e validações
 - 100% de taxa de sucesso
 
 ### Documentação Completa
 
-Para detalhes completos sobre segurança, configuração e melhores práticas:
-- 📖 **[SECURITY_GUIDE.md](SECURITY_GUIDE.md)** - Guia completo de segurança
-- 📋 **[SECURITY_IMPLEMENTATION_SUMMARY.md](SECURITY_IMPLEMENTATION_SUMMARY.md)** - Resumo de implementações
+Para detalhes completos sobre segurança, autenticação e melhores práticas:
+- 📖 **[AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
+- 📖 **[SECURITY_GUIDE.md](frontend/mw-docs/src/assets/docs/SECURITY_GUIDE.md)** - Guia completo de segurança
 
 ## 🚀 Deploy
 
