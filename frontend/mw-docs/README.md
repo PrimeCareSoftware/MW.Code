@@ -179,7 +179,17 @@ mw-docs/
 
 ## 🌐 Deploy
 
-Os arquivos buildados podem ser servidos por qualquer servidor web estático:
+### GitHub Pages (Automático)
+
+A documentação é automaticamente publicada no GitHub Pages sempre que houver alterações na branch `main`.
+
+**URL da Documentação**: https://medicwarehouse.github.io/MW.Code/
+
+**📖 Guia completo de deploy**: Consulte [DEPLOY.md](DEPLOY.md) para instruções detalhadas sobre configuração, troubleshooting e como usar o workflow de deploy.
+
+### Outros Servidores
+
+Os arquivos buildados também podem ser servidos por qualquer servidor web estático:
 
 - **Nginx**
 - **Apache**
@@ -187,7 +197,6 @@ Os arquivos buildados podem ser servidos por qualquer servidor web estático:
 - **Firebase Hosting**
 - **Vercel**
 - **Netlify**
-- **GitHub Pages**
 
 ### Exemplo de configuração Nginx
 
