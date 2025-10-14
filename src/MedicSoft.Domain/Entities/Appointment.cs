@@ -35,13 +35,13 @@ namespace MedicSoft.Domain.Entities
         public DateTime? CheckInTime { get; private set; }
         public DateTime? CheckOutTime { get; private set; }
 
-        // Navigation properties
+        // Propriedades de navegação
         public Patient Patient { get; private set; } = null!;
         public Clinic Clinic { get; private set; } = null!;
 
         private Appointment() 
         { 
-            // EF Constructor - nullable warnings suppressed as EF Core sets these via reflection
+            // Construtor do EF - avisos de nulabilidade suprimidos pois o EF Core define via reflection
         }
 
         public Appointment(Guid patientId, Guid clinicId, DateTime scheduledDate, 
@@ -49,16 +49,16 @@ namespace MedicSoft.Domain.Entities
             string tenantId, string? notes = null) : base(tenantId)
         {
             if (patientId == Guid.Empty)
-                throw new ArgumentException("Patient ID cannot be empty", nameof(patientId));
+                throw new ArgumentException("O ID do paciente não pode estar vazio", nameof(patientId));
             
             if (clinicId == Guid.Empty)
-                throw new ArgumentException("Clinic ID cannot be empty", nameof(clinicId));
+                throw new ArgumentException("O ID da clínica não pode estar vazio", nameof(clinicId));
 
             if (scheduledDate < DateTime.Today)
-                throw new ArgumentException("Scheduled date cannot be in the past", nameof(scheduledDate));
+                throw new ArgumentException("A data agendada não pode estar no passado", nameof(scheduledDate));
 
             if (durationMinutes <= 0)
-                throw new ArgumentException("Duration must be positive", nameof(durationMinutes));
+                throw new ArgumentException("A duração deve ser positiva", nameof(durationMinutes));
 
             PatientId = patientId;
             ClinicId = clinicId;
@@ -73,7 +73,7 @@ namespace MedicSoft.Domain.Entities
         public void Confirm()
         {
             if (Status != AppointmentStatus.Scheduled)
-                throw new InvalidOperationException("Only scheduled appointments can be confirmed");
+                throw new InvalidOperationException("Apenas agendamentos marcados podem ser confirmados");
 
             Status = AppointmentStatus.Confirmed;
             UpdateTimestamp();
@@ -82,7 +82,7 @@ namespace MedicSoft.Domain.Entities
         public void Cancel(string reason)
         {
             if (Status == AppointmentStatus.Completed || Status == AppointmentStatus.Cancelled)
-                throw new InvalidOperationException("Cannot cancel completed or already cancelled appointments");
+                throw new InvalidOperationException("Não é possível cancelar agendamentos concluídos ou já cancelados");
 
             Status = AppointmentStatus.Cancelled;
             CancellationReason = reason?.Trim();
@@ -92,7 +92,7 @@ namespace MedicSoft.Domain.Entities
         public void MarkAsNoShow()
         {
             if (Status != AppointmentStatus.Scheduled && Status != AppointmentStatus.Confirmed)
-                throw new InvalidOperationException("Only scheduled or confirmed appointments can be marked as no-show");
+                throw new InvalidOperationException("Apenas agendamentos marcados ou confirmados podem ser marcados como ausência");
 
             Status = AppointmentStatus.NoShow;
             UpdateTimestamp();
@@ -101,7 +101,7 @@ namespace MedicSoft.Domain.Entities
         public void CheckIn()
         {
             if (Status != AppointmentStatus.Confirmed && Status != AppointmentStatus.Scheduled)
-                throw new InvalidOperationException("Only confirmed or scheduled appointments can be checked in");
+                throw new InvalidOperationException("Apenas agendamentos confirmados ou marcados podem fazer check-in");
 
             Status = AppointmentStatus.InProgress;
             CheckInTime = DateTime.UtcNow;
@@ -111,7 +111,7 @@ namespace MedicSoft.Domain.Entities
         public void CheckOut(string? notes = null)
         {
             if (Status != AppointmentStatus.InProgress)
-                throw new InvalidOperationException("Only in-progress appointments can be checked out");
+                throw new InvalidOperationException("Apenas agendamentos em andamento podem fazer check-out");
 
             Status = AppointmentStatus.Completed;
             CheckOutTime = DateTime.UtcNow;
@@ -123,14 +123,14 @@ namespace MedicSoft.Domain.Entities
         public void Reschedule(DateTime newDate, TimeSpan newTime)
         {
             if (Status == AppointmentStatus.Completed || Status == AppointmentStatus.Cancelled)
-                throw new InvalidOperationException("Cannot reschedule completed or cancelled appointments");
+                throw new InvalidOperationException("Não é possível reagendar consultas concluídas ou canceladas");
 
             if (newDate < DateTime.Today)
-                throw new ArgumentException("New date cannot be in the past", nameof(newDate));
+                throw new ArgumentException("A nova data não pode estar no passado", nameof(newDate));
 
             ScheduledDate = newDate;
             ScheduledTime = newTime;
-            Status = AppointmentStatus.Scheduled; // Reset to scheduled after reschedule
+            Status = AppointmentStatus.Scheduled; // Reseta para agendado após reagendamento
             UpdateTimestamp();
         }
 

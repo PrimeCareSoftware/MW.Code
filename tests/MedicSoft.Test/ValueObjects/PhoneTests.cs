@@ -29,7 +29,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Phone(countryCode, number));
-            Assert.Equal("Country code cannot be empty (Parameter 'countryCode')", exception.Message);
+            Assert.Equal("O código do país não pode estar vazio (Parameter 'countryCode')", exception.Message);
         }
 
         [Theory]
@@ -40,7 +40,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Phone(countryCode, number));
-            Assert.Equal("Phone number cannot be empty (Parameter 'number')", exception.Message);
+            Assert.Equal("O número de telefone não pode estar vazio (Parameter 'number')", exception.Message);
         }
 
         [Fact]

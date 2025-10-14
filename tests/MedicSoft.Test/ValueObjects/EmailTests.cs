@@ -29,7 +29,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Email(email));
-            Assert.Equal("Email cannot be empty (Parameter 'value')", exception.Message);
+            Assert.Equal("O e-mail não pode estar vazio (Parameter 'value')", exception.Message);
         }
 
         [Theory]
@@ -42,7 +42,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Email(email));
-            Assert.Equal("Invalid email format (Parameter 'value')", exception.Message);
+            Assert.Equal("Formato de e-mail inválido (Parameter 'value')", exception.Message);
         }
 
         [Fact]

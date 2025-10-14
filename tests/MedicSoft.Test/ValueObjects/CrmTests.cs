@@ -30,7 +30,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Crm(number, state));
-            Assert.Equal("CRM number cannot be empty (Parameter 'number')", exception.Message);
+            Assert.Equal("O número do CRM não pode estar vazio (Parameter 'number')", exception.Message);
         }
 
         [Theory]
@@ -41,7 +41,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Crm(number, state));
-            Assert.Equal("CRM state cannot be empty (Parameter 'state')", exception.Message);
+            Assert.Equal("O estado do CRM não pode estar vazio (Parameter 'state')", exception.Message);
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Crm(number, "SP"));
-            Assert.Equal("CRM number must have between 4 and 7 digits (Parameter 'number')", exception.Message);
+            Assert.Equal("O número do CRM deve ter entre 4 e 7 dígitos (Parameter 'number')", exception.Message);
         }
 
         [Theory]
@@ -63,7 +63,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Crm("123456", state));
-            Assert.Contains("Invalid state", exception.Message);
+            Assert.Contains("Estado inválido", exception.Message);
         }
 
         [Theory]
@@ -114,7 +114,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => Crm.Parse(crmString));
-            Assert.Equal("CRM string cannot be empty (Parameter 'crmString')", exception.Message);
+            Assert.Equal("A string do CRM não pode estar vazia (Parameter 'crmString')", exception.Message);
         }
 
         [Theory]
@@ -125,7 +125,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => Crm.Parse(crmString));
-            Assert.Equal("CRM must be in format: NUMBER-UF or NUMBER/UF (Parameter 'crmString')", exception.Message);
+            Assert.Equal("O CRM deve estar no formato: NUMERO-UF ou NUMERO/UF (Parameter 'crmString')", exception.Message);
         }
 
         [Theory]

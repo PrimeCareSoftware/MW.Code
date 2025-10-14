@@ -31,7 +31,7 @@ export class Attendance implements OnInit, OnDestroy {
   
   attendanceForm: FormGroup;
   
-  // Timer
+  // Cronômetro
   elapsedSeconds = signal<number>(0);
   timerSubscription?: Subscription;
   startTime?: Date;
@@ -115,14 +115,14 @@ export class Attendance implements OnInit, OnDestroy {
           notes: record.notes
         });
         
-        // Calculate elapsed time if consultation is still in progress
+        // Calcula o tempo decorrido se a consulta ainda estiver em andamento
         if (record.consultationStartTime && !record.consultationEndTime) {
           this.startTime = new Date(record.consultationStartTime);
           this.startTimer();
         }
       },
       error: (error) => {
-        // If not found, create new medical record
+        // Se não encontrado, cria um novo prontuário
         if (error.status === 404) {
           this.createMedicalRecord(appointmentId, patientId);
         } else {
@@ -154,7 +154,7 @@ export class Attendance implements OnInit, OnDestroy {
 
   startTimer(): void {
     if (this.timerSubscription) {
-      return; // Timer already running
+      return; // Cronômetro já está em execução
     }
 
     this.timerSubscription = interval(1000).subscribe(() => {
@@ -227,7 +227,7 @@ export class Attendance implements OnInit, OnDestroy {
         this.successMessage.set('Atendimento finalizado com sucesso!');
         this.isLoading.set(false);
         
-        // Redirect after 2 seconds
+        // Redireciona após 2 segundos
         setTimeout(() => {
           this.router.navigate(['/appointments']);
         }, 2000);

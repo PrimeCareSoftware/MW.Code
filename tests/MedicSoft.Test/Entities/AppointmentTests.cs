@@ -57,7 +57,7 @@ namespace MedicSoft.Test.Entities
                 new Appointment(Guid.Empty, _clinicId, DateTime.Today.AddDays(1), 
                     new TimeSpan(10, 0, 0), 30, AppointmentType.Regular, _tenantId));
 
-            Assert.Equal("Patient ID cannot be empty (Parameter 'patientId')", exception.Message);
+            Assert.Equal("O ID do paciente não pode estar vazio (Parameter 'patientId')", exception.Message);
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace MedicSoft.Test.Entities
                 new Appointment(_patientId, Guid.Empty, DateTime.Today.AddDays(1), 
                     new TimeSpan(10, 0, 0), 30, AppointmentType.Regular, _tenantId));
 
-            Assert.Equal("Clinic ID cannot be empty (Parameter 'clinicId')", exception.Message);
+            Assert.Equal("O ID da clínica não pode estar vazio (Parameter 'clinicId')", exception.Message);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace MedicSoft.Test.Entities
                 new Appointment(_patientId, _clinicId, pastDate, 
                     new TimeSpan(10, 0, 0), 30, AppointmentType.Regular, _tenantId));
 
-            Assert.Equal("Scheduled date cannot be in the past (Parameter 'scheduledDate')", exception.Message);
+            Assert.Equal("A data agendada não pode estar no passado (Parameter 'scheduledDate')", exception.Message);
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace MedicSoft.Test.Entities
                 new Appointment(_patientId, _clinicId, DateTime.Today.AddDays(1), 
                     new TimeSpan(10, 0, 0), 0, AppointmentType.Regular, _tenantId));
 
-            Assert.Equal("Duration must be positive (Parameter 'durationMinutes')", exception.Message);
+            Assert.Equal("A duração deve ser positiva (Parameter 'durationMinutes')", exception.Message);
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace MedicSoft.Test.Entities
 
             // Act & Assert
             var exception = Assert.Throws<InvalidOperationException>(() => appointment.Confirm());
-            Assert.Equal("Only scheduled appointments can be confirmed", exception.Message);
+            Assert.Equal("Apenas agendamentos marcados podem ser confirmados", exception.Message);
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace MedicSoft.Test.Entities
 
             // Act & Assert
             var exception = Assert.Throws<InvalidOperationException>(() => appointment.Cancel("reason"));
-            Assert.Equal("Cannot cancel completed or already cancelled appointments", exception.Message);
+            Assert.Equal("Não é possível cancelar agendamentos concluídos ou já cancelados", exception.Message);
         }
 
         [Fact]
@@ -207,7 +207,7 @@ namespace MedicSoft.Test.Entities
 
             // Act & Assert
             var exception = Assert.Throws<InvalidOperationException>(() => appointment.CheckOut());
-            Assert.Equal("Only in-progress appointments can be checked out", exception.Message);
+            Assert.Equal("Apenas agendamentos em andamento podem fazer check-out", exception.Message);
         }
 
         [Fact]
@@ -239,7 +239,7 @@ namespace MedicSoft.Test.Entities
             // Act & Assert
             var exception = Assert.Throws<InvalidOperationException>(() => 
                 appointment.Reschedule(DateTime.Today.AddDays(5), new TimeSpan(14, 0, 0)));
-            Assert.Equal("Cannot reschedule completed or cancelled appointments", exception.Message);
+            Assert.Equal("Não é possível reagendar consultas concluídas ou canceladas", exception.Message);
         }
 
         [Fact]

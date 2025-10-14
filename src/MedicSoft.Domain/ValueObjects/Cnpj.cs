@@ -5,8 +5,8 @@ using MedicSoft.Domain.Common;
 namespace MedicSoft.Domain.ValueObjects
 {
     /// <summary>
-    /// Value Object representing a Brazilian CNPJ (Cadastro Nacional da Pessoa Jurídica)
-    /// Validates CNPJ format and check digits
+    /// Objeto de Valor representando um CNPJ brasileiro (Cadastro Nacional da Pessoa Jurídica)
+    /// Valida o formato do CNPJ e os dígitos verificadores
     /// </summary>
     public record Cnpj
     {
@@ -15,27 +15,27 @@ namespace MedicSoft.Domain.ValueObjects
         public Cnpj(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("CNPJ cannot be empty", nameof(value));
+                throw new ArgumentException("O CNPJ não pode estar vazio", nameof(value));
 
-            // Remove non-numeric characters
+            // Remove caracteres não numéricos
             var cleanCnpj = new string(value.Where(char.IsDigit).ToArray());
 
             if (cleanCnpj.Length != DocumentConstants.CnpjLength)
-                throw new ArgumentException($"CNPJ must have {DocumentConstants.CnpjLength} digits", nameof(value));
+                throw new ArgumentException($"O CNPJ deve ter {DocumentConstants.CnpjLength} dígitos", nameof(value));
 
-            // Check for known invalid CNPJs (all same digit)
+            // Verifica CNPJs inválidos conhecidos (todos os dígitos iguais)
             if (cleanCnpj.Distinct().Count() == 1)
-                throw new ArgumentException("Invalid CNPJ format", nameof(value));
+                throw new ArgumentException("Formato de CNPJ inválido", nameof(value));
 
             if (!IsValidCnpj(cleanCnpj))
-                throw new ArgumentException("Invalid CNPJ check digits", nameof(value));
+                throw new ArgumentException("Dígitos verificadores do CNPJ inválidos", nameof(value));
 
             Value = cleanCnpj;
         }
 
         private static bool IsValidCnpj(string cnpj)
         {
-            // Calculate first check digit
+            // Calcula o primeiro dígito verificador
             int[] multiplier1 = { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
             var sum = 0;
             for (int i = 0; i < 12; i++)
@@ -48,7 +48,7 @@ namespace MedicSoft.Domain.ValueObjects
             if (int.Parse(cnpj[12].ToString()) != firstCheckDigit)
                 return false;
 
-            // Calculate second check digit
+            // Calcula o segundo dígito verificador
             int[] multiplier2 = { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
             sum = 0;
             for (int i = 0; i < 13; i++)
