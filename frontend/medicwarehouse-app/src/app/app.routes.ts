@@ -46,5 +46,20 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/attendance/attendance').then(m => m.Attendance),
     canActivate: [authGuard]
   },
+  { 
+    path: 'system-admin', 
+    loadComponent: () => import('./pages/system-admin/system-admin-dashboard').then(m => m.SystemAdminDashboard),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'system-admin/clinics', 
+    loadComponent: () => import('./pages/system-admin/clinic-list').then(m => m.ClinicList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'system-admin/clinics/:id', 
+    loadComponent: () => import('./pages/system-admin/clinic-detail').then(m => m.ClinicDetailComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];
