@@ -5,8 +5,8 @@ using MedicSoft.Domain.Common;
 namespace MedicSoft.Domain.ValueObjects
 {
     /// <summary>
-    /// Value Object representing a Brazilian CPF (Cadastro de Pessoas Físicas)
-    /// Validates CPF format and check digits
+    /// Objeto de Valor representando um CPF brasileiro (Cadastro de Pessoas Físicas)
+    /// Valida o formato do CPF e os dígitos verificadores
     /// </summary>
     public record Cpf
     {
@@ -15,27 +15,27 @@ namespace MedicSoft.Domain.ValueObjects
         public Cpf(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("CPF cannot be empty", nameof(value));
+                throw new ArgumentException("O CPF não pode estar vazio", nameof(value));
 
-            // Remove non-numeric characters
+            // Remove caracteres não numéricos
             var cleanCpf = new string(value.Where(char.IsDigit).ToArray());
 
             if (cleanCpf.Length != DocumentConstants.CpfLength)
-                throw new ArgumentException($"CPF must have {DocumentConstants.CpfLength} digits", nameof(value));
+                throw new ArgumentException($"O CPF deve ter {DocumentConstants.CpfLength} dígitos", nameof(value));
 
-            // Check for known invalid CPFs (all same digit)
+            // Verifica CPFs inválidos conhecidos (todos os dígitos iguais)
             if (cleanCpf.Distinct().Count() == 1)
-                throw new ArgumentException("Invalid CPF format", nameof(value));
+                throw new ArgumentException("Formato de CPF inválido", nameof(value));
 
             if (!IsValidCpf(cleanCpf))
-                throw new ArgumentException("Invalid CPF check digits", nameof(value));
+                throw new ArgumentException("Dígitos verificadores do CPF inválidos", nameof(value));
 
             Value = cleanCpf;
         }
 
         private static bool IsValidCpf(string cpf)
         {
-            // Calculate first check digit
+            // Calcula o primeiro dígito verificador
             var sum = 0;
             for (int i = 0; i < 9; i++)
             {
@@ -47,7 +47,7 @@ namespace MedicSoft.Domain.ValueObjects
             if (int.Parse(cpf[9].ToString()) != firstCheckDigit)
                 return false;
 
-            // Calculate second check digit
+            // Calcula o segundo dígito verificador
             sum = 0;
             for (int i = 0; i < 10; i++)
             {

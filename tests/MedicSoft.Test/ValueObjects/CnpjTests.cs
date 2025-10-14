@@ -30,7 +30,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cnpj(cnpj));
-            Assert.Equal("CNPJ cannot be empty (Parameter 'value')", exception.Message);
+            Assert.Equal("O CNPJ não pode estar vazio (Parameter 'value')", exception.Message);
         }
 
         [Theory]
@@ -41,7 +41,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cnpj(cnpj));
-            Assert.Equal("CNPJ must have 14 digits (Parameter 'value')", exception.Message);
+            Assert.Equal("O CNPJ deve ter 14 dígitos (Parameter 'value')", exception.Message);
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cnpj(cnpj));
-            Assert.Equal("Invalid CNPJ format (Parameter 'value')", exception.Message);
+            Assert.Equal("Formato de CNPJ inválido (Parameter 'value')", exception.Message);
         }
 
         [Theory]
@@ -62,7 +62,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cnpj(cnpj));
-            Assert.Equal("Invalid CNPJ check digits (Parameter 'value')", exception.Message);
+            Assert.Equal("Dígitos verificadores do CNPJ inválidos (Parameter 'value')", exception.Message);
         }
 
         [Fact]

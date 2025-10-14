@@ -4,8 +4,8 @@ using System.Text.RegularExpressions;
 namespace MedicSoft.Domain.ValueObjects
 {
     /// <summary>
-    /// Value Object representing a CRM (Conselho Regional de Medicina)
-    /// Format: CRM number + UF (e.g., "123456-SP")
+    /// Objeto de Valor representando um CRM (Conselho Regional de Medicina)
+    /// Formato: número do CRM + UF (ex: "123456-SP")
     /// </summary>
     public record Crm
     {
@@ -26,19 +26,19 @@ namespace MedicSoft.Domain.ValueObjects
         public Crm(string number, string state)
         {
             if (string.IsNullOrWhiteSpace(number))
-                throw new ArgumentException("CRM number cannot be empty", nameof(number));
+                throw new ArgumentException("O número do CRM não pode estar vazio", nameof(number));
 
             if (string.IsNullOrWhiteSpace(state))
-                throw new ArgumentException("CRM state cannot be empty", nameof(state));
+                throw new ArgumentException("O estado do CRM não pode estar vazio", nameof(state));
 
             var cleanNumber = number.Trim();
             var cleanState = state.Trim().ToUpperInvariant();
 
             if (!CrmRegex.IsMatch(cleanNumber))
-                throw new ArgumentException("CRM number must have between 4 and 7 digits", nameof(number));
+                throw new ArgumentException("O número do CRM deve ter entre 4 e 7 dígitos", nameof(number));
 
             if (!IsValidState(cleanState))
-                throw new ArgumentException($"Invalid state: {cleanState}. Must be a valid Brazilian UF.", nameof(state));
+                throw new ArgumentException($"Estado inválido: {cleanState}. Deve ser uma UF brasileira válida.", nameof(state));
 
             Number = cleanNumber;
             State = cleanState;
@@ -54,11 +54,11 @@ namespace MedicSoft.Domain.ValueObjects
         public static Crm Parse(string crmString)
         {
             if (string.IsNullOrWhiteSpace(crmString))
-                throw new ArgumentException("CRM string cannot be empty", nameof(crmString));
+                throw new ArgumentException("A string do CRM não pode estar vazia", nameof(crmString));
 
             var parts = crmString.Split('-', '/');
             if (parts.Length != 2)
-                throw new ArgumentException("CRM must be in format: NUMBER-UF or NUMBER/UF", nameof(crmString));
+                throw new ArgumentException("O CRM deve estar no formato: NUMERO-UF ou NUMERO/UF", nameof(crmString));
 
             return new Crm(parts[0].Trim(), parts[1].Trim());
         }

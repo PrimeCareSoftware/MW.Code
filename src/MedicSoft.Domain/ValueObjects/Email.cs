@@ -14,10 +14,10 @@ namespace MedicSoft.Domain.ValueObjects
         public Email(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("Email cannot be empty", nameof(value));
+                throw new ArgumentException("O e-mail não pode estar vazio", nameof(value));
 
             if (!EmailRegex.IsMatch(value))
-                throw new ArgumentException("Invalid email format", nameof(value));
+                throw new ArgumentException("Formato de e-mail inválido", nameof(value));
 
             Value = value.Trim().ToLowerInvariant();
         }

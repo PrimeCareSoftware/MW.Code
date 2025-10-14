@@ -55,7 +55,7 @@ namespace MedicSoft.Test.ValueObjects
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
                 new Address(street, number, neighborhood, city, state, zipCode, country));
-            Assert.Equal("Street cannot be empty (Parameter 'street')", exception.Message);
+            Assert.Equal("A rua não pode estar vazia (Parameter 'street')", exception.Message);
         }
 
         [Theory]
@@ -68,7 +68,7 @@ namespace MedicSoft.Test.ValueObjects
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
                 new Address(street, number, neighborhood, city, state, zipCode, country));
-            Assert.Equal("Number cannot be empty (Parameter 'number')", exception.Message);
+            Assert.Equal("O número não pode estar vazio (Parameter 'number')", exception.Message);
         }
 
         [Theory]
@@ -81,7 +81,7 @@ namespace MedicSoft.Test.ValueObjects
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
                 new Address(street, number, neighborhood, city, state, zipCode, country));
-            Assert.Equal("Neighborhood cannot be empty (Parameter 'neighborhood')", exception.Message);
+            Assert.Equal("O bairro não pode estar vazio (Parameter 'neighborhood')", exception.Message);
         }
 
         [Theory]
@@ -94,7 +94,7 @@ namespace MedicSoft.Test.ValueObjects
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
                 new Address(street, number, neighborhood, city, state, zipCode, country));
-            Assert.Equal("City cannot be empty (Parameter 'city')", exception.Message);
+            Assert.Equal("A cidade não pode estar vazia (Parameter 'city')", exception.Message);
         }
 
         [Theory]
@@ -107,7 +107,7 @@ namespace MedicSoft.Test.ValueObjects
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
                 new Address(street, number, neighborhood, city, state, zipCode, country));
-            Assert.Equal("State cannot be empty (Parameter 'state')", exception.Message);
+            Assert.Equal("O estado não pode estar vazio (Parameter 'state')", exception.Message);
         }
 
         [Theory]
@@ -120,7 +120,7 @@ namespace MedicSoft.Test.ValueObjects
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
                 new Address(street, number, neighborhood, city, state, zipCode, country));
-            Assert.Equal("ZipCode cannot be empty (Parameter 'zipCode')", exception.Message);
+            Assert.Equal("O CEP não pode estar vazio (Parameter 'zipCode')", exception.Message);
         }
 
         [Theory]
@@ -133,7 +133,7 @@ namespace MedicSoft.Test.ValueObjects
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
                 new Address(street, number, neighborhood, city, state, zipCode, country));
-            Assert.Equal("Country cannot be empty (Parameter 'country')", exception.Message);
+            Assert.Equal("O país não pode estar vazio (Parameter 'country')", exception.Message);
         }
 
         [Fact]

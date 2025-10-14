@@ -17,25 +17,25 @@ namespace MedicSoft.Domain.ValueObjects
             string city, string state, string zipCode, string country, string? complement = null)
         {
             if (string.IsNullOrWhiteSpace(street))
-                throw new ArgumentException("Street cannot be empty", nameof(street));
+                throw new ArgumentException("A rua não pode estar vazia", nameof(street));
             
             if (string.IsNullOrWhiteSpace(number))
-                throw new ArgumentException("Number cannot be empty", nameof(number));
+                throw new ArgumentException("O número não pode estar vazio", nameof(number));
             
             if (string.IsNullOrWhiteSpace(neighborhood))
-                throw new ArgumentException("Neighborhood cannot be empty", nameof(neighborhood));
+                throw new ArgumentException("O bairro não pode estar vazio", nameof(neighborhood));
             
             if (string.IsNullOrWhiteSpace(city))
-                throw new ArgumentException("City cannot be empty", nameof(city));
+                throw new ArgumentException("A cidade não pode estar vazia", nameof(city));
             
             if (string.IsNullOrWhiteSpace(state))
-                throw new ArgumentException("State cannot be empty", nameof(state));
+                throw new ArgumentException("O estado não pode estar vazio", nameof(state));
             
             if (string.IsNullOrWhiteSpace(zipCode))
-                throw new ArgumentException("ZipCode cannot be empty", nameof(zipCode));
+                throw new ArgumentException("O CEP não pode estar vazio", nameof(zipCode));
             
             if (string.IsNullOrWhiteSpace(country))
-                throw new ArgumentException("Country cannot be empty", nameof(country));
+                throw new ArgumentException("O país não pode estar vazio", nameof(country));
 
             Street = street.Trim();
             Number = number.Trim();

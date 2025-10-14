@@ -30,7 +30,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cpf(cpf));
-            Assert.Equal("CPF cannot be empty (Parameter 'value')", exception.Message);
+            Assert.Equal("O CPF não pode estar vazio (Parameter 'value')", exception.Message);
         }
 
         [Theory]
@@ -41,7 +41,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cpf(cpf));
-            Assert.Equal("CPF must have 11 digits (Parameter 'value')", exception.Message);
+            Assert.Equal("O CPF deve ter 11 dígitos (Parameter 'value')", exception.Message);
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cpf(cpf));
-            Assert.Equal("Invalid CPF format (Parameter 'value')", exception.Message);
+            Assert.Equal("Formato de CPF inválido (Parameter 'value')", exception.Message);
         }
 
         [Theory]
@@ -62,7 +62,7 @@ namespace MedicSoft.Test.ValueObjects
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => new Cpf(cpf));
-            Assert.Equal("Invalid CPF check digits (Parameter 'value')", exception.Message);
+            Assert.Equal("Dígitos verificadores do CPF inválidos (Parameter 'value')", exception.Message);
         }
 
         [Fact]

@@ -10,10 +10,10 @@ namespace MedicSoft.Domain.ValueObjects
         public Phone(string countryCode, string number)
         {
             if (string.IsNullOrWhiteSpace(countryCode))
-                throw new ArgumentException("Country code cannot be empty", nameof(countryCode));
+                throw new ArgumentException("O código do país não pode estar vazio", nameof(countryCode));
             
             if (string.IsNullOrWhiteSpace(number))
-                throw new ArgumentException("Phone number cannot be empty", nameof(number));
+                throw new ArgumentException("O número de telefone não pode estar vazio", nameof(number));
 
             CountryCode = countryCode.Trim();
             Number = number.Trim();
