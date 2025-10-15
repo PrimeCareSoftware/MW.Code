@@ -1,0 +1,16 @@
+{
+  "name": "documentacao-portatil",
+  "version": "1.0.0",
+  "description": "Gerador de documentação consolidada do MedicWarehouse",
+  "main": "gerar-documentacao.js",
+  "scripts": {
+    "gerar": "node gerar-documentacao.js",
+    "start": "node gerar-documentacao.js"
+  },
+  "keywords": ["documentation", "pdf", "markdown"],
+  "author": "MedicWarehouse",
+  "license": "ISC",
+  "dependencies": {
+    "marked": "^16.4.0"
+  }
+}
