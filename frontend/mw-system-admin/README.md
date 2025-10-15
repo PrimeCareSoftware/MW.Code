@@ -1,59 +1,65 @@
-# MwSystemAdmin
+# MW System Admin - Painel de Administração do Sistema
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.3.
+Sistema de administração dedicado para System Owners do MedicWarehouse gerenciarem todas as clínicas e usuários do sistema.
 
-## Development server
+## 📋 Sobre
 
-To start a local development server, run:
+O MW System Admin é um aplicativo Angular standalone separado do aplicativo principal do MedicWarehouse, projetado especificamente para proprietários do sistema (System Owners) gerenciarem:
 
-```bash
-ng serve
-```
+- 🏥 **Clínicas**: Visualizar, criar, ativar/desativar e gerenciar todas as clínicas
+- 👥 **Usuários System Owner**: Adicionar e gerenciar outros administradores do sistema
+- 💰 **Financeiro**: Monitorar MRR, assinaturas e métricas financeiras
+- 📊 **Analytics**: Dashboard com métricas globais do sistema
+- ⚙️ **Configurações**: Gerenciar assinaturas, planos e override manual
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🚀 Como Executar
 
-## Code scaffolding
+### Pré-requisitos
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js 18+ instalado
+- NPM ou Yarn
+- Backend API MedicWarehouse rodando (padrão: http://localhost:5000)
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Instalação
 
 ```bash
-ng build
+# Navegar para o diretório do projeto
+cd frontend/mw-system-admin
+
+# Instalar dependências
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Executar em Desenvolvimento
 
 ```bash
-ng test
+# Iniciar servidor de desenvolvimento
+npm start
+
+# O aplicativo estará disponível em http://localhost:4200
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Build para Produção
 
 ```bash
-ng e2e
+# Gerar build de produção
+npm run build
+
+# Os arquivos serão gerados em dist/mw-system-admin
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🔐 Login
 
-## Additional Resources
+Para acessar o sistema, você precisa ter um usuário System Owner cadastrado no backend com `tenantId = "system"` e `IsSystemOwner = true`.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## �� Funcionalidades
+
+- Dashboard com métricas globais
+- Gestão completa de clínicas
+- Controle de assinaturas e planos
+- Override manual para casos especiais
+- Gestão de System Owners (em desenvolvimento)
+
+## 📖 Documentação
+
+Veja a [documentação completa](../../SYSTEM_OWNER_ACCESS.md) para mais detalhes.
