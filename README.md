@@ -6,6 +6,30 @@
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
 
+## 🖥️ Frontend Applications
+
+O MedicWarehouse possui **dois aplicativos Angular independentes**:
+
+### 1. **MedicWarehouse App** (`frontend/medicwarehouse-app`)
+Aplicativo principal para uso diário das clínicas:
+- 👨‍⚕️ **Usuários**: Proprietários de clínicas, médicos, secretárias, enfermeiros
+- 📊 **Dashboard** da clínica individual
+- 👥 **Gestão de pacientes** e prontuários
+- 📅 **Agendamentos** e atendimentos
+- 💊 **Prescrições** médicas e procedimentos
+- **URL desenvolvimento**: `http://localhost:4200`
+
+### 2. **MW System Admin** (`frontend/mw-system-admin`) 🆕
+Painel administrativo para gestão do sistema completo:
+- 🔧 **Usuários**: System Owners (administradores do sistema)
+- 🏥 **Gestão de todas as clínicas** (criar, ativar, desativar)
+- 💰 **Métricas financeiras** (MRR, receitas, churn)
+- 📊 **Analytics globais** do sistema
+- ⚙️ **Controle de assinaturas** e override manual
+- 👤 **Gestão de system owners**
+- **URL desenvolvimento**: `http://localhost:4201`
+- 📖 **Documentação**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
+
 ## 📚 Documentação Completa
 
 ### 📱 Documentação Portátil (NOVO!)
@@ -242,6 +266,7 @@ dotnet run
 
 #### Frontend (Angular)
 
+**MedicWarehouse App** (aplicativo principal das clínicas):
 ```bash
 # Navegar para o frontend
 cd frontend/medicwarehouse-app
@@ -250,10 +275,26 @@ cd frontend/medicwarehouse-app
 npm install
 
 # Executar em modo de desenvolvimento
-ng serve
+npm start
 
 # O frontend estará disponível em: http://localhost:4200
 ```
+
+**MW System Admin** (painel administrativo do sistema) 🆕:
+```bash
+# Navegar para o system admin
+cd frontend/mw-system-admin
+
+# Instalar dependências
+npm install
+
+# Executar em modo de desenvolvimento (porta 4201)
+npm start
+
+# O admin estará disponível em: http://localhost:4201
+```
+
+> 📖 **Documentação completa do System Admin**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
 
 #### Banco de Dados (SQL Server)
 

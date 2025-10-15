@@ -48,3 +48,34 @@ export interface UpdateSubscriptionRequest {
 export interface ManualOverrideRequest {
   reason: string;
 }
+
+export interface CreateClinicRequest {
+  name: string;
+  document: string;
+  email: string;
+  phone: string;
+  address: string;
+  ownerUsername: string;
+  ownerPassword: string;
+  ownerFullName: string;
+  planId: string;
+}
+
+export interface SystemOwner {
+  id: string;
+  username: string;
+  email: string;
+  fullName: string;
+  phone: string;
+  isActive: boolean;
+  createdAt: string;
+  lastLoginAt?: string;
+}
+
+export interface CreateSystemOwnerRequest {
+  username: string;
+  email: string;
+  password: string;
+  fullName: string;
+  phone: string;
+}

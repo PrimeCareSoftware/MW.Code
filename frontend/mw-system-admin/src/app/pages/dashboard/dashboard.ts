@@ -5,11 +5,11 @@ import { SystemAdminService } from '../../services/system-admin';
 import { SystemAnalytics } from '../../models/system-admin.model';
 
 @Component({
-  selector: 'app-system-admin-dashboard',
+  selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="system-admin-dashboard">
+    <div class="dashboard">
       <div class="header">
         <h1>Painel de Administração do Sistema</h1>
         <p class="subtitle">Gerencie todas as clínicas e visualize métricas do sistema</p>
@@ -95,56 +95,59 @@ import { SystemAnalytics } from '../../models/system-admin.model';
           </div>
         </div>
 
+        <!-- Subscription Status Distribution -->
+        <div class="section">
+          <h2>Distribuição de Assinaturas por Status</h2>
+          <div class="distribution-grid">
+            @for (item of getSubscriptionStatusItems(); track item.key) {
+              <div class="distribution-card">
+                <div class="distribution-value">{{ item.value }}</div>
+                <div class="distribution-label">{{ item.label }}</div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Subscription Plan Distribution -->
+        <div class="section">
+          <h2>Distribuição de Assinaturas por Plano</h2>
+          <div class="distribution-grid">
+            @for (item of getSubscriptionPlanItems(); track item.key) {
+              <div class="distribution-card">
+                <div class="distribution-value">{{ item.value }}</div>
+                <div class="distribution-label">{{ item.label }}</div>
+              </div>
+            }
+          </div>
+        </div>
+
         <!-- Quick Actions -->
         <div class="quick-actions">
           <h2>Ações Rápidas</h2>
           <div class="actions-grid">
-            <button (click)="navigateToClinics()" class="action-btn">
-              <i class="icon">📋</i>
-              <span>Gerenciar Clínicas</span>
+            <button class="action-btn" (click)="navigateToClinics('')">
+              <span class="action-icon">📋</span>
+              <span class="action-text">Gerenciar Clínicas</span>
             </button>
-            <button (click)="navigateToClinics('active')" class="action-btn">
-              <i class="icon">✅</i>
-              <span>Ver Clínicas Ativas</span>
+            <button class="action-btn" (click)="navigateToClinics('active')">
+              <span class="action-icon">✅</span>
+              <span class="action-text">Ver Clínicas Ativas</span>
             </button>
-            <button (click)="navigateToClinics('inactive')" class="action-btn">
-              <i class="icon">❌</i>
-              <span>Ver Clínicas Inativas</span>
+            <button class="action-btn" (click)="navigateToClinics('inactive')">
+              <span class="action-icon">🚫</span>
+              <span class="action-text">Ver Clínicas Inativas</span>
             </button>
-          </div>
-        </div>
-
-        <!-- Subscription Details -->
-        <div class="subscription-details">
-          <div class="detail-card">
-            <h3>Assinaturas por Status</h3>
-            <div class="status-list">
-              @for (item of getSubscriptionsByStatus(); track item.status) {
-                <div class="status-item">
-                  <span class="status-name">{{ item.status }}</span>
-                  <span class="status-count">{{ item.count }}</span>
-                </div>
-              }
-            </div>
-          </div>
-
-          <div class="detail-card">
-            <h3>Assinaturas por Plano</h3>
-            <div class="plan-list">
-              @for (item of getSubscriptionsByPlan(); track item.plan) {
-                <div class="plan-item">
-                  <span class="plan-name">{{ item.plan }}</span>
-                  <span class="plan-count">{{ item.count }}</span>
-                </div>
-              }
-            </div>
+            <button class="action-btn" (click)="navigateToUsers()">
+              <span class="action-icon">👤</span>
+              <span class="action-text">Gerenciar Usuários System Owner</span>
+            </button>
           </div>
         </div>
       }
     </div>
   `,
   styles: [`
-    .system-admin-dashboard {
+    .dashboard {
       padding: 24px;
       max-width: 1400px;
       margin: 0 auto;
@@ -154,17 +157,43 @@ import { SystemAnalytics } from '../../models/system-admin.model';
       margin-bottom: 32px;
     }
 
-    .header h1 {
+    h1 {
       font-size: 32px;
       font-weight: 700;
-      color: #1a1a1a;
+      color: #1a202c;
       margin: 0 0 8px 0;
     }
 
     .subtitle {
+      color: #718096;
       font-size: 16px;
-      color: #666;
       margin: 0;
+    }
+
+    .loading, .error {
+      text-align: center;
+      padding: 48px 24px;
+      color: #718096;
+    }
+
+    .error {
+      color: #c53030;
+    }
+
+    .btn-retry {
+      margin-top: 16px;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btn-retry:hover {
+      background: #5568d3;
     }
 
     .analytics-grid {
@@ -177,18 +206,24 @@ import { SystemAnalytics } from '../../models/system-admin.model';
     .card {
       background: white;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     }
 
     .card.highlight {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .card.highlight .stat-large,
+    .card.highlight .stat-label,
+    .card.highlight .stat-item {
       color: white;
     }
 
@@ -200,8 +235,9 @@ import { SystemAnalytics } from '../../models/system-admin.model';
     }
 
     .card-header h3 {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
+      color: #2d3748;
       margin: 0;
     }
 
@@ -214,36 +250,31 @@ import { SystemAnalytics } from '../../models/system-admin.model';
     }
 
     .card-body {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      text-align: left;
     }
 
     .stat-large {
       font-size: 48px;
       font-weight: 700;
-      line-height: 1;
+      color: #1a202c;
+      margin-bottom: 12px;
     }
 
     .stat-details {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      font-size: 14px;
     }
 
     .stat-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      font-size: 14px;
     }
 
     .stat-label {
-      color: #666;
-    }
-
-    .card.highlight .stat-label {
-      color: rgba(255, 255, 255, 0.9);
+      color: #718096;
+      font-weight: 500;
     }
 
     .stat-value {
@@ -258,19 +289,65 @@ import { SystemAnalytics } from '../../models/system-admin.model';
       color: #ef4444;
     }
 
-    .quick-actions {
+    .section {
       margin-bottom: 32px;
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a202c;
+      margin: 0 0 20px 0;
+    }
+
+    .distribution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+    }
+
+    .distribution-card {
+      text-align: center;
+      padding: 20px;
+      background: #f7fafc;
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .distribution-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 8px;
+    }
+
+    .distribution-label {
+      font-size: 13px;
+      color: #718096;
+      font-weight: 500;
+    }
+
+    .quick-actions {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .quick-actions h2 {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 600;
-      margin-bottom: 16px;
+      color: #1a202c;
+      margin: 0 0 20px 0;
     }
 
     .actions-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
     }
 
@@ -280,103 +357,56 @@ import { SystemAnalytics } from '../../models/system-admin.model';
       align-items: center;
       gap: 12px;
       padding: 24px;
-      background: white;
-      border: 2px solid #e5e7eb;
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
-      font-size: 16px;
-      font-weight: 500;
-      color: #1a1a1a;
     }
 
     .action-btn:hover {
-      border-color: #667eea;
-      background: #f9fafb;
-      transform: translateY(-2px);
-    }
-
-    .action-btn .icon {
-      font-size: 48px;
-    }
-
-    .subscription-details {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-
-    .detail-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding: 24px;
-    }
-
-    .detail-card h3 {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0 0 16px 0;
-    }
-
-    .status-list, .plan-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .status-item, .plan-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      background: #f9fafb;
-      border-radius: 8px;
-    }
-
-    .status-name, .plan-name {
-      font-weight: 500;
-      color: #1a1a1a;
-    }
-
-    .status-count, .plan-count {
-      font-weight: 600;
-      color: #667eea;
-      font-size: 18px;
-    }
-
-    .loading, .error {
-      text-align: center;
-      padding: 48px;
-      font-size: 18px;
-      color: #666;
-    }
-
-    .error {
-      color: #ef4444;
-    }
-
-    .btn-retry {
-      margin-top: 16px;
-      padding: 12px 24px;
       background: #667eea;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
 
-    .btn-retry:hover {
-      background: #5568d3;
+    .action-btn:hover .action-icon,
+    .action-btn:hover .action-text {
+      color: white;
+    }
+
+    .action-icon {
+      font-size: 32px;
+    }
+
+    .action-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2d3748;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .analytics-grid,
+      .distribution-grid,
+      .actions-grid {
+        grid-template-columns: 1fr;
+      }
     }
   `]
 })
-export class SystemAdminDashboard implements OnInit {
+export class Dashboard implements OnInit {
   analytics = signal<SystemAnalytics | null>(null);
-  loading = signal<boolean>(true);
+  loading = signal(true);
   error = signal<string | null>(null);
 
   constructor(
@@ -384,21 +414,21 @@ export class SystemAdminDashboard implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAnalytics();
   }
 
-  loadAnalytics() {
+  loadAnalytics(): void {
     this.loading.set(true);
     this.error.set(null);
 
     this.systemAdminService.getAnalytics().subscribe({
-      next: (data: SystemAnalytics) => {
+      next: (data) => {
         this.analytics.set(data);
         this.loading.set(false);
       },
-      error: (err: any) => {
-        this.error.set(err.message || 'Erro ao carregar dados');
+      error: (err) => {
+        this.error.set(err.error?.message || 'Erro ao carregar dados');
         this.loading.set(false);
       }
     });
@@ -411,31 +441,36 @@ export class SystemAdminDashboard implements OnInit {
     }).format(value);
   }
 
-  navigateToClinics(status?: string) {
-    if (status) {
-      this.router.navigate(['/system-admin/clinics'], { queryParams: { status } });
-    } else {
-      this.router.navigate(['/system-admin/clinics']);
-    }
-  }
+  getSubscriptionStatusItems(): Array<{ key: string; label: string; value: number }> {
+    const statusLabels: { [key: string]: string } = {
+      'Active': 'Ativo',
+      'Trial': 'Trial',
+      'Expired': 'Expirado',
+      'Suspended': 'Suspenso',
+      'PaymentOverdue': 'Pagamento Atrasado',
+      'Cancelled': 'Cancelado'
+    };
 
-  getSubscriptionsByStatus(): Array<{ status: string; count: number }> {
-    const data = this.analytics()?.subscriptionsByStatus;
-    if (!data || typeof data !== 'object') return [];
-    
-    return Object.entries(data).map(([status, count]) => ({
-      status,
-      count: count as number
+    return Object.entries(this.analytics()?.subscriptionsByStatus || {}).map(([key, value]) => ({
+      key,
+      label: statusLabels[key] || key,
+      value: value as number
     }));
   }
 
-  getSubscriptionsByPlan(): Array<{ plan: string; count: number }> {
-    const data = this.analytics()?.subscriptionsByPlan;
-    if (!data || typeof data !== 'object') return [];
-    
-    return Object.entries(data).map(([plan, count]) => ({
-      plan,
-      count: count as number
+  getSubscriptionPlanItems(): Array<{ key: string; label: string; value: number }> {
+    return Object.entries(this.analytics()?.subscriptionsByPlan || {}).map(([key, value]) => ({
+      key,
+      label: key,
+      value: value as number
     }));
+  }
+
+  navigateToClinics(status: string): void {
+    this.router.navigate(['/clinics'], { queryParams: status ? { status } : {} });
+  }
+
+  navigateToUsers(): void {
+    this.router.navigate(['/users']);
   }
 }

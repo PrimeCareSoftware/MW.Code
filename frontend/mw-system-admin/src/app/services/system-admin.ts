@@ -8,7 +8,10 @@ import {
   PaginatedClinics,
   SystemAnalytics,
   UpdateSubscriptionRequest,
-  ManualOverrideRequest
+  ManualOverrideRequest,
+  CreateClinicRequest,
+  SystemOwner,
+  CreateSystemOwnerRequest
 } from '../models/system-admin.model';
 
 @Injectable({
@@ -35,6 +38,16 @@ export class SystemAdminService {
    */
   getClinic(id: string): Observable<ClinicDetail> {
     return this.http.get<ClinicDetail>(`${this.apiUrl}/clinics/${id}`);
+  }
+
+  /**
+   * Create a new clinic
+   */
+  createClinic(request: CreateClinicRequest): Observable<{ message: string; clinicId: string }> {
+    return this.http.post<{ message: string; clinicId: string }>(
+      `${this.apiUrl}/clinics`,
+      request
+    );
   }
 
   /**
@@ -80,6 +93,33 @@ export class SystemAdminService {
   disableManualOverride(id: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
       `${this.apiUrl}/clinics/${id}/subscription/manual-override/disable`,
+      {}
+    );
+  }
+
+  /**
+   * Get all system owners
+   */
+  getSystemOwners(): Observable<SystemOwner[]> {
+    return this.http.get<SystemOwner[]>(`${this.apiUrl}/system-owners`);
+  }
+
+  /**
+   * Create a new system owner
+   */
+  createSystemOwner(request: CreateSystemOwnerRequest): Observable<{ message: string; ownerId: string }> {
+    return this.http.post<{ message: string; ownerId: string }>(
+      `${this.apiUrl}/system-owners`,
+      request
+    );
+  }
+
+  /**
+   * Toggle system owner active status
+   */
+  toggleSystemOwnerStatus(id: string): Observable<{ message: string; isActive: boolean }> {
+    return this.http.post<{ message: string; isActive: boolean }>(
+      `${this.apiUrl}/system-owners/${id}/toggle-status`,
       {}
     );
   }

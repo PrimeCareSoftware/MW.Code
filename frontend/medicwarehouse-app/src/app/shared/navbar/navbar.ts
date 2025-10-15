@@ -15,10 +15,4 @@ export class Navbar {
   logout(): void {
     this.authService.logout();
   }
-
-  isSystemAdmin(): boolean {
-    // Check if user has system tenant (system owner)
-    const user = this.authService.currentUser();
-    return user?.tenantId === 'system';
-  }
 }
