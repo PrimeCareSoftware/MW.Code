@@ -20,6 +20,13 @@
           Agendamentos
         </a>
       </li>
+      @if (isSystemAdmin()) {
+        <li>
+          <a routerLink="/system-admin" routerLinkActive="active" class="admin-link">
+            ⚙️ Administração
+          </a>
+        </li>
+      }
     </ul>
 
     <div class="navbar-user">
