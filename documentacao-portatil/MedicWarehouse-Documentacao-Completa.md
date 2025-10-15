@@ -1,6 +1,6 @@
 # MedicWarehouse - Documentação Completa
 
-> **Data de Geração:** 15/10/2025, 02:10:06
+> **Data de Geração:** 15/10/2025, 02:13:35
 
 > Este documento contém toda a documentação do projeto MedicWarehouse consolidada em um único arquivo.
 
@@ -111,6 +111,14 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 
 ## 📚 Documentação Completa
 
+### 📱 Documentação Portátil (NOVO!)
+**Leia toda a documentação no celular ou gere um PDF completo!**
+- 📂 **Localização**: `documentacao-portatil/`
+- 📖 **Guia de uso**: [`COMO_LER_DOCUMENTACAO_NO_CELULAR.md`](COMO_LER_DOCUMENTACAO_NO_CELULAR.md)
+- ✨ **O que faz**: Consolida todos os 33 documentos em um único arquivo HTML responsivo ou PDF
+- 🚀 **Como usar**: `cd documentacao-portatil && npm run gerar`
+
+### 🌐 Documentação Web
 Toda a documentação detalhada do projeto está disponível no **projeto web de documentação**:
 - 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
@@ -14428,4 +14436,4 @@ Se você não encontrou o que procura neste índice:
 
 ---
 
-*Documentação gerada automaticamente em 15/10/2025, 02:10:06*
+*Documentação gerada automaticamente em 15/10/2025, 02:13:35*
