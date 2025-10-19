@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
 
 namespace MedicSoft.Api.Controllers
@@ -14,11 +15,16 @@ namespace MedicSoft.Api.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IJwtTokenService _jwtTokenService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService, IJwtTokenService jwtTokenService)
+        public AuthController(
+            IAuthService authService, 
+            IJwtTokenService jwtTokenService,
+            ILogger<AuthController> logger)
         {
             _authService = authService;
             _jwtTokenService = jwtTokenService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -27,45 +33,82 @@ namespace MedicSoft.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Username) || 
-                string.IsNullOrWhiteSpace(request.Password) ||
-                string.IsNullOrWhiteSpace(request.TenantId))
+            try
             {
-                return BadRequest(new { message = "Username, password, and tenantId are required" });
+                // Validate request
+                if (request == null)
+                {
+                    _logger.LogWarning("User login attempt with null request body");
+                    return BadRequest(new { message = "Request body is required" });
+                }
+
+                if (string.IsNullOrWhiteSpace(request.Username) || 
+                    string.IsNullOrWhiteSpace(request.Password) ||
+                    string.IsNullOrWhiteSpace(request.TenantId))
+                {
+                    _logger.LogWarning("User login attempt with missing credentials. Username: {Username}, TenantId: {TenantId}", 
+                        request.Username ?? "null", request.TenantId ?? "null");
+                    return BadRequest(new { message = "Username, password, and tenantId are required" });
+                }
+
+                _logger.LogInformation("User login attempt for username: {Username}, tenantId: {TenantId}", 
+                    request.Username, request.TenantId);
+
+                var user = await _authService.AuthenticateUserAsync(
+                    request.Username, 
+                    request.Password, 
+                    request.TenantId
+                );
+
+                if (user == null)
+                {
+                    _logger.LogWarning("Failed user login attempt for username: {Username}, tenantId: {TenantId}", 
+                        request.Username, request.TenantId);
+                    return Unauthorized(new { message = "Invalid credentials or user not found" });
+                }
+
+                _logger.LogInformation("User authenticated successfully: {UserId}, username: {Username}", 
+                    user.Id, user.Username);
+
+                // Record login
+                try
+                {
+                    await _authService.RecordUserLoginAsync(user.Id, request.TenantId);
+                    _logger.LogInformation("User login recorded for: {UserId}", user.Id);
+                }
+                catch (Exception recordEx)
+                {
+                    // Log but don't fail the login if recording fails
+                    _logger.LogError(recordEx, "Failed to record user login for: {UserId}", user.Id);
+                }
+
+                // Generate JWT token
+                var token = _jwtTokenService.GenerateToken(
+                    username: user.Username,
+                    userId: user.Id.ToString(),
+                    tenantId: request.TenantId,
+                    role: user.Role.ToString(),
+                    clinicId: user.ClinicId?.ToString()
+                );
+
+                _logger.LogInformation("JWT token generated successfully for user: {UserId}", user.Id);
+
+                return Ok(new LoginResponse
+                {
+                    Token = token,
+                    Username = user.Username,
+                    TenantId = request.TenantId,
+                    Role = user.Role.ToString(),
+                    ClinicId = user.ClinicId,
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
+                });
             }
-
-            var user = await _authService.AuthenticateUserAsync(
-                request.Username, 
-                request.Password, 
-                request.TenantId
-            );
-
-            if (user == null)
+            catch (Exception ex)
             {
-                return Unauthorized(new { message = "Invalid credentials or user not found" });
+                _logger.LogError(ex, "Unexpected error during user login for username: {Username}, tenantId: {TenantId}", 
+                    request?.Username ?? "unknown", request?.TenantId ?? "unknown");
+                return StatusCode(500, new { message = "An error occurred during login. Please try again later." });
             }
-
-            // Record login
-            await _authService.RecordUserLoginAsync(user.Id, request.TenantId);
-
-            // Generate JWT token
-            var token = _jwtTokenService.GenerateToken(
-                username: user.Username,
-                userId: user.Id.ToString(),
-                tenantId: request.TenantId,
-                role: user.Role.ToString(),
-                clinicId: user.ClinicId?.ToString()
-            );
-
-            return Ok(new LoginResponse
-            {
-                Token = token,
-                Username = user.Username,
-                TenantId = request.TenantId,
-                Role = user.Role.ToString(),
-                ClinicId = user.ClinicId,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
-            });
         }
 
         /// <summary>
@@ -74,47 +117,85 @@ namespace MedicSoft.Api.Controllers
         [HttpPost("owner-login")]
         public async Task<ActionResult<LoginResponse>> OwnerLogin([FromBody] LoginRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Username) || 
-                string.IsNullOrWhiteSpace(request.Password) ||
-                string.IsNullOrWhiteSpace(request.TenantId))
+            try
             {
-                return BadRequest(new { message = "Username, password, and tenantId are required" });
+                // Validate request
+                if (request == null)
+                {
+                    _logger.LogWarning("Owner login attempt with null request body");
+                    return BadRequest(new { message = "Request body is required" });
+                }
+
+                if (string.IsNullOrWhiteSpace(request.Username) || 
+                    string.IsNullOrWhiteSpace(request.Password) ||
+                    string.IsNullOrWhiteSpace(request.TenantId))
+                {
+                    _logger.LogWarning("Owner login attempt with missing credentials. Username: {Username}, TenantId: {TenantId}", 
+                        request.Username ?? "null", request.TenantId ?? "null");
+                    return BadRequest(new { message = "Username, password, and tenantId are required" });
+                }
+
+                _logger.LogInformation("Owner login attempt for username: {Username}, tenantId: {TenantId}", 
+                    request.Username, request.TenantId);
+
+                // Authenticate owner
+                var owner = await _authService.AuthenticateOwnerAsync(
+                    request.Username, 
+                    request.Password, 
+                    request.TenantId
+                );
+
+                if (owner == null)
+                {
+                    _logger.LogWarning("Failed owner login attempt for username: {Username}, tenantId: {TenantId}", 
+                        request.Username, request.TenantId);
+                    return Unauthorized(new { message = "Invalid credentials or owner not found" });
+                }
+
+                _logger.LogInformation("Owner authenticated successfully: {OwnerId}, username: {Username}", 
+                    owner.Id, owner.Username);
+
+                // Record login
+                try
+                {
+                    await _authService.RecordOwnerLoginAsync(owner.Id, request.TenantId);
+                    _logger.LogInformation("Owner login recorded for: {OwnerId}", owner.Id);
+                }
+                catch (Exception recordEx)
+                {
+                    // Log but don't fail the login if recording fails
+                    _logger.LogError(recordEx, "Failed to record owner login for: {OwnerId}", owner.Id);
+                }
+
+                // Generate JWT token
+                var token = _jwtTokenService.GenerateToken(
+                    username: owner.Username,
+                    userId: owner.Id.ToString(),
+                    tenantId: request.TenantId,
+                    role: "Owner",
+                    clinicId: owner.ClinicId?.ToString(),
+                    isSystemOwner: owner.IsSystemOwner
+                );
+
+                _logger.LogInformation("JWT token generated successfully for owner: {OwnerId}", owner.Id);
+
+                return Ok(new LoginResponse
+                {
+                    Token = token,
+                    Username = owner.Username,
+                    TenantId = request.TenantId,
+                    Role = "Owner",
+                    ClinicId = owner.ClinicId,
+                    IsSystemOwner = owner.IsSystemOwner,
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
+                });
             }
-
-            var owner = await _authService.AuthenticateOwnerAsync(
-                request.Username, 
-                request.Password, 
-                request.TenantId
-            );
-
-            if (owner == null)
+            catch (Exception ex)
             {
-                return Unauthorized(new { message = "Invalid credentials or owner not found" });
+                _logger.LogError(ex, "Unexpected error during owner login for username: {Username}, tenantId: {TenantId}", 
+                    request?.Username ?? "unknown", request?.TenantId ?? "unknown");
+                return StatusCode(500, new { message = "An error occurred during login. Please try again later." });
             }
-
-            // Record login
-            await _authService.RecordOwnerLoginAsync(owner.Id, request.TenantId);
-
-            // Generate JWT token
-            var token = _jwtTokenService.GenerateToken(
-                username: owner.Username,
-                userId: owner.Id.ToString(),
-                tenantId: request.TenantId,
-                role: "Owner",
-                clinicId: owner.ClinicId?.ToString(),
-                isSystemOwner: owner.IsSystemOwner
-            );
-
-            return Ok(new LoginResponse
-            {
-                Token = token,
-                Username = owner.Username,
-                TenantId = request.TenantId,
-                Role = "Owner",
-                ClinicId = owner.ClinicId,
-                IsSystemOwner = owner.IsSystemOwner,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
-            });
         }
 
         /// <summary>
