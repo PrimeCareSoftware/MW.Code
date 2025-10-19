@@ -132,12 +132,14 @@ namespace MedicSoft.Api.Controllers
                 // Generate unique tenant ID for the clinic
                 var tenantId = Guid.NewGuid().ToString();
 
-                // Check if a plan was specified
-                Guid? planId = null;
+                // Check if a plan was specified and validate it
+                SubscriptionPlan? plan = null;
                 if (!string.IsNullOrEmpty(request.PlanId))
                 {
-                    planId = Guid.Parse(request.PlanId);
-                    var plan = await _context.SubscriptionPlans
+                    if (!Guid.TryParse(request.PlanId, out var planId))
+                        return BadRequest(new { message = "Formato de ID do plano inválido" });
+
+                    plan = await _context.SubscriptionPlans
                         .IgnoreQueryFilters()
                         .FirstOrDefaultAsync(p => p.Id == planId);
                     
@@ -174,26 +176,19 @@ namespace MedicSoft.Api.Controllers
                     null  // Specialty
                 );
 
-                // Create subscription if plan specified
-                if (planId.HasValue)
+                // Create subscription if plan was validated
+                if (plan != null)
                 {
-                    var plan = await _context.SubscriptionPlans
-                        .IgnoreQueryFilters()
-                        .FirstOrDefaultAsync(p => p.Id == planId.Value);
-
-                    if (plan != null)
-                    {
-                        var subscription = new ClinicSubscription(
-                            clinic.Id,
-                            plan.Id,
-                            DateTime.UtcNow, // startDate
-                            0, // trialDays - no trial for admin-created clinics
-                            plan.MonthlyPrice,
-                            tenantId
-                        );
-                        
-                        await _subscriptionRepository.AddAsync(subscription);
-                    }
+                    var subscription = new ClinicSubscription(
+                        clinic.Id,
+                        plan.Id,
+                        DateTime.UtcNow, // startDate
+                        0, // trialDays - no trial for admin-created clinics
+                        plan.MonthlyPrice,
+                        tenantId
+                    );
+                    
+                    await _subscriptionRepository.AddAsync(subscription);
                 }
 
                 return Ok(new
