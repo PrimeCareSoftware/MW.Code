@@ -52,7 +52,7 @@ import { Auth } from '../../services/auth';
               id="tenantId" 
               formControlName="tenantId"
               class="form-control"
-              placeholder="Digite o tenant ID"
+              placeholder="Tenant ID (padrão: system)"
               [class.error]="loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched"
             />
             @if (loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched) {
