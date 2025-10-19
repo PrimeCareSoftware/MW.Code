@@ -45,6 +45,8 @@ Modified the `AuthController.cs` to include:
 
 #### Added Logger Dependency Injection
 ```csharp
+private readonly IAuthService _authService;
+private readonly IJwtTokenService _jwtTokenService;
 private readonly ILogger<AuthController> _logger;
 
 public AuthController(
@@ -196,10 +198,10 @@ This fix is **100% backward compatible**:
 
 1. ✅ Error handling implemented
 2. ✅ Tested with various error scenarios
-3. 🔄 Deploy to development environment
-4. 🔄 Test with actual database connection
-5. 🔄 Monitor logs for any authentication issues
-6. 🔄 Consider adding retry logic for transient database errors (future enhancement)
+3. **TODO:** Deploy to development environment
+4. **TODO:** Test with actual database connection
+5. **TODO:** Monitor logs for any authentication issues
+6. **TODO:** Consider adding retry logic for transient database errors (future enhancement)
 
 ## Conclusion
 
