@@ -122,6 +122,93 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Create a new clinic with owner
+        /// </summary>
+        [HttpPost("clinics")]
+        public async Task<ActionResult> CreateClinic([FromBody] CreateClinicRequest request)
+        {
+            try
+            {
+                // Generate unique tenant ID for the clinic
+                var tenantId = Guid.NewGuid().ToString();
+
+                // Check if a plan was specified and validate it
+                SubscriptionPlan? plan = null;
+                if (!string.IsNullOrEmpty(request.PlanId))
+                {
+                    if (!Guid.TryParse(request.PlanId, out var planId))
+                        return BadRequest(new { message = "Formato de ID do plano inválido" });
+
+                    plan = await _context.SubscriptionPlans
+                        .IgnoreQueryFilters()
+                        .FirstOrDefaultAsync(p => p.Id == planId);
+                    
+                    if (plan == null)
+                        return BadRequest(new { message = "Plano não encontrado" });
+                }
+
+                // Create clinic
+                var clinic = new Clinic(
+                    request.Name,
+                    request.Name, // TradeName same as Name
+                    request.Document,
+                    request.Phone,
+                    request.Email,
+                    request.Address,
+                    new TimeSpan(8, 0, 0), // Default 8 AM
+                    new TimeSpan(18, 0, 0), // Default 6 PM
+                    tenantId,
+                    30 // Default 30 minute appointments
+                );
+
+                await _clinicRepository.AddAsync(clinic);
+
+                // Create owner for the clinic
+                var owner = await _ownerService.CreateOwnerAsync(
+                    request.OwnerUsername,
+                    request.Email, // Use clinic email if owner email not provided
+                    request.OwnerPassword,
+                    request.OwnerFullName,
+                    request.Phone, // Use clinic phone if owner phone not provided
+                    tenantId,
+                    clinic.Id,
+                    null, // ProfessionalId
+                    null  // Specialty
+                );
+
+                // Create subscription if plan was validated
+                if (plan != null)
+                {
+                    var subscription = new ClinicSubscription(
+                        clinic.Id,
+                        plan.Id,
+                        DateTime.UtcNow, // startDate
+                        0, // trialDays - no trial for admin-created clinics
+                        plan.MonthlyPrice,
+                        tenantId
+                    );
+                    
+                    await _subscriptionRepository.AddAsync(subscription);
+                }
+
+                return Ok(new
+                {
+                    message = "Clínica criada com sucesso",
+                    clinicId = clinic.Id,
+                    tenantId = tenantId
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Erro ao criar clínica: {ex.Message}" });
+            }
+        }
+
+        /// <summary>
         /// Get detailed information about a specific clinic
         /// </summary>
         [HttpGet("clinics/{id}")]
@@ -371,6 +458,33 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Toggle system owner active status
+        /// </summary>
+        [HttpPost("system-owners/{id}/toggle-status")]
+        public async Task<ActionResult> ToggleSystemOwnerStatus(Guid id)
+        {
+            var owner = await _context.Owners
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(o => o.Id == id && o.ClinicId == null);
+
+            if (owner == null)
+                return NotFound(new { message = "System owner não encontrado" });
+
+            if (owner.IsActive)
+                owner.Deactivate();
+            else
+                owner.Activate();
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = owner.IsActive ? "System owner ativado com sucesso" : "System owner desativado com sucesso",
+                isActive = owner.IsActive
+            });
+        }
+
+        /// <summary>
         /// Create a new SystemAdmin user (deprecated - use system-owners instead)
         /// </summary>
         [HttpPost("users")]
@@ -534,6 +648,19 @@ namespace MedicSoft.Api.Controllers
         public string Password { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+    }
+
+    public class CreateClinicRequest
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Document { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public string OwnerUsername { get; set; } = string.Empty;
+        public string OwnerPassword { get; set; } = string.Empty;
+        public string OwnerFullName { get; set; } = string.Empty;
+        public string PlanId { get; set; } = string.Empty;
     }
 
     public class CreateSystemOwnerRequest
