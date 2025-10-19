@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -9,11 +10,25 @@ namespace MedicSoft.Api.Controllers
     public class DataSeederController : BaseController
     {
         private readonly DataSeederService _seederService;
+        private readonly IOwnerRepository _ownerRepository;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
 
-        public DataSeederController(DataSeederService seederService, ITenantContext tenantContext)
+        public DataSeederController(
+            DataSeederService seederService, 
+            ITenantContext tenantContext,
+            IOwnerRepository ownerRepository,
+            IPasswordHasher passwordHasher,
+            IWebHostEnvironment environment,
+            IConfiguration configuration)
             : base(tenantContext)
         {
             _seederService = seederService;
+            _ownerRepository = ownerRepository;
+            _passwordHasher = passwordHasher;
+            _environment = environment;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -99,6 +114,98 @@ namespace MedicSoft.Api.Controllers
                 },
                 note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features"
             });
+        }
+
+        /// <summary>
+        /// Seed initial system owner for development/testing
+        /// Creates a default system owner if none exists
+        /// WARNING: This endpoint should be disabled in production
+        /// </summary>
+        [HttpPost("seed-system-owner")]
+        public async Task<ActionResult> SeedSystemOwner()
+        {
+            // Check if development mode is enabled
+            var devModeEnabled = _configuration.GetValue<bool>("Development:EnableDevEndpoints", false);
+            
+            if (!_environment.IsDevelopment() && !devModeEnabled)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    error = "This endpoint is only available in Development environment or when Development:EnableDevEndpoints is true"
+                });
+            }
+
+            try
+            {
+                // Check if a system owner already exists
+                var existingOwner = await _ownerRepository.GetByUsernameAsync("admin", "system");
+                if (existingOwner != null)
+                {
+                    return Ok(new
+                    {
+                        message = "System owner already exists",
+                        owner = new
+                        {
+                            username = existingOwner.Username,
+                            email = existingOwner.Email,
+                            isSystemOwner = existingOwner.IsSystemOwner
+                        },
+                        note = "Use these credentials to login",
+                        loginInfo = new
+                        {
+                            endpoint = "POST /api/auth/owner-login",
+                            username = "admin",
+                            password = "Admin@123",
+                            tenantId = "system"
+                        }
+                    });
+                }
+
+                // Create default system owner
+                var passwordHash = _passwordHasher.HashPassword("Admin@123");
+                var systemOwner = new Domain.Entities.Owner(
+                    username: "admin",
+                    email: "admin@medicwarehouse.com",
+                    passwordHash: passwordHash,
+                    fullName: "System Administrator",
+                    phone: "+5511999999999",
+                    tenantId: "system"
+                );
+
+                await _ownerRepository.AddAsync(systemOwner);
+
+                return Ok(new
+                {
+                    message = "System owner created successfully",
+                    owner = new
+                    {
+                        username = "admin",
+                        email = "admin@medicwarehouse.com",
+                        password = "Admin@123",
+                        isSystemOwner = true,
+                        tenantId = "system"
+                    },
+                    loginInfo = new
+                    {
+                        endpoint = "POST /api/auth/owner-login",
+                        body = new
+                        {
+                            username = "admin",
+                            password = "Admin@123",
+                            tenantId = "system"
+                        }
+                    },
+                    note = "Use these credentials to login and manage the system. Change the password after first login!"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "An error occurred while creating system owner",
+                    details = ex.Message
+                });
+            }
         }
     }
 }

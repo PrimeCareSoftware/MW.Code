@@ -44,7 +44,8 @@ Toda a documentação detalhada do projeto está disponível no **projeto web de
 - 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
 - 📖 **Principais Documentos**:
-  - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema** (NOVO!)
+  - `GUIA_DESENVOLVIMENTO_AUTH.md` - **Guia de desenvolvimento e autenticação para MVP/testes** (NOVO!) 🔥
+  - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema**
   - `BUSINESS_RULES.md` - Regras de negócio
   - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas
   - `SYSTEM_ADMIN_DOCUMENTATION.md` - Área do administrador do sistema
@@ -226,6 +227,48 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ## 🏃‍♂️ Como Executar
 
 > 📖 **Para um guia completo e detalhado passo a passo**, consulte o arquivo [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
+
+### 🔑 Primeiros Passos - Criando Usuários Iniciais (IMPORTANTE para MVP)
+
+**Problema**: Para testar o sistema, você precisa de autenticação, mas não consegue criar o primeiro usuário sem autenticação.
+
+**Solução**: Use os **endpoints de desenvolvimento** para criar usuários iniciais sem autenticação:
+
+```bash
+# 1. Criar um System Owner (administrador do sistema)
+POST http://localhost:5000/api/data-seeder/seed-system-owner
+
+# Credenciais criadas:
+# Username: admin
+# Password: Admin@123
+# TenantId: system
+
+# 2. Fazer login
+POST http://localhost:5000/api/auth/owner-login
+{
+  "username": "admin",
+  "password": "Admin@123",
+  "tenantId": "system"
+}
+
+# 3. Usar o token retornado para acessar endpoints protegidos
+```
+
+**Ou criar dados completos de demonstração:**
+```bash
+# Cria clínica, usuários, pacientes, agendamentos, etc.
+POST http://localhost:5000/api/data-seeder/seed-demo
+
+# Credenciais criadas:
+# - admin / Admin@123 (SystemAdmin)
+# - dr.silva / Doctor@123 (Doctor)  
+# - recep.maria / Recep@123 (Receptionist)
+```
+
+> 📖 **Para mais detalhes sobre autenticação e desenvolvimento**, consulte:
+> - [GUIA_DESENVOLVIMENTO_AUTH.md](GUIA_DESENVOLVIMENTO_AUTH.md) - Guia completo para desenvolvimento e testes
+> - [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) - Documentação completa de autenticação
+> - [CARGA_INICIAL_TESTES.md](CARGA_INICIAL_TESTES.md) - Detalhes sobre dados de teste
 
 ### Pré-requisitos
 
