@@ -19,7 +19,7 @@ export class Auth {
   constructor(private http: HttpClient, private router: Router) { }
 
   /**
-   * System Owner login (without tenantId)
+   * System Owner login
    */
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/owner-login`, credentials)

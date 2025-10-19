@@ -46,6 +46,21 @@ import { Auth } from '../../services/auth';
           </div>
 
           <div class="form-group">
+            <label for="tenantId">Tenant ID</label>
+            <input 
+              type="text" 
+              id="tenantId" 
+              formControlName="tenantId"
+              class="form-control"
+              placeholder="Tenant ID (padrão: system)"
+              [class.error]="loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched"
+            />
+            @if (loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched) {
+              <span class="error-message">Tenant ID é obrigatório</span>
+            }
+          </div>
+
+          <div class="form-group">
             <label for="password">Senha</label>
             <input 
               type="password" 
@@ -243,7 +258,8 @@ export class Login {
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      tenantId: ['system', Validators.required]
     });
   }
 
