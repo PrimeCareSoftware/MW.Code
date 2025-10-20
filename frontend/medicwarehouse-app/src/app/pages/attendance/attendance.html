@@ -280,13 +280,13 @@
 
             @if (examRequests().length > 0) {
               <div class="exams-list">
-                @for (exam of examRequests(); track $index) {
+                @for (exam of examRequests(); track exam.id) {
                   <div class="exam-item">
                     <div class="exam-header">
                       <strong>{{ exam.examName }}</strong>
                       <span class="exam-type-badge">{{ examTypeLabels[exam.examType] }}</span>
                       <span class="exam-urgency-badge urgency-{{ exam.urgency }}">{{ examUrgencyLabels[exam.urgency] }}</span>
-                      <button type="button" class="btn-remove" (click)="removeExamRequest($index)" title="Remover">
+                      <button type="button" class="btn-remove" (click)="removeExamRequest(exam)" title="Remover">
                         ✕
                       </button>
                     </div>

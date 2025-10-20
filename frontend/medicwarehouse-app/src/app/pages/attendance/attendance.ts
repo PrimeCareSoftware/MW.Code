@@ -8,11 +8,12 @@ import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
 import { PatientService } from '../../services/patient';
 import { ProcedureService } from '../../services/procedure';
+import { ExamRequestService } from '../../services/exam-request';
 import { Appointment } from '../../models/appointment.model';
 import { MedicalRecord } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
 import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
-import { ExamType, ExamUrgency, ExamTypeLabels, ExamUrgencyLabels, CreateExamRequest } from '../../models/exam-request.model';
+import { ExamRequest, ExamType, ExamUrgency, ExamTypeLabels, ExamUrgencyLabels } from '../../models/exam-request.model';
 
 @Component({
   selector: 'app-attendance',
@@ -46,7 +47,7 @@ export class Attendance implements OnInit, OnDestroy {
   procedureForm: FormGroup;
   
   // Exam Requests
-  examRequests = signal<CreateExamRequest[]>([]);
+  examRequests = signal<ExamRequest[]>([]);
   showAddExam = signal<boolean>(false);
   examForm: FormGroup;
   
@@ -65,7 +66,8 @@ export class Attendance implements OnInit, OnDestroy {
     private appointmentService: AppointmentService,
     private medicalRecordService: MedicalRecordService,
     private patientService: PatientService,
-    private procedureService: ProcedureService
+    private procedureService: ProcedureService,
+    private examRequestService: ExamRequestService
   ) {
     this.attendanceForm = this.fb.group({
       diagnosis: [''],
@@ -95,6 +97,7 @@ export class Attendance implements OnInit, OnDestroy {
       this.loadAppointment(id);
       this.loadAvailableProcedures();
       this.loadAppointmentProcedures(id);
+      this.loadExamRequests(id);
     }
   }
 
@@ -358,11 +361,23 @@ export class Attendance implements OnInit, OnDestroy {
     }
   }
 
+  loadExamRequests(appointmentId: string): void {
+    this.examRequestService.getByAppointment(appointmentId).subscribe({
+      next: (examRequests) => {
+        this.examRequests.set(examRequests);
+      },
+      error: (error) => {
+        console.error('Error loading exam requests:', error);
+      }
+    });
+  }
+
   onAddExamRequest(): void {
     if (!this.examForm.valid || !this.appointmentId() || !this.patient()) return;
 
     const formValue = this.examForm.value;
-    const examRequest: CreateExamRequest = {
+    
+    this.examRequestService.create({
       appointmentId: this.appointmentId()!,
       patientId: this.patient()!.id,
       examType: formValue.examType,
@@ -370,21 +385,40 @@ export class Attendance implements OnInit, OnDestroy {
       description: formValue.description,
       urgency: formValue.urgency,
       notes: formValue.notes || undefined
-    };
-
-    // For now, just add to local list (will need backend implementation)
-    this.examRequests.update(exams => [...exams, examRequest]);
-    this.successMessage.set('Pedido de exame adicionado com sucesso!');
-    this.examForm.reset({
-      examType: ExamType.Laboratory,
-      urgency: ExamUrgency.Routine
+    }).subscribe({
+      next: (examRequest) => {
+        this.examRequests.update(exams => [...exams, examRequest]);
+        this.successMessage.set('Pedido de exame adicionado com sucesso!');
+        this.examForm.reset({
+          examType: ExamType.Laboratory,
+          urgency: ExamUrgency.Routine
+        });
+        this.showAddExam.set(false);
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: (error) => {
+        console.error('Error adding exam request:', error);
+        this.errorMessage.set('Erro ao adicionar pedido de exame');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
     });
-    this.showAddExam.set(false);
-    setTimeout(() => this.successMessage.set(''), 3000);
   }
 
-  removeExamRequest(index: number): void {
-    this.examRequests.update(exams => exams.filter((_, i) => i !== index));
+  removeExamRequest(examRequest: ExamRequest): void {
+    if (!confirm('Tem certeza que deseja remover este pedido de exame?')) return;
+
+    this.examRequestService.cancel(examRequest.id).subscribe({
+      next: () => {
+        this.examRequests.update(exams => exams.filter(e => e.id !== examRequest.id));
+        this.successMessage.set('Pedido de exame removido com sucesso!');
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: (error) => {
+        console.error('Error removing exam request:', error);
+        this.errorMessage.set('Erro ao remover pedido de exame');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
   }
 
   getTotalProceduresCost(): number {
