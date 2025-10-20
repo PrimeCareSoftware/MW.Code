@@ -141,6 +141,167 @@
             </div>
           </div>
 
+          <!-- Procedures Section -->
+          <div class="card">
+            <div class="card-header-flex">
+              <h3>Procedimentos Realizados</h3>
+              <button type="button" class="btn btn-outline" (click)="toggleAddProcedure()">
+                {{ showAddProcedure() ? 'Cancelar' : '+ Adicionar Procedimento' }}
+              </button>
+            </div>
+            
+            @if (showAddProcedure()) {
+              <form [formGroup]="procedureForm" class="add-form">
+                <div class="form-group">
+                  <label for="procedure">Procedimento</label>
+                  <select id="procedure" formControlName="procedureId" class="form-control">
+                    <option value="">Selecione um procedimento</option>
+                    @for (proc of availableProcedures(); track proc.id) {
+                      <option [value]="proc.id">{{ proc.name }} - R$ {{ proc.price }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="customPrice">Preço Personalizado (opcional)</label>
+                    <input 
+                      type="number" 
+                      id="customPrice" 
+                      formControlName="customPrice" 
+                      class="form-control" 
+                      placeholder="Deixe vazio para usar preço padrão"
+                      step="0.01"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="procedureNotes">Observações</label>
+                    <input 
+                      type="text" 
+                      id="procedureNotes" 
+                      formControlName="notes" 
+                      class="form-control" 
+                      placeholder="Observações sobre o procedimento"
+                    />
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="onAddProcedure()" [disabled]="!procedureForm.valid">
+                  Adicionar
+                </button>
+              </form>
+            }
+
+            @if (appointmentProcedures().length > 0) {
+              <div class="procedures-list">
+                @for (proc of appointmentProcedures(); track proc.id) {
+                  <div class="procedure-item">
+                    <div class="procedure-info">
+                      <strong>{{ proc.procedureName }}</strong>
+                      <span class="procedure-code">{{ proc.procedureCode }}</span>
+                    </div>
+                    <div class="procedure-price">R$ {{ proc.priceCharged }}</div>
+                    @if (proc.notes) {
+                      <div class="procedure-notes">{{ proc.notes }}</div>
+                    }
+                  </div>
+                }
+                <div class="procedures-total">
+                  <strong>Total:</strong> <span>R$ {{ getTotalProceduresCost() }}</span>
+                </div>
+              </div>
+            } @else {
+              <p class="text-muted">Nenhum procedimento adicionado</p>
+            }
+          </div>
+
+          <!-- Exam Requests Section -->
+          <div class="card">
+            <div class="card-header-flex">
+              <h3>Pedidos de Exames</h3>
+              <button type="button" class="btn btn-outline" (click)="toggleAddExam()">
+                {{ showAddExam() ? 'Cancelar' : '+ Solicitar Exame' }}
+              </button>
+            </div>
+            
+            @if (showAddExam()) {
+              <form [formGroup]="examForm" class="add-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="examType">Tipo de Exame</label>
+                    <select id="examType" formControlName="examType" class="form-control">
+                      @for (type of examTypes; track type) {
+                        <option [value]="type">{{ examTypeLabels[type] }}</option>
+                      }
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="urgency">Urgência</label>
+                    <select id="urgency" formControlName="urgency" class="form-control">
+                      @for (urgency of examUrgencies; track urgency) {
+                        <option [value]="urgency">{{ examUrgencyLabels[urgency] }}</option>
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="examName">Nome do Exame</label>
+                  <input 
+                    type="text" 
+                    id="examName" 
+                    formControlName="examName" 
+                    class="form-control" 
+                    placeholder="Ex: Hemograma Completo, Raio-X de Tórax"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="description">Descrição / Justificativa</label>
+                  <textarea 
+                    id="description" 
+                    formControlName="description" 
+                    class="form-control" 
+                    rows="2"
+                    placeholder="Motivo da solicitação do exame..."
+                  ></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="examNotes">Observações Adicionais</label>
+                  <input 
+                    type="text" 
+                    id="examNotes" 
+                    formControlName="notes" 
+                    class="form-control" 
+                    placeholder="Instruções especiais, preparo, etc."
+                  />
+                </div>
+                <button type="button" class="btn btn-primary" (click)="onAddExamRequest()" [disabled]="!examForm.valid">
+                  Adicionar Pedido
+                </button>
+              </form>
+            }
+
+            @if (examRequests().length > 0) {
+              <div class="exams-list">
+                @for (exam of examRequests(); track $index) {
+                  <div class="exam-item">
+                    <div class="exam-header">
+                      <strong>{{ exam.examName }}</strong>
+                      <span class="exam-type-badge">{{ examTypeLabels[exam.examType] }}</span>
+                      <span class="exam-urgency-badge urgency-{{ exam.urgency }}">{{ examUrgencyLabels[exam.urgency] }}</span>
+                      <button type="button" class="btn-remove" (click)="removeExamRequest($index)" title="Remover">
+                        ✕
+                      </button>
+                    </div>
+                    <div class="exam-description">{{ exam.description }}</div>
+                    @if (exam.notes) {
+                      <div class="exam-notes"><em>Obs: {{ exam.notes }}</em></div>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="text-muted">Nenhum pedido de exame adicionado</p>
+            }
+          </div>
+
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" (click)="onSave()" [disabled]="isLoading()">
               Salvar Prontuário

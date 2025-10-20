@@ -1,15 +1,18 @@
 import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { Navbar } from '../../shared/navbar/navbar';
 import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
 import { PatientService } from '../../services/patient';
+import { ProcedureService } from '../../services/procedure';
 import { Appointment } from '../../models/appointment.model';
 import { MedicalRecord } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
+import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
+import { ExamType, ExamUrgency, ExamTypeLabels, ExamUrgencyLabels, CreateExamRequest } from '../../models/exam-request.model';
 
 @Component({
   selector: 'app-attendance',
@@ -36,17 +39,51 @@ export class Attendance implements OnInit, OnDestroy {
   timerSubscription?: Subscription;
   startTime?: Date;
 
+  // Procedures
+  availableProcedures = signal<Procedure[]>([]);
+  appointmentProcedures = signal<AppointmentProcedure[]>([]);
+  showAddProcedure = signal<boolean>(false);
+  procedureForm: FormGroup;
+  
+  // Exam Requests
+  examRequests = signal<CreateExamRequest[]>([]);
+  showAddExam = signal<boolean>(false);
+  examForm: FormGroup;
+  
+  // Enum helpers
+  procedureCategories = Object.values(ProcedureCategory).filter(v => typeof v === 'number') as ProcedureCategory[];
+  procedureCategoryLabels = ProcedureCategoryLabels;
+  examTypes = Object.values(ExamType).filter(v => typeof v === 'number') as ExamType[];
+  examTypeLabels = ExamTypeLabels;
+  examUrgencies = Object.values(ExamUrgency).filter(v => typeof v === 'number') as ExamUrgency[];
+  examUrgencyLabels = ExamUrgencyLabels;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private appointmentService: AppointmentService,
     private medicalRecordService: MedicalRecordService,
-    private patientService: PatientService
+    private patientService: PatientService,
+    private procedureService: ProcedureService
   ) {
     this.attendanceForm = this.fb.group({
       diagnosis: [''],
       prescription: [''],
+      notes: ['']
+    });
+
+    this.procedureForm = this.fb.group({
+      procedureId: ['', Validators.required],
+      customPrice: [''],
+      notes: ['']
+    });
+
+    this.examForm = this.fb.group({
+      examType: [ExamType.Laboratory, Validators.required],
+      examName: ['', Validators.required],
+      description: ['', Validators.required],
+      urgency: [ExamUrgency.Routine, Validators.required],
       notes: ['']
     });
   }
@@ -56,6 +93,8 @@ export class Attendance implements OnInit, OnDestroy {
     if (id) {
       this.appointmentId.set(id);
       this.loadAppointment(id);
+      this.loadAvailableProcedures();
+      this.loadAppointmentProcedures(id);
     }
   }
 
@@ -242,5 +281,113 @@ export class Attendance implements OnInit, OnDestroy {
 
   onPrint(): void {
     window.print();
+  }
+
+  // Procedure Management
+  loadAvailableProcedures(): void {
+    this.procedureService.getAll(true).subscribe({
+      next: (procedures) => {
+        this.availableProcedures.set(procedures);
+      },
+      error: (error) => {
+        console.error('Error loading procedures:', error);
+      }
+    });
+  }
+
+  loadAppointmentProcedures(appointmentId: string): void {
+    this.procedureService.getAppointmentProcedures(appointmentId).subscribe({
+      next: (procedures) => {
+        this.appointmentProcedures.set(procedures);
+      },
+      error: (error) => {
+        console.error('Error loading appointment procedures:', error);
+      }
+    });
+  }
+
+  toggleAddProcedure(): void {
+    this.showAddProcedure.set(!this.showAddProcedure());
+    if (!this.showAddProcedure()) {
+      this.procedureForm.reset();
+    }
+  }
+
+  onAddProcedure(): void {
+    if (!this.procedureForm.valid || !this.appointmentId()) return;
+
+    const formValue = this.procedureForm.value;
+    this.procedureService.addProcedureToAppointment(this.appointmentId()!, {
+      procedureId: formValue.procedureId,
+      customPrice: formValue.customPrice || undefined,
+      notes: formValue.notes || undefined
+    }).subscribe({
+      next: (procedure) => {
+        this.appointmentProcedures.update(procs => [...procs, procedure]);
+        this.successMessage.set('Procedimento adicionado com sucesso!');
+        this.procedureForm.reset();
+        this.showAddProcedure.set(false);
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: (error) => {
+        console.error('Error adding procedure:', error);
+        this.errorMessage.set('Erro ao adicionar procedimento');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
+  }
+
+  getProcedureName(procedureId: string): string {
+    const procedure = this.availableProcedures().find(p => p.id === procedureId);
+    return procedure ? procedure.name : '';
+  }
+
+  getProcedurePrice(procedureId: string): number {
+    const procedure = this.availableProcedures().find(p => p.id === procedureId);
+    return procedure ? procedure.price : 0;
+  }
+
+  // Exam Request Management
+  toggleAddExam(): void {
+    this.showAddExam.set(!this.showAddExam());
+    if (!this.showAddExam()) {
+      this.examForm.reset({
+        examType: ExamType.Laboratory,
+        urgency: ExamUrgency.Routine
+      });
+    }
+  }
+
+  onAddExamRequest(): void {
+    if (!this.examForm.valid || !this.appointmentId() || !this.patient()) return;
+
+    const formValue = this.examForm.value;
+    const examRequest: CreateExamRequest = {
+      appointmentId: this.appointmentId()!,
+      patientId: this.patient()!.id,
+      examType: formValue.examType,
+      examName: formValue.examName,
+      description: formValue.description,
+      urgency: formValue.urgency,
+      notes: formValue.notes || undefined
+    };
+
+    // For now, just add to local list (will need backend implementation)
+    this.examRequests.update(exams => [...exams, examRequest]);
+    this.successMessage.set('Pedido de exame adicionado com sucesso!');
+    this.examForm.reset({
+      examType: ExamType.Laboratory,
+      urgency: ExamUrgency.Routine
+    });
+    this.showAddExam.set(false);
+    setTimeout(() => this.successMessage.set(''), 3000);
+  }
+
+  removeExamRequest(index: number): void {
+    this.examRequests.update(exams => exams.filter((_, i) => i !== index));
+  }
+
+  getTotalProceduresCost(): number {
+    return this.appointmentProcedures().reduce((sum, proc) => sum + proc.priceCharged, 0);
   }
 }

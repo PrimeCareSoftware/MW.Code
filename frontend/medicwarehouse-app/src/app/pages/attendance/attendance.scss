@@ -203,6 +203,215 @@
     color: #7f8c8d;
     font-style: italic;
   }
+
+  .card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+
+    h3 {
+      margin: 0;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  .add-form {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.9rem;
+      }
+
+      .form-control, select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 0.95rem;
+
+        &:focus {
+          outline: none;
+          border-color: #3498db;
+          box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+      }
+    }
+  }
+
+  .procedures-list {
+    margin-top: 1rem;
+
+    .procedure-item {
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      border-left: 3px solid #27ae60;
+
+      .procedure-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
+        strong {
+          color: #2c3e50;
+          font-size: 1rem;
+        }
+
+        .procedure-code {
+          color: #7f8c8d;
+          font-size: 0.85rem;
+          font-family: monospace;
+        }
+      }
+
+      .procedure-price {
+        color: #27ae60;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      .procedure-notes {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        font-style: italic;
+        margin-top: 0.5rem;
+      }
+    }
+
+    .procedures-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      background: #e8f5e9;
+      border-radius: 4px;
+      font-size: 1.1rem;
+
+      strong {
+        color: #2c3e50;
+      }
+
+      span {
+        color: #27ae60;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .exams-list {
+    margin-top: 1rem;
+
+    .exam-item {
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      border-left: 3px solid #e74c3c;
+
+      .exam-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+
+        strong {
+          color: #2c3e50;
+          flex: 1;
+        }
+
+        .exam-type-badge {
+          padding: 0.25rem 0.75rem;
+          background: #3498db;
+          color: white;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .exam-urgency-badge {
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 600;
+
+          &.urgency-0 {
+            background: #95a5a6;
+            color: white;
+          }
+
+          &.urgency-1 {
+            background: #f39c12;
+            color: white;
+          }
+
+          &.urgency-2 {
+            background: #e74c3c;
+            color: white;
+          }
+        }
+
+        .btn-remove {
+          background: none;
+          border: none;
+          color: #e74c3c;
+          font-size: 1.2rem;
+          cursor: pointer;
+          padding: 0;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: background 0.2s;
+
+          &:hover {
+            background: #fee;
+          }
+        }
+      }
+
+      .exam-description {
+        color: #2c3e50;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .exam-notes {
+        color: #7f8c8d;
+        font-size: 0.85rem;
+      }
+    }
+  }
 }
 
 .alert {
