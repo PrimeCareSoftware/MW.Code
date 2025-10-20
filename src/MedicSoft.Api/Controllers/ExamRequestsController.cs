@@ -32,6 +32,7 @@ namespace MedicSoft.Api.Controllers
         /// Create a new exam request for an appointment
         /// </summary>
         [HttpPost]
+        [Route("")]
         public async Task<ActionResult<ExamRequestDto>> Create([FromBody] CreateExamRequestDto createDto)
         {
             if (!ModelState.IsValid)
@@ -96,16 +97,14 @@ namespace MedicSoft.Api.Controllers
                 if (examRequest == null)
                     return NotFound($"Exam request with ID {id} not found");
 
-                if (!string.IsNullOrEmpty(updateDto.ExamName) && !string.IsNullOrEmpty(updateDto.Description))
-                {
-                    examRequest.Update(
-                        updateDto.ExamName,
-                        updateDto.Description,
-                        updateDto.Urgency ?? examRequest.Urgency,
-                        updateDto.Notes
-                    );
-                }
+                // Update basic information if provided
+                var examName = updateDto.ExamName ?? examRequest.ExamName;
+                var description = updateDto.Description ?? examRequest.Description;
+                var urgency = updateDto.Urgency ?? examRequest.Urgency;
+                
+                examRequest.Update(examName, description, urgency, updateDto.Notes);
 
+                // Update scheduled date if provided
                 if (updateDto.ScheduledDate.HasValue)
                 {
                     examRequest.Schedule(updateDto.ScheduledDate.Value);
