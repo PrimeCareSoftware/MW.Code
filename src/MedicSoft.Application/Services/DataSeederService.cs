@@ -27,7 +27,13 @@ namespace MedicSoft.Application.Services
         private readonly IPrescriptionTemplateRepository _prescriptionTemplateRepository;
         private readonly IMedicalRecordTemplateRepository _medicalRecordTemplateRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly INotificationRoutineRepository _notificationRoutineRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
+        private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
+        private readonly IOwnerRepository _ownerRepository;
+        private readonly IExpenseRepository _expenseRepository;
+        private readonly IExamRequestRepository _examRequestRepository;
         private readonly string _demoTenantId = "demo-clinic-001";
 
         public DataSeederService(
@@ -45,7 +51,13 @@ namespace MedicSoft.Application.Services
             IPrescriptionTemplateRepository prescriptionTemplateRepository,
             IMedicalRecordTemplateRepository medicalRecordTemplateRepository,
             INotificationRepository notificationRepository,
-            IPasswordHasher passwordHasher)
+            INotificationRoutineRepository notificationRoutineRepository,
+            IPasswordHasher passwordHasher,
+            ISubscriptionPlanRepository subscriptionPlanRepository,
+            IClinicSubscriptionRepository clinicSubscriptionRepository,
+            IOwnerRepository ownerRepository,
+            IExpenseRepository expenseRepository,
+            IExamRequestRepository examRequestRepository)
         {
             _clinicRepository = clinicRepository;
             _userRepository = userRepository;
@@ -61,7 +73,13 @@ namespace MedicSoft.Application.Services
             _prescriptionTemplateRepository = prescriptionTemplateRepository;
             _medicalRecordTemplateRepository = medicalRecordTemplateRepository;
             _notificationRepository = notificationRepository;
+            _notificationRoutineRepository = notificationRoutineRepository;
             _passwordHasher = passwordHasher;
+            _subscriptionPlanRepository = subscriptionPlanRepository;
+            _clinicSubscriptionRepository = clinicSubscriptionRepository;
+            _ownerRepository = ownerRepository;
+            _expenseRepository = expenseRepository;
+            _examRequestRepository = examRequestRepository;
         }
 
         public async Task SeedDemoDataAsync()
@@ -73,9 +91,24 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException("Demo data already exists for this tenant");
             }
 
+            // 0. Create Subscription Plans (system-wide)
+            var subscriptionPlans = CreateDemoSubscriptionPlans();
+            foreach (var plan in subscriptionPlans)
+            {
+                await _subscriptionPlanRepository.AddAsync(plan);
+            }
+
             // 1. Create Demo Clinic
             var clinic = CreateDemoClinic();
             await _clinicRepository.AddAsync(clinic);
+
+            // 1.1. Create Clinic Subscription
+            var clinicSubscription = CreateClinicSubscription(clinic.Id, subscriptionPlans[2].Id); // Standard plan
+            await _clinicSubscriptionRepository.AddAsync(clinicSubscription);
+
+            // 1.2. Create Demo Owner for the clinic
+            var owner = CreateDemoOwner();
+            await _ownerRepository.AddAsync(owner);
 
             // 2. Create Users (Admin, Doctor, Receptionist)
             var users = CreateDemoUsers();
@@ -166,6 +199,27 @@ namespace MedicSoft.Application.Services
             foreach (var notification in notifications)
             {
                 await _notificationRepository.AddAsync(notification);
+            }
+
+            // 15. Create Notification Routines
+            var notificationRoutines = CreateDemoNotificationRoutines(clinic.Id);
+            foreach (var routine in notificationRoutines)
+            {
+                await _notificationRoutineRepository.AddAsync(routine);
+            }
+
+            // 16. Create Expenses
+            var expenses = CreateDemoExpenses(clinic.Id);
+            foreach (var expense in expenses)
+            {
+                await _expenseRepository.AddAsync(expense);
+            }
+
+            // 17. Create Exam Requests
+            var examRequests = CreateDemoExamRequests(appointments, patients);
+            foreach (var examRequest in examRequests)
+            {
+                await _examRequestRepository.AddAsync(examRequest);
             }
         }
 
@@ -1058,6 +1112,425 @@ RETORNO: {{return_date}}",
             notifications.Add(notif5);
 
             return notifications;
+        }
+
+        private List<SubscriptionPlan> CreateDemoSubscriptionPlans()
+        {
+            return new List<SubscriptionPlan>
+            {
+                new SubscriptionPlan(
+                    "Trial Gratuito",
+                    "Plano de teste gratuito por 30 dias com funcionalidades básicas",
+                    0.00m,
+                    30,
+                    3,
+                    50,
+                    PlanType.Trial,
+                    "system",
+                    hasReports: false,
+                    hasWhatsAppIntegration: false,
+                    hasSMSNotifications: false,
+                    hasTissExport: false
+                ),
+                new SubscriptionPlan(
+                    "Básico",
+                    "Plano básico para pequenas clínicas com funcionalidades essenciais",
+                    99.90m,
+                    15,
+                    5,
+                    100,
+                    PlanType.Basic,
+                    "system",
+                    hasReports: true,
+                    hasWhatsAppIntegration: false,
+                    hasSMSNotifications: true,
+                    hasTissExport: false
+                ),
+                new SubscriptionPlan(
+                    "Standard",
+                    "Plano completo para clínicas médicas com todas as funcionalidades",
+                    199.90m,
+                    15,
+                    15,
+                    500,
+                    PlanType.Standard,
+                    "system",
+                    hasReports: true,
+                    hasWhatsAppIntegration: true,
+                    hasSMSNotifications: true,
+                    hasTissExport: true
+                ),
+                new SubscriptionPlan(
+                    "Premium",
+                    "Plano premium para grandes clínicas e hospitais",
+                    399.90m,
+                    15,
+                    50,
+                    2000,
+                    PlanType.Premium,
+                    "system",
+                    hasReports: true,
+                    hasWhatsAppIntegration: true,
+                    hasSMSNotifications: true,
+                    hasTissExport: true
+                ),
+                new SubscriptionPlan(
+                    "Enterprise",
+                    "Plano corporativo para redes de clínicas e hospitais com suporte dedicado",
+                    999.90m,
+                    30,
+                    200,
+                    10000,
+                    PlanType.Enterprise,
+                    "system",
+                    hasReports: true,
+                    hasWhatsAppIntegration: true,
+                    hasSMSNotifications: true,
+                    hasTissExport: true
+                )
+            };
+        }
+
+        private ClinicSubscription CreateClinicSubscription(Guid clinicId, Guid subscriptionPlanId)
+        {
+            var startDate = DateTime.UtcNow.AddDays(-15); // Started 15 days ago
+            
+            var subscription = new ClinicSubscription(
+                clinicId,
+                subscriptionPlanId,
+                startDate,
+                15, // trial days
+                199.90m, // Standard plan price
+                _demoTenantId
+            );
+            
+            // Activate the subscription
+            subscription.Activate();
+            
+            return subscription;
+        }
+
+        private Owner CreateDemoOwner()
+        {
+            var ownerPassword = _passwordHasher.HashPassword("Owner@123");
+            return new Owner(
+                "owner.demo",
+                "owner@clinicademo.com.br",
+                ownerPassword,
+                "Dr. Roberto Almeida",
+                "+55 11 98765-4320",
+                _demoTenantId
+            );
+        }
+
+        private List<NotificationRoutine> CreateDemoNotificationRoutines(Guid clinicId)
+        {
+            return new List<NotificationRoutine>
+            {
+                new NotificationRoutine(
+                    "Lembrete de Consulta - 24h Antes",
+                    "Rotina automática para enviar lembrete de consulta 24 horas antes via WhatsApp",
+                    NotificationChannel.WhatsApp,
+                    NotificationType.AppointmentReminder,
+                    "Olá {{patient_name}}! Lembrete: Você tem consulta agendada amanhã às {{appointment_time}}. Clínica {{clinic_name}}. Favor chegar 15 minutos antes.",
+                    RoutineScheduleType.BeforeAppointment,
+                    "{\"hours_before\": 24}",
+                    RoutineScope.Clinic,
+                    _demoTenantId,
+                    maxRetries: 3
+                ),
+                new NotificationRoutine(
+                    "Lembrete de Consulta - 2h Antes (SMS)",
+                    "Rotina para enviar lembrete via SMS 2 horas antes da consulta",
+                    NotificationChannel.SMS,
+                    NotificationType.AppointmentReminder,
+                    "Lembrete: Consulta hoje às {{appointment_time}}. {{clinic_name}}. Chegar 15min antes.",
+                    RoutineScheduleType.BeforeAppointment,
+                    "{\"hours_before\": 2}",
+                    RoutineScope.Clinic,
+                    _demoTenantId,
+                    maxRetries: 2
+                ),
+                new NotificationRoutine(
+                    "Confirmação de Agendamento",
+                    "Envio imediato de confirmação após agendamento de consulta",
+                    NotificationChannel.Email,
+                    NotificationType.AppointmentConfirmation,
+                    "Olá {{patient_name}},\n\nSua consulta foi agendada com sucesso!\n\nData: {{appointment_date}}\nHorário: {{appointment_time}}\nMédico: {{doctor_name}}\n\nClínica {{clinic_name}}\n{{clinic_address}}\n{{clinic_phone}}",
+                    RoutineScheduleType.Custom,
+                    "{\"trigger\": \"on_appointment_created\"}",
+                    RoutineScope.Clinic,
+                    _demoTenantId,
+                    maxRetries: 3
+                ),
+                new NotificationRoutine(
+                    "Aniversário do Paciente",
+                    "Envio de mensagem de aniversário aos pacientes",
+                    NotificationChannel.WhatsApp,
+                    NotificationType.General,
+                    "Parabéns {{patient_name}}! 🎉🎂 A equipe da {{clinic_name}} deseja um feliz aniversário! Que este novo ano seja repleto de saúde e felicidade!",
+                    RoutineScheduleType.Daily,
+                    "{\"time\": \"09:00\"}",
+                    RoutineScope.Clinic,
+                    _demoTenantId,
+                    maxRetries: 1
+                ),
+                new NotificationRoutine(
+                    "Pesquisa de Satisfação",
+                    "Envio de pesquisa de satisfação 24 horas após a consulta",
+                    NotificationChannel.Email,
+                    NotificationType.General,
+                    "Olá {{patient_name}},\n\nGostaríamos de saber como foi sua experiência na consulta de {{appointment_date}}.\n\nPor favor, avalie nosso atendimento: [link_pesquisa]\n\nSua opinião é muito importante para nós!\n\nAtenciosamente,\n{{clinic_name}}",
+                    RoutineScheduleType.AfterAppointment,
+                    "{\"hours_after\": 24}",
+                    RoutineScope.Clinic,
+                    _demoTenantId,
+                    maxRetries: 2
+                )
+            };
+        }
+
+        private List<Expense> CreateDemoExpenses(Guid clinicId)
+        {
+            var today = DateTime.Today;
+            var expenses = new List<Expense>();
+
+            // Aluguel - Pago
+            var rent = new Expense(
+                clinicId,
+                "Aluguel do consultório - Mês atual",
+                ExpenseCategory.Rent,
+                3500.00m,
+                today.AddDays(-25),
+                _demoTenantId,
+                "Imobiliária Santos",
+                "12.345.678/0001-90",
+                "Aluguel mensal do espaço da clínica"
+            );
+            rent.MarkAsPaid(PaymentMethod.BankTransfer, "TRF-2024-001");
+            expenses.Add(rent);
+
+            // Conta de luz - Pago
+            var electricity = new Expense(
+                clinicId,
+                "Conta de energia elétrica",
+                ExpenseCategory.Utilities,
+                450.00m,
+                today.AddDays(-20),
+                _demoTenantId,
+                "Companhia de Energia",
+                null,
+                "Consumo referente ao mês anterior"
+            );
+            electricity.MarkAsPaid(PaymentMethod.Pix, "PIX-2024-015");
+            expenses.Add(electricity);
+
+            // Internet e telefone - Pago
+            var internet = new Expense(
+                clinicId,
+                "Internet fibra ótica 200MB + telefone",
+                ExpenseCategory.Utilities,
+                199.90m,
+                today.AddDays(-18),
+                _demoTenantId,
+                "Provedor de Internet",
+                "98.765.432/0001-10",
+                "Plano empresarial"
+            );
+            internet.MarkAsPaid(PaymentMethod.CreditCard, "CC-2024-045");
+            expenses.Add(internet);
+
+            // Material de limpeza - Pago
+            var cleaning = new Expense(
+                clinicId,
+                "Material de limpeza e higienização",
+                ExpenseCategory.Supplies,
+                350.00m,
+                today.AddDays(-15),
+                _demoTenantId,
+                "Distribuidora de Produtos",
+                "11.222.333/0001-44",
+                "Álcool, desinfetantes, papel toalha, etc."
+            );
+            cleaning.MarkAsPaid(PaymentMethod.Cash, null);
+            expenses.Add(cleaning);
+
+            // Software de gestão - Pendente
+            var software = new Expense(
+                clinicId,
+                "Assinatura sistema de gestão - MedicWarehouse",
+                ExpenseCategory.Software,
+                199.90m,
+                today.AddDays(5),
+                _demoTenantId,
+                "MedicWarehouse Ltda",
+                "22.333.444/0001-55",
+                "Plano Standard mensal"
+            );
+            expenses.Add(software);
+
+            // Material médico - Pendente
+            var medical = new Expense(
+                clinicId,
+                "Material médico descartável",
+                ExpenseCategory.Supplies,
+                890.00m,
+                today.AddDays(10),
+                _demoTenantId,
+                "Distribuidora Médica",
+                "33.444.555/0001-66",
+                "Luvas, seringas, gazes, curativos"
+            );
+            expenses.Add(medical);
+
+            // Manutenção equipamentos - Vencido
+            var maintenance = new Expense(
+                clinicId,
+                "Manutenção preventiva ar condicionado",
+                ExpenseCategory.Maintenance,
+                280.00m,
+                today.AddDays(-5),
+                _demoTenantId,
+                "Climatização e Refrigeração",
+                "44.555.666/0001-77",
+                "Limpeza e manutenção preventiva"
+            );
+            maintenance.CheckOverdue();
+            expenses.Add(maintenance);
+
+            // Contador - Pendente
+            var accounting = new Expense(
+                clinicId,
+                "Serviços contábeis mensais",
+                ExpenseCategory.ProfessionalServices,
+                650.00m,
+                today.AddDays(15),
+                _demoTenantId,
+                "Contabilidade Empresarial",
+                "55.666.777/0001-88",
+                "Honorários contábeis do mês"
+            );
+            expenses.Add(accounting);
+
+            // Marketing - Pago
+            var marketing = new Expense(
+                clinicId,
+                "Publicidade em redes sociais",
+                ExpenseCategory.Marketing,
+                500.00m,
+                today.AddDays(-10),
+                _demoTenantId,
+                "Agência Digital",
+                "66.777.888/0001-99",
+                "Gestão de mídias sociais e anúncios"
+            );
+            marketing.MarkAsPaid(PaymentMethod.Pix, "PIX-2024-028");
+            expenses.Add(marketing);
+
+            // Treinamento - Cancelado
+            var training = new Expense(
+                clinicId,
+                "Curso de atualização médica",
+                ExpenseCategory.Training,
+                1200.00m,
+                today.AddDays(20),
+                _demoTenantId,
+                "Centro de Educação Médica",
+                "77.888.999/0001-00",
+                "Curso cancelado devido a conflito de agenda"
+            );
+            training.Cancel("Conflito de agenda - curso remarcado para próximo mês");
+            expenses.Add(training);
+
+            return expenses;
+        }
+
+        private List<ExamRequest> CreateDemoExamRequests(List<Appointment> appointments, List<Patient> patients)
+        {
+            var examRequests = new List<ExamRequest>();
+
+            // Exam request for first completed appointment (Carlos - Hypertension)
+            var exam1 = new ExamRequest(
+                appointments[0].Id,
+                patients[0].Id,
+                ExamType.Laboratory,
+                "Hemograma completo, Glicemia em jejum, Perfil lipídico",
+                "Exames de rotina para controle de hipertensão",
+                ExamUrgency.Routine,
+                _demoTenantId,
+                "Em jejum de 12 horas"
+            );
+            exam1.Complete("Hemograma: Normal\nGlicemia: 95 mg/dL\nColesterol total: 180 mg/dL\nHDL: 55 mg/dL\nLDL: 110 mg/dL\nTriglicerídeos: 120 mg/dL");
+            examRequests.Add(exam1);
+
+            // Exam request for second completed appointment (Ana - Diabetes and Arrhythmia)
+            var exam2 = new ExamRequest(
+                appointments[1].Id,
+                patients[1].Id,
+                ExamType.Laboratory,
+                "Hemograma, Glicemia em jejum, Hemoglobina glicada (HbA1c)",
+                "Avaliação e controle glicêmico",
+                ExamUrgency.Urgent,
+                _demoTenantId,
+                "Jejum de 12 horas para exames laboratoriais"
+            );
+            exam2.Complete("Hemograma: Normal\nGlicemia: 145 mg/dL (elevada)\nHbA1c: 7.2% (controle inadequado)");
+            examRequests.Add(exam2);
+
+            // ECG for Ana
+            var exam2b = new ExamRequest(
+                appointments[1].Id,
+                patients[1].Id,
+                ExamType.Cardiac,
+                "Eletrocardiograma (ECG)",
+                "Investigação de palpitações",
+                ExamUrgency.Urgent,
+                _demoTenantId,
+                "Trazer lista de medicamentos em uso"
+            );
+            exam2b.Complete("ECG: Ritmo sinusal, sem alterações agudas");
+            examRequests.Add(exam2b);
+
+            // Exam request for today's appointment (Pedro) - Pending
+            var exam3 = new ExamRequest(
+                appointments[2].Id,
+                patients[2].Id,
+                ExamType.Imaging,
+                "Raio-X de tórax PA e perfil",
+                "Investigação de tosse persistente",
+                ExamUrgency.Routine,
+                _demoTenantId,
+                "Levar exames anteriores se disponível"
+            );
+            examRequests.Add(exam3);
+
+            // Additional exam request - Scheduled
+            var exam4 = new ExamRequest(
+                appointments[1].Id,
+                patients[1].Id,
+                ExamType.Cardiac,
+                "Ecocardiograma com doppler",
+                "Avaliação detalhada da função cardíaca devido a queixas de palpitação",
+                ExamUrgency.Urgent,
+                _demoTenantId,
+                "Trazer ECG anterior"
+            );
+            exam4.Schedule(DateTime.UtcNow.AddDays(5));
+            examRequests.Add(exam4);
+
+            // Ultrasound request - Pending
+            var exam5 = new ExamRequest(
+                appointments[0].Id,
+                patients[0].Id,
+                ExamType.Ultrasound,
+                "Ultrassom de abdômen total",
+                "Avaliação de rotina",
+                ExamUrgency.Routine,
+                _demoTenantId
+            );
+            examRequests.Add(exam5);
+
+            return examRequests;
         }
     }
 }
