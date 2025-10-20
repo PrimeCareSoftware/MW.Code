@@ -45,13 +45,38 @@ namespace MedicSoft.Api.Controllers
                 {
                     message = "Demo data seeded successfully",
                     tenantId = "demo-clinic-001",
-                    users = new[]
+                    credentials = new
                     {
-                        new { username = "admin", password = "Admin@123", role = "SystemAdmin" },
-                        new { username = "dr.silva", password = "Doctor@123", role = "Doctor" },
-                        new { username = "recep.maria", password = "Recep@123", role = "Receptionist" }
+                        owner = new { username = "owner.demo", password = "Owner@123", role = "Owner" },
+                        users = new[]
+                        {
+                            new { username = "admin", password = "Admin@123", role = "SystemAdmin" },
+                            new { username = "dr.silva", password = "Doctor@123", role = "Doctor" },
+                            new { username = "recep.maria", password = "Recep@123", role = "Receptionist" }
+                        }
                     },
-                    note = "Use these credentials to login and test the system"
+                    summary = new
+                    {
+                        subscriptionPlans = 5,
+                        clinic = 1,
+                        clinicSubscription = 1,
+                        owner = 1,
+                        users = 3,
+                        patients = 6,
+                        procedures = 8,
+                        appointments = 5,
+                        payments = 2,
+                        medications = 8,
+                        medicalRecords = 2,
+                        prescriptionItems = 3,
+                        prescriptionTemplates = 4,
+                        medicalRecordTemplates = 3,
+                        notifications = 5,
+                        notificationRoutines = 5,
+                        expenses = 10,
+                        examRequests = 5
+                    },
+                    note = "Use these credentials to login and test the system. Complete database seeded with realistic demo data."
                 });
             }
             catch (InvalidOperationException ex)
@@ -80,37 +105,54 @@ namespace MedicSoft.Api.Controllers
                 },
                 users = new[]
                 {
+                    new { username = "owner.demo", role = "Owner", email = "owner@clinicademo.com.br", crm = (string?)null, specialty = (string?)null },
                     new { username = "admin", role = "SystemAdmin", email = "admin@clinicademo.com.br", crm = (string?)null, specialty = (string?)null },
                     new { username = "dr.silva", role = "Doctor", email = "joao.silva@clinicademo.com.br", crm = (string?)"CRM-123456", specialty = (string?)"Clínico Geral" },
                     new { username = "recep.maria", role = "Receptionist", email = "maria.santos@clinicademo.com.br", crm = (string?)null, specialty = (string?)null }
                 },
                 dataSeeded = new
                 {
+                    subscriptionPlans = 5,
+                    clinic = 1,
+                    clinicSubscription = 1,
+                    owner = 1,
+                    users = 3,
                     patients = 6,
                     procedures = 8,
                     appointments = 5,
+                    appointmentProcedures = 3,
                     payments = 2,
                     medications = 8,
                     medicalRecords = 2,
                     prescriptionItems = 3,
                     prescriptionTemplates = 4,
                     medicalRecordTemplates = 3,
-                    notifications = 5
+                    notifications = 5,
+                    notificationRoutines = 5,
+                    expenses = 10,
+                    examRequests = 5
                 },
                 entities = new[]
                 {
+                    "✅ 5 Planos de assinatura (Trial, Básico, Standard, Premium, Enterprise)",
                     "✅ 1 Clínica Demo",
+                    "✅ 1 Assinatura ativa (Plano Standard)",
+                    "✅ 1 Proprietário da clínica (Owner)",
                     "✅ 3 Usuários (Admin, Médico, Recepcionista)",
                     "✅ 6 Pacientes (incluindo 2 crianças com responsável)",
                     "✅ 8 Procedimentos diversos (consultas, exames, vacinas, etc.)",
                     "✅ 5 Agendamentos (passados, hoje e futuros)",
+                    "✅ 3 Procedimentos vinculados a agendamentos",
                     "✅ 2 Pagamentos processados",
                     "✅ 8 Medicamentos (antibióticos, analgésicos, anti-hipertensivos, etc.)",
                     "✅ 2 Prontuários médicos com consultas finalizadas",
                     "✅ 3 Itens de prescrição vinculados aos prontuários",
                     "✅ 4 Templates de prescrição (antibióticos, anti-hipertensivos, analgésicos, diabetes)",
                     "✅ 3 Templates de prontuário (clínica geral, cardiologia, pediatria)",
-                    "✅ 5 Notificações (SMS, WhatsApp, Email) em diversos estados"
+                    "✅ 5 Notificações (SMS, WhatsApp, Email) em diversos estados",
+                    "✅ 5 Rotinas de notificação automatizadas",
+                    "✅ 10 Despesas (pagas, pendentes, vencidas e canceladas)",
+                    "✅ 5 Solicitações de exames (laboratoriais, imagem, cardiológicos)"
                 },
                 note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features"
             });
