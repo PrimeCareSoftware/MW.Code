@@ -107,6 +107,10 @@ namespace MedicSoft.Application.Mappings
             CreateMap<AppointmentProcedure, AppointmentProcedureDto>()
                 .ForMember(dest => dest.ProcedureName, opt => opt.MapFrom(src => src.Procedure != null ? src.Procedure.Name : string.Empty))
                 .ForMember(dest => dest.ProcedureCode, opt => opt.MapFrom(src => src.Procedure != null ? src.Procedure.Code : string.Empty));
+
+            // ExamRequest mappings
+            CreateMap<ExamRequest, ExamRequestDto>()
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient != null ? src.Patient.Name : string.Empty));
         }
     }
 }
