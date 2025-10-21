@@ -1304,7 +1304,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(-25),
                 _demoTenantId,
                 "Imobiliária Santos",
-                "12.345.678/0001-90",
+                "12.345.678/0001-95",
                 "Aluguel mensal do espaço da clínica"
             );
             rent.MarkAsPaid(PaymentMethod.BankTransfer, "TRF-2024-001");
@@ -1334,7 +1334,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(-18),
                 _demoTenantId,
                 "Provedor de Internet",
-                "98.765.432/0001-10",
+                "98.765.432/0001-98",
                 "Plano empresarial"
             );
             internet.MarkAsPaid(PaymentMethod.CreditCard, "CC-2024-045");
@@ -1349,7 +1349,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(-15),
                 _demoTenantId,
                 "Distribuidora de Produtos",
-                "11.222.333/0001-44",
+                "11.222.333/0001-81",
                 "Álcool, desinfetantes, papel toalha, etc."
             );
             cleaning.MarkAsPaid(PaymentMethod.Cash, null);
@@ -1364,7 +1364,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(5),
                 _demoTenantId,
                 "MedicWarehouse Ltda",
-                "22.333.444/0001-55",
+                "22.333.444/0001-81",
                 "Plano Standard mensal"
             );
             expenses.Add(software);
@@ -1378,7 +1378,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(10),
                 _demoTenantId,
                 "Distribuidora Médica",
-                "33.444.555/0001-66",
+                "33.444.555/0001-81",
                 "Luvas, seringas, gazes, curativos"
             );
             expenses.Add(medical);
@@ -1392,7 +1392,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(-5),
                 _demoTenantId,
                 "Climatização e Refrigeração",
-                "44.555.666/0001-77",
+                "44.555.666/0001-81",
                 "Limpeza e manutenção preventiva"
             );
             maintenance.CheckOverdue();
@@ -1407,7 +1407,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(15),
                 _demoTenantId,
                 "Contabilidade Empresarial",
-                "55.666.777/0001-88",
+                "55.666.777/0001-81",
                 "Honorários contábeis do mês"
             );
             expenses.Add(accounting);
@@ -1421,7 +1421,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(-10),
                 _demoTenantId,
                 "Agência Digital",
-                "66.777.888/0001-99",
+                "66.777.888/0001-81",
                 "Gestão de mídias sociais e anúncios"
             );
             marketing.MarkAsPaid(PaymentMethod.Pix, "PIX-2024-028");
@@ -1436,7 +1436,7 @@ RETORNO: {{return_date}}",
                 today.AddDays(20),
                 _demoTenantId,
                 "Centro de Educação Médica",
-                "77.888.999/0001-00",
+                "77.888.999/0001-81",
                 "Curso cancelado devido a conflito de agenda"
             );
             training.Cancel("Conflito de agenda - curso remarcado para próximo mês");
