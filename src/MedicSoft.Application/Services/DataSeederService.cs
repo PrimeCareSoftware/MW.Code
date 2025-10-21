@@ -228,7 +228,7 @@ namespace MedicSoft.Application.Services
             return new Clinic(
                 "Clínica Demo MedicWarehouse",
                 "Clínica Demo",
-                "12.345.678/0001-90",
+                "12.345.678/0001-95",
                 "+55 11 98765-4321",
                 "contato@clinicademo.com.br",
                 "Avenida Paulista, 1000 - Bela Vista, São Paulo - SP, 01310-100",
