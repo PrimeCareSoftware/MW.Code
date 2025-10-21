@@ -169,7 +169,7 @@ Content-Type: application/json
 
 {
   "clinicName": "Minha Clínica",
-  "cnpj": "12.345.678/0001-90",
+  "cnpj": "12.345.678/0001-95",
   "tradeName": "Clínica Exemplo",
   "phone": "+5511999999999",
   "email": "contato@minhaclinca.com",
@@ -266,7 +266,7 @@ POST http://localhost:5000/api/data-seeder/seed-system-owner
 POST http://localhost:5000/api/registration
 {
   "clinicName": "Minha Clínica",
-  "cnpj": "12.345.678/0001-90",
+  "cnpj": "12.345.678/0001-95",
   // ... demais campos
 }
 

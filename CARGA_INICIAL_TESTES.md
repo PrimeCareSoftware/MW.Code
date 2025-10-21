@@ -22,7 +22,7 @@ Gerar dados de demonstração completos e interconectados que permitam testar:
 ### 1. Clínica Demo
 - **Nome**: Clínica Demo MedicWarehouse
 - **TenantId**: `demo-clinic-001`
-- **CNPJ**: 12.345.678/0001-90
+- **CNPJ**: 12.345.678/0001-95
 - **Horário**: 08:00 - 18:00
 - **Duração de consulta**: 30 minutos
 

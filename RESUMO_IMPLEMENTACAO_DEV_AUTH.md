@@ -160,7 +160,7 @@ POST /api/data-seeder/seed-system-owner
 POST /api/registration
 {
   "clinicName": "Minha Clínica",
-  "cnpj": "12.345.678/0001-90",
+  "cnpj": "12.345.678/0001-95",
   // ... demais campos
 }
 

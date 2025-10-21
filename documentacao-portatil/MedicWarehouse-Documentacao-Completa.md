@@ -10219,7 +10219,7 @@ Content-Type: application/json
 
 {
   "clinicName": "Clínica Sorriso",
-  "clinicCNPJ": "12.345.678/0001-90",
+  "clinicCNPJ": "12.345.678/0001-95",
   "clinicPhone": "+5511999999999",
   "clinicEmail": "contato@clinica.com",
   "street": "Rua das Flores",
