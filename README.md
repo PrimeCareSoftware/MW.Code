@@ -578,26 +578,40 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
 
 ## 🚀 Deploy e Infraestrutura de Produção
 
-### 💰 Infraestrutura com Baixo Custo (NOVO!)
+### 💰 Infraestrutura com Baixo Custo (NOVO!) 🔥
 
-Documentação completa para colocar o sistema em produção com **custo mínimo** enquanto você ainda não tem clientes grandes:
+**Documentação completa para produção com custo mínimo ($5-20/mês) enquanto você não tem clientes grandes!**
 
-- 📖 **[INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)** - **Guia completo de infraestrutura econômica**
-  - 💚 **Opção 1: Railway + Vercel** (Recomendado) - $5-20/mês para 10-50 clínicas
-  - 🔧 **Opção 2: VPS (Hetzner/DigitalOcean)** - $5-10/mês com controle total
-  - 🆓 **Opção 3: Free Tier** - $0/mês apenas para testes/MVP
-  - 📊 Comparativo completo de custos e escalabilidade
-  - 🔄 Estratégia de crescimento gradual
+#### 📚 [INFRA_DOCS_INDEX.md](INFRA_DOCS_INDEX.md) - **COMECE AQUI!**
+Índice completo com todos os guias de infraestrutura. Navegação fácil para encontrar o que você precisa.
 
-- 📖 **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - **Deploy passo a passo no Railway**
-  - Setup em 30 minutos
-  - PostgreSQL incluído e configurado automaticamente
-  - SSL, backups e monitoramento inclusos
+#### 🚀 Guias Principais:
 
-- 📖 **[MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)** - **Migração de SQL Server para PostgreSQL**
-  - Economize 90-96% em custos de banco de dados
-  - Guia técnico completo de migração
-  - Scripts e troubleshooting
+- **[QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md)** - ⚡ **Do Zero ao Ar em 30 Minutos**
+  - Setup rápido com Railway ou VPS
+  - Passo a passo simplificado
+  - Para quem quer resultados AGORA
+
+- **[CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md)** - 💵 **Planeje Seus Custos**
+  - Estimativas por número de clínicas (1-500+)
+  - Comparação Railway vs VPS vs Cloud
+  - Projeção de crescimento e ROI
+
+- **[INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)** - 📋 **Guia Completo**
+  - 💚 **Railway + Vercel** (Recomendado) - $5-20/mês
+  - 🔧 **VPS (Hetzner/DigitalOcean)** - $5-10/mês
+  - 🆓 **Free Tier** - $0/mês (apenas testes)
+  - Comparativos, estratégias de escala, backups
+
+- **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - 🚂 **Deploy no Railway**
+  - Passo a passo detalhado
+  - PostgreSQL incluído
+  - SSL e backups automáticos
+
+- **[MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
+  - Migração SQL Server → PostgreSQL
+  - Guia técnico completo
+  - Scripts e validação
 
 ### Usando Docker (Desenvolvimento/VPS)
 
