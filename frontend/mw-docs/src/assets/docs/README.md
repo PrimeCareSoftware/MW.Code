@@ -86,6 +86,10 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Análise por Categoria**: Distribuição de despesas por categoria
 - ✅ **API RESTful**: Endpoints completos para geração de relatórios
 
+## 📈 Análise e Melhorias
+
+> 📄 **[ANÁLISE COMPARATIVA E MELHORIAS](ANALISE_MELHORIAS_SISTEMA.md)** - Análise detalhada do sistema MedicWarehouse comparado com principais concorrentes de mercado (Doctoralia, iClinic, Nuvem Saúde, etc.), gaps identificados e roadmap de melhorias propostas para 2025-2026. Inclui análise de funcionalidades, experiência do usuário, arquitetura técnica e projeções de ROI.
+
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
 - ✅ **WhatsApp**: Interface para WhatsApp Business API
