@@ -270,7 +270,7 @@ Cliente no Premium (R$ 320) → Basic (R$ 190)
 **Impacto no negócio:**
 - Reduz o MRR
 - Aumenta custos de cobrança
-- Prejudica fluxo de caixaxa
+- Prejudica fluxo de caixa
 
 ---
 
