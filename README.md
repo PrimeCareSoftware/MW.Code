@@ -576,25 +576,61 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
 - 📖 **[AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
 - 📖 **[SECURITY_GUIDE.md](frontend/mw-docs/src/assets/docs/SECURITY_GUIDE.md)** - Guia completo de segurança
 
-## 🚀 Deploy
+## 🚀 Deploy e Infraestrutura de Produção
 
-### Usando Docker
+### 💰 Infraestrutura com Baixo Custo (NOVO!)
 
+Documentação completa para colocar o sistema em produção com **custo mínimo** enquanto você ainda não tem clientes grandes:
+
+- 📖 **[INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)** - **Guia completo de infraestrutura econômica**
+  - 💚 **Opção 1: Railway + Vercel** (Recomendado) - $5-20/mês para 10-50 clínicas
+  - 🔧 **Opção 2: VPS (Hetzner/DigitalOcean)** - $5-10/mês com controle total
+  - 🆓 **Opção 3: Free Tier** - $0/mês apenas para testes/MVP
+  - 📊 Comparativo completo de custos e escalabilidade
+  - 🔄 Estratégia de crescimento gradual
+
+- 📖 **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - **Deploy passo a passo no Railway**
+  - Setup em 30 minutos
+  - PostgreSQL incluído e configurado automaticamente
+  - SSL, backups e monitoramento inclusos
+
+- 📖 **[MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)** - **Migração de SQL Server para PostgreSQL**
+  - Economize 90-96% em custos de banco de dados
+  - Guia técnico completo de migração
+  - Scripts e troubleshooting
+
+### Usando Docker (Desenvolvimento/VPS)
+
+**Desenvolvimento:**
 ```bash
-# Build das imagens
-docker-compose build
+# Build e iniciar
+docker-compose up -d
 
-# Deploy em produção
-docker-compose -f docker-compose.yml up -d
+# A API estará em: http://localhost:5000
+# Frontend em: http://localhost:4200
+```
+
+**Produção (VPS):**
+```bash
+# Usar compose otimizado para produção
+docker-compose -f docker-compose.production.yml up -d
+
+# Ver logs
+docker-compose -f docker-compose.production.yml logs -f
 ```
 
 ### Configuração de Produção
 
-Atualize as seguintes configurações para produção:
+📋 **Checklist de Setup:**
+- [ ] Copiar `.env.example` para `.env` e configurar
+- [ ] Gerar `JWT_SECRET_KEY` forte (32+ caracteres)
+- [ ] Configurar `POSTGRES_PASSWORD` segura
+- [ ] Atualizar `CORS` com domínios corretos
+- [ ] Configurar backups automáticos
+- [ ] Habilitar HTTPS (SSL/TLS)
+- [ ] Configurar monitoramento de logs
 
-- `appsettings.Production.json`: String de conexão e chave JWT
-- `docker-compose.yml`: Variáveis de ambiente de produção
-- Nginx: Configuração SSL/TLS
+Para detalhes completos, veja: [INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)
 
 ## 🔄 CI/CD
 
