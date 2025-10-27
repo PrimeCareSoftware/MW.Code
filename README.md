@@ -32,7 +32,14 @@ Painel administrativo para gestão do sistema completo:
 
 ## 📚 Documentação Completa
 
-### 📱 Documentação Portátil (NOVO!)
+### 💼 Glossário de Termos Empresariais (NOVO!)
+**Não entende termos da área empresarial? Comece por aqui!**
+- 📖 **[`GLOSSARIO_TERMOS_EMPRESARIAIS.md`](GLOSSARIO_TERMOS_EMPRESARIAIS.md)** - Glossário completo explicando todos os termos de negócio
+- 💡 Aprenda sobre: SaaS, MRR, Churn, CAC, LTV, ROI, e muito mais
+- 🎯 Ideal para: Empreendedores, donos de negócio, estudantes
+- 📊 Exemplos práticos e aplicações reais
+
+### 📱 Documentação Portátil
 **Leia toda a documentação no celular ou gere um PDF completo!**
 - 📂 **Localização**: `documentacao-portatil/`
 - 📖 **Guia de uso**: [`COMO_LER_DOCUMENTACAO_NO_CELULAR.md`](COMO_LER_DOCUMENTACAO_NO_CELULAR.md)

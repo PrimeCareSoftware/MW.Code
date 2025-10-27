@@ -17,6 +17,12 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 ## 📑 Documentação por Categoria
 
+### 📚 Documentação de Negócio
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) | Glossário completo de termos empresariais e de negócio | 30 min |
+
 ### 🎯 Para Desenvolvedores - Começando
 
 | Documento | Descrição | Tempo de Leitura |
@@ -123,6 +129,14 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 **Tempo Total:** ~35 minutos
 
+### Para Empreendedores / Donos de Negócio
+
+1. 📚 [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md)
+2. 📋 [FUNCIONALIDADES_IMPLEMENTADAS.md](./FUNCIONALIDADES_IMPLEMENTADAS.md)
+3. 📊 [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) (Overview)
+
+**Tempo Total:** ~45 minutos
+
 ---
 
 ## 📂 Estrutura de Documentação
@@ -130,6 +144,9 @@ Este documento serve como guia de navegação para toda a documentação do sist
 ```
 MW.Code/
 ├── 📚 DOCUMENTATION_INDEX.md (este arquivo)
+│
+├── 📖 NEGÓCIO E GESTÃO
+│   └── GLOSSARIO_TERMOS_EMPRESARIAIS.md ⭐
 │
 ├── 🚀 INÍCIO RÁPIDO
 │   ├── SEEDER_QUICK_REFERENCE.md
@@ -181,6 +198,7 @@ MW.Code/
 
 | Tópico | Documento Recomendado |
 |--------|----------------------|
+| **Termos empresariais** | [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) |
 | **Como começar** | [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) |
 | **Estrutura do banco de dados** | [ENTITY_DIAGRAM.md](./ENTITY_DIAGRAM.md) |
 | **Como autenticar** | [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) |
@@ -196,15 +214,18 @@ MW.Code/
 
 ## 📊 Estatísticas da Documentação
 
-- **Total de Documentos:** 30+
-- **Documentos Essenciais:** 5
-- **Tempo Total de Leitura:** ~4 horas (todos os documentos)
+- **Total de Documentos:** 31+
+- **Documentos Essenciais:** 6
+- **Tempo Total de Leitura:** ~4,5 horas (todos os documentos)
 - **Idioma Principal:** Português (PT-BR)
-- **Última Atualização:** 2025-10-20
+- **Última Atualização:** 2025-10-27
 
 ---
 
 ## 🆕 Documentos Criados Recentemente
+
+### ✨ Novos (2025-10-27)
+1. ⭐ **GLOSSARIO_TERMOS_EMPRESARIAIS.md** - Glossário completo de termos empresariais
 
 ### ✨ Novos (2025-10-20)
 1. ⭐ **SYSTEM_MAPPING.md** - Mapeamento completo do sistema
