@@ -357,7 +357,9 @@ VPS (Hetzner):
 
 ### Exemplo: 50 clínicas pagando R$200/mês cada
 
-**Receita Mensal:** 50 × R$200 = R$10,000 (~$2,000 USD)
+**Receita Mensal:** 50 × R$200 = R$10,000 (~$2,000 USD)*
+
+*Nota: Taxa de câmbio BRL:USD varia. Use a taxa atual para cálculos precisos.*
 
 **Custos Infraestrutura:** 
 - Railway: $10-20/mês

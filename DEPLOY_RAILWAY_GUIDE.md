@@ -521,4 +521,4 @@ Parabéns! Seu sistema está no ar com:
 
 **Criado por**: GitHub Copilot  
 **Versão**: 1.0  
-**Última atualização**: Outubro 2025
+**Data**: Outubro 2024

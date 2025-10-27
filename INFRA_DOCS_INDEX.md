@@ -296,4 +296,4 @@ Ao completar os guias, você terá:
 
 **Boa sorte com seu deploy! 🚀**
 
-*Última atualização: Outubro 2025*
+*Criado em: Outubro 2024*

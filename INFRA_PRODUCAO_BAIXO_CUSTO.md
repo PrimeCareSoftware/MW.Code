@@ -538,5 +538,5 @@ sudo swapon /swapfile
 ---
 
 **Criado por**: GitHub Copilot  
-**Data**: Outubro 2025  
+**Data**: Outubro 2024  
 **Versão**: 1.0

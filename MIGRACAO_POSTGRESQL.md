@@ -486,4 +486,4 @@ Total: $60-240/ano (economia de 90-96%)
 
 **Criado por**: GitHub Copilot  
 **Versão**: 1.0  
-**Última atualização**: Outubro 2025
+**Data**: Outubro 2024
