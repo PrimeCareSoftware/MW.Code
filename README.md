@@ -576,25 +576,75 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
 - 📖 **[AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
 - 📖 **[SECURITY_GUIDE.md](frontend/mw-docs/src/assets/docs/SECURITY_GUIDE.md)** - Guia completo de segurança
 
-## 🚀 Deploy
+## 🚀 Deploy e Infraestrutura de Produção
 
-### Usando Docker
+### 💰 Infraestrutura com Baixo Custo (NOVO!) 🔥
 
+**Documentação completa para produção com custo mínimo ($5-20/mês) enquanto você não tem clientes grandes!**
+
+#### 📚 [INFRA_DOCS_INDEX.md](INFRA_DOCS_INDEX.md) - **COMECE AQUI!**
+Índice completo com todos os guias de infraestrutura. Navegação fácil para encontrar o que você precisa.
+
+#### 🚀 Guias Principais:
+
+- **[QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md)** - ⚡ **Do Zero ao Ar em 30 Minutos**
+  - Setup rápido com Railway ou VPS
+  - Passo a passo simplificado
+  - Para quem quer resultados AGORA
+
+- **[CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md)** - 💵 **Planeje Seus Custos**
+  - Estimativas por número de clínicas (1-500+)
+  - Comparação Railway vs VPS vs Cloud
+  - Projeção de crescimento e ROI
+
+- **[INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)** - 📋 **Guia Completo**
+  - 💚 **Railway + Vercel** (Recomendado) - $5-20/mês
+  - 🔧 **VPS (Hetzner/DigitalOcean)** - $5-10/mês
+  - 🆓 **Free Tier** - $0/mês (apenas testes)
+  - Comparativos, estratégias de escala, backups
+
+- **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - 🚂 **Deploy no Railway**
+  - Passo a passo detalhado
+  - PostgreSQL incluído
+  - SSL e backups automáticos
+
+- **[MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
+  - Migração SQL Server → PostgreSQL
+  - Guia técnico completo
+  - Scripts e validação
+
+### Usando Docker (Desenvolvimento/VPS)
+
+**Desenvolvimento:**
 ```bash
-# Build das imagens
-docker-compose build
+# Build e iniciar
+docker-compose up -d
 
-# Deploy em produção
-docker-compose -f docker-compose.yml up -d
+# A API estará em: http://localhost:5000
+# Frontend em: http://localhost:4200
+```
+
+**Produção (VPS):**
+```bash
+# Usar compose otimizado para produção
+docker-compose -f docker-compose.production.yml up -d
+
+# Ver logs
+docker-compose -f docker-compose.production.yml logs -f
 ```
 
 ### Configuração de Produção
 
-Atualize as seguintes configurações para produção:
+📋 **Checklist de Setup:**
+- [ ] Copiar `.env.example` para `.env` e configurar
+- [ ] Gerar `JWT_SECRET_KEY` forte (32+ caracteres)
+- [ ] Configurar `POSTGRES_PASSWORD` segura
+- [ ] Atualizar `CORS` com domínios corretos
+- [ ] Configurar backups automáticos
+- [ ] Habilitar HTTPS (SSL/TLS)
+- [ ] Configurar monitoramento de logs
 
-- `appsettings.Production.json`: String de conexão e chave JWT
-- `docker-compose.yml`: Variáveis de ambiente de produção
-- Nginx: Configuração SSL/TLS
+Para detalhes completos, veja: [INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)
 
 ## 🔄 CI/CD
 
