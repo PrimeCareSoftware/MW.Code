@@ -1,94 +1,109 @@
 .patient-list-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: var(--spacing-8) var(--spacing-6);
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: var(--spacing-8);
 
   h1 {
-    color: #333;
-    margin: 0 0 5px 0;
-    font-size: 32px;
+    color: var(--gray-900);
+    margin: 0 0 var(--spacing-2) 0;
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
   }
 
   p {
-    color: #666;
+    color: var(--gray-600);
     margin: 0;
-    font-size: 16px;
+    font-size: var(--font-size-lg);
   }
 
   .btn {
-    padding: 12px 24px;
+    padding: var(--spacing-3) var(--spacing-6);
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
 
     &.btn-primary {
-      background-color: #667eea;
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
       color: white;
 
       &:hover {
-        background-color: #5568d3;
+        background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
       }
     }
   }
 }
 
 .alert {
-  padding: 12px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  padding: var(--spacing-4);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-6);
 
   &.alert-error {
-    background-color: #fee;
-    color: #c33;
-    border: 1px solid #fcc;
+    background-color: var(--error-50);
+    color: var(--error-700);
+    border-left: 4px solid var(--error-500);
   }
 }
 
 .loading {
   text-align: center;
-  padding: 40px;
-  font-size: 18px;
-  color: #666;
+  padding: var(--spacing-12);
+  font-size: var(--font-size-xl);
+  color: var(--gray-500);
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: var(--spacing-16);
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 2px dashed var(--gray-300);
 
   p {
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 20px;
+    font-size: var(--font-size-xl);
+    color: var(--gray-600);
+    margin-bottom: var(--spacing-6);
+    
+    &::before {
+      content: '📋';
+      font-size: var(--font-size-4xl);
+      display: block;
+      margin-bottom: var(--spacing-4);
+    }
   }
 
   .btn {
-    padding: 12px 24px;
+    padding: var(--spacing-4) var(--spacing-8);
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all var(--transition-base);
 
     &.btn-primary {
-      background-color: #667eea;
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
       color: white;
+      box-shadow: var(--shadow-md);
 
       &:hover {
-        background-color: #5568d3;
+        background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
       }
     }
   }
@@ -96,9 +111,10 @@
 
 .table-container {
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
+  border: 1px solid var(--gray-200);
 }
 
 .patients-table {
@@ -106,33 +122,43 @@
   border-collapse: collapse;
 
   thead {
-    background-color: #f8f9fa;
+    background-color: var(--gray-50);
 
     th {
-      padding: 15px;
+      padding: var(--spacing-4) var(--spacing-5);
       text-align: left;
       font-weight: 600;
-      color: #333;
-      border-bottom: 2px solid #dee2e6;
+      color: var(--gray-700);
+      border-bottom: 2px solid var(--gray-200);
+      font-size: var(--font-size-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
   }
 
   tbody {
     tr {
-      border-bottom: 1px solid #dee2e6;
-      transition: background-color 0.2s;
+      border-bottom: 1px solid var(--gray-200);
+      transition: all var(--transition-fast);
 
       &:hover {
-        background-color: #f8f9fa;
+        background-color: var(--primary-50);
+      }
+      
+      &:last-child {
+        border-bottom: none;
       }
 
       td {
-        padding: 15px;
-        color: #666;
+        padding: var(--spacing-5);
+        color: var(--gray-700);
+        font-size: var(--font-size-sm);
+        vertical-align: middle;
 
         &.actions {
           display: flex;
-          gap: 10px;
+          gap: var(--spacing-2);
+          align-items: center;
         }
       }
     }
@@ -140,56 +166,67 @@
 }
 
 .btn-action {
-  padding: 6px 12px;
+  padding: var(--spacing-2) var(--spacing-3);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 16px;
+  transition: all var(--transition-base);
+  font-size: var(--font-size-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
 
   &.btn-edit {
-    background-color: #f0f0f0;
+    background-color: var(--gray-100);
 
     &:hover {
-      background-color: #e0e0e0;
+      background-color: var(--primary-100);
+      transform: scale(1.1);
     }
   }
 
   &.btn-delete {
-    background-color: #fee;
+    background-color: var(--error-50);
 
     &:hover {
-      background-color: #fdd;
+      background-color: var(--error-100);
+      transform: scale(1.1);
     }
   }
 }
 
 .child-patient {
-  background-color: #fafcff !important;
+  background-color: var(--info-50) !important;
+  
+  &:hover {
+    background-color: var(--info-100) !important;
+  }
 }
 
 .badge {
   display: inline-block;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 11px;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
   font-weight: 600;
-  margin-left: 8px;
+  margin-left: var(--spacing-2);
 
   &.badge-child {
-    background-color: #e3f2fd;
-    color: #1976d2;
+    background-color: var(--info-100);
+    color: var(--info-700);
   }
 }
 
 .guardian-info {
-  color: #666;
-  font-size: 13px;
+  color: var(--gray-600);
+  font-size: var(--font-size-sm);
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--spacing-1);
 }
 
 .no-info {
-  color: #ccc;
+  color: var(--gray-400);
 }
