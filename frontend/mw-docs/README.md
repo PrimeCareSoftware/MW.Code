@@ -18,7 +18,7 @@ Este projeto foi criado para resolver o problema de ter vários arquivos de docu
 
 ## 📦 Documentos Incluídos
 
-Este projeto integra **29 documentos** organizados em **12 categorias**:
+Este projeto integra **36 documentos** organizados em **13 categorias**:
 
 ### Categorias
 

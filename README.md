@@ -4,7 +4,7 @@
 
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](GITHUB_PAGES_SETUP_REQUIRED.md)
 
-Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
+Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
 ## 🖥️ Frontend Applications
 
@@ -227,7 +227,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ## 🔧 Tecnologias
 
 - **Backend**: .NET 8, Entity Framework Core, SQL Server
-- **Frontend**: Angular 18, TypeScript, SCSS
+- **Frontend**: Angular 20, TypeScript, SCSS
 - **Banco de Dados**: SQL Server 2022 (via Docker)
 - **Containerização**: Docker e Docker Compose
 
@@ -485,7 +485,7 @@ dotnet test --filter "FullyQualifiedName~ProcedureTests"
 
 ### Estatísticas de Testes
 
-- ✅ **670+ testes** implementados
+- ✅ **719 testes** implementados
 - ✅ **100% de cobertura** nas entidades de domínio
 - ✅ **Testes de Validação**: Regras de negócio e validações
 - ✅ **Testes de Comportamento**: Fluxos e estados das entidades
@@ -566,7 +566,7 @@ O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados
 
 ### Testes de Segurança
 
-- **719 testes** passando (incluindo 6 novos testes de JWT)
+- **719 testes** passando e aprovados (incluindo testes de JWT, validações e segurança)
 - Cobertura de JWT token generation/validation, password hashing, input sanitization e validações
 - 100% de taxa de sucesso
 
