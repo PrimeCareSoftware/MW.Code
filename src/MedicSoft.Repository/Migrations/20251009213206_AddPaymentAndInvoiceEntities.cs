@@ -41,7 +41,7 @@ namespace MedicSoft.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubscriptionPlan",
+                name: "SubscriptionPlans",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -63,7 +63,7 @@ namespace MedicSoft.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubscriptionPlan", x => x.Id);
+                    table.PrimaryKey("PK_SubscriptionPlans", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,9 +129,9 @@ namespace MedicSoft.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClinicSubscriptions_SubscriptionPlan_SubscriptionPlanId",
+                        name: "FK_ClinicSubscriptions_SubscriptionPlans_SubscriptionPlanId",
                         column: x => x.SubscriptionPlanId,
-                        principalTable: "SubscriptionPlan",
+                        principalTable: "SubscriptionPlans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -331,7 +331,7 @@ namespace MedicSoft.Repository.Migrations
                 name: "ClinicSubscriptions");
 
             migrationBuilder.DropTable(
-                name: "SubscriptionPlan");
+                name: "SubscriptionPlans");
         }
     }
 }
