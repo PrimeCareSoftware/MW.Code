@@ -11,7 +11,7 @@ namespace MedicSoft.Repository.Context
             
             // Use a connection string for design-time operations
             // This is just for migrations - actual connection string comes from configuration at runtime
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=MedicSoftDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true");
 
             return new MedicSoftDbContext(optionsBuilder.Options);
         }
