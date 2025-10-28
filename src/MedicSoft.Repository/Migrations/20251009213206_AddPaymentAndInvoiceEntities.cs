@@ -41,7 +41,7 @@ namespace MedicSoft.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubscriptionPlan",
+                name: "SubscriptionPlans",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -63,7 +63,7 @@ namespace MedicSoft.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubscriptionPlan", x => x.Id);
+                    table.PrimaryKey("PK_SubscriptionPlans", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,7 +100,7 @@ namespace MedicSoft.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClinicSubscription",
+                name: "ClinicSubscriptions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -115,25 +115,42 @@ namespace MedicSoft.Repository.Migrations
                     CurrentPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CancellationReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CancellationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsFrozen = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    FrozenStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FrozenEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PendingPlanId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PendingPlanPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PlanChangeDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsUpgrade = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ManualOverrideActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ManualOverrideReason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ManualOverrideSetAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ManualOverrideSetBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClinicSubscription", x => x.Id);
+                    table.PrimaryKey("PK_ClinicSubscriptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClinicSubscription_Clinics_ClinicId",
+                        name: "FK_ClinicSubscriptions_Clinics_ClinicId",
                         column: x => x.ClinicId,
                         principalTable: "Clinics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClinicSubscription_SubscriptionPlan_SubscriptionPlanId",
+                        name: "FK_ClinicSubscriptions_SubscriptionPlans_SubscriptionPlanId",
                         column: x => x.SubscriptionPlanId,
-                        principalTable: "SubscriptionPlan",
+                        principalTable: "SubscriptionPlans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClinicSubscriptions_SubscriptionPlans_PendingPlanId",
+                        column: x => x.PendingPlanId,
+                        principalTable: "SubscriptionPlans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,9 +186,9 @@ namespace MedicSoft.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Payments_ClinicSubscription_ClinicSubscriptionId",
+                        name: "FK_Payments_ClinicSubscriptions_ClinicSubscriptionId",
                         column: x => x.ClinicSubscriptionId,
-                        principalTable: "ClinicSubscription",
+                        principalTable: "ClinicSubscriptions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -215,13 +232,13 @@ namespace MedicSoft.Repository.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClinicSubscription_ClinicId",
-                table: "ClinicSubscription",
+                name: "IX_ClinicSubscriptions_ClinicId",
+                table: "ClinicSubscriptions",
                 column: "ClinicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClinicSubscription_SubscriptionPlanId",
-                table: "ClinicSubscription",
+                name: "IX_ClinicSubscriptions_SubscriptionPlanId",
+                table: "ClinicSubscriptions",
                 column: "SubscriptionPlanId");
 
             migrationBuilder.CreateIndex(
@@ -328,10 +345,10 @@ namespace MedicSoft.Repository.Migrations
                 name: "Medications");
 
             migrationBuilder.DropTable(
-                name: "ClinicSubscription");
+                name: "ClinicSubscriptions");
 
             migrationBuilder.DropTable(
-                name: "SubscriptionPlan");
+                name: "SubscriptionPlans");
         }
     }
 }
