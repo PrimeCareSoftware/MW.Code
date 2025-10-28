@@ -655,7 +655,7 @@ MW.Code/
 │   ├── MedicSoft.Repository/  # Acesso a dados (EF Core)
 │   └── MedicSoft.CrossCutting/ # Serviços transversais
 │
-├── frontend/                  # Frontend Angular 18
+├── frontend/                  # Frontend Angular 20
 │   └── medicwarehouse-app/    # Aplicação Angular
 │       ├── src/
 │       ├── package.json
@@ -686,7 +686,7 @@ Após executar o sistema com sucesso:
 ## Recursos Adicionais
 
 - **Documentação .NET 8**: https://learn.microsoft.com/dotnet/
-- **Documentação Angular 18**: https://angular.io/docs
+- **Documentação Angular 20**: https://angular.dev/overview
 - **Documentação SQL Server**: https://learn.microsoft.com/sql/
 - **Documentação Docker**: https://docs.docker.com/
 - **Entity Framework Core**: https://learn.microsoft.com/ef/core/

@@ -2,7 +2,7 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
-Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
+Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
 ## 🏗️ Arquitetura
 
@@ -139,7 +139,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ## 🔧 Tecnologias
 
 - **Backend**: .NET 8, Entity Framework Core, SQL Server
-- **Frontend**: Angular 18, TypeScript, SCSS
+- **Frontend**: Angular 20, TypeScript, SCSS
 - **Banco de Dados**: SQL Server 2022 (via Docker)
 - **Containerização**: Docker e Docker Compose
 - **Autenticação**: JWT Bearer Tokens

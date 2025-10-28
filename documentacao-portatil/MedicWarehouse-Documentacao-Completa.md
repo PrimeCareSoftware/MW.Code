@@ -1,6 +1,6 @@
 # MedicWarehouse - Documentação Completa
 
-> **Data de Geração:** 28/10/2025, 13:35:06
+> **Data de Geração:** 28/10/2025, 13:39:11
 
 > Este documento contém toda a documentação do projeto MedicWarehouse consolidada em um único arquivo.
 
@@ -2429,7 +2429,7 @@ Para novos desenvolvedores:
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
-Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
+Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
 ## 🏗️ Arquitetura
 
@@ -2566,7 +2566,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ## 🔧 Tecnologias
 
 - **Backend**: .NET 8, Entity Framework Core, SQL Server
-- **Frontend**: Angular 18, TypeScript, SCSS
+- **Frontend**: Angular 20, TypeScript, SCSS
 - **Banco de Dados**: SQL Server 2022 (via Docker)
 - **Containerização**: Docker e Docker Compose
 - **Autenticação**: JWT Bearer Tokens
@@ -3575,7 +3575,7 @@ MW.Code/
 │   ├── MedicSoft.Repository/  # Acesso a dados (EF Core)
 │   └── MedicSoft.CrossCutting/ # Serviços transversais
 │
-├── frontend/                  # Frontend Angular 18
+├── frontend/                  # Frontend Angular 20
 │   └── medicwarehouse-app/    # Aplicação Angular
 │       ├── src/
 │       ├── package.json
@@ -3606,7 +3606,7 @@ Após executar o sistema com sucesso:
 ## Recursos Adicionais
 
 - **Documentação .NET 8**: https://learn.microsoft.com/dotnet/
-- **Documentação Angular 18**: https://angular.io/docs
+- **Documentação Angular 20**: https://angular.dev/overview
 - **Documentação SQL Server**: https://learn.microsoft.com/sql/
 - **Documentação Docker**: https://docs.docker.com/
 - **Entity Framework Core**: https://learn.microsoft.com/ef/core/
@@ -8389,10 +8389,10 @@ O projeto está configurado com quality gates padrão do SonarCloud:
 ## Estatísticas Gerais
 
 ```
-✅ Total de Testes: 558
-✅ Aprovados: 558 (100%)
+✅ Total de Testes: 719
+✅ Aprovados: 719 (100%)
 ❌ Reprovados: 0
-⏱️ Tempo de Execução: ~4 segundos
+⏱️ Tempo de Execução: ~3 segundos
 ```
 
 ## Distribuição dos Testes
@@ -16838,4 +16838,4 @@ Se você não encontrou o que procura neste índice:
 
 ---
 
-*Documentação gerada automaticamente em 28/10/2025, 13:35:06*
+*Documentação gerada automaticamente em 28/10/2025, 13:39:11*

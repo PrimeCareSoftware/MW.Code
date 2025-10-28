@@ -87,7 +87,7 @@
 - SQL Server
 
 ### Frontend
-- Angular 18
+- Angular 20
 - TypeScript
 - Reactive Forms
 - Signals API
