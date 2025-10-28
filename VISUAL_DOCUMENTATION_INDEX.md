@@ -119,7 +119,7 @@ Example:
 
 ---
 
-## �� Finding Specific Information
+## 🔍 Finding Specific Information
 
 ### Need to know about...
 
@@ -204,9 +204,9 @@ Example:
 
 ## 🔗 External Links
 
-- **Repository**: https://github.com/MedicWarehouse/MW.Code
-- **Documentation**: Included in repository
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Repository**: [MedicWarehouse/MW.Code](../../)
+- **Documentation**: Included in repository (see links above)
+- **Issues**: [GitHub Issues](../../issues)
 
 ---
 
