@@ -36,7 +36,9 @@ Este projeto integra **36 documentos** organizados em **13 categorias**:
 4. **🚀 Guias de Uso**
    - README.md
    - GUIA_EXECUCAO.md
+   - SYSTEM_SETUP_GUIDE.md
    - API_QUICK_GUIDE.md
+   - AUTHENTICATION_GUIDE.md
 
 5. **🔄 CI/CD e Qualidade**
    - CI_CD_DOCUMENTATION.md
@@ -71,7 +73,9 @@ Este projeto integra **36 documentos** organizados em **13 categorias**:
     - MW_SITE_IMPLEMENTATION_SUMMARY.md
 
 12. **📚 Índice e Referências**
+    - DOCUMENTATION_INDEX.md
     - INDEX.md
+    - GLOSSARIO_TERMOS_EMPRESARIAIS.md
 
 ## 🚀 Como Executar
 

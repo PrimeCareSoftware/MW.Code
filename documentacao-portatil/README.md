@@ -4,7 +4,7 @@ Este diretório contém ferramentas para gerar uma versão consolidada e portát
 
 ## 🎯 Objetivo
 
-Consolidar todos os 29+ documentos markdown do projeto em:
+Consolidar todos os 37 documentos markdown do projeto em:
 - ✅ **Um único arquivo Markdown** - fácil de navegar e versionar
 - ✅ **Um arquivo HTML responsivo** - otimizado para leitura em celular, tablet e desktop
 - ✅ **Conversão fácil para PDF** - basta imprimir o HTML como PDF
@@ -100,7 +100,7 @@ O HTML gerado é totalmente responsivo e otimizado para leitura mobile:
 
 ## 📋 Documentos Incluídos
 
-O script consolida **29 documentos** organizados em **12 categorias**:
+O script consolida **37 documentos** organizados em **10 categorias**:
 
 ### 🚀 Guias
 - README Principal
