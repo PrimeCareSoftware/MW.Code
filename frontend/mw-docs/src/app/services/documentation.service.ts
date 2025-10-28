@@ -91,12 +91,30 @@ export class DocumentationService {
           idealFor: 'Desenvolvedores, configuração inicial'
         },
         {
+          id: 'system-setup-guide',
+          title: 'SYSTEM_SETUP_GUIDE.md',
+          category: 'Guias',
+          path: 'SYSTEM_SETUP_GUIDE.md',
+          description: 'Guia completo de configuração e setup do sistema passo a passo',
+          size: '18KB / 556 linhas',
+          idealFor: 'Desenvolvedores, administradores, configuração inicial'
+        },
+        {
           id: 'api-quick-guide',
           title: 'API_QUICK_GUIDE.md',
           category: 'Guias',
           path: 'API_QUICK_GUIDE.md',
           description: 'Guia rápido dos endpoints da API com exemplos',
           idealFor: 'Desenvolvedores de integração, testes'
+        },
+        {
+          id: 'authentication-guide',
+          title: 'AUTHENTICATION_GUIDE.md',
+          category: 'Guias',
+          path: 'AUTHENTICATION_GUIDE.md',
+          description: 'Guia completo de autenticação JWT, endpoints de login e validação de tokens',
+          size: '8.7KB / 392 linhas',
+          idealFor: 'Desenvolvedores, integração de autenticação'
         }
       ]
     },
@@ -354,12 +372,30 @@ export class DocumentationService {
       icon: '📚',
       docs: [
         {
+          id: 'documentation-index',
+          title: 'DOCUMENTATION_INDEX.md',
+          category: 'Referência',
+          path: 'DOCUMENTATION_INDEX.md',
+          description: 'Índice completo de navegação com 31+ documentos organizados por categoria e fluxos de leitura recomendados',
+          size: '11KB / 290 linhas',
+          idealFor: 'Todos os usuários, navegação da documentação'
+        },
+        {
           id: 'index',
           title: 'INDEX.md',
           category: 'Referência',
           path: 'docs/INDEX.md',
-          description: 'Índice completo da documentação com jornadas de leitura',
+          description: 'Índice alternativo da documentação com jornadas de leitura',
           idealFor: 'Todos os usuários'
+        },
+        {
+          id: 'glossario-termos-empresariais',
+          title: 'GLOSSARIO_TERMOS_EMPRESARIAIS.md',
+          category: 'Referência',
+          path: 'GLOSSARIO_TERMOS_EMPRESARIAIS.md',
+          description: 'Glossário completo de termos empresariais: SaaS, MRR, Churn, CAC, LTV, ROI e muito mais',
+          size: '19KB / 822 linhas',
+          idealFor: 'Empreendedores, donos de negócio, estudantes, todos os usuários'
         }
       ]
     }

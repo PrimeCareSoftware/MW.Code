@@ -1,6 +1,6 @@
 # MedicWarehouse - Documentação Completa
 
-> **Data de Geração:** 15/10/2025, 02:13:35
+> **Data de Geração:** 28/10/2025, 13:39:11
 
 > Este documento contém toda a documentação do projeto MedicWarehouse consolidada em um único arquivo.
 
@@ -15,80 +15,90 @@
 
 ### Guias
 
-2. [📖 README](#doc-2)
-3. [🚀 Guia de Execução](#doc-3)
-4. [⚡ API Quick Guide](#doc-4)
-
-### Interface
-
-5. [📱 Documentação de Telas](#doc-5)
-6. [🔄 Resumo Visual de Fluxos](#doc-6)
-
-### Negócio
-
-7. [📋 Regras de Negócio](#doc-7)
-
-### Técnica
-
-8. [🔧 Implementação Técnica](#doc-8)
-9. [⚙️ Implementação](#doc-9)
-
-### CI/CD
-
-10. [🔄 CI/CD](#doc-10)
-11. [🧪 Resumo de Testes](#doc-11)
-12. [🔒 Validações de Segurança](#doc-12)
-13. [📊 SonarCloud Setup](#doc-13)
-
-### Implementação
-
-14. [📝 Resumo de Implementação](#doc-14)
-15. [✨ Novas Funcionalidades](#doc-15)
-16. [📋 Resumo de Regras de Negócio](#doc-16)
-17. [🔄 Resumo de Migrações](#doc-17)
-
-### Segurança
-
-18. [🔐 Guia de Segurança](#doc-18)
-19. [🔐 Resumo de Implementação de Segurança](#doc-19)
-
-### Pagamentos
-
-20. [💰 Sistema de Pagamentos](#doc-20)
-21. [💳 Fluxo de Pagamentos](#doc-21)
-
-### Financeiro
-
-22. [📊 Gestão Financeira](#doc-22)
-
-### Assinaturas
-
-23. [💳 Sistema de Assinaturas](#doc-23)
-
-### WhatsApp AI
-
-24. [🤖 WhatsApp AI Agent](#doc-24)
-25. [🤖 Implementação WhatsApp AI](#doc-25)
-26. [🔐 Segurança WhatsApp AI](#doc-26)
-
-### Notificações
-
-27. [🔔 Documentação de Notificações](#doc-27)
-28. [🔔 Implementação de Notificações](#doc-28)
-29. [🔔 Exemplos de Notificações](#doc-29)
-
-### Recursos
-
-30. [👨‍👩‍👧 Sistema Responsável/Dependente](#doc-30)
-
-### Marketing
-
-31. [🌐 MW.Site Documentação](#doc-31)
-32. [🌐 MW.Site Implementação](#doc-32)
+2. [🔐 Guia de Autenticação](#doc-2)
 
 ### Referência
 
-33. [📚 Índice](#doc-33)
+3. [📖 Glossário de Termos Empresariais](#doc-3)
+4. [📚 Índice de Documentação](#doc-4)
+
+### Guias
+
+5. [📖 README](#doc-5)
+6. [🚀 Guia de Execução](#doc-6)
+7. [⚙️ Guia de Setup do Sistema](#doc-7)
+8. [⚡ API Quick Guide](#doc-8)
+
+### Interface
+
+9. [📱 Documentação de Telas](#doc-9)
+10. [🔄 Resumo Visual de Fluxos](#doc-10)
+
+### Negócio
+
+11. [📋 Regras de Negócio](#doc-11)
+
+### Técnica
+
+12. [🔧 Implementação Técnica](#doc-12)
+13. [⚙️ Implementação](#doc-13)
+
+### CI/CD
+
+14. [🔄 CI/CD](#doc-14)
+15. [🧪 Resumo de Testes](#doc-15)
+16. [🔒 Validações de Segurança](#doc-16)
+17. [📊 SonarCloud Setup](#doc-17)
+
+### Implementação
+
+18. [📝 Resumo de Implementação](#doc-18)
+19. [✨ Novas Funcionalidades](#doc-19)
+20. [📋 Resumo de Regras de Negócio](#doc-20)
+21. [🔄 Resumo de Migrações](#doc-21)
+
+### Segurança
+
+22. [🔐 Guia de Segurança](#doc-22)
+23. [🔐 Resumo de Implementação de Segurança](#doc-23)
+
+### Pagamentos
+
+24. [💰 Sistema de Pagamentos](#doc-24)
+25. [💳 Fluxo de Pagamentos](#doc-25)
+
+### Financeiro
+
+26. [📊 Gestão Financeira](#doc-26)
+
+### Assinaturas
+
+27. [💳 Sistema de Assinaturas](#doc-27)
+
+### WhatsApp AI
+
+28. [🤖 WhatsApp AI Agent](#doc-28)
+29. [🤖 Implementação WhatsApp AI](#doc-29)
+30. [🔐 Segurança WhatsApp AI](#doc-30)
+
+### Notificações
+
+31. [🔔 Documentação de Notificações](#doc-31)
+32. [🔔 Implementação de Notificações](#doc-32)
+33. [🔔 Exemplos de Notificações](#doc-33)
+
+### Recursos
+
+34. [👨‍👩‍👧 Sistema Responsável/Dependente](#doc-34)
+
+### Marketing
+
+35. [🌐 MW.Site Documentação](#doc-35)
+36. [🌐 MW.Site Implementação](#doc-36)
+
+### Referência
+
+37. [📚 Índice](#doc-37)
 
 ---
 
@@ -107,11 +117,42 @@
 
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](GITHUB_PAGES_SETUP_REQUIRED.md)
 
-Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
+Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
+
+## 🖥️ Frontend Applications
+
+O MedicWarehouse possui **dois aplicativos Angular independentes**:
+
+### 1. **MedicWarehouse App** (`frontend/medicwarehouse-app`)
+Aplicativo principal para uso diário das clínicas:
+- 👨‍⚕️ **Usuários**: Proprietários de clínicas, médicos, secretárias, enfermeiros
+- 📊 **Dashboard** da clínica individual
+- 👥 **Gestão de pacientes** e prontuários
+- 📅 **Agendamentos** e atendimentos
+- 💊 **Prescrições** médicas e procedimentos
+- **URL desenvolvimento**: `http://localhost:4200`
+
+### 2. **MW System Admin** (`frontend/mw-system-admin`) 🆕
+Painel administrativo para gestão do sistema completo:
+- 🔧 **Usuários**: System Owners (administradores do sistema)
+- 🏥 **Gestão de todas as clínicas** (criar, ativar, desativar)
+- 💰 **Métricas financeiras** (MRR, receitas, churn)
+- 📊 **Analytics globais** do sistema
+- ⚙️ **Controle de assinaturas** e override manual
+- 👤 **Gestão de system owners**
+- **URL desenvolvimento**: `http://localhost:4201`
+- 📖 **Documentação**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
 
 ## 📚 Documentação Completa
 
-### 📱 Documentação Portátil (NOVO!)
+### 💼 Glossário de Termos Empresariais (NOVO!)
+**Não entende termos da área empresarial? Comece por aqui!**
+- 📖 **[`GLOSSARIO_TERMOS_EMPRESARIAIS.md`](GLOSSARIO_TERMOS_EMPRESARIAIS.md)** - Glossário completo explicando todos os termos de negócio
+- 💡 Aprenda sobre: SaaS, MRR, Churn, CAC, LTV, ROI, e muito mais
+- 🎯 Ideal para: Empreendedores, donos de negócio, estudantes
+- 📊 Exemplos práticos e aplicações reais
+
+### 📱 Documentação Portátil
 **Leia toda a documentação no celular ou gere um PDF completo!**
 - 📂 **Localização**: `documentacao-portatil/`
 - 📖 **Guia de uso**: [`COMO_LER_DOCUMENTACAO_NO_CELULAR.md`](COMO_LER_DOCUMENTACAO_NO_CELULAR.md)
@@ -123,7 +164,8 @@ Toda a documentação detalhada do projeto está disponível no **projeto web de
 - 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
 - 📖 **Principais Documentos**:
-  - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema** (NOVO!)
+  - `GUIA_DESENVOLVIMENTO_AUTH.md` - **Guia de desenvolvimento e autenticação para MVP/testes** (NOVO!) 🔥
+  - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema**
   - `BUSINESS_RULES.md` - Regras de negócio
   - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas
   - `SYSTEM_ADMIN_DOCUMENTATION.md` - Área do administrador do sistema
@@ -298,13 +340,55 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ## 🔧 Tecnologias
 
 - **Backend**: .NET 8, Entity Framework Core, SQL Server
-- **Frontend**: Angular 18, TypeScript, SCSS
+- **Frontend**: Angular 20, TypeScript, SCSS
 - **Banco de Dados**: SQL Server 2022 (via Docker)
 - **Containerização**: Docker e Docker Compose
 
 ## 🏃‍♂️ Como Executar
 
 > 📖 **Para um guia completo e detalhado passo a passo**, consulte o arquivo [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
+
+### 🔑 Primeiros Passos - Criando Usuários Iniciais (IMPORTANTE para MVP)
+
+**Problema**: Para testar o sistema, você precisa de autenticação, mas não consegue criar o primeiro usuário sem autenticação.
+
+**Solução**: Use os **endpoints de desenvolvimento** para criar usuários iniciais sem autenticação:
+
+```bash
+# 1. Criar um System Owner (administrador do sistema)
+POST http://localhost:5000/api/data-seeder/seed-system-owner
+
+# Credenciais criadas:
+# Username: admin
+# Password: Admin@123
+# TenantId: system
+
+# 2. Fazer login
+POST http://localhost:5000/api/auth/owner-login
+{
+  "username": "admin",
+  "password": "Admin@123",
+  "tenantId": "system"
+}
+
+# 3. Usar o token retornado para acessar endpoints protegidos
+```
+
+**Ou criar dados completos de demonstração:**
+```bash
+# Cria clínica, usuários, pacientes, agendamentos, etc.
+POST http://localhost:5000/api/data-seeder/seed-demo
+
+# Credenciais criadas:
+# - admin / Admin@123 (SystemAdmin)
+# - dr.silva / Doctor@123 (Doctor)  
+# - recep.maria / Recep@123 (Receptionist)
+```
+
+> 📖 **Para mais detalhes sobre autenticação e desenvolvimento**, consulte:
+> - [GUIA_DESENVOLVIMENTO_AUTH.md](GUIA_DESENVOLVIMENTO_AUTH.md) - Guia completo para desenvolvimento e testes
+> - [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) - Documentação completa de autenticação
+> - [CARGA_INICIAL_TESTES.md](CARGA_INICIAL_TESTES.md) - Detalhes sobre dados de teste
 
 ### Pré-requisitos
 
@@ -345,6 +429,7 @@ dotnet run
 
 #### Frontend (Angular)
 
+**MedicWarehouse App** (aplicativo principal das clínicas):
 ```bash
 # Navegar para o frontend
 cd frontend/medicwarehouse-app
@@ -353,10 +438,26 @@ cd frontend/medicwarehouse-app
 npm install
 
 # Executar em modo de desenvolvimento
-ng serve
+npm start
 
 # O frontend estará disponível em: http://localhost:4200
 ```
+
+**MW System Admin** (painel administrativo do sistema) 🆕:
+```bash
+# Navegar para o system admin
+cd frontend/mw-system-admin
+
+# Instalar dependências
+npm install
+
+# Executar em modo de desenvolvimento (porta 4201)
+npm start
+
+# O admin estará disponível em: http://localhost:4201
+```
+
+> 📖 **Documentação completa do System Admin**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
 
 #### Banco de Dados (SQL Server)
 
@@ -497,7 +598,7 @@ dotnet test --filter "FullyQualifiedName~ProcedureTests"
 
 ### Estatísticas de Testes
 
-- ✅ **670+ testes** implementados
+- ✅ **719 testes** implementados
 - ✅ **100% de cobertura** nas entidades de domínio
 - ✅ **Testes de Validação**: Regras de negócio e validações
 - ✅ **Testes de Comportamento**: Fluxos e estados das entidades
@@ -578,7 +679,7 @@ O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados
 
 ### Testes de Segurança
 
-- **719 testes** passando (incluindo 6 novos testes de JWT)
+- **719 testes** passando e aprovados (incluindo testes de JWT, validações e segurança)
 - Cobertura de JWT token generation/validation, password hashing, input sanitization e validações
 - 100% de taxa de sucesso
 
@@ -588,25 +689,75 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
 - 📖 **[AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
 - 📖 **[SECURITY_GUIDE.md](frontend/mw-docs/src/assets/docs/SECURITY_GUIDE.md)** - Guia completo de segurança
 
-## 🚀 Deploy
+## 🚀 Deploy e Infraestrutura de Produção
 
-### Usando Docker
+### 💰 Infraestrutura com Baixo Custo (NOVO!) 🔥
 
+**Documentação completa para produção com custo mínimo ($5-20/mês) enquanto você não tem clientes grandes!**
+
+#### 📚 [INFRA_DOCS_INDEX.md](INFRA_DOCS_INDEX.md) - **COMECE AQUI!**
+Índice completo com todos os guias de infraestrutura. Navegação fácil para encontrar o que você precisa.
+
+#### 🚀 Guias Principais:
+
+- **[QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md)** - ⚡ **Do Zero ao Ar em 30 Minutos**
+  - Setup rápido com Railway ou VPS
+  - Passo a passo simplificado
+  - Para quem quer resultados AGORA
+
+- **[CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md)** - 💵 **Planeje Seus Custos**
+  - Estimativas por número de clínicas (1-500+)
+  - Comparação Railway vs VPS vs Cloud
+  - Projeção de crescimento e ROI
+
+- **[INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)** - 📋 **Guia Completo**
+  - 💚 **Railway + Vercel** (Recomendado) - $5-20/mês
+  - 🔧 **VPS (Hetzner/DigitalOcean)** - $5-10/mês
+  - 🆓 **Free Tier** - $0/mês (apenas testes)
+  - Comparativos, estratégias de escala, backups
+
+- **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - 🚂 **Deploy no Railway**
+  - Passo a passo detalhado
+  - PostgreSQL incluído
+  - SSL e backups automáticos
+
+- **[MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
+  - Migração SQL Server → PostgreSQL
+  - Guia técnico completo
+  - Scripts e validação
+
+### Usando Docker (Desenvolvimento/VPS)
+
+**Desenvolvimento:**
 ```bash
-# Build das imagens
-docker-compose build
+# Build e iniciar
+docker-compose up -d
 
-# Deploy em produção
-docker-compose -f docker-compose.yml up -d
+# A API estará em: http://localhost:5000
+# Frontend em: http://localhost:4200
+```
+
+**Produção (VPS):**
+```bash
+# Usar compose otimizado para produção
+docker-compose -f docker-compose.production.yml up -d
+
+# Ver logs
+docker-compose -f docker-compose.production.yml logs -f
 ```
 
 ### Configuração de Produção
 
-Atualize as seguintes configurações para produção:
+📋 **Checklist de Setup:**
+- [ ] Copiar `.env.example` para `.env` e configurar
+- [ ] Gerar `JWT_SECRET_KEY` forte (32+ caracteres)
+- [ ] Configurar `POSTGRES_PASSWORD` segura
+- [ ] Atualizar `CORS` com domínios corretos
+- [ ] Configurar backups automáticos
+- [ ] Habilitar HTTPS (SSL/TLS)
+- [ ] Configurar monitoramento de logs
 
-- `appsettings.Production.json`: String de conexão e chave JWT
-- `docker-compose.yml`: Variáveis de ambiente de produção
-- Nginx: Configuração SSL/TLS
+Para detalhes completos, veja: [INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)
 
 ## 🔄 CI/CD
 
@@ -718,6 +869,1555 @@ POST /api/contact
 
 <div id="doc-2"></div>
 
+# 🔐 Guia de Autenticação
+
+> **Categoria:** Guias
+> **Arquivo:** `AUTHENTICATION_GUIDE.md`
+
+---
+
+# Authentication Documentation - MedicWarehouse API
+
+## Overview
+
+The MedicWarehouse API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.
+
+## Authentication Endpoints
+
+### 1. User Login
+**Endpoint**: `POST /api/auth/login`
+
+Used for regular users (doctors, secretaries, receptionists, etc.)
+
+**Request Body**:
+```json
+{
+  "username": "doctor@clinic.com",
+  "password": "SecurePassword123!",
+  "tenantId": "clinic-tenant-id"
+}
+```
+
+**Success Response** (200 OK):
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "doctor@clinic.com",
+  "tenantId": "clinic-tenant-id",
+  "role": "Doctor",
+  "clinicId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "isSystemOwner": false,
+  "expiresAt": "2025-10-13T01:36:10Z"
+}
+```
+
+**Error Response** (401 Unauthorized):
+```json
+{
+  "message": "Invalid credentials or user not found"
+}
+```
+
+---
+
+### 2. Owner Login
+**Endpoint**: `POST /api/auth/owner-login`
+
+Used for clinic owners and system owners (administrators).
+
+**Request Body**:
+```json
+{
+  "username": "owner@clinic.com",
+  "password": "SecurePassword123!",
+  "tenantId": "clinic-tenant-id"
+}
+```
+
+**Success Response** (200 OK):
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "owner@clinic.com",
+  "tenantId": "clinic-tenant-id",
+  "role": "Owner",
+  "clinicId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "isSystemOwner": false,
+  "expiresAt": "2025-10-13T01:36:10Z"
+}
+```
+
+**System Owner Response** (no clinicId):
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "igor",
+  "tenantId": "system",
+  "role": "Owner",
+  "clinicId": null,
+  "isSystemOwner": true,
+  "expiresAt": "2025-10-13T01:36:10Z"
+}
+```
+
+---
+
+### 3. Token Validation
+**Endpoint**: `POST /api/auth/validate`
+
+Validates if a JWT token is still valid.
+
+**Request Body**:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Success Response** (200 OK):
+```json
+{
+  "isValid": true,
+  "username": "doctor@clinic.com",
+  "role": "Doctor",
+  "tenantId": "clinic-tenant-id"
+}
+```
+
+**Invalid Token Response** (200 OK):
+```json
+{
+  "isValid": false
+}
+```
+
+---
+
+## JWT Token Structure
+
+### Token Claims
+
+The JWT token includes the following claims:
+
+| Claim | Type | Description | Example |
+|-------|------|-------------|---------|
+| `name` | string | Username | `doctor@clinic.com` |
+| `nameid` | string | User/Owner ID (GUID) | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` |
+| `role` | string | User role | `Doctor`, `Owner`, `Secretary`, etc. |
+| `tenant_id` | string | Tenant identifier | `clinic-tenant-id` |
+| `clinic_id` | string? | Clinic ID (optional, null for system owners) | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` |
+| `is_system_owner` | string | Whether user is a system owner | `true` or `false` |
+| `iss` | string | Token issuer | `MedicWarehouse` |
+| `aud` | string | Token audience | `MedicWarehouse-API` |
+| `exp` | number | Expiration timestamp | Unix timestamp |
+
+### Token Example (Decoded)
+
+**Header**:
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+**Payload**:
+```json
+{
+  "name": "doctor@clinic.com",
+  "nameid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "role": "Doctor",
+  "tenant_id": "clinic-tenant-id",
+  "clinic_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "is_system_owner": "false",
+  "iss": "MedicWarehouse",
+  "aud": "MedicWarehouse-API",
+  "exp": 1697158570
+}
+```
+
+**Signature**:
+```
+HMACSHA256(
+  base64UrlEncode(header) + "." + base64UrlEncode(payload),
+  secret
+)
+```
+
+---
+
+## Using the Token
+
+### Authorization Header
+
+All protected endpoints require the JWT token in the `Authorization` header:
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+### Example: cURL
+
+```bash
+curl -X GET "https://api.medicwarehouse.com/api/patients" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json"
+```
+
+### Example: JavaScript (Fetch)
+
+```javascript
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+
+fetch('https://api.medicwarehouse.com/api/patients', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+### Example: Axios
+
+```javascript
+import axios from 'axios';
+
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+
+axios.get('https://api.medicwarehouse.com/api/patients', {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+})
+.then(response => console.log(response.data));
+```
+
+---
+
+## Security Features
+
+### 1. HMAC-SHA256 Encryption
+- Tokens are signed using HMAC-SHA256 algorithm
+- Secret key must be at least 32 characters (256 bits)
+- Secret key is stored securely in configuration (never in code)
+
+### 2. Token Expiration
+- Default expiration: **60 minutes**
+- Configurable via `JwtSettings:ExpiryMinutes` in appsettings.json
+- **Zero clock skew** - expired tokens are immediately rejected
+
+### 3. Token Validation
+- Validates signature
+- Validates issuer (`MedicWarehouse`)
+- Validates audience (`MedicWarehouse-API`)
+- Validates expiration time
+- No tolerance for expired tokens (ClockSkew = 0)
+
+### 4. BCrypt Password Hashing
+- All passwords are hashed using BCrypt
+- Work factor: 12
+- Passwords are never stored in plain text
+
+---
+
+## Business Rules
+
+### System Owners vs Clinic Owners
+
+#### System Owner (e.g., Igor)
+- **ClinicId**: `null`
+- **TenantId**: `"system"`
+- **IsSystemOwner**: `true`
+- **Permissions**: Can manage all clinics and system-wide operations
+- **Restrictions**: Cannot be assigned to a specific clinic after creation
+
+#### Clinic Owner
+- **ClinicId**: `<guid-da-clinica>`
+- **TenantId**: `<tenant-da-clinica>`
+- **IsSystemOwner**: `false`
+- **Permissions**: Can manage only their specific clinic
+- **Restrictions**: Cannot become a system owner after creation
+
+**Important**: The `ClinicId` property is **readonly** after owner creation. System owners cannot "join" a clinic, and clinic owners cannot become system owners.
+
+---
+
+## Configuration
+
+### appsettings.json
+
+```json
+{
+  "JwtSettings": {
+    "SecretKey": "YourSecretKey-MustBe-AtLeast32Characters-ForSecurity!",
+    "ExpiryMinutes": 60,
+    "Issuer": "MedicWarehouse",
+    "Audience": "MedicWarehouse-API"
+  }
+}
+```
+
+### Production Configuration
+
+For production, **never** hardcode secrets:
+
+1. **Use Environment Variables**:
+```bash
+export JWT_SECRET_KEY="YourProductionSecretKey..."
+```
+
+2. **Use Azure Key Vault** (Recommended):
+```csharp
+builder.Configuration.AddAzureKeyVault(
+    new Uri($"https://{keyVaultName}.vault.azure.net/"),
+    new DefaultAzureCredential());
+```
+
+---
+
+## Error Handling
+
+### Common Error Responses
+
+#### 401 Unauthorized
+```json
+{
+  "message": "Invalid credentials or user not found"
+}
+```
+
+**Causes**:
+- Invalid username or password
+- User is inactive
+- Owner is inactive
+
+#### 400 Bad Request
+```json
+{
+  "message": "Username, password, and tenantId are required"
+}
+```
+
+**Causes**:
+- Missing required fields in request body
+
+---
+
+## Swagger Integration
+
+The API includes Swagger UI with JWT authentication support:
+
+1. Navigate to `/swagger` in your browser
+2. Click the **Authorize** button
+3. Enter: `Bearer <your-token-here>`
+4. Click **Authorize**
+5. All subsequent requests will include the token
+
+---
+
+## Testing
+
+### Unit Tests
+
+The JWT service includes comprehensive unit tests:
+
+```bash
+dotnet test --filter "FullyQualifiedName~JwtTokenServiceTests"
+```
+
+**Test Coverage**:
+- Token generation for regular users
+- Token generation for system owners
+- Token generation for clinic owners
+- Token validation
+- Invalid token handling
+- HMAC-SHA256 algorithm verification
+
+---
+
+## Migration from No Authentication
+
+If you're migrating from a version without authentication:
+
+1. **Update all API calls** to include `Authorization` header
+2. **Implement login flow** in your frontend
+3. **Store token securely** (sessionStorage or memory, not localStorage for security)
+4. **Handle token expiration** (refresh or re-login)
+5. **Update tests** to use authentication
+
+---
+
+## Best Practices
+
+1. ✅ **Use HTTPS in production** - Never send tokens over HTTP
+2. ✅ **Store tokens securely** - Prefer memory or sessionStorage over localStorage
+3. ✅ **Implement token refresh** - Prompt user to re-login before expiration
+4. ✅ **Validate tokens on server** - Never trust client-side validation
+5. ✅ **Use strong secret keys** - Minimum 32 characters, randomly generated
+6. ✅ **Rotate secret keys regularly** - Especially after security incidents
+7. ✅ **Log authentication attempts** - For security auditing
+8. ✅ **Implement rate limiting** - Prevent brute force attacks (already configured)
+
+---
+
+## Support
+
+For issues or questions:
+- Email: contato@medicwarehouse.com
+- GitHub: https://github.com/MedicWarehouse/MW.Code
+
+
+---
+
+<div style="page-break-after: always;"></div>
+
+<div id="doc-3"></div>
+
+# 📖 Glossário de Termos Empresariais
+
+> **Categoria:** Referência
+> **Arquivo:** `GLOSSARIO_TERMOS_EMPRESARIAIS.md`
+
+---
+
+# Glossário de Termos Empresariais - MedicWarehouse
+
+## 📚 Introdução
+
+Este documento foi criado para ajudar você a entender os **termos empresariais e de negócio** utilizados no sistema MedicWarehouse. Se você não tem familiaridade com conceitos da área empresarial, este guia irá explicar cada termo de forma clara e prática, para que possa estudar e aplicar esses conhecimentos no seu negócio.
+
+---
+
+## 🎯 Termos Fundamentais de Negócio
+
+### SaaS (Software as a Service / Software como Serviço)
+**O que é:** Modelo de negócio onde o software é oferecido pela internet mediante assinatura, sem que o cliente precise instalar nada no computador.
+
+**Exemplo prático:** 
+- Netflix é um SaaS para entretenimento
+- MedicWarehouse é um SaaS para gestão de clínicas médicas
+- Cliente paga mensalidade e acessa o sistema pela internet
+
+**Vantagens:**
+- Cliente não precisa comprar servidores
+- Atualizações automáticas
+- Acesso de qualquer lugar
+- Custo inicial baixo
+
+---
+
+### Multitenant (Multilocação)
+**O que é:** Arquitetura onde um único sistema atende múltiplos clientes (tenants), mantendo os dados de cada um totalmente separados e seguros.
+
+**Exemplo prático:**
+- 100 clínicas usam o mesmo MedicWarehouse
+- Cada clínica só vê seus próprios dados
+- Clínica A não consegue acessar dados da Clínica B
+- É como um prédio com vários apartamentos (tenants)
+
+**Benefícios:**
+- Reduz custos de infraestrutura
+- Facilita manutenção
+- Cada cliente tem sua "área privada"
+
+---
+
+### MRR (Monthly Recurring Revenue / Receita Recorrente Mensal)
+**O que é:** Total de dinheiro que entra todo mês através das assinaturas ativas.
+
+**Como calcular:**
+```
+MRR = Soma de todas as mensalidades dos clientes ativos
+
+Exemplo:
+- 10 clientes no plano Basic (R$ 190/mês) = R$ 1.900
+- 5 clientes no plano Standard (R$ 240/mês) = R$ 1.200
+- 3 clientes no plano Premium (R$ 320/mês) = R$ 960
+----------------------------------------
+MRR Total = R$ 4.060/mês
+```
+
+**Por que é importante:**
+- Prevê a receita do próximo mês
+- Mostra a saúde financeira do negócio
+- Ajuda no planejamento financeiro
+
+---
+
+### ARR (Annual Recurring Revenue / Receita Recorrente Anual)
+**O que é:** Projeção da receita recorrente para 12 meses.
+
+**Como calcular:**
+```
+ARR = MRR × 12
+
+Se MRR = R$ 4.060
+ARR = R$ 48.720/ano
+```
+
+**Aplicação:**
+- Planejamento de longo prazo
+- Valuation da empresa
+- Projeção de crescimento
+
+---
+
+### Churn Rate (Taxa de Cancelamento)
+**O que é:** Percentual de clientes que cancelam a assinatura em um período.
+
+**Como calcular:**
+```
+Churn Rate = (Clientes que cancelaram / Total de clientes no início) × 100
+
+Exemplo:
+- Início do mês: 100 clientes
+- Cancelamentos no mês: 5 clientes
+- Churn Rate = (5 / 100) × 100 = 5%
+```
+
+**Interpretação:**
+- Churn baixo (< 5%): Ótimo! Clientes estão satisfeitos
+- Churn médio (5-10%): Atenção! Precisa melhorar
+- Churn alto (> 10%): Alerta! Clientes insatisfeitos
+
+**Como reduzir:**
+- Melhorar suporte ao cliente
+- Adicionar mais funcionalidades
+- Ouvir feedback dos usuários
+
+---
+
+### CAC (Customer Acquisition Cost / Custo de Aquisição de Cliente)
+**O que é:** Quanto você gasta para conquistar um novo cliente.
+
+**Como calcular:**
+```
+CAC = (Gastos com Marketing + Vendas) / Número de novos clientes
+
+Exemplo:
+- Gastos com anúncios: R$ 5.000
+- Salário da equipe de vendas: R$ 10.000
+- Novos clientes no mês: 15
+----------------------------------------
+CAC = R$ 15.000 / 15 = R$ 1.000 por cliente
+```
+
+**Por que importa:**
+- Precisa ser menor que o LTV
+- Ajuda a definir orçamento de marketing
+- Mostra eficiência de vendas
+
+---
+
+### LTV (Lifetime Value / Valor do Tempo de Vida do Cliente)
+**O que é:** Quanto um cliente gera de receita durante todo o tempo que fica com você.
+
+**Como calcular:**
+```
+LTV = Receita Mensal Média × Tempo Médio de Permanência
+
+Exemplo:
+- Cliente paga R$ 240/mês
+- Fica em média 24 meses
+----------------------------------------
+LTV = R$ 240 × 24 = R$ 5.760
+```
+
+**Regra de ouro:**
+```
+LTV deve ser pelo menos 3x maior que o CAC
+
+Se CAC = R$ 1.000
+LTV ideal ≥ R$ 3.000
+```
+
+---
+
+### ROI (Return on Investment / Retorno sobre Investimento)
+**O que é:** Quanto você ganhou em relação ao que investiu.
+
+**Como calcular:**
+```
+ROI = [(Receita - Custo) / Custo] × 100
+
+Exemplo:
+- Investiu R$ 10.000 em marketing
+- Gerou R$ 30.000 em vendas
+----------------------------------------
+ROI = [(30.000 - 10.000) / 10.000] × 100 = 200%
+```
+
+**Interpretação:**
+- ROI positivo: Lucro
+- ROI negativo: Prejuízo
+- ROI de 200%: Para cada R$ 1 investido, ganhou R$ 2
+
+---
+
+## 💰 Termos de Assinatura e Pagamento
+
+### Trial (Período de Teste)
+**O que é:** Período gratuito onde o cliente pode testar o sistema antes de pagar.
+
+**No MedicWarehouse:**
+- 15 dias gratuitos
+- Recursos limitados
+- Não precisa cartão de crédito
+- Após trial, deve escolher um plano pago
+
+**Objetivo:**
+- Mostrar valor do produto
+- Conquistar confiança do cliente
+- Reduzir barreira de entrada
+
+---
+
+### Upgrade (Melhoria de Plano)
+**O que é:** Quando o cliente muda para um plano mais caro com mais recursos.
+
+**Como funciona no MedicWarehouse:**
+```
+Cliente no Basic (R$ 190) → Premium (R$ 320)
+- Diferença: R$ 130
+- Paga R$ 130 imediatamente (proporcional)
+- Recebe recursos do Premium na hora
+- Próxima cobrança: R$ 320
+```
+
+**Benefícios:**
+- Cliente tem mais recursos
+- Empresa aumenta receita
+- Win-win (ganha-ganha)
+
+---
+
+### Downgrade (Redução de Plano)
+**O que é:** Quando o cliente muda para um plano mais barato com menos recursos.
+
+**Como funciona no MedicWarehouse:**
+```
+Cliente no Premium (R$ 320) → Basic (R$ 190)
+- Mudança agendada para próximo vencimento
+- Continua com Premium até lá
+- Sem reembolso
+- Próxima cobrança: R$ 190
+```
+
+**Quando acontece:**
+- Cliente quer economizar
+- Não está usando todos os recursos
+- Negócio está em dificuldade
+
+---
+
+### Freeze (Congelamento)
+**O que é:** Pausar a assinatura por um período determinado.
+
+**No MedicWarehouse:**
+- Duração: 1 mês fixo
+- Suspende cobrança
+- Bloqueia acesso ao sistema
+- Prorroga vencimento em 1 mês
+
+**Quando usar:**
+- Cliente está viajando
+- Consultório fechado temporariamente
+- Problemas financeiros temporários
+
+---
+
+### Payment Overdue (Pagamento Atrasado)
+**O que é:** Quando o pagamento não foi realizado na data de vencimento.
+
+**Fluxo no MedicWarehouse:**
+```
+1. Vencimento passa
+2. Status → PaymentOverdue
+3. Sistema envia notificações (SMS, Email, WhatsApp)
+4. Cliente tem prazo para regularizar
+5. Se não pagar → Suspende acesso
+```
+
+---
+
+### Inadimplência
+**O que é:** Cliente que está com pagamentos atrasados.
+
+**Como gerenciar:**
+- Enviar lembretes antes do vencimento
+- Facilitar formas de pagamento
+- Oferecer parcelamento
+- Manter comunicação respeitosa
+
+**Impacto no negócio:**
+- Reduz o MRR
+- Aumenta custos de cobrança
+- Prejudica fluxo de caixa
+
+---
+
+## 👥 Termos de Gestão de Usuários
+
+### RBAC (Role-Based Access Control / Controle de Acesso Baseado em Funções)
+**O que é:** Sistema que define o que cada tipo de usuário pode fazer.
+
+**Roles (Funções) no MedicWarehouse:**
+```
+1. SystemAdmin (Administrador do Sistema)
+   - Gerencia TODAS as clínicas
+   - Vê métricas globais
+   - Controle total
+
+2. ClinicOwner (Dono da Clínica)
+   - Gerencia SUA clínica
+   - Cadastra funcionários
+   - Vê relatórios financeiros
+
+3. Doctor/Dentist (Médico/Dentista)
+   - Atende pacientes
+   - Prescreve medicamentos
+   - Acessa prontuários
+
+4. Nurse (Enfermeiro)
+   - Prepara pacientes
+   - Registra sinais vitais
+   - Auxilia médicos
+
+5. Receptionist/Secretary (Recepcionista/Secretária)
+   - Agenda consultas
+   - Cadastra pacientes
+   - Recebe pagamentos
+```
+
+**Por que é importante:**
+- Segurança dos dados
+- Organização clara
+- Responsabilidades definidas
+
+---
+
+### Permissions (Permissões)
+**O que é:** Ações específicas que cada role pode executar.
+
+**Exemplos:**
+```
+Receptionist pode:
+✅ Agendar consultas
+✅ Cadastrar pacientes
+❌ Prescrever medicamentos (só médico)
+❌ Ver relatórios financeiros (só dono)
+```
+
+---
+
+### Onboarding (Integração)
+**O que é:** Processo de apresentar o sistema ao novo cliente.
+
+**Etapas no MedicWarehouse:**
+```
+1. Cadastro inicial da clínica
+2. Tutorial das funcionalidades
+3. Importação de dados (se necessário)
+4. Treinamento da equipe
+5. Primeiro agendamento
+6. Suporte inicial
+```
+
+**Objetivo:**
+- Cliente aprender rápido
+- Reduzir abandono inicial
+- Aumentar satisfação
+
+---
+
+## 📊 Termos de Métricas e Analytics
+
+### Dashboard (Painel de Controle)
+**O que é:** Tela com resumo visual das principais informações do negócio.
+
+**Informações típicas:**
+- Consultas do dia/semana/mês
+- Receita do período
+- Pacientes ativos
+- Agendamentos pendentes
+- Inadimplência
+
+---
+
+### KPI (Key Performance Indicator / Indicador-Chave de Desempenho)
+**O que é:** Métricas que mostram se o negócio está indo bem.
+
+**KPIs do MedicWarehouse:**
+```
+1. Taxa de ocupação de agenda
+   - Quantos horários foram preenchidos
+
+2. Tempo médio de atendimento
+   - Quanto tempo dura cada consulta
+
+3. Taxa de comparecimento
+   - Quantos pacientes aparecem nas consultas
+
+4. Receita por médico
+   - Quanto cada médico gera
+
+5. Taxa de retorno de pacientes
+   - Quantos voltam para nova consulta
+```
+
+---
+
+### Conversion Rate (Taxa de Conversão)
+**O que é:** Percentual de pessoas que completam uma ação desejada.
+
+**Exemplos:**
+```
+1. Trial → Pagante
+   - Quantos que testaram assinaram
+   - Meta: > 20%
+
+2. Visitante → Trial
+   - Quantos que visitaram o site se cadastraram
+   - Meta: > 5%
+
+3. Lead → Cliente
+   - Quantos contatos viraram clientes
+   - Meta: > 10%
+```
+
+---
+
+### Funnel (Funil de Vendas)
+**O que é:** Jornada do cliente desde conhecer até comprar.
+
+**Funil do MedicWarehouse:**
+```
+1. Visitante (topo do funil)
+   ↓ (conversão)
+2. Lead (interessado)
+   ↓ (conversão)
+3. Trial (testando)
+   ↓ (conversão)
+4. Cliente (pagante)
+   ↓ (fidelização)
+5. Promotor (indica outros)
+```
+
+**Meta:** Aumentar conversão em cada etapa.
+
+---
+
+## 🏥 Termos Específicos da Área Médica
+
+### Prontuário Eletrônico
+**O que é:** Histórico digital completo do paciente.
+
+**Contém:**
+- Dados pessoais
+- Histórico de consultas
+- Diagnósticos
+- Prescrições
+- Exames
+- Alergias
+
+---
+
+### Anamnese
+**O que é:** Entrevista inicial com o paciente para coletar histórico médico.
+
+**Informações coletadas:**
+- Queixa principal
+- História da doença atual
+- Antecedentes pessoais
+- Antecedentes familiares
+- Hábitos de vida
+
+---
+
+### Triage (Triagem)
+**O que é:** Classificação inicial de urgência do paciente.
+
+**Níveis:**
+- 🔴 Emergência (imediato)
+- 🟡 Urgente (até 1 hora)
+- 🟢 Não urgente (ordem de chegada)
+
+---
+
+### TISS (Troca de Informações em Saúde Suplementar)
+**O que é:** Padrão brasileiro para troca de informações com planos de saúde.
+
+**Para que serve:**
+- Enviar guias para operadoras
+- Receber autorizações
+- Processar pagamentos
+- Padronizar comunicação
+
+---
+
+## 💼 Termos de Gestão Empresarial
+
+### Fluxo de Caixa
+**O que é:** Controle de tudo que entra e sai de dinheiro.
+
+**Como fazer:**
+```
+Receitas:
++ R$ 10.000 (mensalidades)
++ R$ 2.000 (consultas particulares)
+
+Despesas:
+- R$ 3.000 (salários)
+- R$ 1.000 (aluguel)
+- R$ 500 (internet/luz)
+----------------------------------------
+Saldo = R$ 7.500 (positivo = bom!)
+```
+
+---
+
+### Break-even (Ponto de Equilíbrio)
+**O que é:** Momento em que a receita cobre todos os custos (nem lucro, nem prejuízo).
+
+**Como calcular:**
+```
+Break-even = Custos Fixos / (Preço - Custo Variável)
+
+Exemplo:
+- Custos fixos: R$ 10.000/mês (servidor, salários)
+- Preço do plano: R$ 240
+- Custo variável por cliente: R$ 40
+----------------------------------------
+Break-even = 10.000 / (240 - 40) = 50 clientes
+
+Precisa de 50 clientes para empatar!
+```
+
+---
+
+### Runway (Pista de Pouso)
+**O que é:** Quanto tempo seu dinheiro dura até acabar.
+
+**Como calcular:**
+```
+Runway = Dinheiro em Caixa / Queima Mensal
+
+Exemplo:
+- Tem R$ 100.000 em caixa
+- Gasta R$ 20.000/mês mais do que ganha
+----------------------------------------
+Runway = 100.000 / 20.000 = 5 meses
+
+Você tem 5 meses para virar o jogo!
+```
+
+---
+
+### Burn Rate (Taxa de Queima)
+**O que é:** Quanto dinheiro você gasta por mês além do que ganha.
+
+**Exemplo:**
+```
+Receita mensal: R$ 30.000
+Despesas mensais: R$ 50.000
+----------------------------------------
+Burn Rate = R$ 20.000/mês (negativo)
+```
+
+**Atenção:** Burn rate alto consome o caixa rápido!
+
+---
+
+## 🎁 Termos de Marketing e Vendas
+
+### Freemium
+**O que é:** Modelo onde oferece versão gratuita e cobra por recursos avançados.
+
+**Exemplo:**
+- Grátis: 1 usuário, recursos básicos
+- Pago: múltiplos usuários, recursos avançados
+
+---
+
+### Upselling
+**O que é:** Oferecer produto/serviço superior ao que o cliente já tem.
+
+**Exemplo:**
+- Cliente tem plano Basic
+- Você oferece Premium com mais recursos
+- Cliente faz upgrade
+
+---
+
+### Cross-selling
+**O que é:** Vender produtos complementares.
+
+**Exemplo:**
+- Cliente tem o sistema de gestão
+- Você oferece módulo de WhatsApp
+- Cliente adiciona ao plano
+
+---
+
+### Lead
+**O que é:** Potencial cliente que demonstrou interesse.
+
+**Como gerar:**
+- Anúncios online
+- Indicações
+- Eventos
+- Conteúdo educativo
+
+---
+
+### Prospect
+**O que é:** Lead qualificado que tem potencial real de comprar.
+
+**Diferença:**
+```
+Lead = Alguém que deu o email
+Prospect = Alguém que realmente precisa e pode pagar
+```
+
+---
+
+## 📈 Termos de Crescimento
+
+### Growth Hacking
+**O que é:** Estratégias criativas e de baixo custo para crescer rápido.
+
+**Exemplos:**
+- Programa de indicações
+- Conteúdo viral
+- Parcerias estratégicas
+- Gamificação
+
+---
+
+### Viral Loop
+**O que é:** Cada usuário traz novos usuários automaticamente.
+
+**Exemplo:**
+```
+1. Cliente usa o sistema
+2. Indica para 3 colegas
+3. Cada colega indica mais 3
+4. Crescimento exponencial!
+```
+
+---
+
+### Network Effect (Efeito de Rede)
+**O que é:** Produto fica mais valioso conforme mais pessoas usam.
+
+**Exemplo:**
+- WhatsApp: quanto mais gente usa, mais útil fica
+- Rede de clínicas: podem compartilhar pacientes
+
+---
+
+### Scalability (Escalabilidade)
+**O que é:** Capacidade de crescer sem aumentar custos proporcionalmente.
+
+**SaaS é escalável:**
+```
+10 clientes: Custo R$ 5.000
+100 clientes: Custo R$ 8.000 (não 10x mais!)
+1000 clientes: Custo R$ 15.000
+
+Receita cresce linear, custo cresce devagar!
+```
+
+---
+
+## 🔒 Termos de Segurança e Compliance
+
+### LGPD (Lei Geral de Proteção de Dados)
+**O que é:** Lei brasileira que protege dados pessoais.
+
+**Principais pontos:**
+- Cliente deve autorizar uso de dados
+- Dados devem estar seguros
+- Cliente pode pedir exclusão
+- Multas pesadas para quem descumprir
+
+**No MedicWarehouse:**
+- Dados médicos são sensíveis
+- Isolamento entre clínicas (multitenant)
+- Criptografia de dados
+- Logs de acesso
+
+---
+
+### 2FA (Two-Factor Authentication / Autenticação em Dois Fatores)
+**O que é:** Segurança adicional que exige dois tipos de prova de identidade.
+
+**Exemplo:**
+```
+1º Fator: Senha (algo que você sabe)
+2º Fator: Código SMS (algo que você tem)
+```
+
+---
+
+### Encryption (Criptografia)
+**O que é:** Transformar dados em código secreto que só pode ser lido com a chave certa.
+
+**Tipos:**
+- Em trânsito: Protege dados durante transmissão (HTTPS)
+- Em repouso: Protege dados armazenados (banco de dados)
+
+---
+
+## 💡 Dicas para Aplicar no Seu Negócio
+
+### 1. Comece Medindo
+```
+✅ Defina seus KPIs principais
+✅ Registre todos os números
+✅ Compare mês a mês
+✅ Tome decisões baseadas em dados
+```
+
+### 2. Foque na Retenção
+```
+✅ Manter cliente é mais barato que conquistar novo
+✅ Cliente satisfeito indica outros
+✅ Reduza o churn a qualquer custo
+✅ Invista em suporte e qualidade
+```
+
+### 3. Entenda Seus Números
+```
+✅ CAC vs LTV
+✅ MRR e crescimento
+✅ Churn e causas
+✅ Break-even e runway
+```
+
+### 4. Pense em Escalabilidade
+```
+✅ Automatize processos
+✅ Documente tudo
+✅ Padronize atendimento
+✅ Use tecnologia
+```
+
+### 5. Cuide do Cliente
+```
+✅ Onboarding bem-feito
+✅ Suporte rápido
+✅ Escute feedback
+✅ Melhore continuamente
+```
+
+---
+
+## 📖 Recursos para Aprofundar
+
+### Livros Recomendados
+1. **"A Startup Enxuta"** - Eric Ries
+   - Conceitos de MVP, pivotar, aprender rápido
+
+2. **"Zero to One"** - Peter Thiel
+   - Construir empresas inovadoras
+
+3. **"Tração"** - Gabriel Weinberg
+   - 19 canais para crescer seu negócio
+
+4. **"Hooked"** - Nir Eyal
+   - Como criar produtos que prendem atenção
+
+### Blogs e Sites
+- **Endeavor Brasil**: Conteúdo sobre empreendedorismo
+- **Rock Content**: Marketing digital
+- **Saia do Lugar**: Gestão e finanças
+- **ABStartups**: Ecossistema de startups
+
+### Cursos Online
+- **Udemy**: Cursos de gestão e negócios
+- **Coursera**: Certificações de universidades
+- **Sebrae**: Cursos gratuitos para empreendedores
+- **LinkedIn Learning**: Habilidades profissionais
+
+---
+
+## 🎓 Glossário Rápido (Ordem Alfabética)
+
+| Termo | Significado Resumido |
+|-------|---------------------|
+| **2FA** | Autenticação em dois fatores |
+| **Analytics** | Análise de dados |
+| **ARR** | Receita recorrente anual |
+| **Break-even** | Ponto de equilíbrio |
+| **Burn Rate** | Taxa de queima de caixa |
+| **CAC** | Custo de aquisição de cliente |
+| **Churn** | Taxa de cancelamento |
+| **Conversion** | Taxa de conversão |
+| **Cross-selling** | Venda de complementares |
+| **Dashboard** | Painel de controle |
+| **Downgrade** | Redução de plano |
+| **Freemium** | Grátis + premium |
+| **Freeze** | Congelamento |
+| **Funnel** | Funil de vendas |
+| **Growth** | Crescimento |
+| **KPI** | Indicador-chave de desempenho |
+| **Lead** | Potencial cliente |
+| **LGPD** | Lei de proteção de dados |
+| **LTV** | Valor vitalício do cliente |
+| **MRR** | Receita recorrente mensal |
+| **Multitenant** | Múltiplos clientes isolados |
+| **Onboarding** | Integração de novos usuários |
+| **RBAC** | Controle de acesso por função |
+| **ROI** | Retorno sobre investimento |
+| **Runway** | Tempo até dinheiro acabar |
+| **SaaS** | Software como serviço |
+| **Scalability** | Escalabilidade |
+| **Trial** | Período de teste |
+| **Upgrade** | Melhoria de plano |
+| **Upselling** | Venda de produto superior |
+
+---
+
+## 🆘 Precisa de Mais Ajuda?
+
+### Documentação Relacionada
+- [`BUSINESS_RULES.md`](frontend/mw-docs/src/assets/docs/BUSINESS_RULES.md) - Regras de negócio detalhadas
+- [`SUBSCRIPTION_SYSTEM.md`](frontend/mw-docs/src/assets/docs/SUBSCRIPTION_SYSTEM.md) - Sistema de assinaturas
+- [`README.md`](README.md) - Visão geral do projeto
+
+### Contato
+- 📧 Entre em contato com a equipe MedicWarehouse
+- 💬 Participe de comunidades de empreendedorismo
+- 📚 Continue estudando e praticando
+
+---
+
+**Última atualização:** Outubro 2025
+
+**Versão:** 1.0
+
+**Mantido por:** Equipe MedicWarehouse
+
+---
+
+> 💡 **Dica Final:** Este glossário é um ponto de partida. A melhor forma de aprender é praticando! Comece aplicando um termo por vez no seu negócio e vá expandindo gradualmente. Boa sorte! 🚀
+
+
+---
+
+<div style="page-break-after: always;"></div>
+
+<div id="doc-4"></div>
+
+# 📚 Índice de Documentação
+
+> **Categoria:** Referência
+> **Arquivo:** `DOCUMENTATION_INDEX.md`
+
+---
+
+# 📚 Índice de Documentação - MedicWarehouse
+
+Este documento serve como guia de navegação para toda a documentação do sistema MedicWarehouse.
+
+---
+
+## 🚀 Início Rápido
+
+**Quer começar imediatamente?** Siga estes passos:
+
+1. 📖 Leia: [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md)
+2. 🎯 Execute: `POST /api/data-seeder/seed-demo`
+3. 🔐 Login: Use credenciais do seeder
+4. ✅ Teste: Explore as APIs via Swagger
+
+---
+
+## 📑 Documentação por Categoria
+
+### 📚 Documentação de Negócio
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) | Glossário completo de termos empresariais e de negócio | 30 min |
+
+### 🎯 Para Desenvolvedores - Começando
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) | Referência rápida dos seeders | 2 min |
+| [RESUMO_IMPLEMENTACAO_SEEDERS.md](./RESUMO_IMPLEMENTACAO_SEEDERS.md) | Guia passo a passo com exemplos práticos | 10 min |
+| [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) | Como autenticar e usar JWT | 5 min |
+
+### 🏗️ Arquitetura e Estrutura
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) | Mapeamento completo do sistema | 15 min |
+| [ENTITY_DIAGRAM.md](./ENTITY_DIAGRAM.md) | Diagrama de entidades e relacionamentos | 8 min |
+| [SERVICE_LAYER_ARCHITECTURE.md](./SERVICE_LAYER_ARCHITECTURE.md) | Arquitetura da camada de serviços | 10 min |
+| [BEFORE_AND_AFTER_ARCHITECTURE.md](./BEFORE_AND_AFTER_ARCHITECTURE.md) | Evolução da arquitetura | 8 min |
+
+### 🗄️ Dados e Seeders
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) | Guia completo e detalhado dos seeders | 20 min |
+| [CARGA_INICIAL_TESTES.md](./CARGA_INICIAL_TESTES.md) | Dados iniciais para testes | 5 min |
+
+### 🔐 Segurança e Autenticação
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) | Guia completo de autenticação | 12 min |
+| [GUIA_DESENVOLVIMENTO_AUTH.md](./GUIA_DESENVOLVIMENTO_AUTH.md) | Desenvolvimento com autenticação | 10 min |
+| [QUICK_REFERENCE_PERMISSIONS.md](./QUICK_REFERENCE_PERMISSIONS.md) | Referência rápida de permissões | 5 min |
+| [SUGESTOES_MELHORIAS_SEGURANCA.md](./SUGESTOES_MELHORIAS_SEGURANCA.md) | Melhorias de segurança sugeridas | 8 min |
+
+### 👥 Funcionalidades Específicas
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [OWNER_FLOW_DOCUMENTATION.md](./OWNER_FLOW_DOCUMENTATION.md) | Fluxo de proprietários | 10 min |
+| [SYSTEM_ADMIN_AREA_GUIDE.md](./SYSTEM_ADMIN_AREA_GUIDE.md) | Área administrativa do sistema | 8 min |
+| [ATTENDANCE_FEATURES_IMPLEMENTATION.md](./ATTENDANCE_FEATURES_IMPLEMENTATION.md) | Funcionalidades de atendimento | 12 min |
+
+### 📦 Implementações e Histórico
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) | Resumo de implementações | 10 min |
+| [FUNCIONALIDADES_IMPLEMENTADAS.md](./FUNCIONALIDADES_IMPLEMENTADAS.md) | Lista de funcionalidades | 8 min |
+| [DEPLOY_IMPLEMENTATION_SUMMARY.md](./DEPLOY_IMPLEMENTATION_SUMMARY.md) | Resumo de deploy | 6 min |
+
+### 🧪 Testes e API
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) | Guia rápido do Postman | 5 min |
+| [POSTMAN_IMPORT_GUIDE.md](./POSTMAN_IMPORT_GUIDE.md) | Como importar collection | 3 min |
+| [MedicWarehouse-Postman-Collection.json](./MedicWarehouse-Postman-Collection.json) | Collection do Postman | - |
+
+### 🌐 Frontend e Integração
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [FRONTEND_INTEGRATION_GUIDE.md](./FRONTEND_INTEGRATION_GUIDE.md) | Integração com frontend | 12 min |
+| [FIX_PAGES_DEPLOYMENT_SOLUTION.md](./FIX_PAGES_DEPLOYMENT_SOLUTION.md) | Solução de deploy Pages | 6 min |
+
+---
+
+## 🎯 Fluxos de Leitura Recomendados
+
+### Para Desenvolvedores Novos no Projeto
+
+1. ⚡ [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md)
+2. 🏗️ [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md)
+3. 🔐 [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md)
+4. 📋 [SEEDER_GUIDE.md](./SEEDER_GUIDE.md)
+5. 📊 [ENTITY_DIAGRAM.md](./ENTITY_DIAGRAM.md)
+
+**Tempo Total:** ~50 minutos
+
+### Para Testers / QA
+
+1. ⚡ [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md)
+2. 🎯 [RESUMO_IMPLEMENTACAO_SEEDERS.md](./RESUMO_IMPLEMENTACAO_SEEDERS.md)
+3. 🧪 [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md)
+4. 📋 [SEEDER_GUIDE.md](./SEEDER_GUIDE.md)
+
+**Tempo Total:** ~40 minutos
+
+### Para Arquitetos / Tech Leads
+
+1. 🏗️ [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md)
+2. 📊 [ENTITY_DIAGRAM.md](./ENTITY_DIAGRAM.md)
+3. 🏛️ [SERVICE_LAYER_ARCHITECTURE.md](./SERVICE_LAYER_ARCHITECTURE.md)
+4. 🔐 [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md)
+5. 🔒 [SUGESTOES_MELHORIAS_SEGURANCA.md](./SUGESTOES_MELHORIAS_SEGURANCA.md)
+
+**Tempo Total:** ~55 minutos
+
+### Para Product Owners / Gestores
+
+1. 📋 [FUNCIONALIDADES_IMPLEMENTADAS.md](./FUNCIONALIDADES_IMPLEMENTADAS.md)
+2. 🎯 [RESUMO_IMPLEMENTACAO_SEEDERS.md](./RESUMO_IMPLEMENTACAO_SEEDERS.md)
+3. 📊 [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) (Overview)
+4. ✅ [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)
+
+**Tempo Total:** ~35 minutos
+
+### Para Empreendedores / Donos de Negócio
+
+1. 📚 [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md)
+2. 📋 [FUNCIONALIDADES_IMPLEMENTADAS.md](./FUNCIONALIDADES_IMPLEMENTADAS.md)
+3. 📊 [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) (Overview)
+
+**Tempo Total:** ~45 minutos
+
+---
+
+## 📂 Estrutura de Documentação
+
+```
+MW.Code/
+├── 📚 DOCUMENTATION_INDEX.md (este arquivo)
+│
+├── 📖 NEGÓCIO E GESTÃO
+│   └── GLOSSARIO_TERMOS_EMPRESARIAIS.md ⭐
+│
+├── 🚀 INÍCIO RÁPIDO
+│   ├── SEEDER_QUICK_REFERENCE.md
+│   ├── RESUMO_IMPLEMENTACAO_SEEDERS.md
+│   └── POSTMAN_QUICK_GUIDE.md
+│
+├── 🏗️ ARQUITETURA
+│   ├── SYSTEM_MAPPING.md ⭐
+│   ├── ENTITY_DIAGRAM.md ⭐
+│   ├── SERVICE_LAYER_ARCHITECTURE.md
+│   └── BEFORE_AND_AFTER_ARCHITECTURE.md
+│
+├── 🗄️ DADOS E SEEDERS
+│   ├── SEEDER_GUIDE.md ⭐
+│   └── CARGA_INICIAL_TESTES.md
+│
+├── 🔐 SEGURANÇA
+│   ├── AUTHENTICATION_GUIDE.md ⭐
+│   ├── GUIA_DESENVOLVIMENTO_AUTH.md
+│   ├── QUICK_REFERENCE_PERMISSIONS.md
+│   └── SUGESTOES_MELHORIAS_SEGURANCA.md
+│
+├── 👥 FUNCIONALIDADES
+│   ├── OWNER_FLOW_DOCUMENTATION.md
+│   ├── SYSTEM_ADMIN_AREA_GUIDE.md
+│   └── ATTENDANCE_FEATURES_IMPLEMENTATION.md
+│
+├── 📦 IMPLEMENTAÇÕES
+│   ├── IMPLEMENTATION_SUMMARY.md
+│   ├── FUNCIONALIDADES_IMPLEMENTADAS.md
+│   └── DEPLOY_IMPLEMENTATION_SUMMARY.md
+│
+├── 🧪 TESTES E API
+│   ├── POSTMAN_IMPORT_GUIDE.md
+│   └── MedicWarehouse-Postman-Collection.json
+│
+└── 🌐 FRONTEND
+    ├── FRONTEND_INTEGRATION_GUIDE.md
+    └── FIX_PAGES_DEPLOYMENT_SOLUTION.md
+```
+
+⭐ = Documentos essenciais
+
+---
+
+## 🔍 Busca Rápida por Tópico
+
+### Precisa saber sobre...
+
+| Tópico | Documento Recomendado |
+|--------|----------------------|
+| **Termos empresariais** | [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) |
+| **Como começar** | [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) |
+| **Estrutura do banco de dados** | [ENTITY_DIAGRAM.md](./ENTITY_DIAGRAM.md) |
+| **Como autenticar** | [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) |
+| **Dados de teste** | [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) |
+| **APIs disponíveis** | [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) |
+| **Permissões e roles** | [QUICK_REFERENCE_PERMISSIONS.md](./QUICK_REFERENCE_PERMISSIONS.md) |
+| **Fluxo de consultas** | [ATTENDANCE_FEATURES_IMPLEMENTATION.md](./ATTENDANCE_FEATURES_IMPLEMENTATION.md) |
+| **Usar Postman** | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) |
+| **Integração frontend** | [FRONTEND_INTEGRATION_GUIDE.md](./FRONTEND_INTEGRATION_GUIDE.md) |
+| **Segurança** | [SUGESTOES_MELHORIAS_SEGURANCA.md](./SUGESTOES_MELHORIAS_SEGURANCA.md) |
+
+---
+
+## 📊 Estatísticas da Documentação
+
+- **Total de Documentos:** 31+
+- **Documentos Essenciais:** 6
+- **Tempo Total de Leitura:** ~4,5 horas (todos os documentos)
+- **Idioma Principal:** Português (PT-BR)
+- **Última Atualização:** 2025-10-27
+
+---
+
+## 🆕 Documentos Criados Recentemente
+
+### ✨ Novos (2025-10-27)
+1. ⭐ **GLOSSARIO_TERMOS_EMPRESARIAIS.md** - Glossário completo de termos empresariais
+
+### ✨ Novos (2025-10-20)
+1. ⭐ **SYSTEM_MAPPING.md** - Mapeamento completo do sistema
+2. ⭐ **SEEDER_GUIDE.md** - Guia completo dos seeders
+3. ⭐ **ENTITY_DIAGRAM.md** - Diagrama de entidades
+4. **SEEDER_QUICK_REFERENCE.md** - Referência rápida
+5. **RESUMO_IMPLEMENTACAO_SEEDERS.md** - Resumo executivo
+6. **DOCUMENTATION_INDEX.md** - Este índice
+
+---
+
+## 💡 Dicas de Uso
+
+### Para Leitura Offline
+Todos os documentos estão em Markdown e podem ser:
+- Lidos diretamente no GitHub
+- Baixados para leitura offline
+- Convertidos para PDF
+- Visualizados em qualquer editor Markdown
+
+### Para Navegação
+- Use o índice no topo de cada documento
+- Links internos conectam documentos relacionados
+- Busque por palavras-chave usando Ctrl+F
+
+### Para Contribuir
+Ao adicionar nova documentação:
+1. Use o formato Markdown
+2. Adicione ao índice relevante
+3. Atualize este arquivo
+4. Use emojis para melhor visualização
+5. Mantenha links funcionando
+
+---
+
+## 📞 Precisa de Ajuda?
+
+Se não encontrar o que procura:
+1. Verifique o [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) para visão geral
+2. Consulte o [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) para dados de teste
+3. Veja a [Postman Collection](./MedicWarehouse-Postman-Collection.json) para exemplos de API
+
+---
+
+## ✅ Checklist de Onboarding
+
+Para novos desenvolvedores:
+
+- [ ] Ler SEEDER_QUICK_REFERENCE.md
+- [ ] Popular banco de dados com seeders
+- [ ] Fazer login via API/Postman
+- [ ] Ler SYSTEM_MAPPING.md
+- [ ] Explorar ENTITY_DIAGRAM.md
+- [ ] Testar endpoints via Swagger
+- [ ] Ler AUTHENTICATION_GUIDE.md
+- [ ] Importar Postman Collection
+- [ ] Testar cenários do SEEDER_GUIDE.md
+- [ ] Pronto para desenvolver! 🎉
+
+---
+
+**Boa leitura e bons testes!** 📚✨
+
+
+---
+
+<div style="page-break-after: always;"></div>
+
+<div id="doc-5"></div>
+
 # 📖 README
 
 > **Categoria:** Guias
@@ -729,7 +2429,7 @@ POST /api/contact
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
-Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular**, **.NET 8** e **PostgreSQL**.
+Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
 ## 🏗️ Arquitetura
 
@@ -813,6 +2513,10 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Análise por Categoria**: Distribuição de despesas por categoria
 - ✅ **API RESTful**: Endpoints completos para geração de relatórios
 
+## 📈 Análise e Melhorias
+
+> 📄 **[ANÁLISE COMPARATIVA E MELHORIAS](ANALISE_MELHORIAS_SISTEMA.md)** - Análise detalhada do sistema MedicWarehouse comparado com principais concorrentes de mercado (Doctoralia, iClinic, Nuvem Saúde, etc.), gaps identificados e roadmap de melhorias propostas para 2025-2026. Inclui análise de funcionalidades, experiência do usuário, arquitetura técnica e projeções de ROI.
+
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
 - ✅ **WhatsApp**: Interface para WhatsApp Business API
@@ -862,7 +2566,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 ## 🔧 Tecnologias
 
 - **Backend**: .NET 8, Entity Framework Core, SQL Server
-- **Frontend**: Angular 18, TypeScript, SCSS
+- **Frontend**: Angular 20, TypeScript, SCSS
 - **Banco de Dados**: SQL Server 2022 (via Docker)
 - **Containerização**: Docker e Docker Compose
 - **Autenticação**: JWT Bearer Tokens
@@ -1205,7 +2909,7 @@ POST /api/contact
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-3"></div>
+<div id="doc-6"></div>
 
 # 🚀 Guia de Execução
 
@@ -1871,7 +3575,7 @@ MW.Code/
 │   ├── MedicSoft.Repository/  # Acesso a dados (EF Core)
 │   └── MedicSoft.CrossCutting/ # Serviços transversais
 │
-├── frontend/                  # Frontend Angular 18
+├── frontend/                  # Frontend Angular 20
 │   └── medicwarehouse-app/    # Aplicação Angular
 │       ├── src/
 │       ├── package.json
@@ -1902,7 +3606,7 @@ Após executar o sistema com sucesso:
 ## Recursos Adicionais
 
 - **Documentação .NET 8**: https://learn.microsoft.com/dotnet/
-- **Documentação Angular 18**: https://angular.io/docs
+- **Documentação Angular 20**: https://angular.dev/overview
 - **Documentação SQL Server**: https://learn.microsoft.com/sql/
 - **Documentação Docker**: https://docs.docker.com/
 - **Entity Framework Core**: https://learn.microsoft.com/ef/core/
@@ -1927,7 +3631,705 @@ Se você encontrar problemas não listados aqui:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-4"></div>
+<div id="doc-7"></div>
+
+# ⚙️ Guia de Setup do Sistema
+
+> **Categoria:** Guias
+> **Arquivo:** `frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md`
+
+---
+
+# Guia Completo de Configuração do Sistema MedicWarehouse
+
+## 📋 Índice
+
+1. [Visão Geral](#visão-geral)
+2. [Pré-requisitos](#pré-requisitos)
+3. [Configuração Inicial](#configuração-inicial)
+4. [Fluxo de Cadastro Correto](#fluxo-de-cadastro-correto)
+5. [Exemplos Swagger](#exemplos-swagger)
+6. [Exemplos Postman](#exemplos-postman)
+7. [Troubleshooting](#troubleshooting)
+
+---
+
+## 🎯 Visão Geral
+
+Este guia explica a **ordem correta** para configurar e cadastrar todos os componentes do sistema MedicWarehouse. Seguir esta ordem é essencial para garantir que o sistema funcione corretamente.
+
+### ⚠️ Importante: Autenticação Sempre Obrigatória
+
+O sistema **sempre requer autenticação JWT**. Não existe mais a opção de desabilitar autenticação, garantindo máxima segurança em todos os ambientes.
+
+---
+
+## 🔧 Pré-requisitos
+
+### 1. Backend Configurado
+
+Certifique-se de que o arquivo `appsettings.json` está configurado corretamente:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=MedicWarehouse;Trusted_Connection=True;TrustServerCertificate=True"
+  },
+  "JwtSettings": {
+    "SecretKey": "SuaChaveSecretaMuitoSeguraComPeloMenos32Caracteres!@#$%",
+    "ExpiryMinutes": 60,
+    "Issuer": "MedicWarehouse",
+    "Audience": "MedicWarehouse-API"
+  }
+}
+```
+
+**⚠️ Importante**: A `SecretKey` deve ter **no mínimo 32 caracteres**.
+
+### 2. Banco de Dados
+
+Execute as migrations para criar o banco de dados:
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef database update
+```
+
+### 3. Iniciar API
+
+```bash
+cd src/MedicSoft.Api
+dotnet run
+```
+
+A API estará disponível em:
+- HTTP: `http://localhost:5000`
+- HTTPS: `https://localhost:5001`
+- Swagger: `https://localhost:5001/swagger`
+
+---
+
+## 📝 Fluxo de Cadastro Correto
+
+### Ordem de Cadastro:
+
+```mermaid
+graph TD
+    A[1. Planos de Assinatura] --> B[2. Registro de Clínica via MW.Site]
+    B --> C[3. Login do Usuário Owner]
+    C --> D[4. Cadastrar Usuários Adicionais]
+    D --> E[5. Cadastrar Pacientes]
+    D --> F[6. Cadastrar Procedimentos]
+    E --> G[7. Criar Agendamentos]
+    E --> H[8. Gerenciar Prontuários]
+```
+
+### Detalhamento de Cada Passo:
+
+#### **Passo 1: Planos de Assinatura** (Já Existem no Sistema)
+
+Os planos são pré-configurados no sistema através de Seeds ou Migration inicial:
+
+- **Trial**: 15 dias gratuitos
+- **Basic**: R$ 190/mês - 2 usuários, 100 pacientes
+- **Standard**: R$ 240/mês - 3 usuários, 300 pacientes
+- **Premium**: R$ 320/mês - 5 usuários, ilimitado
+- **Enterprise**: Sob consulta
+
+**Não é necessário criar planos manualmente** - eles já existem no banco de dados.
+
+#### **Passo 2: Registro de Clínica** (Público - Sem Autenticação)
+
+Este é o **único endpoint público** do sistema. Ele cria:
+- ✅ Registro da clínica
+- ✅ Primeiro usuário com role `ClinicOwner`
+- ✅ Assinatura no plano escolhido
+- ✅ TenantId único para a clínica
+
+**Endpoint**: `POST /api/registration`
+
+**Dados Necessários**:
+```json
+{
+  "clinicName": "Clínica Exemplo",
+  "clinicCNPJ": "12.345.678/0001-95",
+  "clinicPhone": "+5511999999999",
+  "clinicEmail": "contato@clinica.com",
+  "street": "Rua das Flores",
+  "number": "123",
+  "complement": "Sala 10",
+  "neighborhood": "Centro",
+  "city": "São Paulo",
+  "state": "SP",
+  "zipCode": "01234-567",
+  "ownerName": "Dr. João Silva",
+  "ownerCPF": "123.456.789-00",
+  "ownerPhone": "+5511988888888",
+  "ownerEmail": "joao@clinica.com",
+  "username": "joao.silva",
+  "password": "SenhaForte123!@",
+  "planId": "guid-do-plano",
+  "acceptTerms": true,
+  "useTrial": true
+}
+```
+
+**Resposta de Sucesso**:
+```json
+{
+  "success": true,
+  "message": "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
+  "clinicId": "guid-da-clinica",
+  "userId": "guid-do-usuario",
+  "trialEndDate": "2024-11-01T00:00:00Z"
+}
+```
+
+#### **Passo 3: Login do Usuário Owner** (Obter Token JWT)
+
+Após o registro, faça login com as credenciais criadas para obter o **token JWT**.
+
+**Endpoint**: `POST /api/auth/login`
+
+**Dados Necessários**:
+```json
+{
+  "username": "joao.silva",
+  "password": "SenhaForte123!@",
+  "tenantId": "guid-da-clinica"
+}
+```
+
+**⚠️ Importante**: O `tenantId` é o **ClinicId** retornado no passo 2.
+
+**Resposta de Sucesso**:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "joao.silva",
+  "tenantId": "guid-da-clinica",
+  "expiresAt": "2024-10-12T04:00:00Z"
+}
+```
+
+**🔑 Guarde o Token**: Use este token em todas as próximas requisições no header:
+```
+Authorization: Bearer {seu-token-aqui}
+```
+
+#### **Passo 4: Cadastrar Usuários Adicionais** (Requer Autenticação)
+
+Agora que você está autenticado como `ClinicOwner`, pode criar usuários adicionais.
+
+**Endpoint**: `POST /api/users`
+
+**Headers Necessários**:
+```
+Authorization: Bearer {seu-token}
+X-Tenant-Id: {guid-da-clinica}
+```
+
+**Dados Necessários**:
+```json
+{
+  "username": "dra.maria",
+  "email": "maria@clinica.com",
+  "password": "SenhaForte456!@",
+  "fullName": "Dra. Maria Santos",
+  "phone": "+5511977777777",
+  "role": "Doctor",
+  "professionalId": "CRM 12345-SP",
+  "specialty": "Cardiologia"
+}
+```
+
+**Roles Disponíveis**:
+- `SystemAdmin` - Acesso total ao sistema
+- `ClinicOwner` - Dono da clínica (já criado no registro)
+- `Doctor` - Médico
+- `Dentist` - Dentista
+- `Nurse` - Enfermeiro(a)
+- `Receptionist` - Recepcionista
+- `Secretary` - Secretário(a)
+
+#### **Passo 5: Cadastrar Pacientes** (Requer Autenticação)
+
+**Endpoint**: `POST /api/patients`
+
+**Headers Necessários**:
+```
+Authorization: Bearer {seu-token}
+X-Tenant-Id: {guid-da-clinica}
+```
+
+**Dados Necessários**:
+```json
+{
+  "name": "Carlos Eduardo Silva",
+  "document": "987.654.321-00",
+  "dateOfBirth": "1990-05-15",
+  "gender": "Male",
+  "email": "carlos@email.com",
+  "phone": "+5511966666666",
+  "address": {
+    "street": "Av. Paulista",
+    "number": "1000",
+    "complement": "Apto 101",
+    "neighborhood": "Bela Vista",
+    "city": "São Paulo",
+    "state": "SP",
+    "zipCode": "01310-100"
+  },
+  "emergencyContact": "+5511955555555",
+  "bloodType": "O+",
+  "allergies": "Nenhuma",
+  "chronicDiseases": "Nenhuma",
+  "currentMedications": "Nenhuma"
+}
+```
+
+#### **Passo 6: Cadastrar Procedimentos** (Requer Autenticação)
+
+**Endpoint**: `POST /api/procedures`
+
+**Headers Necessários**:
+```
+Authorization: Bearer {seu-token}
+X-Tenant-Id: {guid-da-clinica}
+```
+
+**Dados Necessários**:
+```json
+{
+  "name": "Consulta Cardiológica",
+  "code": "CARD-001",
+  "description": "Consulta de rotina em cardiologia",
+  "price": 250.00,
+  "durationMinutes": 30,
+  "category": "Consultation"
+}
+```
+
+#### **Passo 7: Criar Agendamentos** (Requer Autenticação)
+
+**Endpoint**: `POST /api/appointments`
+
+**Headers Necessários**:
+```
+Authorization: Bearer {seu-token}
+X-Tenant-Id: {guid-da-clinica}
+```
+
+**Dados Necessários**:
+```json
+{
+  "patientId": "guid-do-paciente",
+  "appointmentDate": "2024-10-15T10:00:00Z",
+  "durationMinutes": 30,
+  "type": "Consultation",
+  "notes": "Primeira consulta",
+  "procedureIds": ["guid-do-procedimento"]
+}
+```
+
+---
+
+## 🌐 Exemplos Swagger
+
+### 1. Acessar Swagger
+
+Navegue para: `https://localhost:5001/swagger`
+
+### 2. Passo a Passo no Swagger
+
+#### **Passo 2.1: Registrar Clínica**
+
+1. Encontre o endpoint `POST /api/registration`
+2. Clique em **"Try it out"**
+3. Preencha o JSON com os dados da clínica
+4. Clique em **"Execute"**
+5. **Copie** o `clinicId` e `userId` da resposta
+
+#### **Passo 2.2: Fazer Login**
+
+1. Encontre o endpoint `POST /api/auth/login`
+2. Clique em **"Try it out"**
+3. Preencha:
+   ```json
+   {
+     "username": "seu-username",
+     "password": "sua-senha",
+     "tenantId": "clinicId-copiado-anteriormente"
+   }
+   ```
+4. Clique em **"Execute"**
+5. **Copie** o `token` da resposta
+
+#### **Passo 2.3: Autenticar no Swagger**
+
+1. No topo da página do Swagger, clique no botão **"Authorize"** 🔒
+2. No campo "Value", digite: `Bearer {seu-token}`
+3. Clique em **"Authorize"**
+4. Clique em **"Close"**
+
+Agora todos os endpoints protegidos estarão acessíveis!
+
+#### **Passo 2.4: Adicionar Header X-Tenant-Id**
+
+**⚠️ Importante**: Para endpoints que exigem `X-Tenant-Id`, você precisa adicioná-lo manualmente em cada requisição:
+
+1. Em cada endpoint, após clicar "Try it out"
+2. Procure por "Parameters" ou "Headers"
+3. Adicione `X-Tenant-Id` com o valor do `clinicId`
+
+---
+
+## 📮 Exemplos Postman
+
+### 1. Importar Collection
+
+Importe o arquivo `MedicWarehouse-Postman-Collection.json` localizado na raiz do projeto.
+
+### 2. Configurar Variáveis de Ambiente
+
+Crie um Environment no Postman com as seguintes variáveis:
+
+```
+base_url = https://localhost:5001
+token = (deixe vazio - será preenchido automaticamente)
+tenant_id = (deixe vazio - será preenchido após registro)
+clinic_id = (deixe vazio - será preenchido após registro)
+user_id = (deixe vazio - será preenchido após registro)
+```
+
+### 3. Sequência de Execução no Postman
+
+#### **3.1. Registrar Clínica**
+
+**Request**: `POST {{base_url}}/api/registration`
+
+**Body**:
+```json
+{
+  "clinicName": "Clínica Postman Test",
+  "clinicCNPJ": "12.345.678/0001-95",
+  "clinicPhone": "+5511999999999",
+  "clinicEmail": "postman@test.com",
+  "street": "Rua Teste",
+  "number": "100",
+  "neighborhood": "Centro",
+  "city": "São Paulo",
+  "state": "SP",
+  "zipCode": "01000-000",
+  "ownerName": "Dr. Postman",
+  "ownerCPF": "123.456.789-00",
+  "ownerPhone": "+5511988888888",
+  "ownerEmail": "postman@test.com",
+  "username": "postman.test",
+  "password": "Postman123!@#",
+  "planId": "{{plan_id}}",
+  "acceptTerms": true,
+  "useTrial": true
+}
+```
+
+**Tests** (adicione na aba Tests para salvar valores automaticamente):
+```javascript
+if (pm.response.code === 200) {
+    var jsonData = pm.response.json();
+    pm.environment.set("clinic_id", jsonData.clinicId);
+    pm.environment.set("user_id", jsonData.userId);
+    pm.environment.set("tenant_id", jsonData.clinicId);
+}
+```
+
+#### **3.2. Fazer Login**
+
+**Request**: `POST {{base_url}}/api/auth/login`
+
+**Body**:
+```json
+{
+  "username": "postman.test",
+  "password": "Postman123!@#",
+  "tenantId": "{{tenant_id}}"
+}
+```
+
+**Tests**:
+```javascript
+if (pm.response.code === 200) {
+    var jsonData = pm.response.json();
+    pm.environment.set("token", jsonData.token);
+}
+```
+
+#### **3.3. Configurar Header Padrão**
+
+Para todas as requisições subsequentes, adicione nos Headers:
+
+```
+Authorization: Bearer {{token}}
+X-Tenant-Id: {{tenant_id}}
+```
+
+**Dica**: Configure isso no Authorization da Collection para aplicar a todas as requests.
+
+#### **3.4. Criar Usuário Adicional**
+
+**Request**: `POST {{base_url}}/api/users`
+
+**Headers**:
+```
+Authorization: Bearer {{token}}
+X-Tenant-Id: {{tenant_id}}
+```
+
+**Body**:
+```json
+{
+  "username": "dra.maria",
+  "email": "maria@test.com",
+  "password": "Maria123!@#",
+  "fullName": "Dra. Maria Santos",
+  "phone": "+5511977777777",
+  "role": "Doctor",
+  "professionalId": "CRM 12345",
+  "specialty": "Cardiologia"
+}
+```
+
+#### **3.5. Criar Paciente**
+
+**Request**: `POST {{base_url}}/api/patients`
+
+**Headers**:
+```
+Authorization: Bearer {{token}}
+X-Tenant-Id: {{tenant_id}}
+```
+
+**Body**:
+```json
+{
+  "name": "João da Silva",
+  "document": "987.654.321-00",
+  "dateOfBirth": "1985-03-20",
+  "gender": "Male",
+  "email": "joao@test.com",
+  "phone": "+5511966666666",
+  "address": {
+    "street": "Rua Exemplo",
+    "number": "200",
+    "neighborhood": "Centro",
+    "city": "São Paulo",
+    "state": "SP",
+    "zipCode": "01000-000"
+  },
+  "emergencyContact": "+5511955555555"
+}
+```
+
+---
+
+## 🔍 Troubleshooting
+
+### ❌ Erro: "401 Unauthorized"
+
+**Causa**: Token JWT ausente ou inválido.
+
+**Solução**:
+1. Verifique se incluiu o header: `Authorization: Bearer {token}`
+2. Verifique se o token não expirou (60 minutos de validade)
+3. Faça login novamente para obter um novo token
+
+### ❌ Erro: "JWT SecretKey is not configured"
+
+**Causa**: `JwtSettings:SecretKey` não está configurado no `appsettings.json`
+
+**Solução**:
+```json
+{
+  "JwtSettings": {
+    "SecretKey": "SuaChaveMuitoSeguraComNoMinimo32Caracteres!@#$%",
+    "ExpiryMinutes": 60,
+    "Issuer": "MedicWarehouse",
+    "Audience": "MedicWarehouse-API"
+  }
+}
+```
+
+### ❌ Erro: "JWT SecretKey must be at least 32 characters long"
+
+**Causa**: A chave secreta configurada tem menos de 32 caracteres.
+
+**Solução**: Use uma chave com pelo menos 32 caracteres:
+```
+MedicWarehouse-SecretKey-2024-@#$%MinhaChaveMuitoSegura!
+```
+
+### ❌ Erro: "CNPJ already registered"
+
+**Causa**: Já existe uma clínica com o mesmo CNPJ no banco de dados.
+
+**Solução**:
+1. Use um CNPJ diferente, ou
+2. Se for ambiente de testes, limpe o banco de dados
+
+### ❌ Erro: "Username already taken"
+
+**Causa**: Já existe um usuário com o mesmo username.
+
+**Solução**:
+1. Escolha um username diferente, ou
+2. Faça login com o usuário existente
+
+### ❌ Erro: "Invalid credentials"
+
+**Causa**: Username ou senha incorretos, ou usuário inativo.
+
+**Solução**:
+1. Verifique se o username está correto (é case-insensitive)
+2. Verifique se a senha está correta (é case-sensitive)
+3. Verifique se o tenantId está correto
+4. Certifique-se de que o usuário está ativo no banco
+
+### ❌ Erro: "Password validation failed"
+
+**Causa**: A senha não atende aos requisitos de segurança.
+
+**Requisitos da Senha**:
+- ✅ Mínimo 8 caracteres
+- ✅ Pelo menos uma letra minúscula (a-z)
+- ✅ Pelo menos uma letra maiúscula (A-Z)
+- ✅ Pelo menos um dígito (0-9)
+- ✅ Pelo menos um caractere especial (!@#$%^&*...)
+- ❌ Não pode conter palavras fracas comuns (Password, 12345678, qwerty)
+
+**Exemplo de senha forte**: `MedicWare2024!@#`
+
+### ❌ Erro: "Account is disabled"
+
+**Causa**: O usuário foi desativado no sistema.
+
+**Solução**:
+1. Entre em contato com o administrador da clínica para reativar a conta
+2. Se você é o ClinicOwner, use o endpoint de ativação de usuários
+
+### ❌ Erro: Database connection failed
+
+**Causa**: String de conexão incorreta ou SQL Server não está rodando.
+
+**Solução**:
+1. Verifique se o SQL Server está rodando
+2. Verifique a string de conexão em `appsettings.json`
+3. Execute as migrations: `dotnet ef database update`
+
+### ❌ Headers X-Tenant-Id faltando
+
+**Causa**: Alguns endpoints requerem o header `X-Tenant-Id` explicitamente.
+
+**Solução**:
+```
+X-Tenant-Id: {guid-da-clinica}
+```
+
+---
+
+## 📊 Resumo dos Endpoints por Categoria
+
+### 🔓 Endpoints Públicos (Sem Autenticação)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/api/registration` | Registrar nova clínica |
+| GET | `/api/registration/check-cnpj/{cnpj}` | Verificar se CNPJ existe |
+| GET | `/api/registration/check-username/{username}` | Verificar disponibilidade de username |
+| POST | `/api/auth/login` | Fazer login e obter token JWT |
+
+### 🔒 Endpoints Protegidos (Requerem Autenticação)
+
+#### Usuários
+| Método | Endpoint | Permissão Necessária |
+|--------|----------|---------------------|
+| GET | `/api/users` | ClinicOwner, SystemAdmin |
+| POST | `/api/users` | ClinicOwner, SystemAdmin |
+| GET | `/api/users/{id}` | ClinicOwner, SystemAdmin |
+| PUT | `/api/users/{id}` | ClinicOwner, SystemAdmin |
+| DELETE | `/api/users/{id}` | ClinicOwner, SystemAdmin |
+
+#### Pacientes
+| Método | Endpoint | Permissão Necessária |
+|--------|----------|---------------------|
+| GET | `/api/patients` | Todos os usuários autenticados |
+| POST | `/api/patients` | Receptionist, Doctor, ClinicOwner |
+| GET | `/api/patients/{id}` | Todos os usuários autenticados |
+| PUT | `/api/patients/{id}` | Receptionist, Doctor, ClinicOwner |
+| DELETE | `/api/patients/{id}` | ClinicOwner |
+
+#### Agendamentos
+| Método | Endpoint | Permissão Necessária |
+|--------|----------|---------------------|
+| GET | `/api/appointments` | Todos os usuários autenticados |
+| POST | `/api/appointments` | Receptionist, Doctor, ClinicOwner |
+| GET | `/api/appointments/{id}` | Todos os usuários autenticados |
+| PUT | `/api/appointments/{id}` | Receptionist, Doctor, ClinicOwner |
+| DELETE | `/api/appointments/{id}` | ClinicOwner |
+
+#### Prontuários Médicos
+| Método | Endpoint | Permissão Necessária |
+|--------|----------|---------------------|
+| GET | `/api/medical-records` | Doctor, Nurse, ClinicOwner |
+| POST | `/api/medical-records` | Doctor, ClinicOwner |
+| GET | `/api/medical-records/{id}` | Doctor, Nurse, ClinicOwner |
+| PUT | `/api/medical-records/{id}` | Doctor, ClinicOwner |
+
+---
+
+## 🎓 Melhores Práticas
+
+### Segurança
+
+1. **Nunca compartilhe tokens JWT** - Cada usuário deve ter seu próprio token
+2. **Tokens expiram em 60 minutos** - Implemente refresh automático no frontend
+3. **Use HTTPS em produção** - HTTP não é seguro para tokens JWT
+4. **Senhas fortes são obrigatórias** - O sistema valida automaticamente
+5. **TenantId isola os dados** - Cada clínica vê apenas seus próprios dados
+
+### Performance
+
+1. **Cache tokens JWT** - Não faça login a cada requisição
+2. **Reutilize conexões** - Keep-alive HTTP
+3. **Pagination** - Use parâmetros de paginação em listas grandes
+
+### Desenvolvimento
+
+1. **Use variáveis de ambiente** - No Postman para facilitar testes
+2. **Scripts de automação** - Configure Tests no Postman para salvar valores
+3. **Logs detalhados** - Ative logs para debug durante desenvolvimento
+4. **Teste com dados reais** - Mas nunca em produção
+
+---
+
+## 📞 Suporte
+
+Para questões ou problemas:
+- **Email**: contato@medicwarehouse.com
+- **GitHub Issues**: [https://github.com/MedicWarehouse/MW.Code/issues](https://github.com/MedicWarehouse/MW.Code/issues)
+- **Documentação**: `/frontend/mw-docs/src/assets/docs/`
+
+---
+
+## 📝 Licença
+
+Este sistema é propriedade da MedicWarehouse. Todos os direitos reservados.
+
+
+---
+
+<div style="page-break-after: always;"></div>
+
+<div id="doc-8"></div>
 
 # ⚡ API Quick Guide
 
@@ -2377,7 +4779,7 @@ curl -X POST http://localhost:5000/api/patients/{patientId}/link-clinic/{clinicI
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-5"></div>
+<div id="doc-9"></div>
 
 # 📱 Documentação de Telas
 
@@ -3278,7 +5680,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-6"></div>
+<div id="doc-10"></div>
 
 # 🔄 Resumo Visual de Fluxos
 
@@ -3680,7 +6082,7 @@ Consulte: **[SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md)**
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-7"></div>
+<div id="doc-11"></div>
 
 # 📋 Regras de Negócio
 
@@ -4642,7 +7044,7 @@ A documentação visual complementa as regras de negócio descritas neste docume
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-8"></div>
+<div id="doc-12"></div>
 
 # 🔧 Implementação Técnica
 
@@ -5396,7 +7798,7 @@ Para detalhes completos e representações visuais de cada tela, consulte [SCREE
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-9"></div>
+<div id="doc-13"></div>
 
 # ⚙️ Implementação
 
@@ -5650,7 +8052,7 @@ Para questões ou problemas, criar issue no repositório GitHub.
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-10"></div>
+<div id="doc-14"></div>
 
 # 🔄 CI/CD
 
@@ -5973,7 +8375,7 @@ O projeto está configurado com quality gates padrão do SonarCloud:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-11"></div>
+<div id="doc-15"></div>
 
 # 🧪 Resumo de Testes
 
@@ -5987,10 +8389,10 @@ O projeto está configurado com quality gates padrão do SonarCloud:
 ## Estatísticas Gerais
 
 ```
-✅ Total de Testes: 558
-✅ Aprovados: 558 (100%)
+✅ Total de Testes: 719
+✅ Aprovados: 719 (100%)
 ❌ Reprovados: 0
-⏱️ Tempo de Execução: ~4 segundos
+⏱️ Tempo de Execução: ~3 segundos
 ```
 
 ## Distribuição dos Testes
@@ -6231,7 +8633,7 @@ A suite de testes garante:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-12"></div>
+<div id="doc-16"></div>
 
 # 🔒 Validações de Segurança
 
@@ -6572,7 +8974,7 @@ Todas as validações são executadas no momento da criação/atualização das 
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-13"></div>
+<div id="doc-17"></div>
 
 # 📊 SonarCloud Setup
 
@@ -6792,7 +9194,7 @@ As seguintes correções foram aplicadas para melhorar a qualidade do código co
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-14"></div>
+<div id="doc-18"></div>
 
 # 📝 Resumo de Implementação
 
@@ -7027,7 +9429,7 @@ O workflow está configurado e pronto para ser executado automaticamente em cada
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-15"></div>
+<div id="doc-19"></div>
 
 # ✨ Novas Funcionalidades
 
@@ -7309,7 +9711,7 @@ The implemented features provide:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-16"></div>
+<div id="doc-20"></div>
 
 # 📋 Resumo de Regras de Negócio
 
@@ -7619,7 +10021,7 @@ O sistema está pronto para uso e totalmente testado!
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-17"></div>
+<div id="doc-21"></div>
 
 # 🔄 Resumo de Migrações
 
@@ -7836,7 +10238,7 @@ The system now supports the multi-clinic business requirements with proper data 
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-18"></div>
+<div id="doc-22"></div>
 
 # 🔐 Guia de Segurança
 
@@ -8221,7 +10623,7 @@ Para questões de segurança críticas:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-19"></div>
+<div id="doc-23"></div>
 
 # 🔐 Resumo de Implementação de Segurança
 
@@ -8650,7 +11052,7 @@ Para questões relacionadas a esta implementação:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-20"></div>
+<div id="doc-24"></div>
 
 # 💰 Sistema de Pagamentos
 
@@ -8970,7 +11372,7 @@ Branch: copilot/create-financial-flow-and-docs
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-21"></div>
+<div id="doc-25"></div>
 
 # 💳 Fluxo de Pagamentos
 
@@ -9252,7 +11654,7 @@ O frontend pode ser desenvolvido consumindo os endpoints já disponíveis e docu
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-22"></div>
+<div id="doc-26"></div>
 
 # 📊 Gestão Financeira
 
@@ -9764,7 +12166,7 @@ Para completar a implementação, os seguintes componentes frontend devem ser cr
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-23"></div>
+<div id="doc-27"></div>
 
 # 💳 Sistema de Assinaturas
 
@@ -10219,7 +12621,7 @@ Content-Type: application/json
 
 {
   "clinicName": "Clínica Sorriso",
-  "clinicCNPJ": "12.345.678/0001-95",
+  "clinicCNPJ": "12.345.678/0001-90",
   "clinicPhone": "+5511999999999",
   "clinicEmail": "contato@clinica.com",
   "street": "Rua das Flores",
@@ -10408,7 +12810,7 @@ if (!user.HasPermission(Permission.ManageUsers))
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-24"></div>
+<div id="doc-28"></div>
 
 # 🤖 WhatsApp AI Agent
 
@@ -10871,7 +13273,7 @@ Para dúvidas sobre implementação ou configuração, consulte a documentação
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-25"></div>
+<div id="doc-29"></div>
 
 # 🤖 Implementação WhatsApp AI
 
@@ -11294,7 +13696,7 @@ Para dúvidas sobre a implementação:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-26"></div>
+<div id="doc-30"></div>
 
 # 🔐 Segurança WhatsApp AI
 
@@ -11745,7 +14147,7 @@ Para reportar vulnerabilidades de segurança:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-27"></div>
+<div id="doc-31"></div>
 
 # 🔔 Documentação de Notificações
 
@@ -12123,7 +14525,7 @@ Quanto mais específico o filtro, mais relevante a notificação para o destinat
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-28"></div>
+<div id="doc-32"></div>
 
 # 🔔 Implementação de Notificações
 
@@ -12487,7 +14889,7 @@ A implementação do Sistema de Rotinas de Notificação Configuráveis está **
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-29"></div>
+<div id="doc-33"></div>
 
 # 🔔 Exemplos de Notificações
 
@@ -12790,7 +15192,7 @@ Próximas Execuções:
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-30"></div>
+<div id="doc-34"></div>
 
 # 👨‍👩‍👧 Sistema Responsável/Dependente
 
@@ -13258,7 +15660,7 @@ npm run build
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-31"></div>
+<div id="doc-35"></div>
 
 # 🌐 MW.Site Documentação
 
@@ -13915,7 +16317,7 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-32"></div>
+<div id="doc-36"></div>
 
 # 🌐 MW.Site Implementação
 
@@ -14187,7 +16589,7 @@ O projeto MW.Site foi implementado com sucesso, atendendo a todos os requisitos 
 
 <div style="page-break-after: always;"></div>
 
-<div id="doc-33"></div>
+<div id="doc-37"></div>
 
 # 📚 Índice
 
@@ -14436,4 +16838,4 @@ Se você não encontrou o que procura neste índice:
 
 ---
 
-*Documentação gerada automaticamente em 15/10/2025, 02:13:35*
+*Documentação gerada automaticamente em 28/10/2025, 13:39:11*

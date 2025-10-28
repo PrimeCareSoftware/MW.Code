@@ -53,10 +53,10 @@ documentacao-portatil/
 
 ## 📊 Números
 
-- **33 documentos** markdown consolidados
+- **37 documentos** markdown consolidados
 - **14 categorias** organizadas com ícones
-- **553 KB** HTML formatado e estilizado
-- **434 KB** Markdown puro
+- **~638 KB** HTML formatado e estilizado
+- **~495 KB** Markdown puro
 - **~2 segundos** para regenerar toda documentação
 
 ## 🚀 Como Usar
@@ -236,11 +236,11 @@ A solução implementada é:
 
 - ✅ **Mais prática** que um app Android
 - ✅ **Multiplataforma** (funciona em iOS também)
-- ✅ **Leve** (553KB vs ~30MB de um app)
+- ✅ **Leve** (638KB vs ~30MB de um app)
 - ✅ **Fácil de manter** (regenera em 2 segundos)
 - ✅ **Fácil de compartilhar** (um arquivo só)
 - ✅ **Profissional** (design moderno)
-- ✅ **Completa** (todos os 33 documentos)
+- ✅ **Completa** (todos os 37 documentos)
 
 **Status**: ✅ **IMPLEMENTADO E TESTADO COM SUCESSO**
 
