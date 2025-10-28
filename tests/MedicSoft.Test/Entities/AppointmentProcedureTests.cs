@@ -114,7 +114,7 @@ namespace MedicSoft.Test.Entities
             var appointmentProcedure = CreateValidAppointmentProcedure();
 
             // Act
-            appointmentProcedure.UpdateNotes(null);
+            appointmentProcedure.UpdateNotes(null!);
 
             // Assert
             Assert.Null(appointmentProcedure.Notes);
