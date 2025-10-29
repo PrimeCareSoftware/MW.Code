@@ -343,10 +343,10 @@ O projeto segue:
 
 ## 📚 Documentação Adicional
 
-- [Análise de Serviços de Vídeo](../TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md)
-- [Daily.co API Docs](https://docs.daily.co)
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [DDD Reference](https://www.domainlanguage.com/ddd/)
+- [Análise de Serviços de Vídeo](../TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md) - Análise completa de 5 provedores
+- [Daily.co API Docs](https://docs.daily.co) - Documentação oficial da API
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - Artigo original
+- [DDD Reference](https://www.domainlanguage.com/ddd/) - Guia de referência DDD
 
 ## 🤝 Contribuindo
 
@@ -363,6 +363,6 @@ Este projeto é parte do MedicWarehouse.
 ---
 
 **Criado por**: GitHub Copilot  
-**Data**: Outubro 2024  
+**Data**: Outubro/Novembro 2024  
 **Versão**: 1.0.0  
 **Tecnologias**: .NET 8, PostgreSQL, Daily.co, Clean Architecture, DDD

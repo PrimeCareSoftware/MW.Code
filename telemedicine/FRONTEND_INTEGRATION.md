@@ -489,9 +489,10 @@ const routes: Routes = [
 
 ## 📚 Recursos
 
-- [Daily.co React SDK](https://docs.daily.co/reference/daily-react)
-- [Daily.co JavaScript SDK](https://docs.daily.co/reference/daily-js)
-- [Angular HTTP Client](https://angular.io/guide/http)
+- [Daily.co JavaScript SDK](https://docs.daily.co/reference/daily-js) - SDK oficial para JavaScript/TypeScript
+- [Daily.co Prebuilt UI](https://docs.daily.co/reference/daily-js/prebuilt-ui) - UI pré-construída customizável
+- [Angular HTTP Client](https://angular.io/guide/http) - Guia oficial do Angular
+- [RxJS Observables](https://angular.io/guide/rx-library) - Programação reativa no Angular
 
 ---
 
