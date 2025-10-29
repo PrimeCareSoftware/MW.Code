@@ -1,0 +1,92 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using MedicSoft.Telemedicine.Application.Interfaces;
+using MedicSoft.Telemedicine.Application.Services;
+using MedicSoft.Telemedicine.Domain.Interfaces;
+using MedicSoft.Telemedicine.Infrastructure.ExternalServices;
+using MedicSoft.Telemedicine.Infrastructure.Persistence;
+using MedicSoft.Telemedicine.Infrastructure.Repositories;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MedicSoft Telemedicine API",
+        Version = "v1",
+        Description = "Microservice for telemedicine video consultations",
+        Contact = new OpenApiContact
+        {
+            Name = "MedicWarehouse Team"
+        }
+    });
+    
+    // Add tenant header parameter globally
+    c.AddSecurityDefinition("TenantId", new OpenApiSecurityScheme
+    {
+        Description = "Tenant identifier for multi-tenancy",
+        Name = "X-Tenant-Id",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "TenantId"
+    });
+});
+
+// Configure Database
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<TelemedicineDbContext>(options =>
+{
+    if (connectionString?.Contains("postgres", StringComparison.OrdinalIgnoreCase) == true)
+    {
+        options.UseNpgsql(connectionString);
+    }
+    else
+    {
+        // Fallback to in-memory for development
+        options.UseInMemoryDatabase("TelemedicineDb");
+    }
+});
+
+// Register Application Services
+builder.Services.AddScoped<ITelemedicineService, TelemedicineService>();
+
+// Register Domain Services
+builder.Services.AddScoped<ITelemedicineSessionRepository, TelemedicineSessionRepository>();
+
+// Register Infrastructure Services
+builder.Services.AddHttpClient<IVideoCallService, DailyCoVideoService>();
+
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Telemedicine API V1");
+        c.RoutePrefix = string.Empty; // Swagger at root
+    });
+}
+
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();

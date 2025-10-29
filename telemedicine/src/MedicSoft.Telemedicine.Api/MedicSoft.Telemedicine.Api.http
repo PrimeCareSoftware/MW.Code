@@ -1,0 +1,6 @@
+@MedicSoft.Telemedicine.Api_HostAddress = http://localhost:5084
+
+GET {{MedicSoft.Telemedicine.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
