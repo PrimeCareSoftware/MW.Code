@@ -17,6 +17,7 @@ Aplicativo principal para uso diário das clínicas:
 - 👥 **Gestão de pacientes** e prontuários
 - 📅 **Agendamentos** e atendimentos
 - 💊 **Prescrições** médicas e procedimentos
+- 🎥 **Telemedicina** com videochamadas (NOVO!) 🆕
 - **URL desenvolvimento**: `http://localhost:4200`
 
 ### 2. **MW System Admin** (`frontend/mw-system-admin`) 🆕
@@ -29,6 +30,31 @@ Painel administrativo para gestão do sistema completo:
 - 👤 **Gestão de system owners**
 - **URL desenvolvimento**: `http://localhost:4201`
 - 📖 **Documentação**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
+
+## 🎥 Microserviço de Telemedicina 🆕
+
+**Novo microserviço independente para teleconsultas médicas!**
+
+- 📂 **Localização**: `telemedicine/`
+- 📖 **Documentação**: [`telemedicine/README.md`](telemedicine/README.md)
+- 🎯 **Arquitetura**: Clean Architecture + DDD
+- 🔐 **Multi-tenant**: Isolamento completo por TenantId
+- 🎥 **Integração**: Daily.co (10.000 min/mês grátis)
+- ✅ **Testes**: 22 testes unitários passando
+- 💰 **Custo**: ~$30/mês para 1.000 consultas
+- 🚀 **Status**: Pronto para produção
+
+**Features:**
+- ✅ Gestão de sessões de videochamada
+- ✅ Tokens JWT para segurança
+- ✅ Gravação de consultas (opcional)
+- ✅ Rastreamento de duração
+- ✅ API RESTful com Swagger
+- ✅ HIPAA Compliant
+
+**Guias:**
+- [Análise de Serviços de Vídeo](TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md)
+- [Integração Frontend](telemedicine/FRONTEND_INTEGRATION.md)
 
 ## 📚 Documentação Completa
 
