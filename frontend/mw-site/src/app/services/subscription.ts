@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { SubscriptionPlan, AVAILABLE_PLANS } from '../models/subscription-plan.model';
 import { RegistrationRequest, RegistrationResponse } from '../models/registration.model';
 import { ContactRequest, ContactResponse } from '../models/contact.model';
@@ -14,12 +15,23 @@ export class SubscriptionService {
 
   constructor(private http: HttpClient) { }
 
-  getPlans(): SubscriptionPlan[] {
-    return AVAILABLE_PLANS;
+  getPlans(): Observable<SubscriptionPlan[]> {
+    return this.http.get<SubscriptionPlan[]>(`${this.apiUrl}/api/registration/plans`).pipe(
+      map(plans => plans.map(p => ({
+        ...p,
+        id: String(p.id) // Convert Guid to string for frontend compatibility
+      }))),
+      catchError(error => {
+        console.error('Error fetching plans from API, using fallback plans', error);
+        return of(AVAILABLE_PLANS); // Fallback to hardcoded plans if API fails
+      })
+    );
   }
 
-  getPlanById(id: string): SubscriptionPlan | undefined {
-    return AVAILABLE_PLANS.find(p => p.id === id);
+  getPlanById(id: string): Observable<SubscriptionPlan | undefined> {
+    return this.getPlans().pipe(
+      map(plans => plans.find(p => p.id === id))
+    );
   }
 
   register(request: RegistrationRequest): Observable<RegistrationResponse> {
