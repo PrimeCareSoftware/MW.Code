@@ -19,9 +19,19 @@ export class PricingComponent {
   
   plans: SubscriptionPlan[] = [];
   whatsappNumber = environment.whatsappNumber;
+  loading = true;
 
   ngOnInit(): void {
-    this.plans = this.subscriptionService.getPlans();
+    this.subscriptionService.getPlans().subscribe({
+      next: (plans) => {
+        this.plans = plans;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading plans:', error);
+        this.loading = false;
+      }
+    });
   }
 
   selectPlan(plan: SubscriptionPlan): void {

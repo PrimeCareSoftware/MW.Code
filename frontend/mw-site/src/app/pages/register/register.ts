@@ -52,13 +52,14 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       if (params['plan']) {
-        const plan = this.subscriptionService.getPlanById(params['plan']);
-        if (plan) {
-          this.selectedPlan = plan;
-          this.model.planId = plan.id;
-          this.cartService.clearCart();
-          this.cartService.addToCart(plan);
-        }
+        this.subscriptionService.getPlanById(params['plan']).subscribe(plan => {
+          if (plan) {
+            this.selectedPlan = plan;
+            this.model.planId = plan.id;
+            this.cartService.clearCart();
+            this.cartService.addToCart(plan);
+          }
+        });
       }
     });
 
