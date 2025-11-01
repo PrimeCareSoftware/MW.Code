@@ -19,7 +19,7 @@ export class SubscriptionService {
     return this.http.get<SubscriptionPlan[]>(`${this.apiUrl}/api/registration/plans`).pipe(
       map(plans => plans.map(p => ({
         ...p,
-        id: p.id.toString() // Convert Guid to string for frontend compatibility
+        id: String(p.id) // Convert Guid to string for frontend compatibility
       }))),
       catchError(error => {
         console.error('Error fetching plans from API, using fallback plans', error);

@@ -126,17 +126,23 @@ namespace MedicSoft.Api.Controllers
             return Ok(planDtos);
         }
 
+        // Constants for plan limits thresholds
+        private const int UnlimitedUsersThreshold = 100;
+        private const int UnlimitedPatientsThreshold = 10000;
+        private const int LargeUsersLimit = 999;
+        private const int LargePatientsLimit = 999999;
+
         private List<string> GeneratePlanFeatures(SubscriptionPlan plan)
         {
             var features = new List<string>();
 
             // Add user and patient limits
-            if (plan.MaxUsers == 999 || plan.MaxUsers >= 100)
+            if (plan.MaxUsers >= LargeUsersLimit || plan.MaxUsers >= UnlimitedUsersThreshold)
                 features.Add("Usuários ilimitados");
             else
                 features.Add($"Até {plan.MaxUsers} usuários");
 
-            if (plan.MaxPatients == 999999 || plan.MaxPatients >= 10000)
+            if (plan.MaxPatients >= LargePatientsLimit || plan.MaxPatients >= UnlimitedPatientsThreshold)
                 features.Add("Pacientes ilimitados");
             else if (plan.MaxPatients >= 1000)
                 features.Add($"Até {plan.MaxPatients / 1000}k pacientes");
