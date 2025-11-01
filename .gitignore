@@ -68,3 +68,4 @@ logs
 frontend/mw-site/node_modules/
 frontend/mw-site/dist/
 frontend/mw-site/.angular/
+/.vs
