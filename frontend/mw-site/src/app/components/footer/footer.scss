@@ -1,32 +1,49 @@
 .footer {
-  background: #2c3e50;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
-  padding: 3rem 0 1rem;
-  margin-top: 4rem;
+  padding: 4rem 0 1.5rem;
+  margin-top: 0;
+  box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.1);
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 3rem;
+  margin-bottom: 3rem;
 }
 
 .footer-section {
   h3, h4 {
-    margin-bottom: 1rem;
-    color: #667eea;
+    margin-bottom: 1.5rem;
+    color: white;
+    font-weight: 700;
+    font-size: 1.3rem;
+    position: relative;
+    padding-bottom: 0.75rem;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
   }
   
   p {
-    line-height: 1.6;
+    line-height: 1.8;
     color: #bdc3c7;
+    font-size: 1rem;
   }
   
   ul {
@@ -34,12 +51,19 @@
     padding: 0;
     
     li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: translateX(5px);
+      }
       
       a {
         color: #bdc3c7;
         text-decoration: none;
-        transition: color 0.3s;
+        transition: all 0.3s ease;
+        display: inline-block;
+        font-size: 1rem;
         
         &:hover {
           color: #667eea;
@@ -51,17 +75,29 @@
 
 .footer-bottom {
   text-align: center;
-  padding-top: 2rem;
-  border-top: 1px solid #34495e;
+  padding-top: 2.5rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
   
   p {
     margin: 0;
     color: #95a5a6;
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 768px) {
+  .footer {
+    padding: 3rem 0 1.5rem;
+  }
+  
   .footer-content {
     grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .footer-section {
+    h3, h4 {
+      font-size: 1.2rem;
+    }
   }
 }
