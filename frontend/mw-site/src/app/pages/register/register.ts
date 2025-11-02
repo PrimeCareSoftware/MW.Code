@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SubscriptionService } from '../../services/subscription';
 import { CartService } from '../../services/cart';
 import { FormPersistenceService } from '../../services/form-persistence';
@@ -10,7 +10,7 @@ import { SubscriptionPlan } from '../../models/subscription-plan.model';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
