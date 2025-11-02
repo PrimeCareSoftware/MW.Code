@@ -1,5 +1,33 @@
 <div class="register">
   <div class="container">
+    <!-- Data Consent Dialog -->
+    <div class="consent-dialog-overlay" *ngIf="showDataConsentDialog">
+      <div class="consent-dialog">
+        <h3>🔒 Dados Salvos Encontrados</h3>
+        <p>
+          Encontramos dados de um cadastro anterior que você não concluiu. 
+          Gostaria de recuperá-los para continuar de onde parou?
+        </p>
+        <div class="consent-info">
+          <p><strong>Sobre seus dados:</strong></p>
+          <ul>
+            <li>✓ Armazenados de forma segura em seu navegador</li>
+            <li>✓ Mantidos por 7 dias após o último acesso</li>
+            <li>✓ Você pode apagá-los a qualquer momento</li>
+            <li>✓ Em conformidade com a LGPD</li>
+          </ul>
+        </div>
+        <div class="consent-actions">
+          <button class="btn btn-primary" (click)="acceptDataConsent()">
+            Sim, recuperar meus dados
+          </button>
+          <button class="btn btn-secondary" (click)="declineDataConsent()">
+            Não, começar do zero
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="register-card">
       <h1>Cadastro de Nova Clínica</h1>
       <p class="subtitle">Complete o cadastro e comece seu teste gratuito por 15 dias</p>
@@ -29,8 +57,12 @@
           <span class="step-number">4</span>
           <span class="step-label">Acesso</span>
         </div>
-        <div class="step" [class.active]="currentStep >= 5">
+        <div class="step" [class.active]="currentStep >= 5" [class.completed]="currentStep > 5">
           <span class="step-number">5</span>
+          <span class="step-label">Plano</span>
+        </div>
+        <div class="step" [class.active]="currentStep >= 6">
+          <span class="step-number">6</span>
           <span class="step-label">Confirmar</span>
         </div>
       </div>
@@ -170,6 +202,61 @@
 
         <!-- Step 5: Confirmation -->
         <div class="step-content" *ngIf="currentStep === 5">
+          <h2>Escolha seu Plano</h2>
+          <p class="step-subtitle">Revise ou altere o plano selecionado antes de finalizar</p>
+
+          <div class="plans-selection">
+            <div class="plan-option" 
+                 *ngFor="let plan of allPlans"
+                 [class.selected]="plan.id === selectedPlan?.id"
+                 [class.recommended]="plan.isRecommended"
+                 (click)="changePlan(plan)">
+              <div class="plan-radio">
+                <input 
+                  type="radio" 
+                  [checked]="plan.id === selectedPlan?.id"
+                  [value]="plan.id"
+                  name="selectedPlan"
+                  (change)="changePlan(plan)"
+                />
+              </div>
+              <div class="plan-details">
+                <div class="plan-badge" *ngIf="plan.isRecommended">
+                  Mais Indicado
+                </div>
+                <h3>{{ plan.name }}</h3>
+                <p class="plan-description">{{ plan.description }}</p>
+                <div class="plan-price-inline">
+                  <span class="price" *ngIf="plan.monthlyPrice > 0">
+                    <strong>R$ {{ plan.monthlyPrice }}</strong>/mês
+                  </span>
+                  <span class="price custom" *ngIf="plan.monthlyPrice === 0">
+                    <strong>Sob Consulta</strong>
+                  </span>
+                  <span class="trial-tag" *ngIf="plan.trialDays > 0">
+                    ✨ {{ plan.trialDays }} dias grátis
+                  </span>
+                </div>
+                <ul class="plan-features-compact">
+                  <li *ngFor="let feature of plan.features.slice(0, 4)">
+                    <span class="check">✓</span> {{ feature }}
+                  </li>
+                  <li *ngIf="plan.features.length > 4" class="more-features">
+                    +{{ plan.features.length - 4 }} recursos adicionais
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="plan-note">
+            <strong>📋 Nota:</strong> Você poderá mudar de plano a qualquer momento após o cadastro, 
+            sem qualquer custo adicional ou taxa de cancelamento.
+          </div>
+        </div>
+
+        <!-- Step 6: Confirmation -->
+        <div class="step-content" *ngIf="currentStep === 6">
           <h2>Confirme seus Dados</h2>
           <div class="summary-section">
             <h3>Clínica</h3>
@@ -207,10 +294,10 @@
           <button type="button" class="btn btn-secondary" (click)="prevStep()" *ngIf="currentStep > 1" [disabled]="isSubmitting">
             Voltar
           </button>
-          <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 5" [disabled]="!validateStep(currentStep)">
+          <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 6" [disabled]="!validateStep(currentStep)">
             Próximo
           </button>
-          <button type="button" class="btn btn-primary" (click)="onSubmit()" *ngIf="currentStep === 5" [disabled]="!model.acceptTerms || isSubmitting">
+          <button type="button" class="btn btn-primary" (click)="onSubmit()" *ngIf="currentStep === 6" [disabled]="!model.acceptTerms || isSubmitting">
             <span *ngIf="!isSubmitting">Finalizar Cadastro</span>
             <span *ngIf="isSubmitting">Processando...</span>
           </button>
