@@ -4,9 +4,9 @@ import { RegistrationRequest } from '../models/registration.model';
 /**
  * Service for persisting form data locally in compliance with LGPD
  * - Data is stored in localStorage with expiration
- * - Data is encrypted (in production, use proper encryption)
  * - User consent is required
  * - Data is automatically cleared after expiration
+ * - Note: For production, consider implementing encryption using Web Crypto API
  */
 @Injectable({
   providedIn: 'root'
