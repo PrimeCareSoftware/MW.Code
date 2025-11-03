@@ -6,6 +6,8 @@
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
+> ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](MIGRACAO_POSTGRESQL.md)
+
 ## 🖥️ Frontend Applications
 
 O MedicWarehouse possui **dois aplicativos Angular independentes**:
@@ -252,10 +254,12 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 🔧 Tecnologias
 
-- **Backend**: .NET 8, Entity Framework Core, SQL Server
+- **Backend**: .NET 8, Entity Framework Core, PostgreSQL (Npgsql)
 - **Frontend**: Angular 20, TypeScript, SCSS
-- **Banco de Dados**: SQL Server 2022 (via Docker)
+- **Banco de Dados**: PostgreSQL 16 (via Docker) - Migrado de SQL Server com economia de 90%+
 - **Containerização**: Docker e Docker Compose
+- **Autenticação**: JWT (stateless)
+- **Arquitetura**: DDD + Clean Architecture
 
 ## 🏃‍♂️ Como Executar
 
@@ -372,23 +376,29 @@ npm start
 
 > 📖 **Documentação completa do System Admin**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
 
-#### Banco de Dados (SQL Server)
+#### Banco de Dados (PostgreSQL)
 
 ```bash
-# Executar apenas o SQL Server
-docker run -d \
-  --name medicwarehouse-sqlserver \
-  -e "ACCEPT_EULA=Y" \
-  -e "MSSQL_SA_PASSWORD=MedicW@rehouse2024!" \
-  -e "MSSQL_PID=Developer" \
-  -p 1433:1433 \
-  mcr.microsoft.com/mssql/server:2022-latest
+# Executar apenas o PostgreSQL via Docker
+docker compose up postgres -d
 
-# Criar o banco de dados
-docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
-  -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse;"
+# Ou executar PostgreSQL standalone:
+docker run -d \
+  --name medicwarehouse-postgres \
+  -e POSTGRES_DB=medicwarehouse \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -p 5432:5432 \
+  postgres:16-alpine
+
+# Aplicar migrations
+dotnet ef database update --context MedicSoftDbContext \
+  --project src/MedicSoft.Repository \
+  --startup-project src/MedicSoft.Api
 ```
+
+> 📖 **Guia completo de setup do PostgreSQL**: [DOCKER_POSTGRES_SETUP.md](DOCKER_POSTGRES_SETUP.md)  
+> 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)
 
 ## 📖 Documentação da API
 

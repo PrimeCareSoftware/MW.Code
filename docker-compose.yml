@@ -1,25 +1,25 @@
 version: '3.8'
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: medicwarehouse-sqlserver
+  postgres:
+    image: postgres:16-alpine
+    container_name: medicwarehouse-postgres
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: MedicW@rehouse2024!
-      MSSQL_PID: Developer
+      POSTGRES_DB: medicwarehouse
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqlserver_data:/var/opt/mssql
-      - ./scripts/init-db-sqlserver.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
       - medicwarehouse-network
     healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "MedicW@rehouse2024!" -Q "SELECT 1" || exit 1
+      test: ["CMD-SHELL", "pg_isready -U postgres -d medicwarehouse"]
       interval: 10s
-      timeout: 3s
-      retries: 10
+      timeout: 5s
+      retries: 5
       start_period: 10s
 
   api:
@@ -31,16 +31,20 @@ services:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
     depends_on:
-      sqlserver:
+      postgres:
         condition: service_healthy
     networks:
       - medicwarehouse-network
 
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend/medicwarehouse-app
       dockerfile: Dockerfile
     container_name: medicwarehouse-frontend
     ports:
@@ -52,8 +56,22 @@ services:
     networks:
       - medicwarehouse-network
 
+  system-admin:
+    build:
+      context: ./frontend/mw-system-admin
+      dockerfile: Dockerfile
+    container_name: medicwarehouse-system-admin
+    ports:
+      - "4201:4200"
+    environment:
+      - API_URL=http://api:8080
+    depends_on:
+      - api
+    networks:
+      - medicwarehouse-network
+
 volumes:
-  sqlserver_data:
+  postgres_data:
 
 networks:
   medicwarehouse-network:

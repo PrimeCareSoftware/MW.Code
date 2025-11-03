@@ -61,9 +61,40 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Configure database
-builder.Services.AddDbContext<MedicSoftDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Configure database with auto-detection for SQL Server or PostgreSQL
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
+{
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        // Auto-detect database provider based on connection string
+        if (connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
+            connectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            // PostgreSQL
+            options.UseNpgsql(connectionString, npgsqlOptions =>
+            {
+                npgsqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorCodesToAdd: null);
+                npgsqlOptions.CommandTimeout(60);
+            });
+        }
+        else
+        {
+            // SQL Server (backward compatibility)
+            options.UseSqlServer(connectionString, sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null);
+                sqlOptions.CommandTimeout(60);
+            });
+        }
+    }
+});
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

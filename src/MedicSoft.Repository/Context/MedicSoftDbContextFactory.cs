@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace MedicSoft.Repository.Context
 {
@@ -9,11 +10,38 @@ namespace MedicSoft.Repository.Context
         {
             var optionsBuilder = new DbContextOptionsBuilder<MedicSoftDbContext>();
             
-            // Use a connection string for design-time operations
-            // This is just for migrations - actual connection string comes from configuration at runtime
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true");
+            // Read configuration from appsettings.json
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "MedicSoft.Api"))
+                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .Build();
 
-            return new MedicSoftDbContext(optionsBuilder.Options);
+            var connectionString = configuration.GetConnectionString("DefaultConnection") 
+                ?? "Host=localhost;Port=5432;Database=medicwarehouse;Username=postgres;Password=postgres";
+            
+            // Auto-detect database provider
+            if (IsPostgreSQL(connectionString))
+            {
+                optionsBuilder.UseNpgsql(connectionString, options =>
+                {
+                    options.MigrationsHistoryTable("__EFMigrationsHistory", "public");
+                });
+            }
+            else
+            {
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+
+            return new MedicSoftDbContext(optionsBuilder.Options, configuration);
+        }
+
+        private bool IsPostgreSQL(string connectionString)
+        {
+            return connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
+                   connectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase) ||
+                   connectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase) && 
+                   connectionString.Contains("Port=5432", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
