@@ -210,7 +210,12 @@ else
 // Add security headers
 app.UseSecurityHeaders();
 
-app.UseHttpsRedirection();
+// Use HTTPS redirection only if required by configuration
+var requireHttps = builder.Configuration.GetValue<bool>("Security:RequireHttps", false);
+if (requireHttps)
+{
+    app.UseHttpsRedirection();
+}
 
 // Use secure CORS policy
 app.UseCors("SecurePolicy");
