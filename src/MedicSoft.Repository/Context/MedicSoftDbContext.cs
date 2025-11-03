@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Configurations;
 
@@ -6,8 +7,16 @@ namespace MedicSoft.Repository.Context
 {
     public class MedicSoftDbContext : DbContext
     {
+        private readonly IConfiguration? _configuration;
+
         public MedicSoftDbContext(DbContextOptions<MedicSoftDbContext> options) : base(options)
         {
+            _configuration = null;
+        }
+
+        public MedicSoftDbContext(DbContextOptions<MedicSoftDbContext> options, IConfiguration? configuration) : base(options)
+        {
+            _configuration = configuration;
         }
 
         public DbSet<Patient> Patients { get; set; } = null!;
@@ -97,10 +106,58 @@ namespace MedicSoft.Repository.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured && _configuration != null)
             {
-                optionsBuilder.UseSqlServer();
+                var connectionString = _configuration.GetConnectionString("DefaultConnection");
+                
+                if (!string.IsNullOrEmpty(connectionString))
+                {
+                    // Auto-detect database provider based on connection string
+                    if (IsPostgreSQL(connectionString))
+                    {
+                        ConfigurePostgreSQL(optionsBuilder, connectionString);
+                    }
+                    else
+                    {
+                        ConfigureSqlServer(optionsBuilder, connectionString);
+                    }
+                }
             }
+        }
+
+        private bool IsPostgreSQL(string connectionString)
+        {
+            return connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
+                   connectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase) ||
+                   connectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase) && 
+                   connectionString.Contains("Port=5432", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void ConfigurePostgreSQL(DbContextOptionsBuilder optionsBuilder, string connectionString)
+        {
+            optionsBuilder.UseNpgsql(connectionString, options =>
+            {
+                options.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorCodesToAdd: null);
+                
+                options.MigrationsHistoryTable("__EFMigrationsHistory", "public");
+                options.CommandTimeout(60);
+            });
+        }
+
+        private void ConfigureSqlServer(DbContextOptionsBuilder optionsBuilder, string connectionString)
+        {
+            optionsBuilder.UseSqlServer(connectionString, options =>
+            {
+                options.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null);
+                
+                options.CommandTimeout(60);
+            });
         }
 
         // This would typically be set through a service or context accessor
