@@ -1,26 +1,31 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SubscriptionService } from '../../services/subscription';
 import { CartService } from '../../services/cart';
+import { FormPersistenceService } from '../../services/form-persistence';
 import { RegistrationRequest } from '../../models/registration.model';
 import { SubscriptionPlan } from '../../models/subscription-plan.model';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private subscriptionService = inject(SubscriptionService);
   private cartService = inject(CartService);
+  private formPersistence = inject(FormPersistenceService);
   
   selectedPlan?: SubscriptionPlan;
+  allPlans: SubscriptionPlan[] = [];
   currentStep = 1;
+  showDataConsentDialog = false;
+  hasSavedData = false;
   
   model: RegistrationRequest = {
     clinicName: '',
@@ -48,8 +53,23 @@ export class RegisterComponent implements OnInit {
   passwordConfirm = '';
   isSubmitting = false;
   submitError = '';
+  private autoSaveInterval?: number;
 
   ngOnInit(): void {
+    // Load all plans for the plan selection step
+    this.subscriptionService.getPlans().subscribe({
+      next: (plans) => {
+        this.allPlans = plans;
+      },
+      error: (error) => {
+        console.error('Error loading plans:', error);
+      }
+    });
+
+    // Check if user has saved data
+    this.hasSavedData = this.formPersistence.hasSavedData();
+
+    // Check for plan from URL
     this.route.queryParams.subscribe(params => {
       if (params['plan']) {
         this.subscriptionService.getPlanById(params['plan']).subscribe(plan => {
@@ -71,16 +91,103 @@ export class RegisterComponent implements OnInit {
         this.model.planId = this.selectedPlan.id;
       }
     }
+
+    // Show data consent dialog if there's saved data and no consent
+    if (this.hasSavedData && !this.formPersistence.hasConsent()) {
+      this.showDataConsentDialog = true;
+    } else if (this.formPersistence.hasConsent()) {
+      // Load saved data if consent is granted
+      this.loadSavedData();
+    }
+
+    // Start auto-save interval (every 30 seconds)
+    this.autoSaveInterval = window.setInterval(() => {
+      this.autoSaveFormData();
+    }, 30000);
+  }
+
+  ngOnDestroy(): void {
+    // Clear auto-save interval
+    if (this.autoSaveInterval) {
+      clearInterval(this.autoSaveInterval);
+    }
+  }
+
+  /**
+   * Accept data consent and load saved data
+   */
+  acceptDataConsent(): void {
+    this.formPersistence.grantConsent();
+    this.loadSavedData();
+    this.showDataConsentDialog = false;
+  }
+
+  /**
+   * Decline data consent and clear saved data
+   */
+  declineDataConsent(): void {
+    this.formPersistence.revokeConsent();
+    this.hasSavedData = false;
+    this.showDataConsentDialog = false;
+  }
+
+  /**
+   * Load saved form data
+   */
+  private loadSavedData(): void {
+    const savedData = this.formPersistence.loadFormData();
+    if (savedData) {
+      Object.assign(this.model, savedData);
+      
+      // Reload selected plan if planId is saved
+      if (this.model.planId) {
+        this.subscriptionService.getPlanById(this.model.planId).subscribe(plan => {
+          if (plan) {
+            this.selectedPlan = plan;
+          }
+        });
+      }
+    }
+  }
+
+  /**
+   * Auto-save form data
+   */
+  private autoSaveFormData(): void {
+    if (this.formPersistence.hasConsent() && this.currentStep > 1) {
+      this.formPersistence.saveFormData(this.model);
+    }
+  }
+
+  /**
+   * Clear saved data (called on successful registration)
+   */
+  private clearSavedData(): void {
+    this.formPersistence.clearFormData();
   }
 
   nextStep(): void {
     if (this.validateStep(this.currentStep)) {
       this.currentStep++;
+      // Auto-save when moving to next step
+      this.autoSaveFormData();
     }
   }
 
   prevStep(): void {
     this.currentStep--;
+  }
+
+  /**
+   * Change the selected plan
+   */
+  changePlan(plan: SubscriptionPlan): void {
+    this.selectedPlan = plan;
+    this.model.planId = plan.id;
+    this.cartService.clearCart();
+    this.cartService.addToCart(plan);
+    // Save the new selection
+    this.autoSaveFormData();
   }
 
   validateStep(step: number): boolean {
@@ -97,6 +204,8 @@ export class RegisterComponent implements OnInit {
       case 4:
         return !!(this.model.username && this.model.password && 
                   this.passwordConfirm && this.model.password === this.passwordConfirm);
+      case 5:
+        return !!(this.selectedPlan && this.model.planId);
       default:
         return true;
     }
@@ -119,6 +228,7 @@ export class RegisterComponent implements OnInit {
     this.subscriptionService.register(this.model).subscribe({
       next: (response) => {
         this.cartService.clearCart();
+        this.clearSavedData(); // Clear saved data on success
         this.router.navigate(['/checkout'], { 
           queryParams: { 
             success: true,
