@@ -686,80 +686,35 @@ CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Username"" ON ""Users"" (""Username
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AppointmentProcedures");
-
-            migrationBuilder.DropTable(
-                name: "ExamRequests");
-
-            migrationBuilder.DropTable(
-                name: "Expenses");
-
-            migrationBuilder.DropTable(
-                name: "HealthInsurancePlans");
-
-            migrationBuilder.DropTable(
-                name: "Invoices");
-
-            migrationBuilder.DropTable(
-                name: "MedicalRecordTemplates");
-
-            migrationBuilder.DropTable(
-                name: "ModuleConfigurations");
-
-            migrationBuilder.DropTable(
-                name: "NotificationRoutines");
-
-            migrationBuilder.DropTable(
-                name: "Owners");
-
-            migrationBuilder.DropTable(
-                name: "PasswordResetTokens");
-
-            migrationBuilder.DropTable(
-                name: "PatientClinicLinks");
-
-            migrationBuilder.DropTable(
-                name: "PrescriptionItems");
-
-            migrationBuilder.DropTable(
-                name: "PrescriptionTemplates");
-
-            migrationBuilder.DropTable(
-                name: "ProcedureMaterials");
-
-            migrationBuilder.DropTable(
-                name: "Payments");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "MedicalRecords");
-
-            migrationBuilder.DropTable(
-                name: "Medications");
-
-            migrationBuilder.DropTable(
-                name: "Materials");
-
-            migrationBuilder.DropTable(
-                name: "Procedures");
-
-            migrationBuilder.DropTable(
-                name: "ClinicSubscriptions");
-
-            migrationBuilder.DropTable(
-                name: "Appointments");
-
-            migrationBuilder.DropTable(
-                name: "SubscriptionPlans");
-
-            migrationBuilder.DropTable(
-                name: "Clinics");
-
-            migrationBuilder.DropTable(
-                name: "Patients");
+            // Idempotent rollback using DROP TABLE IF EXISTS
+            // Drop tables in reverse dependency order
+            migrationBuilder.Sql(@"
+DROP TABLE IF EXISTS ""AppointmentProcedures"";
+DROP TABLE IF EXISTS ""ExamRequests"";
+DROP TABLE IF EXISTS ""Expenses"";
+DROP TABLE IF EXISTS ""HealthInsurancePlans"";
+DROP TABLE IF EXISTS ""Invoices"";
+DROP TABLE IF EXISTS ""MedicalRecordTemplates"";
+DROP TABLE IF EXISTS ""ModuleConfigurations"";
+DROP TABLE IF EXISTS ""NotificationRoutines"";
+DROP TABLE IF EXISTS ""Owners"";
+DROP TABLE IF EXISTS ""PasswordResetTokens"";
+DROP TABLE IF EXISTS ""PatientClinicLinks"";
+DROP TABLE IF EXISTS ""PrescriptionItems"";
+DROP TABLE IF EXISTS ""PrescriptionTemplates"";
+DROP TABLE IF EXISTS ""ProcedureMaterials"";
+DROP TABLE IF EXISTS ""Payments"";
+DROP TABLE IF EXISTS ""Users"";
+DROP TABLE IF EXISTS ""MedicalRecords"";
+DROP TABLE IF EXISTS ""Medications"";
+DROP TABLE IF EXISTS ""Materials"";
+DROP TABLE IF EXISTS ""Procedures"";
+DROP TABLE IF EXISTS ""ClinicSubscriptions"";
+DROP TABLE IF EXISTS ""Appointments"";
+DROP TABLE IF EXISTS ""SubscriptionPlans"";
+DROP TABLE IF EXISTS ""Clinics"";
+DROP TABLE IF EXISTS ""Patients"";
+");
         }
     }
 }
