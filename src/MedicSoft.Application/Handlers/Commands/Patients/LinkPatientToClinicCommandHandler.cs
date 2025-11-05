@@ -20,27 +20,30 @@ namespace MedicSoft.Application.Handlers.Commands.Patients
 
         public async Task<bool> Handle(LinkPatientToClinicCommand request, CancellationToken cancellationToken)
         {
-            // Check if patient exists
-            var patient = await _patientRepository.GetByIdAsync(request.PatientId, request.TenantId);
-            if (patient == null)
-                throw new InvalidOperationException("Patient not found");
-
-            // Check if link already exists
-            var existingLink = await _linkRepository.GetLinkAsync(request.PatientId, request.ClinicId, request.TenantId);
-            if (existingLink != null)
+            return await _linkRepository.ExecuteInTransactionAsync(async () =>
             {
-                if (!existingLink.IsActive)
-                {
-                    existingLink.Activate();
-                    await _linkRepository.UpdateAsync(existingLink);
-                }
-                return true;
-            }
+                // Check if patient exists
+                var patient = await _patientRepository.GetByIdAsync(request.PatientId, request.TenantId);
+                if (patient == null)
+                    throw new InvalidOperationException("Patient not found");
 
-            // Create new link
-            var link = new PatientClinicLink(request.PatientId, request.ClinicId, request.TenantId);
-            await _linkRepository.AddAsync(link);
-            return true;
+                // Check if link already exists
+                var existingLink = await _linkRepository.GetLinkAsync(request.PatientId, request.ClinicId, request.TenantId);
+                if (existingLink != null)
+                {
+                    if (!existingLink.IsActive)
+                    {
+                        existingLink.Activate();
+                        await _linkRepository.UpdateAsync(existingLink);
+                    }
+                    return true;
+                }
+
+                // Create new link
+                var link = new PatientClinicLink(request.PatientId, request.ClinicId, request.TenantId);
+                await _linkRepository.AddAsync(link);
+                return true;
+            });
         }
     }
 }

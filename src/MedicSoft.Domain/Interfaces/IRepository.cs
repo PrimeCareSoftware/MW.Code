@@ -16,5 +16,7 @@ namespace MedicSoft.Domain.Interfaces
         Task DeleteAsync(Guid id, string tenantId);
         Task<bool> ExistsAsync(Guid id, string tenantId);
         Task<int> CountAsync(string tenantId);
+        Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation);
+        Task ExecuteInTransactionAsync(Func<Task> operation);
     }
 }

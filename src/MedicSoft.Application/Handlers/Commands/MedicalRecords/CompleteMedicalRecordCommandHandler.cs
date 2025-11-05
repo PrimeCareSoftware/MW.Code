@@ -24,30 +24,33 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
 
         public async Task<MedicalRecordDto> Handle(CompleteMedicalRecordCommand request, CancellationToken cancellationToken)
         {
-            var medicalRecord = await _medicalRecordRepository.GetByIdAsync(request.Id, request.TenantId);
-            if (medicalRecord == null)
+            return await _medicalRecordRepository.ExecuteInTransactionAsync(async () =>
             {
-                throw new InvalidOperationException("Medical record not found");
-            }
+                var medicalRecord = await _medicalRecordRepository.GetByIdAsync(request.Id, request.TenantId);
+                if (medicalRecord == null)
+                {
+                    throw new InvalidOperationException("Medical record not found");
+                }
 
-            // Complete the medical record
-            medicalRecord.CompleteConsultation(
-                request.CompleteDto.Diagnosis,
-                request.CompleteDto.Prescription,
-                request.CompleteDto.Notes
-            );
+                // Complete the medical record
+                medicalRecord.CompleteConsultation(
+                    request.CompleteDto.Diagnosis,
+                    request.CompleteDto.Prescription,
+                    request.CompleteDto.Notes
+                );
 
-            await _medicalRecordRepository.UpdateAsync(medicalRecord);
+                await _medicalRecordRepository.UpdateAsync(medicalRecord);
 
-            // Check out the appointment
-            var appointment = await _appointmentRepository.GetByIdAsync(medicalRecord.AppointmentId, request.TenantId);
-            if (appointment != null)
-            {
-                appointment.CheckOut(medicalRecord.Notes);
-                await _appointmentRepository.UpdateAsync(appointment);
-            }
+                // Check out the appointment
+                var appointment = await _appointmentRepository.GetByIdAsync(medicalRecord.AppointmentId, request.TenantId);
+                if (appointment != null)
+                {
+                    appointment.CheckOut(medicalRecord.Notes);
+                    await _appointmentRepository.UpdateAsync(appointment);
+                }
 
-            return _mapper.Map<MedicalRecordDto>(medicalRecord);
+                return _mapper.Map<MedicalRecordDto>(medicalRecord);
+            });
         }
     }
 }
