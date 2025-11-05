@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -86,9 +87,10 @@ namespace MedicSoft.Repository.Repositories
         /// </summary>
         /// <typeparam name="TResult">The return type of the operation</typeparam>
         /// <param name="operation">The operation to execute within the transaction</param>
+        /// <param name="cancellationToken">Cancellation token to cancel the operation</param>
         /// <returns>The result of the operation</returns>
         /// <exception cref="Exception">Re-throws any exception that occurs during the operation after rollback</exception>
-        public virtual async Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation)
+        public virtual async Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation, CancellationToken cancellationToken = default)
         {
             // Check if there's already an active transaction
             if (_context.Database.CurrentTransaction != null)
@@ -98,16 +100,16 @@ namespace MedicSoft.Repository.Repositories
             }
 
             // Begin a new transaction
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
             try
             {
                 var result = await operation();
-                await transaction.CommitAsync();
+                await transaction.CommitAsync(cancellationToken);
                 return result;
             }
             catch
             {
-                await transaction.RollbackAsync();
+                await transaction.RollbackAsync(cancellationToken);
                 throw;
             }
         }
@@ -118,8 +120,9 @@ namespace MedicSoft.Repository.Repositories
         /// and the exception is re-thrown.
         /// </summary>
         /// <param name="operation">The operation to execute within the transaction</param>
+        /// <param name="cancellationToken">Cancellation token to cancel the operation</param>
         /// <exception cref="Exception">Re-throws any exception that occurs during the operation after rollback</exception>
-        public virtual async Task ExecuteInTransactionAsync(Func<Task> operation)
+        public virtual async Task ExecuteInTransactionAsync(Func<Task> operation, CancellationToken cancellationToken = default)
         {
             // Check if there's already an active transaction
             if (_context.Database.CurrentTransaction != null)
@@ -130,15 +133,15 @@ namespace MedicSoft.Repository.Repositories
             }
 
             // Begin a new transaction
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
             try
             {
                 await operation();
-                await transaction.CommitAsync();
+                await transaction.CommitAsync(cancellationToken);
             }
             catch
             {
-                await transaction.RollbackAsync();
+                await transaction.RollbackAsync(cancellationToken);
                 throw;
             }
         }

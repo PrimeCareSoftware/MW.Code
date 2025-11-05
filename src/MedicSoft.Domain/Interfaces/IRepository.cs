@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Common;
 
@@ -16,7 +17,7 @@ namespace MedicSoft.Domain.Interfaces
         Task DeleteAsync(Guid id, string tenantId);
         Task<bool> ExistsAsync(Guid id, string tenantId);
         Task<int> CountAsync(string tenantId);
-        Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation);
-        Task ExecuteInTransactionAsync(Func<Task> operation);
+        Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation, CancellationToken cancellationToken = default);
+        Task ExecuteInTransactionAsync(Func<Task> operation, CancellationToken cancellationToken = default);
     }
 }
