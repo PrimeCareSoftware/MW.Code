@@ -223,6 +223,136 @@ namespace MedicSoft.Application.Services
             }
         }
 
+        public async Task ClearDatabaseAsync()
+        {
+            // Delete data in the correct order to respect foreign key constraints
+            // Delete child entities first, then parent entities
+            
+            // 1. Delete PrescriptionItems (depends on MedicalRecords and Medications)
+            var prescriptionItems = await _prescriptionItemRepository.GetAllAsync(_demoTenantId);
+            foreach (var item in prescriptionItems)
+            {
+                await _prescriptionItemRepository.DeleteAsync(item.Id, _demoTenantId);
+            }
+
+            // 2. Delete ExamRequests (depends on Appointments and Patients)
+            var examRequests = await _examRequestRepository.GetAllAsync(_demoTenantId);
+            foreach (var examRequest in examRequests)
+            {
+                await _examRequestRepository.DeleteAsync(examRequest.Id, _demoTenantId);
+            }
+
+            // 3. Delete Notifications (depends on Patients and Appointments)
+            var notifications = await _notificationRepository.GetAllAsync(_demoTenantId);
+            foreach (var notification in notifications)
+            {
+                await _notificationRepository.DeleteAsync(notification.Id, _demoTenantId);
+            }
+
+            // 4. Delete NotificationRoutines
+            var notificationRoutines = await _notificationRoutineRepository.GetAllAsync(_demoTenantId);
+            foreach (var routine in notificationRoutines)
+            {
+                await _notificationRoutineRepository.DeleteAsync(routine.Id, _demoTenantId);
+            }
+
+            // 5. Delete MedicalRecords (depends on Appointments and Patients)
+            var medicalRecords = await _medicalRecordRepository.GetAllAsync(_demoTenantId);
+            foreach (var record in medicalRecords)
+            {
+                await _medicalRecordRepository.DeleteAsync(record.Id, _demoTenantId);
+            }
+
+            // 6. Delete Payments (depends on Appointments)
+            var payments = await _paymentRepository.GetAllAsync(_demoTenantId);
+            foreach (var payment in payments)
+            {
+                await _paymentRepository.DeleteAsync(payment.Id, _demoTenantId);
+            }
+
+            // 7. Delete AppointmentProcedures (depends on Appointments and Procedures)
+            var appointmentProcedures = await _appointmentProcedureRepository.GetAllAsync(_demoTenantId);
+            foreach (var ap in appointmentProcedures)
+            {
+                await _appointmentProcedureRepository.DeleteAsync(ap.Id, _demoTenantId);
+            }
+
+            // 8. Delete Appointments
+            var appointments = await _appointmentRepository.GetAllAsync(_demoTenantId);
+            foreach (var appointment in appointments)
+            {
+                await _appointmentRepository.DeleteAsync(appointment.Id, _demoTenantId);
+            }
+
+            // 9. Delete PatientClinicLinks
+            var patientLinks = await _patientClinicLinkRepository.GetAllAsync(_demoTenantId);
+            foreach (var link in patientLinks)
+            {
+                await _patientClinicLinkRepository.DeleteAsync(link.Id, _demoTenantId);
+            }
+
+            // 10. Delete Patients
+            var patients = await _patientRepository.GetAllAsync(_demoTenantId);
+            foreach (var patient in patients)
+            {
+                await _patientRepository.DeleteAsync(patient.Id, _demoTenantId);
+            }
+
+            // 11. Delete PrescriptionTemplates
+            var prescriptionTemplates = await _prescriptionTemplateRepository.GetAllAsync(_demoTenantId);
+            foreach (var template in prescriptionTemplates)
+            {
+                await _prescriptionTemplateRepository.DeleteAsync(template.Id, _demoTenantId);
+            }
+
+            // 12. Delete MedicalRecordTemplates
+            var medicalRecordTemplates = await _medicalRecordTemplateRepository.GetAllAsync(_demoTenantId);
+            foreach (var template in medicalRecordTemplates)
+            {
+                await _medicalRecordTemplateRepository.DeleteAsync(template.Id, _demoTenantId);
+            }
+
+            // 13. Delete Medications
+            var medications = await _medicationRepository.GetAllAsync(_demoTenantId);
+            foreach (var medication in medications)
+            {
+                await _medicationRepository.DeleteAsync(medication.Id, _demoTenantId);
+            }
+
+            // 14. Delete Procedures
+            var procedures = await _procedureRepository.GetAllAsync(_demoTenantId);
+            foreach (var procedure in procedures)
+            {
+                await _procedureRepository.DeleteAsync(procedure.Id, _demoTenantId);
+            }
+
+            // 15. Delete Expenses
+            var expenses = await _expenseRepository.GetAllAsync(_demoTenantId);
+            foreach (var expense in expenses)
+            {
+                await _expenseRepository.DeleteAsync(expense.Id, _demoTenantId);
+            }
+
+            // 16. Delete Clinics
+            var clinics = await _clinicRepository.GetAllAsync(_demoTenantId);
+            foreach (var clinic in clinics)
+            {
+                await _clinicRepository.DeleteAsync(clinic.Id, _demoTenantId);
+            }
+
+            // 17. Delete SubscriptionPlans (system-wide, delete the demo plans)
+            var subscriptionPlans = await _subscriptionPlanRepository.GetAllAsync("system");
+            foreach (var plan in subscriptionPlans)
+            {
+                await _subscriptionPlanRepository.DeleteAsync(plan.Id, "system");
+            }
+
+            // Note: Users, Owners, and ClinicSubscriptions don't have standard GetAllAsync/DeleteAsync methods
+            // in their repository interfaces. These entities may cascade delete when their parent
+            // entities (Clinics) are deleted, depending on the database foreign key configuration.
+            // If manual deletion is needed, it can be implemented by extending the repository interfaces.
+        }
+
         private Clinic CreateDemoClinic()
         {
             return new Clinic(

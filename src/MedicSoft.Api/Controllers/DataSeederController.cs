@@ -249,5 +249,64 @@ namespace MedicSoft.Api.Controllers
                 });
             }
         }
+
+        /// <summary>
+        /// Clear all data from the database
+        /// WARNING: This will delete all data from all tables. Use with caution!
+        /// This endpoint should only be available in Development environment
+        /// </summary>
+        [HttpDelete("clear-database")]
+        public async Task<ActionResult> ClearDatabase()
+        {
+            // Check if development mode is enabled
+            var devModeEnabled = _configuration.GetValue<bool>("Development:EnableDevEndpoints", false);
+            
+            if (!_environment.IsDevelopment() && !devModeEnabled)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    error = "This endpoint is only available in Development environment or when Development:EnableDevEndpoints is true"
+                });
+            }
+
+            try
+            {
+                await _seederService.ClearDatabaseAsync();
+                
+                return Ok(new
+                {
+                    message = "Database cleared successfully",
+                    deletedTables = new[]
+                    {
+                        "PrescriptionItems",
+                        "ExamRequests",
+                        "Notifications",
+                        "NotificationRoutines",
+                        "MedicalRecords",
+                        "Payments",
+                        "AppointmentProcedures",
+                        "Appointments",
+                        "PatientClinicLinks",
+                        "Patients",
+                        "PrescriptionTemplates",
+                        "MedicalRecordTemplates",
+                        "Medications",
+                        "Procedures",
+                        "Expenses",
+                        "Clinics",
+                        "SubscriptionPlans"
+                    },
+                    note = "All data has been removed from the database. Users, Owners, and ClinicSubscriptions may remain if not cascade-deleted. You can now re-seed the database using POST /api/data-seeder/seed-demo"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "An error occurred while clearing the database",
+                    details = ex.Message
+                });
+            }
+        }
     }
 }
