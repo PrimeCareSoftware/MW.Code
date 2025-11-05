@@ -2,13 +2,23 @@
   <div class="login-card">
     <div class="login-header">
       <h1>MedicWarehouse</h1>
-      <p>Sistema de Gestão para Consultórios Médicos</p>
+      @if (clinicName()) {
+        <p>{{ clinicName() }}</p>
+      } @else {
+        <p>Sistema de Gestão para Consultórios Médicos</p>
+      }
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       @if (errorMessage()) {
         <div class="alert alert-error">
           {{ errorMessage() }}
+        </div>
+      }
+
+      @if (tenantFromUrl()) {
+        <div class="alert alert-info">
+          <p>Acessando: <strong>{{ tenantFromUrl() }}</strong></p>
         </div>
       }
 
@@ -40,16 +50,19 @@
         }
       </div>
 
-      <div class="form-group">
-        <label for="tenantId">Tenant ID</label>
-        <input 
-          type="text" 
-          id="tenantId" 
-          formControlName="tenantId"
-          placeholder="Digite o tenant ID"
-          class="form-control"
-        />
-      </div>
+      @if (!tenantFromUrl()) {
+        <div class="form-group">
+          <label for="tenantId">Tenant ID</label>
+          <input 
+            type="text" 
+            id="tenantId" 
+            formControlName="tenantId"
+            placeholder="Digite o tenant ID"
+            class="form-control"
+          />
+          <small class="form-help">Acesse via subdomínio para não precisar digitar o Tenant ID</small>
+        </div>
+      }
 
       <button 
         type="submit" 

@@ -13,6 +13,7 @@ namespace MedicSoft.Domain.Entities
         public string Phone { get; private set; }
         public string Email { get; private set; }
         public string Address { get; private set; }
+        public string? Subdomain { get; private set; } // Unique subdomain for clinic access
         public TimeSpan OpeningTime { get; private set; }
         public TimeSpan ClosingTime { get; private set; }
         public int AppointmentDurationMinutes { get; private set; } = 30;
@@ -96,6 +97,27 @@ namespace MedicSoft.Domain.Entities
             Phone = phone.Trim();
             Email = email.Trim();
             Address = address.Trim();
+            UpdateTimestamp();
+        }
+
+        public void SetSubdomain(string? subdomain)
+        {
+            if (!string.IsNullOrWhiteSpace(subdomain))
+            {
+                // Validate subdomain format (lowercase alphanumeric and hyphens)
+                var validSubdomain = subdomain.Trim().ToLowerInvariant();
+                if (!System.Text.RegularExpressions.Regex.IsMatch(validSubdomain, "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"))
+                    throw new ArgumentException("Subdomain must contain only lowercase letters, numbers, and hyphens", nameof(subdomain));
+                
+                if (validSubdomain.Length < 3 || validSubdomain.Length > 63)
+                    throw new ArgumentException("Subdomain must be between 3 and 63 characters", nameof(subdomain));
+                
+                Subdomain = validSubdomain;
+            }
+            else
+            {
+                Subdomain = null;
+            }
             UpdateTimestamp();
         }
 

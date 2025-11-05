@@ -8,6 +8,8 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 
 > ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](MIGRACAO_POSTGRESQL.md)
 
+> 🎯 **NOVO**: Login por Subdomínio! Acesse sua clínica via `clinic1.mwsistema.com.br` sem precisar digitar Tenant ID. [Ver guia →](SUBDOMAIN_LOGIN_GUIDE.md)
+
 ## 🖥️ Frontend Applications
 
 O MedicWarehouse possui **dois aplicativos Angular independentes**:
@@ -20,7 +22,9 @@ Aplicativo principal para uso diário das clínicas:
 - 📅 **Agendamentos** e atendimentos
 - 💊 **Prescrições** médicas e procedimentos
 - 🎥 **Telemedicina** com videochamadas (NOVO!) 🆕
+- 🌐 **Login por Subdomínio** - Acesso personalizado por clínica (NOVO!) 🆕
 - **URL desenvolvimento**: `http://localhost:4200`
+- **Exemplo com subdomínio**: `http://clinic1.localhost:4200`
 
 ### 2. **MW System Admin** (`frontend/mw-system-admin`) 🆕
 Painel administrativo para gestão do sistema completo:

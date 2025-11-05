@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MedicSoft.Api.Middleware;
 using MedicSoft.Application.Mappings;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Extensions;
@@ -250,6 +251,9 @@ if (requireHttps)
 
 // Use secure CORS policy
 app.UseCors("SecurePolicy");
+
+// Add tenant resolution middleware (before authentication)
+app.UseTenantResolution();
 
 // Enable authentication and authorization
 app.UseAuthentication();
