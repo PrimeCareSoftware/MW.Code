@@ -293,13 +293,10 @@ namespace MedicSoft.Api.Controllers
                         "Medications",
                         "Procedures",
                         "Expenses",
-                        "Users",
-                        "Owners",
-                        "ClinicSubscriptions",
                         "Clinics",
                         "SubscriptionPlans"
                     },
-                    note = "All data has been removed from the database. You can now re-seed the database using POST /api/data-seeder/seed-demo"
+                    note = "All data has been removed from the database. Users, Owners, and ClinicSubscriptions may remain if not cascade-deleted. You can now re-seed the database using POST /api/data-seeder/seed-demo"
                 });
             }
             catch (Exception ex)

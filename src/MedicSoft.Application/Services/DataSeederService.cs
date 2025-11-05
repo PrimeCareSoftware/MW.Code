@@ -347,9 +347,10 @@ namespace MedicSoft.Application.Services
                 await _subscriptionPlanRepository.DeleteAsync(plan.Id, "system");
             }
 
-            // Note: Users, Owners, and ClinicSubscriptions repositories don't have GetAllAsync/DeleteAsync methods
-            // These entities will cascade delete when their parent entities (Clinics) are deleted
-            // or can be handled manually through direct database operations if needed
+            // Note: Users, Owners, and ClinicSubscriptions don't have standard GetAllAsync/DeleteAsync methods
+            // in their repository interfaces. These entities may cascade delete when their parent
+            // entities (Clinics) are deleted, depending on the database foreign key configuration.
+            // If manual deletion is needed, it can be implemented by extending the repository interfaces.
         }
 
         private Clinic CreateDemoClinic()
