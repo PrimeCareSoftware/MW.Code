@@ -110,6 +110,13 @@
       content: '⚠️';
     }
   }
+
+  .form-help {
+    display: block;
+    color: var(--gray-500);
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-2);
+  }
 }
 
 .alert {
@@ -128,6 +135,25 @@
     &::before {
       content: '❌';
       font-size: var(--font-size-lg);
+    }
+  }
+
+  &.alert-info {
+    background-color: var(--primary-50);
+    color: var(--primary-700);
+    border: 1px solid var(--primary-200);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    
+    &::before {
+      content: 'ℹ️';
+      font-size: var(--font-size-lg);
+    }
+
+    p {
+      margin: 0;
+      font-size: var(--font-size-sm);
     }
   }
 }

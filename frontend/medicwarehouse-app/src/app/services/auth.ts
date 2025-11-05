@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthResponse, LoginRequest, UserInfo } from '../models/auth.model';
 import { environment } from '../../environments/environment';
+import { TenantResolverService } from './tenant-resolver.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,21 @@ export class Auth {
   public isAuthenticated = signal<boolean>(this.hasToken());
   public currentUser = signal<UserInfo | null>(this.getUserInfo());
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private tenantResolver: TenantResolverService
+  ) { }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
+    // Try to get tenant from URL if not provided in credentials
+    if (!credentials.tenantId) {
+      const tenantFromUrl = this.tenantResolver.extractTenantFromUrl();
+      if (tenantFromUrl) {
+        credentials.tenantId = tenantFromUrl;
+      }
+    }
+
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
       .pipe(
         tap(response => {

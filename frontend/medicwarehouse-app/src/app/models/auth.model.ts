@@ -1,7 +1,7 @@
 export interface LoginRequest {
   username: string;
   password: string;
-  tenantId: string;
+  tenantId?: string; // Optional - can be resolved from subdomain
 }
 
 export interface AuthResponse {
