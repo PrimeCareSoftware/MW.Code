@@ -66,8 +66,10 @@ export class TenantResolverService {
     if (segments.length > 0) {
       const firstSegment = segments[0].toLowerCase();
       
-      // Exclude common paths
-      const excludedPaths = ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets'];
+      // Exclude common paths (configurable via environment)
+      const excludedPaths = environment.tenant?.excludedPaths || 
+        ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets'];
+      
       if (!excludedPaths.includes(firstSegment)) {
         return firstSegment;
       }

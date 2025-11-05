@@ -106,7 +106,7 @@ namespace MedicSoft.Domain.Entities
             {
                 // Validate subdomain format (lowercase alphanumeric and hyphens)
                 var validSubdomain = subdomain.Trim().ToLowerInvariant();
-                if (!System.Text.RegularExpressions.Regex.IsMatch(validSubdomain, "^[a-z0-9][a-z0-9-]*[a-z0-9]$"))
+                if (!System.Text.RegularExpressions.Regex.IsMatch(validSubdomain, "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"))
                     throw new ArgumentException("Subdomain must contain only lowercase letters, numbers, and hyphens", nameof(subdomain));
                 
                 if (validSubdomain.Length < 3 || validSubdomain.Length > 63)
