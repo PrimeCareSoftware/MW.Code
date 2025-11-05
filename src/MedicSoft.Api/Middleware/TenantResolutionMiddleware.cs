@@ -44,7 +44,7 @@ namespace MedicSoft.Api.Middleware
                 }
             }
 
-            // If subdomain resolution failed, try path-based routing (e.g., /clinic1/login)
+            // If subdomain resolution failed, try path-based routing (e.g., /subdomain/login)
             if (string.IsNullOrEmpty(tenantId))
             {
                 subdomain = ExtractSubdomainFromPath(context.Request.Path);
@@ -112,7 +112,7 @@ namespace MedicSoft.Api.Middleware
             if (string.IsNullOrEmpty(path) || path == "/")
                 return null;
 
-            // Extract first path segment (e.g., /clinic1/login -> clinic1)
+            // Extract first path segment (e.g., /subdomain/login -> subdomain)
             var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
             if (segments.Length > 0)
             {

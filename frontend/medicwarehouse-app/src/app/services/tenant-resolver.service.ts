@@ -28,7 +28,7 @@ export class TenantResolverService {
 
   /**
    * Extract subdomain from hostname
-   * Example: clinic1.mwsistema.com.br -> clinic1
+   * Example: subdomain.mwsistema.com.br -> subdomain
    */
   private extractSubdomain(): string | null {
     const host = window.location.hostname;
@@ -52,7 +52,7 @@ export class TenantResolverService {
 
   /**
    * Extract tenant from path
-   * Example: /clinic1/login -> clinic1
+   * Example: /subdomain/login -> subdomain
    */
   private extractFromPath(): string | null {
     const path = window.location.pathname;
