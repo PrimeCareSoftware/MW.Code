@@ -38,5 +38,31 @@ namespace MedicSoft.Repository.Repositories
             return await _dbSet
                 .FirstOrDefaultAsync(c => c.Document.Replace(".", "").Replace("/", "").Replace("-", "") == cleanCnpj);
         }
+
+        public async Task<Clinic?> GetBySubdomainAsync(string subdomain)
+        {
+            if (string.IsNullOrWhiteSpace(subdomain))
+                return null;
+
+            var normalizedSubdomain = subdomain.Trim().ToLowerInvariant();
+            return await _dbSet
+                .FirstOrDefaultAsync(c => c.Subdomain == normalizedSubdomain && c.IsActive);
+        }
+
+        public async Task<bool> IsSubdomainUniqueAsync(string subdomain, Guid? excludeId = null)
+        {
+            if (string.IsNullOrWhiteSpace(subdomain))
+                return true;
+
+            var normalizedSubdomain = subdomain.Trim().ToLowerInvariant();
+            var query = _dbSet.Where(c => c.Subdomain == normalizedSubdomain);
+            
+            if (excludeId.HasValue)
+            {
+                query = query.Where(c => c.Id != excludeId.Value);
+            }
+
+            return !await query.AnyAsync();
+        }
     }
 }

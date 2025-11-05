@@ -7,5 +7,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<Clinic?> GetByDocumentAsync(string document, string tenantId);
         Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null);
         Task<Clinic?> GetByCNPJAsync(string cnpj);
+        Task<Clinic?> GetBySubdomainAsync(string subdomain);
+        Task<bool> IsSubdomainUniqueAsync(string subdomain, Guid? excludeId = null);
     }
 }
