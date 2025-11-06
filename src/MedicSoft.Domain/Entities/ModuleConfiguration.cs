@@ -72,6 +72,7 @@ namespace MedicSoft.Domain.Entities
         public const string TissExport = "TissExport";
         public const string InventoryManagement = "InventoryManagement";
         public const string UserManagement = "UserManagement";
+        public const string WaitingQueue = "WaitingQueue";
 
         public static string[] GetAllModules() => new[]
         {
@@ -85,7 +86,8 @@ namespace MedicSoft.Domain.Entities
             SMSNotifications,
             TissExport,
             InventoryManagement,
-            UserManagement
+            UserManagement,
+            WaitingQueue
         };
 
         public static bool IsModuleAvailableInPlan(string moduleName, SubscriptionPlan plan)

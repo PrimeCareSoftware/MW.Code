@@ -44,6 +44,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<ProcedureMaterial> ProcedureMaterials { get; set; } = null!;
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
         public DbSet<ExamRequest> ExamRequests { get; set; } = null!;
+        public DbSet<WaitingQueueEntry> WaitingQueueEntries { get; set; } = null!;
+        public DbSet<WaitingQueueConfiguration> WaitingQueueConfigurations { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -75,6 +77,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ProcedureMaterialConfiguration());
             modelBuilder.ApplyConfiguration(new PasswordResetTokenConfiguration());
             modelBuilder.ApplyConfiguration(new ExamRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new WaitingQueueEntryConfiguration());
+            modelBuilder.ApplyConfiguration(new WaitingQueueConfigurationConfiguration());
 
             // Global query filters for tenant isolation
             modelBuilder.Entity<Patient>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
@@ -102,6 +106,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.Entity<PasswordResetToken>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
             modelBuilder.Entity<ProcedureMaterial>().HasQueryFilter(pm => EF.Property<string>(pm, "TenantId") == GetTenantId());
             modelBuilder.Entity<ExamRequest>().HasQueryFilter(e => EF.Property<string>(e, "TenantId") == GetTenantId());
+            modelBuilder.Entity<WaitingQueueEntry>().HasQueryFilter(wqe => EF.Property<string>(wqe, "TenantId") == GetTenantId());
+            modelBuilder.Entity<WaitingQueueConfiguration>().HasQueryFilter(wqc => EF.Property<string>(wqc, "TenantId") == GetTenantId());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
