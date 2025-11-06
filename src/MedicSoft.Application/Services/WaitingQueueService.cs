@@ -27,6 +27,7 @@ namespace MedicSoft.Application.Services
         private readonly IWaitingQueueRepository _queueRepository;
         private readonly IWaitingQueueConfigurationRepository _configRepository;
         private readonly IPatientRepository _patientRepository;
+        private const int AverageServiceTimeMinutes = 15;
 
         public WaitingQueueService(
             IWaitingQueueRepository queueRepository,
@@ -54,8 +55,8 @@ namespace MedicSoft.Application.Services
             {
                 sortedEntries[i].UpdatePosition(i + 1);
                 
-                // Estimate wait time based on position and average service time (assuming 15 min per patient)
-                var estimatedWaitTime = i * 15;
+                // Estimate wait time based on position and average service time
+                var estimatedWaitTime = i * AverageServiceTimeMinutes;
                 sortedEntries[i].UpdateEstimatedWaitTime(estimatedWaitTime);
             }
 
@@ -68,6 +69,31 @@ namespace MedicSoft.Application.Services
                 ? (int)waitingEntries.Average(e => e.GetWaitingTime().TotalMinutes)
                 : 0;
 
+            // Map entries to DTOs (patient names are already loaded via Include in repository)
+            var entryDtos = allEntries
+                .OrderBy(e => e.Status == QueueStatus.Waiting ? e.Position : int.MaxValue)
+                .ThenBy(e => e.CheckInTime)
+                .Select(e => new WaitingQueueEntryDto
+                {
+                    Id = e.Id,
+                    AppointmentId = e.AppointmentId,
+                    ClinicId = e.ClinicId,
+                    PatientId = e.PatientId,
+                    PatientName = e.Patient?.Name ?? "Desconhecido",
+                    Position = e.Position,
+                    Priority = e.Priority.ToString(),
+                    Status = e.Status.ToString(),
+                    CheckInTime = e.CheckInTime,
+                    CalledTime = e.CalledTime,
+                    CompletedTime = e.CompletedTime,
+                    TriageNotes = e.TriageNotes,
+                    EstimatedWaitTimeMinutes = e.EstimatedWaitTimeMinutes,
+                    ActualWaitTimeMinutes = (int)e.GetWaitingTime().TotalMinutes,
+                    CreatedAt = e.CreatedAt,
+                    UpdatedAt = e.UpdatedAt
+                })
+                .ToList();
+
             return new WaitingQueueSummaryDto
             {
                 ClinicId = clinicId,
@@ -75,11 +101,7 @@ namespace MedicSoft.Application.Services
                 TotalCalled = allEntries.Count(e => e.Status == QueueStatus.Called),
                 TotalInProgress = allEntries.Count(e => e.Status == QueueStatus.InProgress),
                 AverageWaitTimeMinutes = averageWaitTime,
-                Entries = allEntries
-                    .OrderBy(e => e.Status == QueueStatus.Waiting ? e.Position : int.MaxValue)
-                    .ThenBy(e => e.CheckInTime)
-                    .Select(e => MapToDto(e))
-                    .ToList()
+                Entries = entryDtos
             };
         }
 
@@ -102,7 +124,7 @@ namespace MedicSoft.Application.Services
             return waitingEntries.Select(e => new PublicQueueDisplayDto
             {
                 Position = e.Position,
-                PatientIdentifier = config.ShowPatientNames ? GetPatientName(e.PatientId, tenantId).Result : $"Paciente {e.Position}",
+                PatientIdentifier = config.ShowPatientNames ? (e.Patient?.Name ?? $"Paciente {e.Position}") : $"Paciente {e.Position}",
                 Status = e.Status.ToString(),
                 EstimatedWaitTimeMinutes = config.ShowEstimatedWaitTime ? e.EstimatedWaitTimeMinutes : null
             }).ToList();
@@ -128,7 +150,28 @@ namespace MedicSoft.Application.Services
             // Recalculate positions for all waiting entries
             await RecalculatePositionsAsync(dto.ClinicId, tenantId);
 
-            return MapToDto(entry);
+            // Reload entry with patient data
+            entry = await _queueRepository.GetByIdAsync(entry.Id, tenantId);
+
+            return new WaitingQueueEntryDto
+            {
+                Id = entry!.Id,
+                AppointmentId = entry.AppointmentId,
+                ClinicId = entry.ClinicId,
+                PatientId = entry.PatientId,
+                PatientName = entry.Patient?.Name ?? "Desconhecido",
+                Position = entry.Position,
+                Priority = entry.Priority.ToString(),
+                Status = entry.Status.ToString(),
+                CheckInTime = entry.CheckInTime,
+                CalledTime = entry.CalledTime,
+                CompletedTime = entry.CompletedTime,
+                TriageNotes = entry.TriageNotes,
+                EstimatedWaitTimeMinutes = entry.EstimatedWaitTimeMinutes,
+                ActualWaitTimeMinutes = (int)entry.GetWaitingTime().TotalMinutes,
+                CreatedAt = entry.CreatedAt,
+                UpdatedAt = entry.UpdatedAt
+            };
         }
 
         public async Task<WaitingQueueEntryDto> UpdateTriageAsync(Guid entryId, UpdateQueueTriageDto dto, string tenantId)
@@ -147,7 +190,7 @@ namespace MedicSoft.Application.Services
             // Recalculate positions after priority change
             await RecalculatePositionsAsync(entry.ClinicId, tenantId);
 
-            return MapToDto(entry);
+            return MapEntryToDto(entry);
         }
 
         public async Task<WaitingQueueEntryDto> CallPatientAsync(Guid entryId, string tenantId)
@@ -160,7 +203,7 @@ namespace MedicSoft.Application.Services
             await _queueRepository.UpdateAsync(entry);
             await _queueRepository.SaveChangesAsync();
 
-            return MapToDto(entry);
+            return MapEntryToDto(entry);
         }
 
         public async Task<WaitingQueueEntryDto> StartServiceAsync(Guid entryId, string tenantId)
@@ -176,7 +219,7 @@ namespace MedicSoft.Application.Services
             // Recalculate positions for remaining waiting entries
             await RecalculatePositionsAsync(entry.ClinicId, tenantId);
 
-            return MapToDto(entry);
+            return MapEntryToDto(entry);
         }
 
         public async Task<WaitingQueueEntryDto> CompleteServiceAsync(Guid entryId, string tenantId)
@@ -189,7 +232,7 @@ namespace MedicSoft.Application.Services
             await _queueRepository.UpdateAsync(entry);
             await _queueRepository.SaveChangesAsync();
 
-            return MapToDto(entry);
+            return MapEntryToDto(entry);
         }
 
         public async Task CancelEntryAsync(Guid entryId, string tenantId)
@@ -271,20 +314,14 @@ namespace MedicSoft.Application.Services
             for (int i = 0; i < waitingEntries.Count; i++)
             {
                 waitingEntries[i].UpdatePosition(i + 1);
-                var estimatedWaitTime = i * 15; // 15 minutes per patient average
+                var estimatedWaitTime = i * AverageServiceTimeMinutes;
                 waitingEntries[i].UpdateEstimatedWaitTime(estimatedWaitTime);
             }
 
             await _queueRepository.SaveChangesAsync();
         }
 
-        private async Task<string> GetPatientName(Guid patientId, string tenantId)
-        {
-            var patient = await _patientRepository.GetByIdAsync(patientId, tenantId);
-            return patient?.Name ?? "Desconhecido";
-        }
-
-        private WaitingQueueEntryDto MapToDto(WaitingQueueEntry entry)
+        private static WaitingQueueEntryDto MapEntryToDto(WaitingQueueEntry entry)
         {
             return new WaitingQueueEntryDto
             {
@@ -292,7 +329,7 @@ namespace MedicSoft.Application.Services
                 AppointmentId = entry.AppointmentId,
                 ClinicId = entry.ClinicId,
                 PatientId = entry.PatientId,
-                PatientName = GetPatientName(entry.PatientId, entry.TenantId).Result,
+                PatientName = entry.Patient?.Name ?? "Desconhecido",
                 Position = entry.Position,
                 Priority = entry.Priority.ToString(),
                 Status = entry.Status.ToString(),
@@ -307,7 +344,7 @@ namespace MedicSoft.Application.Services
             };
         }
 
-        private WaitingQueueConfigurationDto MapConfigToDto(WaitingQueueConfiguration config)
+        private static WaitingQueueConfigurationDto MapConfigToDto(WaitingQueueConfiguration config)
         {
             return new WaitingQueueConfigurationDto
             {

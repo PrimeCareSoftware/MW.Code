@@ -264,13 +264,16 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange
             var entry = CreateValidEntry();
-            System.Threading.Thread.Sleep(100); // Small delay
+            
+            // Simulate some wait time by setting CheckInTime in the past
+            var checkInTime = DateTime.UtcNow.AddMinutes(-5);
+            typeof(WaitingQueueEntry).GetProperty("CheckInTime")!.SetValue(entry, checkInTime);
 
             // Act
             var waitingTime = entry.GetWaitingTime();
 
             // Assert
-            Assert.True(waitingTime.TotalMilliseconds >= 100);
+            Assert.True(waitingTime.TotalMinutes >= 4.5 && waitingTime.TotalMinutes <= 5.5);
         }
 
         [Fact]
