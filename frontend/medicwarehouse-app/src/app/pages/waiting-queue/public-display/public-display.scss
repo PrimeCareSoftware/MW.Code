@@ -1,0 +1,295 @@
+.public-display-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  h1 {
+    font-size: 48px;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .current-time {
+    font-size: 32px;
+    font-weight: 300;
+    opacity: 0.9;
+  }
+}
+
+.error-message {
+  background-color: rgba(220, 53, 69, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 60px 20px;
+
+  .spinner {
+    border: 8px solid rgba(255, 255, 255, 0.3);
+    border-top: 8px solid white;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+  }
+
+  p {
+    font-size: 24px;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .empty-icon {
+    font-size: 120px;
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+
+  p {
+    font-size: 32px;
+    margin: 10px 0;
+    font-weight: 600;
+  }
+
+  .sub-text {
+    font-size: 24px;
+    opacity: 0.8;
+    font-weight: 400;
+  }
+}
+
+.queue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.queue-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  transition: transform 0.3s, background-color 0.3s;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  &.called {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #333;
+    animation: pulse 2s infinite;
+    border-color: #ffd700;
+
+    .position-number {
+      background-color: #333;
+      color: #ffd700;
+    }
+  }
+
+  .position-number {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    background-color: white;
+    color: #667eea;
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .patient-info {
+    .status-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .patient-name {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      word-wrap: break-word;
+    }
+
+    .wait-time {
+      font-size: 20px;
+      opacity: 0.9;
+      margin-top: 10px;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(255, 215, 0, 0.5);
+  }
+}
+
+.footer {
+  text-align: center;
+  margin-top: auto;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+  p {
+    font-size: 24px;
+    margin: 10px 0;
+    opacity: 0.9;
+
+    &.update-time {
+      font-size: 18px;
+      opacity: 0.7;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .public-display-container {
+    padding: 20px;
+  }
+
+  .header {
+    h1 {
+      font-size: 32px;
+    }
+
+    .current-time {
+      font-size: 24px;
+    }
+  }
+
+  .queue-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .queue-card {
+    padding: 20px;
+
+    .position-number {
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 32px;
+    }
+
+    .patient-info {
+      .status-icon {
+        font-size: 28px;
+      }
+
+      .patient-name {
+        font-size: 22px;
+      }
+
+      .wait-time {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .empty-state {
+    padding: 40px 20px;
+
+    .empty-icon {
+      font-size: 80px;
+    }
+
+    p {
+      font-size: 24px;
+    }
+
+    .sub-text {
+      font-size: 18px;
+    }
+  }
+
+  .footer p {
+    font-size: 18px;
+
+    &.update-time {
+      font-size: 14px;
+    }
+  }
+}
+
+// Fullscreen mode (for TV/monitor displays)
+@media (min-width: 1920px) {
+  .header h1 {
+    font-size: 72px;
+  }
+
+  .header .current-time {
+    font-size: 48px;
+  }
+
+  .queue-grid {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 40px;
+  }
+
+  .queue-card {
+    padding: 40px;
+
+    .position-number {
+      width: 120px;
+      height: 120px;
+      line-height: 120px;
+      font-size: 60px;
+    }
+
+    .patient-info {
+      .status-icon {
+        font-size: 48px;
+      }
+
+      .patient-name {
+        font-size: 36px;
+      }
+
+      .wait-time {
+        font-size: 28px;
+      }
+    }
+  }
+}
