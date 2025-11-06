@@ -1,0 +1,175 @@
+<div class="queue-management-container">
+  <div class="header">
+    <h1>Fila de Espera</h1>
+    <button class="btn-refresh" (click)="loadQueueSummary()" [disabled]="loading">
+      <span *ngIf="!loading">🔄 Atualizar</span>
+      <span *ngIf="loading">⏳ Carregando...</span>
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="summary" class="summary-cards">
+    <div class="summary-card">
+      <div class="card-icon">⏳</div>
+      <div class="card-content">
+        <div class="card-value">{{ summary.totalWaiting }}</div>
+        <div class="card-label">Aguardando</div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">📢</div>
+      <div class="card-content">
+        <div class="card-value">{{ summary.totalCalled }}</div>
+        <div class="card-label">Chamados</div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">🏥</div>
+      <div class="card-content">
+        <div class="card-value">{{ summary.totalInProgress }}</div>
+        <div class="card-label">Em Atendimento</div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">⏱️</div>
+      <div class="card-content">
+        <div class="card-value">{{ formatWaitTime(summary.averageWaitTimeMinutes) }}</div>
+        <div class="card-label">Tempo Médio</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="summary && summary.entries.length > 0" class="queue-list">
+    <table class="queue-table">
+      <thead>
+        <tr>
+          <th>Posição</th>
+          <th>Paciente</th>
+          <th>Prioridade</th>
+          <th>Status</th>
+          <th>Tempo de Espera</th>
+          <th>Tempo Estimado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of summary.entries" [class]="getStatusClass(entry.status)">
+          <td class="position">
+            <span class="position-badge">{{ entry.position || '-' }}</span>
+          </td>
+          <td class="patient-name">
+            <strong>{{ entry.patientName }}</strong>
+            <div *ngIf="entry.triageNotes" class="triage-notes">
+              📝 {{ entry.triageNotes }}
+            </div>
+          </td>
+          <td>
+            <span class="priority-badge" [class]="getPriorityClass(entry.priority)">
+              {{ TRIAGE_PRIORITY_LABELS[entry.priority] }}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge">
+              {{ QUEUE_STATUS_LABELS[entry.status] }}
+            </span>
+          </td>
+          <td class="wait-time">
+            {{ formatWaitTime(entry.actualWaitTimeMinutes) }}
+          </td>
+          <td class="estimated-time">
+            {{ entry.estimatedWaitTimeMinutes > 0 ? formatWaitTime(entry.estimatedWaitTimeMinutes) : '-' }}
+          </td>
+          <td class="actions">
+            <button 
+              *ngIf="entry.status === QueueStatus.Waiting"
+              class="btn-small btn-triage"
+              (click)="openTriageDialog(entry)"
+              title="Editar Triagem">
+              📋
+            </button>
+            
+            <button 
+              *ngIf="entry.status === QueueStatus.Waiting"
+              class="btn-small btn-call"
+              (click)="callPatient(entry)"
+              title="Chamar Paciente">
+              📢
+            </button>
+            
+            <button 
+              *ngIf="entry.status === QueueStatus.Called"
+              class="btn-small btn-start"
+              (click)="startService(entry)"
+              title="Iniciar Atendimento">
+              ▶️
+            </button>
+            
+            <button 
+              *ngIf="entry.status === QueueStatus.InProgress"
+              class="btn-small btn-complete"
+              (click)="completeService(entry)"
+              title="Finalizar Atendimento">
+              ✅
+            </button>
+            
+            <button 
+              *ngIf="entry.status !== QueueStatus.Completed && entry.status !== QueueStatus.Cancelled"
+              class="btn-small btn-cancel"
+              (click)="cancelEntry(entry)"
+              title="Cancelar">
+              ❌
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="summary && summary.entries.length === 0" class="empty-state">
+    <p>👥 Nenhum paciente na fila</p>
+  </div>
+
+  <!-- Triage Dialog -->
+  <div *ngIf="editingTriage" class="modal-overlay" (click)="closeTriageDialog()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Editar Triagem</h2>
+        <button class="btn-close" (click)="closeTriageDialog()">✖</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="priority">Prioridade:</label>
+          <select id="priority" [(ngModel)]="triageForm.priority" class="form-control">
+            <option [value]="TriagePriority.Low">{{ TRIAGE_PRIORITY_LABELS[TriagePriority.Low] }}</option>
+            <option [value]="TriagePriority.Normal">{{ TRIAGE_PRIORITY_LABELS[TriagePriority.Normal] }}</option>
+            <option [value]="TriagePriority.High">{{ TRIAGE_PRIORITY_LABELS[TriagePriority.High] }}</option>
+            <option [value]="TriagePriority.Urgent">{{ TRIAGE_PRIORITY_LABELS[TriagePriority.Urgent] }}</option>
+            <option [value]="TriagePriority.Emergency">{{ TRIAGE_PRIORITY_LABELS[TriagePriority.Emergency] }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Observações:</label>
+          <textarea 
+            id="notes" 
+            [(ngModel)]="triageForm.notes" 
+            class="form-control"
+            rows="4"
+            placeholder="Adicione observações sobre a triagem..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeTriageDialog()">Cancelar</button>
+        <button class="btn btn-primary" (click)="saveTriage()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

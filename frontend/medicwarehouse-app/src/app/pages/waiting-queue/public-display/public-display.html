@@ -1,0 +1,39 @@
+<div class="public-display-container">
+  <div class="header">
+    <h1>🏥 Fila de Espera</h1>
+    <div class="current-time">{{ currentTime | date:'HH:mm:ss' }}</div>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading && queue.length === 0" class="loading-message">
+    <div class="spinner"></div>
+    <p>Carregando fila...</p>
+  </div>
+
+  <div *ngIf="!loading && queue.length === 0" class="empty-state">
+    <div class="empty-icon">👥</div>
+    <p>Nenhum paciente aguardando</p>
+    <p class="sub-text">Aguarde sua vez ser chamada</p>
+  </div>
+
+  <div *ngIf="queue.length > 0" class="queue-grid">
+    <div *ngFor="let entry of queue" class="queue-card" [class.called]="entry.status === 'Called'">
+      <div class="position-number">{{ entry.position }}</div>
+      <div class="patient-info">
+        <div class="status-icon">{{ getStatusIcon(entry.status) }}</div>
+        <div class="patient-name">{{ entry.patientIdentifier }}</div>
+        <div *ngIf="entry.estimatedWaitTimeMinutes !== null && entry.estimatedWaitTimeMinutes !== undefined" class="wait-time">
+          ⏱️ {{ formatWaitTime(entry.estimatedWaitTimeMinutes) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Por favor, aguarde ser chamado</p>
+    <p class="update-time">Última atualização: {{ currentTime | date:'HH:mm' }}</p>
+  </div>
+</div>

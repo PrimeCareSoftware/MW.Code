@@ -180,6 +180,8 @@ builder.Services.AddScoped<IPrescriptionTemplateRepository, PrescriptionTemplate
 builder.Services.AddScoped<IMedicalRecordTemplateRepository, MedicalRecordTemplateRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<IExamRequestRepository, ExamRequestRepository>();
+builder.Services.AddScoped<IWaitingQueueRepository, WaitingQueueRepository>();
+builder.Services.AddScoped<IWaitingQueueConfigurationRepository, WaitingQueueConfigurationRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
@@ -192,6 +194,7 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IExamRequestService, ExamRequestService>();
+builder.Services.AddScoped<IWaitingQueueService, WaitingQueueService>();
 builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
