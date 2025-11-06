@@ -211,6 +211,15 @@ MW.Code/
 - **Idioma Principal:** Português (PT-BR)
 - **Última Atualização:** 2025-11-06
 
+### 📋 Critérios de Documentação Essencial
+
+Os documentos mantidos seguem os seguintes critérios:
+- ✅ **Valor Técnico**: Documentação necessária para desenvolvimento, arquitetura ou operação
+- ✅ **Valor de Negócio**: Informações sobre funcionalidades, regras de negócio ou glossário
+- ✅ **Atualidade**: Documentação relevante para o estado atual do sistema
+- ✅ **Não Redundância**: Informação única que não se sobrepõe a outros documentos
+- ❌ **Removidos**: Documentos temporários, históricos de tarefas, bugfixes concluídos, ou duplicados
+
 ---
 
 ## 🆕 Documentos Criados Recentemente
