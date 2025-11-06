@@ -62,15 +62,12 @@ Este documento serve como guia de navegação para toda a documentação do sist
 |-----------|-----------|------------------|
 | [OWNER_FLOW_DOCUMENTATION.md](./OWNER_FLOW_DOCUMENTATION.md) | Fluxo de proprietários | 10 min |
 | [SYSTEM_ADMIN_AREA_GUIDE.md](./SYSTEM_ADMIN_AREA_GUIDE.md) | Área administrativa do sistema | 8 min |
-| [ATTENDANCE_FEATURES_IMPLEMENTATION.md](./ATTENDANCE_FEATURES_IMPLEMENTATION.md) | Funcionalidades de atendimento | 12 min |
 
 ### 📦 Implementações e Histórico
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
-| [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) | Resumo de implementações | 10 min |
 | [FUNCIONALIDADES_IMPLEMENTADAS.md](./FUNCIONALIDADES_IMPLEMENTADAS.md) | Lista de funcionalidades | 8 min |
-| [DEPLOY_IMPLEMENTATION_SUMMARY.md](./DEPLOY_IMPLEMENTATION_SUMMARY.md) | Resumo de deploy | 6 min |
 
 ### 🧪 Testes e API
 
@@ -85,7 +82,6 @@ Este documento serve como guia de navegação para toda a documentação do sist
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
 | [FRONTEND_INTEGRATION_GUIDE.md](./FRONTEND_INTEGRATION_GUIDE.md) | Integração com frontend | 12 min |
-| [FIX_PAGES_DEPLOYMENT_SOLUTION.md](./FIX_PAGES_DEPLOYMENT_SOLUTION.md) | Solução de deploy Pages | 6 min |
 
 ---
 
@@ -125,9 +121,8 @@ Este documento serve como guia de navegação para toda a documentação do sist
 1. 📋 [FUNCIONALIDADES_IMPLEMENTADAS.md](./FUNCIONALIDADES_IMPLEMENTADAS.md)
 2. 🎯 [RESUMO_IMPLEMENTACAO_SEEDERS.md](./RESUMO_IMPLEMENTACAO_SEEDERS.md)
 3. 📊 [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) (Overview)
-4. ✅ [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)
 
-**Tempo Total:** ~35 minutos
+**Tempo Total:** ~25 minutos
 
 ### Para Empreendedores / Donos de Negócio
 
@@ -171,21 +166,17 @@ MW.Code/
 │
 ├── 👥 FUNCIONALIDADES
 │   ├── OWNER_FLOW_DOCUMENTATION.md
-│   ├── SYSTEM_ADMIN_AREA_GUIDE.md
-│   └── ATTENDANCE_FEATURES_IMPLEMENTATION.md
+│   └── SYSTEM_ADMIN_AREA_GUIDE.md
 │
 ├── 📦 IMPLEMENTAÇÕES
-│   ├── IMPLEMENTATION_SUMMARY.md
-│   ├── FUNCIONALIDADES_IMPLEMENTADAS.md
-│   └── DEPLOY_IMPLEMENTATION_SUMMARY.md
+│   └── FUNCIONALIDADES_IMPLEMENTADAS.md
 │
 ├── 🧪 TESTES E API
 │   ├── POSTMAN_IMPORT_GUIDE.md
 │   └── MedicWarehouse-Postman-Collection.json
 │
 └── 🌐 FRONTEND
-    ├── FRONTEND_INTEGRATION_GUIDE.md
-    └── FIX_PAGES_DEPLOYMENT_SOLUTION.md
+    └── FRONTEND_INTEGRATION_GUIDE.md
 ```
 
 ⭐ = Documentos essenciais
@@ -205,7 +196,7 @@ MW.Code/
 | **Dados de teste** | [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) |
 | **APIs disponíveis** | [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) |
 | **Permissões e roles** | [QUICK_REFERENCE_PERMISSIONS.md](./QUICK_REFERENCE_PERMISSIONS.md) |
-| **Fluxo de consultas** | [ATTENDANCE_FEATURES_IMPLEMENTATION.md](./ATTENDANCE_FEATURES_IMPLEMENTATION.md) |
+| **Fluxo de consultas** | [IMPLEMENTACAO_FECHAMENTO_CONSULTA.md](./IMPLEMENTACAO_FECHAMENTO_CONSULTA.md) |
 | **Usar Postman** | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) |
 | **Integração frontend** | [FRONTEND_INTEGRATION_GUIDE.md](./FRONTEND_INTEGRATION_GUIDE.md) |
 | **Segurança** | [SUGESTOES_MELHORIAS_SEGURANCA.md](./SUGESTOES_MELHORIAS_SEGURANCA.md) |
@@ -214,11 +205,20 @@ MW.Code/
 
 ## 📊 Estatísticas da Documentação
 
-- **Total de Documentos:** 31+
+- **Total de Documentos:** 48 arquivos markdown
 - **Documentos Essenciais:** 6
-- **Tempo Total de Leitura:** ~4,5 horas (todos os documentos)
+- **Tempo Total de Leitura:** ~3 horas (documentos essenciais)
 - **Idioma Principal:** Português (PT-BR)
-- **Última Atualização:** 2025-10-27
+- **Última Atualização:** 2025-11-06
+
+### 📋 Critérios de Documentação Essencial
+
+Os documentos mantidos seguem os seguintes critérios:
+- ✅ **Valor Técnico**: Documentação necessária para desenvolvimento, arquitetura ou operação
+- ✅ **Valor de Negócio**: Informações sobre funcionalidades, regras de negócio ou glossário
+- ✅ **Atualidade**: Documentação relevante para o estado atual do sistema
+- ✅ **Não Redundância**: Informação única que não se sobrepõe a outros documentos
+- ❌ **Removidos**: Documentos temporários, históricos de tarefas, bugfixes concluídos, ou duplicados
 
 ---
 

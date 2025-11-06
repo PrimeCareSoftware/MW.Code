@@ -74,8 +74,8 @@ Painel administrativo para gestão do sistema completo:
 ### 📱 Documentação Portátil
 **Leia toda a documentação no celular ou gere um PDF completo!**
 - 📂 **Localização**: `documentacao-portatil/`
-- 📖 **Guia de uso**: [`COMO_LER_DOCUMENTACAO_NO_CELULAR.md`](COMO_LER_DOCUMENTACAO_NO_CELULAR.md)
-- ✨ **O que faz**: Consolida todos os 33 documentos em um único arquivo HTML responsivo ou PDF
+- 📖 **Guia de uso**: [`documentacao-portatil/README.md`](documentacao-portatil/README.md)
+- ✨ **O que faz**: Consolida todos os documentos em um único arquivo HTML responsivo ou PDF
 - 🚀 **Como usar**: `cd documentacao-portatil && npm run gerar`
 
 ### 🌐 Documentação Web
