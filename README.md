@@ -10,6 +10,8 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 
 > 🎯 **NOVO**: Login por Subdomínio! Acesse sua clínica via `clinic1.mwsistema.com.br` sem precisar digitar Tenant ID. [Ver guia →](SUBDOMAIN_LOGIN_GUIDE.md)
 
+> 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](MOCK_DATA_GUIDE.md)
+
 ## 🖥️ Frontend Applications
 
 O MedicWarehouse possui **dois aplicativos Angular independentes**:
@@ -23,6 +25,7 @@ Aplicativo principal para uso diário das clínicas:
 - 💊 **Prescrições** médicas e procedimentos
 - 🎥 **Telemedicina** com videochamadas (NOVO!) 🆕
 - 🌐 **Login por Subdomínio** - Acesso personalizado por clínica (NOVO!) 🆕
+- 🧪 **Dados Mockados** - Desenvolvimento sem backend (NOVO!) 🆕
 - **URL desenvolvimento**: `http://localhost:4200`
 - **Exemplo com subdomínio**: `http://clinic1.localhost:4200`
 
@@ -34,6 +37,7 @@ Painel administrativo para gestão do sistema completo:
 - 📊 **Analytics globais** do sistema
 - ⚙️ **Controle de assinaturas** e override manual
 - 👤 **Gestão de system owners**
+- 🧪 **Dados Mockados** - Desenvolvimento sem backend (NOVO!) 🆕
 - **URL desenvolvimento**: `http://localhost:4201`
 - 📖 **Documentação**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
 
