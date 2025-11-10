@@ -176,15 +176,79 @@ namespace MedicSoft.Test.Entities
             // Arrange
             var owner = CreateValidOwner();
             var beforeLogin = DateTime.UtcNow;
+            var sessionId = Guid.NewGuid().ToString();
 
             // Act
-            owner.RecordLogin();
+            owner.RecordLogin(sessionId);
             var afterLogin = DateTime.UtcNow;
 
             // Assert
             Assert.NotNull(owner.LastLoginAt);
             Assert.True(owner.LastLoginAt >= beforeLogin);
             Assert.True(owner.LastLoginAt <= afterLogin);
+            Assert.Equal(sessionId, owner.CurrentSessionId);
+        }
+
+        [Fact]
+        public void RecordLogin_ThrowsException_WhenSessionIdIsEmpty()
+        {
+            // Arrange
+            var owner = CreateValidOwner();
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => owner.RecordLogin(""));
+            Assert.Throws<ArgumentException>(() => owner.RecordLogin(null!));
+        }
+
+        [Fact]
+        public void IsSessionValid_ReturnsTrueForMatchingSession()
+        {
+            // Arrange
+            var owner = CreateValidOwner();
+            var sessionId = Guid.NewGuid().ToString();
+            owner.RecordLogin(sessionId);
+
+            // Act
+            var isValid = owner.IsSessionValid(sessionId);
+
+            // Assert
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void IsSessionValid_ReturnsFalseForDifferentSession()
+        {
+            // Arrange
+            var owner = CreateValidOwner();
+            var sessionId1 = Guid.NewGuid().ToString();
+            var sessionId2 = Guid.NewGuid().ToString();
+            owner.RecordLogin(sessionId1);
+
+            // Act
+            var isValid = owner.IsSessionValid(sessionId2);
+
+            // Assert
+            Assert.False(isValid);
+        }
+
+        [Fact]
+        public void RecordLogin_InvalidatesPreviousSession()
+        {
+            // Arrange
+            var owner = CreateValidOwner();
+            var sessionId1 = Guid.NewGuid().ToString();
+            var sessionId2 = Guid.NewGuid().ToString();
+            
+            // Act - First login
+            owner.RecordLogin(sessionId1);
+            Assert.True(owner.IsSessionValid(sessionId1));
+            
+            // Act - Second login (should invalidate first session)
+            owner.RecordLogin(sessionId2);
+            
+            // Assert
+            Assert.False(owner.IsSessionValid(sessionId1));
+            Assert.True(owner.IsSessionValid(sessionId2));
         }
 
         [Fact]

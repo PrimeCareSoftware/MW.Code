@@ -14,6 +14,7 @@ import { TenantResolverService } from '../../services/tenant-resolver.service';
 export class Login {
   loginForm: FormGroup;
   errorMessage = signal<string>('');
+  infoMessage = signal<string>('');
   isLoading = signal<boolean>(false);
   tenantFromUrl = signal<string | null>(null);
   clinicName = signal<string | null>(null);
@@ -32,6 +33,12 @@ export class Login {
 
     // Try to detect tenant from URL on component load
     this.detectTenantFromUrl();
+    
+    // Check if there's a message from router state (e.g., session invalidation)
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras?.state?.['message']) {
+      this.infoMessage.set(navigation.extras.state['message']);
+    }
   }
 
   detectTenantFromUrl(): void {

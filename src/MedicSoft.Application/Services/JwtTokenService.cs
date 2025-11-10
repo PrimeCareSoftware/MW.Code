@@ -10,7 +10,7 @@ namespace MedicSoft.Application.Services
 {
     public interface IJwtTokenService
     {
-        string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false);
+        string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null);
         ClaimsPrincipal? ValidateToken(string token);
     }
 
@@ -23,7 +23,7 @@ namespace MedicSoft.Application.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false)
+        public string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null)
         {
             var secretKey = _configuration["JwtSettings:SecretKey"] 
                 ?? throw new InvalidOperationException("JWT SecretKey not configured");
@@ -48,6 +48,12 @@ namespace MedicSoft.Application.Services
             if (!string.IsNullOrEmpty(clinicId))
             {
                 claims.Add(new Claim("clinic_id", clinicId));
+            }
+
+            // Add session_id if provided
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                claims.Add(new Claim("session_id", sessionId));
             }
 
             var token = new JwtSecurityToken(

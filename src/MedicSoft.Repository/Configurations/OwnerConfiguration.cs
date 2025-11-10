@@ -40,6 +40,9 @@ namespace MedicSoft.Repository.Configurations
 
             builder.Property(o => o.LastLoginAt);
 
+            builder.Property(o => o.CurrentSessionId)
+                .HasMaxLength(200);
+
             builder.Property(o => o.ProfessionalId)
                 .HasMaxLength(50);
 

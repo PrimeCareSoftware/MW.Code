@@ -9,8 +9,10 @@ namespace MedicSoft.Application.Services
     {
         Task<User?> AuthenticateUserAsync(string username, string password, string tenantId);
         Task<Owner?> AuthenticateOwnerAsync(string username, string password, string tenantId);
-        Task RecordUserLoginAsync(Guid userId, string tenantId);
-        Task RecordOwnerLoginAsync(Guid ownerId, string tenantId);
+        Task<string> RecordUserLoginAsync(Guid userId, string tenantId);
+        Task<string> RecordOwnerLoginAsync(Guid ownerId, string tenantId);
+        Task<bool> ValidateUserSessionAsync(Guid userId, string sessionId, string tenantId);
+        Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId);
     }
 
     public class AuthService : IAuthService
@@ -55,24 +57,42 @@ namespace MedicSoft.Application.Services
             return owner;
         }
 
-        public async Task RecordUserLoginAsync(Guid userId, string tenantId)
+        public async Task<string> RecordUserLoginAsync(Guid userId, string tenantId)
         {
             var user = await _userRepository.GetByIdAsync(userId, tenantId);
             if (user != null)
             {
-                user.RecordLogin();
+                var sessionId = Guid.NewGuid().ToString();
+                user.RecordLogin(sessionId);
                 await _userRepository.UpdateAsync(user);
+                return sessionId;
             }
+            throw new InvalidOperationException("User not found");
         }
 
-        public async Task RecordOwnerLoginAsync(Guid ownerId, string tenantId)
+        public async Task<string> RecordOwnerLoginAsync(Guid ownerId, string tenantId)
         {
             var owner = await _ownerRepository.GetByIdAsync(ownerId, tenantId);
             if (owner != null)
             {
-                owner.RecordLogin();
+                var sessionId = Guid.NewGuid().ToString();
+                owner.RecordLogin(sessionId);
                 await _ownerRepository.UpdateAsync(owner);
+                return sessionId;
             }
+            throw new InvalidOperationException("Owner not found");
+        }
+
+        public async Task<bool> ValidateUserSessionAsync(Guid userId, string sessionId, string tenantId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId, tenantId);
+            return user != null && user.IsSessionValid(sessionId);
+        }
+
+        public async Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId)
+        {
+            var owner = await _ownerRepository.GetByIdAsync(ownerId, tenantId);
+            return owner != null && owner.IsSessionValid(sessionId);
         }
     }
 }

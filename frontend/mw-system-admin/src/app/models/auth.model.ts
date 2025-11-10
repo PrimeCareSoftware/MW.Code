@@ -17,3 +17,12 @@ export interface UserInfo {
   tenantId: string;
   isSystemOwner: boolean;
 }
+
+export interface SessionValidationRequest {
+  token: string;
+}
+
+export interface SessionValidationResponse {
+  isValid: boolean;
+  message: string;
+}
