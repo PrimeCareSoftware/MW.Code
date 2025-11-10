@@ -21,7 +21,10 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
+| [PENDING_TASKS.md](./PENDING_TASKS.md) | ⭐ **NOVO!** Documento centralizado de pendências e planejamento futuro | 20 min |
 | [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) | Glossário completo de termos empresariais e de negócio | 30 min |
+| [ANALISE_MELHORIAS_SISTEMA.md](./ANALISE_MELHORIAS_SISTEMA.md) | Análise detalhada de melhorias e concorrentes (1.445 linhas) | 60 min |
+| [RESUMO_ANALISE_MELHORIAS.md](./RESUMO_ANALISE_MELHORIAS.md) | Resumo executivo da análise de melhorias | 15 min |
 
 ### 🎯 Para Desenvolvedores - Começando
 
@@ -189,6 +192,9 @@ MW.Code/
 
 | Tópico | Documento Recomendado |
 |--------|----------------------|
+| **Pendências e planejamento futuro** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
+| **Melhorias e roadmap** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
+| **Gaps e funcionalidades faltantes** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
 | **Termos empresariais** | [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) |
 | **Como começar** | [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) |
 | **Estrutura do banco de dados** | [ENTITY_DIAGRAM.md](./ENTITY_DIAGRAM.md) |
@@ -200,6 +206,7 @@ MW.Code/
 | **Usar Postman** | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) |
 | **Integração frontend** | [FRONTEND_INTEGRATION_GUIDE.md](./FRONTEND_INTEGRATION_GUIDE.md) |
 | **Segurança** | [SUGESTOES_MELHORIAS_SEGURANCA.md](./SUGESTOES_MELHORIAS_SEGURANCA.md) |
+| **Análise de concorrentes** | [ANALISE_MELHORIAS_SISTEMA.md](./ANALISE_MELHORIAS_SISTEMA.md) |
 
 ---
 

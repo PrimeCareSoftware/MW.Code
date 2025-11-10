@@ -87,13 +87,13 @@ Toda a documentação detalhada do projeto está disponível no **projeto web de
 - 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
 - 📖 **Principais Documentos**:
-  - `GUIA_DESENVOLVIMENTO_AUTH.md` - **Guia de desenvolvimento e autenticação para MVP/testes** (NOVO!) 🔥
+  - **[`PENDING_TASKS.md`](PENDING_TASKS.md)** - ⭐ **NOVO!** Documento centralizado com todas as pendências e planejamento futuro (2025-2026)
+  - `GUIA_DESENVOLVIMENTO_AUTH.md` - **Guia de desenvolvimento e autenticação para MVP/testes** 🔥
   - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema**
   - `BUSINESS_RULES.md` - Regras de negócio
   - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas
   - `SYSTEM_ADMIN_DOCUMENTATION.md` - Área do administrador do sistema
   - `PASSWORD_RECOVERY_FLOW.md` - Recuperação de senha com 2FA
-  - `PENDING_TASKS.md` - Pendências e integrações futuras
   - `API_QUICK_GUIDE.md` - Guia rápido da API
   - `SECURITY_GUIDE.md` - Guia de segurança
   - `GUIA_EXECUCAO.md` - Como executar o projeto
