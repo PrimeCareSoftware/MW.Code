@@ -17,6 +17,7 @@ namespace MedicSoft.Domain.Entities
         public UserRole Role { get; private set; }
         public bool IsActive { get; private set; }
         public DateTime? LastLoginAt { get; private set; }
+        public string? CurrentSessionId { get; private set; } // Tracks the current active session
         public string? ProfessionalId { get; private set; } // CRM, CRO, etc.
         public string? Specialty { get; private set; }
 
@@ -111,10 +112,20 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
 
-        public void RecordLogin()
+        public void RecordLogin(string sessionId)
         {
+            if (string.IsNullOrWhiteSpace(sessionId))
+                throw new ArgumentException("Session ID cannot be empty", nameof(sessionId));
+            
             LastLoginAt = DateTime.UtcNow;
+            CurrentSessionId = sessionId;
             UpdateTimestamp();
+        }
+        
+        public bool IsSessionValid(string sessionId)
+        {
+            return !string.IsNullOrWhiteSpace(CurrentSessionId) && 
+                   CurrentSessionId == sessionId;
         }
 
         public bool HasPermission(Permission permission)
