@@ -29,6 +29,13 @@ import { Auth } from '../../services/auth';
           </div>
         }
 
+        @if (infoMessage()) {
+          <div class="alert alert-warning">
+            <span class="alert-icon">⚠️</span>
+            <span>{{ infoMessage() }}</span>
+          </div>
+        }
+
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="username">Usuário</label>
@@ -152,6 +159,12 @@ import { Auth } from '../../services/auth';
       border: 1px solid #fc8181;
     }
 
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
     .alert-icon {
       font-size: 20px;
     }
@@ -250,6 +263,7 @@ export class Login {
   loginForm: FormGroup;
   loading = signal(false);
   error = signal<string | null>(null);
+  infoMessage = signal<string | null>(null);
 
   constructor(
     private fb: FormBuilder,
@@ -261,6 +275,12 @@ export class Login {
       password: ['', Validators.required],
       tenantId: ['system', Validators.required]
     });
+
+    // Check if there's a message from router state (e.g., session invalidation)
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras?.state?.['message']) {
+      this.infoMessage.set(navigation.extras.state['message']);
+    }
   }
 
   onSubmit(): void {

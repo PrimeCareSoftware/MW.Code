@@ -156,6 +156,20 @@
       font-size: var(--font-size-sm);
     }
   }
+
+  &.alert-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    
+    &::before {
+      content: '⚠️';
+      font-size: var(--font-size-lg);
+    }
+  }
 }
 
 .btn {

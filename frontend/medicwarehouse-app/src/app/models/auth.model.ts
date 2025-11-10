@@ -11,6 +11,15 @@ export interface AuthResponse {
   expiresAt: string;
 }
 
+export interface SessionValidationRequest {
+  token: string;
+}
+
+export interface SessionValidationResponse {
+  isValid: boolean;
+  message: string;
+}
+
 export interface UserInfo {
   username: string;
   tenantId: string;
