@@ -6,11 +6,36 @@
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
+> 🌐 **NOVO**: Frontend Estático para GitHub Pages! Teste todas as aplicações sem backend. [Ver demo →](front-static/)
+
 > ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](MIGRACAO_POSTGRESQL.md)
 
 > 🎯 **NOVO**: Login por Subdomínio! Acesse sua clínica via `clinic1.mwsistema.com.br` sem precisar digitar Tenant ID. [Ver guia →](SUBDOMAIN_LOGIN_GUIDE.md)
 
 > 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](MOCK_DATA_GUIDE.md)
+
+## 🌐 Frontend Estático (GitHub Pages) 🆕
+
+**Teste todas as aplicações no seu navegador sem precisar instalar nada!**
+
+Versão completa do frontend hospedada no GitHub Pages com dados mockados:
+
+- 📂 **Localização**: [`front-static/`](front-static/)
+- 🌐 **URL de acesso** (quando GitHub Pages estiver ativo): `https://medicwarehouse.github.io/MW.Code/front-static/`
+- 🧪 **Modo Mock**: Todas as aplicações funcionam sem backend
+- 📖 **Documentação**: [`front-static/README.md`](front-static/README.md)
+
+**Aplicações Incluídas:**
+- 💊 **MedicWarehouse App** - Sistema completo de gestão de clínicas
+- 🌐 **MW Site** - Site institucional e marketing
+- ⚙️ **System Admin** - Painel administrativo
+- 📚 **MW Docs** - Documentação interativa
+- 📄 **Documentação Portátil** - Docs consolidadas em HTML
+
+**Como Reconstruir:**
+```bash
+bash build-static.sh
+```
 
 ## 🖥️ Frontend Applications
 
