@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedicWarehouse - Versão Estática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .card-footer svg {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-footer svg {
+            transform: translateX(5px);
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .info h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .info ul {
+            list-style: none;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .info ul li::before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 MedicWarehouse</h1>
+            <p>Versão Estática para GitHub Pages</p>
+            <span class="badge">🧪 Modo Mock - Sem Backend</span>
+        </div>
+
+        <div class="cards">
+            <a href="./medicwarehouse-app/" class="card">
+                <div class="card-icon">💊</div>
+                <h2>MedicWarehouse App</h2>
+                <p>Aplicativo principal para gestão de clínicas médicas. Inclui dashboard, pacientes, agendamentos e prontuários eletrônicos.</p>
+                <div class="card-footer">
+                    Acessar aplicativo
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="./mw-site/" class="card">
+                <div class="card-icon">🌐</div>
+                <h2>MW Site</h2>
+                <p>Site institucional e de marketing do MedicWarehouse. Apresenta planos, recursos e formulário de contato.</p>
+                <div class="card-footer">
+                    Acessar site
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="./mw-system-admin/" class="card">
+                <div class="card-icon">⚙️</div>
+                <h2>System Admin</h2>
+                <p>Painel administrativo para system owners. Gerencia todas as clínicas, métricas financeiras e assinaturas.</p>
+                <div class="card-footer">
+                    Acessar dashboard
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="./mw-docs/" class="card">
+                <div class="card-icon">📚</div>
+                <h2>Documentação</h2>
+                <p>Documentação completa do sistema MedicWarehouse. Guias de uso, setup, API e informações técnicas.</p>
+                <div class="card-footer">
+                    Acessar docs
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="./documentacao/MedicWarehouse-Documentacao-Completa.html" class="card">
+                <div class="card-icon">📄</div>
+                <h2>Documentação Portátil</h2>
+                <p>Versão consolidada de toda a documentação em um único arquivo HTML. Ideal para consulta offline.</p>
+                <div class="card-footer">
+                    Abrir documento
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                    </svg>
+                </div>
+            </a>
+        </div>
+
+        <div class="info">
+            <h3>ℹ️ Informações Importantes</h3>
+            <ul>
+                <li><strong>Modo Mock:</strong> Todas as aplicações usam dados mockados. Nenhuma chamada à API real é feita.</li>
+                <li><strong>Dados de Teste:</strong> Você pode fazer login e testar todas as funcionalidades sem afetar dados reais.</li>
+                <li><strong>Sem Backend:</strong> As aplicações funcionam completamente no navegador, sem necessidade de servidor.</li>
+                <li><strong>GitHub Pages:</strong> Esta versão está hospedada no GitHub Pages para demonstração e testes.</li>
+                <li><strong>Repositório:</strong> <a href="https://github.com/MedicWarehouse/MW.Code" target="_blank" style="color: #667eea;">github.com/MedicWarehouse/MW.Code</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

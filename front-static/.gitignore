@@ -1,0 +1,7 @@
+# This .gitignore is intentionally minimal
+# We want to track the built static files in this folder
+
+# Only ignore temporary files
+*.tmp
+.DS_Store
+Thumbs.db
