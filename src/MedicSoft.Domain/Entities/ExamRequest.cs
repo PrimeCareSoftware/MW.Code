@@ -35,7 +35,7 @@ namespace MedicSoft.Domain.Entities
 
         public ExamRequest(Guid appointmentId, Guid patientId, ExamType examType,
             string examName, string description, ExamUrgency urgency,
-            string tenantId, string? notes = null) : base(tenantId)
+            string tenantId, string? notes = null, DateTime? requestedDate = null) : base(tenantId)
         {
             if (appointmentId == Guid.Empty)
                 throw new ArgumentException("Appointment ID cannot be empty", nameof(appointmentId));
@@ -56,7 +56,7 @@ namespace MedicSoft.Domain.Entities
             Description = description.Trim();
             Urgency = urgency;
             Status = ExamRequestStatus.Pending;
-            RequestedDate = DateTime.UtcNow;
+            RequestedDate = requestedDate ?? DateTime.UtcNow;
             Notes = notes?.Trim();
         }
 
@@ -75,9 +75,9 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
 
-        public void Schedule(DateTime scheduledDate)
+        public void Schedule(DateTime scheduledDate, bool allowHistoricalData = false)
         {
-            if (scheduledDate < DateTime.UtcNow)
+            if (!allowHistoricalData && scheduledDate < DateTime.UtcNow)
                 throw new ArgumentException("Scheduled date cannot be in the past", nameof(scheduledDate));
 
             ScheduledDate = scheduledDate;

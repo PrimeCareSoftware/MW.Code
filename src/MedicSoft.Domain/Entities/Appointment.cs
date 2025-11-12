@@ -46,7 +46,7 @@ namespace MedicSoft.Domain.Entities
 
         public Appointment(Guid patientId, Guid clinicId, DateTime scheduledDate, 
             TimeSpan scheduledTime, int durationMinutes, AppointmentType type, 
-            string tenantId, string? notes = null) : base(tenantId)
+            string tenantId, string? notes = null, bool allowHistoricalData = false) : base(tenantId)
         {
             if (patientId == Guid.Empty)
                 throw new ArgumentException("O ID do paciente não pode estar vazio", nameof(patientId));
@@ -54,7 +54,7 @@ namespace MedicSoft.Domain.Entities
             if (clinicId == Guid.Empty)
                 throw new ArgumentException("O ID da clínica não pode estar vazio", nameof(clinicId));
 
-            if (scheduledDate < DateTime.Today)
+            if (!allowHistoricalData && scheduledDate < DateTime.Today)
                 throw new ArgumentException("A data agendada não pode estar no passado", nameof(scheduledDate));
 
             if (durationMinutes <= 0)

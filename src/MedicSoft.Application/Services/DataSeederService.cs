@@ -605,7 +605,7 @@ namespace MedicSoft.Application.Services
             var appointments = new List<Appointment>();
             var today = DateTime.Today;
 
-            // Past appointments (completed)
+            // Past appointments (completed) - using allowHistoricalData flag
             var pastAppointment1 = new Appointment(
                 patients[0].Id, // Carlos
                 clinicId,
@@ -614,7 +614,8 @@ namespace MedicSoft.Application.Services
                 30,
                 AppointmentType.Regular,
                 _demoTenantId,
-                "Consulta de rotina"
+                "Consulta de rotina",
+                allowHistoricalData: true
             );
             pastAppointment1.Confirm();
             pastAppointment1.CheckIn();
@@ -629,7 +630,8 @@ namespace MedicSoft.Application.Services
                 45,
                 AppointmentType.Regular,
                 _demoTenantId,
-                "Consulta cardiológica"
+                "Consulta cardiológica",
+                allowHistoricalData: true
             );
             pastAppointment2.Confirm();
             pastAppointment2.CheckIn();
@@ -682,25 +684,26 @@ namespace MedicSoft.Application.Services
             List<Patient> patients)
         {
             var appointmentProcedures = new List<AppointmentProcedure>();
+            var today = DateTime.Today;
 
-            // First completed appointment - General consultation
+            // First completed appointment - General consultation (7 days ago at 9:00)
             appointmentProcedures.Add(new AppointmentProcedure(
                 appointments[0].Id,
                 procedures[0].Id, // Consulta Geral
                 patients[0].Id,
                 150.00m,
-                DateTime.UtcNow.AddDays(-7),
+                today.AddDays(-7).Add(new TimeSpan(9, 0, 0)),
                 _demoTenantId,
                 "Consulta realizada"
             ));
 
-            // Second completed appointment - Cardiology + ECG
+            // Second completed appointment - Cardiology + ECG (5 days ago at 10:00)
             appointmentProcedures.Add(new AppointmentProcedure(
                 appointments[1].Id,
                 procedures[1].Id, // Consulta Cardiológica
                 patients[1].Id,
                 250.00m,
-                DateTime.UtcNow.AddDays(-5),
+                today.AddDays(-5).Add(new TimeSpan(10, 0, 0)),
                 _demoTenantId,
                 "Consulta cardiológica"
             ));
@@ -710,7 +713,7 @@ namespace MedicSoft.Application.Services
                 procedures[3].Id, // Eletrocardiograma
                 patients[1].Id,
                 120.00m,
-                DateTime.UtcNow.AddDays(-5).AddMinutes(30),
+                today.AddDays(-5).Add(new TimeSpan(10, 30, 0)),
                 _demoTenantId,
                 "ECG realizado"
             ));
@@ -892,13 +895,14 @@ namespace MedicSoft.Application.Services
         private List<MedicalRecord> CreateDemoMedicalRecords(List<Appointment> appointments, List<Patient> patients)
         {
             var medicalRecords = new List<MedicalRecord>();
+            var today = DateTime.Today;
 
-            // Medical record for first completed appointment (Carlos)
+            // Medical record for first completed appointment (Carlos) - 7 days ago at 9:00
             var record1 = new MedicalRecord(
                 appointments[0].Id,
                 patients[0].Id,
                 _demoTenantId,
-                DateTime.UtcNow.AddDays(-7).AddHours(9),
+                today.AddDays(-7).Add(new TimeSpan(9, 0, 0)),
                 "Hipertensão arterial controlada. Paciente apresenta bom estado geral.",
                 "Manter medicação atual. Orientado sobre dieta e exercícios.",
                 "Paciente relata controle adequado da pressão arterial. PA: 120/80 mmHg"
@@ -910,12 +914,12 @@ namespace MedicSoft.Application.Services
             );
             medicalRecords.Add(record1);
 
-            // Medical record for second completed appointment (Ana)
+            // Medical record for second completed appointment (Ana) - 5 days ago at 10:00
             var record2 = new MedicalRecord(
                 appointments[1].Id,
                 patients[1].Id,
                 _demoTenantId,
-                DateTime.UtcNow.AddDays(-5).AddHours(10),
+                today.AddDays(-5).Add(new TimeSpan(10, 0, 0)),
                 "Diabetes tipo 2. Queixa de palpitações ocasionais.",
                 "Solicitado ECG. Ajuste de medicação para controle glicêmico.",
                 "Paciente relata episódios de palpitação. Glicemia: 145 mg/dL. ECG normal."
@@ -1578,8 +1582,9 @@ RETORNO: {{return_date}}",
         private List<ExamRequest> CreateDemoExamRequests(List<Appointment> appointments, List<Patient> patients)
         {
             var examRequests = new List<ExamRequest>();
+            var today = DateTime.Today;
 
-            // Exam request for first completed appointment (Carlos - Hypertension)
+            // Exam request for first completed appointment (Carlos - Hypertension) - 7 days ago
             var exam1 = new ExamRequest(
                 appointments[0].Id,
                 patients[0].Id,
@@ -1588,12 +1593,13 @@ RETORNO: {{return_date}}",
                 "Exames de rotina para controle de hipertensão",
                 ExamUrgency.Routine,
                 _demoTenantId,
-                "Em jejum de 12 horas"
+                "Em jejum de 12 horas",
+                requestedDate: today.AddDays(-7).Add(new TimeSpan(9, 0, 0))
             );
             exam1.Complete("Hemograma: Normal\nGlicemia: 95 mg/dL\nColesterol total: 180 mg/dL\nHDL: 55 mg/dL\nLDL: 110 mg/dL\nTriglicerídeos: 120 mg/dL");
             examRequests.Add(exam1);
 
-            // Exam request for second completed appointment (Ana - Diabetes and Arrhythmia)
+            // Exam request for second completed appointment (Ana - Diabetes and Arrhythmia) - 5 days ago
             var exam2 = new ExamRequest(
                 appointments[1].Id,
                 patients[1].Id,
@@ -1602,12 +1608,13 @@ RETORNO: {{return_date}}",
                 "Avaliação e controle glicêmico",
                 ExamUrgency.Urgent,
                 _demoTenantId,
-                "Jejum de 12 horas para exames laboratoriais"
+                "Jejum de 12 horas para exames laboratoriais",
+                requestedDate: today.AddDays(-5).Add(new TimeSpan(10, 0, 0))
             );
             exam2.Complete("Hemograma: Normal\nGlicemia: 145 mg/dL (elevada)\nHbA1c: 7.2% (controle inadequado)");
             examRequests.Add(exam2);
 
-            // ECG for Ana
+            // ECG for Ana - 5 days ago
             var exam2b = new ExamRequest(
                 appointments[1].Id,
                 patients[1].Id,
@@ -1616,7 +1623,8 @@ RETORNO: {{return_date}}",
                 "Investigação de palpitações",
                 ExamUrgency.Urgent,
                 _demoTenantId,
-                "Trazer lista de medicamentos em uso"
+                "Trazer lista de medicamentos em uso",
+                requestedDate: today.AddDays(-5).Add(new TimeSpan(10, 15, 0))
             );
             exam2b.Complete("ECG: Ritmo sinusal, sem alterações agudas");
             examRequests.Add(exam2b);
@@ -1634,7 +1642,7 @@ RETORNO: {{return_date}}",
             );
             examRequests.Add(exam3);
 
-            // Additional exam request - Scheduled
+            // Additional exam request - Scheduled for 5 days in the future
             var exam4 = new ExamRequest(
                 appointments[1].Id,
                 patients[1].Id,
@@ -1643,12 +1651,13 @@ RETORNO: {{return_date}}",
                 "Avaliação detalhada da função cardíaca devido a queixas de palpitação",
                 ExamUrgency.Urgent,
                 _demoTenantId,
-                "Trazer ECG anterior"
+                "Trazer ECG anterior",
+                requestedDate: today.AddDays(-5).Add(new TimeSpan(10, 30, 0))
             );
             exam4.Schedule(DateTime.UtcNow.AddDays(5));
             examRequests.Add(exam4);
 
-            // Ultrasound request - Pending
+            // Ultrasound request - Pending (from 7 days ago)
             var exam5 = new ExamRequest(
                 appointments[0].Id,
                 patients[0].Id,
@@ -1656,7 +1665,9 @@ RETORNO: {{return_date}}",
                 "Ultrassom de abdômen total",
                 "Avaliação de rotina",
                 ExamUrgency.Routine,
-                _demoTenantId
+                _demoTenantId,
+                notes: null,
+                requestedDate: today.AddDays(-7).Add(new TimeSpan(9, 15, 0))
             );
             examRequests.Add(exam5);
 
