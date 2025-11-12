@@ -84,14 +84,17 @@ namespace MedicSoft.Application.Services
 
         public async Task SeedDemoDataAsync()
         {
-            // Check if demo data already exists
-            var existingClinics = await _clinicRepository.GetAllAsync(_demoTenantId);
-            if (existingClinics.Any())
+            // Execute all seeding operations in a transaction to ensure data consistency
+            await _clinicRepository.ExecuteInTransactionAsync(async () =>
             {
-                throw new InvalidOperationException("Demo data already exists for this tenant");
-            }
+                // Check if demo data already exists
+                var existingClinics = await _clinicRepository.GetAllAsync(_demoTenantId);
+                if (existingClinics.Any())
+                {
+                    throw new InvalidOperationException("Demo data already exists for this tenant");
+                }
 
-            // 0. Create Subscription Plans (system-wide)
+                // 0. Create Subscription Plans (system-wide)
             var subscriptionPlans = CreateDemoSubscriptionPlans();
             foreach (var plan in subscriptionPlans)
             {
@@ -221,14 +224,18 @@ namespace MedicSoft.Application.Services
             {
                 await _examRequestRepository.AddAsync(examRequest);
             }
+            });
         }
 
         public async Task ClearDatabaseAsync()
         {
-            // Delete data in the correct order to respect foreign key constraints
-            // Delete child entities first, then parent entities
-            
-            // 1. Delete PrescriptionItems (depends on MedicalRecords and Medications)
+            // Execute all deletion operations in a transaction to ensure data consistency
+            await _clinicRepository.ExecuteInTransactionAsync(async () =>
+            {
+                // Delete data in the correct order to respect foreign key constraints
+                // Delete child entities first, then parent entities
+                
+                // 1. Delete PrescriptionItems (depends on MedicalRecords and Medications)
             var prescriptionItems = await _prescriptionItemRepository.GetAllAsync(_demoTenantId);
             foreach (var item in prescriptionItems)
             {
@@ -347,10 +354,11 @@ namespace MedicSoft.Application.Services
                 await _subscriptionPlanRepository.DeleteAsync(plan.Id, "system");
             }
 
-            // Note: Users, Owners, and ClinicSubscriptions don't have standard GetAllAsync/DeleteAsync methods
-            // in their repository interfaces. These entities may cascade delete when their parent
-            // entities (Clinics) are deleted, depending on the database foreign key configuration.
-            // If manual deletion is needed, it can be implemented by extending the repository interfaces.
+                // Note: Users, Owners, and ClinicSubscriptions don't have standard GetAllAsync/DeleteAsync methods
+                // in their repository interfaces. These entities may cascade delete when their parent
+                // entities (Clinics) are deleted, depending on the database foreign key configuration.
+                // If manual deletion is needed, it can be implemented by extending the repository interfaces.
+            });
         }
 
         private Clinic CreateDemoClinic()
