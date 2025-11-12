@@ -86,6 +86,30 @@ namespace MedicSoft.Test.Entities
         }
 
         [Fact]
+        public void Constructor_WithPastDateAndAllowHistoricalData_CreatesAppointment()
+        {
+            // Arrange
+            var pastDate = DateTime.Today.AddDays(-7);
+            var scheduledTime = new TimeSpan(10, 0, 0);
+            var duration = 30;
+            var type = AppointmentType.Regular;
+
+            // Act
+            var appointment = new Appointment(_patientId, _clinicId, pastDate, 
+                scheduledTime, duration, type, _tenantId, null, allowHistoricalData: true);
+
+            // Assert
+            Assert.NotEqual(Guid.Empty, appointment.Id);
+            Assert.Equal(_patientId, appointment.PatientId);
+            Assert.Equal(_clinicId, appointment.ClinicId);
+            Assert.Equal(pastDate, appointment.ScheduledDate);
+            Assert.Equal(scheduledTime, appointment.ScheduledTime);
+            Assert.Equal(duration, appointment.DurationMinutes);
+            Assert.Equal(type, appointment.Type);
+            Assert.Equal(AppointmentStatus.Scheduled, appointment.Status);
+        }
+
+        [Fact]
         public void Constructor_WithInvalidDuration_ThrowsArgumentException()
         {
             // Act & Assert

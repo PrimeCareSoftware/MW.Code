@@ -504,13 +504,16 @@ Para instruções detalhadas, consulte o [Guia de Importação do Postman](POSTM
 
 - **Data Seeding (Dados de Teste)** 🆕:
   - `GET /api/data-seeder/demo-info` - Informações sobre os dados demo
-  - `POST /api/data-seeder/seed-demo` - 🔧 Gerar dados de teste completos
-    - Cria clínica demo com TenantId: `demo-clinic-001`
-    - Cria 3 usuários: Admin, Médico e Recepcionista
-    - Cria 6 pacientes (incluindo 2 crianças com responsável)
-    - Cria 8 procedimentos diversos
-    - Cria 5 agendamentos com histórico
-    - Cria pagamentos de exemplo
+  - `POST /api/data-seeder/seed-demo` - 🔧 Gerar dados de teste completos com garantia de consistência
+    - ✅ **Transacional**: Todas as operações em uma transação (rollback automático em caso de erro)
+    - ✅ **Consistente**: Datas e relacionamentos validados
+    - ✅ **Completo**: Cria clínica demo com TenantId: `demo-clinic-001`
+    - ✅ Cria 3 usuários: Admin, Médico e Recepcionista
+    - ✅ Cria 6 pacientes (incluindo 2 crianças com responsável)
+    - ✅ Cria 8 procedimentos diversos
+    - ✅ Cria 5 agendamentos com histórico (passados, presente e futuros)
+    - ✅ Cria prontuários médicos, prescrições, exames e pagamentos de exemplo
+  - `DELETE /api/data-seeder/clear-database` - 🧹 Limpar dados demo (transacional)
 
 ## 🧪 Testes
 
