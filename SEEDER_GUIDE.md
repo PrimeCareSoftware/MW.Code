@@ -4,6 +4,14 @@
 
 O sistema MedicWarehouse possui seeders abrangentes para popular o banco de dados com dados de demonstração realísticos. Isso permite testar todas as funcionalidades do sistema sem precisar inserir dados manualmente.
 
+### ✨ Características Principais
+
+- ✅ **Consistência de Dados**: Todos os dados são criados com relacionamentos válidos e datas consistentes
+- ✅ **Transações**: Todas as operações são executadas em uma transação - rollback automático em caso de erro
+- ✅ **Dados Históricos**: Suporte para criação de agendamentos e registros passados para demonstração completa
+- ✅ **Validação de FK**: Ordem correta de inserção respeitando dependências entre entidades
+- ✅ **Dados Realísticos**: Informações médicas, pacientes e procedimentos com dados reais para testes
+
 ## Endpoints de Seeder
 
 ### 1. Informações sobre Dados Demo
@@ -323,6 +331,37 @@ Para limpar os dados demo e recomeçar:
 
 ---
 
+## 🔒 Garantias de Consistência
+
+### Transações
+Todas as operações de seeding são executadas dentro de uma transação de banco de dados:
+- ✅ Se todas as operações forem bem-sucedidas, a transação é confirmada (commit)
+- ✅ Se qualquer operação falhar, todas as mudanças são revertidas (rollback)
+- ✅ Garante que o banco de dados nunca fica em estado inconsistente
+
+### Ordem de Inserção
+Os dados são criados na ordem correta respeitando todas as dependências:
+1. Planos de Assinatura (sem dependências)
+2. Clínica
+3. Assinatura da Clínica
+4. Owner e Usuários
+5. Procedimentos e Pacientes
+6. Links Paciente-Clínica
+7. Agendamentos
+8. Procedimentos de Agendamento, Pagamentos
+9. Medicamentos e Prontuários Médicos
+10. Prescrições e Templates
+11. Notificações e Rotinas
+12. Despesas e Solicitações de Exames
+
+### Validações
+- ✅ Verifica se dados demo já existem antes de criar
+- ✅ Todas as foreign keys são válidas
+- ✅ Datas são consistentes entre entidades relacionadas
+- ✅ Validações de negócio são respeitadas
+
+---
+
 ## 💡 Dicas de Uso
 
 1. **Testar Fluxo Completo:** Use os agendamentos passados para ver prontuários completos
@@ -343,6 +382,9 @@ Para limpar os dados demo e recomeçar:
 
 ### Dados não aparecem na consulta
 **Solução:** Verifique se está usando o Tenant ID correto: `demo-clinic-001`
+
+### Erro durante o seeding
+**Solução:** Graças às transações, nenhum dado parcial é inserido. Verifique os logs para identificar o problema específico. O banco de dados permanece em estado consistente.
 
 ---
 
