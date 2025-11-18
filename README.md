@@ -2,6 +2,8 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
+> 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
+
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](GITHUB_PAGES_SETUP_REQUIRED.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
@@ -271,7 +273,13 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 🏃‍♂️ Como Executar
 
-> 📖 **Para um guia completo e detalhado passo a passo**, consulte o arquivo [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
+> 🚀 **NOVO!** [**GUIA_INICIO_RAPIDO_LOCAL.md**](GUIA_INICIO_RAPIDO_LOCAL.md) - **Setup em 10 minutos para testar HOJE!**
+
+> 📖 **Para um guia completo e detalhado**, consulte o arquivo [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
+
+> ✅ **NOVO!** [**CHECKLIST_TESTES_COMPLETO.md**](CHECKLIST_TESTES_COMPLETO.md) - Teste todos os 80+ endpoints e funcionalidades
+
+> 📊 **NOVO!** [**RESUMO_SISTEMA_COMPLETO.md**](RESUMO_SISTEMA_COMPLETO.md) - Visão geral de tudo que está implementado
 
 ### 🔑 Primeiros Passos - Criando Usuários Iniciais (IMPORTANTE para MVP)
 
