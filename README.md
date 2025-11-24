@@ -4,6 +4,8 @@
 
 > 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
 
+> 🐳 **NOVO!** Migramos para **Podman** (100% gratuito e open-source)! Docker ainda é suportado. [→ Ver Guia de Migração](DOCKER_TO_PODMAN_MIGRATION.md)
+
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](GITHUB_PAGES_SETUP_REQUIRED.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
