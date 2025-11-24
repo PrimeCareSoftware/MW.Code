@@ -279,12 +279,13 @@ podman-compose exec postgres psql -U postgres medicwarehouse
 
 **Solução:**
 ```bash
-# Instalar podman-compose via pip
-pip3 install podman-compose
-
-# Ou via package manager
+# Instalar via package manager (recomendado)
 sudo apt install podman-compose  # Ubuntu/Debian
 sudo dnf install podman-compose  # Fedora/RHEL
+
+# Alternativa: via pip (se não disponível no repositório)
+# Nota: Use apenas se o método acima não funcionar
+# pip3 install podman-compose
 ```
 
 ### Problema: "permission denied" ao rodar Podman

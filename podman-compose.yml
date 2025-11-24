@@ -1,3 +1,5 @@
+version: '3.8'
+
 # Podman Compose para MedicWarehouse - Ambiente de Desenvolvimento
 # Este arquivo também é compatível com Docker Compose
 #

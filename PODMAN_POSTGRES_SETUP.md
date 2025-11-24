@@ -40,7 +40,7 @@ podman machine start
 ```
 
 **Windows:**
-- Download: https://github.com/containers/podman/releases
+- Baixar: https://github.com/containers/podman/releases
 - Ou use WSL2 com Linux
 
 **Verificar instalação:**
