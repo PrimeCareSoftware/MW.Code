@@ -1,5 +1,21 @@
 import Foundation
 
+// MARK: - Date Formatters (Shared)
+
+private let iso8601Formatter = ISO8601DateFormatter()
+private let displayDateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    return formatter
+}()
+
+private let displayDateTimeFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    formatter.timeStyle = .short
+    return formatter
+}()
+
 // MARK: - Authentication Models
 
 struct LoginRequest: Codable {
@@ -33,11 +49,8 @@ struct Patient: Codable, Identifiable {
     
     var displayDateOfBirth: String {
         guard let dob = dateOfBirth else { return "N/A" }
-        let formatter = ISO8601DateFormatter()
-        if let date = formatter.date(from: dob) {
-            let displayFormatter = DateFormatter()
-            displayFormatter.dateStyle = .medium
-            return displayFormatter.string(from: date)
+        if let date = iso8601Formatter.date(from: dob) {
+            return displayDateFormatter.string(from: date)
         }
         return dob
     }
@@ -66,12 +79,8 @@ struct Appointment: Codable, Identifiable {
     let notes: String?
     
     var displayDate: String {
-        let formatter = ISO8601DateFormatter()
-        if let date = formatter.date(from: appointmentDate) {
-            let displayFormatter = DateFormatter()
-            displayFormatter.dateStyle = .medium
-            displayFormatter.timeStyle = .short
-            return displayFormatter.string(from: date)
+        if let date = iso8601Formatter.date(from: appointmentDate) {
+            return displayDateTimeFormatter.string(from: date)
         }
         return appointmentDate
     }
