@@ -86,17 +86,30 @@ if ! command_exists podman; then
     brew install podman podman-compose
     
     echo -e "${YELLOW}→${NC} Inicializando máquina virtual do Podman..."
-    podman machine init
-    podman machine start
-    
-    echo -e "${GREEN}✓${NC} Podman instalado e configurado"
+    if podman machine init; then
+        echo -e "${GREEN}✓${NC} Máquina virtual do Podman inicializada"
+        
+        echo -e "${YELLOW}→${NC} Iniciando máquina virtual do Podman..."
+        if podman machine start; then
+            echo -e "${GREEN}✓${NC} Podman instalado e configurado"
+        else
+            echo -e "${YELLOW}⚠️  Erro ao iniciar máquina do Podman. Tente: podman machine start${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  Erro ao inicializar máquina do Podman.${NC}"
+        echo -e "${YELLOW}    Verifique se a virtualização está habilitada.${NC}"
+    fi
 else
     echo -e "${GREEN}✓${NC} Podman já está instalado"
     
     # Verificar se a máquina está rodando
-    if ! podman machine list | grep -q "Currently running"; then
+    if ! podman machine list 2>/dev/null | grep -q "Currently running"; then
         echo -e "${YELLOW}→${NC} Iniciando máquina virtual do Podman..."
-        podman machine start
+        if podman machine start; then
+            echo -e "${GREEN}✓${NC} Máquina do Podman iniciada"
+        else
+            echo -e "${YELLOW}⚠️  Erro ao iniciar máquina do Podman${NC}"
+        fi
     fi
 fi
 echo ""

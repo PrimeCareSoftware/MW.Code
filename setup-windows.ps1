@@ -165,20 +165,42 @@ Write-Host "║  ✅ Configuração Concluída!                            ║" 
 Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
 Write-Host ""
 Write-Host "📋 Ferramentas instaladas:" -ForegroundColor Blue
-if (Test-CommandExists "dotnet") { Write-Host "   • .NET SDK: $(dotnet --version)" }
-if (Test-CommandExists "node") { Write-Host "   • Node.js: $(node --version)" }
-if (Test-CommandExists "npm") { Write-Host "   • npm: $(npm --version)" }
-if (Test-CommandExists "docker") { Write-Host "   • Docker: $(docker --version)" }
-if (Test-CommandExists "podman") { Write-Host "   • Podman: $(podman --version)" }
-if (Test-CommandExists "git") { Write-Host "   • Git: $(git --version)" }
+if (Test-CommandExists "dotnet") { 
+    try { Write-Host "   • .NET SDK: $(dotnet --version)" } 
+    catch { Write-Host "   • .NET SDK: Instalado (versão indisponível)" }
+}
+if (Test-CommandExists "node") { 
+    try { Write-Host "   • Node.js: $(node --version)" } 
+    catch { Write-Host "   • Node.js: Instalado (versão indisponível)" }
+}
+if (Test-CommandExists "npm") { 
+    try { Write-Host "   • npm: $(npm --version)" } 
+    catch { Write-Host "   • npm: Instalado (versão indisponível)" }
+}
+if (Test-CommandExists "docker") { 
+    try { Write-Host "   • Docker: $(docker --version)" } 
+    catch { Write-Host "   • Docker: Instalado (versão indisponível)" }
+}
+if (Test-CommandExists "podman") { 
+    try { Write-Host "   • Podman: $(podman --version)" } 
+    catch { Write-Host "   • Podman: Instalado (versão indisponível)" }
+}
+if (Test-CommandExists "git") { 
+    try { Write-Host "   • Git: $(git --version)" } 
+    catch { Write-Host "   • Git: Instalado (versão indisponível)" }
+}
 Write-Host ""
 Write-Host "📚 Próximos passos:" -ForegroundColor Blue
-if ($hasDocker) {
+
+# Determinar comando de container
+$containerCmd = "docker-compose"
+if ($hasPodman -and -not $hasDocker) {
+    $containerCmd = "podman-compose"
+}
+
+if ($hasDocker -or $hasPodman) {
     Write-Host "   1. Configure o banco de dados: " -NoNewline -ForegroundColor White
-    Write-Host "docker-compose up postgres -d" -ForegroundColor Yellow
-} elseif ($hasPodman) {
-    Write-Host "   1. Configure o banco de dados: " -NoNewline -ForegroundColor White
-    Write-Host "podman-compose up postgres -d" -ForegroundColor Yellow
+    Write-Host "$containerCmd up postgres -d" -ForegroundColor Yellow
 } else {
     Write-Host "   1. Instale Docker ou Podman e configure o banco de dados" -ForegroundColor Yellow
 }

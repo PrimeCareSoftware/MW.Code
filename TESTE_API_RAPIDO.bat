@@ -41,12 +41,14 @@ set "LOGIN_DATA={\"username\":\"admin\",\"password\":\"Admin@123\",\"tenantId\":
 curl -s -X POST "%API_URL%/auth/login" -H "Content-Type: application/json" -d "%LOGIN_DATA%" > login_response.tmp
 
 :: Extrair token (usando PowerShell para processar JSON)
-for /f "delims=" %%i in ('powershell -Command "Get-Content login_response.tmp | ConvertFrom-Json | Select-Object -ExpandProperty token"') do set "TOKEN=%%i"
+for /f "delims=" %%i in ('powershell -Command "try { Get-Content login_response.tmp | ConvertFrom-Json | Select-Object -ExpandProperty token } catch { Write-Output '' }"') do set "TOKEN=%%i"
 
 if "!TOKEN!"=="" (
-    echo ✗ Falha no login!
+    echo ✗ Falha no login! Resposta da API:
     type login_response.tmp
     del login_response.tmp
+    echo.
+    echo Verifique se a API está rodando em %API_URL%
     pause
     exit /b 1
 ) else (

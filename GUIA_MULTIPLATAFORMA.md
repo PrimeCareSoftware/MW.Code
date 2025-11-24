@@ -270,13 +270,13 @@ O código usa `Path.Combine()` para garantir compatibilidade:
 
 ```csharp
 // ✅ CORRETO - Cross-platform
-var path = Path.Combine("folder", "file.txt");
+var filePath = Path.Combine("folder", "file.txt");
 
 // ❌ ERRADO - Específico do Windows
-var path = "folder\\file.txt";
+var windowsPath = "folder\\file.txt";
 
 // ❌ ERRADO - Específico do Unix
-var path = "folder/file.txt";
+var unixPath = "folder/file.txt";
 ```
 
 ### 3. Scripts Duplicados
