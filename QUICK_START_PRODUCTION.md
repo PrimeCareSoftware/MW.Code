@@ -106,8 +106,20 @@ openssl rand -base64 32
 2. **OS**: Ubuntu 24.04 LTS
 3. **SSH**: Conecte ao servidor
 
-### Passo 2: Instalar Docker (5 min)
+### Passo 2: Instalar Podman (5 min)
 
+**Opção A: Podman (Recomendado - Gratuito e Open-Source)**
+```bash
+# Instalar Podman e Podman Compose
+sudo apt update
+sudo apt install -y podman podman-compose
+
+# Verificar
+podman --version
+podman-compose --version
+```
+
+**Opção B: Docker (Alternativa)**
 ```bash
 # Instalar Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -120,6 +132,8 @@ apt-get install docker-compose-plugin
 docker --version
 docker compose version
 ```
+
+> **💡 Recomendação**: Use Podman para evitar custos de licenciamento Docker em produção.
 
 ### Passo 3: Preparar Aplicação (10 min)
 
@@ -144,14 +158,24 @@ Salve: `Ctrl+X` → `Y` → `Enter`
 
 ### Passo 4: Iniciar Aplicação (5 min)
 
+**Com Podman:**
 ```bash
 # Build e start
-docker compose -f docker-compose.production.yml up -d
+podman-compose -f podman-compose.production.yml up -d
 
 # Ver logs
-docker compose -f docker-compose.production.yml logs -f
+podman-compose -f podman-compose.production.yml logs -f
 
 # Aguarde ~5 minutos para tudo iniciar
+```
+
+**Com Docker (alternativa):**
+```bash
+# Build e start
+docker-compose -f podman-compose.production.yml up -d
+
+# Ver logs
+docker-compose -f podman-compose.production.yml logs -f
 ```
 
 ### Passo 5: Configurar Nginx e SSL (30 min)

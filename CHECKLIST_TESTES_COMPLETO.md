@@ -17,17 +17,20 @@
 ## 🔧 Preparação do Ambiente
 
 ### Pré-requisitos
-- [ ] Docker Desktop instalado e rodando
+- [ ] Podman (ou Docker) instalado e rodando
 - [ ] .NET 8 SDK instalado
 - [ ] Node.js 18+ instalado
-- [ ] PostgreSQL rodando (via Docker)
+- [ ] PostgreSQL rodando (via Podman/Docker)
 - [ ] Migrations aplicadas
 - [ ] Dados demo populados
 
 ### Verificação Inicial
 ```bash
-# 1. PostgreSQL rodando
-docker compose ps | grep postgres
+# 1. PostgreSQL rodando (Podman)
+podman-compose ps | grep postgres
+
+# Ou com Docker:
+# docker-compose ps | grep postgres
 
 # 2. API buildando
 dotnet build src/MedicSoft.Api/MedicSoft.Api.csproj

@@ -82,8 +82,8 @@ Escolha o documento conforme sua necessidade:
 
 ## 🔧 Arquivos de Configuração
 
-### [docker-compose.production.yml](docker-compose.production.yml)
-**🐳 Docker Compose otimizado para produção**
+### [podman-compose.production.yml](podman-compose.production.yml)
+**🐳 Podman Compose otimizado para produção (compatível com Docker)**
 
 - ✅ PostgreSQL com limites de recursos
 - ✅ Backend .NET otimizado
@@ -91,8 +91,20 @@ Escolha o documento conforme sua necessidade:
 - ✅ Health checks configurados
 - ✅ Networks isoladas
 - ✅ Volumes para persistência
+- ✅ **100% Gratuito** - Sem custos de licenciamento
 
-**👉 Use para deploy em VPS com Docker!**
+**👉 Use para deploy em VPS com Podman ou Docker!**
+
+### [DOCKER_TO_PODMAN_MIGRATION.md](DOCKER_TO_PODMAN_MIGRATION.md)
+**🔄 Guia de Migração | Docker → Podman**
+
+- ✅ Por que migrar para Podman
+- ✅ Passo a passo da migração
+- ✅ Comandos equivalentes
+- ✅ Troubleshooting completo
+- ✅ Mantém compatibilidade com Docker
+
+**👉 Migre para solução 100% gratuita e open-source!**
 
 ---
 
@@ -110,14 +122,14 @@ Escolha o documento conforme sua necessidade:
 ---
 
 ### Frontend Dockerfiles e Nginx
-**📦 Builds de produção otimizados**
+**📦 Builds de produção otimizados (compatível com Podman e Docker)**
 
 - [frontend/medicwarehouse-app/Dockerfile.production](frontend/medicwarehouse-app/Dockerfile.production)
 - [frontend/medicwarehouse-app/nginx.conf](frontend/medicwarehouse-app/nginx.conf)
 - [frontend/mw-system-admin/Dockerfile.production](frontend/mw-system-admin/Dockerfile.production)
 - [frontend/mw-system-admin/nginx.conf](frontend/mw-system-admin/nginx.conf)
 
-**👉 Multi-stage builds para imagens otimizadas!**
+**👉 Multi-stage builds para imagens otimizadas com Podman ou Docker!**
 
 ---
 

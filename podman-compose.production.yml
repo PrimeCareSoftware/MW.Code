@@ -1,0 +1,240 @@
+version: '3.8'
+
+# Podman Compose para Produção - MedicWarehouse
+# Otimizado para baixo consumo de recursos e alta performance
+# Este arquivo também é compatível com Docker Compose
+#
+# Executar com Podman (recomendado - livre e open-source):
+#   podman-compose -f podman-compose.production.yml up -d
+#
+# Ou com Docker (alternativa):
+#   docker-compose -f podman-compose.production.yml up -d
+
+services:
+  # PostgreSQL - Banco de Dados (mais econômico que SQL Server)
+  postgres:
+    image: postgres:16-alpine
+    container_name: medicwarehouse-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: medicwarehouse
+      POSTGRES_USER: medicwarehouse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe123!}
+      # Otimizações para baixo consumo de memória
+      POSTGRES_SHARED_BUFFERS: 128MB
+      POSTGRES_EFFECTIVE_CACHE_SIZE: 512MB
+      POSTGRES_WORK_MEM: 4MB
+      POSTGRES_MAINTENANCE_WORK_MEM: 64MB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - medicwarehouse-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medicwarehouse -d medicwarehouse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    # Limites de recursos para VPS pequeno
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # Backend API .NET
+  api:
+    build:
+      context: .
+      dockerfile: src/MedicSoft.Api/Dockerfile
+      args:
+        CONFIGURATION: Release
+    container_name: medicwarehouse-api
+    restart: unless-stopped
+    environment:
+      # Ambiente
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      
+      # Database (PostgreSQL)
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=medicwarehouse;Password=${POSTGRES_PASSWORD:-ChangeMe123!}
+      
+      # JWT Settings (IMPORTANTE: Use variável de ambiente segura)
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      
+      # Security
+      - Security__RequireHttps=true
+      - Security__MinPasswordLength=12
+      - RateLimiting__EnableRateLimiting=true
+      - RateLimiting__PermitLimit=100
+      - RateLimiting__WindowSeconds=60
+      
+      # CORS - Adicione seu domínio aqui
+      - Cors__AllowedOrigins__0=https://seu-dominio.com
+      - Cors__AllowedOrigins__1=https://www.seu-dominio.com
+      
+      # Logging otimizado para produção
+      - Logging__LogLevel__Default=Warning
+      - Logging__LogLevel__Microsoft=Warning
+      - Logging__LogLevel__Microsoft.AspNetCore=Warning
+      
+    ports:
+      - "5000:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Limites de recursos
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+          cpus: '0.5'
+
+  # Frontend Angular (Build de produção otimizado)
+  frontend:
+    build:
+      context: ./frontend/medicwarehouse-app
+      dockerfile: Dockerfile.production
+      args:
+        API_URL: ${API_URL:-http://api:8080}
+    container_name: medicwarehouse-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - medicwarehouse-network
+    # Limites de recursos (Nginx consome pouco)
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
+
+  # System Admin Frontend (Build de produção otimizado)
+  system-admin:
+    build:
+      context: ./frontend/mw-system-admin
+      dockerfile: Dockerfile.production
+      args:
+        API_URL: ${API_URL:-http://api:8080}
+    container_name: medicwarehouse-system-admin
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "4201:80"
+    depends_on:
+      - api
+    networks:
+      - medicwarehouse-network
+    # Limites de recursos
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
+
+  # Nginx Reverse Proxy (Opcional - Comentado por padrão)
+  # Descomente se quiser servir tudo em uma única porta
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: medicwarehouse-nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./nginx/ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - api
+  #     - frontend
+  #     - system-admin
+  #   networks:
+  #     - medicwarehouse-network
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 64M
+  #         cpus: '0.1'
+
+volumes:
+  postgres_data:
+    driver: local
+    # Para backups mais fáceis, você pode mapear para um diretório:
+    # driver_opts:
+    #   type: none
+    #   device: /opt/medicwarehouse/data
+    #   o: bind
+
+networks:
+  medicwarehouse-network:
+    driver: bridge
+
+# INSTRUÇÕES DE USO:
+#
+# 1. Criar arquivo .env na raiz do projeto:
+#    POSTGRES_PASSWORD=sua-senha-forte-aqui
+#    JWT_SECRET_KEY=sua-chave-jwt-super-segura-minimo-32-caracteres
+#    API_URL=https://api.seu-dominio.com
+#
+# 2. Build e iniciar com Podman (recomendado):
+#    podman-compose -f podman-compose.production.yml up -d
+#
+#    Ou com Docker (alternativa):
+#    docker-compose -f podman-compose.production.yml up -d
+#
+# 3. Ver logs:
+#    podman-compose -f podman-compose.production.yml logs -f
+#
+# 4. Ver status:
+#    podman-compose -f podman-compose.production.yml ps
+#
+# 5. Parar:
+#    podman-compose -f podman-compose.production.yml down
+#
+# 6. Backup do banco:
+#    podman exec medicwarehouse-postgres pg_dump -U medicwarehouse medicwarehouse > backup.sql
+#
+# 7. Restore do banco:
+#    podman exec -i medicwarehouse-postgres psql -U medicwarehouse medicwarehouse < backup.sql
+#
+# RECURSOS TOTAIS ESTIMADOS:
+# - CPU: ~2.0 vCPU total (picos)
+# - RAM: ~1.3GB total (confortável para VPS de 2GB)
+# - Disco: ~5GB (inicial) + crescimento com dados
+#
+# SUPORTA:
+# - 10-20 clínicas pequenas em VPS de 2GB RAM
+# - 50-100 clínicas em VPS de 4GB RAM
+# - Escala horizontalmente adicionando mais instâncias da API
