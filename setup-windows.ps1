@@ -44,8 +44,12 @@ Write-Host ""
 # Instalar .NET 8 SDK
 Write-Host "[2/7] Verificando .NET 8 SDK..." -ForegroundColor Blue
 if (Test-CommandExists "dotnet") {
-    $dotnetVersion = dotnet --version
-    Write-Host "✓ .NET SDK já está instalado (versão: $dotnetVersion)" -ForegroundColor Green
+    try {
+        $dotnetVersion = dotnet --version
+        Write-Host "✓ .NET SDK já está instalado (versão: $dotnetVersion)" -ForegroundColor Green
+    } catch {
+        Write-Host "✓ .NET SDK já está instalado" -ForegroundColor Green
+    }
 } else {
     Write-Host "→ Instalando .NET 8 SDK..." -ForegroundColor Yellow
     if (Test-CommandExists "winget") {
@@ -60,8 +64,12 @@ Write-Host ""
 # Instalar Node.js
 Write-Host "[3/7] Verificando Node.js..." -ForegroundColor Blue
 if (Test-CommandExists "node") {
-    $nodeVersion = node --version
-    Write-Host "✓ Node.js já está instalado (versão: $nodeVersion)" -ForegroundColor Green
+    try {
+        $nodeVersion = node --version
+        Write-Host "✓ Node.js já está instalado (versão: $nodeVersion)" -ForegroundColor Green
+    } catch {
+        Write-Host "✓ Node.js já está instalado" -ForegroundColor Green
+    }
 } else {
     Write-Host "→ Instalando Node.js..." -ForegroundColor Yellow
     if (Test-CommandExists "winget") {
@@ -104,8 +112,12 @@ Write-Host ""
 # Instalar Git
 Write-Host "[5/7] Verificando Git..." -ForegroundColor Blue
 if (Test-CommandExists "git") {
-    $gitVersion = git --version
-    Write-Host "✓ Git já está instalado ($gitVersion)" -ForegroundColor Green
+    try {
+        $gitVersion = git --version
+        Write-Host "✓ Git já está instalado ($gitVersion)" -ForegroundColor Green
+    } catch {
+        Write-Host "✓ Git já está instalado" -ForegroundColor Green
+    }
 } else {
     Write-Host "→ Instalando Git..." -ForegroundColor Yellow
     if (Test-CommandExists "winget") {

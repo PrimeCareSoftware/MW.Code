@@ -14,6 +14,9 @@ jobs:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     
+    permissions:
+      contents: read
+    
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -74,6 +77,9 @@ jobs:
     needs: test-cross-platform
     runs-on: ubuntu-latest
     if: always()
+    
+    permissions:
+      contents: read
     
     steps:
     - name: Check results
