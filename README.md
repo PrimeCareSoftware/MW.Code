@@ -4,11 +4,22 @@
 
 > 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
 
+> 🌍 **NOVO!** Desenvolva em **macOS, Windows ou Linux**! [→ Ver Guia Multiplataforma](GUIA_MULTIPLATAFORMA.md) - Compatibilidade total garantida!
+
 > 🐳 **NOVO!** Migramos para **Podman** (100% gratuito e open-source)! Docker ainda é suportado. [→ Ver Guia de Migração](DOCKER_TO_PODMAN_MIGRATION.md)
 
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](GITHUB_PAGES_SETUP_REQUIRED.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
+
+## 🌍 Compatibilidade Multiplataforma
+
+O MedicWarehouse é **100% cross-platform**:
+
+- ✅ **macOS**: Script automatizado de setup (`setup-macos.sh`)
+- ✅ **Windows**: Script PowerShell de setup (`setup-windows.ps1`)
+- ✅ **Linux**: Suporte completo (Ubuntu, Fedora, Debian, etc.)
+- 📖 **[Guia Completo](GUIA_MULTIPLATAFORMA.md)**: Instruções detalhadas para cada plataforma
 
 > ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](MIGRACAO_POSTGRESQL.md)
 
