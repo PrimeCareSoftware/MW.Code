@@ -2,18 +2,26 @@
 
 > **Objetivo:** Colocar o sistema MedicWarehouse rodando em seu PC para testes completos em menos de 10 minutos!
 
+> 🌍 **NOVO!** Está usando **macOS** ou **Windows**? Use nossos scripts automatizados!
+> - **macOS**: Execute `./setup-macos.sh`
+> - **Windows**: Execute `.\setup-windows.ps1` (PowerShell como Administrador)
+> - **[Guia Completo Multiplataforma](GUIA_MULTIPLATAFORMA.md)**: Instruções detalhadas para cada plataforma
+
 ## ⚡ Pré-requisitos
 
 Antes de começar, certifique-se de ter instalado:
 
 - ✅ **Podman** (recomendado - livre e open-source) **ou Docker** (para PostgreSQL)
   - **Podman (Linux)**: `sudo apt install podman podman-compose` ou `sudo dnf install podman podman-compose`
-  - **Podman (macOS)**: `brew install podman podman-compose`
+  - **Podman (macOS)**: `brew install podman podman-compose` ou use `./setup-macos.sh`
+  - **Podman (Windows)**: [Podman Desktop](https://podman-desktop.io/) ou use `.\setup-windows.ps1`
   - **Docker (alternativa)**: [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
 - ✅ **.NET 8 SDK** (para API)
   - [Download .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0)
+  - Ou use scripts: `./setup-macos.sh` (macOS) ou `.\setup-windows.ps1` (Windows)
 - ✅ **Node.js 18+** (para frontend)
   - [Download Node.js](https://nodejs.org/)
+  - Ou use scripts: `./setup-macos.sh` (macOS) ou `.\setup-windows.ps1` (Windows)
 - ✅ **Git** (já deve estar instalado)
 
 ## 📋 Passo a Passo

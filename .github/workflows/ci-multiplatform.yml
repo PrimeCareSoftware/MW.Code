@@ -1,0 +1,94 @@
+# CI Multiplataforma - Testa em múltiplos sistemas operacionais
+# Este workflow é opcional e demonstra compatibilidade cross-platform
+# Não substitui o CI principal, apenas valida a compatibilidade
+
+name: CI - Multiplataforma (Opcional)
+
+on:
+  workflow_dispatch:  # Execução manual apenas
+  schedule:
+    - cron: '0 0 * * 0'  # Executar semanalmente aos domingos
+
+jobs:
+  test-cross-platform:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    permissions:
+      contents: read
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            display-name: '🐧 Linux'
+          - os: windows-latest
+            display-name: '🪟 Windows'
+          - os: macos-latest
+            display-name: '🍎 macOS'
+      fail-fast: false  # Continuar testando mesmo se um OS falhar
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        
+    - name: Display environment info
+      run: |
+        echo "OS: ${{ matrix.display-name }}"
+        dotnet --version
+        node --version
+        npm --version
+      
+    - name: Restore .NET dependencies
+      run: dotnet restore
+      
+    - name: Build backend
+      run: dotnet build --no-restore --configuration Release
+      
+    - name: Run backend tests
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      
+    - name: Install frontend dependencies
+      working-directory: frontend/medicwarehouse-app
+      run: npm ci
+      
+    - name: Build frontend
+      working-directory: frontend/medicwarehouse-app
+      run: npm run build -- --configuration production
+      
+    - name: Summary
+      if: success()
+      run: |
+        echo "✅ Build e testes passaram em ${{ matrix.display-name }}"
+        
+  summary:
+    name: Compatibilidade Multiplataforma
+    needs: test-cross-platform
+    runs-on: ubuntu-latest
+    if: always()
+    
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Check results
+      run: |
+        echo "# 🌍 Teste de Compatibilidade Multiplataforma" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Este workflow valida que o MedicWarehouse funciona em:" >> $GITHUB_STEP_SUMMARY
+        echo "- 🐧 Linux (Ubuntu)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🪟 Windows" >> $GITHUB_STEP_SUMMARY
+        echo "- 🍎 macOS" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Status: ${{ needs.test-cross-platform.result }}" >> $GITHUB_STEP_SUMMARY

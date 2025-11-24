@@ -30,6 +30,8 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
+| [GUIA_INICIO_RAPIDO_LOCAL.md](./GUIA_INICIO_RAPIDO_LOCAL.md) | Setup rápido em menos de 10 minutos | 5 min |
+| [GUIA_MULTIPLATAFORMA.md](./GUIA_MULTIPLATAFORMA.md) | 🆕 **Desenvolvimento em macOS, Windows e Linux** | 15 min |
 | [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) | Referência rápida dos seeders | 2 min |
 | [RESUMO_IMPLEMENTACAO_SEEDERS.md](./RESUMO_IMPLEMENTACAO_SEEDERS.md) | Guia passo a passo com exemplos práticos | 10 min |
 | [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) | Como autenticar e usar JWT | 5 min |
