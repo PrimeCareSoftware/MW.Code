@@ -62,7 +62,7 @@ if ! command_exists dotnet; then
     brew install --cask dotnet-sdk
     echo -e "${GREEN}✓${NC} .NET 8 SDK instalado"
 else
-    DOTNET_VERSION=$(dotnet --version)
+    DOTNET_VERSION=$(dotnet --version 2>/dev/null || echo "versão desconhecida")
     echo -e "${GREEN}✓${NC} .NET SDK já está instalado (versão: $DOTNET_VERSION)"
 fi
 echo ""
@@ -74,7 +74,7 @@ if ! command_exists node; then
     brew install node@20
     echo -e "${GREEN}✓${NC} Node.js instalado"
 else
-    NODE_VERSION=$(node --version)
+    NODE_VERSION=$(node --version 2>/dev/null || echo "versão desconhecida")
     echo -e "${GREEN}✓${NC} Node.js já está instalado (versão: $NODE_VERSION)"
 fi
 echo ""
