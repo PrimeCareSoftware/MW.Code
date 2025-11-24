@@ -27,6 +27,35 @@ O MedicWarehouse é **100% cross-platform**:
 
 > 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](MOCK_DATA_GUIDE.md)
 
+> 📱 **NOVO!** Aplicativos Móveis Nativos! Apps para iOS (Swift/SwiftUI) e Android (Kotlin/Compose) disponíveis! [→ Ver Documentação Mobile](mobile/README.md)
+
+## 📱 Mobile Applications 🆕
+
+O MedicWarehouse agora possui **aplicativos nativos** para dispositivos móveis:
+
+### iOS App (Swift/SwiftUI)
+- 🍎 **iPhone e iPad**: iOS 17.0+
+- 🎨 **SwiftUI**: Interface nativa e moderna
+- 📂 **Localização**: `mobile/ios/`
+- 📖 **[Documentação →](mobile/ios/README.md)**
+
+### Android App (Kotlin/Jetpack Compose)
+- 🤖 **Android**: API 24+ (Android 7.0+)
+- 🎨 **Jetpack Compose**: UI declarativa moderna
+- 📂 **Localização**: `mobile/android/`
+- 📖 **[Documentação →](mobile/android/README.md)**
+
+**Funcionalidades Mobile:**
+- ✅ Autenticação JWT (usuários e proprietários)
+- ✅ Dashboard com estatísticas em tempo real
+- ✅ Listagem de pacientes com busca
+- ✅ Listagem de agendamentos com filtros
+- 🚧 Criação/edição (em desenvolvimento)
+- 🚧 Prontuários médicos (planejado)
+- 🚧 Notificações push (planejado)
+
+**[📚 Ver documentação completa dos apps mobile →](mobile/README.md)**
+
 ## 🖥️ Frontend Applications
 
 O MedicWarehouse possui **dois aplicativos Angular independentes**:
