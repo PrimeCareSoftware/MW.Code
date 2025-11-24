@@ -166,7 +166,7 @@ Hetzner CX21:
 Suporta: 20-50 clínicas pequenas
 ```
 
-### Passo a Passo: VPS com Docker
+### Passo a Passo: VPS com Podman
 
 #### 1. Criar VPS
 
@@ -177,8 +177,20 @@ Suporta: 20-50 clínicas pequenas
 ssh root@seu-ip
 ```
 
-#### 2. Instalar Docker
+#### 2. Instalar Podman (Recomendado)
 
+**Opção A: Podman (Gratuito e Open-Source)**
+```bash
+# Instalar Podman e Podman Compose
+apt-get update
+apt-get install -y podman podman-compose
+
+# Verificar instalação
+podman --version
+podman-compose --version
+```
+
+**Opção B: Docker (Alternativa)**
 ```bash
 # Instalar Docker e Docker Compose
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -189,6 +201,8 @@ apt-get install docker-compose-plugin
 docker --version
 docker compose version
 ```
+
+> **💡 Recomendação**: Use Podman para evitar custos de licenciamento Docker em produção.
 
 #### 3. Preparar Aplicação
 
@@ -206,19 +220,32 @@ ASPNETCORE_ENVIRONMENT=Production
 EOF
 ```
 
-#### 4. Usar Docker Compose Otimizado
+#### 4. Usar Compose Otimizado para Produção
 
-Use o arquivo `docker-compose.production.yml` (criado neste PR)
+Use o arquivo `podman-compose.production.yml`
 
+**Com Podman:**
 ```bash
 # Build e start
-docker compose -f docker-compose.production.yml up -d
+podman-compose -f podman-compose.production.yml up -d
 
 # Ver logs
-docker compose -f docker-compose.production.yml logs -f
+podman-compose -f podman-compose.production.yml logs -f
 
 # Verificar status
-docker compose -f docker-compose.production.yml ps
+podman-compose -f podman-compose.production.yml ps
+```
+
+**Com Docker (alternativa):**
+```bash
+# Build e start
+docker-compose -f podman-compose.production.yml up -d
+
+# Ver logs
+docker-compose -f podman-compose.production.yml logs -f
+
+# Verificar status
+docker-compose -f podman-compose.production.yml ps
 ```
 
 #### 5. Configurar Nginx e SSL

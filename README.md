@@ -256,7 +256,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
-- ✅ **Docker**: Containerização completa
+- ✅ **Podman**: Containerização completa (livre e open-source)
 - ✅ **Relatórios Financeiros**: Dashboards completos de receitas, despesas e lucro
 - ✅ **Relatórios Operacionais**: Agendamentos, pacientes e performance
 - ✅ **Contas a Receber e Pagar**: Controle completo de fluxo de caixa
@@ -266,8 +266,8 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 - **Backend**: .NET 8, Entity Framework Core, PostgreSQL (Npgsql)
 - **Frontend**: Angular 20, TypeScript, SCSS
-- **Banco de Dados**: PostgreSQL 16 (via Docker) - Migrado de SQL Server com economia de 90%+
-- **Containerização**: Docker e Docker Compose
+- **Banco de Dados**: PostgreSQL 16 (via Podman) - Migrado de SQL Server com economia de 90%+
+- **Containerização**: Podman e Podman Compose (livre e open-source)
 - **Autenticação**: JWT (stateless)
 - **Arquitetura**: DDD + Clean Architecture
 
@@ -325,19 +325,22 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 
 ### Pré-requisitos
 
-- Docker e Docker Compose
+- Podman e Podman Compose (ou Docker como alternativa)
 - .NET 8 SDK (para desenvolvimento)
 - Node.js 18+ (para desenvolvimento)
 
-### Executar com Docker
+### Executar com Podman
 
 ```bash
 # Clone o repositório
 git clone https://github.com/MedicWarehouse/MW.Code.git
 cd MW.Code
 
-# Execute com Docker Compose
-docker-compose up -d
+# Execute com Podman Compose
+podman-compose up -d
+
+# Ou, se preferir usar Docker como alternativa:
+# docker-compose up -d
 
 # A API estará disponível em: http://localhost:5000
 # O Frontend estará disponível em: http://localhost:4200
@@ -395,11 +398,11 @@ npm start
 #### Banco de Dados (PostgreSQL)
 
 ```bash
-# Executar apenas o PostgreSQL via Docker
-docker compose up postgres -d
+# Executar apenas o PostgreSQL via Podman
+podman-compose up postgres -d
 
-# Ou executar PostgreSQL standalone:
-docker run -d \
+# Ou executar PostgreSQL standalone com Podman:
+podman run -d \
   --name medicwarehouse-postgres \
   -e POSTGRES_DB=medicwarehouse \
   -e POSTGRES_USER=postgres \
@@ -413,7 +416,7 @@ dotnet ef database update --context MedicSoftDbContext \
   --startup-project src/MedicSoft.Api
 ```
 
-> 📖 **Guia completo de setup do PostgreSQL**: [DOCKER_POSTGRES_SETUP.md](DOCKER_POSTGRES_SETUP.md)  
+> 📖 **Guia completo de setup do PostgreSQL**: [PODMAN_POSTGRES_SETUP.md](PODMAN_POSTGRES_SETUP.md)  
 > 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)
 
 ## 📖 Documentação da API
@@ -668,12 +671,12 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
   - Guia técnico completo
   - Scripts e validação
 
-### Usando Docker (Desenvolvimento/VPS)
+### Usando Podman (Desenvolvimento/VPS)
 
 **Desenvolvimento:**
 ```bash
 # Build e iniciar
-docker-compose up -d
+podman-compose up -d
 
 # A API estará em: http://localhost:5000
 # Frontend em: http://localhost:4200
@@ -682,11 +685,13 @@ docker-compose up -d
 **Produção (VPS):**
 ```bash
 # Usar compose otimizado para produção
-docker-compose -f docker-compose.production.yml up -d
+podman-compose -f podman-compose.production.yml up -d
 
 # Ver logs
-docker-compose -f docker-compose.production.yml logs -f
+podman-compose -f podman-compose.production.yml logs -f
 ```
+
+> **Nota:** Os arquivos compose também funcionam com Docker (`docker-compose`) como alternativa.
 
 ### Configuração de Produção
 

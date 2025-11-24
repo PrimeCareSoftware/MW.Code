@@ -6,9 +6,10 @@
 
 Antes de começar, certifique-se de ter instalado:
 
-- ✅ **Docker Desktop** (para PostgreSQL)
-  - Windows/Mac: [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
-  - Linux: `sudo apt install docker.io docker-compose`
+- ✅ **Podman** (recomendado - livre e open-source) **ou Docker** (para PostgreSQL)
+  - **Podman (Linux)**: `sudo apt install podman podman-compose` ou `sudo dnf install podman podman-compose`
+  - **Podman (macOS)**: `brew install podman podman-compose`
+  - **Docker (alternativa)**: [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
 - ✅ **.NET 8 SDK** (para API)
   - [Download .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0)
 - ✅ **Node.js 18+** (para frontend)
@@ -26,12 +27,22 @@ cd MW.Code
 
 ### 2️⃣ Iniciar o Banco de Dados PostgreSQL
 
+**Com Podman (recomendado):**
 ```bash
-# Iniciar apenas o PostgreSQL via Docker
-docker compose up postgres -d
+# Iniciar apenas o PostgreSQL via Podman
+podman-compose up postgres -d
 
 # Verificar se está rodando
-docker compose ps
+podman-compose ps
+```
+
+**Com Docker (alternativa):**
+```bash
+# Iniciar apenas o PostgreSQL via Docker
+docker-compose up postgres -d
+
+# Verificar se está rodando
+docker-compose ps
 ```
 
 **Aguarde ~10 segundos** para o PostgreSQL inicializar completamente.
