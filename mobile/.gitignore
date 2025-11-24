@@ -1,0 +1,36 @@
+# iOS
+ios/.DS_Store
+ios/xcuserdata/
+ios/build/
+ios/DerivedData/
+ios/*.xcworkspace/xcuserdata/
+ios/*.pbxuser
+ios/*.mode1v3
+ios/*.mode2v3
+ios/*.perspectivev3
+ios/*.xccheckout
+ios/*.moved-aside
+ios/*.hmap
+ios/*.ipa
+ios/*.dSYM.zip
+ios/*.dSYM
+
+# Android
+android/.gradle/
+android/.idea/
+android/local.properties
+android/build/
+android/app/build/
+android/*.iml
+android/.DS_Store
+android/captures/
+android/.externalNativeBuild/
+android/.cxx/
+
+# General
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
