@@ -26,7 +26,7 @@ services:
     networks:
       - medicwarehouse-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U medicwarehouse -d medicwarehouse"]
+      test: pg_isready -U medicwarehouse -d medicwarehouse
       interval: 10s
       timeout: 5s
       retries: 5
