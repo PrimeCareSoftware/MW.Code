@@ -6,6 +6,9 @@
 
 $ErrorActionPreference = "Stop"
 
+# Diretório do script (raiz do projeto)
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
 Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Blue
 Write-Host "║  🪟 Setup MedicWarehouse - Windows                    ║" -ForegroundColor Blue
 Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Blue
@@ -133,7 +136,7 @@ Write-Host ""
 Write-Host "[6/7] Restaurando dependências do .NET..." -ForegroundColor Blue
 if (Test-CommandExists "dotnet") {
     try {
-        dotnet restore
+        dotnet restore "$ScriptDir\MedicWarehouse.sln"
         Write-Host "✓ Dependências do .NET restauradas" -ForegroundColor Green
     } catch {
         Write-Host "⚠️  Erro ao restaurar dependências do .NET" -ForegroundColor Yellow
@@ -146,9 +149,9 @@ Write-Host ""
 # Instalar dependências do frontend
 Write-Host "[7/7] Instalando dependências do frontend..." -ForegroundColor Blue
 
-if (Test-Path "frontend/medicwarehouse-app") {
+if (Test-Path "$ScriptDir\frontend\medicwarehouse-app") {
     Write-Host "→ Instalando dependências do medicwarehouse-app..." -ForegroundColor Yellow
-    Push-Location frontend/medicwarehouse-app
+    Push-Location "$ScriptDir\frontend\medicwarehouse-app"
     try {
         npm install
         Write-Host "✓ Dependências do medicwarehouse-app instaladas" -ForegroundColor Green
@@ -158,9 +161,9 @@ if (Test-Path "frontend/medicwarehouse-app") {
     Pop-Location
 }
 
-if (Test-Path "frontend/mw-system-admin") {
+if (Test-Path "$ScriptDir\frontend\mw-system-admin") {
     Write-Host "→ Instalando dependências do mw-system-admin..." -ForegroundColor Yellow
-    Push-Location frontend/mw-system-admin
+    Push-Location "$ScriptDir\frontend\mw-system-admin"
     try {
         npm install
         Write-Host "✓ Dependências do mw-system-admin instaladas" -ForegroundColor Green

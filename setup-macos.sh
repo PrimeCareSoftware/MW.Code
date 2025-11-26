@@ -5,6 +5,9 @@
 
 set -e
 
+# Diretório do script (raiz do projeto)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # Cores para output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -128,26 +131,26 @@ echo ""
 
 # Restaurar dependências do .NET
 echo -e "${BLUE}[6/7] Restaurando dependências do .NET...${NC}"
-dotnet restore
+dotnet restore "$SCRIPT_DIR/MedicWarehouse.sln"
 echo -e "${GREEN}✓${NC} Dependências do .NET restauradas"
 echo ""
 
 # Instalar dependências do frontend
 echo -e "${BLUE}[7/7] Instalando dependências do frontend...${NC}"
 
-if [ -d "frontend/medicwarehouse-app" ]; then
+if [ -d "$SCRIPT_DIR/frontend/medicwarehouse-app" ]; then
     echo -e "${YELLOW}→${NC} Instalando dependências do medicwarehouse-app..."
-    cd frontend/medicwarehouse-app
+    cd "$SCRIPT_DIR/frontend/medicwarehouse-app"
     npm install
-    cd ../..
+    cd "$SCRIPT_DIR"
     echo -e "${GREEN}✓${NC} Dependências do medicwarehouse-app instaladas"
 fi
 
-if [ -d "frontend/mw-system-admin" ]; then
+if [ -d "$SCRIPT_DIR/frontend/mw-system-admin" ]; then
     echo -e "${YELLOW}→${NC} Instalando dependências do mw-system-admin..."
-    cd frontend/mw-system-admin
+    cd "$SCRIPT_DIR/frontend/mw-system-admin"
     npm install
-    cd ../..
+    cd "$SCRIPT_DIR"
     echo -e "${GREEN}✓${NC} Dependências do mw-system-admin instaladas"
 fi
 echo ""
