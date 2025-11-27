@@ -2,13 +2,13 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
-> 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
+> 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
 
-> 🌍 **NOVO!** Desenvolva em **macOS, Windows ou Linux**! [→ Ver Guia Multiplataforma](GUIA_MULTIPLATAFORMA.md) - Compatibilidade total garantida!
+> 🌍 **NOVO!** Desenvolva em **macOS, Windows ou Linux**! [→ Ver Guia Multiplataforma](docs/GUIA_MULTIPLATAFORMA.md) - Compatibilidade total garantida!
 
-> 🐳 **NOVO!** Migramos para **Podman** (100% gratuito e open-source)! Docker ainda é suportado. [→ Ver Guia de Migração](DOCKER_TO_PODMAN_MIGRATION.md)
+> 🐳 **NOVO!** Migramos para **Podman** (100% gratuito e open-source)! Docker ainda é suportado. [→ Ver Guia de Migração](docs/DOCKER_TO_PODMAN_MIGRATION.md)
 
-> ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](GITHUB_PAGES_SETUP_REQUIRED.md)
+> ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](docs/GITHUB_PAGES_SETUP_REQUIRED.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
@@ -19,13 +19,13 @@ O MedicWarehouse é **100% cross-platform**:
 - ✅ **macOS**: Script automatizado de setup (`setup-macos.sh`)
 - ✅ **Windows**: Script PowerShell de setup (`setup-windows.ps1`)
 - ✅ **Linux**: Suporte completo (Ubuntu, Fedora, Debian, etc.)
-- 📖 **[Guia Completo](GUIA_MULTIPLATAFORMA.md)**: Instruções detalhadas para cada plataforma
+- 📖 **[Guia Completo](docs/GUIA_MULTIPLATAFORMA.md)**: Instruções detalhadas para cada plataforma
 
-> ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](MIGRACAO_POSTGRESQL.md)
+> ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](docs/MIGRACAO_POSTGRESQL.md)
 
-> 🎯 **NOVO**: Login por Subdomínio! Acesse sua clínica via `clinic1.mwsistema.com.br` sem precisar digitar Tenant ID. [Ver guia →](SUBDOMAIN_LOGIN_GUIDE.md)
+> 🎯 **NOVO**: Login por Subdomínio! Acesse sua clínica via `clinic1.mwsistema.com.br` sem precisar digitar Tenant ID. [Ver guia →](docs/SUBDOMAIN_LOGIN_GUIDE.md)
 
-> 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](MOCK_DATA_GUIDE.md)
+> 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](docs/MOCK_DATA_GUIDE.md)
 
 > 📱 **NOVO!** Aplicativos Móveis Nativos! Apps para iOS (Swift/SwiftUI) e Android (Kotlin/Compose) disponíveis! [→ Ver Documentação Mobile](mobile/README.md)
 
@@ -83,7 +83,7 @@ Painel administrativo para gestão do sistema completo:
 - 👤 **Gestão de system owners**
 - 🧪 **Dados Mockados** - Desenvolvimento sem backend (NOVO!) 🆕
 - **URL desenvolvimento**: `http://localhost:4201`
-- 📖 **Documentação**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
+- 📖 **Documentação**: [SYSTEM_OWNER_ACCESS.md](docs/SYSTEM_OWNER_ACCESS.md)
 
 ## 🎥 Microserviço de Telemedicina 🆕
 
@@ -107,14 +107,14 @@ Painel administrativo para gestão do sistema completo:
 - ✅ HIPAA Compliant
 
 **Guias:**
-- [Análise de Serviços de Vídeo](TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md)
+- [Análise de Serviços de Vídeo](docs/TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md)
 - [Integração Frontend](telemedicine/FRONTEND_INTEGRATION.md)
 
 ## 📚 Documentação Completa
 
 ### 💼 Glossário de Termos Empresariais (NOVO!)
 **Não entende termos da área empresarial? Comece por aqui!**
-- 📖 **[`GLOSSARIO_TERMOS_EMPRESARIAIS.md`](GLOSSARIO_TERMOS_EMPRESARIAIS.md)** - Glossário completo explicando todos os termos de negócio
+- 📖 **[`GLOSSARIO_TERMOS_EMPRESARIAIS.md`](docs/GLOSSARIO_TERMOS_EMPRESARIAIS.md)** - Glossário completo explicando todos os termos de negócio
 - 💡 Aprenda sobre: SaaS, MRR, Churn, CAC, LTV, ROI, e muito mais
 - 🎯 Ideal para: Empreendedores, donos de negócio, estudantes
 - 📊 Exemplos práticos e aplicações reais
@@ -131,7 +131,7 @@ Toda a documentação detalhada do projeto está disponível no **projeto web de
 - 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
 - 📖 **Principais Documentos**:
-  - **[`PENDING_TASKS.md`](PENDING_TASKS.md)** - ⭐ **NOVO!** Documento centralizado com todas as pendências e planejamento futuro (2025-2026)
+  - **[`PENDING_TASKS.md`](docs/PENDING_TASKS.md)** - ⭐ **NOVO!** Documento centralizado com todas as pendências e planejamento futuro (2025-2026)
   - `GUIA_DESENVOLVIMENTO_AUTH.md` - **Guia de desenvolvimento e autenticação para MVP/testes** 🔥
   - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema**
   - `BUSINESS_RULES.md` - Regras de negócio
@@ -268,8 +268,8 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
   - Filtros de Destinatários: Segmentação baseada em critérios configuráveis
   - Escopo Multi-nível: Clínica ou Sistema (admin)
   - Até 10 retentativas configuráveis
-  - [📚 Documentação Completa](NOTIFICATION_ROUTINES_DOCUMENTATION.md)
-  - [💡 Exemplos de Uso](NOTIFICATION_ROUTINES_EXAMPLE.md)
+  - [📚 Documentação Completa](docs/NOTIFICATION_ROUTINES_DOCUMENTATION.md)
+  - [💡 Exemplos de Uso](docs/NOTIFICATION_ROUTINES_EXAMPLE.md)
 
 ### 🏥 Procedimentos e Serviços
 - ✅ **Cadastro de Procedimentos**: Nome, código, categoria, preço, duração
@@ -294,7 +294,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Gestão de Permissões**: Controle granular de acesso
 - ✅ **Auditoria**: Log completo de operações
 
-> 📖 **Para detalhes completos de segurança**, consulte [SECURITY_GUIDE.md](SECURITY_GUIDE.md)
+> 📖 **Para detalhes completos de segurança**, consulte [SECURITY_GUIDE.md](docs/SECURITY_GUIDE.md)
 
 ### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
@@ -315,13 +315,13 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 🏃‍♂️ Como Executar
 
-> 🚀 **NOVO!** [**GUIA_INICIO_RAPIDO_LOCAL.md**](GUIA_INICIO_RAPIDO_LOCAL.md) - **Setup em 10 minutos para testar HOJE!**
+> 🚀 **NOVO!** [**GUIA_INICIO_RAPIDO_LOCAL.md**](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - **Setup em 10 minutos para testar HOJE!**
 
-> 📖 **Para um guia completo e detalhado**, consulte o arquivo [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
+> 📖 **Para um guia completo e detalhado**, consulte o arquivo [GUIA_EXECUCAO.md](docs/GUIA_EXECUCAO.md)
 
-> ✅ **NOVO!** [**CHECKLIST_TESTES_COMPLETO.md**](CHECKLIST_TESTES_COMPLETO.md) - Teste todos os 80+ endpoints e funcionalidades
+> ✅ **NOVO!** [**CHECKLIST_TESTES_COMPLETO.md**](docs/CHECKLIST_TESTES_COMPLETO.md) - Teste todos os 80+ endpoints e funcionalidades
 
-> 📊 **NOVO!** [**RESUMO_SISTEMA_COMPLETO.md**](RESUMO_SISTEMA_COMPLETO.md) - Visão geral de tudo que está implementado
+> 📊 **NOVO!** [**RESUMO_SISTEMA_COMPLETO.md**](docs/RESUMO_SISTEMA_COMPLETO.md) - Visão geral de tudo que está implementado
 
 ### 🔑 Primeiros Passos - Criando Usuários Iniciais (IMPORTANTE para MVP)
 
@@ -361,9 +361,9 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 ```
 
 > 📖 **Para mais detalhes sobre autenticação e desenvolvimento**, consulte:
-> - [GUIA_DESENVOLVIMENTO_AUTH.md](GUIA_DESENVOLVIMENTO_AUTH.md) - Guia completo para desenvolvimento e testes
-> - [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) - Documentação completa de autenticação
-> - [CARGA_INICIAL_TESTES.md](CARGA_INICIAL_TESTES.md) - Detalhes sobre dados de teste
+> - [GUIA_DESENVOLVIMENTO_AUTH.md](docs/GUIA_DESENVOLVIMENTO_AUTH.md) - Guia completo para desenvolvimento e testes
+> - [AUTHENTICATION_GUIDE.md](docs/AUTHENTICATION_GUIDE.md) - Documentação completa de autenticação
+> - [CARGA_INICIAL_TESTES.md](docs/CARGA_INICIAL_TESTES.md) - Detalhes sobre dados de teste
 
 ### Pré-requisitos
 
@@ -435,7 +435,7 @@ npm start
 # O admin estará disponível em: http://localhost:4201
 ```
 
-> 📖 **Documentação completa do System Admin**: [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md)
+> 📖 **Documentação completa do System Admin**: [SYSTEM_OWNER_ACCESS.md](docs/SYSTEM_OWNER_ACCESS.md)
 
 #### Banco de Dados (PostgreSQL)
 
@@ -458,8 +458,8 @@ dotnet ef database update --context MedicSoftDbContext \
   --startup-project src/MedicSoft.Api
 ```
 
-> 📖 **Guia completo de setup do PostgreSQL**: [PODMAN_POSTGRES_SETUP.md](PODMAN_POSTGRES_SETUP.md)  
-> 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)
+> 📖 **Guia completo de setup do PostgreSQL**: [PODMAN_POSTGRES_SETUP.md](docs/PODMAN_POSTGRES_SETUP.md)  
+> 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](docs/MIGRACAO_POSTGRESQL.md)
 
 ## 📖 Documentação da API
 
@@ -473,7 +473,7 @@ Após executar a aplicação, acesse a documentação interativa do Swagger:
 Para facilitar o teste e integração, todas as APIs foram exportadas para o Postman:
 
 - 📥 **Arquivo**: [`MedicWarehouse-Postman-Collection.json`](MedicWarehouse-Postman-Collection.json)
-- 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](POSTMAN_IMPORT_GUIDE.md)
+- 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](docs/POSTMAN_IMPORT_GUIDE.md)
 - ✨ **Recursos incluídos**:
   - Todos os endpoints organizados por funcionalidade
   - Variáveis pré-configuradas (base_url, tenant_id)
@@ -485,7 +485,7 @@ Para facilitar o teste e integração, todas as APIs foram exportadas para o Pos
 2. Configure as variáveis da coleção
 3. Teste os endpoints!
 
-Para instruções detalhadas, consulte o [Guia de Importação do Postman](POSTMAN_IMPORT_GUIDE.md).
+Para instruções detalhadas, consulte o [Guia de Importação do Postman](docs/POSTMAN_IMPORT_GUIDE.md).
 
 > 📖 **Guia Completo**: Para um passo a passo detalhado de como configurar e cadastrar tudo no sistema, consulte o [Guia de Configuração do Sistema](frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md).
 
@@ -495,7 +495,7 @@ Para instruções detalhadas, consulte o [Guia de Importação do Postman](POSTM
   - `POST /api/auth/login` - Login de usuários (doctors, secretaries, etc.)
   - `POST /api/auth/owner-login` - Login de proprietários (clinic owners e system owners)
   - `POST /api/auth/validate` - Validar token JWT
-  - 📖 **Veja**: [`AUTHENTICATION_GUIDE.md`](AUTHENTICATION_GUIDE.md) para detalhes completos
+  - 📖 **Veja**: [`AUTHENTICATION_GUIDE.md`](docs/AUTHENTICATION_GUIDE.md) para detalhes completos
 
 - **Registro e Configuração**:
   - `POST /api/registration` - Registro de nova clínica
@@ -622,12 +622,12 @@ O sistema utiliza **multitenancy** por coluna `TenantId`, garantindo isolamento 
 - Prontuários médicos são **isolados por clínica** - cada clínica vê apenas seus próprios registros
 - Sistema detecta cadastro prévio por CPF e reutiliza dados, criando novo vínculo
 
-Para mais detalhes sobre as regras de negócio, consulte [BUSINESS_RULES.md](BUSINESS_RULES.md)
+Para mais detalhes sobre as regras de negócio, consulte [BUSINESS_RULES.md](docs/BUSINESS_RULES.md)
 
 ## 📱 Interface e Telas
 
 Para visualizar todas as telas do sistema com descrições detalhadas e fluxos de navegação, consulte:
-- **[SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md)** - Documentação completa de todas as interfaces com diagramas de fluxo
+- **[SCREENS_DOCUMENTATION.md](docs/SCREENS_DOCUMENTATION.md)** - Documentação completa de todas as interfaces com diagramas de fluxo
 - **[docs/VISUAL_FLOW_SUMMARY.md](docs/VISUAL_FLOW_SUMMARY.md)** - Resumo visual rápido com diagramas Mermaid interativos
 
 Este documento inclui:
@@ -673,7 +673,7 @@ O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados
 ### Documentação Completa
 
 Para detalhes completos sobre segurança, autenticação e melhores práticas:
-- 📖 **[AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
+- 📖 **[AUTHENTICATION_GUIDE.md](docs/AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
 - 📖 **[SECURITY_GUIDE.md](frontend/mw-docs/src/assets/docs/SECURITY_GUIDE.md)** - Guia completo de segurança
 
 ## 🚀 Deploy e Infraestrutura de Produção
@@ -682,33 +682,33 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
 
 **Documentação completa para produção com custo mínimo ($5-20/mês) enquanto você não tem clientes grandes!**
 
-#### 📚 [INFRA_DOCS_INDEX.md](INFRA_DOCS_INDEX.md) - **COMECE AQUI!**
+#### 📚 [INFRA_DOCS_INDEX.md](docs/INFRA_DOCS_INDEX.md) - **COMECE AQUI!**
 Índice completo com todos os guias de infraestrutura. Navegação fácil para encontrar o que você precisa.
 
 #### 🚀 Guias Principais:
 
-- **[QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md)** - ⚡ **Do Zero ao Ar em 30 Minutos**
+- **[QUICK_START_PRODUCTION.md](docs/QUICK_START_PRODUCTION.md)** - ⚡ **Do Zero ao Ar em 30 Minutos**
   - Setup rápido com Railway ou VPS
   - Passo a passo simplificado
   - Para quem quer resultados AGORA
 
-- **[CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md)** - 💵 **Planeje Seus Custos**
+- **[CALCULADORA_CUSTOS.md](docs/CALCULADORA_CUSTOS.md)** - 💵 **Planeje Seus Custos**
   - Estimativas por número de clínicas (1-500+)
   - Comparação Railway vs VPS vs Cloud
   - Projeção de crescimento e ROI
 
-- **[INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)** - 📋 **Guia Completo**
+- **[INFRA_PRODUCAO_BAIXO_CUSTO.md](docs/INFRA_PRODUCAO_BAIXO_CUSTO.md)** - 📋 **Guia Completo**
   - 💚 **Railway + Vercel** (Recomendado) - $5-20/mês
   - 🔧 **VPS (Hetzner/DigitalOcean)** - $5-10/mês
   - 🆓 **Free Tier** - $0/mês (apenas testes)
   - Comparativos, estratégias de escala, backups
 
-- **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - 🚂 **Deploy no Railway**
+- **[DEPLOY_RAILWAY_GUIDE.md](docs/DEPLOY_RAILWAY_GUIDE.md)** - 🚂 **Deploy no Railway**
   - Passo a passo detalhado
   - PostgreSQL incluído
   - SSL e backups automáticos
 
-- **[MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
+- **[MIGRACAO_POSTGRESQL.md](docs/MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
   - Migração SQL Server → PostgreSQL
   - Guia técnico completo
   - Scripts e validação
@@ -746,7 +746,7 @@ podman-compose -f podman-compose.production.yml logs -f
 - [ ] Habilitar HTTPS (SSL/TLS)
 - [ ] Configurar monitoramento de logs
 
-Para detalhes completos, veja: [INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)
+Para detalhes completos, veja: [INFRA_PRODUCAO_BAIXO_CUSTO.md](docs/INFRA_PRODUCAO_BAIXO_CUSTO.md)
 
 ## 🔄 CI/CD
 
@@ -763,7 +763,7 @@ O workflow é executado automaticamente em:
 - Pull Requests para as branches `main` e `develop`
 - Execução manual via GitHub Actions
 
-Para mais detalhes, consulte: [CI_CD_DOCUMENTATION.md](CI_CD_DOCUMENTATION.md)
+Para mais detalhes, consulte: [CI_CD_DOCUMENTATION.md](docs/CI_CD_DOCUMENTATION.md)
 
 ## 🤝 Contribuição
 
@@ -826,7 +826,7 @@ Acesse: `http://localhost:4200`
 
 ### Documentação Completa
 
-Para informações detalhadas sobre MW.Site, consulte: [MW_SITE_DOCUMENTATION.md](MW_SITE_DOCUMENTATION.md)
+Para informações detalhadas sobre MW.Site, consulte: [MW_SITE_DOCUMENTATION.md](docs/MW_SITE_DOCUMENTATION.md)
 
 ### API Endpoints para MW.Site
 

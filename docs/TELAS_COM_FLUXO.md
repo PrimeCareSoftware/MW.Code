@@ -772,7 +772,7 @@ Para mais informações, consulte:
 - [SYSTEM_MAPPING.md](SYSTEM_MAPPING.md) - Mapeamento completo do sistema
 - [OWNER_FLOW_DOCUMENTATION.md](OWNER_FLOW_DOCUMENTATION.md) - Fluxo de proprietários
 - [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) - Guia de autenticação
-- [README.md](README.md) - Visão geral do projeto
+- [README.md](../README.md) - Visão geral do projeto
 
 ---
 

@@ -353,7 +353,7 @@ Consulte os guias detalhados:
 - **[INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md)** - Guia completo de infraestrutura
 - **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - Passo a passo detalhado Railway
 - **[MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)** - Migração SQL Server → PostgreSQL
-- **[README.md](README.md)** - Documentação geral do projeto
+- **[README.md](../README.md)** - Documentação geral do projeto
 
 ---
 

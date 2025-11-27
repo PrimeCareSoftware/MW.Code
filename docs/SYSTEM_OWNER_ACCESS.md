@@ -396,7 +396,7 @@ Para problemas ou dúvidas:
 
 ## 📚 Documentos Relacionados
 
-- [README Principal](README.md)
+- [README Principal](../README.md)
 - [README MW System Admin](frontend/mw-system-admin/README.md)
 - [Arquitetura do Sistema](BEFORE_AND_AFTER_ARCHITECTURE.md)
 - [Guia de Autenticação](AUTHENTICATION_GUIDE.md)

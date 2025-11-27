@@ -390,6 +390,6 @@ Os dados são criados na ordem correta respeitando todas as dependências:
 
 ## 📚 Referências
 
-- [Documentação da API](./README.md)
+- [Documentação da API](../README.md)
 - [Guia de Autenticação](./AUTHENTICATION_GUIDE.md)
-- [Postman Collection](./MedicWarehouse-Postman-Collection.json)
+- [Postman Collection](../MedicWarehouse-Postman-Collection.json)

@@ -365,7 +365,7 @@ podman volume create mwcode_postgres_data
 ### Guias do MedicWarehouse
 - [PODMAN_POSTGRES_SETUP.md](PODMAN_POSTGRES_SETUP.md) - Setup completo do PostgreSQL com Podman
 - [QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md) - Deploy em produção
-- [README.md](README.md) - Documentação principal do projeto
+- [README.md](../README.md) - Documentação principal do projeto
 
 ### Comandos Úteis Podman
 

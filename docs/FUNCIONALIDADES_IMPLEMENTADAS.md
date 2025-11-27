@@ -318,7 +318,7 @@ Para completar a implementação no frontend:
 
 ## 📚 Documentação Completa
 
-- [README.md](README.md) - Visão geral do sistema
+- [README.md](../README.md) - Visão geral do sistema
 - [FINANCIAL_REPORTS_DOCUMENTATION.md](FINANCIAL_REPORTS_DOCUMENTATION.md) - Documentação de relatórios
 - [PAYMENT_FLOW.md](PAYMENT_FLOW.md) - Fluxo de pagamentos
 - [NOTIFICATION_ROUTINES_DOCUMENTATION.md](NOTIFICATION_ROUTINES_DOCUMENTATION.md) - Sistema de notificações

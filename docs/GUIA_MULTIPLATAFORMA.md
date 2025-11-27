@@ -486,7 +486,7 @@ Antes de fazer commit de código, verifique:
 
 - **[GUIA_INICIO_RAPIDO_LOCAL.md](GUIA_INICIO_RAPIDO_LOCAL.md)**: Setup rápido do sistema
 - **[DOCKER_TO_PODMAN_MIGRATION.md](DOCKER_TO_PODMAN_MIGRATION.md)**: Migração Docker → Podman
-- **[README.md](README.md)**: Documentação completa do projeto
+- **[README.md](../README.md)**: Documentação completa do projeto
 - **.NET Cross-Platform**: https://docs.microsoft.com/dotnet/core/compatibility/
 - **Node.js Multi-platform**: https://nodejs.org/en/docs/guides/
 

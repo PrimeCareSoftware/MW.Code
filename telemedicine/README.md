@@ -343,7 +343,7 @@ O projeto segue:
 
 ## 📚 Documentação Adicional
 
-- [Análise de Serviços de Vídeo](../TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md) - Análise completa de 5 provedores
+- [Análise de Serviços de Vídeo](../docs/TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md) - Análise completa de 5 provedores
 - [Daily.co API Docs](https://docs.daily.co) - Documentação oficial da API
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - Artigo original
 - [DDD Reference](https://www.domainlanguage.com/ddd/) - Guia de referência DDD
