@@ -82,7 +82,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 |-----------|-----------|------------------|
 | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) | Guia rápido do Postman | 5 min |
 | [POSTMAN_IMPORT_GUIDE.md](./POSTMAN_IMPORT_GUIDE.md) | Como importar collection | 3 min |
-| [MedicWarehouse-Postman-Collection.json](./MedicWarehouse-Postman-Collection.json) | Collection do Postman | - |
+| [MedicWarehouse-Postman-Collection.json](../MedicWarehouse-Postman-Collection.json) | Collection do Postman | - |
 
 ### 🌐 Frontend e Integração
 
@@ -277,7 +277,7 @@ Ao adicionar nova documentação:
 Se não encontrar o que procura:
 1. Verifique o [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) para visão geral
 2. Consulte o [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) para dados de teste
-3. Veja a [Postman Collection](./MedicWarehouse-Postman-Collection.json) para exemplos de API
+3. Veja a [Postman Collection](../MedicWarehouse-Postman-Collection.json) para exemplos de API
 
 ---
 

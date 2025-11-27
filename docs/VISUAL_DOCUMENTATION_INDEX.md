@@ -20,7 +20,7 @@ This index helps you find the right visual documentation for your needs.
 ### Visual Documentation (This Series)
 - **[TELAS_COM_FLUXO.md](TELAS_COM_FLUXO.md)** - Portuguese: All screens with ASCII mockups and flows
 - **[SCREENS_WITH_FLOW.md](SCREENS_WITH_FLOW.md)** - English: All screens with ASCII mockups and flows
-- **[VISUAL_FLOW_SUMMARY.md](docs/VISUAL_FLOW_SUMMARY.md)** - Mermaid diagrams and flow charts
+- **[VISUAL_FLOW_SUMMARY.md](VISUAL_FLOW_SUMMARY.md)** - Mermaid diagrams and flow charts
 
 ### System Documentation
 - **[SYSTEM_MAPPING.md](SYSTEM_MAPPING.md)** - Complete system architecture and entity mapping
@@ -28,7 +28,7 @@ This index helps you find the right visual documentation for your needs.
 - **[AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md)** - Authentication and authorization guide
 
 ### Technical Documentation
-- **[README.md](README.md)** - Project overview and getting started
+- **[README.md](../README.md)** - Project overview and getting started
 - **[API_CONTROLLERS_REPOSITORY_ACCESS_ANALYSIS.md](API_CONTROLLERS_REPOSITORY_ACCESS_ANALYSIS.md)** - API analysis
 - **[SERVICE_LAYER_ARCHITECTURE.md](SERVICE_LAYER_ARCHITECTURE.md)** - Service layer details
 
@@ -77,11 +77,11 @@ Both **TELAS_COM_FLUXO.md** (Portuguese) and **SCREENS_WITH_FLOW.md** (English) 
 ### For Developers
 1. Start with [SCREENS_WITH_FLOW.md](SCREENS_WITH_FLOW.md) for screen mockups
 2. Review [SYSTEM_MAPPING.md](SYSTEM_MAPPING.md) for architecture
-3. Check [README.md](README.md) for setup instructions
+3. Check [README.md](../README.md) for setup instructions
 
 ### For Designers
 1. Review screen mockups in [SCREENS_WITH_FLOW.md](SCREENS_WITH_FLOW.md)
-2. Check flows in [VISUAL_FLOW_SUMMARY.md](docs/VISUAL_FLOW_SUMMARY.md)
+2. Check flows in [VISUAL_FLOW_SUMMARY.md](VISUAL_FLOW_SUMMARY.md)
 3. Review user flows for interaction patterns
 
 ### For Product Managers
@@ -130,7 +130,7 @@ Example:
 - **Database entities?** → [SYSTEM_MAPPING.md](SYSTEM_MAPPING.md) (Data Model section)
 - **API endpoints?** → [OWNER_FLOW_DOCUMENTATION.md](OWNER_FLOW_DOCUMENTATION.md) or [API_CONTROLLERS_REPOSITORY_ACCESS_ANALYSIS.md](API_CONTROLLERS_REPOSITORY_ACCESS_ANALYSIS.md)
 - **Test data?** → [SEEDER_GUIDE.md](SEEDER_GUIDE.md)
-- **Getting started?** → [README.md](README.md)
+- **Getting started?** → [README.md](../README.md)
 
 ---
 

@@ -82,7 +82,7 @@ Escolha o documento conforme sua necessidade:
 
 ## 🔧 Arquivos de Configuração
 
-### [podman-compose.production.yml](podman-compose.production.yml)
+### [podman-compose.production.yml](../podman-compose.production.yml)
 **🐳 Podman Compose otimizado para produção (compatível com Docker)**
 
 - ✅ PostgreSQL com limites de recursos
@@ -108,7 +108,7 @@ Escolha o documento conforme sua necessidade:
 
 ---
 
-### [.env.example](.env.example)
+### [.env.example](../.env.example)
 **🔐 Template de variáveis de ambiente**
 
 - ✅ Todas as variáveis necessárias
@@ -124,10 +124,10 @@ Escolha o documento conforme sua necessidade:
 ### Frontend Dockerfiles e Nginx
 **📦 Builds de produção otimizados (compatível com Podman e Docker)**
 
-- [frontend/medicwarehouse-app/Dockerfile.production](frontend/medicwarehouse-app/Dockerfile.production)
-- [frontend/medicwarehouse-app/nginx.conf](frontend/medicwarehouse-app/nginx.conf)
-- [frontend/mw-system-admin/Dockerfile.production](frontend/mw-system-admin/Dockerfile.production)
-- [frontend/mw-system-admin/nginx.conf](frontend/mw-system-admin/nginx.conf)
+- [frontend/medicwarehouse-app/Dockerfile.production](../frontend/medicwarehouse-app/Dockerfile.production)
+- [frontend/medicwarehouse-app/nginx.conf](../frontend/medicwarehouse-app/nginx.conf)
+- [frontend/mw-system-admin/Dockerfile.production](../frontend/mw-system-admin/Dockerfile.production)
+- [frontend/mw-system-admin/nginx.conf](../frontend/mw-system-admin/nginx.conf)
 
 **👉 Multi-stage builds para imagens otimizadas com Podman ou Docker!**
 

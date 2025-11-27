@@ -374,7 +374,7 @@ Ambos os apps utilizam componentes nativos de suas plataformas:
 ### API
 - [Documentação da API](README.md)
 - [Swagger UI](http://localhost:5000/swagger)
-- [Postman Collection](MedicWarehouse-Postman-Collection.json)
+- [Postman Collection](../MedicWarehouse-Postman-Collection.json)
 
 ### Desenvolvimento
 - [Guia de Desenvolvimento Auth](GUIA_DESENVOLVIMENTO_AUTH.md)
