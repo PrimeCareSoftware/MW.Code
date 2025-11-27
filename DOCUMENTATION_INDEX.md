@@ -21,7 +21,9 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
-| [PENDING_TASKS.md](./PENDING_TASKS.md) | ⭐ **NOVO!** Documento centralizado de pendências e planejamento futuro | 20 min |
+| [PENDING_TASKS.md](./PENDING_TASKS.md) | ⭐ Documento centralizado de pendências e planejamento futuro | 20 min |
+| [APPS_PENDING_TASKS.md](./APPS_PENDING_TASKS.md) | 🆕 **NOVO!** Pendências específicas de cada aplicativo | 15 min |
+| [SCREENSHOTS_DOCUMENTATION.md](./SCREENSHOTS_DOCUMENTATION.md) | 🆕 **NOVO!** Documentação visual com prints das telas | 10 min |
 | [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) | Glossário completo de termos empresariais e de negócio | 30 min |
 | [ANALISE_MELHORIAS_SISTEMA.md](./ANALISE_MELHORIAS_SISTEMA.md) | Análise detalhada de melhorias e concorrentes (1.445 linhas) | 60 min |
 | [RESUMO_ANALISE_MELHORIAS.md](./RESUMO_ANALISE_MELHORIAS.md) | Resumo executivo da análise de melhorias | 15 min |
