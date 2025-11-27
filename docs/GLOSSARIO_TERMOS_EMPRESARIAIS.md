@@ -802,7 +802,7 @@ Receita cresce linear, custo cresce devagar!
 ### Documentação Relacionada
 - [`BUSINESS_RULES.md`](frontend/mw-docs/src/assets/docs/BUSINESS_RULES.md) - Regras de negócio detalhadas
 - [`SUBSCRIPTION_SYSTEM.md`](frontend/mw-docs/src/assets/docs/SUBSCRIPTION_SYSTEM.md) - Sistema de assinaturas
-- [`README.md`](README.md) - Visão geral do projeto
+- [`README.md`](../README.md) - Visão geral do projeto
 
 ### Contato
 - 📧 Entre em contato com a equipe MedicWarehouse

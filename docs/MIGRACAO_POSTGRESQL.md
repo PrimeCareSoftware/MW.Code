@@ -407,7 +407,7 @@ docker compose exec api dotnet ef database update
 
 - **[DOCKER_POSTGRES_SETUP.md](DOCKER_POSTGRES_SETUP.md)** - Guia completo de Docker
 - **[DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md)** - Deploy em produção
-- **[README.md](README.md)** - Visão geral do projeto
+- **[README.md](../README.md)** - Visão geral do projeto
 
 ### Documentação Externa
 

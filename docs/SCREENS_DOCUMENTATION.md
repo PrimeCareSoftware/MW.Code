@@ -874,7 +874,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ## 📚 Documentação Relacionada
 
-- [README.md](README.md) - Documentação geral do projeto
+- [README.md](../README.md) - Documentação geral do projeto
 - [BUSINESS_RULES.md](BUSINESS_RULES.md) - Regras de negócio detalhadas
 - [TECHNICAL_IMPLEMENTATION.md](TECHNICAL_IMPLEMENTATION.md) - Implementação técnica
 - [API_QUICK_GUIDE.md](API_QUICK_GUIDE.md) - Guia rápido da API

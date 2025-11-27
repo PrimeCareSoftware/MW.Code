@@ -1196,7 +1196,7 @@ Baixo Impacto, Alto Esforço (Avoid):
 - 📄 [RESUMO_ANALISE_MELHORIAS.md](RESUMO_ANALISE_MELHORIAS.md) - Resumo executivo
 - 📄 [SUGESTOES_MELHORIAS_SEGURANCA.md](SUGESTOES_MELHORIAS_SEGURANCA.md) - Melhorias de segurança detalhadas
 - 📄 [FUNCIONALIDADES_IMPLEMENTADAS.md](FUNCIONALIDADES_IMPLEMENTADAS.md) - Status atual das funcionalidades
-- 📄 [README.md](README.md) - Visão geral do projeto
+- 📄 [README.md](../README.md) - Visão geral do projeto
 
 ### Documentos Relacionados
 - 📄 [LGPD_COMPLIANCE_DOCUMENTATION.md](LGPD_COMPLIANCE_DOCUMENTATION.md) - Compliance com LGPD

@@ -145,45 +145,60 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 ```
 MW.Code/
-├── 📚 DOCUMENTATION_INDEX.md (este arquivo)
+├── 📄 README.md (principal)
+├── docs/
+│   ├── 📚 DOCUMENTATION_INDEX.md (este arquivo)
+│   │
+│   ├── 📖 NEGÓCIO E GESTÃO
+│   │   ├── GLOSSARIO_TERMOS_EMPRESARIAIS.md ⭐
+│   │   ├── BUSINESS_RULES.md
+│   │   └── PENDING_TASKS.md
+│   │
+│   ├── 🚀 INÍCIO RÁPIDO
+│   │   ├── GUIA_INICIO_RAPIDO_LOCAL.md
+│   │   ├── SEEDER_QUICK_REFERENCE.md
+│   │   ├── RESUMO_IMPLEMENTACAO_SEEDERS.md
+│   │   └── POSTMAN_QUICK_GUIDE.md
+│   │
+│   ├── 🏗️ ARQUITETURA
+│   │   ├── SYSTEM_MAPPING.md ⭐
+│   │   ├── ENTITY_DIAGRAM.md ⭐
+│   │   ├── SERVICE_LAYER_ARCHITECTURE.md
+│   │   └── BEFORE_AND_AFTER_ARCHITECTURE.md
+│   │
+│   ├── 🗄️ DADOS E SEEDERS
+│   │   ├── SEEDER_GUIDE.md ⭐
+│   │   └── CARGA_INICIAL_TESTES.md
+│   │
+│   ├── 🔐 SEGURANÇA
+│   │   ├── AUTHENTICATION_GUIDE.md ⭐
+│   │   ├── SECURITY_GUIDE.md
+│   │   ├── GUIA_DESENVOLVIMENTO_AUTH.md
+│   │   ├── QUICK_REFERENCE_PERMISSIONS.md
+│   │   └── SUGESTOES_MELHORIAS_SEGURANCA.md
+│   │
+│   ├── 👥 FUNCIONALIDADES
+│   │   ├── OWNER_FLOW_DOCUMENTATION.md
+│   │   └── SYSTEM_ADMIN_AREA_GUIDE.md
+│   │
+│   ├── 📦 IMPLEMENTAÇÕES
+│   │   └── FUNCIONALIDADES_IMPLEMENTADAS.md
+│   │
+│   ├── 🧪 TESTES E API
+│   │   ├── POSTMAN_IMPORT_GUIDE.md
+│   │   └── CI_CD_DOCUMENTATION.md
+│   │
+│   ├── 🌐 FRONTEND
+│   │   ├── FRONTEND_INTEGRATION_GUIDE.md
+│   │   └── MW_SITE_DOCUMENTATION.md
+│   │
+│   └── 🚀 INFRAESTRUTURA
+│       ├── INFRA_DOCS_INDEX.md
+│       ├── QUICK_START_PRODUCTION.md
+│       ├── DEPLOY_RAILWAY_GUIDE.md
+│       └── MIGRACAO_POSTGRESQL.md
 │
-├── 📖 NEGÓCIO E GESTÃO
-│   └── GLOSSARIO_TERMOS_EMPRESARIAIS.md ⭐
-│
-├── 🚀 INÍCIO RÁPIDO
-│   ├── SEEDER_QUICK_REFERENCE.md
-│   ├── RESUMO_IMPLEMENTACAO_SEEDERS.md
-│   └── POSTMAN_QUICK_GUIDE.md
-│
-├── 🏗️ ARQUITETURA
-│   ├── SYSTEM_MAPPING.md ⭐
-│   ├── ENTITY_DIAGRAM.md ⭐
-│   ├── SERVICE_LAYER_ARCHITECTURE.md
-│   └── BEFORE_AND_AFTER_ARCHITECTURE.md
-│
-├── 🗄️ DADOS E SEEDERS
-│   ├── SEEDER_GUIDE.md ⭐
-│   └── CARGA_INICIAL_TESTES.md
-│
-├── 🔐 SEGURANÇA
-│   ├── AUTHENTICATION_GUIDE.md ⭐
-│   ├── GUIA_DESENVOLVIMENTO_AUTH.md
-│   ├── QUICK_REFERENCE_PERMISSIONS.md
-│   └── SUGESTOES_MELHORIAS_SEGURANCA.md
-│
-├── 👥 FUNCIONALIDADES
-│   ├── OWNER_FLOW_DOCUMENTATION.md
-│   └── SYSTEM_ADMIN_AREA_GUIDE.md
-│
-├── 📦 IMPLEMENTAÇÕES
-│   └── FUNCIONALIDADES_IMPLEMENTADAS.md
-│
-├── 🧪 TESTES E API
-│   ├── POSTMAN_IMPORT_GUIDE.md
-│   └── MedicWarehouse-Postman-Collection.json
-│
-└── 🌐 FRONTEND
-    └── FRONTEND_INTEGRATION_GUIDE.md
+└── MedicWarehouse-Postman-Collection.json
 ```
 
 ⭐ = Documentos essenciais

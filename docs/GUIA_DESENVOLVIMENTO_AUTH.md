@@ -394,7 +394,7 @@ Para resetar e começar do zero:
 - [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) - Guia completo de autenticação
 - [CARGA_INICIAL_TESTES.md](CARGA_INICIAL_TESTES.md) - Detalhes sobre dados de teste
 - [SYSTEM_OWNER_ACCESS.md](SYSTEM_OWNER_ACCESS.md) - Acesso de system owners
-- [README.md](README.md) - Documentação geral do projeto
+- [README.md](../README.md) - Documentação geral do projeto
 
 ## ❓ Problemas Comuns
 

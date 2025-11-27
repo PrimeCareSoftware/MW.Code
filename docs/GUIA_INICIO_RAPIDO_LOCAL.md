@@ -322,7 +322,7 @@ curl -X POST http://localhost:5000/api/data-seeder/seed-demo
 ## 📚 Documentação Adicional
 
 - **Autenticação:** [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md)
-- **API Completa:** [README.md](README.md)
+- **API Completa:** [README.md](../README.md)
 - **Seeders:** [SEEDER_GUIDE.md](SEEDER_GUIDE.md)
 - **Postman:** [POSTMAN_IMPORT_GUIDE.md](POSTMAN_IMPORT_GUIDE.md)
 - **Pendências:** [PENDING_TASKS.md](PENDING_TASKS.md)

@@ -286,7 +286,7 @@ Authorization: Bearer {token}
 ## 📚 Documentação Adicional
 
 Para mais informações sobre o sistema, consulte:
-- [README.md](README.md) - Documentação geral do projeto
+- [README.md](../README.md) - Documentação geral do projeto
 - [IMPLEMENTACAO_FECHAMENTO_CONSULTA.md](IMPLEMENTACAO_FECHAMENTO_CONSULTA.md) - Detalhes sobre fechamento de consulta
 - [SECURITY_GUIDE.md](SECURITY_GUIDE.md) - Guia de segurança completo
 - [API_QUICK_GUIDE.md](API_QUICK_GUIDE.md) - Guia rápido da API

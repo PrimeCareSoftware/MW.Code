@@ -292,7 +292,7 @@ Antes de começar o desenvolvimento, verifique:
 
 ## 📚 Referências
 
-- [README.md](README.md) - Guia geral do projeto
+- [README.md](../README.md) - Guia geral do projeto
 - [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md) - Como executar o projeto
 - [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) - Guia de autenticação
 - [SECURITY_GUIDE.md](SECURITY_GUIDE.md) - Guia de segurança

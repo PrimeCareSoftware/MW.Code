@@ -298,7 +298,7 @@ Com as melhorias implementadas, o **MedicWarehouse** estará posicionado para se
 - 📄 [BUSINESS_RULES.md](frontend/mw-docs/src/assets/docs/BUSINESS_RULES.md) - Regras de negócio atuais
 - 📄 [FUNCIONALIDADES_IMPLEMENTADAS.md](FUNCIONALIDADES_IMPLEMENTADAS.md) - Status das funcionalidades
 - 📄 [SUGESTOES_MELHORIAS_SEGURANCA.md](SUGESTOES_MELHORIAS_SEGURANCA.md) - Melhorias de segurança
-- 📄 [README.md](README.md) - Visão geral do projeto
+- 📄 [README.md](../README.md) - Visão geral do projeto
 
 ---
 

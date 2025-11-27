@@ -15,10 +15,10 @@ const documentFiles = [
   // Raiz do projeto
   { path: 'README.md', title: '📚 README Principal', category: 'Início' },
   
-  // Documentação essencial da raiz
-  { path: 'AUTHENTICATION_GUIDE.md', title: '🔐 Guia de Autenticação', category: 'Guias' },
-  { path: 'GLOSSARIO_TERMOS_EMPRESARIAIS.md', title: '📖 Glossário de Termos Empresariais', category: 'Referência' },
-  { path: 'DOCUMENTATION_INDEX.md', title: '📚 Índice de Documentação', category: 'Referência' },
+  // Documentação essencial em docs/
+  { path: 'docs/AUTHENTICATION_GUIDE.md', title: '🔐 Guia de Autenticação', category: 'Guias' },
+  { path: 'docs/GLOSSARIO_TERMOS_EMPRESARIAIS.md', title: '📖 Glossário de Termos Empresariais', category: 'Referência' },
+  { path: 'docs/DOCUMENTATION_INDEX.md', title: '📚 Índice de Documentação', category: 'Referência' },
   
   // Frontend mw-docs
   { path: 'frontend/mw-docs/src/assets/docs/README.md', title: '📖 README', category: 'Guias' },

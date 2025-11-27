@@ -372,7 +372,7 @@ Ambos os apps utilizam componentes nativos de suas plataformas:
 - [README Mobile Geral](mobile/README.md)
 
 ### API
-- [Documentação da API](README.md)
+- [Documentação da API](../README.md)
 - [Swagger UI](http://localhost:5000/swagger)
 - [Postman Collection](../MedicWarehouse-Postman-Collection.json)
 

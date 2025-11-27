@@ -353,7 +353,7 @@ curl -X POST http://localhost:5000/api/data-seeder/seed-demo
 4. **[RESUMO_SISTEMA_COMPLETO.md](RESUMO_SISTEMA_COMPLETO.md)** - Documentação executiva
 
 ### Documentação Existente Verificada
-5. [README.md](README.md) - Visão geral atualizada
+5. [README.md](../README.md) - Visão geral atualizada
 6. [SEEDER_GUIDE.md](SEEDER_GUIDE.md) - Detalhes do seeder
 7. [PENDING_TASKS.md](PENDING_TASKS.md) - Roadmap 2025-2026
 8. [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) - JWT completo

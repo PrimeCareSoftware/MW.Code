@@ -134,7 +134,7 @@ Muitos endpoints precisam de IDs (como patientId, appointmentId, etc.). Para sub
 ## 📖 Documentação Adicional
 
 - **Swagger UI**: http://localhost:5000/swagger (quando a API estiver rodando)
-- **README do Projeto**: [README.md](README.md)
+- **README do Projeto**: [README.md](../README.md)
 - **Guia de Execução**: [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
 - **Repositório GitHub**: https://github.com/MedicWarehouse/MW.Code
 

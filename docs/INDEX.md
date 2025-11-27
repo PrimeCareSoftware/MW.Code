@@ -10,21 +10,21 @@ Bem-vindo à documentação completa do sistema MedicWarehouse. Use este índice
 
 | Documento | Descrição | Tamanho | Ideal Para |
 |-----------|-----------|---------|------------|
-| **[SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md)** | Documentação completa de todas as 8 telas do sistema com mockups ASCII e diagramas de fluxo | 40KB / 813 linhas | Desenvolvedores frontend, designers, analistas de UX |
+| **[SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md)** | Documentação completa de todas as 8 telas do sistema com mockups ASCII e diagramas de fluxo | 40KB / 813 linhas | Desenvolvedores frontend, designers, analistas de UX |
 | **[VISUAL_FLOW_SUMMARY.md](VISUAL_FLOW_SUMMARY.md)** | Resumo visual rápido com diagramas Mermaid interativos dos principais fluxos | 12KB / 387 linhas | Quick reference, reuniões, apresentações |
 
 ### 📋 Regras de Negócio e Requisitos
 
 | Documento | Descrição | Tamanho | Ideal Para |
 |-----------|-----------|---------|------------|
-| **[BUSINESS_RULES.md](../BUSINESS_RULES.md)** | Regras de negócio detalhadas do sistema incluindo multi-tenancy, vínculos, privacidade | Extenso | Analistas de negócio, product owners, stakeholders |
+| **[BUSINESS_RULES.md](BUSINESS_RULES.md)** | Regras de negócio detalhadas do sistema incluindo multi-tenancy, vínculos, privacidade | Extenso | Analistas de negócio, product owners, stakeholders |
 
 ### 🔧 Implementação Técnica
 
 | Documento | Descrição | Tamanho | Ideal Para |
 |-----------|-----------|---------|------------|
-| **[TECHNICAL_IMPLEMENTATION.md](../TECHNICAL_IMPLEMENTATION.md)** | Arquitetura técnica, fluxos de dados, configurações do EF Core, segurança | Extenso | Desenvolvedores backend, arquitetos, DevOps |
-| **[IMPLEMENTATION.md](../IMPLEMENTATION.md)** | Implementação original do sistema de atendimento ao paciente | Médio | Desenvolvedores, referência histórica |
+| **[TECHNICAL_IMPLEMENTATION.md](TECHNICAL_IMPLEMENTATION.md)** | Arquitetura técnica, fluxos de dados, configurações do EF Core, segurança | Extenso | Desenvolvedores backend, arquitetos, DevOps |
+| **[IMPLEMENTATION.md](IMPLEMENTATION.md)** | Implementação original do sistema de atendimento ao paciente | Médio | Desenvolvedores, referência histórica |
 
 ### 🚀 Guias de Uso
 
@@ -34,25 +34,25 @@ Bem-vindo à documentação completa do sistema MedicWarehouse. Use este índice
 | **[GUIA_TESTES_PASSO_A_PASSO.md](GUIA_TESTES_PASSO_A_PASSO.md)** | 🆕 **Guia completo de testes passo a passo para todas as telas e APIs** | Grande / 1000+ linhas | Testadores, desenvolvedores, usuários finais testando o sistema |
 | **[SYSTEM_SETUP_GUIDE.md](../frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md)** | 🆕 **Guia completo de configuração e ordem correta de cadastro** | Grande | Desenvolvedores, administradores, essencial para setup inicial |
 | **[ORDEM_CORRETA_CADASTRO.md](ORDEM_CORRETA_CADASTRO.md)** | 🆕 **Referência rápida da ordem de cadastro** | Pequeno | Quick reference, consulta rápida |
-| **[GUIA_EXECUCAO.md](../GUIA_EXECUCAO.md)** | Guia passo a passo para executar o projeto localmente | Médio | Desenvolvedores, configuração inicial |
-| **[API_QUICK_GUIDE.md](../API_QUICK_GUIDE.md)** | Guia rápido dos endpoints da API com exemplos | Médio | Desenvolvedores de integração, testes |
+| **[GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)** | Guia passo a passo para executar o projeto localmente | Médio | Desenvolvedores, configuração inicial |
+| **[API_QUICK_GUIDE.md](API_QUICK_GUIDE.md)** | Guia rápido dos endpoints da API com exemplos | Médio | Desenvolvedores de integração, testes |
 
 ### 🔄 CI/CD e Qualidade
 
 | Documento | Descrição | Tamanho | Ideal Para |
 |-----------|-----------|---------|------------|
-| **[CI_CD_DOCUMENTATION.md](../CI_CD_DOCUMENTATION.md)** | Documentação do pipeline de CI/CD com GitHub Actions | Médio | DevOps, engenheiros de CI/CD |
-| **[TEST_SUMMARY.md](../TEST_SUMMARY.md)** | Resumo dos testes unitários e cobertura de código | Médio | QA, desenvolvedores |
-| **[SECURITY_VALIDATIONS.md](../SECURITY_VALIDATIONS.md)** | Validações de segurança implementadas no sistema | Médio | Security engineers, auditores |
+| **[CI_CD_DOCUMENTATION.md](CI_CD_DOCUMENTATION.md)** | Documentação do pipeline de CI/CD com GitHub Actions | Médio | DevOps, engenheiros de CI/CD |
+| **[TEST_SUMMARY.md](TEST_SUMMARY.md)** | Resumo dos testes unitários e cobertura de código | Médio | QA, desenvolvedores |
+| **[SECURITY_VALIDATIONS.md](SECURITY_VALIDATIONS.md)** | Validações de segurança implementadas no sistema | Médio | Security engineers, auditores |
 
 ### 📝 Resumos de Implementação
 
 | Documento | Descrição | Tamanho | Ideal Para |
 |-----------|-----------|---------|------------|
-| **[IMPLEMENTATION_SUMMARY.md](../IMPLEMENTATION_SUMMARY.md)** | Resumo geral das implementações | Pequeno | Visão geral rápida |
-| **[IMPLEMENTATION_NEW_FEATURES.md](../IMPLEMENTATION_NEW_FEATURES.md)** | Novas funcionalidades implementadas | Pequeno | Product managers, changelog |
-| **[IMPLEMENTATION_SUMMARY_BUSINESS_RULES.md](../IMPLEMENTATION_SUMMARY_BUSINESS_RULES.md)** | Resumo da implementação das regras de negócio | Pequeno | Analistas de negócio |
-| **[MIGRATION_IMPLEMENTATION_SUMMARY.md](../MIGRATION_IMPLEMENTATION_SUMMARY.md)** | Resumo das migrações de banco de dados | Pequeno | DBAs, DevOps |
+| **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** | Resumo geral das implementações | Pequeno | Visão geral rápida |
+| **[IMPLEMENTATION_NEW_FEATURES.md](IMPLEMENTATION_NEW_FEATURES.md)** | Novas funcionalidades implementadas | Pequeno | Product managers, changelog |
+| **[IMPLEMENTATION_SUMMARY_BUSINESS_RULES.md](IMPLEMENTATION_SUMMARY_BUSINESS_RULES.md)** | Resumo da implementação das regras de negócio | Pequeno | Analistas de negócio |
+| **[MIGRATION_IMPLEMENTATION_SUMMARY.md](MIGRATION_IMPLEMENTATION_SUMMARY.md)** | Resumo das migrações de banco de dados | Pequeno | DBAs, DevOps |
 
 ---
 
@@ -140,44 +140,44 @@ graph LR
 ## 🔍 Busca Rápida por Tópico
 
 ### 🏥 Multi-Tenancy e Isolamento
-- [BUSINESS_RULES.md](../BUSINESS_RULES.md) - Seção 1
-- [TECHNICAL_IMPLEMENTATION.md](../TECHNICAL_IMPLEMENTATION.md) - Seções 1 e 2
-- [SECURITY_VALIDATIONS.md](../SECURITY_VALIDATIONS.md)
+- [BUSINESS_RULES.md](BUSINESS_RULES.md) - Seção 1
+- [TECHNICAL_IMPLEMENTATION.md](TECHNICAL_IMPLEMENTATION.md) - Seções 1 e 2
+- [SECURITY_VALIDATIONS.md](SECURITY_VALIDATIONS.md)
 
 ### 👥 Gestão de Pacientes
-- [BUSINESS_RULES.md](../BUSINESS_RULES.md) - Seção 1
-- [SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md) - Telas 4 e 5
+- [BUSINESS_RULES.md](BUSINESS_RULES.md) - Seção 1
+- [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md) - Telas 4 e 5
 - [VISUAL_FLOW_SUMMARY.md](VISUAL_FLOW_SUMMARY.md) - Fluxo 3
 
 ### 📅 Agendamentos e Atendimento
-- [BUSINESS_RULES.md](../BUSINESS_RULES.md) - Seções 3 e 4
-- [SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md) - Telas 6, 7 e 8
+- [BUSINESS_RULES.md](BUSINESS_RULES.md) - Seções 3 e 4
+- [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md) - Telas 6, 7 e 8
 - [VISUAL_FLOW_SUMMARY.md](VISUAL_FLOW_SUMMARY.md) - Fluxos 1 e 2
 
 ### 📋 Prontuários e Timeline
-- [BUSINESS_RULES.md](../BUSINESS_RULES.md) - Seção 5
-- [TECHNICAL_IMPLEMENTATION.md](../TECHNICAL_IMPLEMENTATION.md) - Seção 5
-- [SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md) - Tela 8
+- [BUSINESS_RULES.md](BUSINESS_RULES.md) - Seção 5
+- [TECHNICAL_IMPLEMENTATION.md](TECHNICAL_IMPLEMENTATION.md) - Seção 5
+- [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md) - Tela 8
 
 ### 💊 Medicamentos e Prescrições
-- [BUSINESS_RULES.md](../BUSINESS_RULES.md) - Seção 7
+- [BUSINESS_RULES.md](BUSINESS_RULES.md) - Seção 7
 - [README.md](../README.md) - Funcionalidades
-- [SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md) - Tela 8
+- [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md) - Tela 8
 
 ### 🔐 Segurança e Autenticação
-- [SECURITY_VALIDATIONS.md](../SECURITY_VALIDATIONS.md)
+- [SECURITY_VALIDATIONS.md](SECURITY_VALIDATIONS.md)
 - [SYSTEM_SETUP_GUIDE.md](../frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md) - 🆕 Seção de Autenticação
-- [TECHNICAL_IMPLEMENTATION.md](../TECHNICAL_IMPLEMENTATION.md)
+- [TECHNICAL_IMPLEMENTATION.md](TECHNICAL_IMPLEMENTATION.md)
 - [README.md](../README.md) - Seção Segurança
 
 ### 🎨 Interface e Fluxos
-- [SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md) - **Principal**
+- [SCREENS_DOCUMENTATION.md](SCREENS_DOCUMENTATION.md) - **Principal**
 - [VISUAL_FLOW_SUMMARY.md](VISUAL_FLOW_SUMMARY.md) - **Resumo Rápido**
-- [BUSINESS_RULES.md](../BUSINESS_RULES.md) - Seção 6
+- [BUSINESS_RULES.md](BUSINESS_RULES.md) - Seção 6
 
 ### 🔄 API e Integrações
-- [API_QUICK_GUIDE.md](../API_QUICK_GUIDE.md) - **Guia Principal**
-- [TECHNICAL_IMPLEMENTATION.md](../TECHNICAL_IMPLEMENTATION.md) - Fluxos de dados
+- [API_QUICK_GUIDE.md](API_QUICK_GUIDE.md) - **Guia Principal**
+- [TECHNICAL_IMPLEMENTATION.md](TECHNICAL_IMPLEMENTATION.md) - Fluxos de dados
 - [README.md](../README.md) - Documentação da API
 
 ---
