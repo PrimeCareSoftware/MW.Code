@@ -426,10 +426,123 @@ curl -X POST http://localhost:5000/api/patients/{patientId}/link-clinic/{clinicI
 
 - **Documentação Completa**: [BUSINESS_RULES.md](BUSINESS_RULES.md)
 - **Detalhes Técnicos**: [TECHNICAL_IMPLEMENTATION.md](TECHNICAL_IMPLEMENTATION.md)
+- **Editor de Texto Rico e Autocomplete**: [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](RICH_TEXT_EDITOR_AUTOCOMPLETE.md)
 - **README**: [README.md](README.md)
 
 ---
 
-**Versão**: 1.0  
-**Data**: Janeiro 2025  
+## 💊 Endpoints de Medicações (NOVO!)
+
+### Busca de Medicações para Autocomplete
+
+**Endpoint**: `GET /api/medications/search`
+
+**Query Parameters**:
+- `term` (string, obrigatório): Termo de busca (mínimo 2 caracteres)
+
+**Exemplo**:
+```bash
+GET /api/medications/search?term=dipi
+Authorization: Bearer {token}
+X-Tenant-Id: demo-clinic-001
+```
+
+**Resposta**:
+```json
+[
+  {
+    "id": "guid",
+    "name": "Dipirona Sódica",
+    "genericName": "Dipyrone",
+    "dosage": "500mg",
+    "pharmaceuticalForm": "Comprimido",
+    "administrationRoute": "Oral",
+    "displayText": "Dipirona Sódica 500mg - Comprimido"
+  }
+]
+```
+
+**Características**:
+- ✅ Busca por nome comercial e genérico
+- ✅ Limite de 20 resultados para performance
+- ✅ Filtrado por TenantId
+- ✅ Apenas medicações ativas
+
+### Outros Endpoints de Medicações
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/medications` | Lista todas as medicações |
+| GET | `/api/medications/{id}` | Obtém medicação por ID |
+| GET | `/api/medications/category/{category}` | Lista por categoria |
+| POST | `/api/medications` | Cria nova medicação |
+| PUT | `/api/medications/{id}` | Atualiza medicação |
+| DELETE | `/api/medications/{id}` | Desativa medicação |
+
+---
+
+## 🔬 Endpoints de Catálogo de Exames (NOVO!)
+
+### Busca de Exames para Autocomplete
+
+**Endpoint**: `GET /api/exam-catalog/search`
+
+**Query Parameters**:
+- `term` (string, obrigatório): Termo de busca (mínimo 2 caracteres)
+
+**Exemplo**:
+```bash
+GET /api/exam-catalog/search?term=hemo
+Authorization: Bearer {token}
+X-Tenant-Id: demo-clinic-001
+```
+
+**Resposta**:
+```json
+[
+  {
+    "id": "guid",
+    "name": "Hemograma Completo",
+    "examType": "Laboratory",
+    "category": "Hematologia",
+    "preparation": "Jejum de 4 horas",
+    "displayText": "Hemograma Completo"
+  }
+]
+```
+
+**Características**:
+- ✅ Busca por nome e sinônimos
+- ✅ Limite de 20 resultados para performance
+- ✅ Filtrado por TenantId
+- ✅ Apenas exames ativos
+
+### Outros Endpoints de Catálogo de Exames
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/exam-catalog` | Lista todos os exames |
+| GET | `/api/exam-catalog/{id}` | Obtém exame por ID |
+| GET | `/api/exam-catalog/type/{examType}` | Lista por tipo |
+| GET | `/api/exam-catalog/category/{category}` | Lista por categoria |
+| POST | `/api/exam-catalog` | Cria novo exame |
+| PUT | `/api/exam-catalog/{id}` | Atualiza exame |
+| DELETE | `/api/exam-catalog/{id}` | Desativa exame |
+
+### Tipos de Exame Disponíveis
+
+| Tipo | Descrição |
+|------|-----------|
+| Laboratory | Exames laboratoriais |
+| Imaging | Exames de imagem |
+| Ultrasound | Ultrassonografia |
+| Cardiac | Exames cardíacos |
+| Endoscopy | Endoscopia |
+| Biopsy | Biópsia |
+| Other | Outros |
+
+---
+
+**Versão**: 1.1  
+**Data**: Novembro 2025  
 **Autor**: Equipe MedicWarehouse

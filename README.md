@@ -206,6 +206,15 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Medicamentos Controlados**: Identificação de substâncias controladas (Portaria 344/98)
 - ✅ **Categorias**: Analgésico, Antibiótico, Anti-inflamatório, etc.
 
+### 📝 Editor de Texto Rico e Autocomplete 🆕
+- ✅ **Editor de Texto Rico**: Formatação avançada (negrito, itálico, listas, títulos)
+- ✅ **Autocomplete de Medicações**: Digite `@@` para buscar medicações (130+ itens)
+- ✅ **Autocomplete de Exames**: Digite `##` para buscar exames (150+ itens)
+- ✅ **Navegação por Teclado**: ↑↓ para navegar, Enter para selecionar
+- ✅ **Dados em PT-BR**: Base completa de medicações e exames brasileiros
+- ✅ **Integração no Atendimento**: Campos de diagnóstico, prescrição e observações
+- 📖 **Documentação**: [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](docs/RICH_TEXT_EDITOR_AUTOCOMPLETE.md)
+
 ### 📅 Agendamentos e Atendimento
 - ✅ **CRUD de Pacientes**: Cadastro completo com validações
 - ✅ **Agendamento de Consultas**: Sistema completo de agendamentos

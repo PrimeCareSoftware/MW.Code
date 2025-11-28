@@ -107,6 +107,45 @@ Este documento responde diretamente às funcionalidades solicitadas no problema 
 **Endpoints:**
 - `POST /api/medical-records` - Criar prontuário com prescrição
 
+### 🆕 Editor de Texto Rico com Autocomplete (NOVO!)
+
+Sistema avançado de edição de texto com formatação e predição inteligente de medicações e exames.
+
+**Funcionalidades:**
+- ✅ **Formatação de Texto**: Negrito, itálico, sublinhado, listas, títulos
+- ✅ **Autocomplete de Medicações**: Digite `@@` + nome para sugestões (130+ medicações)
+- ✅ **Autocomplete de Exames**: Digite `##` + nome para sugestões (150+ exames)
+- ✅ **Navegação por Teclado**: ↑↓ para navegar, Enter para selecionar, Esc para fechar
+- ✅ **Dados em Português BR**: Base completa de medicações e exames brasileiros
+- ✅ **Multi-tenant**: Dados isolados por clínica
+
+**Campos Integrados no Atendimento:**
+- **Diagnóstico**: Formatação básica (sem autocomplete)
+- **Prescrição Médica**: Autocomplete de medicações (`@@`)
+- **Observações Clínicas**: Autocomplete de medicações (`@@`) e exames (`##`)
+
+**Endpoints de Medicações:**
+- `GET /api/medications` - Listar medicações
+- `GET /api/medications/search?term={termo}` - Busca para autocomplete
+- `GET /api/medications/{id}` - Obter medicação por ID
+- `GET /api/medications/category/{category}` - Listar por categoria
+- `POST /api/medications` - Criar nova medicação
+- `PUT /api/medications/{id}` - Atualizar medicação
+- `DELETE /api/medications/{id}` - Desativar medicação
+
+**Endpoints de Catálogo de Exames:**
+- `GET /api/exam-catalog` - Listar exames
+- `GET /api/exam-catalog/search?term={termo}` - Busca para autocomplete
+- `GET /api/exam-catalog/{id}` - Obter exame por ID
+- `GET /api/exam-catalog/type/{examType}` - Listar por tipo
+- `GET /api/exam-catalog/category/{category}` - Listar por categoria
+- `POST /api/exam-catalog` - Criar novo exame
+- `PUT /api/exam-catalog/{id}` - Atualizar exame
+- `DELETE /api/exam-catalog/{id}` - Desativar exame
+
+**Documentação:**
+- [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](RICH_TEXT_EDITOR_AUTOCOMPLETE.md)
+
 ### Documentos
 - ✅ Armazenamento de diagnóstico
 - ✅ Armazenamento de prescrições

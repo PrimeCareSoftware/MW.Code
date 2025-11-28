@@ -69,6 +69,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 |-----------|-----------|------------------|
 | [OWNER_FLOW_DOCUMENTATION.md](./OWNER_FLOW_DOCUMENTATION.md) | Fluxo de proprietários | 10 min |
 | [SYSTEM_ADMIN_AREA_GUIDE.md](./SYSTEM_ADMIN_AREA_GUIDE.md) | Área administrativa do sistema | 8 min |
+| [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](./RICH_TEXT_EDITOR_AUTOCOMPLETE.md) | 🆕 **NOVO!** Editor de texto rico com autocomplete de medicações e exames | 15 min |
 
 ### 📦 Implementações e Histórico
 
@@ -214,6 +215,9 @@ MW.Code/
 | **Pendências e planejamento futuro** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
 | **Melhorias e roadmap** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
 | **Gaps e funcionalidades faltantes** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
+| **Editor de texto rico e autocomplete** | [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](./RICH_TEXT_EDITOR_AUTOCOMPLETE.md) 🆕 **NOVO!** |
+| **Autocomplete de medicações** | [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](./RICH_TEXT_EDITOR_AUTOCOMPLETE.md) 🆕 **NOVO!** |
+| **Catálogo de exames** | [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](./RICH_TEXT_EDITOR_AUTOCOMPLETE.md) 🆕 **NOVO!** |
 | **Termos empresariais** | [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) |
 | **Como começar** | [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) |
 | **Estrutura do banco de dados** | [ENTITY_DIAGRAM.md](./ENTITY_DIAGRAM.md) |
@@ -231,7 +235,7 @@ MW.Code/
 
 ## 📊 Estatísticas da Documentação
 
-- **Total de Documentos:** 48 arquivos markdown
+- **Total de Documentos:** 49 arquivos markdown
 - **Documentos Essenciais:** 6
 - **Tempo Total de Leitura:** ~3 horas (documentos essenciais)
 - **Idioma Principal:** Português (PT-BR)
@@ -249,6 +253,9 @@ Os documentos mantidos seguem os seguintes critérios:
 ---
 
 ## 🆕 Documentos Criados Recentemente
+
+### ✨ Novos (2025-11-28)
+1. 🆕 **RICH_TEXT_EDITOR_AUTOCOMPLETE.md** - Editor de texto rico com autocomplete de medicações e exames
 
 ### ✨ Novos (2025-10-27)
 1. ⭐ **GLOSSARIO_TERMOS_EMPRESARIAIS.md** - Glossário completo de termos empresariais
