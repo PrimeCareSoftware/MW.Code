@@ -517,7 +517,7 @@ namespace MedicSoft.Application.Services
             // Adult patients
             patients.Add(new Patient(
                 "Carlos Alberto Santos",
-                "123.456.789-00",
+                "529.982.247-25",
                 new DateTime(1980, 5, 15),
                 "Masculino",
                 new Email("carlos.santos@email.com"),
@@ -530,7 +530,7 @@ namespace MedicSoft.Application.Services
 
             patients.Add(new Patient(
                 "Ana Maria Oliveira",
-                "234.567.890-11",
+                "318.649.712-40",
                 new DateTime(1975, 8, 20),
                 "Feminino",
                 new Email("ana.oliveira@email.com"),
@@ -543,7 +543,7 @@ namespace MedicSoft.Application.Services
 
             patients.Add(new Patient(
                 "Pedro Henrique Costa",
-                "345.678.901-22",
+                "123.891.234-65",
                 new DateTime(1990, 3, 10),
                 "Masculino",
                 new Email("pedro.costa@email.com"),
@@ -557,7 +557,7 @@ namespace MedicSoft.Application.Services
             // Guardian (mother)
             var guardian = new Patient(
                 "Juliana Martins Silva",
-                "456.789.012-33",
+                "456.782.345-10",
                 new DateTime(1985, 12, 25),
                 "Feminino",
                 new Email("juliana.martins@email.com"),
@@ -572,7 +572,7 @@ namespace MedicSoft.Application.Services
             // Children linked to guardian
             var child1 = new Patient(
                 "Lucas Martins Silva",
-                "567.890.123-44",
+                "789.673.456-74",
                 new DateTime(2015, 6, 10),
                 "Masculino",
                 new Email("lucas.martins@email.com"),
@@ -587,7 +587,7 @@ namespace MedicSoft.Application.Services
 
             var child2 = new Patient(
                 "Sofia Martins Silva",
-                "678.901.234-55",
+                "912.564.567-64",
                 new DateTime(2017, 9, 15),
                 "Feminino",
                 new Email("sofia.martins@email.com"),
