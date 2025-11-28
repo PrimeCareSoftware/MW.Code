@@ -1,7 +1,8 @@
 .appointment-list-container {
-  max-width: 1400px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
   padding: var(--spacing-8) var(--spacing-6);
+  animation: fadeIn 0.4s ease-out;
 }
 
 .page-header {
@@ -9,24 +10,31 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-8);
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
 
   h1 {
     color: var(--gray-900);
-    margin: 0 0 var(--spacing-2) 0;
-    font-size: var(--font-size-4xl);
-    font-weight: 700;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--spacing-1);
   }
 
   p {
-    color: var(--gray-600);
+    color: var(--gray-500);
+    font-size: var(--font-size-base);
     margin: 0;
-    font-size: var(--font-size-lg);
   }
 
   .header-actions {
     display: flex;
-    gap: var(--spacing-4);
+    gap: var(--spacing-3);
     align-items: center;
+
+    .btn svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 
@@ -42,60 +50,67 @@
   gap: var(--spacing-4);
 
   label {
-    font-weight: 600;
+    font-weight: var(--font-medium);
     color: var(--gray-700);
     font-size: var(--font-size-sm);
+    white-space: nowrap;
   }
 
   .date-input {
     padding: var(--spacing-3) var(--spacing-4);
-    border: 2px solid var(--gray-300);
+    border: 1px solid var(--gray-300);
     border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
     transition: all var(--transition-base);
+    background: white;
     
     &:focus {
       outline: none;
       border-color: var(--primary-500);
-      box-shadow: 0 0 0 3px var(--primary-50);
+      box-shadow: 0 0 0 3px var(--primary-100);
     }
   }
 }
 
 .agenda-info {
   background: white;
-  padding: var(--spacing-6);
+  padding: var(--spacing-5) var(--spacing-6);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--gray-200);
   margin-bottom: var(--spacing-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h3 {
-    margin: 0 0 var(--spacing-2) 0;
+    margin: 0;
     color: var(--gray-900);
-    font-weight: 600;
+    font-weight: var(--font-semibold);
+    font-size: var(--font-size-lg);
   }
 
   p {
     margin: 0;
-    color: var(--gray-600);
+    color: var(--gray-500);
     font-size: var(--font-size-sm);
   }
 }
 
 .appointments-grid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-4);
 }
 
 .appointment-card {
   background: white;
-  padding: var(--spacing-6);
+  padding: var(--spacing-5) var(--spacing-6);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--gray-200);
   display: grid;
-  grid-template-columns: 100px 1fr auto;
+  grid-template-columns: 80px 1fr auto;
   gap: var(--spacing-6);
   align-items: center;
   transition: all var(--transition-base);
@@ -103,57 +118,61 @@
   &:hover {
     box-shadow: var(--shadow-md);
     border-color: var(--primary-300);
+    transform: translateY(-2px);
   }
 
   .appointment-time {
-    font-size: var(--font-size-2xl);
-    font-weight: 700;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-bold);
     color: var(--primary-600);
+    font-family: var(--font-family-mono);
   }
 
   .appointment-info {
     h4 {
       margin: 0 0 var(--spacing-2) 0;
       color: var(--gray-900);
-      font-weight: 600;
+      font-weight: var(--font-semibold);
+      font-size: var(--font-size-base);
     }
 
     p {
       margin: 0;
-      color: var(--gray-600);
+      color: var(--gray-500);
       font-size: var(--font-size-sm);
     }
 
     .status {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       margin-top: var(--spacing-2);
       padding: var(--spacing-1) var(--spacing-3);
       border-radius: var(--radius-full);
       font-size: var(--font-size-xs);
-      font-weight: 600;
+      font-weight: var(--font-semibold);
 
       &.status-scheduled {
-        background: var(--info-50);
+        background: var(--info-100);
         color: var(--info-700);
       }
 
       &.status-confirmed {
-        background: var(--success-50);
+        background: var(--success-100);
         color: var(--success-700);
       }
 
       &.status-cancelled {
-        background: var(--error-50);
+        background: var(--error-100);
         color: var(--error-700);
       }
       
       &.status-inprogress {
-        background: var(--warning-50);
-        color: var(--warning-600);
+        background: var(--warning-100);
+        color: var(--warning-700);
       }
       
       &.status-completed {
-        background: var(--success-50);
+        background: var(--success-100);
         color: var(--success-700);
       }
     }
@@ -161,7 +180,7 @@
     .notes {
       margin-top: var(--spacing-3);
       font-style: italic;
-      color: var(--gray-500);
+      color: var(--gray-400);
       font-size: var(--font-size-xs);
     }
   }
@@ -170,71 +189,36 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-2);
+    align-items: flex-end;
 
     .btn {
-      padding: var(--spacing-2) var(--spacing-4);
-      border: none;
-      border-radius: var(--radius-md);
-      cursor: pointer;
       font-size: var(--font-size-xs);
-      font-weight: 600;
-      text-decoration: none;
-      text-align: center;
-      transition: all var(--transition-base);
+      padding: var(--spacing-2) var(--spacing-4);
 
       &.btn-sm {
         padding: var(--spacing-2) var(--spacing-3);
-        font-size: var(--font-size-xs);
-      }
-
-      &.btn-primary {
-        background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-        color: white;
-
-        &:hover {
-          background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
-          transform: translateY(-1px);
-          box-shadow: var(--shadow-md);
-        }
-      }
-
-      &.btn-success {
-        background: linear-gradient(135deg, var(--success-600), var(--success-700));
-        color: white;
-
-        &:hover {
-          background: linear-gradient(135deg, var(--success-700), var(--success-700));
-          transform: translateY(-1px);
-        }
       }
     }
 
     .badge {
       padding: var(--spacing-2) var(--spacing-3);
-      border-radius: var(--radius-full);
       font-size: var(--font-size-xs);
-      font-weight: 600;
       text-align: center;
-
-      &.badge-completed {
-        background: var(--success-50);
-        color: var(--success-700);
-      }
     }
 
     .btn-cancel {
       padding: var(--spacing-2) var(--spacing-4);
-      background-color: var(--error-50);
-      color: var(--error-700);
+      background-color: transparent;
+      color: var(--error-600);
       border: 1px solid var(--error-200);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
       cursor: pointer;
       font-size: var(--font-size-xs);
-      font-weight: 500;
+      font-weight: var(--font-medium);
       transition: all var(--transition-base);
 
       &:hover:not(:disabled) {
-        background-color: var(--error-100);
+        background-color: var(--error-50);
         border-color: var(--error-300);
       }
 
@@ -242,46 +226,6 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
-    }
-  }
-}
-
-.btn {
-  padding: var(--spacing-3) var(--spacing-6);
-  border: none;
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-base);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  &.btn-primary {
-    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-    color: white;
-    box-shadow: var(--shadow-md);
-
-    &:hover {
-      background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-  }
-
-  &.btn-outline {
-    background-color: white;
-    color: var(--primary-600);
-    border: 2px solid var(--primary-600);
-
-    &:hover {
-      background-color: var(--primary-50);
     }
   }
 }
@@ -304,25 +248,31 @@
       margin: 0;
       color: var(--gray-900);
       text-transform: capitalize;
-      font-weight: 700;
+      font-weight: var(--font-bold);
+      font-size: var(--font-size-xl);
     }
 
     .btn-nav {
       background: transparent;
-      border: none;
+      border: 1px solid var(--gray-200);
       cursor: pointer;
       padding: var(--spacing-2);
-      border-radius: var(--radius-full);
+      border-radius: var(--radius-lg);
       transition: all var(--transition-base);
       color: var(--gray-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       &:hover {
         background-color: var(--gray-100);
         color: var(--primary-600);
+        border-color: var(--gray-300);
       }
 
       svg {
-        display: block;
+        width: 20px;
+        height: 20px;
       }
     }
   }
@@ -335,8 +285,8 @@
     .calendar-day-header {
       text-align: center;
       padding: var(--spacing-3) var(--spacing-2);
-      font-weight: 600;
-      color: var(--gray-600);
+      font-weight: var(--font-semibold);
+      color: var(--gray-500);
       font-size: var(--font-size-sm);
     }
 
@@ -352,11 +302,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      background: white;
 
       &:hover {
         background-color: var(--gray-50);
         border-color: var(--primary-400);
-        transform: scale(1.05);
+        transform: scale(1.02);
       }
 
       &.other-month {
@@ -371,32 +322,32 @@
       }
 
       &.today {
-        background-color: var(--info-50);
-        border-color: var(--info-500);
+        background-color: var(--primary-50);
+        border-color: var(--primary-500);
         border-width: 2px;
 
         .day-number {
-          color: var(--info-600);
-          font-weight: 700;
+          color: var(--primary-600);
+          font-weight: var(--font-bold);
         }
       }
 
       &.has-appointments {
-        border-color: var(--primary-500);
-        background-color: var(--primary-50);
+        border-color: var(--success-500);
+        background-color: var(--success-50);
       }
 
       .day-number {
         font-size: var(--font-size-base);
         color: var(--gray-900);
-        font-weight: 500;
+        font-weight: var(--font-medium);
       }
 
       .appointment-badge {
         position: absolute;
         top: var(--spacing-1);
         right: var(--spacing-1);
-        background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+        background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
         color: white;
         border-radius: var(--radius-full);
         min-width: 20px;
@@ -405,7 +356,7 @@
         align-items: center;
         justify-content: center;
         font-size: var(--font-size-xs);
-        font-weight: 700;
+        font-weight: var(--font-bold);
         padding: 0 var(--spacing-1);
         box-shadow: var(--shadow-sm);
       }
@@ -413,23 +364,28 @@
   }
 }
 
-.alert {
-  padding: var(--spacing-4);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-6);
-
-  &.alert-error {
-    background-color: var(--error-50);
-    color: var(--error-700);
-    border-left: 4px solid var(--error-500);
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-12);
+  color: var(--gray-500);
+  gap: var(--spacing-4);
+  
+  &::before {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary-500);
+    border-radius: var(--radius-full);
+    animation: spin 1s linear infinite;
   }
 }
 
-.loading {
-  text-align: center;
-  padding: var(--spacing-12);
-  font-size: var(--font-size-xl);
-  color: var(--gray-500);
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .empty-state {
@@ -441,15 +397,8 @@
   border: 2px dashed var(--gray-300);
 
   p {
-    font-size: var(--font-size-xl);
-    color: var(--gray-600);
+    font-size: var(--font-size-lg);
+    color: var(--gray-500);
     margin-bottom: var(--spacing-6);
-    
-    &::before {
-      content: '📅';
-      font-size: var(--font-size-4xl);
-      display: block;
-      margin-bottom: var(--spacing-4);
-    }
   }
 }
