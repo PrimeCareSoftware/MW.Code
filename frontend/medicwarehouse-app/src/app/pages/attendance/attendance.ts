@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { Navbar } from '../../shared/navbar/navbar';
+import { RichTextEditor } from '../../shared/rich-text-editor/rich-text-editor';
 import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
 import { PatientService } from '../../services/patient';
@@ -14,11 +15,13 @@ import { MedicalRecord } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
 import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
 import { ExamRequest, ExamType, ExamUrgency, ExamTypeLabels, ExamUrgencyLabels } from '../../models/exam-request.model';
+import { MedicationAutocomplete } from '../../models/medication.model';
+import { ExamAutocomplete } from '../../models/exam-catalog.model';
 
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor],
   templateUrl: './attendance.html',
   styleUrl: './attendance.scss'
 })
@@ -423,5 +426,18 @@ export class Attendance implements OnInit, OnDestroy {
 
   getTotalProceduresCost(): number {
     return this.appointmentProcedures().reduce((sum, proc) => sum + proc.priceCharged, 0);
+  }
+
+  // Event handlers for medication and exam autocomplete
+  onMedicationSelected(medication: MedicationAutocomplete): void {
+    console.log('Medicação selecionada:', medication);
+    // The medication text is already inserted by the RichTextEditor component
+    // Additional logic can be added here if needed (e.g., tracking selected medications)
+  }
+
+  onExamSelected(exam: ExamAutocomplete): void {
+    console.log('Exame selecionado:', exam);
+    // The exam text is already inserted by the RichTextEditor component
+    // Additional logic can be added here if needed (e.g., auto-filling exam request form)
   }
 }
