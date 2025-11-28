@@ -132,7 +132,7 @@
       </div>
     }
 
-    @if (showAutocomplete() && autocompleteItems().length === 0 && searchTerm().length >= 2 && !isLoading()) {
+    @if (showAutocomplete() && autocompleteItems().length === 0 && searchTerm().length >= minSearchLength && !isLoading()) {
       <div
         class="autocomplete-dropdown autocomplete-empty"
         [style.top.px]="autocompletePosition().top"

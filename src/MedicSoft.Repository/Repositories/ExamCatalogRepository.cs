@@ -20,12 +20,14 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<IEnumerable<ExamCatalog>> SearchByNameAsync(string searchTerm, string tenantId)
         {
-            var normalizedSearchTerm = searchTerm.ToLower();
+            // Use EF.Functions.ILike for PostgreSQL or EF.Functions.Like for SQL Server
+            // This enables case-insensitive search with potential index usage
             return await _dbSet
-                .Where(e => (e.Name.ToLower().Contains(normalizedSearchTerm) ||
-                           (e.Synonyms != null && e.Synonyms.ToLower().Contains(normalizedSearchTerm))) &&
+                .Where(e => (EF.Functions.Like(e.Name, $"%{searchTerm}%") ||
+                           (e.Synonyms != null && EF.Functions.Like(e.Synonyms, $"%{searchTerm}%"))) &&
                            e.TenantId == tenantId && e.IsActive)
                 .OrderBy(e => e.Name)
+                .Take(20) // Limit results for better performance
                 .ToListAsync();
         }
 

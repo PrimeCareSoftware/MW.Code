@@ -49,6 +49,8 @@ export class RichTextEditor implements OnInit, OnDestroy, ControlValueAccessor {
   @Input() examTrigger = '##';
   @Input() label = '';
   @Input() id = '';
+  @Input() minSearchLength = 2;
+  @Input() searchDebounceMs = 300;
 
   @Output() medicationSelected = new EventEmitter<MedicationAutocomplete>();
   @Output() examSelected = new EventEmitter<ExamAutocomplete>();
@@ -78,7 +80,7 @@ export class RichTextEditor implements OnInit, OnDestroy, ControlValueAccessor {
 
   ngOnInit(): void {
     this.searchSubject
-      .pipe(debounceTime(300), distinctUntilChanged((a, b) => a.term === b.term && a.type === b.type), takeUntil(this.destroy$))
+      .pipe(debounceTime(this.searchDebounceMs), distinctUntilChanged((a, b) => a.term === b.term && a.type === b.type), takeUntil(this.destroy$))
       .subscribe(({ term, type }) => {
         this.performSearch(term, type);
       });
@@ -284,7 +286,7 @@ export class RichTextEditor implements OnInit, OnDestroy, ControlValueAccessor {
   }
 
   private performSearch(term: string, type: 'medication' | 'exam'): void {
-    if (term.length < 2) {
+    if (term.length < this.minSearchLength) {
       this.autocompleteItems.set([]);
       return;
     }

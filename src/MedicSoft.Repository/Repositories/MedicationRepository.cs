@@ -20,9 +20,11 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<IEnumerable<Medication>> SearchByNameAsync(string searchTerm, string tenantId)
         {
+            // Use EF.Functions.Like for better database performance
             return await _dbSet
-                .Where(m => m.Name.Contains(searchTerm) && m.TenantId == tenantId && m.IsActive)
+                .Where(m => EF.Functions.Like(m.Name, $"%{searchTerm}%") && m.TenantId == tenantId && m.IsActive)
                 .OrderBy(m => m.Name)
+                .Take(20) // Limit results for better performance
                 .ToListAsync();
         }
 
