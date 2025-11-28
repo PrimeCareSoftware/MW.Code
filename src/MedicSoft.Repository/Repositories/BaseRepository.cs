@@ -83,7 +83,8 @@ namespace MedicSoft.Repository.Repositories
         /// <summary>
         /// Executes an operation within a database transaction. If the operation succeeds, 
         /// the transaction is committed. If an error occurs, the transaction is rolled back
-        /// and the exception is re-thrown.
+        /// and the exception is re-thrown. This method is compatible with retrying execution
+        /// strategies like NpgsqlRetryingExecutionStrategy.
         /// </summary>
         /// <typeparam name="TResult">The return type of the operation</typeparam>
         /// <param name="operation">The operation to execute within the transaction</param>
@@ -99,25 +100,30 @@ namespace MedicSoft.Repository.Repositories
                 return await operation();
             }
 
-            // Begin a new transaction
-            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-            try
+            // Use execution strategy to handle retrying execution strategies (e.g., NpgsqlRetryingExecutionStrategy)
+            var strategy = _context.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
             {
-                var result = await operation();
-                await transaction.CommitAsync(cancellationToken);
-                return result;
-            }
-            catch
-            {
-                await transaction.RollbackAsync(cancellationToken);
-                throw;
-            }
+                await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+                try
+                {
+                    var result = await operation();
+                    await transaction.CommitAsync(cancellationToken);
+                    return result;
+                }
+                catch
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+            });
         }
 
         /// <summary>
         /// Executes an operation within a database transaction. If the operation succeeds, 
         /// the transaction is committed. If an error occurs, the transaction is rolled back
-        /// and the exception is re-thrown.
+        /// and the exception is re-thrown. This method is compatible with retrying execution
+        /// strategies like NpgsqlRetryingExecutionStrategy.
         /// </summary>
         /// <param name="operation">The operation to execute within the transaction</param>
         /// <param name="cancellationToken">Cancellation token to cancel the operation</param>
@@ -132,18 +138,22 @@ namespace MedicSoft.Repository.Repositories
                 return;
             }
 
-            // Begin a new transaction
-            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-            try
+            // Use execution strategy to handle retrying execution strategies (e.g., NpgsqlRetryingExecutionStrategy)
+            var strategy = _context.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                await operation();
-                await transaction.CommitAsync(cancellationToken);
-            }
-            catch
-            {
-                await transaction.RollbackAsync(cancellationToken);
-                throw;
-            }
+                await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+                try
+                {
+                    await operation();
+                    await transaction.CommitAsync(cancellationToken);
+                }
+                catch
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+            });
         }
     }
 }
