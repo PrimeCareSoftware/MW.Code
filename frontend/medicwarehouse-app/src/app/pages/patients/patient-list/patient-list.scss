@@ -1,7 +1,8 @@
 .patient-list-container {
-  max-width: 1400px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
   padding: var(--spacing-8) var(--spacing-6);
+  animation: fadeIn 0.4s ease-out;
 }
 
 .page-header {
@@ -9,112 +10,154 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-8);
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
 
-  h1 {
-    color: var(--gray-900);
-    margin: 0 0 var(--spacing-2) 0;
-    font-size: var(--font-size-4xl);
-    font-weight: 700;
-  }
+  .header-content {
+    h1 {
+      color: var(--gray-900);
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-bold);
+      margin-bottom: var(--spacing-1);
+    }
 
-  p {
-    color: var(--gray-600);
-    margin: 0;
-    font-size: var(--font-size-lg);
+    p {
+      color: var(--gray-500);
+      font-size: var(--font-size-base);
+      margin: 0;
+    }
   }
 
   .btn {
-    padding: var(--spacing-3) var(--spacing-6);
-    border: none;
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    box-shadow: var(--shadow-md);
-
-    &.btn-primary {
-      background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-      color: white;
-
-      &:hover {
-        background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg);
-      }
+    svg {
+      width: 20px;
+      height: 20px;
     }
   }
 }
 
-.alert {
-  padding: var(--spacing-4);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-6);
-
-  &.alert-error {
-    background-color: var(--error-50);
-    color: var(--error-700);
-    border-left: 4px solid var(--error-500);
-  }
-}
-
-.loading {
-  text-align: center;
-  padding: var(--spacing-12);
-  font-size: var(--font-size-xl);
-  color: var(--gray-500);
-}
-
-.empty-state {
-  text-align: center;
+.loading-container {
+  display: flex;
+  justify-content: center;
   padding: var(--spacing-16);
+}
+
+.empty-state-card {
   background: white;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-sm);
   border: 2px dashed var(--gray-300);
+  padding: var(--spacing-16);
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
 
-  p {
-    font-size: var(--font-size-xl);
-    color: var(--gray-600);
-    margin-bottom: var(--spacing-6);
-    
-    &::before {
-      content: '📋';
-      font-size: var(--font-size-4xl);
-      display: block;
-      margin-bottom: var(--spacing-4);
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-100);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-6);
+
+    svg {
+      width: 40px;
+      height: 40px;
+      color: var(--primary-500);
     }
   }
 
-  .btn {
-    padding: var(--spacing-4) var(--spacing-8);
-    border: none;
-    border-radius: var(--radius-lg);
+  h3 {
+    color: var(--gray-900);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--spacing-2);
+  }
+
+  p {
+    color: var(--gray-500);
     font-size: var(--font-size-base);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-base);
+    margin-bottom: var(--spacing-6);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-    &.btn-primary {
-      background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-      color: white;
-      box-shadow: var(--shadow-md);
-
-      &:hover {
-        background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg);
-      }
+  .btn {
+    svg {
+      width: 20px;
+      height: 20px;
     }
+  }
+}
+
+.patients-card {
+  background: white;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-5) var(--spacing-6);
+  border-bottom: 1px solid var(--gray-100);
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2) var(--spacing-4);
+  flex: 1;
+  max-width: 400px;
+  transition: all var(--transition-fast);
+
+  &:focus-within {
+    background: white;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: var(--gray-400);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: var(--font-size-sm);
+    color: var(--gray-900);
+    outline: none;
+
+    &::placeholder {
+      color: var(--gray-400);
+    }
+  }
+}
+
+.results-info {
+  .badge {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-2) var(--spacing-4);
   }
 }
 
 .table-container {
-  background: white;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  border: 1px solid var(--gray-200);
+  overflow-x: auto;
 }
 
 .patients-table {
@@ -122,111 +165,188 @@
   border-collapse: collapse;
 
   thead {
-    background-color: var(--gray-50);
+    background: var(--gray-50);
 
     th {
       padding: var(--spacing-4) var(--spacing-5);
       text-align: left;
-      font-weight: 600;
-      color: var(--gray-700);
-      border-bottom: 2px solid var(--gray-200);
-      font-size: var(--font-size-sm);
+      font-weight: var(--font-semibold);
+      color: var(--gray-600);
+      font-size: var(--font-size-xs);
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+
+      &.actions-col {
+        text-align: right;
+        width: 120px;
+      }
     }
   }
 
   tbody {
     tr {
-      border-bottom: 1px solid var(--gray-200);
-      transition: all var(--transition-fast);
+      border-bottom: 1px solid var(--gray-100);
+      transition: background var(--transition-fast);
 
       &:hover {
-        background-color: var(--primary-50);
+        background: var(--gray-50);
       }
-      
+
       &:last-child {
         border-bottom: none;
       }
 
-      td {
-        padding: var(--spacing-5);
-        color: var(--gray-700);
-        font-size: var(--font-size-sm);
-        vertical-align: middle;
+      &.child-row {
+        background: var(--primary-50);
 
-        &.actions {
-          display: flex;
-          gap: var(--spacing-2);
-          align-items: center;
+        &:hover {
+          background: var(--primary-100);
         }
       }
+    }
+
+    td {
+      padding: var(--spacing-4) var(--spacing-5);
+      color: var(--gray-700);
+      font-size: var(--font-size-sm);
+      vertical-align: middle;
     }
   }
 }
 
+.patient-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.patient-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: var(--font-bold);
+  font-size: var(--font-size-base);
+  flex-shrink: 0;
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+
+  .patient-name {
+    font-weight: var(--font-semibold);
+    color: var(--gray-900);
+  }
+
+  .badge-child {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    background: var(--accent-100);
+    color: var(--accent-600);
+    padding: 2px var(--spacing-2);
+    font-size: 10px;
+    width: fit-content;
+  }
+}
+
+.document-text {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+
+  .email {
+    color: var(--gray-700);
+    font-size: var(--font-size-sm);
+  }
+
+  .phone {
+    color: var(--gray-500);
+    font-size: var(--font-size-xs);
+  }
+}
+
+.age-text {
+  color: var(--gray-600);
+}
+
+.guardian-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--gray-600);
+  font-size: var(--font-size-sm);
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: var(--gray-400);
+  }
+}
+
+.no-data {
+  color: var(--gray-300);
+}
+
+.actions-cell {
+  text-align: right;
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: flex-end;
+}
+
 .btn-action {
-  padding: var(--spacing-2) var(--spacing-3);
+  width: 36px;
+  height: 36px;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--transition-base);
-  font-size: var(--font-size-lg);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  height: 36px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 
   &.btn-edit {
-    background-color: var(--gray-100);
+    background: var(--gray-100);
+    color: var(--gray-600);
 
     &:hover {
-      background-color: var(--primary-100);
+      background: var(--primary-100);
+      color: var(--primary-600);
       transform: scale(1.1);
     }
   }
 
   &.btn-delete {
-    background-color: var(--error-50);
+    background: var(--error-50);
+    color: var(--error-500);
 
     &:hover {
-      background-color: var(--error-100);
+      background: var(--error-100);
+      color: var(--error-600);
       transform: scale(1.1);
     }
   }
-}
-
-.child-patient {
-  background-color: var(--info-50) !important;
-  
-  &:hover {
-    background-color: var(--info-100) !important;
-  }
-}
-
-.badge {
-  display: inline-block;
-  padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  margin-left: var(--spacing-2);
-
-  &.badge-child {
-    background-color: var(--info-100);
-    color: var(--info-700);
-  }
-}
-
-.guardian-info {
-  color: var(--gray-600);
-  font-size: var(--font-size-sm);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-1);
-}
-
-.no-info {
-  color: var(--gray-400);
 }

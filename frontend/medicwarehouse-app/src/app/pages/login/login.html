@@ -1,90 +1,178 @@
-<div class="login-container">
-  <div class="login-card">
-    <div class="login-header">
+<div class="login-wrapper">
+  <div class="login-branding">
+    <div class="branding-content">
+      <div class="brand-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
       <h1>MedicWarehouse</h1>
-      @if (clinicName()) {
-        <p>{{ clinicName() }}</p>
-      } @else {
-        <p>Sistema de Gestão para Consultórios Médicos</p>
-      }
+      <p class="tagline">Sistema completo de gestão para clínicas e consultórios médicos</p>
+      
+      <div class="features-list">
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span>Gestão completa de pacientes</span>
+        </div>
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span>Agendamentos inteligentes</span>
+        </div>
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span>Prontuário eletrônico</span>
+        </div>
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span>Seguro e em conformidade com LGPD</span>
+        </div>
+      </div>
     </div>
+    <div class="branding-footer">
+      <p>© 2025 MedicWarehouse. Todos os direitos reservados.</p>
+    </div>
+  </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      @if (errorMessage()) {
-        <div class="alert alert-error">
-          {{ errorMessage() }}
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="mobile-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
         </div>
-      }
-
-      @if (infoMessage()) {
-        <div class="alert alert-warning">
-          {{ infoMessage() }}
-        </div>
-      }
-
-      @if (tenantFromUrl()) {
-        <div class="alert alert-info">
-          <p>Acessando: <strong>{{ tenantFromUrl() }}</strong></p>
-        </div>
-      }
-
-      <div class="form-group">
-        <label for="username">Usuário</label>
-        <input 
-          type="text" 
-          id="username" 
-          formControlName="username"
-          placeholder="Digite seu usuário"
-          class="form-control"
-        />
-        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
-          <span class="error-text">Usuário é obrigatório</span>
-        }
-      </div>
-
-      <div class="form-group">
-        <label for="password">Senha</label>
-        <input 
-          type="password" 
-          id="password" 
-          formControlName="password"
-          placeholder="Digite sua senha"
-          class="form-control"
-        />
-        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-          <span class="error-text">Senha é obrigatória</span>
-        }
-      </div>
-
-      @if (!tenantFromUrl()) {
-        <div class="form-group">
-          <label for="tenantId">Tenant ID</label>
-          <input 
-            type="text" 
-            id="tenantId" 
-            formControlName="tenantId"
-            placeholder="Digite o tenant ID"
-            class="form-control"
-          />
-          <small class="form-help">Acesse via subdomínio para não precisar digitar o Tenant ID</small>
-        </div>
-      }
-
-      <button 
-        type="submit" 
-        class="btn btn-primary" 
-        [disabled]="loginForm.invalid || isLoading()"
-      >
-        @if (isLoading()) {
-          <span>Entrando...</span>
+        <h2>Bem-vindo de volta!</h2>
+        @if (clinicName()) {
+          <p class="clinic-name">{{ clinicName() }}</p>
         } @else {
-          <span>Entrar</span>
+          <p>Entre na sua conta para continuar</p>
         }
-      </button>
-
-      <div class="login-footer">
-        <p>Não tem uma conta? <a routerLink="/register">Cadastre-se</a></p>
       </div>
-    </form>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        @if (errorMessage()) {
+          <div class="alert alert-error">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        @if (infoMessage()) {
+          <div class="alert alert-warning">
+            {{ infoMessage() }}
+          </div>
+        }
+
+        @if (tenantFromUrl()) {
+          <div class="tenant-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>{{ tenantFromUrl() }}</span>
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="username">Usuário</label>
+          <div class="input-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input 
+              type="text" 
+              id="username" 
+              formControlName="username"
+              placeholder="Digite seu usuário"
+              class="form-control"
+              autocomplete="username"
+            />
+          </div>
+          @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+            <span class="error-text">Usuário é obrigatório</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <div class="input-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input 
+              type="password" 
+              id="password" 
+              formControlName="password"
+              placeholder="Digite sua senha"
+              class="form-control"
+              autocomplete="current-password"
+            />
+          </div>
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <span class="error-text">Senha é obrigatória</span>
+          }
+        </div>
+
+        @if (!tenantFromUrl()) {
+          <div class="form-group">
+            <label for="tenantId">Tenant ID</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              <input 
+                type="text" 
+                id="tenantId" 
+                formControlName="tenantId"
+                placeholder="Digite o tenant ID"
+                class="form-control"
+              />
+            </div>
+            <span class="form-hint">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4M12 8h.01"/>
+              </svg>
+              Acesse via subdomínio para não precisar digitar o Tenant ID
+            </span>
+          </div>
+        }
+
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-login" 
+          [disabled]="loginForm.invalid || isLoading()"
+        >
+          @if (isLoading()) {
+            <span class="spinner"></span>
+            <span>Entrando...</span>
+          } @else {
+            <span>Entrar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          }
+        </button>
+
+        <div class="login-footer">
+          <p>Não tem uma conta? <a routerLink="/register">Cadastre-se gratuitamente</a></p>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
