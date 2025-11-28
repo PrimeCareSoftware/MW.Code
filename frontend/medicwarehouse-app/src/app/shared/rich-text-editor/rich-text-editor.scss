@@ -1,0 +1,249 @@
+.rich-text-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.editor-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-bottom: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #e5e7eb;
+  margin: 0 0.5rem;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.5rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: #4b5563;
+  font-size: 0.875rem;
+  transition: all 0.15s;
+  min-width: 32px;
+  height: 32px;
+
+  &:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+  }
+
+  &:active {
+    background: #d1d5db;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.toolbar-btn-special {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  padding: 0.375rem 0.75rem;
+  min-width: auto;
+
+  &:hover {
+    background: #dbeafe;
+    border-color: #93c5fd;
+  }
+
+  .btn-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
+
+.editor-container {
+  position: relative;
+}
+
+.editor-textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  z-index: 50;
+  min-width: 300px;
+  max-width: 400px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.autocomplete-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.loading-indicator {
+  color: #3b82f6;
+  font-style: italic;
+}
+
+.autocomplete-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.1s;
+
+  &:hover,
+  &.selected {
+    background: #eff6ff;
+  }
+
+  .item-icon {
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+
+  .item-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.autocomplete-hint {
+  padding: 0.375rem 0.75rem;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.625rem;
+  color: #9ca3af;
+}
+
+.autocomplete-empty {
+  padding: 1rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.editor-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+
+  code {
+    background: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #1f2937;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .toolbar {
+    gap: 0.125rem;
+    padding: 0.375rem;
+  }
+
+  .toolbar-btn {
+    padding: 0.25rem;
+    min-width: 28px;
+    height: 28px;
+  }
+
+  .toolbar-btn-special {
+    .btn-label {
+      display: none;
+    }
+  }
+
+  .toolbar-divider {
+    margin: 0 0.25rem;
+  }
+
+  .autocomplete-dropdown {
+    min-width: 250px;
+    max-width: calc(100vw - 2rem);
+  }
+}

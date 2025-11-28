@@ -100,25 +100,28 @@
             <h3>Prontuário Médico</h3>
             
             <div class="form-group">
-              <label for="diagnosis">Diagnóstico</label>
-              <textarea 
-                id="diagnosis" 
-                formControlName="diagnosis" 
-                class="form-control" 
-                rows="4"
+              <app-rich-text-editor
+                formControlName="diagnosis"
+                id="diagnosis"
+                label="Diagnóstico"
                 placeholder="Descreva o diagnóstico do paciente..."
-              ></textarea>
+                [rows]="4"
+                [enableMedicationAutocomplete]="false"
+                [enableExamAutocomplete]="false"
+              ></app-rich-text-editor>
             </div>
 
             <div class="form-group">
-              <label for="prescription">Prescrição Médica</label>
-              <textarea 
-                id="prescription" 
-                formControlName="prescription" 
-                class="form-control prescription-area" 
-                rows="8"
-                placeholder="Receite medicamentos, dosagens, e instruções de uso..."
-              ></textarea>
+              <app-rich-text-editor
+                formControlName="prescription"
+                id="prescription"
+                label="Prescrição Médica"
+                placeholder="Receite medicamentos, dosagens, e instruções de uso... Use @@ para buscar medicações"
+                [rows]="8"
+                [enableMedicationAutocomplete]="true"
+                [enableExamAutocomplete]="false"
+                (medicationSelected)="onMedicationSelected($event)"
+              ></app-rich-text-editor>
               <button type="button" class="btn btn-outline btn-print" (click)="onPrint()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -130,14 +133,17 @@
             </div>
 
             <div class="form-group">
-              <label for="notes">Observações</label>
-              <textarea 
-                id="notes" 
-                formControlName="notes" 
-                class="form-control" 
-                rows="4"
-                placeholder="Anotações adicionais sobre a consulta..."
-              ></textarea>
+              <app-rich-text-editor
+                formControlName="notes"
+                id="notes"
+                label="Observações Clínicas"
+                placeholder="Anotações adicionais sobre a consulta... Use @@ para medicações e ## para exames"
+                [rows]="4"
+                [enableMedicationAutocomplete]="true"
+                [enableExamAutocomplete]="true"
+                (medicationSelected)="onMedicationSelected($event)"
+                (examSelected)="onExamSelected($event)"
+              ></app-rich-text-editor>
             </div>
           </div>
 

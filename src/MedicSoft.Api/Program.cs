@@ -183,6 +183,7 @@ builder.Services.AddScoped<IExamRequestRepository, ExamRequestRepository>();
 builder.Services.AddScoped<IWaitingQueueRepository, WaitingQueueRepository>();
 builder.Services.AddScoped<IWaitingQueueConfigurationRepository, WaitingQueueConfigurationRepository>();
 builder.Services.AddScoped<IOwnerClinicLinkRepository, OwnerClinicLinkRepository>();
+builder.Services.AddScoped<IExamCatalogRepository, ExamCatalogRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
