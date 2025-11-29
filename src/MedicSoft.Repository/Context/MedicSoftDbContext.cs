@@ -48,6 +48,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<WaitingQueueEntry> WaitingQueueEntries { get; set; } = null!;
         public DbSet<WaitingQueueConfiguration> WaitingQueueConfigurations { get; set; } = null!;
         public DbSet<ExamCatalog> ExamCatalogs { get; set; } = null!;
+        public DbSet<Notification> Notifications { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,6 +84,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new WaitingQueueEntryConfiguration());
             modelBuilder.ApplyConfiguration(new WaitingQueueConfigurationConfiguration());
             modelBuilder.ApplyConfiguration(new ExamCatalogConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
 
             // Global query filters for tenant isolation
             modelBuilder.Entity<Patient>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
@@ -114,6 +116,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.Entity<WaitingQueueEntry>().HasQueryFilter(wqe => EF.Property<string>(wqe, "TenantId") == GetTenantId());
             modelBuilder.Entity<WaitingQueueConfiguration>().HasQueryFilter(wqc => EF.Property<string>(wqc, "TenantId") == GetTenantId());
             modelBuilder.Entity<ExamCatalog>().HasQueryFilter(ec => EF.Property<string>(ec, "TenantId") == GetTenantId());
+            modelBuilder.Entity<Notification>().HasQueryFilter(n => EF.Property<string>(n, "TenantId") == GetTenantId());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
