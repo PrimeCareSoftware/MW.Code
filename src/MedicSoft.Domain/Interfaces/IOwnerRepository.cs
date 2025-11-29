@@ -19,6 +19,11 @@ namespace MedicSoft.Domain.Interfaces
         /// </summary>
         Task AddWithoutSaveAsync(Owner owner);
         /// <summary>
+        /// Marks an owner for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        Task DeleteWithoutSaveAsync(Guid id, string tenantId);
+        /// <summary>
         /// Saves all pending changes to the database.
         /// </summary>
         Task SaveChangesAsync(CancellationToken cancellationToken = default);

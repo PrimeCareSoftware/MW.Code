@@ -65,6 +65,19 @@ namespace MedicSoft.Repository.Repositories
         }
 
         /// <summary>
+        /// Marks an owner for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task DeleteWithoutSaveAsync(Guid id, string tenantId)
+        {
+            var owner = await GetByIdAsync(id, tenantId);
+            if (owner != null)
+            {
+                _context.Owners.Remove(owner);
+            }
+        }
+
+        /// <summary>
         /// Saves all pending changes to the database.
         /// </summary>
         public async Task SaveChangesAsync(CancellationToken cancellationToken = default)

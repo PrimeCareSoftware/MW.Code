@@ -93,6 +93,19 @@ namespace MedicSoft.Repository.Repositories
         }
 
         /// <summary>
+        /// Marks a subscription for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task DeleteWithoutSaveAsync(Guid id, string tenantId)
+        {
+            var subscription = await GetByIdAsync(id, tenantId);
+            if (subscription != null)
+            {
+                _context.ClinicSubscriptions.Remove(subscription);
+            }
+        }
+
+        /// <summary>
         /// Saves all pending changes to the database.
         /// </summary>
         public async Task SaveChangesAsync(CancellationToken cancellationToken = default)

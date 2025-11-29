@@ -70,6 +70,19 @@ namespace MedicSoft.Repository.Repositories
         }
 
         /// <summary>
+        /// Marks a user for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task DeleteWithoutSaveAsync(Guid id, string tenantId)
+        {
+            var user = await GetByIdAsync(id, tenantId);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+            }
+        }
+
+        /// <summary>
         /// Saves all pending changes to the database.
         /// </summary>
         public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
