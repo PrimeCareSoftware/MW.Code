@@ -16,7 +16,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF NOT EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Users' AND column_name = 'CurrentSessionId'
+                        WHERE table_schema = 'public' AND table_name = 'Users' AND column_name = 'CurrentSessionId'
                     ) THEN
                         ALTER TABLE ""Users"" ADD COLUMN ""CurrentSessionId"" character varying(200);
                     END IF;
@@ -29,7 +29,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF NOT EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Owners' AND column_name = 'CurrentSessionId'
+                        WHERE table_schema = 'public' AND table_name = 'Owners' AND column_name = 'CurrentSessionId'
                     ) THEN
                         ALTER TABLE ""Owners"" ADD COLUMN ""CurrentSessionId"" character varying(200);
                     END IF;

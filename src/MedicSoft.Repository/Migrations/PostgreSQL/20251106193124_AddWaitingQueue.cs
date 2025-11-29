@@ -17,7 +17,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF NOT EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' AND column_name = 'Subdomain'
+                        WHERE table_schema = 'public' AND table_name = 'Clinics' AND column_name = 'Subdomain'
                     ) THEN
                         ALTER TABLE ""Clinics"" ADD COLUMN ""Subdomain"" text;
                     END IF;
