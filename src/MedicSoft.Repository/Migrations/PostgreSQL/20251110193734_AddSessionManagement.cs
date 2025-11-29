@@ -10,19 +10,31 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "CurrentSessionId",
-                table: "Users",
-                type: "character varying(200)",
-                maxLength: 200,
-                nullable: true);
+            // Idempotent: Only add column if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Users' AND column_name = 'CurrentSessionId'
+                    ) THEN
+                        ALTER TABLE ""Users"" ADD COLUMN ""CurrentSessionId"" character varying(200);
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AddColumn<string>(
-                name: "CurrentSessionId",
-                table: "Owners",
-                type: "character varying(200)",
-                maxLength: 200,
-                nullable: true);
+            // Idempotent: Only add column if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Owners' AND column_name = 'CurrentSessionId'
+                    ) THEN
+                        ALTER TABLE ""Owners"" ADD COLUMN ""CurrentSessionId"" character varying(200);
+                    END IF;
+                END $$;
+            ");
         }
 
         /// <inheritdoc />

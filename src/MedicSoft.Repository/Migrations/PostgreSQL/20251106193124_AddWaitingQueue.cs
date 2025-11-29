@@ -11,11 +11,18 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Subdomain",
-                table: "Clinics",
-                type: "text",
-                nullable: true);
+            // Idempotent: Only add column if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Clinics' AND column_name = 'Subdomain'
+                    ) THEN
+                        ALTER TABLE ""Clinics"" ADD COLUMN ""Subdomain"" text;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.CreateTable(
                 name: "WaitingQueueConfigurations",
