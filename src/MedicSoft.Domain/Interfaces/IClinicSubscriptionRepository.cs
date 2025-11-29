@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
 
@@ -13,6 +14,20 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<ClinicSubscription>> GetExpiringTrialsAsync(int daysBeforeExpiration);
         Task<IEnumerable<ClinicSubscription>> GetPendingDowngradesAsync();
         Task AddAsync(ClinicSubscription subscription);
+        /// <summary>
+        /// Adds a subscription to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        Task AddWithoutSaveAsync(ClinicSubscription subscription);
+        /// <summary>
+        /// Marks a subscription for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        Task DeleteWithoutSaveAsync(Guid id, string tenantId);
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// </summary>
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
         Task UpdateAsync(ClinicSubscription subscription);
     }
 }

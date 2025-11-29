@@ -88,6 +88,8 @@ namespace MedicSoft.Application.Services
         public async Task SeedDemoDataAsync()
         {
             // Execute all seeding operations in a transaction to ensure data consistency
+            // Using AddWithoutSaveAsync to batch all operations and avoid multiple SaveChanges calls
+            // which cause issues with NpgsqlRetryingExecutionStrategy
             await _clinicRepository.ExecuteInTransactionAsync(async () =>
             {
                 // Check if demo data already exists
@@ -98,278 +100,288 @@ namespace MedicSoft.Application.Services
                 }
 
                 // 0. Create Subscription Plans (system-wide)
-            var subscriptionPlans = CreateDemoSubscriptionPlans();
-            foreach (var plan in subscriptionPlans)
-            {
-                await _subscriptionPlanRepository.AddAsync(plan);
-            }
+                var subscriptionPlans = CreateDemoSubscriptionPlans();
+                foreach (var plan in subscriptionPlans)
+                {
+                    await _subscriptionPlanRepository.AddWithoutSaveAsync(plan);
+                }
 
-            // 1. Create Demo Clinic
-            var clinic = CreateDemoClinic();
-            await _clinicRepository.AddAsync(clinic);
+                // 1. Create Demo Clinic
+                var clinic = CreateDemoClinic();
+                await _clinicRepository.AddWithoutSaveAsync(clinic);
 
-            // 1.1. Create Clinic Subscription
-            var clinicSubscription = CreateClinicSubscription(clinic.Id, subscriptionPlans[2].Id); // Standard plan
-            await _clinicSubscriptionRepository.AddAsync(clinicSubscription);
+                // 1.1. Create Clinic Subscription
+                var clinicSubscription = CreateClinicSubscription(clinic.Id, subscriptionPlans[2].Id); // Standard plan
+                await _clinicSubscriptionRepository.AddWithoutSaveAsync(clinicSubscription);
 
-            // 1.2. Create Demo Owner for the clinic
-            var owner = CreateDemoOwner();
-            await _ownerRepository.AddAsync(owner);
+                // 1.2. Create Demo Owner for the clinic
+                var owner = CreateDemoOwner();
+                await _ownerRepository.AddWithoutSaveAsync(owner);
 
-            // 2. Create Users (Admin, Doctor, Receptionist)
-            var users = CreateDemoUsers();
-            foreach (var user in users)
-            {
-                await _userRepository.AddAsync(user);
-            }
+                // 2. Create Users (Admin, Doctor, Receptionist)
+                var users = CreateDemoUsers();
+                foreach (var user in users)
+                {
+                    await _userRepository.AddWithoutSaveAsync(user);
+                }
 
-            // 3. Create Procedures/Services
-            var procedures = CreateDemoProcedures();
-            foreach (var procedure in procedures)
-            {
-                await _procedureRepository.AddAsync(procedure);
-            }
+                // 3. Create Procedures/Services
+                var procedures = CreateDemoProcedures();
+                foreach (var procedure in procedures)
+                {
+                    await _procedureRepository.AddWithoutSaveAsync(procedure);
+                }
 
-            // 4. Create Patients
-            var patients = CreateDemoPatients(clinic.Id);
-            foreach (var patient in patients)
-            {
-                await _patientRepository.AddAsync(patient);
-            }
+                // 4. Create Patients
+                var patients = CreateDemoPatients(clinic.Id);
+                foreach (var patient in patients)
+                {
+                    await _patientRepository.AddWithoutSaveAsync(patient);
+                }
 
-            // 5. Link patients to clinic
-            var patientLinks = CreatePatientClinicLinks(patients, clinic.Id);
-            foreach (var link in patientLinks)
-            {
-                await _patientClinicLinkRepository.AddAsync(link);
-            }
+                // 5. Link patients to clinic
+                var patientLinks = CreatePatientClinicLinks(patients, clinic.Id);
+                foreach (var link in patientLinks)
+                {
+                    await _patientClinicLinkRepository.AddWithoutSaveAsync(link);
+                }
 
-            // 6. Create Appointments
-            var appointments = CreateDemoAppointments(patients, clinic.Id);
-            foreach (var appointment in appointments)
-            {
-                await _appointmentRepository.AddAsync(appointment);
-            }
+                // 6. Create Appointments
+                var appointments = CreateDemoAppointments(patients, clinic.Id);
+                foreach (var appointment in appointments)
+                {
+                    await _appointmentRepository.AddWithoutSaveAsync(appointment);
+                }
 
-            // 7. Create Appointment Procedures
-            var appointmentProcedures = CreateAppointmentProcedures(appointments, procedures, patients);
-            foreach (var ap in appointmentProcedures)
-            {
-                await _appointmentProcedureRepository.AddAsync(ap);
-            }
+                // 7. Create Appointment Procedures
+                var appointmentProcedures = CreateAppointmentProcedures(appointments, procedures, patients);
+                foreach (var ap in appointmentProcedures)
+                {
+                    await _appointmentProcedureRepository.AddWithoutSaveAsync(ap);
+                }
 
-            // 8. Create Payments for some appointments
-            var payments = CreateDemoPayments(appointments);
-            foreach (var payment in payments)
-            {
-                await _paymentRepository.AddAsync(payment);
-            }
+                // 8. Create Payments for some appointments
+                var payments = CreateDemoPayments(appointments);
+                foreach (var payment in payments)
+                {
+                    await _paymentRepository.AddWithoutSaveAsync(payment);
+                }
 
-            // 9. Create Medications
-            var medications = CreateDemoMedications();
-            foreach (var medication in medications)
-            {
-                await _medicationRepository.AddAsync(medication);
-            }
+                // 9. Create Medications
+                var medications = CreateDemoMedications();
+                foreach (var medication in medications)
+                {
+                    await _medicationRepository.AddWithoutSaveAsync(medication);
+                }
 
-            // 10. Create Medical Records for completed appointments
-            var medicalRecords = CreateDemoMedicalRecords(appointments, patients);
-            foreach (var record in medicalRecords)
-            {
-                await _medicalRecordRepository.AddAsync(record);
-            }
+                // 10. Create Medical Records for completed appointments
+                var medicalRecords = CreateDemoMedicalRecords(appointments, patients);
+                foreach (var record in medicalRecords)
+                {
+                    await _medicalRecordRepository.AddWithoutSaveAsync(record);
+                }
 
-            // 11. Create Prescription Items
-            var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications, patients);
-            foreach (var item in prescriptionItems)
-            {
-                await _prescriptionItemRepository.AddAsync(item);
-            }
+                // 11. Create Prescription Items
+                var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications, patients);
+                foreach (var item in prescriptionItems)
+                {
+                    await _prescriptionItemRepository.AddWithoutSaveAsync(item);
+                }
 
-            // 12. Create Prescription Templates
-            var prescriptionTemplates = CreateDemoPrescriptionTemplates();
-            foreach (var template in prescriptionTemplates)
-            {
-                await _prescriptionTemplateRepository.AddAsync(template);
-            }
+                // 12. Create Prescription Templates
+                var prescriptionTemplates = CreateDemoPrescriptionTemplates();
+                foreach (var template in prescriptionTemplates)
+                {
+                    await _prescriptionTemplateRepository.AddWithoutSaveAsync(template);
+                }
 
-            // 13. Create Medical Record Templates
-            var medicalRecordTemplates = CreateDemoMedicalRecordTemplates();
-            foreach (var template in medicalRecordTemplates)
-            {
-                await _medicalRecordTemplateRepository.AddAsync(template);
-            }
+                // 13. Create Medical Record Templates
+                var medicalRecordTemplates = CreateDemoMedicalRecordTemplates();
+                foreach (var template in medicalRecordTemplates)
+                {
+                    await _medicalRecordTemplateRepository.AddWithoutSaveAsync(template);
+                }
 
-            // 14. Create Notifications for appointments
-            var notifications = CreateDemoNotifications(appointments, patients);
-            foreach (var notification in notifications)
-            {
-                await _notificationRepository.AddAsync(notification);
-            }
+                // 14. Create Notifications for appointments
+                var notifications = CreateDemoNotifications(appointments, patients);
+                foreach (var notification in notifications)
+                {
+                    await _notificationRepository.AddWithoutSaveAsync(notification);
+                }
 
-            // 15. Create Notification Routines
-            var notificationRoutines = CreateDemoNotificationRoutines(clinic.Id);
-            foreach (var routine in notificationRoutines)
-            {
-                await _notificationRoutineRepository.AddAsync(routine);
-            }
+                // 15. Create Notification Routines
+                var notificationRoutines = CreateDemoNotificationRoutines(clinic.Id);
+                foreach (var routine in notificationRoutines)
+                {
+                    await _notificationRoutineRepository.AddWithoutSaveAsync(routine);
+                }
 
-            // 16. Create Expenses
-            var expenses = CreateDemoExpenses(clinic.Id);
-            foreach (var expense in expenses)
-            {
-                await _expenseRepository.AddAsync(expense);
-            }
+                // 16. Create Expenses
+                var expenses = CreateDemoExpenses(clinic.Id);
+                foreach (var expense in expenses)
+                {
+                    await _expenseRepository.AddWithoutSaveAsync(expense);
+                }
 
-            // 17. Create Exam Requests
-            var examRequests = CreateDemoExamRequests(appointments, patients);
-            foreach (var examRequest in examRequests)
-            {
-                await _examRequestRepository.AddAsync(examRequest);
-            }
+                // 17. Create Exam Requests
+                var examRequests = CreateDemoExamRequests(appointments, patients);
+                foreach (var examRequest in examRequests)
+                {
+                    await _examRequestRepository.AddWithoutSaveAsync(examRequest);
+                }
 
-            // 18. Create Exam Catalog (comprehensive list for autocomplete)
-            var examCatalogs = CreateDemoExamCatalogs();
-            foreach (var examCatalog in examCatalogs)
-            {
-                await _examCatalogRepository.AddAsync(examCatalog);
-            }
+                // 18. Create Exam Catalog (comprehensive list for autocomplete)
+                var examCatalogs = CreateDemoExamCatalogs();
+                foreach (var examCatalog in examCatalogs)
+                {
+                    await _examCatalogRepository.AddWithoutSaveAsync(examCatalog);
+                }
+
+                // Save all changes at once at the end of the transaction
+                // This is compatible with NpgsqlRetryingExecutionStrategy
+                await _clinicRepository.SaveChangesAsync();
             });
         }
 
         public async Task ClearDatabaseAsync()
         {
             // Execute all deletion operations in a transaction to ensure data consistency
+            // Using DeleteWithoutSaveAsync to batch all operations and avoid multiple SaveChanges calls
+            // which cause issues with NpgsqlRetryingExecutionStrategy
             await _clinicRepository.ExecuteInTransactionAsync(async () =>
             {
                 // Delete data in the correct order to respect foreign key constraints
                 // Delete child entities first, then parent entities
                 
                 // 1. Delete PrescriptionItems (depends on MedicalRecords and Medications)
-            var prescriptionItems = await _prescriptionItemRepository.GetAllAsync(_demoTenantId);
-            foreach (var item in prescriptionItems)
-            {
-                await _prescriptionItemRepository.DeleteAsync(item.Id, _demoTenantId);
-            }
+                var prescriptionItems = await _prescriptionItemRepository.GetAllAsync(_demoTenantId);
+                foreach (var item in prescriptionItems)
+                {
+                    await _prescriptionItemRepository.DeleteWithoutSaveAsync(item.Id, _demoTenantId);
+                }
 
-            // 2. Delete ExamRequests (depends on Appointments and Patients)
-            var examRequests = await _examRequestRepository.GetAllAsync(_demoTenantId);
-            foreach (var examRequest in examRequests)
-            {
-                await _examRequestRepository.DeleteAsync(examRequest.Id, _demoTenantId);
-            }
+                // 2. Delete ExamRequests (depends on Appointments and Patients)
+                var examRequests = await _examRequestRepository.GetAllAsync(_demoTenantId);
+                foreach (var examRequest in examRequests)
+                {
+                    await _examRequestRepository.DeleteWithoutSaveAsync(examRequest.Id, _demoTenantId);
+                }
 
-            // 3. Delete Notifications (depends on Patients and Appointments)
-            var notifications = await _notificationRepository.GetAllAsync(_demoTenantId);
-            foreach (var notification in notifications)
-            {
-                await _notificationRepository.DeleteAsync(notification.Id, _demoTenantId);
-            }
+                // 3. Delete Notifications (depends on Patients and Appointments)
+                var notifications = await _notificationRepository.GetAllAsync(_demoTenantId);
+                foreach (var notification in notifications)
+                {
+                    await _notificationRepository.DeleteWithoutSaveAsync(notification.Id, _demoTenantId);
+                }
 
-            // 4. Delete NotificationRoutines
-            var notificationRoutines = await _notificationRoutineRepository.GetAllAsync(_demoTenantId);
-            foreach (var routine in notificationRoutines)
-            {
-                await _notificationRoutineRepository.DeleteAsync(routine.Id, _demoTenantId);
-            }
+                // 4. Delete NotificationRoutines
+                var notificationRoutines = await _notificationRoutineRepository.GetAllAsync(_demoTenantId);
+                foreach (var routine in notificationRoutines)
+                {
+                    await _notificationRoutineRepository.DeleteWithoutSaveAsync(routine.Id, _demoTenantId);
+                }
 
-            // 5. Delete MedicalRecords (depends on Appointments and Patients)
-            var medicalRecords = await _medicalRecordRepository.GetAllAsync(_demoTenantId);
-            foreach (var record in medicalRecords)
-            {
-                await _medicalRecordRepository.DeleteAsync(record.Id, _demoTenantId);
-            }
+                // 5. Delete MedicalRecords (depends on Appointments and Patients)
+                var medicalRecords = await _medicalRecordRepository.GetAllAsync(_demoTenantId);
+                foreach (var record in medicalRecords)
+                {
+                    await _medicalRecordRepository.DeleteWithoutSaveAsync(record.Id, _demoTenantId);
+                }
 
-            // 6. Delete Payments (depends on Appointments)
-            var payments = await _paymentRepository.GetAllAsync(_demoTenantId);
-            foreach (var payment in payments)
-            {
-                await _paymentRepository.DeleteAsync(payment.Id, _demoTenantId);
-            }
+                // 6. Delete Payments (depends on Appointments)
+                var payments = await _paymentRepository.GetAllAsync(_demoTenantId);
+                foreach (var payment in payments)
+                {
+                    await _paymentRepository.DeleteWithoutSaveAsync(payment.Id, _demoTenantId);
+                }
 
-            // 7. Delete AppointmentProcedures (depends on Appointments and Procedures)
-            var appointmentProcedures = await _appointmentProcedureRepository.GetAllAsync(_demoTenantId);
-            foreach (var ap in appointmentProcedures)
-            {
-                await _appointmentProcedureRepository.DeleteAsync(ap.Id, _demoTenantId);
-            }
+                // 7. Delete AppointmentProcedures (depends on Appointments and Procedures)
+                var appointmentProcedures = await _appointmentProcedureRepository.GetAllAsync(_demoTenantId);
+                foreach (var ap in appointmentProcedures)
+                {
+                    await _appointmentProcedureRepository.DeleteWithoutSaveAsync(ap.Id, _demoTenantId);
+                }
 
-            // 8. Delete Appointments
-            var appointments = await _appointmentRepository.GetAllAsync(_demoTenantId);
-            foreach (var appointment in appointments)
-            {
-                await _appointmentRepository.DeleteAsync(appointment.Id, _demoTenantId);
-            }
+                // 8. Delete Appointments
+                var appointments = await _appointmentRepository.GetAllAsync(_demoTenantId);
+                foreach (var appointment in appointments)
+                {
+                    await _appointmentRepository.DeleteWithoutSaveAsync(appointment.Id, _demoTenantId);
+                }
 
-            // 9. Delete PatientClinicLinks
-            var patientLinks = await _patientClinicLinkRepository.GetAllAsync(_demoTenantId);
-            foreach (var link in patientLinks)
-            {
-                await _patientClinicLinkRepository.DeleteAsync(link.Id, _demoTenantId);
-            }
+                // 9. Delete PatientClinicLinks
+                var patientLinks = await _patientClinicLinkRepository.GetAllAsync(_demoTenantId);
+                foreach (var link in patientLinks)
+                {
+                    await _patientClinicLinkRepository.DeleteWithoutSaveAsync(link.Id, _demoTenantId);
+                }
 
-            // 10. Delete Patients
-            var patients = await _patientRepository.GetAllAsync(_demoTenantId);
-            foreach (var patient in patients)
-            {
-                await _patientRepository.DeleteAsync(patient.Id, _demoTenantId);
-            }
+                // 10. Delete Patients
+                var patients = await _patientRepository.GetAllAsync(_demoTenantId);
+                foreach (var patient in patients)
+                {
+                    await _patientRepository.DeleteWithoutSaveAsync(patient.Id, _demoTenantId);
+                }
 
-            // 11. Delete PrescriptionTemplates
-            var prescriptionTemplates = await _prescriptionTemplateRepository.GetAllAsync(_demoTenantId);
-            foreach (var template in prescriptionTemplates)
-            {
-                await _prescriptionTemplateRepository.DeleteAsync(template.Id, _demoTenantId);
-            }
+                // 11. Delete PrescriptionTemplates
+                var prescriptionTemplates = await _prescriptionTemplateRepository.GetAllAsync(_demoTenantId);
+                foreach (var template in prescriptionTemplates)
+                {
+                    await _prescriptionTemplateRepository.DeleteWithoutSaveAsync(template.Id, _demoTenantId);
+                }
 
-            // 12. Delete MedicalRecordTemplates
-            var medicalRecordTemplates = await _medicalRecordTemplateRepository.GetAllAsync(_demoTenantId);
-            foreach (var template in medicalRecordTemplates)
-            {
-                await _medicalRecordTemplateRepository.DeleteAsync(template.Id, _demoTenantId);
-            }
+                // 12. Delete MedicalRecordTemplates
+                var medicalRecordTemplates = await _medicalRecordTemplateRepository.GetAllAsync(_demoTenantId);
+                foreach (var template in medicalRecordTemplates)
+                {
+                    await _medicalRecordTemplateRepository.DeleteWithoutSaveAsync(template.Id, _demoTenantId);
+                }
 
-            // 13. Delete Medications
-            var medications = await _medicationRepository.GetAllAsync(_demoTenantId);
-            foreach (var medication in medications)
-            {
-                await _medicationRepository.DeleteAsync(medication.Id, _demoTenantId);
-            }
+                // 13. Delete Medications
+                var medications = await _medicationRepository.GetAllAsync(_demoTenantId);
+                foreach (var medication in medications)
+                {
+                    await _medicationRepository.DeleteWithoutSaveAsync(medication.Id, _demoTenantId);
+                }
 
-            // 13.1. Delete ExamCatalogs
-            var examCatalogs = await _examCatalogRepository.GetAllAsync(_demoTenantId);
-            foreach (var examCatalog in examCatalogs)
-            {
-                await _examCatalogRepository.DeleteAsync(examCatalog.Id, _demoTenantId);
-            }
+                // 13.1. Delete ExamCatalogs
+                var examCatalogs = await _examCatalogRepository.GetAllAsync(_demoTenantId);
+                foreach (var examCatalog in examCatalogs)
+                {
+                    await _examCatalogRepository.DeleteWithoutSaveAsync(examCatalog.Id, _demoTenantId);
+                }
 
-            // 14. Delete Procedures
-            var procedures = await _procedureRepository.GetAllAsync(_demoTenantId);
-            foreach (var procedure in procedures)
-            {
-                await _procedureRepository.DeleteAsync(procedure.Id, _demoTenantId);
-            }
+                // 14. Delete Procedures
+                var procedures = await _procedureRepository.GetAllAsync(_demoTenantId);
+                foreach (var procedure in procedures)
+                {
+                    await _procedureRepository.DeleteWithoutSaveAsync(procedure.Id, _demoTenantId);
+                }
 
-            // 15. Delete Expenses
-            var expenses = await _expenseRepository.GetAllAsync(_demoTenantId);
-            foreach (var expense in expenses)
-            {
-                await _expenseRepository.DeleteAsync(expense.Id, _demoTenantId);
-            }
+                // 15. Delete Expenses
+                var expenses = await _expenseRepository.GetAllAsync(_demoTenantId);
+                foreach (var expense in expenses)
+                {
+                    await _expenseRepository.DeleteWithoutSaveAsync(expense.Id, _demoTenantId);
+                }
 
-            // 16. Delete Clinics
-            var clinics = await _clinicRepository.GetAllAsync(_demoTenantId);
-            foreach (var clinic in clinics)
-            {
-                await _clinicRepository.DeleteAsync(clinic.Id, _demoTenantId);
-            }
+                // 16. Delete Clinics
+                var clinics = await _clinicRepository.GetAllAsync(_demoTenantId);
+                foreach (var clinic in clinics)
+                {
+                    await _clinicRepository.DeleteWithoutSaveAsync(clinic.Id, _demoTenantId);
+                }
 
-            // 17. Delete SubscriptionPlans (system-wide, delete the demo plans)
-            var subscriptionPlans = await _subscriptionPlanRepository.GetAllAsync("system");
-            foreach (var plan in subscriptionPlans)
-            {
-                await _subscriptionPlanRepository.DeleteAsync(plan.Id, "system");
-            }
+                // 17. Delete SubscriptionPlans (system-wide, delete the demo plans)
+                var subscriptionPlans = await _subscriptionPlanRepository.GetAllAsync("system");
+                foreach (var plan in subscriptionPlans)
+                {
+                    await _subscriptionPlanRepository.DeleteWithoutSaveAsync(plan.Id, "system");
+                }
+
+                // Save all changes at once at the end of the transaction
+                // This is compatible with NpgsqlRetryingExecutionStrategy
+                await _clinicRepository.SaveChangesAsync();
 
                 // Note: Users, Owners, and ClinicSubscriptions don't have standard GetAllAsync/DeleteAsync methods
                 // in their repository interfaces. These entities may cascade delete when their parent

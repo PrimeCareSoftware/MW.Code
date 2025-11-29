@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Domain.Entities;
@@ -80,6 +81,36 @@ namespace MedicSoft.Repository.Repositories
         {
             await _context.ClinicSubscriptions.AddAsync(subscription);
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Adds a subscription to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task AddWithoutSaveAsync(ClinicSubscription subscription)
+        {
+            await _context.ClinicSubscriptions.AddAsync(subscription);
+        }
+
+        /// <summary>
+        /// Marks a subscription for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task DeleteWithoutSaveAsync(Guid id, string tenantId)
+        {
+            var subscription = await GetByIdAsync(id, tenantId);
+            if (subscription != null)
+            {
+                _context.ClinicSubscriptions.Remove(subscription);
+            }
+        }
+
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// </summary>
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(ClinicSubscription subscription)

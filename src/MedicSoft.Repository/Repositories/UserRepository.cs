@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Domain.Entities;
@@ -57,6 +58,36 @@ namespace MedicSoft.Repository.Repositories
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Adds a user to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task AddWithoutSaveAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+        }
+
+        /// <summary>
+        /// Marks a user for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task DeleteWithoutSaveAsync(Guid id, string tenantId)
+        {
+            var user = await GetByIdAsync(id, tenantId);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+            }
+        }
+
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// </summary>
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(User user)
