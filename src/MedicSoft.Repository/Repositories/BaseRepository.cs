@@ -52,6 +52,26 @@ namespace MedicSoft.Repository.Repositories
             return entity;
         }
 
+        /// <summary>
+        /// Adds an entity to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction
+        /// to avoid issues with retrying execution strategies like NpgsqlRetryingExecutionStrategy.
+        /// </summary>
+        public virtual async Task<T> AddWithoutSaveAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);
+            return entity;
+        }
+
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// Call this after batching multiple AddWithoutSaveAsync operations.
+        /// </summary>
+        public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
         public virtual async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
@@ -65,6 +85,20 @@ namespace MedicSoft.Repository.Repositories
             {
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        /// Marks an entity for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction
+        /// to avoid issues with retrying execution strategies like NpgsqlRetryingExecutionStrategy.
+        /// </summary>
+        public virtual async Task DeleteWithoutSaveAsync(Guid id, string tenantId)
+        {
+            var entity = await GetByIdAsync(id, tenantId);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
             }
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Domain.Entities;
@@ -52,6 +53,23 @@ namespace MedicSoft.Repository.Repositories
         {
             await _context.Owners.AddAsync(owner);
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Adds an owner to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        public async Task AddWithoutSaveAsync(Owner owner)
+        {
+            await _context.Owners.AddAsync(owner);
+        }
+
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// </summary>
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(Owner owner)

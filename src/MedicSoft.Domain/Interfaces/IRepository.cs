@@ -13,8 +13,25 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<T>> GetAllAsync(string tenantId);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, string tenantId);
         Task<T> AddAsync(T entity);
+        /// <summary>
+        /// Adds an entity to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction
+        /// to avoid issues with retrying execution strategies.
+        /// </summary>
+        Task<T> AddWithoutSaveAsync(T entity);
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// Call this after batching multiple AddWithoutSaveAsync or DeleteWithoutSaveAsync operations.
+        /// </summary>
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
         Task UpdateAsync(T entity);
         Task DeleteAsync(Guid id, string tenantId);
+        /// <summary>
+        /// Marks an entity for deletion without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction
+        /// to avoid issues with retrying execution strategies.
+        /// </summary>
+        Task DeleteWithoutSaveAsync(Guid id, string tenantId);
         Task<bool> ExistsAsync(Guid id, string tenantId);
         Task<int> CountAsync(string tenantId);
         Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation, CancellationToken cancellationToken = default);

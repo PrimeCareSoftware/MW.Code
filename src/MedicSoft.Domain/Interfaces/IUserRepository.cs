@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
 
@@ -13,6 +14,15 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<User>> GetByClinicIdAsync(Guid clinicId, string tenantId);
         Task<int> GetUserCountByClinicIdAsync(Guid clinicId, string tenantId);
         Task AddAsync(User user);
+        /// <summary>
+        /// Adds a user to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        Task AddWithoutSaveAsync(User user);
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// </summary>
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
         Task UpdateAsync(User user);
     }
 }

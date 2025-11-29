@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
 
@@ -12,6 +13,15 @@ namespace MedicSoft.Domain.Interfaces
         Task<Owner?> GetByClinicIdAsync(Guid clinicId, string tenantId);
         Task<IEnumerable<Owner>> GetAllAsync(string tenantId);
         Task AddAsync(Owner owner);
+        /// <summary>
+        /// Adds an owner to the context without immediately saving changes.
+        /// Use this method when batching multiple operations within a transaction.
+        /// </summary>
+        Task AddWithoutSaveAsync(Owner owner);
+        /// <summary>
+        /// Saves all pending changes to the database.
+        /// </summary>
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
         Task UpdateAsync(Owner owner);
         Task<bool> ExistsByUsernameAsync(string username, string tenantId);
         Task<bool> ExistsByEmailAsync(string email, string tenantId);
