@@ -2,6 +2,27 @@
 
 Este documento apresenta todas as telas do sistema MedicWarehouse com seus fluxos de navegação e funcionalidades.
 
+## 🖼️ Screenshots do Sistema
+
+O sistema foi redesenhado com um layout moderno inspirado em plataformas líderes de healthcare como Doctolib, Practo e Epic Systems.
+
+### Tela de Login
+![Login](https://github.com/user-attachments/assets/235f8dcc-07f5-4112-80de-8d53eb27f23e)
+
+### Tela de Cadastro
+![Register](https://github.com/user-attachments/assets/ec97cf84-ad44-4440-8f07-db237ee7e6a6)
+
+### Dashboard
+![Dashboard](https://github.com/user-attachments/assets/f4005015-49b8-402b-a6d6-7708ec1bbc69)
+
+### Lista de Pacientes
+![Patients](https://github.com/user-attachments/assets/ae22b99d-6cab-4361-b6b4-95ed89813c9d)
+
+### Formulário de Paciente
+![Patient Form](https://github.com/user-attachments/assets/8c3a2344-bdcb-49e9-aa28-cd9a9b837ad8)
+
+---
+
 ## 📱 Índice de Telas
 
 1. [Tela de Login](#1-tela-de-login)
