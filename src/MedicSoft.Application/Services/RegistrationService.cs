@@ -53,20 +53,11 @@ namespace MedicSoft.Application.Services
                 return (false, $"Password validation failed: {passwordError}", null, null);
             }
 
-            // Check if CNPJ already exists
+            // Check if CNPJ already exists (CNPJ is unique across all tenants, so safe to check outside transaction)
             var existingClinic = await _clinicRepository.GetByCNPJAsync(request.ClinicCNPJ);
             if (existingClinic != null)
             {
                 return (false, "CNPJ already registered", null, null);
-            }
-
-            // Generate tenant ID
-            var tenantId = Guid.NewGuid().ToString();
-
-            // Check if username already exists
-            if (await _ownerService.ExistsByUsernameAsync(request.Username, tenantId))
-            {
-                return (false, "Username already taken", null, null);
             }
 
             // Get subscription plan - plans are system-wide, so we use "system" as tenantId
@@ -76,9 +67,25 @@ namespace MedicSoft.Application.Services
                 return (false, "Invalid subscription plan", null, null);
             }
 
+            // Generate tenant ID (unique for each registration)
+            var tenantId = Guid.NewGuid().ToString();
+
             // Execute all creations within a transaction to ensure data consistency
+            // Username and email validation is done inside the transaction with the unique tenantId
             return await _clinicRepository.ExecuteInTransactionAsync(async () =>
             {
+                // Validate username within transaction (although tenantId is unique, this ensures consistency)
+                if (await _ownerRepository.ExistsByUsernameAsync(request.Username, tenantId))
+                {
+                    return (false, "Username already taken", (Guid?)null, (Guid?)null);
+                }
+
+                // Validate email within transaction
+                if (await _ownerRepository.ExistsByEmailAsync(request.OwnerEmail, tenantId))
+                {
+                    return (false, "Email already registered", (Guid?)null, (Guid?)null);
+                }
+
                 // Build full address
                 var fullAddress = $"{request.Street}, {request.Number} {request.Complement}, {request.Neighborhood} - {request.City}/{request.State} - CEP: {request.ZipCode}";
 
@@ -98,7 +105,7 @@ namespace MedicSoft.Application.Services
 
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
 
-                // Create owner (use AddWithoutSaveAsync pattern for consistency within transaction)
+                // Create owner
                 var passwordHash = _passwordHasher.HashPassword(request.Password);
                 var owner = new Owner(
                     request.Username,
