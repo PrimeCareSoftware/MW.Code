@@ -17,6 +17,7 @@ namespace MedicSoft.Application.Services
     {
         private readonly IClinicRepository _clinicRepository;
         private readonly IOwnerService _ownerService;
+        private readonly IOwnerRepository _ownerRepository;
         private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
         private readonly IPasswordHasher _passwordHasher;
@@ -24,12 +25,14 @@ namespace MedicSoft.Application.Services
         public RegistrationService(
             IClinicRepository clinicRepository,
             IOwnerService ownerService,
+            IOwnerRepository ownerRepository,
             ISubscriptionPlanRepository subscriptionPlanRepository,
             IClinicSubscriptionRepository clinicSubscriptionRepository,
             IPasswordHasher passwordHasher)
         {
             _clinicRepository = clinicRepository;
             _ownerService = ownerService;
+            _ownerRepository = ownerRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;
             _clinicSubscriptionRepository = clinicSubscriptionRepository;
             _passwordHasher = passwordHasher;
@@ -66,57 +69,66 @@ namespace MedicSoft.Application.Services
                 return (false, "Username already taken", null, null);
             }
 
-            // Get subscription plan
-            var plan = await _subscriptionPlanRepository.GetByIdAsync(Guid.Parse(request.PlanId), tenantId);
+            // Get subscription plan - plans are system-wide, so we use "system" as tenantId
+            var plan = await _subscriptionPlanRepository.GetByIdAsync(Guid.Parse(request.PlanId), "system");
             if (plan == null)
             {
                 return (false, "Invalid subscription plan", null, null);
             }
 
-            // Build full address
-            var fullAddress = $"{request.Street}, {request.Number} {request.Complement}, {request.Neighborhood} - {request.City}/{request.State} - CEP: {request.ZipCode}";
+            // Execute all creations within a transaction to ensure data consistency
+            return await _clinicRepository.ExecuteInTransactionAsync(async () =>
+            {
+                // Build full address
+                var fullAddress = $"{request.Street}, {request.Number} {request.Complement}, {request.Neighborhood} - {request.City}/{request.State} - CEP: {request.ZipCode}";
 
-            // Create clinic with default schedule (8AM to 6PM)
-            var clinic = new Clinic(
-                request.ClinicName,
-                request.ClinicName, // TradeName same as Name
-                request.ClinicCNPJ,
-                request.ClinicPhone,
-                request.ClinicEmail,
-                fullAddress,
-                new TimeSpan(8, 0, 0), // 8 AM
-                new TimeSpan(18, 0, 0), // 6 PM
-                tenantId,
-                30 // 30 minute appointments
-            );
+                // Create clinic with default schedule (8AM to 6PM)
+                var clinic = new Clinic(
+                    request.ClinicName,
+                    request.ClinicName, // TradeName same as Name
+                    request.ClinicCNPJ,
+                    request.ClinicPhone,
+                    request.ClinicEmail,
+                    fullAddress,
+                    new TimeSpan(8, 0, 0), // 8 AM
+                    new TimeSpan(18, 0, 0), // 6 PM
+                    tenantId,
+                    30 // 30 minute appointments
+                );
 
-            await _clinicRepository.AddAsync(clinic);
+                await _clinicRepository.AddWithoutSaveAsync(clinic);
 
-            // Create owner
-            var owner = await _ownerService.CreateOwnerAsync(
-                request.Username,
-                request.OwnerEmail,
-                request.Password,
-                request.OwnerName,
-                request.OwnerPhone,
-                tenantId,
-                clinic.Id
-            );
+                // Create owner (use AddWithoutSaveAsync pattern for consistency within transaction)
+                var passwordHash = _passwordHasher.HashPassword(request.Password);
+                var owner = new Owner(
+                    request.Username,
+                    request.OwnerEmail,
+                    passwordHash,
+                    request.OwnerName,
+                    request.OwnerPhone,
+                    tenantId,
+                    clinic.Id
+                );
+                await _ownerRepository.AddWithoutSaveAsync(owner);
 
-            // Create subscription
-            var trialDays = request.UseTrial ? plan.TrialDays : 0;
-            var subscription = new ClinicSubscription(
-                clinic.Id,
-                plan.Id,
-                DateTime.UtcNow,
-                trialDays,
-                plan.MonthlyPrice,
-                tenantId
-            );
+                // Create subscription
+                var trialDays = request.UseTrial ? plan.TrialDays : 0;
+                var subscription = new ClinicSubscription(
+                    clinic.Id,
+                    plan.Id,
+                    DateTime.UtcNow,
+                    trialDays,
+                    plan.MonthlyPrice,
+                    tenantId
+                );
 
-            await _clinicSubscriptionRepository.AddAsync(subscription);
+                await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
 
-            return (true, "Registration successful", clinic.Id, owner.Id);
+                // Save all changes at once within the transaction
+                await _clinicRepository.SaveChangesAsync();
+
+                return (true, "Registration successful", clinic.Id, owner.Id);
+            });
         }
 
         public async Task<bool> CheckCNPJExistsAsync(string cnpj)
