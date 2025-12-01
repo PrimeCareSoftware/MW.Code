@@ -131,22 +131,25 @@ namespace MedicSoft.Application.Services
 
         public async Task TransferPrimaryOwnershipAsync(Guid clinicId, Guid currentPrimaryOwnerId, Guid newPrimaryOwnerId)
         {
-            // Get current primary owner link
-            var currentPrimaryLink = await _linkRepository.GetPrimaryOwnerByClinicIdAsync(clinicId);
-            if (currentPrimaryLink == null || currentPrimaryLink.OwnerId != currentPrimaryOwnerId)
-                throw new InvalidOperationException("Current user is not the primary owner");
+            await _linkRepository.ExecuteInTransactionAsync(async () =>
+            {
+                // Get current primary owner link
+                var currentPrimaryLink = await _linkRepository.GetPrimaryOwnerByClinicIdAsync(clinicId);
+                if (currentPrimaryLink == null || currentPrimaryLink.OwnerId != currentPrimaryOwnerId)
+                    throw new InvalidOperationException("Current user is not the primary owner");
 
-            // Get new primary owner link
-            var newPrimaryLink = await _linkRepository.GetLinkAsync(newPrimaryOwnerId, clinicId);
-            if (newPrimaryLink == null || !newPrimaryLink.IsActive)
-                throw new InvalidOperationException("New owner does not have access to this clinic");
+                // Get new primary owner link
+                var newPrimaryLink = await _linkRepository.GetLinkAsync(newPrimaryOwnerId, clinicId);
+                if (newPrimaryLink == null || !newPrimaryLink.IsActive)
+                    throw new InvalidOperationException("New owner does not have access to this clinic");
 
-            // Transfer ownership
-            currentPrimaryLink.RemoveAsPrimary();
-            newPrimaryLink.SetAsPrimary();
+                // Transfer ownership
+                currentPrimaryLink.RemoveAsPrimary();
+                newPrimaryLink.SetAsPrimary();
 
-            await _linkRepository.UpdateAsync(currentPrimaryLink);
-            await _linkRepository.UpdateAsync(newPrimaryLink);
+                await _linkRepository.UpdateAsync(currentPrimaryLink);
+                await _linkRepository.UpdateAsync(newPrimaryLink);
+            });
         }
 
         public async Task UpdateLinkAsync(Guid linkId, string tenantId, string? role, decimal? ownershipPercentage)
