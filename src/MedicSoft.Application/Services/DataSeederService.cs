@@ -32,6 +32,7 @@ namespace MedicSoft.Application.Services
         private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
         private readonly IOwnerRepository _ownerRepository;
+        private readonly IOwnerClinicLinkRepository _ownerClinicLinkRepository;
         private readonly IExpenseRepository _expenseRepository;
         private readonly IExamRequestRepository _examRequestRepository;
         private readonly IExamCatalogRepository _examCatalogRepository;
@@ -57,6 +58,7 @@ namespace MedicSoft.Application.Services
             ISubscriptionPlanRepository subscriptionPlanRepository,
             IClinicSubscriptionRepository clinicSubscriptionRepository,
             IOwnerRepository ownerRepository,
+            IOwnerClinicLinkRepository ownerClinicLinkRepository,
             IExpenseRepository expenseRepository,
             IExamRequestRepository examRequestRepository,
             IExamCatalogRepository examCatalogRepository)
@@ -80,6 +82,7 @@ namespace MedicSoft.Application.Services
             _subscriptionPlanRepository = subscriptionPlanRepository;
             _clinicSubscriptionRepository = clinicSubscriptionRepository;
             _ownerRepository = ownerRepository;
+            _ownerClinicLinkRepository = ownerClinicLinkRepository;
             _expenseRepository = expenseRepository;
             _examRequestRepository = examRequestRepository;
             _examCatalogRepository = examCatalogRepository;
@@ -365,14 +368,42 @@ namespace MedicSoft.Application.Services
                     await _expenseRepository.DeleteWithoutSaveAsync(expense.Id, _demoTenantId);
                 }
 
-                // 16. Delete Clinics
+                // 16. Delete Users (depends on Clinics - must be deleted before Clinics)
+                var users = await _userRepository.GetAllAsync(_demoTenantId);
+                foreach (var user in users)
+                {
+                    await _userRepository.DeleteWithoutSaveAsync(user.Id, _demoTenantId);
+                }
+
+                // 17. Delete OwnerClinicLinks (depends on Owners and Clinics)
+                var ownerClinicLinks = await _ownerClinicLinkRepository.GetAllAsync(_demoTenantId);
+                foreach (var link in ownerClinicLinks)
+                {
+                    await _ownerClinicLinkRepository.DeleteWithoutSaveAsync(link.Id, _demoTenantId);
+                }
+
+                // 18. Delete ClinicSubscriptions (depends on Clinics and SubscriptionPlans)
+                var clinicSubscriptions = await _clinicSubscriptionRepository.GetAllAsync(_demoTenantId);
+                foreach (var subscription in clinicSubscriptions)
+                {
+                    await _clinicSubscriptionRepository.DeleteWithoutSaveAsync(subscription.Id, _demoTenantId);
+                }
+
+                // 19. Delete Owners (may have ClinicId reference)
+                var owners = await _ownerRepository.GetAllAsync(_demoTenantId);
+                foreach (var owner in owners)
+                {
+                    await _ownerRepository.DeleteWithoutSaveAsync(owner.Id, _demoTenantId);
+                }
+
+                // 20. Delete Clinics
                 var clinics = await _clinicRepository.GetAllAsync(_demoTenantId);
                 foreach (var clinic in clinics)
                 {
                     await _clinicRepository.DeleteWithoutSaveAsync(clinic.Id, _demoTenantId);
                 }
 
-                // 17. Delete SubscriptionPlans (system-wide, delete the demo plans)
+                // 21. Delete SubscriptionPlans (system-wide, delete the demo plans)
                 var subscriptionPlans = await _subscriptionPlanRepository.GetAllAsync("system");
                 foreach (var plan in subscriptionPlans)
                 {
@@ -382,11 +413,6 @@ namespace MedicSoft.Application.Services
                 // Save all changes at once at the end of the transaction
                 // This is compatible with NpgsqlRetryingExecutionStrategy
                 await _clinicRepository.SaveChangesAsync();
-
-                // Note: Users, Owners, and ClinicSubscriptions don't have standard GetAllAsync/DeleteAsync methods
-                // in their repository interfaces. These entities may cascade delete when their parent
-                // entities (Clinics) are deleted, depending on the database foreign key configuration.
-                // If manual deletion is needed, it can be implemented by extending the repository interfaces.
             });
         }
 

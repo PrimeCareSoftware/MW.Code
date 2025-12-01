@@ -48,6 +48,13 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<User>> GetAllAsync(string tenantId)
+        {
+            return await _context.Users
+                .Where(u => u.TenantId == tenantId)
+                .ToListAsync();
+        }
+
         public async Task<int> GetUserCountByClinicIdAsync(Guid clinicId, string tenantId)
         {
             return await _context.Users

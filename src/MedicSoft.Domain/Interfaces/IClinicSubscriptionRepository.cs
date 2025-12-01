@@ -10,6 +10,7 @@ namespace MedicSoft.Domain.Interfaces
     {
         Task<ClinicSubscription?> GetByIdAsync(Guid id, string tenantId);
         Task<ClinicSubscription?> GetByClinicIdAsync(Guid clinicId, string tenantId);
+        Task<IEnumerable<ClinicSubscription>> GetAllAsync(string tenantId);
         Task<IEnumerable<ClinicSubscription>> GetOverdueSubscriptionsAsync();
         Task<IEnumerable<ClinicSubscription>> GetExpiringTrialsAsync(int daysBeforeExpiration);
         Task<IEnumerable<ClinicSubscription>> GetPendingDowngradesAsync();

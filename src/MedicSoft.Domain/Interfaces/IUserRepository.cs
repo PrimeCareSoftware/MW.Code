@@ -11,6 +11,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<object?> GetByUsernameAsync(string username);
         Task<User?> GetUserByUsernameAsync(string username, string tenantId);
         Task<User?> GetByIdAsync(Guid id, string tenantId);
+        Task<IEnumerable<User>> GetAllAsync(string tenantId);
         Task<IEnumerable<User>> GetByClinicIdAsync(Guid clinicId, string tenantId);
         Task<int> GetUserCountByClinicIdAsync(Guid clinicId, string tenantId);
         Task AddAsync(User user);

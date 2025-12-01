@@ -291,12 +291,17 @@ namespace MedicSoft.Api.Controllers
                         "PrescriptionTemplates",
                         "MedicalRecordTemplates",
                         "Medications",
+                        "ExamCatalogs",
                         "Procedures",
                         "Expenses",
+                        "Users",
+                        "OwnerClinicLinks",
+                        "ClinicSubscriptions",
+                        "Owners",
                         "Clinics",
                         "SubscriptionPlans"
                     },
-                    note = "All data has been removed from the database. Users, Owners, and ClinicSubscriptions may remain if not cascade-deleted. You can now re-seed the database using POST /api/data-seeder/seed-demo"
+                    note = "All demo data has been removed from the database. You can now re-seed the database using POST /api/data-seeder/seed-demo"
                 });
             }
             catch (Exception ex)

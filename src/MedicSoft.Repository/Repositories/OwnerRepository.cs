@@ -44,7 +44,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _context.Owners
                 .Include(o => o.Clinic)
-                .Where(o => o.TenantId == tenantId && o.IsActive)
+                .Where(o => o.TenantId == tenantId)
                 .OrderBy(o => o.FullName)
                 .ToListAsync();
         }
