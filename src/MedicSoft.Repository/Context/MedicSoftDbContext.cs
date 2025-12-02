@@ -224,21 +224,172 @@ namespace MedicSoft.Repository.Context
             var entries = ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
 
+            var diagnostics = new List<string>();
+
             foreach (var entry in entries)
             {
                 foreach (var property in entry.Properties)
                 {
+                    // Normalize scalar DateTime values
                     if (property.CurrentValue is DateTime dateTime)
                     {
                         if (dateTime.Kind == DateTimeKind.Unspecified)
                         {
+                            diagnostics.Add($"Entity={entry.Entity.GetType().Name} Property={property.Metadata.Name} Value={dateTime:o} Kind=Unspecified");
                             property.CurrentValue = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
                         }
                         else if (dateTime.Kind == DateTimeKind.Local)
                         {
+                            diagnostics.Add($"Entity={entry.Entity.GetType().Name} Property={property.Metadata.Name} Value={dateTime:o} Kind=Local");
                             property.CurrentValue = dateTime.ToUniversalTime();
                         }
+
+                        continue;
                     }
+
+                    // If the property is a complex/owned object or collection, recursively inspect/normalize contained DateTimes
+                    if (property.CurrentValue != null)
+                    {
+                        try
+                        {
+                            var visited = new HashSet<object>();
+                            NormalizeObjectDateTimes(property.CurrentValue, visited, diagnostics, entry.Entity.GetType().Name + "." + property.Metadata.Name);
+                        }
+                        catch
+                        {
+                            // Swallow any reflection errors to avoid breaking save; best-effort normalization only
+                        }
+                    }
+                }
+            }
+
+            if (diagnostics.Count > 0)
+            {
+                // Print diagnostics to console to make it easy to find offending values in logs
+                Console.Error.WriteLine("[MedicSoftDbContext] DateTime normalization diagnostics (non-UTC values found):");
+                foreach (var d in diagnostics.Take(50))
+                    Console.Error.WriteLine(d);
+
+                // If there were many, indicate how many were suppressed
+                if (diagnostics.Count > 50)
+                    Console.Error.WriteLine($"...and {diagnostics.Count - 50} more items.");
+            }
+        }
+
+        private void NormalizeObjectDateTimes(object? obj, HashSet<object> visited, List<string> diagnostics, string? path = null)
+        {
+            if (obj == null) return;
+
+            // Avoid cycles
+            if (visited.Contains(obj)) return;
+            visited.Add(obj);
+
+            // Handle DateTime directly
+            if (obj is DateTime dt)
+            {
+                if (dt.Kind == DateTimeKind.Unspecified)
+                    diagnostics.Add($"ObjectPath={path ?? "(root)"} Value={dt:o} Kind=Unspecified (collection/owned element)");
+                else if (dt.Kind == DateTimeKind.Local)
+                    diagnostics.Add($"ObjectPath={path ?? "(root)"} Value={dt:o} Kind=Local (collection/owned element)");
+                // Can't set the value here because caller must assign back; callers handle scalar properties separately
+                return;
+            }
+
+            // Handle collections (IEnumerable) except string
+            if (obj is System.Collections.IEnumerable enumerable && !(obj is string))
+            {
+                foreach (var item in enumerable)
+                {
+                    if (item == null) continue;
+
+                    if (item is DateTime d)
+                    {
+                        if (d.Kind == DateTimeKind.Unspecified)
+                            diagnostics.Add($"ObjectPath={path ?? "(root)"} CollectionElement Value={d:o} Kind=Unspecified");
+                        else if (d.Kind == DateTimeKind.Local)
+                            diagnostics.Add($"ObjectPath={path ?? "(root)"} CollectionElement Value={d:o} Kind=Local");
+
+                        // Try to normalize in-place where possible (arrays and lists)
+                        try
+                        {
+                            if (enumerable is System.Collections.IList list)
+                            {
+                                for (int i = 0; i < list.Count; i++)
+                                {
+                                    if (list[i] is DateTime listDt)
+                                    {
+                                        if (listDt.Kind == DateTimeKind.Unspecified)
+                                            list[i] = DateTime.SpecifyKind(listDt, DateTimeKind.Utc);
+                                        else if (listDt.Kind == DateTimeKind.Local)
+                                            list[i] = listDt.ToUniversalTime();
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // ignore failures normalizing collection elements
+                        }
+
+                        continue;
+                    }
+
+                    NormalizeObjectDateTimes(item, visited, diagnostics, path == null ? item.GetType().Name : path + "." + item.GetType().Name);
+                }
+
+                return;
+            }
+
+            // For objects, reflect over writable properties and normalize DateTime and DateTime? values
+            var type = obj.GetType();
+            var props = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+                .Where(p => p.CanRead && p.CanWrite);
+
+            foreach (var pi in props)
+            {
+                try
+                {
+                    var val = pi.GetValue(obj);
+                    if (val == null) continue;
+
+                    if (val is DateTime dtVal)
+                    {
+                        if (dtVal.Kind == DateTimeKind.Unspecified)
+                        {
+                            diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={dtVal:o} Kind=Unspecified");
+                            pi.SetValue(obj, DateTime.SpecifyKind(dtVal, DateTimeKind.Utc));
+                        }
+                        else if (dtVal.Kind == DateTimeKind.Local)
+                        {
+                            diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={dtVal:o} Kind=Local");
+                            pi.SetValue(obj, dtVal.ToUniversalTime());
+                        }
+                        continue;
+                    }
+
+                    // Nullable<DateTime>
+                    var underlying = Nullable.GetUnderlyingType(pi.PropertyType);
+                    if (underlying == typeof(DateTime) && val is DateTime nullableDt)
+                    {
+                        if (nullableDt.Kind == DateTimeKind.Unspecified)
+                        {
+                            diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={nullableDt:o} Kind=Unspecified");
+                            pi.SetValue(obj, DateTime.SpecifyKind(nullableDt, DateTimeKind.Utc));
+                        }
+                        else if (nullableDt.Kind == DateTimeKind.Local)
+                        {
+                            diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={nullableDt:o} Kind=Local");
+                            pi.SetValue(obj, nullableDt.ToUniversalTime());
+                        }
+                        continue;
+                    }
+
+                    // Recurse into complex properties
+                    NormalizeObjectDateTimes(val, visited, diagnostics, path == null ? type.Name + "." + pi.Name : path + "." + pi.Name);
+                }
+                catch
+                {
+                    // Ignore reflection errors on individual properties
                 }
             }
         }

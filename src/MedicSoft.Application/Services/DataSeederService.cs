@@ -573,7 +573,7 @@ namespace MedicSoft.Application.Services
             patients.Add(new Patient(
                 "Carlos Alberto Santos",
                 "529.982.247-25",
-                new DateTime(1980, 5, 15),
+                new DateTime(1980, 5, 15, 0, 0, 0, DateTimeKind.Utc),
                 "Masculino",
                 new Email("carlos.santos@email.com"),
                 new Phone("+55", "11987654321"),
@@ -586,7 +586,7 @@ namespace MedicSoft.Application.Services
             patients.Add(new Patient(
                 "Ana Maria Oliveira",
                 "318.649.712-40",
-                new DateTime(1975, 8, 20),
+                new DateTime(1975, 8, 20, 0, 0, 0, DateTimeKind.Utc),
                 "Feminino",
                 new Email("ana.oliveira@email.com"),
                 new Phone("+55", "11987654322"),
@@ -599,7 +599,7 @@ namespace MedicSoft.Application.Services
             patients.Add(new Patient(
                 "Pedro Henrique Costa",
                 "123.891.234-65",
-                new DateTime(1990, 3, 10),
+                new DateTime(1990, 3, 10, 0, 0, 0, DateTimeKind.Utc),
                 "Masculino",
                 new Email("pedro.costa@email.com"),
                 new Phone("+55", "11987654323"),
@@ -613,7 +613,7 @@ namespace MedicSoft.Application.Services
             var guardian = new Patient(
                 "Juliana Martins Silva",
                 "456.782.345-10",
-                new DateTime(1985, 12, 25),
+                new DateTime(1985, 12, 25, 0, 0, 0, DateTimeKind.Utc),
                 "Feminino",
                 new Email("juliana.martins@email.com"),
                 new Phone("+55", "11987654324"),
@@ -628,7 +628,7 @@ namespace MedicSoft.Application.Services
             var child1 = new Patient(
                 "Lucas Martins Silva",
                 "789.673.456-74",
-                new DateTime(2015, 6, 10),
+                new DateTime(2015, 6, 10, 0, 0, 0, DateTimeKind.Utc),
                 "Masculino",
                 new Email("lucas.martins@email.com"),
                 new Phone("+55", "11987654325"),
@@ -643,7 +643,7 @@ namespace MedicSoft.Application.Services
             var child2 = new Patient(
                 "Sofia Martins Silva",
                 "912.564.567-64",
-                new DateTime(2017, 9, 15),
+                new DateTime(2017, 9, 15, 0, 0, 0, DateTimeKind.Utc),
                 "Feminino",
                 new Email("sofia.martins@email.com"),
                 new Phone("+55", "11987654326"),
@@ -666,7 +666,7 @@ namespace MedicSoft.Application.Services
         private List<Appointment> CreateDemoAppointments(List<Patient> patients, Guid clinicId)
         {
             var appointments = new List<Appointment>();
-            var today = DateTime.Today;
+            var today = DateTime.UtcNow.Date;
 
             // Past appointments (completed) - using allowHistoricalData flag
             var pastAppointment1 = new Appointment(
@@ -747,7 +747,7 @@ namespace MedicSoft.Application.Services
             List<Patient> patients)
         {
             var appointmentProcedures = new List<AppointmentProcedure>();
-            var today = DateTime.Today;
+            var today = DateTime.UtcNow.Date;
 
             // First completed appointment - General consultation (7 days ago at 9:00)
             appointmentProcedures.Add(new AppointmentProcedure(
@@ -989,7 +989,7 @@ namespace MedicSoft.Application.Services
         private List<MedicalRecord> CreateDemoMedicalRecords(List<Appointment> appointments, List<Patient> patients)
         {
             var medicalRecords = new List<MedicalRecord>();
-            var today = DateTime.Today;
+            var today = DateTime.UtcNow.Date;
 
             // Medical record for first completed appointment (Carlos) - 7 days ago at 9:00
             var record1 = new MedicalRecord(
@@ -1520,7 +1520,7 @@ RETORNO: {{return_date}}",
 
         private List<Expense> CreateDemoExpenses(Guid clinicId)
         {
-            var today = DateTime.Today;
+            var today = DateTime.UtcNow.Date;
             var expenses = new List<Expense>();
 
             // Aluguel - Pago
@@ -1676,7 +1676,7 @@ RETORNO: {{return_date}}",
         private List<ExamRequest> CreateDemoExamRequests(List<Appointment> appointments, List<Patient> patients)
         {
             var examRequests = new List<ExamRequest>();
-            var today = DateTime.Today;
+            var today = DateTime.UtcNow.Date;
 
             // Exam request for first completed appointment (Carlos - Hypertension) - 7 days ago
             var exam1 = new ExamRequest(
