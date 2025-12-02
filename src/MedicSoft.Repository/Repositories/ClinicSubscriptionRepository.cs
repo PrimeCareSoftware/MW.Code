@@ -39,6 +39,13 @@ namespace MedicSoft.Repository.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<ClinicSubscription>> GetAllAsync(string tenantId)
+        {
+            return await _context.ClinicSubscriptions
+                .Where(cs => cs.TenantId == tenantId)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<ClinicSubscription>> GetOverdueSubscriptionsAsync()
         {
             var today = DateTime.UtcNow;
