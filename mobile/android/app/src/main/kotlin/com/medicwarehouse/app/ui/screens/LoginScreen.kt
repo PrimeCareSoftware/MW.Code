@@ -92,7 +92,7 @@ fun LoginScreen(
                 brush = Brush.linearGradient(
                     colors = listOf(
                         MWPrimary,
-                        MWSecondary.copy(alpha = 0.9f + animatedOffset * 0.1f),
+                        MWSecondary.copy(alpha = (0.85f + animatedOffset * 0.1f).coerceIn(0f, 1f)),
                         Color(0xFFEC4899).copy(alpha = 0.7f)
                     )
                 )

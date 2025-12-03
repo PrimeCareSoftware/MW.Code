@@ -471,7 +471,8 @@ fun MWEmptyState(
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = MWPrimary
                 ),
-                border = ButtonDefaults.outlinedButtonBorder.copy(
+                border = androidx.compose.foundation.BorderStroke(
+                    width = 1.dp,
                     brush = Brush.linearGradient(
                         colors = listOf(MWPrimary.copy(alpha = 0.5f), MWPrimary.copy(alpha = 0.3f))
                     )
