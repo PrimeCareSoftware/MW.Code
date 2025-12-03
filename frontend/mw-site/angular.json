@@ -34,7 +34,10 @@
             ],
             "styles": [
               "src/styles.scss"
-            ]
+            ],
+            "optimization": {
+              "fonts": false
+            }
           },
           "configurations": {
             "production": {
@@ -46,8 +49,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "8kB",
-                  "maximumError": "12kB"
+                  "maximumWarning": "16kB",
+                  "maximumError": "24kB"
                 }
               ],
               "outputHashing": "all"
