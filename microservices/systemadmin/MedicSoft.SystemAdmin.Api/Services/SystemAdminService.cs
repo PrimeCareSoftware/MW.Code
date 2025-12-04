@@ -238,7 +238,9 @@ public class SystemAdminService : ISystemAdminService
             InactiveClinics = totalClinics - activeClinics,
             TotalUsers = totalUsers,
             ActiveUsers = activeUsers,
-            TotalPatients = 0, // Would need patients table
+            // TODO: Patient count requires cross-microservice communication with Patients microservice
+            // Consider implementing an API call to Patients service or data aggregation strategy
+            TotalPatients = 0,
             SubscriptionsByStatus = subscriptionsByStatus,
             SubscriptionsByPlan = subscriptionsByPlan,
             MonthlyRecurringRevenue = monthlyRevenue

@@ -66,6 +66,9 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 // Configure JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
+// Add JWT Authentication using shared library (for protected endpoints like validate-session)
+builder.Services.AddMicroserviceAuthentication(builder.Configuration);
+
 // Register services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -99,6 +102,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("CorsPolicy");
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
