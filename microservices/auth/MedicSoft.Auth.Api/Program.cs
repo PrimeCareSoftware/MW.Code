@@ -66,6 +66,9 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 // Configure JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
+// Configure Session settings
+builder.Services.Configure<SessionSettings>(builder.Configuration.GetSection("SessionSettings"));
+
 // Add JWT Authentication using shared library (for protected endpoints like validate-session)
 builder.Services.AddMicroserviceAuthentication(builder.Configuration);
 
@@ -89,6 +92,50 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Ensure database is created
+// Note: In production, use proper EF Core migrations instead of EnsureCreated
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+    
+    try
+    {
+        // Only use EnsureCreated in development
+        // In production, migrations should be applied separately
+        if (env.IsDevelopment())
+        {
+            context.Database.EnsureCreated();
+            logger.LogInformation("Database schema ensured in development mode");
+        }
+        else
+        {
+            // In production, verify database connectivity
+            try
+            {
+                var canConnect = await context.Database.CanConnectAsync();
+                if (canConnect)
+                {
+                    logger.LogInformation("Database connection verified successfully");
+                }
+                else
+                {
+                    logger.LogWarning("Could not connect to database. Please verify connection string and database availability.");
+                }
+            }
+            catch (Exception dbEx)
+            {
+                logger.LogError(dbEx, "Failed to verify database connection. Error: {ErrorMessage}", dbEx.Message);
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while initializing the database");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
