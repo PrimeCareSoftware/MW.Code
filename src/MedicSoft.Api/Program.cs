@@ -153,6 +153,11 @@ if (rateLimitEnabled)
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+// Configure MediatR License
+builder.Services.Configure<MedicSoft.Application.Configuration.MediatRLicenseSettings>(
+    builder.Configuration.GetSection("MediatRLicense"));
+builder.Services.AddSingleton<MedicSoft.Application.Services.MediatRLicenseService>();
+
 // Configure MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
     typeof(MedicSoft.Application.Services.PatientService).Assembly));
@@ -272,6 +277,21 @@ if (rateLimitEnabled)
 }
 
 app.MapControllers();
+
+// Initialize MediatR License
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        var licenseService = scope.ServiceProvider.GetRequiredService<MedicSoft.Application.Services.MediatRLicenseService>();
+        licenseService.InitializeLicense();
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(ex, "MediatR license initialization warning: {Message}", ex.Message);
+    }
+}
 
 // Ensure database is created
 using (var scope = app.Services.CreateScope())
