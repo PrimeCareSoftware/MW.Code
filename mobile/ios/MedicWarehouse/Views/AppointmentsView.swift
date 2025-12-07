@@ -22,6 +22,24 @@ struct AppointmentsView: View {
             case .completed: return "completed"
             }
         }
+        
+        var icon: String {
+            switch self {
+            case .all: return "list.bullet"
+            case .scheduled: return "calendar.badge.clock"
+            case .inProgress: return "clock.fill"
+            case .completed: return "checkmark.circle.fill"
+            }
+        }
+        
+        var color: Color {
+            switch self {
+            case .all: return .mwTextSecondary
+            case .scheduled: return .mwPrimary
+            case .inProgress: return .mwWarning
+            case .completed: return .mwSuccess
+            }
+        }
     }
     
     var filteredAppointments: [Appointment] {
@@ -34,84 +52,117 @@ struct AppointmentsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Filter Pills
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(AppointmentFilter.allCases, id: \.self) { filter in
-                            FilterPill(
-                                title: filter.rawValue,
-                                isSelected: selectedFilter == filter
-                            ) {
-                                selectedFilter = filter
+                // Custom Header
+                VStack(spacing: MWDesign.Spacing.md) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: MWDesign.Spacing.xxs) {
+                            Text("Agendamentos")
+                                .font(.system(size: 28, weight: .bold, design: .rounded))
+                                .foregroundColor(.mwTextPrimary)
+                            
+                            Text("\(appointments.count) no total")
+                                .font(.subheadline)
+                                .foregroundColor(.mwTextSecondary)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            // Add new appointment action
+                        }) {
+                            ZStack {
+                                Circle()
+                                    .fill(LinearGradient(colors: [Color.mwSuccess, Color(hex: "34D399")], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .frame(width: 44, height: 44)
+                                
+                                Image(systemName: "plus")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(.white)
                             }
+                            .shadow(color: Color.mwSuccess.opacity(0.3), radius: 6, x: 0, y: 3)
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, MWDesign.Spacing.lg)
+                    .padding(.top, MWDesign.Spacing.md)
+                    
+                    // Enhanced Filter Pills
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: MWDesign.Spacing.sm) {
+                            ForEach(AppointmentFilter.allCases, id: \.self) { filter in
+                                ModernFilterPill(
+                                    title: filter.rawValue,
+                                    icon: filter.icon,
+                                    color: filter.color,
+                                    isSelected: selectedFilter == filter
+                                ) {
+                                    withAnimation(MWDesign.Animation.smooth) {
+                                        selectedFilter = filter
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal, MWDesign.Spacing.lg)
+                    }
+                    .padding(.bottom, MWDesign.Spacing.sm)
                 }
-                .background(Color(.systemGroupedBackground))
+                .background(Color.mwBackground)
                 
+                // Content
                 if isLoading {
-                    Spacer()
-                    ProgressView()
-                        .scaleEffect(1.5)
+                    VStack(spacing: MWDesign.Spacing.md) {
+                        ForEach(0..<4) { _ in
+                            SkeletonAppointmentCard()
+                        }
+                    }
+                    .padding(.horizontal, MWDesign.Spacing.lg)
+                    .padding(.top, MWDesign.Spacing.md)
+                    
                     Spacer()
                 } else if let errorMessage = errorMessage {
                     Spacer()
-                    VStack(spacing: 15) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.system(size: 50))
-                            .foregroundColor(.orange)
-                        
-                        Text(errorMessage)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.gray)
-                        
-                        Button("Tentar Novamente") {
+                    MWEmptyStateView(
+                        icon: "exclamationmark.triangle",
+                        title: "Erro ao carregar",
+                        message: errorMessage,
+                        actionTitle: "Tentar Novamente",
+                        action: {
                             Task {
                                 await loadAppointments()
                             }
                         }
-                        .buttonStyle(.borderedProminent)
-                    }
-                    .padding()
+                    )
                     Spacer()
                 } else if filteredAppointments.isEmpty {
                     Spacer()
-                    VStack(spacing: 15) {
-                        Image(systemName: "calendar.badge.exclamationmark")
-                            .font(.system(size: 50))
-                            .foregroundColor(.gray)
-                        
-                        Text("Nenhum agendamento encontrado")
-                            .foregroundColor(.gray)
-                    }
+                    MWEmptyStateView(
+                        icon: "calendar.badge.exclamationmark",
+                        title: "Nenhum agendamento",
+                        message: selectedFilter == .all ? "Não há agendamentos registrados" : "Nenhum agendamento com status \"\(selectedFilter.rawValue)\""
+                    )
                     Spacer()
                 } else {
-                    List(filteredAppointments) { appointment in
-                        AppointmentRow(appointment: appointment)
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: MWDesign.Spacing.md) {
+                            ForEach(Array(filteredAppointments.enumerated()), id: \.element.id) { index, appointment in
+                                ModernAppointmentCard(appointment: appointment, delay: Double(index) * 0.05)
+                            }
+                        }
+                        .padding(.horizontal, MWDesign.Spacing.lg)
+                        .padding(.top, MWDesign.Spacing.md)
+                        .padding(.bottom, MWDesign.Spacing.xl)
                     }
-                    .listStyle(PlainListStyle())
-                }
-            }
-            .navigationTitle("Agendamentos")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        // Add new appointment action
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title3)
+                    .refreshable {
+                        await loadAppointments()
                     }
                 }
             }
+            .background(Color.mwBackground)
+            .navigationBarHidden(true)
             .task {
                 await loadAppointments()
             }
-            .refreshable {
-                await loadAppointments()
-            }
         }
+        .navigationViewStyle(.stack)
     }
     
     private func loadAppointments() async {
@@ -133,35 +184,62 @@ struct AppointmentsView: View {
     }
 }
 
-struct FilterPill: View {
+// MARK: - Modern Filter Pill
+struct ModernFilterPill: View {
     let title: String
+    let icon: String
+    let color: Color
     let isSelected: Bool
     let action: () -> Void
     
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(.subheadline)
-                .fontWeight(isSelected ? .semibold : .regular)
-                .foregroundColor(isSelected ? .white : .primary)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(isSelected ? Color.blue : Color(.systemGray6))
-                .cornerRadius(20)
+            HStack(spacing: MWDesign.Spacing.xs) {
+                Image(systemName: icon)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(isSelected ? .semibold : .medium)
+            }
+            .foregroundColor(isSelected ? .white : color)
+            .padding(.horizontal, MWDesign.Spacing.md)
+            .padding(.vertical, MWDesign.Spacing.sm)
+            .background(
+                Group {
+                    if isSelected {
+                        LinearGradient(colors: [color, color.opacity(0.8)], startPoint: .leading, endPoint: .trailing)
+                    } else {
+                        color.opacity(0.1)
+                    }
+                }
+            )
+            .cornerRadius(MWDesign.Radius.full)
+            .overlay(
+                RoundedRectangle(cornerRadius: MWDesign.Radius.full)
+                    .stroke(isSelected ? Color.clear : color.opacity(0.2), lineWidth: 1)
+            )
+            .shadow(color: isSelected ? color.opacity(0.3) : Color.clear, radius: 4, x: 0, y: 2)
         }
     }
 }
 
-struct AppointmentRow: View {
+// MARK: - Modern Appointment Card
+struct ModernAppointmentCard: View {
     let appointment: Appointment
+    var delay: Double = 0
+    
+    @State private var appeared = false
+    @State private var isPressed = false
     
     var statusColor: Color {
         switch appointment.status.lowercased() {
-        case "scheduled": return .blue
-        case "in_progress": return .orange
-        case "completed": return .green
-        case "cancelled": return .red
-        default: return .gray
+        case "scheduled": return .mwPrimary
+        case "in_progress": return .mwWarning
+        case "completed": return .mwSuccess
+        case "cancelled": return .mwError
+        default: return .mwTextMuted
         }
     }
     
@@ -175,81 +253,201 @@ struct AppointmentRow: View {
         }
     }
     
+    var statusIcon: String {
+        switch appointment.status.lowercased() {
+        case "scheduled": return "calendar.badge.clock"
+        case "in_progress": return "clock.fill"
+        case "completed": return "checkmark.circle.fill"
+        case "cancelled": return "xmark.circle.fill"
+        default: return "questionmark.circle"
+        }
+    }
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header with status
-            HStack {
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(statusColor)
-                        .frame(width: 8, height: 8)
+        Button(action: {
+            // Navigate to appointment details
+        }) {
+            VStack(alignment: .leading, spacing: MWDesign.Spacing.md) {
+                // Header with status and date
+                HStack {
+                    MWStatusBadge(text: statusText, color: statusColor, style: .subtle)
                     
-                    Text(statusText)
+                    Spacer()
+                    
+                    HStack(spacing: MWDesign.Spacing.xxs) {
+                        Image(systemName: "calendar")
+                            .font(.caption)
+                        Text(appointment.displayDate)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundColor(.mwTextSecondary)
+                }
+                
+                Divider()
+                    .background(Color.mwBorder)
+                
+                // Patient info
+                HStack(spacing: MWDesign.Spacing.sm) {
+                    MWAvatarView(
+                        name: appointment.patientName ?? "P",
+                        size: 44,
+                        gradient: LinearGradient(colors: [.mwPrimary, .mwSecondary], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(appointment.patientName ?? "Paciente não informado")
+                            .font(.body)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.mwTextPrimary)
+                            .lineLimit(1)
+                        
+                        if let doctorName = appointment.doctorName {
+                            HStack(spacing: MWDesign.Spacing.xxs) {
+                                Image(systemName: "stethoscope")
+                                    .font(.caption2)
+                                Text(doctorName)
+                                    .font(.caption)
+                            }
+                            .foregroundColor(.mwTextSecondary)
+                        }
+                    }
+                    
+                    Spacer()
+                }
+                
+                // Additional info
+                HStack(spacing: MWDesign.Spacing.lg) {
+                    // Duration
+                    HStack(spacing: MWDesign.Spacing.xxs) {
+                        Image(systemName: "clock")
+                            .font(.caption)
+                            .foregroundColor(.mwAccent)
+                        Text("\(appointment.duration) min")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.mwTextSecondary)
+                    }
+                    
+                    // Appointment type
+                    if let type = appointment.appointmentType {
+                        HStack(spacing: MWDesign.Spacing.xxs) {
+                            Image(systemName: "tag.fill")
+                                .font(.caption)
+                                .foregroundColor(.mwWarning)
+                            Text(type)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundColor(.mwTextSecondary)
+                                .lineLimit(1)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    // Arrow
+                    Image(systemName: "chevron.right")
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundColor(statusColor)
+                        .foregroundColor(.mwTextMuted)
                 }
+            }
+            .padding(MWDesign.Spacing.md)
+            .background(Color.mwSurface)
+            .cornerRadius(MWDesign.Radius.lg)
+            .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 4)
+            .overlay(
+                RoundedRectangle(cornerRadius: MWDesign.Radius.lg)
+                    .stroke(Color.mwBorder.opacity(0.5), lineWidth: 1)
+            )
+            .overlay(
+                // Left accent bar
+                HStack {
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(statusColor)
+                        .frame(width: 4)
+                    Spacer()
+                }
+                .padding(.vertical, MWDesign.Spacing.sm)
+            )
+            .scaleEffect(isPressed ? 0.98 : 1.0)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    withAnimation(MWDesign.Animation.quick) {
+                        isPressed = true
+                    }
+                }
+                .onEnded { _ in
+                    withAnimation(MWDesign.Animation.quick) {
+                        isPressed = false
+                    }
+                }
+        )
+        .opacity(appeared ? 1.0 : 0)
+        .offset(y: appeared ? 0 : 20)
+        .onAppear {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8).delay(delay)) {
+                appeared = true
+            }
+        }
+    }
+}
+
+// MARK: - Skeleton Appointment Card
+struct SkeletonAppointmentCard: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: MWDesign.Spacing.md) {
+            HStack {
+                RoundedRectangle(cornerRadius: MWDesign.Radius.full)
+                    .fill(Color.mwSurfaceSecondary)
+                    .frame(width: 80, height: 24)
                 
                 Spacer()
                 
-                Text(appointment.displayDate)
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.mwSurfaceSecondary)
+                    .frame(width: 70, height: 14)
             }
             
-            // Patient name
-            HStack {
-                Image(systemName: "person.fill")
-                    .foregroundColor(.blue)
-                    .frame(width: 20)
+            Divider()
+            
+            HStack(spacing: MWDesign.Spacing.sm) {
+                Circle()
+                    .fill(Color.mwSurfaceSecondary)
+                    .frame(width: 44, height: 44)
                 
-                Text(appointment.patientName ?? "Paciente não informado")
-                    .font(.headline)
-            }
-            
-            // Doctor name (if available)
-            if let doctorName = appointment.doctorName {
-                HStack {
-                    Image(systemName: "stethoscope")
-                        .foregroundColor(.purple)
-                        .frame(width: 20)
+                VStack(alignment: .leading, spacing: MWDesign.Spacing.xs) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.mwSurfaceSecondary)
+                        .frame(width: 140, height: 16)
                     
-                    Text(doctorName)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.mwSurfaceSecondary)
+                        .frame(width: 100, height: 12)
                 }
-            }
-            
-            // Appointment type (if available)
-            if let type = appointment.appointmentType {
-                HStack {
-                    Image(systemName: "tag.fill")
-                        .foregroundColor(.orange)
-                        .frame(width: 20)
-                    
-                    Text(type)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
-            }
-            
-            // Duration
-            HStack {
-                Image(systemName: "clock.fill")
-                    .foregroundColor(.green)
-                    .frame(width: 20)
                 
-                Text("\(appointment.duration) minutos")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                Spacer()
+            }
+            
+            HStack(spacing: MWDesign.Spacing.lg) {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.mwSurfaceSecondary)
+                    .frame(width: 60, height: 14)
+                
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.mwSurfaceSecondary)
+                    .frame(width: 80, height: 14)
+                
+                Spacer()
             }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
-        .padding(.horizontal)
-        .padding(.vertical, 5)
+        .padding(MWDesign.Spacing.md)
+        .background(Color.mwSurface)
+        .cornerRadius(MWDesign.Radius.lg)
+        .shimmer()
     }
 }
 

@@ -1,0 +1,216 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: medicwarehouse-postgres
+    environment:
+      POSTGRES_DB: medicwarehouse
+      POSTGRES_USER: postgres
+      # SECURITY: POSTGRES_PASSWORD must be set in production. Never use default values in production.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD environment variable is required}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - medicwarehouse-network
+    healthcheck:
+      test: pg_isready -U postgres -d medicwarehouse
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Auth Microservice
+  auth-api:
+    build:
+      context: .
+      dockerfile: microservices/auth/MedicSoft.Auth.Api/Dockerfile
+    container_name: medicwarehouse-auth-api
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
+  # Patients Microservice
+  patients-api:
+    build:
+      context: .
+      dockerfile: microservices/patients/MedicSoft.Patients.Api/Dockerfile
+    container_name: medicwarehouse-patients-api
+    ports:
+      - "5002:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
+  # Appointments Microservice
+  appointments-api:
+    build:
+      context: .
+      dockerfile: microservices/appointments/MedicSoft.Appointments.Api/Dockerfile
+    container_name: medicwarehouse-appointments-api
+    ports:
+      - "5003:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
+  # Medical Records Microservice
+  medicalrecords-api:
+    build:
+      context: .
+      dockerfile: microservices/medicalrecords/MedicSoft.MedicalRecords.Api/Dockerfile
+    container_name: medicwarehouse-medicalrecords-api
+    ports:
+      - "5004:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
+  # Billing Microservice
+  billing-api:
+    build:
+      context: .
+      dockerfile: microservices/billing/MedicSoft.Billing.Api/Dockerfile
+    container_name: medicwarehouse-billing-api
+    ports:
+      - "5005:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
+  # System Admin Microservice
+  systemadmin-api:
+    build:
+      context: .
+      dockerfile: microservices/systemadmin/MedicSoft.SystemAdmin.Api/Dockerfile
+    container_name: medicwarehouse-systemadmin-api
+    ports:
+      - "5006:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
+  # Original API (for backward compatibility during migration)
+  api:
+    build:
+      context: .
+      dockerfile: src/MedicSoft.Api/Dockerfile
+    container_name: medicwarehouse-api
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
+  frontend:
+    build:
+      context: ./frontend/medicwarehouse-app
+      dockerfile: Dockerfile
+    container_name: medicwarehouse-frontend
+    ports:
+      - "4200:4200"
+    environment:
+      - API_URL=http://api:8080
+    depends_on:
+      - api
+    networks:
+      - medicwarehouse-network
+
+  system-admin:
+    build:
+      context: ./frontend/mw-system-admin
+      dockerfile: Dockerfile
+    container_name: medicwarehouse-system-admin
+    ports:
+      - "4201:4200"
+    environment:
+      - API_URL=http://api:8080
+    depends_on:
+      - api
+    networks:
+      - medicwarehouse-network
+
+volumes:
+  postgres_data:
+
+networks:
+  medicwarehouse-network:
+    driver: bridge

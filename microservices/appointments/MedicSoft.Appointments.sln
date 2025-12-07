@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.Appointments.Api", "MedicSoft.Appointments.Api\MedicSoft.Appointments.Api.csproj", "{2D83A78D-D3BE-4501-B452-587262AFB9C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.Shared.Authentication", "..\shared\MedicSoft.Shared.Authentication\MedicSoft.Shared.Authentication.csproj", "{1C930315-2D38-4DB5-A365-908E609A9014}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D83A78D-D3BE-4501-B452-587262AFB9C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D83A78D-D3BE-4501-B452-587262AFB9C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D83A78D-D3BE-4501-B452-587262AFB9C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D83A78D-D3BE-4501-B452-587262AFB9C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C930315-2D38-4DB5-A365-908E609A9014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C930315-2D38-4DB5-A365-908E609A9014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C930315-2D38-4DB5-A365-908E609A9014}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C930315-2D38-4DB5-A365-908E609A9014}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
