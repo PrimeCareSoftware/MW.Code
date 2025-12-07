@@ -29,6 +29,8 @@ In `appsettings.json`:
 }
 ```
 
+> **Note:** For sensitive projects, consider using [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) for development instead of storing the license key in appsettings.json. The key in this file is for development/testing purposes only.
+
 #### Production Environment
 In `appsettings.Production.json`, the license key is referenced via environment variable:
 ```json

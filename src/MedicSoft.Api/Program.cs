@@ -281,6 +281,7 @@ app.MapControllers();
 // Initialize MediatR License
 using (var scope = app.Services.CreateScope())
 {
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     try
     {
         var licenseService = scope.ServiceProvider.GetRequiredService<MedicSoft.Application.Services.MediatRLicenseService>();
@@ -288,7 +289,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"MediatR license initialization warning: {ex.Message}");
+        logger.LogWarning(ex, "MediatR license initialization warning: {Message}", ex.Message);
     }
 }
 
