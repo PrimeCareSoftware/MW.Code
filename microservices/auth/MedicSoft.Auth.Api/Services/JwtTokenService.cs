@@ -71,9 +71,9 @@ public class JwtTokenService : IJwtTokenService
         }
 
         // Strip "Bearer " prefix if present
-        if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) && token.Length > 7)
         {
-            token = token.Substring(7);
+            token = token[7..];
             _logger.LogDebug("Stripped 'Bearer ' prefix from token");
         }
 

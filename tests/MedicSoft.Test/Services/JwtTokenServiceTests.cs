@@ -147,8 +147,6 @@ namespace MedicSoft.Test.Services
             Assert.True(header.ContainsKey("alg"));
         }
 
-
-
         private string PadBase64(string base64)
         {
             var padLength = 4 - (base64.Length % 4);
