@@ -14,7 +14,7 @@ RUN npm ci --only=production && npm cache clean --force
 COPY . .
 
 # Argumento para API URL
-ARG API_URL=http://localhost:5000
+ARG API_URL=http://localhost:5293
 ENV API_URL=${API_URL}
 
 # Build de produção otimizado
