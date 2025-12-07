@@ -17,6 +17,9 @@ namespace MedicSoft.Application.Services
 
     public class JwtTokenService : IJwtTokenService
     {
+        private const string DefaultIssuer = "MedicWarehouse";
+        private const string DefaultAudience = "MedicWarehouse-API";
+        
         private readonly IConfiguration _configuration;
         private readonly ILogger<JwtTokenService> _logger;
 
@@ -26,13 +29,31 @@ namespace MedicSoft.Application.Services
             _logger = logger;
         }
 
+        private string GetSecretKey()
+        {
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("JWT SecretKey not configured");
+            return secretKey;
+        }
+
+        private string GetIssuer()
+        {
+            var issuer = _configuration["JwtSettings:Issuer"];
+            return string.IsNullOrWhiteSpace(issuer) ? DefaultIssuer : issuer;
+        }
+
+        private string GetAudience()
+        {
+            var audience = _configuration["JwtSettings:Audience"];
+            return string.IsNullOrWhiteSpace(audience) ? DefaultAudience : audience;
+        }
+
         public string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null)
         {
-            var secretKey = _configuration["JwtSettings:SecretKey"] 
-                ?? throw new InvalidOperationException("JWT SecretKey not configured");
-            
-            var issuer = _configuration["JwtSettings:Issuer"] ?? "MedicWarehouse";
-            var audience = _configuration["JwtSettings:Audience"] ?? "MedicWarehouse-API";
+            var secretKey = GetSecretKey();
+            var issuer = GetIssuer();
+            var audience = GetAudience();
             var expiryMinutes = int.Parse(_configuration["JwtSettings:ExpiryMinutes"] ?? "60");
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
@@ -63,6 +84,7 @@ namespace MedicSoft.Application.Services
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
+                notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
                 signingCredentials: credentials
             );
@@ -85,11 +107,9 @@ namespace MedicSoft.Application.Services
                 _logger.LogDebug("Stripped 'Bearer ' prefix from token");
             }
 
-            var secretKey = _configuration["JwtSettings:SecretKey"] 
-                ?? throw new InvalidOperationException("JWT SecretKey not configured");
-            
-            var issuer = _configuration["JwtSettings:Issuer"] ?? "MedicWarehouse";
-            var audience = _configuration["JwtSettings:Audience"] ?? "MedicWarehouse-API";
+            var secretKey = GetSecretKey();
+            var issuer = GetIssuer();
+            var audience = GetAudience();
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(secretKey);
