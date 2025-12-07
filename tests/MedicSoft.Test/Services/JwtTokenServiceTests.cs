@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using MedicSoft.Application.Services;
 using Xunit;
 
@@ -23,7 +25,9 @@ namespace MedicSoft.Test.Services
                 })
                 .Build();
 
-            _jwtTokenService = new JwtTokenService(configuration);
+            // Use NullLogger for tests to avoid mocking
+            var logger = NullLogger<JwtTokenService>.Instance;
+            _jwtTokenService = new JwtTokenService(configuration, logger);
         }
 
         [Fact]
@@ -142,6 +146,8 @@ namespace MedicSoft.Test.Services
             Assert.NotNull(header);
             Assert.True(header.ContainsKey("alg"));
         }
+
+
 
         private string PadBase64(string base64)
         {

@@ -18,10 +18,12 @@ public interface IJwtTokenService
 public class JwtTokenService : IJwtTokenService
 {
     private readonly JwtSettings _jwtSettings;
+    private readonly ILogger<JwtTokenService> _logger;
 
-    public JwtTokenService(IOptions<JwtSettings> jwtSettings)
+    public JwtTokenService(IOptions<JwtSettings> jwtSettings, ILogger<JwtTokenService> logger)
     {
         _jwtSettings = jwtSettings.Value;
+        _logger = logger;
     }
 
     public string GenerateToken(string username, string userId, string tenantId, string role, 
@@ -62,6 +64,19 @@ public class JwtTokenService : IJwtTokenService
 
     public ClaimsPrincipal? ValidateToken(string token)
     {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            _logger.LogWarning("ValidateToken called with null or empty token");
+            return null;
+        }
+
+        // Strip "Bearer " prefix if present
+        if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        {
+            token = token.Substring(7);
+            _logger.LogDebug("Stripped 'Bearer ' prefix from token");
+        }
+
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
 
@@ -79,10 +94,27 @@ public class JwtTokenService : IJwtTokenService
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
 
+            _logger.LogDebug("Token validated successfully");
             return principal;
         }
-        catch
+        catch (SecurityTokenExpiredException ex)
         {
+            _logger.LogWarning("Token validation failed: Token has expired. Exception: {Message}", ex.Message);
+            return null;
+        }
+        catch (SecurityTokenInvalidSignatureException ex)
+        {
+            _logger.LogWarning("Token validation failed: Invalid signature. Exception: {Message}", ex.Message);
+            return null;
+        }
+        catch (SecurityTokenException ex)
+        {
+            _logger.LogWarning("Token validation failed: {Message}", ex.Message);
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error during token validation");
             return null;
         }
     }
