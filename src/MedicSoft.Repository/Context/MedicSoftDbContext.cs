@@ -86,37 +86,44 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ExamCatalogConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
 
-            // Global query filters for tenant isolation
-            modelBuilder.Entity<Patient>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Clinic>().HasQueryFilter(c => EF.Property<string>(c, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Appointment>().HasQueryFilter(a => EF.Property<string>(a, "TenantId") == GetTenantId());
-            modelBuilder.Entity<HealthInsurancePlan>().HasQueryFilter(h => EF.Property<string>(h, "TenantId") == GetTenantId());
-            modelBuilder.Entity<MedicalRecord>().HasQueryFilter(mr => EF.Property<string>(mr, "TenantId") == GetTenantId());
-            modelBuilder.Entity<PatientClinicLink>().HasQueryFilter(l => EF.Property<string>(l, "TenantId") == GetTenantId());
-            modelBuilder.Entity<MedicalRecordTemplate>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
-            modelBuilder.Entity<PrescriptionTemplate>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Medication>().HasQueryFilter(m => EF.Property<string>(m, "TenantId") == GetTenantId());
-            modelBuilder.Entity<PrescriptionItem>().HasQueryFilter(pi => EF.Property<string>(pi, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Payment>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Invoice>().HasQueryFilter(i => EF.Property<string>(i, "TenantId") == GetTenantId());
-            modelBuilder.Entity<NotificationRoutine>().HasQueryFilter(nr => EF.Property<string>(nr, "TenantId") == GetTenantId());
-            modelBuilder.Entity<SubscriptionPlan>().HasQueryFilter(sp => EF.Property<string>(sp, "TenantId") == GetTenantId());
-            modelBuilder.Entity<ClinicSubscription>().HasQueryFilter(cs => EF.Property<string>(cs, "TenantId") == GetTenantId());
-            modelBuilder.Entity<User>().HasQueryFilter(u => EF.Property<string>(u, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Owner>().HasQueryFilter(o => EF.Property<string>(o, "TenantId") == GetTenantId());
-            modelBuilder.Entity<OwnerClinicLink>().HasQueryFilter(ocl => EF.Property<string>(ocl, "TenantId") == GetTenantId());
-            modelBuilder.Entity<ModuleConfiguration>().HasQueryFilter(mc => EF.Property<string>(mc, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Expense>().HasQueryFilter(e => EF.Property<string>(e, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Procedure>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
-            modelBuilder.Entity<AppointmentProcedure>().HasQueryFilter(ap => EF.Property<string>(ap, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Material>().HasQueryFilter(m => EF.Property<string>(m, "TenantId") == GetTenantId());
-            modelBuilder.Entity<PasswordResetToken>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
-            modelBuilder.Entity<ProcedureMaterial>().HasQueryFilter(pm => EF.Property<string>(pm, "TenantId") == GetTenantId());
-            modelBuilder.Entity<ExamRequest>().HasQueryFilter(e => EF.Property<string>(e, "TenantId") == GetTenantId());
-            modelBuilder.Entity<WaitingQueueEntry>().HasQueryFilter(wqe => EF.Property<string>(wqe, "TenantId") == GetTenantId());
-            modelBuilder.Entity<WaitingQueueConfiguration>().HasQueryFilter(wqc => EF.Property<string>(wqc, "TenantId") == GetTenantId());
-            modelBuilder.Entity<ExamCatalog>().HasQueryFilter(ec => EF.Property<string>(ec, "TenantId") == GetTenantId());
-            modelBuilder.Entity<Notification>().HasQueryFilter(n => EF.Property<string>(n, "TenantId") == GetTenantId());
+            // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
+            // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
+            // To enable global query filters in the future:
+            // 1. Inject IHttpContextAccessor into DbContext
+            // 2. Read tenantId from HttpContext.Items["TenantId"] in GetTenantId()
+            // 3. Uncomment the filters below
+            
+            // Global query filters for tenant isolation (DISABLED - repositories handle tenant filtering explicitly)
+            //modelBuilder.Entity<Patient>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Clinic>().HasQueryFilter(c => EF.Property<string>(c, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Appointment>().HasQueryFilter(a => EF.Property<string>(a, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<HealthInsurancePlan>().HasQueryFilter(h => EF.Property<string>(h, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<MedicalRecord>().HasQueryFilter(mr => EF.Property<string>(mr, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<PatientClinicLink>().HasQueryFilter(l => EF.Property<string>(l, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<MedicalRecordTemplate>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<PrescriptionTemplate>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Medication>().HasQueryFilter(m => EF.Property<string>(m, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<PrescriptionItem>().HasQueryFilter(pi => EF.Property<string>(pi, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Payment>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Invoice>().HasQueryFilter(i => EF.Property<string>(i, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<NotificationRoutine>().HasQueryFilter(nr => EF.Property<string>(nr, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<SubscriptionPlan>().HasQueryFilter(sp => EF.Property<string>(sp, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<ClinicSubscription>().HasQueryFilter(cs => EF.Property<string>(cs, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<User>().HasQueryFilter(u => EF.Property<string>(u, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Owner>().HasQueryFilter(o => EF.Property<string>(o, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<OwnerClinicLink>().HasQueryFilter(ocl => EF.Property<string>(ocl, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<ModuleConfiguration>().HasQueryFilter(mc => EF.Property<string>(mc, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Expense>().HasQueryFilter(e => EF.Property<string>(e, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Procedure>().HasQueryFilter(p => EF.Property<string>(p, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<AppointmentProcedure>().HasQueryFilter(ap => EF.Property<string>(ap, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Material>().HasQueryFilter(m => EF.Property<string>(m, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<PasswordResetToken>().HasQueryFilter(t => EF.Property<string>(t, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<ProcedureMaterial>().HasQueryFilter(pm => EF.Property<string>(pm, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<ExamRequest>().HasQueryFilter(e => EF.Property<string>(e, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<WaitingQueueEntry>().HasQueryFilter(wqe => EF.Property<string>(wqe, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<WaitingQueueConfiguration>().HasQueryFilter(wqc => EF.Property<string>(wqc, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<ExamCatalog>().HasQueryFilter(ec => EF.Property<string>(ec, "TenantId") == GetTenantId());
+            //modelBuilder.Entity<Notification>().HasQueryFilter(n => EF.Property<string>(n, "TenantId") == GetTenantId());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

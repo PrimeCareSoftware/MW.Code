@@ -326,6 +326,8 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 > 🚀 **NOVO!** [**GUIA_INICIO_RAPIDO_LOCAL.md**](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - **Setup em 10 minutos para testar HOJE!**
 
+> 🔧 **IMPORTANTE!** [**LOCALHOST_SETUP_FIX.md**](docs/LOCALHOST_SETUP_FIX.md) - **Fix aplicado para executar em localhost** - Leia se tiver problemas com autenticação ou dados vazios
+
 > 📖 **Para um guia completo e detalhado**, consulte o arquivo [GUIA_EXECUCAO.md](docs/GUIA_EXECUCAO.md)
 
 > ✅ **NOVO!** [**CHECKLIST_TESTES_COMPLETO.md**](docs/CHECKLIST_TESTES_COMPLETO.md) - Teste todos os 80+ endpoints e funcionalidades
