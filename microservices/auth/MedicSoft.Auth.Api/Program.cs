@@ -66,6 +66,9 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 // Configure JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
+// Configure Session settings
+builder.Services.Configure<SessionSettings>(builder.Configuration.GetSection("SessionSettings"));
+
 // Add JWT Authentication using shared library (for protected endpoints like validate-session)
 builder.Services.AddMicroserviceAuthentication(builder.Configuration);
 
@@ -90,18 +93,36 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Ensure database is created and apply schema changes
+// Ensure database is created
+// Note: In production, use proper EF Core migrations instead of EnsureCreated
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
     
     try
     {
-        // This will create the database if it doesn't exist
-        // and update schema to match the current model
-        context.Database.EnsureCreated();
-        logger.LogInformation("Database initialized successfully");
+        // Only use EnsureCreated in development
+        // In production, migrations should be applied separately
+        if (env.IsDevelopment())
+        {
+            context.Database.EnsureCreated();
+            logger.LogInformation("Database schema ensured in development mode");
+        }
+        else
+        {
+            // In production, verify database connectivity
+            var canConnect = await context.Database.CanConnectAsync();
+            if (canConnect)
+            {
+                logger.LogInformation("Database connection verified");
+            }
+            else
+            {
+                logger.LogWarning("Could not connect to database");
+            }
+        }
     }
     catch (Exception ex)
     {

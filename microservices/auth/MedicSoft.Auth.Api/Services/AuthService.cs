@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MedicSoft.Auth.Api.Data;
+using MedicSoft.Shared.Authentication.Models;
 using BCrypt.Net;
 
 namespace MedicSoft.Auth.Api.Services;
@@ -18,11 +20,16 @@ public class AuthService : IAuthService
 {
     private readonly AuthDbContext _context;
     private readonly ILogger<AuthService> _logger;
+    private readonly SessionSettings _sessionSettings;
 
-    public AuthService(AuthDbContext context, ILogger<AuthService> logger)
+    public AuthService(
+        AuthDbContext context, 
+        ILogger<AuthService> logger,
+        IOptions<SessionSettings> sessionSettings)
     {
         _context = context;
         _logger = logger;
+        _sessionSettings = sessionSettings.Value;
     }
 
     public async Task<UserEntity?> AuthenticateUserAsync(string username, string password, string tenantId)
@@ -88,7 +95,7 @@ public class AuthService : IAuthService
             SessionId = sessionId,
             TenantId = tenantId,
             CreatedAt = now,
-            ExpiresAt = now.AddHours(24), // Session expires after 24 hours of creation
+            ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours),
             LastActivityAt = now
         };
 
@@ -134,7 +141,7 @@ public class AuthService : IAuthService
             SessionId = sessionId,
             TenantId = tenantId,
             CreatedAt = now,
-            ExpiresAt = now.AddHours(24), // Session expires after 24 hours of creation
+            ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours),
             LastActivityAt = now
         };
 
