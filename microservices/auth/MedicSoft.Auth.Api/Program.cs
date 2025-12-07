@@ -113,14 +113,21 @@ using (var scope = app.Services.CreateScope())
         else
         {
             // In production, verify database connectivity
-            var canConnect = await context.Database.CanConnectAsync();
-            if (canConnect)
+            try
             {
-                logger.LogInformation("Database connection verified");
+                var canConnect = await context.Database.CanConnectAsync();
+                if (canConnect)
+                {
+                    logger.LogInformation("Database connection verified successfully");
+                }
+                else
+                {
+                    logger.LogWarning("Could not connect to database. Please verify connection string and database availability.");
+                }
             }
-            else
+            catch (Exception dbEx)
             {
-                logger.LogWarning("Could not connect to database");
+                logger.LogError(dbEx, "Failed to verify database connection. Error: {ErrorMessage}", dbEx.Message);
             }
         }
     }
