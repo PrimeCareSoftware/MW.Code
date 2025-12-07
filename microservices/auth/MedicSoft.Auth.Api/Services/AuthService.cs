@@ -88,6 +88,7 @@ public class AuthService : IAuthService
 
         // Create new session record to support multiple concurrent sessions
         var now = DateTime.UtcNow;
+        var expiresAt = now.AddHours(_sessionSettings.ExpiryHours);
         var session = new UserSessionEntity
         {
             Id = Guid.NewGuid(),
@@ -95,7 +96,7 @@ public class AuthService : IAuthService
             SessionId = sessionId,
             TenantId = tenantId,
             CreatedAt = now,
-            ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours),
+            ExpiresAt = expiresAt,
             LastActivityAt = now
         };
 
@@ -114,7 +115,8 @@ public class AuthService : IAuthService
 
         await _context.SaveChangesAsync();
 
-        _logger.LogInformation("User login recorded: {UserId}, Session: {SessionId}", userId, sessionId);
+        _logger.LogInformation("User login recorded: UserId={UserId}, SessionId={SessionId}, ExpiresAt={ExpiresAt}, ExpiryHours={ExpiryHours}", 
+            userId, sessionId, expiresAt, _sessionSettings.ExpiryHours);
         return sessionId;
     }
 
@@ -134,6 +136,7 @@ public class AuthService : IAuthService
 
         // Create new session record to support multiple concurrent sessions
         var now = DateTime.UtcNow;
+        var expiresAt = now.AddHours(_sessionSettings.ExpiryHours);
         var session = new OwnerSessionEntity
         {
             Id = Guid.NewGuid(),
@@ -141,7 +144,7 @@ public class AuthService : IAuthService
             SessionId = sessionId,
             TenantId = tenantId,
             CreatedAt = now,
-            ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours),
+            ExpiresAt = expiresAt,
             LastActivityAt = now
         };
 
@@ -160,7 +163,8 @@ public class AuthService : IAuthService
 
         await _context.SaveChangesAsync();
 
-        _logger.LogInformation("Owner login recorded: {OwnerId}, Session: {SessionId}", ownerId, sessionId);
+        _logger.LogInformation("Owner login recorded: OwnerId={OwnerId}, SessionId={SessionId}, ExpiresAt={ExpiresAt}, ExpiryHours={ExpiryHours}", 
+            ownerId, sessionId, expiresAt, _sessionSettings.ExpiryHours);
         return sessionId;
     }
 
@@ -170,7 +174,10 @@ public class AuthService : IAuthService
             .FirstOrDefaultAsync(u => u.Id == userId && u.TenantId == tenantId && u.IsActive);
 
         if (user == null)
+        {
+            _logger.LogWarning("User not found or inactive during session validation: UserId={UserId}, TenantId={TenantId}", userId, tenantId);
             return false;
+        }
 
         // Check if session exists in the UserSessions table and is not expired
         var now = DateTime.UtcNow;
@@ -182,15 +189,42 @@ public class AuthService : IAuthService
 
         if (session != null)
         {
-            // Update last activity time
+            // Update last activity time and extend session expiration (sliding expiration)
             session.LastActivityAt = now;
+            session.ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours);
             await _context.SaveChangesAsync();
+            
+            _logger.LogDebug("User session validated and extended: UserId={UserId}, SessionId={SessionId}, NewExpiresAt={ExpiresAt}", 
+                userId, sessionId, session.ExpiresAt);
             return true;
+        }
+
+        // Check if there's a session record that has expired
+        var expiredSession = await _context.UserSessions
+            .FirstOrDefaultAsync(s => s.UserId == userId && 
+                                    s.SessionId == sessionId && 
+                                    s.TenantId == tenantId);
+        
+        if (expiredSession != null)
+        {
+            _logger.LogWarning("User session has expired: UserId={UserId}, SessionId={SessionId}, ExpiredAt={ExpiredAt}, CurrentTime={CurrentTime}", 
+                userId, sessionId, expiredSession.ExpiresAt, now);
+            return false;
         }
 
         // Fallback to legacy SessionId field for backward compatibility
         // This allows sessions created before the migration to still work
-        return user.SessionId == sessionId;
+        var legacySessionValid = user.SessionId == sessionId;
+        if (legacySessionValid)
+        {
+            _logger.LogInformation("User session validated using legacy SessionId field: UserId={UserId}", userId);
+        }
+        else
+        {
+            _logger.LogWarning("User session not found: UserId={UserId}, SessionId={SessionId}", userId, sessionId);
+        }
+        
+        return legacySessionValid;
     }
 
     public async Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId)
@@ -199,7 +233,10 @@ public class AuthService : IAuthService
             .FirstOrDefaultAsync(o => o.Id == ownerId && o.TenantId == tenantId && o.IsActive);
 
         if (owner == null)
+        {
+            _logger.LogWarning("Owner not found or inactive during session validation: OwnerId={OwnerId}, TenantId={TenantId}", ownerId, tenantId);
             return false;
+        }
 
         // Check if session exists in the OwnerSessions table and is not expired
         var now = DateTime.UtcNow;
@@ -211,14 +248,41 @@ public class AuthService : IAuthService
 
         if (session != null)
         {
-            // Update last activity time
+            // Update last activity time and extend session expiration (sliding expiration)
             session.LastActivityAt = now;
+            session.ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours);
             await _context.SaveChangesAsync();
+            
+            _logger.LogDebug("Owner session validated and extended: OwnerId={OwnerId}, SessionId={SessionId}, NewExpiresAt={ExpiresAt}", 
+                ownerId, sessionId, session.ExpiresAt);
             return true;
+        }
+
+        // Check if there's a session record that has expired
+        var expiredSession = await _context.OwnerSessions
+            .FirstOrDefaultAsync(s => s.OwnerId == ownerId && 
+                                    s.SessionId == sessionId && 
+                                    s.TenantId == tenantId);
+        
+        if (expiredSession != null)
+        {
+            _logger.LogWarning("Owner session has expired: OwnerId={OwnerId}, SessionId={SessionId}, ExpiredAt={ExpiredAt}, CurrentTime={CurrentTime}", 
+                ownerId, sessionId, expiredSession.ExpiresAt, now);
+            return false;
         }
 
         // Fallback to legacy SessionId field for backward compatibility
         // This allows sessions created before the migration to still work
-        return owner.SessionId == sessionId;
+        var legacySessionValid = owner.SessionId == sessionId;
+        if (legacySessionValid)
+        {
+            _logger.LogInformation("Owner session validated using legacy SessionId field: OwnerId={OwnerId}", ownerId);
+        }
+        else
+        {
+            _logger.LogWarning("Owner session not found: OwnerId={OwnerId}, SessionId={SessionId}", ownerId, sessionId);
+        }
+        
+        return legacySessionValid;
     }
 }

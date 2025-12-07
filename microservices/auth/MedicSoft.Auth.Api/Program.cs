@@ -66,8 +66,22 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 // Configure JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-// Configure Session settings
+// Configure Session settings with validation
 builder.Services.Configure<SessionSettings>(builder.Configuration.GetSection("SessionSettings"));
+builder.Services.AddOptions<SessionSettings>()
+    .Configure(options => builder.Configuration.GetSection("SessionSettings").Bind(options))
+    .Validate(settings => 
+    {
+        if (settings.ExpiryHours <= 0)
+        {
+            throw new InvalidOperationException($"SessionSettings.ExpiryHours must be greater than 0. Current value: {settings.ExpiryHours}");
+        }
+        if (settings.ExpiryHours > 720) // 30 days
+        {
+            throw new InvalidOperationException($"SessionSettings.ExpiryHours is too large. Current value: {settings.ExpiryHours}. Maximum recommended: 720 hours (30 days)");
+        }
+        return true;
+    }, "SessionSettings validation failed");
 
 // Add JWT Authentication using shared library (for protected endpoints like validate-session)
 builder.Services.AddMicroserviceAuthentication(builder.Configuration);
@@ -93,13 +107,29 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Ensure database is created
+// Ensure database is created and log configuration
 // Note: In production, use proper EF Core migrations instead of EnsureCreated
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+    
+    // Log session configuration
+    try
+    {
+        var sessionSettings = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<SessionSettings>>().Value;
+        var jwtSettings = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<JwtSettings>>().Value;
+        
+        logger.LogInformation("Session Configuration: ExpiryHours={ExpiryHours}, MaxConcurrentSessions={MaxConcurrentSessions}", 
+            sessionSettings.ExpiryHours, sessionSettings.MaxConcurrentSessions);
+        logger.LogInformation("JWT Configuration: ExpiryMinutes={ExpiryMinutes}, Issuer={Issuer}, Audience={Audience}", 
+            jwtSettings.ExpiryMinutes, jwtSettings.Issuer, jwtSettings.Audience);
+    }
+    catch (Exception configEx)
+    {
+        logger.LogError(configEx, "Failed to log configuration settings");
+    }
     
     try
     {
