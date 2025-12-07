@@ -28,11 +28,18 @@ namespace MedicSoft.Application.Services
 
         public string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null)
         {
-            var secretKey = _configuration["JwtSettings:SecretKey"] 
-                ?? throw new InvalidOperationException("JWT SecretKey not configured");
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("JWT SecretKey not configured");
             
-            var issuer = _configuration["JwtSettings:Issuer"] ?? "MedicWarehouse";
-            var audience = _configuration["JwtSettings:Audience"] ?? "MedicWarehouse-API";
+            var issuer = _configuration["JwtSettings:Issuer"];
+            if (string.IsNullOrWhiteSpace(issuer))
+                issuer = "MedicWarehouse";
+            
+            var audience = _configuration["JwtSettings:Audience"];
+            if (string.IsNullOrWhiteSpace(audience))
+                audience = "MedicWarehouse-API";
+            
             var expiryMinutes = int.Parse(_configuration["JwtSettings:ExpiryMinutes"] ?? "60");
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
@@ -85,11 +92,17 @@ namespace MedicSoft.Application.Services
                 _logger.LogDebug("Stripped 'Bearer ' prefix from token");
             }
 
-            var secretKey = _configuration["JwtSettings:SecretKey"] 
-                ?? throw new InvalidOperationException("JWT SecretKey not configured");
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("JWT SecretKey not configured");
             
-            var issuer = _configuration["JwtSettings:Issuer"] ?? "MedicWarehouse";
-            var audience = _configuration["JwtSettings:Audience"] ?? "MedicWarehouse-API";
+            var issuer = _configuration["JwtSettings:Issuer"];
+            if (string.IsNullOrWhiteSpace(issuer))
+                issuer = "MedicWarehouse";
+            
+            var audience = _configuration["JwtSettings:Audience"];
+            if (string.IsNullOrWhiteSpace(audience))
+                audience = "MedicWarehouse-API";
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(secretKey);

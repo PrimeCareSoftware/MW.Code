@@ -5,9 +5,23 @@ namespace MedicSoft.Shared.Authentication.Models;
 /// </summary>
 public class JwtSettings
 {
+    private string _issuer = "MedicWarehouse";
+    private string _audience = "MedicWarehouse-API";
+
     public string SecretKey { get; set; } = string.Empty;
-    public string Issuer { get; set; } = "MedicWarehouse";
-    public string Audience { get; set; } = "MedicWarehouse-API";
+    
+    public string Issuer 
+    { 
+        get => _issuer;
+        set => _issuer = string.IsNullOrWhiteSpace(value) ? "MedicWarehouse" : value;
+    }
+    
+    public string Audience 
+    { 
+        get => _audience;
+        set => _audience = string.IsNullOrWhiteSpace(value) ? "MedicWarehouse-API" : value;
+    }
+    
     public int ExpiryMinutes { get; set; } = 60;
 }
 
