@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.Repository", "MedicSoft.Repository\MedicSoft.Repository.csproj", "{58F99D59-DC1C-9A65-14F7-3C8CF8A4E0B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.Api", "MedicSoft.Api\MedicSoft.Api.csproj", "{C0BB9420-99D4-A074-8ADD-73B918B59A17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.WhatsAppAgent", "MedicSoft.WhatsAppAgent\MedicSoft.WhatsAppAgent.csproj", "{054999E8-8482-9CC1-4E62-9E6826FCDE9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.Application", "MedicSoft.Application\MedicSoft.Application.csproj", "{C4D82C59-23A9-CE50-C062-4F32BB4DE9C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.Domain", "MedicSoft.Domain\MedicSoft.Domain.csproj", "{2FD0AB70-AF6F-2ED7-6E0C-688D437AEEDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicSoft.CrossCutting", "MedicSoft.CrossCutting\MedicSoft.CrossCutting.csproj", "{FA14C7A8-B242-BA2A-1B2A-4F539C637C54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58F99D59-DC1C-9A65-14F7-3C8CF8A4E0B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F99D59-DC1C-9A65-14F7-3C8CF8A4E0B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F99D59-DC1C-9A65-14F7-3C8CF8A4E0B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F99D59-DC1C-9A65-14F7-3C8CF8A4E0B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0BB9420-99D4-A074-8ADD-73B918B59A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0BB9420-99D4-A074-8ADD-73B918B59A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0BB9420-99D4-A074-8ADD-73B918B59A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0BB9420-99D4-A074-8ADD-73B918B59A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{054999E8-8482-9CC1-4E62-9E6826FCDE9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{054999E8-8482-9CC1-4E62-9E6826FCDE9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{054999E8-8482-9CC1-4E62-9E6826FCDE9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{054999E8-8482-9CC1-4E62-9E6826FCDE9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4D82C59-23A9-CE50-C062-4F32BB4DE9C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4D82C59-23A9-CE50-C062-4F32BB4DE9C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4D82C59-23A9-CE50-C062-4F32BB4DE9C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4D82C59-23A9-CE50-C062-4F32BB4DE9C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FD0AB70-AF6F-2ED7-6E0C-688D437AEEDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FD0AB70-AF6F-2ED7-6E0C-688D437AEEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FD0AB70-AF6F-2ED7-6E0C-688D437AEEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD0AB70-AF6F-2ED7-6E0C-688D437AEEDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA14C7A8-B242-BA2A-1B2A-4F539C637C54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA14C7A8-B242-BA2A-1B2A-4F539C637C54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA14C7A8-B242-BA2A-1B2A-4F539C637C54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA14C7A8-B242-BA2A-1B2A-4F539C637C54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {059FD5D1-4B33-4894-B59E-ACC37F210150}
+	EndGlobalSection
+EndGlobal
