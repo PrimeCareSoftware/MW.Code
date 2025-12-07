@@ -260,6 +260,7 @@ public class AuthController : ControllerBase
             var principal = _jwtTokenService.ValidateToken(request.Token);
             if (principal == null)
             {
+                _logger.LogWarning("ValidateSession failed: Token validation returned null");
                 return Ok(new SessionValidationResponse
                 {
                     IsValid = false,

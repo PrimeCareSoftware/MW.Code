@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MedicSoft.Application.Services
@@ -17,10 +18,12 @@ namespace MedicSoft.Application.Services
     public class JwtTokenService : IJwtTokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger<JwtTokenService> _logger;
 
-        public JwtTokenService(IConfiguration configuration)
+        public JwtTokenService(IConfiguration configuration, ILogger<JwtTokenService> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null)
@@ -69,6 +72,19 @@ namespace MedicSoft.Application.Services
 
         public ClaimsPrincipal? ValidateToken(string token)
         {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                _logger.LogWarning("ValidateToken called with null or empty token");
+                return null;
+            }
+
+            // Strip "Bearer " prefix if present
+            if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) && token.Length > 7)
+            {
+                token = token[7..];
+                _logger.LogDebug("Stripped 'Bearer ' prefix from token");
+            }
+
             var secretKey = _configuration["JwtSettings:SecretKey"] 
                 ?? throw new InvalidOperationException("JWT SecretKey not configured");
             
@@ -92,10 +108,27 @@ namespace MedicSoft.Application.Services
                     ClockSkew = TimeSpan.Zero // No tolerance for expired tokens
                 }, out SecurityToken validatedToken);
 
+                _logger.LogDebug("Token validated successfully");
                 return principal;
             }
-            catch
+            catch (SecurityTokenExpiredException ex)
             {
+                _logger.LogWarning("Token validation failed: Token has expired. Exception: {Message}", ex.Message);
+                return null;
+            }
+            catch (SecurityTokenInvalidSignatureException ex)
+            {
+                _logger.LogWarning("Token validation failed: Invalid signature. Exception: {Message}", ex.Message);
+                return null;
+            }
+            catch (SecurityTokenException ex)
+            {
+                _logger.LogWarning("Token validation failed: {Message}", ex.Message);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error during token validation");
                 return null;
             }
         }
