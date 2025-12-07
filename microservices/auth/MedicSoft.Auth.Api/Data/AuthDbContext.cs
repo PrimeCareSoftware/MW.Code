@@ -10,6 +10,8 @@ public class AuthDbContext : DbContext
 
     public DbSet<UserEntity> Users => Set<UserEntity>();
     public DbSet<OwnerEntity> Owners => Set<OwnerEntity>();
+    public DbSet<UserSessionEntity> UserSessions => Set<UserSessionEntity>();
+    public DbSet<OwnerSessionEntity> OwnerSessions => Set<OwnerSessionEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +38,40 @@ public class AuthDbContext : DbContext
             entity.Property(e => e.PasswordHash).IsRequired();
             entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
             entity.Property(e => e.SessionId).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<UserSessionEntity>(entity =>
+        {
+            entity.ToTable("UserSessions");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.SessionId).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.UserAgent).HasMaxLength(500);
+            entity.Property(e => e.IpAddress).HasMaxLength(50);
+            entity.HasIndex(e => new { e.UserId, e.SessionId });
+            entity.HasIndex(e => e.ExpiresAt);
+            
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<OwnerSessionEntity>(entity =>
+        {
+            entity.ToTable("OwnerSessions");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.SessionId).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.UserAgent).HasMaxLength(500);
+            entity.Property(e => e.IpAddress).HasMaxLength(50);
+            entity.HasIndex(e => new { e.OwnerId, e.SessionId });
+            entity.HasIndex(e => e.ExpiresAt);
+            
+            entity.HasOne(e => e.Owner)
+                .WithMany()
+                .HasForeignKey(e => e.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

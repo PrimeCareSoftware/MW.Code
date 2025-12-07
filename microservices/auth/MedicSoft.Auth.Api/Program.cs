@@ -90,6 +90,25 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Ensure database is created and apply schema changes
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    
+    try
+    {
+        // This will create the database if it doesn't exist
+        // and update schema to match the current model
+        context.Database.EnsureCreated();
+        logger.LogInformation("Database initialized successfully");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while initializing the database");
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
