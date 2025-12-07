@@ -67,7 +67,6 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 // Configure Session settings with validation
-builder.Services.Configure<SessionSettings>(builder.Configuration.GetSection("SessionSettings"));
 builder.Services.AddOptions<SessionSettings>()
     .Configure(options => builder.Configuration.GetSection("SessionSettings").Bind(options))
     .Validate(settings => 
