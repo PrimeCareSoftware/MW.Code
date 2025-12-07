@@ -70,6 +70,7 @@ namespace MedicSoft.Application.Services
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
+                notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
                 signingCredentials: credentials
             );
