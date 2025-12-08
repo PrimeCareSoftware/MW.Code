@@ -113,8 +113,8 @@ namespace MedicSoft.Test.Services
         {
             // Note: This test is difficult to implement without waiting for token to expire
             // or manipulating time. Skipping detailed validation.
-            // The ValidateToken method has ClockSkew = TimeSpan.Zero which means
-            // it will not tolerate any expired tokens.
+            // The ValidateToken method has ClockSkew = TimeSpan.FromMinutes(5) which allows
+            // 5 minutes tolerance for time synchronization issues between servers.
             
             // Just verify that the method exists and returns null for invalid tokens
             var invalidToken = "invalid.token.string";

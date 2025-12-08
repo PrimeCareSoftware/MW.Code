@@ -119,7 +119,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = audience,
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero // No tolerance for expired tokens
+        ClockSkew = TimeSpan.FromMinutes(5) // Allow 5 minutes tolerance for time sync issues
     };
 });
 

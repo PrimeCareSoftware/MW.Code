@@ -91,7 +91,7 @@ public class JwtTokenService : IJwtTokenService
                 ValidateAudience = true,
                 ValidAudience = _jwtSettings.Audience,
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.FromMinutes(5) // Allow 5 minutes tolerance for time sync issues
             }, out SecurityToken validatedToken);
 
             _logger.LogDebug("Token validated successfully");
