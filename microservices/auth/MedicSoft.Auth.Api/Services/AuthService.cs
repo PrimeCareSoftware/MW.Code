@@ -171,6 +171,7 @@ public class AuthService : IAuthService
     public async Task<bool> ValidateUserSessionAsync(Guid userId, string sessionId, string tenantId)
     {
         var user = await _context.Users
+            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == userId && u.TenantId == tenantId && u.IsActive);
 
         if (user == null)
@@ -180,8 +181,10 @@ public class AuthService : IAuthService
         }
 
         // Check if session exists in the UserSessions table and is not expired
+        // Use AsNoTracking to avoid change tracking conflicts and get fresh data
         var now = DateTime.UtcNow;
         var session = await _context.UserSessions
+            .AsNoTracking()
             .FirstOrDefaultAsync(s => s.UserId == userId && 
                                     s.SessionId == sessionId && 
                                     s.TenantId == tenantId &&
@@ -189,18 +192,34 @@ public class AuthService : IAuthService
 
         if (session != null)
         {
-            // Update last activity time and extend session expiration (sliding expiration)
-            session.LastActivityAt = now;
-            session.ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours);
+            // Attach and update the session to extend expiration (sliding expiration)
+            var trackedSession = new UserSessionEntity
+            {
+                Id = session.Id,
+                UserId = session.UserId,
+                SessionId = session.SessionId,
+                TenantId = session.TenantId,
+                CreatedAt = session.CreatedAt,
+                ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours),
+                LastActivityAt = now,
+                UserAgent = session.UserAgent,
+                IpAddress = session.IpAddress
+            };
+            
+            _context.UserSessions.Attach(trackedSession);
+            _context.Entry(trackedSession).Property(s => s.LastActivityAt).IsModified = true;
+            _context.Entry(trackedSession).Property(s => s.ExpiresAt).IsModified = true;
+            
             await _context.SaveChangesAsync();
             
             _logger.LogDebug("User session validated and extended: UserId={UserId}, SessionId={SessionId}, NewExpiresAt={ExpiresAt}", 
-                userId, sessionId, session.ExpiresAt);
+                userId, sessionId, trackedSession.ExpiresAt);
             return true;
         }
 
         // Check if there's a session record that has expired
         var expiredSession = await _context.UserSessions
+            .AsNoTracking()
             .FirstOrDefaultAsync(s => s.UserId == userId && 
                                     s.SessionId == sessionId && 
                                     s.TenantId == tenantId);
@@ -230,6 +249,7 @@ public class AuthService : IAuthService
     public async Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId)
     {
         var owner = await _context.Owners
+            .AsNoTracking()
             .FirstOrDefaultAsync(o => o.Id == ownerId && o.TenantId == tenantId && o.IsActive);
 
         if (owner == null)
@@ -239,8 +259,10 @@ public class AuthService : IAuthService
         }
 
         // Check if session exists in the OwnerSessions table and is not expired
+        // Use AsNoTracking to avoid change tracking conflicts and get fresh data
         var now = DateTime.UtcNow;
         var session = await _context.OwnerSessions
+            .AsNoTracking()
             .FirstOrDefaultAsync(s => s.OwnerId == ownerId && 
                                     s.SessionId == sessionId && 
                                     s.TenantId == tenantId &&
@@ -248,18 +270,34 @@ public class AuthService : IAuthService
 
         if (session != null)
         {
-            // Update last activity time and extend session expiration (sliding expiration)
-            session.LastActivityAt = now;
-            session.ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours);
+            // Attach and update the session to extend expiration (sliding expiration)
+            var trackedSession = new OwnerSessionEntity
+            {
+                Id = session.Id,
+                OwnerId = session.OwnerId,
+                SessionId = session.SessionId,
+                TenantId = session.TenantId,
+                CreatedAt = session.CreatedAt,
+                ExpiresAt = now.AddHours(_sessionSettings.ExpiryHours),
+                LastActivityAt = now,
+                UserAgent = session.UserAgent,
+                IpAddress = session.IpAddress
+            };
+            
+            _context.OwnerSessions.Attach(trackedSession);
+            _context.Entry(trackedSession).Property(s => s.LastActivityAt).IsModified = true;
+            _context.Entry(trackedSession).Property(s => s.ExpiresAt).IsModified = true;
+            
             await _context.SaveChangesAsync();
             
             _logger.LogDebug("Owner session validated and extended: OwnerId={OwnerId}, SessionId={SessionId}, NewExpiresAt={ExpiresAt}", 
-                ownerId, sessionId, session.ExpiresAt);
+                ownerId, sessionId, trackedSession.ExpiresAt);
             return true;
         }
 
         // Check if there's a session record that has expired
         var expiredSession = await _context.OwnerSessions
+            .AsNoTracking()
             .FirstOrDefaultAsync(s => s.OwnerId == ownerId && 
                                     s.SessionId == sessionId && 
                                     s.TenantId == tenantId);
