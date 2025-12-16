@@ -20,17 +20,3 @@ public class AppointmentCompletedNotificationDto
     public Guid? NextPatientId { get; set; }
     public string? NextPatientName { get; set; }
 }
-
-public class NotificationEntity
-{
-    public Guid Id { get; set; }
-    public string Type { get; set; } = string.Empty;
-    public string Title { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-    public string? DataJson { get; set; }
-    public bool IsRead { get; set; }
-    public string TenantId { get; set; } = string.Empty;
-    public Guid? UserId { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? ReadAt { get; set; }
-}

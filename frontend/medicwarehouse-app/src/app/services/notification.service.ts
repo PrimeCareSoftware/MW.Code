@@ -41,8 +41,8 @@ export class NotificationService {
       tap(() => {
         // Create local notification
         const notification: Notification = {
-          id: Math.random().toString(),
-          type: 'AppointmentCompleted' as any,
+          id: crypto.randomUUID(),
+          type: NotificationType.AppointmentCompleted,
           title: 'Consulta Finalizada',
           message: `Dr(a). ${data.doctorName} finalizou o atendimento de ${data.patientName}`,
           data,

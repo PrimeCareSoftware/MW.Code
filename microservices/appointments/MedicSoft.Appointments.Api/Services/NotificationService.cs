@@ -160,12 +160,12 @@ public class NotificationService : INotificationService
 
     private static NotificationDto MapToDto(NotificationEntity entity)
     {
-        object? data = null;
+        JsonElement? data = null;
         if (!string.IsNullOrEmpty(entity.DataJson))
         {
             try
             {
-                data = JsonSerializer.Deserialize<object>(entity.DataJson);
+                data = JsonSerializer.Deserialize<JsonElement>(entity.DataJson);
             }
             catch
             {

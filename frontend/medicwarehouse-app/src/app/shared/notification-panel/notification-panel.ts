@@ -61,11 +61,11 @@ export class NotificationPanel implements OnInit, OnDestroy {
 
   getNotificationIcon(notification: Notification): string {
     switch (notification.type) {
-      case 'AppointmentCompleted' as any:
+      case NotificationType.AppointmentCompleted:
         return '✓';
-      case 'PatientReady' as any:
+      case NotificationType.PatientReady:
         return '👤';
-      case 'AppointmentReminder' as any:
+      case NotificationType.AppointmentReminder:
         return '⏰';
       default:
         return 'ℹ';
