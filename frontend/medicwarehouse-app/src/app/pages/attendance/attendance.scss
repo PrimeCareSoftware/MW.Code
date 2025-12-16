@@ -482,6 +482,32 @@
   }
 }
 
+.completion-notice {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  color: #155724;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+
+  svg {
+    flex-shrink: 0;
+    color: #28a745;
+  }
+}
+    border: 1px solid #3498db;
+
+    &:hover:not(:disabled) {
+      background: #3498db;
+      color: white;
+    }
+  }
+}
+
 // Print styles
 .print-only {
   display: none;
