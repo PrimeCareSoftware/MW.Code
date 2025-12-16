@@ -67,6 +67,7 @@ builder.Services.AddMicroserviceAuthentication(builder.Configuration);
 
 // Register services
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // Configure CORS
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()

@@ -49,8 +49,11 @@ public class AppointmentService : IAppointmentService
         {
             Id = Guid.NewGuid(),
             PatientId = dto.PatientId,
+            PatientName = "Patient Name", // TODO: Fetch from Patients microservice
             ClinicId = dto.ClinicId,
+            ClinicName = "Clinic Name", // TODO: Fetch from Clinics data
             DoctorId = dto.DoctorId,
+            DoctorName = dto.DoctorId.HasValue ? "Doctor Name" : null, // TODO: Fetch from Users/Doctors microservice
             ScheduledDate = dto.ScheduledDate.Date,
             StartTime = dto.StartTime,
             EndTime = endTime,
@@ -214,8 +217,11 @@ public class AppointmentService : IAppointmentService
         {
             Id = entity.Id,
             PatientId = entity.PatientId,
+            PatientName = entity.PatientName,
             ClinicId = entity.ClinicId,
+            ClinicName = entity.ClinicName,
             DoctorId = entity.DoctorId,
+            DoctorName = entity.DoctorName,
             ScheduledDate = entity.ScheduledDate,
             StartTime = entity.StartTime,
             EndTime = entity.EndTime,
