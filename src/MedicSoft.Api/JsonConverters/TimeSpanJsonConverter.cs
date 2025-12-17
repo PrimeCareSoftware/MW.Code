@@ -44,8 +44,8 @@ namespace MedicSoft.Api.JsonConverters
         public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
         {
             // Serialize as "HH:mm" format in 24-hour notation (e.g., "09:00", "14:30")
-            // For TimeSpan, we use the total hours component
-            var hours = (int)value.TotalHours;
+            // Use Hours (not TotalHours) to get the hour component within a 24-hour period
+            var hours = value.Hours;
             var minutes = value.Minutes;
             writer.WriteStringValue($"{hours:D2}:{minutes:D2}");
         }
