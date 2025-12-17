@@ -18,9 +18,18 @@ namespace MedicSoft.Api.JsonConverters
             }
 
             // Try to parse as "HH:mm" format first (24-hour format)
-            if (TimeSpan.TryParseExact(value, @"hh\:mm", null, out var result))
+            // Split and parse manually since TimeSpan.ParseExact doesn't support HH format directly
+            if (value.Contains(':'))
             {
-                return result;
+                var parts = value.Split(':');
+                if (parts.Length == 2 && 
+                    int.TryParse(parts[0], out var hours) && 
+                    int.TryParse(parts[1], out var minutes) &&
+                    hours >= 0 && hours <= 23 &&
+                    minutes >= 0 && minutes <= 59)
+                {
+                    return new TimeSpan(hours, minutes, 0);
+                }
             }
 
             // Fall back to default TimeSpan parsing for backwards compatibility
