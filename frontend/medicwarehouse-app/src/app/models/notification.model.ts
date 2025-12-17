@@ -1,0 +1,25 @@
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  data?: any;
+  isRead: boolean;
+  createdAt: Date;
+}
+
+export enum NotificationType {
+  AppointmentCompleted = 'AppointmentCompleted',
+  PatientReady = 'PatientReady',
+  AppointmentReminder = 'AppointmentReminder',
+  General = 'General'
+}
+
+export interface AppointmentCompletedNotification {
+  appointmentId: string;
+  doctorName: string;
+  patientName: string;
+  completedAt: Date;
+  nextPatientId?: string;
+  nextPatientName?: string;
+}

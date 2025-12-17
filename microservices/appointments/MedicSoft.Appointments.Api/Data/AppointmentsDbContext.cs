@@ -10,6 +10,7 @@ public class AppointmentsDbContext : DbContext
 
     public DbSet<AppointmentEntity> Appointments => Set<AppointmentEntity>();
     public DbSet<WaitingQueueEntryEntity> WaitingQueueEntries => Set<WaitingQueueEntryEntity>();
+    public DbSet<NotificationEntity> Notifications => Set<NotificationEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,6 +21,9 @@ public class AppointmentsDbContext : DbContext
             entity.ToTable("Appointments");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.PatientName).HasMaxLength(200);
+            entity.Property(e => e.ClinicName).HasMaxLength(200);
+            entity.Property(e => e.DoctorName).HasMaxLength(200);
         });
 
         modelBuilder.Entity<WaitingQueueEntryEntity>(entity =>
@@ -28,6 +32,16 @@ public class AppointmentsDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
         });
+
+        modelBuilder.Entity<NotificationEntity>(entity =>
+        {
+            entity.ToTable("Notifications");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Type).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Message).IsRequired().HasMaxLength(1000);
+        });
     }
 }
 
@@ -35,8 +49,11 @@ public class AppointmentEntity
 {
     public Guid Id { get; set; }
     public Guid PatientId { get; set; }
+    public string PatientName { get; set; } = string.Empty;
     public Guid ClinicId { get; set; }
+    public string ClinicName { get; set; } = string.Empty;
     public Guid? DoctorId { get; set; }
+    public string? DoctorName { get; set; }
     public DateTime ScheduledDate { get; set; }
     public TimeSpan StartTime { get; set; }
     public TimeSpan EndTime { get; set; }
@@ -66,4 +83,18 @@ public class WaitingQueueEntryEntity
     public DateTime? ServiceEndedAt { get; set; }
     public string TenantId { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+}
+
+public class NotificationEntity
+{
+    public Guid Id { get; set; }
+    public string Type { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+    public string? DataJson { get; set; }
+    public bool IsRead { get; set; }
+    public string TenantId { get; set; } = string.Empty;
+    public Guid? UserId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ReadAt { get; set; }
 }

@@ -1,0 +1,99 @@
+<app-navbar></app-navbar>
+
+<div class="calendar-container">
+  <div class="page-header">
+    <div>
+      <h1>Calendário de Agendamentos</h1>
+      <p>Visualização semanal - clique em um horário para agendar</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" routerLink="/appointments">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        Ver Lista
+      </button>
+      <button class="btn btn-primary" routerLink="/appointments/new">
+        + Novo Agendamento
+      </button>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  <div class="calendar-controls">
+    <button class="btn btn-outline" (click)="previousWeek()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Anterior
+    </button>
+    <div class="week-range">
+      <h2>{{ getWeekRange() }}</h2>
+      <button class="btn btn-sm btn-outline" (click)="goToToday()">Hoje</button>
+    </div>
+    <button class="btn btn-outline" (click)="nextWeek()">
+      Próxima
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">Carregando calendário...</div>
+  } @else {
+    <div class="calendar-wrapper">
+      <div class="calendar-grid">
+        <!-- Time column header -->
+        <div class="time-header"></div>
+        
+        <!-- Day headers -->
+        @for (day of weekDays(); track day.date.getTime()) {
+          <div class="day-header" [class.today]="day.isToday">
+            <div class="day-name">{{ day.dayName }}</div>
+            <div class="day-number">{{ day.dayNumber }}</div>
+          </div>
+        }
+
+        <!-- Time slots and appointments -->
+        @for (row of calendarGrid(); track row[0]?.timeSlot.time) {
+          <!-- Time label -->
+          <div class="time-label">
+            {{ row[0]?.timeSlot.time }}
+          </div>
+          
+          <!-- Slots for each day -->
+          @for (slot of row; track slot.dayColumn.date.getTime() + slot.timeSlot.time) {
+            <div 
+              class="calendar-slot"
+              [class.available]="slot.isAvailable"
+              [class.occupied]="!slot.isAvailable"
+              [class.today-column]="slot.dayColumn.isToday"
+              (click)="onSlotClick(slot)"
+            >
+              @if (slot.appointment) {
+                <div class="appointment-block" [class]="getStatusClass(slot.appointment.status)">
+                  <div class="appointment-patient">{{ slot.appointment.patientName }}</div>
+                  <div class="appointment-duration">{{ slot.appointment.durationMinutes }}min</div>
+                  <div class="appointment-type">{{ slot.appointment.type }}</div>
+                </div>
+              } @else {
+                <div class="slot-placeholder">
+                  <span class="plus-icon">+</span>
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

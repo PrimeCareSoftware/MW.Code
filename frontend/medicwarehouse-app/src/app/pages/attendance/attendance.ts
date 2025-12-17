@@ -10,6 +10,7 @@ import { MedicalRecordService } from '../../services/medical-record';
 import { PatientService } from '../../services/patient';
 import { ProcedureService } from '../../services/procedure';
 import { ExamRequestService } from '../../services/exam-request';
+import { NotificationService } from '../../services/notification.service';
 import { Appointment } from '../../models/appointment.model';
 import { MedicalRecord } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
@@ -70,7 +71,8 @@ export class Attendance implements OnInit, OnDestroy {
     private medicalRecordService: MedicalRecordService,
     private patientService: PatientService,
     private procedureService: ProcedureService,
-    private examRequestService: ExamRequestService
+    private examRequestService: ExamRequestService,
+    private notificationService: NotificationService
   ) {
     this.attendanceForm = this.fb.group({
       diagnosis: [''],
@@ -272,6 +274,9 @@ export class Attendance implements OnInit, OnDestroy {
         this.successMessage.set('Atendimento finalizado com sucesso!');
         this.isLoading.set(false);
         
+        // Notify secretary about completion
+        this.notifySecretaryConsultationCompleted();
+        
         // Redireciona após 2 segundos
         setTimeout(() => {
           this.router.navigate(['/appointments']);
@@ -281,6 +286,29 @@ export class Attendance implements OnInit, OnDestroy {
         console.error('Error completing consultation:', error);
         this.errorMessage.set('Erro ao finalizar atendimento');
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  notifySecretaryConsultationCompleted(): void {
+    const appointment = this.appointment();
+    const patient = this.patient();
+    
+    if (!appointment || !patient) return;
+
+    // Send notification to secretary
+    this.notificationService.notifyAppointmentCompleted({
+      appointmentId: appointment.id,
+      doctorName: 'Dr. Sistema', // In real app, this would come from authenticated user
+      patientName: patient.name,
+      completedAt: new Date(),
+      // nextPatientId and nextPatientName would be determined by checking the next appointment
+    }).subscribe({
+      next: () => {
+        console.log('Secretary notified successfully');
+      },
+      error: (error) => {
+        console.error('Error notifying secretary:', error);
       }
     });
   }

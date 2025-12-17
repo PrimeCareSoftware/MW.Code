@@ -2,10 +2,11 @@ import { Component, HostListener, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { NotificationPanel } from '../notification-panel/notification-panel';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NotificationPanel],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })

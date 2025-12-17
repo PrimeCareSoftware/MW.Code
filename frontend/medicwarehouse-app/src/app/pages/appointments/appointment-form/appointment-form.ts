@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { PatientService } from '../../../services/patient';
@@ -24,7 +24,8 @@ export class AppointmentForm implements OnInit {
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
     private patientService: PatientService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.appointmentForm = this.fb.group({
       patientId: ['', [Validators.required]],
@@ -39,6 +40,16 @@ export class AppointmentForm implements OnInit {
 
   ngOnInit(): void {
     this.loadPatients();
+    
+    // Pre-fill date and time from query parameters if provided
+    this.route.queryParams.subscribe(params => {
+      if (params['date']) {
+        this.appointmentForm.patchValue({ scheduledDate: params['date'] });
+      }
+      if (params['time']) {
+        this.appointmentForm.patchValue({ scheduledTime: params['time'] });
+      }
+    });
   }
 
   loadPatients(): void {
