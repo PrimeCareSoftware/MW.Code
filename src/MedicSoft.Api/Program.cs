@@ -293,18 +293,22 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Ensure database is created
+// Apply database migrations
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    
     try
     {
-        context.Database.EnsureCreated();
+        logger.LogInformation("Applying database migrations...");
+        context.Database.Migrate();
+        logger.LogInformation("Database migrations applied successfully");
     }
     catch (Exception ex)
     {
-        // Log the exception in a real application
-        Console.WriteLine($"Database initialization failed: {ex.Message}");
+        logger.LogError(ex, "Database migration failed: {Message}", ex.Message);
+        Console.WriteLine($"Database migration failed: {ex.Message}");
     }
 }
 
