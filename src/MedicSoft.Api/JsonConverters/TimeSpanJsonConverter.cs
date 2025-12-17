@@ -9,6 +9,9 @@ namespace MedicSoft.Api.JsonConverters
     /// </summary>
     public class TimeSpanJsonConverter : JsonConverter<TimeSpan>
     {
+        private const int MaxHours = 23;
+        private const int MaxMinutes = 59;
+
         public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
@@ -19,14 +22,15 @@ namespace MedicSoft.Api.JsonConverters
 
             // Try to parse as "HH:mm" format first (24-hour format)
             // Split and parse manually since TimeSpan.ParseExact doesn't support HH format directly
-            if (value.Contains(':'))
+            var colonIndex = value.IndexOf(':');
+            if (colonIndex > 0)
             {
                 var parts = value.Split(':');
                 if (parts.Length == 2 && 
                     int.TryParse(parts[0], out var hours) && 
                     int.TryParse(parts[1], out var minutes) &&
-                    hours >= 0 && hours <= 23 &&
-                    minutes >= 0 && minutes <= 59)
+                    hours >= 0 && hours <= MaxHours &&
+                    minutes >= 0 && minutes <= MaxMinutes)
                 {
                     return new TimeSpan(hours, minutes, 0);
                 }
