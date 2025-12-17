@@ -64,10 +64,10 @@
         }
 
         <!-- Time slots and appointments -->
-        @for (row of calendarGrid(); track row[0]?.timeSlot.time) {
+        @for (row of calendarGrid(); track row[0]?.timeSlot?.time) {
           <!-- Time label -->
           <div class="time-label">
-            {{ row[0]?.timeSlot.time }}
+            {{ row[0]?.timeSlot?.time }}
           </div>
           
           <!-- Slots for each day -->

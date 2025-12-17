@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotificationService } from '../../services/notification.service';
-import { Notification } from '../../models/notification.model';
+import type { Notification } from '../../models/notification.model';
+import { NotificationType } from '../../models/notification.model';
 
 @Component({
   selector: 'app-notification-panel',

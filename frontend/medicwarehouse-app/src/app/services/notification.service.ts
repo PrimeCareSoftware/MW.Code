@@ -2,7 +2,8 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Notification, AppointmentCompletedNotification } from '../models/notification.model';
+import type { Notification, AppointmentCompletedNotification } from '../models/notification.model';
+import { NotificationType } from '../models/notification.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({

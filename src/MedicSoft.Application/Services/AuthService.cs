@@ -86,13 +86,29 @@ namespace MedicSoft.Application.Services
         public async Task<bool> ValidateUserSessionAsync(Guid userId, string sessionId, string tenantId)
         {
             var user = await _userRepository.GetByIdAsync(userId, tenantId);
-            return user != null && user.IsSessionValid(sessionId);
+            if (user == null)
+            {
+                return false;
+            }
+            
+            var isValid = user.IsSessionValid(sessionId);
+            // Log for debugging
+            Console.WriteLine($"[AuthService] ValidateUserSession - UserId: {userId}, SessionId: {sessionId}, CurrentSessionId: {user.CurrentSessionId ?? "null"}, IsValid: {isValid}");
+            return isValid;
         }
 
         public async Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId)
         {
             var owner = await _ownerRepository.GetByIdAsync(ownerId, tenantId);
-            return owner != null && owner.IsSessionValid(sessionId);
+            if (owner == null)
+            {
+                return false;
+            }
+            
+            var isValid = owner.IsSessionValid(sessionId);
+            // Log for debugging
+            Console.WriteLine($"[AuthService] ValidateOwnerSession - OwnerId: {ownerId}, SessionId: {sessionId}, CurrentSessionId: {owner.CurrentSessionId ?? "null"}, IsValid: {isValid}");
+            return isValid;
         }
     }
 }

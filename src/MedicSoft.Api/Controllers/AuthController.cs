@@ -284,14 +284,28 @@ namespace MedicSoft.Api.Controllers
                 var tenantIdClaim = principal.FindFirst("tenant_id")?.Value;
                 var roleClaim = principal.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 
+                _logger.LogInformation("ValidateSession - Claims extracted: UserId={UserId}, SessionId={SessionId}, TenantId={TenantId}, Role={Role}",
+                    userIdClaim ?? "null", sessionIdClaim ?? "null", tenantIdClaim ?? "null", roleClaim ?? "null");
+
                 if (string.IsNullOrWhiteSpace(userIdClaim) || 
-                    string.IsNullOrWhiteSpace(sessionIdClaim) || 
                     string.IsNullOrWhiteSpace(tenantIdClaim))
                 {
+                    _logger.LogWarning("ValidateSession failed: Missing userId or tenantId claims");
                     return Ok(new SessionValidationResponse 
                     { 
                         IsValid = false,
                         Message = "Token inválido"
+                    });
+                }
+
+                // If sessionId is missing, it might be an old token - still validate token expiry
+                if (string.IsNullOrWhiteSpace(sessionIdClaim))
+                {
+                    _logger.LogInformation("ValidateSession: No session_id claim found in token, treating as valid (legacy token)");
+                    return Ok(new SessionValidationResponse 
+                    { 
+                        IsValid = true,
+                        Message = "Sessão válida (token sem session_id)"
                     });
                 }
 

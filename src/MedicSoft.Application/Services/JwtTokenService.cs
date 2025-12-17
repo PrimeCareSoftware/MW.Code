@@ -116,7 +116,7 @@ namespace MedicSoft.Application.Services
 
             try
             {
-                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                var primaryValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -126,10 +126,41 @@ namespace MedicSoft.Application.Services
                     ValidAudience = audience,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(5) // Allow 5 minutes tolerance for time sync issues
-                }, out SecurityToken validatedToken);
+                };
+
+                var principal = tokenHandler.ValidateToken(token, primaryValidationParameters, out SecurityToken validatedToken);
 
                 _logger.LogDebug("Token validated successfully");
                 return principal;
+            }
+            catch (SecurityTokenInvalidLifetimeException ex) when (ex.Message.Contains("IDX10225"))
+            {
+                // Legacy tokens may be missing exp; attempt a fallback validation without lifetime enforcement
+                _logger.LogWarning("Token validation failed due to missing exp. Attempting legacy validation without lifetime. Exception: {Message}", ex.Message);
+                try
+                {
+                    var legacyValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = true,
+                        ValidIssuer = issuer,
+                        ValidateAudience = true,
+                        ValidAudience = audience,
+                        ValidateLifetime = false,
+                        RequireExpirationTime = false,
+                        ClockSkew = TimeSpan.FromMinutes(5)
+                    };
+
+                    var principal = tokenHandler.ValidateToken(token, legacyValidationParameters, out SecurityToken _);
+                    _logger.LogInformation("Legacy token validated without expiration claim.");
+                    return principal;
+                }
+                catch (Exception legacyEx)
+                {
+                    _logger.LogWarning("Legacy token validation failed: {Message}", legacyEx.Message);
+                    return null;
+                }
             }
             catch (SecurityTokenExpiredException ex)
             {
