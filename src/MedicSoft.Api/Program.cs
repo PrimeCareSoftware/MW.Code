@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MedicSoft.Api.JsonConverters;
 using MedicSoft.Api.Middleware;
 using MedicSoft.Application.Mappings;
 using MedicSoft.Application.Services;
@@ -18,7 +19,12 @@ using MedicSoft.Repository.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Add custom TimeSpan converter to serialize as "HH:mm" format for calendar compatibility
+        options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 
 // Configure Swagger with JWT support
