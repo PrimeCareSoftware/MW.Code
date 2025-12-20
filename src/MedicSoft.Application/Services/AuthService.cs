@@ -19,15 +19,21 @@ namespace MedicSoft.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IOwnerRepository _ownerRepository;
+        private readonly IUserSessionRepository _userSessionRepository;
+        private readonly IOwnerSessionRepository _ownerSessionRepository;
         private readonly IPasswordHasher _passwordHasher;
 
         public AuthService(
             IUserRepository userRepository, 
             IOwnerRepository ownerRepository,
+            IUserSessionRepository userSessionRepository,
+            IOwnerSessionRepository ownerSessionRepository,
             IPasswordHasher passwordHasher)
         {
             _userRepository = userRepository;
             _ownerRepository = ownerRepository;
+            _userSessionRepository = userSessionRepository;
+            _ownerSessionRepository = ownerSessionRepository;
             _passwordHasher = passwordHasher;
         }
 
@@ -60,55 +66,77 @@ namespace MedicSoft.Application.Services
         public async Task<string> RecordUserLoginAsync(Guid userId, string tenantId)
         {
             var user = await _userRepository.GetByIdAsync(userId, tenantId);
-            if (user != null)
-            {
-                var sessionId = Guid.NewGuid().ToString();
-                user.RecordLogin(sessionId);
-                await _userRepository.UpdateAsync(user);
-                return sessionId;
-            }
-            throw new InvalidOperationException("User not found");
+            if (user == null)
+                throw new InvalidOperationException("User not found");
+
+            var sessionId = Guid.NewGuid().ToString();
+            
+            // Update legacy field for backward compatibility
+            user.RecordLogin(sessionId);
+            await _userRepository.UpdateAsync(user);
+
+            // Create new session record in database
+            var userSession = new UserSession(userId, sessionId, tenantId, expiryHours: 24);
+            await _userSessionRepository.AddAsync(userSession);
+            await _userSessionRepository.SaveChangesAsync();
+
+            return sessionId;
         }
 
         public async Task<string> RecordOwnerLoginAsync(Guid ownerId, string tenantId)
         {
             var owner = await _ownerRepository.GetByIdAsync(ownerId, tenantId);
-            if (owner != null)
-            {
-                var sessionId = Guid.NewGuid().ToString();
-                owner.RecordLogin(sessionId);
-                await _ownerRepository.UpdateAsync(owner);
-                return sessionId;
-            }
-            throw new InvalidOperationException("Owner not found");
+            if (owner == null)
+                throw new InvalidOperationException("Owner not found");
+
+            var sessionId = Guid.NewGuid().ToString();
+            
+            // Update legacy field for backward compatibility
+            owner.RecordLogin(sessionId);
+            await _ownerRepository.UpdateAsync(owner);
+
+            // Create new session record in database
+            var ownerSession = new OwnerSession(ownerId, sessionId, tenantId, expiryHours: 24);
+            await _ownerSessionRepository.AddAsync(ownerSession);
+            await _ownerSessionRepository.SaveChangesAsync();
+
+            return sessionId;
         }
 
         public async Task<bool> ValidateUserSessionAsync(Guid userId, string sessionId, string tenantId)
         {
             var user = await _userRepository.GetByIdAsync(userId, tenantId);
             if (user == null)
-            {
                 return false;
-            }
+
+            // Check if session exists in the UserSessions table
+            var isValid = await _userSessionRepository.IsSessionValidAsync(userId, sessionId, tenantId);
             
-            var isValid = user.IsSessionValid(sessionId);
-            // Log for debugging
-            Console.WriteLine($"[AuthService] ValidateUserSession - UserId: {userId}, SessionId: {sessionId}, CurrentSessionId: {user.CurrentSessionId ?? "null"}, IsValid: {isValid}");
-            return isValid;
+            if (isValid)
+                return true;
+
+            // Fallback to legacy SessionId field for backward compatibility
+            // This allows sessions created before the migration to still work
+            var legacySessionValid = user.IsSessionValid(sessionId);
+            return legacySessionValid;
         }
 
         public async Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId)
         {
             var owner = await _ownerRepository.GetByIdAsync(ownerId, tenantId);
             if (owner == null)
-            {
                 return false;
-            }
+
+            // Check if session exists in the OwnerSessions table
+            var isValid = await _ownerSessionRepository.IsSessionValidAsync(ownerId, sessionId, tenantId);
             
-            var isValid = owner.IsSessionValid(sessionId);
-            // Log for debugging
-            Console.WriteLine($"[AuthService] ValidateOwnerSession - OwnerId: {ownerId}, SessionId: {sessionId}, CurrentSessionId: {owner.CurrentSessionId ?? "null"}, IsValid: {isValid}");
-            return isValid;
+            if (isValid)
+                return true;
+
+            // Fallback to legacy SessionId field for backward compatibility
+            // This allows sessions created before the migration to still work
+            var legacySessionValid = owner.IsSessionValid(sessionId);
+            return legacySessionValid;
         }
     }
 }

@@ -125,6 +125,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = audience,
         ValidateLifetime = true,
+        RequireExpirationTime = true,
         ClockSkew = TimeSpan.FromMinutes(5) // Allow 5 minutes tolerance for time sync issues
     };
 });
@@ -195,6 +196,8 @@ builder.Services.AddScoped<IWaitingQueueRepository, WaitingQueueRepository>();
 builder.Services.AddScoped<IWaitingQueueConfigurationRepository, WaitingQueueConfigurationRepository>();
 builder.Services.AddScoped<IOwnerClinicLinkRepository, OwnerClinicLinkRepository>();
 builder.Services.AddScoped<IExamCatalogRepository, ExamCatalogRepository>();
+builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
+builder.Services.AddScoped<IOwnerSessionRepository, OwnerSessionRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();

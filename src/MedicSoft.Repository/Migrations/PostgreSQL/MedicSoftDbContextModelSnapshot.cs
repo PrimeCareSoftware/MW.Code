@@ -1332,6 +1332,59 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.ToTable("OwnerClinicLinks", (string)null);
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.OwnerSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
+
+                    b.Property<DateTime>("LastActivityAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt")
+                        .HasDatabaseName("idx_ownersession_expiresat");
+
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("idx_ownersession_tenantid");
+
+                    b.HasIndex("OwnerId", "SessionId")
+                        .IsUnique()
+                        .HasDatabaseName("idx_ownersession_ownerid_sessionid");
+
+                    b.ToTable("owner_sessions", "public");
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.PasswordResetToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1938,6 +1991,59 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.UserSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
+
+                    b.Property<DateTime>("LastActivityAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt")
+                        .HasDatabaseName("idx_usersession_expiresat");
+
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("idx_usersession_tenantid");
+
+                    b.HasIndex("UserId", "SessionId")
+                        .IsUnique()
+                        .HasDatabaseName("idx_usersession_userid_sessionid");
+
+                    b.ToTable("user_sessions", "public");
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.WaitingQueueConfiguration", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2268,6 +2374,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.OwnerSession", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.Owner", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.PasswordResetToken", b =>
                 {
                     b.HasOne("MedicSoft.Domain.Entities.User", "User")
@@ -2484,6 +2601,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Clinic");
+                });
+
+            modelBuilder.Entity("MedicSoft.Domain.Entities.UserSession", b =>
+                {
+                    b.HasOne("MedicSoft.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.WaitingQueueConfiguration", b =>

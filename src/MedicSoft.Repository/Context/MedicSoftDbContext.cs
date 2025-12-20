@@ -49,6 +49,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<WaitingQueueConfiguration> WaitingQueueConfigurations { get; set; } = null!;
         public DbSet<ExamCatalog> ExamCatalogs { get; set; } = null!;
         public DbSet<Notification> Notifications { get; set; } = null!;
+        public DbSet<UserSession> UserSessions { get; set; } = null!;
+        public DbSet<OwnerSession> OwnerSessions { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -85,6 +87,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new WaitingQueueConfigurationConfiguration());
             modelBuilder.ApplyConfiguration(new ExamCatalogConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new UserSessionConfiguration());
+            modelBuilder.ApplyConfiguration(new OwnerSessionConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

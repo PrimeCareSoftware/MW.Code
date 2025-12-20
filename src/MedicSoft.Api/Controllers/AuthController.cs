@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
@@ -246,12 +248,41 @@ namespace MedicSoft.Api.Controllers
                 return Ok(new TokenValidationResponse { IsValid = false });
             }
 
-            return Ok(new TokenValidationResponse 
-            { 
+            var username = principal.Identity?.Name;
+            var role = principal.FindFirst("role")?.Value
+                ?? principal.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+            var tenantId = principal.FindFirst("tenant_id")?.Value;
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(role) || string.IsNullOrWhiteSpace(tenantId))
+            {
+                try
+                {
+                    // Strip Bearer prefix if present
+                    var tokenString = request.Token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) && request.Token.Length > 7
+                        ? request.Token[7..]
+                        : request.Token;
+
+                    var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                    var raw = handler.ReadJwtToken(tokenString);
+
+                    username ??= raw.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value
+                        ?? raw.Claims.FirstOrDefault(c => c.Type == "unique_name")?.Value;
+                    role ??= raw.Claims.FirstOrDefault(c => c.Type == "role")?.Value
+                        ?? raw.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+                    tenantId ??= raw.Claims.FirstOrDefault(c => c.Type == "tenant_id")?.Value;
+                }
+                catch
+                {
+                    // ignore fallback errors; will return what we have
+                }
+            }
+
+            return Ok(new TokenValidationResponse
+            {
                 IsValid = true,
-                Username = principal.Identity?.Name,
-                Role = principal.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value,
-                TenantId = principal.FindFirst("tenant_id")?.Value
+                Username = username,
+                Role = role,
+                TenantId = tenantId
             });
         }
 
@@ -268,6 +299,10 @@ namespace MedicSoft.Api.Controllers
                     return BadRequest(new { message = "Token is required" });
                 }
 
+                _logger.LogDebug("ValidateSession - Token received, length: {TokenLength}, first 50 chars: {TokenStart}", 
+                    request.Token.Length, 
+                    request.Token.Length > 50 ? request.Token.Substring(0, 50) : request.Token);
+
                 var principal = _jwtTokenService.ValidateToken(request.Token);
                 if (principal == null)
                 {
@@ -279,10 +314,89 @@ namespace MedicSoft.Api.Controllers
                     });
                 }
 
-                var userIdClaim = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                // Extract claims - try both mapped names and JWT short names
+                var userIdClaim = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value 
+                    ?? principal.FindFirst("nameid")?.Value 
+                    ?? principal.FindFirst("sub")?.Value;
                 var sessionIdClaim = principal.FindFirst("session_id")?.Value;
                 var tenantIdClaim = principal.FindFirst("tenant_id")?.Value;
-                var roleClaim = principal.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                var roleClaim = principal.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value 
+                    ?? principal.FindFirst("role")?.Value;
+
+                // Fallback: if any required custom claim is missing, parse raw JWT payload directly
+                if (string.IsNullOrWhiteSpace(sessionIdClaim) || string.IsNullOrWhiteSpace(tenantIdClaim) || string.IsNullOrWhiteSpace(userIdClaim))
+                {
+                    try
+                    {
+                        var tokenString = request.Token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) && request.Token.Length > 7
+                            ? request.Token[7..]
+                            : request.Token;
+
+                        var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                        var raw = handler.ReadJwtToken(tokenString);
+
+                        userIdClaim ??= raw.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                            ?? raw.Claims.FirstOrDefault(c => c.Type == "nameid")?.Value
+                            ?? raw.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+                        sessionIdClaim ??= raw.Claims.FirstOrDefault(c => c.Type == "session_id")?.Value;
+                        tenantIdClaim ??= raw.Claims.FirstOrDefault(c => c.Type == "tenant_id")?.Value;
+
+                        _logger.LogInformation("ValidateSession - Fallback parsed claims: UserId={UserId}, SessionId={SessionId}, TenantId={TenantId}",
+                            userIdClaim ?? "null", sessionIdClaim ?? "null", tenantIdClaim ?? "null");
+
+                        // As a last resort, decode the JWT payload manually to read raw JSON
+                        if (string.IsNullOrWhiteSpace(sessionIdClaim) || string.IsNullOrWhiteSpace(tenantIdClaim) || string.IsNullOrWhiteSpace(userIdClaim))
+                        {
+                            var parts = tokenString.Split('.');
+                            if (parts.Length >= 2)
+                            {
+                                string payloadJson = null;
+                                try
+                                {
+                                    payloadJson = Base64UrlDecode(parts[1]);
+                                    using var doc = JsonDocument.Parse(payloadJson);
+                                    var root = doc.RootElement;
+                                    if (string.IsNullOrWhiteSpace(userIdClaim))
+                                    {
+                                        if (root.TryGetProperty("nameid", out var nameidProp)) userIdClaim = nameidProp.GetString();
+                                        else if (root.TryGetProperty("sub", out var subProp)) userIdClaim = subProp.GetString();
+                                    }
+                                    if (string.IsNullOrWhiteSpace(sessionIdClaim) && root.TryGetProperty("session_id", out var sessProp))
+                                    {
+                                        sessionIdClaim = sessProp.GetString();
+                                    }
+                                    if (string.IsNullOrWhiteSpace(tenantIdClaim) && root.TryGetProperty("tenant_id", out var tenantProp))
+                                    {
+                                        tenantIdClaim = tenantProp.GetString();
+                                    }
+
+                                    _logger.LogInformation("ValidateSession - Manual JWT decode claims: UserId={UserId}, SessionId={SessionId}, TenantId={TenantId}",
+                                        userIdClaim ?? "null", sessionIdClaim ?? "null", tenantIdClaim ?? "null");
+                                }
+                                catch (Exception decodeEx)
+                                {
+                                    _logger.LogWarning(decodeEx, "Manual JWT payload decode failed");
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception parseEx)
+                    {
+                        _logger.LogWarning(parseEx, "ValidateSession fallback parse failed");
+                    }
+                }
+
+                static string Base64UrlDecode(string input)
+                {
+                    string padded = input.Replace('-', '+').Replace('_', '/');
+                    switch (padded.Length % 4)
+                    {
+                        case 2: padded += "=="; break;
+                        case 3: padded += "="; break;
+                    }
+                    var bytes = Convert.FromBase64String(padded);
+                    return Encoding.UTF8.GetString(bytes);
+                }
 
                 _logger.LogInformation("ValidateSession - Claims extracted: UserId={UserId}, SessionId={SessionId}, TenantId={TenantId}, Role={Role}",
                     userIdClaim ?? "null", sessionIdClaim ?? "null", tenantIdClaim ?? "null", roleClaim ?? "null");
