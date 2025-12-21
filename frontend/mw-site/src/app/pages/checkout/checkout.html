@@ -7,13 +7,57 @@
         Parabéns! Sua clínica foi cadastrada e seu período de teste gratuito de 15 dias começou agora.
       </p>
 
+      <!-- Registration Data Display -->
+      <div class="registration-data">
+        <h2>📋 Dados do Cadastro</h2>
+        <div class="data-section">
+          <h3>🏥 Clínica</h3>
+          <div class="data-item">
+            <span class="label">Nome:</span>
+            <span class="value">{{ clinicName }}</span>
+          </div>
+          <div class="data-item" *ngIf="clinicId">
+            <span class="label">ID:</span>
+            <span class="value">{{ clinicId }}</span>
+          </div>
+        </div>
+
+        <div class="data-section">
+          <h3>👤 Responsável</h3>
+          <div class="data-item">
+            <span class="label">Nome:</span>
+            <span class="value">{{ ownerName }}</span>
+          </div>
+          <div class="data-item">
+            <span class="label">Email:</span>
+            <span class="value">{{ ownerEmail }}</span>
+          </div>
+        </div>
+
+        <div class="data-section">
+          <h3>🔑 Acesso ao Sistema</h3>
+          <div class="data-item important">
+            <span class="label">Usuário:</span>
+            <span class="value">{{ username }}</span>
+          </div>
+          <div class="data-item important">
+            <span class="label">TenantID / Identificador da Clínica:</span>
+            <span class="value tenant-id">{{ tenantId }}</span>
+          </div>
+          <div class="info-box">
+            <strong>⚠️ Importante:</strong> Guarde essas informações em local seguro. 
+            Você precisará do <strong>TenantID</strong> e do seu <strong>usuário</strong> para fazer login no sistema.
+          </div>
+        </div>
+      </div>
+
       <div class="next-steps">
         <h2>Próximos Passos</h2>
         <div class="step-card">
           <div class="step-number">1</div>
           <div class="step-content">
             <h3>Acesse sua conta</h3>
-            <p>Use o usuário e senha que você cadastrou para fazer login no sistema</p>
+            <p>Use o TenantID <strong>{{ tenantId }}</strong>, usuário <strong>{{ username }}</strong> e a senha que você cadastrou para fazer login</p>
           </div>
         </div>
         <div class="step-card">

@@ -37,7 +37,7 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                var (success, message, clinicId, ownerId) = await _registrationService.RegisterClinicWithOwnerAsync(request);
+                var (success, message, clinicId, ownerId, tenantId, subdomain, clinicName, ownerName, ownerEmail, username) = await _registrationService.RegisterClinicWithOwnerAsync(request);
 
                 if (!success)
                 {
@@ -53,7 +53,13 @@ namespace MedicSoft.Api.Controllers
                     Success = true,
                     Message = "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
                     ClinicId = clinicId,
-                    UserId = ownerId
+                    UserId = ownerId,
+                    TenantId = tenantId,
+                    Subdomain = subdomain,
+                    ClinicName = clinicName,
+                    OwnerName = ownerName,
+                    OwnerEmail = ownerEmail,
+                    Username = username
                 });
             }
             catch (Exception ex)

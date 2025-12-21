@@ -38,4 +38,10 @@ export interface RegistrationResponse {
   clinicId?: string;
   userId?: string;
   trialEndDate?: Date;
+  tenantId?: string;
+  subdomain?: string;
+  clinicName?: string;
+  ownerName?: string;
+  ownerEmail?: string;
+  username?: string;
 }

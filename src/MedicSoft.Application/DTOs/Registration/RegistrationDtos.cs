@@ -42,6 +42,12 @@ namespace MedicSoft.Application.DTOs.Registration
         public Guid? ClinicId { get; set; }
         public Guid? UserId { get; set; }
         public DateTime? TrialEndDate { get; set; }
+        public string? TenantId { get; set; }
+        public string? Subdomain { get; set; }
+        public string? ClinicName { get; set; }
+        public string? OwnerName { get; set; }
+        public string? OwnerEmail { get; set; }
+        public string? Username { get; set; }
     }
 
     public class CheckCNPJResponseDto

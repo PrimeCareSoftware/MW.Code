@@ -9,7 +9,7 @@ namespace MedicSoft.Application.Services
 {
     public interface IRegistrationService
     {
-        Task<(bool Success, string Message, Guid? ClinicId, Guid? OwnerId)> RegisterClinicWithOwnerAsync(RegistrationRequestDto request);
+        Task<(bool Success, string Message, Guid? ClinicId, Guid? OwnerId, string? TenantId, string? Subdomain, string? ClinicName, string? OwnerName, string? OwnerEmail, string? Username)> RegisterClinicWithOwnerAsync(RegistrationRequestDto request);
         Task<bool> CheckCNPJExistsAsync(string cnpj);
         Task<bool> CheckUsernameAvailableAsync(string username, string tenantId);
     }
@@ -39,40 +39,40 @@ namespace MedicSoft.Application.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<(bool Success, string Message, Guid? ClinicId, Guid? OwnerId)> RegisterClinicWithOwnerAsync(RegistrationRequestDto request)
+        public async Task<(bool Success, string Message, Guid? ClinicId, Guid? OwnerId, string? TenantId, string? Subdomain, string? ClinicName, string? OwnerName, string? OwnerEmail, string? Username)> RegisterClinicWithOwnerAsync(RegistrationRequestDto request)
         {
             // Validate required fields
             if (!request.AcceptTerms)
             {
-                return (false, "You must accept the terms and conditions", null, null);
+                return (false, "You must accept the terms and conditions", null, null, null, null, null, null, null, null);
             }
 
             // Validate password strength
             var (isValidPassword, passwordError) = _passwordHasher.ValidatePasswordStrength(request.Password, 8);
             if (!isValidPassword)
             {
-                return (false, $"Password validation failed: {passwordError}", null, null);
+                return (false, $"Password validation failed: {passwordError}", null, null, null, null, null, null, null, null);
             }
 
             // Check if CNPJ already exists (CNPJ is unique across all tenants, so safe to check outside transaction)
             var existingClinic = await _clinicRepository.GetByCNPJAsync(request.ClinicCNPJ);
             if (existingClinic != null)
             {
-                return (false, "CNPJ already registered", null, null);
+                return (false, "CNPJ already registered", null, null, null, null, null, null, null, null);
             }
 
             // Get subscription plan - plans are system-wide, so we use "system" as tenantId
             var plan = await _subscriptionPlanRepository.GetByIdAsync(Guid.Parse(request.PlanId), "system");
             if (plan == null)
             {
-                return (false, "Invalid subscription plan", null, null);
+                return (false, "Invalid subscription plan", null, null, null, null, null, null, null, null);
             }
 
-            // Generate friendly subdomain from clinic name
+            // Generate friendly subdomain from clinic name - this will be used as tenantId
             var subdomain = GenerateFriendlySubdomain(request.ClinicName);
             
-            // Generate tenant ID (unique for each registration)
-            var tenantId = Guid.NewGuid().ToString();
+            // Use the friendly subdomain as the tenant ID
+            var tenantId = subdomain;
 
             // Execute all creations within a transaction to ensure data consistency
             // Username and email validation is done inside the transaction with the unique tenantId
@@ -81,13 +81,13 @@ namespace MedicSoft.Application.Services
                 // Validate username within transaction (although tenantId is unique, this ensures consistency)
                 if (await _ownerRepository.ExistsByUsernameAsync(request.Username, tenantId))
                 {
-                    return (false, "Username already taken", (Guid?)null, (Guid?)null);
+                    return (false, "Username already taken", (Guid?)null, (Guid?)null, (string?)null, (string?)null, (string?)null, (string?)null, (string?)null, (string?)null);
                 }
 
                 // Validate email within transaction
                 if (await _ownerRepository.ExistsByEmailAsync(request.OwnerEmail, tenantId))
                 {
-                    return (false, "Email already registered", (Guid?)null, (Guid?)null);
+                    return (false, "Email already registered", (Guid?)null, (Guid?)null, (string?)null, (string?)null, (string?)null, (string?)null, (string?)null, (string?)null);
                 }
 
                 // Build full address
@@ -141,7 +141,7 @@ namespace MedicSoft.Application.Services
                 // Save all changes at once within the transaction
                 await _clinicRepository.SaveChangesAsync();
 
-                return (true, "Registration successful", clinic.Id, owner.Id);
+                return (true, "Registration successful", clinic.Id, owner.Id, tenantId, subdomain, clinic.Name, owner.FullName, owner.Email, owner.Username);
             });
         }
 

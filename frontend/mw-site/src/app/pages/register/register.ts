@@ -239,7 +239,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.router.navigate(['/checkout'], { 
           queryParams: { 
             success: true,
-            clinicId: response.clinicId 
+            clinicId: response.clinicId,
+            userId: response.userId,
+            tenantId: response.tenantId,
+            subdomain: response.subdomain,
+            clinicName: response.clinicName,
+            ownerName: response.ownerName,
+            ownerEmail: response.ownerEmail,
+            username: response.username
           } 
         });
       },

@@ -13,11 +13,25 @@ export class CheckoutComponent implements OnInit {
   
   success = false;
   clinicId = '';
+  userId = '';
+  tenantId = '';
+  subdomain = '';
+  clinicName = '';
+  ownerName = '';
+  ownerEmail = '';
+  username = '';
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.success = params['success'] === 'true';
       this.clinicId = params['clinicId'] || '';
+      this.userId = params['userId'] || '';
+      this.tenantId = params['tenantId'] || '';
+      this.subdomain = params['subdomain'] || '';
+      this.clinicName = params['clinicName'] || '';
+      this.ownerName = params['ownerName'] || '';
+      this.ownerEmail = params['ownerEmail'] || '';
+      this.username = params['username'] || '';
     });
   }
 }
