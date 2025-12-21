@@ -110,6 +110,31 @@ Painel administrativo para gestão do sistema completo:
 - [Análise de Serviços de Vídeo](docs/TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md)
 - [Integração Frontend](telemedicine/FRONTEND_INTEGRATION.md)
 
+## 🎫 Sistema de Chamados (Support Tickets) 🆕
+
+**Sistema de suporte técnico integrado à API principal!**
+
+- 📂 **API Endpoint**: `/api/tickets`
+- 📖 **Documentação**: [`docs/TICKET_API_DOCUMENTATION.md`](docs/TICKET_API_DOCUMENTATION.md)
+- 🔧 **Migrado de**: Microserviço SystemAdmin → API Principal
+- 🎯 **Finalidade**: Bugs, suporte técnico, solicitação de recursos
+- ✅ **Migração**: Script SQL e EF Core migration incluídos
+
+**Features:**
+- ✅ Criação e gerenciamento de tickets
+- ✅ Comentários e atualizações
+- ✅ Anexos de imagens (até 5MB)
+- ✅ Atribuição para System Owners
+- ✅ Rastreamento de status e histórico
+- ✅ Estatísticas e métricas
+- ✅ Comentários internos (visíveis apenas para admins)
+- ✅ Múltiplos tipos: Bug, Feature Request, Suporte Técnico, etc.
+- ✅ Prioridades: Low, Medium, High, Critical
+
+**Guias:**
+- [Documentação da API de Tickets](docs/TICKET_API_DOCUMENTATION.md)
+- [Script de Migração](scripts/run-ticket-migration.sh)
+
 ## 📚 Documentação Completa
 
 ### 💼 Glossário de Termos Empresariais (NOVO!)
