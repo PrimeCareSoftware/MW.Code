@@ -15,6 +15,7 @@ namespace MedicSoft.Domain.Entities
         public string Phone { get; private set; }
         public Guid? ClinicId { get; private set; }
         public UserRole Role { get; private set; }
+        public Guid? ProfileId { get; private set; } // New: Access profile for granular permissions
         public bool IsActive { get; private set; }
         public DateTime? LastLoginAt { get; private set; }
         public string? CurrentSessionId { get; private set; } // Tracks the current active session
@@ -23,6 +24,7 @@ namespace MedicSoft.Domain.Entities
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }
+        public AccessProfile? Profile { get; private set; }
 
         private User()
         {
@@ -100,6 +102,12 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
 
+        public void AssignProfile(Guid? profileId)
+        {
+            ProfileId = profileId;
+            UpdateTimestamp();
+        }
+
         public void Activate()
         {
             IsActive = true;
@@ -131,6 +139,57 @@ namespace MedicSoft.Domain.Entities
         public bool HasPermission(Permission permission)
         {
             return GetRolePermissions(Role).Contains(permission);
+        }
+
+        /// <summary>
+        /// Checks if user has a specific permission key (new profile-based system)
+        /// </summary>
+        public bool HasPermissionKey(string permissionKey)
+        {
+            // If user has a profile, use profile-based permissions
+            if (Profile != null && Profile.IsActive)
+            {
+                return Profile.HasPermission(permissionKey);
+            }
+
+            // Fallback to role-based permissions (for backward compatibility)
+            return HasLegacyPermission(permissionKey);
+        }
+
+        private bool HasLegacyPermission(string permissionKey)
+        {
+            // Map new permission keys to old Permission enum
+            var legacyMapping = new Dictionary<string, Permission>
+            {
+                { "clinic.view", Permission.ManageClinic },
+                { "clinic.manage", Permission.ManageClinic },
+                { "users.view", Permission.ManageUsers },
+                { "users.create", Permission.ManageUsers },
+                { "users.edit", Permission.ManageUsers },
+                { "users.delete", Permission.ManageUsers },
+                { "patients.view", Permission.ViewPatients },
+                { "patients.create", Permission.ManagePatients },
+                { "patients.edit", Permission.ManagePatients },
+                { "patients.delete", Permission.ManagePatients },
+                { "appointments.view", Permission.ViewAppointments },
+                { "appointments.create", Permission.ManageAppointments },
+                { "appointments.edit", Permission.ManageAppointments },
+                { "appointments.delete", Permission.ManageAppointments },
+                { "medical-records.view", Permission.ViewMedicalRecords },
+                { "medical-records.create", Permission.ManageMedicalRecords },
+                { "medical-records.edit", Permission.ManageMedicalRecords },
+                { "payments.view", Permission.ManagePayments },
+                { "payments.manage", Permission.ManagePayments },
+                { "reports.financial", Permission.ViewReports },
+                { "reports.operational", Permission.ViewReports }
+            };
+
+            if (legacyMapping.TryGetValue(permissionKey, out var permission))
+            {
+                return HasPermission(permission);
+            }
+
+            return false;
         }
 
         private static Permission[] GetRolePermissions(UserRole role)
