@@ -37,6 +37,9 @@ import { Auth } from '../../services/auth';
             <a routerLink="/subdomains" routerLinkActive="active" class="nav-link">
               🌐 Subdomínios
             </a>
+            <a routerLink="/tickets" routerLinkActive="active" class="nav-link">
+              🎫 Chamados
+            </a>
           </div>
 
           <div class="navbar-end">

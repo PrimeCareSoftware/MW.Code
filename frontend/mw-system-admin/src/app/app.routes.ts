@@ -42,6 +42,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'tickets',
+    loadComponent: () => import('./pages/tickets/tickets').then(m => m.TicketsPage),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full'
