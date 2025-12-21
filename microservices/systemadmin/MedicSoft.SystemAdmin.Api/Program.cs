@@ -67,6 +67,7 @@ builder.Services.AddMicroserviceAuthentication(builder.Configuration);
 
 // Register services
 builder.Services.AddScoped<ISystemAdminService, SystemAdminService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 
 // Configure CORS
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()

@@ -14,6 +14,10 @@ public class SystemAdminDbContext : DbContext
     public DbSet<SubscriptionPlanEntity> SubscriptionPlans => Set<SubscriptionPlanEntity>();
     public DbSet<ClinicSubscriptionEntity> ClinicSubscriptions => Set<ClinicSubscriptionEntity>();
     public DbSet<SubdomainEntity> Subdomains => Set<SubdomainEntity>();
+    public DbSet<TicketEntity> Tickets => Set<TicketEntity>();
+    public DbSet<TicketCommentEntity> TicketComments => Set<TicketCommentEntity>();
+    public DbSet<TicketAttachmentEntity> TicketAttachments => Set<TicketAttachmentEntity>();
+    public DbSet<TicketHistoryEntity> TicketHistory => Set<TicketHistoryEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,6 +68,42 @@ public class SystemAdminDbContext : DbContext
             entity.Property(e => e.Subdomain).IsRequired().HasMaxLength(100);
             entity.HasIndex(e => e.Subdomain).IsUnique();
             entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<TicketEntity>(entity =>
+        {
+            entity.ToTable("Tickets");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Description).IsRequired();
+            entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
+            entity.HasIndex(e => new { e.TenantId, e.UserId });
+            entity.HasIndex(e => new { e.TenantId, e.ClinicId });
+            entity.HasIndex(e => new { e.Status, e.TenantId });
+        });
+
+        modelBuilder.Entity<TicketCommentEntity>(entity =>
+        {
+            entity.ToTable("TicketComments");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Comment).IsRequired();
+            entity.HasIndex(e => e.TicketId);
+        });
+
+        modelBuilder.Entity<TicketAttachmentEntity>(entity =>
+        {
+            entity.ToTable("TicketAttachments");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.FileName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.FileUrl).IsRequired().HasMaxLength(500);
+            entity.HasIndex(e => e.TicketId);
+        });
+
+        modelBuilder.Entity<TicketHistoryEntity>(entity =>
+        {
+            entity.ToTable("TicketHistory");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.TicketId);
         });
     }
 }
@@ -162,4 +202,60 @@ public class SubdomainEntity
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+}
+
+public class TicketEntity
+{
+    public Guid Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public int Type { get; set; } // TicketType enum
+    public int Status { get; set; } // TicketStatus enum
+    public int Priority { get; set; } // TicketPriority enum
+    public Guid UserId { get; set; }
+    public string UserName { get; set; } = string.Empty;
+    public string UserEmail { get; set; } = string.Empty;
+    public Guid? ClinicId { get; set; }
+    public string? ClinicName { get; set; }
+    public string TenantId { get; set; } = string.Empty;
+    public Guid? AssignedToId { get; set; }
+    public string? AssignedToName { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public DateTime? LastStatusChangeAt { get; set; }
+}
+
+public class TicketCommentEntity
+{
+    public Guid Id { get; set; }
+    public Guid TicketId { get; set; }
+    public string Comment { get; set; } = string.Empty;
+    public Guid AuthorId { get; set; }
+    public string AuthorName { get; set; } = string.Empty;
+    public bool IsInternal { get; set; }
+    public bool IsSystemOwner { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+public class TicketAttachmentEntity
+{
+    public Guid Id { get; set; }
+    public Guid TicketId { get; set; }
+    public string FileName { get; set; } = string.Empty;
+    public string FileUrl { get; set; } = string.Empty;
+    public string ContentType { get; set; } = string.Empty;
+    public long FileSize { get; set; }
+    public DateTime UploadedAt { get; set; }
+}
+
+public class TicketHistoryEntity
+{
+    public Guid Id { get; set; }
+    public Guid TicketId { get; set; }
+    public int OldStatus { get; set; }
+    public int NewStatus { get; set; }
+    public Guid ChangedById { get; set; }
+    public string ChangedByName { get; set; } = string.Empty;
+    public string? Comment { get; set; }
+    public DateTime ChangedAt { get; set; }
 }
