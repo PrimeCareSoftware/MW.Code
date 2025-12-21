@@ -42,6 +42,20 @@ install_with_brew() {
     fi
 }
 
+# Função para instalar dependências do frontend
+install_frontend_deps() {
+    local app_name=$1
+    local app_path="$SCRIPT_DIR/frontend/$app_name"
+    
+    if [ -d "$app_path" ]; then
+        echo -e "${YELLOW}→${NC} Instalando dependências do $app_name..."
+        cd "$app_path"
+        npm install --silent
+        cd "$SCRIPT_DIR"
+        echo -e "${GREEN}✓${NC} Dependências do $app_name instaladas"
+    fi
+}
+
 # Verificar se Homebrew está instalado
 echo -e "${BLUE}[1/11] Verificando Homebrew...${NC}"
 if ! command_exists brew; then
@@ -161,11 +175,21 @@ if podman ps --format "{{.Names}}" 2>/dev/null | grep -q "medicwarehouse-postgre
 else
     echo -e "${YELLOW}→${NC} Iniciando container PostgreSQL..."
     cd "$SCRIPT_DIR"
-    if podman-compose up postgres -d 2>/dev/null; then
+    if podman-compose up postgres -d 2>&1 | grep -q -E "(Started|Creating|Created)"; then
         echo -e "${GREEN}✓${NC} PostgreSQL iniciado com sucesso"
-        echo -e "${YELLOW}→${NC} Aguardando PostgreSQL inicializar (15 segundos)..."
-        sleep 15
-        POSTGRES_RUNNING=true
+        echo -e "${YELLOW}→${NC} Aguardando PostgreSQL inicializar..."
+        # Esperar até 30 segundos pelo PostgreSQL ficar pronto
+        for i in {1..30}; do
+            if podman exec medicwarehouse-postgres pg_isready -U postgres -d medicwarehouse 2>/dev/null; then
+                echo -e "${GREEN}✓${NC} PostgreSQL está pronto (${i}s)"
+                POSTGRES_RUNNING=true
+                break
+            fi
+            sleep 1
+        done
+        if [ "$POSTGRES_RUNNING" = false ]; then
+            echo -e "${YELLOW}⚠️  PostgreSQL demorou para inicializar. Pode não estar pronto ainda.${NC}"
+        fi
     else
         echo -e "${YELLOW}⚠️  Não foi possível iniciar o PostgreSQL automaticamente${NC}"
         echo -e "${YELLOW}   Execute manualmente: podman-compose up postgres -d${NC}"
@@ -179,10 +203,12 @@ echo -e "${BLUE}[9/11] Aplicando migrations do banco de dados...${NC}"
 if [ "$POSTGRES_RUNNING" = true ]; then
     echo -e "${YELLOW}→${NC} Aplicando migrations da API principal..."
     cd "$SCRIPT_DIR/src/MedicSoft.Api"
-    if dotnet ef database update --context MedicSoftDbContext --project ../MedicSoft.Repository 2>/dev/null; then
+    MIGRATION_ERROR=$(dotnet ef database update --context MedicSoftDbContext --project ../MedicSoft.Repository 2>&1)
+    if [ $? -eq 0 ]; then
         echo -e "${GREEN}✓${NC} Migrations da API principal aplicadas"
     else
         echo -e "${YELLOW}⚠️  Erro ao aplicar migrations da API principal${NC}"
+        echo -e "${YELLOW}   Detalhes: ${MIGRATION_ERROR}${NC}" | head -3
         echo -e "${YELLOW}   Execute manualmente após iniciar o PostgreSQL:${NC}"
         echo -e "${YELLOW}   cd src/MedicSoft.Api && dotnet ef database update --context MedicSoftDbContext --project ../MedicSoft.Repository${NC}"
     fi
@@ -197,47 +223,24 @@ echo ""
 # Instalar dependências do frontend
 echo -e "${BLUE}[10/11] Instalando dependências do frontend...${NC}"
 
-# Frontend principal
-if [ -d "$SCRIPT_DIR/frontend/medicwarehouse-app" ]; then
-    echo -e "${YELLOW}→${NC} Instalando dependências do medicwarehouse-app..."
-    cd "$SCRIPT_DIR/frontend/medicwarehouse-app"
-    npm install --silent
-    cd "$SCRIPT_DIR"
-    echo -e "${GREEN}✓${NC} Dependências do medicwarehouse-app instaladas"
-fi
+# Instalar dependências de todos os frontends
+install_frontend_deps "medicwarehouse-app"
+install_frontend_deps "mw-system-admin"
+install_frontend_deps "mw-docs"
+install_frontend_deps "mw-site"
 
-# System Admin
-if [ -d "$SCRIPT_DIR/frontend/mw-system-admin" ]; then
-    echo -e "${YELLOW}→${NC} Instalando dependências do mw-system-admin..."
-    cd "$SCRIPT_DIR/frontend/mw-system-admin"
-    npm install --silent
-    cd "$SCRIPT_DIR"
-    echo -e "${GREEN}✓${NC} Dependências do mw-system-admin instaladas"
-fi
-
-# Documentação
-if [ -d "$SCRIPT_DIR/frontend/mw-docs" ]; then
-    echo -e "${YELLOW}→${NC} Instalando dependências do mw-docs..."
-    cd "$SCRIPT_DIR/frontend/mw-docs"
-    npm install --silent
-    cd "$SCRIPT_DIR"
-    echo -e "${GREEN}✓${NC} Dependências do mw-docs instaladas"
-fi
-
-# Site institucional
-if [ -d "$SCRIPT_DIR/frontend/mw-site" ]; then
-    echo -e "${YELLOW}→${NC} Instalando dependências do mw-site..."
-    cd "$SCRIPT_DIR/frontend/mw-site"
-    npm install --silent
-    cd "$SCRIPT_DIR"
-    echo -e "${GREEN}✓${NC} Dependências do mw-site instaladas"
-fi
 echo ""
 
 # Popular banco de dados com dados demo
 echo -e "${BLUE}[11/11] Populando banco de dados com dados demo...${NC}"
-echo -e "${YELLOW}→${NC} Verificando se a API está rodando para popular dados..."
-if curl -s http://localhost:5000/health > /dev/null 2>&1; then
+echo -e "${YELLOW}→${NC} Verificando se a API está disponível..."
+API_AVAILABLE=false
+# Check if port 5000 is listening instead of specific endpoint
+if nc -z localhost 5000 2>/dev/null || curl -sf http://localhost:5000 > /dev/null 2>&1; then
+    API_AVAILABLE=true
+fi
+
+if [ "$API_AVAILABLE" = true ]; then
     echo -e "${YELLOW}→${NC} Executando data seeder..."
     if curl -s -X POST http://localhost:5000/api/data-seeder/seed-demo > /dev/null 2>&1; then
         echo -e "${GREEN}✓${NC} Dados demo populados com sucesso"
@@ -310,7 +313,11 @@ echo ""
 echo -e "${BLUE}📚 Próximos Passos Recomendados:${NC}"
 echo ""
 echo -e "${CYAN}Opção 1 - Modo Simples (Desenvolvimento Rápido):${NC}"
-echo -e "   1. ${YELLOW}podman-compose up postgres -d${NC}  (já iniciado ✓)"
+if [ "$POSTGRES_RUNNING" = true ]; then
+    echo -e "   1. ${YELLOW}podman-compose up postgres -d${NC}  (já iniciado ✓)"
+else
+    echo -e "   1. ${YELLOW}podman-compose up postgres -d${NC}"
+fi
 echo -e "   2. ${YELLOW}cd src/MedicSoft.Api && dotnet run${NC}"
 echo -e "   3. ${YELLOW}curl -X POST http://localhost:5000/api/data-seeder/seed-demo${NC}"
 echo -e "   4. ${YELLOW}cd ../../frontend/medicwarehouse-app && npm start${NC}"
