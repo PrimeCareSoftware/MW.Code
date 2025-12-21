@@ -145,6 +145,73 @@ namespace MedicSoft.Test.Entities
             Assert.Throws<ArgumentException>(() => clinic.SetSubdomain(invalidSubdomain));
         }
 
+        [Fact]
+        public void SetSubdomain_WithSequentialNumber_ShouldAccept()
+        {
+            // Arrange
+            var clinic = CreateTestClinic();
+            var subdomain = "clinica-teste-2";
+
+            // Act
+            clinic.SetSubdomain(subdomain);
+
+            // Assert
+            Assert.Equal(subdomain, clinic.Subdomain);
+        }
+
+        [Fact]
+        public void SetSubdomain_WithMultipleHyphens_ShouldAccept()
+        {
+            // Arrange
+            var clinic = CreateTestClinic();
+            var subdomain = "clinica-sao-jose";
+
+            // Act
+            clinic.SetSubdomain(subdomain);
+
+            // Assert
+            Assert.Equal(subdomain, clinic.Subdomain);
+        }
+
+        [Fact]
+        public void SetSubdomain_UserFriendlyName_ShouldNotContainRandomHexCharacters()
+        {
+            // Arrange
+            var clinic = CreateTestClinic();
+            
+            // Test various friendly subdomains that should be accepted
+            var friendlySubdomains = new[]
+            {
+                "clinica-saude",
+                "clinica-teste-2",
+                "clinica-exemplo",
+                "clinica-popular-3",
+                "clinic",
+                "my-clinic-15"
+            };
+
+            foreach (var subdomain in friendlySubdomains)
+            {
+                // Act
+                clinic.SetSubdomain(subdomain);
+
+                // Assert
+                Assert.Equal(subdomain, clinic.Subdomain);
+                
+                // Verify the subdomain follows the new friendly pattern
+                // It should NOT end with random hex patterns like "-ff48" or "-a1b2c3d4"
+                // which were characteristic of the old GUID-based approach
+                
+                // Check if the subdomain ends with what looks like a hex pattern
+                var endsWithHexPattern = System.Text.RegularExpressions.Regex.IsMatch(
+                    subdomain, @"-[0-9a-f]{4}$") || System.Text.RegularExpressions.Regex.IsMatch(
+                    subdomain, @"-[0-9a-f]{8}$");
+                
+                Assert.False(endsWithHexPattern, 
+                    $"Subdomain '{subdomain}' ends with a random hex pattern, which should not happen with the new logic");
+            }
+        }
+
         private Clinic CreateTestClinic()
         {
             return new Clinic(

@@ -22,6 +22,8 @@ namespace MedicSoft.Application.Services
         private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
         private readonly IPasswordHasher _passwordHasher;
+        
+        private const int MaxSubdomainAttempts = 100;
 
         public RegistrationService(
             IClinicRepository clinicRepository,
@@ -69,24 +71,26 @@ namespace MedicSoft.Application.Services
             }
 
             // Generate friendly subdomain from clinic name - this will be used as tenantId
-            var subdomain = GenerateFriendlySubdomain(request.ClinicName);
+            var baseSubdomain = GenerateFriendlySubdomain(request.ClinicName);
+            var subdomain = baseSubdomain;
             
-            // Ensure subdomain uniqueness by checking if it already exists
+            // Ensure subdomain uniqueness using sequential numbering
             var isUnique = await _clinicRepository.IsSubdomainUniqueAsync(subdomain);
             if (!isUnique)
             {
-                // If not unique, append more entropy to make it unique
-                var attempts = 0;
-                while (!isUnique && attempts < 10)
+                // If not unique, append sequential numbers (2, 3, 4, etc.) to make it unique
+                var counter = 2;
+                
+                while (!isUnique && counter <= MaxSubdomainAttempts)
                 {
-                    subdomain = $"{subdomain.Split('-')[0]}-{Guid.NewGuid().ToString("N")[..8]}";
+                    subdomain = $"{baseSubdomain}-{counter}";
                     isUnique = await _clinicRepository.IsSubdomainUniqueAsync(subdomain);
-                    attempts++;
+                    counter++;
                 }
                 
                 if (!isUnique)
                 {
-                    return RegistrationResult.CreateFailure("Unable to generate unique identifier. Please try again.");
+                    return RegistrationResult.CreateFailure("Unable to generate unique identifier. Please try again with a different clinic name.");
                 }
             }
             
@@ -191,7 +195,7 @@ namespace MedicSoft.Application.Services
         {
             if (string.IsNullOrWhiteSpace(clinicName))
             {
-                return $"clinic-{Guid.NewGuid().ToString("N")[..8]}";
+                return "clinic";
             }
 
             // Convert to lowercase and remove accents
@@ -213,21 +217,18 @@ namespace MedicSoft.Application.Services
             // Ensure length constraints (3-63 characters)
             if (subdomain.Length < 3)
             {
-                subdomain = $"{subdomain}-{Guid.NewGuid().ToString("N")[..4]}";
+                subdomain = "clinic";
             }
             else if (subdomain.Length > 63)
             {
                 subdomain = subdomain[..63].TrimEnd('-');
             }
 
-            // Ensure it doesn't start or end with hyphen
+            // Ensure it doesn't start or end with hyphen (should be covered by Trim('-') above, but double-check)
             if (subdomain.StartsWith('-') || subdomain.EndsWith('-'))
             {
                 subdomain = subdomain.Trim('-');
             }
-
-            // Add a short random suffix to ensure uniqueness
-            subdomain = $"{subdomain}-{Guid.NewGuid().ToString("N")[..4]}";
 
             return subdomain;
         }
