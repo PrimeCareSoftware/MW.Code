@@ -51,6 +51,10 @@ namespace MedicSoft.Repository.Context
         public DbSet<Notification> Notifications { get; set; } = null!;
         public DbSet<UserSession> UserSessions { get; set; } = null!;
         public DbSet<OwnerSession> OwnerSessions { get; set; } = null!;
+        public DbSet<Ticket> Tickets { get; set; } = null!;
+        public DbSet<TicketComment> TicketComments { get; set; } = null!;
+        public DbSet<TicketAttachment> TicketAttachments { get; set; } = null!;
+        public DbSet<TicketHistory> TicketHistory { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -89,6 +93,10 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new UserSessionConfiguration());
             modelBuilder.ApplyConfiguration(new OwnerSessionConfiguration());
+            modelBuilder.ApplyConfiguration(new TicketConfiguration());
+            modelBuilder.ApplyConfiguration(new TicketCommentConfiguration());
+            modelBuilder.ApplyConfiguration(new TicketAttachmentConfiguration());
+            modelBuilder.ApplyConfiguration(new TicketHistoryConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
