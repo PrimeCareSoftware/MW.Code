@@ -13,6 +13,7 @@ public class SystemAdminDbContext : DbContext
     public DbSet<UserEntity> Users => Set<UserEntity>();
     public DbSet<SubscriptionPlanEntity> SubscriptionPlans => Set<SubscriptionPlanEntity>();
     public DbSet<ClinicSubscriptionEntity> ClinicSubscriptions => Set<ClinicSubscriptionEntity>();
+    public DbSet<SubdomainEntity> Subdomains => Set<SubdomainEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,6 +54,15 @@ public class SystemAdminDbContext : DbContext
         {
             entity.ToTable("ClinicSubscriptions");
             entity.HasKey(e => e.Id);
+            entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<SubdomainEntity>(entity =>
+        {
+            entity.ToTable("Subdomains");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Subdomain).IsRequired().HasMaxLength(100);
+            entity.HasIndex(e => e.Subdomain).IsUnique();
             entity.Property(e => e.TenantId).IsRequired().HasMaxLength(100);
         });
     }
@@ -118,6 +128,7 @@ public class SubscriptionPlanEntity
     public decimal YearlyPrice { get; set; }
     public int MaxUsers { get; set; }
     public int MaxPatients { get; set; }
+    public int TrialDays { get; set; } = 14;
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; }
 }
@@ -136,7 +147,19 @@ public class ClinicSubscriptionEntity
     public string? ManualOverrideReason { get; set; }
     public string? ManualOverrideSetBy { get; set; }
     public DateTime? ManualOverrideSetAt { get; set; }
+    public DateTime? ManualOverrideExpiresAt { get; set; }
     public string TenantId { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
+
+public class SubdomainEntity
+{
+    public Guid Id { get; set; }
+    public string Subdomain { get; set; } = string.Empty;
+    public Guid ClinicId { get; set; }
+    public string TenantId { get; set; } = string.Empty;
+    public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }
