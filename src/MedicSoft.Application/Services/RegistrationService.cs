@@ -22,6 +22,8 @@ namespace MedicSoft.Application.Services
         private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
         private readonly IPasswordHasher _passwordHasher;
+        
+        private const int MaxSubdomainAttempts = 100;
 
         public RegistrationService(
             IClinicRepository clinicRepository,
@@ -78,9 +80,8 @@ namespace MedicSoft.Application.Services
             {
                 // If not unique, append sequential numbers (2, 3, 4, etc.) to make it unique
                 var counter = 2;
-                var maxAttempts = 100; // Reasonable limit to prevent infinite loops
                 
-                while (!isUnique && counter <= maxAttempts)
+                while (!isUnique && counter <= MaxSubdomainAttempts)
                 {
                     subdomain = $"{baseSubdomain}-{counter}";
                     isUnique = await _clinicRepository.IsSubdomainUniqueAsync(subdomain);

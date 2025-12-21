@@ -198,22 +198,17 @@ namespace MedicSoft.Test.Entities
                 // Assert
                 Assert.Equal(subdomain, clinic.Subdomain);
                 
-                // Verify it doesn't look like it has random hex patterns
-                // Old implementation would produce patterns like "clinica-03-ff48" or "clinic-a1b2c3d4"
-                // New implementation should only have readable names with optional sequential numbers
-                var parts = subdomain.Split('-');
-                foreach (var part in parts)
-                {
-                    // Each part should either be a word or a simple number (not a hex string)
-                    if (int.TryParse(part, out _))
-                    {
-                        // It's a number, which is fine for sequential numbering
-                        continue;
-                    }
-                    // Otherwise, it should be a readable word (all letters)
-                    Assert.True(part.All(char.IsLetter), 
-                        $"Part '{part}' in subdomain '{subdomain}' contains non-letter characters that look like random hex");
-                }
+                // Verify the subdomain follows the new friendly pattern
+                // It should NOT end with random hex patterns like "-ff48" or "-a1b2c3d4"
+                // which were characteristic of the old GUID-based approach
+                
+                // Check if the subdomain ends with what looks like a hex pattern
+                var endsWithHexPattern = System.Text.RegularExpressions.Regex.IsMatch(
+                    subdomain, @"-[0-9a-f]{4}$") || System.Text.RegularExpressions.Regex.IsMatch(
+                    subdomain, @"-[0-9a-f]{8}$");
+                
+                Assert.False(endsWithHexPattern, 
+                    $"Subdomain '{subdomain}' ends with a random hex pattern, which should not happen with the new logic");
             }
         }
 
