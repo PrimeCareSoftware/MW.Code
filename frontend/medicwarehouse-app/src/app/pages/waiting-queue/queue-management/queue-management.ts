@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
-import { switchMap, debounceTime, distinctUntilChanged, Subject } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { WaitingQueueService } from '../../../services/waiting-queue.service';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
