@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.SystemAdmin.Api.Models;
 using MedicSoft.SystemAdmin.Api.Services;
-using MedicSoft.Shared.Authentication.Controllers;
+using MedicSoft.Shared.Authentication;
 
 namespace MedicSoft.SystemAdmin.Api.Controllers;
 

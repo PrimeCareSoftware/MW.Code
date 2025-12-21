@@ -62,6 +62,14 @@ public abstract class MicroserviceBaseController : ControllerBase
     }
 
     /// <summary>
+    /// Gets the user's email from the JWT token
+    /// </summary>
+    protected string? GetUserEmail()
+    {
+        return User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
+    }
+
+    /// <summary>
     /// Checks if the current user is a system owner
     /// </summary>
     protected bool IsSystemOwner()
