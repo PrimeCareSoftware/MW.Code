@@ -72,6 +72,16 @@ export class ApiConfigService {
   }
 
   /**
+   * Gets the base URL for telemedicine-related endpoints (video calls)
+   */
+  get telemedicineUrl(): string {
+    if (environment.useMicroservices && environment.microservices) {
+      return environment.microservices.telemedicine;
+    }
+    return environment.apiUrl;
+  }
+
+  /**
    * Checks if microservices mode is enabled
    */
   get isMicroservicesMode(): boolean {
@@ -81,7 +91,7 @@ export class ApiConfigService {
   /**
    * Gets the appropriate URL for a given service type
    */
-  getServiceUrl(serviceType: 'auth' | 'patients' | 'appointments' | 'medicalRecords' | 'billing' | 'systemAdmin'): string {
+  getServiceUrl(serviceType: 'auth' | 'patients' | 'appointments' | 'medicalRecords' | 'billing' | 'systemAdmin' | 'telemedicine'): string {
     switch (serviceType) {
       case 'auth':
         return this.authUrl;
@@ -95,6 +105,8 @@ export class ApiConfigService {
         return this.billingUrl;
       case 'systemAdmin':
         return this.systemAdminUrl;
+      case 'telemedicine':
+        return this.telemedicineUrl;
       default:
         return environment.apiUrl;
     }

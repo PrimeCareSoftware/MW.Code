@@ -10,7 +10,8 @@ export const environment = {
     appointments: 'http://localhost:5003/api',
     medicalRecords: 'http://localhost:5004/api',
     billing: 'http://localhost:5005/api',
-    systemAdmin: 'http://localhost:5006/api'
+    systemAdmin: 'http://localhost:5006/api',
+    telemedicine: 'http://localhost:5084/api'
   },
   
   // Flag to enable microservices mode

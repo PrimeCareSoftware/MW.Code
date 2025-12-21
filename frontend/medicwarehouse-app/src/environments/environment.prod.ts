@@ -10,7 +10,8 @@ export const environment = {
     appointments: 'https://appointments.medicwarehouse.com/api',
     medicalRecords: 'https://medicalrecords.medicwarehouse.com/api',
     billing: 'https://billing.medicwarehouse.com/api',
-    systemAdmin: 'https://systemadmin.medicwarehouse.com/api'
+    systemAdmin: 'https://systemadmin.medicwarehouse.com/api',
+    telemedicine: 'https://telemedicine.medicwarehouse.com/api'
   },
   
   // Flag to enable microservices mode
