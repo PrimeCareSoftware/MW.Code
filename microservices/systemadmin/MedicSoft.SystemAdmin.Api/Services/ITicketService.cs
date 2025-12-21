@@ -5,8 +5,8 @@ namespace MedicSoft.SystemAdmin.Api.Services;
 public interface ITicketService
 {
     Task<Guid> CreateTicketAsync(CreateTicketRequest request, Guid userId, string userName, string userEmail, Guid? clinicId, string? clinicName, string tenantId);
-    Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid userId, bool isSystemOwner);
-    Task<List<TicketSummaryDto>> GetUserTicketsAsync(Guid userId, string tenantId);
+    Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid userId, bool isSystemOwner, bool isClinicOwner = false, Guid? userClinicId = null);
+    Task<List<TicketSummaryDto>> GetUserTicketsAsync(Guid userId, string tenantId, bool isClinicOwner = false, Guid? userClinicId = null);
     Task<List<TicketSummaryDto>> GetClinicTicketsAsync(Guid clinicId, string tenantId, bool isSystemOwner);
     Task<List<TicketSummaryDto>> GetAllTicketsAsync(TicketStatus? status, TicketType? type, Guid? clinicId, string? tenantId);
     Task<bool> UpdateTicketAsync(Guid ticketId, UpdateTicketRequest request, Guid userId, bool isSystemOwner);

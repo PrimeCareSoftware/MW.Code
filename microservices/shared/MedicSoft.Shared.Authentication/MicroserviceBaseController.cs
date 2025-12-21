@@ -78,6 +78,14 @@ public abstract class MicroserviceBaseController : ControllerBase
     }
 
     /// <summary>
+    /// Checks if the current user is a clinic owner (has a clinic but is not a system owner)
+    /// </summary>
+    protected bool IsClinicOwner()
+    {
+        return !IsSystemOwner() && GetClinicId().HasValue;
+    }
+
+    /// <summary>
     /// Gets the user's role from the JWT token
     /// </summary>
     protected string? GetUserRole()

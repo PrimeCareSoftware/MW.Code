@@ -65,8 +65,11 @@ namespace MedicSoft.Api.Controllers
                 return Unauthorized();
 
             var isSystemOwner = IsSystemOwner();
+            var isClinicOwner = IsClinicOwner();
+            var userClinicId = GetClinicIdFromClaims();
             var tenantId = GetTenantId();
-            var ticket = await _ticketService.GetTicketByIdAsync(id, userId.Value, isSystemOwner, tenantId);
+            
+            var ticket = await _ticketService.GetTicketByIdAsync(id, userId.Value, isSystemOwner, tenantId, isClinicOwner, userClinicId);
 
             if (ticket == null)
                 return NotFound(new { message = "Chamado não encontrado" });
@@ -75,7 +78,7 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get current user's tickets
+        /// Get current user's tickets (or clinic tickets for clinic owners)
         /// </summary>
         [HttpGet("my-tickets")]
         public async Task<ActionResult> GetMyTickets()
@@ -84,14 +87,17 @@ namespace MedicSoft.Api.Controllers
             if (!userId.HasValue)
                 return Unauthorized();
 
+            var isClinicOwner = IsClinicOwner();
+            var userClinicId = GetClinicIdFromClaims();
             var tenantId = GetTenantId();
-            var tickets = await _ticketService.GetUserTicketsAsync(userId.Value, tenantId);
+            
+            var tickets = await _ticketService.GetUserTicketsAsync(userId.Value, tenantId, isClinicOwner, userClinicId);
 
             return Ok(tickets);
         }
 
         /// <summary>
-        /// Get tickets for a specific clinic (system owners only)
+        /// Get tickets for a specific clinic (clinic owners and system owners only)
         /// </summary>
         [HttpGet("clinic/{clinicId}")]
         public async Task<ActionResult> GetClinicTickets(Guid clinicId)
@@ -101,7 +107,19 @@ namespace MedicSoft.Api.Controllers
                 return Unauthorized();
 
             var isSystemOwner = IsSystemOwner();
+            var isClinicOwner = IsClinicOwner();
+            var userClinicId = GetClinicIdFromClaims();
             var tenantId = GetTenantId();
+
+            // Authorization: System owners can see any clinic's tickets
+            // Clinic owners can only see tickets from their own clinic
+            if (!isSystemOwner)
+            {
+                if (!isClinicOwner || !userClinicId.HasValue || userClinicId.Value != clinicId)
+                {
+                    return Forbid();
+                }
+            }
 
             var tickets = await _ticketService.GetClinicTicketsAsync(clinicId, tenantId, isSystemOwner);
 
@@ -303,6 +321,12 @@ namespace MedicSoft.Api.Controllers
                 return isSystemOwner;
             }
             return false;
+        }
+
+        private bool IsClinicOwner()
+        {
+            // A user is a clinic owner if they are not a system owner but have a clinic_id
+            return !IsSystemOwner() && GetClinicIdFromClaims().HasValue;
         }
     }
 }

@@ -45,15 +45,30 @@ namespace MedicSoft.Application.Services
             return ticket.Id;
         }
 
-        public async Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid userId, bool isSystemOwner, string tenantId)
+        public async Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid userId, bool isSystemOwner, string tenantId, bool isClinicOwner = false, Guid? userClinicId = null)
         {
             var ticket = await _ticketRepository.GetTicketWithDetailsAsync(ticketId, tenantId);
             if (ticket == null)
                 return null;
 
             // Check permissions
-            if (!isSystemOwner && ticket.UserId != userId)
-                return null;
+            // System owners can see all tickets
+            // Clinic owners can see all tickets from their clinic
+            // Regular users can only see their own tickets
+            if (!isSystemOwner)
+            {
+                if (isClinicOwner && userClinicId.HasValue)
+                {
+                    // Clinic owner can see tickets from their clinic
+                    if (ticket.ClinicId != userClinicId.Value)
+                        return null;
+                }
+                else if (ticket.UserId != userId)
+                {
+                    // Regular user can only see their own tickets
+                    return null;
+                }
+            }
 
             return new TicketDto
             {
@@ -99,9 +114,20 @@ namespace MedicSoft.Application.Services
             };
         }
 
-        public async Task<List<TicketSummaryDto>> GetUserTicketsAsync(Guid userId, string tenantId)
+        public async Task<List<TicketSummaryDto>> GetUserTicketsAsync(Guid userId, string tenantId, bool isClinicOwner = false, Guid? userClinicId = null)
         {
-            var tickets = await _ticketRepository.GetUserTicketsAsync(userId, tenantId);
+            IEnumerable<Ticket> tickets;
+            
+            // If user is a clinic owner, get all tickets from their clinic
+            // Otherwise, get only the user's own tickets
+            if (isClinicOwner && userClinicId.HasValue)
+            {
+                tickets = await _ticketRepository.GetClinicTicketsAsync(userClinicId.Value, tenantId);
+            }
+            else
+            {
+                tickets = await _ticketRepository.GetUserTicketsAsync(userId, tenantId);
+            }
 
             return tickets.Select(t => new TicketSummaryDto
             {

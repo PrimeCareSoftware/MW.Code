@@ -47,15 +47,30 @@ public class TicketService : ITicketService
         return ticket.Id;
     }
 
-    public async Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid userId, bool isSystemOwner)
+    public async Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid userId, bool isSystemOwner, bool isClinicOwner = false, Guid? userClinicId = null)
     {
         var ticket = await _context.Tickets.FindAsync(ticketId);
         if (ticket == null)
             return null;
 
         // Check permissions
-        if (!isSystemOwner && ticket.UserId != userId)
-            return null;
+        // System owners can see all tickets
+        // Clinic owners can see all tickets from their clinic
+        // Regular users can only see their own tickets
+        if (!isSystemOwner)
+        {
+            if (isClinicOwner && userClinicId.HasValue)
+            {
+                // Clinic owner can see tickets from their clinic
+                if (ticket.ClinicId != userClinicId.Value)
+                    return null;
+            }
+            else if (ticket.UserId != userId)
+            {
+                // Regular user can only see their own tickets
+                return null;
+            }
+        }
 
         var comments = await _context.TicketComments
             .Where(c => c.TicketId == ticketId && (!c.IsInternal || isSystemOwner))
@@ -109,10 +124,24 @@ public class TicketService : ITicketService
         };
     }
 
-    public async Task<List<TicketSummaryDto>> GetUserTicketsAsync(Guid userId, string tenantId)
+    public async Task<List<TicketSummaryDto>> GetUserTicketsAsync(Guid userId, string tenantId, bool isClinicOwner = false, Guid? userClinicId = null)
     {
-        var tickets = await _context.Tickets
-            .Where(t => t.UserId == userId && t.TenantId == tenantId)
+        IQueryable<TicketEntity> query;
+        
+        // If user is a clinic owner, get all tickets from their clinic
+        // Otherwise, get only the user's own tickets
+        if (isClinicOwner && userClinicId.HasValue)
+        {
+            query = _context.Tickets
+                .Where(t => t.ClinicId == userClinicId.Value && t.TenantId == tenantId);
+        }
+        else
+        {
+            query = _context.Tickets
+                .Where(t => t.UserId == userId && t.TenantId == tenantId);
+        }
+        
+        var tickets = await query
             .OrderByDescending(t => t.UpdatedAt)
             .ToListAsync();
 
