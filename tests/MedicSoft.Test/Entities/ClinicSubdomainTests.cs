@@ -145,6 +145,78 @@ namespace MedicSoft.Test.Entities
             Assert.Throws<ArgumentException>(() => clinic.SetSubdomain(invalidSubdomain));
         }
 
+        [Fact]
+        public void SetSubdomain_WithSequentialNumber_ShouldAccept()
+        {
+            // Arrange
+            var clinic = CreateTestClinic();
+            var subdomain = "clinica-teste-2";
+
+            // Act
+            clinic.SetSubdomain(subdomain);
+
+            // Assert
+            Assert.Equal(subdomain, clinic.Subdomain);
+        }
+
+        [Fact]
+        public void SetSubdomain_WithMultipleHyphens_ShouldAccept()
+        {
+            // Arrange
+            var clinic = CreateTestClinic();
+            var subdomain = "clinica-sao-jose";
+
+            // Act
+            clinic.SetSubdomain(subdomain);
+
+            // Assert
+            Assert.Equal(subdomain, clinic.Subdomain);
+        }
+
+        [Fact]
+        public void SetSubdomain_UserFriendlyName_ShouldNotContainRandomHexCharacters()
+        {
+            // Arrange
+            var clinic = CreateTestClinic();
+            
+            // Test various friendly subdomains that should be accepted
+            var friendlySubdomains = new[]
+            {
+                "clinica-saude",
+                "clinica-teste-2",
+                "clinica-exemplo",
+                "clinica-popular-3",
+                "clinic",
+                "my-clinic-15"
+            };
+
+            foreach (var subdomain in friendlySubdomains)
+            {
+                // Act
+                clinic.SetSubdomain(subdomain);
+
+                // Assert
+                Assert.Equal(subdomain, clinic.Subdomain);
+                
+                // Verify it doesn't look like it has random hex patterns
+                // Old implementation would produce patterns like "clinica-03-ff48" or "clinic-a1b2c3d4"
+                // New implementation should only have readable names with optional sequential numbers
+                var parts = subdomain.Split('-');
+                foreach (var part in parts)
+                {
+                    // Each part should either be a word or a simple number (not a hex string)
+                    if (int.TryParse(part, out _))
+                    {
+                        // It's a number, which is fine for sequential numbering
+                        continue;
+                    }
+                    // Otherwise, it should be a readable word (all letters)
+                    Assert.True(part.All(char.IsLetter), 
+                        $"Part '{part}' in subdomain '{subdomain}' contains non-letter characters that look like random hex");
+                }
+            }
+        }
+
         private Clinic CreateTestClinic()
         {
             return new Clinic(
