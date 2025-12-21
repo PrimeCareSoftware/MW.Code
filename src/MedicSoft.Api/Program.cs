@@ -202,6 +202,7 @@ builder.Services.AddScoped<IOwnerClinicLinkRepository, OwnerClinicLinkRepository
 builder.Services.AddScoped<IExamCatalogRepository, ExamCatalogRepository>();
 builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
 builder.Services.AddScoped<IOwnerSessionRepository, OwnerSessionRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
@@ -216,6 +217,7 @@ builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IExamRequestService, ExamRequestService>();
 builder.Services.AddScoped<IWaitingQueueService, WaitingQueueService>();
 builder.Services.AddScoped<IOwnerClinicLinkService, OwnerClinicLinkService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
