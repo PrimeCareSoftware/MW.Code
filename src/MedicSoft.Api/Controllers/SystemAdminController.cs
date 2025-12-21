@@ -557,6 +557,11 @@ namespace MedicSoft.Api.Controllers
             if (owner == null)
                 return NotFound(new { message = "Proprietário não encontrado" });
 
+            // Validate password strength
+            var (isValid, message) = _passwordHasher.ValidatePasswordStrength(request.NewPassword);
+            if (!isValid)
+                return BadRequest(new { message = message ?? "Senha inválida" });
+
             owner.UpdatePassword(_passwordHasher.HashPassword(request.NewPassword));
             await _context.SaveChangesAsync();
 
@@ -1064,7 +1069,6 @@ namespace MedicSoft.Api.Controllers
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public decimal MonthlyPrice { get; set; }
-        public decimal YearlyPrice { get; set; }
         public int MaxUsers { get; set; }
         public int MaxPatients { get; set; }
         public int TrialDays { get; set; } = 14;
@@ -1075,7 +1079,6 @@ namespace MedicSoft.Api.Controllers
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public decimal MonthlyPrice { get; set; }
-        public decimal YearlyPrice { get; set; }
         public int MaxUsers { get; set; }
         public int MaxPatients { get; set; }
         public int TrialDays { get; set; }
@@ -1091,7 +1094,6 @@ namespace MedicSoft.Api.Controllers
     public class UpdateClinicRequest
     {
         public string Name { get; set; } = string.Empty;
-        public string Document { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
