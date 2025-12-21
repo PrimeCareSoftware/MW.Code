@@ -26,6 +26,11 @@ import {
   styleUrls: ['./queue-management.scss']
 })
 export class QueueManagementComponent implements OnInit, OnDestroy {
+  // Constants
+  private readonly MIN_SEARCH_LENGTH = 2;
+  private readonly AD_HOC_APPOINTMENT_ID = '00000000-0000-0000-0000-000000000000'; // Special ID for ad-hoc patients
+  private readonly AUTO_REFRESH_INTERVAL = 30000; // 30 seconds
+
   summary: WaitingQueueSummary | null = null;
   loading = false;
   error: string | null = null;
@@ -45,7 +50,6 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
   addingToQueue = false;
 
   autoRefreshSubscription?: Subscription;
-  autoRefreshInterval = 30000; // 30 seconds
 
   // Expose enums and labels to template
   TriagePriority = TriagePriority;
@@ -90,7 +94,7 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
   }
 
   startAutoRefresh(): void {
-    this.autoRefreshSubscription = interval(this.autoRefreshInterval)
+    this.autoRefreshSubscription = interval(this.AUTO_REFRESH_INTERVAL)
       .pipe(
         switchMap(() => this.waitingQueueService.getQueueSummary(this.clinicId))
       )
@@ -262,7 +266,7 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
   }
 
   searchPatients(): void {
-    if (!this.patientSearchTerm || this.patientSearchTerm.trim().length < 2) {
+    if (!this.patientSearchTerm || this.patientSearchTerm.trim().length < this.MIN_SEARCH_LENGTH) {
       this.searchResults = [];
       return;
     }
@@ -277,13 +281,14 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
         console.error('Error searching patients:', err);
         this.searchingPatients = false;
         this.searchResults = [];
+        this.showErrorMessage('Erro ao buscar pacientes. Por favor, tente novamente.');
       }
     });
   }
 
   addPatientToQueue(patient: Patient): void {
     if (!this.clinicId) {
-      alert('Clínica não configurada. Por favor, configure a clínica antes de adicionar pacientes à fila.');
+      this.showErrorMessage('Clínica não configurada. Por favor, configure a clínica antes de adicionar pacientes à fila.');
       return;
     }
 
@@ -291,7 +296,7 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
 
     // Create a waiting queue entry for the patient
     const queueEntry: CreateWaitingQueueEntry = {
-      appointmentId: '00000000-0000-0000-0000-000000000000', // Ad-hoc patient without appointment
+      appointmentId: this.AD_HOC_APPOINTMENT_ID, // Special ID for ad-hoc patients without appointment
       clinicId: this.clinicId,
       patientId: patient.id,
       priority: TriagePriority.Normal,
@@ -304,13 +309,24 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
         this.patientSearchTerm = '';
         this.searchResults = [];
         this.loadQueueSummary();
-        alert(`Paciente ${patient.name} adicionado à fila com sucesso!`);
+        this.showSuccessMessage(`Paciente ${patient.name} adicionado à fila com sucesso!`);
       },
       error: (err) => {
         console.error('Error adding patient to queue:', err);
         this.addingToQueue = false;
-        alert('Erro ao adicionar paciente à fila. Por favor, tente novamente.');
+        this.showErrorMessage('Erro ao adicionar paciente à fila. Por favor, tente novamente.');
       }
     });
+  }
+
+  // Helper methods for user feedback
+  private showSuccessMessage(message: string): void {
+    // TODO: Replace with toast notification service when available
+    alert(message);
+  }
+
+  private showErrorMessage(message: string): void {
+    // TODO: Replace with toast notification service when available
+    alert(message);
   }
 }
