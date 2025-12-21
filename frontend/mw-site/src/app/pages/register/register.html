@@ -110,11 +110,12 @@
             <input 
               type="text" 
               [(ngModel)]="model.zipCode" 
-              (blur)="formatZipCode(model.zipCode)"
+              (blur)="formatZipCode(model.zipCode); onCepBlur()"
               name="zipCode" 
               placeholder="00000-000"
               required 
             />
+            <small *ngIf="isLoadingCep" class="loading-text">Consultando CEP...</small>
           </div>
           <div class="form-row">
             <div class="form-group" style="flex: 3;">

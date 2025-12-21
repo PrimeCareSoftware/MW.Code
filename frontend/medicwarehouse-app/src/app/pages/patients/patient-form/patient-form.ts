@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientService } from '../../../services/patient';
+import { CepService } from '../../../services/cep.service';
 import { Patient } from '../../../models/patient.model';
 import { debounceTime, Subject } from 'rxjs';
 
@@ -18,6 +19,7 @@ export class PatientForm implements OnInit {
   isEditMode = signal<boolean>(false);
   patientId = signal<string | null>(null);
   isLoading = signal<boolean>(false);
+  isLoadingCep = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
   isChildPatient = signal<boolean>(false);
@@ -29,6 +31,7 @@ export class PatientForm implements OnInit {
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
+    private cepService: CepService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -231,5 +234,41 @@ export class PatientForm implements OnInit {
         });
       }
     }
+  }
+
+  /**
+   * Look up CEP and auto-fill address fields
+   */
+  onCepBlur(): void {
+    const addressGroup = this.patientForm.get('address');
+    const cep = addressGroup?.get('zipCode')?.value;
+    
+    if (!cep || cep.replace(/\D/g, '').length !== 8) {
+      return;
+    }
+
+    this.isLoadingCep.set(true);
+    this.cepService.lookupCep(cep).subscribe({
+      next: (addressData) => {
+        this.isLoadingCep.set(false);
+        if (addressData && addressGroup) {
+          // Auto-fill address fields
+          addressGroup.patchValue({
+            street: addressData.street,
+            neighborhood: addressData.neighborhood,
+            city: addressData.city,
+            state: addressData.state
+          });
+          
+          if (addressData.complement) {
+            addressGroup.patchValue({ complement: addressData.complement });
+          }
+        }
+      },
+      error: (error) => {
+        this.isLoadingCep.set(false);
+        console.error('Error looking up CEP:', error);
+      }
+    });
   }
 }
