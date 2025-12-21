@@ -1,0 +1,210 @@
+<app-navbar></app-navbar>
+
+<div class="tickets-page">
+  <div class="page-header">
+    <h1>Meus Chamados</h1>
+    <p>Acompanhe o status dos seus chamados</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="status-filter">Filtrar por Status:</label>
+      <select id="status-filter" [(ngModel)]="statusFilter" (change)="loadTickets()">
+        <option value="all">Todos</option>
+        <option [value]="TicketStatus.Open">Aberto</option>
+        <option [value]="TicketStatus.InAnalysis">Em Análise</option>
+        <option [value]="TicketStatus.InProgress">Em Atendimento</option>
+        <option [value]="TicketStatus.Blocked">Com Impedimento</option>
+        <option [value]="TicketStatus.Completed">Concluído</option>
+        <option [value]="TicketStatus.Cancelled">Cancelado</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (isLoading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Carregando chamados...</p>
+    </div>
+  }
+
+  <!-- Tickets List -->
+  @if (!isLoading() && filteredTickets.length > 0) {
+    <div class="tickets-grid">
+      @for (ticket of filteredTickets; track ticket.id) {
+        <div class="ticket-card" (click)="viewTicket(ticket.id)">
+          <div class="ticket-header">
+            <h3>{{ ticket.title }}</h3>
+            <span class="badge" [ngClass]="getStatusBadgeClass(ticket.status)">
+              {{ getTicketStatusLabel(ticket.status) }}
+            </span>
+          </div>
+
+          <div class="ticket-meta">
+            <div class="meta-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>{{ formatDate(ticket.createdAt) }}</span>
+            </div>
+
+            <div class="meta-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>{{ getTicketTypeLabel(ticket.type) }}</span>
+            </div>
+          </div>
+
+          <div class="ticket-footer">
+            <span class="badge" [ngClass]="getPriorityBadgeClass(ticket.priority)">
+              {{ getTicketPriorityLabel(ticket.priority) }}
+            </span>
+            @if (ticket.unreadUpdates > 0) {
+              <span class="unread-badge">{{ ticket.unreadUpdates }} nova(s) atualização(ões)</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && filteredTickets.length === 0) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <h3>Nenhum chamado encontrado</h3>
+      <p>Você ainda não criou nenhum chamado. Use o botão flutuante para abrir um novo chamado.</p>
+    </div>
+  }
+</div>
+
+<!-- Ticket Detail Modal -->
+@if (showDetailModal() && selectedTicket(); as ticket) {
+  <div class="modal-overlay" (click)="closeDetailModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ ticket.title }}</h2>
+        <button class="close-button" (click)="closeDetailModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Status & Priority -->
+        <div class="ticket-badges">
+          <span class="badge" [ngClass]="getStatusBadgeClass(ticket.status)">
+            {{ getTicketStatusLabel(ticket.status) }}
+          </span>
+          <span class="badge" [ngClass]="getPriorityBadgeClass(ticket.priority)">
+            {{ getTicketPriorityLabel(ticket.priority) }}
+          </span>
+          <span class="badge badge-type">
+            {{ getTicketTypeLabel(ticket.type) }}
+          </span>
+        </div>
+
+        <!-- Description -->
+        <div class="detail-section">
+          <h4>Descrição</h4>
+          <p class="description">{{ ticket.description }}</p>
+        </div>
+
+        <!-- Metadata -->
+        <div class="detail-section">
+          <div class="metadata">
+            <div class="metadata-item">
+              <strong>Criado em:</strong>
+              <span>{{ formatDate(ticket.createdAt) }}</span>
+            </div>
+            <div class="metadata-item">
+              <strong>Última atualização:</strong>
+              <span>{{ formatDate(ticket.updatedAt) }}</span>
+            </div>
+            @if (ticket.assignedToName) {
+              <div class="metadata-item">
+                <strong>Atribuído para:</strong>
+                <span>{{ ticket.assignedToName }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Attachments -->
+        @if (ticket.attachments.length > 0) {
+          <div class="detail-section">
+            <h4>Anexos ({{ ticket.attachments.length }})</h4>
+            <div class="attachments-list">
+              @for (attachment of ticket.attachments; track attachment.id) {
+                <div class="attachment-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <span>{{ attachment.fileName }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Comments -->
+        <div class="detail-section">
+          <h4>Comentários ({{ ticket.comments.length }})</h4>
+          
+          @if (ticket.comments.length > 0) {
+            <div class="comments-list">
+              @for (comment of ticket.comments; track comment.id) {
+                <div class="comment" [class.system-owner]="comment.isSystemOwner">
+                  <div class="comment-header">
+                    <strong>{{ comment.authorName }}</strong>
+                    @if (comment.isSystemOwner) {
+                      <span class="badge badge-owner">Suporte</span>
+                    }
+                    <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+                  </div>
+                  <p>{{ comment.comment }}</p>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="no-comments">Nenhum comentário ainda</p>
+          }
+
+          <!-- Add Comment Form -->
+          <div class="add-comment-form">
+            <textarea
+              [(ngModel)]="newComment"
+              placeholder="Adicionar comentário..."
+              rows="3"
+              [disabled]="isAddingComment()"
+            ></textarea>
+            <button
+              class="btn btn-primary"
+              (click)="addComment()"
+              [disabled]="!newComment.trim() || isAddingComment()"
+            >
+              @if (isAddingComment()) {
+                <span class="spinner"></span>
+                Enviando...
+              } @else {
+                Adicionar Comentário
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
