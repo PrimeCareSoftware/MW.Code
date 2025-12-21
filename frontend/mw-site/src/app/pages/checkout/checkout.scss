@@ -70,6 +70,94 @@ h1 {
   margin-bottom: 3rem;
 }
 
+/* Registration Data Display */
+.registration-data {
+  text-align: left;
+  margin: 3rem 0;
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 10px;
+  
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  
+  .data-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    
+    h3 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 0.5rem;
+    }
+    
+    .data-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &.important {
+        background: #fff9e6;
+        padding: 1rem;
+        margin: 0.5rem -0.5rem;
+        border-radius: 5px;
+        border: 1px solid #ffe082;
+      }
+      
+      .label {
+        font-weight: 600;
+        color: #555;
+        margin-right: 1rem;
+      }
+      
+      .value {
+        color: #2c3e50;
+        font-weight: 500;
+        word-break: break-word;
+        text-align: right;
+        
+        &.tenant-id {
+          font-family: monospace;
+          background: #e8f5e9;
+          padding: 0.25rem 0.75rem;
+          border-radius: 5px;
+          color: #27ae60;
+          font-weight: 600;
+          font-size: 1.1rem;
+        }
+      }
+    }
+    
+    .info-box {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      border-radius: 5px;
+      color: #856404;
+      line-height: 1.6;
+      
+      strong {
+        color: #664d03;
+      }
+    }
+  }
+}
+
 .next-steps {
   text-align: left;
   margin: 3rem 0;
@@ -226,6 +314,23 @@ h1 {
   
   h1 {
     font-size: 2rem;
+  }
+  
+  .registration-data {
+    padding: 1rem;
+    
+    .data-section {
+      padding: 1rem;
+      
+      .data-item {
+        flex-direction: column;
+        gap: 0.5rem;
+        
+        .value {
+          text-align: left;
+        }
+      }
+    }
   }
   
   .action-buttons {

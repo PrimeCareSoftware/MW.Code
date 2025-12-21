@@ -35,6 +35,84 @@ namespace MedicSoft.Application.DTOs.Registration
         public bool UseTrial { get; set; }
     }
 
+    /// <summary>
+    /// Result object for registration operations
+    /// Contains registration status and data for successful registrations
+    /// 
+    /// Example usage:
+    /// - Success: All fields populated with registration data
+    /// - Failure: Only Success=false and Message populated, other fields are null
+    /// </summary>
+    public class RegistrationResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        
+        /// <summary>Populated only on successful registration</summary>
+        public Guid? ClinicId { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
+        public Guid? OwnerId { get; set; }
+        
+        /// <summary>Populated only on successful registration - the friendly subdomain used as tenant identifier</summary>
+        public string? TenantId { get; set; }
+        
+        /// <summary>Populated only on successful registration - same as TenantId for clarity</summary>
+        public string? Subdomain { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
+        public string? ClinicName { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
+        public string? OwnerName { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
+        public string? OwnerEmail { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
+        public string? Username { get; set; }
+
+        /// <summary>
+        /// Creates a successful registration result
+        /// </summary>
+        public static RegistrationResult CreateSuccess(
+            Guid clinicId, 
+            Guid ownerId, 
+            string tenantId, 
+            string subdomain, 
+            string clinicName, 
+            string ownerName, 
+            string ownerEmail, 
+            string username)
+        {
+            return new RegistrationResult
+            {
+                Success = true,
+                Message = "Registration successful",
+                ClinicId = clinicId,
+                OwnerId = ownerId,
+                TenantId = tenantId,
+                Subdomain = subdomain,
+                ClinicName = clinicName,
+                OwnerName = ownerName,
+                OwnerEmail = ownerEmail,
+                Username = username
+            };
+        }
+
+        /// <summary>
+        /// Creates a failed registration result
+        /// </summary>
+        public static RegistrationResult CreateFailure(string message)
+        {
+            return new RegistrationResult
+            {
+                Success = false,
+                Message = message
+            };
+        }
+    }
+
     public class RegistrationResponseDto
     {
         public bool Success { get; set; }
@@ -42,6 +120,12 @@ namespace MedicSoft.Application.DTOs.Registration
         public Guid? ClinicId { get; set; }
         public Guid? UserId { get; set; }
         public DateTime? TrialEndDate { get; set; }
+        public string? TenantId { get; set; }
+        public string? Subdomain { get; set; }
+        public string? ClinicName { get; set; }
+        public string? OwnerName { get; set; }
+        public string? OwnerEmail { get; set; }
+        public string? Username { get; set; }
     }
 
     public class CheckCNPJResponseDto
