@@ -116,7 +116,7 @@ namespace MedicSoft.Application.Services
 
         public async Task<List<TicketSummaryDto>> GetUserTicketsAsync(Guid userId, string tenantId, bool isClinicOwner = false, Guid? userClinicId = null)
         {
-            List<Ticket> tickets;
+            IEnumerable<Ticket> tickets;
             
             // If user is a clinic owner, get all tickets from their clinic
             // Otherwise, get only the user's own tickets
