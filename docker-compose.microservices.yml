@@ -159,6 +159,30 @@ services:
     networks:
       - medicwarehouse-network
 
+  # Telemedicine Microservice (Video Calls)
+  telemedicine-api:
+    build:
+      context: .
+      dockerfile: telemedicine/src/MedicSoft.Telemedicine.Api/Dockerfile
+    container_name: medicwarehouse-telemedicine-api
+    ports:
+      - "5084:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=telemedicine;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - DailyCo__ApiKey=${DAILYCO_API_KEY}
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=MedicWarehouse
+      - JwtSettings__Audience=MedicWarehouse-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medicwarehouse-network
+
   # Original API (for backward compatibility during migration)
   api:
     build:
