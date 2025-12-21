@@ -37,18 +37,39 @@ namespace MedicSoft.Application.DTOs.Registration
 
     /// <summary>
     /// Result object for registration operations
+    /// Contains registration status and data for successful registrations
+    /// 
+    /// Example usage:
+    /// - Success: All fields populated with registration data
+    /// - Failure: Only Success=false and Message populated, other fields are null
     /// </summary>
     public class RegistrationResult
     {
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
+        
+        /// <summary>Populated only on successful registration</summary>
         public Guid? ClinicId { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
         public Guid? OwnerId { get; set; }
+        
+        /// <summary>Populated only on successful registration - the friendly subdomain used as tenant identifier</summary>
         public string? TenantId { get; set; }
+        
+        /// <summary>Populated only on successful registration - same as TenantId for clarity</summary>
         public string? Subdomain { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
         public string? ClinicName { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
         public string? OwnerName { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
         public string? OwnerEmail { get; set; }
+        
+        /// <summary>Populated only on successful registration</summary>
         public string? Username { get; set; }
 
         /// <summary>

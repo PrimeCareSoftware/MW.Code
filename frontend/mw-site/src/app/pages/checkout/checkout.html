@@ -8,11 +8,11 @@
       </p>
 
       <!-- Registration Data Display -->
-      <div class="registration-data">
+      <div class="registration-data" *ngIf="tenantId && clinicName">
         <h2>📋 Dados do Cadastro</h2>
         <div class="data-section">
           <h3>🏥 Clínica</h3>
-          <div class="data-item">
+          <div class="data-item" *ngIf="clinicName">
             <span class="label">Nome:</span>
             <span class="value">{{ clinicName }}</span>
           </div>
@@ -22,25 +22,25 @@
           </div>
         </div>
 
-        <div class="data-section">
+        <div class="data-section" *ngIf="ownerName || ownerEmail">
           <h3>👤 Responsável</h3>
-          <div class="data-item">
+          <div class="data-item" *ngIf="ownerName">
             <span class="label">Nome:</span>
             <span class="value">{{ ownerName }}</span>
           </div>
-          <div class="data-item">
+          <div class="data-item" *ngIf="ownerEmail">
             <span class="label">Email:</span>
             <span class="value">{{ ownerEmail }}</span>
           </div>
         </div>
 
-        <div class="data-section">
+        <div class="data-section" *ngIf="username && tenantId">
           <h3>🔑 Acesso ao Sistema</h3>
-          <div class="data-item important">
+          <div class="data-item important" *ngIf="username">
             <span class="label">Usuário:</span>
             <span class="value">{{ username }}</span>
           </div>
-          <div class="data-item important">
+          <div class="data-item important" *ngIf="tenantId">
             <span class="label">TenantID / Identificador da Clínica:</span>
             <span class="value tenant-id">{{ tenantId }}</span>
           </div>
@@ -57,7 +57,8 @@
           <div class="step-number">1</div>
           <div class="step-content">
             <h3>Acesse sua conta</h3>
-            <p>Use o TenantID <strong>{{ tenantId }}</strong>, usuário <strong>{{ username }}</strong> e a senha que você cadastrou para fazer login</p>
+            <p *ngIf="tenantId && username">Use o TenantID <strong>{{ tenantId }}</strong>, usuário <strong>{{ username }}</strong> e a senha que você cadastrou para fazer login</p>
+            <p *ngIf="!tenantId || !username">Use o usuário e senha que você cadastrou para fazer login no sistema</p>
           </div>
         </div>
         <div class="step-card">

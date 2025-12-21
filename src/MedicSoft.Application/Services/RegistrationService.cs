@@ -71,6 +71,25 @@ namespace MedicSoft.Application.Services
             // Generate friendly subdomain from clinic name - this will be used as tenantId
             var subdomain = GenerateFriendlySubdomain(request.ClinicName);
             
+            // Ensure subdomain uniqueness by checking if it already exists
+            var isUnique = await _clinicRepository.IsSubdomainUniqueAsync(subdomain);
+            if (!isUnique)
+            {
+                // If not unique, append more entropy to make it unique
+                var attempts = 0;
+                while (!isUnique && attempts < 10)
+                {
+                    subdomain = $"{subdomain.Split('-')[0]}-{Guid.NewGuid().ToString("N")[..8]}";
+                    isUnique = await _clinicRepository.IsSubdomainUniqueAsync(subdomain);
+                    attempts++;
+                }
+                
+                if (!isUnique)
+                {
+                    return RegistrationResult.CreateFailure("Unable to generate unique identifier. Please try again.");
+                }
+            }
+            
             // Use the friendly subdomain as the tenant ID
             var tenantId = subdomain;
 
