@@ -297,8 +297,12 @@ namespace MedicSoft.Api.Controllers
 
         private bool IsSystemOwner()
         {
-            var roleClaim = User.FindFirst(ClaimTypes.Role) ?? User.FindFirst("role");
-            return roleClaim?.Value == "SystemOwner";
+            var isSystemOwnerClaim = User.FindFirst("is_system_owner");
+            if (isSystemOwnerClaim != null && bool.TryParse(isSystemOwnerClaim.Value, out var isSystemOwner))
+            {
+                return isSystemOwner;
+            }
+            return false;
         }
     }
 }
