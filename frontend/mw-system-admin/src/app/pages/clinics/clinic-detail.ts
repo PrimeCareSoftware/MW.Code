@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../services/system-admin';
-import { ClinicDetail, UpdateClinicRequest, EnableManualOverrideRequest, SubscriptionPlan, UpdateSubscriptionRequest } from '../../models/system-admin.model';
+import { ClinicDetail as ClinicDetailModel, UpdateClinicRequest, EnableManualOverrideRequest, SubscriptionPlan, UpdateSubscriptionRequest } from '../../models/system-admin.model';
 
 @Component({
   selector: 'app-clinic-detail',
@@ -612,7 +612,7 @@ import { ClinicDetail, UpdateClinicRequest, EnableManualOverrideRequest, Subscri
   `]
 })
 export class ClinicDetail implements OnInit {
-  clinic = signal<ClinicDetail | null>(null);
+  clinic = signal<ClinicDetailModel | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
   editMode = signal(false);
@@ -786,7 +786,8 @@ export class ClinicDetail implements OnInit {
     this.router.navigate(['/clinics']);
   }
 
-  formatDate(date: string): string {
+  formatDate(date?: string): string {
+    if (!date) return '-';
     return new Date(date).toLocaleDateString('pt-BR');
   }
 
