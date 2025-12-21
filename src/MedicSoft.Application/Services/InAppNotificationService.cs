@@ -139,15 +139,17 @@ namespace MedicSoft.Application.Services
 
         private void CleanupOldNotifications(string tenantId)
         {
-            var tenantNotifications = _notifications.Values
-                .Where(n => n.TenantId == tenantId)
-                .OrderByDescending(n => n.CreatedAt)
+            // Get snapshot of tenant notifications and identify ones to remove
+            var notificationsToRemove = _notifications
+                .Where(kvp => kvp.Value.TenantId == tenantId)
+                .OrderByDescending(kvp => kvp.Value.CreatedAt)
                 .Skip(100)
-                .ToList();
+                .Select(kvp => kvp.Key)
+                .ToList(); // Materialize to avoid multiple enumerations
 
-            foreach (var notification in tenantNotifications)
+            // Remove old notifications
+            foreach (var key in notificationsToRemove)
             {
-                var key = $"{tenantId}:{notification.Id}";
                 _notifications.TryRemove(key, out _);
             }
         }
