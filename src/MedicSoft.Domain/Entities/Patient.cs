@@ -68,7 +68,10 @@ namespace MedicSoft.Domain.Entities
 
             Name = name.Trim();
             Document = document.Trim();
-            DateOfBirth = dateOfBirth;
+            // Ensure DateOfBirth is stored as UTC for PostgreSQL compatibility
+            DateOfBirth = dateOfBirth.Kind == DateTimeKind.Unspecified 
+                ? DateTime.SpecifyKind(dateOfBirth, DateTimeKind.Utc) 
+                : dateOfBirth.ToUniversalTime();
             Gender = gender.Trim();
             Email = email ?? throw new ArgumentNullException(nameof(email));
             Phone = phone ?? throw new ArgumentNullException(nameof(phone));

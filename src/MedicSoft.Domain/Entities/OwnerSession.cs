@@ -11,7 +11,7 @@ namespace MedicSoft.Domain.Entities
     {
         public Guid OwnerId { get; private set; }
         public string SessionId { get; private set; }
-        public DateTime CreatedAt { get; private set; }
+        public new DateTime CreatedAt { get; private set; }
         public DateTime ExpiresAt { get; private set; }
         public DateTime LastActivityAt { get; private set; }
         public string? UserAgent { get; private set; }

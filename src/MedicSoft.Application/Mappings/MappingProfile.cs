@@ -19,6 +19,19 @@ namespace MedicSoft.Application.Mappings
 
             CreateMap<Address, AddressDto>();
 
+            // Map AddressDto to Address value object
+            CreateMap<AddressDto, Address>()
+                .ConstructUsing(src => new Address(
+                    src.Street,
+                    src.Number,
+                    src.Neighborhood,
+                    src.City,
+                    src.State,
+                    src.ZipCode,
+                    src.Country,
+                    src.Complement
+                ));
+
             CreateMap<CreatePatientDto, Patient>()
                 .ConstructUsing((src, context) =>
                 {

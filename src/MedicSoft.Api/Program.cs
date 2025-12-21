@@ -16,6 +16,10 @@ using MedicSoft.Domain.Services;
 using MedicSoft.Repository.Context;
 using MedicSoft.Repository.Repositories;
 
+// Enable Npgsql legacy timestamp behavior to handle DateTime values with Kind=Unspecified or Local
+// This must be set before any Npgsql/EF Core operations
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

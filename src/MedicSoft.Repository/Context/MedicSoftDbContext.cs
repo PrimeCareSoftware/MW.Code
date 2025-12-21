@@ -233,12 +233,17 @@ namespace MedicSoft.Repository.Context
         private void NormalizeDateTimeValuesToUtc()
         {
             var entries = ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
+                .ToList(); // Materialize to avoid collection modified errors
+
+            Console.WriteLine($"[MedicSoftDbContext] NormalizeDateTimeValuesToUtc called. Processing {entries.Count} entities.");
 
             var diagnostics = new List<string>();
 
             foreach (var entry in entries)
             {
+                Console.WriteLine($"[MedicSoftDbContext] Processing entity: {entry.Entity.GetType().Name}, State: {entry.State}");
+                
                 foreach (var property in entry.Properties)
                 {
                     // Normalize scalar DateTime values
@@ -246,12 +251,16 @@ namespace MedicSoft.Repository.Context
                     {
                         if (dateTime.Kind == DateTimeKind.Unspecified)
                         {
-                            diagnostics.Add($"Entity={entry.Entity.GetType().Name} Property={property.Metadata.Name} Value={dateTime:o} Kind=Unspecified");
+                            var message = $"FIXING: Entity={entry.Entity.GetType().Name} Property={property.Metadata.Name} Value={dateTime:o} Kind=Unspecified -> UTC";
+                            diagnostics.Add(message);
+                            Console.WriteLine($"[MedicSoftDbContext] {message}");
                             property.CurrentValue = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
                         }
                         else if (dateTime.Kind == DateTimeKind.Local)
                         {
-                            diagnostics.Add($"Entity={entry.Entity.GetType().Name} Property={property.Metadata.Name} Value={dateTime:o} Kind=Local");
+                            var message = $"FIXING: Entity={entry.Entity.GetType().Name} Property={property.Metadata.Name} Value={dateTime:o} Kind=Local -> UTC";
+                            diagnostics.Add(message);
+                            Console.WriteLine($"[MedicSoftDbContext] {message}");
                             property.CurrentValue = dateTime.ToUniversalTime();
                         }
 
@@ -353,8 +362,8 @@ namespace MedicSoft.Repository.Context
 
             // For objects, reflect over writable properties and normalize DateTime and DateTime? values
             var type = obj.GetType();
-            var props = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Where(p => p.CanRead && p.CanWrite);
+            var props = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .Where(p => p.CanRead && (p.CanWrite || p.GetSetMethod(true) != null));
 
             foreach (var pi in props)
             {
@@ -368,12 +377,29 @@ namespace MedicSoft.Repository.Context
                         if (dtVal.Kind == DateTimeKind.Unspecified)
                         {
                             diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={dtVal:o} Kind=Unspecified");
-                            pi.SetValue(obj, DateTime.SpecifyKind(dtVal, DateTimeKind.Utc));
+                            // Try to set via public setter first, then fall back to private setter
+                            if (pi.CanWrite)
+                            {
+                                pi.SetValue(obj, DateTime.SpecifyKind(dtVal, DateTimeKind.Utc));
+                            }
+                            else
+                            {
+                                var setter = pi.GetSetMethod(true);
+                                setter?.Invoke(obj, new object[] { DateTime.SpecifyKind(dtVal, DateTimeKind.Utc) });
+                            }
                         }
                         else if (dtVal.Kind == DateTimeKind.Local)
                         {
                             diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={dtVal:o} Kind=Local");
-                            pi.SetValue(obj, dtVal.ToUniversalTime());
+                            if (pi.CanWrite)
+                            {
+                                pi.SetValue(obj, dtVal.ToUniversalTime());
+                            }
+                            else
+                            {
+                                var setter = pi.GetSetMethod(true);
+                                setter?.Invoke(obj, new object[] { dtVal.ToUniversalTime() });
+                            }
                         }
                         continue;
                     }
@@ -385,12 +411,28 @@ namespace MedicSoft.Repository.Context
                         if (nullableDt.Kind == DateTimeKind.Unspecified)
                         {
                             diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={nullableDt:o} Kind=Unspecified");
-                            pi.SetValue(obj, DateTime.SpecifyKind(nullableDt, DateTimeKind.Utc));
+                            if (pi.CanWrite)
+                            {
+                                pi.SetValue(obj, DateTime.SpecifyKind(nullableDt, DateTimeKind.Utc));
+                            }
+                            else
+                            {
+                                var setter = pi.GetSetMethod(true);
+                                setter?.Invoke(obj, new object[] { DateTime.SpecifyKind(nullableDt, DateTimeKind.Utc) });
+                            }
                         }
                         else if (nullableDt.Kind == DateTimeKind.Local)
                         {
                             diagnostics.Add($"ObjectPath={path ?? type.Name}.{pi.Name} Value={nullableDt:o} Kind=Local");
-                            pi.SetValue(obj, nullableDt.ToUniversalTime());
+                            if (pi.CanWrite)
+                            {
+                                pi.SetValue(obj, nullableDt.ToUniversalTime());
+                            }
+                            else
+                            {
+                                var setter = pi.GetSetMethod(true);
+                                setter?.Invoke(obj, new object[] { nullableDt.ToUniversalTime() });
+                            }
                         }
                         continue;
                     }
