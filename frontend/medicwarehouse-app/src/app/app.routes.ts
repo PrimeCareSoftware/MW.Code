@@ -56,5 +56,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/waiting-queue/queue-management/queue-management').then(m => m.QueueManagementComponent),
     canActivate: [authGuard]
   },
+  { 
+    path: 'tickets', 
+    loadComponent: () => import('./pages/tickets/tickets').then(m => m.Tickets),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];
