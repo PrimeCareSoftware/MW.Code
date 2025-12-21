@@ -85,7 +85,6 @@
               <input 
                 type="text" 
                 [(ngModel)]="model.clinicCNPJ" 
-                (blur)="formatCNPJ(model.clinicCNPJ)"
                 appCnpjMask
                 name="clinicCNPJ" 
                 placeholder="00.000.000/0000-00"
@@ -111,7 +110,7 @@
             <input 
               type="text" 
               [(ngModel)]="model.zipCode" 
-              (blur)="formatZipCode(model.zipCode); onCepBlur()"
+              (blur)="onCepBlur()"
               appCepMask
               name="zipCode" 
               placeholder="00000-000"
@@ -162,7 +161,6 @@
               <input 
                 type="text" 
                 [(ngModel)]="model.ownerCPF" 
-                (blur)="formatCPF(model.ownerCPF)"
                 appCpfMask
                 name="ownerCPF" 
                 placeholder="000.000.000-00"

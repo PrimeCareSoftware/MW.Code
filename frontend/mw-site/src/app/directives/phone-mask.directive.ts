@@ -20,8 +20,8 @@ export class PhoneMaskDirective {
     // Apply phone mask: (00) 00000-0000 or (00) 0000-0000
     if (value.length <= 2) {
       input.value = value;
-    } else if (value.length <= 7) {
-      input.value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+    } else if (value.length <= 6) {
+      input.value = value.replace(/^(\d{2})(\d{1,4})/, '($1) $2');
     } else if (value.length <= 10) {
       input.value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
     } else {
