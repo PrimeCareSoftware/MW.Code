@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
@@ -16,7 +16,10 @@ export class PatientList implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private patientService: PatientService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadPatients();
@@ -49,5 +52,11 @@ export class PatientList implements OnInit {
         }
       });
     }
+  }
+
+  startAttendance(patientId: string): void {
+    // Navigate to waiting queue to add patient or directly to attendance
+    // For now, we'll navigate to create an appointment with the patient pre-selected
+    this.router.navigate(['/appointments/new'], { queryParams: { patientId } });
   }
 }
