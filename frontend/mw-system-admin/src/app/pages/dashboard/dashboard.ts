@@ -129,17 +129,17 @@ import { SystemAnalytics } from '../../models/system-admin.model';
               <span class="action-icon">📋</span>
               <span class="action-text">Gerenciar Clínicas</span>
             </button>
-            <button class="action-btn" (click)="navigateToClinics('active')">
-              <span class="action-icon">✅</span>
-              <span class="action-text">Ver Clínicas Ativas</span>
+            <button class="action-btn" (click)="navigateToPlans()">
+              <span class="action-icon">💎</span>
+              <span class="action-text">Planos de Assinatura</span>
             </button>
-            <button class="action-btn" (click)="navigateToClinics('inactive')">
-              <span class="action-icon">🚫</span>
-              <span class="action-text">Ver Clínicas Inativas</span>
-            </button>
-            <button class="action-btn" (click)="navigateToUsers()">
+            <button class="action-btn" (click)="navigateToOwners()">
               <span class="action-icon">👤</span>
-              <span class="action-text">Gerenciar Usuários System Owner</span>
+              <span class="action-text">Gerenciar Proprietários</span>
+            </button>
+            <button class="action-btn" (click)="navigateToSubdomains()">
+              <span class="action-icon">🌐</span>
+              <span class="action-text">Configurar Subdomínios</span>
             </button>
           </div>
         </div>
@@ -470,7 +470,15 @@ export class Dashboard implements OnInit {
     this.router.navigate(['/clinics'], { queryParams: status ? { status } : {} });
   }
 
-  navigateToUsers(): void {
-    this.router.navigate(['/users']);
+  navigateToPlans(): void {
+    this.router.navigate(['/plans']);
+  }
+
+  navigateToOwners(): void {
+    this.router.navigate(['/clinic-owners']);
+  }
+
+  navigateToSubdomains(): void {
+    this.router.navigate(['/subdomains']);
   }
 }

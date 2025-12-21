@@ -11,7 +11,16 @@ import {
   ManualOverrideRequest,
   CreateClinicRequest,
   SystemOwner,
-  CreateSystemOwnerRequest
+  CreateSystemOwnerRequest,
+  SubscriptionPlan,
+  CreateSubscriptionPlanRequest,
+  UpdateSubscriptionPlanRequest,
+  UpdateClinicRequest,
+  ClinicOwner,
+  ResetPasswordRequest,
+  Subdomain,
+  CreateSubdomainRequest,
+  EnableManualOverrideRequest
 } from '../models/system-admin.model';
 
 @Injectable({
@@ -121,6 +130,161 @@ export class SystemAdminService {
     return this.http.post<{ message: string; isActive: boolean }>(
       `${this.apiUrl}/system-owners/${id}/toggle-status`,
       {}
+    );
+  }
+
+  // Subscription Plans Management
+  /**
+   * Get all subscription plans
+   */
+  getSubscriptionPlans(activeOnly?: boolean): Observable<SubscriptionPlan[]> {
+    const params: any = {};
+    if (activeOnly !== undefined) {
+      params.activeOnly = activeOnly;
+    }
+    return this.http.get<SubscriptionPlan[]>(`${this.apiUrl}/subscription-plans`, { params });
+  }
+
+  /**
+   * Get a specific subscription plan
+   */
+  getSubscriptionPlan(id: string): Observable<SubscriptionPlan> {
+    return this.http.get<SubscriptionPlan>(`${this.apiUrl}/subscription-plans/${id}`);
+  }
+
+  /**
+   * Create a new subscription plan
+   */
+  createSubscriptionPlan(request: CreateSubscriptionPlanRequest): Observable<{ message: string; planId: string }> {
+    return this.http.post<{ message: string; planId: string }>(
+      `${this.apiUrl}/subscription-plans`,
+      request
+    );
+  }
+
+  /**
+   * Update a subscription plan
+   */
+  updateSubscriptionPlan(id: string, request: UpdateSubscriptionPlanRequest): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(
+      `${this.apiUrl}/subscription-plans/${id}`,
+      request
+    );
+  }
+
+  /**
+   * Delete a subscription plan
+   */
+  deleteSubscriptionPlan(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.apiUrl}/subscription-plans/${id}`
+    );
+  }
+
+  /**
+   * Toggle subscription plan status
+   */
+  toggleSubscriptionPlanStatus(id: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/subscription-plans/${id}/toggle-status`,
+      {}
+    );
+  }
+
+  // Clinic Management
+  /**
+   * Update clinic information
+   */
+  updateClinic(id: string, request: UpdateClinicRequest): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(
+      `${this.apiUrl}/clinics/${id}`,
+      request
+    );
+  }
+
+  // Clinic Owners Management
+  /**
+   * Get all clinic owners
+   */
+  getClinicOwners(clinicId?: string): Observable<ClinicOwner[]> {
+    const params: any = {};
+    if (clinicId) {
+      params.clinicId = clinicId;
+    }
+    return this.http.get<ClinicOwner[]>(`${this.apiUrl}/clinic-owners`, { params });
+  }
+
+  /**
+   * Reset clinic owner password
+   */
+  resetOwnerPassword(id: string, request: ResetPasswordRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/clinic-owners/${id}/reset-password`,
+      request
+    );
+  }
+
+  /**
+   * Toggle clinic owner status
+   */
+  toggleClinicOwnerStatus(id: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/clinic-owners/${id}/toggle-status`,
+      {}
+    );
+  }
+
+  // Subdomain Management
+  /**
+   * Get all subdomains
+   */
+  getSubdomains(): Observable<Subdomain[]> {
+    return this.http.get<Subdomain[]>(`${this.apiUrl}/subdomains`);
+  }
+
+  /**
+   * Resolve subdomain to tenant
+   */
+  resolveSubdomain(subdomain: string): Observable<Subdomain> {
+    return this.http.get<Subdomain>(`${this.apiUrl}/subdomains/resolve/${subdomain}`);
+  }
+
+  /**
+   * Create a new subdomain
+   */
+  createSubdomain(request: CreateSubdomainRequest): Observable<{ message: string; subdomainId: string }> {
+    return this.http.post<{ message: string; subdomainId: string }>(
+      `${this.apiUrl}/subdomains`,
+      request
+    );
+  }
+
+  /**
+   * Delete a subdomain
+   */
+  deleteSubdomain(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.apiUrl}/subdomains/${id}`
+    );
+  }
+
+  // Manual Override
+  /**
+   * Enable manual override for clinic subscription
+   */
+  enableManualOverrideExtended(id: string, request: EnableManualOverrideRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/clinics/${id}/subscription/manual-override`,
+      request
+    );
+  }
+
+  /**
+   * Disable manual override for clinic subscription
+   */
+  disableManualOverrideExtended(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.apiUrl}/clinics/${id}/subscription/manual-override`
     );
   }
 }

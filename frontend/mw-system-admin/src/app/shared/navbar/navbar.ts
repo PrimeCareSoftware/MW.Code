@@ -22,11 +22,20 @@ import { Auth } from '../../services/auth';
 
         @if (authService.isAuthenticated()) {
           <div class="navbar-menu">
-            <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+            <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
               📊 Dashboard
             </a>
             <a routerLink="/clinics" routerLinkActive="active" class="nav-link">
               🏥 Clínicas
+            </a>
+            <a routerLink="/plans" routerLinkActive="active" class="nav-link">
+              💎 Planos
+            </a>
+            <a routerLink="/clinic-owners" routerLinkActive="active" class="nav-link">
+              👤 Proprietários
+            </a>
+            <a routerLink="/subdomains" routerLinkActive="active" class="nav-link">
+              🌐 Subdomínios
             </a>
           </div>
 
