@@ -7,10 +7,13 @@ import { PatientService } from '../../../services/patient';
 import { CepService } from '../../../services/cep.service';
 import { Patient } from '../../../models/patient.model';
 import { debounceTime, Subject } from 'rxjs';
+import { CpfMaskDirective } from '../../../directives/cpf-mask.directive';
+import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
+import { CepMaskDirective } from '../../../directives/cep-mask.directive';
 
 @Component({
   selector: 'app-patient-form',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, Navbar, CpfMaskDirective, PhoneMaskDirective, CepMaskDirective],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.scss'
 })

@@ -85,7 +85,7 @@
               <input 
                 type="text" 
                 [(ngModel)]="model.clinicCNPJ" 
-                (blur)="formatCNPJ(model.clinicCNPJ)"
+                appCnpjMask
                 name="clinicCNPJ" 
                 placeholder="00.000.000/0000-00"
                 required 
@@ -93,7 +93,7 @@
             </div>
             <div class="form-group">
               <label>Telefone *</label>
-              <input type="tel" [(ngModel)]="model.clinicPhone" name="clinicPhone" placeholder="(11) 99999-9999" required />
+              <input type="tel" [(ngModel)]="model.clinicPhone" appPhoneMask name="clinicPhone" placeholder="(11) 99999-9999" required />
             </div>
           </div>
           <div class="form-group">
@@ -110,7 +110,8 @@
             <input 
               type="text" 
               [(ngModel)]="model.zipCode" 
-              (blur)="formatZipCode(model.zipCode); onCepBlur()"
+              (blur)="onCepBlur()"
+              appCepMask
               name="zipCode" 
               placeholder="00000-000"
               required 
@@ -160,7 +161,7 @@
               <input 
                 type="text" 
                 [(ngModel)]="model.ownerCPF" 
-                (blur)="formatCPF(model.ownerCPF)"
+                appCpfMask
                 name="ownerCPF" 
                 placeholder="000.000.000-00"
                 required 
@@ -168,7 +169,7 @@
             </div>
             <div class="form-group">
               <label>Telefone *</label>
-              <input type="tel" [(ngModel)]="model.ownerPhone" name="ownerPhone" placeholder="(11) 99999-9999" required />
+              <input type="tel" [(ngModel)]="model.ownerPhone" appPhoneMask name="ownerPhone" placeholder="(11) 99999-9999" required />
             </div>
           </div>
           <div class="form-group">

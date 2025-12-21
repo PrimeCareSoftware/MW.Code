@@ -8,10 +8,14 @@ import { FormPersistenceService } from '../../services/form-persistence';
 import { CepService } from '../../services/cep.service';
 import { RegistrationRequest } from '../../models/registration.model';
 import { SubscriptionPlan } from '../../models/subscription-plan.model';
+import { CpfMaskDirective } from '../../directives/cpf-mask.directive';
+import { CnpjMaskDirective } from '../../directives/cnpj-mask.directive';
+import { PhoneMaskDirective } from '../../directives/phone-mask.directive';
+import { CepMaskDirective } from '../../directives/cep-mask.directive';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, CpfMaskDirective, CnpjMaskDirective, PhoneMaskDirective, CepMaskDirective],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
