@@ -218,6 +218,7 @@ builder.Services.AddScoped<IExamRequestService, ExamRequestService>();
 builder.Services.AddScoped<IWaitingQueueService, WaitingQueueService>();
 builder.Services.AddScoped<IOwnerClinicLinkService, OwnerClinicLinkService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddSingleton<IInAppNotificationService, InAppNotificationService>();
 builder.Services.AddScoped<DataSeederService>();
 
 // Register domain services
