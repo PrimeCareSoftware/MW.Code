@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MedicSoft.Application.DTOs.Registration;
 using MedicSoft.Domain.Entities;
@@ -67,6 +68,9 @@ namespace MedicSoft.Application.Services
                 return (false, "Invalid subscription plan", null, null);
             }
 
+            // Generate friendly subdomain from clinic name
+            var subdomain = GenerateFriendlySubdomain(request.ClinicName);
+            
             // Generate tenant ID (unique for each registration)
             var tenantId = Guid.NewGuid().ToString();
 
@@ -104,6 +108,9 @@ namespace MedicSoft.Application.Services
                 );
 
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
+                
+                // Set the friendly subdomain
+                clinic.SetSubdomain(subdomain);
 
                 // Create owner
                 var passwordHash = _passwordHasher.HashPassword(request.Password);
@@ -147,6 +154,54 @@ namespace MedicSoft.Application.Services
         public async Task<bool> CheckUsernameAvailableAsync(string username, string tenantId)
         {
             return !await _ownerService.ExistsByUsernameAsync(username, tenantId);
+        }
+
+        /// <summary>
+        /// Generate a friendly subdomain from clinic name
+        /// </summary>
+        private static string GenerateFriendlySubdomain(string clinicName)
+        {
+            if (string.IsNullOrWhiteSpace(clinicName))
+            {
+                return $"clinic-{Guid.NewGuid().ToString("N")[..8]}";
+            }
+
+            // Convert to lowercase and remove accents
+            var subdomain = clinicName.ToLowerInvariant()
+                .Normalize(System.Text.NormalizationForm.FormD);
+
+            // Remove diacritics (accents)
+            var chars = subdomain.Where(c => 
+                System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != 
+                System.Globalization.UnicodeCategory.NonSpacingMark).ToArray();
+            subdomain = new string(chars).Normalize(System.Text.NormalizationForm.FormC);
+
+            // Replace spaces and invalid characters with hyphens
+            subdomain = System.Text.RegularExpressions.Regex.Replace(subdomain, @"[^a-z0-9]+", "-");
+
+            // Remove leading/trailing hyphens
+            subdomain = subdomain.Trim('-');
+
+            // Ensure length constraints (3-63 characters)
+            if (subdomain.Length < 3)
+            {
+                subdomain = $"{subdomain}-{Guid.NewGuid().ToString("N")[..4]}";
+            }
+            else if (subdomain.Length > 63)
+            {
+                subdomain = subdomain[..63].TrimEnd('-');
+            }
+
+            // Ensure it doesn't start or end with hyphen
+            if (subdomain.StartsWith('-') || subdomain.EndsWith('-'))
+            {
+                subdomain = subdomain.Trim('-');
+            }
+
+            // Add a short random suffix to ensure uniqueness
+            subdomain = $"{subdomain}-{Guid.NewGuid().ToString("N")[..4]}";
+
+            return subdomain;
         }
     }
 }

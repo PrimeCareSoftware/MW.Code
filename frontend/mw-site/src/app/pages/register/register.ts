@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SubscriptionService } from '../../services/subscription';
 import { CartService } from '../../services/cart';
 import { FormPersistenceService } from '../../services/form-persistence';
+import { CepService } from '../../services/cep.service';
 import { RegistrationRequest } from '../../models/registration.model';
 import { SubscriptionPlan } from '../../models/subscription-plan.model';
 
@@ -20,6 +21,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private subscriptionService = inject(SubscriptionService);
   private cartService = inject(CartService);
   private formPersistence = inject(FormPersistenceService);
+  private cepService = inject(CepService);
   
   selectedPlan?: SubscriptionPlan;
   allPlans: SubscriptionPlan[] = [];
@@ -53,6 +55,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   passwordConfirm = '';
   isSubmitting = false;
   submitError = '';
+  isLoadingCep = false;
   private autoSaveInterval?: number;
 
   ngOnInit(): void {
@@ -260,5 +263,36 @@ export class RegisterComponent implements OnInit, OnDestroy {
     let zip = value.replace(/\D/g, '');
     if (zip.length > 8) zip = zip.substring(0, 8);
     this.model.zipCode = zip.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+  }
+
+  /**
+   * Look up CEP and auto-fill address fields
+   */
+  onCepBlur(): void {
+    const cep = this.model.zipCode;
+    if (!cep || cep.replace(/\D/g, '').length !== 8) {
+      return;
+    }
+
+    this.isLoadingCep = true;
+    this.cepService.lookupCep(cep).subscribe({
+      next: (addressData) => {
+        this.isLoadingCep = false;
+        if (addressData) {
+          // Auto-fill address fields
+          this.model.street = addressData.street;
+          this.model.neighborhood = addressData.neighborhood;
+          this.model.city = addressData.city;
+          this.model.state = addressData.state;
+          if (addressData.complement) {
+            this.model.complement = addressData.complement;
+          }
+        }
+      },
+      error: (error) => {
+        this.isLoadingCep = false;
+        console.error('Error looking up CEP:', error);
+      }
+    });
   }
 }
