@@ -154,8 +154,10 @@ echo ""
 # Iniciar o PostgreSQL com Podman
 echo -e "${BLUE}[8/11] Iniciando PostgreSQL com Podman...${NC}"
 echo -e "${YELLOW}→${NC} Verificando se o PostgreSQL já está rodando..."
+POSTGRES_RUNNING=false
 if podman ps --format "{{.Names}}" 2>/dev/null | grep -q "medicwarehouse-postgres"; then
     echo -e "${GREEN}✓${NC} PostgreSQL já está rodando"
+    POSTGRES_RUNNING=true
 else
     echo -e "${YELLOW}→${NC} Iniciando container PostgreSQL..."
     cd "$SCRIPT_DIR"
@@ -163,25 +165,33 @@ else
         echo -e "${GREEN}✓${NC} PostgreSQL iniciado com sucesso"
         echo -e "${YELLOW}→${NC} Aguardando PostgreSQL inicializar (15 segundos)..."
         sleep 15
+        POSTGRES_RUNNING=true
     else
         echo -e "${YELLOW}⚠️  Não foi possível iniciar o PostgreSQL automaticamente${NC}"
         echo -e "${YELLOW}   Execute manualmente: podman-compose up postgres -d${NC}"
+        POSTGRES_RUNNING=false
     fi
 fi
 echo ""
 
 # Aplicar migrations do banco de dados
 echo -e "${BLUE}[9/11] Aplicando migrations do banco de dados...${NC}"
-echo -e "${YELLOW}→${NC} Aplicando migrations da API principal..."
-cd "$SCRIPT_DIR/src/MedicSoft.Api"
-if dotnet ef database update --context MedicSoftDbContext --project ../MedicSoft.Repository 2>/dev/null; then
-    echo -e "${GREEN}✓${NC} Migrations da API principal aplicadas"
+if [ "$POSTGRES_RUNNING" = true ]; then
+    echo -e "${YELLOW}→${NC} Aplicando migrations da API principal..."
+    cd "$SCRIPT_DIR/src/MedicSoft.Api"
+    if dotnet ef database update --context MedicSoftDbContext --project ../MedicSoft.Repository 2>/dev/null; then
+        echo -e "${GREEN}✓${NC} Migrations da API principal aplicadas"
+    else
+        echo -e "${YELLOW}⚠️  Erro ao aplicar migrations da API principal${NC}"
+        echo -e "${YELLOW}   Execute manualmente após iniciar o PostgreSQL:${NC}"
+        echo -e "${YELLOW}   cd src/MedicSoft.Api && dotnet ef database update --context MedicSoftDbContext --project ../MedicSoft.Repository${NC}"
+    fi
+    cd "$SCRIPT_DIR"
 else
-    echo -e "${YELLOW}⚠️  Erro ao aplicar migrations da API principal${NC}"
+    echo -e "${YELLOW}⚠️  PostgreSQL não está rodando. Pulando migrations.${NC}"
     echo -e "${YELLOW}   Execute manualmente após iniciar o PostgreSQL:${NC}"
     echo -e "${YELLOW}   cd src/MedicSoft.Api && dotnet ef database update --context MedicSoftDbContext --project ../MedicSoft.Repository${NC}"
 fi
-cd "$SCRIPT_DIR"
 echo ""
 
 # Instalar dependências do frontend
