@@ -64,7 +64,10 @@ public class TicketsController : MicroserviceBaseController
             return Unauthorized();
 
         var isSystemOwner = IsSystemOwner();
-        var ticket = await _ticketService.GetTicketByIdAsync(id, userId.Value, isSystemOwner);
+        var isClinicOwner = IsClinicOwner();
+        var userClinicId = GetClinicId();
+        
+        var ticket = await _ticketService.GetTicketByIdAsync(id, userId.Value, isSystemOwner, isClinicOwner, userClinicId);
 
         if (ticket == null)
             return NotFound(new { message = "Chamado não encontrado" });
@@ -73,7 +76,7 @@ public class TicketsController : MicroserviceBaseController
     }
 
     /// <summary>
-    /// Get current user's tickets
+    /// Get current user's tickets (or clinic tickets for clinic owners)
     /// </summary>
     [HttpGet("my-tickets")]
     public async Task<ActionResult> GetMyTickets()
@@ -82,14 +85,17 @@ public class TicketsController : MicroserviceBaseController
         if (!userId.HasValue)
             return Unauthorized();
 
+        var isClinicOwner = IsClinicOwner();
+        var userClinicId = GetClinicId();
         var tenantId = GetTenantId() ?? "";
-        var tickets = await _ticketService.GetUserTicketsAsync(userId.Value, tenantId);
+        
+        var tickets = await _ticketService.GetUserTicketsAsync(userId.Value, tenantId, isClinicOwner, userClinicId);
 
         return Ok(tickets);
     }
 
     /// <summary>
-    /// Get tickets for a specific clinic (system owners only)
+    /// Get tickets for a specific clinic (clinic owners and system owners only)
     /// </summary>
     [HttpGet("clinic/{clinicId}")]
     public async Task<ActionResult> GetClinicTickets(Guid clinicId)
@@ -99,7 +105,19 @@ public class TicketsController : MicroserviceBaseController
             return Unauthorized();
 
         var isSystemOwner = IsSystemOwner();
+        var isClinicOwner = IsClinicOwner();
+        var userClinicId = GetClinicId();
         var tenantId = GetTenantId() ?? "";
+
+        // Authorization: System owners can see any clinic's tickets
+        // Clinic owners can only see tickets from their own clinic
+        if (!isSystemOwner)
+        {
+            if (!isClinicOwner || !userClinicId.HasValue || userClinicId.Value != clinicId)
+            {
+                return Forbid();
+            }
+        }
 
         var tickets = await _ticketService.GetClinicTicketsAsync(clinicId, tenantId, isSystemOwner);
 
