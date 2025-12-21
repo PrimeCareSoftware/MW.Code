@@ -35,6 +35,63 @@ namespace MedicSoft.Application.DTOs.Registration
         public bool UseTrial { get; set; }
     }
 
+    /// <summary>
+    /// Result object for registration operations
+    /// </summary>
+    public class RegistrationResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public Guid? ClinicId { get; set; }
+        public Guid? OwnerId { get; set; }
+        public string? TenantId { get; set; }
+        public string? Subdomain { get; set; }
+        public string? ClinicName { get; set; }
+        public string? OwnerName { get; set; }
+        public string? OwnerEmail { get; set; }
+        public string? Username { get; set; }
+
+        /// <summary>
+        /// Creates a successful registration result
+        /// </summary>
+        public static RegistrationResult CreateSuccess(
+            Guid clinicId, 
+            Guid ownerId, 
+            string tenantId, 
+            string subdomain, 
+            string clinicName, 
+            string ownerName, 
+            string ownerEmail, 
+            string username)
+        {
+            return new RegistrationResult
+            {
+                Success = true,
+                Message = "Registration successful",
+                ClinicId = clinicId,
+                OwnerId = ownerId,
+                TenantId = tenantId,
+                Subdomain = subdomain,
+                ClinicName = clinicName,
+                OwnerName = ownerName,
+                OwnerEmail = ownerEmail,
+                Username = username
+            };
+        }
+
+        /// <summary>
+        /// Creates a failed registration result
+        /// </summary>
+        public static RegistrationResult CreateFailure(string message)
+        {
+            return new RegistrationResult
+            {
+                Success = false,
+                Message = message
+            };
+        }
+    }
+
     public class RegistrationResponseDto
     {
         public bool Success { get; set; }
