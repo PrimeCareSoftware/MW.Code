@@ -339,6 +339,17 @@
     }
   }
 
+  &.btn-start-attendance {
+    background: var(--success-50);
+    color: var(--success-600);
+
+    &:hover {
+      background: var(--success-100);
+      color: var(--success-700);
+      transform: scale(1.1);
+    }
+  }
+
   &.btn-delete {
     background: var(--error-50);
     color: var(--error-500);

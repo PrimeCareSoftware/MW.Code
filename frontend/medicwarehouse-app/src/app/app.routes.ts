@@ -51,5 +51,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/attendance/attendance').then(m => m.Attendance),
     canActivate: [authGuard]
   },
+  { 
+    path: 'waiting-queue', 
+    loadComponent: () => import('./pages/waiting-queue/queue-management/queue-management').then(m => m.QueueManagementComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];

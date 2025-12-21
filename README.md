@@ -132,6 +132,8 @@ Toda a documentação detalhada do projeto está disponível no **projeto web de
 - 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
 - 📖 **Principais Documentos**:
   - **[`PENDING_TASKS.md`](docs/PENDING_TASKS.md)** - ⭐ **NOVO!** Documento centralizado com todas as pendências e planejamento futuro (2025-2026)
+  - **[`WAITING_QUEUE_GUIDE.md`](docs/WAITING_QUEUE_GUIDE.md)** - 🆕 **NOVO!** Guia completo da Fila de Espera com busca de pacientes avulsos
+  - **[`PATIENT_CONSULTATION_IMPROVEMENTS.md`](docs/PATIENT_CONSULTATION_IMPROVEMENTS.md)** - 🆕 **NOVO!** Melhorias na consulta de pacientes e início rápido de atendimento
   - `GUIA_DESENVOLVIMENTO_AUTH.md` - **Guia de desenvolvimento e autenticação para MVP/testes** 🔥
   - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema**
   - `BUSINESS_RULES.md` - Regras de negócio

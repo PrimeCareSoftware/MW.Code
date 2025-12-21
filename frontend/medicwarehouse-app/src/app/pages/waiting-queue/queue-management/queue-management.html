@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <div class="queue-management-container">
   <div class="header">
     <h1>Fila de Espera</h1>
@@ -9,6 +11,49 @@
 
   <div *ngIf="error" class="error-message">
     {{ error }}
+  </div>
+
+  <!-- Patient Search and Add to Queue Section -->
+  <div class="add-patient-section">
+    <h3>Adicionar Paciente Avulso à Fila</h3>
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="patientSearchTerm" 
+        (input)="searchPatients()"
+        placeholder="Buscar paciente por nome, CPF ou telefone..."
+        class="search-input"
+      />
+      <button 
+        class="btn-search" 
+        (click)="searchPatients()"
+        [disabled]="searchingPatients">
+        {{ searchingPatients ? '🔍 Buscando...' : '🔍 Buscar' }}
+      </button>
+    </div>
+    
+    <div *ngIf="searchResults.length > 0" class="search-results">
+      <h4>Resultados da Busca:</h4>
+      <div class="patient-results-list">
+        <div *ngFor="let patient of searchResults" class="patient-result-item">
+          <div class="patient-result-info">
+            <strong>{{ patient.name }}</strong>
+            <span class="patient-document">CPF: {{ patient.document }}</span>
+            <span class="patient-contact">Tel: {{ patient.phone }}</span>
+          </div>
+          <button 
+            class="btn-add-to-queue"
+            (click)="addPatientToQueue(patient)"
+            [disabled]="addingToQueue">
+            {{ addingToQueue ? '➕ Adicionando...' : '➕ Adicionar à Fila' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="patientSearchTerm && searchResults.length === 0 && !searchingPatients" class="no-results">
+      <p>Nenhum paciente encontrado. Tente outro termo de busca.</p>
+    </div>
   </div>
 
   <div *ngIf="summary" class="summary-cards">
