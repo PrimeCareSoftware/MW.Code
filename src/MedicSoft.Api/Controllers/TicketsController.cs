@@ -9,6 +9,7 @@ using System.Security.Claims;
 namespace MedicSoft.Api.Controllers
 {
     [Authorize]
+    [Route("api/[controller]")]
     public class TicketsController : BaseController
     {
         private readonly ITicketService _ticketService;
