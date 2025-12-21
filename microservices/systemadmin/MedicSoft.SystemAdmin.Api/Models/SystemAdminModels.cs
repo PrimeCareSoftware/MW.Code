@@ -69,3 +69,91 @@ public class UpdateSubscriptionRequest
     public Guid NewPlanId { get; set; }
     public int? Status { get; set; }
 }
+
+public class UpdateClinicRequest
+{
+    public string Name { get; set; } = string.Empty;
+    public string Document { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+}
+
+public class SubscriptionPlanDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public decimal MonthlyPrice { get; set; }
+    public decimal YearlyPrice { get; set; }
+    public int MaxUsers { get; set; }
+    public int MaxPatients { get; set; }
+    public int TrialDays { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+public class CreateSubscriptionPlanRequest
+{
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public decimal MonthlyPrice { get; set; }
+    public decimal YearlyPrice { get; set; }
+    public int MaxUsers { get; set; }
+    public int MaxPatients { get; set; }
+    public int TrialDays { get; set; } = 14;
+}
+
+public class UpdateSubscriptionPlanRequest
+{
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public decimal MonthlyPrice { get; set; }
+    public decimal YearlyPrice { get; set; }
+    public int MaxUsers { get; set; }
+    public int MaxPatients { get; set; }
+    public int TrialDays { get; set; }
+    public bool IsActive { get; set; }
+}
+
+public class ResetPasswordRequest
+{
+    public string NewPassword { get; set; } = string.Empty;
+}
+
+public class SubdomainDto
+{
+    public Guid Id { get; set; }
+    public string Subdomain { get; set; } = string.Empty;
+    public Guid ClinicId { get; set; }
+    public string ClinicName { get; set; } = string.Empty;
+    public string TenantId { get; set; } = string.Empty;
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+public class CreateSubdomainRequest
+{
+    public string Subdomain { get; set; } = string.Empty;
+    public Guid ClinicId { get; set; }
+}
+
+public class ClinicOwnerDto
+{
+    public Guid Id { get; set; }
+    public string Username { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public bool IsActive { get; set; }
+    public Guid? ClinicId { get; set; }
+    public string? ClinicName { get; set; }
+    public DateTime? LastLoginAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+public class EnableManualOverrideRequest
+{
+    public string Reason { get; set; } = string.Empty;
+    public DateTime? ExtendUntil { get; set; }
+}
