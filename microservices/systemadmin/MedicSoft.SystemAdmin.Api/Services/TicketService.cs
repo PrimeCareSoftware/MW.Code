@@ -337,9 +337,42 @@ public class TicketService : ITicketService
 
     public async Task<Guid> AddAttachmentAsync(Guid ticketId, UploadAttachmentRequest request)
     {
-        // Decode base64 and save file (simplified - in production, use cloud storage)
-        var fileBytes = Convert.FromBase64String(request.Base64Data);
-        var fileUrl = $"/uploads/tickets/{ticketId}/{Guid.NewGuid()}_{request.FileName}";
+        // Validate file size (max 5MB)
+        const int maxFileSizeBytes = 5 * 1024 * 1024;
+        
+        // Validate content type
+        var allowedContentTypes = new[] { "image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp" };
+        if (!allowedContentTypes.Contains(request.ContentType.ToLower()))
+        {
+            throw new InvalidOperationException("Tipo de arquivo não permitido. Apenas imagens são aceitas.");
+        }
+        
+        // Decode base64 and validate size
+        byte[] fileBytes;
+        try
+        {
+            fileBytes = Convert.FromBase64String(request.Base64Data);
+        }
+        catch (FormatException)
+        {
+            throw new InvalidOperationException("Dados de arquivo inválidos.");
+        }
+        
+        if (fileBytes.Length > maxFileSizeBytes)
+        {
+            throw new InvalidOperationException($"Arquivo muito grande. Tamanho máximo: {maxFileSizeBytes / 1024 / 1024}MB");
+        }
+        
+        // Validate file extension
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        var fileExtension = Path.GetExtension(request.FileName).ToLower();
+        if (!allowedExtensions.Contains(fileExtension))
+        {
+            throw new InvalidOperationException("Extensão de arquivo não permitida.");
+        }
+        
+        // TODO: In production, upload to cloud storage (AWS S3, Azure Blob, etc.)
+        var fileUrl = $"/uploads/tickets/{ticketId}/{Guid.NewGuid()}{fileExtension}";
 
         var attachment = new TicketAttachmentEntity
         {
@@ -367,18 +400,21 @@ public class TicketService : ITicketService
 
     public async Task<int> GetUnreadUpdatesCountAsync(Guid userId, string tenantId)
     {
-        // For now, return count of tickets with recent updates (last 7 days)
-        var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
-        
-        return await _context.Tickets
-            .Where(t => t.UserId == userId && t.TenantId == tenantId && t.UpdatedAt > sevenDaysAgo)
-            .CountAsync();
+        // TODO: Implement proper read tracking with a separate table
+        // For now, return 0 to avoid confusion
+        // A proper implementation would track:
+        // - Last viewed timestamp per ticket per user
+        // - Compare with ticket.UpdatedAt
+        // - Count tickets with updates since last view
+        return 0;
     }
 
     public async Task<bool> MarkTicketAsReadAsync(Guid ticketId, Guid userId)
     {
-        // This is a simplified implementation
-        // In production, you'd have a separate table to track read status per user
+        // TODO: Implement proper read tracking
+        // Create a TicketReadStatus table with:
+        // - TicketId, UserId, LastReadAt
+        // - Update or insert on each view
         return await Task.FromResult(true);
     }
 

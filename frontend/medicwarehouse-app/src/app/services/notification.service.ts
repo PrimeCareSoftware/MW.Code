@@ -6,15 +6,24 @@ import type { Notification, AppointmentCompletedNotification } from '../models/n
 import { NotificationType } from '../models/notification.model';
 import { environment } from '../../environments/environment';
 
+export interface ToastMessage {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info' | 'warning';
+  duration: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
   private apiUrl = `${environment.apiUrl}/notifications`;
   private notificationSubject = new Subject<Notification>();
+  private toastSubject = new Subject<ToastMessage>();
   
   public notifications = signal<Notification[]>([]);
   public unreadCount = signal<number>(0);
+  public toasts = signal<ToastMessage[]>([]);
 
   constructor(private http: HttpClient) {
     this.loadNotifications();
@@ -23,6 +32,49 @@ export class NotificationService {
   // Observable for real-time notifications
   get onNotification$(): Observable<Notification> {
     return this.notificationSubject.asObservable();
+  }
+
+  // Observable for toast messages
+  get onToast$(): Observable<ToastMessage> {
+    return this.toastSubject.asObservable();
+  }
+
+  // Show toast message
+  showToast(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info', duration: number = 3000): void {
+    const toast: ToastMessage = {
+      id: crypto.randomUUID(),
+      message,
+      type,
+      duration
+    };
+    
+    this.toasts.update(toasts => [...toasts, toast]);
+    this.toastSubject.next(toast);
+    
+    // Auto-remove toast after duration
+    setTimeout(() => {
+      this.removeToast(toast.id);
+    }, duration);
+  }
+
+  removeToast(id: string): void {
+    this.toasts.update(toasts => toasts.filter(t => t.id !== id));
+  }
+
+  success(message: string): void {
+    this.showToast(message, 'success');
+  }
+
+  error(message: string): void {
+    this.showToast(message, 'error', 5000);
+  }
+
+  info(message: string): void {
+    this.showToast(message, 'info');
+  }
+
+  warning(message: string): void {
+    this.showToast(message, 'warning', 4000);
   }
 
   loadNotifications(): void {

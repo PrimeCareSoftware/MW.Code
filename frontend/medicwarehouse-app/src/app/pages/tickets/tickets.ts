@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { TicketService } from '../../services/ticket.service';
+import { NotificationService } from '../../services/notification.service';
 import { 
   TicketSummary, 
   Ticket,
@@ -44,7 +45,10 @@ export class Tickets implements OnInit {
   getTicketStatusColor = getTicketStatusColor;
   getTicketPriorityColor = getTicketPriorityColor;
 
-  constructor(private ticketService: TicketService) {}
+  constructor(
+    private ticketService: TicketService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.loadTickets();
@@ -57,7 +61,7 @@ export class Tickets implements OnInit {
       this.tickets.set(tickets || []);
     } catch (error) {
       console.error('Error loading tickets:', error);
-      alert('Erro ao carregar chamados');
+      this.notificationService.error('Erro ao carregar chamados');
     } finally {
       this.isLoading.set(false);
     }
@@ -80,7 +84,7 @@ export class Tickets implements OnInit {
       }
     } catch (error) {
       console.error('Error loading ticket details:', error);
-      alert('Erro ao carregar detalhes do chamado');
+      this.notificationService.error('Erro ao carregar detalhes do chamado');
     }
   }
 
@@ -111,10 +115,10 @@ export class Tickets implements OnInit {
       }
       
       this.newComment = '';
-      alert('Comentário adicionado com sucesso');
+      this.notificationService.success('Comentário adicionado com sucesso');
     } catch (error) {
       console.error('Error adding comment:', error);
-      alert('Erro ao adicionar comentário');
+      this.notificationService.error('Erro ao adicionar comentário');
     } finally {
       this.isAddingComment.set(false);
     }

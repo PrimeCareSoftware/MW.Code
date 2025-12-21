@@ -36,8 +36,9 @@ public class TicketsController : MicroserviceBaseController
         string? clinicName = null;
         if (clinicId.HasValue)
         {
-            // In a real implementation, you'd fetch the clinic name from database
-            clinicName = $"Clinic {clinicId}";
+            // TODO: Fetch clinic name from Clinics table
+            // For now, leave it null - the frontend will handle display
+            clinicName = null;
         }
 
         var ticketId = await _ticketService.CreateTicketAsync(

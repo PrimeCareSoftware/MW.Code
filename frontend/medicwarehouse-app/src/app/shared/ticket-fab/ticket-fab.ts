@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TicketService } from '../../services/ticket.service';
+import { NotificationService } from '../../services/notification.service';
 import { CreateTicketRequest, TicketType, TicketPriority, getTicketTypeLabel, getTicketPriorityLabel } from '../../models/ticket.model';
 
 @Component({
@@ -48,7 +49,10 @@ export class TicketFab {
     { value: TicketPriority.Critical, label: 'Crítica' }
   ];
 
-  constructor(private ticketService: TicketService) {}
+  constructor(
+    private ticketService: TicketService,
+    private notificationService: NotificationService
+  ) {}
 
   openModal(): void {
     this.showModal.set(true);
@@ -70,7 +74,7 @@ export class TicketFab {
 
   async onSubmit(): Promise<void> {
     if (!this.title.trim() || !this.description.trim()) {
-      alert('Por favor, preencha o título e a descrição do chamado.');
+      this.notificationService.warning('Por favor, preencha o título e a descrição do chamado.');
       return;
     }
 
@@ -98,15 +102,16 @@ export class TicketFab {
             }).toPromise();
           } catch (error) {
             console.error('Error uploading attachment:', error);
+            this.notificationService.warning('Alguns anexos não puderam ser enviados.');
           }
         }
       }
 
-      alert('Chamado criado com sucesso!');
+      this.notificationService.success('Chamado criado com sucesso!');
       this.closeModal();
     } catch (error: any) {
       console.error('Error creating ticket:', error);
-      alert(error?.error?.message || 'Erro ao criar chamado. Por favor, tente novamente.');
+      this.notificationService.error(error?.error?.message || 'Erro ao criar chamado. Por favor, tente novamente.');
     } finally {
       this.isSubmitting.set(false);
     }
