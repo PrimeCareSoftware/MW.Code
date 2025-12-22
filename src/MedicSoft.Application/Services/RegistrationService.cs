@@ -21,6 +21,7 @@ namespace MedicSoft.Application.Services
         private readonly IOwnerRepository _ownerRepository;
         private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
+        private readonly IAccessProfileRepository _accessProfileRepository;
         private readonly IPasswordHasher _passwordHasher;
         
         private const int MaxSubdomainAttempts = 100;
@@ -31,6 +32,7 @@ namespace MedicSoft.Application.Services
             IOwnerRepository ownerRepository,
             ISubscriptionPlanRepository subscriptionPlanRepository,
             IClinicSubscriptionRepository clinicSubscriptionRepository,
+            IAccessProfileRepository accessProfileRepository,
             IPasswordHasher passwordHasher)
         {
             _clinicRepository = clinicRepository;
@@ -38,6 +40,7 @@ namespace MedicSoft.Application.Services
             _ownerRepository = ownerRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;
             _clinicSubscriptionRepository = clinicSubscriptionRepository;
+            _accessProfileRepository = accessProfileRepository;
             _passwordHasher = passwordHasher;
         }
 
@@ -160,6 +163,20 @@ namespace MedicSoft.Application.Services
                 );
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
+
+                // Create default access profiles for the clinic
+                var defaultProfiles = new[]
+                {
+                    AccessProfile.CreateDefaultOwnerProfile(tenantId, clinic.Id),
+                    AccessProfile.CreateDefaultMedicalProfile(tenantId, clinic.Id),
+                    AccessProfile.CreateDefaultReceptionProfile(tenantId, clinic.Id),
+                    AccessProfile.CreateDefaultFinancialProfile(tenantId, clinic.Id)
+                };
+
+                foreach (var profile in defaultProfiles)
+                {
+                    await _accessProfileRepository.AddAsync(profile);
+                }
 
                 // Save all changes at once within the transaction
                 await _clinicRepository.SaveChangesAsync();

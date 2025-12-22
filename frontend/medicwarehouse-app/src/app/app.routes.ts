@@ -61,5 +61,20 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/tickets/tickets').then(m => m.Tickets),
     canActivate: [authGuard]
   },
+  { 
+    path: 'admin/profiles', 
+    loadComponent: () => import('./pages/admin/profiles/profile-list.component').then(m => m.ProfileListComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'admin/profiles/new', 
+    loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'admin/profiles/edit/:id', 
+    loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];

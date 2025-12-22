@@ -37,6 +37,8 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(u => u.Role)
                 .IsRequired();
 
+            builder.Property(u => u.ProfileId);
+
             builder.Property(u => u.IsActive)
                 .IsRequired();
 
@@ -67,11 +69,17 @@ namespace MedicSoft.Repository.Configurations
                 .HasForeignKey(u => u.ClinicId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasOne(u => u.Profile)
+                .WithMany()
+                .HasForeignKey(u => u.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Indexes
             builder.HasIndex(u => u.Username).IsUnique();
             builder.HasIndex(u => u.Email);
             builder.HasIndex(u => u.ClinicId);
             builder.HasIndex(u => u.Role);
+            builder.HasIndex(u => u.ProfileId);
             builder.HasIndex(u => new { u.TenantId, u.IsActive });
         }
     }

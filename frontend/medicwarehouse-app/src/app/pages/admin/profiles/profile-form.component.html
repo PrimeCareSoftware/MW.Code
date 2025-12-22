@@ -1,0 +1,87 @@
+<div class="profile-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Editar Perfil' : 'Novo Perfil' }}</h1>
+    <p class="subtitle">Configure nome, descrição e permissões do perfil</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ error }}
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-section">
+      <h3>Informações Básicas</h3>
+      
+      <div class="form-group">
+        <label for="name">Nome do Perfil *</label>
+        <input 
+          type="text" 
+          id="name" 
+          formControlName="name" 
+          class="form-control"
+          placeholder="Ex: Enfermeiro, Financeiro, etc.">
+        <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="error-message">
+          Nome é obrigatório
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descrição *</label>
+        <textarea 
+          id="description" 
+          formControlName="description" 
+          class="form-control"
+          rows="3"
+          placeholder="Descreva as responsabilidades deste perfil..."></textarea>
+        <div *ngIf="form.get('description')?.invalid && form.get('description')?.touched" class="error-message">
+          Descrição é obrigatória
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Permissões</h3>
+      <p class="section-subtitle">Selecione as permissões que este perfil terá acesso</p>
+
+      <div *ngFor="let category of permissionCategories" class="permission-category">
+        <div class="category-header">
+          <h4>{{ category.category }}</h4>
+          <div class="category-actions">
+            <button type="button" class="btn-link" (click)="selectAllInCategory(category)">
+              Selecionar todos
+            </button>
+            <button type="button" class="btn-link" (click)="deselectAllInCategory(category)">
+              Limpar
+            </button>
+          </div>
+        </div>
+
+        <div class="permissions-grid">
+          <label *ngFor="let permission of category.permissions" class="permission-checkbox">
+            <input 
+              type="checkbox" 
+              [checked]="isPermissionSelected(permission.key)"
+              (change)="togglePermission(permission.key)">
+            <span class="permission-label">{{ permission.description }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="saving">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="saving || form.invalid">
+        <i *ngIf="saving" class="fas fa-spinner fa-spin"></i>
+        {{ saving ? 'Salvando...' : (isEditMode ? 'Salvar Alterações' : 'Criar Perfil') }}
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="loading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    Carregando...
+  </div>
+</div>
