@@ -156,35 +156,35 @@ namespace MedicSoft.Domain.Entities
             return HasLegacyPermission(permissionKey);
         }
 
+        private static readonly Dictionary<string, Permission> LegacyPermissionMapping = new()
+        {
+            { "clinic.view", Permission.ManageClinic },
+            { "clinic.manage", Permission.ManageClinic },
+            { "users.view", Permission.ManageUsers },
+            { "users.create", Permission.ManageUsers },
+            { "users.edit", Permission.ManageUsers },
+            { "users.delete", Permission.ManageUsers },
+            { "patients.view", Permission.ViewPatients },
+            { "patients.create", Permission.ManagePatients },
+            { "patients.edit", Permission.ManagePatients },
+            { "patients.delete", Permission.ManagePatients },
+            { "appointments.view", Permission.ViewAppointments },
+            { "appointments.create", Permission.ManageAppointments },
+            { "appointments.edit", Permission.ManageAppointments },
+            { "appointments.delete", Permission.ManageAppointments },
+            { "medical-records.view", Permission.ViewMedicalRecords },
+            { "medical-records.create", Permission.ManageMedicalRecords },
+            { "medical-records.edit", Permission.ManageMedicalRecords },
+            { "payments.view", Permission.ManagePayments },
+            { "payments.manage", Permission.ManagePayments },
+            { "reports.financial", Permission.ViewReports },
+            { "reports.operational", Permission.ViewReports }
+        };
+
         private bool HasLegacyPermission(string permissionKey)
         {
             // Map new permission keys to old Permission enum
-            var legacyMapping = new Dictionary<string, Permission>
-            {
-                { "clinic.view", Permission.ManageClinic },
-                { "clinic.manage", Permission.ManageClinic },
-                { "users.view", Permission.ManageUsers },
-                { "users.create", Permission.ManageUsers },
-                { "users.edit", Permission.ManageUsers },
-                { "users.delete", Permission.ManageUsers },
-                { "patients.view", Permission.ViewPatients },
-                { "patients.create", Permission.ManagePatients },
-                { "patients.edit", Permission.ManagePatients },
-                { "patients.delete", Permission.ManagePatients },
-                { "appointments.view", Permission.ViewAppointments },
-                { "appointments.create", Permission.ManageAppointments },
-                { "appointments.edit", Permission.ManageAppointments },
-                { "appointments.delete", Permission.ManageAppointments },
-                { "medical-records.view", Permission.ViewMedicalRecords },
-                { "medical-records.create", Permission.ManageMedicalRecords },
-                { "medical-records.edit", Permission.ManageMedicalRecords },
-                { "payments.view", Permission.ManagePayments },
-                { "payments.manage", Permission.ManagePayments },
-                { "reports.financial", Permission.ViewReports },
-                { "reports.operational", Permission.ViewReports }
-            };
-
-            if (legacyMapping.TryGetValue(permissionKey, out var permission))
+            if (LegacyPermissionMapping.TryGetValue(permissionKey, out var permission))
             {
                 return HasPermission(permission);
             }

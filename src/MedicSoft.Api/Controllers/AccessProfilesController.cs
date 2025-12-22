@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 using System.Security.Claims;
 
 namespace MedicSoft.Api.Controllers
@@ -272,7 +273,7 @@ namespace MedicSoft.Api.Controllers
         private bool IsOwner()
         {
             var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
-            return roleClaim == "ClinicOwner" || roleClaim == "SystemAdmin";
+            return roleClaim == RoleNames.ClinicOwner || roleClaim == RoleNames.SystemAdmin;
         }
     }
 }
