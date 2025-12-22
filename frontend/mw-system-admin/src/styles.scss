@@ -357,6 +357,9 @@ a {
   50% { opacity: 0.5; }
 }
 
+/* Common animation keyframes
+   Note: These animations are intentionally duplicated across apps
+   for independence and to avoid external dependencies */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
