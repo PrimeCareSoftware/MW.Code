@@ -102,11 +102,11 @@
     gap: var(--spacing-3);
     color: rgba(255, 255, 255, 0.9);
     font-size: var(--font-size-base);
-    animation: slideIn 0.6s ease-out backwards;
     
-    @for $i from 1 through 4 {
+    /* Staggered animation for up to 10 items */
+    @for $i from 1 through 10 {
       &:nth-child(#{$i}) {
-        animation-delay: #{$i * 0.1}s;
+        animation: slideIn 0.6s ease-out #{$i * 0.1}s backwards;
       }
     }
     
