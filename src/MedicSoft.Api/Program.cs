@@ -204,6 +204,7 @@ builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
 builder.Services.AddScoped<IOwnerSessionRepository, OwnerSessionRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IAccessProfileRepository, AccessProfileRepository>();
+builder.Services.AddScoped<IClinicCustomizationRepository, ClinicCustomizationRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
