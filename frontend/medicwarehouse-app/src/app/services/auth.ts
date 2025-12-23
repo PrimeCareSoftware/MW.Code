@@ -46,13 +46,15 @@ export class Auth {
           this.setUserInfo({ 
             username: response.username, 
             tenantId: response.tenantId,
-            clinicId: response.clinicId
+            clinicId: response.clinicId,
+            isOwner: response.isOwner
           });
           this.isAuthenticated.set(true);
           this.currentUser.set({ 
             username: response.username, 
             tenantId: response.tenantId,
-            clinicId: response.clinicId
+            clinicId: response.clinicId,
+            isOwner: response.isOwner
           });
           this.startSessionValidation();
         })

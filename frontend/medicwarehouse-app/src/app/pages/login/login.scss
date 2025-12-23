@@ -10,6 +10,8 @@
 .login-branding {
   flex: 1;
   background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-800) 50%, var(--secondary-900) 100%);
+  background-size: cover;
+  background-position: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,6 +74,12 @@
       width: 48px;
       height: 48px;
       color: white;
+    }
+
+    .clinic-logo {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
   }
   
@@ -197,6 +205,12 @@
       width: 36px;
       height: 36px;
       color: white;
+    }
+
+    .mobile-clinic-logo {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
     }
   }
 

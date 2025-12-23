@@ -1,0 +1,110 @@
+<div class="clinic-info-container">
+  <div class="page-header">
+    <h1>Informações da Clínica</h1>
+    <p>Gerencie as informações e dados de contato da sua clínica</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando informações...</p>
+    </div>
+  } @else {
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        {{ successMessage() }}
+      </div>
+    }
+
+    @if (clinicInfo()) {
+      <div class="info-card">
+        <h3>Dados Básicos</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Nome da Clínica</label>
+            <p>{{ clinicInfo()!.name }}</p>
+          </div>
+          <div class="info-item">
+            <label>Subdomínio</label>
+            <p>{{ clinicInfo()!.subdomain }}</p>
+          </div>
+          <div class="info-item">
+            <label>Tenant ID</label>
+            <p>{{ clinicInfo()!.tenantId }}</p>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="clinicForm" (ngSubmit)="onSubmit()" class="clinic-form">
+        <div class="form-card">
+          <h3>Informações de Contato</h3>
+          
+          <div class="form-group">
+            <label for="phone">Telefone</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              formControlName="phone"
+              placeholder="(00) 0000-0000"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              placeholder="contato@clinica.com.br"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="address">Endereço</label>
+            <textarea 
+              id="address" 
+              formControlName="address"
+              placeholder="Rua, número, bairro, cidade - UF"
+              class="form-control"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="workingHours">Horário de Funcionamento</label>
+            <textarea 
+              id="workingHours" 
+              formControlName="workingHours"
+              placeholder="Segunda a Sexta: 8h às 18h"
+              class="form-control"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="clinicForm.invalid || isSaving()"
+            >
+              @if (isSaving()) {
+                <span class="spinner"></span>
+                <span>Salvando...</span>
+              } @else {
+                <span>Salvar Alterações</span>
+              }
+            </button>
+          </div>
+        </div>
+      </form>
+    }
+  }
+</div>
