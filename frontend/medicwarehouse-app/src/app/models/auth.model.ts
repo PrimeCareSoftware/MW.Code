@@ -8,6 +8,7 @@ export interface AuthResponse {
   token: string;
   username: string;
   tenantId: string;
+  clinicId?: string;
   expiresAt: string;
 }
 
@@ -23,6 +24,7 @@ export interface SessionValidationResponse {
 export interface UserInfo {
   username: string;
   tenantId: string;
+  clinicId?: string;
 }
 
 export interface RegisterRequest {

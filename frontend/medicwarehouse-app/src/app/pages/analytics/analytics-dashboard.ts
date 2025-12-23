@@ -19,6 +19,7 @@ import {
 } from 'ng-apexcharts';
 import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { Navbar } from '../../shared/navbar/navbar';
+import { Loading } from '../../shared/loading/loading';
 import { Auth } from '../../services/auth';
 import { Analytics, FinancialSummary, RevenueReport, AppointmentsReport, PatientsReport } from '../../services/analytics/analytics';
 
@@ -40,7 +41,7 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-analytics-dashboard',
-  imports: [CommonModule, FormsModule, Navbar, NgApexchartsModule],
+  imports: [CommonModule, FormsModule, Navbar, Loading, NgApexchartsModule],
   templateUrl: './analytics-dashboard.html',
   styleUrl: './analytics-dashboard.scss'
 })

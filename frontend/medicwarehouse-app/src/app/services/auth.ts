@@ -43,9 +43,17 @@ export class Auth {
       .pipe(
         tap(response => {
           this.setToken(response.token);
-          this.setUserInfo({ username: response.username, tenantId: response.tenantId });
+          this.setUserInfo({ 
+            username: response.username, 
+            tenantId: response.tenantId,
+            clinicId: response.clinicId
+          });
           this.isAuthenticated.set(true);
-          this.currentUser.set({ username: response.username, tenantId: response.tenantId });
+          this.currentUser.set({ 
+            username: response.username, 
+            tenantId: response.tenantId,
+            clinicId: response.clinicId
+          });
           this.startSessionValidation();
         })
       );
@@ -134,5 +142,10 @@ export class Auth {
       this.sessionCheckSubscription.unsubscribe();
       this.sessionCheckSubscription = null;
     }
+  }
+
+  getClinicId(): string | null {
+    const user = this.getUserInfo();
+    return user?.clinicId || null;
   }
 }
