@@ -36,9 +36,10 @@ namespace MedicSoft.Repository.Repositories
             return session != null && session.IsValid();
         }
 
-        public async Task DeleteAsync(OwnerSession session)
+        public Task DeleteAsync(OwnerSession session)
         {
             _context.OwnerSessions.Remove(session);
+            return Task.CompletedTask;
         }
 
         public async Task DeleteExpiredSessionsAsync()

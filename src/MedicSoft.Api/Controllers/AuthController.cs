@@ -350,7 +350,7 @@ namespace MedicSoft.Api.Controllers
                             var parts = tokenString.Split('.');
                             if (parts.Length >= 2)
                             {
-                                string payloadJson = null;
+                                string? payloadJson = null;
                                 try
                                 {
                                     payloadJson = Base64UrlDecode(parts[1]);

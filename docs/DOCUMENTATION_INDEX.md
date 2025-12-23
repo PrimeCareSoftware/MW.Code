@@ -58,6 +58,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
+| [SECURITY_CODE_QUALITY_ANALYSIS.md](./SECURITY_CODE_QUALITY_ANALYSIS.md) | 🆕 **NOVO!** Análise completa de segurança e qualidade de código | 20 min |
 | [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) | Guia completo de autenticação | 12 min |
 | [GUIA_DESENVOLVIMENTO_AUTH.md](./GUIA_DESENVOLVIMENTO_AUTH.md) | Desenvolvimento com autenticação | 10 min |
 | [QUICK_REFERENCE_PERMISSIONS.md](./QUICK_REFERENCE_PERMISSIONS.md) | Referência rápida de permissões | 5 min |
@@ -76,6 +77,9 @@ Este documento serve como guia de navegação para toda a documentação do sist
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
 | [FUNCIONALIDADES_IMPLEMENTADAS.md](./FUNCIONALIDADES_IMPLEMENTADAS.md) | Lista de funcionalidades | 8 min |
+| [archive/README.md](./archive/README.md) | 🆕 **Documentação Arquivada** - Implementações e fixes concluídos | 5 min |
+
+**Nota**: Documentos de implementações concluídas, fixes aplicados e migrações realizadas foram movidos para `docs/archive/` para manter a documentação principal organizada.
 
 ### 🧪 Testes e API
 
