@@ -1,12 +1,16 @@
 <div class="login-wrapper">
-  <div class="login-branding">
+  <div class="login-branding" [style.background-image]="customization()?.backgroundImageUrl ? 'url(' + customization()!.backgroundImageUrl + ')' : ''">
     <div class="branding-content">
       <div class="brand-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-        </svg>
+        @if (customization()?.logoUrl) {
+          <img [src]="customization()!.logoUrl" alt="Clinic Logo" class="clinic-logo" />
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        }
       </div>
-      <h1>MedicWarehouse</h1>
+      <h1>{{ clinicName() || 'MedicWarehouse' }}</h1>
       <p class="tagline">Sistema completo de gestão para clínicas e consultórios médicos</p>
       
       <div class="features-list">
@@ -49,9 +53,13 @@
     <div class="login-card">
       <div class="login-header">
         <div class="mobile-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
+          @if (customization()?.logoUrl) {
+            <img [src]="customization()!.logoUrl" alt="Clinic Logo" class="mobile-clinic-logo" />
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          }
         </div>
         <h2>Bem-vindo de volta!</h2>
         @if (clinicName()) {

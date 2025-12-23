@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
+import { ownerGuard } from './guards/owner-guard';
+import { CLINIC_ADMIN_ROUTES } from './pages/clinic-admin/clinic-admin.routes';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -81,5 +83,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/analytics/analytics-dashboard').then(m => m.AnalyticsDashboard),
     canActivate: [authGuard]
   },
+  ...CLINIC_ADMIN_ROUTES,
   { path: '**', redirectTo: '/dashboard' }
 ];

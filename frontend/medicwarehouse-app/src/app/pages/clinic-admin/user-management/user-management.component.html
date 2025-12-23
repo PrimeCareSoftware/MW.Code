@@ -1,0 +1,80 @@
+<div class="user-management-container">
+  <div class="page-header">
+    <h1>Gerenciamento de Usuários</h1>
+    <p>Visualize e gerencie os usuários da sua clínica</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando usuários...</p>
+    </div>
+  } @else {
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (users().length > 0) {
+      <div class="users-card">
+        <div class="card-header">
+          <h3>Usuários da Clínica ({{ users().length }})</h3>
+        </div>
+        
+        <div class="users-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome de Usuário</th>
+                <th>Nome Completo</th>
+                <th>E-mail</th>
+                <th>Perfil</th>
+                <th>Status</th>
+                <th>Criado em</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of users(); track user.id) {
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-avatar">
+                        {{ user.username.charAt(0).toUpperCase() }}
+                      </div>
+                      <span class="user-username">{{ user.username }}</span>
+                    </div>
+                  </td>
+                  <td>{{ user.fullName || '-' }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>
+                    <span class="profile-badge">
+                      {{ user.profileName || 'Sem perfil' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span [class]="'status-badge ' + getStatusBadgeClass(user.isActive)">
+                      {{ getStatusText(user.isActive) }}
+                    </span>
+                  </td>
+                  <td>{{ user.createdAt | date: 'dd/MM/yyyy' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <h3>Nenhum usuário encontrado</h3>
+        <p>Ainda não há usuários cadastrados na sua clínica.</p>
+      </div>
+    }
+  }
+</div>

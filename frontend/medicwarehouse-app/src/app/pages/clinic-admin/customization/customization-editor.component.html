@@ -1,0 +1,187 @@
+<div class="customization-container">
+  <div class="page-header">
+    <h1>Personalização da Clínica</h1>
+    <p>Customize as cores, logo e imagem de fundo da tela de login</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando configurações...</p>
+    </div>
+  } @else {
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <div class="content-grid">
+      <div class="editor-section">
+        <form [formGroup]="customizationForm" (ngSubmit)="onSubmit()">
+          <div class="form-card">
+            <h3>Cores</h3>
+            
+            <div class="form-group">
+              <label for="primaryColor">Cor Primária</label>
+              <div class="color-input-group">
+                <input 
+                  type="color" 
+                  id="primaryColor" 
+                  formControlName="primaryColor"
+                  class="color-picker"
+                />
+                <input 
+                  type="text" 
+                  formControlName="primaryColor"
+                  placeholder="#2563eb"
+                  class="form-control color-text"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="secondaryColor">Cor Secundária</label>
+              <div class="color-input-group">
+                <input 
+                  type="color" 
+                  id="secondaryColor" 
+                  formControlName="secondaryColor"
+                  class="color-picker"
+                />
+                <input 
+                  type="text" 
+                  formControlName="secondaryColor"
+                  placeholder="#7c3aed"
+                  class="form-control color-text"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fontColor">Cor da Fonte</label>
+              <div class="color-input-group">
+                <input 
+                  type="color" 
+                  id="fontColor" 
+                  formControlName="fontColor"
+                  class="color-picker"
+                />
+                <input 
+                  type="text" 
+                  formControlName="fontColor"
+                  placeholder="#1f2937"
+                  class="form-control color-text"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <h3>Imagens</h3>
+            
+            <div class="form-group">
+              <label for="logoUrl">Logo da Clínica</label>
+              <input 
+                type="text" 
+                id="logoUrl" 
+                formControlName="logoUrl"
+                placeholder="https://exemplo.com/logo.png"
+                class="form-control"
+              />
+              <button type="button" class="btn btn-secondary btn-sm" (click)="uploadLogo()">
+                Upload de Imagem
+              </button>
+              @if (customizationForm.get('logoUrl')?.value) {
+                <div class="image-preview">
+                  <img [src]="customizationForm.get('logoUrl')!.value" alt="Logo preview" />
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="backgroundImageUrl">Imagem de Fundo (Login)</label>
+              <input 
+                type="text" 
+                id="backgroundImageUrl" 
+                formControlName="backgroundImageUrl"
+                placeholder="https://exemplo.com/background.jpg"
+                class="form-control"
+              />
+              <button type="button" class="btn btn-secondary btn-sm" (click)="uploadBackground()">
+                Upload de Imagem
+              </button>
+              @if (customizationForm.get('backgroundImageUrl')?.value) {
+                <div class="image-preview">
+                  <img [src]="customizationForm.get('backgroundImageUrl')!.value" alt="Background preview" />
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="customizationForm.invalid || isSaving()"
+            >
+              @if (isSaving()) {
+                <span class="spinner"></span>
+                <span>Salvando...</span>
+              } @else {
+                <span>Salvar Alterações</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="preview-section">
+        <div class="preview-card">
+          <h3>Pré-visualização</h3>
+          <p class="preview-hint">Veja como ficará a tela de login</p>
+          
+          <div 
+            class="login-preview" 
+            [style.background-color]="customizationForm.get('primaryColor')?.value"
+            [style.color]="customizationForm.get('fontColor')?.value"
+          >
+            @if (customizationForm.get('logoUrl')?.value) {
+              <img 
+                [src]="customizationForm.get('logoUrl')!.value" 
+                class="preview-logo" 
+                alt="Logo preview"
+              />
+            } @else {
+              <div class="preview-logo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+              </div>
+            }
+            
+            <h2>Login</h2>
+            
+            <div class="preview-input-group">
+              <input type="text" placeholder="Usuário" class="preview-input" readonly />
+              <input type="password" placeholder="Senha" class="preview-input" readonly />
+              
+              <button 
+                class="preview-button" 
+                [style.background-color]="customizationForm.get('secondaryColor')?.value"
+              >
+                Entrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

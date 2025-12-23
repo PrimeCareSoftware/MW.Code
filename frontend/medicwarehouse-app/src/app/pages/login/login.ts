@@ -1,9 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { TenantResolverService } from '../../services/tenant-resolver.service';
+import { ClinicCustomizationService } from '../../services/clinic-customization.service';
+import { ClinicCustomizationPublicDto } from '../../models/clinic-customization.model';
 
 @Component({
   selector: 'app-login',
@@ -11,27 +13,31 @@ import { TenantResolverService } from '../../services/tenant-resolver.service';
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class Login {
+export class Login implements OnInit {
   loginForm: FormGroup;
   errorMessage = signal<string>('');
   infoMessage = signal<string>('');
   isLoading = signal<boolean>(false);
   tenantFromUrl = signal<string | null>(null);
   clinicName = signal<string | null>(null);
+  customization = signal<ClinicCustomizationPublicDto | null>(null);
 
   constructor(
     private fb: FormBuilder,
     private authService: Auth,
     private router: Router,
-    private tenantResolver: TenantResolverService
+    private tenantResolver: TenantResolverService,
+    private clinicCustomizationService: ClinicCustomizationService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
       tenantId: [''] // Optional, will be auto-filled from URL
     });
+  }
 
-    // Try to detect tenant from URL on component load
+  ngOnInit(): void {
+    // Detect tenant from URL on component load
     this.detectTenantFromUrl();
     
     // Check if there's a message from router state (e.g., session invalidation)
@@ -47,15 +53,38 @@ export class Login {
       this.tenantFromUrl.set(tenant);
       this.loginForm.patchValue({ tenantId: tenant });
       
-      // Try to resolve clinic name for better UX
-      this.tenantResolver.resolveTenantBySubdomain(tenant).subscribe({
-        next: (tenantInfo) => {
-          this.clinicName.set(tenantInfo.clinicName || null);
+      // Fetch clinic customization based on subdomain
+      this.clinicCustomizationService.getBySubdomain(tenant).subscribe({
+        next: (customizationData) => {
+          this.customization.set(customizationData);
+          this.clinicName.set(customizationData.clinicName || null);
+          this.applyCustomization(customizationData);
         },
-        error: () => {
-          // Ignore errors, just proceed without clinic name
+        error: (error) => {
+          console.error('Error loading clinic customization:', error);
+          // Try to resolve clinic name for backward compatibility
+          this.tenantResolver.resolveTenantBySubdomain(tenant).subscribe({
+            next: (tenantInfo) => {
+              this.clinicName.set(tenantInfo.clinicName || null);
+            },
+            error: () => {
+              // Ignore errors, just proceed without clinic name
+            }
+          });
         }
       });
+    }
+  }
+
+  applyCustomization(customization: ClinicCustomizationPublicDto): void {
+    if (customization.primaryColor) {
+      document.documentElement.style.setProperty('--primary-color', customization.primaryColor);
+    }
+    if (customization.secondaryColor) {
+      document.documentElement.style.setProperty('--secondary-color', customization.secondaryColor);
+    }
+    if (customization.fontColor) {
+      document.documentElement.style.setProperty('--font-color', customization.fontColor);
     }
   }
 
