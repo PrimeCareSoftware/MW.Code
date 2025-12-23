@@ -76,5 +76,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
     canActivate: [authGuard]
   },
+  { 
+    path: 'analytics', 
+    loadComponent: () => import('./pages/analytics/analytics-dashboard').then(m => m.AnalyticsDashboard),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];

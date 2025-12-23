@@ -1,0 +1,294 @@
+<app-navbar></app-navbar>
+
+<div class="analytics-container">
+  <!-- Header -->
+  <div class="analytics-header">
+    <div class="header-content">
+      <h1>📊 Análise e Relatórios</h1>
+      <p>Acompanhe o desempenho da sua clínica com métricas e indicadores essenciais</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" (click)="exportData()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Exportar Dados
+      </button>
+    </div>
+  </div>
+
+  <!-- Date Range Filter -->
+  <div class="filter-section">
+    <div class="filter-card">
+      <label>Período de Análise</label>
+      <div class="filter-group">
+        <select [(ngModel)]="dateRange" (change)="onDateRangeChange()" class="form-select">
+          <option value="today">Hoje</option>
+          <option value="last7days">Últimos 7 dias</option>
+          <option value="last30days">Últimos 30 dias</option>
+          <option value="thisMonth">Este mês</option>
+          <option value="lastMonth">Mês passado</option>
+          <option value="last3months">Últimos 3 meses</option>
+          <option value="last6months">Últimos 6 meses</option>
+          <option value="custom">Personalizado</option>
+        </select>
+
+        @if (dateRange === 'custom') {
+          <div class="custom-date-range">
+            <input 
+              type="date" 
+              [(ngModel)]="customStartDate" 
+              (change)="onDateRangeChange()"
+              class="form-input"
+              placeholder="Data inicial"
+            />
+            <span>até</span>
+            <input 
+              type="date" 
+              [(ngModel)]="customEndDate" 
+              (change)="onDateRangeChange()"
+              class="form-input"
+              placeholder="Data final"
+            />
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <app-loading message="Carregando dados analíticos..." size="large"></app-loading>
+  }
+
+  <!-- KPI Cards -->
+  @if (!loading && financialSummary) {
+    <div class="kpi-grid">
+      <div class="kpi-card revenue">
+        <div class="kpi-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Receita Total</span>
+          <span class="kpi-value">{{ formatCurrency(financialSummary.totalRevenue) }}</span>
+          <span class="kpi-subtitle">{{ financialSummary.totalAppointments }} consultas</span>
+        </div>
+      </div>
+
+      <div class="kpi-card expenses">
+        <div class="kpi-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9"/>
+            <path d="M13 17V5"/>
+            <path d="M8 17v-3"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Despesas Totais</span>
+          <span class="kpi-value">{{ formatCurrency(financialSummary.totalExpenses) }}</span>
+          <span class="kpi-subtitle">{{ financialSummary.expensesByCategory.length }} categorias</span>
+        </div>
+      </div>
+
+      <div class="kpi-card profit" [class.negative]="financialSummary.netProfit < 0">
+        <div class="kpi-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Lucro Líquido</span>
+          <span class="kpi-value">{{ formatCurrency(financialSummary.netProfit) }}</span>
+          <span class="kpi-subtitle">
+            Margem: {{ financialSummary.totalRevenue > 0 ? formatPercent((financialSummary.netProfit / financialSummary.totalRevenue) * 100) : '0%' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="kpi-card patients">
+        <div class="kpi-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Pacientes Atendidos</span>
+          <span class="kpi-value">{{ financialSummary.totalPatients }}</span>
+          <span class="kpi-subtitle">Ticket médio: {{ formatCurrency(financialSummary.averageAppointmentValue) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="charts-grid">
+      <!-- Revenue Trend Chart -->
+      <div class="chart-card full-width">
+        <div class="chart-header">
+          <h3>Evolução da Receita</h3>
+          <p>Acompanhe o faturamento diário do período</p>
+        </div>
+        <div class="chart-body">
+          @if (revenueChartOptions) {
+            <apx-chart
+              [series]="revenueChartOptions.series!"
+              [chart]="revenueChartOptions.chart!"
+              [dataLabels]="revenueChartOptions.dataLabels!"
+              [stroke]="revenueChartOptions.stroke!"
+              [xaxis]="revenueChartOptions.xaxis!"
+              [yaxis]="revenueChartOptions.yaxis!"
+              [fill]="revenueChartOptions.fill!"
+              [colors]="revenueChartOptions.colors!"
+              [tooltip]="revenueChartOptions.tooltip!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- Revenue by Payment Method -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Receita por Forma de Pagamento</h3>
+          <p>Distribuição dos métodos de pagamento</p>
+        </div>
+        <div class="chart-body">
+          @if (revenueByMethodChartOptions) {
+            <apx-chart
+              [series]="revenueByMethodChartOptions.series!"
+              [chart]="revenueByMethodChartOptions.chart!"
+              [dataLabels]="revenueByMethodChartOptions.dataLabels!"
+              [plotOptions]="revenueByMethodChartOptions.plotOptions!"
+              [xaxis]="revenueByMethodChartOptions.xaxis!"
+              [yaxis]="revenueByMethodChartOptions.yaxis!"
+              [fill]="revenueByMethodChartOptions.fill!"
+              [colors]="revenueByMethodChartOptions.colors!"
+              [tooltip]="revenueByMethodChartOptions.tooltip!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- Expenses by Category -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Despesas por Categoria</h3>
+          <p>Distribuição dos gastos da clínica</p>
+        </div>
+        <div class="chart-body">
+          @if (expensesChartOptions) {
+            <apx-chart
+              [series]="expensesChartOptions.series!"
+              [chart]="expensesChartOptions.chart!"
+              [labels]="expensesChartOptions.labels!"
+              [colors]="expensesChartOptions.colors!"
+              [dataLabels]="expensesChartOptions.dataLabels!"
+              [legend]="expensesChartOptions.legend!"
+              [tooltip]="expensesChartOptions.tooltip!"
+              [responsive]="expensesChartOptions.responsive!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- Appointments by Status -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Consultas por Status</h3>
+          <p>Status das consultas no período</p>
+        </div>
+        <div class="chart-body">
+          @if (appointmentsStatusChartOptions) {
+            <apx-chart
+              [series]="appointmentsStatusChartOptions.series!"
+              [chart]="appointmentsStatusChartOptions.chart!"
+              [labels]="appointmentsStatusChartOptions.labels!"
+              [colors]="appointmentsStatusChartOptions.colors!"
+              [legend]="appointmentsStatusChartOptions.legend!"
+              [responsive]="appointmentsStatusChartOptions.responsive!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- Appointments by Type -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Consultas por Tipo</h3>
+          <p>Tipos de consultas realizadas</p>
+        </div>
+        <div class="chart-body">
+          @if (appointmentsTypeChartOptions) {
+            <apx-chart
+              [series]="appointmentsTypeChartOptions.series!"
+              [chart]="appointmentsTypeChartOptions.chart!"
+              [plotOptions]="appointmentsTypeChartOptions.plotOptions!"
+              [dataLabels]="appointmentsTypeChartOptions.dataLabels!"
+              [xaxis]="appointmentsTypeChartOptions.xaxis!"
+              [colors]="appointmentsTypeChartOptions.colors!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- Patients Growth Chart -->
+      <div class="chart-card full-width">
+        <div class="chart-header">
+          <h3>Crescimento de Pacientes</h3>
+          <p>Evolução da base de pacientes ao longo do tempo</p>
+        </div>
+        <div class="chart-body">
+          @if (patientsGrowthChartOptions) {
+            <apx-chart
+              [series]="patientsGrowthChartOptions.series!"
+              [chart]="patientsGrowthChartOptions.chart!"
+              [stroke]="patientsGrowthChartOptions.stroke!"
+              [xaxis]="patientsGrowthChartOptions.xaxis!"
+              [yaxis]="patientsGrowthChartOptions.yaxis!"
+              [colors]="patientsGrowthChartOptions.colors!"
+              [legend]="patientsGrowthChartOptions.legend!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Stats -->
+    @if (appointmentsReport) {
+      <div class="summary-section">
+        <h2>Resumo de Performance</h2>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <span class="summary-label">Taxa de Conclusão</span>
+            <span class="summary-value success">{{ formatPercent(appointmentsReport.completionRate) }}</span>
+            <span class="summary-detail">{{ appointmentsReport.completedAppointments }} de {{ appointmentsReport.totalAppointments }} consultas</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">Taxa de Cancelamento</span>
+            <span class="summary-value warning">{{ formatPercent(appointmentsReport.cancellationRate) }}</span>
+            <span class="summary-detail">{{ appointmentsReport.cancelledAppointments }} consultas canceladas</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">Faltas (No-Show)</span>
+            <span class="summary-value danger">{{ appointmentsReport.noShowAppointments }}</span>
+            <span class="summary-detail">{{ appointmentsReport.totalAppointments > 0 ? formatPercent((appointmentsReport.noShowAppointments / appointmentsReport.totalAppointments) * 100) : '0%' }} do total</span>
+          </div>
+          @if (patientsReport) {
+            <div class="summary-card">
+              <span class="summary-label">Novos Pacientes</span>
+              <span class="summary-value info">{{ patientsReport.newPatients }}</span>
+              <span class="summary-detail">{{ patientsReport.activePatients }} pacientes ativos</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>
