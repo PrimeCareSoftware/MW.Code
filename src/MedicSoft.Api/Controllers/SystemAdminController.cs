@@ -958,22 +958,22 @@ namespace MedicSoft.Api.Controllers
         /// Create a new subdomain (not implemented - tenantIds are auto-generated with clinics)
         /// </summary>
         [HttpPost("subdomains")]
-        public async Task<ActionResult> CreateSubdomain([FromBody] CreateSubdomainRequest request)
+        public Task<ActionResult> CreateSubdomain([FromBody] CreateSubdomainRequest request)
         {
             // In the monolithic API, subdomains are essentially tenant IDs which are auto-generated
             // This endpoint returns a message indicating the feature is not supported
-            return BadRequest(new { message = "Criação manual de subdomínios não é suportada. Os subdomínios são gerados automaticamente ao criar uma clínica." });
+            return Task.FromResult<ActionResult>(BadRequest(new { message = "Criação manual de subdomínios não é suportada. Os subdomínios são gerados automaticamente ao criar uma clínica." }));
         }
 
         /// <summary>
         /// Delete a subdomain (not implemented - would require deleting entire clinic)
         /// </summary>
         [HttpDelete("subdomains/{id}")]
-        public async Task<ActionResult> DeleteSubdomain(Guid id)
+        public Task<ActionResult> DeleteSubdomain(Guid id)
         {
             // In the monolithic API, deleting a subdomain would mean deleting a clinic
             // This is a dangerous operation and should be done through clinic deletion
-            return BadRequest(new { message = "Exclusão de subdomínios não é suportada. Para remover um subdomínio, desative a clínica correspondente." });
+            return Task.FromResult<ActionResult>(BadRequest(new { message = "Exclusão de subdomínios não é suportada. Para remover um subdomínio, desative a clínica correspondente." }));
         }
     }
 
