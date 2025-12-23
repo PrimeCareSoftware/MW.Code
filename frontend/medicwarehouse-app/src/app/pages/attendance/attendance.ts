@@ -305,7 +305,7 @@ export class Attendance implements OnInit, OnDestroy {
       // nextPatientId and nextPatientName would be determined by checking the next appointment
     }).subscribe({
       next: () => {
-        console.log('Secretary notified successfully');
+        // Secretary notified successfully
       },
       error: (error) => {
         console.error('Error notifying secretary:', error);
@@ -458,13 +458,11 @@ export class Attendance implements OnInit, OnDestroy {
 
   // Event handlers for medication and exam autocomplete
   onMedicationSelected(medication: MedicationAutocomplete): void {
-    console.log('Medicação selecionada:', medication);
     // The medication text is already inserted by the RichTextEditor component
     // Additional logic can be added here if needed (e.g., tracking selected medications)
   }
 
   onExamSelected(exam: ExamAutocomplete): void {
-    console.log('Exame selecionado:', exam);
     // The exam text is already inserted by the RichTextEditor component
     // Additional logic can be added here if needed (e.g., auto-filling exam request form)
   }
