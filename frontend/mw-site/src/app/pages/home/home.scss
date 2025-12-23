@@ -75,28 +75,34 @@
   }
   
   h1 {
-    font-size: 3.5rem;
-    line-height: 1.1;
+    font-size: 4rem;
+    line-height: 1.05;
     margin-bottom: 1.5rem;
     color: var(--gray-900);
     font-weight: 700;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.028em;
+    
+    @media (max-width: 1024px) {
+      font-size: 3.25rem;
+    }
     
     @media (max-width: 768px) {
-      font-size: 2.5rem;
+      font-size: 2.75rem;
     }
   }
   
   .hero-subtitle {
-    font-size: 1.25rem;
-    line-height: 1.7;
+    font-size: 1.375rem;
+    line-height: 1.5;
     color: var(--gray-600);
     margin-bottom: 2rem;
-    max-width: 540px;
+    max-width: 560px;
+    letter-spacing: -0.006em;
     
     @media (max-width: 968px) {
       margin-left: auto;
       margin-right: auto;
+      font-size: 1.25rem;
     }
   }
   
@@ -365,24 +371,35 @@
 }
 
 .section-title {
-  font-size: 2.25rem;
+  font-size: 2.75rem;
   text-align: center;
   margin-bottom: 1rem;
   color: var(--gray-900);
   font-weight: 700;
+  letter-spacing: -0.024em;
+  line-height: 1.1;
+  
+  @media (max-width: 1024px) {
+    font-size: 2.25rem;
+  }
   
   @media (max-width: 768px) {
-    font-size: 1.75rem;
+    font-size: 1.875rem;
   }
 }
 
 .section-subtitle {
   text-align: center;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   color: var(--gray-600);
   max-width: 600px;
   margin: 0 auto;
-  line-height: 1.7;
+  line-height: 1.5;
+  letter-spacing: -0.006em;
+  
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+  }
 }
 
 // Features Section
