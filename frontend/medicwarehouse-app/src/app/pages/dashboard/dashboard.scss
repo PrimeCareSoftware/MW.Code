@@ -387,6 +387,11 @@
       background: var(--gray-100);
       color: var(--gray-500);
     }
+
+    &.analytics {
+      background: var(--success-100);
+      color: var(--success-600);
+    }
   }
 
   .quick-content {
