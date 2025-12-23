@@ -278,7 +278,7 @@
           <div class="summary-card">
             <span class="summary-label">Faltas (No-Show)</span>
             <span class="summary-value danger">{{ appointmentsReport.noShowAppointments }}</span>
-            <span class="summary-detail">{{ formatPercent((appointmentsReport.noShowAppointments / appointmentsReport.totalAppointments) * 100) }} do total</span>
+            <span class="summary-detail">{{ appointmentsReport.totalAppointments > 0 ? formatPercent((appointmentsReport.noShowAppointments / appointmentsReport.totalAppointments) * 100) : '0%' }} do total</span>
           </div>
           @if (patientsReport) {
             <div class="summary-card">

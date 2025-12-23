@@ -85,13 +85,19 @@ export class AnalyticsDashboard implements OnInit {
   loadData() {
     this.loading = true;
     const { startDate, endDate } = this.getDateRange();
-    const clinicId = this.authService.getClinicId() || '';
+    const clinicId = this.authService.getClinicId();
+    
+    if (!clinicId) {
+      console.error('No clinic ID available');
+      this.loading = false;
+      return;
+    }
 
     Promise.all([
-      this.analyticsService.getFinancialSummary(clinicId, startDate, endDate).toPromise(),
-      this.analyticsService.getRevenueReport(clinicId, startDate, endDate).toPromise(),
-      this.analyticsService.getAppointmentsReport(clinicId, startDate, endDate).toPromise(),
-      this.analyticsService.getPatientsReport(clinicId, startDate, endDate).toPromise()
+      import('rxjs').then(rxjs => rxjs.firstValueFrom(this.analyticsService.getFinancialSummary(clinicId, startDate, endDate))),
+      import('rxjs').then(rxjs => rxjs.firstValueFrom(this.analyticsService.getRevenueReport(clinicId, startDate, endDate))),
+      import('rxjs').then(rxjs => rxjs.firstValueFrom(this.analyticsService.getAppointmentsReport(clinicId, startDate, endDate))),
+      import('rxjs').then(rxjs => rxjs.firstValueFrom(this.analyticsService.getPatientsReport(clinicId, startDate, endDate)))
     ]).then(([financial, revenue, appointments, patients]) => {
       this.financialSummary = financial;
       this.revenueReport = revenue;
@@ -470,6 +476,6 @@ export class AnalyticsDashboard implements OnInit {
 
   exportData() {
     // TODO: Implement export functionality
-    alert('Funcionalidade de exportação em desenvolvimento');
+    console.warn('Export functionality not yet implemented');
   }
 }

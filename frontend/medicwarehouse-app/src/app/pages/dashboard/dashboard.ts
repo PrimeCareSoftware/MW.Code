@@ -61,15 +61,16 @@ export class Dashboard implements OnInit {
       }
 
       const today = format(new Date(), 'yyyy-MM-dd');
+      const { firstValueFrom } = await import('rxjs');
       
       // Load patients count
-      const patients = await this.http.get<any[]>(`${environment.apiUrl}/patients?clinicId=${clinicId}`).toPromise();
+      const patients = await firstValueFrom(this.http.get<any[]>(`${environment.apiUrl}/patients?clinicId=${clinicId}`));
       this.stats.totalPatients = patients?.length || 0;
 
       // Load today's appointments
-      const appointments = await this.http.get<any[]>(
+      const appointments = await firstValueFrom(this.http.get<any[]>(
         `${environment.apiUrl}/appointments?clinicId=${clinicId}&date=${today}`
-      ).toPromise();
+      ));
       
       this.stats.todayAppointments = appointments?.length || 0;
       this.stats.completedAppointments = appointments?.filter(a => a.status === 'Completed').length || 0;
