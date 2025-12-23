@@ -29,13 +29,13 @@ export class ClinicCustomizationService {
   }
 
   updateLogo(logoUrl: string): Observable<ClinicCustomizationDto> {
-    return this.http.put<ClinicCustomizationDto>(`${this.apiUrl}/logo`, JSON.stringify(logoUrl), {
+    return this.http.put<ClinicCustomizationDto>(`${this.apiUrl}/logo`, logoUrl, {
       headers: { 'Content-Type': 'application/json' }
     });
   }
 
   updateBackground(backgroundUrl: string): Observable<ClinicCustomizationDto> {
-    return this.http.put<ClinicCustomizationDto>(`${this.apiUrl}/background`, JSON.stringify(backgroundUrl), {
+    return this.http.put<ClinicCustomizationDto>(`${this.apiUrl}/background`, backgroundUrl, {
       headers: { 'Content-Type': 'application/json' }
     });
   }

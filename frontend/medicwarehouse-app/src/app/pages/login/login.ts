@@ -77,15 +77,21 @@ export class Login implements OnInit {
   }
 
   applyCustomization(customization: ClinicCustomizationPublicDto): void {
-    if (customization.primaryColor) {
+    if (customization.primaryColor && this.isValidColor(customization.primaryColor)) {
       document.documentElement.style.setProperty('--primary-color', customization.primaryColor);
     }
-    if (customization.secondaryColor) {
+    if (customization.secondaryColor && this.isValidColor(customization.secondaryColor)) {
       document.documentElement.style.setProperty('--secondary-color', customization.secondaryColor);
     }
-    if (customization.fontColor) {
+    if (customization.fontColor && this.isValidColor(customization.fontColor)) {
       document.documentElement.style.setProperty('--font-color', customization.fontColor);
     }
+  }
+
+  private isValidColor(color: string): boolean {
+    // Validate hex color format (#RGB or #RRGGBB)
+    const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+    return hexColorRegex.test(color);
   }
 
   onSubmit(): void {
