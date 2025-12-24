@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Patient, CreatePatient, UpdatePatient } from '../models/patient.model';
+import { PatientCompleteHistory, PatientProcedureHistory } from '../models/patient-history.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -42,5 +43,24 @@ export class PatientService {
 
   search(searchTerm: string): Observable<Patient[]> {
     return this.http.get<Patient[]>(`${this.apiUrl}/search?searchTerm=${encodeURIComponent(searchTerm)}`);
+  }
+
+  /**
+   * Get appointment history for a patient
+   * @param patientId Patient ID
+   * @param includeMedicalRecords Whether to include medical records (requires permission)
+   */
+  getAppointmentHistory(patientId: string, includeMedicalRecords: boolean = false): Observable<PatientCompleteHistory> {
+    return this.http.get<PatientCompleteHistory>(
+      `${this.apiUrl}/${patientId}/appointment-history?includeMedicalRecords=${includeMedicalRecords}`
+    );
+  }
+
+  /**
+   * Get procedure history for a patient
+   * @param patientId Patient ID
+   */
+  getProcedureHistory(patientId: string): Observable<PatientProcedureHistory[]> {
+    return this.http.get<PatientProcedureHistory[]>(`${this.apiUrl}/${patientId}/procedure-history`);
   }
 }
