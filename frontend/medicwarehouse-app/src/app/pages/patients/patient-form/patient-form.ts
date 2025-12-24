@@ -5,7 +5,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientService } from '../../../services/patient';
 import { CepService } from '../../../services/cep.service';
+import { Auth } from '../../../services/auth';
 import { Patient } from '../../../models/patient.model';
+import { PatientCompleteHistory, PatientAppointmentHistory, PatientProcedureHistory } from '../../../models/patient-history.model';
 import { debounceTime, Subject } from 'rxjs';
 import { CpfMaskDirective } from '../../../directives/cpf-mask.directive';
 import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
@@ -23,6 +25,7 @@ export class PatientForm implements OnInit {
   patientId = signal<string | null>(null);
   isLoading = signal<boolean>(false);
   isLoadingCep = signal<boolean>(false);
+  isLoadingHistory = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
   isChildPatient = signal<boolean>(false);
@@ -31,10 +34,21 @@ export class PatientForm implements OnInit {
   selectedGuardian = signal<Patient | null>(null);
   private searchSubject = new Subject<string>();
 
+  // Tab management
+  activeTab = signal<'basic' | 'appointments' | 'procedures'>('basic');
+
+  // History data
+  appointmentHistory = signal<PatientAppointmentHistory[]>([]);
+  procedureHistory = signal<PatientProcedureHistory[]>([]);
+  
+  // Permission for viewing medical records
+  canViewMedicalRecords = signal<boolean>(false);
+
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
     private cepService: CepService,
+    private auth: Auth,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -84,7 +98,121 @@ export class PatientForm implements OnInit {
       this.isEditMode.set(true);
       this.patientId.set(id);
       this.loadPatient(id);
+      // Load history data for existing patient
+      this.loadPatientHistory(id);
     }
+
+    // TODO: Check user permissions for medical records
+    // For now, we assume the user can view medical records if they're a doctor
+    // In production, check: this.auth.currentUser()?.permissions.includes('medical-records.view')
+    this.canViewMedicalRecords.set(true); // Placeholder
+  }
+
+  setActiveTab(tab: 'basic' | 'appointments' | 'procedures'): void {
+    this.activeTab.set(tab);
+  }
+
+  loadPatientHistory(patientId: string): void {
+    this.isLoadingHistory.set(true);
+
+    // Load appointment history
+    this.patientService.getAppointmentHistory(patientId, this.canViewMedicalRecords()).subscribe({
+      next: (history) => {
+        this.appointmentHistory.set(history.appointments);
+        this.isLoadingHistory.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading appointment history:', error);
+        this.isLoadingHistory.set(false);
+      }
+    });
+
+    // Load procedure history
+    this.patientService.getProcedureHistory(patientId).subscribe({
+      next: (procedures) => {
+        this.procedureHistory.set(procedures);
+      },
+      error: (error) => {
+        console.error('Error loading procedure history:', error);
+      }
+    });
+  }
+
+  formatPaymentMethod(method: string): string {
+    const methodMap: { [key: string]: string } = {
+      'Cash': 'Dinheiro',
+      'CreditCard': 'Cartão de Crédito',
+      'DebitCard': 'Cartão de Débito',
+      'Pix': 'PIX',
+      'BankTransfer': 'Transferência Bancária',
+      'Check': 'Cheque'
+    };
+    return methodMap[method] || method;
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR');
+  }
+
+  formatTime(timeString: string): string {
+    // timeString format: "HH:MM:SS" or TimeSpan format
+    return timeString.substring(0, 5); // Returns "HH:MM"
+  }
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('pt-BR', { 
+      style: 'currency', 
+      currency: 'BRL' 
+    }).format(amount);
+  }
+  
+  getStatusBadgeClass(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'Scheduled': 'badge-info',
+      'Confirmed': 'badge-success',
+      'InProgress': 'badge-warning',
+      'Completed': 'badge-success',
+      'Cancelled': 'badge-error',
+      'NoShow': 'badge-error'
+    };
+    return statusMap[status] || 'badge-default';
+  }
+
+  getPaymentStatusBadgeClass(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'Pending': 'badge-warning',
+      'Processing': 'badge-info',
+      'Paid': 'badge-success',
+      'Failed': 'badge-error',
+      'Refunded': 'badge-info',
+      'Cancelled': 'badge-error'
+    };
+    return statusMap[status] || 'badge-default';
+  }
+
+  formatAppointmentStatus(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'Scheduled': 'Agendado',
+      'Confirmed': 'Confirmado',
+      'InProgress': 'Em Andamento',
+      'Completed': 'Concluído',
+      'Cancelled': 'Cancelado',
+      'NoShow': 'Faltou'
+    };
+    return statusMap[status] || status;
+  }
+
+  formatPaymentStatus(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'Pending': 'Pendente',
+      'Processing': 'Processando',
+      'Paid': 'Pago',
+      'Failed': 'Falhou',
+      'Refunded': 'Reembolsado',
+      'Cancelled': 'Cancelado'
+    };
+    return statusMap[status] || status;
   }
 
   onDateOfBirthChange(): void {

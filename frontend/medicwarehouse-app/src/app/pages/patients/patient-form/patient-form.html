@@ -22,6 +22,58 @@
     <div class="alert alert-success">{{ successMessage() }}</div>
   }
 
+  <!-- Tabs Navigation -->
+  <div class="tabs-navigation">
+    <button 
+      type="button"
+      class="tab-button" 
+      [class.active]="activeTab() === 'basic'"
+      (click)="setActiveTab('basic')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      Cadastro Básico
+    </button>
+
+    @if (isEditMode()) {
+      <button 
+        type="button"
+        class="tab-button" 
+        [class.active]="activeTab() === 'appointments'"
+        (click)="setActiveTab('appointments')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Histórico de Atendimentos
+      </button>
+
+      <button 
+        type="button"
+        class="tab-button" 
+        [class.active]="activeTab() === 'procedures'"
+        (click)="setActiveTab('procedures')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Histórico de Procedimentos
+      </button>
+    }
+  </div>
+
+  <!-- Tab Content -->
+
+  <!-- Tab Content -->
+
+  <!-- Basic Registration Tab -->
+  <div class="tab-content" [class.active]="activeTab() === 'basic'">
   <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form">
     <!-- Personal Data Section -->
     <div class="form-section">
@@ -256,4 +308,228 @@
       </button>
     </div>
   </form>
+  </div>
+
+  <!-- Appointments History Tab -->
+  <div class="tab-content" [class.active]="activeTab() === 'appointments'">
+    <div class="history-container">
+      <div class="history-header">
+        <h2>Histórico de Atendimentos</h2>
+        <p>Consultas e atendimentos realizados pelo paciente</p>
+      </div>
+
+      @if (isLoadingHistory()) {
+        <div class="loading-state">
+          <span class="spinner"></span>
+          <p>Carregando histórico...</p>
+        </div>
+      } @else if (appointmentHistory().length === 0) {
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <h3>Nenhum atendimento registrado</h3>
+          <p>Este paciente ainda não possui histórico de atendimentos</p>
+        </div>
+      } @else {
+        <div class="history-list">
+          @for (appointment of appointmentHistory(); track appointment.appointmentId) {
+            <div class="history-card">
+              <div class="history-card-header">
+                <div class="appointment-date">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  <span>{{ formatDate(appointment.scheduledDate) }} às {{ formatTime(appointment.scheduledTime) }}</span>
+                </div>
+                <span class="badge" [ngClass]="getStatusBadgeClass(appointment.status)">
+                  {{ formatAppointmentStatus(appointment.status) }}
+                </span>
+              </div>
+
+              <div class="history-card-body">
+                @if (appointment.doctorName) {
+                  <div class="info-row">
+                    <span class="info-label">Médico:</span>
+                    <span class="info-value">
+                      {{ appointment.doctorName }}
+                      @if (appointment.doctorProfessionalId) {
+                        <span class="professional-id">({{ appointment.doctorProfessionalId }})</span>
+                      }
+                    </span>
+                  </div>
+                  @if (appointment.doctorSpecialty) {
+                    <div class="info-row">
+                      <span class="info-label">Especialidade:</span>
+                      <span class="info-value">{{ appointment.doctorSpecialty }}</span>
+                    </div>
+                  }
+                }
+
+                @if (appointment.type) {
+                  <div class="info-row">
+                    <span class="info-label">Tipo:</span>
+                    <span class="info-value">{{ appointment.type }}</span>
+                  </div>
+                }
+
+                @if (appointment.payment) {
+                  <div class="payment-info">
+                    <div class="info-row">
+                      <span class="info-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                          <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        Pagamento:
+                      </span>
+                      <span class="info-value">
+                        {{ formatPaymentMethod(appointment.payment.method) }} - 
+                        {{ formatCurrency(appointment.payment.amount) }}
+                        <span class="badge" [ngClass]="getPaymentStatusBadgeClass(appointment.payment.status)">
+                          {{ formatPaymentStatus(appointment.payment.status) }}
+                        </span>
+                      </span>
+                    </div>
+                    @if (appointment.payment.cardLastFourDigits) {
+                      <div class="info-row">
+                        <span class="info-label">Cartão:</span>
+                        <span class="info-value">**** {{ appointment.payment.cardLastFourDigits }}</span>
+                      </div>
+                    }
+                    @if (appointment.payment.pixKey) {
+                      <div class="info-row">
+                        <span class="info-label">Chave PIX:</span>
+                        <span class="info-value">{{ appointment.payment.pixKey }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+
+                @if (canViewMedicalRecords() && appointment.medicalRecord) {
+                  <div class="medical-record-info">
+                    <div class="info-row">
+                      <span class="info-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        Prontuário:
+                      </span>
+                      <span class="info-value">{{ appointment.medicalRecord.diagnosis || 'Sem diagnóstico registrado' }}</span>
+                    </div>
+                    @if (appointment.medicalRecord.consultationDurationMinutes > 0) {
+                      <div class="info-row">
+                        <span class="info-label">Duração:</span>
+                        <span class="info-value">{{ appointment.medicalRecord.consultationDurationMinutes }} minutos</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Procedures History Tab -->
+  <div class="tab-content" [class.active]="activeTab() === 'procedures'">
+    <div class="history-container">
+      <div class="history-header">
+        <h2>Histórico de Procedimentos</h2>
+        <p>Procedimentos médicos realizados pelo paciente</p>
+      </div>
+
+      @if (isLoadingHistory()) {
+        <div class="loading-state">
+          <span class="spinner"></span>
+          <p>Carregando histórico...</p>
+        </div>
+      } @else if (procedureHistory().length === 0) {
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <h3>Nenhum procedimento registrado</h3>
+          <p>Este paciente ainda não possui histórico de procedimentos</p>
+        </div>
+      } @else {
+        <div class="history-list">
+          @for (procedure of procedureHistory(); track procedure.procedureId) {
+            <div class="history-card">
+              <div class="history-card-header">
+                <div class="procedure-info">
+                  <h3>{{ procedure.procedureName }}</h3>
+                  <span class="procedure-code">Código: {{ procedure.procedureCode }}</span>
+                </div>
+                <span class="badge badge-info">{{ procedure.procedureCategory }}</span>
+              </div>
+
+              <div class="history-card-body">
+                <div class="info-row">
+                  <span class="info-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Data:
+                  </span>
+                  <span class="info-value">{{ formatDate(procedure.performedAt) }}</span>
+                </div>
+
+                <div class="info-row">
+                  <span class="info-label">Valor:</span>
+                  <span class="info-value price">{{ formatCurrency(procedure.priceCharged) }}</span>
+                </div>
+
+                @if (procedure.doctorName) {
+                  <div class="info-row">
+                    <span class="info-label">Médico:</span>
+                    <span class="info-value">{{ procedure.doctorName }}</span>
+                  </div>
+                }
+
+                @if (procedure.notes) {
+                  <div class="info-row">
+                    <span class="info-label">Observações:</span>
+                    <span class="info-value">{{ procedure.notes }}</span>
+                  </div>
+                }
+
+                @if (procedure.payment) {
+                  <div class="payment-info">
+                    <div class="info-row">
+                      <span class="info-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                          <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        Pagamento:
+                      </span>
+                      <span class="info-value">
+                        {{ formatPaymentMethod(procedure.payment.method) }}
+                        <span class="badge" [ngClass]="getPaymentStatusBadgeClass(procedure.payment.status)">
+                          {{ formatPaymentStatus(procedure.payment.status) }}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
 </div>

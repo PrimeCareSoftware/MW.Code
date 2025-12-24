@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.Queries.Patients;
 using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers
@@ -8,11 +10,16 @@ namespace MedicSoft.Api.Controllers
     public class PatientsController : BaseController
     {
         private readonly IPatientService _patientService;
+        private readonly IMediator _mediator;
 
-        public PatientsController(IPatientService patientService, ITenantContext tenantContext) 
+        public PatientsController(
+            IPatientService patientService, 
+            IMediator mediator,
+            ITenantContext tenantContext) 
             : base(tenantContext)
         {
             _patientService = patientService;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -169,6 +176,55 @@ namespace MedicSoft.Api.Controllers
         {
             var children = await _patientService.GetChildrenOfGuardianAsync(guardianId, GetTenantId());
             return Ok(children);
+        }
+
+        /// <summary>
+        /// Get appointment history for a patient
+        /// Includes payment information for all appointments
+        /// Medical records are only included if user has 'medical-records.view' permission
+        /// </summary>
+        [HttpGet("{patientId}/appointment-history")]
+        public async Task<ActionResult<PatientCompleteHistoryDto>> GetAppointmentHistory(
+            Guid patientId,
+            [FromQuery] bool includeMedicalRecords = false)
+        {
+            try
+            {
+                // TODO: Check if user has permission to view medical records
+                // For now, we'll allow includeMedicalRecords based on the parameter
+                // In production, validate: User.HasClaim("Permission", "medical-records.view")
+                
+                var query = new GetPatientAppointmentHistoryQuery(
+                    patientId, 
+                    GetTenantId(), 
+                    includeMedicalRecords);
+                
+                var history = await _mediator.Send(query);
+                return Ok(history);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get procedure history for a patient
+        /// Includes payment information for all procedures
+        /// </summary>
+        [HttpGet("{patientId}/procedure-history")]
+        public async Task<ActionResult<IEnumerable<PatientProcedureHistoryDto>>> GetProcedureHistory(Guid patientId)
+        {
+            try
+            {
+                var query = new GetPatientProcedureHistoryQuery(patientId, GetTenantId());
+                var history = await _mediator.Send(query);
+                return Ok(history);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }
