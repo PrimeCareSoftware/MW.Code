@@ -7,8 +7,6 @@ using MedicSoft.Application.Queries.Patients;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.ValueObjects;
-using MedicSoft.Repository.Context;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -16,20 +14,26 @@ namespace MedicSoft.Test.Handlers.Queries.Patients
 {
     public class GetPatientAppointmentHistoryQueryHandlerTests
     {
-        private readonly MedicSoftDbContext _context;
         private readonly Mock<IPatientRepository> _patientRepositoryMock;
+        private readonly Mock<IAppointmentRepository> _appointmentRepositoryMock;
+        private readonly Mock<IPaymentRepository> _paymentRepositoryMock;
+        private readonly Mock<IMedicalRecordRepository> _medicalRecordRepositoryMock;
         private readonly GetPatientAppointmentHistoryQueryHandler _handler;
         private readonly string _tenantId = "test-tenant";
 
         public GetPatientAppointmentHistoryQueryHandlerTests()
         {
-            var options = new DbContextOptionsBuilder<MedicSoftDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-            _context = new MedicSoftDbContext(options);
-
             _patientRepositoryMock = new Mock<IPatientRepository>();
-            _handler = new GetPatientAppointmentHistoryQueryHandler(_context, _patientRepositoryMock.Object);
+            _appointmentRepositoryMock = new Mock<IAppointmentRepository>();
+            _paymentRepositoryMock = new Mock<IPaymentRepository>();
+            _medicalRecordRepositoryMock = new Mock<IMedicalRecordRepository>();
+            
+            _handler = new GetPatientAppointmentHistoryQueryHandler(
+                _patientRepositoryMock.Object,
+                _appointmentRepositoryMock.Object,
+                _paymentRepositoryMock.Object,
+                _medicalRecordRepositoryMock.Object
+            );
         }
 
         [Fact]
@@ -42,6 +46,10 @@ namespace MedicSoft.Test.Handlers.Queries.Patients
             _patientRepositoryMock
                 .Setup(x => x.GetByIdAsync(patientId, _tenantId))
                 .ReturnsAsync(patient);
+
+            _appointmentRepositoryMock
+                .Setup(x => x.GetByPatientIdAsync(patientId, _tenantId))
+                .ReturnsAsync(Array.Empty<Appointment>());
 
             var query = new GetPatientAppointmentHistoryQuery(patientId, _tenantId, false);
 
