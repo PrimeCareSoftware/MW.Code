@@ -4,26 +4,30 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Queries.Patients;
 using MedicSoft.Domain.Interfaces;
-using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Application.Handlers.Queries.Patients
 {
     public class GetPatientAppointmentHistoryQueryHandler 
         : IRequestHandler<GetPatientAppointmentHistoryQuery, PatientCompleteHistoryDto>
     {
-        private readonly MedicSoftDbContext _context;
         private readonly IPatientRepository _patientRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IPaymentRepository _paymentRepository;
+        private readonly IMedicalRecordRepository _medicalRecordRepository;
 
         public GetPatientAppointmentHistoryQueryHandler(
-            MedicSoftDbContext context,
-            IPatientRepository patientRepository)
+            IPatientRepository patientRepository,
+            IAppointmentRepository appointmentRepository,
+            IPaymentRepository paymentRepository,
+            IMedicalRecordRepository medicalRecordRepository)
         {
-            _context = context;
             _patientRepository = patientRepository;
+            _appointmentRepository = appointmentRepository;
+            _paymentRepository = paymentRepository;
+            _medicalRecordRepository = medicalRecordRepository;
         }
 
         public async Task<PatientCompleteHistoryDto> Handle(
@@ -37,52 +41,38 @@ namespace MedicSoft.Application.Handlers.Queries.Patients
                 throw new InvalidOperationException($"Patient with ID {request.PatientId} not found");
             }
 
-            // Get appointments with related data
-            var appointments = await _context.Appointments
-                .Where(a => a.PatientId == request.PatientId && a.TenantId == request.TenantId)
-                .Include(a => a.Clinic)
-                .OrderByDescending(a => a.ScheduledDate)
-                .ThenByDescending(a => a.ScheduledTime)
-                .ToListAsync(cancellationToken);
-
-            var appointmentIds = appointments.Select(a => a.Id).ToList();
-
-            // Get payments for these appointments
-            var payments = await _context.Payments
-                .Where(p => appointmentIds.Contains(p.AppointmentId!.Value))
-                .ToListAsync(cancellationToken);
-
-            // Get medical records if requested
-            Dictionary<Guid, Domain.Entities.MedicalRecord> medicalRecords = new();
-            if (request.IncludeMedicalRecords)
-            {
-                var records = await _context.MedicalRecords
-                    .Where(mr => appointmentIds.Contains(mr.AppointmentId))
-                    .ToListAsync(cancellationToken);
-                
-                medicalRecords = records.ToDictionary(mr => mr.AppointmentId);
-            }
+            // Get appointments for this patient
+            var appointments = await _appointmentRepository.GetByPatientIdAsync(request.PatientId, request.TenantId);
+            var appointmentList = appointments.ToList();
 
             // Build history DTOs
-            var appointmentHistory = appointments.Select(a =>
+            var appointmentHistory = new List<PatientAppointmentHistoryDto>();
+            
+            foreach (var appointment in appointmentList)
             {
-                var payment = payments.FirstOrDefault(p => p.AppointmentId == a.Id);
-                var medicalRecord = request.IncludeMedicalRecords && medicalRecords.ContainsKey(a.Id) 
-                    ? medicalRecords[a.Id] 
-                    : null;
+                // Get payment for this appointment
+                var payments = await _paymentRepository.GetByAppointmentIdAsync(appointment.Id);
+                var payment = payments.FirstOrDefault();
 
-                return new PatientAppointmentHistoryDto
+                // Get medical record if requested
+                Domain.Entities.MedicalRecord? medicalRecord = null;
+                if (request.IncludeMedicalRecords)
                 {
-                    AppointmentId = a.Id,
-                    ScheduledDate = a.ScheduledDate,
-                    ScheduledTime = a.ScheduledTime,
-                    Status = a.Status.ToString(),
-                    Type = a.Type.ToString(),
+                    medicalRecord = await _medicalRecordRepository.GetByAppointmentIdAsync(appointment.Id, request.TenantId);
+                }
+
+                var historyEntry = new PatientAppointmentHistoryDto
+                {
+                    AppointmentId = appointment.Id,
+                    ScheduledDate = appointment.ScheduledDate,
+                    ScheduledTime = appointment.ScheduledTime,
+                    Status = appointment.Status.ToString(),
+                    Type = appointment.Type.ToString(),
                     DoctorName = null, // Will be populated from clinic staff if available
                     DoctorSpecialty = null,
                     DoctorProfessionalId = null,
-                    CheckInTime = a.CheckInTime,
-                    CheckOutTime = a.CheckOutTime,
+                    CheckInTime = appointment.CheckInTime,
+                    CheckOutTime = appointment.CheckOutTime,
                     Payment = payment != null ? new PaymentHistoryDto
                     {
                         PaymentId = payment.Id,
@@ -101,7 +91,9 @@ namespace MedicSoft.Application.Handlers.Queries.Patients
                         CreatedAt = medicalRecord.CreatedAt
                     } : null
                 };
-            }).ToList();
+
+                appointmentHistory.Add(historyEntry);
+            }
 
             return new PatientCompleteHistoryDto
             {

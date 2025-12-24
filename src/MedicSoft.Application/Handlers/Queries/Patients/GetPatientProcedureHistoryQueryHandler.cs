@@ -3,21 +3,24 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Queries.Patients;
-using MedicSoft.Repository.Context;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Handlers.Queries.Patients
 {
     public class GetPatientProcedureHistoryQueryHandler 
         : IRequestHandler<GetPatientProcedureHistoryQuery, IEnumerable<PatientProcedureHistoryDto>>
     {
-        private readonly MedicSoftDbContext _context;
+        private readonly IAppointmentProcedureRepository _appointmentProcedureRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public GetPatientProcedureHistoryQueryHandler(MedicSoftDbContext context)
+        public GetPatientProcedureHistoryQueryHandler(
+            IAppointmentProcedureRepository appointmentProcedureRepository,
+            IPaymentRepository paymentRepository)
         {
-            _context = context;
+            _appointmentProcedureRepository = appointmentProcedureRepository;
+            _paymentRepository = paymentRepository;
         }
 
         public async Task<IEnumerable<PatientProcedureHistoryDto>> Handle(
@@ -25,29 +28,19 @@ namespace MedicSoft.Application.Handlers.Queries.Patients
             CancellationToken cancellationToken)
         {
             // Get all appointment procedures for this patient
-            var appointmentProcedures = await _context.AppointmentProcedures
-                .Where(ap => ap.PatientId == request.PatientId && ap.TenantId == request.TenantId)
-                .Include(ap => ap.Procedure)
-                .Include(ap => ap.Appointment)
-                .OrderByDescending(ap => ap.PerformedAt)
-                .ToListAsync(cancellationToken);
-
-            var appointmentIds = appointmentProcedures
-                .Select(ap => ap.AppointmentId)
-                .Distinct()
-                .ToList();
-
-            // Get payments for these appointments
-            var payments = await _context.Payments
-                .Where(p => appointmentIds.Contains(p.AppointmentId!.Value))
-                .ToListAsync(cancellationToken);
+            var appointmentProcedures = await _appointmentProcedureRepository.GetByPatientIdAsync(request.PatientId, request.TenantId);
+            var procedureList = appointmentProcedures.ToList();
 
             // Build procedure history DTOs
-            var procedureHistory = appointmentProcedures.Select(ap =>
-            {
-                var payment = payments.FirstOrDefault(p => p.AppointmentId == ap.AppointmentId);
+            var procedureHistory = new List<PatientProcedureHistoryDto>();
 
-                return new PatientProcedureHistoryDto
+            foreach (var ap in procedureList)
+            {
+                // Get payment for this appointment
+                var payments = await _paymentRepository.GetByAppointmentIdAsync(ap.AppointmentId);
+                var payment = payments.FirstOrDefault();
+
+                var historyEntry = new PatientProcedureHistoryDto
                 {
                     ProcedureId = ap.Id,
                     AppointmentId = ap.AppointmentId,
@@ -70,7 +63,9 @@ namespace MedicSoft.Application.Handlers.Queries.Patients
                         PixKey = payment.PixKey
                     } : null
                 };
-            }).ToList();
+
+                procedureHistory.Add(historyEntry);
+            }
 
             return procedureHistory;
         }
