@@ -68,6 +68,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
+| [PATIENT_HISTORY_API.md](./PATIENT_HISTORY_API.md) | 🆕 **NOVO!** API de histórico de atendimentos e procedimentos do paciente | 10 min |
 | [OWNER_FLOW_DOCUMENTATION.md](./OWNER_FLOW_DOCUMENTATION.md) | Fluxo de proprietários | 10 min |
 | [SYSTEM_ADMIN_AREA_GUIDE.md](./SYSTEM_ADMIN_AREA_GUIDE.md) | Área administrativa do sistema | 8 min |
 | [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](./RICH_TEXT_EDITOR_AUTOCOMPLETE.md) | 🆕 **NOVO!** Editor de texto rico com autocomplete de medicações e exames | 15 min |
