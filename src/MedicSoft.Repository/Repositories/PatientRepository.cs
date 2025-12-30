@@ -90,5 +90,16 @@ namespace MedicSoft.Repository.Repositories
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Patient>> GetByClinicIdAsync(Guid clinicId, string tenantId)
+        {
+            return await _dbSet
+                .Include(p => p.ClinicLinks)
+                .Where(p => p.TenantId == tenantId && 
+                           p.IsActive && 
+                           p.ClinicLinks.Any(cl => cl.ClinicId == clinicId && cl.IsActive))
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
     }
 }

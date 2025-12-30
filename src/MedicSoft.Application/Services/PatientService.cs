@@ -12,6 +12,7 @@ namespace MedicSoft.Application.Services
         Task<bool> DeletePatientAsync(Guid patientId, string tenantId);
         Task<PatientDto?> GetPatientByIdAsync(Guid patientId, string tenantId);
         Task<IEnumerable<PatientDto>> GetAllPatientsAsync(string tenantId);
+        Task<IEnumerable<PatientDto>> GetPatientsByClinicIdAsync(Guid clinicId, string tenantId);
         Task<IEnumerable<PatientDto>> SearchPatientsAsync(string searchTerm, string tenantId);
         Task<PatientDto?> GetPatientByDocumentGlobalAsync(string document);
         Task<bool> LinkPatientToClinicAsync(Guid patientId, Guid clinicId, string tenantId);
@@ -55,6 +56,12 @@ namespace MedicSoft.Application.Services
         public async Task<IEnumerable<PatientDto>> GetAllPatientsAsync(string tenantId)
         {
             var query = new GetAllPatientsQuery(tenantId);
+            return await _mediator.Send(query);
+        }
+
+        public async Task<IEnumerable<PatientDto>> GetPatientsByClinicIdAsync(Guid clinicId, string tenantId)
+        {
+            var query = new GetPatientsByClinicIdQuery(clinicId, tenantId);
             return await _mediator.Send(query);
         }
 

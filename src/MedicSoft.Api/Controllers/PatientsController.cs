@@ -28,7 +28,21 @@ namespace MedicSoft.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
         {
-            var patients = await _patientService.GetAllPatientsAsync(GetTenantId());
+            // Get clinicId from JWT token
+            var clinicId = GetClinicId();
+            
+            // If user has a clinic ID, filter patients by clinic
+            // Otherwise, return all patients in the tenant (for system admins)
+            IEnumerable<PatientDto> patients;
+            if (clinicId.HasValue)
+            {
+                patients = await _patientService.GetPatientsByClinicIdAsync(clinicId.Value, GetTenantId());
+            }
+            else
+            {
+                patients = await _patientService.GetAllPatientsAsync(GetTenantId());
+            }
+            
             return Ok(patients);
         }
 
