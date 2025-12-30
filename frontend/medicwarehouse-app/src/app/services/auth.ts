@@ -42,18 +42,21 @@ export class Auth {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
       .pipe(
         tap(response => {
+          // Ensure clinicId is converted to string if it exists
+          const clinicId = response.clinicId ? String(response.clinicId) : undefined;
+          
           this.setToken(response.token);
           this.setUserInfo({ 
             username: response.username, 
             tenantId: response.tenantId,
-            clinicId: response.clinicId,
+            clinicId: clinicId,
             isOwner: response.isOwner
           });
           this.isAuthenticated.set(true);
           this.currentUser.set({ 
             username: response.username, 
             tenantId: response.tenantId,
-            clinicId: response.clinicId,
+            clinicId: clinicId,
             isOwner: response.isOwner
           });
           this.startSessionValidation();
