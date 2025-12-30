@@ -94,10 +94,12 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<Patient>> GetByClinicIdAsync(Guid clinicId, string tenantId)
         {
             return await _dbSet
-                .Include(p => p.ClinicLinks)
                 .Where(p => p.TenantId == tenantId && 
                            p.IsActive && 
-                           p.ClinicLinks.Any(cl => cl.ClinicId == clinicId && cl.IsActive))
+                           _context.Set<PatientClinicLink>().Any(cl => 
+                               cl.PatientId == p.Id && 
+                               cl.ClinicId == clinicId && 
+                               cl.IsActive))
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }

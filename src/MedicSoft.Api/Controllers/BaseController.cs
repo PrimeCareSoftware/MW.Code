@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.CrossCutting.Identity;
 
@@ -32,7 +33,7 @@ namespace MedicSoft.Api.Controllers
         protected Guid? GetClinicId()
         {
             // Extract clinicId from JWT claims
-            var clinicIdClaim = User?.Claims?.FirstOrDefault(c => c.Type == "clinic_id");
+            var clinicIdClaim = User?.FindFirst("clinic_id");
             if (clinicIdClaim != null && Guid.TryParse(clinicIdClaim.Value, out var clinicId))
             {
                 return clinicId;
