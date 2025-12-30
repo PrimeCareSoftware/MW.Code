@@ -128,12 +128,13 @@ export class AppointmentCalendar implements OnInit {
     this.isLoading.set(true);
     const weekStart = this.currentWeekStart();
     const days = this.weekDays();
+    const clinicId = this.clinicId; // Store in local variable for type safety
     
     try {
       // Load appointments for each day
       const promises = days.map(day => {
         const dateStr = day.date.toISOString().split('T')[0];
-        return this.appointmentService.getDailyAgenda(this.clinicId!, dateStr).toPromise();
+        return this.appointmentService.getDailyAgenda(clinicId, dateStr).toPromise();
       });
       
       const results = await Promise.all(promises);
