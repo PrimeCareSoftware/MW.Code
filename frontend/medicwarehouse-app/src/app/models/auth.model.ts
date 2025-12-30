@@ -9,7 +9,8 @@ export interface AuthResponse {
   username: string;
   tenantId: string;
   clinicId?: string;
-  isOwner?: boolean;
+  role?: string;
+  isSystemOwner?: boolean;
   expiresAt: string;
 }
 
@@ -26,7 +27,8 @@ export interface UserInfo {
   username: string;
   tenantId: string;
   clinicId?: string;
-  isOwner?: boolean;
+  role?: string;
+  isSystemOwner?: boolean;
 }
 
 export interface RegisterRequest {

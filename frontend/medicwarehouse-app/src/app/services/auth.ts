@@ -50,14 +50,16 @@ export class Auth {
             username: response.username, 
             tenantId: response.tenantId,
             clinicId: clinicId,
-            isOwner: response.isOwner
+            role: response.role,
+            isSystemOwner: response.isSystemOwner
           });
           this.isAuthenticated.set(true);
           this.currentUser.set({ 
             username: response.username, 
             tenantId: response.tenantId,
             clinicId: clinicId,
-            isOwner: response.isOwner
+            role: response.role,
+            isSystemOwner: response.isSystemOwner
           });
           this.startSessionValidation();
         })
