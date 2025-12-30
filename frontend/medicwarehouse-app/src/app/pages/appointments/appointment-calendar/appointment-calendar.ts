@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { Appointment } from '../../../models/appointment.model';
+import { Auth } from '../../../services/auth';
 
 interface TimeSlot {
   time: string;
@@ -43,15 +44,24 @@ export class AppointmentCalendar implements OnInit {
   errorMessage = signal<string>('');
   selectedDoctorId = signal<string | null>(null);
   
-  // Default clinic ID - in real app, this would come from user context
-  clinicId = '00000000-0000-0000-0000-000000000001';
+  // Clinic ID will be retrieved from authenticated user
+  clinicId: string | null = null;
 
   constructor(
     private appointmentService: AppointmentService,
-    private router: Router
+    private router: Router,
+    private auth: Auth
   ) {}
 
   ngOnInit(): void {
+    // Get clinicId from authenticated user
+    this.clinicId = this.auth.getClinicId();
+    
+    if (!this.clinicId) {
+      this.errorMessage.set('Usuário não está associado a uma clínica. Por favor, entre em contato com o administrador.');
+      return;
+    }
+    
     this.generateTimeSlots();
     this.generateWeekDays();
     this.loadWeekAppointments();
@@ -110,15 +120,21 @@ export class AppointmentCalendar implements OnInit {
   }
 
   async loadWeekAppointments(): Promise<void> {
+    if (!this.clinicId) {
+      this.errorMessage.set('ID da clínica não disponível');
+      return;
+    }
+    
     this.isLoading.set(true);
     const weekStart = this.currentWeekStart();
     const days = this.weekDays();
+    const clinicId = this.clinicId; // Store in local variable for type safety
     
     try {
       // Load appointments for each day
       const promises = days.map(day => {
         const dateStr = day.date.toISOString().split('T')[0];
-        return this.appointmentService.getDailyAgenda(this.clinicId, dateStr).toPromise();
+        return this.appointmentService.getDailyAgenda(clinicId, dateStr).toPromise();
       });
       
       const results = await Promise.all(promises);

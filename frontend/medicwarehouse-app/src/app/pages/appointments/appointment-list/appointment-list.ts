@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { DailyAgenda } from '../../../models/appointment.model';
+import { Auth } from '../../../services/auth';
 
 interface CalendarDay {
   date: Date;
@@ -28,20 +29,35 @@ export class AppointmentList implements OnInit {
   viewMode = signal<'list' | 'calendar'>('list');
   calendarDays = signal<CalendarDay[]>([]);
   currentMonth = signal<Date>(new Date());
+  clinicId: string | null = null;
 
-  constructor(private appointmentService: AppointmentService) {}
+  constructor(
+    private appointmentService: AppointmentService,
+    private auth: Auth
+  ) {}
 
   ngOnInit(): void {
+    // Get clinicId from authenticated user
+    this.clinicId = this.auth.getClinicId();
+    
+    if (!this.clinicId) {
+      this.errorMessage.set('Usuário não está associado a uma clínica. Por favor, entre em contato com o administrador.');
+      return;
+    }
+    
     this.loadAgenda();
     this.generateCalendar();
   }
 
   loadAgenda(): void {
-    this.isLoading.set(true);
-    // Using default clinic ID for demo
-    const clinicId = '00000000-0000-0000-0000-000000000001';
+    if (!this.clinicId) {
+      this.errorMessage.set('ID da clínica não disponível');
+      return;
+    }
     
-    this.appointmentService.getDailyAgenda(clinicId, this.selectedDate()).subscribe({
+    this.isLoading.set(true);
+    
+    this.appointmentService.getDailyAgenda(this.clinicId, this.selectedDate()).subscribe({
       next: (data) => {
         this.agenda.set(data);
         this.isLoading.set(false);

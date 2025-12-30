@@ -6,6 +6,7 @@ import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
+import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-appointment-form',
@@ -25,11 +26,12 @@ export class AppointmentForm implements OnInit {
     private appointmentService: AppointmentService,
     private patientService: PatientService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: Auth
   ) {
     this.appointmentForm = this.fb.group({
       patientId: ['', [Validators.required]],
-      clinicId: ['00000000-0000-0000-0000-000000000001', [Validators.required]],
+      clinicId: ['', [Validators.required]],
       scheduledDate: ['', [Validators.required]],
       scheduledTime: ['', [Validators.required]],
       durationMinutes: [30, [Validators.required, Validators.min(15)]],
@@ -39,6 +41,17 @@ export class AppointmentForm implements OnInit {
   }
 
   ngOnInit(): void {
+    // Get clinicId from authenticated user
+    const clinicId = this.auth.getClinicId();
+    
+    if (!clinicId) {
+      this.errorMessage.set('Usuário não está associado a uma clínica. Por favor, entre em contato com o administrador.');
+      return;
+    }
+    
+    // Set the clinicId in the form
+    this.appointmentForm.patchValue({ clinicId });
+    
     this.loadPatients();
     
     // Pre-fill date and time from query parameters if provided
