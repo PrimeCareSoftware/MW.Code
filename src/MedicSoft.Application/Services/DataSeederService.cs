@@ -122,7 +122,7 @@ namespace MedicSoft.Application.Services
                 await _ownerRepository.AddWithoutSaveAsync(owner);
 
                 // 2. Create Users (Admin, Doctor, Receptionist)
-                var users = CreateDemoUsers();
+                var users = CreateDemoUsers(clinic.Id);
                 foreach (var user in users)
                 {
                     await _userRepository.AddWithoutSaveAsync(user);
@@ -432,11 +432,11 @@ namespace MedicSoft.Application.Services
             );
         }
 
-        private List<User> CreateDemoUsers()
+        private List<User> CreateDemoUsers(Guid clinicId)
         {
             var users = new List<User>();
 
-            // Admin User
+            // Admin User - SystemAdmin doesn't need a clinicId
             var adminPassword = _passwordHasher.HashPassword("Admin@123");
             users.Add(new User(
                 "admin",
@@ -448,7 +448,7 @@ namespace MedicSoft.Application.Services
                 _demoTenantId
             ));
 
-            // Doctor
+            // Doctor - Must have clinicId
             var doctorPassword = _passwordHasher.HashPassword("Doctor@123");
             users.Add(new User(
                 "dr.silva",
@@ -458,12 +458,12 @@ namespace MedicSoft.Application.Services
                 "+55 11 98765-4322",
                 UserRole.Doctor,
                 _demoTenantId,
-                null,
+                clinicId,
                 "CRM-123456",
                 "Clínico Geral"
             ));
 
-            // Receptionist
+            // Receptionist - Must have clinicId
             var receptionistPassword = _passwordHasher.HashPassword("Recep@123");
             users.Add(new User(
                 "recep.maria",
@@ -472,7 +472,8 @@ namespace MedicSoft.Application.Services
                 "Maria Santos",
                 "+55 11 98765-4323",
                 UserRole.Receptionist,
-                _demoTenantId
+                _demoTenantId,
+                clinicId
             ));
 
             return users;
