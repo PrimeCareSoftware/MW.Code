@@ -21,5 +21,10 @@ export const environment = {
   security: {
     enableCSRFProtection: true,
     tokenExpiryWarning: 5 // minutes before expiry to show warning
+  },
+  tenant: {
+    // Domain suffix for subdomain display (can be changed to any domain)
+    // Examples: 'localhost:4200', 'medicwarehouse.com.br', 'yourdomain.com'
+    domainSuffix: 'localhost:4200'
   }
 };

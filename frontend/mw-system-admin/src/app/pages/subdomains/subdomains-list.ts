@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../services/system-admin';
 import { Subdomain, CreateSubdomainRequest, ClinicSummary } from '../../models/system-admin.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-subdomains-list',
@@ -42,7 +43,7 @@ import { Subdomain, CreateSubdomainRequest, ClinicSummary } from '../../models/s
               @for (subdomain of subdomains(); track subdomain.id) {
                 <tr>
                   <td>
-                    <code class="subdomain-code">{{ subdomain.subdomain }}.medicwarehouse.com</code>
+                    <code class="subdomain-code">{{ subdomain.subdomain }}.{{ domainSuffix }}</code>
                   </td>
                   <td>{{ subdomain.clinicName }}</td>
                   <td><code>{{ subdomain.tenantId }}</code></td>
@@ -91,7 +92,7 @@ import { Subdomain, CreateSubdomainRequest, ClinicSummary } from '../../models/s
                     placeholder="minhaclinica"
                     pattern="[a-z0-9-]+"
                   />
-                  <span class="domain-suffix">.medicwarehouse.com</span>
+                  <span class="domain-suffix">.{{ domainSuffix }}</span>
                 </div>
                 <small>Apenas letras minúsculas, números e hífens</small>
               </div>
@@ -409,6 +410,9 @@ export class SubdomainsList implements OnInit {
   clinics = signal<ClinicSummary[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
+  
+  // Get domain suffix from environment configuration
+  domainSuffix = environment.tenant?.domainSuffix || 'medicwarehouse.com';
   
   showModal = false;
   submitting = signal(false);
