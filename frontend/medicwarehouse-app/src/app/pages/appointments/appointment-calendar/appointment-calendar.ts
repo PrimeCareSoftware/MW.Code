@@ -58,7 +58,7 @@ export class AppointmentCalendar implements OnInit {
     this.clinicId = this.auth.getClinicId();
     
     if (!this.clinicId) {
-      this.errorMessage.set('Usuário não está associado a uma clínica. Por favor, entre em contato com o administrador.');
+      this.errorMessage.set('Para visualizar o calendário de consultas, você precisa estar associado a uma clínica. Entre em contato com o administrador do sistema para configurar sua associação com uma clínica.');
       return;
     }
     
