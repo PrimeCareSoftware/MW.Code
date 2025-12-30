@@ -96,5 +96,44 @@ describe('TenantResolverService', () => {
       const result = service.extractTenantFromUrl();
       expect(result).toBeNull();
     });
+
+    it('should extract subdomain from localhost with port', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          hostname: 'clinica01.localhost',
+          pathname: '/login'
+        },
+        writable: true
+      });
+
+      const result = service.extractTenantFromUrl();
+      expect(result).toBe('clinica01');
+    });
+
+    it('should extract subdomain from custom domain', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          hostname: 'clinica01.com.br',
+          pathname: '/login'
+        },
+        writable: true
+      });
+
+      const result = service.extractTenantFromUrl();
+      expect(result).toBe('clinica01');
+    });
+
+    it('should extract subdomain from medicwarehouse domain', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          hostname: 'clinica01.medicwarehouse.com.br',
+          pathname: '/login'
+        },
+        writable: true
+      });
+
+      const result = service.extractTenantFromUrl();
+      expect(result).toBe('clinica01');
+    });
   });
 });

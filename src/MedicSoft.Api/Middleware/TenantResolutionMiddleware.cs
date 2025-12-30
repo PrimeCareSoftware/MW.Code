@@ -90,14 +90,15 @@ namespace MedicSoft.Api.Middleware
             if (string.IsNullOrEmpty(host))
                 return null;
 
-            // Skip localhost and IP addresses
+            // Skip plain localhost and IP addresses
             if (host == "localhost" || host.StartsWith("127.") || host.StartsWith("192.168."))
                 return null;
 
             var parts = host.Split('.');
             
-            // Need at least 3 parts for subdomain (subdomain.domain.com)
-            if (parts.Length >= 3)
+            // Support subdomain.localhost format (2 parts)
+            // Also support subdomain.domain.com format (3+ parts)
+            if (parts.Length >= 2)
             {
                 // Return first part as subdomain, but exclude 'www'
                 var subdomain = parts[0].ToLowerInvariant();

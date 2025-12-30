@@ -25,6 +25,9 @@ export const environment = {
   },
   tenant: {
     // Paths that should not be treated as tenant identifiers
-    excludedPaths: ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets', 'health', 'swagger']
+    excludedPaths: ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets', 'health', 'swagger'],
+    // Domain suffix for subdomain display (can be changed to any domain)
+    // Examples: 'localhost:4200', 'medicwarehouse.com.br', 'yourdomain.com'
+    domainSuffix: 'localhost:4200'
   }
 };

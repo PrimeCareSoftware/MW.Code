@@ -28,20 +28,24 @@ export class TenantResolverService {
 
   /**
    * Extract subdomain from hostname
-   * Example: subdomain.mwsistema.com.br -> subdomain
+   * Examples: 
+   * - subdomain.mwsistema.com.br -> subdomain
+   * - subdomain.localhost -> subdomain
+   * - subdomain.com.br -> subdomain
    */
   private extractSubdomain(): string | null {
     const host = window.location.hostname;
 
-    // Skip localhost and IP addresses
+    // Skip plain localhost and IP addresses
     if (host === 'localhost' || host.startsWith('127.') || host.startsWith('192.168.')) {
       return null;
     }
 
     const parts = host.split('.');
     
-    // Need at least 3 parts for subdomain (subdomain.domain.com)
-    if (parts.length >= 3) {
+    // Support subdomain.localhost format (2 parts)
+    // Also support subdomain.domain.com format (3+ parts)
+    if (parts.length >= 2) {
       const subdomain = parts[0].toLowerCase();
       // Exclude 'www'
       return subdomain === 'www' ? null : subdomain;
