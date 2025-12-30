@@ -45,7 +45,7 @@ export class AppointmentForm implements OnInit {
     const clinicId = this.auth.getClinicId();
     
     if (!clinicId) {
-      this.errorMessage.set('Usuário não está associado a uma clínica. Por favor, entre em contato com o administrador.');
+      this.errorMessage.set('Para criar uma consulta, você precisa estar associado a uma clínica. Entre em contato com o administrador do sistema para configurar sua associação com uma clínica.');
       return;
     }
     
