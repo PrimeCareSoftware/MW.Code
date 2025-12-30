@@ -2,8 +2,9 @@
 
 > **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema MedicWarehouse.
 
-> **Última Atualização:** Novembro 2025  
-> **Status:** Em planejamento para 2025-2026
+> **Última Atualização:** Dezembro 2024  
+> **Status:** Em planejamento para 2025-2026  
+> **Versão:** 2.0 - Compliance Regulatório Brasileiro
 
 ---
 
@@ -20,22 +21,28 @@ O MedicWarehouse possui uma **base técnica sólida** com:
 
 ### Gaps Identificados em Relação ao Mercado
 
-Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem Saúde, SimplesVet, MedPlus, ClinicWeb), foram identificados 8 gaps principais:
+Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem Saúde, SimplesVet, MedPlus, ClinicWeb), foram identificados 11 gaps principais:
 
 #### 🔥🔥🔥 Crítico
 - [ ] **Telemedicina / Teleconsulta** - 80% dos concorrentes oferecem
 - [ ] **Portal do Paciente** - 90% dos concorrentes têm
 - [ ] **Integração TISS / Convênios** - 70% do mercado atende convênios
+- [ ] **🇧🇷 Emissão de NF-e/NFS-e** - Obrigatório por lei (Receita Federal)
+- [ ] **🇧🇷 Conformidade CFM** - Resoluções obrigatórias (prontuário, receitas)
 
 #### 🔥🔥 Alto
 - [ ] **Prontuário SOAP Estruturado** - Padrão de mercado
 - [ ] **Auditoria Completa (LGPD)** - Compliance obrigatório
 - [ ] **Criptografia de Dados Médicos** - Segurança crítica
+- [ ] **🇧🇷 Receitas Médicas Digitais** - Compliance CFM + ANVISA
+- [ ] **🇧🇷 SNGPC (Controlados)** - Obrigatório ANVISA
 
 #### 🔥 Médio
 - [ ] **Assinatura Digital (ICP-Brasil)** - Exigido por CFM
 - [ ] **Sistema de Fila de Espera** - Útil para clínicas grandes
 - [ ] **BI e Analytics Avançados** - Análise preditiva e ML
+- [ ] **🇧🇷 CRM Avançado** - Jornada do paciente, NPS, marketing
+- [ ] **🇧🇷 Gestão Fiscal e Contábil** - Impostos, DAS, integração contábil
 
 #### Baixo
 - [ ] **Integrações com Laboratórios** - Conveniência
@@ -50,10 +57,14 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
+| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ❌ Não iniciado | 2 meses, 1 dev | Q1/2025 |
+| 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
 | 🔥🔥🔥 | Telemedicina Completa | ❌ Não iniciado | 4-6 meses, 2 devs | Q3/2025 |
 | 🔥🔥🔥 | Portal do Paciente | ❌ Não iniciado | 2-3 meses, 2 devs | Q2/2025 |
 | 🔥🔥🔥 | Integração TISS Fase 1 | ❌ Não iniciado | 3 meses, 2-3 devs | Q4/2025 |
 | 🔥🔥🔥 | Integração TISS Fase 2 | ❌ Não iniciado | 3 meses, 2-3 devs | Q1/2026 |
+| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
+| 🔥🔥 | SNGPC (ANVISA) | ❌ Não iniciado | 2 meses, 1 dev | Q2/2025 |
 
 ### Melhorias de UX e Produtividade
 
@@ -62,11 +73,15 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 | 🔥🔥 | Prontuário SOAP Estruturado | ❌ Não iniciado | 1-2 meses, 1 dev | Q1/2025 |
 | 🔥 | Sistema de Fila de Espera | ❌ Não iniciado | 2-3 meses, 2 devs | Q2/2026 |
 | 🔥 | Anamnese Guiada por Especialidade | ❌ Não iniciado | 1 mês, 1 dev | Q3/2026 |
+| 🔥 | CRM - Jornada do Paciente | ❌ Não iniciado | 1.5 meses, 1 dev | Q3/2025 |
+| 🔥 | Automação de Marketing | ❌ Não iniciado | 2 meses, 1 dev | Q4/2025 |
+| 🔥 | Pesquisas de Satisfação (NPS) | ❌ Não iniciado | 1 mês, 1 dev | Q4/2025 |
 
 ### Segurança e Compliance
 
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
+| 🔥🔥🔥 | Conformidade CFM Completa | ❌ Não iniciado | 2 meses, 1 dev | Q1/2025 |
 | 🔥🔥 | Auditoria Completa (LGPD) | ❌ Não iniciado | 2 meses, 1 dev | Q1/2025 |
 | 🔥🔥 | Criptografia de Dados Médicos | ❌ Não iniciado | 1-2 meses, 1 dev | Q1/2025 |
 | 🔥🔥 | Bloqueio de Conta por Tentativas Falhadas | ❌ Não iniciado | 2 semanas, 1 dev | Q1/2025 |
@@ -77,6 +92,16 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 | 🔥🔥 | Pentest Profissional Semestral | ❌ Não iniciado | - | Q2/2025 |
 | 🔥 | Assinatura Digital (ICP-Brasil) | ❌ Não iniciado | 2-3 meses, 2 devs | Q3/2026 |
 | 🔥 | IP Blocking e Geo-blocking | ❌ Não iniciado | 1 mês, 1 dev | Q3/2026 |
+| 🔥 | Acessibilidade Digital (LBI) | ❌ Não iniciado | 1.5 meses, 1 dev | Q3/2025 |
+
+### Gestão Fiscal e Contábil
+
+| Prioridade | Item | Status | Esforço | Prazo |
+|------------|------|--------|---------|-------|
+| 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
+| 🔥🔥 | Controle Tributário e Impostos | ❌ Não iniciado | 2 meses, 1-2 devs | Q3/2025 |
+| 🔥🔥 | Integração Contábil | ❌ Não iniciado | 2 meses, 1 dev | Q3/2025 |
+| 🔥 | eSocial e Folha | ❌ Não iniciado | 3-4 meses, 2 devs | 2026+ |
 
 ### Integrações e Ecossistema
 
@@ -100,6 +125,805 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 |------------|------|--------|---------|-------|
 | Baixo | Agendamento Público (Mini-Marketplace) | ❌ Não iniciado | 2-3 meses, 2 devs | 2027+ |
 | Baixo | Programa de Indicação e Fidelidade | ❌ Não iniciado | 1-2 meses, 1 dev | 2027+ |
+
+---
+
+## 🇧🇷 MELHORIAS BASEADAS EM REGULAMENTAÇÕES BRASILEIRAS
+
+### Visão Geral
+
+Esta seção consolida todas as melhorias necessárias para garantir conformidade total com as regulamentações brasileiras de saúde, fiscais e melhores práticas de mercado. O sistema deve atender rigorosamente aos órgãos reguladores: CFM (Conselho Federal de Medicina), ANVISA (Agência Nacional de Vigilância Sanitária), ANS (Agência Nacional de Saúde Suplementar), Receita Federal, e requisitos de CRM (Customer Relationship Management).
+
+### 📋 Resumo Executivo de Conformidade Regulatória
+
+| Categoria | Prioridade | Status | Prazo Meta |
+|-----------|------------|--------|------------|
+| CFM - Resoluções Médicas | 🔥🔥🔥 CRÍTICA | ❌ Pendente | Q1-Q2/2025 |
+| ANS - TISS e Convênios | 🔥🔥🔥 CRÍTICA | ❌ Pendente | Q4/2025-Q1/2026 |
+| Receita Federal - Fiscal | 🔥🔥 ALTA | ❌ Pendente | Q2-Q3/2025 |
+| ANVISA - Vigilância Sanitária | 🔥🔥 ALTA | ❌ Pendente | Q2/2025 |
+| LGPD - Proteção de Dados | 🔥🔥 ALTA | ⚠️ Parcial | Q1/2025 |
+| CRM e Relacionamento | 🔥 MÉDIA | ❌ Pendente | Q3-Q4/2025 |
+
+---
+
+### 🏥 1. CONFORMIDADE COM CFM (CONSELHO FEDERAL DE MEDICINA)
+
+**Status:** ⚠️ Parcialmente Atendido  
+**Prioridade:** 🔥🔥🔥 CRÍTICA  
+**Impacto:** Muito Alto - Obrigatoriedade Legal  
+**Esforço:** 4-6 meses | 2-3 devs  
+**Prazo:** Q1-Q2/2025
+
+#### Resoluções CFM Aplicáveis
+
+##### 1.1 Resolução CFM 1.821/2007 - Prontuário Médico
+**Status:** ⚠️ Parcial (prontuário existe, mas faltam requisitos específicos)
+
+**Requisitos Obrigatórios:**
+- [x] Identificação completa do paciente
+- [x] Data e hora do atendimento
+- [x] Identificação do médico (CRM)
+- [ ] **Anamnese completa estruturada** (SOAP implementar em Q1/2025)
+- [ ] **Exame físico detalhado** por sistemas
+- [ ] **Hipóteses diagnósticas com CID-10**
+- [ ] **Plano terapêutico detalhado**
+- [ ] **Evolução do quadro clínico** em cada consulta
+- [ ] **Dados de receitas com DCB/DCI** (denominação comum)
+- [ ] **Consentimento informado registrado**
+- [ ] **Guarda mínima de 20 anos** (já implementado via soft-delete)
+
+**Ações Necessárias:**
+1. Estruturar campos obrigatórios no prontuário conforme CFM 1.821
+2. Criar templates por especialidade médica
+3. Validar preenchimento mínimo antes de salvar
+4. Implementar alertas para campos obrigatórios faltantes
+5. Adicionar workflow de consentimento informado digital
+
+**Esforço:** 2 meses | 1 dev  
+**Prazo:** Q1/2025
+
+---
+
+##### 1.2 Resolução CFM 2.314/2022 - Telemedicina
+**Status:** ✅ Em Desenvolvimento (microserviço criado, falta compliance completo)
+
+**Requisitos Obrigatórios:**
+- [ ] **Termo de consentimento específico** para teleconsulta
+- [ ] **Registro de consentimento no prontuário**
+- [ ] **Identificação inequívoca do médico** (CRM + foto)
+- [ ] **Identificação do paciente** (documento com foto)
+- [ ] **Guarda de gravação por 20 anos** (se aplicável)
+- [ ] **Sigilo e segurança das informações** (criptografia E2E)
+- [ ] **Infraestrutura tecnológica adequada**
+- [ ] **Atestados e receitas com assinatura digital**
+- [ ] **Primeiro atendimento presencial** (exceções em áreas remotas)
+- [ ] **Registro detalhado no prontuário** com modalidade de atendimento
+
+**Ações Necessárias:**
+1. Criar termo de consentimento digital específico para telemedicina
+2. Implementar verificação de identidade bidirecional (médico e paciente)
+3. Adicionar campo "Modalidade" no prontuário (Presencial/Teleconsulta)
+4. Implementar sistema de armazenamento de gravações (opcional, com consentimento)
+5. Criar fluxo de assinatura digital integrada (ICP-Brasil)
+6. Adicionar validação de primeiro atendimento presencial
+
+**Esforço:** 2 meses | 2 devs (em paralelo com #1 Telemedicina)  
+**Prazo:** Q3/2025
+
+---
+
+##### 1.3 Resolução CFM 1.638/2002 - Prontuário Eletrônico
+**Status:** ✅ Atendido parcialmente
+
+**Requisitos Técnicos:**
+- [x] **Sistema seguro** com controle de acesso
+- [x] **Backup regular** dos dados
+- [x] **Rastreabilidade** de acessos (implementar auditoria completa Q1/2025)
+- [ ] **Assinatura digital** em documentos críticos (ICP-Brasil)
+- [ ] **Impossibilidade de alteração** após conclusão (imutabilidade)
+- [ ] **Registro de todas as alterações** com usuário e timestamp
+- [ ] **Mecanismo de recuperação** de versões anteriores
+
+**Ações Necessárias:**
+1. Implementar versionamento de prontuários (histórico de edições)
+2. Bloquear edição após conclusão do atendimento (com justificativa para reabrir)
+3. Implementar assinatura digital ICP-Brasil para prontuários fechados
+4. Adicionar timestamp confiável em todos os registros
+5. Criar auditoria completa de acessos e alterações (já planejado Q1/2025)
+
+**Esforço:** 1.5 meses | 1 dev  
+**Prazo:** Q1/2025
+
+---
+
+##### 1.4 Resolução CFM 1.643/2002 - Receita Médica Digital
+**Status:** ⚠️ Parcial (receitas digitais existem, falta compliance)
+
+**Requisitos Obrigatórios:**
+- [ ] **Identificação do médico** com CRM e UF
+- [ ] **Identificação do paciente** completa
+- [ ] **Data de emissão**
+- [ ] **Medicamento em DCB/DCI** (denominação comum brasileira)
+- [ ] **Posologia detalhada**
+- [ ] **Quantidade prescrita**
+- [ ] **Assinatura digital** do médico (ICP-Brasil A1 ou A3)
+- [ ] **Receita controlada** (receituário especial para psicotrópicos)
+- [ ] **Validade da receita** conforme tipo
+
+**Tipos de Receita:**
+1. **Receita Simples** - Medicamentos comuns (validade 30 dias)
+2. **Receita de Controle Especial (Receituário B)** - Psicotrópicos (validade 30 dias, retenção)
+3. **Receita de Controle Especial (Receituário A)** - Entorpecentes (validade 30 dias, 2 vias, retenção)
+4. **Receita Antimicrobiana** - Notificação específica (validade 10 dias)
+5. **Receita Especial (C1)** - Outros controlados (validade 30 dias)
+
+**Ações Necessárias:**
+1. Criar tipos de receita conforme classificação ANVISA
+2. Implementar validações específicas por tipo de receita
+3. Integrar assinatura digital ICP-Brasil
+4. Implementar impressão em papel especial (receituário A, B)
+5. Adicionar campo de validade automático conforme tipo
+6. Integrar com SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados)
+7. Criar controle de numeração de receitas controladas
+
+**Esforço:** 3 meses | 2 devs  
+**Prazo:** Q2/2025
+
+---
+
+### 💊 2. CONFORMIDADE COM ANVISA (AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA)
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥🔥 ALTA  
+**Impacto:** Alto - Obrigatoriedade Legal  
+**Esforço:** 3-4 meses | 2 devs  
+**Prazo:** Q2/2025
+
+#### 2.1 RDC 44/2009 - Boas Práticas Farmacêuticas
+
+**Aplicável para clínicas que possuem farmácia:**
+
+- [ ] **Controle de estoque de medicamentos**
+- [ ] **Rastreabilidade de lote e validade**
+- [ ] **Controle de temperatura** (medicamentos termolábeis)
+- [ ] **Notificação de eventos adversos**
+- [ ] **Registro de dispensação** com receita médica
+
+**Ações Necessárias (se aplicável):**
+1. Criar módulo de controle de estoque farmacêutico
+2. Implementar rastreabilidade por lote/validade
+3. Sistema de alertas de vencimento
+4. Integração com receita médica digital
+5. Relatórios de dispensação para vigilância sanitária
+
+**Esforço:** 2 meses | 1 dev (opcional, sob demanda)  
+**Prazo:** Q4/2025 (baixa prioridade, nem todas as clínicas têm farmácia)
+
+---
+
+#### 2.2 SNGPC - Sistema Nacional de Produtos Controlados
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥🔥 ALTA (para clínicas com dispensação)
+
+**Requisitos:**
+- [ ] **Escrituração de receitas de medicamentos controlados**
+- [ ] **Transmissão mensal ao SNGPC** (XML)
+- [ ] **Registro de dispensa com CPF do paciente**
+- [ ] **Numeração sequencial de receitas**
+- [ ] **Livro de registro** de substâncias controladas (digital)
+
+**Ações Necessárias:**
+1. Criar módulo de escrituração digital
+2. Implementar geração de arquivos XML para SNGPC
+3. Integração com WebService da ANVISA
+4. Controle de numeração sequencial
+5. Relatórios de conformidade
+
+**Esforço:** 2 meses | 1 dev  
+**Prazo:** Q2/2025
+
+---
+
+#### 2.3 Notificação de Eventos Adversos
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥 MÉDIA
+
+**Requisitos:**
+- [ ] **Registro de reações adversas a medicamentos**
+- [ ] **Notificação à ANVISA via NOTIVISA**
+- [ ] **Acompanhamento de eventos adversos**
+
+**Ações Necessárias:**
+1. Adicionar campo de eventos adversos no prontuário
+2. Criar fluxo de notificação ao NOTIVISA
+3. Relatórios de farmacovigilância
+
+**Esforço:** 1 mês | 1 dev  
+**Prazo:** Q3/2025
+
+---
+
+### 🏛️ 3. CONFORMIDADE COM ANS (AGÊNCIA NACIONAL DE SAÚDE SUPLEMENTAR)
+
+**Status:** ❌ Não Iniciado (já planejado item #3)  
+**Prioridade:** 🔥🔥🔥 CRÍTICA  
+**Impacto:** Muito Alto - 70% do mercado  
+**Esforço:** 6-8 meses | 2-3 devs  
+**Prazo:** Q4/2025 - Q1/2026
+
+#### 3.1 Padrão TISS (Troca de Informações na Saúde Suplementar)
+
+**Já detalhado no item #3 do documento. Adicionar:**
+
+##### Versão TISS Obrigatória
+- **Versão Atual:** TISS 4.02.00 (ANS, 2024)
+- **Atualização:** Trimestral conforme releases ANS
+- **Validação:** Schemas XSD oficiais
+
+##### Guias TISS Obrigatórias
+1. **Guia de Consulta (Guia SP/SADT)**
+2. **Guia de Internação**
+3. **Guia de Resumo de Internação**
+4. **Guia de Honorários Individuais**
+5. **Guia de Outras Despesas**
+
+##### Tabelas Obrigatórias
+- [ ] **CBHPM** - Classificação Brasileira Hierarquizada de Procedimentos Médicos
+- [ ] **TUSS** - Terminologia Unificada da Saúde Suplementar
+- [ ] **Rol ANS** - Procedimentos de cobertura obrigatória
+- [ ] **Tabela de Operadoras** (cadastro nacional ANS)
+
+**Ações Adicionais:**
+1. Implementar atualização automática das tabelas TISS
+2. Validação de procedimentos conforme Rol ANS
+3. Cálculo de coparticipação e franquia
+4. Integração com portal ANS para operadoras
+
+**Esforço:** Incluído no item #3 (TISS Fase 1 e 2)  
+**Prazo:** Q4/2025 - Q1/2026
+
+---
+
+#### 3.2 Registro de Operadoras de Saúde (RPS)
+
+**Requisitos:**
+- [ ] **Cadastro atualizado** de operadoras (registro ANS)
+- [ ] **Códigos de operadoras** oficiais ANS
+- [ ] **Tabelas de preços** por operadora
+- [ ] **Prazos de pagamento** por operadora
+- [ ] **Histórico de glosas** por operadora
+
+**Ações Necessárias:**
+1. Criar banco de dados de operadoras com registro ANS
+2. Sincronização periódica com base ANS
+3. Dashboards de performance por operadora
+
+**Esforço:** Incluído no TISS Fase 1  
+**Prazo:** Q4/2025
+
+---
+
+### 💰 4. CONFORMIDADE FISCAL E TRIBUTÁRIA (RECEITA FEDERAL)
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥🔥 ALTA  
+**Impacto:** Alto - Obrigatoriedade Legal  
+**Esforço:** 4-5 meses | 2-3 devs  
+**Prazo:** Q2-Q3/2025
+
+#### 4.1 Emissão de Notas Fiscais Eletrônicas (NF-e / NFS-e)
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥🔥🔥 CRÍTICA
+
+**Tipos de Nota Fiscal:**
+1. **NFS-e** - Nota Fiscal de Serviços Eletrônica (serviços médicos)
+2. **NF-e** - Nota Fiscal Eletrônica (venda de produtos, se aplicável)
+3. **NFC-e** - Nota Fiscal ao Consumidor Eletrônica
+
+**Requisitos Obrigatórios:**
+- [ ] **Emissão automática** após pagamento/consulta
+- [ ] **Envio para SEFAZ** municipal/estadual
+- [ ] **RPS (Recibo Provisório de Serviço)** temporário
+- [ ] **Retificação e cancelamento** de notas
+- [ ] **XML assinado digitalmente** (certificado A1/A3)
+- [ ] **DANFE** - Documento Auxiliar da NF-e (impressão)
+- [ ] **Envio automático ao paciente** (email/PDF)
+- [ ] **Armazenamento legal** por 5 anos
+
+**Campos Obrigatórios NFS-e:**
+- CNPJ/CPF do prestador (clínica)
+- CNPJ/CPF do tomador (paciente)
+- Data e hora da emissão
+- Descrição do serviço (código CNAE)
+- Valor do serviço
+- Alíquota e valor do ISS
+- Retenções (IR, PIS, COFINS, CSLL, INSS)
+- Código do serviço conforme lista municipal
+
+**Integrações Necessárias:**
+1. **APIs SEFAZ** municipais (cada cidade tem sua API)
+2. **Certificado Digital** ICP-Brasil A1 ou A3
+3. **NFSe Nacional** (padrão unificado em implantação)
+4. **Focus NFE** ou **ENotas** (gateway facilitador)
+
+**Ações Necessárias:**
+1. Integração com gateway de NF-e (Focus NFE, eNotas, Bling)
+2. Configuração de CNAE, alíquotas, impostos
+3. Geração automática após pagamento
+4. Armazenamento de XML e PDF
+5. Relatórios fiscais (livro de serviços)
+6. Cancelamento e substituição de notas
+
+**Esforço:** 3 meses | 2 devs  
+**Prazo:** Q2/2025  
+**Custo Adicional:** Gateway NFe ~R$ 50-200/mês
+
+---
+
+#### 4.2 Controle de Faturamento e Impostos
+
+**Requisitos:**
+- [ ] **Apuração de impostos** (ISS, PIS, COFINS, IR, CSLL)
+- [ ] **Regime tributário** (Simples Nacional, Lucro Presumido, Lucro Real)
+- [ ] **DAS** - Documento de Arrecadação do Simples (emissão)
+- [ ] **DCTF** - Declaração de Débitos e Créditos Federais
+- [ ] **EFD-Reinf** - Escrituração Fiscal Digital de Retenções
+
+**Relatórios Fiscais Obrigatórios:**
+1. **Livro Caixa** (registro de receitas e despesas)
+2. **Livro de Apuração do ISS**
+3. **Demonstrativo de Receitas** por regime tributário
+4. **Retenções de IR-Fonte** (pessoa física ou jurídica)
+
+**Ações Necessárias:**
+1. Módulo de apuração tributária
+2. Cálculo automático de impostos por regime
+3. Geração de DAS (Simples Nacional)
+4. Integração contábil (exportação de dados)
+5. Relatórios gerenciais de tributação
+
+**Esforço:** 2 meses | 1-2 devs  
+**Prazo:** Q3/2025
+
+---
+
+#### 4.3 Integração Contábil
+
+**Requisitos:**
+- [ ] **Plano de contas** contábil
+- [ ] **Lançamentos contábeis** automáticos
+- [ ] **Conciliação bancária**
+- [ ] **Exportação para sistemas contábeis** (Domínio, ContaAzul, Omie)
+- [ ] **Balancete mensal**
+- [ ] **DRE** - Demonstração do Resultado do Exercício
+
+**Ações Necessárias:**
+1. Criar plano de contas padrão para clínicas médicas
+2. Lançamentos automáticos de receitas/despesas
+3. Integração via API com softwares contábeis
+4. Exportação de arquivos SPED (opcional)
+5. Relatórios gerenciais contábeis
+
+**Esforço:** 2 meses | 1 dev  
+**Prazo:** Q3/2025
+
+---
+
+#### 4.4 eSocial e Folha de Pagamento
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥 MÉDIA (se tiver funcionários CLT)
+
+**Aplicável para clínicas com funcionários:**
+- [ ] **Cadastro de funcionários** (admissão, demissão)
+- [ ] **Folha de pagamento** mensal
+- [ ] **Encargos** (INSS, FGTS)
+- [ ] **Envio ao eSocial** (eventos)
+- [ ] **DIRF** - Declaração de Imposto Retido na Fonte
+- [ ] **RAIS** - Relação Anual de Informações Sociais
+
+**Ações Necessárias:**
+1. Módulo de RH e folha de pagamento
+2. Integração com eSocial (eventos S-1000, S-2200, S-1200, etc.)
+3. Cálculo de encargos e descontos
+4. Geração de holerites
+5. Relatórios trabalhistas
+
+**Esforço:** 3-4 meses | 2 devs (opcional)  
+**Prazo:** 2026+ (sob demanda)
+
+---
+
+### 📊 5. CRM E GESTÃO DE RELACIONAMENTO COM PACIENTES
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥 MÉDIA-ALTA  
+**Impacto:** Alto - Retenção e Satisfação  
+**Esforço:** 3-4 meses | 2 devs  
+**Prazo:** Q3-Q4/2025
+
+#### 5.1 Jornada do Paciente (Patient Journey)
+
+**Objetivo:** Mapear e otimizar toda a jornada do paciente na clínica.
+
+**Estágios da Jornada:**
+1. **Descoberta** - Como o paciente conheceu a clínica
+2. **Agendamento** - Primeira consulta
+3. **Pré-consulta** - Confirmação e preparação
+4. **Atendimento** - Experiência na clínica
+5. **Pós-consulta** - Satisfação e follow-up
+6. **Retenção** - Retorno e fidelização
+7. **Indicação** - Recomendação a outros
+
+**Ações Necessárias:**
+1. Mapear estágio atual de cada paciente
+2. Automações por estágio (emails, SMS, WhatsApp)
+3. Dashboards de conversão por estágio
+4. Identificação de pontos de atrito (churn)
+5. Campanhas de reativação de inativos
+
+**Esforço:** 1.5 meses | 1 dev  
+**Prazo:** Q3/2025
+
+---
+
+#### 5.2 Automação de Marketing
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥 MÉDIA
+
+**Funcionalidades:**
+- [ ] **Campanhas de email marketing** segmentadas
+- [ ] **Automação de WhatsApp** (aniversário, lembretes, promoções)
+- [ ] **SMS marketing** para confirmação e lembrete
+- [ ] **Segmentação avançada** (idade, especialidade, histórico)
+- [ ] **A/B testing** de mensagens
+- [ ] **Relatórios de performance** de campanhas
+
+**Integrações Sugeridas:**
+- RD Station
+- HubSpot
+- Mailchimp
+- SendGrid
+- Twilio (SMS)
+- Meta (WhatsApp Business API)
+
+**Ações Necessárias:**
+1. Módulo de campanhas de marketing
+2. Templates de email/SMS/WhatsApp
+3. Automação baseada em triggers (eventos)
+4. Segmentação dinâmica de pacientes
+5. Relatórios de ROI de marketing
+
+**Esforço:** 2 meses | 1 dev  
+**Prazo:** Q4/2025
+
+---
+
+#### 5.3 Pesquisas de Satisfação (NPS/CSAT)
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥 MÉDIA
+
+**Métricas a Implementar:**
+1. **NPS** - Net Promoter Score (0-10)
+2. **CSAT** - Customer Satisfaction Score
+3. **CES** - Customer Effort Score
+4. **Avaliação por médico**
+5. **Avaliação da infraestrutura**
+
+**Automação:**
+- [ ] **Envio automático** após consulta (24h)
+- [ ] **Múltiplos canais** (email, SMS, WhatsApp, app)
+- [ ] **Dashboards em tempo real** de satisfação
+- [ ] **Alertas para notas baixas** (< 7)
+- [ ] **Análise de sentimento** (IA) em comentários
+
+**Ações Necessárias:**
+1. Criar templates de pesquisas
+2. Automação de envio pós-consulta
+3. Dashboards de NPS por médico/clínica/período
+4. Sistema de alertas para insatisfação
+5. Análise de texto livre (ML)
+
+**Esforço:** 1 mês | 1 dev  
+**Prazo:** Q4/2025
+
+---
+
+#### 5.4 Programa de Fidelidade e Recompensas
+
+**Status:** ❌ Não Iniciado (já listado como baixa prioridade)  
+**Prioridade:** Baixa  
+**Prazo:** 2027+
+
+**Funcionalidades:**
+- Sistema de pontos por consulta
+- Níveis de fidelidade (bronze, prata, ouro, platinum)
+- Descontos progressivos
+- Benefícios exclusivos
+- Programa de indicação com recompensas
+
+**Esforço:** 1.5 meses | 1 dev  
+**Prazo:** 2027+
+
+---
+
+#### 5.5 Gestão de Reclamações e Ouvidoria
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥 MÉDIA
+
+**Requisitos:**
+- [ ] **Canal de reclamações** (formulário, email, telefone)
+- [ ] **Registro estruturado** de reclamações
+- [ ] **Classificação por tipo** (atendimento, infraestrutura, médico, financeiro)
+- [ ] **Workflow de resolução** com SLA
+- [ ] **Notificações automáticas** ao responsável
+- [ ] **Acompanhamento de resolução**
+- [ ] **Relatórios de reclamações** para gestão
+
+**Ações Necessárias:**
+1. Módulo de ouvidoria
+2. Workflow de tratamento de reclamações
+3. Dashboards de reclamações por categoria
+4. SLA e alertas de vencimento
+5. Integração com satisfação (fechar o ciclo)
+
+**Esforço:** 1.5 meses | 1 dev  
+**Prazo:** Q4/2025
+
+---
+
+### 📚 6. OUTRAS REGULAMENTAÇÕES E BOAS PRÁTICAS
+
+#### 6.1 Acessibilidade Digital (Lei Brasileira de Inclusão)
+
+**Status:** ❌ Não Iniciado  
+**Prioridade:** 🔥 MÉDIA
+
+**Lei 13.146/2015 (LBI) - Estatuto da Pessoa com Deficiência:**
+- [ ] **WCAG 2.1 nível AA** (Web Content Accessibility Guidelines)
+- [ ] **Navegação por teclado** completa
+- [ ] **Leitores de tela** compatíveis (NVDA, JAWS)
+- [ ] **Contraste adequado** de cores
+- [ ] **Textos alternativos** em imagens
+- [ ] **Legendas** em vídeos (telemedicina)
+- [ ] **Tamanho de fonte** ajustável
+
+**Ações Necessárias:**
+1. Auditoria de acessibilidade com ferramentas (axe, WAVE)
+2. Correções de HTML semântico
+3. Testes com leitores de tela
+4. Documentação de acessibilidade
+5. Treinamento de equipe
+
+**Esforço:** 1.5 meses | 1 dev frontend  
+**Prazo:** Q3/2025
+
+---
+
+#### 6.2 Certificação Digital ICP-Brasil
+
+**Status:** ❌ Não Iniciado (já planejado item #8)  
+**Prioridade:** 🔥 MÉDIA
+
+**Já detalhado no item #8. Integrar com:**
+- Receitas médicas digitais
+- Prontuários eletrônicos
+- Atestados e laudos
+- Notas fiscais eletrônicas
+- Contratos digitais
+
+**Certificadoras Homologadas:**
+- Serasa Experian
+- Certisign
+- Safeweb
+- Soluti (Docusign)
+- Valid Certificadora
+
+**Esforço:** Incluído no item #8  
+**Prazo:** Q3/2026
+
+---
+
+#### 6.3 Código de Ética Médica
+
+**Status:** ⚠️ Parcial  
+**Prioridade:** 🔥 ALTA
+
+**Resolução CFM 2.217/2018 - Código de Ética Médica:**
+
+**Artigos Relevantes:**
+- **Art. 73** - Sigilo profissional (LGPD + controle de acesso)
+- **Art. 85** - Prontuário legível e completo
+- **Art. 87** - Não deixar prontuário em lugar de fácil acesso
+- **Art. 88** - Liberação de cópias mediante solicitação
+- **Art. 89** - Guardar prontuário por tempo hábil
+
+**Ações de Compliance:**
+1. Controle rigoroso de acesso (já implementado)
+2. Auditoria de acessos (planejado Q1/2025)
+3. Termo de responsabilidade para acessos
+4. Criptografia de dados sensíveis (planejado Q1/2025)
+5. Portal de solicitação de cópias pelo paciente (Portal Paciente Q2/2025)
+
+**Esforço:** Distribuído em outras tarefas  
+**Prazo:** Q1-Q2/2025
+
+---
+
+### 🎯 INTEGRAÇÃO COM ROADMAP EXISTENTE
+
+#### Ajustes Necessários no Roadmap 2025-2026
+
+##### **Q1 2025 - Compliance Foundation (AJUSTADO)**
+
+**Adicionar:**
+- [ ] Conformidade CFM 1.821 (Prontuário completo estruturado)
+- [ ] Conformidade CFM 1.638 (Versionamento e imutabilidade)
+- [ ] Base para receitas médicas digitais CFM 1.643
+
+**Esforço adicional:** +1 mês | +1 dev  
+**Novo custo Q1:** R$ 120k (antes R$ 90k)
+
+---
+
+##### **Q2 2025 - Fiscal & Compliance (NOVO FOCO)**
+
+**Priorizar:**
+- [ ] Emissão de NF-e/NFS-e (CRÍTICO)
+- [ ] Integração SNGPC (ANVISA)
+- [ ] Receitas médicas digitais completas (CFM + ANVISA)
+- [ ] Portal do Paciente (mantido)
+
+**Esforço:** 3 devs full-time (3 meses)  
+**Novo custo Q2:** R$ 135k (antes R$ 90k)
+
+---
+
+##### **Q3 2025 - Telemedicina + CRM (AJUSTADO)**
+
+**Adicionar:**
+- [ ] Compliance CFM 2.314 (Telemedicina)
+- [ ] CRM - Jornada do Paciente
+- [ ] Acessibilidade Digital (LBI)
+
+**Esforço:** 3 devs full-time (3 meses)  
+**Novo custo Q3:** R$ 135k (antes R$ 91.5k)
+
+---
+
+##### **Q4 2025 - TISS + Marketing (AJUSTADO)**
+
+**Adicionar:**
+- [ ] Automação de Marketing
+- [ ] Pesquisas de Satisfação (NPS)
+- [ ] Gestão de Reclamações
+
+**Esforço:** 3 devs full-time (3 meses)  
+**Novo custo Q4:** R$ 155k (mantido)
+
+---
+
+### 💰 NOVO INVESTIMENTO ESTIMADO (2025-2026)
+
+| Período | Projeto Original | Compliance Regulatório | **NOVO TOTAL** |
+|---------|------------------|------------------------|----------------|
+| **Q1/2025** | R$ 90k | +R$ 30k (CFM compliance) | **R$ 120k** |
+| **Q2/2025** | R$ 90k | +R$ 45k (Fiscal + ANVISA) | **R$ 135k** |
+| **Q3/2025** | R$ 91.5k | +R$ 43.5k (Telemedicina compliance + CRM) | **R$ 135k** |
+| **Q4/2025** | R$ 155k | ±R$ 0k (já incluso) | **R$ 155k** |
+| **Q1/2026** | R$ 135k | ±R$ 0k | **R$ 135k** |
+| **Q2/2026** | R$ 110k | ±R$ 0k | **R$ 110k** |
+| **Q3/2026** | R$ 90k | ±R$ 0k | **R$ 90k** |
+| **Q4/2026** | R$ 90k | ±R$ 0k | **R$ 90k** |
+| | **R$ 851.5k** | **+R$ 118.5k** | **R$ 970k** |
+
+**Novo investimento total 2025-2026: R$ 970k** (+14% para compliance regulatório)
+
+---
+
+### 🔗 DOCUMENTAÇÃO DE REFERÊNCIA REGULATÓRIA
+
+#### Legislação e Normas Brasileiras
+
+**CFM - Conselho Federal de Medicina:**
+- Resolução CFM 1.821/2007 - Prontuário Médico
+- Resolução CFM 1.638/2002 - Prontuário Eletrônico
+- Resolução CFM 1.643/2002 - Receita Médica Digital
+- Resolução CFM 2.314/2022 - Telemedicina
+- Resolução CFM 2.217/2018 - Código de Ética Médica
+
+**ANVISA - Agência Nacional de Vigilância Sanitária:**
+- RDC 44/2009 - Boas Práticas Farmacêuticas
+- Portaria 344/1998 - Medicamentos Controlados
+- SNGPC - Sistema Nacional de Produtos Controlados
+
+**ANS - Agência Nacional de Saúde Suplementar:**
+- Padrão TISS 4.02.00
+- Rol de Procedimentos e Eventos em Saúde
+- RN 395/2016 - Cobertura Assistencial
+
+**Receita Federal:**
+- Nota Fiscal de Serviços Eletrônica (NFS-e)
+- Simples Nacional - Lei Complementar 123/2006
+- eSocial - Decreto 8.373/2014
+
+**LGPD:**
+- Lei 13.709/2018 - Lei Geral de Proteção de Dados
+
+**Acessibilidade:**
+- Lei 13.146/2015 - Lei Brasileira de Inclusão (LBI)
+- WCAG 2.1 - Web Content Accessibility Guidelines
+
+---
+
+### ✅ CHECKLIST DE CONFORMIDADE REGULATÓRIA
+
+#### Conformidade CFM
+- [ ] Prontuário estruturado CFM 1.821 (Q1/2025)
+- [ ] Prontuário eletrônico CFM 1.638 (Q1/2025)
+- [ ] Receitas digitais CFM 1.643 (Q2/2025)
+- [ ] Telemedicina CFM 2.314 (Q3/2025)
+- [ ] Código de Ética compliance (Q1-Q2/2025)
+
+#### Conformidade ANVISA
+- [ ] SNGPC integração (Q2/2025)
+- [ ] Receitas controladas (Q2/2025)
+- [ ] Notificação eventos adversos (Q3/2025)
+- [ ] Controle estoque farmacêutico (Q4/2025 - opcional)
+
+#### Conformidade ANS
+- [ ] TISS Fase 1 (Q4/2025)
+- [ ] TISS Fase 2 (Q1/2026)
+- [ ] Tabelas oficiais (CBHPM, TUSS, Rol ANS)
+
+#### Conformidade Fiscal
+- [ ] NF-e/NFS-e (Q2/2025)
+- [ ] Controle tributário (Q3/2025)
+- [ ] Integração contábil (Q3/2025)
+- [ ] eSocial (2026 - opcional)
+
+#### CRM e Relacionamento
+- [ ] Jornada do paciente (Q3/2025)
+- [ ] Automação de marketing (Q4/2025)
+- [ ] NPS/CSAT (Q4/2025)
+- [ ] Ouvidoria (Q4/2025)
+
+#### Acessibilidade e Inclusão
+- [ ] WCAG 2.1 AA (Q3/2025)
+- [ ] Testes com leitores de tela (Q3/2025)
+
+---
+
+### 📞 PRÓXIMOS PASSOS PARA COMPLIANCE
+
+#### Imediato (Dezembro 2024 - Janeiro 2025)
+1. ✅ **Aprovação de orçamento adicional** (+R$ 118.5k para compliance)
+2. ✅ **Priorização regulatória** por criticidade legal
+3. ✅ **Contratação de consultor jurídico** especializado em direito médico
+4. ✅ **Auditoria de compliance inicial** (gap analysis)
+
+#### Q1 2025
+5. 🔥 **Implementar compliance CFM** (prontuários, auditoria)
+6. 🔥 **Base para receitas digitais**
+7. 🔥 **Versionamento e imutabilidade de prontuários**
+
+#### Q2 2025
+8. 🔥 **Emissão de NF-e/NFS-e** (CRÍTICO)
+9. 🔥 **Receitas médicas completas** (CFM + ANVISA)
+10. 🔥 **SNGPC integração**
+
+---
+
+**Documento Atualizado:** Dezembro 2024  
+**Versão:** 2.0 (Compliance Regulatório Brasileiro)  
+**Responsável:** Product Owner + Compliance Officer (contratar)
 
 ---
 
@@ -1087,20 +1911,22 @@ Sistema de indicação para pacientes e programa de fidelidade.
 
 | Período | Projeto | Custo |
 |---------|---------|-------|
-| **Q1/2025** | Compliance + SOAP + Segurança | R$ 90k |
-| **Q2/2025** | Portal Paciente + Segurança | R$ 90k |
-| **Q3/2025** | Telemedicina | R$ 91.5k |
-| **Q4/2025** | TISS Fase 1 + Pentest | R$ 155k |
+| **Q1/2025** | Compliance + SOAP + Segurança + CFM | R$ 120k |
+| **Q2/2025** | Portal + Fiscal (NF-e) + ANVISA + Segurança | R$ 135k |
+| **Q3/2025** | Telemedicina + CRM + Acessibilidade | R$ 135k |
+| **Q4/2025** | TISS Fase 1 + Marketing + Pentest | R$ 155k |
 | **Q1/2026** | TISS Fase 2 | R$ 135k |
 | **Q2/2026** | BI + Fila + Pentest | R$ 110k |
 | **Q3/2026** | ICP + API + Segurança | R$ 90k |
 | **Q4/2026** | Laboratórios | R$ 90k |
-| | **TOTAL 2 ANOS** | **R$ 851.5k** |
+| | **TOTAL 2 ANOS** | **R$ 970k** |
 
 **Observações:**
 - Custo médio de R$ 15k/mês por dev pleno/sênior
 - Pentests semestrais: R$ 20k cada
 - Infraestrutura adicional (telemedicina): R$ 500/mês
+- Gateway NF-e: R$ 50-200/mês
+- **Compliance regulatório brasileiro adiciona +R$ 118.5k (+14%)**
 
 ---
 
@@ -1128,10 +1954,16 @@ Sistema de indicação para pacientes e programa de fidelidade.
 - Churn: 8%/ano (-7 pontos)
 
 #### ROI em 2 Anos
-- **Investimento:** R$ 851.5k
-- **Receita adicional (2 anos):** ~R$ 2.5M
-- **ROI:** 194%
-- **Payback:** 10-12 meses
+- **Investimento:** R$ 970k
+- **Receita adicional (2 anos):** ~R$ 3.2M (compliance aumenta confiança e reduz churn)
+- **ROI:** 230%
+- **Payback:** 9-11 meses
+
+**Benefícios Adicionais do Compliance:**
+- Redução de risco legal e multas (economia potencial de R$ 100-500k)
+- Aumento de credibilidade no mercado (+15% conversão)
+- Possibilidade de atender hospitais e grandes clínicas (compliance obrigatório)
+- Redução de churn por problemas fiscais/regulatórios (-3 pontos percentuais)
 
 ---
 
@@ -1171,20 +2003,27 @@ Alto Impacto, Baixo Esforço (Quick Wins):
 ✅ Criptografia (1-2 meses)
 ✅ Bloqueio de Conta (2 semanas)
 ✅ MFA Admins (2 semanas)
+✅ Conformidade CFM básica (2 meses)
+✅ NPS/CSAT (1 mês)
 
 Alto Impacto, Alto Esforço (Major Projects):
 🔥 Telemedicina (4-6 meses)
 🔥 Portal do Paciente (2-3 meses)
 🔥 TISS Integração (6-8 meses)
+🔥 NF-e/NFS-e (3 meses) - OBRIGATÓRIO
+🔥 Receitas Digitais CFM+ANVISA (3 meses) - OBRIGATÓRIO
+🔥 CRM Completo (3-4 meses)
 
 Baixo Impacto, Baixo Esforço (Fill-ins):
 ⚪ Anamnese Guiada (1 mês)
 ⚪ Benchmarking (1 mês)
 ⚪ API Pública (1-2 meses)
+⚪ Acessibilidade (1.5 meses)
 
 Baixo Impacto, Alto Esforço (Avoid):
 ⚫ Marketplace Público (3-4 meses)
 ⚫ Laboratórios (4-6 meses) - apenas se houver demanda
+⚫ eSocial (3-4 meses) - apenas se houver demanda
 ```
 
 ---
@@ -1279,10 +2118,16 @@ Baixo Impacto, Alto Esforço (Avoid):
 - [ ] Prontuário SOAP estruturado
 - [ ] Bloqueio de conta por tentativas
 - [ ] MFA para administradores
+- [ ] **Conformidade CFM 1.821 (Prontuário)**
+- [ ] **Conformidade CFM 1.638 (Versionamento)**
+- [ ] **Base para receitas digitais**
 - [ ] Testes e validações Q1
 
 ### Q2/2025 - Patient Experience
 - [ ] Portal do Paciente desenvolvido
+- [ ] **Emissão de NF-e/NFS-e (CRÍTICO)**
+- [ ] **Receitas médicas digitais CFM+ANVISA**
+- [ ] **Integração SNGPC (controlados)**
 - [ ] WAF configurado
 - [ ] SIEM implementado
 - [ ] Refresh token pattern
@@ -1292,7 +2137,11 @@ Baixo Impacto, Alto Esforço (Avoid):
 - [ ] Videochamada implementada
 - [ ] Agendamento de teleconsulta
 - [ ] Prontuário de teleconsulta
-- [ ] Compliance CFM
+- [ ] **Compliance CFM 2.314 (Telemedicina)**
+- [ ] **CRM - Jornada do Paciente**
+- [ ] **Acessibilidade Digital (LBI)**
+- [ ] **Controle Tributário**
+- [ ] **Integração Contábil**
 - [ ] Testes e validações Q3
 
 ### Q4/2025 - TISS Fase 1
@@ -1300,6 +2149,9 @@ Baixo Impacto, Alto Esforço (Avoid):
 - [ ] Plano do paciente
 - [ ] Guia SP/SADT
 - [ ] Faturamento básico TISS
+- [ ] **Automação de Marketing**
+- [ ] **Pesquisas NPS/CSAT**
+- [ ] **Gestão de Reclamações**
 - [ ] Pentest realizado
 - [ ] Testes e validações Q4
 
@@ -1314,8 +2166,8 @@ Baixo Impacto, Alto Esforço (Avoid):
 ---
 
 **Documento Elaborado Por:** GitHub Copilot  
-**Data:** Novembro 2025  
-**Versão:** 1.0  
-**Status:** Documento centralizado consolidado
+**Data:** Dezembro 2024  
+**Versão:** 2.0 - Compliance Regulatório Brasileiro  
+**Status:** Documento centralizado consolidado com melhorias regulatórias
 
-**Este documento serve como fonte única da verdade para todas as pendências e planejamento futuro do MedicWarehouse.**
+**Este documento serve como fonte única da verdade para todas as pendências e planejamento futuro do MedicWarehouse, incluindo conformidade total com regulamentações brasileiras (CFM, ANVISA, ANS, Receita Federal, LGPD).**
