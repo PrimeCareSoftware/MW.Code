@@ -1,13 +1,40 @@
 # 📑 Índice de Documentação de Desenvolvimento
 
 > **Central de Documentos de Planejamento MedicWarehouse**  
-> **Última Atualização:** Dezembro 2024
+> **Última Atualização:** Janeiro 2025
 
 ---
 
 ## 🎯 Documentos Principais
 
-### 1. 📋 PLANO_DESENVOLVIMENTO_PRIORIZADO.md
+### 1. 🤖 PROMPTS_COPILOT_DESENVOLVIMENTO.md ⭐ **NOVO**
+**Foco:** Prompts estruturados para Copilot desenvolver cada etapa  
+**Conteúdo:**
+- ✅ Prompts prontos para uso no GitHub Copilot
+- ✅ Cobertura completa de tarefas P0 (8 tarefas críticas)
+- ✅ Prompts selecionados de P1, P2 e P3
+- ✅ Exemplos de código (.NET 8, Angular 20)
+- ✅ Boas práticas e avisos de segurança
+- ✅ Checklists de validação
+- ✅ 780 linhas, 21KB de conteúdo prático
+
+**Quando usar:** Para **agilizar desenvolvimento** com Copilot e evitar erros
+
+**[📄 Abrir Documento](PROMPTS_COPILOT_DESENVOLVIMENTO.md)**
+
+---
+
+### 2. 📋 PLANO_DESENVOLVIMENTO_PRIORIZADO.md
+**Foco:** Tarefas críticas (P0) - Obrigatórias por lei  
+**Conteúdo:**
+- ✅ 8 tarefas CRÍTICAS com passos detalhados
+- ✅ Conformidades: CFM, ANVISA, Receita Federal, ANS
+- ✅ Estimativas de esforço e custo
+- ✅ Cronogramas Q1-Q4/2025
+
+**Quando usar:** Para planejar desenvolvimentos **obrigatórios** e críticos
+
+### 2. 📋 PLANO_DESENVOLVIMENTO_PRIORIZADO.md
 **Foco:** Tarefas críticas (P0) - Obrigatórias por lei  
 **Conteúdo:**
 - ✅ 8 tarefas CRÍTICAS com passos detalhados
@@ -21,7 +48,7 @@
 
 ---
 
-### 2. 📋 PLANO_DESENVOLVIMENTO_PRIORIZADO_PARTE2.md
+### 3. 📋 PLANO_DESENVOLVIMENTO_PRIORIZADO_PARTE2.md
 **Foco:** Tarefas P1 (Alta), P2 (Média), P3 (Baixa) + Aplicativos  
 **Conteúdo:**
 - ✅ 16 tarefas de prioridade média/baixa
@@ -35,7 +62,7 @@
 
 ---
 
-### 3. 📋 PENDING_TASKS.md
+### 4. 📋 PENDING_TASKS.md
 **Foco:** Documento mestre com TODAS as pendências  
 **Conteúdo:**
 - ✅ 1.400+ linhas de análise detalhada
@@ -50,7 +77,7 @@
 
 ---
 
-### 4. 📱 APPS_PENDING_TASKS.md
+### 5. 📱 APPS_PENDING_TASKS.md
 **Foco:** Pendências específicas de cada aplicativo  
 **Conteúdo:**
 - ✅ 6 aplicativos do ecossistema
