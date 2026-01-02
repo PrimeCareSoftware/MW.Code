@@ -15,20 +15,26 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange
             var consultationStartTime = DateTime.UtcNow;
+            var chiefComplaint = "Patient complains of headache";
+            var historyOfPresentIllness = "Patient has been experiencing severe headaches for the past 3 days, worsening in the morning.";
 
             // Act
-            var record = new MedicalRecord(_appointmentId, _patientId, _tenantId, consultationStartTime);
+            var record = new MedicalRecord(_appointmentId, _patientId, _tenantId, consultationStartTime, 
+                chiefComplaint, historyOfPresentIllness);
 
             // Assert
             Assert.NotEqual(Guid.Empty, record.Id);
             Assert.Equal(_appointmentId, record.AppointmentId);
             Assert.Equal(_patientId, record.PatientId);
             Assert.Equal(consultationStartTime, record.ConsultationStartTime);
+            Assert.Equal(chiefComplaint, record.ChiefComplaint);
+            Assert.Equal(historyOfPresentIllness, record.HistoryOfPresentIllness);
             Assert.Equal(string.Empty, record.Diagnosis);
             Assert.Equal(string.Empty, record.Prescription);
             Assert.Equal(string.Empty, record.Notes);
             Assert.Equal(0, record.ConsultationDurationMinutes);
             Assert.Null(record.ConsultationEndTime);
+            Assert.False(record.IsClosed);
         }
 
         [Fact]
@@ -36,15 +42,20 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange
             var consultationStartTime = DateTime.UtcNow;
+            var chiefComplaint = "Patient complains of fever";
+            var historyOfPresentIllness = "Patient has been experiencing high fever for the past 2 days with body aches and fatigue.";
             var diagnosis = "Common cold";
             var prescription = "Rest and fluids";
             var notes = "Patient feeling better";
 
             // Act
             var record = new MedicalRecord(_appointmentId, _patientId, _tenantId, 
-                consultationStartTime, diagnosis, prescription, notes);
+                consultationStartTime, chiefComplaint, historyOfPresentIllness,
+                diagnosis, prescription, notes);
 
             // Assert
+            Assert.Equal(chiefComplaint, record.ChiefComplaint);
+            Assert.Equal(historyOfPresentIllness, record.HistoryOfPresentIllness);
             Assert.Equal(diagnosis, record.Diagnosis);
             Assert.Equal(prescription, record.Prescription);
             Assert.Equal(notes, record.Notes);
@@ -55,7 +66,8 @@ namespace MedicSoft.Test.Entities
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
-                new MedicalRecord(Guid.Empty, _patientId, _tenantId, DateTime.UtcNow));
+                new MedicalRecord(Guid.Empty, _patientId, _tenantId, DateTime.UtcNow,
+                    "Valid complaint text", "Valid history of present illness text that is long enough"));
 
             Assert.Equal("Appointment ID cannot be empty (Parameter 'appointmentId')", exception.Message);
         }
@@ -65,7 +77,8 @@ namespace MedicSoft.Test.Entities
         {
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() =>
-                new MedicalRecord(_appointmentId, Guid.Empty, _tenantId, DateTime.UtcNow));
+                new MedicalRecord(_appointmentId, Guid.Empty, _tenantId, DateTime.UtcNow,
+                    "Valid complaint text", "Valid history of present illness text that is long enough"));
 
             Assert.Equal("Patient ID cannot be empty (Parameter 'patientId')", exception.Message);
         }
@@ -159,7 +172,7 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange
             var startTime = DateTime.UtcNow.AddMinutes(-30);
-            var record = new MedicalRecord(_appointmentId, _patientId, _tenantId, startTime);
+            var record = CreateValidMedicalRecord(startTime);
 
             // Act
             record.CompleteConsultation("Diagnosis", "Prescription", "Notes");
@@ -262,15 +275,20 @@ namespace MedicSoft.Test.Entities
         public void Constructor_TrimsWhitespaceFromOptionalFields()
         {
             // Arrange
+            var chiefComplaint = "  Complaint  ";
+            var historyOfPresentIllness = "  History of present illness that is long enough to meet the minimum length requirement  ";
             var diagnosis = "  Diagnosis  ";
             var prescription = "  Prescription  ";
             var notes = "  Notes  ";
 
             // Act
             var record = new MedicalRecord(_appointmentId, _patientId, _tenantId, 
-                DateTime.UtcNow, diagnosis, prescription, notes);
+                DateTime.UtcNow, chiefComplaint, historyOfPresentIllness,
+                diagnosis, prescription, notes);
 
             // Assert
+            Assert.Equal("Complaint", record.ChiefComplaint);
+            Assert.Equal("History of present illness that is long enough to meet the minimum length requirement", record.HistoryOfPresentIllness);
             Assert.Equal("Diagnosis", record.Diagnosis);
             Assert.Equal("Prescription", record.Prescription);
             Assert.Equal("Notes", record.Notes);
@@ -335,7 +353,14 @@ namespace MedicSoft.Test.Entities
 
         private MedicalRecord CreateValidMedicalRecord()
         {
-            return new MedicalRecord(_appointmentId, _patientId, _tenantId, DateTime.UtcNow);
+            return CreateValidMedicalRecord(DateTime.UtcNow);
+        }
+        
+        private MedicalRecord CreateValidMedicalRecord(DateTime consultationStartTime)
+        {
+            return new MedicalRecord(_appointmentId, _patientId, _tenantId, consultationStartTime,
+                "Patient complains of persistent cough",
+                "Patient has been experiencing a persistent dry cough for the past week with no improvement.");
         }
     }
 }
