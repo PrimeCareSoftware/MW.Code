@@ -58,6 +58,12 @@ namespace MedicSoft.Repository.Context
         public DbSet<AccessProfile> AccessProfiles { get; set; } = null!;
         public DbSet<ProfilePermission> ProfilePermissions { get; set; } = null!;
         public DbSet<ClinicCustomization> ClinicCustomizations { get; set; } = null!;
+        
+        // CFM 1.821 - New entities for medical record compliance
+        public DbSet<ClinicalExamination> ClinicalExaminations { get; set; } = null!;
+        public DbSet<DiagnosticHypothesis> DiagnosticHypotheses { get; set; } = null!;
+        public DbSet<TherapeuticPlan> TherapeuticPlans { get; set; } = null!;
+        public DbSet<InformedConsent> InformedConsents { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -103,6 +109,12 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new AccessProfileConfiguration());
             modelBuilder.ApplyConfiguration(new ProfilePermissionConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicCustomizationConfiguration());
+            
+            // CFM 1.821 - New configurations for medical record compliance
+            modelBuilder.ApplyConfiguration(new ClinicalExaminationConfiguration());
+            modelBuilder.ApplyConfiguration(new DiagnosticHypothesisConfiguration());
+            modelBuilder.ApplyConfiguration(new TherapeuticPlanConfiguration());
+            modelBuilder.ApplyConfiguration(new InformedConsentConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
