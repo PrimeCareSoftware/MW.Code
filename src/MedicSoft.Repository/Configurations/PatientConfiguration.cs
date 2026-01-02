@@ -33,6 +33,9 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(p => p.Allergies)
                 .HasMaxLength(1000);
 
+            builder.Property(p => p.MotherName)
+                .HasMaxLength(200); // CFM 1.821 - Campo recomendado
+
             builder.Property(p => p.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);
