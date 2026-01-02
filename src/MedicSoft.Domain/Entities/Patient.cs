@@ -18,6 +18,7 @@ namespace MedicSoft.Domain.Entities
         public Address Address { get; private set; }
         public string? MedicalHistory { get; private set; }
         public string? Allergies { get; private set; }
+        public string? MotherName { get; private set; } // CFM 1.821 - Recomendado
         public bool IsActive { get; private set; } = true;
 
         // Propriedades de relacionamento Responsável-Criança
@@ -47,7 +48,7 @@ namespace MedicSoft.Domain.Entities
 
         public Patient(string name, string document, DateTime dateOfBirth, string gender,
             Email email, Phone phone, Address address, string tenantId,
-            string? medicalHistory = null, string? allergies = null) : base(tenantId)
+            string? medicalHistory = null, string? allergies = null, string? motherName = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -78,6 +79,7 @@ namespace MedicSoft.Domain.Entities
             Address = address ?? throw new ArgumentNullException(nameof(address));
             MedicalHistory = medicalHistory?.Trim();
             Allergies = allergies?.Trim();
+            MotherName = motherName?.Trim(); // CFM 1.821 - Campo recomendado
         }
 
         public void UpdatePersonalInfo(string name, Email email, Phone phone, Address address)
@@ -96,6 +98,12 @@ namespace MedicSoft.Domain.Entities
         {
             MedicalHistory = medicalHistory?.Trim();
             Allergies = allergies?.Trim();
+            UpdateTimestamp();
+        }
+        
+        public void UpdateMotherName(string? motherName)
+        {
+            MotherName = motherName?.Trim();
             UpdateTimestamp();
         }
 

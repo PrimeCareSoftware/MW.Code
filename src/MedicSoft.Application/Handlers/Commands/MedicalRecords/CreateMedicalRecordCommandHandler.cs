@@ -56,11 +56,15 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 await _appointmentRepository.UpdateAsync(appointment);
 
                 // Create medical record
+                // TODO: Update CreateMedicalRecordCommand to include ChiefComplaint and HistoryOfPresentIllness
+                // For now, using Diagnosis and Notes as temporary defaults to maintain backward compatibility
                 var medicalRecord = new MedicalRecord(
                     request.MedicalRecordDto.AppointmentId,
                     request.MedicalRecordDto.PatientId,
                     request.TenantId,
                     request.MedicalRecordDto.ConsultationStartTime,
+                    chiefComplaint: request.MedicalRecordDto.Diagnosis ?? "Pending evaluation",  // Temporary default
+                    historyOfPresentIllness: request.MedicalRecordDto.Notes ?? "Patient history to be documented during consultation.",  // Temporary default
                     request.MedicalRecordDto.Diagnosis,
                     request.MedicalRecordDto.Prescription,
                     request.MedicalRecordDto.Notes
