@@ -254,6 +254,61 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Prescrição Médica**: Área de texto com impressão otimizada
 - ✅ **Encaixes**: Permite agendamentos de emergência
 
+### 🏥 Conformidade CFM 1.821/2007 - Prontuário Eletrônico 🆕
+
+**Sistema 100% conforme a Resolução CFM 1.821/2007 sobre prontuários eletrônicos!**
+
+#### Anamnese Estruturada (Campos Obrigatórios)
+- ✅ **Queixa Principal**: Campo obrigatório com validação de 10+ caracteres
+- ✅ **História da Doença Atual (HDA)**: Descrição detalhada com validação de 50+ caracteres
+- ✅ **História Patológica Pregressa (HPP)**: Registro de histórico médico do paciente
+- ✅ **História Familiar**: Antecedentes familiares relevantes
+- ✅ **Hábitos de Vida**: Tabagismo, etilismo, atividade física, etc.
+- ✅ **Medicações em Uso**: Lista de medicamentos atuais do paciente
+
+#### Exame Clínico Completo
+- ✅ **Sinais Vitais Obrigatórios**:
+  - Pressão Arterial (Sistólica/Diastólica): 50-300/30-200 mmHg
+  - Frequência Cardíaca: 30-220 bpm
+  - Frequência Respiratória: 8-60 irpm
+  - Temperatura: 32-45°C
+  - Saturação de O2: 0-100%
+- ✅ **Exame Físico Sistemático**: Descrição obrigatória (mín. 20 caracteres)
+- ✅ **Estado Geral**: Registro do estado geral do paciente
+
+#### Hipóteses Diagnósticas com CID-10
+- ✅ **Diagnósticos Estruturados**: Suporte a múltiplos diagnósticos por atendimento
+- ✅ **Código CID-10 Validado**: Validação automática de formato (ex: A00, J20.9, Z99.01)
+- ✅ **Tipificação**: Principal ou Secundário
+- ✅ **Data do Diagnóstico**: Registro temporal de cada hipótese
+
+#### Plano Terapêutico Detalhado
+- ✅ **Tratamento/Conduta**: Descrição obrigatória (mín. 20 caracteres)
+- ✅ **Prescrição Medicamentosa**: Lista detalhada de medicamentos prescritos
+- ✅ **Solicitação de Exames**: Exames complementares solicitados
+- ✅ **Encaminhamentos**: Referências para outros especialistas
+- ✅ **Orientações ao Paciente**: Instruções e cuidados
+- ✅ **Data de Retorno**: Agendamento de retorno automático
+
+#### Consentimento Informado
+- ✅ **Termo de Consentimento**: Registro de consentimento do paciente
+- ✅ **Aceite Digital**: Registro de aceite com data/hora
+- ✅ **Rastreabilidade**: IP de origem e assinatura digital (opcional)
+- ✅ **Histórico Completo**: Todos os consentimentos registrados
+
+#### Auditoria e Controle
+- ✅ **Fechamento de Prontuário**: Impede alterações após finalização
+- ✅ **Identificação Profissional**: Médico responsável (CRM/UF)
+- ✅ **Timestamps Completos**: Data/hora de criação e modificação
+- ✅ **Isolamento Multi-tenant**: Segurança e privacidade garantidas
+- ✅ **Guarda de 20 anos**: Soft-delete sem exclusão física
+
+📖 **Documentação Completa**:
+- [Especificação CFM 1.821](docs/ESPECIFICACAO_CFM_1821.md)
+- [Implementação Detalhada](docs/CFM_1821_IMPLEMENTACAO.md)
+- [Phase 3 - Backend Complete](docs/PHASE_3_BACKEND_COMPLETE.md)
+- [Phase 4 - Frontend Complete](docs/PHASE_4_FRONTEND_COMPLETE.md)
+
 ### 💳 Assinaturas e Cobrança
 - ✅ **Período de Teste**: 15 dias gratuitos para novas clínicas
 - ✅ **Planos Flexíveis**: Trial, Basic, Standard, Premium, Enterprise
