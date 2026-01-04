@@ -27,6 +27,39 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 throw new InvalidOperationException("Medical record not found");
             }
 
+            // CFM 1.821 - Update required fields
+            if (!string.IsNullOrWhiteSpace(request.UpdateDto.ChiefComplaint))
+            {
+                medicalRecord.UpdateChiefComplaint(request.UpdateDto.ChiefComplaint);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.UpdateDto.HistoryOfPresentIllness))
+            {
+                medicalRecord.UpdateHistoryOfPresentIllness(request.UpdateDto.HistoryOfPresentIllness);
+            }
+
+            // CFM 1.821 - Update recommended fields
+            if (request.UpdateDto.PastMedicalHistory != null)
+            {
+                medicalRecord.UpdatePastMedicalHistory(request.UpdateDto.PastMedicalHistory);
+            }
+
+            if (request.UpdateDto.FamilyHistory != null)
+            {
+                medicalRecord.UpdateFamilyHistory(request.UpdateDto.FamilyHistory);
+            }
+
+            if (request.UpdateDto.LifestyleHabits != null)
+            {
+                medicalRecord.UpdateLifestyleHabits(request.UpdateDto.LifestyleHabits);
+            }
+
+            if (request.UpdateDto.CurrentMedications != null)
+            {
+                medicalRecord.UpdateCurrentMedications(request.UpdateDto.CurrentMedications);
+            }
+
+            // Legacy fields (maintain backward compatibility)
             if (request.UpdateDto.Diagnosis != null)
             {
                 medicalRecord.UpdateDiagnosis(request.UpdateDto.Diagnosis);

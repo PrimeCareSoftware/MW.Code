@@ -206,6 +206,12 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IAccessProfileRepository, AccessProfileRepository>();
 builder.Services.AddScoped<IClinicCustomizationRepository, ClinicCustomizationRepository>();
 
+// CFM 1.821 - Register new repositories
+builder.Services.AddScoped<IClinicalExaminationRepository, ClinicalExaminationRepository>();
+builder.Services.AddScoped<IDiagnosticHypothesisRepository, DiagnosticHypothesisRepository>();
+builder.Services.AddScoped<ITherapeuticPlanRepository, TherapeuticPlanRepository>();
+builder.Services.AddScoped<IInformedConsentRepository, InformedConsentRepository>();
+
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
@@ -223,6 +229,12 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAccessProfileService, AccessProfileService>();
 builder.Services.AddSingleton<IInAppNotificationService, InAppNotificationService>();
 builder.Services.AddScoped<DataSeederService>();
+
+// CFM 1.821 - Register new services
+builder.Services.AddScoped<IClinicalExaminationService, ClinicalExaminationService>();
+builder.Services.AddScoped<IDiagnosticHypothesisService, DiagnosticHypothesisService>();
+builder.Services.AddScoped<ITherapeuticPlanService, TherapeuticPlanService>();
+builder.Services.AddScoped<IInformedConsentService, InformedConsentService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();

@@ -90,7 +90,25 @@ namespace MedicSoft.Application.Mappings
                 });
 
             CreateMap<MedicalRecord, MedicalRecordDto>()
-                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name));
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name))
+                .ForMember(dest => dest.Examinations, opt => opt.MapFrom(src => src.Examinations))
+                .ForMember(dest => dest.Diagnoses, opt => opt.MapFrom(src => src.Diagnoses))
+                .ForMember(dest => dest.Plans, opt => opt.MapFrom(src => src.Plans))
+                .ForMember(dest => dest.Consents, opt => opt.MapFrom(src => src.Consents));
+
+            // CFM 1.821 - Clinical Examination mappings
+            CreateMap<ClinicalExamination, ClinicalExaminationDto>();
+
+            // CFM 1.821 - Diagnostic Hypothesis mappings
+            CreateMap<DiagnosticHypothesis, DiagnosticHypothesisDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => 
+                    src.Type == DiagnosisType.Principal ? DiagnosisTypeDto.Principal : DiagnosisTypeDto.Secondary));
+
+            // CFM 1.821 - Therapeutic Plan mappings
+            CreateMap<TherapeuticPlan, TherapeuticPlanDto>();
+
+            // CFM 1.821 - Informed Consent mappings
+            CreateMap<InformedConsent, InformedConsentDto>();
 
             // Payment mappings
             CreateMap<Payment, PaymentDto>()

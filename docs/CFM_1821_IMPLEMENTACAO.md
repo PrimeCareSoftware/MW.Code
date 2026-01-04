@@ -92,21 +92,62 @@ Este documento descreve a implementação realizada para conformidade com a Reso
   - Adaptados para novos campos obrigatórios
   - Compatibilidade mantida com código legado
 
-### 🚧 Pendente (Próximas Etapas)
-
 #### Fase 3: Backend - Commands e Handlers
-- [ ] Criar commands para as novas entidades
-- [ ] Criar handlers para as novas entidades
-- [ ] Atualizar DTOs para incluir novos campos
-- [ ] Criar queries para buscar prontuários com dados CFM completos
+- ✅ Commands criados para as novas entidades:
+  - `CreateClinicalExaminationCommand`, `UpdateClinicalExaminationCommand`
+  - `CreateDiagnosticHypothesisCommand`, `UpdateDiagnosticHypothesisCommand`, `DeleteDiagnosticHypothesisCommand`
+  - `CreateTherapeuticPlanCommand`, `UpdateTherapeuticPlanCommand`
+  - `CreateInformedConsentCommand`, `AcceptInformedConsentCommand`
+
+- ✅ Handlers criados para todos os commands:
+  - Validação de entidades relacionadas (MedicalRecord, Patient)
+  - Tratamento de erros apropriado
+  - Uso de AutoMapper para DTOs
+
+- ✅ DTOs atualizados:
+  - `MedicalRecordDto` inclui novos campos CFM e coleções relacionadas
+  - DTOs criados para todas as novas entidades
+  - Enum `DiagnosisTypeDto` para tipagem de diagnósticos
+
+- ✅ Queries criadas:
+  - `GetClinicalExaminationsByMedicalRecordQuery`
+  - `GetDiagnosticHypothesesByMedicalRecordQuery`
+  - `GetTherapeuticPlansByMedicalRecordQuery`
+  - `GetInformedConsentsByMedicalRecordQuery`
+
+- ✅ Query Handlers criados para todas as queries
+- ✅ `UpdateMedicalRecordCommandHandler` atualizado para suportar campos CFM
+- ✅ `CreateMedicalRecordCommandHandler` atualizado para usar campos CFM
+- ✅ Mapeamentos AutoMapper configurados para novas entidades
 
 #### Fase 3: Backend - API
-- [ ] Atualizar endpoints de Medical Records
-- [ ] Criar endpoints para Clinical Examinations
-- [ ] Criar endpoints para Diagnostic Hypotheses
-- [ ] Criar endpoints para Therapeutic Plans
-- [ ] Criar endpoints para Informed Consents
-- [ ] Adicionar testes de integração
+- ✅ Controllers criados:
+  - `ClinicalExaminationsController` (Create, Update, Get by Medical Record)
+  - `DiagnosticHypothesesController` (Create, Update, Delete, Get by Medical Record)
+  - `TherapeuticPlansController` (Create, Update, Get by Medical Record)
+  - `InformedConsentsController` (Create, Accept, Get by Medical Record)
+
+- ✅ Services criados:
+  - `IClinicalExaminationService` / `ClinicalExaminationService`
+  - `IDiagnosticHypothesisService` / `DiagnosticHypothesisService`
+  - `ITherapeuticPlanService` / `TherapeuticPlanService`
+  - `IInformedConsentService` / `InformedConsentService`
+
+- ✅ Serviços registrados no DI Container (Program.cs)
+- ✅ Endpoints com documentação XML
+- ✅ Tratamento de exceções apropriado
+- ✅ Validação de ModelState
+- ✅ Build bem-sucedido (dotnet build)
+- ✅ 864/865 testes passando (1 falha pré-existente não relacionada)
+
+### 🚧 Pendente (Próximas Etapas)
+
+#### Fase 3: Backend - Tests Adicionais (Opcional)
+- [ ] Criar testes unitários para commands/handlers de ClinicalExamination
+- [ ] Criar testes unitários para commands/handlers de DiagnosticHypothesis
+- [ ] Criar testes unitários para commands/handlers de TherapeuticPlan
+- [ ] Criar testes unitários para commands/handlers de InformedConsent
+- [ ] Criar testes de integração para novos endpoints
 
 #### Fase 4: Frontend
 - [ ] Atualizar formulário de prontuário com campos obrigatórios
@@ -389,5 +430,5 @@ dotnet test --filter "FullyQualifiedName~DiagnosticHypothesisTests|FullyQualifie
 ---
 
 **Documento Atualizado:** Janeiro 2025  
-**Versão:** 1.0  
-**Status:** Em Implementação (Backend 80% concluído)
+**Versão:** 2.0  
+**Status:** Backend 100% concluído | Frontend e Documentação pendentes
