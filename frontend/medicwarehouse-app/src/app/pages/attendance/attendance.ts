@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, forkJoin } from 'rxjs';
 import { Navbar } from '../../shared/navbar/navbar';
 import { RichTextEditor } from '../../shared/rich-text-editor/rich-text-editor';
 import { AppointmentService } from '../../services/appointment';
@@ -22,6 +22,9 @@ import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLa
 import { ExamRequest, ExamType, ExamUrgency, ExamTypeLabels, ExamUrgencyLabels } from '../../models/exam-request.model';
 import { MedicationAutocomplete } from '../../models/medication.model';
 import { ExamAutocomplete } from '../../models/exam-catalog.model';
+
+// Constants
+const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
 
 @Component({
   selector: 'app-attendance',
@@ -128,7 +131,7 @@ export class Attendance implements OnInit, OnDestroy {
     // Diagnostic Hypothesis Form
     this.diagnosticForm = this.fb.group({
       description: ['', Validators.required],
-      icd10Code: ['', [Validators.required, Validators.pattern(/^[A-Z]\d{2}(\.\d{1,2})?$/)]],
+      icd10Code: ['', [Validators.required, Validators.pattern(ICD10_PATTERN)]],
       type: [DiagnosisType.Principal, Validators.required]
     });
 
@@ -252,43 +255,21 @@ export class Attendance implements OnInit, OnDestroy {
   }
 
   loadCFMEntities(medicalRecordId: string): void {
-    // Load Clinical Examinations
-    this.clinicalExaminationService.getByMedicalRecord(medicalRecordId).subscribe({
-      next: (examinations) => {
-        this.clinicalExaminations.set(examinations);
+    // Load all CFM entities in parallel using forkJoin
+    forkJoin({
+      examinations: this.clinicalExaminationService.getByMedicalRecord(medicalRecordId),
+      hypotheses: this.diagnosticHypothesisService.getByMedicalRecord(medicalRecordId),
+      plans: this.therapeuticPlanService.getByMedicalRecord(medicalRecordId),
+      consents: this.informedConsentService.getByMedicalRecord(medicalRecordId)
+    }).subscribe({
+      next: (results) => {
+        this.clinicalExaminations.set(results.examinations);
+        this.diagnosticHypotheses.set(results.hypotheses);
+        this.therapeuticPlans.set(results.plans);
+        this.informedConsents.set(results.consents);
       },
       error: (error) => {
-        console.error('Error loading clinical examinations:', error);
-      }
-    });
-
-    // Load Diagnostic Hypotheses
-    this.diagnosticHypothesisService.getByMedicalRecord(medicalRecordId).subscribe({
-      next: (hypotheses) => {
-        this.diagnosticHypotheses.set(hypotheses);
-      },
-      error: (error) => {
-        console.error('Error loading diagnostic hypotheses:', error);
-      }
-    });
-
-    // Load Therapeutic Plans
-    this.therapeuticPlanService.getByMedicalRecord(medicalRecordId).subscribe({
-      next: (plans) => {
-        this.therapeuticPlans.set(plans);
-      },
-      error: (error) => {
-        console.error('Error loading therapeutic plans:', error);
-      }
-    });
-
-    // Load Informed Consents
-    this.informedConsentService.getByMedicalRecord(medicalRecordId).subscribe({
-      next: (consents) => {
-        this.informedConsents.set(consents);
-      },
-      error: (error) => {
-        console.error('Error loading informed consents:', error);
+        console.error('Error loading CFM entities:', error);
       }
     });
   }
