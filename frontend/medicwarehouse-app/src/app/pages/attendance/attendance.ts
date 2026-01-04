@@ -11,8 +11,12 @@ import { PatientService } from '../../services/patient';
 import { ProcedureService } from '../../services/procedure';
 import { ExamRequestService } from '../../services/exam-request';
 import { NotificationService } from '../../services/notification.service';
+import { ClinicalExaminationService } from '../../services/clinical-examination.service';
+import { DiagnosticHypothesisService } from '../../services/diagnostic-hypothesis.service';
+import { TherapeuticPlanService } from '../../services/therapeutic-plan.service';
+import { InformedConsentService } from '../../services/informed-consent.service';
 import { Appointment } from '../../models/appointment.model';
-import { MedicalRecord } from '../../models/medical-record.model';
+import { MedicalRecord, ClinicalExamination, DiagnosticHypothesis, TherapeuticPlan, InformedConsent, DiagnosisType, DiagnosisTypeLabels } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
 import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
 import { ExamRequest, ExamType, ExamUrgency, ExamTypeLabels, ExamUrgencyLabels } from '../../models/exam-request.model';
@@ -38,6 +42,23 @@ export class Attendance implements OnInit, OnDestroy {
   successMessage = signal<string>('');
   
   attendanceForm: FormGroup;
+  clinicalExaminationForm: FormGroup;
+  diagnosticForm: FormGroup;
+  therapeuticPlanForm: FormGroup;
+  
+  // CFM 1.821 Entities
+  clinicalExaminations = signal<ClinicalExamination[]>([]);
+  diagnosticHypotheses = signal<DiagnosticHypothesis[]>([]);
+  therapeuticPlans = signal<TherapeuticPlan[]>([]);
+  informedConsents = signal<InformedConsent[]>([]);
+  
+  showAddClinicalExamination = signal<boolean>(false);
+  showAddDiagnosis = signal<boolean>(false);
+  showAddTherapeuticPlan = signal<boolean>(false);
+  
+  // Enum helpers
+  diagnosisTypes = Object.values(DiagnosisType).filter(v => typeof v === 'number') as DiagnosisType[];
+  diagnosisTypeLabels = DiagnosisTypeLabels;
   
   // Cronômetro
   elapsedSeconds = signal<number>(0);
@@ -72,12 +93,53 @@ export class Attendance implements OnInit, OnDestroy {
     private patientService: PatientService,
     private procedureService: ProcedureService,
     private examRequestService: ExamRequestService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private clinicalExaminationService: ClinicalExaminationService,
+    private diagnosticHypothesisService: DiagnosticHypothesisService,
+    private therapeuticPlanService: TherapeuticPlanService,
+    private informedConsentService: InformedConsentService
   ) {
+    // CFM 1.821 Required Fields
     this.attendanceForm = this.fb.group({
+      chiefComplaint: ['', [Validators.required, Validators.minLength(10)]],
+      historyOfPresentIllness: ['', [Validators.required, Validators.minLength(50)]],
+      pastMedicalHistory: [''],
+      familyHistory: [''],
+      lifestyleHabits: [''],
+      currentMedications: [''],
+      // Legacy fields (optional)
       diagnosis: [''],
       prescription: [''],
       notes: ['']
+    });
+
+    // Clinical Examination Form
+    this.clinicalExaminationForm = this.fb.group({
+      systematicExamination: ['', [Validators.required, Validators.minLength(20)]],
+      bloodPressureSystolic: ['', [Validators.min(50), Validators.max(300)]],
+      bloodPressureDiastolic: ['', [Validators.min(30), Validators.max(200)]],
+      heartRate: ['', [Validators.min(30), Validators.max(220)]],
+      respiratoryRate: ['', [Validators.min(8), Validators.max(60)]],
+      temperature: ['', [Validators.min(32), Validators.max(45)]],
+      oxygenSaturation: ['', [Validators.min(0), Validators.max(100)]],
+      generalState: ['']
+    });
+
+    // Diagnostic Hypothesis Form
+    this.diagnosticForm = this.fb.group({
+      description: ['', Validators.required],
+      icd10Code: ['', [Validators.required, Validators.pattern(/^[A-Z]\d{2}(\.\d{1,2})?$/)]],
+      type: [DiagnosisType.Principal, Validators.required]
+    });
+
+    // Therapeutic Plan Form
+    this.therapeuticPlanForm = this.fb.group({
+      treatment: ['', [Validators.required, Validators.minLength(20)]],
+      medicationPrescription: [''],
+      examRequests: [''],
+      referrals: [''],
+      patientGuidance: [''],
+      returnDate: ['']
     });
 
     this.procedureForm = this.fb.group({
@@ -157,10 +219,19 @@ export class Attendance implements OnInit, OnDestroy {
       next: (record) => {
         this.medicalRecord.set(record);
         this.attendanceForm.patchValue({
+          chiefComplaint: record.chiefComplaint,
+          historyOfPresentIllness: record.historyOfPresentIllness,
+          pastMedicalHistory: record.pastMedicalHistory,
+          familyHistory: record.familyHistory,
+          lifestyleHabits: record.lifestyleHabits,
+          currentMedications: record.currentMedications,
           diagnosis: record.diagnosis,
           prescription: record.prescription,
           notes: record.notes
         });
+        
+        // Load CFM 1.821 entities
+        this.loadCFMEntities(record.id);
         
         // Calcula o tempo decorrido se a consulta ainda estiver em andamento
         if (record.consultationStartTime && !record.consultationEndTime) {
@@ -180,12 +251,57 @@ export class Attendance implements OnInit, OnDestroy {
     });
   }
 
+  loadCFMEntities(medicalRecordId: string): void {
+    // Load Clinical Examinations
+    this.clinicalExaminationService.getByMedicalRecord(medicalRecordId).subscribe({
+      next: (examinations) => {
+        this.clinicalExaminations.set(examinations);
+      },
+      error: (error) => {
+        console.error('Error loading clinical examinations:', error);
+      }
+    });
+
+    // Load Diagnostic Hypotheses
+    this.diagnosticHypothesisService.getByMedicalRecord(medicalRecordId).subscribe({
+      next: (hypotheses) => {
+        this.diagnosticHypotheses.set(hypotheses);
+      },
+      error: (error) => {
+        console.error('Error loading diagnostic hypotheses:', error);
+      }
+    });
+
+    // Load Therapeutic Plans
+    this.therapeuticPlanService.getByMedicalRecord(medicalRecordId).subscribe({
+      next: (plans) => {
+        this.therapeuticPlans.set(plans);
+      },
+      error: (error) => {
+        console.error('Error loading therapeutic plans:', error);
+      }
+    });
+
+    // Load Informed Consents
+    this.informedConsentService.getByMedicalRecord(medicalRecordId).subscribe({
+      next: (consents) => {
+        this.informedConsents.set(consents);
+      },
+      error: (error) => {
+        console.error('Error loading informed consents:', error);
+      }
+    });
+  }
+
   createMedicalRecord(appointmentId: string, patientId: string): void {
     const now = new Date().toISOString();
+    // Initialize with empty required fields - will be filled by user
     this.medicalRecordService.create({
       appointmentId,
       patientId,
-      consultationStartTime: now
+      consultationStartTime: now,
+      chiefComplaint: '',
+      historyOfPresentIllness: ''
     }).subscribe({
       next: (record) => {
         this.medicalRecord.set(record);
@@ -230,6 +346,11 @@ export class Attendance implements OnInit, OnDestroy {
   onSave(): void {
     if (!this.medicalRecord()) return;
 
+    if (this.attendanceForm.invalid) {
+      this.errorMessage.set('Por favor, preencha todos os campos obrigatórios corretamente.');
+      return;
+    }
+
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
@@ -237,6 +358,12 @@ export class Attendance implements OnInit, OnDestroy {
     const formValue = this.attendanceForm.value;
     
     this.medicalRecordService.update(this.medicalRecord()!.id, {
+      chiefComplaint: formValue.chiefComplaint,
+      historyOfPresentIllness: formValue.historyOfPresentIllness,
+      pastMedicalHistory: formValue.pastMedicalHistory,
+      familyHistory: formValue.familyHistory,
+      lifestyleHabits: formValue.lifestyleHabits,
+      currentMedications: formValue.currentMedications,
       diagnosis: formValue.diagnosis,
       prescription: formValue.prescription,
       notes: formValue.notes,
@@ -465,5 +592,129 @@ export class Attendance implements OnInit, OnDestroy {
   onExamSelected(exam: ExamAutocomplete): void {
     // The exam text is already inserted by the RichTextEditor component
     // Additional logic can be added here if needed (e.g., auto-filling exam request form)
+  }
+
+  // CFM 1.821 - Clinical Examination Management
+  toggleAddClinicalExamination(): void {
+    this.showAddClinicalExamination.set(!this.showAddClinicalExamination());
+    if (!this.showAddClinicalExamination()) {
+      this.clinicalExaminationForm.reset();
+    }
+  }
+
+  onAddClinicalExamination(): void {
+    if (!this.clinicalExaminationForm.valid || !this.medicalRecord()) return;
+
+    const formValue = this.clinicalExaminationForm.value;
+    this.clinicalExaminationService.create({
+      medicalRecordId: this.medicalRecord()!.id,
+      systematicExamination: formValue.systematicExamination,
+      bloodPressureSystolic: formValue.bloodPressureSystolic || undefined,
+      bloodPressureDiastolic: formValue.bloodPressureDiastolic || undefined,
+      heartRate: formValue.heartRate || undefined,
+      respiratoryRate: formValue.respiratoryRate || undefined,
+      temperature: formValue.temperature || undefined,
+      oxygenSaturation: formValue.oxygenSaturation || undefined,
+      generalState: formValue.generalState || undefined
+    }).subscribe({
+      next: (examination) => {
+        this.clinicalExaminations.update(exams => [...exams, examination]);
+        this.successMessage.set('Exame clínico adicionado com sucesso!');
+        this.clinicalExaminationForm.reset();
+        this.showAddClinicalExamination.set(false);
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: (error) => {
+        console.error('Error adding clinical examination:', error);
+        this.errorMessage.set('Erro ao adicionar exame clínico');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
+  }
+
+  // CFM 1.821 - Diagnostic Hypothesis Management
+  toggleAddDiagnosis(): void {
+    this.showAddDiagnosis.set(!this.showAddDiagnosis());
+    if (!this.showAddDiagnosis()) {
+      this.diagnosticForm.reset({ type: DiagnosisType.Principal });
+    }
+  }
+
+  onAddDiagnosis(): void {
+    if (!this.diagnosticForm.valid || !this.medicalRecord()) return;
+
+    const formValue = this.diagnosticForm.value;
+    this.diagnosticHypothesisService.create({
+      medicalRecordId: this.medicalRecord()!.id,
+      description: formValue.description,
+      icd10Code: formValue.icd10Code.toUpperCase(),
+      type: formValue.type
+    }).subscribe({
+      next: (hypothesis) => {
+        this.diagnosticHypotheses.update(hyps => [...hyps, hypothesis]);
+        this.successMessage.set('Hipótese diagnóstica adicionada com sucesso!');
+        this.diagnosticForm.reset({ type: DiagnosisType.Principal });
+        this.showAddDiagnosis.set(false);
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: (error) => {
+        console.error('Error adding diagnostic hypothesis:', error);
+        this.errorMessage.set('Erro ao adicionar hipótese diagnóstica');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
+  }
+
+  removeDiagnosis(hypothesis: DiagnosticHypothesis): void {
+    if (!confirm('Tem certeza que deseja remover esta hipótese diagnóstica?')) return;
+
+    this.diagnosticHypothesisService.delete(hypothesis.id).subscribe({
+      next: () => {
+        this.diagnosticHypotheses.update(hyps => hyps.filter(h => h.id !== hypothesis.id));
+        this.successMessage.set('Hipótese diagnóstica removida com sucesso!');
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: (error) => {
+        console.error('Error removing diagnostic hypothesis:', error);
+        this.errorMessage.set('Erro ao remover hipótese diagnóstica');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
+  }
+
+  // CFM 1.821 - Therapeutic Plan Management
+  toggleAddTherapeuticPlan(): void {
+    this.showAddTherapeuticPlan.set(!this.showAddTherapeuticPlan());
+    if (!this.showAddTherapeuticPlan()) {
+      this.therapeuticPlanForm.reset();
+    }
+  }
+
+  onAddTherapeuticPlan(): void {
+    if (!this.therapeuticPlanForm.valid || !this.medicalRecord()) return;
+
+    const formValue = this.therapeuticPlanForm.value;
+    this.therapeuticPlanService.create({
+      medicalRecordId: this.medicalRecord()!.id,
+      treatment: formValue.treatment,
+      medicationPrescription: formValue.medicationPrescription || undefined,
+      examRequests: formValue.examRequests || undefined,
+      referrals: formValue.referrals || undefined,
+      patientGuidance: formValue.patientGuidance || undefined,
+      returnDate: formValue.returnDate || undefined
+    }).subscribe({
+      next: (plan) => {
+        this.therapeuticPlans.update(plans => [...plans, plan]);
+        this.successMessage.set('Plano terapêutico adicionado com sucesso!');
+        this.therapeuticPlanForm.reset();
+        this.showAddTherapeuticPlan.set(false);
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: (error) => {
+        console.error('Error adding therapeutic plan:', error);
+        this.errorMessage.set('Erro ao adicionar plano terapêutico');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
   }
 }
