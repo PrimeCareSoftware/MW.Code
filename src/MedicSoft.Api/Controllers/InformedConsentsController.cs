@@ -58,12 +58,17 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 // Get IP address from request if not provided
-                if (string.IsNullOrEmpty(acceptDto.IPAddress))
-                {
-                    acceptDto = acceptDto with { IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() };
-                }
+                var ipAddress = string.IsNullOrEmpty(acceptDto.IPAddress) 
+                    ? HttpContext.Connection.RemoteIpAddress?.ToString() 
+                    : acceptDto.IPAddress;
 
-                var consent = await _informedConsentService.AcceptInformedConsentAsync(id, acceptDto, GetTenantId());
+                var updatedAcceptDto = new AcceptInformedConsentDto 
+                { 
+                    IPAddress = ipAddress,
+                    DigitalSignature = acceptDto.DigitalSignature
+                };
+
+                var consent = await _informedConsentService.AcceptInformedConsentAsync(id, updatedAcceptDto, GetTenantId());
                 return Ok(consent);
             }
             catch (InvalidOperationException ex)

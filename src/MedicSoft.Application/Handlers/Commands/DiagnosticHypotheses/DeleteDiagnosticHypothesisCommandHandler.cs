@@ -22,7 +22,7 @@ namespace MedicSoft.Application.Handlers.Commands.DiagnosticHypotheses
                 throw new InvalidOperationException("Diagnostic hypothesis not found");
             }
 
-            await _diagnosticHypothesisRepository.DeleteAsync(hypothesis);
+            await _diagnosticHypothesisRepository.DeleteAsync(hypothesis.Id, request.TenantId);
 
             return true;
         }
