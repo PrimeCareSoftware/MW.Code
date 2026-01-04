@@ -55,19 +55,21 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 appointment.CheckIn();
                 await _appointmentRepository.UpdateAsync(appointment);
 
-                // Create medical record
-                // TODO: Update CreateMedicalRecordCommand to include ChiefComplaint and HistoryOfPresentIllness
-                // For now, using Diagnosis and Notes as temporary defaults to maintain backward compatibility
+                // Create medical record with CFM 1.821 fields
                 var medicalRecord = new MedicalRecord(
                     request.MedicalRecordDto.AppointmentId,
                     request.MedicalRecordDto.PatientId,
                     request.TenantId,
                     request.MedicalRecordDto.ConsultationStartTime,
-                    chiefComplaint: request.MedicalRecordDto.Diagnosis ?? "Pending evaluation",  // Temporary default
-                    historyOfPresentIllness: request.MedicalRecordDto.Notes ?? "Patient history to be documented during consultation.",  // Temporary default
+                    chiefComplaint: request.MedicalRecordDto.ChiefComplaint,
+                    historyOfPresentIllness: request.MedicalRecordDto.HistoryOfPresentIllness,
                     request.MedicalRecordDto.Diagnosis,
                     request.MedicalRecordDto.Prescription,
-                    request.MedicalRecordDto.Notes
+                    request.MedicalRecordDto.Notes,
+                    request.MedicalRecordDto.PastMedicalHistory,
+                    request.MedicalRecordDto.FamilyHistory,
+                    request.MedicalRecordDto.LifestyleHabits,
+                    request.MedicalRecordDto.CurrentMedications
                 );
 
                 await _medicalRecordRepository.AddAsync(medicalRecord);
