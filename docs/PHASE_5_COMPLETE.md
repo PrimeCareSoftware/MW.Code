@@ -303,9 +303,9 @@ A **Fase 5** da implementação do sistema conforme a Resolução CFM 1.821/2007
 
 ### Suporte Técnico
 - 📧 Email: suporte@medicwarehouse.com.br
-- 📱 WhatsApp: (XX) XXXXX-XXXX
-- 🌐 Portal: https://suporte.medicwarehouse.com.br
-- 📖 Docs: https://docs.medicwarehouse.com.br
+- 📱 WhatsApp: Entre em contato pelo email para obter o número de suporte
+- 🌐 Portal: Em desenvolvimento
+- 📖 Docs: Consulte os arquivos MD na pasta `docs/`
 
 ---
 
