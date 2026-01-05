@@ -10,6 +10,7 @@ Estes documentos foram movidos para o arquivo porque:
 2. **Correções Aplicadas**: Os bugs/problemas descritos já foram corrigidos
 3. **Migrações Realizadas**: As migrações de dados/código já foram executadas
 4. **Redundância**: Informações duplicadas em outros documentos principais
+5. **Fases Completas**: Documentos de phases (3, 4, 5) de implementações CFM já finalizadas
 
 ## O que contém?
 
@@ -23,6 +24,12 @@ Estes documentos foram movidos para o arquivo porque:
 - Sumários de implementações de features
 - Documentos de permissões de owner
 - Implementações de novas funcionalidades
+
+### Phases de Implementação (PHASE_*)
+- **PHASE_3_BACKEND_COMPLETE.md** - Implementação backend CFM 1.821 (concluída)
+- **PHASE_4_FRONTEND_COMPLETE.md** - Implementação frontend CFM 1.821 (concluída)
+- **PHASE_4_SUMMARY.md** - Resumo da Phase 4 (concluída)
+- **PHASE_5_COMPLETE.md** - Phase 5 completa (concluída)
 
 ### Migrações Realizadas (*MIGRATION*)
 - Migrações de banco de dados
@@ -43,10 +50,11 @@ Estes documentos foram movidos para o arquivo porque:
 Para documentação ativa e atualizada, consulte:
 
 - **README.md** (raiz) - Visão geral do projeto
+- **docs/DOCUMENTATION_INDEX.md** - ⭐ **Índice principal** de toda documentação
 - **docs/BUSINESS_RULES.md** - Regras de negócio atuais
+- **docs/PLANO_DESENVOLVIMENTO.md** - Plano de desenvolvimento 2025-2026
 - **docs/PENDING_TASKS.md** - Tarefas pendentes e roadmap
 - **docs/SECURITY_GUIDE.md** - Guia de segurança completo
-- **docs/DOCUMENTATION_INDEX.md** - Índice de toda documentação
 
 ## Nota Importante
 
@@ -54,5 +62,5 @@ Para documentação ativa e atualizada, consulte:
 
 ---
 
-**Data de Arquivamento**: Dezembro 2025  
+**Última Atualização**: Janeiro 2025  
 **Motivo**: Consolidação e limpeza de documentação
