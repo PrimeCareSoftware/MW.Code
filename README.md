@@ -151,23 +151,17 @@ Painel administrativo para gestão do sistema completo:
 - ✨ **O que faz**: Consolida todos os documentos em um único arquivo HTML responsivo ou PDF
 - 🚀 **Como usar**: `cd documentacao-portatil && npm run gerar`
 
-### 🌐 Documentação Web
-Toda a documentação detalhada do projeto está disponível no **projeto web de documentação**:
-- 📂 **Localização**: `frontend/mw-docs/src/assets/docs/`
-- 🌐 **Documentação Web**: Execute o projeto mw-docs para visualizar
+### 🌐 Documentação Completa
+Toda a documentação detalhada do projeto está disponível e organizada:
+- 📂 **Índice Principal**: [`docs/DOCUMENTATION_INDEX.md`](docs/DOCUMENTATION_INDEX.md) - ⭐ **Comece aqui!** Navegação completa para toda documentação
+- 📋 **Plano de Desenvolvimento**: [`docs/PLANO_DESENVOLVIMENTO.md`](docs/PLANO_DESENVOLVIMENTO.md) - Roadmap 2025-2026 com prioridades e regras de negócio
 - 📖 **Principais Documentos**:
-  - **[`PENDING_TASKS.md`](docs/PENDING_TASKS.md)** - ⭐ **NOVO!** Documento centralizado com todas as pendências e planejamento futuro (2025-2026)
-  - **[`WAITING_QUEUE_GUIDE.md`](docs/WAITING_QUEUE_GUIDE.md)** - 🆕 **NOVO!** Guia completo da Fila de Espera com busca de pacientes avulsos
-  - **[`PATIENT_CONSULTATION_IMPROVEMENTS.md`](docs/PATIENT_CONSULTATION_IMPROVEMENTS.md)** - 🆕 **NOVO!** Melhorias na consulta de pacientes e início rápido de atendimento
-  - `GUIA_DESENVOLVIMENTO_AUTH.md` - **Guia de desenvolvimento e autenticação para MVP/testes** 🔥
-  - `SYSTEM_SETUP_GUIDE.md` - **Guia completo de configuração e setup do sistema**
-  - `BUSINESS_RULES.md` - Regras de negócio
-  - `SUBSCRIPTION_SYSTEM.md` - Sistema de assinaturas
-  - `SYSTEM_ADMIN_DOCUMENTATION.md` - Área do administrador do sistema
-  - `PASSWORD_RECOVERY_FLOW.md` - Recuperação de senha com 2FA
-  - `API_QUICK_GUIDE.md` - Guia rápido da API
-  - `SECURITY_GUIDE.md` - Guia de segurança
-  - `GUIA_EXECUCAO.md` - Como executar o projeto
+  - [`BUSINESS_RULES.md`](docs/BUSINESS_RULES.md) - ⭐ **ESSENCIAL** - Regras de negócio do sistema
+  - [`PENDING_TASKS.md`](docs/PENDING_TASKS.md) - Documento centralizado com todas as pendências
+  - [`GUIA_INICIO_RAPIDO_LOCAL.md`](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup rápido em 10 minutos
+  - [`AUTHENTICATION_GUIDE.md`](docs/AUTHENTICATION_GUIDE.md) - Guia de autenticação JWT
+  - [`SEEDER_GUIDE.md`](docs/SEEDER_GUIDE.md) - Guia completo dos seeders
+  - [`SYSTEM_MAPPING.md`](docs/SYSTEM_MAPPING.md) - Mapeamento completo do sistema
 
 ## 🏗️ Arquitetura
 
