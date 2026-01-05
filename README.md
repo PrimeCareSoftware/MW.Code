@@ -300,8 +300,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 📖 **Documentação Completa**:
 - [Especificação CFM 1.821](docs/ESPECIFICACAO_CFM_1821.md)
 - [Implementação Detalhada](docs/CFM_1821_IMPLEMENTACAO.md)
-- [Phase 3 - Backend Complete](docs/PHASE_3_BACKEND_COMPLETE.md)
-- [Phase 4 - Frontend Complete](docs/PHASE_4_FRONTEND_COMPLETE.md)
+- [Histórico de Implementação](docs/archive/README.md) - Phases 3, 4, e 5 completas (arquivado)
 
 ### 💳 Assinaturas e Cobrança
 - ✅ **Período de Teste**: 15 dias gratuitos para novas clínicas
