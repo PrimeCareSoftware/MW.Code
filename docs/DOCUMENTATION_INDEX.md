@@ -1,5 +1,8 @@
 # 📚 Índice de Documentação - MedicWarehouse
 
+> **Última Atualização:** Janeiro 2025  
+> **Status:** Documentação consolidada e otimizada
+
 Este documento serve como guia de navegação para toda a documentação do sistema MedicWarehouse.
 
 ---
@@ -17,25 +20,26 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 ## 📑 Documentação por Categoria
 
-### 📚 Documentação de Negócio
+### 📚 Documentação de Negócio e Planejamento
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
-| [PENDING_TASKS.md](./PENDING_TASKS.md) | ⭐ Documento centralizado de pendências e planejamento futuro | 20 min |
-| [APPS_PENDING_TASKS.md](./APPS_PENDING_TASKS.md) | 🆕 **NOVO!** Pendências específicas de cada aplicativo | 15 min |
-| [SCREENSHOTS_DOCUMENTATION.md](./SCREENSHOTS_DOCUMENTATION.md) | 🆕 **NOVO!** Documentação visual com prints das telas | 10 min |
+| [BUSINESS_RULES.md](./BUSINESS_RULES.md) | ⭐ **ESSENCIAL** - Regras de negócio do sistema | 30 min |
+| [PLANO_DESENVOLVIMENTO.md](./PLANO_DESENVOLVIMENTO.md) | ⭐ **NOVO!** Plano consolidado de desenvolvimento 2025-2026 com prioridades | 60 min |
+| [PENDING_TASKS.md](./PENDING_TASKS.md) | Documento centralizado de pendências e planejamento futuro | 20 min |
+| [APPS_PENDING_TASKS.md](./APPS_PENDING_TASKS.md) | Pendências específicas de cada aplicativo | 15 min |
+| [SCREENSHOTS_DOCUMENTATION.md](./SCREENSHOTS_DOCUMENTATION.md) | Documentação visual com prints das telas | 10 min |
 | [GLOSSARIO_TERMOS_EMPRESARIAIS.md](./GLOSSARIO_TERMOS_EMPRESARIAIS.md) | Glossário completo de termos empresariais e de negócio | 30 min |
-| [ANALISE_MELHORIAS_SISTEMA.md](./ANALISE_MELHORIAS_SISTEMA.md) | Análise detalhada de melhorias e concorrentes (1.445 linhas) | 60 min |
+| [ANALISE_MELHORIAS_SISTEMA.md](./ANALISE_MELHORIAS_SISTEMA.md) | Análise detalhada de melhorias e concorrentes | 60 min |
 | [RESUMO_ANALISE_MELHORIAS.md](./RESUMO_ANALISE_MELHORIAS.md) | Resumo executivo da análise de melhorias | 15 min |
 
 ### 🎯 Para Desenvolvedores - Começando
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
-| [GUIA_INICIO_RAPIDO_LOCAL.md](./GUIA_INICIO_RAPIDO_LOCAL.md) | Setup rápido em menos de 10 minutos | 5 min |
-| [GUIA_MULTIPLATAFORMA.md](./GUIA_MULTIPLATAFORMA.md) | 🆕 **Desenvolvimento em macOS, Windows e Linux** | 15 min |
+| [GUIA_INICIO_RAPIDO_LOCAL.md](./GUIA_INICIO_RAPIDO_LOCAL.md) | ⭐ Setup rápido em menos de 10 minutos | 5 min |
+| [GUIA_MULTIPLATAFORMA.md](./GUIA_MULTIPLATAFORMA.md) | Desenvolvimento em macOS, Windows e Linux | 15 min |
 | [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) | Referência rápida dos seeders | 2 min |
-| [RESUMO_IMPLEMENTACAO_SEEDERS.md](./RESUMO_IMPLEMENTACAO_SEEDERS.md) | Guia passo a passo com exemplos práticos | 10 min |
 | [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) | Como autenticar e usar JWT | 5 min |
 
 ### 🏗️ Arquitetura e Estrutura
