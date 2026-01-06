@@ -17,6 +17,7 @@ namespace MedicSoft.Application.DTOs
         public MedicationCategory Category { get; set; }
         public bool RequiresPrescription { get; set; }
         public bool IsControlled { get; set; }
+        public ControlledSubstanceList? ControlledList { get; set; }
         public string? AnvisaRegistration { get; set; }
         public string? Barcode { get; set; }
         public string? Description { get; set; }
@@ -49,6 +50,7 @@ namespace MedicSoft.Application.DTOs
         public MedicationCategory Category { get; set; }
         public bool RequiresPrescription { get; set; }
         public bool IsControlled { get; set; }
+        public ControlledSubstanceList? ControlledList { get; set; }
         public string? AnvisaRegistration { get; set; }
         public string? Barcode { get; set; }
         public string? Description { get; set; }
@@ -67,6 +69,7 @@ namespace MedicSoft.Application.DTOs
         public MedicationCategory? Category { get; set; }
         public bool? RequiresPrescription { get; set; }
         public bool? IsControlled { get; set; }
+        public ControlledSubstanceList? ControlledList { get; set; }
         public string? AnvisaRegistration { get; set; }
         public string? Barcode { get; set; }
         public string? Description { get; set; }

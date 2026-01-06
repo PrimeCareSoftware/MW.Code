@@ -142,6 +142,23 @@ namespace MedicSoft.Application.Mappings
             // ExamRequest mappings
             CreateMap<ExamRequest, ExamRequestDto>()
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient != null ? src.Patient.Name : string.Empty));
+
+            // Digital Prescription mappings
+            CreateMap<DigitalPrescription, DigitalPrescriptionDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))
+                .ForMember(dest => dest.DaysUntilExpiration, opt => opt.MapFrom(src => src.DaysUntilExpiration()))
+                .ForMember(dest => dest.IsExpired, opt => opt.MapFrom(src => src.IsExpired()))
+                .ForMember(dest => dest.IsValid, opt => opt.MapFrom(src => src.IsValid()));
+
+            CreateMap<DigitalPrescriptionItem, DigitalPrescriptionItemDto>()
+                .ForMember(dest => dest.ControlledList, opt => opt.MapFrom(src => src.ControlledList.HasValue ? src.ControlledList.Value.ToString() : null));
+
+            // SNGPC Report mappings
+            CreateMap<SNGPCReport, SNGPCReportDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.DaysUntilDeadline, opt => opt.MapFrom(src => src.DaysUntilDeadline()))
+                .ForMember(dest => dest.IsOverdue, opt => opt.MapFrom(src => src.IsOverdue()));
         }
     }
 }
