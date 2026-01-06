@@ -2,6 +2,8 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
+> 📊 **NOVO!** Quer ver tudo que foi desenvolvido? [→ Ver Resumo Técnico Completo](docs/RESUMO_TECNICO_COMPLETO.md) - Visão geral de **92% de completude do sistema**!
+
 > 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
 
 > 🌍 **NOVO!** Desenvolva em **macOS, Windows ou Linux**! [→ Ver Guia Multiplataforma](docs/GUIA_MULTIPLATAFORMA.md) - Compatibilidade total garantida!
@@ -11,6 +13,20 @@
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](docs/GITHUB_PAGES_SETUP_REQUIRED.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
+
+## 📊 Status do Projeto
+
+| Métrica | Valor |
+|---------|-------|
+| **Completude Geral** | ✅ **92%** |
+| **Controllers Backend** | 40+ |
+| **Componentes Frontend** | 163+ |
+| **Apps Mobile** | 2 (iOS + Android) |
+| **Microservices** | 7 |
+| **Testes Automatizados** | 670+ |
+| **Documentos** | 49+ |
+
+[→ Ver Resumo Técnico Completo](docs/RESUMO_TECNICO_COMPLETO.md)
 
 ## 🌍 Compatibilidade Multiplataforma
 
