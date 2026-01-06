@@ -124,7 +124,7 @@ namespace MedicSoft.Repository.Configurations
             builder.HasIndex(dp => new { dp.TenantId, dp.SequenceNumber })
                 .IsUnique()
                 .HasDatabaseName("IX_DigitalPrescriptions_TenantId_SequenceNumber")
-                .HasFilter("[SequenceNumber] IS NOT NULL");
+                .HasFilter("\"SequenceNumber\" IS NOT NULL");
 
             builder.HasIndex(dp => new { dp.TenantId, dp.RequiresSNGPCReport, dp.ReportedToSNGPCAt })
                 .HasDatabaseName("IX_DigitalPrescriptions_SNGPC_Reporting");

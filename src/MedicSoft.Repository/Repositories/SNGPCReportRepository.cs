@@ -39,21 +39,25 @@ namespace MedicSoft.Repository.Repositories
         {
             var now = DateTime.UtcNow;
             
-            return await _dbSet
+            var reports = await _dbSet
                 .Where(sr => sr.TenantId == tenantId &&
                             sr.Status != SNGPCReportStatus.Transmitted &&
                             sr.Status != SNGPCReportStatus.Validated)
-                .ToListAsync()
-                .ContinueWith(task => task.Result.Where(sr => sr.IsOverdue()).ToList());
+                .ToListAsync();
+            
+            // Filter for overdue reports (reports must check IsOverdue() method)
+            return reports.Where(sr => sr.IsOverdue()).ToList();
         }
 
         public async Task<IEnumerable<SNGPCReport>> GetFailedReportsForRetryAsync(string tenantId)
         {
-            return await _dbSet
+            var reports = await _dbSet
                 .Where(sr => sr.Status == SNGPCReportStatus.TransmissionFailed && 
                             sr.TenantId == tenantId)
-                .ToListAsync()
-                .ContinueWith(task => task.Result.Where(sr => sr.CanRetryTransmission()).ToList());
+                .ToListAsync();
+            
+            // Filter for reports that can retry (reports must check CanRetryTransmission() method)
+            return reports.Where(sr => sr.CanRetryTransmission()).ToList();
         }
 
         public async Task<SNGPCReport?> GetMostRecentReportAsync(string tenantId)

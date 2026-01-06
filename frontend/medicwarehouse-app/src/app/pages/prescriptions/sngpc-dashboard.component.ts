@@ -321,7 +321,7 @@ export class SNGPCDashboardComponent implements OnInit {
     this.prescriptionService.getSNGPCReportHistory(12).subscribe(reports => {
       this.reports = reports;
       this.transmittedThisYear = reports.filter(r => 
-        r.status === 'Transmitted' && r.year === currentYear
+        r.status === SNGPCReportStatus.Transmitted && r.year === currentYear
       ).length;
     });
 

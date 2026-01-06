@@ -52,10 +52,11 @@ namespace MedicSoft.Test.Entities
             var description = "Anti-hipertensivo para tratamento de hipertensão";
 
             // Act
+            var controlledList = (ControlledSubstanceList?)null;  // Not a controlled substance
             var medication = new Medication(
                 name, dosage, pharmaceuticalForm, category, requiresPrescription, _tenantId,
                 genericName, manufacturer, activeIngredient, concentration, administrationRoute,
-                isControlled, null, anvisaRegistration, barcode, description);
+                isControlled, controlledList, anvisaRegistration, barcode, description);
 
             // Assert
             Assert.Equal(name, medication.Name);
