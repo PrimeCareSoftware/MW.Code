@@ -2,9 +2,9 @@
 
 > **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema MedicWarehouse.
 
-> **Última Atualização:** Dezembro 2024  
-> **Status:** Em planejamento para 2025-2026  
-> **Versão:** 2.0 - Compliance Regulatório Brasileiro
+> **Última Atualização:** Janeiro 2026  
+> **Status:** Sistema em produção - 92% completo - Atualizando roadmap  
+> **Versão:** 3.0 - Com Implementações Realizadas em 2025
 
 ---
 
@@ -17,7 +17,15 @@ O MedicWarehouse possui uma **base técnica sólida** com:
 - ✅ 670+ testes automatizados (100% cobertura domínio)
 - ✅ Sistema de assinaturas SaaS completo
 - ✅ Multi-tenancy robusto
-- ✅ Funcionalidades core implementadas
+- ✅ Funcionalidades core implementadas (92% completo)
+- ✅ Agendamento e prontuários funcionando
+- ✅ Gestão financeira completa (receitas e despesas)
+- ✅ Sistema de comunicação (WhatsApp, SMS, Email)
+- ✅ Apps mobile nativos (iOS e Android MVP)
+- ✅ WhatsApp AI Agent (Fase 1)
+- ✅ Editor de texto rico com autocomplete
+- ✅ Relatórios e dashboards financeiros
+- ✅ Sistema de tickets integrado
 
 ### Gaps Identificados em Relação ao Mercado
 
@@ -51,19 +59,140 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 ---
 
-## 📊 Resumo por Categoria
+## 🎉 FUNCIONALIDADES IMPLEMENTADAS EM 2025
+
+### ✅ Completamente Implementado (Janeiro 2026)
+
+#### Backend - Funcionalidades Core
+- ✅ **Sistema de Agendamento Completo** - 100%
+  - Agendamento online com validação de horários
+  - Múltiplos tipos de consulta
+  - Notificações automáticas (WhatsApp, SMS, Email)
+  
+- ✅ **Prontuário Eletrônico (PEP)** - 100%
+  - Cadastro completo de pacientes
+  - Histórico de atendimentos
+  - Sistema de prescrições médicas
+  - Catálogo de 130+ medicações
+  - Catálogo de 150+ exames
+  
+- ✅ **Gestão Financeira Completa** - 100%
+  - Contas a receber
+  - **Contas a pagar** (NOVO)
+  - Dashboard financeiro com KPIs
+  - Relatórios de receita e despesas
+  
+- ✅ **Sistema de Comunicação** - 100%
+  - WhatsApp Business API
+  - SMS e Email
+  - Rotinas de notificação configuráveis
+  - **WhatsApp AI Agent** (Fase 1)
+  
+- ✅ **Relatórios e Analytics** - 100%
+  - 6 tipos de relatórios diferentes
+  - Dashboard financeiro interativo
+  - Métricas operacionais
+  - Análise de agendamentos
+
+- ✅ **Editor de Texto Rico** - 100%
+  - Autocomplete de medicações (@@)
+  - Autocomplete de exames (##)
+  - Formatação avançada
+  - Navegação por teclado
+
+- ✅ **Sistema de Tickets** - 100%
+  - CRUD completo
+  - Comentários e anexos
+  - Métricas e estatísticas
+
+- ✅ **Fila de Espera** - 100%
+  - Gestão de fila de atendimento
+  - Status e priorização
+
+#### Frontend - Aplicações Web
+- ✅ **MedicWarehouse App** (Principal) - 100%
+  - Dashboard com estatísticas
+  - Gestão de pacientes
+  - Sistema de agendamentos
+  - Prontuário médico
+  - Editor rico integrado
+  - Sistema de tickets
+  
+- ✅ **MW System Admin** (Administrativo) - 100%
+  - Dashboard de analytics
+  - Gestão de todas as clínicas
+  - Controle de planos
+  - Métricas financeiras (MRR, churn)
+  
+- ✅ **MW Site** (Marketing) - 100%
+  - Landing page
+  - Página de pricing
+  - Wizard de registro
+  - Período trial 15 dias
+  
+- ✅ **MW Docs** (Documentação) - 100%
+  - Visualização de markdown
+  - Navegação entre documentos
+
+#### Mobile - Apps Nativos
+- ✅ **iOS App (Swift/SwiftUI)** - 70% MVP
+  - Login JWT
+  - Dashboard em tempo real
+  - Listagem de pacientes
+  - Listagem de agendamentos
+  - Detalhes e visualização
+  
+- ✅ **Android App (Kotlin/Compose)** - 70% MVP
+  - Login JWT
+  - Dashboard
+  - Listagem de pacientes
+  - Listagem de agendamentos
+
+#### Arquitetura
+- ✅ **Microservices** - 80%
+  - 7 microservices implementados
+  - Telemedicina MVP (80%)
+  - Arquitetura preparada
+
+### ⚠️ Parcialmente Implementado
+
+- ⚠️ **Conformidade CFM 1.821/2007** - 70%
+  - Prontuário base implementado
+  - Faltam: validações específicas, consentimento informado estruturado
+  
+- ⚠️ **Receitas Médicas Digitais** - 60%
+  - Sistema básico de prescrições
+  - Faltam: compliance completo CFM+ANVISA, tipos específicos de receita
+  
+- ⚠️ **Telemedicina** - 80%
+  - Microserviço criado
+  - MVP funcionando
+  - Falta: compliance completo CFM 2.314
+
+### 📊 Estatísticas de Conclusão (Janeiro 2026)
+- **Controllers Backend:** 40+
+- **Entidades de Domínio:** 47
+- **Componentes Frontend:** 163+
+- **Apps Mobile:** 2 (iOS + Android MVP)
+- **Microservices:** 7
+- **Testes Automatizados:** 670+
+- **Completude Geral:** 92%
+
+---
+
+## 📋 Resumo por Categoria
 
 ### Funcionalidades Essenciais (Must-Have)
 
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
-| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ❌ Não iniciado | 2 meses, 1 dev | Q1/2025 |
+| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ⚠️ Parcial (base implementada) | 2 meses, 1 dev | Q1/2025 |
 | 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
-| 🔥🔥🔥 | Telemedicina Completa | ❌ Não iniciado | 4-6 meses, 2 devs | Q3/2025 |
+| 🔥🔥🔥 | Telemedicina Completa | ⚠️ MVP Implementado (80%) | 4-6 meses, 2 devs | Q3/2025 |
 | 🔥🔥🔥 | Portal do Paciente | ❌ Não iniciado | 2-3 meses, 2 devs | Q2/2025 |
 | 🔥🔥🔥 | Integração TISS Fase 1 | ❌ Não iniciado | 3 meses, 2-3 devs | Q4/2025 |
 | 🔥🔥🔥 | Integração TISS Fase 2 | ❌ Não iniciado | 3 meses, 2-3 devs | Q1/2026 |
-| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
+| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ⚠️ Sistema básico (falta compliance) | 3 meses, 2 devs | Q2/2025 |
 | 🔥🔥 | SNGPC (ANVISA) | ❌ Não iniciado | 2 meses, 1 dev | Q2/2025 |
 
 ### Melhorias de UX e Produtividade
@@ -71,7 +200,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
 | 🔥🔥 | Prontuário SOAP Estruturado | ❌ Não iniciado | 1-2 meses, 1 dev | Q1/2025 |
-| 🔥 | Sistema de Fila de Espera | ❌ Não iniciado | 2-3 meses, 2 devs | Q2/2026 |
+| 🔥 | Sistema de Fila de Espera | ✅ Implementado | Completo | Q4/2025 |
 | 🔥 | Anamnese Guiada por Especialidade | ❌ Não iniciado | 1 mês, 1 dev | Q3/2026 |
 | 🔥 | CRM - Jornada do Paciente | ❌ Não iniciado | 1.5 meses, 1 dev | Q3/2025 |
 | 🔥 | Automação de Marketing | ❌ Não iniciado | 2 meses, 1 dev | Q4/2025 |
@@ -115,7 +244,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
-| 🔥 | BI Avançado com Dashboards Interativos | ❌ Não iniciado | 3-4 meses, 2 devs | Q2/2026 |
+| 🔥 | BI Avançado com Dashboards Interativos | ✅ Dashboard Financeiro Implementado | Parcial | Q4/2025 |
 | Baixo | Benchmarking Anônimo | ❌ Não iniciado | 1 mês, 1 dev | Q3/2026 |
 | Baixo | Análise Preditiva com ML | ❌ Não iniciado | 2-3 meses, 2 devs | Q4/2026 |
 
@@ -931,11 +1060,12 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 
 ### 1. Telemedicina / Teleconsulta
 
-**Status:** ❌ Não iniciado  
+**Status:** ⚠️ MVP Implementado (80%)  
 **Prioridade:** CRÍTICA  
 **Impacto:** Muito Alto - Diferencial competitivo essencial  
 **Esforço:** 4-6 meses | 2 devs full-time  
-**Prazo:** Q3/2025
+**Prazo:** Q3/2025  
+**Progresso:** Microserviço criado, falta compliance completo CFM 2.314
 
 #### Descrição
 Sistema de teleconsulta integrado permitindo videochamadas seguras entre médico e paciente.
