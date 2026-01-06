@@ -20,6 +20,7 @@ namespace MedicSoft.Domain.Entities
         public MedicationCategory Category { get; private set; }
         public bool RequiresPrescription { get; private set; }
         public bool IsControlled { get; private set; } // Controlled substance (Portaria 344/98)
+        public ControlledSubstanceList? ControlledList { get; private set; } // ANVISA Portaria 344/98 classification
         public string? AnvisaRegistration { get; private set; } // ANVISA registration number
         public string? Barcode { get; private set; } // EAN-13 barcode
         public string? Description { get; private set; }
@@ -38,6 +39,7 @@ namespace MedicSoft.Domain.Entities
             string? genericName = null, string? manufacturer = null,
             string? activeIngredient = null, string? concentration = null,
             string? administrationRoute = null, bool isControlled = false,
+            ControlledSubstanceList? controlledList = null,
             string? anvisaRegistration = null, string? barcode = null,
             string? description = null) : base(tenantId)
         {
@@ -61,6 +63,12 @@ namespace MedicSoft.Domain.Entities
             Category = category;
             RequiresPrescription = requiresPrescription;
             IsControlled = isControlled;
+            ControlledList = controlledList;
+            
+            // Validate controlled substance data
+            if (isControlled && controlledList == null)
+                throw new ArgumentException("Controlled list must be specified for controlled substances", nameof(controlledList));
+            
             AnvisaRegistration = anvisaRegistration?.Trim();
             Barcode = barcode?.Trim();
             Description = description?.Trim();
@@ -72,6 +80,7 @@ namespace MedicSoft.Domain.Entities
             string? genericName = null, string? manufacturer = null,
             string? activeIngredient = null, string? concentration = null,
             string? administrationRoute = null, bool isControlled = false,
+            ControlledSubstanceList? controlledList = null,
             string? anvisaRegistration = null, string? barcode = null,
             string? description = null)
         {
@@ -95,6 +104,12 @@ namespace MedicSoft.Domain.Entities
             Category = category;
             RequiresPrescription = requiresPrescription;
             IsControlled = isControlled;
+            ControlledList = controlledList;
+            
+            // Validate controlled substance data
+            if (isControlled && controlledList == null)
+                throw new ArgumentException("Controlled list must be specified for controlled substances", nameof(controlledList));
+            
             AnvisaRegistration = anvisaRegistration?.Trim();
             Barcode = barcode?.Trim();
             Description = description?.Trim();
