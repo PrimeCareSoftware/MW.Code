@@ -13,5 +13,20 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<Medication>> GetActiveAsync(string tenantId);
         Task<IEnumerable<Medication>> GetByActiveIngredientAsync(string activeIngredient, string tenantId);
         Task<bool> IsNameUniqueAsync(string name, string tenantId, Guid? excludeId = null);
+        
+        /// <summary>
+        /// Gets all controlled substances.
+        /// </summary>
+        Task<IEnumerable<Medication>> GetControlledSubstancesAsync(string tenantId);
+        
+        /// <summary>
+        /// Gets medications by controlled substance list classification.
+        /// </summary>
+        Task<IEnumerable<Medication>> GetByControlledListAsync(ControlledSubstanceList controlledList, string tenantId);
+        
+        /// <summary>
+        /// Gets medications that require special prescription type (controlled).
+        /// </summary>
+        Task<IEnumerable<Medication>> GetRequiringSpecialPrescriptionAsync(string tenantId);
     }
 }
