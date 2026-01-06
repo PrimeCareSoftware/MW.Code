@@ -52,10 +52,11 @@ namespace MedicSoft.Test.Entities
             var description = "Anti-hipertensivo para tratamento de hipertensão";
 
             // Act
+            var controlledList = (ControlledSubstanceList?)null;  // Not a controlled substance
             var medication = new Medication(
                 name, dosage, pharmaceuticalForm, category, requiresPrescription, _tenantId,
                 genericName, manufacturer, activeIngredient, concentration, administrationRoute,
-                isControlled, anvisaRegistration, barcode, description);
+                isControlled, controlledList, anvisaRegistration, barcode, description);
 
             // Assert
             Assert.Equal(name, medication.Name);
@@ -180,11 +181,12 @@ namespace MedicSoft.Test.Entities
             // Arrange & Act
             var medication = new Medication(
                 "Rivotril", "2mg", "Comprimido", MedicationCategory.Anxiolytic,
-                true, _tenantId, isControlled: true);
+                true, _tenantId, isControlled: true, controlledList: ControlledSubstanceList.B1_Psychotropics);
 
             // Assert
             Assert.True(medication.IsControlled);
             Assert.True(medication.RequiresPrescription);
+            Assert.Equal(ControlledSubstanceList.B1_Psychotropics, medication.ControlledList);
         }
 
         [Fact]

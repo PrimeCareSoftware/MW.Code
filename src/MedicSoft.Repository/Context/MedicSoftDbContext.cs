@@ -64,6 +64,12 @@ namespace MedicSoft.Repository.Context
         public DbSet<DiagnosticHypothesis> DiagnosticHypotheses { get; set; } = null!;
         public DbSet<TherapeuticPlan> TherapeuticPlans { get; set; } = null!;
         public DbSet<InformedConsent> InformedConsents { get; set; } = null!;
+        
+        // Digital Prescriptions - CFM 1.643/2002 and ANVISA 344/1998
+        public DbSet<DigitalPrescription> DigitalPrescriptions { get; set; } = null!;
+        public DbSet<DigitalPrescriptionItem> DigitalPrescriptionItems { get; set; } = null!;
+        public DbSet<PrescriptionSequenceControl> PrescriptionSequenceControls { get; set; } = null!;
+        public DbSet<SNGPCReport> SNGPCReports { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -115,6 +121,12 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new DiagnosticHypothesisConfiguration());
             modelBuilder.ApplyConfiguration(new TherapeuticPlanConfiguration());
             modelBuilder.ApplyConfiguration(new InformedConsentConfiguration());
+            
+            // Digital Prescriptions - CFM 1.643/2002 and ANVISA 344/1998
+            modelBuilder.ApplyConfiguration(new DigitalPrescriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new DigitalPrescriptionItemConfiguration());
+            modelBuilder.ApplyConfiguration(new PrescriptionSequenceControlConfiguration());
+            modelBuilder.ApplyConfiguration(new SNGPCReportConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

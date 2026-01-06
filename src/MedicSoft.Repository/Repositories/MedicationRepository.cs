@@ -64,5 +64,29 @@ namespace MedicSoft.Repository.Repositories
             
             return !await query.AnyAsync();
         }
+
+        public async Task<IEnumerable<Medication>> GetControlledSubstancesAsync(string tenantId)
+        {
+            return await _dbSet
+                .Where(m => m.IsControlled && m.TenantId == tenantId && m.IsActive)
+                .OrderBy(m => m.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Medication>> GetByControlledListAsync(ControlledSubstanceList controlledList, string tenantId)
+        {
+            return await _dbSet
+                .Where(m => m.ControlledList == controlledList && m.TenantId == tenantId && m.IsActive)
+                .OrderBy(m => m.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Medication>> GetRequiringSpecialPrescriptionAsync(string tenantId)
+        {
+            return await _dbSet
+                .Where(m => m.RequiresPrescription && m.IsControlled && m.TenantId == tenantId && m.IsActive)
+                .OrderBy(m => m.Name)
+                .ToListAsync();
+        }
     }
 }

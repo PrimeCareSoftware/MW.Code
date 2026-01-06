@@ -111,6 +111,7 @@ namespace MedicSoft.Api.Controllers
                 dto.Concentration,
                 dto.AdministrationRoute,
                 dto.IsControlled,
+                dto.ControlledList,
                 dto.AnvisaRegistration,
                 dto.Barcode,
                 dto.Description
@@ -152,6 +153,7 @@ namespace MedicSoft.Api.Controllers
                 dto.Concentration ?? medication.Concentration,
                 dto.AdministrationRoute ?? medication.AdministrationRoute,
                 dto.IsControlled ?? medication.IsControlled,
+                dto.ControlledList ?? medication.ControlledList,
                 dto.AnvisaRegistration ?? medication.AnvisaRegistration,
                 dto.Barcode ?? medication.Barcode,
                 dto.Description ?? medication.Description
