@@ -160,6 +160,11 @@ Painel administrativo para gestão do sistema completo:
 - 🎯 Ideal para: Empreendedores, donos de negócio, estudantes
 - 📊 Exemplos práticos e aplicações reais
 
+### 📊 Documentação Técnica Consolidada (NOVO!)
+- 📖 **[`RESUMO_TECNICO_COMPLETO.md`](docs/RESUMO_TECNICO_COMPLETO.md)** - ⭐ Visão geral completa do sistema (92% completude)
+- 📖 **[`GUIA_COMPLETO_APIs.md`](docs/GUIA_COMPLETO_APIs.md)** - ⭐ Documentação de todos os endpoints da API
+- 📖 **[`CHANGELOG.md`](CHANGELOG.md)** - ⭐ Histórico completo de desenvolvimento
+
 ### 📱 Documentação Portátil
 **Leia toda a documentação no celular ou gere um PDF completo!**
 - 📂 **Localização**: `documentacao-portatil/`

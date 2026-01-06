@@ -26,6 +26,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
 | [RESUMO_TECNICO_COMPLETO.md](./RESUMO_TECNICO_COMPLETO.md) | ⭐ **NOVO!** Visão técnica completa do sistema com estatísticas e roadmap | 45 min |
+| [GUIA_COMPLETO_APIs.md](./GUIA_COMPLETO_APIs.md) | ⭐ **NOVO!** Documentação completa de todos os endpoints da API | 40 min |
 | [BUSINESS_RULES.md](./BUSINESS_RULES.md) | ⭐ **ESSENCIAL** - Regras de negócio do sistema | 30 min |
 | [PLANO_DESENVOLVIMENTO.md](./PLANO_DESENVOLVIMENTO.md) | ⭐ **NOVO!** Plano consolidado de desenvolvimento 2025-2026 com prioridades | 60 min |
 | [PENDING_TASKS.md](./PENDING_TASKS.md) | Documento centralizado de pendências e planejamento futuro | 20 min |
@@ -92,6 +93,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
+| [GUIA_COMPLETO_APIs.md](./GUIA_COMPLETO_APIs.md) | ⭐ **NOVO!** Guia completo de todos os endpoints da API | 40 min |
 | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) | Guia rápido do Postman | 5 min |
 | [POSTMAN_IMPORT_GUIDE.md](./POSTMAN_IMPORT_GUIDE.md) | Como importar collection | 3 min |
 | [MedicWarehouse-Postman-Collection.json](../MedicWarehouse-Postman-Collection.json) | Collection do Postman | - |
@@ -224,6 +226,8 @@ MW.Code/
 | Tópico | Documento Recomendado |
 |--------|----------------------|
 | **Visão geral técnica completa** | [RESUMO_TECNICO_COMPLETO.md](./RESUMO_TECNICO_COMPLETO.md) ⭐ **NOVO!** |
+| **Todos os endpoints da API** | [GUIA_COMPLETO_APIs.md](./GUIA_COMPLETO_APIs.md) ⭐ **NOVO!** |
+| **Histórico de desenvolvimento** | [CHANGELOG.md](../CHANGELOG.md) ⭐ **NOVO!** |
 | **Pendências e planejamento futuro** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
 | **Melhorias e roadmap** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
 | **Gaps e funcionalidades faltantes** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
@@ -247,11 +251,17 @@ MW.Code/
 
 ## 📊 Estatísticas da Documentação
 
-- **Total de Documentos:** 50 arquivos markdown (incluindo RESUMO_TECNICO_COMPLETO.md)
-- **Documentos Essenciais:** 7
-- **Tempo Total de Leitura:** ~3.5 horas (documentos essenciais)
+- **Total de Documentos:** 51 arquivos markdown (incluindo RESUMO_TECNICO_COMPLETO.md e GUIA_COMPLETO_APIs.md)
+- **Documentos Essenciais:** 8
+- **Tempo Total de Leitura:** ~4 horas (documentos essenciais)
 - **Idioma Principal:** Português (PT-BR)
 - **Última Atualização:** 2026-01-06
+
+### 🆕 Novos Documentos (Janeiro 2026)
+
+1. ⭐ **RESUMO_TECNICO_COMPLETO.md** - Visão técnica consolidada com 92% de completude
+2. ⭐ **GUIA_COMPLETO_APIs.md** - Documentação completa de 25 categorias de endpoints
+3. 📝 **CHANGELOG.md** (na raiz) - Histórico completo de desenvolvimento
 
 ### 📋 Critérios de Documentação Essencial
 
