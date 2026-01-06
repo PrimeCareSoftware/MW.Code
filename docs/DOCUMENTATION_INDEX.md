@@ -1,7 +1,11 @@
 # 📚 Índice de Documentação - MedicWarehouse
 
-> **Última Atualização:** Janeiro 2025  
+> **Última Atualização:** Janeiro 2026 🆕  
 > **Status:** Documentação consolidada e otimizada
+
+> ⚠️ **ATUALIZAÇÃO (06/01/2026):** Nova documentação de Receitas Médicas Digitais! ✅  
+> Sistema completo conforme CFM 1.643/2002 e ANVISA 344/1998.  
+> Ver [DIGITAL_PRESCRIPTIONS.md](./DIGITAL_PRESCRIPTIONS.md)
 
 Este documento serve como guia de navegação para toda a documentação do sistema MedicWarehouse.
 
@@ -72,6 +76,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
+| [DIGITAL_PRESCRIPTIONS.md](./DIGITAL_PRESCRIPTIONS.md) | 🆕 **NOVO! (Jan/2026)** Sistema de Receitas Médicas Digitais - CFM 1.643/2002 + ANVISA 344/1998 | 40 min |
 | [PATIENT_HISTORY_API.md](./PATIENT_HISTORY_API.md) | 🆕 **NOVO!** API de histórico de atendimentos e procedimentos do paciente | 10 min |
 | [OWNER_FLOW_DOCUMENTATION.md](./OWNER_FLOW_DOCUMENTATION.md) | Fluxo de proprietários | 10 min |
 | [SYSTEM_ADMIN_AREA_GUIDE.md](./SYSTEM_ADMIN_AREA_GUIDE.md) | Área administrativa do sistema | 8 min |

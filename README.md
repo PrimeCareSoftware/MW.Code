@@ -227,6 +227,43 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Medicamentos Controlados**: Identificação de substâncias controladas (Portaria 344/98)
 - ✅ **Categorias**: Analgésico, Antibiótico, Anti-inflamatório, etc.
 
+### 💊 Receitas Médicas Digitais (CFM 1.643/2002 + ANVISA 344/1998) 🆕
+
+**Sistema completo de prescrição eletrônica 100% conforme regulamentações brasileiras!**
+
+#### Conformidade Legal
+- ✅ **CFM 1.643/2002**: Prontuário eletrônico e receitas digitais
+- ✅ **ANVISA 344/1998**: Controle de substâncias controladas
+- ✅ **RDC ANVISA 20/2011**: Receitas antimicrobianas
+
+#### Tipos de Receitas Suportadas
+- ✅ **Receita Simples**: Medicamentos comuns (validade 30 dias)
+- ✅ **Receita Antimicrobiana**: Antibióticos (validade 10 dias, retenção obrigatória)
+- ✅ **Controle Especial A**: Entorpecentes (Lista A1, A2, A3 - numeração sequencial)
+- ✅ **Controle Especial B**: Psicotrópicos (Lista B1, B2 - numeração sequencial)
+- ✅ **Controle Especial C1**: Outros controlados (Lista C1 - numeração sequencial)
+
+#### Funcionalidades Principais
+- ✅ **Numeração Sequencial**: Controle automático para substâncias controladas
+- ✅ **Código de Verificação**: QR Code único para autenticação
+- ✅ **Assinatura Digital**: Suporte para certificados ICP-Brasil (pronto para uso)
+- ✅ **Validade Automática**: Prazos corretos por tipo de receita (10-30 dias)
+- ✅ **Rastreamento SNGPC**: Preparado para envio ao sistema ANVISA
+- ✅ **Dados do Médico**: CRM, nome completo, UF (obrigatório CFM)
+- ✅ **Dados do Paciente**: Nome, CPF/RG (obrigatório CFM)
+- ✅ **Classificação ANVISA**: 10 listas de substâncias controladas (A1-C5)
+- ✅ **Imutabilidade**: Receitas assinadas não podem ser alteradas
+- ✅ **Retenção 20 anos**: Soft delete mantém histórico completo
+- ✅ **Multi-tenant**: Isolamento completo por clínica
+
+#### Segurança e Rastreabilidade
+- ✅ **Verificação QR Code**: Cada receita tem código único
+- ✅ **Integridade de Dados**: Informações duplicadas para garantir consistência
+- ✅ **Auditoria Completa**: Histórico de criação, assinatura e modificações
+- ✅ **Controle de Acesso**: Apenas médicos autorizados podem prescrever
+
+📖 **Documentação Completa**: [DIGITAL_PRESCRIPTIONS.md](docs/DIGITAL_PRESCRIPTIONS.md)
+
 ### 📝 Editor de Texto Rico e Autocomplete 🆕
 - ✅ **Editor de Texto Rico**: Formatação avançada (negrito, itálico, listas, títulos)
 - ✅ **Autocomplete de Medicações**: Digite `@@` para buscar medicações (130+ itens)

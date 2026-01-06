@@ -5,8 +5,12 @@
 > **Objetivo:** Documento detalhado com ordem de prioridade e passos necessários para cada desenvolvimento pendente.
 
 > **Base:** Análise do PENDING_TASKS.md e APPS_PENDING_TASKS.md  
-> **Última Atualização:** Janeiro 2025  
+> **Última Atualização:** Janeiro 2026 🆕  
 > **Status:** Plano de execução 2025-2026
+
+> ⚠️ **ATUALIZAÇÃO (06/01/2026):** Sistema de Receitas Médicas Digitais implementado! ✅  
+> Backend completo com entidades de domínio conforme CFM 1.643/2002 e ANVISA 344/1998.  
+> Ver detalhes em [DIGITAL_PRESCRIPTIONS.md](DIGITAL_PRESCRIPTIONS.md)
 
 ---
 

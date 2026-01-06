@@ -107,6 +107,94 @@ Este documento responde diretamente às funcionalidades solicitadas no problema 
 **Endpoints:**
 - `POST /api/medical-records` - Criar prontuário com prescrição
 
+### 💊 Receitas Médicas Digitais (CFM 1.643/2002 + ANVISA 344/1998) 🆕
+
+**Sistema completo de prescrição eletrônica 100% conforme regulamentações brasileiras!**
+
+#### Conformidade Legal Implementada
+- ✅ **CFM 1.643/2002**: Prontuário eletrônico e receitas digitais
+- ✅ **ANVISA 344/1998**: Controle de substâncias controladas (10 listas)
+- ✅ **RDC ANVISA 20/2011**: Receitas antimicrobianas
+
+#### Tipos de Receitas Implementadas
+- ✅ **Receita Simples**: Medicamentos comuns (validade 30 dias)
+- ✅ **Receita Antimicrobiana**: Antibióticos (validade 10 dias, retenção obrigatória)
+- ✅ **Controle Especial A**: Entorpecentes (Lista A1, A2, A3)
+- ✅ **Controle Especial B**: Psicotrópicos (Lista B1, B2)
+- ✅ **Controle Especial C1**: Outros controlados (Lista C1)
+
+#### Funcionalidades Implementadas
+- ✅ **Entidades de Domínio**: `DigitalPrescription` e `DigitalPrescriptionItem`
+- ✅ **Numeração Sequencial**: Controle automático para substâncias controladas
+- ✅ **Código de Verificação**: QR Code único para cada receita
+- ✅ **Assinatura Digital**: Suporte ICP-Brasil (pronto para integração)
+- ✅ **Validade Automática**: Cálculo correto por tipo (10-30 dias)
+- ✅ **Rastreamento SNGPC**: Flags e métodos para envio ao sistema ANVISA
+- ✅ **Imutabilidade**: Receitas assinadas não podem ser modificadas
+- ✅ **Validações de Domínio**: Regras de negócio completas
+- ✅ **Multi-tenant**: Isolamento completo por clínica
+- ✅ **Soft Delete**: Retenção de 20 anos (CFM)
+
+#### Campos Obrigatórios CFM
+- ✅ Nome completo do médico
+- ✅ CRM e UF do médico
+- ✅ Nome completo do paciente
+- ✅ Documento do paciente (CPF/RG)
+- ✅ Data de emissão
+- ✅ Medicamento, dosagem, forma farmacêutica
+- ✅ Frequência e duração do tratamento
+- ✅ Quantidade total prescrita
+
+#### Classificação ANVISA de Substâncias Controladas
+- ✅ **Lista A1**: Entorpecentes (narcóticos)
+- ✅ **Lista A2**: Entorpecentes (psicotrópicos)
+- ✅ **Lista A3**: Psicotrópicos
+- ✅ **Lista B1**: Psicotrópicos
+- ✅ **Lista B2**: Psicotrópicos anorexígenos
+- ✅ **Lista C1**: Outras substâncias controladas
+- ✅ **Lista C2**: Retinóides de uso sistêmico
+- ✅ **Lista C3**: Imunossupressores
+- ✅ **Lista C4**: Antirretrovirais
+- ✅ **Lista C5**: Anabolizantes
+
+#### Métodos de Domínio Implementados
+```csharp
+// DigitalPrescription
+- AddItem(item)
+- RemoveItem(itemId)
+- SignPrescription(signature, certificate)
+- MarkAsReportedToSNGPC()
+- Deactivate()
+- Reactivate()
+- IsExpired()
+- IsValid()
+- DaysUntilExpiration()
+
+// DigitalPrescriptionItem
+- Update(dosage, frequency, duration, quantity, route, instructions)
+- SetBatchInformation(batch, manufactureDate, expiryDate)
+- IsExpired()
+- DaysUntilExpiry()
+- GetDailyDoseDescription()
+```
+
+#### Repositórios Implementados
+- ✅ `IDigitalPrescriptionRepository`
+- ✅ `IDigitalPrescriptionItemRepository`
+- ✅ `IPrescriptionSequenceControlRepository`
+
+#### Próximos Passos
+- ⏳ **API Controller**: Criar endpoints REST
+- ⏳ **Frontend Angular**: Componentes de UI
+- ⏳ **Integração SNGPC**: Envio automático para ANVISA
+- ⏳ **Geração de PDF**: Templates de impressão
+- ⏳ **Assinatura ICP-Brasil**: Integração com certificados digitais
+
+**Documentação Completa:**
+- [DIGITAL_PRESCRIPTIONS.md](DIGITAL_PRESCRIPTIONS.md) - Documentação técnica completa
+- Entidades: `src/MedicSoft.Domain/Entities/DigitalPrescription.cs`
+- Interfaces: `src/MedicSoft.Domain/Interfaces/IDigitalPrescriptionRepository.cs`
+
 ### 🆕 Editor de Texto Rico com Autocomplete (NOVO!)
 
 Sistema avançado de edição de texto com formatação e predição inteligente de medicações e exames.

@@ -2,9 +2,13 @@
 
 > **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema MedicWarehouse.
 
-> **Última Atualização:** Dezembro 2024  
+> **Última Atualização:** Janeiro 2026 🆕  
 > **Status:** Em planejamento para 2025-2026  
-> **Versão:** 2.0 - Compliance Regulatório Brasileiro
+> **Versão:** 2.1 - Compliance Regulatório Brasileiro
+
+> ⚠️ **ATUALIZAÇÃO (06/01/2026):** Sistema de Receitas Médicas Digitais implementado! ✅  
+> Entidades de domínio completas conforme CFM 1.643/2002 e ANVISA 344/1998.  
+> Próximas etapas: API Controllers e Frontend. Ver [DIGITAL_PRESCRIPTIONS.md](DIGITAL_PRESCRIPTIONS.md)
 
 ---
 
@@ -63,8 +67,8 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 | 🔥🔥🔥 | Portal do Paciente | ❌ Não iniciado | 2-3 meses, 2 devs | Q2/2025 |
 | 🔥🔥🔥 | Integração TISS Fase 1 | ❌ Não iniciado | 3 meses, 2-3 devs | Q4/2025 |
 | 🔥🔥🔥 | Integração TISS Fase 2 | ❌ Não iniciado | 3 meses, 2-3 devs | Q1/2026 |
-| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
-| 🔥🔥 | SNGPC (ANVISA) | ❌ Não iniciado | 2 meses, 1 dev | Q2/2025 |
+| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ✅ **IMPLEMENTADO** - Entidades de domínio completas (Jan/2026) | Fase 1: Backend completo. Fase 2: API + Frontend | Q1/2026 |
+| 🔥🔥 | SNGPC (ANVISA) | ⏳ **PARCIAL** - Estrutura pronta, falta integração | 2 meses, 1 dev | Q2/2026 |
 
 ### Melhorias de UX e Produtividade
 
