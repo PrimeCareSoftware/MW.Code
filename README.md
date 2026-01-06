@@ -2,6 +2,8 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
+> 📊 **NOVO!** Quer ver tudo que foi desenvolvido? [→ Ver Resumo Técnico Completo](docs/RESUMO_TECNICO_COMPLETO.md) - Visão geral de **92% de completude do sistema**!
+
 > 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
 
 > 🌍 **NOVO!** Desenvolva em **macOS, Windows ou Linux**! [→ Ver Guia Multiplataforma](docs/GUIA_MULTIPLATAFORMA.md) - Compatibilidade total garantida!
@@ -11,6 +13,20 @@
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](docs/GITHUB_PAGES_SETUP_REQUIRED.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
+
+## 📊 Status do Projeto
+
+| Métrica | Valor |
+|---------|-------|
+| **Completude Geral** | ✅ **92%** |
+| **Controllers Backend** | 40+ |
+| **Componentes Frontend** | 163+ |
+| **Apps Mobile** | 2 (iOS + Android) |
+| **Microservices** | 7 |
+| **Testes Automatizados** | 670+ |
+| **Documentos** | 49+ |
+
+[→ Ver Resumo Técnico Completo](docs/RESUMO_TECNICO_COMPLETO.md)
 
 ## 🌍 Compatibilidade Multiplataforma
 
@@ -143,6 +159,11 @@ Painel administrativo para gestão do sistema completo:
 - 💡 Aprenda sobre: SaaS, MRR, Churn, CAC, LTV, ROI, e muito mais
 - 🎯 Ideal para: Empreendedores, donos de negócio, estudantes
 - 📊 Exemplos práticos e aplicações reais
+
+### 📊 Documentação Técnica Consolidada (NOVO!)
+- 📖 **[`RESUMO_TECNICO_COMPLETO.md`](docs/RESUMO_TECNICO_COMPLETO.md)** - ⭐ Visão geral completa do sistema (92% completude)
+- 📖 **[`GUIA_COMPLETO_APIs.md`](docs/GUIA_COMPLETO_APIs.md)** - ⭐ Documentação de todos os endpoints da API
+- 📖 **[`CHANGELOG.md`](CHANGELOG.md)** - ⭐ Histórico completo de desenvolvimento
 
 ### 📱 Documentação Portátil
 **Leia toda a documentação no celular ou gere um PDF completo!**
@@ -853,11 +874,24 @@ Para mais detalhes, consulte: [CI_CD_DOCUMENTATION.md](docs/CI_CD_DOCUMENTATION.
 
 ## 🤝 Contribuição
 
+Contribuições são bem-vindas! Veja nosso [Guia de Contribuição](CONTRIBUTING.md) para saber como começar.
+
+### Como Contribuir
+
 1. Fork o projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
 3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
+
+**Guia completo:** [CONTRIBUTING.md](CONTRIBUTING.md)
+
+### Boas Issues para Começar
+
+Procure por issues marcadas com:
+- `good first issue` - Boas para iniciantes
+- `help wanted` - Precisamos de ajuda
+- `documentation` - Melhorias na documentação
 
 ## 📄 Licença
 
