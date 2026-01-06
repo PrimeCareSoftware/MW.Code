@@ -228,6 +228,7 @@ MW.Code/
 | **Visão geral técnica completa** | [RESUMO_TECNICO_COMPLETO.md](./RESUMO_TECNICO_COMPLETO.md) ⭐ **NOVO!** |
 | **Todos os endpoints da API** | [GUIA_COMPLETO_APIs.md](./GUIA_COMPLETO_APIs.md) ⭐ **NOVO!** |
 | **Histórico de desenvolvimento** | [CHANGELOG.md](../CHANGELOG.md) ⭐ **NOVO!** |
+| **Como contribuir** | [CONTRIBUTING.md](../CONTRIBUTING.md) ⭐ **NOVO!** |
 | **Pendências e planejamento futuro** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
 | **Melhorias e roadmap** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
 | **Gaps e funcionalidades faltantes** | [PENDING_TASKS.md](./PENDING_TASKS.md) ⭐ **NOVO!** |
