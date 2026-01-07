@@ -156,9 +156,13 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 ### ⚠️ Parcialmente Implementado
 
-- ⚠️ **Conformidade CFM 1.821/2007** - 70%
-  - Prontuário base implementado
-  - Faltam: validações específicas, consentimento informado estruturado
+- ⚠️ **Conformidade CFM 1.821/2007** - 85% ✨ (Janeiro 2026)
+  - ✅ Prontuário base implementado
+  - ✅ Consentimento informado estruturado (frontend completo)
+  - ✅ Exame clínico com sinais vitais (frontend completo)
+  - ✅ Hipóteses diagnósticas com CID-10 (frontend completo)
+  - ✅ Plano terapêutico detalhado (frontend completo)
+  - Falta: Integração completa no fluxo de atendimento
   
 - ⚠️ **Receitas Médicas Digitais** - 60%
   - Sistema básico de prescrições
@@ -287,30 +291,32 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 #### Resoluções CFM Aplicáveis
 
 ##### 1.1 Resolução CFM 1.821/2007 - Prontuário Médico
-**Status:** ⚠️ Parcial (prontuário existe, mas faltam requisitos específicos)
+**Status:** ⚠️ 85% Completo (backend 100%, frontend 85%, falta integração final) ✨
 
 **Requisitos Obrigatórios:**
 - [x] Identificação completa do paciente
 - [x] Data e hora do atendimento
 - [x] Identificação do médico (CRM)
-- [ ] **Anamnese completa estruturada** (SOAP implementar em Q1/2025)
-- [ ] **Exame físico detalhado** por sistemas
-- [ ] **Hipóteses diagnósticas com CID-10**
-- [ ] **Plano terapêutico detalhado**
-- [ ] **Evolução do quadro clínico** em cada consulta
-- [ ] **Dados de receitas com DCB/DCI** (denominação comum)
-- [ ] **Consentimento informado registrado**
-- [ ] **Guarda mínima de 20 anos** (já implementado via soft-delete)
+- [x] **Anamnese completa estruturada** ✨ (Janeiro 2026)
+- [x] **Exame físico detalhado** por sistemas ✨ (Janeiro 2026)
+- [x] **Hipóteses diagnósticas com CID-10** ✨ (Janeiro 2026)
+- [x] **Plano terapêutico detalhado** ✨ (Janeiro 2026)
+- [x] **Evolução do quadro clínico** em cada consulta (via histórico)
+- [x] **Dados de receitas com DCB/DCI** (implementado em DigitalPrescription)
+- [x] **Consentimento informado registrado** ✨ (Janeiro 2026)
+- [x] **Guarda mínima de 20 anos** (já implementado via soft-delete)
 
 **Ações Necessárias:**
-1. Estruturar campos obrigatórios no prontuário conforme CFM 1.821
-2. Criar templates por especialidade médica
-3. Validar preenchimento mínimo antes de salvar
-4. Implementar alertas para campos obrigatórios faltantes
-5. Adicionar workflow de consentimento informado digital
+1. ✅ Estruturar campos obrigatórios no prontuário conforme CFM 1.821 ✨
+2. ✅ Criar formulários de captura para todos os campos obrigatórios ✨
+3. ✅ Validar preenchimento mínimo antes de salvar ✨
+4. [ ] Integrar componentes no fluxo de atendimento (em progresso)
+5. ✅ Adicionar workflow de consentimento informado digital ✨
+6. [ ] Criar templates por especialidade médica (opcional, futuro)
+7. [ ] Implementar alertas para campos obrigatórios faltantes (em progresso)
 
-**Esforço:** 2 meses | 1 dev  
-**Prazo:** Q1/2025
+**Esforço Restante:** 1 semana | 1 dev  
+**Prazo:** Q1/2025 (quase completo)
 
 ---
 
