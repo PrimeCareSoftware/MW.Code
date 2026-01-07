@@ -22,18 +22,46 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Patient Portal API",
         Version = "v1",
-        Description = "API for Patient Portal - MedicWarehouse",
+        Description = "API for Patient Portal - MedicWarehouse\n\n" +
+                      "This API provides secure access for patients to view their medical appointments, " +
+                      "documents, and manage their profile information.\n\n" +
+                      "**Authentication:** JWT Bearer Token\n" +
+                      "**Base URL:** /api\n\n" +
+                      "**Getting Started:**\n" +
+                      "1. Register a new account via POST /api/auth/register\n" +
+                      "2. Login via POST /api/auth/login to receive access and refresh tokens\n" +
+                      "3. Use the access token in the Authorization header for protected endpoints\n" +
+                      "4. Refresh tokens when needed via POST /api/auth/refresh\n\n" +
+                      "**Security Features:**\n" +
+                      "- JWT tokens with 15-minute expiry\n" +
+                      "- Refresh tokens with 7-day validity\n" +
+                      "- Password hashing with PBKDF2\n" +
+                      "- Account lockout after 5 failed attempts\n" +
+                      "- LGPD compliant data handling",
         Contact = new OpenApiContact
         {
             Name = "MedicWarehouse",
             Email = "support@medicwarehouse.com"
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Proprietary"
         }
     });
+
+    // Include XML comments
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
 
     // Add JWT Authentication to Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.\n\n" +
+                      "Example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -138,4 +166,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Make Program class accessible for integration tests
+public partial class Program { }
 

@@ -19,8 +19,39 @@ public class ProfileController : ControllerBase
     }
 
     /// <summary>
-    /// Get current user profile
+    /// Retrieves the profile information of the authenticated patient
     /// </summary>
+    /// <returns>User profile data including personal information and account settings</returns>
+    /// <response code="200">Returns the user profile information</response>
+    /// <response code="401">User is not authenticated</response>
+    /// <response code="404">User profile not found</response>
+    /// <response code="500">Internal server error</response>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     GET /api/profile/me
+    ///     Authorization: Bearer {access-token}
+    /// 
+    /// Sample response:
+    /// 
+    ///     {
+    ///         "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "email": "patient@example.com",
+    ///         "fullName": "João Silva",
+    ///         "cpf": "12345678901",
+    ///         "phoneNumber": "+55 11 98765-4321",
+    ///         "dateOfBirth": "1990-01-15",
+    ///         "emailConfirmed": true,
+    ///         "phoneConfirmed": false,
+    ///         "twoFactorEnabled": false,
+    ///         "lastLoginAt": "2026-01-07T10:30:00Z",
+    ///         "createdAt": "2025-12-01T08:00:00Z"
+    ///     }
+    /// 
+    /// **LGPD Compliance:**
+    /// - Sensitive data (password hash, security stamps) is never returned
+    /// - Profile access is logged for audit purposes
+    /// </remarks>
     [HttpGet("me")]
     public async Task<IActionResult> GetProfile()
     {
@@ -58,8 +89,40 @@ public class ProfileController : ControllerBase
     }
 
     /// <summary>
-    /// Update user profile
+    /// Updates the profile information of the authenticated patient
     /// </summary>
+    /// <param name="request">Profile fields to update (full name and/or phone number)</param>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">Profile updated successfully</response>
+    /// <response code="401">User is not authenticated</response>
+    /// <response code="404">User profile not found</response>
+    /// <response code="500">Internal server error</response>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     PUT /api/profile/me
+    ///     Authorization: Bearer {access-token}
+    ///     {
+    ///         "fullName": "João Silva Santos",
+    ///         "phoneNumber": "+55 11 91234-5678"
+    ///     }
+    /// 
+    /// **Updatable Fields:**
+    /// - fullName: User's full name
+    /// - phoneNumber: Contact phone number in international format
+    /// 
+    /// **Non-Updatable Fields:**
+    /// - Email and CPF cannot be changed via this endpoint for security reasons
+    /// - To change email or CPF, contact support
+    /// 
+    /// **Validation:**
+    /// - Full name must not be empty if provided
+    /// - Phone number should be in valid format if provided
+    /// 
+    /// **LGPD Compliance:**
+    /// - Profile updates are logged for audit purposes
+    /// - Only the authenticated user can update their own profile
+    /// </remarks>
     [HttpPut("me")]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto request)
     {
