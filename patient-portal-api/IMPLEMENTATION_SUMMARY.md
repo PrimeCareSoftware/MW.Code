@@ -64,6 +64,57 @@ patient-portal-api/
     - Password hashing (PBKDF2, 100k iterações)
     - Account lockout (5 tentativas, 15min bloqueio)
     - Alteração de senha
+  - `TokenService` - Geração e validação de JWT tokens
+  - `AppointmentService` - Gestão de visualização de agendamentos
+  - `DocumentService` - Gestão de visualização e download de documentos
+
+#### Infrastructure Layer - Completo ✅
+- **DbContext:**
+  - `PatientPortalDbContext` - Contexto EF Core configurado
+  - Usa o mesmo banco de dados do MedicWarehouse principal
+  - Configurações de entidades e índices otimizados
+  
+- **Repositórios Concretos:**
+  - `PatientUserRepository` - CRUD completo para PatientUser
+  - `RefreshTokenRepository` - Gerenciamento de refresh tokens
+  - `AppointmentViewRepository` - Leitura de agendamentos
+  - `DocumentViewRepository` - Leitura de documentos
+  
+- **Migrations:**
+  - Migration inicial criada para tabelas PatientUsers e RefreshTokens
+  - Scripts SQL para views vw_PatientAppointments e vw_PatientDocuments
+
+#### API Layer - Completo ✅
+- **Controllers REST:**
+  - `AuthController` - Endpoints de autenticação:
+    - POST /api/auth/login - Login com email ou CPF
+    - POST /api/auth/register - Registro de novo paciente
+    - POST /api/auth/refresh - Refresh de access token
+    - POST /api/auth/logout - Logout e revogação de token
+    - POST /api/auth/change-password - Troca de senha
+  - `AppointmentsController` - Endpoints de agendamentos:
+    - GET /api/appointments - Lista todos agendamentos
+    - GET /api/appointments/upcoming - Próximos agendamentos
+    - GET /api/appointments/{id} - Detalhes de agendamento
+    - GET /api/appointments/status/{status} - Filtra por status
+    - GET /api/appointments/count - Contagem de agendamentos
+  - `DocumentsController` - Endpoints de documentos:
+    - GET /api/documents - Lista todos documentos
+    - GET /api/documents/recent - Documentos recentes
+    - GET /api/documents/{id} - Detalhes de documento
+    - GET /api/documents/type/{type} - Filtra por tipo
+    - GET /api/documents/{id}/download - Download de documento
+    - GET /api/documents/count - Contagem de documentos
+  - `ProfileController` - Endpoints de perfil:
+    - GET /api/profile/me - Dados do perfil do usuário
+    - PUT /api/profile/me - Atualização de perfil
+    
+- **Configurações:**
+  - JWT Authentication com Bearer tokens
+  - Swagger/OpenAPI com suporte a autenticação JWT
+  - CORS configurado
+  - Dependency Injection completo
+  - Connection string para PostgreSQL
 
 ### 2. **Frontend (Angular 20)**
 
@@ -150,18 +201,24 @@ Total tests: 12
 
 ### Linhas de Código
 - **Domain:** ~250 linhas
-- **Application:** ~400 linhas (incluindo AuthService ~270 linhas)
+- **Application:** ~900 linhas (AuthService ~270, TokenService ~100, AppointmentService ~100, DocumentService ~130)
+- **Infrastructure:** ~450 linhas (DbContext ~150, 4 Repositories ~300)
+- **API:** ~500 linhas (4 Controllers ~500)
 - **Tests:** ~150 linhas
-- **Documentação:** ~20.000+ caracteres
+- **Documentação:** ~25.000+ caracteres
 
 ### Arquivos Criados
 - **Entidades:** 4 arquivos
 - **Enums:** 2 arquivos
-- **Interfaces:** 6 arquivos
+- **Interfaces:** 8 arquivos (4 repositórios, 4 serviços)
 - **DTOs:** 6 arquivos
-- **Services:** 1 arquivo (AuthService)
+- **Services:** 4 arquivos (AuthService, TokenService, AppointmentService, DocumentService)
+- **Repositories:** 4 arquivos
+- **Controllers:** 4 arquivos (Auth, Appointments, Documents, Profile)
+- **DbContext:** 2 arquivos (Context + Factory)
+- **Migrations:** 1 migration inicial
 - **Tests:** 2 arquivos
-- **Documentação:** 3 arquivos
+- **Documentação:** 4 arquivos (README, ARCHITECTURE, IMPLEMENTATION_SUMMARY, PATIENT_PORTAL_GUIDE)
 
 ## 🎯 Compliance e Regulamentações
 
@@ -178,21 +235,29 @@ Total tests: 12
 
 ## ⏭️ Próximos Passos
 
-### Fase 2 (Continuação) - Infrastructure
-- [ ] Implementar `PatientPortalDbContext` (EF Core)
-- [ ] Implementar repositórios concretos
-- [ ] Criar migrations do banco de dados
-- [ ] Configurar PostgreSQL
+### ✅ Fase 2 (Continuação) - Infrastructure (COMPLETA)
+- [x] Implementar `PatientPortalDbContext` (EF Core)
+- [x] Implementar repositórios concretos (PatientUser, RefreshToken, AppointmentView, DocumentView)
+- [x] Criar migrations do banco de dados
+- [x] Configurar PostgreSQL
 
-### Fase 3 - API Controllers
-- [ ] `AuthController` - Login, registro, refresh token
-- [ ] `ProfileController` - Perfil do paciente
-- [ ] `AppointmentsController` - Listagem de agendamentos
-- [ ] `DocumentsController` - Listagem e download de documentos
-- [ ] Configurar JWT middleware
-- [ ] Adicionar Swagger/OpenAPI
+### ✅ Fase 3 - API Controllers (COMPLETA)
+- [x] `AuthController` - Login, registro, refresh token, logout, change password
+- [x] `ProfileController` - Perfil do paciente (get, update)
+- [x] `AppointmentsController` - Listagem de agendamentos (all, upcoming, by status, by id)
+- [x] `DocumentsController` - Listagem e download de documentos (all, recent, by type, by id)
+- [x] Configurar JWT middleware com autenticação Bearer
+- [x] Adicionar Swagger/OpenAPI com suporte JWT
+- [x] Implementar TokenService para geração de JWT
+- [x] Implementar AppointmentService e DocumentService
 
-### Fase 4 - Frontend Angular
+### 🔄 Fase 4 - Testes Adicionais (PARCIAL)
+- [x] Testes unitários existentes (12/12 passando)
+- [ ] Testes de integração para repositórios
+- [ ] Testes de integração para API endpoints
+- [ ] Testes de segurança
+
+### Fase 5 - Frontend Angular
 - [ ] Implementar páginas de autenticação
   - Login (com CPF ou email)
   - Registro
