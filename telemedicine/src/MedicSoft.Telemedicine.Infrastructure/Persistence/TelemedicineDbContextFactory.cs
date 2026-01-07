@@ -12,8 +12,9 @@ public class TelemedicineDbContextFactory : IDesignTimeDbContextFactory<Telemedi
     {
         var optionsBuilder = new DbContextOptionsBuilder<TelemedicineDbContext>();
         
-        // Use a default PostgreSQL connection string for migrations
-        // This will be overridden at runtime by the actual connection string
+        // DEVELOPMENT ONLY: Default PostgreSQL connection string for migrations
+        // In production, connection strings are provided via configuration
+        // This will be overridden at runtime by the actual connection string from appsettings
         optionsBuilder.UseNpgsql("Host=localhost;Database=medicsoft;Username=postgres;Password=postgres");
         
         return new TelemedicineDbContext(optionsBuilder.Options);

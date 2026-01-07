@@ -61,6 +61,8 @@ if ([string]::IsNullOrEmpty($ConnectionString)) {
     Write-Host "Or set DATABASE_CONNECTION_STRING environment variable"
     Write-Host ""
     Write-ColorOutput "Using default connection string for local development..." -Color Yellow
+    Write-ColorOutput "WARNING: Default credentials are for DEVELOPMENT ONLY!" -Color Red
+    Write-ColorOutput "Never use default credentials in production environments!" -Color Red
     $ConnectionString = "Host=localhost;Database=medicsoft;Username=postgres;Password=postgres"
 }
 

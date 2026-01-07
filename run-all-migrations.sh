@@ -27,6 +27,8 @@ if [ -z "$CONNECTION_STRING" ]; then
     echo "Or set DATABASE_CONNECTION_STRING environment variable"
     echo ""
     echo -e "${YELLOW}Using default connection string for local development...${NC}"
+    echo -e "${RED}WARNING: Default credentials are for DEVELOPMENT ONLY!${NC}"
+    echo -e "${RED}Never use default credentials in production environments!${NC}"
     CONNECTION_STRING="Host=localhost;Database=medicsoft;Username=postgres;Password=postgres"
 fi
 

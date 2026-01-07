@@ -142,11 +142,6 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Database migration failed: {Message}", ex.Message);
         Console.WriteLine($"Database migration failed: {ex.Message}");
     }
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while initializing the database");
-    }
 }
 
 // Configure the HTTP request pipeline.
