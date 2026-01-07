@@ -99,6 +99,38 @@ Este documento descreve a implementação realizada para conformidade com a Reso
   - `CreateTherapeuticPlanCommand`, `UpdateTherapeuticPlanCommand`
   - `CreateInformedConsentCommand`, `AcceptInformedConsentCommand`
 
+#### Fase 4: Frontend - Componentes CFM 1.821 ✅ COMPLETO (Janeiro 2026)
+- ✅ `InformedConsentFormComponent` criado
+  - Formulário completo de consentimento informado
+  - Listagem de consentimentos existentes
+  - Aceite imediato opcional com rastreamento de IP
+  - Integração com backend completa
+  
+- ✅ `ClinicalExaminationFormComponent` criado
+  - Formulário de sinais vitais com validações de range
+  - Alertas visuais para valores anormais
+  - Exame físico sistemático obrigatório (min 20 caracteres)
+  - Estado geral opcional
+  - Modo criar/atualizar
+  
+- ✅ `DiagnosticHypothesisFormComponent` criado
+  - Suporte a múltiplas hipóteses diagnósticas
+  - Validação de formato CID-10 com regex
+  - Busca rápida com exemplos comuns de CID-10
+  - Tipo Principal vs Secundário
+  - CRUD completo (criar, atualizar, excluir)
+  - Auto-uppercase para códigos CID
+  
+- ✅ `TherapeuticPlanFormComponent` criado
+  - Tratamento/Conduta obrigatório (min 20 caracteres)
+  - Prescrição medicamentosa com orientações
+  - Exames solicitados
+  - Encaminhamentos
+  - Orientações ao paciente
+  - Data de retorno
+  - Contadores de caracteres
+  - Modo criar/atualizar
+
 - ✅ Handlers criados para todos os commands:
   - Validação de entidades relacionadas (MedicalRecord, Patient)
   - Tratamento de erros apropriado

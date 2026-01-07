@@ -269,9 +269,9 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Prescrição Médica**: Área de texto com impressão otimizada
 - ✅ **Encaixes**: Permite agendamentos de emergência
 
-### 🏥 Conformidade CFM 1.821/2007 - Prontuário Eletrônico 🆕
+### 🏥 Conformidade CFM 1.821/2007 - Prontuário Eletrônico 🆕✨
 
-**Sistema 100% conforme a Resolução CFM 1.821/2007 sobre prontuários eletrônicos!**
+**Sistema 85% conforme a Resolução CFM 1.821/2007 sobre prontuários eletrônicos! (Janeiro 2026)**
 
 #### Anamnese Estruturada (Campos Obrigatórios)
 - ✅ **Queixa Principal**: Campo obrigatório com validação de 10+ caracteres
@@ -281,35 +281,43 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Hábitos de Vida**: Tabagismo, etilismo, atividade física, etc.
 - ✅ **Medicações em Uso**: Lista de medicamentos atuais do paciente
 
-#### Exame Clínico Completo
-- ✅ **Sinais Vitais Obrigatórios**:
+#### Exame Clínico Completo ✨ (Frontend Janeiro 2026)
+- ✅ **Sinais Vitais Obrigatórios** com validação inteligente:
   - Pressão Arterial (Sistólica/Diastólica): 50-300/30-200 mmHg
   - Frequência Cardíaca: 30-220 bpm
   - Frequência Respiratória: 8-60 irpm
   - Temperatura: 32-45°C
   - Saturação de O2: 0-100%
+  - 🎯 **Alertas visuais para valores anormais** (fora da faixa normal)
 - ✅ **Exame Físico Sistemático**: Descrição obrigatória (mín. 20 caracteres)
 - ✅ **Estado Geral**: Registro do estado geral do paciente
+- ✅ **Componente Frontend**: `ClinicalExaminationFormComponent` completo
 
-#### Hipóteses Diagnósticas com CID-10
+#### Hipóteses Diagnósticas com CID-10 ✨ (Frontend Janeiro 2026)
 - ✅ **Diagnósticos Estruturados**: Suporte a múltiplos diagnósticos por atendimento
 - ✅ **Código CID-10 Validado**: Validação automática de formato (ex: A00, J20.9, Z99.01)
 - ✅ **Tipificação**: Principal ou Secundário
 - ✅ **Data do Diagnóstico**: Registro temporal de cada hipótese
+- ✅ **Busca Rápida CID-10**: Interface com exemplos comuns para facilitar preenchimento
+- ✅ **Validação Regex**: Padrão `[A-Z]{1,3}\d{2}(\.\d{1,2})?`
+- ✅ **Componente Frontend**: `DiagnosticHypothesisFormComponent` completo
 
-#### Plano Terapêutico Detalhado
+#### Plano Terapêutico Detalhado ✨ (Frontend Janeiro 2026)
 - ✅ **Tratamento/Conduta**: Descrição obrigatória (mín. 20 caracteres)
 - ✅ **Prescrição Medicamentosa**: Lista detalhada de medicamentos prescritos
 - ✅ **Solicitação de Exames**: Exames complementares solicitados
 - ✅ **Encaminhamentos**: Referências para outros especialistas
 - ✅ **Orientações ao Paciente**: Instruções e cuidados
 - ✅ **Data de Retorno**: Agendamento de retorno automático
+- ✅ **Componente Frontend**: `TherapeuticPlanFormComponent` completo
 
-#### Consentimento Informado
+#### Consentimento Informado ✨ (Frontend Janeiro 2026)
 - ✅ **Termo de Consentimento**: Registro de consentimento do paciente
 - ✅ **Aceite Digital**: Registro de aceite com data/hora
 - ✅ **Rastreabilidade**: IP de origem e assinatura digital (opcional)
 - ✅ **Histórico Completo**: Todos os consentimentos registrados
+- ✅ **Aceite Imediato**: Opção de registrar aceite no momento do atendimento
+- ✅ **Componente Frontend**: `InformedConsentFormComponent` completo
 
 #### Auditoria e Controle
 - ✅ **Fechamento de Prontuário**: Impede alterações após finalização
@@ -318,9 +326,16 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Isolamento Multi-tenant**: Segurança e privacidade garantidas
 - ✅ **Guarda de 20 anos**: Soft-delete sem exclusão física
 
+#### Status de Implementação (Janeiro 2026)
+- ✅ **Backend**: 100% completo (entidades, repositórios, controllers, handlers)
+- ✅ **Frontend Components**: 100% completo (4 componentes prontos)
+- 🔄 **Integração**: Em progresso (integrar componentes no fluxo de atendimento)
+- 📊 **Compliance Geral**: 85% (↑15% em Janeiro 2026)
+
 📖 **Documentação Completa**:
 - [Especificação CFM 1.821](docs/ESPECIFICACAO_CFM_1821.md)
 - [Implementação Detalhada](docs/CFM_1821_IMPLEMENTACAO.md)
+- [Plano de Implementação Pendente](docs/IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md) - **NOVO!**
 - [Histórico de Implementação](docs/archive/README.md) - Phases 3, 4, e 5 completas (arquivado)
 
 ### 💳 Assinaturas e Cobrança
