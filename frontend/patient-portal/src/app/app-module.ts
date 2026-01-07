@@ -1,8 +1,11 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -10,10 +13,12 @@ import { App } from './app';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule
   ],
   providers: [
-    provideBrowserGlobalErrorListeners()
+    provideBrowserGlobalErrorListeners(),
+    provideHttpClient(withInterceptors([authInterceptor]))
   ],
   bootstrap: [App]
 })
