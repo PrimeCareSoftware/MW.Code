@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres-test:
+    image: postgres:16-alpine
+    container_name: patient-portal-postgres-test
+    environment:
+      POSTGRES_DB: patient_portal_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_test_password
+    ports:
+      - "5433:5432"
+    networks:
+      - patient-portal-test-network
+    healthcheck:
+      test: pg_isready -U postgres -d patient_portal_test
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  patient-portal-api-test:
+    build:
+      context: .
+      dockerfile: PatientPortal.Api/Dockerfile
+    container_name: patient-portal-api-test
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Testing
+      - ConnectionStrings__DefaultConnection=Host=postgres-test;Port=5432;Database=patient_portal_test;Username=postgres;Password=postgres_test_password
+      - JwtSettings__SecretKey=TestSecretKey-MinLength32Chars-ForTestingOnly!
+      - JwtSettings__ExpiryMinutes=15
+      - JwtSettings__Issuer=PatientPortal-Test
+      - JwtSettings__Audience=PatientPortal-Test-API
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+    networks:
+      - patient-portal-test-network
+    healthcheck:
+      test: curl -f http://localhost:8080/health || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+networks:
+  patient-portal-test-network:
+    driver: bridge

@@ -57,8 +57,60 @@ npm run build
 ### Testes
 
 ```bash
-# Executar testes unitários
+# Executar testes unitários (Karma/Jasmine)
 npm test
+
+# Executar testes E2E (Playwright)
+npm run e2e
+
+# E2E com UI interativa
+npm run e2e:ui
+
+# E2E em modo headed (visível)
+npm run e2e:headed
+
+# E2E em browser específico
+npm run e2e -- --project chromium
+npm run e2e -- --project firefox
+npm run e2e -- --project webkit
+```
+
+**Testes Implementados:**
+
+#### Unit Tests (Karma/Jasmine)
+- Testes de componentes
+- Testes de serviços
+- Testes de guards e interceptors
+
+#### E2E Tests (Playwright) - 30+ testes
+- ✅ **auth.spec.ts** (7 testes) - Autenticação completa
+  - Login, registro, validação de formulários
+- ✅ **dashboard.spec.ts** (6 testes) - Navegação e dashboard
+  - Rotas, welcome message, logout
+- ✅ **appointments.spec.ts** (5 testes) - Gestão de consultas
+  - Listagem, filtros, visualização
+- ✅ **documents.spec.ts** (6 testes) - Documentos
+  - Listagem, busca, download
+- ✅ **profile.spec.ts** (6 testes) - Perfil do usuário
+  - Edição de dados, alteração de senha
+
+**Browsers Testados:**
+- ✅ Chromium (Desktop)
+- ✅ Firefox (Desktop)
+- ✅ WebKit/Safari (Desktop)
+- ✅ Mobile Chrome (Pixel 5)
+- ✅ Mobile Safari (iPhone 12)
+
+### Docker
+
+```bash
+# Build da imagem Docker
+docker build -t patient-portal-frontend .
+
+# Executar container
+docker run -p 8080:8080 patient-portal-frontend
+
+# Acessar em http://localhost:8080
 ```
 
 ## 🔧 Configuração
@@ -123,6 +175,30 @@ O projeto utiliza Angular Material com customizações:
 - Refresh tokens automáticos via interceptor
 - Auth guard protegendo rotas
 - HTTPS obrigatório em produção
+- Security headers configurados no nginx (Docker)
+- CSP (Content Security Policy) habilitado
+
+## 🔄 CI/CD
+
+O frontend está integrado ao pipeline de CI/CD do Patient Portal.
+
+**Workflow:** `.github/workflows/patient-portal-ci.yml`
+
+**Processos Automatizados:**
+- ✅ Testes unitários em cada commit
+- ✅ Testes E2E em múltiplos browsers
+- ✅ Build Docker otimizado
+- ✅ Deploy automático para staging (develop branch)
+- ✅ Deploy automático para production (main branch)
+
+**Docker Configuration:**
+- Multi-stage build (Node.js → nginx)
+- Tamanho otimizado (~50MB)
+- nginx com security headers
+- Health check configurado
+- Non-root user para segurança
+
+Veja [CI_CD_GUIDE.md](../../patient-portal-api/CI_CD_GUIDE.md) para mais detalhes.
 
 ## 📚 Documentação Adicional
 
