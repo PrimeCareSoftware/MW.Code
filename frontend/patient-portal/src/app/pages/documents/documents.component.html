@@ -1,0 +1,66 @@
+<div class="documents-container">
+  <header class="page-header">
+    <button mat-icon-button routerLink="/dashboard">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Meus Documentos</h1>
+  </header>
+
+  <div class="documents-content" *ngIf="!loading; else loadingTemplate">
+    <div *ngIf="documents.length > 0; else noDocuments">
+      <mat-card *ngFor="let document of documents" class="document-card">
+        <mat-card-content>
+          <div class="document-icon">
+            <mat-icon>description</mat-icon>
+          </div>
+          
+          <div class="document-info">
+            <h2>{{ document.title }}</h2>
+            <div class="document-meta">
+              <span class="document-type">{{ document.documentType }}</span>
+              <span class="separator">•</span>
+              <span>{{ document.doctorName }}</span>
+            </div>
+            <p class="document-date">Emitido em {{ formatDate(document.issuedDate) }}</p>
+            <p class="document-description" *ngIf="document.description">
+              {{ document.description }}
+            </p>
+            <div class="document-file-info" *ngIf="document.fileName">
+              <mat-icon>attach_file</mat-icon>
+              <span>{{ document.fileName }}</span>
+              <span *ngIf="document.fileSizeFormatted" class="file-size">
+                ({{ document.fileSizeFormatted }})
+              </span>
+            </div>
+          </div>
+
+          <div class="document-actions">
+            <button mat-raised-button color="primary" 
+                    [disabled]="!document.isAvailable"
+                    (click)="downloadDocument(document)">
+              <mat-icon>download</mat-icon>
+              Baixar
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <ng-template #noDocuments>
+      <mat-card class="empty-state">
+        <mat-card-content>
+          <mat-icon>description</mat-icon>
+          <h2>Nenhum documento encontrado</h2>
+          <p>Você ainda não tem documentos disponíveis</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Carregando documentos...</p>
+    </div>
+  </ng-template>
+</div>

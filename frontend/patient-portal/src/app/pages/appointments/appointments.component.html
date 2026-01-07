@@ -1,0 +1,77 @@
+<div class="appointments-container">
+  <header class="page-header">
+    <button mat-icon-button routerLink="/dashboard">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Minhas Consultas</h1>
+  </header>
+
+  <div class="appointments-content" *ngIf="!loading; else loadingTemplate">
+    <div *ngIf="appointments.length > 0; else noAppointments">
+      <mat-card *ngFor="let appointment of appointments" class="appointment-card">
+        <mat-card-content>
+          <div class="appointment-header">
+            <div>
+              <h2>{{ appointment.doctorName }}</h2>
+              <p class="specialty">{{ appointment.doctorSpecialty }}</p>
+            </div>
+            <div class="appointment-date">
+              <p class="date">{{ formatDate(appointment.appointmentDate) }}</p>
+              <p class="time">{{ formatTime(appointment.startTime) }} - {{ formatTime(appointment.endTime) }}</p>
+            </div>
+          </div>
+
+          <div class="appointment-details">
+            <div class="detail-item">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ appointment.clinicName }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>medical_services</mat-icon>
+              <span>{{ appointment.appointmentType }}</span>
+            </div>
+            <div class="detail-item" *ngIf="appointment.isTelehealth">
+              <mat-icon>videocam</mat-icon>
+              <span>Telemedicina</span>
+            </div>
+          </div>
+
+          <div class="appointment-footer">
+            <span class="status-badge" [class]="appointment.status.toLowerCase()">
+              {{ appointment.status }}
+            </span>
+            <div class="actions" *ngIf="appointment.canCancel || appointment.canReschedule">
+              <button mat-button color="primary" *ngIf="appointment.canReschedule">
+                Reagendar
+              </button>
+              <button mat-button color="warn" *ngIf="appointment.canCancel">
+                Cancelar
+              </button>
+            </div>
+          </div>
+
+          <div class="notes" *ngIf="appointment.notes">
+            <p><strong>Observações:</strong> {{ appointment.notes }}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <ng-template #noAppointments>
+      <mat-card class="empty-state">
+        <mat-card-content>
+          <mat-icon>event_busy</mat-icon>
+          <h2>Nenhuma consulta encontrada</h2>
+          <p>Você ainda não tem consultas agendadas</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Carregando consultas...</p>
+    </div>
+  </ng-template>
+</div>
