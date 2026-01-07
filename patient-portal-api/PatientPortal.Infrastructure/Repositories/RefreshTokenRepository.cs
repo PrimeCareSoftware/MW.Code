@@ -50,6 +50,8 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         foreach (var token in tokens)
         {
             token.RevokedAt = DateTime.UtcNow;
+            token.RevokedByIp = revokedByIp;
+            token.ReasonRevoked = reason;
         }
 
         await _context.SaveChangesAsync();

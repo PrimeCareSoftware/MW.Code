@@ -82,8 +82,13 @@ public class DocumentService : IDocumentService
         if (document == null)
             return null;
 
-        // TODO: Implement actual file download from storage
-        // For now, return null - this should be implemented based on file storage strategy
+        // TODO: Implement actual file download from storage system
+        // This should integrate with the main application's file storage (e.g., Azure Blob Storage, S3, or local filesystem)
+        // For now, return null - implementation depends on the storage strategy used by MedicWarehouse
+        // Example implementation:
+        // - Get file path from document.FileUrl
+        // - Read file from storage
+        // - Return byte array
         return null;
     }
 
