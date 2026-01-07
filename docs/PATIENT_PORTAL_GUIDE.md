@@ -1,6 +1,6 @@
 # 🏥 Portal do Paciente - Guia de Implementação
 
-> **Status:** Fase 1-2 Completas (38% implementado)  
+> **Status:** Fase 1-3 Completas (75% implementado)  
 > **Última Atualização:** Janeiro 2026  
 > **Localização:** `patient-portal-api/` e `frontend/patient-portal/`
 
@@ -44,7 +44,7 @@ Aplicação moderna e responsiva:
 
 ## 📊 Status da Implementação
 
-### ✅ Completo (38%)
+### ✅ Completo (75%)
 
 #### Fase 1: Projeto Setup
 - [x] Projeto Angular 20 criado
@@ -58,18 +58,21 @@ Aplicação moderna e responsiva:
 - [x] **4 Interfaces de Repositório**
 - [x] **4 Interfaces de Serviço**
 - [x] **AuthService completo:** Login, registro, refresh token, password hashing
+- [x] **TokenService completo:** Geração e validação de JWT
+- [x] **AppointmentService completo:** Visualização de agendamentos
+- [x] **DocumentService completo:** Visualização de documentos
 - [x] **12 Testes Unitários:** 100% passando
 - [x] **Documentação:** README, ARCHITECTURE, IMPLEMENTATION_SUMMARY
 
-### 🚧 Em Progresso (62%)
-
 #### Fase 2 (continuação): Backend - Infrastructure & API
-- [ ] PatientPortalDbContext (EF Core)
-- [ ] Repositórios concretos
-- [ ] Migrations do banco
-- [ ] Controllers REST
-- [ ] JWT middleware
-- [ ] Swagger/OpenAPI
+- [x] PatientPortalDbContext (EF Core)
+- [x] Repositórios concretos (PatientUser, RefreshToken, AppointmentView, DocumentView)
+- [x] Migrations do banco
+- [x] Controllers REST (Auth, Appointments, Documents, Profile)
+- [x] JWT middleware com autenticação Bearer
+- [x] Swagger/OpenAPI com suporte JWT
+
+### 🚧 Em Progresso (25%)
 
 #### Fase 3: Frontend Angular
 - [ ] Páginas de autenticação (Login, Registro)

@@ -223,41 +223,47 @@ npm run e2e
 ### Autenticação
 
 ```
-POST   /api/auth/login           # Login de paciente
+POST   /api/auth/login           # Login de paciente (email ou CPF + senha)
 POST   /api/auth/register        # Registro de novo paciente
-POST   /api/auth/refresh-token   # Atualizar access token
-POST   /api/auth/revoke-token    # Revogar refresh token
+POST   /api/auth/refresh         # Atualizar access token
+POST   /api/auth/logout          # Logout e revogação de token
 POST   /api/auth/change-password # Alterar senha
 ```
 
 ### Agendamentos
 
 ```
-GET    /api/appointments          # Listar agendamentos
-GET    /api/appointments/{id}     # Obter agendamento específico
-GET    /api/appointments/upcoming # Listar próximos agendamentos
+GET    /api/appointments                 # Listar todos agendamentos (com paginação)
+GET    /api/appointments/{id}            # Obter agendamento específico
+GET    /api/appointments/upcoming        # Listar próximos agendamentos
+GET    /api/appointments/status/{status} # Filtrar por status (Scheduled, Completed, Cancelled)
+GET    /api/appointments/count           # Contagem total de agendamentos
 ```
 
 ### Documentos
 
 ```
-GET    /api/documents             # Listar documentos
-GET    /api/documents/{id}        # Obter documento específico
-GET    /api/documents/{id}/download # Download do PDF
-GET    /api/documents/recent      # Documentos recentes
+GET    /api/documents               # Listar todos documentos (com paginação)
+GET    /api/documents/{id}          # Obter documento específico
+GET    /api/documents/{id}/download # Download do documento
+GET    /api/documents/recent        # Documentos recentes
+GET    /api/documents/type/{type}   # Filtrar por tipo (Prescription, Exam, MedicalCertificate, Referral)
+GET    /api/documents/count         # Contagem total de documentos
 ```
 
 ### Perfil
 
 ```
-GET    /api/profile               # Obter perfil do paciente
-PUT    /api/profile               # Atualizar perfil
+GET    /api/profile/me              # Obter perfil do paciente autenticado
+PUT    /api/profile/me              # Atualizar perfil (nome, telefone)
 ```
 
 ## 📖 Documentação da API
 
-Após executar a API, acesse a documentação Swagger em:
-`https://localhost:7000/swagger`
+Após executar a API, acesse a documentação Swagger interativa em:
+- **Local:** `http://localhost:5000` (porta padrão configurável)
+- **Swagger UI:** Disponível na raiz da aplicação
+- **Autenticação:** Use o botão "Authorize" no Swagger para testar endpoints protegidos
 
 ## 🔒 Compliance e Regulamentações
 
