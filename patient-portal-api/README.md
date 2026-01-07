@@ -206,17 +206,78 @@ dotnet test
 
 # Executar com cobertura
 dotnet test /p:CollectCoverage=true /p:CoverageReportFormat=opencover
+
+# Executar apenas testes de segurança
+dotnet test --filter "Category=Security"
+
+# Executar apenas testes de performance
+dotnet test --filter "Category=Performance"
+
+# Executar com verbosidade
+dotnet test --verbosity normal
 ```
+
+**Testes Implementados:**
+- ✅ 15 testes unitários (Domain entities)
+- ✅ 7 testes de integração (API endpoints)
+- ✅ 8 testes de segurança (JWT, passwords, SQL injection)
+- ✅ 5 testes de performance (response time, concurrency)
 
 ### Frontend
 
 ```bash
-# Testes unitários
+# Testes unitários (Karma/Jasmine)
 npm test
 
-# Testes E2E
+# Testes E2E (Playwright)
 npm run e2e
+
+# E2E com UI interativa
+npm run e2e:ui
+
+# E2E em browser específico
+npm run e2e -- --project chromium
 ```
+
+**Testes E2E Implementados:**
+- ✅ auth.spec.ts (7 testes de autenticação)
+- ✅ dashboard.spec.ts (6 testes de navegação)
+- ✅ appointments.spec.ts (5 testes de agendamentos)
+- ✅ documents.spec.ts (6 testes de documentos)
+- ✅ profile.spec.ts (6 testes de perfil)
+
+## 🔄 CI/CD
+
+O projeto possui um pipeline completo de CI/CD usando GitHub Actions.
+
+**Workflow:** `.github/workflows/patient-portal-ci.yml`
+
+**Jobs do Pipeline:**
+1. ✅ Backend Tests - Testes automatizados do backend
+2. ✅ Frontend Tests - Testes unitários do frontend
+3. ✅ Security Tests - OWASP Dependency Check
+4. ✅ Build Backend - Docker image da API
+5. ✅ Build Frontend - Docker image do frontend
+6. ✅ Performance Tests - Load testing com k6
+7. 🚀 Deploy Staging - Deploy automático no develop
+8. 🚀 Deploy Production - Deploy automático no main
+
+**Executar Localmente:**
+
+```bash
+# Build Docker images
+cd patient-portal-api
+docker build -f PatientPortal.Api/Dockerfile -t patient-portal-api:local .
+
+cd ../frontend/patient-portal
+docker build -t patient-portal-frontend:local .
+
+# Executar com docker-compose
+cd ../patient-portal-api
+docker-compose up --build
+```
+
+Veja [CI_CD_GUIDE.md](CI_CD_GUIDE.md) para documentação completa.
 
 ## 📚 API Endpoints
 
