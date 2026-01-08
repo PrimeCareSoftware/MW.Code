@@ -575,11 +575,16 @@ podman run -d \
   postgres:16-alpine
 
 # Aplicar migrations
+# Método 1: Aplicar todas as migrations automaticamente (RECOMENDADO)
+./run-all-migrations.sh
+
+# Método 2: Aplicar apenas a aplicação principal
 dotnet ef database update --context MedicSoftDbContext \
   --project src/MedicSoft.Repository \
   --startup-project src/MedicSoft.Api
 ```
 
+> 📖 **Guia completo de migrations**: [MIGRATIONS_GUIDE.md](MIGRATIONS_GUIDE.md) - Como aplicar todas as migrations do sistema  
 > 📖 **Guia completo de setup do PostgreSQL**: [PODMAN_POSTGRES_SETUP.md](docs/PODMAN_POSTGRES_SETUP.md)  
 > 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](docs/MIGRACAO_POSTGRESQL.md)
 

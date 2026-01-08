@@ -132,37 +132,15 @@ using (var scope = app.Services.CreateScope())
     
     try
     {
-        // Only use EnsureCreated in development
-        // In production, migrations should be applied separately
-        if (env.IsDevelopment())
-        {
-            context.Database.EnsureCreated();
-            logger.LogInformation("Database schema ensured in development mode");
-        }
-        else
-        {
-            // In production, verify database connectivity
-            try
-            {
-                var canConnect = await context.Database.CanConnectAsync();
-                if (canConnect)
-                {
-                    logger.LogInformation("Database connection verified successfully");
-                }
-                else
-                {
-                    logger.LogWarning("Could not connect to database. Please verify connection string and database availability.");
-                }
-            }
-            catch (Exception dbEx)
-            {
-                logger.LogError(dbEx, "Failed to verify database connection. Error: {ErrorMessage}", dbEx.Message);
-            }
-        }
+        // Apply migrations automatically
+        // Migrations will be idempotent - safe to run multiple times
+        context.Database.Migrate();
+        logger.LogInformation("Database migrations applied successfully");
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "An error occurred while initializing the database");
+        logger.LogError(ex, "Database migration failed: {Message}", ex.Message);
+        Console.WriteLine($"Database migration failed: {ex.Message}");
     }
 }
 
