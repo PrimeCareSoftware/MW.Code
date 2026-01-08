@@ -30,6 +30,9 @@ export interface RegistrationRequest {
   
   // Trial
   useTrial: boolean;
+  
+  // Sales Funnel Tracking (optional)
+  sessionId?: string;
 }
 
 export interface RegistrationResponse {

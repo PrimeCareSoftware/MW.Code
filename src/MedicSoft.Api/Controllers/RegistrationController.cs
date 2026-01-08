@@ -16,13 +16,16 @@ namespace MedicSoft.Api.Controllers
     {
         private readonly IRegistrationService _registrationService;
         private readonly ISubscriptionPlanRepository _planRepository;
+        private readonly ISalesFunnelService _salesFunnelService;
 
         public RegistrationController(
             IRegistrationService registrationService,
-            ISubscriptionPlanRepository planRepository)
+            ISubscriptionPlanRepository planRepository,
+            ISalesFunnelService salesFunnelService)
         {
             _registrationService = registrationService;
             _planRepository = planRepository;
+            _salesFunnelService = salesFunnelService;
         }
 
         /// <summary>
@@ -46,6 +49,25 @@ namespace MedicSoft.Api.Controllers
                         Success = false,
                         Message = result.Message
                     });
+                }
+
+                // Track conversion in sales funnel if sessionId is provided
+                if (!string.IsNullOrEmpty(request.SessionId) && result.ClinicId.HasValue && result.OwnerId.HasValue)
+                {
+                    try
+                    {
+                        await _salesFunnelService.MarkConversionAsync(new MedicSoft.Application.DTOs.SalesFunnel.MarkConversionDto
+                        {
+                            SessionId = request.SessionId,
+                            ClinicId = result.ClinicId.Value,
+                            OwnerId = result.OwnerId.Value
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log error but don't fail registration
+                        Console.Error.WriteLine($"Failed to track conversion: {ex.Message}");
+                    }
                 }
 
                 return Ok(new RegistrationResponseDto
