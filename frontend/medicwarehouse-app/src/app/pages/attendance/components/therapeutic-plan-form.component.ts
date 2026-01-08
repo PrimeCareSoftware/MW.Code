@@ -359,11 +359,16 @@ import { CreateTherapeuticPlan, UpdateTherapeuticPlan, TherapeuticPlan } from '.
 })
 export class TherapeuticPlanFormComponent implements OnInit {
   @Input() medicalRecordId!: string;
-  @Input() existingPlan?: TherapeuticPlan;
+  @Input() set existingPlanInput(value: TherapeuticPlan | undefined) {
+    if (value) {
+      this.existingPlan.set(value);
+    }
+  }
   @Output() planSaved = new EventEmitter<TherapeuticPlan>();
   @Output() cancelled = new EventEmitter<void>();
 
   planForm: FormGroup;
+  existingPlan = signal<TherapeuticPlan | undefined>(undefined);
   isSaving = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
@@ -388,7 +393,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.existingPlan) {
+    if (this.existingPlan()) {
       this.loadExistingData();
     } else {
       this.loadExistingPlan();
@@ -405,7 +410,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
           const latestPlan = plans.sort((a, b) => 
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           )[0];
-          this.existingPlan = latestPlan;
+          this.existingPlan.set(latestPlan);
           this.loadExistingData();
         }
       },
@@ -416,16 +421,17 @@ export class TherapeuticPlanFormComponent implements OnInit {
   }
 
   loadExistingData() {
-    if (!this.existingPlan) return;
+    const plan = this.existingPlan();
+    if (!plan) return;
 
     this.planForm.patchValue({
-      treatment: this.existingPlan.treatment,
-      medicationPrescription: this.existingPlan.medicationPrescription || '',
-      examRequests: this.existingPlan.examRequests || '',
-      referrals: this.existingPlan.referrals || '',
-      patientGuidance: this.existingPlan.patientGuidance || '',
-      returnDate: this.existingPlan.returnDate ? 
-        new Date(this.existingPlan.returnDate).toISOString().split('T')[0] : ''
+      treatment: plan.treatment,
+      medicationPrescription: plan.medicationPrescription || '',
+      examRequests: plan.examRequests || '',
+      referrals: plan.referrals || '',
+      patientGuidance: plan.patientGuidance || '',
+      returnDate: plan.returnDate ? 
+        new Date(plan.returnDate).toISOString().split('T')[0] : ''
     });
   }
 
@@ -457,11 +463,11 @@ export class TherapeuticPlanFormComponent implements OnInit {
       returnDate: formValue.returnDate || null
     };
 
-    if (this.existingPlan) {
+    if (this.existingPlan()) {
       // Update existing
       const updateData: UpdateTherapeuticPlan = planData;
 
-      this.therapeuticPlanService.update(this.existingPlan.id, updateData).subscribe({
+      this.therapeuticPlanService.update(this.existingPlan()!.id, updateData).subscribe({
         next: (plan) => {
           this.successMessage.set('Plano terapêutico atualizado com sucesso!');
           this.planSaved.emit(plan);
