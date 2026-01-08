@@ -1,13 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { DigitalPrescriptionService } from '../../../services/prescriptions/digital-prescription.service';
-import { SNGPCReport, SNGPCReportStatus } from '../../../models/prescriptions/digital-prescription.model';
+import { DigitalPrescriptionService } from '../../services/prescriptions/digital-prescription.service';
+import { SNGPCReport, SNGPCReportStatus } from '../../models/prescriptions/digital-prescription.model';
 
 /**
  * Dashboard for SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) reporting
@@ -16,15 +10,7 @@ import { SNGPCReport, SNGPCReportStatus } from '../../../models/prescriptions/di
 @Component({
   selector: 'app-sngpc-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule,
-    MatChipsModule,
-    MatProgressSpinnerModule
-  ],
+  imports: [CommonModule],
   template: `
     <div class="sngpc-dashboard">
       <h1>Dashboard SNGPC</h1>
