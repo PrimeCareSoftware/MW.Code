@@ -47,6 +47,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'sales-metrics',
+    loadComponent: () => import('./pages/sales-metrics/sales-metrics').then(m => m.SalesMetrics),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full'

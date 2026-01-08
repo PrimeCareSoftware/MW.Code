@@ -40,6 +40,9 @@ import { Auth } from '../../services/auth';
             <a routerLink="/tickets" routerLinkActive="active" class="nav-link">
               🎫 Chamados
             </a>
+            <a routerLink="/sales-metrics" routerLinkActive="active" class="nav-link">
+              📈 Métricas
+            </a>
           </div>
 
           <div class="navbar-end">
