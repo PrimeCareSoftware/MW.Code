@@ -54,9 +54,15 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 - **Catálogo de Medicações** - 130+ medicações brasileiras
 - **Catálogo de Exames** - 150+ exames laboratoriais e de imagem
-- **Prescrições Digitais** - Sistema estruturado de prescrições
 - **Fila de Espera** - Gestão de fila de atendimento
 - **Consentimento Informado** - Conformidade CFM 1.821/2007
+
+- **Receitas Médicas Digitais** - Sistema completo (CFM 1.643/2002 & ANVISA 344/1998)
+  - 5 tipos de receita suportados (Simples, Controladas A/B/C1, Antimicrobiana)
+  - Entidades: DigitalPrescription, DigitalPrescriptionItem, SNGPCReport
+  - Controle sequencial de numeração
+  - Sistema SNGPC para medicamentos controlados
+  - API completa com 15+ endpoints
 
 #### Frontend
 - **MedicWarehouse App** - Aplicativo principal das clínicas
@@ -67,6 +73,20 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
   - Prontuário médico CFM
   - Editor rico integrado
   - Sistema de tickets
+  
+- **Componentes de Prontuário CFM 1.821** ✨ (Janeiro 2026)
+  - `InformedConsentFormComponent` - Consentimento informado (~340 linhas)
+  - `ClinicalExaminationFormComponent` - Exame clínico com sinais vitais (~540 linhas)
+  - `DiagnosticHypothesisFormComponent` - Hipóteses com CID-10 (~620 linhas)
+  - `TherapeuticPlanFormComponent` - Plano terapêutico (~540 linhas)
+  - Total: ~2.040 linhas de código production-ready
+  
+- **Componentes de Receitas Digitais** ✨ (Janeiro 2026)
+  - `DigitalPrescriptionFormComponent` - Formulário completo (~950 linhas)
+  - `DigitalPrescriptionViewComponent` - Visualização e impressão (~700 linhas)
+  - `PrescriptionTypeSelectorComponent` - Seleção de tipo (~210 linhas)
+  - `SNGPCDashboardComponent` - Dashboard ANVISA (~376 linhas)
+  - Total: ~2.236 linhas de código production-ready
   
 - **MW System Admin** - Painel administrativo separado
   - Dashboard de analytics do sistema

@@ -237,6 +237,67 @@ telemedicine/
 - Formatação: negrito, itálico, listas, títulos
 - Dados em português brasileiro
 
+**Componentes Frontend CFM 1.821** ✨ (Janeiro 2026):
+- `InformedConsentFormComponent` - Consentimento informado (~340 linhas)
+  - Formulário para criar consentimento
+  - Listagem de consentimentos existentes
+  - Aceite imediato com rastreamento de IP
+  - Validação de texto mínimo (50 caracteres)
+  
+- `ClinicalExaminationFormComponent` - Exame clínico (~540 linhas)
+  - 6 sinais vitais obrigatórios com validações inteligentes
+  - Alertas visuais para valores anormais
+  - Exame físico sistemático (mín. 20 caracteres)
+  - Campo de estado geral
+  
+- `DiagnosticHypothesisFormComponent` - Diagnósticos (~620 linhas)
+  - Suporte a múltiplos diagnósticos por atendimento
+  - Validação de código CID-10 (regex)
+  - Tipificação: Principal ou Secundário
+  - Busca rápida com exemplos comuns
+  
+- `TherapeuticPlanFormComponent` - Plano terapêutico (~540 linhas)
+  - Tratamento/Conduta obrigatório
+  - Prescrição medicamentosa integrada
+  - Exames solicitados
+  - Encaminhamentos e orientações
+  - Data de retorno com date picker
+
+#### 5.1. Receitas Médicas Digitais ✨ (Janeiro 2026)
+**Compliance CFM 1.643/2002 & ANVISA 344/1998**
+
+**Backend:**
+- Entidades: DigitalPrescription, DigitalPrescriptionItem, SNGPCReport
+- 5 tipos de receita: Simples, Controladas A/B/C1, Antimicrobiana
+- Controle sequencial de numeração para controladas
+- Validações ANVISA por tipo e substância
+- Sistema SNGPC para reporting mensal
+- API completa com 15+ endpoints
+
+**Componentes Frontend** (~2.236 linhas total):
+- `DigitalPrescriptionFormComponent` (~950 linhas)
+  - Formulário completo de prescrição
+  - Seleção de tipo com informações de compliance
+  - Editor de itens com validações ANVISA
+  - Preview antes de finalizar
+  
+- `DigitalPrescriptionViewComponent` (~700 linhas)
+  - Layout otimizado para impressão
+  - QR Code para verificação
+  - Informações completas médico/paciente
+  - Assinatura digital (preparado ICP-Brasil)
+  
+- `PrescriptionTypeSelectorComponent` (~210 linhas)
+  - Cards visuais para cada tipo
+  - Avisos sobre controlados
+  - Informações de validade
+  
+- `SNGPCDashboardComponent` (~376 linhas)
+  - Dashboard de medicamentos controlados
+  - Estatísticas de reportes pendentes
+  - Geração de XML ANVISA
+  - Controle de transmissão e prazos
+
 #### 6. Procedimentos e Serviços ✅
 - Cadastro de procedimentos
 - 11 categorias (Consulta, Exame, Cirurgia, Terapia, etc.)

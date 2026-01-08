@@ -36,14 +36,24 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 - [ ] **Portal do Paciente** - 90% dos concorrentes têm
 - [ ] **Integração TISS / Convênios** - 70% do mercado atende convênios
 - [ ] **🇧🇷 Emissão de NF-e/NFS-e** - Obrigatório por lei (Receita Federal)
-- [ ] **🇧🇷 Conformidade CFM** - Resoluções obrigatórias (prontuário, receitas)
+- [x] **🇧🇷 Conformidade CFM** - Resoluções obrigatórias (prontuário, receitas) ✅ **85% completo - Janeiro 2026**
+  - [x] CFM 1.821/2007 - Prontuário Eletrônico (4 componentes frontend criados)
+  - [x] CFM 1.643/2002 - Receitas Digitais (4 componentes frontend criados)
 
 #### 🔥🔥 Alto
 - [ ] **Prontuário SOAP Estruturado** - Padrão de mercado
 - [ ] **Auditoria Completa (LGPD)** - Compliance obrigatório
 - [ ] **Criptografia de Dados Médicos** - Segurança crítica
-- [ ] **🇧🇷 Receitas Médicas Digitais** - Compliance CFM + ANVISA
-- [ ] **🇧🇷 SNGPC (Controlados)** - Obrigatório ANVISA
+- [x] **🇧🇷 Receitas Médicas Digitais** - Compliance CFM + ANVISA ✅ **80% completo - Janeiro 2026**
+  - [x] Backend completo (entidades, API, validações)
+  - [x] Frontend completo (4 componentes criados)
+  - [ ] Integração ICP-Brasil (preparado mas não implementado)
+  - [ ] Integração no fluxo de atendimento
+- [x] **🇧🇷 SNGPC (Controlados)** - Obrigatório ANVISA ✅ **80% completo - Janeiro 2026**
+  - [x] Backend completo (SNGPCReport, PrescriptionSequenceControl)
+  - [x] Frontend - Dashboard SNGPC criado
+  - [ ] Geração de XML ANVISA schema v2.1 completo
+  - [ ] Integração com sistema SNGPC da ANVISA
 
 #### 🔥 Médio
 - [ ] **Assinatura Digital (ICP-Brasil)** - Exigido por CFM
@@ -109,6 +119,20 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - Gestão de fila de atendimento
   - Status e priorização
 
+- ✅ **Componentes CFM 1.821/2007** - 100% ✨ (Janeiro 2026)
+  - InformedConsentFormComponent - Consentimento informado
+  - ClinicalExaminationFormComponent - Exame clínico e sinais vitais
+  - DiagnosticHypothesisFormComponent - Hipóteses diagnósticas com CID-10
+  - TherapeuticPlanFormComponent - Plano terapêutico detalhado
+  - Total: ~2.040 linhas de código production-ready
+
+- ✅ **Componentes de Receitas Digitais** - 100% ✨ (Janeiro 2026)
+  - DigitalPrescriptionFormComponent - Formulário completo de prescrição
+  - DigitalPrescriptionViewComponent - Visualização e impressão
+  - PrescriptionTypeSelectorComponent - Seleção visual de tipo
+  - SNGPCDashboardComponent - Dashboard de medicamentos controlados
+  - Total: ~2.236 linhas de código production-ready
+
 #### Frontend - Aplicações Web
 - ✅ **MedicWarehouse App** (Principal) - 100%
   - Dashboard com estatísticas
@@ -164,9 +188,16 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - ✅ Plano terapêutico detalhado (frontend completo)
   - Falta: Integração completa no fluxo de atendimento
   
-- ⚠️ **Receitas Médicas Digitais** - 60%
-  - Sistema básico de prescrições
-  - Faltam: compliance completo CFM+ANVISA, tipos específicos de receita
+- ✅ **Receitas Médicas Digitais** - 80% ✨ (Janeiro 2026)
+  - ✅ Backend completo (entidades, API, validações ANVISA)
+  - ✅ Frontend completo - 4 componentes criados (~2.236 linhas):
+    - DigitalPrescriptionFormComponent - Formulário completo
+    - DigitalPrescriptionViewComponent - Visualização e impressão
+    - PrescriptionTypeSelectorComponent - Seleção de tipo
+    - SNGPCDashboardComponent - Dashboard ANVISA
+  - ✅ Suporte a 5 tipos de receita (Simples, Controladas A/B/C1, Antimicrobiana)
+  - ✅ Sistema SNGPC para medicamentos controlados
+  - Falta: Integração ICP-Brasil, integração no fluxo de atendimento
   
 - ⚠️ **Telemedicina** - 80%
   - Microserviço criado
@@ -190,7 +221,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
-| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ⚠️ Parcial (base implementada) | 2 meses, 1 dev | Q1/2025 |
+| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ✅ 85% Completo (Jan 2026) | 2 semanas, 1 dev | Q1/2026 |
 | 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
 | 🔥🔥🔥 | Telemedicina Completa | ⚠️ MVP Implementado (80%) | 4-6 meses, 2 devs | Q3/2025 |
 | 🔥🔥🔥 | Portal do Paciente | ❌ Não iniciado | 2-3 meses, 2 devs | Q2/2025 |

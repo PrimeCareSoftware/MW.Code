@@ -1,7 +1,7 @@
 # 📚 Índice de Documentação - MedicWarehouse
 
-> **Última Atualização:** Janeiro 2025  
-> **Status:** Documentação consolidada e otimizada
+> **Última Atualização:** Janeiro 2026  
+> **Status:** Documentação consolidada e atualizada
 
 Este documento serve como guia de navegação para toda a documentação do sistema MedicWarehouse.
 
@@ -70,6 +70,24 @@ Este documento serve como guia de navegação para toda a documentação do sist
 | [GUIA_DESENVOLVIMENTO_AUTH.md](./GUIA_DESENVOLVIMENTO_AUTH.md) | Desenvolvimento com autenticação | 10 min |
 | [QUICK_REFERENCE_PERMISSIONS.md](./QUICK_REFERENCE_PERMISSIONS.md) | Referência rápida de permissões | 5 min |
 | [SUGESTOES_MELHORIAS_SEGURANCA.md](./SUGESTOES_MELHORIAS_SEGURANCA.md) | Melhorias de segurança sugeridas | 8 min |
+
+### 🏥 Conformidade CFM e Receitas Digitais
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [CFM_1821_IMPLEMENTACAO.md](./CFM_1821_IMPLEMENTACAO.md) | ✨ Implementação completa CFM 1.821 (Prontuário Eletrônico) | 25 min |
+| [ESPECIFICACAO_CFM_1821.md](./ESPECIFICACAO_CFM_1821.md) | Especificação técnica CFM 1.821 | 20 min |
+| [RESUMO_IMPLEMENTACAO_CFM_JAN2026.md](./RESUMO_IMPLEMENTACAO_CFM_JAN2026.md) | ✨ **NOVO!** Resumo da implementação Janeiro 2026 | 15 min |
+| [DIGITAL_PRESCRIPTIONS.md](./DIGITAL_PRESCRIPTIONS.md) | ✨ Sistema completo de receitas digitais (CFM 1.643 & ANVISA 344) | 20 min |
+| [IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md](./IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md) | Plano de implementação pendente | 12 min |
+| [GUIA_MEDICO_CFM_1821.md](./GUIA_MEDICO_CFM_1821.md) | Guia para médicos sobre CFM 1.821 | 18 min |
+| [API_EXAMPLES_CFM_1821.md](./API_EXAMPLES_CFM_1821.md) | Exemplos de uso da API CFM | 10 min |
+| [ANALISE_SEGURANCA_CFM_1821.md](./ANALISE_SEGURANCA_CFM_1821.md) | Análise de segurança CFM | 12 min |
+
+**Status de Implementação (Janeiro 2026):**
+- ✅ CFM 1.821/2007 (Prontuário): 85% completo - 4 componentes frontend (~2.040 linhas)
+- ✅ CFM 1.643/2002 (Receitas Digitais): 80% completo - 4 componentes frontend (~2.236 linhas)
+- ✅ ANVISA 344/1998 (SNGPC): 80% completo - Backend e dashboard completos
 
 ### 👥 Funcionalidades Específicas
 
