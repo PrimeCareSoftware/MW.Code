@@ -338,6 +338,70 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - [Plano de Implementação Pendente](docs/IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md) - **NOVO!**
 - [Histórico de Implementação](docs/archive/README.md) - Phases 3, 4, e 5 completas (arquivado)
 
+### 💊 Receitas Médicas Digitais - CFM 1.643/2002 & ANVISA 344/1998 🆕✨
+
+**Sistema completo de prescrições digitais conforme CFM 1.643/2002 e ANVISA Portaria 344/1998! (Janeiro 2026)**
+
+#### Tipos de Receita Suportados
+- ✅ **Receita Simples** - Medicamentos comuns - 30 dias de validade
+- ✅ **Receita de Controle Especial A** (Lista A1/A2/A3) - Entorpecentes - 30 dias + SNGPC
+- ✅ **Receita de Controle Especial B** (Lista B1/B2) - Psicotrópicos - 30 dias + SNGPC
+- ✅ **Receita de Controle Especial C1** (Lista C1) - Outras controladas - 30 dias + SNGPC
+- ✅ **Receita Antimicrobiana** - Antibióticos - 10 dias de validade
+
+#### Frontend Components ✨ (Janeiro 2026)
+- ✅ **Digital Prescription Form Component** - Formulário completo de prescrição
+  - Seletor de tipo de receita com informações de compliance
+  - Editor de itens de prescrição com validações ANVISA
+  - Campos obrigatórios por tipo de receita
+  - Preview antes de finalizar
+  - Suporte para múltiplos medicamentos
+  - ~950 linhas de código TypeScript
+  
+- ✅ **Digital Prescription View Component** - Visualização e impressão
+  - Layout otimizado para impressão
+  - QR Code para verificação de autenticidade
+  - Informações completas do médico (CRM/UF)
+  - Informações completas do paciente
+  - Lista detalhada de medicamentos
+  - Assinatura digital (preparado para ICP-Brasil)
+  - ~700 linhas de código TypeScript
+  
+- ✅ **Prescription Type Selector Component** - Seleção visual de tipo
+  - Cards informativos para cada tipo de receita
+  - Avisos sobre medicamentos controlados
+  - Informações de validade e compliance
+  - Características específicas de cada tipo
+  - ~210 linhas de código TypeScript
+  
+- ✅ **SNGPC Dashboard Component** - Gestão de medicamentos controlados
+  - Estatísticas de prescrições não reportadas
+  - Dashboard de relatórios ANVISA
+  - Rastreamento de prazo (dia 10 do mês seguinte)
+  - Geração de XML para ANVISA
+  - Controle de transmissão
+  - ~376 linhas de código TypeScript
+
+#### Backend Features
+- ✅ **Entidades de Domínio**: DigitalPrescription, DigitalPrescriptionItem, SNGPCReport
+- ✅ **Controle Sequencial**: Numeração automática para receitas controladas
+- ✅ **Validações ANVISA**: Por tipo de receita e substância controlada
+- ✅ **Código de Verificação**: QR Code para autenticidade
+- ✅ **Assinatura Digital**: Preparado para ICP-Brasil
+- ✅ **Relatórios SNGPC**: Sistema completo de reporting para ANVISA
+- ✅ **API RESTful**: 15+ endpoints para gestão completa
+
+#### Compliance Regulatório
+- ✅ **CFM 1.643/2002**: Formato digital de receita médica
+- ✅ **ANVISA 344/1998**: Classificação de substâncias controladas
+- ✅ **CFM 1.821/2007**: Integração com prontuário eletrônico
+- ✅ **SNGPC**: Sistema Nacional de Gerenciamento de Produtos Controlados
+- ✅ **Retenção**: 20 anos de guarda obrigatória
+
+📖 **Documentação Completa**:
+- [Receitas Digitais - Guia Completo](docs/DIGITAL_PRESCRIPTIONS.md)
+- [Implementação Pendente](docs/IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md)
+
 ### 💳 Assinaturas e Cobrança
 - ✅ **Período de Teste**: 15 dias gratuitos para novas clínicas
 - ✅ **Planos Flexíveis**: Trial, Basic, Standard, Premium, Enterprise
