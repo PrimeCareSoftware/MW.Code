@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, signal, OnInit } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { DiagnosticHypothesisService } from '../../../services/diagnostic-hypothesis.service';
-import { CreateDiagnosticHypothesis, UpdateDiagnosticHypothesis, DiagnosticHypothesis, DiagnosticType } from '../../../models/medical-record.model';
+import { CreateDiagnosticHypothesis, UpdateDiagnosticHypothesis, DiagnosticHypothesis, DiagnosisType } from '../../../models/medical-record.model';
 
 @Component({
   selector: 'app-diagnostic-hypothesis-form',
@@ -28,13 +28,13 @@ import { CreateDiagnosticHypothesis, UpdateDiagnosticHypothesis, DiagnosticHypot
         <div class="existing-hypotheses">
           <h4>Diagnósticos Registrados</h4>
           @for (hypothesis of existingHypotheses(); track hypothesis.id) {
-            <div class="hypothesis-item" [class.principal]="hypothesis.type === 'Principal'">
+            <div class="hypothesis-item" [class.principal]="hypothesis.type === 1">
               <div class="hypothesis-header">
                 <div class="hypothesis-info">
-                  <span class="hypothesis-type" [class.principal]="hypothesis.type === 'Principal'">
-                    {{ hypothesis.type === 'Principal' ? '⭐ Principal' : 'Secundário' }}
+                  <span class="hypothesis-type" [class.principal]="hypothesis.type === 1">
+                    {{ hypothesis.type === 1 ? '⭐ Principal' : 'Secundário' }}
                   </span>
-                  <span class="hypothesis-code">CID-10: {{ hypothesis.icdCode }}</span>
+                  <span class="hypothesis-code">CID-10: {{ hypothesis.icd10Code }}</span>
                 </div>
                 <button
                   type="button"
@@ -48,7 +48,7 @@ import { CreateDiagnosticHypothesis, UpdateDiagnosticHypothesis, DiagnosticHypot
               </div>
               <div class="hypothesis-description">{{ hypothesis.description }}</div>
               <div class="hypothesis-date">
-                <small>Data: {{ hypothesis.diagnosisDate | date: 'dd/MM/yyyy' }}</small>
+                <small>Data: {{ hypothesis.diagnosedAt | date: 'dd/MM/yyyy' }}</small>
               </div>
             </div>
           }
@@ -83,8 +83,8 @@ import { CreateDiagnosticHypothesis, UpdateDiagnosticHypothesis, DiagnosticHypot
                 [class.invalid]="isFieldInvalid('type')"
               >
                 <option value="">Selecione...</option>
-                <option value="Principal">⭐ Principal</option>
-                <option value="Secondary">Secundário</option>
+                <option value="1">⭐ Principal</option>
+                <option value="2">Secundário</option>
               </select>
               @if (isFieldInvalid('type')) {
                 <small class="error-text">Tipo é obrigatório</small>
@@ -119,19 +119,6 @@ import { CreateDiagnosticHypothesis, UpdateDiagnosticHypothesis, DiagnosticHypot
               }
               <small class="help-text">
                 Formato: 1-3 letras + 2 dígitos + opcional (.1 dígito)
-              </small>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="diagnosisDate">Data do Diagnóstico</label>
-              <input
-                type="date"
-                id="diagnosisDate"
-                formControlName="diagnosisDate"
-                [max]="todayDate"
-              />
-              <small class="help-text">
-                Deixe em branco para usar a data de hoje
               </small>
             </div>
           </div>
@@ -523,7 +510,6 @@ export class DiagnosticHypothesisFormComponent implements OnInit {
   isDeletingId = signal<string | null>(null);
   errorMessage = signal('');
   successMessage = signal('');
-  todayDate: string;
 
   // CID-10 format validator: 1-3 letters + 2 digits + optional (.1 digit)
   private readonly cidPattern = /^[A-Z]{1,3}\d{2}(\.\d{1,2})?$/;
@@ -532,13 +518,10 @@ export class DiagnosticHypothesisFormComponent implements OnInit {
     private fb: FormBuilder,
     private diagnosticHypothesisService: DiagnosticHypothesisService
   ) {
-    this.todayDate = new Date().toISOString().split('T')[0];
-    
     this.hypothesisForm = this.fb.group({
       description: ['', [Validators.required, Validators.minLength(5)]],
       icdCode: ['', [Validators.required, Validators.pattern(this.cidPattern)]],
-      type: ['', Validators.required],
-      diagnosisDate: [this.todayDate]
+      type: ['', Validators.required]
     });
   }
 
@@ -571,8 +554,8 @@ export class DiagnosticHypothesisFormComponent implements OnInit {
   }
 
   hasPrincipalDiagnosis(): boolean {
-    return this.existingHypotheses().some(h => h.type === 'Principal') ||
-           this.hypothesisForm.get('type')?.value === 'Principal';
+    return this.existingHypotheses().some(h => h.type === DiagnosisType.Principal) ||
+           this.hypothesisForm.get('type')?.value == DiagnosisType.Principal;
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -593,15 +576,13 @@ export class DiagnosticHypothesisFormComponent implements OnInit {
     this.successMessage.set('');
 
     const formValue = this.hypothesisForm.value;
-    const diagnosisDate = formValue.diagnosisDate || this.todayDate;
 
     if (this.editingHypothesis()) {
       // Update existing
       const updateData: UpdateDiagnosticHypothesis = {
         description: formValue.description.trim(),
-        icdCode: formValue.icdCode.trim().toUpperCase(),
-        type: formValue.type as DiagnosticType,
-        diagnosisDate: diagnosisDate
+        icd10Code: formValue.icdCode.trim().toUpperCase(),
+        type: parseInt(formValue.type) as DiagnosisType
       };
 
       this.diagnosticHypothesisService.update(this.editingHypothesis()!.id, updateData).subscribe({
@@ -622,9 +603,8 @@ export class DiagnosticHypothesisFormComponent implements OnInit {
       const createData: CreateDiagnosticHypothesis = {
         medicalRecordId: this.medicalRecordId,
         description: formValue.description.trim(),
-        icdCode: formValue.icdCode.trim().toUpperCase(),
-        type: formValue.type as DiagnosticType,
-        diagnosisDate: diagnosisDate
+        icd10Code: formValue.icdCode.trim().toUpperCase(),
+        type: parseInt(formValue.type) as DiagnosisType
       };
 
       this.diagnosticHypothesisService.create(createData).subscribe({
@@ -672,8 +652,7 @@ export class DiagnosticHypothesisFormComponent implements OnInit {
     this.hypothesisForm.reset({
       description: '',
       icdCode: '',
-      type: '',
-      diagnosisDate: this.todayDate
+      type: ''
     });
   }
 }

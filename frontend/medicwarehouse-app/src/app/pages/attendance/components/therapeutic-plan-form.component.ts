@@ -79,17 +79,17 @@ import { CreateTherapeuticPlan, UpdateTherapeuticPlan, TherapeuticPlan } from '.
           <h4>Exames Solicitados</h4>
           <div class="form-group">
             <textarea
-              id="requestedExams"
-              formControlName="requestedExams"
+              id="examRequests"
+              formControlName="examRequests"
               rows="5"
               placeholder="Liste os exames complementares solicitados...&#10;&#10;Exemplo:&#10;- Hemograma completo&#10;- Glicemia de jejum&#10;- TSH e T4 livre&#10;- ECG de repouso"
             ></textarea>
             <small class="help-text">
               Opcional: Exames laboratoriais, de imagem ou outros exames complementares
             </small>
-            @if (planForm.get('requestedExams')?.value) {
+            @if (planForm.get('examRequests')?.value) {
               <small class="char-count">
-                {{ planForm.get('requestedExams')?.value.length }} caracteres
+                {{ planForm.get('examRequests')?.value.length }} caracteres
               </small>
             }
           </div>
@@ -359,11 +359,16 @@ import { CreateTherapeuticPlan, UpdateTherapeuticPlan, TherapeuticPlan } from '.
 })
 export class TherapeuticPlanFormComponent implements OnInit {
   @Input() medicalRecordId!: string;
-  @Input() existingPlan?: TherapeuticPlan;
+  @Input() set existingPlanInput(value: TherapeuticPlan | undefined) {
+    if (value) {
+      this.existingPlan.set(value);
+    }
+  }
   @Output() planSaved = new EventEmitter<TherapeuticPlan>();
   @Output() cancelled = new EventEmitter<void>();
 
   planForm: FormGroup;
+  existingPlan = signal<TherapeuticPlan | undefined>(undefined);
   isSaving = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
@@ -380,7 +385,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
     this.planForm = this.fb.group({
       treatment: ['', [Validators.required, Validators.minLength(20)]],
       medicationPrescription: [''],
-      requestedExams: [''],
+      examRequests: [''],
       referrals: [''],
       patientGuidance: [''],
       returnDate: ['']
@@ -388,7 +393,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.existingPlan) {
+    if (this.existingPlan()) {
       this.loadExistingData();
     } else {
       this.loadExistingPlan();
@@ -405,7 +410,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
           const latestPlan = plans.sort((a, b) => 
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           )[0];
-          this.existingPlan = latestPlan;
+          this.existingPlan.set(latestPlan);
           this.loadExistingData();
         }
       },
@@ -416,16 +421,17 @@ export class TherapeuticPlanFormComponent implements OnInit {
   }
 
   loadExistingData() {
-    if (!this.existingPlan) return;
+    const plan = this.existingPlan();
+    if (!plan) return;
 
     this.planForm.patchValue({
-      treatment: this.existingPlan.treatment,
-      medicationPrescription: this.existingPlan.medicationPrescription || '',
-      requestedExams: this.existingPlan.requestedExams || '',
-      referrals: this.existingPlan.referrals || '',
-      patientGuidance: this.existingPlan.patientGuidance || '',
-      returnDate: this.existingPlan.returnDate ? 
-        new Date(this.existingPlan.returnDate).toISOString().split('T')[0] : ''
+      treatment: plan.treatment,
+      medicationPrescription: plan.medicationPrescription || '',
+      examRequests: plan.examRequests || '',
+      referrals: plan.referrals || '',
+      patientGuidance: plan.patientGuidance || '',
+      returnDate: plan.returnDate ? 
+        new Date(plan.returnDate).toISOString().split('T')[0] : ''
     });
   }
 
@@ -451,17 +457,17 @@ export class TherapeuticPlanFormComponent implements OnInit {
     const planData = {
       treatment: formValue.treatment.trim(),
       medicationPrescription: formValue.medicationPrescription?.trim() || null,
-      requestedExams: formValue.requestedExams?.trim() || null,
+      examRequests: formValue.examRequests?.trim() || null,
       referrals: formValue.referrals?.trim() || null,
       patientGuidance: formValue.patientGuidance?.trim() || null,
       returnDate: formValue.returnDate || null
     };
 
-    if (this.existingPlan) {
+    if (this.existingPlan()) {
       // Update existing
       const updateData: UpdateTherapeuticPlan = planData;
 
-      this.therapeuticPlanService.update(this.existingPlan.id, updateData).subscribe({
+      this.therapeuticPlanService.update(this.existingPlan()!.id, updateData).subscribe({
         next: (plan) => {
           this.successMessage.set('Plano terapêutico atualizado com sucesso!');
           this.planSaved.emit(plan);

@@ -19,6 +19,10 @@ export class DigitalPrescriptionService {
 
   // Digital Prescription methods
 
+  create(prescription: CreateDigitalPrescription): Observable<DigitalPrescription> {
+    return this.createPrescription(prescription);
+  }
+
   createPrescription(prescription: CreateDigitalPrescription): Observable<DigitalPrescription> {
     return this.http.post<DigitalPrescription>(this.apiUrl, prescription);
   }
