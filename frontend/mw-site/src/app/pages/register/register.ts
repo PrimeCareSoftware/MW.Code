@@ -6,6 +6,7 @@ import { SubscriptionService } from '../../services/subscription';
 import { CartService } from '../../services/cart';
 import { FormPersistenceService } from '../../services/form-persistence';
 import { CepService } from '../../services/cep.service';
+import { SalesFunnelTrackingService } from '../../services/sales-funnel-tracking.service';
 import { RegistrationRequest } from '../../models/registration.model';
 import { SubscriptionPlan } from '../../models/subscription-plan.model';
 import { CpfMaskDirective } from '../../directives/cpf-mask.directive';
@@ -26,6 +27,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private cartService = inject(CartService);
   private formPersistence = inject(FormPersistenceService);
   private cepService = inject(CepService);
+  private salesFunnelTracking = inject(SalesFunnelTrackingService);
   
   selectedPlan?: SubscriptionPlan;
   allPlans: SubscriptionPlan[] = [];
@@ -111,12 +113,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.autoSaveInterval = window.setInterval(() => {
       this.autoSaveFormData();
     }, 30000);
+
+    // Track entering step 1 when component loads
+    this.salesFunnelTracking.trackStepEntered(this.currentStep, this.getCapturedDataForStep(this.currentStep));
   }
 
   ngOnDestroy(): void {
     // Clear auto-save interval
     if (this.autoSaveInterval) {
       clearInterval(this.autoSaveInterval);
+    }
+
+    // Track abandonment if leaving without completing
+    if (this.currentStep < 6 && !this.isSubmitting) {
+      this.salesFunnelTracking.trackStepAbandoned(
+        this.currentStep, 
+        this.getCapturedDataForStep(this.currentStep),
+        this.model.planId
+      );
     }
   }
 
@@ -175,7 +189,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   nextStep(): void {
     if (this.validateStep(this.currentStep)) {
+      // Track step completion
+      this.salesFunnelTracking.trackStepCompleted(
+        this.currentStep,
+        this.getCapturedDataForStep(this.currentStep),
+        this.model.planId
+      );
+      
       this.currentStep++;
+      
+      // Track entering next step
+      this.salesFunnelTracking.trackStepEntered(
+        this.currentStep,
+        this.getCapturedDataForStep(this.currentStep),
+        this.model.planId
+      );
+      
       // Auto-save when moving to next step
       this.autoSaveFormData();
     }
@@ -183,6 +212,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   prevStep(): void {
     this.currentStep--;
+    
+    // Track entering previous step
+    this.salesFunnelTracking.trackStepEntered(
+      this.currentStep,
+      this.getCapturedDataForStep(this.currentStep),
+      this.model.planId
+    );
   }
 
   /**
@@ -232,10 +268,21 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
     this.submitError = '';
 
-    this.subscriptionService.register(this.model).subscribe({
+    // Add session ID to model for conversion tracking
+    const registrationData = {
+      ...this.model,
+      sessionId: this.salesFunnelTracking.getSessionId()
+    };
+
+    this.subscriptionService.register(registrationData).subscribe({
       next: (response) => {
+        // Clear cart and saved data
         this.cartService.clearCart();
-        this.clearSavedData(); // Clear saved data on success
+        this.clearSavedData();
+        
+        // Clear sales funnel tracking session
+        this.salesFunnelTracking.clearSession();
+        
         this.router.navigate(['/checkout'], { 
           queryParams: { 
             success: true,
@@ -305,5 +352,51 @@ export class RegisterComponent implements OnInit, OnDestroy {
         console.error('Error looking up CEP:', error);
       }
     });
+  }
+
+  /**
+   * Get captured data for a specific step (for tracking)
+   * Returns only non-sensitive information
+   */
+  private getCapturedDataForStep(step: number): any {
+    switch (step) {
+      case 1: // Clinic Info
+        return {
+          clinicName: this.model.clinicName,
+          clinicCNPJ: this.model.clinicCNPJ ? '***' : '', // Masked for privacy
+          clinicPhone: this.model.clinicPhone,
+          clinicEmail: this.model.clinicEmail
+        };
+      case 2: // Address
+        return {
+          zipCode: this.model.zipCode,
+          city: this.model.city,
+          state: this.model.state,
+          neighborhood: this.model.neighborhood
+        };
+      case 3: // Owner Info
+        return {
+          ownerName: this.model.ownerName,
+          ownerCPF: this.model.ownerCPF ? '***' : '', // Masked for privacy
+          ownerEmail: this.model.ownerEmail
+        };
+      case 4: // Login Credentials
+        return {
+          username: this.model.username,
+          hasPassword: !!this.model.password
+        };
+      case 5: // Plan Selection
+        return {
+          planId: this.model.planId,
+          planName: this.selectedPlan?.name
+        };
+      case 6: // Confirmation
+        return {
+          acceptTerms: this.model.acceptTerms,
+          planId: this.model.planId
+        };
+      default:
+        return {};
+    }
   }
 }
