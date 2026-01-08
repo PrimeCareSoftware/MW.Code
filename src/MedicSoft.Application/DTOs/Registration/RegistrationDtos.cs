@@ -33,6 +33,9 @@ namespace MedicSoft.Application.DTOs.Registration
         
         // Trial
         public bool UseTrial { get; set; }
+        
+        // Sales Funnel Tracking (optional)
+        public string? SessionId { get; set; }
     }
 
     /// <summary>

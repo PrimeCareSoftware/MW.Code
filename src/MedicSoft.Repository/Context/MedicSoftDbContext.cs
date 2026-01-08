@@ -70,6 +70,9 @@ namespace MedicSoft.Repository.Context
         public DbSet<DigitalPrescriptionItem> DigitalPrescriptionItems { get; set; } = null!;
         public DbSet<PrescriptionSequenceControl> PrescriptionSequenceControls { get; set; } = null!;
         public DbSet<SNGPCReport> SNGPCReports { get; set; } = null!;
+        
+        // Sales Funnel Metrics
+        public DbSet<SalesFunnelMetric> SalesFunnelMetrics { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -127,6 +130,9 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new DigitalPrescriptionItemConfiguration());
             modelBuilder.ApplyConfiguration(new PrescriptionSequenceControlConfiguration());
             modelBuilder.ApplyConfiguration(new SNGPCReportConfiguration());
+            
+            // Sales Funnel Metrics
+            modelBuilder.ApplyConfiguration(new SalesFunnelMetricConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

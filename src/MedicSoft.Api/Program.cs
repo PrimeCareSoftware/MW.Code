@@ -205,6 +205,7 @@ builder.Services.AddScoped<IOwnerSessionRepository, OwnerSessionRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IAccessProfileRepository, AccessProfileRepository>();
 builder.Services.AddScoped<IClinicCustomizationRepository, ClinicCustomizationRepository>();
+builder.Services.AddScoped<ISalesFunnelMetricRepository, SalesFunnelMetricRepository>();
 
 // CFM 1.821 - Register new repositories
 builder.Services.AddScoped<IClinicalExaminationRepository, ClinicalExaminationRepository>();
@@ -229,6 +230,7 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAccessProfileService, AccessProfileService>();
 builder.Services.AddSingleton<IInAppNotificationService, InAppNotificationService>();
 builder.Services.AddScoped<DataSeederService>();
+builder.Services.AddScoped<ISalesFunnelService, SalesFunnelService>();
 
 // CFM 1.821 - Register new services
 builder.Services.AddScoped<IClinicalExaminationService, ClinicalExaminationService>();
