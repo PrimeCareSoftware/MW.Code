@@ -29,41 +29,41 @@ import { CreateClinicalExamination, UpdateClinicalExamination, ClinicalExaminati
           
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="systolicBloodPressure">Pressão Arterial Sistólica (mmHg) *</label>
+              <label for="bloodPressureSystolic">Pressão Arterial Sistólica (mmHg) *</label>
               <input
                 type="number"
-                id="systolicBloodPressure"
-                formControlName="systolicBloodPressure"
+                id="bloodPressureSystolic"
+                formControlName="bloodPressureSystolic"
                 placeholder="Ex: 120"
                 min="50"
                 max="300"
-                [class.invalid]="isFieldInvalid('systolicBloodPressure')"
-                [class.warning]="isVitalSignAbnormal('systolicBloodPressure')"
+                [class.invalid]="isFieldInvalid('bloodPressureSystolic')"
+                [class.warning]="isVitalSignAbnormal('bloodPressureSystolic')"
               />
-              @if (isFieldInvalid('systolicBloodPressure')) {
+              @if (isFieldInvalid('bloodPressureSystolic')) {
                 <small class="error-text">Valor obrigatório (50-300 mmHg)</small>
               }
-              @if (isVitalSignAbnormal('systolicBloodPressure')) {
+              @if (isVitalSignAbnormal('bloodPressureSystolic')) {
                 <small class="warning-text">⚠️ Valor fora da faixa normal (90-140 mmHg)</small>
               }
             </div>
 
             <div class="form-group col-md-6">
-              <label for="diastolicBloodPressure">Pressão Arterial Diastólica (mmHg) *</label>
+              <label for="bloodPressureDiastolic">Pressão Arterial Diastólica (mmHg) *</label>
               <input
                 type="number"
-                id="diastolicBloodPressure"
-                formControlName="diastolicBloodPressure"
+                id="bloodPressureDiastolic"
+                formControlName="bloodPressureDiastolic"
                 placeholder="Ex: 80"
                 min="30"
                 max="200"
-                [class.invalid]="isFieldInvalid('diastolicBloodPressure')"
-                [class.warning]="isVitalSignAbnormal('diastolicBloodPressure')"
+                [class.invalid]="isFieldInvalid('bloodPressureDiastolic')"
+                [class.warning]="isVitalSignAbnormal('bloodPressureDiastolic')"
               />
-              @if (isFieldInvalid('diastolicBloodPressure')) {
+              @if (isFieldInvalid('bloodPressureDiastolic')) {
                 <small class="error-text">Valor obrigatório (30-200 mmHg)</small>
               }
-              @if (isVitalSignAbnormal('diastolicBloodPressure')) {
+              @if (isVitalSignAbnormal('bloodPressureDiastolic')) {
                 <small class="warning-text">⚠️ Valor fora da faixa normal (60-90 mmHg)</small>
               }
             </div>
@@ -402,8 +402,8 @@ export class ClinicalExaminationFormComponent implements OnInit {
 
   // Normal ranges for vital signs
   private readonly normalRanges = {
-    systolicBloodPressure: { min: 90, max: 140 },
-    diastolicBloodPressure: { min: 60, max: 90 },
+    bloodPressureSystolic: { min: 90, max: 140 },
+    bloodPressureDiastolic: { min: 60, max: 90 },
     heartRate: { min: 60, max: 100 },
     respiratoryRate: { min: 12, max: 20 },
     temperature: { min: 36.0, max: 37.5 },
@@ -415,8 +415,8 @@ export class ClinicalExaminationFormComponent implements OnInit {
     private clinicalExaminationService: ClinicalExaminationService
   ) {
     this.examinationForm = this.fb.group({
-      systolicBloodPressure: [null, [Validators.required, Validators.min(50), Validators.max(300)]],
-      diastolicBloodPressure: [null, [Validators.required, Validators.min(30), Validators.max(200)]],
+      bloodPressureSystolic: [null, [Validators.required, Validators.min(50), Validators.max(300)]],
+      bloodPressureDiastolic: [null, [Validators.required, Validators.min(30), Validators.max(200)]],
       heartRate: [null, [Validators.required, Validators.min(30), Validators.max(220)]],
       respiratoryRate: [null, [Validators.required, Validators.min(8), Validators.max(60)]],
       temperature: [null, [Validators.required, Validators.min(32), Validators.max(45)]],
@@ -436,8 +436,8 @@ export class ClinicalExaminationFormComponent implements OnInit {
     if (!this.existingExamination) return;
 
     this.examinationForm.patchValue({
-      systolicBloodPressure: this.existingExamination.systolicBloodPressure,
-      diastolicBloodPressure: this.existingExamination.diastolicBloodPressure,
+      bloodPressureSystolic: this.existingExamination.bloodPressureSystolic,
+      bloodPressureDiastolic: this.existingExamination.bloodPressureDiastolic,
       heartRate: this.existingExamination.heartRate,
       respiratoryRate: this.existingExamination.respiratoryRate,
       temperature: this.existingExamination.temperature,

@@ -79,17 +79,17 @@ import { CreateTherapeuticPlan, UpdateTherapeuticPlan, TherapeuticPlan } from '.
           <h4>Exames Solicitados</h4>
           <div class="form-group">
             <textarea
-              id="requestedExams"
-              formControlName="requestedExams"
+              id="examRequests"
+              formControlName="examRequests"
               rows="5"
               placeholder="Liste os exames complementares solicitados...&#10;&#10;Exemplo:&#10;- Hemograma completo&#10;- Glicemia de jejum&#10;- TSH e T4 livre&#10;- ECG de repouso"
             ></textarea>
             <small class="help-text">
               Opcional: Exames laboratoriais, de imagem ou outros exames complementares
             </small>
-            @if (planForm.get('requestedExams')?.value) {
+            @if (planForm.get('examRequests')?.value) {
               <small class="char-count">
-                {{ planForm.get('requestedExams')?.value.length }} caracteres
+                {{ planForm.get('examRequests')?.value.length }} caracteres
               </small>
             }
           </div>
@@ -380,7 +380,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
     this.planForm = this.fb.group({
       treatment: ['', [Validators.required, Validators.minLength(20)]],
       medicationPrescription: [''],
-      requestedExams: [''],
+      examRequests: [''],
       referrals: [''],
       patientGuidance: [''],
       returnDate: ['']
@@ -421,7 +421,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
     this.planForm.patchValue({
       treatment: this.existingPlan.treatment,
       medicationPrescription: this.existingPlan.medicationPrescription || '',
-      requestedExams: this.existingPlan.requestedExams || '',
+      examRequests: this.existingPlan.examRequests || '',
       referrals: this.existingPlan.referrals || '',
       patientGuidance: this.existingPlan.patientGuidance || '',
       returnDate: this.existingPlan.returnDate ? 
@@ -451,7 +451,7 @@ export class TherapeuticPlanFormComponent implements OnInit {
     const planData = {
       treatment: formValue.treatment.trim(),
       medicationPrescription: formValue.medicationPrescription?.trim() || null,
-      requestedExams: formValue.requestedExams?.trim() || null,
+      examRequests: formValue.examRequests?.trim() || null,
       referrals: formValue.referrals?.trim() || null,
       patientGuidance: formValue.patientGuidance?.trim() || null,
       returnDate: formValue.returnDate || null
