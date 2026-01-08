@@ -84,17 +84,34 @@ namespace MedicSoft.Repository.Repositories
             if (endDate.HasValue)
                 query = query.Where(m => m.CreatedAt <= endDate.Value);
 
-            var metrics = await query.ToListAsync();
-
+            // Use database-level aggregation instead of in-memory processing
             var stepStats = new Dictionary<int, (int Entered, int Completed, int Abandoned)>();
 
+            // Query for each action type efficiently
+            var enteredCounts = await query
+                .Where(m => m.Action == "entered")
+                .GroupBy(m => m.Step)
+                .Select(g => new { Step = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var completedCounts = await query
+                .Where(m => m.Action == "completed")
+                .GroupBy(m => m.Step)
+                .Select(g => new { Step = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var abandonedCounts = await query
+                .Where(m => m.Action == "abandoned")
+                .GroupBy(m => m.Step)
+                .Select(g => new { Step = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            // Combine results
             for (int step = 1; step <= 6; step++)
             {
-                var stepMetrics = metrics.Where(m => m.Step == step).ToList();
-                
-                var entered = stepMetrics.Count(m => m.Action == "entered");
-                var completed = stepMetrics.Count(m => m.Action == "completed");
-                var abandoned = stepMetrics.Count(m => m.Action == "abandoned");
+                var entered = enteredCounts.FirstOrDefault(x => x.Step == step)?.Count ?? 0;
+                var completed = completedCounts.FirstOrDefault(x => x.Step == step)?.Count ?? 0;
+                var abandoned = abandonedCounts.FirstOrDefault(x => x.Step == step)?.Count ?? 0;
 
                 stepStats[step] = (entered, completed, abandoned);
             }
@@ -104,28 +121,16 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<IEnumerable<SalesFunnelMetric>> GetIncompleteSessions(DateTime olderThan, int limit = 100)
         {
-            // Get the latest metric for each session that is not converted and older than threshold
-            var sessionIds = await _dbSet
+            // Use a single query with window functions to get the latest metric per session
+            // This avoids N+1 query problem
+            var latestMetrics = await _dbSet
                 .Where(m => !m.IsConverted && m.CreatedAt < olderThan)
-                .Select(m => m.SessionId)
-                .Distinct()
+                .GroupBy(m => m.SessionId)
+                .Select(g => g.OrderByDescending(m => m.CreatedAt).FirstOrDefault())
                 .Take(limit)
                 .ToListAsync();
 
-            var latestMetrics = new List<SalesFunnelMetric>();
-
-            foreach (var sessionId in sessionIds)
-            {
-                var latestMetric = await _dbSet
-                    .Where(m => m.SessionId == sessionId)
-                    .OrderByDescending(m => m.CreatedAt)
-                    .FirstOrDefaultAsync();
-
-                if (latestMetric != null)
-                    latestMetrics.Add(latestMetric);
-            }
-
-            return latestMetrics;
+            return latestMetrics.Where(m => m != null).Cast<SalesFunnelMetric>().ToList();
         }
 
         public async Task<IEnumerable<SalesFunnelMetric>> GetLatestMetricPerSessionAsync(
@@ -141,27 +146,15 @@ namespace MedicSoft.Repository.Repositories
             if (endDate.HasValue)
                 query = query.Where(m => m.CreatedAt <= endDate.Value);
 
-            // Get unique session IDs
-            var sessionIds = await query
-                .Select(m => m.SessionId)
-                .Distinct()
+            // Use a single query with GroupBy and FirstOrDefault to avoid N+1
+            var latestMetrics = await query
+                .GroupBy(m => m.SessionId)
+                .Select(g => g.OrderByDescending(m => m.CreatedAt).FirstOrDefault())
                 .Take(limit)
                 .ToListAsync();
 
-            var latestMetrics = new List<SalesFunnelMetric>();
-
-            foreach (var sessionId in sessionIds)
-            {
-                var latestMetric = await _dbSet
-                    .Where(m => m.SessionId == sessionId)
-                    .OrderByDescending(m => m.CreatedAt)
-                    .FirstOrDefaultAsync();
-
-                if (latestMetric != null)
-                    latestMetrics.Add(latestMetric);
-            }
-
-            return latestMetrics.OrderByDescending(m => m.CreatedAt).ToList();
+            return latestMetrics.Where(m => m != null).Cast<SalesFunnelMetric>()
+                .OrderByDescending(m => m.CreatedAt).ToList();
         }
     }
 }

@@ -104,7 +104,7 @@ namespace MedicSoft.Domain.Entities
             string? userAgent = null,
             string? referrer = null,
             long? durationMs = null,
-            string? metadata = null) : base("system") // Sales metrics are system-wide, not tenant-specific
+            string? metadata = null) : base(TenantConstants.SystemTenantId) // Sales metrics are system-wide, not tenant-specific
         {
             if (string.IsNullOrWhiteSpace(sessionId))
                 throw new ArgumentException("Session ID cannot be empty", nameof(sessionId));
