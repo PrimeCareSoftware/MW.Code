@@ -162,8 +162,8 @@ export class SalesMetrics implements OnInit {
     });
   }
 
-  updateHoursOld(value: number): void {
-    this.hoursOld.set(value);
+  updateHoursOld(value: number | string): void {
+    this.hoursOld.set(typeof value === 'string' ? parseInt(value, 10) : value);
   }
 
   applyFilters(): void {
