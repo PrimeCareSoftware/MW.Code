@@ -1,5 +1,5 @@
 @echo off
-:: Script de Teste Rápido da API MedicWarehouse
+:: Script de Teste Rápido da API PrimeCare Software
 :: Este script testa os endpoints principais da API
 
 chcp 65001 > nul
@@ -10,7 +10,7 @@ set "API_URL=http://localhost:5000/api"
 set "TENANT_ID=demo-clinic-001"
 
 echo ╔════════════════════════════════════════════════════════╗
-echo ║  MedicWarehouse - Teste Rápido de API                 ║
+echo ║  PrimeCare Software - Teste Rápido de API                 ║
 echo ╚════════════════════════════════════════════════════════╝
 echo.
 
