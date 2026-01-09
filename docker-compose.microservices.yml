@@ -1,9 +1,9 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: medicwarehouse-postgres
+    container_name: primecare-postgres
     environment:
-      POSTGRES_DB: medicwarehouse
+      POSTGRES_DB: primecare
       POSTGRES_USER: postgres
       # SECURITY: POSTGRES_PASSWORD must be set in production. Never use default values in production.
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD environment variable is required}
@@ -13,9 +13,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - medicwarehouse-network
+      - primecare-network
     healthcheck:
-      test: pg_isready -U postgres -d medicwarehouse
+      test: pg_isready -U postgres -d primecare
       interval: 10s
       timeout: 5s
       retries: 5
@@ -26,189 +26,189 @@ services:
     build:
       context: .
       dockerfile: microservices/auth/MedicSoft.Auth.Api/Dockerfile
-    container_name: medicwarehouse-auth-api
+    container_name: primecare-auth-api
     ports:
       - "5001:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:4201
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   # Patients Microservice
   patients-api:
     build:
       context: .
       dockerfile: microservices/patients/MedicSoft.Patients.Api/Dockerfile
-    container_name: medicwarehouse-patients-api
+    container_name: primecare-patients-api
     ports:
       - "5002:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:4201
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   # Appointments Microservice
   appointments-api:
     build:
       context: .
       dockerfile: microservices/appointments/MedicSoft.Appointments.Api/Dockerfile
-    container_name: medicwarehouse-appointments-api
+    container_name: primecare-appointments-api
     ports:
       - "5003:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:4201
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   # Medical Records Microservice
   medicalrecords-api:
     build:
       context: .
       dockerfile: microservices/medicalrecords/MedicSoft.MedicalRecords.Api/Dockerfile
-    container_name: medicwarehouse-medicalrecords-api
+    container_name: primecare-medicalrecords-api
     ports:
       - "5004:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:4201
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   # Billing Microservice
   billing-api:
     build:
       context: .
       dockerfile: microservices/billing/MedicSoft.Billing.Api/Dockerfile
-    container_name: medicwarehouse-billing-api
+    container_name: primecare-billing-api
     ports:
       - "5005:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:4201
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   # System Admin Microservice
   systemadmin-api:
     build:
       context: .
       dockerfile: microservices/systemadmin/MedicSoft.SystemAdmin.Api/Dockerfile
-    container_name: medicwarehouse-systemadmin-api
+    container_name: primecare-systemadmin-api
     ports:
       - "5006:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:4201
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   # Telemedicine Microservice (Video Calls)
   telemedicine-api:
     build:
       context: .
       dockerfile: telemedicine/src/MedicSoft.Telemedicine.Api/Dockerfile
-    container_name: medicwarehouse-telemedicine-api
+    container_name: primecare-telemedicine-api
     ports:
       - "5084:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=telemedicine;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
       - DailyCo__ApiKey=${DAILYCO_API_KEY}
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:4201
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   # Original API (for backward compatibility during migration)
   api:
     build:
       context: .
       dockerfile: src/MedicSoft.Api/Dockerfile
-    container_name: medicwarehouse-api
+    container_name: primecare-api
     ports:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   frontend:
     build:
-      context: ./frontend/medicwarehouse-app
+      context: ./frontend/primecare-app
       dockerfile: Dockerfile
-    container_name: medicwarehouse-frontend
+    container_name: primecare-frontend
     ports:
       - "4200:4200"
     environment:
@@ -216,13 +216,13 @@ services:
     depends_on:
       - api
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   system-admin:
     build:
       context: ./frontend/mw-system-admin
       dockerfile: Dockerfile
-    container_name: medicwarehouse-system-admin
+    container_name: primecare-system-admin
     ports:
       - "4201:4200"
     environment:
@@ -230,11 +230,11 @@ services:
     depends_on:
       - api
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
 volumes:
   postgres_data:
 
 networks:
-  medicwarehouse-network:
+  primecare-network:
     driver: bridge

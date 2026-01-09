@@ -6,5 +6,5 @@ DO $$
 BEGIN
     -- This could be enhanced with actual tenant management tables
     -- For now, we'll just create the database schema
-    RAISE NOTICE 'Database initialized for MedicWarehouse';
+    RAISE NOTICE 'Database initialized for PrimeCare Software';
 END $$;

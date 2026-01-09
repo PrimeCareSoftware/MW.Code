@@ -49,7 +49,7 @@ function Apply-Migration {
 }
 
 Write-ColorOutput "========================================" -Color Blue
-Write-ColorOutput "MedicWarehouse - Migration Script" -Color Blue
+Write-ColorOutput "PrimeCare Software - Migration Script" -Color Blue
 Write-ColorOutput "Apply All Migrations in Correct Order" -Color Blue
 Write-ColorOutput "========================================" -Color Blue
 Write-Host ""

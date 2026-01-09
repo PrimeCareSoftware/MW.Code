@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Patient Portal API",
         Version = "v1",
-        Description = "API for Patient Portal - MedicWarehouse\n\n" +
+        Description = "API for Patient Portal - PrimeCare Software\n\n" +
                       "This API provides secure access for patients to view their medical appointments, " +
                       "documents, and manage their profile information.\n\n" +
                       "**Authentication:** JWT Bearer Token\n" +
@@ -40,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
                       "- LGPD compliant data handling",
         Contact = new OpenApiContact
         {
-            Name = "MedicWarehouse",
+            Name = "PrimeCare Software",
             Email = "support@medicwarehouse.com"
         },
         License = new OpenApiLicense
@@ -84,7 +84,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Configure Database - Using the same database as MedicWarehouse
+// Configure Database - Using the same database as PrimeCare Software
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 

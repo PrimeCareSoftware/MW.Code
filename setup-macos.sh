@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script de Configuração Inicial para macOS - MedicWarehouse
+# Script de Configuração Inicial para macOS - PrimeCare Software
 # Este script configura o ambiente de desenvolvimento no macOS
 
 set -e
@@ -18,7 +18,7 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  🍎 Setup MedicWarehouse - macOS                      ║${NC}"
+echo -e "${BLUE}║  🍎 Setup PrimeCare Software - macOS                      ║${NC}"
 echo -e "${BLUE}║     Complete Environment Setup                         ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""
@@ -161,7 +161,7 @@ echo ""
 
 # Restaurar dependências do .NET
 echo -e "${BLUE}[7/11] Restaurando dependências do .NET...${NC}"
-dotnet restore "$SCRIPT_DIR/MedicWarehouse.sln"
+dotnet restore "$SCRIPT_DIR/PrimeCare Software.sln"
 echo -e "${GREEN}✓${NC} Dependências do .NET restauradas"
 echo ""
 
@@ -287,7 +287,7 @@ echo -e "   • Telemedicine API: ${YELLOW}http://localhost:5084${NC}"
 echo -e "   - Inicie todos com: ${YELLOW}podman-compose -f docker-compose.microservices.yml up -d${NC}"
 echo ""
 echo -e "${BLUE}🖥️  Frontend Applications:${NC}"
-echo -e "   • MedicWarehouse App (Clínicas): ${YELLOW}http://localhost:4200${NC}"
+echo -e "   • PrimeCare Software App (Clínicas): ${YELLOW}http://localhost:4200${NC}"
 echo -e "     - Inicie com: ${YELLOW}cd frontend/medicwarehouse-app && npm start${NC}"
 echo -e "   • System Admin Panel: ${YELLOW}http://localhost:4201${NC}"
 echo -e "     - Inicie com: ${YELLOW}cd frontend/mw-system-admin && npm start${NC}"

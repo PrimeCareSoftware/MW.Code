@@ -15,9 +15,9 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "MedicWarehouse Billing Microservice",
+        Title = "PrimeCare Software Billing Microservice",
         Version = "v1",
-        Description = "Billing and subscriptions microservice for MedicWarehouse system"
+        Description = "Billing and subscriptions microservice for PrimeCare Software system"
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

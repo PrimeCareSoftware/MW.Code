@@ -1,6 +1,6 @@
 version: '3.8'
 
-# Podman Compose para Produção - MedicWarehouse
+# Podman Compose para Produção - PrimeCare Software
 # Otimizado para baixo consumo de recursos e alta performance
 # Este arquivo também é compatível com Docker Compose
 #
@@ -14,11 +14,11 @@ services:
   # PostgreSQL - Banco de Dados (mais econômico que SQL Server)
   postgres:
     image: postgres:16-alpine
-    container_name: medicwarehouse-postgres
+    container_name: primecare-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: medicwarehouse
-      POSTGRES_USER: medicwarehouse
+      POSTGRES_DB: primecare
+      POSTGRES_USER: primecare
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe123!}
       # Otimizações para baixo consumo de memória
       POSTGRES_SHARED_BUFFERS: 128MB
@@ -31,9 +31,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - medicwarehouse-network
+      - primecare-network
     healthcheck:
-      test: pg_isready -U medicwarehouse -d medicwarehouse
+      test: pg_isready -U primecare -d primecare
       interval: 10s
       timeout: 5s
       retries: 5
@@ -55,7 +55,7 @@ services:
       dockerfile: src/MedicSoft.Api/Dockerfile
       args:
         CONFIGURATION: Release
-    container_name: medicwarehouse-api
+    container_name: primecare-api
     restart: unless-stopped
     environment:
       # Ambiente
@@ -63,13 +63,13 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       
       # Database (PostgreSQL)
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=medicwarehouse;Password=${POSTGRES_PASSWORD:-ChangeMe123!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=primecare;Password=${POSTGRES_PASSWORD:-ChangeMe123!}
       
       # JWT Settings (IMPORTANTE: Use variável de ambiente segura)
       - JwtSettings__SecretKey=${JWT_SECRET_KEY}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
       
       # Security
       - Security__RequireHttps=true
@@ -93,7 +93,7 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -113,11 +113,11 @@ services:
   # Frontend Angular (Build de produção otimizado)
   frontend:
     build:
-      context: ./frontend/medicwarehouse-app
+      context: ./frontend/primecare-app
       dockerfile: Dockerfile.production
       args:
         API_URL: ${API_URL:-http://api:8080}
-    container_name: medicwarehouse-frontend
+    container_name: primecare-frontend
     restart: unless-stopped
     environment:
       - NODE_ENV=production
@@ -126,7 +126,7 @@ services:
     depends_on:
       - api
     networks:
-      - medicwarehouse-network
+      - primecare-network
     # Limites de recursos (Nginx consome pouco)
     deploy:
       resources:
@@ -144,7 +144,7 @@ services:
       dockerfile: Dockerfile.production
       args:
         API_URL: ${API_URL:-http://api:8080}
-    container_name: medicwarehouse-system-admin
+    container_name: primecare-system-admin
     restart: unless-stopped
     environment:
       - NODE_ENV=production
@@ -153,7 +153,7 @@ services:
     depends_on:
       - api
     networks:
-      - medicwarehouse-network
+      - primecare-network
     # Limites de recursos
     deploy:
       resources:
@@ -168,7 +168,7 @@ services:
   # Descomente se quiser servir tudo em uma única porta
   # nginx:
   #   image: nginx:alpine
-  #   container_name: medicwarehouse-nginx
+  #   container_name: primecare-nginx
   #   restart: unless-stopped
   #   ports:
   #     - "80:80"
@@ -181,7 +181,7 @@ services:
   #     - frontend
   #     - system-admin
   #   networks:
-  #     - medicwarehouse-network
+  #     - primecare-network
   #   deploy:
   #     resources:
   #       limits:
@@ -194,11 +194,11 @@ volumes:
     # Para backups mais fáceis, você pode mapear para um diretório:
     # driver_opts:
     #   type: none
-    #   device: /opt/medicwarehouse/data
+    #   device: /opt/primecare/data
     #   o: bind
 
 networks:
-  medicwarehouse-network:
+  primecare-network:
     driver: bridge
 
 # INSTRUÇÕES DE USO:
@@ -224,10 +224,10 @@ networks:
 #    podman-compose -f podman-compose.production.yml down
 #
 # 6. Backup do banco:
-#    podman exec medicwarehouse-postgres pg_dump -U medicwarehouse medicwarehouse > backup.sql
+#    podman exec primecare-postgres pg_dump -U primecare primecare > backup.sql
 #
 # 7. Restore do banco:
-#    podman exec -i medicwarehouse-postgres psql -U medicwarehouse medicwarehouse < backup.sql
+#    podman exec -i primecare-postgres psql -U primecare primecare < backup.sql
 #
 # RECURSOS TOTAIS ESTIMADOS:
 # - CPU: ~2.0 vCPU total (picos)
