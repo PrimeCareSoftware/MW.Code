@@ -1,0 +1,60 @@
+<div class="prescription-type-selector">
+      <h2>Selecione o Tipo de Receita</h2>
+      <p class="subtitle">Conforme CFM 1.643/2002 e Portaria ANVISA 344/1998</p>
+
+      <div class="prescription-types">
+        <mat-card 
+          *ngFor="let typeInfo of prescriptionTypes"
+          class="prescription-type-card"
+          [class.controlled]="typeInfo.requiresSNGPC"
+          (click)="selectType(typeInfo)">
+          
+          <mat-card-header>
+            <mat-icon [color]="typeInfo.color" class="type-icon">{{typeInfo.icon}}</mat-icon>
+            <mat-card-title>{{ typeInfo.name }}</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="description">{{ typeInfo.description }}</p>
+            
+            <div class="type-details">
+              <mat-chip-set>
+                <mat-chip>
+                  <mat-icon>schedule</mat-icon>
+                  Validade: {{ typeInfo.expirationDays }} dias
+                </mat-chip>
+                
+                <mat-chip *ngIf="typeInfo.requiresSNGPC" class="sngpc-chip">
+                  <mat-icon>report</mat-icon>
+                  Requer SNGPC
+                </mat-chip>
+                
+                <mat-chip *ngIf="typeInfo.requiresSpecialForm" class="special-form-chip">
+                  <mat-icon>verified_user</mat-icon>
+                  Formulário Especial
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-raised-button [color]="typeInfo.color">
+              Selecionar
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <div class="info-panel" *ngIf="showControlledWarning">
+        <mat-icon class="warning-icon">warning</mat-icon>
+        <div class="warning-content">
+          <h3>Atenção: Medicamentos Controlados</h3>
+          <ul>
+            <li>Receitas de controle especial requerem numeração sequencial</li>
+            <li>Obrigatória notificação ao SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados)</li>
+            <li>Retenção obrigatória da receita pela farmácia</li>
+            <li>Receitas tipo A requerem 2 vias</li>
+          </ul>
+        </div>
+      </div>
+    </div>

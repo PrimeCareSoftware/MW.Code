@@ -1,0 +1,318 @@
+.diagnostic-hypothesis-form {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-text {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      padding: 0.75rem;
+      background: #f8f9fa;
+      border-left: 3px solid #28a745;
+      border-radius: 4px;
+    }
+
+    .existing-hypotheses {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+
+    .existing-hypotheses h4 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .hypothesis-item {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+
+    .hypothesis-item.principal {
+      border-color: #28a745;
+      border-width: 2px;
+      background: #f8fff9;
+    }
+
+    .hypothesis-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .hypothesis-info {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .hypothesis-type {
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      background: #6c757d;
+      color: white;
+      font-weight: 500;
+    }
+
+    .hypothesis-type.principal {
+      background: #28a745;
+    }
+
+    .hypothesis-code {
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      color: #007bff;
+      font-size: 0.9rem;
+    }
+
+    .hypothesis-description {
+      color: #333;
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .hypothesis-date small {
+      color: #666;
+      font-size: 0.8rem;
+    }
+
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s;
+    }
+
+    .btn-delete:hover:not(:disabled) {
+      background: #c82333;
+    }
+
+    .btn-delete:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .add-hypothesis-section {
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+
+    .add-hypothesis-section h4 {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .form-group.col-md-4 {
+      flex: 0 0 calc(33.333% - 0.667rem);
+    }
+
+    .form-group.col-md-6 {
+      flex: 0 0 calc(50% - 0.5rem);
+    }
+
+    .form-group.col-md-8 {
+      flex: 0 0 calc(66.666% - 0.5rem);
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .form-group input.invalid,
+    .form-group select.invalid,
+    .form-group textarea.invalid {
+      border-color: #dc3545;
+      background: #fff5f5;
+    }
+
+    .form-group input.valid {
+      border-color: #28a745;
+      background: #f8fff9;
+    }
+
+    .help-text {
+      display: block;
+      margin-top: 0.25rem;
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    .error-text {
+      display: block;
+      margin-top: 0.25rem;
+      color: #dc3545;
+      font-size: 0.85rem;
+    }
+
+    .warning-text {
+      display: block;
+      margin-top: 0.25rem;
+      color: #856404;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .success-text {
+      display: block;
+      margin-top: 0.25rem;
+      color: #28a745;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .cid-search-helper {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+
+    .cid-search-helper h5 {
+      margin-bottom: 0.75rem;
+      color: #333;
+      font-size: 1rem;
+    }
+
+    .search-examples p {
+      margin-bottom: 0.75rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .example-btn {
+      padding: 0.5rem;
+      background: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .example-btn:hover {
+      background: #dee2e6;
+      border-color: #007bff;
+    }
+
+    .form-actions {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #218838;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #5a6268;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .alert {
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+      }
+
+      .form-group.col-md-4,
+      .form-group.col-md-6,
+      .form-group.col-md-8 {
+        flex: 1;
+      }
+
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+    }

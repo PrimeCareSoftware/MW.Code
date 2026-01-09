@@ -1,0 +1,203 @@
+<div class="clinical-examination-form">
+      <h3>Exame Clínico (CFM 1.821/2007)</h3>
+      <p class="info-text">
+        Registro obrigatório de sinais vitais e exame físico sistemático conforme Resolução CFM 1.821/2007.
+      </p>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error">{{ errorMessage() }}</div>
+      }
+      @if (successMessage()) {
+        <div class="alert alert-success">{{ successMessage() }}</div>
+      }
+
+      <form [formGroup]="examinationForm" (ngSubmit)="onSubmit()">
+        <!-- Vital Signs Section -->
+        <div class="section">
+          <h4>Sinais Vitais *</h4>
+          
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="bloodPressureSystolic">Pressão Arterial Sistólica (mmHg) *</label>
+              <input
+                type="number"
+                id="bloodPressureSystolic"
+                formControlName="bloodPressureSystolic"
+                placeholder="Ex: 120"
+                min="50"
+                max="300"
+                [class.invalid]="isFieldInvalid('bloodPressureSystolic')"
+                [class.warning]="isVitalSignAbnormal('bloodPressureSystolic')"
+              />
+              @if (isFieldInvalid('bloodPressureSystolic')) {
+                <small class="error-text">Valor obrigatório (50-300 mmHg)</small>
+              }
+              @if (isVitalSignAbnormal('bloodPressureSystolic')) {
+                <small class="warning-text">⚠️ Valor fora da faixa normal (90-140 mmHg)</small>
+              }
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="bloodPressureDiastolic">Pressão Arterial Diastólica (mmHg) *</label>
+              <input
+                type="number"
+                id="bloodPressureDiastolic"
+                formControlName="bloodPressureDiastolic"
+                placeholder="Ex: 80"
+                min="30"
+                max="200"
+                [class.invalid]="isFieldInvalid('bloodPressureDiastolic')"
+                [class.warning]="isVitalSignAbnormal('bloodPressureDiastolic')"
+              />
+              @if (isFieldInvalid('bloodPressureDiastolic')) {
+                <small class="error-text">Valor obrigatório (30-200 mmHg)</small>
+              }
+              @if (isVitalSignAbnormal('bloodPressureDiastolic')) {
+                <small class="warning-text">⚠️ Valor fora da faixa normal (60-90 mmHg)</small>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="heartRate">Frequência Cardíaca (bpm) *</label>
+              <input
+                type="number"
+                id="heartRate"
+                formControlName="heartRate"
+                placeholder="Ex: 75"
+                min="30"
+                max="220"
+                [class.invalid]="isFieldInvalid('heartRate')"
+                [class.warning]="isVitalSignAbnormal('heartRate')"
+              />
+              @if (isFieldInvalid('heartRate')) {
+                <small class="error-text">Valor obrigatório (30-220 bpm)</small>
+              }
+              @if (isVitalSignAbnormal('heartRate')) {
+                <small class="warning-text">⚠️ Valor fora da faixa normal (60-100 bpm)</small>
+              }
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="respiratoryRate">Freq. Respiratória (irpm) *</label>
+              <input
+                type="number"
+                id="respiratoryRate"
+                formControlName="respiratoryRate"
+                placeholder="Ex: 16"
+                min="8"
+                max="60"
+                [class.invalid]="isFieldInvalid('respiratoryRate')"
+                [class.warning]="isVitalSignAbnormal('respiratoryRate')"
+              />
+              @if (isFieldInvalid('respiratoryRate')) {
+                <small class="error-text">Valor obrigatório (8-60 irpm)</small>
+              }
+              @if (isVitalSignAbnormal('respiratoryRate')) {
+                <small class="warning-text">⚠️ Valor fora da faixa normal (12-20 irpm)</small>
+              }
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="temperature">Temperatura (°C) *</label>
+              <input
+                type="number"
+                id="temperature"
+                formControlName="temperature"
+                step="0.1"
+                placeholder="Ex: 36.5"
+                min="32"
+                max="45"
+                [class.invalid]="isFieldInvalid('temperature')"
+                [class.warning]="isVitalSignAbnormal('temperature')"
+              />
+              @if (isFieldInvalid('temperature')) {
+                <small class="error-text">Valor obrigatório (32-45 °C)</small>
+              }
+              @if (isVitalSignAbnormal('temperature')) {
+                <small class="warning-text">⚠️ Valor fora da faixa normal (36-37.5 °C)</small>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="oxygenSaturation">Saturação de O₂ (%) *</label>
+              <input
+                type="number"
+                id="oxygenSaturation"
+                formControlName="oxygenSaturation"
+                placeholder="Ex: 98"
+                min="0"
+                max="100"
+                [class.invalid]="isFieldInvalid('oxygenSaturation')"
+                [class.warning]="isVitalSignAbnormal('oxygenSaturation')"
+              />
+              @if (isFieldInvalid('oxygenSaturation')) {
+                <small class="error-text">Valor obrigatório (0-100 %)</small>
+              }
+              @if (isVitalSignAbnormal('oxygenSaturation')) {
+                <small class="warning-text">⚠️ Valor baixo (normal: >95%)</small>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Physical Examination Section -->
+        <div class="section">
+          <h4>Exame Físico Sistemático *</h4>
+          <div class="form-group">
+            <textarea
+              id="systematicExamination"
+              formControlName="systematicExamination"
+              rows="6"
+              placeholder="Descreva o exame físico por sistemas (mínimo 20 caracteres)...&#10;&#10;Exemplos:&#10;- Cabeça e pescoço: ____&#10;- Aparelho respiratório: ____&#10;- Aparelho cardiovascular: ____&#10;- Abdome: ____&#10;- Extremidades: ____"
+              [class.invalid]="isFieldInvalid('systematicExamination')"
+            ></textarea>
+            @if (isFieldInvalid('systematicExamination')) {
+              <small class="error-text">
+                Exame físico sistemático é obrigatório (mínimo 20 caracteres)
+              </small>
+            }
+            <small class="char-count">
+              {{ examinationForm.get('systematicExamination')?.value?.length || 0 }} caracteres
+            </small>
+          </div>
+        </div>
+
+        <!-- General State Section -->
+        <div class="section">
+          <h4>Estado Geral</h4>
+          <div class="form-group">
+            <textarea
+              id="generalState"
+              formControlName="generalState"
+              rows="3"
+              placeholder="Descreva o estado geral do paciente...&#10;Ex: Paciente consciente, orientado, corado, hidratado, acianótico, anictérico"
+            ></textarea>
+            <small class="help-text">
+              Opcional: Descrição do estado geral e aspecto do paciente
+            </small>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onCancel()"
+            [disabled]="isSaving()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="examinationForm.invalid || isSaving()"
+          >
+            {{ isSaving() ? 'Salvando...' : (existingExamination ? 'Atualizar' : 'Registrar') }} Exame
+          </button>
+        </div>
+      </form>
+    </div>

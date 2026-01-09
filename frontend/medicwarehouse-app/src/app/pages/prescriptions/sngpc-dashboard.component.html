@@ -1,0 +1,149 @@
+<div class="sngpc-dashboard">
+      <h1>Dashboard SNGPC</h1>
+      <p class="subtitle">Sistema Nacional de Gerenciamento de Produtos Controlados - ANVISA</p>
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <mat-icon class="stat-icon" color="primary">assignment</mat-icon>
+            <div class="stat-value">{{ unreportedCount }}</div>
+            <div class="stat-label">Prescrições Não Reportadas</div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <mat-icon class="stat-icon" color="accent">schedule</mat-icon>
+            <div class="stat-value">{{ overdueReports.length }}</div>
+            <div class="stat-label">Relatórios Atrasados</div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <mat-icon class="stat-icon" color="primary">check_circle</mat-icon>
+            <div class="stat-value">{{ transmittedThisYear }}</div>
+            <div class="stat-label">Transmitidos Este Ano</div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card" *ngIf="latestReport">
+          <mat-card-content>
+            <mat-icon class="stat-icon" [color]="latestReport.isOverdue ? 'warn' : 'primary'">timer</mat-icon>
+            <div class="stat-value">{{ latestReport.daysUntilDeadline }}</div>
+            <div class="stat-label">Dias até Prazo (Último)</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Overdue Reports Alert -->
+      <mat-card class="alert-card" *ngIf="overdueReports.length > 0">
+        <mat-card-content>
+          <div class="alert-content">
+            <mat-icon class="alert-icon">warning</mat-icon>
+            <div>
+              <h3>Atenção: Relatórios Vencidos!</h3>
+              <p>Você tem {{ overdueReports.length }} relatório(s) SNGPC com prazo vencido. 
+                 Transmita imediatamente para evitar multas da ANVISA.</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Reports Table -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Histórico de Relatórios SNGPC</mat-card-title>
+          <button mat-raised-button color="primary" (click)="createNewReport()">
+            <mat-icon>add</mat-icon>
+            Gerar Novo Relatório
+          </button>
+        </mat-card-header>
+
+        <mat-card-content>
+          <table mat-table [dataSource]="reports" class="reports-table">
+            <!-- Period Column -->
+            <ng-container matColumnDef="period">
+              <th mat-header-cell *matHeaderCellDef>Período</th>
+              <td mat-cell *matCellDef="let report">
+                {{ report.month | number:'2.0' }}/{{ report.year }}
+              </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let report">
+                <mat-chip [class]="'status-' + report.status.toLowerCase()">
+                  {{ getStatusLabel(report.status) }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Prescriptions Column -->
+            <ng-container matColumnDef="prescriptions">
+              <th mat-header-cell *matHeaderCellDef>Prescrições</th>
+              <td mat-cell *matCellDef="let report">{{ report.totalPrescriptions }}</td>
+            </ng-container>
+
+            <!-- Items Column -->
+            <ng-container matColumnDef="items">
+              <th mat-header-cell *matHeaderCellDef>Itens</th>
+              <td mat-cell *matCellDef="let report">{{ report.totalItems }}</td>
+            </ng-container>
+
+            <!-- Deadline Column -->
+            <ng-container matColumnDef="deadline">
+              <th mat-header-cell *matHeaderCellDef>Prazo</th>
+              <td mat-cell *matCellDef="let report">
+                <span [class.overdue]="report.isOverdue">
+                  {{ report.daysUntilDeadline }} dias
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <td mat-cell *matCellDef="let report">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="generateXML(report.id)">
+                    <mat-icon>code</mat-icon>
+                    <span>Gerar XML</span>
+                  </button>
+                  <button mat-menu-item (click)="downloadXML(report.id)">
+                    <mat-icon>download</mat-icon>
+                    <span>Baixar XML</span>
+                  </button>
+                  <button mat-menu-item (click)="transmitReport(report.id)">
+                    <mat-icon>send</mat-icon>
+                    <span>Transmitir</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Info Panel -->
+      <mat-card class="info-card">
+        <mat-card-content>
+          <h3><mat-icon>info</mat-icon> Informações Importantes</h3>
+          <ul>
+            <li>Relatórios devem ser transmitidos até o dia 10 do mês seguinte</li>
+            <li>Inclui todas as prescrições de medicamentos controlados (Listas A, B e C1)</li>
+            <li>Multas por atraso: de R$ 5.000 a R$ 100.000 (Lei 6.360/76)</li>
+            <li>Formato XML deve seguir o schema ANVISA v2.1</li>
+            <li>Assinatura digital ICP-Brasil é obrigatória</li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>

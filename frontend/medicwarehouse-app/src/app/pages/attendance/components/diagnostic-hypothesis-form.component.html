@@ -1,0 +1,167 @@
+<div class="diagnostic-hypothesis-form">
+      <h3>Hipóteses Diagnósticas (CFM 1.821/2007)</h3>
+      <p class="info-text">
+        Registro obrigatório de hipóteses diagnósticas com código CID-10 conforme CFM 1.821/2007.
+        É necessário ao menos uma hipótese diagnóstica principal.
+      </p>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error">{{ errorMessage() }}</div>
+      }
+      @if (successMessage()) {
+        <div class="alert alert-success">{{ successMessage() }}</div>
+      }
+
+      <!-- List of Existing Hypotheses -->
+      @if (existingHypotheses().length > 0) {
+        <div class="existing-hypotheses">
+          <h4>Diagnósticos Registrados</h4>
+          @for (hypothesis of existingHypotheses(); track hypothesis.id) {
+            <div class="hypothesis-item" [class.principal]="hypothesis.type === 1">
+              <div class="hypothesis-header">
+                <div class="hypothesis-info">
+                  <span class="hypothesis-type" [class.principal]="hypothesis.type === 1">
+                    {{ hypothesis.type === 1 ? '⭐ Principal' : 'Secundário' }}
+                  </span>
+                  <span class="hypothesis-code">CID-10: {{ hypothesis.icd10Code }}</span>
+                </div>
+                <button
+                  type="button"
+                  class="btn-delete"
+                  (click)="deleteHypothesis(hypothesis.id)"
+                  [disabled]="isDeletingId() === hypothesis.id"
+                  title="Excluir diagnóstico"
+                >
+                  {{ isDeletingId() === hypothesis.id ? '...' : '🗑️' }}
+                </button>
+              </div>
+              <div class="hypothesis-description">{{ hypothesis.description }}</div>
+              <div class="hypothesis-date">
+                <small>Data: {{ hypothesis.diagnosedAt | date: 'dd/MM/yyyy' }}</small>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Form to Add New Hypothesis -->
+      <div class="add-hypothesis-section">
+        <h4>{{ editingHypothesis() ? 'Editar' : 'Adicionar' }} Diagnóstico</h4>
+        
+        <form [formGroup]="hypothesisForm" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label for="description">Descrição do Diagnóstico *</label>
+              <textarea
+                id="description"
+                formControlName="description"
+                rows="3"
+                placeholder="Descreva a hipótese diagnóstica..."
+                [class.invalid]="isFieldInvalid('description')"
+              ></textarea>
+              @if (isFieldInvalid('description')) {
+                <small class="error-text">Descrição é obrigatória (mínimo 5 caracteres)</small>
+              }
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="type">Tipo *</label>
+              <select
+                id="type"
+                formControlName="type"
+                [class.invalid]="isFieldInvalid('type')"
+              >
+                <option value="">Selecione...</option>
+                <option value="1">⭐ Principal</option>
+                <option value="2">Secundário</option>
+              </select>
+              @if (isFieldInvalid('type')) {
+                <small class="error-text">Tipo é obrigatório</small>
+              }
+              @if (!hasPrincipalDiagnosis() && hypothesisForm.get('type')?.value !== 'Principal') {
+                <small class="warning-text">
+                  ⚠️ É necessário ao menos um diagnóstico principal
+                </small>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="icdCode">Código CID-10 *</label>
+              <input
+                type="text"
+                id="icdCode"
+                formControlName="icdCode"
+                placeholder="Ex: A00, J20.9, Z99.01"
+                (input)="onIcdCodeInput($event)"
+                [class.invalid]="isFieldInvalid('icdCode')"
+                [class.valid]="hypothesisForm.get('icdCode')?.valid && hypothesisForm.get('icdCode')?.value"
+              />
+              @if (isFieldInvalid('icdCode')) {
+                <small class="error-text">
+                  Código CID-10 inválido. Formato: letra(s) seguida de números (ex: A00, J20.9)
+                </small>
+              }
+              @if (hypothesisForm.get('icdCode')?.valid && hypothesisForm.get('icdCode')?.value) {
+                <small class="success-text">✓ Formato válido</small>
+              }
+              <small class="help-text">
+                Formato: 1-3 letras + 2 dígitos + opcional (.1 dígito)
+              </small>
+            </div>
+          </div>
+
+          <!-- CID-10 Quick Search Helper -->
+          <div class="cid-search-helper">
+            <h5>🔍 Busca Rápida CID-10</h5>
+            <div class="search-examples">
+              <p><strong>Exemplos comuns:</strong></p>
+              <div class="examples-grid">
+                <button type="button" class="example-btn" (click)="fillCidExample('J06.9')">
+                  J06.9 - Infecção respiratória aguda
+                </button>
+                <button type="button" class="example-btn" (click)="fillCidExample('E11')">
+                  E11 - Diabetes mellitus tipo 2
+                </button>
+                <button type="button" class="example-btn" (click)="fillCidExample('I10')">
+                  I10 - Hipertensão essencial
+                </button>
+                <button type="button" class="example-btn" (click)="fillCidExample('K29.7')">
+                  K29.7 - Gastrite não especificada
+                </button>
+                <button type="button" class="example-btn" (click)="fillCidExample('M79.1')">
+                  M79.1 - Mialgia
+                </button>
+                <button type="button" class="example-btn" (click)="fillCidExample('R51')">
+                  R51 - Cefaleia
+                </button>
+              </div>
+              <small class="help-text">
+                💡 Dica: Em produção, integrar com base de dados CID-10 completa para busca avançada
+              </small>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            @if (editingHypothesis()) {
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancelEdit()"
+                [disabled]="isSaving()"
+              >
+                Cancelar Edição
+              </button>
+            }
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="hypothesisForm.invalid || isSaving()"
+            >
+              {{ isSaving() ? 'Salvando...' : (editingHypothesis() ? 'Atualizar' : 'Adicionar') }} Diagnóstico
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
