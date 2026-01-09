@@ -122,7 +122,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun MedicWarehouseTheme(
+fun PrimeCare SoftwareTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit

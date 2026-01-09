@@ -2,7 +2,7 @@
 
 ## Resumo da Implementação
 
-Este documento descreve a implementação realizada para conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos médicos no sistema MedicWarehouse.
+Este documento descreve a implementação realizada para conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos médicos no sistema PrimeCare Software.
 
 ---
 

@@ -1,6 +1,6 @@
 version: '3.8'
 
-# Podman Compose para MedicWarehouse - Ambiente de Desenvolvimento
+# Podman Compose para PrimeCare Software - Ambiente de Desenvolvimento
 # Este arquivo também é compatível com Docker Compose
 #
 # Executar com Podman (recomendado - livre e open-source):
@@ -12,9 +12,9 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: medicwarehouse-postgres
+    container_name: primecare-postgres
     environment:
-      POSTGRES_DB: medicwarehouse
+      POSTGRES_DB: primecare
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
@@ -23,9 +23,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - medicwarehouse-network
+      - primecare-network
     healthcheck:
-      test: pg_isready -U postgres -d medicwarehouse
+      test: pg_isready -U postgres -d primecare
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,27 +35,27 @@ services:
     build:
       context: .
       dockerfile: src/MedicSoft.Api/Dockerfile
-    container_name: medicwarehouse-api
+    container_name: primecare-api
     ports:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=medicwarehouse;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=MedicWarehouse
-      - JwtSettings__Audience=MedicWarehouse-API
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   frontend:
     build:
-      context: ./frontend/medicwarehouse-app
+      context: ./frontend/primecare-app
       dockerfile: Dockerfile
-    container_name: medicwarehouse-frontend
+    container_name: primecare-frontend
     ports:
       - "4200:4200"
     environment:
@@ -63,13 +63,13 @@ services:
     depends_on:
       - api
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
   system-admin:
     build:
       context: ./frontend/mw-system-admin
       dockerfile: Dockerfile
-    container_name: medicwarehouse-system-admin
+    container_name: primecare-system-admin
     ports:
       - "4201:4200"
     environment:
@@ -77,11 +77,11 @@ services:
     depends_on:
       - api
     networks:
-      - medicwarehouse-network
+      - primecare-network
 
 volumes:
   postgres_data:
 
 networks:
-  medicwarehouse-network:
+  primecare-network:
     driver: bridge

@@ -1,6 +1,6 @@
 # 💰 Fluxo Financeiro - Sistema de Pagamentos e Nota Fiscal
 
-Este documento descreve o fluxo completo de pagamentos de consultas e emissão de notas fiscais no sistema MedicWarehouse.
+Este documento descreve o fluxo completo de pagamentos de consultas e emissão de notas fiscais no sistema PrimeCare Software.
 
 ## 📊 Visão Geral
 

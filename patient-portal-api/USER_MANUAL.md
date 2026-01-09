@@ -615,7 +615,7 @@ Se funcionar em modo anônimo, o problema é com cache/cookies do navegador.
 
 Para problemas técnicos com o portal (login, navegação, erros):
 
-- **E-mail:** suporte@medicwarehouse.com
+- **E-mail:** suporte@primecaresoftware.com
 - **Horário:** Segunda a Sexta, 8h às 18h
 - **Tempo de resposta:** Até 24 horas úteis
 
@@ -654,7 +654,7 @@ Sua opinião é importante! Envie feedback sobre:
 - Problemas encontrados
 - Elogios ou críticas construtivas
 
-**E-mail:** feedback@medicwarehouse.com
+**E-mail:** feedback@primecaresoftware.com
 
 ---
 
@@ -729,11 +729,11 @@ Use este checklist para garantir que configurou tudo corretamente:
 
 ---
 
-**MedicWarehouse - Portal do Paciente**
+**PrimeCare Software - Portal do Paciente**
 *Sua saúde, seu acesso, sua segurança.*
 
 Para mais informações, visite nossa documentação técnica ou entre em contato com o suporte.
 
 ---
 
-© 2026 MedicWarehouse. Todos os direitos reservados.
+© 2026 PrimeCare Software. Todos os direitos reservados.

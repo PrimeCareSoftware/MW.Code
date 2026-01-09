@@ -1,6 +1,6 @@
-# 📚 Índice de Documentação - MedicWarehouse
+# 📚 Índice de Documentação - PrimeCare Software
 
-Este documento serve como guia de navegação para toda a documentação do sistema MedicWarehouse.
+Este documento serve como guia de navegação para toda a documentação do sistema PrimeCare Software.
 
 ---
 
@@ -78,7 +78,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 |-----------|-----------|------------------|
 | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) | Guia rápido do Postman | 5 min |
 | [POSTMAN_IMPORT_GUIDE.md](./POSTMAN_IMPORT_GUIDE.md) | Como importar collection | 3 min |
-| [MedicWarehouse-Postman-Collection.json](./MedicWarehouse-Postman-Collection.json) | Collection do Postman | - |
+| [PrimeCare Software-Postman-Collection.json](./PrimeCare Software-Postman-Collection.json) | Collection do Postman | - |
 
 ### 🌐 Frontend e Integração
 
@@ -181,7 +181,7 @@ MW.Code/
 │
 ├── 🧪 TESTES E API
 │   ├── POSTMAN_IMPORT_GUIDE.md
-│   └── MedicWarehouse-Postman-Collection.json
+│   └── PrimeCare Software-Postman-Collection.json
 │
 └── 🌐 FRONTEND
     ├── FRONTEND_INTEGRATION_GUIDE.md
@@ -266,7 +266,7 @@ Ao adicionar nova documentação:
 Se não encontrar o que procura:
 1. Verifique o [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) para visão geral
 2. Consulte o [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) para dados de teste
-3. Veja a [Postman Collection](./MedicWarehouse-Postman-Collection.json) para exemplos de API
+3. Veja a [Postman Collection](./PrimeCare Software-Postman-Collection.json) para exemplos de API
 
 ---
 

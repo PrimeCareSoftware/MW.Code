@@ -2,11 +2,11 @@
 
 ## Visão Geral
 
-MW.Site é o site de marketing e contratação do MedicWarehouse SaaS. Desenvolvido em Angular 20, oferece uma experiência completa para visitantes conhecerem o produto, visualizarem planos e realizarem o cadastro com período de teste gratuito de 15 dias.
+MW.Site é o site de marketing e contratação do PrimeCare Software SaaS. Desenvolvido em Angular 20, oferece uma experiência completa para visitantes conhecerem o produto, visualizarem planos e realizarem o cadastro com período de teste gratuito de 15 dias.
 
 ## 🎯 Objetivos
 
-- Apresentar os serviços e diferenciais do MedicWarehouse
+- Apresentar os serviços e diferenciais do PrimeCare Software
 - Facilitar a contratação de planos de assinatura
 - Proporcionar período de teste gratuito de 15 dias
 - Integrar com sistema de pagamentos
@@ -605,7 +605,7 @@ graph TD
 
 ## 📞 Suporte e Contato
 
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Telefone**: (11) 99999-9999
 - **WhatsApp**: +55 11 99999-9999
 - **Horário**: Segunda a Sexta, 8h às 18h | Sábados, 9h às 13h
@@ -639,4 +639,4 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 
 ---
 
-**Desenvolvido com ❤️ pela equipe MedicWarehouse**
+**Desenvolvido com ❤️ pela equipe PrimeCare Software**

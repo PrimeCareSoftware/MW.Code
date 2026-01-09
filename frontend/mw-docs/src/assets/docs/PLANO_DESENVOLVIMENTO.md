@@ -1,4 +1,4 @@
-# 📋 Plano de Desenvolvimento Priorizado - MedicWarehouse
+# 📋 Plano de Desenvolvimento Priorizado - PrimeCare Software
 
 > **Documento Consolidado:** Este documento unifica PLANO_DESENVOLVIMENTO_PRIORIZADO.md (Parte 1) e PLANO_DESENVOLVIMENTO_PRIORIZADO_PARTE2.md (Parte 2)
 
@@ -12,7 +12,7 @@
 
 ## 🎯 Visão Executiva
 
-Este documento organiza TODAS as pendências do MedicWarehouse em uma ordem de prioridade clara, considerando:
+Este documento organiza TODAS as pendências do PrimeCare Software em uma ordem de prioridade clara, considerando:
 
 1. **Obrigatoriedade Legal** (CFM, ANVISA, Receita Federal, ANS)
 2. **Impacto no Negócio** (Aquisição de clientes, retenção, receita)
@@ -867,7 +867,7 @@ Este documento organiza TODAS as pendências do MedicWarehouse em uma ordem de p
 **Versão:** 1.0  
 **Status:** Pronto para execução
 
-**Este documento serve como roteiro detalhado de desenvolvimento do MedicWarehouse para 2025-2026, com foco em compliance regulatório e crescimento de mercado.**
+**Este documento serve como roteiro detalhado de desenvolvimento do PrimeCare Software para 2025-2026, com foco em compliance regulatório e crescimento de mercado.**
 
 # 📋 Plano de Desenvolvimento Priorizado - Parte 2
 ## Prioridades Médias e Baixas + Apps
@@ -1543,7 +1543,7 @@ public class SOAPMedicalRecord
 
 ## 🌐 APLICATIVOS WEB
 
-### MedicWarehouse App (Frontend Principal)
+### PrimeCare Software App (Frontend Principal)
 
 **Prioridade Alta:**
 1. Dashboard de Relatórios (4 semanas)

@@ -1,8 +1,8 @@
-# Resumo de Melhorias de Segurança - MedicWarehouse
+# Resumo de Melhorias de Segurança - PrimeCare Software
 
 ## 🎯 Objetivo
 
-Implementar melhorias abrangentes de segurança no sistema MedicWarehouse para proteger contra ataques comuns incluindo SQL Injection, XSS, CSRF, força bruta, e outras ameaças.
+Implementar melhorias abrangentes de segurança no sistema PrimeCare Software para proteger contra ataques comuns incluindo SQL Injection, XSS, CSRF, força bruta, e outras ameaças.
 
 ## ✅ Implementações Realizadas
 
@@ -267,7 +267,7 @@ dotnet test --filter "FullyQualifiedName~Security"
 - [ ] Configurar variáveis de ambiente no servidor
 ```bash
 export DB_SERVER="seu-servidor.database.windows.net"
-export DB_NAME="MedicWarehouse"
+export DB_NAME="PrimeCare Software"
 export DB_USER="admin_user"
 export DB_PASSWORD="SuaSenhaSegura123!"
 export JWT_SECRET_KEY="ChaveSecretaComPeloMenos32Caracteres!"

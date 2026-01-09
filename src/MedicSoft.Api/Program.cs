@@ -36,12 +36,12 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "MedicWarehouse API",
+        Title = "PrimeCare Software API",
         Version = "v1",
-        Description = "MedicWarehouse - Sistema de Gestão para Consultórios Médicos",
+        Description = "PrimeCare Software - Sistema de Gestão para Consultórios Médicos",
         Contact = new OpenApiContact
         {
-            Name = "MedicWarehouse",
+            Name = "PrimeCare Software",
             Email = "contato@medicwarehouse.com"
         }
     });
@@ -110,8 +110,8 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
-var issuer = jwtSettings["Issuer"] ?? "MedicWarehouse";
-var audience = jwtSettings["Audience"] ?? "MedicWarehouse-API";
+var issuer = jwtSettings["Issuer"] ?? "PrimeCare Software";
+var audience = jwtSettings["Audience"] ?? "PrimeCare Software-API";
 
 builder.Services.AddAuthentication(options =>
 {
@@ -273,7 +273,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MedicWarehouse API v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "PrimeCare Software API v1");
         c.RoutePrefix = "swagger"; // Set Swagger UI at /swagger
     });
 }

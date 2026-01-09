@@ -2,7 +2,7 @@
 
 ## ✅ O Que Foi Implementado
 
-Este documento resume o trabalho realizado na implementação do Portal do Paciente (Patient Portal) para o sistema MedicWarehouse.
+Este documento resume o trabalho realizado na implementação do Portal do Paciente (Patient Portal) para o sistema PrimeCare Software.
 
 ### 📅 Data de Implementação
 **Janeiro de 2026**
@@ -71,7 +71,7 @@ patient-portal-api/
 #### Infrastructure Layer - Completo ✅
 - **DbContext:**
   - `PatientPortalDbContext` - Contexto EF Core configurado
-  - Usa o mesmo banco de dados do MedicWarehouse principal
+  - Usa o mesmo banco de dados do PrimeCare Software principal
   - Configurações de entidades e índices otimizados
   
 - **Repositórios Concretos:**
@@ -338,6 +338,6 @@ Total tests: 12
 ---
 
 **Versão:** 1.0.0  
-**Autor:** GitHub Copilot + MedicWarehouse Team  
+**Autor:** GitHub Copilot + PrimeCare Software Team  
 **Data:** Janeiro 2026  
 **Status:** Fases 1-2 Completas (33%)

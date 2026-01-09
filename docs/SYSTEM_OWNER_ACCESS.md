@@ -2,13 +2,13 @@
 
 ## 📋 Visão Geral
 
-Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal MedicWarehouse.
+Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal PrimeCare Software.
 
 ## 🏗️ Arquitetura da Separação
 
-O MedicWarehouse agora é composto por **dois aplicativos Angular independentes**:
+O PrimeCare Software agora é composto por **dois aplicativos Angular independentes**:
 
-### 1. **MedicWarehouse App** (`medicwarehouse-app`)
+### 1. **PrimeCare Software App** (`medicwarehouse-app`)
 - **Usuários**: Proprietários de clínicas, médicos, secretárias, etc.
 - **Funcionalidades**: 
   - Dashboard da clínica
@@ -39,7 +39,7 @@ O MedicWarehouse agora é composto por **dois aplicativos Angular independentes*
 cd frontend/mw-system-admin
 npm install
 
-# MedicWarehouse App (se necessário)
+# PrimeCare Software App (se necessário)
 cd ../medicwarehouse-app
 npm install
 ```
@@ -69,7 +69,7 @@ Para rodar ambos os projetos simultaneamente, configure portas diferentes:
 ### Passo 3: Executar os Projetos
 
 ```bash
-# Terminal 1 - MedicWarehouse App
+# Terminal 1 - PrimeCare Software App
 cd frontend/medicwarehouse-app
 npm start
 # Disponível em http://localhost:4200
@@ -377,8 +377,8 @@ Ambos os sistemas são totalmente responsivos:
 
 Para problemas ou dúvidas:
 
-- **Email**: suporte@medicwarehouse.com
-- **GitHub Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Email**: suporte@primecaresoftware.com
+- **GitHub Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 - **Documentação**: Veja os arquivos `.md` no repositório
 
 ## 🔄 Atualizações Futuras

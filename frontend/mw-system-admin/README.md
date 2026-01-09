@@ -1,10 +1,10 @@
 # MW System Admin - Painel de Administração do Sistema
 
-Sistema de administração dedicado para System Owners do MedicWarehouse gerenciarem todas as clínicas e usuários do sistema.
+Sistema de administração dedicado para System Owners do PrimeCare Software gerenciarem todas as clínicas e usuários do sistema.
 
 ## 📋 Sobre
 
-O MW System Admin é um aplicativo Angular standalone separado do aplicativo principal do MedicWarehouse, projetado especificamente para proprietários do sistema (System Owners) gerenciarem:
+O MW System Admin é um aplicativo Angular standalone separado do aplicativo principal do PrimeCare Software, projetado especificamente para proprietários do sistema (System Owners) gerenciarem:
 
 - 🏥 **Clínicas**: Visualizar, criar, ativar/desativar e gerenciar todas as clínicas
 - 👥 **Usuários System Owner**: Adicionar e gerenciar outros administradores do sistema
@@ -18,7 +18,7 @@ O MW System Admin é um aplicativo Angular standalone separado do aplicativo pri
 
 - Node.js 18+ instalado
 - NPM ou Yarn
-- Backend API MedicWarehouse rodando (padrão: http://localhost:5000)
+- Backend API PrimeCare Software rodando (padrão: http://localhost:5000)
 
 ### Instalação
 

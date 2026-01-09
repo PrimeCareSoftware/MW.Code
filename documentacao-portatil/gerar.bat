@@ -1,12 +1,12 @@
 @echo off
-:: Script para gerar documentação portátil do MedicWarehouse
+:: Script para gerar documentação portátil do PrimeCare Software
 :: Pode ser executado de qualquer lugar do repositório
 
 chcp 65001 > nul
 cls
 
 echo ╔════════════════════════════════════════════════════════╗
-echo ║  📱 Gerador de Documentação Portátil - MedicWarehouse  ║
+echo ║  📱 Gerador de Documentação Portátil - PrimeCare Software  ║
 echo ╚════════════════════════════════════════════════════════╝
 echo.
 
@@ -36,8 +36,8 @@ echo.
 echo ✅ Concluído!
 echo.
 echo 📖 Arquivos gerados:
-echo    - MedicWarehouse-Documentacao-Completa.md
-echo    - MedicWarehouse-Documentacao-Completa.html
+echo    - PrimeCare Software-Documentacao-Completa.md
+echo    - PrimeCare Software-Documentacao-Completa.html
 echo.
 echo 💡 Próximos passos:
 echo    1. Abra o arquivo HTML no navegador

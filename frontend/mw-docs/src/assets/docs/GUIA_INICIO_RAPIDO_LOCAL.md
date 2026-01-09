@@ -1,6 +1,6 @@
-# 🚀 Guia de Início Rápido - Executar MedicWarehouse Localmente
+# 🚀 Guia de Início Rápido - Executar PrimeCare Software Localmente
 
-> **Objetivo:** Colocar o sistema MedicWarehouse rodando em seu PC para testes completos em menos de 10 minutos!
+> **Objetivo:** Colocar o sistema PrimeCare Software rodando em seu PC para testes completos em menos de 10 minutos!
 
 > 🌍 **NOVO!** Está usando **macOS** ou **Windows**? Use nossos scripts automatizados!
 > - **macOS**: Execute `./setup-macos.sh`
@@ -29,7 +29,7 @@ Antes de começar, certifique-se de ter instalado:
 ### 1️⃣ Clone o Repositório (se ainda não clonou)
 
 ```bash
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 ```
 
@@ -218,7 +218,7 @@ curl -X GET http://localhost:5000/api/appointments \
 
 ### Via Postman
 
-1. Importe a coleção: `MedicWarehouse-Postman-Collection.json`
+1. Importe a coleção: `PrimeCare Software-Postman-Collection.json`
 2. Configure as variáveis:
    - `base_url`: `http://localhost:5000`
    - `tenant_id`: `demo-clinic-001`
@@ -236,7 +236,7 @@ curl -X GET http://localhost:5000/api/data-seeder/demo-info
 
 ### Dados incluídos:
 
-- **Clínica:** Clínica Demo MedicWarehouse (TenantId: `demo-clinic-001`)
+- **Clínica:** Clínica Demo PrimeCare Software (TenantId: `demo-clinic-001`)
 - **Pacientes:** Carlos, Ana Maria, Pedro, Juliana, Lucas (criança), Sofia (criança)
 - **Procedimentos:** Consulta Geral, Cardiologia, Exames, Vacinas, etc.
 - **Agendamentos:** 5 agendamentos (passados, hoje e futuros)
@@ -346,7 +346,7 @@ Antes de começar os testes, certifique-se de que:
 - [ ] Você consegue fazer login
 - [ ] Token JWT está sendo gerado
 
-**Pronto! Agora você tem o MedicWarehouse rodando localmente com dados completos para teste! 🎉**
+**Pronto! Agora você tem o PrimeCare Software rodando localmente com dados completos para teste! 🎉**
 
 ---
 

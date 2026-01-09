@@ -212,7 +212,7 @@ Cada clínica mantém sua própria `ClinicSubscription` vinculada a `Subscriptio
 **Tela Principal:**
 ```
 ╔═══════════════════════════════════════════════════╗
-║  MedicWarehouse - Minhas Clínicas                 ║
+║  PrimeCare Software - Minhas Clínicas                 ║
 ║  👤 João Silva                        [Sair]      ║
 ╠═══════════════════════════════════════════════════╣
 ║                                                    ║
@@ -629,7 +629,7 @@ public async Task Owner_ShouldAccessMultipleClinics()
 - Visibilidade consolidada do negócio
 - Flexibilidade para expandir
 
-✅ **Para o Negócio (MedicWarehouse):**
+✅ **Para o Negócio (PrimeCare Software):**
 - Aumento de receita por cliente
 - Maior retenção de clientes
 - Diferencial competitivo
@@ -658,4 +658,4 @@ public async Task Owner_ShouldAccessMultipleClinics()
 
 **Última Atualização**: 2024-11-19  
 **Versão**: 1.0  
-**Autor**: MedicWarehouse Team
+**Autor**: PrimeCare Software Team

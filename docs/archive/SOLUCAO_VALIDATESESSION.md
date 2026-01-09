@@ -6,7 +6,7 @@ Todos os tokens JWT eram rejeitados na validação com o seguinte erro:
 
 ```
 warn: MedicSoft.Application.Services.JwtTokenService[0]
-      Token read in ValidateToken - Claims: 5, Issuer: MedicWarehouse, Audience: , Expires: 01/01/0001 00:00:00, Exp Payload: (null), Exp Claim: NO - MISSING
+      Token read in ValidateToken - Claims: 5, Issuer: PrimeCare Software, Audience: , Expires: 01/01/0001 00:00:00, Exp Payload: (null), Exp Claim: NO - MISSING
 
 warn: MedicSoft.Application.Services.JwtTokenService[0]
       Token validation failed: IDX10225: Lifetime validation failed. The token is missing an Expiration Time.

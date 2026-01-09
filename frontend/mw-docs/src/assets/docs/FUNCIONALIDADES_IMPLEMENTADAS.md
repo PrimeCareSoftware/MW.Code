@@ -1,4 +1,4 @@
-# Funcionalidades Implementadas - MedicWarehouse
+# Funcionalidades Implementadas - PrimeCare Software
 
 ## ✅ Status das Funcionalidades Solicitadas
 
@@ -370,7 +370,7 @@ Para completar a implementação no frontend:
 
 **TODAS as funcionalidades solicitadas foram implementadas com sucesso!**
 
-O sistema MedicWarehouse agora possui:
+O sistema PrimeCare Software agora possui:
 - ✅ Gerenciamento de agenda completo com confirmações automáticas
 - ✅ Prontuário eletrônico completo com histórico
 - ✅ Gestão financeira completa (receitas e despesas)

@@ -1,8 +1,8 @@
-# Arquitetura de Serviços - MedicWarehouse
+# Arquitetura de Serviços - PrimeCare Software
 
 ## Visão Geral
 
-Este documento descreve a nova arquitetura em camadas do MedicWarehouse, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.
+Este documento descreve a nova arquitetura em camadas do PrimeCare Software, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.
 
 ## Estrutura em Camadas
 

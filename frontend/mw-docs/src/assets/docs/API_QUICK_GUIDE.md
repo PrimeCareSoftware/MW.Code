@@ -432,4 +432,4 @@ curl -X POST http://localhost:5000/api/patients/{patientId}/link-clinic/{clinicI
 
 **Versão**: 1.0  
 **Data**: Janeiro 2025  
-**Autor**: Equipe MedicWarehouse
+**Autor**: Equipe PrimeCare Software

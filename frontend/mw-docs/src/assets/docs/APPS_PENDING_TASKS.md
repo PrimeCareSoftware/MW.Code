@@ -1,6 +1,6 @@
-# 📱 Pendências de Desenvolvimento - Aplicativos MedicWarehouse
+# 📱 Pendências de Desenvolvimento - Aplicativos PrimeCare Software
 
-> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema MedicWarehouse.
+> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema PrimeCare Software.
 
 > **Última Atualização:** Novembro 2025  
 > **Status:** Em desenvolvimento ativo
@@ -9,11 +9,11 @@
 
 ## 📊 Visão Geral do Ecossistema
 
-O MedicWarehouse possui **6 aplicativos** que compõem o ecossistema completo:
+O PrimeCare Software possui **6 aplicativos** que compõem o ecossistema completo:
 
 | Aplicativo | Tecnologia | Localização | Status |
 |------------|-----------|-------------|--------|
-| 🏥 **MedicWarehouse App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Beta |
+| 🏥 **PrimeCare Software App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Beta |
 | 🔧 **MW System Admin** | Angular 20 | `frontend/mw-system-admin` | ✅ Beta |
 | 🌐 **MW Site** | Angular 20 | `frontend/mw-site` | ✅ Em desenvolvimento |
 | 📚 **MW Docs** | Angular 20 | `frontend/mw-docs` | ✅ Produção |
@@ -22,7 +22,7 @@ O MedicWarehouse possui **6 aplicativos** que compõem o ecossistema completo:
 
 ---
 
-## 🏥 MedicWarehouse App (Frontend Principal)
+## 🏥 PrimeCare Software App (Frontend Principal)
 
 **Descrição:** Aplicativo principal para gestão de clínicas, pacientes, agendamentos e atendimentos.
 
@@ -241,7 +241,7 @@ frontend/mw-docs/src/app/
 
 ## 📱 iOS App (Swift/SwiftUI)
 
-**Descrição:** Aplicativo nativo iOS para acesso mobile ao sistema MedicWarehouse.
+**Descrição:** Aplicativo nativo iOS para acesso mobile ao sistema PrimeCare Software.
 
 **Tecnologias:**
 - Swift 5.9
@@ -284,8 +284,8 @@ frontend/mw-docs/src/app/
 ### 📁 Estrutura do Projeto
 
 ```
-mobile/ios/MedicWarehouse/
-├── MedicWarehouseApp.swift    # Entry point
+mobile/ios/PrimeCare Software/
+├── PrimeCare SoftwareApp.swift    # Entry point
 ├── ContentView.swift          # Root view
 ├── Views/
 │   ├── LoginView.swift        # Tela de login
@@ -305,7 +305,7 @@ mobile/ios/MedicWarehouse/
 
 ## 🤖 Android App (Kotlin/Jetpack Compose)
 
-**Descrição:** Aplicativo nativo Android para acesso mobile ao sistema MedicWarehouse.
+**Descrição:** Aplicativo nativo Android para acesso mobile ao sistema PrimeCare Software.
 
 **Tecnologias:**
 - Kotlin 1.9.20
@@ -350,7 +350,7 @@ mobile/ios/MedicWarehouse/
 ```
 mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 ├── MainActivity.kt           # Activity principal
-├── MedicWarehouseApp.kt     # Application class
+├── PrimeCare SoftwareApp.kt     # Application class
 ├── ui/
 │   ├── screens/
 │   │   ├── LoginScreen.kt    # Tela de login

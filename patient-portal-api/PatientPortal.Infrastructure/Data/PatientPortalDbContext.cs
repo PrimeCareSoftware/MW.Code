@@ -5,7 +5,7 @@ namespace PatientPortal.Infrastructure.Data;
 
 /// <summary>
 /// Database context for Patient Portal
-/// Uses the same database as MedicWarehouse main application
+/// Uses the same database as PrimeCare Software main application
 /// </summary>
 public class PatientPortalDbContext : DbContext
 {

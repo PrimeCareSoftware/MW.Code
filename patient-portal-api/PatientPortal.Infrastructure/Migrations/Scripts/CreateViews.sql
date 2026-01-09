@@ -1,6 +1,6 @@
 -- Patient Portal Views
 -- These views provide read-only access to appointments and documents from the main application
--- Note: These are placeholder views. Adjust based on actual MedicWarehouse database schema.
+-- Note: These are placeholder views. Adjust based on actual PrimeCare Software database schema.
 
 -- View for Patient Appointments
 -- Note: This view structure should be adjusted to match the actual Appointments table structure
@@ -61,7 +61,7 @@ LEFT JOIN "Users" u ON mr."DoctorId" = u."Id"
 WHERE mr."IsActive" = true;
 
 -- IMPORTANT: These views are templates and should be adjusted based on:
--- 1. Actual table names and column names in the MedicWarehouse database
+-- 1. Actual table names and column names in the PrimeCare Software database
 -- 2. Actual foreign key relationships
 -- 3. Actual data types and constraints
 -- Run AFTER verifying the schema matches the main application

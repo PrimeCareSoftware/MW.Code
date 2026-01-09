@@ -5,7 +5,7 @@
 Após importar a coleção no Postman, você verá:
 
 ```
-📁 MedicWarehouse API
+📁 PrimeCare Software API
    │
    ├── 🔐 Auth (2 requests)
    │   ├── 📨 Login
@@ -179,6 +179,6 @@ Todos os requests já incluem automaticamente:
 
 ---
 
-**Arquivo**: `MedicWarehouse-Postman-Collection.json`  
+**Arquivo**: `PrimeCare Software-Postman-Collection.json`  
 **Guia Completo**: `POSTMAN_IMPORT_GUIDE.md`  
-**Repositório**: https://github.com/MedicWarehouse/MW.Code
+**Repositório**: https://github.com/PrimeCare Software/MW.Code

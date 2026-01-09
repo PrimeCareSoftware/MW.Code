@@ -545,4 +545,4 @@ X-Tenant-Id: demo-clinic-001
 
 **Versão**: 1.1  
 **Data**: Novembro 2025  
-**Autor**: Equipe MedicWarehouse
+**Autor**: Equipe PrimeCare Software

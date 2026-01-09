@@ -1,6 +1,6 @@
-# MedicWarehouse Mobile Apps
+# PrimeCare Software Mobile Apps
 
-Aplicativos móveis nativos para o sistema MedicWarehouse, disponíveis para **iOS** (iPhone/iPad) e **Android**.
+Aplicativos móveis nativos para o sistema PrimeCare Software, disponíveis para **iOS** (iPhone/iPad) e **Android**.
 
 ## 📱 Plataformas Suportadas
 
@@ -113,7 +113,7 @@ Ambos os apps seguem as diretrizes de design de suas respectivas plataformas:
 ### iOS
 ```bash
 cd mobile/ios
-open MedicWarehouse.xcodeproj
+open PrimeCare Software.xcodeproj
 # Configure API URL in NetworkManager.swift
 # Build and Run (⌘R)
 ```
@@ -281,7 +281,7 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 
 ## 📄 Licença
 
-Este projeto está sob a mesma licença do projeto principal MedicWarehouse.
+Este projeto está sob a mesma licença do projeto principal PrimeCare Software.
 
 ## 🤝 Contribuindo
 
@@ -298,7 +298,7 @@ Contribuições são bem-vindas! Por favor:
 - **Documentação iOS**: [ios/README.md](ios/README.md)
 - **Documentação Android**: [android/README.md](android/README.md)
 - **Issues**: GitHub Issues
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 
 ---
 

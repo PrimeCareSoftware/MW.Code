@@ -1,8 +1,8 @@
-# Relatório de Segurança e Validações - MedicWarehouse
+# Relatório de Segurança e Validações - PrimeCare Software
 
 ## 📋 Resumo Executivo
 
-Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema MedicWarehouse para garantir a integridade e segurança dos dados.
+Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema PrimeCare Software para garantir a integridade e segurança dos dados.
 
 ## 🔒 Validações de Segurança Implementadas
 
@@ -314,7 +314,7 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ## 📝 Conclusão
 
-O sistema MedicWarehouse agora possui:
+O sistema PrimeCare Software agora possui:
 
 - ✅ Validações robustas de CPF, CNPJ e CRM
 - ✅ Proteção contra null pointer exceptions

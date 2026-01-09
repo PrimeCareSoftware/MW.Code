@@ -12,7 +12,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}MedicWarehouse - Migration Script${NC}"
+echo -e "${BLUE}PrimeCare Software - Migration Script${NC}"
 echo -e "${BLUE}Apply All Migrations in Correct Order${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""

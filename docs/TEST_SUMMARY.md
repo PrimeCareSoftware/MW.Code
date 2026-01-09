@@ -1,4 +1,4 @@
-# 📊 Resumo dos Testes Unitários - MedicWarehouse
+# 📊 Resumo dos Testes Unitários - PrimeCare Software
 
 ## Estatísticas Gerais
 

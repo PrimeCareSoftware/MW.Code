@@ -1,4 +1,4 @@
-# 🔐 Sugestões de Melhorias de Segurança - MedicWarehouse
+# 🔐 Sugestões de Melhorias de Segurança - PrimeCare Software
 
 > **IMPORTANTE**: Este documento contém apenas **sugestões** de melhorias de segurança. Nenhuma implementação foi realizada.
 
@@ -380,7 +380,7 @@ nikto -h https://sua-api.medicwarehouse.com
 dotnet list package --vulnerable --include-transitive
 
 # OWASP Dependency-Check
-dependency-check --project MedicWarehouse --scan ./src
+dependency-check --project PrimeCare Software --scan ./src
 
 # Snyk
 snyk test
@@ -614,13 +614,13 @@ CREATE MASTER KEY ENCRYPTION BY PASSWORD = '<senha-forte>';
 GO
 CREATE CERTIFICATE TDECert WITH SUBJECT = 'TDE Certificate';
 GO
-USE MedicWarehouse;
+USE PrimeCare Software;
 GO
 CREATE DATABASE ENCRYPTION KEY
 WITH ALGORITHM = AES_256
 ENCRYPTION BY SERVER CERTIFICATE TDECert;
 GO
-ALTER DATABASE MedicWarehouse SET ENCRYPTION ON;
+ALTER DATABASE PrimeCare Software SET ENCRYPTION ON;
 GO
 ```
 

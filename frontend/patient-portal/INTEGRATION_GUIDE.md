@@ -237,8 +237,8 @@ npm start
 
 ### Usando Postman
 
-Importe a collection do MedicWarehouse:
-- Arquivo: `MedicWarehouse-Postman-Collection.json`
+Importe a collection do PrimeCare Software:
+- Arquivo: `PrimeCare Software-Postman-Collection.json`
 - Configure a variável `{{baseUrl}}` para `http://localhost:5000`
 
 ### CORS

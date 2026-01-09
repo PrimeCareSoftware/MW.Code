@@ -1,8 +1,8 @@
-# Resumo Visual dos Fluxos - MedicWarehouse
+# Resumo Visual dos Fluxos - PrimeCare Software
 
 ## 🎯 Visão Geral do Sistema
 
-Este documento apresenta um resumo visual rápido dos principais fluxos do sistema MedicWarehouse.
+Este documento apresenta um resumo visual rápido dos principais fluxos do sistema PrimeCare Software.
 
 Para documentação completa, consulte: [SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md)
 
@@ -231,7 +231,7 @@ sequenceDiagram
 ### Navbar (Presente em todas as telas autenticadas)
 ```
 ┌────────────────────────────────────────────┐
-│ [🏥 MedicWarehouse] [Dashboard] [Pacientes] │
+│ [🏥 PrimeCare Software] [Dashboard] [Pacientes] │
 │ [Agendamentos] [Financeiro] [Sair] 👤      │
 └────────────────────────────────────────────┘
 ```
@@ -384,4 +384,4 @@ Consulte: **[SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md)**
 
 **Última atualização**: Janeiro 2025  
 **Versão**: 1.0  
-**Equipe**: MedicWarehouse
+**Equipe**: PrimeCare Software

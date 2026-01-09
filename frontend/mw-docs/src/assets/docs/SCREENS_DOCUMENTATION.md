@@ -1,6 +1,6 @@
-# Documentação de Telas e Fluxos - MedicWarehouse
+# Documentação de Telas e Fluxos - PrimeCare Software
 
-Este documento apresenta todas as telas do sistema MedicWarehouse com seus fluxos de navegação e funcionalidades.
+Este documento apresenta todas as telas do sistema PrimeCare Software com seus fluxos de navegação e funcionalidades.
 
 ## 📱 Índice de Telas
 
@@ -48,13 +48,13 @@ graph TD
 ## 1. Tela de Login
 
 ### 📋 Descrição
-Primeira tela do sistema onde o usuário faz autenticação para acessar o MedicWarehouse.
+Primeira tela do sistema onde o usuário faz autenticação para acessar o PrimeCare Software.
 
 ### 🎨 Elementos da Interface
 
 ```
 ┌─────────────────────────────────────────────┐
-│         MedicWarehouse Logo                 │
+│         PrimeCare Software Logo                 │
 │  Sistema de Gestão para Consultórios       │
 │                                             │
 │  ┌─────────────────────────────────┐       │
@@ -105,7 +105,7 @@ Permite que novos usuários criem uma conta no sistema.
 ```
 ┌─────────────────────────────────────────────┐
 │            Cadastro                         │
-│     Crie sua conta no MedicWarehouse        │
+│     Crie sua conta no PrimeCare Software        │
 │                                             │
 │  ┌─────────────────────────────────┐       │
 │  │ Usuário                          │       │
@@ -165,11 +165,11 @@ Tela principal após login, apresenta visão geral do sistema e acesso rápido �
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Dashboard                                                 │
-│  Bem-vindo ao MedicWarehouse                              │
+│  Bem-vindo ao PrimeCare Software                              │
 │                                                            │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
 │  │   👥         │  │   📅         │  │   💲         │   │
@@ -225,7 +225,7 @@ Exibe todos os pacientes cadastrados na clínica com opções de gerenciamento.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Pacientes                         [+ Novo Paciente]      │
@@ -281,7 +281,7 @@ Formulário completo para cadastro ou edição de dados do paciente.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Novo Paciente / Editar Paciente          [Voltar]       │
@@ -389,7 +389,7 @@ Visualização da agenda diária/mensal com todos os agendamentos.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Agendamentos                                             │
@@ -427,7 +427,7 @@ Visualização da agenda diária/mensal com todos os agendamentos.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┘
 │                                                            │
 │  Agendamentos                                             │
@@ -495,7 +495,7 @@ Criação de novo agendamento associando paciente, data e horário.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Novo Agendamento                              [Voltar]   │
@@ -556,7 +556,7 @@ Interface completa para registro do atendimento médico, prontuário e prescriç
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair]           │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair]           │
 ├──────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  Atendimento ao Paciente               [Voltar para Agenda]        │
@@ -883,4 +883,4 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 **Última atualização**: Janeiro 2025  
 **Versão do documento**: 1.0  
-**Equipe**: MedicWarehouse
+**Equipe**: PrimeCare Software

@@ -1,4 +1,4 @@
-# Guia Completo de Configuração do Sistema MedicWarehouse
+# Guia Completo de Configuração do Sistema PrimeCare Software
 
 ## 📋 Índice
 
@@ -14,7 +14,7 @@
 
 ## 🎯 Visão Geral
 
-Este guia explica a **ordem correta** para configurar e cadastrar todos os componentes do sistema MedicWarehouse. Seguir esta ordem é essencial para garantir que o sistema funcione corretamente.
+Este guia explica a **ordem correta** para configurar e cadastrar todos os componentes do sistema PrimeCare Software. Seguir esta ordem é essencial para garantir que o sistema funcione corretamente.
 
 ### ⚠️ Importante: Autenticação Sempre Obrigatória
 
@@ -31,13 +31,13 @@ Certifique-se de que o arquivo `appsettings.json` está configurado corretamente
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=MedicWarehouse;Trusted_Connection=True;TrustServerCertificate=True"
+    "DefaultConnection": "Server=localhost;Database=PrimeCare Software;Trusted_Connection=True;TrustServerCertificate=True"
   },
   "JwtSettings": {
     "SecretKey": "SuaChaveSecretaMuitoSeguraComPeloMenos32Caracteres!@#$%",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -136,7 +136,7 @@ Este é o **único endpoint público** do sistema. Ele cria:
 ```json
 {
   "success": true,
-  "message": "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
+  "message": "Registration successful! Welcome to PrimeCare Software. You can now login with your credentials.",
   "clinicId": "guid-da-clinica",
   "userId": "guid-do-usuario",
   "trialEndDate": "2024-11-01T00:00:00Z"
@@ -346,7 +346,7 @@ Agora todos os endpoints protegidos estarão acessíveis!
 
 ### 1. Importar Collection
 
-Importe o arquivo `MedicWarehouse-Postman-Collection.json` localizado na raiz do projeto.
+Importe o arquivo `PrimeCare Software-Postman-Collection.json` localizado na raiz do projeto.
 
 ### 2. Configurar Variáveis de Ambiente
 
@@ -511,8 +511,8 @@ X-Tenant-Id: {{tenant_id}}
   "JwtSettings": {
     "SecretKey": "SuaChaveMuitoSeguraComNoMinimo32Caracteres!@#$%",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -523,7 +523,7 @@ X-Tenant-Id: {{tenant_id}}
 
 **Solução**: Use uma chave com pelo menos 32 caracteres:
 ```
-MedicWarehouse-SecretKey-2024-@#$%MinhaChaveMuitoSegura!
+PrimeCare Software-SecretKey-2024-@#$%MinhaChaveMuitoSegura!
 ```
 
 ### ❌ Erro: "CNPJ already registered"
@@ -672,12 +672,12 @@ X-Tenant-Id: {guid-da-clinica}
 ## 📞 Suporte
 
 Para questões ou problemas:
-- **Email**: contato@medicwarehouse.com
-- **GitHub Issues**: [https://github.com/MedicWarehouse/MW.Code/issues](https://github.com/MedicWarehouse/MW.Code/issues)
+- **Email**: contato@primecaresoftware.com
+- **GitHub Issues**: [https://github.com/PrimeCare Software/MW.Code/issues](https://github.com/PrimeCare Software/MW.Code/issues)
 - **Documentação**: `/frontend/mw-docs/src/assets/docs/`
 
 ---
 
 ## 📝 Licença
 
-Este sistema é propriedade da MedicWarehouse. Todos os direitos reservados.
+Este sistema é propriedade da PrimeCare Software. Todos os direitos reservados.

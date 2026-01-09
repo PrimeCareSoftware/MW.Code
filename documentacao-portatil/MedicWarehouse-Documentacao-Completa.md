@@ -1,8 +1,8 @@
-# MedicWarehouse - Documentação Completa
+# PrimeCare Software - Documentação Completa
 
 > **Data de Geração:** 06/01/2026, 15:02:39
 
-> Este documento contém toda a documentação do projeto MedicWarehouse consolidada em um único arquivo.
+> Este documento contém toda a documentação do projeto PrimeCare Software consolidada em um único arquivo.
 
 ---
 
@@ -218,9 +218,9 @@
 
 ---
 
-# MedicWarehouse - Sistema de Gestão para Consultórios Médicos
+# PrimeCare Software - Sistema de Gestão para Consultórios Médicos
 
-[![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
+[![CI - Test Frontend e Backend](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml)
 
 > 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
 
@@ -234,7 +234,7 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 
 ## 🌍 Compatibilidade Multiplataforma
 
-O MedicWarehouse é **100% cross-platform**:
+O PrimeCare Software é **100% cross-platform**:
 
 - ✅ **macOS**: Script automatizado de setup (`setup-macos.sh`)
 - ✅ **Windows**: Script PowerShell de setup (`setup-windows.ps1`)
@@ -251,7 +251,7 @@ O MedicWarehouse é **100% cross-platform**:
 
 ## 📱 Mobile Applications 🆕
 
-O MedicWarehouse agora possui **aplicativos nativos** para dispositivos móveis:
+O PrimeCare Software agora possui **aplicativos nativos** para dispositivos móveis:
 
 ### iOS App (Swift/SwiftUI)
 - 🍎 **iPhone e iPad**: iOS 17.0+
@@ -278,9 +278,9 @@ O MedicWarehouse agora possui **aplicativos nativos** para dispositivos móveis:
 
 ## 🖥️ Frontend Applications
 
-O MedicWarehouse possui **dois aplicativos Angular independentes**:
+O PrimeCare Software possui **dois aplicativos Angular independentes**:
 
-### 1. **MedicWarehouse App** (`frontend/medicwarehouse-app`)
+### 1. **PrimeCare Software App** (`frontend/medicwarehouse-app`)
 Aplicativo principal para uso diário das clínicas:
 - 👨‍⚕️ **Usuários**: Proprietários de clínicas, médicos, secretárias, enfermeiros
 - 📊 **Dashboard** da clínica individual
@@ -681,7 +681,7 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 
 ```bash
 # Clone o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Execute com Podman Compose
@@ -713,7 +713,7 @@ dotnet run
 
 #### Frontend (Angular)
 
-**MedicWarehouse App** (aplicativo principal das clínicas):
+**PrimeCare Software App** (aplicativo principal das clínicas):
 ```bash
 # Navegar para o frontend
 cd frontend/medicwarehouse-app
@@ -778,7 +778,7 @@ Após executar a aplicação, acesse a documentação interativa do Swagger:
 
 Para facilitar o teste e integração, todas as APIs foram exportadas para o Postman:
 
-- 📥 **Arquivo**: [`MedicWarehouse-Postman-Collection.json`](MedicWarehouse-Postman-Collection.json)
+- 📥 **Arquivo**: [`PrimeCare Software-Postman-Collection.json`](PrimeCare Software-Postman-Collection.json)
 - 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](docs/POSTMAN_IMPORT_GUIDE.md)
 - ✨ **Recursos incluídos**:
   - Todos os endpoints organizados por funcionalidade
@@ -950,7 +950,7 @@ Este documento inclui:
 
 ## 🔐 Segurança
 
-O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados sensíveis:
+O PrimeCare Software implementa múltiplas camadas de segurança para proteger dados sensíveis:
 
 ### Implementações de Segurança
 
@@ -1085,12 +1085,12 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 📞 Contato
 
-- **Projeto**: MedicWarehouse
-- **Email**: contato@medicwarehouse.com
-- **GitHub**: [https://github.com/MedicWarehouse/MW.Code](https://github.com/MedicWarehouse/MW.Code)
+- **Projeto**: PrimeCare Software
+- **Email**: contato@primecaresoftware.com
+- **GitHub**: [https://github.com/PrimeCare Software/MW.Code](https://github.com/PrimeCare Software/MW.Code)
 ## 🌐 MW.Site - Marketing Website
 
-**Novo!** Site de marketing e contratação do MedicWarehouse SaaS.
+**Novo!** Site de marketing e contratação do PrimeCare Software SaaS.
 
 ### Características
 
@@ -1171,9 +1171,9 @@ POST /api/contact
 
 ---
 
-# MedicWarehouse - Sistema de Gestão para Consultórios Médicos
+# PrimeCare Software - Sistema de Gestão para Consultórios Médicos
 
-[![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
+[![CI - Test Frontend e Backend](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
@@ -1261,7 +1261,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 📈 Análise e Melhorias
 
-> 📄 **[ANÁLISE COMPARATIVA E MELHORIAS](ANALISE_MELHORIAS_SISTEMA.md)** - Análise detalhada do sistema MedicWarehouse comparado com principais concorrentes de mercado (Doctoralia, iClinic, Nuvem Saúde, etc.), gaps identificados e roadmap de melhorias propostas para 2025-2026. Inclui análise de funcionalidades, experiência do usuário, arquitetura técnica e projeções de ROI.
+> 📄 **[ANÁLISE COMPARATIVA E MELHORIAS](ANALISE_MELHORIAS_SISTEMA.md)** - Análise detalhada do sistema PrimeCare Software comparado com principais concorrentes de mercado (Doctoralia, iClinic, Nuvem Saúde, etc.), gaps identificados e roadmap de melhorias propostas para 2025-2026. Inclui análise de funcionalidades, experiência do usuário, arquitetura técnica e projeções de ROI.
 
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
@@ -1331,7 +1331,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ```bash
 # Clone o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Execute com Docker Compose
@@ -1387,7 +1387,7 @@ docker run -d \
 # Criar o banco de dados
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse;"
+  -Q "CREATE DATABASE PrimeCare Software;"
 ```
 
 ## 📖 Documentação da API
@@ -1500,7 +1500,7 @@ Este documento inclui:
 
 ## 🔐 Segurança
 
-O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados sensíveis:
+O PrimeCare Software implementa múltiplas camadas de segurança para proteger dados sensíveis:
 
 ### Implementações de Segurança
 
@@ -1578,12 +1578,12 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 📞 Contato
 
-- **Projeto**: MedicWarehouse
-- **Email**: contato@medicwarehouse.com
-- **GitHub**: [https://github.com/MedicWarehouse/MW.Code](https://github.com/MedicWarehouse/MW.Code)
+- **Projeto**: PrimeCare Software
+- **Email**: contato@primecaresoftware.com
+- **GitHub**: [https://github.com/PrimeCare Software/MW.Code](https://github.com/PrimeCare Software/MW.Code)
 ## 🌐 MW.Site - Marketing Website
 
-**Novo!** Site de marketing e contratação do MedicWarehouse SaaS.
+**Novo!** Site de marketing e contratação do PrimeCare Software SaaS.
 
 ### Características
 
@@ -1664,9 +1664,9 @@ POST /api/contact
 
 ---
 
-# 📋 Guia de Execução Passo a Passo - MedicWarehouse
+# 📋 Guia de Execução Passo a Passo - PrimeCare Software
 
-Este guia fornece instruções detalhadas para executar o sistema MedicWarehouse em seu PC, começando pela criação do banco de dados SQL Server via Docker.
+Este guia fornece instruções detalhadas para executar o sistema PrimeCare Software em seu PC, começando pela criação do banco de dados SQL Server via Docker.
 
 ## 📑 Índice
 
@@ -1770,7 +1770,7 @@ Abra o terminal (PowerShell, CMD, ou Terminal Linux/macOS) e execute:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 
 # Entre no diretório do projeto
 cd MW.Code
@@ -1827,10 +1827,10 @@ Aguarde alguns segundos para o SQL Server inicializar completamente, depois exec
 # Conectar ao SQL Server e criar o banco de dados
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse; SELECT name FROM sys.databases;"
+  -Q "CREATE DATABASE PrimeCare Software; SELECT name FROM sys.databases;"
 ```
 
-Você deve ver a lista de bancos de dados, incluindo `MedicWarehouse`.
+Você deve ver a lista de bancos de dados, incluindo `PrimeCare Software`.
 
 ### Opção 2: Executar Tudo com Docker Compose (Recomendado)
 
@@ -1847,13 +1847,13 @@ O arquivo de configuração principal está em `src/MedicSoft.Api/appsettings.js
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=sqlserver;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=sqlserver;Database=PrimeCare Software;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
   },
   "JwtSettings": {
-    "SecretKey": "MedicWarehouse-SuperSecretKey-2024-Development",
+    "SecretKey": "PrimeCare Software-SuperSecretKey-2024-Development",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -1865,7 +1865,7 @@ Se você for executar sem Docker, edite o arquivo para usar `localhost`:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=localhost,1433;Database=PrimeCare Software;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
   }
 }
 ```
@@ -1940,7 +1940,7 @@ docker run -d \
 # Criar o banco de dados
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse;"
+  -Q "CREATE DATABASE PrimeCare Software;"
 ```
 
 ### 6.2. Executar a API .NET
@@ -2008,7 +2008,7 @@ Você pode conectar ao SQL Server usando ferramentas como:
 
 **Credenciais de Conexão:**
 - **Server**: `localhost,1433`
-- **Database**: `MedicWarehouse`
+- **Database**: `PrimeCare Software`
 - **User**: `sa`
 - **Password**: `MedicW@rehouse2024!`
 - **Authentication**: SQL Server Authentication
@@ -2141,7 +2141,7 @@ lsof -i :4200
 # 1. Criar o banco manualmente
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse;"
+  -Q "CREATE DATABASE PrimeCare Software;"
 
 # 2. Ou usar migrations (se configuradas)
 cd src/MedicSoft.Api
@@ -2312,7 +2312,7 @@ MW.Code/
 ├── README.md                   # Documentação principal
 ├── GUIA_EXECUCAO.md           # Este guia
 ├── IMPLEMENTATION.md          # Detalhes de implementação
-├── MedicWarehouse.sln         # Solution .NET
+├── PrimeCare Software.sln         # Solution .NET
 │
 ├── src/                       # Backend .NET 8
 │   ├── MedicSoft.Api/         # API REST com JWT
@@ -2364,13 +2364,13 @@ Após executar o sistema com sucesso:
 Se você encontrar problemas não listados aqui:
 
 1. Verifique os logs dos containers: `docker-compose logs`
-2. Consulte a [documentação oficial](https://github.com/MedicWarehouse/MW.Code)
+2. Consulte a [documentação oficial](https://github.com/PrimeCare Software/MW.Code)
 3. Abra uma issue no GitHub
-4. Entre em contato: contato@medicwarehouse.com
+4. Entre em contato: contato@primecaresoftware.com
 
 ---
 
-**Desenvolvido com ❤️ pela equipe MedicWarehouse**
+**Desenvolvido com ❤️ pela equipe PrimeCare Software**
 
 
 ---
@@ -2386,9 +2386,9 @@ Se você encontrar problemas não listados aqui:
 
 ---
 
-# 🚀 Guia de Início Rápido - Executar MedicWarehouse Localmente
+# 🚀 Guia de Início Rápido - Executar PrimeCare Software Localmente
 
-> **Objetivo:** Colocar o sistema MedicWarehouse rodando em seu PC para testes completos em menos de 10 minutos!
+> **Objetivo:** Colocar o sistema PrimeCare Software rodando em seu PC para testes completos em menos de 10 minutos!
 
 > 🌍 **NOVO!** Está usando **macOS** ou **Windows**? Use nossos scripts automatizados!
 > - **macOS**: Execute `./setup-macos.sh`
@@ -2417,7 +2417,7 @@ Antes de começar, certifique-se de ter instalado:
 ### 1️⃣ Clone o Repositório (se ainda não clonou)
 
 ```bash
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 ```
 
@@ -2606,7 +2606,7 @@ curl -X GET http://localhost:5000/api/appointments \
 
 ### Via Postman
 
-1. Importe a coleção: `MedicWarehouse-Postman-Collection.json`
+1. Importe a coleção: `PrimeCare Software-Postman-Collection.json`
 2. Configure as variáveis:
    - `base_url`: `http://localhost:5000`
    - `tenant_id`: `demo-clinic-001`
@@ -2624,7 +2624,7 @@ curl -X GET http://localhost:5000/api/data-seeder/demo-info
 
 ### Dados incluídos:
 
-- **Clínica:** Clínica Demo MedicWarehouse (TenantId: `demo-clinic-001`)
+- **Clínica:** Clínica Demo PrimeCare Software (TenantId: `demo-clinic-001`)
 - **Pacientes:** Carlos, Ana Maria, Pedro, Juliana, Lucas (criança), Sofia (criança)
 - **Procedimentos:** Consulta Geral, Cardiologia, Exames, Vacinas, etc.
 - **Agendamentos:** 5 agendamentos (passados, hoje e futuros)
@@ -2734,7 +2734,7 @@ Antes de começar os testes, certifique-se de que:
 - [ ] Você consegue fazer login
 - [ ] Token JWT está sendo gerado
 
-**Pronto! Agora você tem o MedicWarehouse rodando localmente com dados completos para teste! 🎉**
+**Pronto! Agora você tem o PrimeCare Software rodando localmente com dados completos para teste! 🎉**
 
 ---
 
@@ -3198,15 +3198,15 @@ Com essas ferramentas, você pode:
 
 ---
 
-# 🌍 Guia de Desenvolvimento Multiplataforma - MedicWarehouse
+# 🌍 Guia de Desenvolvimento Multiplataforma - PrimeCare Software
 
 ## 📋 Visão Geral
 
-Este guia explica como desenvolver o MedicWarehouse em diferentes sistemas operacionais (macOS, Windows e Linux), mantendo compatibilidade total entre plataformas.
+Este guia explica como desenvolver o PrimeCare Software em diferentes sistemas operacionais (macOS, Windows e Linux), mantendo compatibilidade total entre plataformas.
 
 ## ✅ Compatibilidade Garantida
 
-O MedicWarehouse foi projetado para ser **totalmente cross-platform**:
+O PrimeCare Software foi projetado para ser **totalmente cross-platform**:
 
 - ✅ **Backend (.NET 8)**: Funciona nativamente em macOS, Windows e Linux
 - ✅ **Frontend (Angular/Node.js)**: Compatível com todos os sistemas operacionais
@@ -3227,7 +3227,7 @@ Execute o script de configuração automatizada:
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Executar script de setup
@@ -3294,7 +3294,7 @@ npm start
 ### Dicas para macOS
 
 - **Apple Silicon (M1/M2/M3)**: Todos os componentes são nativos para ARM64
-- **Rosetta 2**: Não é necessário para o MedicWarehouse
+- **Rosetta 2**: Não é necessário para o PrimeCare Software
 - **Permissões**: Use `sudo` apenas quando solicitado pelo Homebrew
 - **Terminal**: Terminal.app, iTerm2 ou outro de sua preferência funcionam igualmente
 
@@ -3311,7 +3311,7 @@ Execute o script de configuração automatizada no PowerShell como **Administrad
 
 ```powershell
 # Clonar o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Executar script de setup (PowerShell como Administrador)
@@ -3418,7 +3418,7 @@ sudo apt install -y podman podman-compose
 sudo apt install -y git
 
 # Clonar e configurar projeto
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 dotnet restore
 cd frontend/medicwarehouse-app && npm install && cd ../..
@@ -3441,7 +3441,7 @@ sudo dnf install podman podman-compose
 sudo dnf install git
 
 # Clonar e configurar projeto
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 dotnet restore
 cd frontend/medicwarehouse-app && npm install && cd ../..
@@ -3729,7 +3729,7 @@ Ao contribuir com o projeto:
 
 ---
 
-# 🚀 Guia Rápido: Telemedicina no MedicWarehouse
+# 🚀 Guia Rápido: Telemedicina no PrimeCare Software
 
 **Versão**: 1.0.0  
 **Data**: Outubro/Novembro 2024  
@@ -4086,9 +4086,9 @@ Você tem um **sistema de telemedicina completo** rodando!
 
 ---
 
-# 🧪 Guia Completo de Testes Passo a Passo - MedicWarehouse
+# 🧪 Guia Completo de Testes Passo a Passo - PrimeCare Software
 
-Este guia fornece instruções detalhadas para testar cada tela e API do sistema MedicWarehouse no seu computador local.
+Este guia fornece instruções detalhadas para testar cada tela e API do sistema PrimeCare Software no seu computador local.
 
 ## 📋 Índice
 
@@ -4206,7 +4206,7 @@ POST /api/registration
 ```json
 {
   "success": true,
-  "message": "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
+  "message": "Registration successful! Welcome to PrimeCare Software. You can now login with your credentials.",
   "clinicId": "guid-da-clinica-criada",
   "userId": "guid-do-owner-criado"
 }
@@ -5751,7 +5751,7 @@ Depois de completar todos os testes acima, você pode explorar:
 # 📝 Guia de Tradução de Código para Português
 
 ## 🎯 Objetivo
-Este guia estabelece o padrão para traduzir comentários, documentação e mensagens do código MedicWarehouse para português, mantendo os identificadores (classes, métodos, variáveis) em inglês.
+Este guia estabelece o padrão para traduzir comentários, documentação e mensagens do código PrimeCare Software para português, mantendo os identificadores (classes, métodos, variáveis) em inglês.
 
 ## ✅ O Que Traduzir
 
@@ -5933,7 +5933,7 @@ Assert.Equal("O nome não pode estar vazio (Parameter 'name')", exception.Messag
 ### Passo 4: Validar
 ```bash
 # Build do projeto
-dotnet build MedicWarehouse.sln
+dotnet build PrimeCare Software.sln
 
 # Executar testes
 dotnet test
@@ -6114,7 +6114,7 @@ Se tiver dúvidas sobre a tradução de algum termo específico:
 
 # 📋 Guia do Médico - Sistema Conforme CFM 1.821/2007
 
-> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o MedicWarehouse em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
+> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o PrimeCare Software em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
 
 > **Data:** Janeiro 2026  
 > **Versão:** 1.0  
@@ -6139,7 +6139,7 @@ Se tiver dúvidas sobre a tradução de algum termo específico:
 
 ## 🩺 Introdução
 
-O MedicWarehouse foi desenvolvido em total conformidade com a **Resolução CFM 1.821/2007**, que estabelece as normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio de prontuários médicos.
+O PrimeCare Software foi desenvolvido em total conformidade com a **Resolução CFM 1.821/2007**, que estabelece as normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio de prontuários médicos.
 
 Este guia tem como objetivo orientar você, médico(a), sobre como preencher corretamente um prontuário eletrônico conforme as exigências do Conselho Federal de Medicina.
 
@@ -6664,19 +6664,19 @@ Apenas **você** e outros profissionais da **sua clínica** com permissão adequ
 
 Se tiver dúvidas sobre o uso do sistema ou precisar de suporte técnico:
 
-- 📧 **Email**: suporte@medicwarehouse.com.br
+- 📧 **Email**: suporte@primecaresoftware.com.br
 - 📱 **WhatsApp**: Entre em contato pelo email para obter o número de suporte
 - 🌐 **Portal de Suporte**: Em desenvolvimento
 - 📖 **Documentação**: Consulte os arquivos MD na pasta `docs/`
 
 ---
 
-**Documento Elaborado Por:** Equipe MedicWarehouse  
+**Documento Elaborado Por:** Equipe PrimeCare Software  
 **Data de Atualização:** Janeiro 2026  
 **Versão:** 1.0  
 **Status:** Oficial
 
-**Agradecemos por usar o MedicWarehouse! 💙**
+**Agradecemos por usar o PrimeCare Software! 💙**
 
 
 ---
@@ -6692,7 +6692,7 @@ Se tiver dúvidas sobre o uso do sistema ou precisar de suporte técnico:
 
 ---
 
-# Guia Completo de Configuração do Sistema MedicWarehouse
+# Guia Completo de Configuração do Sistema PrimeCare Software
 
 ## 📋 Índice
 
@@ -6708,7 +6708,7 @@ Se tiver dúvidas sobre o uso do sistema ou precisar de suporte técnico:
 
 ## 🎯 Visão Geral
 
-Este guia explica a **ordem correta** para configurar e cadastrar todos os componentes do sistema MedicWarehouse. Seguir esta ordem é essencial para garantir que o sistema funcione corretamente.
+Este guia explica a **ordem correta** para configurar e cadastrar todos os componentes do sistema PrimeCare Software. Seguir esta ordem é essencial para garantir que o sistema funcione corretamente.
 
 ### ⚠️ Importante: Autenticação Sempre Obrigatória
 
@@ -6725,13 +6725,13 @@ Certifique-se de que o arquivo `appsettings.json` está configurado corretamente
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=MedicWarehouse;Trusted_Connection=True;TrustServerCertificate=True"
+    "DefaultConnection": "Server=localhost;Database=PrimeCare Software;Trusted_Connection=True;TrustServerCertificate=True"
   },
   "JwtSettings": {
     "SecretKey": "SuaChaveSecretaMuitoSeguraComPeloMenos32Caracteres!@#$%",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -6830,7 +6830,7 @@ Este é o **único endpoint público** do sistema. Ele cria:
 ```json
 {
   "success": true,
-  "message": "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
+  "message": "Registration successful! Welcome to PrimeCare Software. You can now login with your credentials.",
   "clinicId": "guid-da-clinica",
   "userId": "guid-do-usuario",
   "trialEndDate": "2024-11-01T00:00:00Z"
@@ -7040,7 +7040,7 @@ Agora todos os endpoints protegidos estarão acessíveis!
 
 ### 1. Importar Collection
 
-Importe o arquivo `MedicWarehouse-Postman-Collection.json` localizado na raiz do projeto.
+Importe o arquivo `PrimeCare Software-Postman-Collection.json` localizado na raiz do projeto.
 
 ### 2. Configurar Variáveis de Ambiente
 
@@ -7205,8 +7205,8 @@ X-Tenant-Id: {{tenant_id}}
   "JwtSettings": {
     "SecretKey": "SuaChaveMuitoSeguraComNoMinimo32Caracteres!@#$%",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -7217,7 +7217,7 @@ X-Tenant-Id: {{tenant_id}}
 
 **Solução**: Use uma chave com pelo menos 32 caracteres:
 ```
-MedicWarehouse-SecretKey-2024-@#$%MinhaChaveMuitoSegura!
+PrimeCare Software-SecretKey-2024-@#$%MinhaChaveMuitoSegura!
 ```
 
 ### ❌ Erro: "CNPJ already registered"
@@ -7366,15 +7366,15 @@ X-Tenant-Id: {guid-da-clinica}
 ## 📞 Suporte
 
 Para questões ou problemas:
-- **Email**: contato@medicwarehouse.com
-- **GitHub Issues**: [https://github.com/MedicWarehouse/MW.Code/issues](https://github.com/MedicWarehouse/MW.Code/issues)
+- **Email**: contato@primecaresoftware.com
+- **GitHub Issues**: [https://github.com/PrimeCare Software/MW.Code/issues](https://github.com/PrimeCare Software/MW.Code/issues)
 - **Documentação**: `/frontend/mw-docs/src/assets/docs/`
 
 ---
 
 ## 📝 Licença
 
-Este sistema é propriedade da MedicWarehouse. Todos os direitos reservados.
+Este sistema é propriedade da PrimeCare Software. Todos os direitos reservados.
 
 
 ---
@@ -7824,7 +7824,7 @@ curl -X POST http://localhost:5000/api/patients/{patientId}/link-clinic/{clinicI
 
 **Versão**: 1.0  
 **Data**: Janeiro 2025  
-**Autor**: Equipe MedicWarehouse
+**Autor**: Equipe PrimeCare Software
 
 
 ---
@@ -7840,11 +7840,11 @@ curl -X POST http://localhost:5000/api/patients/{patientId}/link-clinic/{clinicI
 
 ---
 
-# Authentication Documentation - MedicWarehouse API
+# Authentication Documentation - PrimeCare Software API
 
 ## Overview
 
-The MedicWarehouse API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.
+The PrimeCare Software API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.
 
 ## Authentication Endpoints
 
@@ -7971,8 +7971,8 @@ The JWT token includes the following claims:
 | `tenant_id` | string | Tenant identifier | `clinic-tenant-id` |
 | `clinic_id` | string? | Clinic ID (optional, null for system owners) | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` |
 | `is_system_owner` | string | Whether user is a system owner | `true` or `false` |
-| `iss` | string | Token issuer | `MedicWarehouse` |
-| `aud` | string | Token audience | `MedicWarehouse-API` |
+| `iss` | string | Token issuer | `PrimeCare Software` |
+| `aud` | string | Token audience | `PrimeCare Software-API` |
 | `exp` | number | Expiration timestamp | Unix timestamp |
 
 ### Token Example (Decoded)
@@ -7994,8 +7994,8 @@ The JWT token includes the following claims:
   "tenant_id": "clinic-tenant-id",
   "clinic_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "is_system_owner": "false",
-  "iss": "MedicWarehouse",
-  "aud": "MedicWarehouse-API",
+  "iss": "PrimeCare Software",
+  "aud": "PrimeCare Software-API",
   "exp": 1697158570
 }
 ```
@@ -8075,8 +8075,8 @@ axios.get('https://api.medicwarehouse.com/api/patients', {
 
 ### 3. Token Validation
 - Validates signature
-- Validates issuer (`MedicWarehouse`)
-- Validates audience (`MedicWarehouse-API`)
+- Validates issuer (`PrimeCare Software`)
+- Validates audience (`PrimeCare Software-API`)
 - Validates expiration time
 - No tolerance for expired tokens (ClockSkew = 0)
 
@@ -8118,8 +8118,8 @@ axios.get('https://api.medicwarehouse.com/api/patients', {
   "JwtSettings": {
     "SecretKey": "YourSecretKey-MustBe-AtLeast32Characters-ForSecurity!",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -8230,8 +8230,8 @@ If you're migrating from a version without authentication:
 ## Support
 
 For issues or questions:
-- Email: contato@medicwarehouse.com
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- Email: contato@primecaresoftware.com
+- GitHub: https://github.com/PrimeCare Software/MW.Code
 
 
 ---
@@ -8254,7 +8254,7 @@ For issues or questions:
 Após importar a coleção no Postman, você verá:
 
 ```
-📁 MedicWarehouse API
+📁 PrimeCare Software API
    │
    ├── 🔐 Auth (2 requests)
    │   ├── 📨 Login
@@ -8428,9 +8428,9 @@ Todos os requests já incluem automaticamente:
 
 ---
 
-**Arquivo**: `MedicWarehouse-Postman-Collection.json`  
+**Arquivo**: `PrimeCare Software-Postman-Collection.json`  
 **Guia Completo**: `POSTMAN_IMPORT_GUIDE.md`  
-**Repositório**: https://github.com/MedicWarehouse/MW.Code
+**Repositório**: https://github.com/PrimeCare Software/MW.Code
 
 
 ---
@@ -8448,7 +8448,7 @@ Todos os requests já incluem automaticamente:
 
 # 📮 Como Importar a Coleção da API no Postman
 
-Este arquivo contém todas as APIs do MedicWarehouse exportadas para o Postman.
+Este arquivo contém todas as APIs do PrimeCare Software exportadas para o Postman.
 
 ## 📥 Importando no Postman
 
@@ -8456,13 +8456,13 @@ Este arquivo contém todas as APIs do MedicWarehouse exportadas para o Postman.
 
 1. Abra o **Postman**
 2. Clique no botão **"Import"** no canto superior esquerdo
-3. Selecione o arquivo **`MedicWarehouse-Postman-Collection.json`**
+3. Selecione o arquivo **`PrimeCare Software-Postman-Collection.json`**
 4. Clique em **"Import"**
 
 ### Opção 2: Arrastar e Soltar
 
 1. Abra o **Postman**
-2. Arraste o arquivo **`MedicWarehouse-Postman-Collection.json`** para a janela do Postman
+2. Arraste o arquivo **`PrimeCare Software-Postman-Collection.json`** para a janela do Postman
 3. A coleção será importada automaticamente
 
 ## 🔐 Configurando a Autenticação
@@ -8499,7 +8499,7 @@ Se você está começando com um banco de dados vazio:
 
 ### 3. Configurar o Token
 
-1. Clique na coleção **"MedicWarehouse API"** (raiz)
+1. Clique na coleção **"PrimeCare Software API"** (raiz)
 2. Vá para a aba **"Variables"**
 3. Cole o token copiado no campo **"Current value"** da variável **"bearer_token"**
 4. Clique em **"Save"**
@@ -8520,7 +8520,7 @@ A coleção vem com variáveis pré-configuradas:
 
 Se sua API está rodando em outra porta ou servidor:
 
-1. Clique na coleção **"MedicWarehouse API"**
+1. Clique na coleção **"PrimeCare Software API"**
 2. Vá para a aba **"Variables"**
 3. Altere o valor de **"base_url"** (ex: `https://api.medicwarehouse.com`)
 4. Clique em **"Save"**
@@ -8538,7 +8538,7 @@ Se você tem múltiplas clínicas:
 A coleção está organizada em pastas por funcionalidade:
 
 ```
-MedicWarehouse API/
+PrimeCare Software API/
 ├── Auth                    # Autenticação
 ├── Patients               # Gerenciamento de Pacientes
 ├── Appointments           # Agendamentos
@@ -8584,7 +8584,7 @@ Muitos endpoints precisam de IDs (como patientId, appointmentId, etc.). Para sub
 - **Swagger UI**: http://localhost:5000/swagger (quando a API estiver rodando)
 - **README do Projeto**: [README.md](../README.md)
 - **Guia de Execução**: [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
-- **Repositório GitHub**: https://github.com/MedicWarehouse/MW.Code
+- **Repositório GitHub**: https://github.com/PrimeCare Software/MW.Code
 
 ## 💡 Dicas
 
@@ -8637,7 +8637,7 @@ Para trabalhar com múltiplos ambientes (Dev, Staging, Production):
 
 ## 🎉 Pronto!
 
-Agora você pode explorar e testar todos os endpoints da API MedicWarehouse usando o Postman!
+Agora você pode explorar e testar todos os endpoints da API PrimeCare Software usando o Postman!
 
 Se tiver dúvidas ou problemas, consulte a documentação completa no repositório ou abra uma issue no GitHub.
 
@@ -8655,11 +8655,11 @@ Se tiver dúvidas ou problemas, consulte a documentação completa no repositór
 
 ---
 
-# Guia de Seeders - MedicWarehouse
+# Guia de Seeders - PrimeCare Software
 
 ## Visão Geral
 
-O sistema MedicWarehouse possui seeders abrangentes para popular o banco de dados com dados de demonstração realísticos. Isso permite testar todas as funcionalidades do sistema sem precisar inserir dados manualmente.
+O sistema PrimeCare Software possui seeders abrangentes para popular o banco de dados com dados de demonstração realísticos. Isso permite testar todas as funcionalidades do sistema sem precisar inserir dados manualmente.
 
 ### ✨ Características Principais
 
@@ -8696,7 +8696,7 @@ Cria um owner/administrador do sistema (apenas em ambiente de desenvolvimento).
 | Entidade | Quantidade | Descrição |
 |----------|-----------|-----------|
 | **Planos de Assinatura** | 5 | Trial, Básico, Standard, Premium, Enterprise |
-| **Clínicas** | 1 | Clínica Demo MedicWarehouse |
+| **Clínicas** | 1 | Clínica Demo PrimeCare Software |
 | **Assinaturas** | 1 | Assinatura ativa no plano Standard |
 | **Proprietários (Owners)** | 1 | Proprietário da clínica demo |
 | **Usuários** | 3 | Admin, Médico, Recepcionista |
@@ -9049,7 +9049,7 @@ Os dados são criados na ordem correta respeitando todas as dependências:
 
 - [Documentação da API](../README.md)
 - [Guia de Autenticação](./AUTHENTICATION_GUIDE.md)
-- [Postman Collection](../MedicWarehouse-Postman-Collection.json)
+- [Postman Collection](../PrimeCare Software-Postman-Collection.json)
 
 
 ---
@@ -9065,7 +9065,7 @@ Os dados são criados na ordem correta respeitando todas as dependências:
 
 ---
 
-# Guia Rápido - Seeders MedicWarehouse
+# Guia Rápido - Seeders PrimeCare Software
 
 ## 🎯 Objetivo
 Popular o banco de dados com dados demo realísticos para teste completo do sistema.
@@ -9160,7 +9160,7 @@ Veja [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) para detalhes completos sobre:
 
 ## 📋 Objetivo
 
-Colocar o MedicWarehouse em produção **com custo mínimo** ($5-20/mês) de forma rápida e segura.
+Colocar o PrimeCare Software em produção **com custo mínimo** ($5-20/mês) de forma rápida e segura.
 
 ## 🎯 O Que Você Vai Conseguir
 
@@ -9179,7 +9179,7 @@ Colocar o MedicWarehouse em produção **com custo mínimo** ($5-20/mês) de for
 
 ```bash
 # 1. Clone o repositório (se ainda não tem)
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # 2. Gere uma chave JWT segura
@@ -9297,7 +9297,7 @@ docker compose version
 
 ```bash
 # Clonar repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Criar arquivo .env
@@ -10143,7 +10143,7 @@ For additional help, create an issue in the GitHub repository with:
 
 ## 📋 Visão Geral
 
-Este guia mostra passo a passo como fazer deploy do MedicWarehouse no Railway com **PostgreSQL**, a opção mais econômica e simples para começar.
+Este guia mostra passo a passo como fazer deploy do PrimeCare Software no Railway com **PostgreSQL**, a opção mais econômica e simples para começar.
 
 **Tempo estimado**: 30 minutos  
 **Custo inicial**: ~$5-15/mês  
@@ -10247,8 +10247,8 @@ Edite: `src/MedicSoft.Api/appsettings.Production.json`
   "JwtSettings": {
     "SecretKey": "${JWT_SECRET_KEY}",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   },
   "Logging": {
     "LogLevel": {
@@ -10276,7 +10276,7 @@ git push origin main
 2. Click em **"Start a New Project"**
 3. Login com GitHub
 4. Click em **"Deploy from GitHub repo"**
-5. Selecione o repositório: `MedicWarehouse/MW.Code`
+5. Selecione o repositório: `PrimeCare Software/MW.Code`
 6. Railway detectará automaticamente que é um projeto .NET
 
 ### Passo 2: Adicionar PostgreSQL
@@ -10680,7 +10680,7 @@ Parabéns! Seu sistema está no ar com:
 
 # 🐳 Docker PostgreSQL Setup Guide
 
-Este guia fornece instruções completas para configurar e executar o MedicWarehouse com PostgreSQL usando Docker.
+Este guia fornece instruções completas para configurar e executar o PrimeCare Software com PostgreSQL usando Docker.
 
 ## 📋 Pré-requisitos
 
@@ -10698,7 +10698,7 @@ Crie um arquivo `.env` na raiz do projeto:
 ```bash
 # .env
 POSTGRES_PASSWORD=MedicW@rehouse2024!
-JWT_SECRET_KEY=MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!
+JWT_SECRET_KEY=PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!
 ```
 
 ### 2. Iniciar PostgreSQL e a Aplicação
@@ -11052,7 +11052,7 @@ cat DEPLOY_RAILWAY_GUIDE.md
 
 # 🐳 Podman PostgreSQL Setup Guide
 
-Este guia fornece instruções completas para configurar e executar o MedicWarehouse com PostgreSQL usando Podman (ou Docker como alternativa).
+Este guia fornece instruções completas para configurar e executar o PrimeCare Software com PostgreSQL usando Podman (ou Docker como alternativa).
 
 ## 🆓 Por que Podman?
 
@@ -11110,7 +11110,7 @@ Crie um arquivo `.env` na raiz do projeto:
 ```bash
 # .env
 POSTGRES_PASSWORD=MedicW@rehouse2024!
-JWT_SECRET_KEY=MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!
+JWT_SECRET_KEY=PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!
 ```
 
 ### 2. Iniciar PostgreSQL e a Aplicação
@@ -11562,7 +11562,7 @@ docker-compose -f podman-compose.production.yml up -d
 
 ## 📋 Visão Geral
 
-Este guia orienta a migração do Docker para o Podman no MedicWarehouse. O Podman é uma alternativa **100% gratuita e open-source** ao Docker, ideal para uso em produção sem custos de licenciamento.
+Este guia orienta a migração do Docker para o Podman no PrimeCare Software. O Podman é uma alternativa **100% gratuita e open-source** ao Docker, ideal para uso em produção sem custos de licenciamento.
 
 ## 🎯 Por que migrar para Podman?
 
@@ -11922,7 +11922,7 @@ podman volume create mwcode_postgres_data
 - [Podman Compose GitHub](https://github.com/containers/podman-compose)
 - [Podman vs Docker Comparison](https://docs.podman.io/en/latest/Introduction.html)
 
-### Guias do MedicWarehouse
+### Guias do PrimeCare Software
 - [PODMAN_POSTGRES_SETUP.md](PODMAN_POSTGRES_SETUP.md) - Setup completo do PostgreSQL com Podman
 - [QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md) - Deploy em produção
 - [README.md](../README.md) - Documentação principal do projeto
@@ -11999,7 +11999,7 @@ Após completar a migração:
 
 ## Visão Geral
 
-Este guia documenta o sistema de gerenciamento de sessões implementado no MedicWarehouse, que garante que apenas uma sessão ativa por usuário seja permitida por vez.
+Este guia documenta o sistema de gerenciamento de sessões implementado no PrimeCare Software, que garante que apenas uma sessão ativa por usuário seja permitida por vez.
 
 ## Funcionalidade
 
@@ -13284,7 +13284,7 @@ Cada clínica mantém sua própria `ClinicSubscription` vinculada a `Subscriptio
 **Tela Principal:**
 ```
 ╔═══════════════════════════════════════════════════╗
-║  MedicWarehouse - Minhas Clínicas                 ║
+║  PrimeCare Software - Minhas Clínicas                 ║
 ║  👤 João Silva                        [Sair]      ║
 ╠═══════════════════════════════════════════════════╣
 ║                                                    ║
@@ -13701,7 +13701,7 @@ public async Task Owner_ShouldAccessMultipleClinics()
 - Visibilidade consolidada do negócio
 - Flexibilidade para expandir
 
-✅ **Para o Negócio (MedicWarehouse):**
+✅ **Para o Negócio (PrimeCare Software):**
 - Aumento de receita por cliente
 - Maior retenção de clientes
 - Diferencial competitivo
@@ -13730,7 +13730,7 @@ public async Task Owner_ShouldAccessMultipleClinics()
 
 **Última Atualização**: 2024-11-19  
 **Versão**: 1.0  
-**Autor**: MedicWarehouse Team
+**Autor**: PrimeCare Software Team
 
 
 ---
@@ -13746,13 +13746,13 @@ public async Task Owner_ShouldAccessMultipleClinics()
 
 ---
 
-# Guia Completo dos Aplicativos Móveis MedicWarehouse
+# Guia Completo dos Aplicativos Móveis PrimeCare Software
 
-Este documento fornece uma visão geral completa dos aplicativos móveis nativos do MedicWarehouse para iOS e Android.
+Este documento fornece uma visão geral completa dos aplicativos móveis nativos do PrimeCare Software para iOS e Android.
 
 ## 📱 Visão Geral
 
-O MedicWarehouse agora oferece aplicativos móveis nativos que complementam perfeitamente o sistema web, permitindo que médicos, secretárias e proprietários de clínicas gerenciem suas operações em qualquer lugar.
+O PrimeCare Software agora oferece aplicativos móveis nativos que complementam perfeitamente o sistema web, permitindo que médicos, secretárias e proprietários de clínicas gerenciem suas operações em qualquer lugar.
 
 ### Plataformas Disponíveis
 
@@ -13964,7 +13964,7 @@ dotnet run
 
 ```bash
 cd mobile/ios
-open MedicWarehouse.xcodeproj
+open PrimeCare Software.xcodeproj
 
 # No Xcode:
 # 1. Selecione um simulador ou dispositivo
@@ -14122,7 +14122,7 @@ Ambos os apps utilizam componentes nativos de suas plataformas:
 ### API
 - [Documentação da API](../README.md)
 - [Swagger UI](http://localhost:5000/swagger)
-- [Postman Collection](../MedicWarehouse-Postman-Collection.json)
+- [Postman Collection](../PrimeCare Software-Postman-Collection.json)
 
 ### Desenvolvimento
 - [Guia de Desenvolvimento Auth](GUIA_DESENVOLVIMENTO_AUTH.md)
@@ -14149,7 +14149,7 @@ Interessado em contribuir para os apps móveis?
 ## 📞 Suporte
 
 - **GitHub Issues**: Para bugs e feature requests
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: Consulte os READMEs específicos
 
 ---
@@ -14174,7 +14174,7 @@ Interessado em contribuir para os apps móveis?
 
 ## Visão Geral
 
-Este documento descreve como funciona a integração com operadoras de planos de saúde no Brasil, fornecendo um roteiro para implementação gradual no sistema MedicWarehouse.
+Este documento descreve como funciona a integração com operadoras de planos de saúde no Brasil, fornecendo um roteiro para implementação gradual no sistema PrimeCare Software.
 
 ## 1. Contexto e Padrões no Brasil
 
@@ -14817,7 +14817,7 @@ A integração com operadoras de planos de saúde é um projeto robusto que adic
 
 **Última Atualização**: 2024-11-19  
 **Versão**: 1.0  
-**Autor**: MedicWarehouse Team
+**Autor**: PrimeCare Software Team
 
 
 ---
@@ -14837,7 +14837,7 @@ A integração com operadoras de planos de saúde é um projeto robusto que adic
 
 ## Visão Geral
 
-A funcionalidade de Fila de Espera do MedicWarehouse permite gerenciar o fluxo de atendimento de pacientes de forma eficiente, com priorização por triagem, chamada de pacientes e controle de tempo de espera.
+A funcionalidade de Fila de Espera do PrimeCare Software permite gerenciar o fluxo de atendimento de pacientes de forma eficiente, com priorização por triagem, chamada de pacientes e controle de tempo de espera.
 
 ## Recursos Principais
 
@@ -15069,7 +15069,7 @@ localStorage.setItem('clinicId', 'seu-clinic-id-aqui');
 Para mais informações ou suporte, consulte:
 - [Documentação Principal](../README.md)
 - [Guia de API](API_GUIDE.md)
-- [Issues do GitHub](https://github.com/MedicWarehouse/MW.Code/issues)
+- [Issues do GitHub](https://github.com/PrimeCare Software/MW.Code/issues)
 
 
 ---
@@ -15089,7 +15089,7 @@ Para mais informações ou suporte, consulte:
 
 ## Visão Geral
 
-Este guia documenta a funcionalidade de dados mockados implementada nos aplicativos frontend do MedicWarehouse. Esta funcionalidade permite que os aplicativos sejam executados sem a necessidade de um backend ativo, facilitando o desenvolvimento, testes e demonstrações.
+Este guia documenta a funcionalidade de dados mockados implementada nos aplicativos frontend do PrimeCare Software. Esta funcionalidade permite que os aplicativos sejam executados sem a necessidade de um backend ativo, facilitando o desenvolvimento, testes e demonstrações.
 
 ## Benefícios
 
@@ -15102,7 +15102,7 @@ Este guia documenta a funcionalidade de dados mockados implementada nos aplicati
 
 ### Opção 1: Através das Variáveis de Ambiente
 
-#### MedicWarehouse App
+#### PrimeCare Software App
 
 Edite o arquivo `/frontend/medicwarehouse-app/src/environments/environment.ts`:
 
@@ -15145,7 +15145,7 @@ Em versões futuras, será possível habilitar/desabilitar dados mockados atrav�
 
 ## Estrutura dos Arquivos
 
-### MedicWarehouse App
+### PrimeCare Software App
 
 ```
 frontend/medicwarehouse-app/src/app/
@@ -15174,7 +15174,7 @@ frontend/mw-system-admin/src/app/
 
 ## Dados Mockados Disponíveis
 
-### MedicWarehouse App
+### PrimeCare Software App
 
 #### Pacientes (`patient.mock.ts`)
 - 3 pacientes de exemplo
@@ -15247,7 +15247,7 @@ Os interceptors são executados na ordem:
 
 ## Endpoints Mockados
 
-### MedicWarehouse App
+### PrimeCare Software App
 
 #### Autenticação
 - `POST /api/auth/login` - Login com credenciais
@@ -15483,7 +15483,7 @@ Este guia fornece instruções passo a passo para testar a funcionalidade de dad
 ### 1.1 Instalar Dependências
 
 ```bash
-# MedicWarehouse App
+# PrimeCare Software App
 cd frontend/medicwarehouse-app
 npm install
 
@@ -15494,7 +15494,7 @@ npm install
 
 ## Passo 2: Habilitar Dados Mockados
 
-### 2.1 MedicWarehouse App
+### 2.1 PrimeCare Software App
 
 Edite `frontend/medicwarehouse-app/src/environments/environment.ts`:
 
@@ -15524,7 +15524,7 @@ export const environment = {
 
 ## Passo 3: Executar os Aplicativos
 
-### 3.1 MedicWarehouse App
+### 3.1 PrimeCare Software App
 
 ```bash
 cd frontend/medicwarehouse-app
@@ -15544,7 +15544,7 @@ O aplicativo estará disponível em: `http://localhost:4201`
 
 ## Passo 4: Cenários de Teste
 
-### Cenário 1: Login no MedicWarehouse App
+### Cenário 1: Login no PrimeCare Software App
 
 1. Acesse `http://localhost:4200/login`
 2. Digite qualquer credencial (com mocks habilitados, qualquer credencial funciona):
@@ -15717,7 +15717,7 @@ O aplicativo estará disponível em: `http://localhost:4201`
 
 ## Passo 8: Verificar Build de Produção
 
-### Build MedicWarehouse App
+### Build PrimeCare Software App
 
 ```bash
 cd frontend/medicwarehouse-app
@@ -15812,9 +15812,9 @@ Se encontrar problemas ou tiver sugestões:
 
 ---
 
-# Documentação de Telas e Fluxos - MedicWarehouse
+# Documentação de Telas e Fluxos - PrimeCare Software
 
-Este documento apresenta todas as telas do sistema MedicWarehouse com seus fluxos de navegação e funcionalidades.
+Este documento apresenta todas as telas do sistema PrimeCare Software com seus fluxos de navegação e funcionalidades.
 
 ## 📱 Índice de Telas
 
@@ -15862,13 +15862,13 @@ graph TD
 ## 1. Tela de Login
 
 ### 📋 Descrição
-Primeira tela do sistema onde o usuário faz autenticação para acessar o MedicWarehouse.
+Primeira tela do sistema onde o usuário faz autenticação para acessar o PrimeCare Software.
 
 ### 🎨 Elementos da Interface
 
 ```
 ┌─────────────────────────────────────────────┐
-│         MedicWarehouse Logo                 │
+│         PrimeCare Software Logo                 │
 │  Sistema de Gestão para Consultórios       │
 │                                             │
 │  ┌─────────────────────────────────┐       │
@@ -15919,7 +15919,7 @@ Permite que novos usuários criem uma conta no sistema.
 ```
 ┌─────────────────────────────────────────────┐
 │            Cadastro                         │
-│     Crie sua conta no MedicWarehouse        │
+│     Crie sua conta no PrimeCare Software        │
 │                                             │
 │  ┌─────────────────────────────────┐       │
 │  │ Usuário                          │       │
@@ -15979,11 +15979,11 @@ Tela principal após login, apresenta visão geral do sistema e acesso rápido �
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Dashboard                                                 │
-│  Bem-vindo ao MedicWarehouse                              │
+│  Bem-vindo ao PrimeCare Software                              │
 │                                                            │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
 │  │   👥         │  │   📅         │  │   💲         │   │
@@ -16039,7 +16039,7 @@ Exibe todos os pacientes cadastrados na clínica com opções de gerenciamento.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Pacientes                         [+ Novo Paciente]      │
@@ -16095,7 +16095,7 @@ Formulário completo para cadastro ou edição de dados do paciente.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Novo Paciente / Editar Paciente          [Voltar]       │
@@ -16203,7 +16203,7 @@ Visualização da agenda diária/mensal com todos os agendamentos.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Agendamentos                                             │
@@ -16241,7 +16241,7 @@ Visualização da agenda diária/mensal com todos os agendamentos.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┘
 │                                                            │
 │  Agendamentos                                             │
@@ -16309,7 +16309,7 @@ Criação de novo agendamento associando paciente, data e horário.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair] │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair] │
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │  Novo Agendamento                              [Voltar]   │
@@ -16370,7 +16370,7 @@ Interface completa para registro do atendimento médico, prontuário e prescriç
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│  [MedicWarehouse] [Dashboard] [Pacientes] [Agenda] [Sair]           │
+│  [PrimeCare Software] [Dashboard] [Pacientes] [Agenda] [Sair]           │
 ├──────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  Atendimento ao Paciente               [Voltar para Agenda]        │
@@ -16697,7 +16697,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 **Última atualização**: Janeiro 2025  
 **Versão do documento**: 1.0  
-**Equipe**: MedicWarehouse
+**Equipe**: PrimeCare Software
 
 
 ---
@@ -16715,13 +16715,13 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 # 📸 Documentação Visual - Screenshots das Telas
 
-> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do MedicWarehouse.
+> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do PrimeCare Software.
 
 > **Última Atualização:** Novembro 2025
 
 ---
 
-## 🏥 MedicWarehouse App (Frontend Principal)
+## 🏥 PrimeCare Software App (Frontend Principal)
 
 ### 1. Tela de Login
 
@@ -16944,10 +16944,10 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ---
 
-# 📸 Documentação Visual Completa - MedicWarehouse
+# 📸 Documentação Visual Completa - PrimeCare Software
 ## Todas as Telas com Fluxo de Navegação
 
-> **Nota**: Este documento fornece uma documentação visual completa de todas as telas do sistema MedicWarehouse, incluindo mockups detalhados e fluxos de navegação.
+> **Nota**: Este documento fornece uma documentação visual completa de todas as telas do sistema PrimeCare Software, incluindo mockups detalhados e fluxos de navegação.
 
 ---
 
@@ -17136,7 +17136,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 MedicWarehouse │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  Bem-vindo(a), Dr. João Silva! 👨‍⚕️                                   ║
@@ -17209,7 +17209,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 MedicWarehouse │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  GERENCIAMENTO DE PACIENTES                                         ║
@@ -17270,7 +17270,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 MedicWarehouse │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  CADASTRO DE PACIENTE                                               ║
@@ -17347,7 +17347,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 MedicWarehouse │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  AGENDA DE CONSULTAS                                                ║
@@ -17430,7 +17430,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 MedicWarehouse │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  NOVO AGENDAMENTO                                                   ║
@@ -17505,7 +17505,7 @@ Funcionalidades planejadas que aparecerão em futuras versões:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 MedicWarehouse │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  ATENDIMENTO - João Silva (45 anos) ⏱️ 00:15:34                    ║
@@ -17727,12 +17727,12 @@ Para mais informações, consulte:
 **Criado em**: 28 de outubro de 2025  
 **Versão**: 1.0.0  
 **Última atualização**: 28 de outubro de 2025  
-**Autores**: Equipe MedicWarehouse  
+**Autores**: Equipe PrimeCare Software  
 **Status**: ✅ Completo
 
 ---
 
-**© 2025 MedicWarehouse - Todos os direitos reservados**
+**© 2025 PrimeCare Software - Todos os direitos reservados**
 
 
 ---
@@ -17748,11 +17748,11 @@ Para mais informações, consulte:
 
 ---
 
-# Resumo Visual dos Fluxos - MedicWarehouse
+# Resumo Visual dos Fluxos - PrimeCare Software
 
 ## 🎯 Visão Geral do Sistema
 
-Este documento apresenta um resumo visual rápido dos principais fluxos do sistema MedicWarehouse.
+Este documento apresenta um resumo visual rápido dos principais fluxos do sistema PrimeCare Software.
 
 Para documentação completa, consulte: [SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md)
 
@@ -17981,7 +17981,7 @@ sequenceDiagram
 ### Navbar (Presente em todas as telas autenticadas)
 ```
 ┌────────────────────────────────────────────┐
-│ [🏥 MedicWarehouse] [Dashboard] [Pacientes] │
+│ [🏥 PrimeCare Software] [Dashboard] [Pacientes] │
 │ [Agendamentos] [Financeiro] [Sair] 👤      │
 └────────────────────────────────────────────┘
 ```
@@ -18134,7 +18134,7 @@ Consulte: **[SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md)**
 
 **Última atualização**: Janeiro 2025  
 **Versão**: 1.0  
-**Equipe**: MedicWarehouse
+**Equipe**: PrimeCare Software
 
 
 ---
@@ -18150,7 +18150,7 @@ Consulte: **[SCREENS_DOCUMENTATION.md](../SCREENS_DOCUMENTATION.md)**
 
 ---
 
-# 📸 Visual Documentation Index - MedicWarehouse
+# 📸 Visual Documentation Index - PrimeCare Software
 
 ## Quick Navigation
 
@@ -18348,7 +18348,7 @@ Example:
 **Created**: October 28, 2025  
 **Version**: 1.0.0  
 **Last Updated**: October 28, 2025  
-**Authors**: MedicWarehouse Team  
+**Authors**: PrimeCare Software Team  
 **Purpose**: Navigation index for visual documentation  
 **Status**: ✅ Complete
 
@@ -18356,13 +18356,13 @@ Example:
 
 ## 🔗 External Links
 
-- **Repository**: [MedicWarehouse/MW.Code](../../)
+- **Repository**: [PrimeCare Software/MW.Code](../../)
 - **Documentation**: Included in repository (see links above)
 - **Issues**: [GitHub Issues](../../issues)
 
 ---
 
-**© 2025 MedicWarehouse - All rights reserved**
+**© 2025 PrimeCare Software - All rights reserved**
 
 
 ---
@@ -18382,7 +18382,7 @@ Example:
 
 ## Overview
 
-This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the MedicWarehouse frontend applications.
+This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the PrimeCare Software frontend applications.
 
 ## Purpose
 
@@ -19281,7 +19281,7 @@ public class MedicationAutocompleteDto
 # Apple-Inspired Design System
 
 ## Overview
-This document describes the Apple-inspired design system implemented across all MedicWarehouse frontend applications (mw-site, mw-docs, medicwarehouse-app, and mw-system-admin).
+This document describes the Apple-inspired design system implemented across all PrimeCare Software frontend applications (mw-site, mw-docs, medicwarehouse-app, and mw-system-admin).
 
 ## Typography
 
@@ -19522,7 +19522,7 @@ To maintain consistency:
 ---
 
 **Last Updated**: December 23, 2025
-**Maintained by**: MedicWarehouse Development Team
+**Maintained by**: PrimeCare Software Development Team
 
 
 ---
@@ -19538,11 +19538,11 @@ To maintain consistency:
 
 ---
 
-# Regras de Negócio - MedicWarehouse
+# Regras de Negócio - PrimeCare Software
 
 ## Visão Geral
 
-O MedicWarehouse é um sistema multitenant de gestão para consultórios e clínicas médicas (SaaS) que implementa regras de negócio específicas para garantir a privacidade dos dados médicos e a flexibilidade de vínculos entre pacientes e clínicas.
+O PrimeCare Software é um sistema multitenant de gestão para consultórios e clínicas médicas (SaaS) que implementa regras de negócio específicas para garantir a privacidade dos dados médicos e a flexibilidade de vínculos entre pacientes e clínicas.
 
 ## 1. Gestão de Pacientes e Vínculos com Clínicas
 
@@ -20041,15 +20041,15 @@ Todos os registros mantêm:
 
 Para dúvidas, sugestões ou suporte técnico:
 
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação Técnica**: Consulte README.md e IMPLEMENTATION.md
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
 ---
 
 **Última Atualização**: Janeiro 2025  
 **Versão do Documento**: 1.0  
-**Autor**: Equipe MedicWarehouse
+**Autor**: Equipe PrimeCare Software
 
 ## 6. Sistema de Assinaturas e Cobrança
 
@@ -20484,7 +20484,7 @@ A documentação visual complementa as regras de negócio descritas neste docume
 
 **Data**: Janeiro 2025  
 **Versão**: 1.1  
-**Equipe**: MedicWarehouse
+**Equipe**: PrimeCare Software
 
 
 ---
@@ -20638,10 +20638,10 @@ Bearer {seu-token-aqui}
 
 ---
 
-# 📱 Fluxo Completo do Sistema MedicWarehouse
+# 📱 Fluxo Completo do Sistema PrimeCare Software
 ## Do Site à Conclusão da Consulta
 
-> **Objetivo:** Este documento apresenta o fluxo completo do sistema MedicWarehouse, desde a primeira visita ao site até a conclusão de uma consulta médica, incluindo screenshots e diagramas visuais de cada etapa.
+> **Objetivo:** Este documento apresenta o fluxo completo do sistema PrimeCare Software, desde a primeira visita ao site até a conclusão de uma consulta médica, incluindo screenshots e diagramas visuais de cada etapa.
 
 > **Última Atualização:** Dezembro 2025
 
@@ -20749,7 +20749,7 @@ Para informações detalhadas sobre cada tela e fluxo:
 
 ---
 
-**© 2025 MedicWarehouse - Todos os direitos reservados**
+**© 2025 PrimeCare Software - Todos os direitos reservados**
 
 
 ---
@@ -20769,7 +20769,7 @@ Para informações detalhadas sobre cada tela e fluxo:
 
 ## Visão Geral
 
-Este documento descreve a implementação técnica das regras de negócio do MedicWarehouse, focando em como o sistema suporta múltiplas clínicas, isolamento de dados e templates reutilizáveis.
+Este documento descreve a implementação técnica das regras de negócio do PrimeCare Software, focando em como o sistema suporta múltiplas clínicas, isolamento de dados e templates reutilizáveis.
 
 ## Arquitetura da Solução
 
@@ -21503,7 +21503,7 @@ Para detalhes completos e representações visuais de cada tela, consulte [SCREE
 
 **Data**: Janeiro 2025  
 **Versão**: 1.0  
-**Autor**: Equipe MedicWarehouse
+**Autor**: Equipe PrimeCare Software
 
 
 ---
@@ -21773,11 +21773,11 @@ Para questões ou problemas, criar issue no repositório GitHub.
 
 ---
 
-# Arquitetura de Serviços - MedicWarehouse
+# Arquitetura de Serviços - PrimeCare Software
 
 ## Visão Geral
 
-Este documento descreve a nova arquitetura em camadas do MedicWarehouse, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.
+Este documento descreve a nova arquitetura em camadas do PrimeCare Software, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.
 
 ## Estrutura em Camadas
 
@@ -22512,7 +22512,7 @@ Taxa de sucesso:             100% ✅
 
 ## 📋 Resumo Executivo
 
-Esta tarefa envolveu uma análise abrangente de todo o código do projeto MedicWarehouse, incluindo:
+Esta tarefa envolveu uma análise abrangente de todo o código do projeto PrimeCare Software, incluindo:
 - 478 arquivos C# (backend)
 - 154 arquivos TypeScript (frontend)
 - 174 arquivos de documentação
@@ -22805,7 +22805,7 @@ Fix compilation warnings and add security analysis documentation
 
 ### Status Final: ✅ **APROVADO PARA PRODUÇÃO**
 
-O projeto MedicWarehouse demonstra **excelentes práticas de segurança e qualidade de código**:
+O projeto PrimeCare Software demonstra **excelentes práticas de segurança e qualidade de código**:
 
 1. ✅ **Código Backend**: Build limpo, sem vulnerabilidades
 2. ✅ **Código Frontend**: Limpo e seguro
@@ -22857,7 +22857,7 @@ O projeto MedicWarehouse demonstra **excelentes práticas de segurança e qualid
 
 ---
 
-# Diagrama de Entidades - MedicWarehouse
+# Diagrama de Entidades - PrimeCare Software
 
 ## 📊 Relacionamentos Principais
 
@@ -23176,7 +23176,7 @@ Pending → Sent → Delivered → Read
 
 ---
 
-Este diagrama fornece uma visão clara e abrangente de todas as entidades e seus relacionamentos no sistema MedicWarehouse.
+Este diagrama fornece uma visão clara e abrangente de todas as entidades e seus relacionamentos no sistema PrimeCare Software.
 
 
 ---
@@ -23194,7 +23194,7 @@ Este diagrama fornece uma visão clara e abrangente de todas as entidades e seus
 
 # 🚀 CI/CD com GitHub Actions
 
-Este documento descreve a implementação do pipeline de CI/CD para o MedicWarehouse usando GitHub Actions.
+Este documento descreve a implementação do pipeline de CI/CD para o PrimeCare Software usando GitHub Actions.
 
 ## 📋 Visão Geral
 
@@ -23258,7 +23258,7 @@ npm test -- --watch=false --browsers=ChromeHeadless
 
 **Configuração**:
 - **Organization**: medicwarehouse
-- **Project Key**: MedicWarehouse_MW.Code
+- **Project Key**: PrimeCare Software_MW.Code
 - **Coverage Format**: OpenCover
 - **Test Results**: TRX format
 
@@ -23275,7 +23275,7 @@ npm test -- --watch=false --browsers=ChromeHeadless
 
 **Configuração**:
 - **Organization**: medicwarehouse
-- **Project Key**: MedicWarehouse_MW.Code_Frontend
+- **Project Key**: PrimeCare Software_MW.Code_Frontend
 - **Coverage Format**: LCOV
 - **Source Directory**: src
 - **Test Inclusions**: \*\*/\*.spec.ts
@@ -23429,7 +23429,7 @@ O projeto utiliza **SonarCloud** para análise estática de código e qualidade.
 #### Backend (.NET)
 - **Scanner**: dotnet-sonarscanner
 - **Formato de Cobertura**: OpenCover
-- **Project Key**: MedicWarehouse_MW.Code
+- **Project Key**: PrimeCare Software_MW.Code
 - **Métricas Analisadas**:
   - Code Smells
   - Bugs
@@ -23441,7 +23441,7 @@ O projeto utiliza **SonarCloud** para análise estática de código e qualidade.
 #### Frontend (Angular)
 - **Scanner**: SonarCloud GitHub Action
 - **Formato de Cobertura**: LCOV
-- **Project Key**: MedicWarehouse_MW.Code_Frontend
+- **Project Key**: PrimeCare Software_MW.Code_Frontend
 - **Configuração**: sonar-project.properties
 - **Métricas Analisadas**:
   - Code Smells
@@ -23515,7 +23515,7 @@ O projeto está configurado com quality gates padrão do SonarCloud:
 
 ---
 
-# 📊 Resumo dos Testes Unitários - MedicWarehouse
+# 📊 Resumo dos Testes Unitários - PrimeCare Software
 
 ## Estatísticas Gerais
 
@@ -23773,11 +23773,11 @@ A suite de testes garante:
 
 ---
 
-# Relatório de Segurança e Validações - MedicWarehouse
+# Relatório de Segurança e Validações - PrimeCare Software
 
 ## 📋 Resumo Executivo
 
-Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema MedicWarehouse para garantir a integridade e segurança dos dados.
+Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema PrimeCare Software para garantir a integridade e segurança dos dados.
 
 ## 🔒 Validações de Segurança Implementadas
 
@@ -24089,7 +24089,7 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ## 📝 Conclusão
 
-O sistema MedicWarehouse agora possui:
+O sistema PrimeCare Software agora possui:
 
 - ✅ Validações robustas de CPF, CNPJ e CRM
 - ✅ Proteção contra null pointer exceptions
@@ -24116,7 +24116,7 @@ Todas as validações são executadas no momento da criação/atualização das 
 
 # 🔍 SonarCloud Setup Guide
 
-Este guia explica como configurar o SonarCloud para o projeto MedicWarehouse.
+Este guia explica como configurar o SonarCloud para o projeto PrimeCare Software.
 
 ## 📋 Pré-requisitos
 
@@ -24139,17 +24139,17 @@ Este guia explica como configurar o SonarCloud para o projeto MedicWarehouse.
 
 #### Projeto Backend
 1. Na organização, clique em "Analyze new project"
-2. Selecione o repositório "MedicWarehouse/MW.Code"
+2. Selecione o repositório "PrimeCare Software/MW.Code"
 3. Configure:
-   - **Project Key**: `MedicWarehouse_MW.Code`
-   - **Project Name**: `MedicWarehouse Backend`
+   - **Project Key**: `PrimeCare Software_MW.Code`
+   - **Project Name**: `PrimeCare Software Backend`
 4. Escolha "With GitHub Actions"
 
 #### Projeto Frontend
 1. Clique novamente em "Analyze new project"
 2. Configure manualmente:
-   - **Project Key**: `MedicWarehouse_MW.Code_Frontend`
-   - **Project Name**: `MedicWarehouse Frontend`
+   - **Project Key**: `PrimeCare Software_MW.Code_Frontend`
+   - **Project Name**: `PrimeCare Software Frontend`
 3. Escolha "With GitHub Actions"
 
 ### 3. Obter Token de Autenticação
@@ -24245,8 +24245,8 @@ Após configurar tudo:
 ### Erro: "Project not found"
 
 **Solução**: Verifique se os Project Keys estão corretos:
-- Backend: `MedicWarehouse_MW.Code`
-- Frontend: `MedicWarehouse_MW.Code_Frontend`
+- Backend: `PrimeCare Software_MW.Code`
+- Frontend: `PrimeCare Software_MW.Code_Frontend`
 
 ### Erro: "Organization not found"
 
@@ -24344,7 +24344,7 @@ Este documento detalha os problemas de configuração encontrados na última exe
 
 ### 1. Frontend - Projeto Não Encontrado
 
-**Erro**: `Could not find a default branch for project with key 'MedicWarehouse_MW.Code_Frontend'`
+**Erro**: `Could not find a default branch for project with key 'PrimeCare Software_MW.Code_Frontend'`
 
 **Causa**: O projeto frontend ainda não foi criado no SonarCloud.
 
@@ -24353,8 +24353,8 @@ Este documento detalha os problemas de configuração encontrados na última exe
 **Solução Necessária**:
 1. Acessar https://sonarcloud.io/
 2. Fazer login com a conta da organização `medicwarehouse`
-3. Criar um novo projeto com a chave `MedicWarehouse_MW.Code_Frontend`
-4. Vincular ao repositório GitHub `MedicWarehouse/MW.Code`
+3. Criar um novo projeto com a chave `PrimeCare Software_MW.Code_Frontend`
+4. Vincular ao repositório GitHub `PrimeCare Software/MW.Code`
 5. Configurar como análise de pull request e branch principal
 
 **Documentação**: [Creating a Project in SonarCloud](https://docs.sonarcloud.io/getting-started/github/)
@@ -24379,7 +24379,7 @@ Este documento detalha os problemas de configuração encontrados na última exe
 
 **Passos para Desabilitar Análise Automática**:
 1. Acessar https://sonarcloud.io/
-2. Navegar para o projeto `MedicWarehouse_MW.Code`
+2. Navegar para o projeto `PrimeCare Software_MW.Code`
 3. Ir em **Administration** > **Analysis Method**
 4. Desabilitar **Automatic Analysis**
 5. Confirmar que apenas **CI-based Analysis** está ativo
@@ -24423,8 +24423,8 @@ Ver: `docs/SONAR_FIXES_SUMMARY.md` para mais detalhes
 ## 🎯 Próximos Passos
 
 ### Prioridade Alta
-1. [ ] Criar projeto frontend no SonarCloud (`MedicWarehouse_MW.Code_Frontend`)
-2. [ ] Desabilitar análise automática no projeto backend (`MedicWarehouse_MW.Code`)
+1. [ ] Criar projeto frontend no SonarCloud (`PrimeCare Software_MW.Code_Frontend`)
+2. [ ] Desabilitar análise automática no projeto backend (`PrimeCare Software_MW.Code`)
 3. [ ] Reexecutar workflow CI/CD para validar configurações
 
 ### Prioridade Média
@@ -24452,7 +24452,7 @@ Ver: `docs/SONAR_FIXES_SUMMARY.md` para mais detalhes
 
 Para questões sobre configuração do SonarCloud:
 - **Equipe**: DevOps / Qualidade
-- **Repositório**: https://github.com/MedicWarehouse/MW.Code
+- **Repositório**: https://github.com/PrimeCare Software/MW.Code
 - **Issues**: Criar issue com label `sonarcloud`
 
 ---
@@ -24474,15 +24474,15 @@ Para questões sobre configuração do SonarCloud:
 
 ---
 
-# ✅ Checklist Completo de Testes - MedicWarehouse
+# ✅ Checklist Completo de Testes - PrimeCare Software
 
-> **Objetivo:** Documento para verificar todos os métodos, APIs, front-end e fluxos do sistema MedicWarehouse
+> **Objetivo:** Documento para verificar todos os métodos, APIs, front-end e fluxos do sistema PrimeCare Software
 
 ## 📋 Índice
 
 1. [Preparação do Ambiente](#preparação-do-ambiente)
 2. [Testes de API - Backend](#testes-de-api---backend)
-3. [Testes de Frontend - MedicWarehouse App](#testes-de-frontend---medicwarehouse-app)
+3. [Testes de Frontend - PrimeCare Software App](#testes-de-frontend---medicwarehouse-app)
 4. [Testes de Frontend - System Admin](#testes-de-frontend---system-admin)
 5. [Testes de Integração](#testes-de-integração)
 6. [Testes de Segurança](#testes-de-segurança)
@@ -24673,7 +24673,7 @@ curl http://localhost:5000/api/data-seeder/demo-info
 
 ---
 
-## 🖥️ Testes de Frontend - MedicWarehouse App
+## 🖥️ Testes de Frontend - PrimeCare Software App
 
 ### Autenticação
 
@@ -25064,11 +25064,11 @@ Para considerar o sistema pronto para produção:
 
 ---
 
-# Carga Inicial para Testes - MedicWarehouse
+# Carga Inicial para Testes - PrimeCare Software
 
 ## 📋 Visão Geral
 
-Este documento descreve a carga inicial de dados implementada para testar **todos os pontos do sistema** MedicWarehouse. Os dados de teste são abrangentes e cobrem todas as principais entidades e funcionalidades do sistema.
+Este documento descreve a carga inicial de dados implementada para testar **todos os pontos do sistema** PrimeCare Software. Os dados de teste são abrangentes e cobrem todas as principais entidades e funcionalidades do sistema.
 
 ## 🎯 Objetivo
 
@@ -25086,7 +25086,7 @@ Gerar dados de demonstração completos e interconectados que permitam testar:
 ## 📦 Dados Gerados
 
 ### 1. Clínica Demo
-- **Nome**: Clínica Demo MedicWarehouse
+- **Nome**: Clínica Demo PrimeCare Software
 - **TenantId**: `demo-clinic-001`
 - **CNPJ**: 12.345.678/0001-95
 - **Horário**: 08:00 - 18:00
@@ -25359,7 +25359,7 @@ Para mais informações sobre o sistema, consulte:
 
 ## 🎉 Conclusão
 
-A carga inicial implementada fornece uma base completa e realista para testar todos os aspectos do sistema MedicWarehouse, desde o cadastro básico até fluxos complexos de atendimento médico com prescrições e notificações.
+A carga inicial implementada fornece uma base completa e realista para testar todos os aspectos do sistema PrimeCare Software, desde o cadastro básico até fluxos complexos de atendimento médico com prescrições e notificações.
 
 
 ---
@@ -25469,7 +25469,7 @@ Documentação completa em português contendo:
 Mudanças realizadas:
 1. ✅ Adicionado badge do GitHub Actions no topo:
    ```markdown
-   [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
+   [![CI - Test Frontend e Backend](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml)
    ```
 
 2. ✅ Adicionada seção "🔄 CI/CD" com:
@@ -25586,7 +25586,7 @@ npm test -- --watch=false --code-coverage
 
 ## 🎉 Conclusão
 
-Implementação completa do GitHub Actions para CI/CD do MedicWarehouse:
+Implementação completa do GitHub Actions para CI/CD do PrimeCare Software:
 - ✅ 3 jobs configurados
 - ✅ Testes backend e frontend
 - ✅ Build verification
@@ -25612,7 +25612,7 @@ O workflow está configurado e pronto para ser executado automaticamente em cada
 
 # 🚀 Implementation Summary - New Features
 
-This document summarizes the implementation of new features requested in the problem statement for MedicWarehouse.
+This document summarizes the implementation of new features requested in the problem statement for PrimeCare Software.
 
 ## 📋 Problem Statement Requirements
 
@@ -25896,7 +25896,7 @@ The implemented features provide:
 
 ## 📋 Visão Geral
 
-Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema MedicWarehouse, conforme especificado no issue.
+Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema PrimeCare Software, conforme especificado no issue.
 
 ## ✅ Requisitos Implementados
 
@@ -26165,8 +26165,8 @@ Duration: 176 ms
 ## 📞 Suporte
 
 - **Documentação**: Veja `BUSINESS_RULES.md` e `TECHNICAL_IMPLEMENTATION.md`
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
-- **Email**: contato@medicwarehouse.com
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
+- **Email**: contato@primecaresoftware.com
 
 ## 🎉 Conclusão
 
@@ -26419,7 +26419,7 @@ The system now supports the multi-clinic business requirements with proper data 
 
 ---
 
-# Funcionalidades Implementadas - MedicWarehouse
+# Funcionalidades Implementadas - PrimeCare Software
 
 ## ✅ Status das Funcionalidades Solicitadas
 
@@ -26791,7 +26791,7 @@ Para completar a implementação no frontend:
 
 **TODAS as funcionalidades solicitadas foram implementadas com sucesso!**
 
-O sistema MedicWarehouse agora possui:
+O sistema PrimeCare Software agora possui:
 - ✅ Gerenciamento de agenda completo com confirmações automáticas
 - ✅ Prontuário eletrônico completo com histórico
 - ✅ Gestão financeira completa (receitas e despesas)
@@ -27066,11 +27066,11 @@ Todas as funcionalidades podem ser acessadas tanto pelo médico quanto pela rece
 
 ---
 
-# Guia de Segurança - MedicWarehouse
+# Guia de Segurança - PrimeCare Software
 
 ## 📋 Visão Geral
 
-Este documento descreve todas as medidas de segurança implementadas no sistema MedicWarehouse para proteger contra ataques comuns como SQL Injection, XSS, CSRF, e outras ameaças.
+Este documento descreve todas as medidas de segurança implementadas no sistema PrimeCare Software para proteger contra ataques comuns como SQL Injection, XSS, CSRF, e outras ameaças.
 
 ## 🔒 Medidas de Segurança Implementadas
 
@@ -27287,7 +27287,7 @@ Nunca commitar secrets no código. Use variáveis de ambiente:
 
 ```bash
 export DB_SERVER="seu-servidor.database.windows.net"
-export DB_NAME="MedicWarehouse"
+export DB_NAME="PrimeCare Software"
 export DB_USER="admin_user"
 export DB_PASSWORD="SuaSenhaSegura123!"
 export JWT_SECRET_KEY="SuaChaveSecretaComPeloMenos32Caracteres!"
@@ -27303,8 +27303,8 @@ export JWT_SECRET_KEY="SuaChaveSecretaComPeloMenos32Caracteres!"
   "JwtSettings": {
     "SecretKey": "${JWT_SECRET_KEY}",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   },
   "Security": {
     "RequireHttps": true,
@@ -27451,11 +27451,11 @@ Para questões de segurança críticas:
 
 ---
 
-# Resumo de Melhorias de Segurança - MedicWarehouse
+# Resumo de Melhorias de Segurança - PrimeCare Software
 
 ## 🎯 Objetivo
 
-Implementar melhorias abrangentes de segurança no sistema MedicWarehouse para proteger contra ataques comuns incluindo SQL Injection, XSS, CSRF, força bruta, e outras ameaças.
+Implementar melhorias abrangentes de segurança no sistema PrimeCare Software para proteger contra ataques comuns incluindo SQL Injection, XSS, CSRF, força bruta, e outras ameaças.
 
 ## ✅ Implementações Realizadas
 
@@ -27720,7 +27720,7 @@ dotnet test --filter "FullyQualifiedName~Security"
 - [ ] Configurar variáveis de ambiente no servidor
 ```bash
 export DB_SERVER="seu-servidor.database.windows.net"
-export DB_NAME="MedicWarehouse"
+export DB_NAME="PrimeCare Software"
 export DB_USER="admin_user"
 export DB_PASSWORD="SuaSenhaSegura123!"
 export JWT_SECRET_KEY="ChaveSecretaComPeloMenos32Caracteres!"
@@ -27884,7 +27884,7 @@ Para questões relacionadas a esta implementação:
 
 ## 📋 Resumo Executivo
 
-Este documento resume a análise completa de segurança e qualidade de código realizada no projeto MedicWarehouse.
+Este documento resume a análise completa de segurança e qualidade de código realizada no projeto PrimeCare Software.
 
 **Data da Análise**: Dezembro 2025  
 **Status Geral**: ✅ **SEGURO** - Boas práticas implementadas  
@@ -28219,7 +28219,7 @@ Nenhum TODO crítico identificado.
 
 ## 📝 Conclusão
 
-O projeto MedicWarehouse demonstra **excelentes práticas de segurança e qualidade de código**. Todas as vulnerabilidades críticas foram evitadas através de:
+O projeto PrimeCare Software demonstra **excelentes práticas de segurança e qualidade de código**. Todas as vulnerabilidades críticas foram evitadas através de:
 
 1. ✅ Autenticação robusta com JWT
 2. ✅ Proteção contra ataques comuns (SQL Injection, XSS, CSRF)
@@ -28250,7 +28250,7 @@ O projeto MedicWarehouse demonstra **excelentes práticas de segurança e qualid
 
 ---
 
-# 🔐 Sugestões de Melhorias de Segurança - MedicWarehouse
+# 🔐 Sugestões de Melhorias de Segurança - PrimeCare Software
 
 > **IMPORTANTE**: Este documento contém apenas **sugestões** de melhorias de segurança. Nenhuma implementação foi realizada.
 
@@ -28632,7 +28632,7 @@ nikto -h https://sua-api.medicwarehouse.com
 dotnet list package --vulnerable --include-transitive
 
 # OWASP Dependency-Check
-dependency-check --project MedicWarehouse --scan ./src
+dependency-check --project PrimeCare Software --scan ./src
 
 # Snyk
 snyk test
@@ -28866,13 +28866,13 @@ CREATE MASTER KEY ENCRYPTION BY PASSWORD = '<senha-forte>';
 GO
 CREATE CERTIFICATE TDECert WITH SUBJECT = 'TDE Certificate';
 GO
-USE MedicWarehouse;
+USE PrimeCare Software;
 GO
 CREATE DATABASE ENCRYPTION KEY
 WITH ALGORITHM = AES_256
 ENCRYPTION BY SERVER CERTIFICATE TDECert;
 GO
-ALTER DATABASE MedicWarehouse SET ENCRYPTION ON;
+ALTER DATABASE PrimeCare Software SET ENCRYPTION ON;
 GO
 ```
 
@@ -29761,11 +29761,11 @@ Este documento deve ser revisado e atualizado:
 
 ---
 
-# Conformidade com LGPD - MedicWarehouse
+# Conformidade com LGPD - PrimeCare Software
 
 ## Visão Geral
 
-Este documento descreve as implementações realizadas no frontend do MedicWarehouse para garantir conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
+Este documento descreve as implementações realizadas no frontend do PrimeCare Software para garantir conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
 
 ## Recursos Implementados
 
@@ -30799,7 +30799,7 @@ Branch: copilot/create-financial-flow-and-docs
 
 # 💰 Fluxo Financeiro - Sistema de Pagamentos e Nota Fiscal
 
-Este documento descreve o fluxo completo de pagamentos de consultas e emissão de notas fiscais no sistema MedicWarehouse.
+Este documento descreve o fluxo completo de pagamentos de consultas e emissão de notas fiscais no sistema PrimeCare Software.
 
 ## 📊 Visão Geral
 
@@ -31079,11 +31079,11 @@ O frontend pode ser desenvolvido consumindo os endpoints já disponíveis e docu
 
 ---
 
-# Sistema de Gestão Financeira e Relatórios - MedicWarehouse
+# Sistema de Gestão Financeira e Relatórios - PrimeCare Software
 
 ## 📊 Visão Geral
 
-O sistema de gestão financeira e relatórios do MedicWarehouse oferece controle completo sobre receitas, despesas e análises operacionais. Com dashboards intuitivos e relatórios detalhados, você pode tomar decisões baseadas em dados reais.
+O sistema de gestão financeira e relatórios do PrimeCare Software oferece controle completo sobre receitas, despesas e análises operacionais. Com dashboards intuitivos e relatórios detalhados, você pode tomar decisões baseadas em dados reais.
 
 ---
 
@@ -31595,7 +31595,7 @@ Para completar a implementação, os seguintes componentes frontend devem ser cr
 
 ## 📊 Estimativa de Custos por Número de Clínicas
 
-Esta calculadora ajuda você a estimar os custos de infraestrutura do MedicWarehouse conforme seu negócio cresce.
+Esta calculadora ajuda você a estimar os custos de infraestrutura do PrimeCare Software conforme seu negócio cresce.
 
 ---
 
@@ -32014,7 +32014,7 @@ VPS (Hetzner):
 
 ## Visão Geral
 
-O MedicWarehouse implementa um sistema completo de assinaturas SaaS com gerenciamento de planos, permissões por usuário e controle de acesso a módulos.
+O PrimeCare Software implementa um sistema completo de assinaturas SaaS com gerenciamento de planos, permissões por usuário e controle de acesso a módulos.
 
 ## 1. Planos de Assinatura
 
@@ -32130,7 +32130,7 @@ Prezado(a) [Nome da Clínica],
 
 Identificamos que o pagamento da sua assinatura está em atraso.
 
-⚠️ ATENÇÃO: Seu acesso ao sistema MedicWarehouse 
+⚠️ ATENÇÃO: Seu acesso ao sistema PrimeCare Software 
 ficará indisponível até a regularização do pagamento.
 
 Valor: R$ XXX,XX
@@ -32144,7 +32144,7 @@ automaticamente.
 Dúvidas? Entre em contato conosco.
 
 Atenciosamente,
-Equipe MedicWarehouse
+Equipe PrimeCare Software
 ```
 
 ### 3.3 Bloqueio de Acesso
@@ -34927,7 +34927,7 @@ A implementação do Sistema de Rotinas de Notificação Configuráveis está **
 
 **Versão**: 1.0.0
 **Data**: 10 de Outubro de 2025
-**Equipe**: MedicWarehouse Development Team
+**Equipe**: PrimeCare Software Development Team
 
 
 ---
@@ -36298,8 +36298,8 @@ describe('Start Attendance Flow', () => {
 
 Para dúvidas ou problemas:
 - [Documentação Principal](../README.md)
-- [GitHub Issues](https://github.com/MedicWarehouse/MW.Code/issues)
-- [Wiki do Projeto](https://github.com/MedicWarehouse/MW.Code/wiki)
+- [GitHub Issues](https://github.com/PrimeCare Software/MW.Code/issues)
+- [Wiki do Projeto](https://github.com/PrimeCare Software/MW.Code/wiki)
 
 
 ---
@@ -36317,7 +36317,7 @@ Para dúvidas ou problemas:
 
 # Dynamic Appointment Calendar and Notification System
 
-This document describes the new features implemented for the MedicWarehouse appointment system.
+This document describes the new features implemented for the PrimeCare Software appointment system.
 
 ## Features
 
@@ -36583,11 +36583,11 @@ For issues or questions, please create a GitHub issue in the repository.
 
 ## Visão Geral
 
-MW.Site é o site de marketing e contratação do MedicWarehouse SaaS. Desenvolvido em Angular 20, oferece uma experiência completa para visitantes conhecerem o produto, visualizarem planos e realizarem o cadastro com período de teste gratuito de 15 dias.
+MW.Site é o site de marketing e contratação do PrimeCare Software SaaS. Desenvolvido em Angular 20, oferece uma experiência completa para visitantes conhecerem o produto, visualizarem planos e realizarem o cadastro com período de teste gratuito de 15 dias.
 
 ## 🎯 Objetivos
 
-- Apresentar os serviços e diferenciais do MedicWarehouse
+- Apresentar os serviços e diferenciais do PrimeCare Software
 - Facilitar a contratação de planos de assinatura
 - Proporcionar período de teste gratuito de 15 dias
 - Integrar com sistema de pagamentos
@@ -37186,7 +37186,7 @@ graph TD
 
 ## 📞 Suporte e Contato
 
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Telefone**: (11) 99999-9999
 - **WhatsApp**: +55 11 99999-9999
 - **Horário**: Segunda a Sexta, 8h às 18h | Sábados, 9h às 13h
@@ -37220,7 +37220,7 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 
 ---
 
-**Desenvolvido com ❤️ pela equipe MedicWarehouse**
+**Desenvolvido com ❤️ pela equipe PrimeCare Software**
 
 
 ---
@@ -37240,7 +37240,7 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 
 ## 🎉 Project Complete
 
-Este documento resume a implementação completa do projeto MW.Site - o site de marketing e contratação do MedicWarehouse SaaS.
+Este documento resume a implementação completa do projeto MW.Site - o site de marketing e contratação do PrimeCare Software SaaS.
 
 ## ✅ Entregas Realizadas
 
@@ -37478,10 +37478,10 @@ Embora todos os requisitos tenham sido atendidos, melhorias futuras incluem:
 
 ## 📞 Informações de Contato
 
-**MedicWarehouse**
-- Email: contato@medicwarehouse.com
+**PrimeCare Software**
+- Email: contato@primecaresoftware.com
 - WhatsApp: +55 11 99999-9999
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- GitHub: https://github.com/PrimeCare Software/MW.Code
 
 ## 🏆 Conclusão
 
@@ -37491,7 +37491,7 @@ O projeto MW.Site foi implementado com sucesso, atendendo a todos os requisitos 
 
 ---
 
-*Desenvolvido com ❤️ pela equipe MedicWarehouse*
+*Desenvolvido com ❤️ pela equipe PrimeCare Software*
 *Data: Outubro 2025*
 
 
@@ -37512,7 +37512,7 @@ O projeto MW.Site foi implementado com sucesso, atendendo a todos os requisitos 
 
 ## Visão Geral
 
-A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no MedicWarehouse, visualizem métricas globais do sistema e controlem assinaturas.
+A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no PrimeCare Software, visualizem métricas globais do sistema e controlem assinaturas.
 
 ## Acesso
 
@@ -37905,7 +37905,7 @@ clinic-detail         | 10.83 kB | 3.00 kB
 ## Contato e Suporte
 
 Para dúvidas ou problemas relacionados à área administrativa:
-- **Email**: suporte@medicwarehouse.com
+- **Email**: suporte@primecaresoftware.com
 - **Documentação Técnica**: [README.md](../README.md)
 - **Issue Tracker**: GitHub Issues
 
@@ -37913,7 +37913,7 @@ Para dúvidas ou problemas relacionados à área administrativa:
 
 **Última Atualização**: 14 de Outubro de 2024  
 **Versão**: 1.0.0  
-**Autor**: GitHub Copilot para MedicWarehouse
+**Autor**: GitHub Copilot para PrimeCare Software
 
 
 ---
@@ -37948,13 +37948,13 @@ Para dúvidas ou problemas relacionados à área administrativa:
 
 ## 📋 Visão Geral
 
-Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal MedicWarehouse.
+Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal PrimeCare Software.
 
 ## 🏗️ Arquitetura da Separação
 
-O MedicWarehouse agora é composto por **dois aplicativos Angular independentes**:
+O PrimeCare Software agora é composto por **dois aplicativos Angular independentes**:
 
-### 1. **MedicWarehouse App** (`medicwarehouse-app`)
+### 1. **PrimeCare Software App** (`medicwarehouse-app`)
 - **Usuários**: Proprietários de clínicas, médicos, secretárias, etc.
 - **Funcionalidades**: 
   - Dashboard da clínica
@@ -37985,7 +37985,7 @@ O MedicWarehouse agora é composto por **dois aplicativos Angular independentes*
 cd frontend/mw-system-admin
 npm install
 
-# MedicWarehouse App (se necessário)
+# PrimeCare Software App (se necessário)
 cd ../medicwarehouse-app
 npm install
 ```
@@ -38015,7 +38015,7 @@ Para rodar ambos os projetos simultaneamente, configure portas diferentes:
 ### Passo 3: Executar os Projetos
 
 ```bash
-# Terminal 1 - MedicWarehouse App
+# Terminal 1 - PrimeCare Software App
 cd frontend/medicwarehouse-app
 npm start
 # Disponível em http://localhost:4200
@@ -38323,8 +38323,8 @@ Ambos os sistemas são totalmente responsivos:
 
 Para problemas ou dúvidas:
 
-- **Email**: suporte@medicwarehouse.com
-- **GitHub Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Email**: suporte@primecaresoftware.com
+- **GitHub Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 - **Documentação**: Veja os arquivos `.md` no repositório
 
 ## 🔄 Atualizações Futuras
@@ -38367,16 +38367,16 @@ Para problemas ou dúvidas:
 
 ---
 
-# Mapeamento Completo do Sistema MedicWarehouse
+# Mapeamento Completo do Sistema PrimeCare Software
 
 ## 📊 Visão Geral da Arquitetura
 
-O MedicWarehouse é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).
+O PrimeCare Software é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).
 
 ### Estrutura de Projetos
 
 ```
-MedicWarehouse.sln
+PrimeCare Software.sln
 ├── src/
 │   ├── MedicSoft.Domain         - Entidades, interfaces e lógica de domínio
 │   ├── MedicSoft.Application    - Serviços de aplicação e casos de uso
@@ -38896,7 +38896,7 @@ Os seeders criam um ambiente completo de teste com:
 
 ---
 
-Este mapeamento fornece uma visão completa e detalhada de todo o sistema MedicWarehouse, suas entidades, relacionamentos, fluxos e funcionalidades.
+Este mapeamento fornece uma visão completa e detalhada de todo o sistema PrimeCare Software, suas entidades, relacionamentos, fluxos e funcionalidades.
 
 
 ---
@@ -39279,9 +39279,9 @@ dotnet test --filter "FullyQualifiedName~SubscriptionServiceEnvironment"
 ## Suporte
 
 Para dúvidas ou problemas:
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: https://docs.medicwarehouse.com
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
 ## Changelog
 
@@ -39308,11 +39308,11 @@ Para dúvidas ou problemas:
 
 ---
 
-# Fluxo de Proprietários (Owners) - MedicWarehouse
+# Fluxo de Proprietários (Owners) - PrimeCare Software
 
 ## Visão Geral
 
-O sistema MedicWarehouse agora possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor controle e gerenciamento das permissões e responsabilidades dentro do sistema.
+O sistema PrimeCare Software agora possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor controle e gerenciamento das permissões e responsabilidades dentro do sistema.
 
 ## Diferença entre Owner e User
 
@@ -39367,7 +39367,7 @@ Registra uma nova clínica e cria automaticamente o Owner associado.
 ```json
 {
   "success": true,
-  "message": "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
+  "message": "Registration successful! Welcome to PrimeCare Software. You can now login with your credentials.",
   "clinicId": "guid-da-clinica",
   "userId": "guid-do-owner"
 }
@@ -39645,9 +39645,9 @@ dotnet ef database update --project src/MedicSoft.Repository --startup-project s
 ## Suporte
 
 Para dúvidas ou problemas:
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: https://docs.medicwarehouse.com
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
 ---
 
@@ -39672,7 +39672,7 @@ Para dúvidas ou problemas:
 
 ## Visão Geral
 
-O MedicWarehouse implementa um sistema completo de perfis de acesso e permissões granulares, permitindo que proprietários de clínicas gerenciem de forma flexível quais funcionalidades cada usuário pode acessar.
+O PrimeCare Software implementa um sistema completo de perfis de acesso e permissões granulares, permitindo que proprietários de clínicas gerenciem de forma flexível quais funcionalidades cada usuário pode acessar.
 
 ## Arquitetura
 
@@ -40255,7 +40255,7 @@ dotnet ef database update --context MedicSoftDbContext
 
 ## Conclusão
 
-O sistema de perfis de acesso e permissões do MedicWarehouse oferece controle granular e flexível sobre o que cada usuário pode fazer na plataforma, seguindo as melhores práticas de segurança e experiência do usuário das principais ferramentas do mercado.
+O sistema de perfis de acesso e permissões do PrimeCare Software oferece controle granular e flexível sobre o que cada usuário pode fazer na plataforma, seguindo as melhores práticas de segurança e experiência do usuário das principais ferramentas do mercado.
 
 
 ---
@@ -40271,11 +40271,11 @@ O sistema de perfis de acesso e permissões do MedicWarehouse oferece controle g
 
 ---
 
-# Frontend Integration Guide - MedicWarehouse API
+# Frontend Integration Guide - PrimeCare Software API
 
 ## Quick Start for Frontend Developers
 
-This guide provides everything you need to integrate your frontend application with the MedicWarehouse API.
+This guide provides everything you need to integrate your frontend application with the PrimeCare Software API.
 
 ## 🔐 Authentication Flow
 
@@ -40784,7 +40784,7 @@ export class LoginComponent {
 ```html
 <!-- login.component.html -->
 <div class="login-container">
-  <h2>MedicWarehouse Login</h2>
+  <h2>PrimeCare Software Login</h2>
   
   <div class="login-type-toggle">
     <button 
@@ -40897,8 +40897,8 @@ If you encounter CORS errors, make sure the backend is configured with your fron
 ## 🤝 Support
 
 For issues or questions:
-- Email: contato@medicwarehouse.com
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- Email: contato@primecaresoftware.com
+- GitHub: https://github.com/PrimeCare Software/MW.Code
 
 
 ---
@@ -40975,7 +40975,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:5000',  // ✅ Correto (sem /api - adicionado nos services)
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@medicwarehouse.com',
+  companyEmail: 'contato@primecaresoftware.com',
   companyPhone: '(11) 99999-9999'
 };
 ```
@@ -41037,7 +41037,7 @@ export const environment = {
   production: true,
   apiUrl: 'https://api.medicwarehouse.com',  // ✅ HTTPS obrigatório
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@medicwarehouse.com',
+  companyEmail: 'contato@primecaresoftware.com',
   companyPhone: '(11) 99999-9999'
 };
 ```
@@ -41236,7 +41236,7 @@ Antes de começar o desenvolvimento, verifique:
 
 ## Visão Geral
 
-Este documento descreve como usar a integração da API de Telemedicina (videochamadas) do MedicSoft no frontend do MedicWarehouse.
+Este documento descreve como usar a integração da API de Telemedicina (videochamadas) do MedicSoft no frontend do PrimeCare Software.
 
 ## Configuração
 
@@ -41948,7 +41948,7 @@ describe('TelemedicineButtonComponent', () => {
 
 ## 📋 Visão Geral
 
-Este documento analisa as melhores opções de serviços de videochamada considerando custo-benefício para implementação no MedicWarehouse.
+Este documento analisa as melhores opções de serviços de videochamada considerando custo-benefício para implementação no PrimeCare Software.
 
 ---
 
@@ -42142,7 +42142,7 @@ Para 5 salas: $295/mês
 
 ## 🎯 Recomendação Final
 
-### Para MedicWarehouse: **Daily.co** 🏆
+### Para PrimeCare Software: **Daily.co** 🏆
 
 **Motivo:**
 1. **Melhor Custo-Benefício**: $30/mês para 1.000 consultas vs $50-90 de outros
@@ -42738,7 +42738,7 @@ Ao completar os guias, você terá:
 
 ## 📋 Visão Geral
 
-Este guia apresenta estratégias para colocar o MedicWarehouse em produção com **custo mínimo** enquanto você ainda não tem clientes grandes, permitindo crescimento gradual conforme a demanda aumenta.
+Este guia apresenta estratégias para colocar o PrimeCare Software em produção com **custo mínimo** enquanto você ainda não tem clientes grandes, permitindo crescimento gradual conforme a demanda aumenta.
 
 ## 💰 Comparativo de Custos Mensais
 
@@ -42812,7 +42812,7 @@ dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 2. **Criar novo projeto**: 
    - Click em "New Project"
    - Selecione "Deploy from GitHub repo"
-   - Escolha `MedicWarehouse/MW.Code`
+   - Escolha `PrimeCare Software/MW.Code`
 
 3. **Adicionar PostgreSQL**:
    - Click em "+ New"
@@ -42944,7 +42944,7 @@ docker compose version
 
 ```bash
 # Clonar repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Criar arquivo .env para produção
@@ -43341,7 +43341,7 @@ O workflow de deploy está configurado corretamente, mas o GitHub Pages precisa 
 ### Passo a Passo
 
 1. **Acesse as configurações do repositório:**
-   - Vá para: https://github.com/MedicWarehouse/MW.Code/settings/pages
+   - Vá para: https://github.com/PrimeCare Software/MW.Code/settings/pages
    - Ou navegue: **Repository** → **Settings** → **Pages** (no menu lateral esquerdo)
 
 2. **Configure a fonte (Source):**
@@ -43365,7 +43365,7 @@ Na seção **"Build and deployment"**, certifique-se de que está selecionado:
 ## 🚀 Após Habilitar GitHub Pages
 
 1. **Execute o workflow novamente:**
-   - Vá para: https://github.com/MedicWarehouse/MW.Code/actions
+   - Vá para: https://github.com/PrimeCare Software/MW.Code/actions
    - Selecione o workflow **"Deploy MW.Docs to GitHub Pages"**
    - Clique em **"Run workflow"**
    - Selecione a branch **main**
@@ -43449,7 +43449,7 @@ Após habilitar GitHub Pages e realizar o primeiro deploy com sucesso:
 
 **⏰ Esta é uma configuração única que leva apenas 5 minutos!**
 
-**🔗 Link direto para configuração:** https://github.com/MedicWarehouse/MW.Code/settings/pages
+**🔗 Link direto para configuração:** https://github.com/PrimeCare Software/MW.Code/settings/pages
 
 
 ---
@@ -43469,7 +43469,7 @@ Após habilitar GitHub Pages e realizar o primeiro deploy com sucesso:
 
 ## Overview
 
-This document explains how to configure the LuckyPennySoftware MediatR license key in the MedicWarehouse application.
+This document explains how to configure the LuckyPennySoftware MediatR license key in the PrimeCare Software application.
 
 ## What is LuckyPennySoftware.MediatR.License?
 
@@ -43677,7 +43677,7 @@ For issues with the license key or questions about licensing:
 
 ## Summary
 
-The MediatR license key from LuckyPennySoftware is now properly configured in the MedicWarehouse application:
+The MediatR license key from LuckyPennySoftware is now properly configured in the PrimeCare Software application:
 - ✅ Stored in configuration files (appsettings.json)
 - ✅ Managed by dedicated service (MediatRLicenseService)
 - ✅ Initialized at application startup
@@ -43702,7 +43702,7 @@ The MediatR license key from LuckyPennySoftware is now properly configured in th
 
 ## 📋 Visão Geral
 
-✅ **MIGRAÇÃO COMPLETA!** O MedicWarehouse agora usa PostgreSQL por padrão, com suporte retrocompatível para SQL Server.
+✅ **MIGRAÇÃO COMPLETA!** O PrimeCare Software agora usa PostgreSQL por padrão, com suporte retrocompatível para SQL Server.
 
 Este documento explica como a migração foi implementada e como usar o sistema com PostgreSQL.
 
@@ -43751,7 +43751,7 @@ Este documento explica como a migração foi implementada e como usar o sistema 
 # 1. Criar arquivo .env
 cat > .env << EOF
 POSTGRES_PASSWORD=postgres
-JWT_SECRET_KEY=MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!
+JWT_SECRET_KEY=PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!
 EOF
 
 # 2. Iniciar PostgreSQL e aplicação
@@ -43809,7 +43809,7 @@ O sistema detecta automaticamente qual banco usar baseado na connection string:
 Host=localhost;Port=5432;Database=medicwarehouse;Username=postgres;Password=postgres
 
 // SQL Server: Connection string tradicional (backward compatibility)
-Server=localhost,1433;Database=MedicWarehouse;User Id=sa;Password=...
+Server=localhost,1433;Database=PrimeCare Software;User Id=sa;Password=...
 ```
 
 ### Arquivos Modificados
@@ -43901,7 +43901,7 @@ psql -h localhost -U postgres -d medicwarehouse
 # Criar arquivo de configuração
 cat > migrate.load << EOF
 LOAD DATABASE
-  FROM mssql://sa:password@localhost/MedicWarehouse
+  FROM mssql://sa:password@localhost/PrimeCare Software
   INTO postgresql://postgres:postgres@localhost/medicwarehouse
   
   WITH include drop, create tables, create indexes, reset sequences,
@@ -44362,11 +44362,11 @@ Para questões ou suporte relacionado à implementação de transações, consul
 
 ## Visão Geral
 
-O Sistema de Chamados do MedicWarehouse permite que usuários abram tickets para reportar bugs, solicitar funcionalidades, obter suporte técnico e gerenciar questões financeiras. System owners podem gerenciar todos os chamados através de um quadro Kanban interativo.
+O Sistema de Chamados do PrimeCare Software permite que usuários abram tickets para reportar bugs, solicitar funcionalidades, obter suporte técnico e gerenciar questões financeiras. System owners podem gerenciar todos os chamados através de um quadro Kanban interativo.
 
 ## Funcionalidades Principais
 
-### Para Usuários (MedicWarehouse App)
+### Para Usuários (PrimeCare Software App)
 
 #### 1. Abertura de Chamados
 - **Botão Flutuante (FAB)**: Disponível em todas as telas do sistema
@@ -44481,7 +44481,7 @@ GET    /api/tickets/statistics         - Estatísticas
 
 ### Frontend
 
-#### MedicWarehouse App
+#### PrimeCare Software App
 ```typescript
 Componentes:
 - TicketFab: Botão flutuante com modal de criação
@@ -44715,7 +44715,7 @@ Para dúvidas ou problemas:
 
 ## License
 
-© 2024 MedicWarehouse. All rights reserved.
+© 2024 PrimeCare Software. All rights reserved.
 
 
 ---
@@ -45747,7 +45747,7 @@ Para problemas ou dúvidas sobre a migração:
 
 ## Resumo da Implementação
 
-Este documento descreve a implementação realizada para conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos médicos no sistema MedicWarehouse.
+Este documento descreve a implementação realizada para conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos médicos no sistema PrimeCare Software.
 
 ---
 
@@ -46258,7 +46258,7 @@ dotnet test --filter "FullyQualifiedName~DiagnosticHypothesisTests|FullyQualifie
 
 ## 📖 Resumo Executivo
 
-A Resolução CFM 1.821/2007 estabelece normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio dos documentos dos prontuários dos pacientes. Este documento mapeia todos os requisitos obrigatórios e o status de implementação no MedicWarehouse.
+A Resolução CFM 1.821/2007 estabelece normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio dos documentos dos prontuários dos pacientes. Este documento mapeia todos os requisitos obrigatórios e o status de implementação no PrimeCare Software.
 
 ---
 
@@ -47413,7 +47413,7 @@ PUT /api/medicalrecords/{id}
 
 ---
 
-**Documento Elaborado Por:** Equipe MedicWarehouse  
+**Documento Elaborado Por:** Equipe PrimeCare Software  
 **Data de Atualização:** Janeiro 2026  
 **Versão:** 1.0  
 **Status:** Oficial
@@ -47713,7 +47713,7 @@ The refactoring should be done incrementally to minimize disruption and ensure a
 
 ---
 
-# 📋 Plano de Desenvolvimento Priorizado - MedicWarehouse
+# 📋 Plano de Desenvolvimento Priorizado - PrimeCare Software
 
 > **Documento Consolidado:** Este documento unifica PLANO_DESENVOLVIMENTO_PRIORIZADO.md (Parte 1) e PLANO_DESENVOLVIMENTO_PRIORIZADO_PARTE2.md (Parte 2)
 
@@ -47727,7 +47727,7 @@ The refactoring should be done incrementally to minimize disruption and ensure a
 
 ## 🎯 Visão Executiva
 
-Este documento organiza TODAS as pendências do MedicWarehouse em uma ordem de prioridade clara, considerando:
+Este documento organiza TODAS as pendências do PrimeCare Software em uma ordem de prioridade clara, considerando:
 
 1. **Obrigatoriedade Legal** (CFM, ANVISA, Receita Federal, ANS)
 2. **Impacto no Negócio** (Aquisição de clientes, retenção, receita)
@@ -48582,7 +48582,7 @@ Este documento organiza TODAS as pendências do MedicWarehouse em uma ordem de p
 **Versão:** 1.0  
 **Status:** Pronto para execução
 
-**Este documento serve como roteiro detalhado de desenvolvimento do MedicWarehouse para 2025-2026, com foco em compliance regulatório e crescimento de mercado.**
+**Este documento serve como roteiro detalhado de desenvolvimento do PrimeCare Software para 2025-2026, com foco em compliance regulatório e crescimento de mercado.**
 
 # 📋 Plano de Desenvolvimento Priorizado - Parte 2
 ## Prioridades Médias e Baixas + Apps
@@ -49258,7 +49258,7 @@ public class SOAPMedicalRecord
 
 ## 🌐 APLICATIVOS WEB
 
-### MedicWarehouse App (Frontend Principal)
+### PrimeCare Software App (Frontend Principal)
 
 **Prioridade Alta:**
 1. Dashboard de Relatórios (4 semanas)
@@ -49415,7 +49415,7 @@ public class SOAPMedicalRecord
 
 # 🚀 Plano de Desenvolvimento - 6 Meses para Produção
 
-> **Objetivo:** Colocar o MedicWarehouse em produção e começar a gerar lucro em 6 meses  
+> **Objetivo:** Colocar o PrimeCare Software em produção e começar a gerar lucro em 6 meses  
 > **Perfil:** Desenvolvedor solo (owner)  
 > **Data de Início:** Janeiro 2025  
 > **Meta de Launch:** Junho 2025  
@@ -50168,7 +50168,7 @@ Como dev solo, você precisa ser **cirúrgico** nas prioridades:
 - [ ] Lista de leads qualificados (50-100)
 
 #### Suporte
-- [ ] Email de suporte configurado (suporte@medicwarehouse.com.br)
+- [ ] Email de suporte configurado (suporte@primecaresoftware.com.br)
 - [ ] Chat ao vivo (Crisp, Intercom ou Tawk.to)
 - [ ] Processos de onboarding documentados
 - [ ] Templates de resposta prontos
@@ -50362,7 +50362,7 @@ Em 6 meses você terá um produto no ar gerando receita recorrente. Em 12 meses,
 **Última atualização:** Janeiro 2025  
 **Versão:** 1.0  
 **Autor:** GitHub Copilot AI  
-**Para dúvidas:** suporte@medicwarehouse.com.br
+**Para dúvidas:** suporte@primecaresoftware.com.br
 
 
 ---
@@ -50393,9 +50393,9 @@ Em 6 meses você terá um produto no ar gerando receita recorrente. Em 12 meses,
 
 ---
 
-# 📱 Pendências de Desenvolvimento - Aplicativos MedicWarehouse
+# 📱 Pendências de Desenvolvimento - Aplicativos PrimeCare Software
 
-> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema MedicWarehouse.
+> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema PrimeCare Software.
 
 > **Última Atualização:** Novembro 2025  
 > **Status:** Em desenvolvimento ativo
@@ -50404,11 +50404,11 @@ Em 6 meses você terá um produto no ar gerando receita recorrente. Em 12 meses,
 
 ## 📊 Visão Geral do Ecossistema
 
-O MedicWarehouse possui **6 aplicativos** que compõem o ecossistema completo:
+O PrimeCare Software possui **6 aplicativos** que compõem o ecossistema completo:
 
 | Aplicativo | Tecnologia | Localização | Status |
 |------------|-----------|-------------|--------|
-| 🏥 **MedicWarehouse App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Beta |
+| 🏥 **PrimeCare Software App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Beta |
 | 🔧 **MW System Admin** | Angular 20 | `frontend/mw-system-admin` | ✅ Beta |
 | 🌐 **MW Site** | Angular 20 | `frontend/mw-site` | ✅ Em desenvolvimento |
 | 📚 **MW Docs** | Angular 20 | `frontend/mw-docs` | ✅ Produção |
@@ -50417,7 +50417,7 @@ O MedicWarehouse possui **6 aplicativos** que compõem o ecossistema completo:
 
 ---
 
-## 🏥 MedicWarehouse App (Frontend Principal)
+## 🏥 PrimeCare Software App (Frontend Principal)
 
 **Descrição:** Aplicativo principal para gestão de clínicas, pacientes, agendamentos e atendimentos.
 
@@ -50636,7 +50636,7 @@ frontend/mw-docs/src/app/
 
 ## 📱 iOS App (Swift/SwiftUI)
 
-**Descrição:** Aplicativo nativo iOS para acesso mobile ao sistema MedicWarehouse.
+**Descrição:** Aplicativo nativo iOS para acesso mobile ao sistema PrimeCare Software.
 
 **Tecnologias:**
 - Swift 5.9
@@ -50679,8 +50679,8 @@ frontend/mw-docs/src/app/
 ### 📁 Estrutura do Projeto
 
 ```
-mobile/ios/MedicWarehouse/
-├── MedicWarehouseApp.swift    # Entry point
+mobile/ios/PrimeCare Software/
+├── PrimeCare SoftwareApp.swift    # Entry point
 ├── ContentView.swift          # Root view
 ├── Views/
 │   ├── LoginView.swift        # Tela de login
@@ -50700,7 +50700,7 @@ mobile/ios/MedicWarehouse/
 
 ## 🤖 Android App (Kotlin/Jetpack Compose)
 
-**Descrição:** Aplicativo nativo Android para acesso mobile ao sistema MedicWarehouse.
+**Descrição:** Aplicativo nativo Android para acesso mobile ao sistema PrimeCare Software.
 
 **Tecnologias:**
 - Kotlin 1.9.20
@@ -50745,7 +50745,7 @@ mobile/ios/MedicWarehouse/
 ```
 mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 ├── MainActivity.kt           # Activity principal
-├── MedicWarehouseApp.kt     # Application class
+├── PrimeCare SoftwareApp.kt     # Application class
 ├── ui/
 │   ├── screens/
 │   │   ├── LoginScreen.kt    # Tela de login
@@ -50859,7 +50859,7 @@ mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 
 ---
 
-# 🤖 Prompts para Copilot - Desenvolvimento MedicWarehouse
+# 🤖 Prompts para Copilot - Desenvolvimento PrimeCare Software
 
 > **Objetivo:** Prompts estruturados para solicitar ao GitHub Copilot o desenvolvimento de cada etapa do plano de desenvolvimento, agilizando o processo e evitando erros.
 
@@ -50990,7 +50990,7 @@ Todos os prompts seguem este padrão:
 # Prompt para Copilot - CFM 1.821 - Etapa 1: Análise
 
 📋 CONTEXTO:
-Trabalho no MedicWarehouse, sistema de gestão para clínicas médicas (.NET 8 + Angular 20).
+Trabalho no PrimeCare Software, sistema de gestão para clínicas médicas (.NET 8 + Angular 20).
 Preciso implementar conformidade com Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
 
 🎯 OBJETIVO:
@@ -51072,11 +51072,11 @@ Por favor, crie documento completo baseado na Resolução CFM 1.821/2007.
 # Prompt para Copilot - CFM 1.821 - Etapa 2: Modelagem BD
 
 📋 CONTEXTO:
-MedicWarehouse (.NET 8, EF Core 8, PostgreSQL 15, Clean Architecture).
+PrimeCare Software (.NET 8, EF Core 8, PostgreSQL 15, Clean Architecture).
 Especificação CFM 1.821 está pronta. Preciso criar entidades de domínio.
 
 🎯 OBJETIVO:
-Criar/atualizar entidades em src/MedicWarehouse.Domain/Entities para suportar
+Criar/atualizar entidades em src/PrimeCare Software.Domain/Entities para suportar
 todos os campos obrigatórios CFM 1.821.
 
 🔧 REQUISITOS TÉCNICOS:
@@ -51084,7 +51084,7 @@ todos os campos obrigatórios CFM 1.821.
 1. Criar/atualizar entidades:
 
 ```csharp
-// src/MedicWarehouse.Domain/Entities/MedicalRecord.cs
+// src/PrimeCare Software.Domain/Entities/MedicalRecord.cs
 public class MedicalRecord : BaseEntity
 {
     // Relacionamentos
@@ -51212,7 +51212,7 @@ Por favor, crie as entidades de domínio completas.
 # Prompt para Copilot - NF-e - Etapa 1: Análise de Gateways
 
 📋 CONTEXTO:
-MedicWarehouse precisa emitir NF-e/NFS-e para clínicas ficarem em conformidade 
+PrimeCare Software precisa emitir NF-e/NFS-e para clínicas ficarem em conformidade 
 com Receita Federal. Preciso avaliar gateways de integração.
 
 🎯 OBJETIVO:
@@ -51310,7 +51310,7 @@ Por favor, crie análise comparativa completa de gateways NF-e/NFS-e.
 # Prompt para Copilot - LGPD - Etapa 1: Auditoria
 
 📋 CONTEXTO:
-MedicWarehouse armazena dados sensíveis de saúde. Preciso auditar conformidade
+PrimeCare Software armazena dados sensíveis de saúde. Preciso auditar conformidade
 com LGPD (Lei 13.709/2018).
 
 🎯 OBJETIVO:
@@ -51619,7 +51619,7 @@ Este documento cobre prompts para:
 ## 🎉 Pronto para Começar!
 
 Este documento contém prompts detalhados para acelerar o desenvolvimento das 
-tarefas mais críticas do MedicWarehouse.
+tarefas mais críticas do PrimeCare Software.
 
 ### Como Começar:
 
@@ -51654,11 +51654,11 @@ Sempre revise, valide e teste o código gerado, especialmente para tarefas de co
 
 ---
 
-# 📊 Análise Comparativa e Melhorias - MedicWarehouse
+# 📊 Análise Comparativa e Melhorias - PrimeCare Software
 
 > **Data:** Outubro 2025  
 > **Versão:** 1.0  
-> **Objetivo:** Análise comparativa com plataformas concorrentes e propostas de melhorias para o sistema MedicWarehouse
+> **Objetivo:** Análise comparativa com plataformas concorrentes e propostas de melhorias para o sistema PrimeCare Software
 
 ---
 
@@ -51676,7 +51676,7 @@ Sempre revise, valide e teste o código gerado, especialmente para tarefas de co
 
 ## 📄 Resumo Executivo
 
-O MedicWarehouse é um sistema robusto de gestão para clínicas médicas com arquitetura DDD bem implementada, desenvolvido em .NET 8 e Angular 18. Após análise comparativa detalhada com os principais concorrentes do mercado (Doctoralia, iClinic, Nuvem Saúde, SimplesVet, MedPlus, ClinicWeb, entre outros), identificamos oportunidades estratégicas de melhoria que podem posicionar o sistema como líder de mercado no segmento de gestão clínica.
+O PrimeCare Software é um sistema robusto de gestão para clínicas médicas com arquitetura DDD bem implementada, desenvolvido em .NET 8 e Angular 18. Após análise comparativa detalhada com os principais concorrentes do mercado (Doctoralia, iClinic, Nuvem Saúde, SimplesVet, MedPlus, ClinicWeb, entre outros), identificamos oportunidades estratégicas de melhoria que podem posicionar o sistema como líder de mercado no segmento de gestão clínica.
 
 ### Contexto do Mercado
 
@@ -51689,7 +51689,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 
 ### Principais Conclusões
 
-#### ✅ **Pontos Fortes do MedicWarehouse**
+#### ✅ **Pontos Fortes do PrimeCare Software**
 
 1. **Arquitetura Sólida**
    - DDD (Domain-Driven Design) bem implementado
@@ -51791,7 +51791,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 - Premium: R$ 235/mês - Tudo + Teleconsulta
 - Enterprise: Personalizado
 
-**Lições para MedicWarehouse:**
+**Lições para PrimeCare Software:**
 - Freemium funciona para aquisição
 - Marketplace é poderoso mas requer massa crítica
 - Integração com pagamento aumenta conversão
@@ -51825,7 +51825,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 
 **Diferencial:** Foco em compliance e gestão financeira
 
-**Lições para MedicWarehouse:**
+**Lições para PrimeCare Software:**
 - Compliance é diferencial competitivo
 - TISS é essencial para crescer
 - Suporte especializado justifica preço premium
@@ -51861,7 +51861,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 - Premium: R$ 189/mês
 - Plus: R$ 269/mês
 
-**Lições para MedicWarehouse:**
+**Lições para PrimeCare Software:**
 - Multi-especialidade amplia mercado
 - Templates específicos são valiosos
 - Marketing integrado é diferencial
@@ -51892,7 +51892,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 - Business: R$ 149/mês
 - Enterprise: R$ 299/mês
 
-**Lições para MedicWarehouse:**
+**Lições para PrimeCare Software:**
 - Verticalização tem valor
 - Nicho específico permite especialização
 - Integração com vendas (pet shop) aumenta ticket
@@ -51923,7 +51923,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 - Implementação customizada
 - Suporte dedicado
 
-**Lições para MedicWarehouse:**
+**Lições para PrimeCare Software:**
 - Mercado enterprise é lucrativo
 - Requer certificações específicas
 - Implementação é serviço adicional
@@ -51953,7 +51953,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 - Master: R$ 397/mês
 - (Todos incluem consultoria)
 
-**Lições para MedicWarehouse:**
+**Lições para PrimeCare Software:**
 - Consultoria agrega valor
 - Suporte diferenciado justifica preço
 - Treinamento reduz churn
@@ -51965,7 +51965,7 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 
 | Plataforma | Plano Básico | Plano Médio | Plano Premium | Enterprise |
 |------------|--------------|-------------|---------------|------------|
-| **MedicWarehouse** | R$ 190 (2 users) | R$ 240 (3 users) | R$ 320 (5 users) | Sob consulta |
+| **PrimeCare Software** | R$ 190 (2 users) | R$ 240 (3 users) | R$ 320 (5 users) | Sob consulta |
 | **Doctoralia** | Grátis | R$ 135 | R$ 235 | Personalizado |
 | **iClinic** | R$ 99 (1 user) | R$ 199 (3 users) | R$ 399 (ilimitado) | Sob consulta |
 | **Nuvem Saúde** | R$ 89 | R$ 129 | R$ 189 | R$ 269 |
@@ -51973,14 +51973,14 @@ O mercado de software para gestão de clínicas no Brasil movimenta aproximadame
 | **ClinicWeb** | R$ 147 | R$ 247 | R$ 397 | - |
 
 **Análise:**
-- MedicWarehouse está **bem posicionado** no mercado (mid-tier)
+- PrimeCare Software está **bem posicionado** no mercado (mid-tier)
 - Preços competitivos mas não são os mais baratos
 - Justifica-se pela robustez técnica e funcionalidades
 - Oportunidade: Criar plano mais econômico (< R$ 150) para aquisição
 
 ---
 
-## 📊 Análise do Sistema Atual - MedicWarehouse
+## 📊 Análise do Sistema Atual - PrimeCare Software
 
 ### Pontos Fortes Técnicos
 
@@ -53015,7 +53015,7 @@ Testes de segurança semestrais por empresa especializada.
 
 ## 🏆 Conclusão
 
-O MedicWarehouse possui uma **base técnica sólida** e **funcionalidades core bem implementadas**. A arquitetura DDD, multi-tenancy robusto e sistema de assinaturas SaaS são diferenciais competitivos fortes.
+O PrimeCare Software possui uma **base técnica sólida** e **funcionalidades core bem implementadas**. A arquitetura DDD, multi-tenancy robusto e sistema de assinaturas SaaS são diferenciais competitivos fortes.
 
 ### Principais Recomendações:
 
@@ -53027,7 +53027,7 @@ O MedicWarehouse possui uma **base técnica sólida** e **funcionalidades core b
 
 ### Diferenciais Competitivos Futuros:
 
-Com as melhorias propostas, o MedicWarehouse terá:
+Com as melhorias propostas, o PrimeCare Software terá:
 - ✅ Telemedicina nativa
 - ✅ Portal do paciente completo
 - ✅ Integração TISS (barreira de entrada)
@@ -53114,7 +53114,7 @@ Com as melhorias propostas, o MedicWarehouse terá:
 
 ---
 
-# 📋 Resumo da Análise de Melhorias - MedicWarehouse
+# 📋 Resumo da Análise de Melhorias - PrimeCare Software
 
 > **Data:** 27 de Outubro de 2025  
 > **Documento Completo:** [ANALISE_MELHORIAS_SISTEMA.md](ANALISE_MELHORIAS_SISTEMA.md)
@@ -53123,7 +53123,7 @@ Com as melhorias propostas, o MedicWarehouse terá:
 
 ## ✅ Tarefa Concluída
 
-Foi realizada uma análise completa e abrangente do código e regras de negócio do MedicWarehouse, comparando com as principais plataformas concorrentes do mercado e identificando melhorias e fluxos necessários para posicionar o sistema como líder de mercado.
+Foi realizada uma análise completa e abrangente do código e regras de negócio do PrimeCare Software, comparando com as principais plataformas concorrentes do mercado e identificando melhorias e fluxos necessários para posicionar o sistema como líder de mercado.
 
 ---
 
@@ -53167,7 +53167,7 @@ Foi realizada uma análise completa e abrangente do código e regras de negócio
 
 1. **Resumo Executivo**
    - Contexto do mercado (R$ 800M anuais)
-   - Pontos fortes do MedicWarehouse
+   - Pontos fortes do PrimeCare Software
    - Gaps críticos identificados
 
 2. **Análise de Concorrentes** (6 plataformas)
@@ -53214,7 +53214,7 @@ Foi realizada uma análise completa e abrangente do código e regras de negócio
 
 ## 🎯 Principais Descobertas
 
-### ✅ Pontos Fortes do MedicWarehouse
+### ✅ Pontos Fortes do PrimeCare Software
 
 1. **Arquitetura Técnica Excelente**
    - DDD bem implementado
@@ -53318,7 +53318,7 @@ Foi realizada uma análise completa e abrangente do código e regras de negócio
 
 ## 📋 Comparativo de Funcionalidades
 
-| Funcionalidade | MedicWarehouse | Doctoralia | iClinic | Nuvem Saúde |
+| Funcionalidade | PrimeCare Software | Doctoralia | iClinic | Nuvem Saúde |
 |----------------|----------------|------------|---------|-------------|
 | **Agenda Online** | ✅ | ✅ | ✅ | ✅ |
 | **Prontuário Eletrônico** | ✅ | ✅ | ✅ | ✅ |
@@ -53357,7 +53357,7 @@ Foi realizada uma análise completa e abrangente do código e regras de negócio
 
 ## 🏆 Posicionamento Final
 
-Com as melhorias implementadas, o **MedicWarehouse** estará posicionado para se tornar **líder de mercado** em gestão clínica no Brasil, com:
+Com as melhorias implementadas, o **PrimeCare Software** estará posicionado para se tornar **líder de mercado** em gestão clínica no Brasil, com:
 
 ✅ **Telemedicina nativa** (diferencial pós-COVID)  
 ✅ **Portal do paciente completo** (melhor experiência)  
@@ -53421,8 +53421,8 @@ Com as melhorias implementadas, o **MedicWarehouse** estará posicionado para se
 ## 📞 Suporte
 
 Para dúvidas ou discussões sobre esta análise:
-- **Email:** contato@medicwarehouse.com
-- **Issues:** https://github.com/MedicWarehouse/MW.Code/issues
+- **Email:** contato@primecaresoftware.com
+- **Issues:** https://github.com/PrimeCare Software/MW.Code/issues
 
 ---
 
@@ -53444,7 +53444,7 @@ Para dúvidas ou discussões sobre esta análise:
 
 ---
 
-# 📊 Resumo Completo do Sistema MedicWarehouse
+# 📊 Resumo Completo do Sistema PrimeCare Software
 
 > **Data:** Novembro 2024  
 > **Status:** Sistema pronto para testes locais  
@@ -53454,7 +53454,7 @@ Para dúvidas ou discussões sobre esta análise:
 
 ## 🎯 Visão Geral
 
-O **MedicWarehouse** é um sistema SaaS completo para gestão de consultórios médicos, construído com:
+O **PrimeCare Software** é um sistema SaaS completo para gestão de consultórios médicos, construído com:
 - **Backend:** .NET 8 + PostgreSQL
 - **Frontend:** Angular 20
 - **Arquitetura:** DDD (Domain-Driven Design)
@@ -53489,7 +53489,7 @@ O **MedicWarehouse** é um sistema SaaS completo para gestão de consultórios m
   - `DELETE /api/data-seeder/clear-database`
 
 #### Frontend Applications
-- ✅ **MedicWarehouse App** (porta 4200) - App principal
+- ✅ **PrimeCare Software App** (porta 4200) - App principal
 - ✅ **MW System Admin** (porta 4201) - Painel administrativo
 - ✅ **Angular 20** configurado
 - ✅ **Environments** configurados para desenvolvimento
@@ -53521,7 +53521,7 @@ Certifique-se de ter instalado:
 
 ```bash
 # Clone (se ainda não fez)
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # O arquivo .env já está configurado para desenvolvimento local
@@ -53613,7 +53613,7 @@ O script testa automaticamente 8 endpoints principais.
 
 ### 8️⃣ (Opcional) Iniciar Frontends
 
-#### MedicWarehouse App
+#### PrimeCare Software App
 
 ```bash
 cd frontend/medicwarehouse-app
@@ -53658,7 +53658,7 @@ Quando você executa `POST /api/data-seeder/seed-demo`, são criados:
 | Entidade | Quantidade | Detalhes |
 |----------|-----------|----------|
 | **Planos** | 5 | Trial, Básico, Standard, Premium, Enterprise |
-| **Clínica** | 1 | Clínica Demo MedicWarehouse |
+| **Clínica** | 1 | Clínica Demo PrimeCare Software |
 | **Assinatura** | 1 | Plano Standard ativo |
 | **Proprietário** | 1 | owner.demo |
 | **Usuários** | 3 | admin, dr.silva, recep.maria |
@@ -53890,7 +53890,7 @@ Execute este checklist para confirmar que tudo está funcionando:
 - **Swagger:** http://localhost:5000/swagger
 - **App Principal:** http://localhost:4200
 - **System Admin:** http://localhost:4201
-- **GitHub:** https://github.com/MedicWarehouse/MW.Code
+- **GitHub:** https://github.com/PrimeCare Software/MW.Code
 
 ### Comandos Úteis
 ```bash
@@ -53915,7 +53915,7 @@ curl -X POST http://localhost:5000/api/data-seeder/seed-demo
 
 ---
 
-**🎊 Parabéns! Você tem tudo pronto para rodar e testar o MedicWarehouse hoje mesmo!**
+**🎊 Parabéns! Você tem tudo pronto para rodar e testar o PrimeCare Software hoje mesmo!**
 
 ---
 
@@ -54129,9 +54129,9 @@ Se você identificar algum problema com a documentação ou links quebrados, por
 
 ---
 
-# 📚 Índice de Documentação - MedicWarehouse
+# 📚 Índice de Documentação - PrimeCare Software
 
-Este documento serve como guia de navegação para toda a documentação do sistema MedicWarehouse.
+Este documento serve como guia de navegação para toda a documentação do sistema PrimeCare Software.
 
 ---
 
@@ -54209,7 +54209,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 |-----------|-----------|------------------|
 | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) | Guia rápido do Postman | 5 min |
 | [POSTMAN_IMPORT_GUIDE.md](./POSTMAN_IMPORT_GUIDE.md) | Como importar collection | 3 min |
-| [MedicWarehouse-Postman-Collection.json](./MedicWarehouse-Postman-Collection.json) | Collection do Postman | - |
+| [PrimeCare Software-Postman-Collection.json](./PrimeCare Software-Postman-Collection.json) | Collection do Postman | - |
 
 ### 🌐 Frontend e Integração
 
@@ -54312,7 +54312,7 @@ MW.Code/
 │
 ├── 🧪 TESTES E API
 │   ├── POSTMAN_IMPORT_GUIDE.md
-│   └── MedicWarehouse-Postman-Collection.json
+│   └── PrimeCare Software-Postman-Collection.json
 │
 └── 🌐 FRONTEND
     ├── FRONTEND_INTEGRATION_GUIDE.md
@@ -54397,7 +54397,7 @@ Ao adicionar nova documentação:
 Se não encontrar o que procura:
 1. Verifique o [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) para visão geral
 2. Consulte o [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) para dados de teste
-3. Veja a [Postman Collection](./MedicWarehouse-Postman-Collection.json) para exemplos de API
+3. Veja a [Postman Collection](./PrimeCare Software-Postman-Collection.json) para exemplos de API
 
 ---
 
@@ -54434,11 +54434,11 @@ Para novos desenvolvedores:
 
 ---
 
-# Glossário de Termos Empresariais - MedicWarehouse
+# Glossário de Termos Empresariais - PrimeCare Software
 
 ## 📚 Introdução
 
-Este documento foi criado para ajudar você a entender os **termos empresariais e de negócio** utilizados no sistema MedicWarehouse. Se você não tem familiaridade com conceitos da área empresarial, este guia irá explicar cada termo de forma clara e prática, para que possa estudar e aplicar esses conhecimentos no seu negócio.
+Este documento foi criado para ajudar você a entender os **termos empresariais e de negócio** utilizados no sistema PrimeCare Software. Se você não tem familiaridade com conceitos da área empresarial, este guia irá explicar cada termo de forma clara e prática, para que possa estudar e aplicar esses conhecimentos no seu negócio.
 
 ---
 
@@ -54449,7 +54449,7 @@ Este documento foi criado para ajudar você a entender os **termos empresariais 
 
 **Exemplo prático:** 
 - Netflix é um SaaS para entretenimento
-- MedicWarehouse é um SaaS para gestão de clínicas médicas
+- PrimeCare Software é um SaaS para gestão de clínicas médicas
 - Cliente paga mensalidade e acessa o sistema pela internet
 
 **Vantagens:**
@@ -54464,7 +54464,7 @@ Este documento foi criado para ajudar você a entender os **termos empresariais 
 **O que é:** Arquitetura onde um único sistema atende múltiplos clientes (tenants), mantendo os dados de cada um totalmente separados e seguros.
 
 **Exemplo prático:**
-- 100 clínicas usam o mesmo MedicWarehouse
+- 100 clínicas usam o mesmo PrimeCare Software
 - Cada clínica só vê seus próprios dados
 - Clínica A não consegue acessar dados da Clínica B
 - É como um prédio com vários apartamentos (tenants)
@@ -54613,7 +54613,7 @@ ROI = [(30.000 - 10.000) / 10.000] × 100 = 200%
 ### Trial (Período de Teste)
 **O que é:** Período gratuito onde o cliente pode testar o sistema antes de pagar.
 
-**No MedicWarehouse:**
+**No PrimeCare Software:**
 - 15 dias gratuitos
 - Recursos limitados
 - Não precisa cartão de crédito
@@ -54629,7 +54629,7 @@ ROI = [(30.000 - 10.000) / 10.000] × 100 = 200%
 ### Upgrade (Melhoria de Plano)
 **O que é:** Quando o cliente muda para um plano mais caro com mais recursos.
 
-**Como funciona no MedicWarehouse:**
+**Como funciona no PrimeCare Software:**
 ```
 Cliente no Basic (R$ 190) → Premium (R$ 320)
 - Diferença: R$ 130
@@ -54648,7 +54648,7 @@ Cliente no Basic (R$ 190) → Premium (R$ 320)
 ### Downgrade (Redução de Plano)
 **O que é:** Quando o cliente muda para um plano mais barato com menos recursos.
 
-**Como funciona no MedicWarehouse:**
+**Como funciona no PrimeCare Software:**
 ```
 Cliente no Premium (R$ 320) → Basic (R$ 190)
 - Mudança agendada para próximo vencimento
@@ -54667,7 +54667,7 @@ Cliente no Premium (R$ 320) → Basic (R$ 190)
 ### Freeze (Congelamento)
 **O que é:** Pausar a assinatura por um período determinado.
 
-**No MedicWarehouse:**
+**No PrimeCare Software:**
 - Duração: 1 mês fixo
 - Suspende cobrança
 - Bloqueia acesso ao sistema
@@ -54683,7 +54683,7 @@ Cliente no Premium (R$ 320) → Basic (R$ 190)
 ### Payment Overdue (Pagamento Atrasado)
 **O que é:** Quando o pagamento não foi realizado na data de vencimento.
 
-**Fluxo no MedicWarehouse:**
+**Fluxo no PrimeCare Software:**
 ```
 1. Vencimento passa
 2. Status → PaymentOverdue
@@ -54715,7 +54715,7 @@ Cliente no Premium (R$ 320) → Basic (R$ 190)
 ### RBAC (Role-Based Access Control / Controle de Acesso Baseado em Funções)
 **O que é:** Sistema que define o que cada tipo de usuário pode fazer.
 
-**Roles (Funções) no MedicWarehouse:**
+**Roles (Funções) no PrimeCare Software:**
 ```
 1. SystemAdmin (Administrador do Sistema)
    - Gerencia TODAS as clínicas
@@ -54767,7 +54767,7 @@ Receptionist pode:
 ### Onboarding (Integração)
 **O que é:** Processo de apresentar o sistema ao novo cliente.
 
-**Etapas no MedicWarehouse:**
+**Etapas no PrimeCare Software:**
 ```
 1. Cadastro inicial da clínica
 2. Tutorial das funcionalidades
@@ -54801,7 +54801,7 @@ Receptionist pode:
 ### KPI (Key Performance Indicator / Indicador-Chave de Desempenho)
 **O que é:** Métricas que mostram se o negócio está indo bem.
 
-**KPIs do MedicWarehouse:**
+**KPIs do PrimeCare Software:**
 ```
 1. Taxa de ocupação de agenda
    - Quantos horários foram preenchidos
@@ -54844,7 +54844,7 @@ Receptionist pode:
 ### Funnel (Funil de Vendas)
 **O que é:** Jornada do cliente desde conhecer até comprar.
 
-**Funil do MedicWarehouse:**
+**Funil do PrimeCare Software:**
 ```
 1. Visitante (topo do funil)
    ↓ (conversão)
@@ -55095,7 +55095,7 @@ Receita cresce linear, custo cresce devagar!
 - Cliente pode pedir exclusão
 - Multas pesadas para quem descumprir
 
-**No MedicWarehouse:**
+**No PrimeCare Software:**
 - Dados médicos são sensíveis
 - Isolamento entre clínicas (multitenant)
 - Criptografia de dados
@@ -55241,7 +55241,7 @@ Receita cresce linear, custo cresce devagar!
 - [`README.md`](README.md) - Visão geral do projeto
 
 ### Contato
-- 📧 Entre em contato com a equipe MedicWarehouse
+- 📧 Entre em contato com a equipe PrimeCare Software
 - 💬 Participe de comunidades de empreendedorismo
 - 📚 Continue estudando e praticando
 
@@ -55251,7 +55251,7 @@ Receita cresce linear, custo cresce devagar!
 
 **Versão:** 1.0
 
-**Mantido por:** Equipe MedicWarehouse
+**Mantido por:** Equipe PrimeCare Software
 
 ---
 
@@ -55283,9 +55283,9 @@ Receita cresce linear, custo cresce devagar!
 
 ## 📞 Informações de Contato
 
-**MedicWarehouse**
-- Email: contato@medicwarehouse.com
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+**PrimeCare Software**
+- Email: contato@primecaresoftware.com
+- GitHub: https://github.com/PrimeCare Software/MW.Code
 
 ---
 

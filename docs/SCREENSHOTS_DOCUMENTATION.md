@@ -1,12 +1,12 @@
 # 📸 Documentação Visual - Screenshots das Telas
 
-> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do MedicWarehouse.
+> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do PrimeCare Software.
 
 > **Última Atualização:** Novembro 2025
 
 ---
 
-## 🏥 MedicWarehouse App (Frontend Principal)
+## 🏥 PrimeCare Software App (Frontend Principal)
 
 ### 1. Tela de Login
 

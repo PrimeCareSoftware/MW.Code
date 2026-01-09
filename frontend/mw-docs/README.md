@@ -1,6 +1,6 @@
-# 📚 MedicWarehouse Docs - Central de Documentação
+# 📚 PrimeCare Software Docs - Central de Documentação
 
-Aplicação Angular standalone criada para centralizar e facilitar a consulta de toda a documentação do projeto MedicWarehouse.
+Aplicação Angular standalone criada para centralizar e facilitar a consulta de toda a documentação do projeto PrimeCare Software.
 
 ## 🎯 Objetivo
 
@@ -281,7 +281,7 @@ Para contribuir com melhorias:
 
 ## 📄 Licença
 
-Este projeto faz parte do MedicWarehouse e segue a mesma licença do projeto principal.
+Este projeto faz parte do PrimeCare Software e segue a mesma licença do projeto principal.
 
 ## 📞 Suporte
 
@@ -289,4 +289,4 @@ Para dúvidas ou problemas, consulte a documentação principal ou entre em cont
 
 ---
 
-**MedicWarehouse** © 2025 - Sistema de Gestão Médica
+**PrimeCare Software** © 2025 - Sistema de Gestão Médica

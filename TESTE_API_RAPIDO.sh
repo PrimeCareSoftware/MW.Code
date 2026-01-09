@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script de Teste Rápido da API MedicWarehouse
+# Script de Teste Rápido da API PrimeCare Software
 # Este script testa os endpoints principais da API
 
 set -e
@@ -17,7 +17,7 @@ API_URL="http://localhost:5000/api"
 TENANT_ID="demo-clinic-001"
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  MedicWarehouse - Teste Rápido de API                 ║${NC}"
+echo -e "${BLUE}║  PrimeCare Software - Teste Rápido de API                 ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""
 

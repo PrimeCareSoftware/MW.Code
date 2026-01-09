@@ -1,6 +1,6 @@
 # 🚀 Plano de Desenvolvimento - 6 Meses para Produção
 
-> **Objetivo:** Colocar o MedicWarehouse em produção e começar a gerar lucro em 6 meses  
+> **Objetivo:** Colocar o PrimeCare Software em produção e começar a gerar lucro em 6 meses  
 > **Perfil:** Desenvolvedor solo (owner)  
 > **Data de Início:** Janeiro 2025  
 > **Meta de Launch:** Junho 2025  
@@ -753,7 +753,7 @@ Como dev solo, você precisa ser **cirúrgico** nas prioridades:
 - [ ] Lista de leads qualificados (50-100)
 
 #### Suporte
-- [ ] Email de suporte configurado (suporte@medicwarehouse.com.br)
+- [ ] Email de suporte configurado (suporte@primecaresoftware.com.br)
 - [ ] Chat ao vivo (Crisp, Intercom ou Tawk.to)
 - [ ] Processos de onboarding documentados
 - [ ] Templates de resposta prontos
@@ -947,4 +947,4 @@ Em 6 meses você terá um produto no ar gerando receita recorrente. Em 12 meses,
 **Última atualização:** Janeiro 2025  
 **Versão:** 1.0  
 **Autor:** GitHub Copilot AI  
-**Para dúvidas:** suporte@medicwarehouse.com.br
+**Para dúvidas:** suporte@primecaresoftware.com.br

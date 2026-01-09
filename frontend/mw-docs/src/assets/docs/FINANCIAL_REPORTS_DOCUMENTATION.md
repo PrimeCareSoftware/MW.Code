@@ -1,8 +1,8 @@
-# Sistema de Gestão Financeira e Relatórios - MedicWarehouse
+# Sistema de Gestão Financeira e Relatórios - PrimeCare Software
 
 ## 📊 Visão Geral
 
-O sistema de gestão financeira e relatórios do MedicWarehouse oferece controle completo sobre receitas, despesas e análises operacionais. Com dashboards intuitivos e relatórios detalhados, você pode tomar decisões baseadas em dados reais.
+O sistema de gestão financeira e relatórios do PrimeCare Software oferece controle completo sobre receitas, despesas e análises operacionais. Com dashboards intuitivos e relatórios detalhados, você pode tomar decisões baseadas em dados reais.
 
 ---
 

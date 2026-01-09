@@ -1,4 +1,4 @@
-# 📊 Resumo Técnico Completo - MedicWarehouse
+# 📊 Resumo Técnico Completo - PrimeCare Software
 
 > **Última Atualização:** Janeiro 2026  
 > **Versão do Sistema:** 2.0  
@@ -8,7 +8,7 @@
 
 ## 🎯 Visão Geral Executiva
 
-O **MedicWarehouse** é um **sistema SaaS multitenant** completo para gestão de consultórios médicos, odontológicos e clínicas de saúde, construído com tecnologias modernas e arquitetura robusta.
+O **PrimeCare Software** é um **sistema SaaS multitenant** completo para gestão de consultórios médicos, odontológicos e clínicas de saúde, construído com tecnologias modernas e arquitetura robusta.
 
 ### Números do Projeto
 
@@ -131,7 +131,7 @@ frontend/
 ```
 mobile/
 ├── ios/                      # App iOS nativo
-│   ├── MedicWarehouse/      # Código Swift/SwiftUI
+│   ├── PrimeCare Software/      # Código Swift/SwiftUI
 │   ├── Models/              # Models de dados
 │   ├── Services/            # API services
 │   ├── ViewModels/          # MVVM ViewModels
@@ -707,7 +707,7 @@ telemedicine/
 ### Para Testers
 1. Execute seed de dados demo: `POST /api/data-seeder/seed-demo`
 2. Use credenciais: `admin / Admin@123`
-3. Importe Postman Collection: `MedicWarehouse-Postman-Collection.json`
+3. Importe Postman Collection: `PrimeCare Software-Postman-Collection.json`
 4. Teste endpoints via Swagger ou Postman
 
 **Guia completo:** `docs/SEEDER_GUIDE.md`
@@ -746,9 +746,9 @@ telemedicine/
 
 ## 📞 Suporte e Contato
 
-- **GitHub:** https://github.com/MedicWarehouse/MW.Code
-- **Issues:** https://github.com/MedicWarehouse/MW.Code/issues
-- **Email:** contato@medicwarehouse.com
+- **GitHub:** https://github.com/PrimeCare Software/MW.Code
+- **Issues:** https://github.com/PrimeCare Software/MW.Code/issues
+- **Email:** contato@primecaresoftware.com
 - **Documentação:** `docs/DOCUMENTATION_INDEX.md`
 
 ---
@@ -817,5 +817,5 @@ telemedicine/
 ---
 
 **Documento gerado em:** Janeiro 2026  
-**Responsável:** Equipe MedicWarehouse  
+**Responsável:** Equipe PrimeCare Software  
 **Versão:** 2.0

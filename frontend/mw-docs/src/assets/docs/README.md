@@ -1,6 +1,6 @@
-# MedicWarehouse - Sistema de Gestão para Consultórios Médicos
+# PrimeCare Software - Sistema de Gestão para Consultórios Médicos
 
-[![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
+[![CI - Test Frontend e Backend](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
@@ -88,7 +88,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 📈 Análise e Melhorias
 
-> 📄 **[ANÁLISE COMPARATIVA E MELHORIAS](ANALISE_MELHORIAS_SISTEMA.md)** - Análise detalhada do sistema MedicWarehouse comparado com principais concorrentes de mercado (Doctoralia, iClinic, Nuvem Saúde, etc.), gaps identificados e roadmap de melhorias propostas para 2025-2026. Inclui análise de funcionalidades, experiência do usuário, arquitetura técnica e projeções de ROI.
+> 📄 **[ANÁLISE COMPARATIVA E MELHORIAS](ANALISE_MELHORIAS_SISTEMA.md)** - Análise detalhada do sistema PrimeCare Software comparado com principais concorrentes de mercado (Doctoralia, iClinic, Nuvem Saúde, etc.), gaps identificados e roadmap de melhorias propostas para 2025-2026. Inclui análise de funcionalidades, experiência do usuário, arquitetura técnica e projeções de ROI.
 
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
@@ -158,7 +158,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ```bash
 # Clone o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Execute com Docker Compose
@@ -214,7 +214,7 @@ docker run -d \
 # Criar o banco de dados
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse;"
+  -Q "CREATE DATABASE PrimeCare Software;"
 ```
 
 ## 📖 Documentação da API
@@ -327,7 +327,7 @@ Este documento inclui:
 
 ## 🔐 Segurança
 
-O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados sensíveis:
+O PrimeCare Software implementa múltiplas camadas de segurança para proteger dados sensíveis:
 
 ### Implementações de Segurança
 
@@ -405,12 +405,12 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 📞 Contato
 
-- **Projeto**: MedicWarehouse
-- **Email**: contato@medicwarehouse.com
-- **GitHub**: [https://github.com/MedicWarehouse/MW.Code](https://github.com/MedicWarehouse/MW.Code)
+- **Projeto**: PrimeCare Software
+- **Email**: contato@primecaresoftware.com
+- **GitHub**: [https://github.com/PrimeCare Software/MW.Code](https://github.com/PrimeCare Software/MW.Code)
 ## 🌐 MW.Site - Marketing Website
 
-**Novo!** Site de marketing e contratação do MedicWarehouse SaaS.
+**Novo!** Site de marketing e contratação do PrimeCare Software SaaS.
 
 ### Características
 

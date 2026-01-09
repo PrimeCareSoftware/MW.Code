@@ -1,7 +1,7 @@
-# 📱 Fluxo Completo do Sistema MedicWarehouse
+# 📱 Fluxo Completo do Sistema PrimeCare Software
 ## Do Site à Conclusão da Consulta
 
-> **Objetivo:** Este documento apresenta o fluxo completo do sistema MedicWarehouse, desde a primeira visita ao site até a conclusão de uma consulta médica, incluindo screenshots e diagramas visuais de cada etapa.
+> **Objetivo:** Este documento apresenta o fluxo completo do sistema PrimeCare Software, desde a primeira visita ao site até a conclusão de uma consulta médica, incluindo screenshots e diagramas visuais de cada etapa.
 
 > **Última Atualização:** Dezembro 2025
 
@@ -109,4 +109,4 @@ Para informações detalhadas sobre cada tela e fluxo:
 
 ---
 
-**© 2025 MedicWarehouse - Todos os direitos reservados**
+**© 2025 PrimeCare Software - Todos os direitos reservados**

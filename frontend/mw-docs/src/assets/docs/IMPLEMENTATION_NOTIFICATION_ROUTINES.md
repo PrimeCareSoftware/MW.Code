@@ -346,4 +346,4 @@ A implementação do Sistema de Rotinas de Notificação Configuráveis está **
 
 **Versão**: 1.0.0
 **Data**: 10 de Outubro de 2025
-**Equipe**: MedicWarehouse Development Team
+**Equipe**: PrimeCare Software Development Team

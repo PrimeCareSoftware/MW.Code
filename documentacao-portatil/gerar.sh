@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script para gerar documentação portátil do MedicWarehouse
+# Script para gerar documentação portátil do PrimeCare Software
 # Pode ser executado de qualquer lugar do repositório
 
 # Cores para output
@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  📱 Gerador de Documentação Portátil - MedicWarehouse  ║${NC}"
+echo -e "${BLUE}║  📱 Gerador de Documentação Portátil - PrimeCare Software  ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -40,8 +40,8 @@ echo ""
 echo -e "${GREEN}✅ Concluído!${NC}"
 echo ""
 echo -e "${BLUE}📖 Arquivos gerados:${NC}"
-echo -e "   - MedicWarehouse-Documentacao-Completa.md"
-echo -e "   - MedicWarehouse-Documentacao-Completa.html"
+echo -e "   - PrimeCare Software-Documentacao-Completa.md"
+echo -e "   - PrimeCare Software-Documentacao-Completa.html"
 echo ""
 echo -e "${BLUE}💡 Próximos passos:${NC}"
 echo -e "   1. Abra o arquivo HTML no navegador"

@@ -239,7 +239,7 @@ SESSION_EXPIRATION_HOURS=24
 
 ## 📝 Licença
 
-Propriedade de MedicWarehouse
+Propriedade de PrimeCare Software
 
 ## 📞 Suporte
 

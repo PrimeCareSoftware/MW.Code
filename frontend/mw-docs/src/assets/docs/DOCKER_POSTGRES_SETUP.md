@@ -1,6 +1,6 @@
 # 🐳 Docker PostgreSQL Setup Guide
 
-Este guia fornece instruções completas para configurar e executar o MedicWarehouse com PostgreSQL usando Docker.
+Este guia fornece instruções completas para configurar e executar o PrimeCare Software com PostgreSQL usando Docker.
 
 ## 📋 Pré-requisitos
 
@@ -18,7 +18,7 @@ Crie um arquivo `.env` na raiz do projeto:
 ```bash
 # .env
 POSTGRES_PASSWORD=MedicW@rehouse2024!
-JWT_SECRET_KEY=MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!
+JWT_SECRET_KEY=PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!
 ```
 
 ### 2. Iniciar PostgreSQL e a Aplicação

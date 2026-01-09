@@ -100,7 +100,7 @@ namespace MedicSoft.Api.Controllers
                 tenantId = "demo-clinic-001",
                 clinic = new
                 {
-                    name = "Clínica Demo MedicWarehouse",
+                    name = "Clínica Demo PrimeCare Software",
                     tradeName = "Clínica Demo"
                 },
                 users = new[]

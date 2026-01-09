@@ -16,7 +16,7 @@ export const SAMPLE_TESTIMONIALS: Testimonial[] = [
     clinicName: 'Clínica Saúde Total',
     role: 'Médico Cardiologista',
     rating: 5,
-    comment: 'O MedicWarehouse transformou a gestão do meu consultório. A interface é intuitiva e o sistema de agendamentos é excelente!',
+    comment: 'O PrimeCare Software transformou a gestão do meu consultório. A interface é intuitiva e o sistema de agendamentos é excelente!',
     date: new Date('2025-09-15')
   },
   {

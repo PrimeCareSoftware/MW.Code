@@ -2,7 +2,7 @@
 
 ## 📱 Visão Geral
 
-Conforme solicitado, foram criados aplicativos móveis nativos para **iOS** (usando Xcode e Swift) e **Android** (usando Kotlin) do sistema MedicWarehouse, com interfaces modernas e atraentes para atrair novos usuários.
+Conforme solicitado, foram criados aplicativos móveis nativos para **iOS** (usando Xcode e Swift) e **Android** (usando Kotlin) do sistema PrimeCare Software, com interfaces modernas e atraentes para atrair novos usuários.
 
 ## ✅ O Que Foi Implementado
 
@@ -32,8 +32,8 @@ Conforme solicitado, foram criados aplicativos móveis nativos para **iOS** (usa
 
 **Estrutura do Projeto**:
 ```
-mobile/ios/MedicWarehouse/
-├── MedicWarehouseApp.swift          # Entry point
+mobile/ios/PrimeCare Software/
+├── PrimeCare SoftwareApp.swift          # Entry point
 ├── ContentView.swift                # Root view
 ├── Views/
 │   ├── LoginView.swift              # Tela de login
@@ -73,7 +73,7 @@ mobile/ios/MedicWarehouse/
 ```
 mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 ├── MainActivity.kt                   # Activity principal
-├── MedicWarehouseApp.kt             # Application class
+├── PrimeCare SoftwareApp.kt             # Application class
 ├── ui/
 │   ├── screens/
 │   │   ├── LoginScreen.kt           # Tela de login
@@ -146,7 +146,7 @@ Ambos os aplicativos seguem um design system consistente e moderno:
 
 ## 🔌 Integração com a API
 
-Ambos os aplicativos consomem a API REST existente do MedicWarehouse:
+Ambos os aplicativos consomem a API REST existente do PrimeCare Software:
 
 ### Endpoints Utilizados
 
@@ -211,7 +211,7 @@ GET  /api/appointments/agenda     - Agenda do dia
 
 ```bash
 cd mobile/ios
-open MedicWarehouse.xcodeproj
+open PrimeCare Software.xcodeproj
 
 # No Xcode:
 # 1. Configure o IP da API (se necessário)

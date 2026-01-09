@@ -2,7 +2,7 @@
 
 ## 🎉 Project Complete
 
-Este documento resume a implementação completa do projeto MW.Site - o site de marketing e contratação do MedicWarehouse SaaS.
+Este documento resume a implementação completa do projeto MW.Site - o site de marketing e contratação do PrimeCare Software SaaS.
 
 ## ✅ Entregas Realizadas
 
@@ -240,10 +240,10 @@ Embora todos os requisitos tenham sido atendidos, melhorias futuras incluem:
 
 ## 📞 Informações de Contato
 
-**MedicWarehouse**
-- Email: contato@medicwarehouse.com
+**PrimeCare Software**
+- Email: contato@primecaresoftware.com
 - WhatsApp: +55 11 99999-9999
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- GitHub: https://github.com/PrimeCare Software/MW.Code
 
 ## 🏆 Conclusão
 
@@ -253,5 +253,5 @@ O projeto MW.Site foi implementado com sucesso, atendendo a todos os requisitos 
 
 ---
 
-*Desenvolvido com ❤️ pela equipe MedicWarehouse*
+*Desenvolvido com ❤️ pela equipe PrimeCare Software*
 *Data: Outubro 2025*

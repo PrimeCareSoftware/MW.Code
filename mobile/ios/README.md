@@ -1,12 +1,12 @@
-# MedicWarehouse iOS App
+# PrimeCare Software iOS App
 
-Aplicativo iOS nativo para o sistema MedicWarehouse, desenvolvido com SwiftUI e integrando com a API RESTful do backend.
+Aplicativo iOS nativo para o sistema PrimeCare Software, desenvolvido com SwiftUI e integrando com a API RESTful do backend.
 
 ## 📱 Características
 
 - **SwiftUI**: Interface moderna e nativa para iOS 17+
 - **MVVM Architecture**: Arquitetura limpa e testável
-- **API Integration**: Consumo completo da API MedicWarehouse
+- **API Integration**: Consumo completo da API PrimeCare Software
 - **Async/Await**: Código assíncrono moderno e seguro
 - **JWT Authentication**: Autenticação segura com tokens
 - **Responsive Design**: Suporte para iPhone e iPad
@@ -56,12 +56,12 @@ Aplicativo iOS nativo para o sistema MedicWarehouse, desenvolvido com SwiftUI e 
 
 ```bash
 cd mobile/ios
-open MedicWarehouse.xcodeproj
+open PrimeCare Software.xcodeproj
 ```
 
 ### 2. Configurar a API Base URL
 
-Edite o arquivo `MedicWarehouse/Services/NetworkManager.swift` e configure a URL da API:
+Edite o arquivo `PrimeCare Software/Services/NetworkManager.swift` e configure a URL da API:
 
 ```swift
 // Para desenvolvimento local
@@ -102,8 +102,8 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 ## 📂 Estrutura do Projeto
 
 ```
-MedicWarehouse/
-├── MedicWarehouseApp.swift      # Entry point
+PrimeCare Software/
+├── PrimeCare SoftwareApp.swift      # Entry point
 ├── ContentView.swift             # Root view
 ├── Info.plist                    # App configuration
 ├── Assets.xcassets/              # Images and colors
@@ -202,7 +202,7 @@ Para desenvolvimento local, o `NSAppTransportSecurity` está configurado para pe
 
 ## 📄 Licença
 
-Este projeto está sob a mesma licença do projeto principal MedicWarehouse.
+Este projeto está sob a mesma licença do projeto principal PrimeCare Software.
 
 ## 📞 Suporte
 

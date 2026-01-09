@@ -434,5 +434,5 @@ public class AuthServiceTests
 ---
 
 **Versão:** 1.0.0  
-**Autor:** MedicWarehouse Team  
+**Autor:** PrimeCare Software Team  
 **Data:** Janeiro 2026

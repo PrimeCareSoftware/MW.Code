@@ -1,8 +1,8 @@
-# ✅ Tarefa Concluída - Análise e Preparação do Sistema MedicWarehouse
+# ✅ Tarefa Concluída - Análise e Preparação do Sistema PrimeCare Software
 
 ## 📋 Solicitação Original
 
-**Objetivo:** Analisar todos os métodos, APIs, front-end e fluxos do sistema MedicWarehouse, verificar pendências na documentação e ajustar a API de seed para testes hoje.
+**Objetivo:** Analisar todos os métodos, APIs, front-end e fluxos do sistema PrimeCare Software, verificar pendências na documentação e ajustar a API de seed para testes hoje.
 
 ## ✅ Trabalho Realizado
 
@@ -33,7 +33,7 @@
 
 #### Frontend (Angular 20)
 - ✅ **2 Aplicações verificadas:**
-  - MedicWarehouse App (porta 4200)
+  - PrimeCare Software App (porta 4200)
   - MW System Admin (porta 4201)
 - ✅ **Configurações:** Environments corretos
 - ✅ **API URL:** localhost:5000 configurado
@@ -70,7 +70,7 @@
 **Conteúdo:**
 - Preparação do ambiente
 - 80+ endpoints de API organizados por controlador
-- Testes de frontend (MedicWarehouse App)
+- Testes de frontend (PrimeCare Software App)
 - Testes de frontend (System Admin)
 - 4 fluxos de integração completos
 - Testes de segurança
@@ -327,7 +327,7 @@ curl -X POST http://localhost:5000/api/data-seeder/seed-demo
 ```
 
 **Opção 3: Postman**
-- Importar: MedicWarehouse-Postman-Collection.json
+- Importar: PrimeCare Software-Postman-Collection.json
 - Configurar variáveis
 - Testar!
 
@@ -394,7 +394,7 @@ curl -X POST http://localhost:5000/api/data-seeder/seed-demo
 
 ## 📊 Resumo Executivo
 
-**Sistema Analisado:** MedicWarehouse SaaS  
+**Sistema Analisado:** PrimeCare Software SaaS  
 **Status:** ✅ Pronto para produção (core features)  
 **Pendências:** Roadmap 2025-2026 documentado  
 **Documentação:** Completa e atualizada  
@@ -429,7 +429,7 @@ Use o **[GUIA_INICIO_RAPIDO_LOCAL.md](GUIA_INICIO_RAPIDO_LOCAL.md)** para começ
 - Swagger: http://localhost:5000/swagger
 - Frontend: http://localhost:4200
 - System Admin: http://localhost:4201
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- GitHub: https://github.com/PrimeCare Software/MW.Code
 
 **Comandos Rápidos:**
 ```bash

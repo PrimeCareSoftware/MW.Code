@@ -1,6 +1,6 @@
-# 📱 Documentação Portátil - MedicWarehouse
+# 📱 Documentação Portátil - PrimeCare Software
 
-Este diretório contém ferramentas para gerar uma versão consolidada e portátil de toda a documentação do projeto MedicWarehouse, permitindo fácil leitura em dispositivos móveis ou conversão para PDF.
+Este diretório contém ferramentas para gerar uma versão consolidada e portátil de toda a documentação do projeto PrimeCare Software, permitindo fácil leitura em dispositivos móveis ou conversão para PDF.
 
 ## 🎯 Objetivo
 
@@ -13,13 +13,13 @@ Consolidar todos os 37 documentos markdown do projeto em:
 
 O script gera dois arquivos:
 
-1. **`MedicWarehouse-Documentacao-Completa.md`**
+1. **`PrimeCare Software-Documentacao-Completa.md`**
    - Todos os documentos em um único arquivo Markdown
    - Índice completo com links internos
    - Informações de categoria e origem de cada documento
    - Perfeito para edição e versionamento
 
-2. **`MedicWarehouse-Documentacao-Completa.html`**
+2. **`PrimeCare Software-Documentacao-Completa.html`**
    - Versão HTML com design moderno e responsivo
    - Otimizado para leitura em dispositivos móveis
    - Syntax highlighting para código
@@ -58,10 +58,10 @@ npm start
 1. **Ver HTML no navegador:**
    ```bash
    # Linux/Mac
-   xdg-open MedicWarehouse-Documentacao-Completa.html
+   xdg-open PrimeCare Software-Documentacao-Completa.html
    
    # Windows
-   start MedicWarehouse-Documentacao-Completa.html
+   start PrimeCare Software-Documentacao-Completa.html
    
    # Ou simplesmente abra o arquivo no navegador
    ```
@@ -247,14 +247,14 @@ Para melhorias neste gerador de documentação:
 
 ## 📄 Licença
 
-Este gerador faz parte do projeto MedicWarehouse e segue a mesma licença.
+Este gerador faz parte do projeto PrimeCare Software e segue a mesma licença.
 
 ## 📞 Suporte
 
 Para dúvidas sobre a documentação ou este gerador:
-- Email: contato@medicwarehouse.com
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- Email: contato@primecaresoftware.com
+- GitHub: https://github.com/PrimeCare Software/MW.Code
 
 ---
 
-*Desenvolvido com ❤️ pela equipe MedicWarehouse*
+*Desenvolvido com ❤️ pela equipe PrimeCare Software*

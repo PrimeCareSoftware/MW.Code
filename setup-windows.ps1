@@ -1,4 +1,4 @@
-# Script de Configuração Inicial para Windows - MedicWarehouse
+# Script de Configuração Inicial para Windows - PrimeCare Software
 # Execute este script no PowerShell como Administrador
 
 # Requer execução como administrador
@@ -10,7 +10,7 @@ $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Blue
-Write-Host "║  🪟 Setup MedicWarehouse - Windows                    ║" -ForegroundColor Blue
+Write-Host "║  🪟 Setup PrimeCare Software - Windows                    ║" -ForegroundColor Blue
 Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Blue
 Write-Host ""
 
@@ -136,7 +136,7 @@ Write-Host ""
 Write-Host "[6/7] Restaurando dependências do .NET..." -ForegroundColor Blue
 if (Test-CommandExists "dotnet") {
     try {
-        dotnet restore "$ScriptDir\MedicWarehouse.sln"
+        dotnet restore "$ScriptDir\PrimeCare Software.sln"
         Write-Host "✓ Dependências do .NET restauradas" -ForegroundColor Green
     } catch {
         Write-Host "⚠️  Erro ao restaurar dependências do .NET" -ForegroundColor Yellow
