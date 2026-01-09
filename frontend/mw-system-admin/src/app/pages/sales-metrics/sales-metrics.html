@@ -14,7 +14,8 @@
         <label>Data Início</label>
         <input 
           type="date" 
-          [(ngModel)]="dateRange().startDate"
+          [ngModel]="dateRange().startDate"
+          (ngModelChange)="updateStartDate($event)"
           (change)="applyFilters()"
         />
       </div>
@@ -22,7 +23,8 @@
         <label>Data Fim</label>
         <input 
           type="date" 
-          [(ngModel)]="dateRange().endDate"
+          [ngModel]="dateRange().endDate"
+          (ngModelChange)="updateEndDate($event)"
           (change)="applyFilters()"
         />
       </div>
@@ -30,7 +32,8 @@
         <label>Sessões incompletas (horas)</label>
         <input 
           type="number" 
-          [(ngModel)]="hoursOld()"
+          [ngModel]="hoursOld()"
+          (ngModelChange)="updateHoursOld($event)"
           (change)="loadIncompleteSessions()"
           min="1"
         />
