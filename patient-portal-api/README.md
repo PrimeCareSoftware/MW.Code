@@ -1,4 +1,4 @@
-# Portal do Paciente (Patient Portal) - MedicWarehouse
+# Portal do Paciente (Patient Portal) - PrimeCare Software
 
 ## 📋 Visão Geral
 
@@ -344,16 +344,16 @@ Após executar a API, acesse a documentação Swagger interativa em:
 
 ## 👥 Autores
 
-- **MedicWarehouse Team**
+- **PrimeCare Software Team**
 - **GitHub Copilot** - Desenvolvimento assistido por IA
 
 ## 📄 Licença
 
-Este projeto faz parte do sistema MedicWarehouse.
+Este projeto faz parte do sistema PrimeCare Software.
 
 ## 🔗 Links Relacionados
 
-- [Documentação Principal do MedicWarehouse](../../docs/README.md)
+- [Documentação Principal do PrimeCare Software](../../docs/README.md)
 - [PLANO_DESENVOLVIMENTO.md](../../docs/PLANO_DESENVOLVIMENTO.md)
 - [PENDING_TASKS.md](../../docs/PENDING_TASKS.md)
 - [RESUMO_TECNICO_COMPLETO.md](../../docs/RESUMO_TECNICO_COMPLETO.md)

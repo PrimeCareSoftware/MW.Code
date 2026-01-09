@@ -8,12 +8,12 @@ public class JwtSettings
     /// <summary>
     /// Default issuer value used when configuration is not provided
     /// </summary>
-    public const string DefaultIssuer = "MedicWarehouse";
+    public const string DefaultIssuer = "PrimeCare Software";
     
     /// <summary>
     /// Default audience value used when configuration is not provided
     /// </summary>
-    public const string DefaultAudience = "MedicWarehouse-API";
+    public const string DefaultAudience = "PrimeCare Software-API";
 
     private string _issuer = DefaultIssuer;
     private string _audience = DefaultAudience;

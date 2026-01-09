@@ -729,11 +729,11 @@ Use este checklist para garantir que configurou tudo corretamente:
 
 ---
 
-**MedicWarehouse - Portal do Paciente**
+**PrimeCare Software - Portal do Paciente**
 *Sua saúde, seu acesso, sua segurança.*
 
 Para mais informações, visite nossa documentação técnica ou entre em contato com o suporte.
 
 ---
 
-© 2026 MedicWarehouse. Todos os direitos reservados.
+© 2026 PrimeCare Software. Todos os direitos reservados.

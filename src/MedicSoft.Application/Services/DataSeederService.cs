@@ -419,7 +419,7 @@ namespace MedicSoft.Application.Services
         private Clinic CreateDemoClinic()
         {
             return new Clinic(
-                "Clínica Demo MedicWarehouse",
+                "Clínica Demo PrimeCare Software",
                 "Clínica Demo",
                 "12.345.678/0001-95",
                 "+55 11 98765-4321",
@@ -1279,7 +1279,7 @@ RETORNO: {{return_date}}",
                 NotificationType.AppointmentReminder,
                 NotificationChannel.SMS,
                 "+5511987654321",
-                "Lembrete: Você tem consulta agendada para amanhã às 09:00. Clínica Demo MedicWarehouse.",
+                "Lembrete: Você tem consulta agendada para amanhã às 09:00. Clínica Demo PrimeCare Software.",
                 _demoTenantId,
                 appointments[0].Id
             );
@@ -1293,7 +1293,7 @@ RETORNO: {{return_date}}",
                 NotificationType.AppointmentReminder,
                 NotificationChannel.WhatsApp,
                 "+5511987654322",
-                "Olá Ana! Lembrete de consulta cardiológica amanhã às 10:00. Clínica Demo MedicWarehouse.",
+                "Olá Ana! Lembrete de consulta cardiológica amanhã às 10:00. Clínica Demo PrimeCare Software.",
                 _demoTenantId,
                 appointments[1].Id
             );
@@ -1587,12 +1587,12 @@ RETORNO: {{return_date}}",
             // Software de gestão - Pendente
             var software = new Expense(
                 clinicId,
-                "Assinatura sistema de gestão - MedicWarehouse",
+                "Assinatura sistema de gestão - PrimeCare Software",
                 ExpenseCategory.Software,
                 199.90m,
                 today.AddDays(5),
                 _demoTenantId,
-                "MedicWarehouse Ltda",
+                "PrimeCare Software Ltda",
                 "22.333.444/0001-81",
                 "Plano Standard mensal"
             );

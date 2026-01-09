@@ -84,7 +84,7 @@ public class DocumentService : IDocumentService
 
         // TODO: Implement actual file download from storage system
         // This should integrate with the main application's file storage (e.g., Azure Blob Storage, S3, or local filesystem)
-        // For now, return null - implementation depends on the storage strategy used by MedicWarehouse
+        // For now, return null - implementation depends on the storage strategy used by PrimeCare Software
         // Example implementation:
         // - Get file path from document.FileUrl
         // - Read file from storage

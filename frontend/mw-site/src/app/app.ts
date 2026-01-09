@@ -10,5 +10,5 @@ import { FooterComponent } from './components/footer/footer';
   styleUrl: './app.scss'
 })
 export class App {
-  title = 'MW.Site - MedicWarehouse';
+  title = 'MW.Site - PrimeCare Software';
 }

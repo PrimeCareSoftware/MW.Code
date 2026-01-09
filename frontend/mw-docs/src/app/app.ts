@@ -8,5 +8,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  title = 'MedicWarehouse Docs';
+  title = 'PrimeCare Software Docs';
 }

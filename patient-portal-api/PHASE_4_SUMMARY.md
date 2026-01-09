@@ -551,7 +551,7 @@ O projeto está **95% completo** e pronto para:
 
 ---
 
-**Desenvolvido por:** GitHub Copilot + MedicWarehouse Team  
+**Desenvolvido por:** GitHub Copilot + PrimeCare Software Team  
 **Data:** Janeiro 2026  
 **Versão:** 1.0  
 

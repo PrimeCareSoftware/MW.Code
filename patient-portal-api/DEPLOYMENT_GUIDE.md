@@ -9,7 +9,7 @@
 - Angular CLI 20
 
 ### Infrastructure Requirements
-- PostgreSQL database (same as MedicWarehouse main application)
+- PostgreSQL database (same as PrimeCare Software main application)
 - HTTPS certificate for production
 - Environment variable configuration system (Azure Key Vault recommended)
 
@@ -26,7 +26,7 @@ dotnet ef database update --project PatientPortal.Infrastructure --startup-proje
 
 ### 2. Create Database Views
 
-**IMPORTANT:** Before running the SQL scripts, verify the schema matches your MedicWarehouse database.
+**IMPORTANT:** Before running the SQL scripts, verify the schema matches your PrimeCare Software database.
 
 ```bash
 # Review and adjust the SQL script

@@ -1068,4 +1068,4 @@ Para reportar vulnerabilidades de segurança:
 **Última Atualização:** Janeiro 2026
 **Próxima Revisão:** Julho 2026
 
-© 2026 MedicWarehouse. Documento Confidencial.
+© 2026 PrimeCare Software. Documento Confidencial.

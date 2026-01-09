@@ -1,6 +1,6 @@
-# MedicWarehouse Microservices Architecture
+# PrimeCare Software Microservices Architecture
 
-This directory contains the microservices implementation of MedicWarehouse, migrated from the monolithic architecture.
+This directory contains the microservices implementation of PrimeCare Software, migrated from the monolithic architecture.
 
 ## Architecture Overview
 
@@ -142,8 +142,8 @@ Each microservice uses the same JWT settings to ensure token compatibility:
   "JwtSettings": {
     "SecretKey": "your-shared-secret-key",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```

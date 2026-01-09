@@ -51,7 +51,7 @@ options.RequireHttpsMetadata = !app.Environment.IsDevelopment();
 
 #### SQL View Scripts
 - **Current:** Template views with placeholder schema
-- **Production:** MUST verify and adjust to match actual MedicWarehouse schema
+- **Production:** MUST verify and adjust to match actual PrimeCare Software schema
 - **Location:** `PatientPortal.Infrastructure/Migrations/Scripts/CreateViews.sql`
 - **Action Required:** Review and adjust column names, table relationships, and data types
 
