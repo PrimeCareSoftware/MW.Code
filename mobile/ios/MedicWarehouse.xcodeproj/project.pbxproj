@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A000001 /* MedicWarehouseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000002 /* MedicWarehouseApp.swift */; };
+		1A000001 /* PrimeCare SoftwareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000002 /* PrimeCare SoftwareApp.swift */; };
 		1A000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000004 /* ContentView.swift */; };
 		1A000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A000006 /* Assets.xcassets */; };
 		1A000009 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000A /* LoginView.swift */; };
@@ -21,8 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1A000001 /* MedicWarehouse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MedicWarehouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A000002 /* MedicWarehouseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicWarehouseApp.swift; sourceTree = "<group>"; };
+		1A000001 /* PrimeCare Software.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrimeCare Software.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A000002 /* PrimeCare SoftwareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimeCare SoftwareApp.swift; sourceTree = "<group>"; };
 		1A000004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A00000A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -50,15 +50,15 @@
 		1A00001B = {
 			isa = PBXGroup;
 			children = (
-				1A00001C /* MedicWarehouse */,
+				1A00001C /* PrimeCare Software */,
 				1A00001D /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		1A00001C /* MedicWarehouse */ = {
+		1A00001C /* PrimeCare Software */ = {
 			isa = PBXGroup;
 			children = (
-				1A000002 /* MedicWarehouseApp.swift */,
+				1A000002 /* PrimeCare SoftwareApp.swift */,
 				1A000004 /* ContentView.swift */,
 				1A00001E /* Views */,
 				1A00001F /* ViewModels */,
@@ -67,13 +67,13 @@
 				1A000006 /* Assets.xcassets */,
 				1A00001A /* Info.plist */,
 			);
-			path = MedicWarehouse;
+			path = PrimeCare Software;
 			sourceTree = "<group>";
 		};
 		1A00001D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1A000001 /* MedicWarehouse.app */,
+				1A000001 /* PrimeCare Software.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,9 +117,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1A000023 /* MedicWarehouse */ = {
+		1A000023 /* PrimeCare Software */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A000024 /* Build configuration list for PBXNativeTarget "MedicWarehouse" */;
+			buildConfigurationList = 1A000024 /* Build configuration list for PBXNativeTarget "PrimeCare Software" */;
 			buildPhases = (
 				1A000025 /* Sources */,
 				1A000019 /* Frameworks */,
@@ -129,9 +129,9 @@
 			);
 			dependencies = (
 			);
-			name = MedicWarehouse;
-			productName = MedicWarehouse;
-			productReference = 1A000001 /* MedicWarehouse.app */;
+			name = PrimeCare Software;
+			productName = PrimeCare Software;
+			productReference = 1A000001 /* PrimeCare Software.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -149,7 +149,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1A000028 /* Build configuration list for PBXProject "MedicWarehouse" */;
+			buildConfigurationList = 1A000028 /* Build configuration list for PBXProject "PrimeCare Software" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -162,7 +162,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1A000023 /* MedicWarehouse */,
+				1A000023 /* PrimeCare Software */,
 			);
 		};
 /* End PBXProject section */
@@ -184,7 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A000003 /* ContentView.swift in Sources */,
-				1A000001 /* MedicWarehouseApp.swift in Sources */,
+				1A000001 /* PrimeCare SoftwareApp.swift in Sources */,
 				1A000009 /* LoginView.swift in Sources */,
 				1A00000B /* DashboardView.swift in Sources */,
 				1A00000D /* PatientsView.swift in Sources */,
@@ -325,11 +325,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MedicWarehouse/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"PrimeCare Software/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MedicWarehouse/Info.plist;
+				INFOPLIST_FILE = PrimeCare Software/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -356,11 +356,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MedicWarehouse/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"PrimeCare Software/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MedicWarehouse/Info.plist;
+				INFOPLIST_FILE = PrimeCare Software/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -383,7 +383,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1A000024 /* Build configuration list for PBXNativeTarget "MedicWarehouse" */ = {
+		1A000024 /* Build configuration list for PBXNativeTarget "PrimeCare Software" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A00002B /* Debug */,
@@ -392,7 +392,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A000028 /* Build configuration list for PBXProject "MedicWarehouse" */ = {
+		1A000028 /* Build configuration list for PBXProject "PrimeCare Software" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A000029 /* Debug */,

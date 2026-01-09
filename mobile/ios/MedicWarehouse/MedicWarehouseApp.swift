@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MedicWarehouseApp: App {
+struct PrimeCare SoftwareApp: App {
     @StateObject private var authViewModel = AuthViewModel()
     
     var body: some Scene {

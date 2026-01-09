@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MedicWarehouse"
+rootProject.name = "PrimeCare Software"
 include(":app")

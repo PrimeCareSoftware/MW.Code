@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.medicwarehouse.app.ui.navigation.NavGraph
-import com.medicwarehouse.app.ui.theme.MedicWarehouseTheme
+import com.medicwarehouse.app.ui.theme.PrimeCare SoftwareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MedicWarehouseTheme {
+            PrimeCare SoftwareTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

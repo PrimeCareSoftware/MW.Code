@@ -174,7 +174,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 
                 Text(
-                    text = "MedicWarehouse",
+                    text = "PrimeCare Software",
                     style = MaterialTheme.typography.headlineLarge.copy(
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold

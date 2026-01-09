@@ -1,6 +1,6 @@
-# MedicWarehouse Android App
+# PrimeCare Software Android App
 
-Aplicativo Android nativo para o sistema MedicWarehouse, desenvolvido com Kotlin, Jetpack Compose e integrando com a API RESTful do backend.
+Aplicativo Android nativo para o sistema PrimeCare Software, desenvolvido com Kotlin, Jetpack Compose e integrando com a API RESTful do backend.
 
 ## 📱 Características
 
@@ -106,7 +106,7 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 ```
 app/src/main/
 ├── kotlin/com/medicwarehouse/app/
-│   ├── MedicWarehouseApp.kt          # Application class com Hilt
+│   ├── PrimeCare SoftwareApp.kt          # Application class com Hilt
 │   ├── MainActivity.kt                # Activity principal
 │   ├── data/                          # Camada de dados
 │   │   ├── Models.kt                  # Data classes
@@ -299,7 +299,7 @@ O bundle estará em: `app/build/outputs/bundle/release/`
 
 ## 📄 Licença
 
-Este projeto está sob a mesma licença do projeto principal MedicWarehouse.
+Este projeto está sob a mesma licença do projeto principal PrimeCare Software.
 
 ## 📞 Suporte
 

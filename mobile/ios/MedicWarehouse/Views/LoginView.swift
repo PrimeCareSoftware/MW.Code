@@ -87,7 +87,7 @@ struct LoginView: View {
                             .opacity(logoOpacity)
                             
                             VStack(spacing: MWDesign.Spacing.xxs) {
-                                Text("MedicWarehouse")
+                                Text("PrimeCare Software")
                                     .font(.system(size: 32, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                 
