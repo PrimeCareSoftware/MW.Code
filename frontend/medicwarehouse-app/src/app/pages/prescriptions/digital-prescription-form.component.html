@@ -1,0 +1,357 @@
+<div class="digital-prescription-form">
+      <h2>Prescrição Digital</h2>
+      <p class="subtitle">Conforme CFM 1.643/2002 e Portaria ANVISA 344/1998</p>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error">{{ errorMessage() }}</div>
+      }
+      @if (successMessage()) {
+        <div class="alert alert-success">{{ successMessage() }}</div>
+      }
+
+      @if (!selectedType()) {
+        <app-prescription-type-selector 
+          (typeSelected)="onTypeSelected($event)">
+        </app-prescription-type-selector>
+      } @else {
+        <div class="selected-type-info">
+          <div class="type-badge" [style.background-color]="getTypeColor()">
+            {{ getTypeName() }}
+          </div>
+          <button 
+            type="button" 
+            class="btn-change-type" 
+            (click)="changeType()"
+            [disabled]="isSaving()"
+          >
+            Alterar Tipo
+          </button>
+        </div>
+
+        <form [formGroup]="prescriptionForm" (ngSubmit)="onSubmit()">
+          <!-- Doctor Information (Auto-filled) -->
+          <div class="section">
+            <h3>Informações do Médico</h3>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="doctorName">Nome do Médico *</label>
+                <input
+                  type="text"
+                  id="doctorName"
+                  formControlName="doctorName"
+                  readonly
+                />
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="doctorCRM">CRM *</label>
+                <input
+                  type="text"
+                  id="doctorCRM"
+                  formControlName="doctorCRM"
+                  readonly
+                />
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="doctorCRMState">UF *</label>
+                <input
+                  type="text"
+                  id="doctorCRMState"
+                  formControlName="doctorCRMState"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Patient Information (Auto-filled) -->
+          <div class="section">
+            <h3>Informações do Paciente</h3>
+            <div class="form-row">
+              <div class="form-group col-md-8">
+                <label for="patientName">Nome do Paciente *</label>
+                <input
+                  type="text"
+                  id="patientName"
+                  formControlName="patientName"
+                  readonly
+                />
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="patientDocument">CPF *</label>
+                <input
+                  type="text"
+                  id="patientDocument"
+                  formControlName="patientDocument"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Medications -->
+          <div class="section">
+            <h3>Medicamentos Prescritos</h3>
+            
+            @if (items().length === 0) {
+              <div class="empty-items">
+                <p>Nenhum medicamento adicionado. Clique no botão abaixo para adicionar.</p>
+              </div>
+            }
+
+            @for (item of items(); track $index) {
+              <div class="medication-item">
+                <div class="item-header">
+                  <span class="item-number">{{ $index + 1 }}.</span>
+                  <h4>{{ item.medicationName }}</h4>
+                  <button
+                    type="button"
+                    class="btn-delete"
+                    (click)="removeItem($index)"
+                    [disabled]="isSaving()"
+                  >
+                    🗑️
+                  </button>
+                </div>
+                <div class="item-details">
+                  <p><strong>Dosagem:</strong> {{ item.dosage }}</p>
+                  <p><strong>Forma Farmacêutica:</strong> {{ item.pharmaceuticalForm }}</p>
+                  <p><strong>Frequência:</strong> {{ item.frequency }}</p>
+                  <p><strong>Duração:</strong> {{ item.durationDays }} dias</p>
+                  <p><strong>Quantidade:</strong> {{ item.quantity }}</p>
+                  @if (item.instructions) {
+                    <p><strong>Instruções:</strong> {{ item.instructions }}</p>
+                  }
+                  @if (item.isControlledSubstance && item.controlledList) {
+                    <div class="controlled-badge">
+                      🔒 Substância Controlada - Lista {{ item.controlledList }}
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (showItemForm()) {
+              <div class="item-form" formGroupName="currentItem">
+                <h4>{{ editingItemIndex() !== null ? 'Editar' : 'Adicionar' }} Medicamento</h4>
+                
+                <div class="form-row">
+                  <div class="form-group col-md-8">
+                    <label for="medicationName">Nome do Medicamento *</label>
+                    <input
+                      type="text"
+                      id="medicationName"
+                      formControlName="medicationName"
+                      placeholder="Ex: Paracetamol"
+                      [class.invalid]="isItemFieldInvalid('medicationName')"
+                    />
+                    @if (isItemFieldInvalid('medicationName')) {
+                      <small class="error-text">Nome do medicamento é obrigatório</small>
+                    }
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label for="quantity">Quantidade *</label>
+                    <input
+                      type="number"
+                      id="quantity"
+                      formControlName="quantity"
+                      min="1"
+                      placeholder="Ex: 20"
+                      [class.invalid]="isItemFieldInvalid('quantity')"
+                    />
+                    @if (isItemFieldInvalid('quantity')) {
+                      <small class="error-text">Quantidade é obrigatória</small>
+                    }
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="dosage">Dosagem *</label>
+                    <input
+                      type="text"
+                      id="dosage"
+                      formControlName="dosage"
+                      placeholder="Ex: 750mg"
+                      [class.invalid]="isItemFieldInvalid('dosage')"
+                    />
+                    @if (isItemFieldInvalid('dosage')) {
+                      <small class="error-text">Dosagem é obrigatória</small>
+                    }
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="pharmaceuticalForm">Forma Farmacêutica *</label>
+                    <input
+                      type="text"
+                      id="pharmaceuticalForm"
+                      formControlName="pharmaceuticalForm"
+                      placeholder="Ex: Comprimido"
+                      [class.invalid]="isItemFieldInvalid('pharmaceuticalForm')"
+                    />
+                    @if (isItemFieldInvalid('pharmaceuticalForm')) {
+                      <small class="error-text">Forma farmacêutica é obrigatória</small>
+                    }
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="frequency">Frequência *</label>
+                    <input
+                      type="text"
+                      id="frequency"
+                      formControlName="frequency"
+                      placeholder="Ex: 1 comprimido 8/8h"
+                      [class.invalid]="isItemFieldInvalid('frequency')"
+                    />
+                    @if (isItemFieldInvalid('frequency')) {
+                      <small class="error-text">Frequência é obrigatória</small>
+                    }
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="durationDays">Duração (dias) *</label>
+                    <input
+                      type="number"
+                      id="durationDays"
+                      formControlName="durationDays"
+                      min="1"
+                      placeholder="Ex: 7"
+                      [class.invalid]="isItemFieldInvalid('durationDays')"
+                    />
+                    @if (isItemFieldInvalid('durationDays')) {
+                      <small class="error-text">Duração é obrigatória</small>
+                    }
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="instructions">Instruções de Uso</label>
+                  <textarea
+                    id="instructions"
+                    formControlName="instructions"
+                    rows="2"
+                    placeholder="Ex: Tomar após as refeições com água"
+                  ></textarea>
+                </div>
+
+                @if (requiresControlledInfo()) {
+                  <div class="controlled-section">
+                    <h5>⚠️ Informações de Substância Controlada</h5>
+                    
+                    <div class="form-group">
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          formControlName="isControlledSubstance"
+                        />
+                        <span>Esta é uma substância controlada</span>
+                      </label>
+                    </div>
+
+                    @if (currentItemForm.get('isControlledSubstance')?.value) {
+                      <div class="form-group">
+                        <label for="controlledList">Lista de Controle ANVISA *</label>
+                        <select
+                          id="controlledList"
+                          formControlName="controlledList"
+                          [class.invalid]="isItemFieldInvalid('controlledList')"
+                        >
+                          <option value="">Selecione...</option>
+                          <option value="A1">A1 - Entorpecentes</option>
+                          <option value="A2">A2 - Entorpecentes</option>
+                          <option value="A3">A3 - Psicotrópicos</option>
+                          <option value="B1">B1 - Psicotrópicos</option>
+                          <option value="B2">B2 - Anorexígenos</option>
+                          <option value="C1">C1 - Outras Substâncias</option>
+                          <option value="C2">C2 - Retinóides</option>
+                          <option value="C3">C3 - Imunossupressores</option>
+                          <option value="C4">C4 - Antirretrovirais</option>
+                          <option value="C5">C5 - Anabolizantes</option>
+                        </select>
+                        @if (isItemFieldInvalid('controlledList')) {
+                          <small class="error-text">Lista de controle é obrigatória para substâncias controladas</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+
+                <div class="form-actions">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="cancelItemEdit()"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="saveItem()"
+                    [disabled]="currentItemForm.invalid"
+                  >
+                    {{ editingItemIndex() !== null ? 'Atualizar' : 'Adicionar' }} Medicamento
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (!showItemForm()) {
+              <button
+                type="button"
+                class="btn btn-add-item"
+                (click)="addNewItem()"
+                [disabled]="isSaving()"
+              >
+                ➕ Adicionar Medicamento
+              </button>
+            }
+          </div>
+
+          <!-- Observations -->
+          <div class="section">
+            <h3>Observações Gerais</h3>
+            <div class="form-group">
+              <textarea
+                id="notes"
+                formControlName="notes"
+                rows="4"
+                placeholder="Observações adicionais sobre a prescrição..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions-main">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="onCancel()"
+              [disabled]="isSaving()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline"
+              (click)="onPreview()"
+              [disabled]="items().length === 0 || isSaving()"
+            >
+              👁️ Visualizar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="prescriptionForm.invalid || items().length === 0 || isSaving()"
+            >
+              {{ isSaving() ? 'Salvando...' : 'Salvar Prescrição' }}
+            </button>
+          </div>
+        </form>
+      }
+    </div>

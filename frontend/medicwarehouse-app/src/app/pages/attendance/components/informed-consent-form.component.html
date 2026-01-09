@@ -1,0 +1,90 @@
+<div class="informed-consent-form">
+      <h3>Consentimento Informado (CFM 1.821/2007)</h3>
+      <p class="info-text">
+        O consentimento informado é obrigatório para procedimentos médicos e deve ser registrado no prontuário.
+      </p>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error">{{ errorMessage() }}</div>
+      }
+      @if (successMessage()) {
+        <div class="alert alert-success">{{ successMessage() }}</div>
+      }
+
+      @if (existingConsents().length > 0) {
+        <div class="existing-consents">
+          <h4>Consentimentos Registrados</h4>
+          @for (consent of existingConsents(); track consent.id) {
+            <div class="consent-item" [class.accepted]="consent.isAccepted">
+              <div class="consent-header">
+                <span class="consent-date">{{ consent.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                <span class="consent-status" [class.accepted]="consent.isAccepted">
+                  {{ consent.isAccepted ? 'Aceito' : 'Pendente' }}
+                </span>
+              </div>
+              <div class="consent-text">{{ consent.consentText }}</div>
+              @if (consent.isAccepted && consent.acceptedAt) {
+                <div class="consent-acceptance">
+                  <small>Aceito em: {{ consent.acceptedAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+                  @if (consent.ipAddress) {
+                    <small>IP: {{ consent.ipAddress }}</small>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <form [formGroup]="consentForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="consentText">Texto do Consentimento *</label>
+          <textarea
+            id="consentText"
+            formControlName="consentText"
+            rows="8"
+            placeholder="Digite o texto do consentimento informado que será apresentado ao paciente..."
+            [class.invalid]="consentForm.get('consentText')?.invalid && consentForm.get('consentText')?.touched"
+          ></textarea>
+          @if (consentForm.get('consentText')?.invalid && consentForm.get('consentText')?.touched) {
+            <small class="error-text">O texto do consentimento deve ter no mínimo 50 caracteres</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              formControlName="acceptImmediately"
+            />
+            <span>Registrar aceite imediato do paciente</span>
+          </label>
+          <small class="help-text">
+            Marque se o paciente já aceitou o consentimento verbalmente ou por escrito
+          </small>
+        </div>
+
+        @if (consentForm.get('acceptImmediately')?.value) {
+          <div class="form-group">
+            <label for="ipAddress">Endereço IP (opcional)</label>
+            <input
+              type="text"
+              id="ipAddress"
+              formControlName="ipAddress"
+              placeholder="Ex: 192.168.1.1"
+            />
+            <small class="help-text">Para rastreabilidade do aceite</small>
+          </div>
+        }
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="consentForm.invalid || isSaving()"
+          >
+            {{ isSaving() ? 'Salvando...' : 'Registrar Consentimento' }}
+          </button>
+        </div>
+      </form>
+    </div>

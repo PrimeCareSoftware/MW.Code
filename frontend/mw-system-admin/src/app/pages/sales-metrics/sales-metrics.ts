@@ -148,6 +148,24 @@ export class SalesMetrics implements OnInit {
     this.selectedSession.set(null);
   }
 
+  updateStartDate(value: string): void {
+    this.dateRange.set({
+      ...this.dateRange(),
+      startDate: value
+    });
+  }
+
+  updateEndDate(value: string): void {
+    this.dateRange.set({
+      ...this.dateRange(),
+      endDate: value
+    });
+  }
+
+  updateHoursOld(value: number | string): void {
+    this.hoursOld.set(typeof value === 'string' ? parseInt(value, 10) : value);
+  }
+
   applyFilters(): void {
     this.loadStats();
     this.loadIncompleteSessions();

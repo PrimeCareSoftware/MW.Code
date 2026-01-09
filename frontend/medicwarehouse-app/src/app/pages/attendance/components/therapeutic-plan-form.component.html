@@ -1,0 +1,166 @@
+<div class="therapeutic-plan-form">
+      <h3>Plano Terapêutico (CFM 1.821/2007)</h3>
+      <p class="info-text">
+        Registro obrigatório do plano terapêutico detalhado conforme CFM 1.821/2007, incluindo
+        tratamento, prescrições, exames solicitados e orientações ao paciente.
+      </p>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error">{{ errorMessage() }}</div>
+      }
+      @if (successMessage()) {
+        <div class="alert alert-success">{{ successMessage() }}</div>
+      }
+
+      @if (existingPlan()) {
+        <div class="existing-plan-notice">
+          <p>✓ Um plano terapêutico já foi registrado. Você pode atualizá-lo abaixo.</p>
+          <small>Última atualização: {{ existingPlan()!.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+        </div>
+      }
+
+      <form [formGroup]="planForm" (ngSubmit)="onSubmit()">
+        <!-- Treatment/Conduct Section -->
+        <div class="section">
+          <h4>Tratamento / Conduta *</h4>
+          <div class="form-group">
+            <textarea
+              id="treatment"
+              formControlName="treatment"
+              rows="5"
+              placeholder="Descreva o tratamento e conduta recomendados (mínimo 20 caracteres)...&#10;&#10;Exemplo:&#10;- Repouso relativo por 3 dias&#10;- Hidratação adequada (2L água/dia)&#10;- Retorno em 7 dias ou se piora dos sintomas"
+              [class.invalid]="isFieldInvalid('treatment')"
+            ></textarea>
+            @if (isFieldInvalid('treatment')) {
+              <small class="error-text">
+                Tratamento/Conduta é obrigatório (mínimo 20 caracteres)
+              </small>
+            }
+            <small class="char-count">
+              {{ planForm.get('treatment')?.value?.length || 0 }} caracteres
+            </small>
+          </div>
+        </div>
+
+        <!-- Medication Prescription Section -->
+        <div class="section">
+          <h4>Prescrição Medicamentosa</h4>
+          <div class="form-group">
+            <textarea
+              id="medicationPrescription"
+              formControlName="medicationPrescription"
+              rows="6"
+              placeholder="Liste os medicamentos prescritos com posologia completa...&#10;&#10;Exemplo:&#10;1. Paracetamol 750mg - 1 cp VO 8/8h por 3 dias (se dor ou febre)&#10;2. Dipirona 500mg - 1 cp VO 6/6h por 5 dias&#10;3. Omeprazol 20mg - 1 cp VO em jejum por 14 dias"
+            ></textarea>
+            <small class="help-text">
+              💡 Dica: Use o formato padrão: Nome + Dosagem + Via + Frequência + Duração
+            </small>
+            @if (planForm.get('medicationPrescription')?.value) {
+              <small class="char-count">
+                {{ planForm.get('medicationPrescription')?.value.length }} caracteres
+              </small>
+            }
+          </div>
+        </div>
+
+        <!-- Requested Exams Section -->
+        <div class="section">
+          <h4>Exames Solicitados</h4>
+          <div class="form-group">
+            <textarea
+              id="examRequests"
+              formControlName="examRequests"
+              rows="5"
+              placeholder="Liste os exames complementares solicitados...&#10;&#10;Exemplo:&#10;- Hemograma completo&#10;- Glicemia de jejum&#10;- TSH e T4 livre&#10;- ECG de repouso"
+            ></textarea>
+            <small class="help-text">
+              Opcional: Exames laboratoriais, de imagem ou outros exames complementares
+            </small>
+            @if (planForm.get('examRequests')?.value) {
+              <small class="char-count">
+                {{ planForm.get('examRequests')?.value.length }} caracteres
+              </small>
+            }
+          </div>
+        </div>
+
+        <!-- Referrals Section -->
+        <div class="section">
+          <h4>Encaminhamentos</h4>
+          <div class="form-group">
+            <textarea
+              id="referrals"
+              formControlName="referrals"
+              rows="4"
+              placeholder="Encaminhamentos para outros especialistas ou serviços...&#10;&#10;Exemplo:&#10;- Encaminhamento para Cardiologista para avaliação de sopro cardíaco&#10;- Fisioterapia respiratória - 10 sessões"
+            ></textarea>
+            <small class="help-text">
+              Opcional: Referências para outros médicos, fisioterapia, nutrição, etc.
+            </small>
+            @if (planForm.get('referrals')?.value) {
+              <small class="char-count">
+                {{ planForm.get('referrals')?.value.length }} caracteres
+              </small>
+            }
+          </div>
+        </div>
+
+        <!-- Patient Guidance Section -->
+        <div class="section">
+          <h4>Orientações ao Paciente</h4>
+          <div class="form-group">
+            <textarea
+              id="patientGuidance"
+              formControlName="patientGuidance"
+              rows="6"
+              placeholder="Orientações e instruções para o paciente...&#10;&#10;Exemplo:&#10;- Evitar esforços físicos intensos por 7 dias&#10;- Manter dieta leve e fracionada&#10;- Observar sinais de piora: febre persistente, dor intensa, falta de ar&#10;- Procurar PS se apresentar os sintomas acima&#10;- Trazer resultados dos exames no retorno"
+            ></textarea>
+            <small class="help-text">
+              Opcional: Instruções sobre cuidados, sinais de alerta, quando procurar atendimento, etc.
+            </small>
+            @if (planForm.get('patientGuidance')?.value) {
+              <small class="char-count">
+                {{ planForm.get('patientGuidance')?.value.length }} caracteres
+              </small>
+            }
+          </div>
+        </div>
+
+        <!-- Return Date Section -->
+        <div class="section">
+          <h4>Data de Retorno</h4>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="returnDate">Agendar Retorno</label>
+              <input
+                type="date"
+                id="returnDate"
+                formControlName="returnDate"
+                [min]="tomorrowDate"
+              />
+              <small class="help-text">
+                Opcional: Data sugerida para retorno do paciente
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onCancel()"
+            [disabled]="isSaving()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="planForm.invalid || isSaving()"
+          >
+            {{ isSaving() ? 'Salvando...' : (existingPlan() ? 'Atualizar' : 'Registrar') }} Plano Terapêutico
+          </button>
+        </div>
+      </form>
+    </div>

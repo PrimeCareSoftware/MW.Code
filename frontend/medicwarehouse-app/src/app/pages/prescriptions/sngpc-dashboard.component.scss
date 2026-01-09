@@ -1,0 +1,120 @@
+.sngpc-dashboard {
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .alert-card {
+      background-color: #fff3cd;
+      border-left: 4px solid #ff9800;
+      margin-bottom: 24px;
+    }
+
+    .alert-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .alert-icon {
+      color: #ff9800;
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
+
+    .alert-content h3 {
+      margin: 0 0 8px 0;
+      color: #856404;
+    }
+
+    .alert-content p {
+      margin: 0;
+      color: #856404;
+    }
+
+    mat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .reports-table {
+      width: 100%;
+    }
+
+    .status-draft { background-color: #e0e0e0; }
+    .status-generated { background-color: #bbdefb; }
+    .status-transmitted { background-color: #c8e6c9; }
+    .status-transmissionfailed { background-color: #ffcdd2; }
+    .status-validated { background-color: #a5d6a7; }
+
+    .overdue {
+      color: #f44336;
+      font-weight: bold;
+    }
+
+    .info-card {
+      margin-top: 24px;
+      background-color: #e3f2fd;
+    }
+
+    .info-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #1976d2;
+      margin-bottom: 16px;
+    }
+
+    .info-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #1565c0;
+    }
+
+    .info-card li {
+      margin-bottom: 8px;
+    }
