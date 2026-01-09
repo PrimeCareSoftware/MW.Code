@@ -1,4 +1,4 @@
-# MedicWarehouse - Sistema de Gestão para Consultórios Médicos
+# PrimeCare Software - Sistema de Gestão para Consultórios Médicos
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
@@ -30,7 +30,7 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 
 ## 🌍 Compatibilidade Multiplataforma
 
-O MedicWarehouse é **100% cross-platform**:
+O PrimeCare Software é **100% cross-platform**:
 
 - ✅ **macOS**: Script automatizado de setup (`setup-macos.sh`)
 - ✅ **Windows**: Script PowerShell de setup (`setup-windows.ps1`)
@@ -47,7 +47,7 @@ O MedicWarehouse é **100% cross-platform**:
 
 ## 📱 Mobile Applications 🆕
 
-O MedicWarehouse agora possui **aplicativos nativos** para dispositivos móveis:
+O PrimeCare Software agora possui **aplicativos nativos** para dispositivos móveis:
 
 ### iOS App (Swift/SwiftUI)
 - 🍎 **iPhone e iPad**: iOS 17.0+
@@ -74,9 +74,9 @@ O MedicWarehouse agora possui **aplicativos nativos** para dispositivos móveis:
 
 ## 🖥️ Frontend Applications
 
-O MedicWarehouse possui **dois aplicativos Angular independentes**:
+O PrimeCare Software possui **dois aplicativos Angular independentes**:
 
-### 1. **MedicWarehouse App** (`frontend/medicwarehouse-app`)
+### 1. **PrimeCare App** (`frontend/medicwarehouse-app`)
 Aplicativo principal para uso diário das clínicas:
 - 👨‍⚕️ **Usuários**: Proprietários de clínicas, médicos, secretárias, enfermeiros
 - 📊 **Dashboard** da clínica individual
@@ -593,7 +593,7 @@ dotnet run
 
 #### Frontend (Angular)
 
-**MedicWarehouse App** (aplicativo principal das clínicas):
+**PrimeCare App** (aplicativo principal das clínicas):
 ```bash
 # Navegar para o frontend
 cd frontend/medicwarehouse-app
@@ -631,7 +631,7 @@ podman-compose up postgres -d
 
 # Ou executar PostgreSQL standalone com Podman:
 podman run -d \
-  --name medicwarehouse-postgres \
+  --name primecare-postgres \
   -e POSTGRES_DB=medicwarehouse \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
@@ -663,7 +663,7 @@ Após executar a aplicação, acesse a documentação interativa do Swagger:
 
 Para facilitar o teste e integração, todas as APIs foram exportadas para o Postman:
 
-- 📥 **Arquivo**: [`MedicWarehouse-Postman-Collection.json`](MedicWarehouse-Postman-Collection.json)
+- 📥 **Arquivo**: [`PrimeCare-Postman-Collection.json`](PrimeCare-Postman-Collection.json)
 - 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](docs/POSTMAN_IMPORT_GUIDE.md)
 - ✨ **Recursos incluídos**:
   - Todos os endpoints organizados por funcionalidade
@@ -835,7 +835,7 @@ Este documento inclui:
 
 ## 🔐 Segurança
 
-O MedicWarehouse implementa múltiplas camadas de segurança para proteger dados sensíveis:
+O PrimeCare Software implementa múltiplas camadas de segurança para proteger dados sensíveis:
 
 ### Implementações de Segurança
 
@@ -983,12 +983,12 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 📞 Contato
 
-- **Projeto**: MedicWarehouse
-- **Email**: contato@medicwarehouse.com
+- **Projeto**: PrimeCare Software
+- **Email**: contato@primecaresoftware.com
 - **GitHub**: [https://github.com/MedicWarehouse/MW.Code](https://github.com/MedicWarehouse/MW.Code)
 ## 🌐 MW.Site - Marketing Website
 
-**Novo!** Site de marketing e contratação do MedicWarehouse SaaS.
+**Novo!** Site de marketing e contratação do PrimeCare Software SaaS.
 
 ### Características
 
