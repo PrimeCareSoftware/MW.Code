@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the MedicWarehouse frontend applications.
+This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the PrimeCare Software frontend applications.
 
 ## Purpose
 

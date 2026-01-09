@@ -1,6 +1,6 @@
 # 📮 Como Importar a Coleção da API no Postman
 
-Este arquivo contém todas as APIs do MedicWarehouse exportadas para o Postman.
+Este arquivo contém todas as APIs do PrimeCare Software exportadas para o Postman.
 
 ## 📥 Importando no Postman
 
@@ -8,13 +8,13 @@ Este arquivo contém todas as APIs do MedicWarehouse exportadas para o Postman.
 
 1. Abra o **Postman**
 2. Clique no botão **"Import"** no canto superior esquerdo
-3. Selecione o arquivo **`MedicWarehouse-Postman-Collection.json`**
+3. Selecione o arquivo **`PrimeCare Software-Postman-Collection.json`**
 4. Clique em **"Import"**
 
 ### Opção 2: Arrastar e Soltar
 
 1. Abra o **Postman**
-2. Arraste o arquivo **`MedicWarehouse-Postman-Collection.json`** para a janela do Postman
+2. Arraste o arquivo **`PrimeCare Software-Postman-Collection.json`** para a janela do Postman
 3. A coleção será importada automaticamente
 
 ## 🔐 Configurando a Autenticação
@@ -51,7 +51,7 @@ Se você está começando com um banco de dados vazio:
 
 ### 3. Configurar o Token
 
-1. Clique na coleção **"MedicWarehouse API"** (raiz)
+1. Clique na coleção **"PrimeCare Software API"** (raiz)
 2. Vá para a aba **"Variables"**
 3. Cole o token copiado no campo **"Current value"** da variável **"bearer_token"**
 4. Clique em **"Save"**
@@ -72,7 +72,7 @@ A coleção vem com variáveis pré-configuradas:
 
 Se sua API está rodando em outra porta ou servidor:
 
-1. Clique na coleção **"MedicWarehouse API"**
+1. Clique na coleção **"PrimeCare Software API"**
 2. Vá para a aba **"Variables"**
 3. Altere o valor de **"base_url"** (ex: `https://api.medicwarehouse.com`)
 4. Clique em **"Save"**
@@ -90,7 +90,7 @@ Se você tem múltiplas clínicas:
 A coleção está organizada em pastas por funcionalidade:
 
 ```
-MedicWarehouse API/
+PrimeCare Software API/
 ├── Auth                    # Autenticação
 ├── Patients               # Gerenciamento de Pacientes
 ├── Appointments           # Agendamentos
@@ -136,7 +136,7 @@ Muitos endpoints precisam de IDs (como patientId, appointmentId, etc.). Para sub
 - **Swagger UI**: http://localhost:5000/swagger (quando a API estiver rodando)
 - **README do Projeto**: [README.md](../README.md)
 - **Guia de Execução**: [GUIA_EXECUCAO.md](GUIA_EXECUCAO.md)
-- **Repositório GitHub**: https://github.com/MedicWarehouse/MW.Code
+- **Repositório GitHub**: https://github.com/PrimeCare Software/MW.Code
 
 ## 💡 Dicas
 
@@ -189,6 +189,6 @@ Para trabalhar com múltiplos ambientes (Dev, Staging, Production):
 
 ## 🎉 Pronto!
 
-Agora você pode explorar e testar todos os endpoints da API MedicWarehouse usando o Postman!
+Agora você pode explorar e testar todos os endpoints da API PrimeCare Software usando o Postman!
 
 Se tiver dúvidas ou problemas, consulte a documentação completa no repositório ou abra uma issue no GitHub.

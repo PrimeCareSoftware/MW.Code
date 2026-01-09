@@ -1,8 +1,8 @@
-# Authentication Documentation - MedicWarehouse API
+# Authentication Documentation - PrimeCare Software API
 
 ## Overview
 
-The MedicWarehouse API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.
+The PrimeCare Software API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.
 
 ## Authentication Endpoints
 
@@ -129,8 +129,8 @@ The JWT token includes the following claims:
 | `tenant_id` | string | Tenant identifier | `clinic-tenant-id` |
 | `clinic_id` | string? | Clinic ID (optional, null for system owners) | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` |
 | `is_system_owner` | string | Whether user is a system owner | `true` or `false` |
-| `iss` | string | Token issuer | `MedicWarehouse` |
-| `aud` | string | Token audience | `MedicWarehouse-API` |
+| `iss` | string | Token issuer | `PrimeCare Software` |
+| `aud` | string | Token audience | `PrimeCare Software-API` |
 | `exp` | number | Expiration timestamp | Unix timestamp |
 
 ### Token Example (Decoded)
@@ -152,8 +152,8 @@ The JWT token includes the following claims:
   "tenant_id": "clinic-tenant-id",
   "clinic_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "is_system_owner": "false",
-  "iss": "MedicWarehouse",
-  "aud": "MedicWarehouse-API",
+  "iss": "PrimeCare Software",
+  "aud": "PrimeCare Software-API",
   "exp": 1697158570
 }
 ```
@@ -233,8 +233,8 @@ axios.get('https://api.medicwarehouse.com/api/patients', {
 
 ### 3. Token Validation
 - Validates signature
-- Validates issuer (`MedicWarehouse`)
-- Validates audience (`MedicWarehouse-API`)
+- Validates issuer (`PrimeCare Software`)
+- Validates audience (`PrimeCare Software-API`)
 - Validates expiration time
 - No tolerance for expired tokens (ClockSkew = 0)
 
@@ -276,8 +276,8 @@ axios.get('https://api.medicwarehouse.com/api/patients', {
   "JwtSettings": {
     "SecretKey": "YourSecretKey-MustBe-AtLeast32Characters-ForSecurity!",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -389,4 +389,4 @@ If you're migrating from a version without authentication:
 
 For issues or questions:
 - Email: contato@medicwarehouse.com
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- GitHub: https://github.com/PrimeCare Software/MW.Code

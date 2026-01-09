@@ -177,7 +177,7 @@ This ensures only clinic owners can access these endpoints.
    ```html
    <div class="login-branding" [style.background-image]="'url(' + backgroundUrl + ')'">
      <img *ngIf="logoUrl" [src]="logoUrl" alt="Clinic Logo" />
-     <h1>{{ clinicName || 'MedicWarehouse' }}</h1>
+     <h1>{{ clinicName || 'PrimeCare Software' }}</h1>
    </div>
    ```
 

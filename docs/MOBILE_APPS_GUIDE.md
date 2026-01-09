@@ -1,10 +1,10 @@
-# Guia Completo dos Aplicativos Móveis MedicWarehouse
+# Guia Completo dos Aplicativos Móveis PrimeCare Software
 
-Este documento fornece uma visão geral completa dos aplicativos móveis nativos do MedicWarehouse para iOS e Android.
+Este documento fornece uma visão geral completa dos aplicativos móveis nativos do PrimeCare Software para iOS e Android.
 
 ## 📱 Visão Geral
 
-O MedicWarehouse agora oferece aplicativos móveis nativos que complementam perfeitamente o sistema web, permitindo que médicos, secretárias e proprietários de clínicas gerenciem suas operações em qualquer lugar.
+O PrimeCare Software agora oferece aplicativos móveis nativos que complementam perfeitamente o sistema web, permitindo que médicos, secretárias e proprietários de clínicas gerenciem suas operações em qualquer lugar.
 
 ### Plataformas Disponíveis
 
@@ -216,7 +216,7 @@ dotnet run
 
 ```bash
 cd mobile/ios
-open MedicWarehouse.xcodeproj
+open PrimeCare Software.xcodeproj
 
 # No Xcode:
 # 1. Selecione um simulador ou dispositivo
@@ -374,7 +374,7 @@ Ambos os apps utilizam componentes nativos de suas plataformas:
 ### API
 - [Documentação da API](../README.md)
 - [Swagger UI](http://localhost:5000/swagger)
-- [Postman Collection](../MedicWarehouse-Postman-Collection.json)
+- [Postman Collection](../PrimeCare Software-Postman-Collection.json)
 
 ### Desenvolvimento
 - [Guia de Desenvolvimento Auth](GUIA_DESENVOLVIMENTO_AUTH.md)

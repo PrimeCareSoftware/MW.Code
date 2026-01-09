@@ -451,7 +451,7 @@ npm run e2e:ui
 
 ## 🔗 Links Relacionados
 
-### Documentação do MedicWarehouse
+### Documentação do PrimeCare Software
 - [PLANO_DESENVOLVIMENTO.md](PLANO_DESENVOLVIMENTO.md) - Plano geral do sistema
 - [PENDING_TASKS.md](PENDING_TASKS.md) - Tarefas pendentes
 - [APPS_PENDING_TASKS.md](APPS_PENDING_TASKS.md) - Tarefas dos apps
@@ -484,7 +484,7 @@ npm run e2e:ui
 
 ## 👥 Equipe
 
-- **MedicWarehouse Team** - Product Owner e QA
+- **PrimeCare Software Team** - Product Owner e QA
 - **GitHub Copilot** - Desenvolvimento assistido por IA
 - **Backend Developer** - .NET 8, C#, PostgreSQL
 - **Frontend Developer** - Angular 20, TypeScript
@@ -492,7 +492,7 @@ npm run e2e:ui
 ## 📝 Notas Importantes
 
 ### Diferenças do Sistema Principal
-O Portal do Paciente é uma **aplicação separada** do MedicWarehouse principal:
+O Portal do Paciente é uma **aplicação separada** do PrimeCare Software principal:
 - **Diferente autenticação:** CPF/Email + senha (não é o mesmo login da clínica)
 - **Diferente banco de dados:** Tabelas específicas (`PatientUser`, `RefreshToken`)
 - **API independente:** Endpoints próprios (`/api/auth`, `/api/appointments`, etc.)

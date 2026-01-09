@@ -1,8 +1,8 @@
-# Fluxo de Proprietários (Owners) - MedicWarehouse
+# Fluxo de Proprietários (Owners) - PrimeCare Software
 
 ## Visão Geral
 
-O sistema MedicWarehouse agora possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor controle e gerenciamento das permissões e responsabilidades dentro do sistema.
+O sistema PrimeCare Software agora possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor controle e gerenciamento das permissões e responsabilidades dentro do sistema.
 
 ## Diferença entre Owner e User
 
@@ -57,7 +57,7 @@ Registra uma nova clínica e cria automaticamente o Owner associado.
 ```json
 {
   "success": true,
-  "message": "Registration successful! Welcome to MedicWarehouse. You can now login with your credentials.",
+  "message": "Registration successful! Welcome to PrimeCare Software. You can now login with your credentials.",
   "clinicId": "guid-da-clinica",
   "userId": "guid-do-owner"
 }
@@ -337,7 +337,7 @@ dotnet ef database update --project src/MedicSoft.Repository --startup-project s
 Para dúvidas ou problemas:
 - **Email**: contato@medicwarehouse.com
 - **Documentação**: https://docs.medicwarehouse.com
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
 ---
 

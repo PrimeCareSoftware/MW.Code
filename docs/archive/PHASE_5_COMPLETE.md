@@ -311,7 +311,7 @@ A **Fase 5** da implementação do sistema conforme a Resolução CFM 1.821/2007
 
 ## 🎉 Conclusão
 
-A **Fase 5** foi concluída com **100% de sucesso**. O sistema MedicWarehouse agora possui:
+A **Fase 5** foi concluída com **100% de sucesso**. O sistema PrimeCare Software agora possui:
 
 ✅ **Backend 100% conforme CFM 1.821**  
 ✅ **Frontend 100% conforme CFM 1.821**  

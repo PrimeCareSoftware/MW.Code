@@ -258,4 +258,4 @@ For issues or questions:
 
 ## License
 
-Part of MedicWarehouse system - Internal use only
+Part of PrimeCare Software system - Internal use only

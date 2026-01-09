@@ -1,8 +1,8 @@
-# Glossário de Termos Empresariais - MedicWarehouse
+# Glossário de Termos Empresariais - PrimeCare Software
 
 ## 📚 Introdução
 
-Este documento foi criado para ajudar você a entender os **termos empresariais e de negócio** utilizados no sistema MedicWarehouse. Se você não tem familiaridade com conceitos da área empresarial, este guia irá explicar cada termo de forma clara e prática, para que possa estudar e aplicar esses conhecimentos no seu negócio.
+Este documento foi criado para ajudar você a entender os **termos empresariais e de negócio** utilizados no sistema PrimeCare Software. Se você não tem familiaridade com conceitos da área empresarial, este guia irá explicar cada termo de forma clara e prática, para que possa estudar e aplicar esses conhecimentos no seu negócio.
 
 ---
 
@@ -13,7 +13,7 @@ Este documento foi criado para ajudar você a entender os **termos empresariais 
 
 **Exemplo prático:** 
 - Netflix é um SaaS para entretenimento
-- MedicWarehouse é um SaaS para gestão de clínicas médicas
+- PrimeCare Software é um SaaS para gestão de clínicas médicas
 - Cliente paga mensalidade e acessa o sistema pela internet
 
 **Vantagens:**
@@ -28,7 +28,7 @@ Este documento foi criado para ajudar você a entender os **termos empresariais 
 **O que é:** Arquitetura onde um único sistema atende múltiplos clientes (tenants), mantendo os dados de cada um totalmente separados e seguros.
 
 **Exemplo prático:**
-- 100 clínicas usam o mesmo MedicWarehouse
+- 100 clínicas usam o mesmo PrimeCare Software
 - Cada clínica só vê seus próprios dados
 - Clínica A não consegue acessar dados da Clínica B
 - É como um prédio com vários apartamentos (tenants)
@@ -177,7 +177,7 @@ ROI = [(30.000 - 10.000) / 10.000] × 100 = 200%
 ### Trial (Período de Teste)
 **O que é:** Período gratuito onde o cliente pode testar o sistema antes de pagar.
 
-**No MedicWarehouse:**
+**No PrimeCare Software:**
 - 15 dias gratuitos
 - Recursos limitados
 - Não precisa cartão de crédito
@@ -193,7 +193,7 @@ ROI = [(30.000 - 10.000) / 10.000] × 100 = 200%
 ### Upgrade (Melhoria de Plano)
 **O que é:** Quando o cliente muda para um plano mais caro com mais recursos.
 
-**Como funciona no MedicWarehouse:**
+**Como funciona no PrimeCare Software:**
 ```
 Cliente no Basic (R$ 190) → Premium (R$ 320)
 - Diferença: R$ 130
@@ -212,7 +212,7 @@ Cliente no Basic (R$ 190) → Premium (R$ 320)
 ### Downgrade (Redução de Plano)
 **O que é:** Quando o cliente muda para um plano mais barato com menos recursos.
 
-**Como funciona no MedicWarehouse:**
+**Como funciona no PrimeCare Software:**
 ```
 Cliente no Premium (R$ 320) → Basic (R$ 190)
 - Mudança agendada para próximo vencimento
@@ -231,7 +231,7 @@ Cliente no Premium (R$ 320) → Basic (R$ 190)
 ### Freeze (Congelamento)
 **O que é:** Pausar a assinatura por um período determinado.
 
-**No MedicWarehouse:**
+**No PrimeCare Software:**
 - Duração: 1 mês fixo
 - Suspende cobrança
 - Bloqueia acesso ao sistema
@@ -247,7 +247,7 @@ Cliente no Premium (R$ 320) → Basic (R$ 190)
 ### Payment Overdue (Pagamento Atrasado)
 **O que é:** Quando o pagamento não foi realizado na data de vencimento.
 
-**Fluxo no MedicWarehouse:**
+**Fluxo no PrimeCare Software:**
 ```
 1. Vencimento passa
 2. Status → PaymentOverdue
@@ -279,7 +279,7 @@ Cliente no Premium (R$ 320) → Basic (R$ 190)
 ### RBAC (Role-Based Access Control / Controle de Acesso Baseado em Funções)
 **O que é:** Sistema que define o que cada tipo de usuário pode fazer.
 
-**Roles (Funções) no MedicWarehouse:**
+**Roles (Funções) no PrimeCare Software:**
 ```
 1. SystemAdmin (Administrador do Sistema)
    - Gerencia TODAS as clínicas
@@ -331,7 +331,7 @@ Receptionist pode:
 ### Onboarding (Integração)
 **O que é:** Processo de apresentar o sistema ao novo cliente.
 
-**Etapas no MedicWarehouse:**
+**Etapas no PrimeCare Software:**
 ```
 1. Cadastro inicial da clínica
 2. Tutorial das funcionalidades
@@ -365,7 +365,7 @@ Receptionist pode:
 ### KPI (Key Performance Indicator / Indicador-Chave de Desempenho)
 **O que é:** Métricas que mostram se o negócio está indo bem.
 
-**KPIs do MedicWarehouse:**
+**KPIs do PrimeCare Software:**
 ```
 1. Taxa de ocupação de agenda
    - Quantos horários foram preenchidos
@@ -408,7 +408,7 @@ Receptionist pode:
 ### Funnel (Funil de Vendas)
 **O que é:** Jornada do cliente desde conhecer até comprar.
 
-**Funil do MedicWarehouse:**
+**Funil do PrimeCare Software:**
 ```
 1. Visitante (topo do funil)
    ↓ (conversão)
@@ -659,7 +659,7 @@ Receita cresce linear, custo cresce devagar!
 - Cliente pode pedir exclusão
 - Multas pesadas para quem descumprir
 
-**No MedicWarehouse:**
+**No PrimeCare Software:**
 - Dados médicos são sensíveis
 - Isolamento entre clínicas (multitenant)
 - Criptografia de dados
@@ -805,7 +805,7 @@ Receita cresce linear, custo cresce devagar!
 - [`README.md`](../README.md) - Visão geral do projeto
 
 ### Contato
-- 📧 Entre em contato com a equipe MedicWarehouse
+- 📧 Entre em contato com a equipe PrimeCare Software
 - 💬 Participe de comunidades de empreendedorismo
 - 📚 Continue estudando e praticando
 
@@ -815,7 +815,7 @@ Receita cresce linear, custo cresce devagar!
 
 **Versão:** 1.0
 
-**Mantido por:** Equipe MedicWarehouse
+**Mantido por:** Equipe PrimeCare Software
 
 ---
 

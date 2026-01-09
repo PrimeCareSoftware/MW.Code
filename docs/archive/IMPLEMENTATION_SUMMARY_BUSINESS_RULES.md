@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema MedicWarehouse, conforme especificado no issue.
+Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema PrimeCare Software, conforme especificado no issue.
 
 ## ✅ Requisitos Implementados
 
@@ -271,7 +271,7 @@ Duration: 176 ms
 ## 📞 Suporte
 
 - **Documentação**: Veja `BUSINESS_RULES.md` e `TECHNICAL_IMPLEMENTATION.md`
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 - **Email**: contato@medicwarehouse.com
 
 ## 🎉 Conclusão

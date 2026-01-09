@@ -1,8 +1,8 @@
-# Frontend Integration Guide - MedicWarehouse API
+# Frontend Integration Guide - PrimeCare Software API
 
 ## Quick Start for Frontend Developers
 
-This guide provides everything you need to integrate your frontend application with the MedicWarehouse API.
+This guide provides everything you need to integrate your frontend application with the PrimeCare Software API.
 
 ## 🔐 Authentication Flow
 
@@ -511,7 +511,7 @@ export class LoginComponent {
 ```html
 <!-- login.component.html -->
 <div class="login-container">
-  <h2>MedicWarehouse Login</h2>
+  <h2>PrimeCare Software Login</h2>
   
   <div class="login-type-toggle">
     <button 
@@ -625,4 +625,4 @@ If you encounter CORS errors, make sure the backend is configured with your fron
 
 For issues or questions:
 - Email: contato@medicwarehouse.com
-- GitHub: https://github.com/MedicWarehouse/MW.Code
+- GitHub: https://github.com/PrimeCare Software/MW.Code

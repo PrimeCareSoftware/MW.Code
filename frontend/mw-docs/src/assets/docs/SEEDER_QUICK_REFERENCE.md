@@ -1,4 +1,4 @@
-# Guia Rápido - Seeders MedicWarehouse
+# Guia Rápido - Seeders PrimeCare Software
 
 ## 🎯 Objetivo
 Popular o banco de dados com dados demo realísticos para teste completo do sistema.

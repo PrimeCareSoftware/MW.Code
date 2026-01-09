@@ -1,6 +1,6 @@
 # 📋 Guia do Médico - Sistema Conforme CFM 1.821/2007
 
-> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o MedicWarehouse em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
+> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o PrimeCare Software em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
 
 > **Data:** Janeiro 2026  
 > **Versão:** 1.0  
@@ -25,7 +25,7 @@
 
 ## 🩺 Introdução
 
-O MedicWarehouse foi desenvolvido em total conformidade com a **Resolução CFM 1.821/2007**, que estabelece as normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio de prontuários médicos.
+O PrimeCare Software foi desenvolvido em total conformidade com a **Resolução CFM 1.821/2007**, que estabelece as normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio de prontuários médicos.
 
 Este guia tem como objetivo orientar você, médico(a), sobre como preencher corretamente um prontuário eletrônico conforme as exigências do Conselho Federal de Medicina.
 
@@ -557,9 +557,9 @@ Se tiver dúvidas sobre o uso do sistema ou precisar de suporte técnico:
 
 ---
 
-**Documento Elaborado Por:** Equipe MedicWarehouse  
+**Documento Elaborado Por:** Equipe PrimeCare Software  
 **Data de Atualização:** Janeiro 2026  
 **Versão:** 1.0  
 **Status:** Oficial
 
-**Agradecemos por usar o MedicWarehouse! 💙**
+**Agradecemos por usar o PrimeCare Software! 💙**

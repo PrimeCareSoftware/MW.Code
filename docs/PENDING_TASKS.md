@@ -1,6 +1,6 @@
-# 📋 Pendências de Desenvolvimento e Planejamento Futuro - MedicWarehouse
+# 📋 Pendências de Desenvolvimento e Planejamento Futuro - PrimeCare Software
 
-> **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema MedicWarehouse.
+> **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema PrimeCare Software.
 
 > **Última Atualização:** Janeiro 2026  
 > **Status:** Sistema em produção - 92% completo - Atualizando roadmap  
@@ -12,7 +12,7 @@
 
 ### Status Geral do Sistema
 
-O MedicWarehouse possui uma **base técnica sólida** com:
+O PrimeCare Software possui uma **base técnica sólida** com:
 - ✅ Arquitetura DDD bem implementada
 - ✅ 670+ testes automatizados (100% cobertura domínio)
 - ✅ Sistema de assinaturas SaaS completo
@@ -134,7 +134,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - Total: ~2.236 linhas de código production-ready
 
 #### Frontend - Aplicações Web
-- ✅ **MedicWarehouse App** (Principal) - 100%
+- ✅ **PrimeCare Software App** (Principal) - 100%
   - Dashboard com estatísticas
   - Gestão de pacientes
   - Sistema de agendamentos
@@ -2337,4 +2337,4 @@ Baixo Impacto, Alto Esforço (Avoid):
 **Versão:** 2.0 - Compliance Regulatório Brasileiro  
 **Status:** Documento centralizado consolidado com melhorias regulatórias
 
-**Este documento serve como fonte única da verdade para todas as pendências e planejamento futuro do MedicWarehouse, incluindo conformidade total com regulamentações brasileiras (CFM, ANVISA, ANS, Receita Federal, LGPD).**
+**Este documento serve como fonte única da verdade para todas as pendências e planejamento futuro do PrimeCare Software, incluindo conformidade total com regulamentações brasileiras (CFM, ANVISA, ANS, Receita Federal, LGPD).**

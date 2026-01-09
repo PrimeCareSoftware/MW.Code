@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este documento analisa as melhores opções de serviços de videochamada considerando custo-benefício para implementação no MedicWarehouse.
+Este documento analisa as melhores opções de serviços de videochamada considerando custo-benefício para implementação no PrimeCare Software.
 
 ---
 
@@ -196,7 +196,7 @@ Para 5 salas: $295/mês
 
 ## 🎯 Recomendação Final
 
-### Para MedicWarehouse: **Daily.co** 🏆
+### Para PrimeCare Software: **Daily.co** 🏆
 
 **Motivo:**
 1. **Melhor Custo-Benefício**: $30/mês para 1.000 consultas vs $50-90 de outros

@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-✅ **MIGRAÇÃO COMPLETA!** O MedicWarehouse agora usa PostgreSQL por padrão, com suporte retrocompatível para SQL Server.
+✅ **MIGRAÇÃO COMPLETA!** O PrimeCare Software agora usa PostgreSQL por padrão, com suporte retrocompatível para SQL Server.
 
 Este documento explica como a migração foi implementada e como usar o sistema com PostgreSQL.
 
@@ -51,7 +51,7 @@ Este documento explica como a migração foi implementada e como usar o sistema 
 # 1. Criar arquivo .env
 cat > .env << EOF
 POSTGRES_PASSWORD=postgres
-JWT_SECRET_KEY=MedicWarehouse-SuperSecretKey-2024-Development-MinLength32Chars!
+JWT_SECRET_KEY=PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!
 EOF
 
 # 2. Iniciar PostgreSQL e aplicação
@@ -109,7 +109,7 @@ O sistema detecta automaticamente qual banco usar baseado na connection string:
 Host=localhost;Port=5432;Database=medicwarehouse;Username=postgres;Password=postgres
 
 // SQL Server: Connection string tradicional (backward compatibility)
-Server=localhost,1433;Database=MedicWarehouse;User Id=sa;Password=...
+Server=localhost,1433;Database=PrimeCare Software;User Id=sa;Password=...
 ```
 
 ### Arquivos Modificados
@@ -201,7 +201,7 @@ psql -h localhost -U postgres -d medicwarehouse
 # Criar arquivo de configuração
 cat > migrate.load << EOF
 LOAD DATABASE
-  FROM mssql://sa:password@localhost/MedicWarehouse
+  FROM mssql://sa:password@localhost/PrimeCare Software
   INTO postgresql://postgres:postgres@localhost/medicwarehouse
   
   WITH include drop, create tables, create indexes, reset sequences,

@@ -7,8 +7,8 @@ const { marked } = require('marked');
 // Configurações
 const REPO_ROOT = path.join(__dirname, '..');
 const OUTPUT_DIR = __dirname;
-const OUTPUT_MD_FILE = path.join(OUTPUT_DIR, 'MedicWarehouse-Documentacao-Completa.md');
-const OUTPUT_HTML_FILE = path.join(OUTPUT_DIR, 'MedicWarehouse-Documentacao-Completa.html');
+const OUTPUT_MD_FILE = path.join(OUTPUT_DIR, 'PrimeCare Software-Documentacao-Completa.md');
+const OUTPUT_HTML_FILE = path.join(OUTPUT_DIR, 'PrimeCare Software-Documentacao-Completa.html');
 
 // Lista completa de arquivos markdown para incluir (todos os arquivos de documentação)
 const documentFiles = [
@@ -207,9 +207,9 @@ function readFileWithFallback(filePath) {
 function gerarMarkdownConsolidado() {
   console.log('📝 Gerando documentação consolidada em Markdown...\n');
   
-  let markdown = `# MedicWarehouse - Documentação Completa\n\n`;
+  let markdown = `# PrimeCare Software - Documentação Completa\n\n`;
   markdown += `> **Data de Geração:** ${new Date().toLocaleString('pt-BR')}\n\n`;
-  markdown += `> Este documento contém toda a documentação do projeto MedicWarehouse consolidada em um único arquivo.\n\n`;
+  markdown += `> Este documento contém toda a documentação do projeto PrimeCare Software consolidada em um único arquivo.\n\n`;
   markdown += `---\n\n`;
   
   // Gerar índice
@@ -244,9 +244,9 @@ function gerarMarkdownConsolidado() {
   // Adicionar rodapé
   markdown += `\n\n---\n\n`;
   markdown += `## 📞 Informações de Contato\n\n`;
-  markdown += `**MedicWarehouse**\n`;
+  markdown += `**PrimeCare Software**\n`;
   markdown += `- Email: contato@medicwarehouse.com\n`;
-  markdown += `- GitHub: https://github.com/MedicWarehouse/MW.Code\n\n`;
+  markdown += `- GitHub: https://github.com/PrimeCare Software/MW.Code\n\n`;
   markdown += `---\n\n`;
   markdown += `*Documentação gerada automaticamente em ${new Date().toLocaleString('pt-BR')}*\n`;
   
@@ -264,7 +264,7 @@ function gerarHTML(markdownContent) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedicWarehouse - Documentação Completa</title>
+    <title>PrimeCare Software - Documentação Completa</title>
     <style>
         * {
             margin: 0;

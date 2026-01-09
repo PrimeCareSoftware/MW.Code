@@ -1,6 +1,6 @@
 # 🚀 Plano de Desenvolvimento - 6 Meses para Produção
 
-> **Objetivo:** Colocar o MedicWarehouse em produção e começar a gerar lucro em 6 meses  
+> **Objetivo:** Colocar o PrimeCare Software em produção e começar a gerar lucro em 6 meses  
 > **Perfil:** Desenvolvedor solo (owner)  
 > **Data de Início:** Janeiro 2025  
 > **Meta de Launch:** Junho 2025  

@@ -1,6 +1,6 @@
-# 📚 Índice da Documentação - MedicWarehouse
+# 📚 Índice da Documentação - PrimeCare Software
 
-Bem-vindo à documentação completa do sistema MedicWarehouse. Use este índice para encontrar rapidamente o que você procura.
+Bem-vindo à documentação completa do sistema PrimeCare Software. Use este índice para encontrar rapidamente o que você procura.
 
 ---
 
@@ -219,4 +219,4 @@ Se você não encontrou o que procura neste índice:
 
 ---
 
-**Equipe MedicWarehouse** | [GitHub](https://github.com/MedicWarehouse/MW.Code)
+**Equipe PrimeCare Software** | [GitHub](https://github.com/PrimeCare Software/MW.Code)

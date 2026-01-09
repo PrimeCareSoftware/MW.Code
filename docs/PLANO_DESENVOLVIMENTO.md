@@ -1,4 +1,4 @@
-# 📋 Plano de Desenvolvimento Priorizado - MedicWarehouse
+# 📋 Plano de Desenvolvimento Priorizado - PrimeCare Software
 
 > **Documento Consolidado:** Este documento unifica PLANO_DESENVOLVIMENTO_PRIORIZADO.md (Parte 1) e PLANO_DESENVOLVIMENTO_PRIORIZADO_PARTE2.md (Parte 2)
 
@@ -86,7 +86,7 @@ Antes de prosseguir com o plano futuro, é importante reconhecer o que JÁ foi e
 - ✅ **Status e Priorização**
 
 #### 8. Aplicações Frontend (100% Completo)
-- ✅ **MedicWarehouse App** (Principal)
+- ✅ **PrimeCare Software App** (Principal)
   - 10+ páginas funcionais
   - Dashboard com estatísticas
   - Gestão completa de pacientes
@@ -145,7 +145,7 @@ Antes de prosseguir com o plano futuro, é importante reconhecer o que JÁ foi e
 
 ## 🎯 Visão Executiva do Plano Futuro
 
-Este documento organiza TODAS as pendências RESTANTES do MedicWarehouse em uma ordem de prioridade clara, considerando:
+Este documento organiza TODAS as pendências RESTANTES do PrimeCare Software em uma ordem de prioridade clara, considerando:
 
 1. **Obrigatoriedade Legal** (CFM, ANVISA, Receita Federal, ANS)
 2. **Impacto no Negócio** (Aquisição de clientes, retenção, receita)
@@ -888,7 +888,7 @@ Este documento organiza TODAS as pendências RESTANTES do MedicWarehouse em uma 
 **Versão:** 2.0 - Ajustado com realizações  
 **Status:** Sistema 92% completo - Atualizando roadmap
 
-**Este documento serve como roteiro detalhado de desenvolvimento do MedicWarehouse para 2026, considerando as implementações já realizadas em 2025.**
+**Este documento serve como roteiro detalhado de desenvolvimento do PrimeCare Software para 2026, considerando as implementações já realizadas em 2025.**
 
 # 📋 Plano de Desenvolvimento Priorizado - Parte 2
 ## Prioridades Médias e Baixas + Apps
@@ -1564,7 +1564,7 @@ public class SOAPMedicalRecord
 
 ## 🌐 APLICATIVOS WEB
 
-### MedicWarehouse App (Frontend Principal)
+### PrimeCare Software App (Frontend Principal)
 
 **Prioridade Alta:**
 1. Dashboard de Relatórios (4 semanas)

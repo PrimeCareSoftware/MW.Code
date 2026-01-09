@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento descreve a implementação técnica das regras de negócio do MedicWarehouse, focando em como o sistema suporta múltiplas clínicas, isolamento de dados e templates reutilizáveis.
+Este documento descreve a implementação técnica das regras de negócio do PrimeCare Software, focando em como o sistema suporta múltiplas clínicas, isolamento de dados e templates reutilizáveis.
 
 ## Arquitetura da Solução
 
@@ -736,4 +736,4 @@ Para detalhes completos e representações visuais de cada tela, consulte [SCREE
 
 **Data**: Janeiro 2025  
 **Versão**: 1.0  
-**Autor**: Equipe MedicWarehouse
+**Autor**: Equipe PrimeCare Software

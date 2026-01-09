@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este guia apresenta estratégias para colocar o MedicWarehouse em produção com **custo mínimo** enquanto você ainda não tem clientes grandes, permitindo crescimento gradual conforme a demanda aumenta.
+Este guia apresenta estratégias para colocar o PrimeCare Software em produção com **custo mínimo** enquanto você ainda não tem clientes grandes, permitindo crescimento gradual conforme a demanda aumenta.
 
 ## 💰 Comparativo de Custos Mensais
 
@@ -76,7 +76,7 @@ dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 2. **Criar novo projeto**: 
    - Click em "New Project"
    - Selecione "Deploy from GitHub repo"
-   - Escolha `MedicWarehouse/MW.Code`
+   - Escolha `PrimeCare Software/MW.Code`
 
 3. **Adicionar PostgreSQL**:
    - Click em "+ New"
@@ -208,7 +208,7 @@ docker compose version
 
 ```bash
 # Clonar repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # Criar arquivo .env para produção

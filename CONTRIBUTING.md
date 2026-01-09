@@ -1,6 +1,6 @@
-# 🤝 Guia de Contribuição - MedicWarehouse
+# 🤝 Guia de Contribuição - PrimeCare Software
 
-> **Bem-vindo!** Obrigado por considerar contribuir para o MedicWarehouse.
+> **Bem-vindo!** Obrigado por considerar contribuir para o PrimeCare Software.
 
 ---
 
@@ -105,7 +105,7 @@ git clone https://github.com/seu-usuario/MW.Code.git
 cd MW.Code
 
 # Adicione o upstream
-git remote add upstream https://github.com/MedicWarehouse/MW.Code.git
+git remote add upstream https://github.com/PrimeCare Software/MW.Code.git
 
 # Configure .env
 cp .env.example .env
@@ -553,7 +553,7 @@ Procure por issues marcadas com:
 
 ### Encontrar uma Issue
 
-1. Veja as [issues abertas](https://github.com/MedicWarehouse/MW.Code/issues)
+1. Veja as [issues abertas](https://github.com/PrimeCare Software/MW.Code/issues)
 2. Escolha uma que você consiga resolver
 3. Comente na issue dizendo que vai trabalhar nela
 4. Aguarde aprovação do maintainer
@@ -613,7 +613,7 @@ Todos os contribuidores são listados no README e no arquivo AUTHORS.
 
 ## 📞 Contato
 
-- **GitHub Issues:** [github.com/MedicWarehouse/MW.Code/issues](https://github.com/MedicWarehouse/MW.Code/issues)
+- **GitHub Issues:** [github.com/PrimeCare Software/MW.Code/issues](https://github.com/PrimeCare Software/MW.Code/issues)
 - **Email:** contato@medicwarehouse.com
 - **Documentação:** [Índice Completo](docs/DOCUMENTATION_INDEX.md)
 
@@ -631,4 +631,4 @@ Todos os contribuidores são listados no README e no arquivo AUTHORS.
 
 **Obrigado por contribuir! 🎉**
 
-Sua contribuição ajuda a tornar o MedicWarehouse melhor para todos.
+Sua contribuição ajuda a tornar o PrimeCare Software melhor para todos.

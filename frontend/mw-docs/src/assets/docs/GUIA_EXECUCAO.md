@@ -1,6 +1,6 @@
-# 📋 Guia de Execução Passo a Passo - MedicWarehouse
+# 📋 Guia de Execução Passo a Passo - PrimeCare Software
 
-Este guia fornece instruções detalhadas para executar o sistema MedicWarehouse em seu PC, começando pela criação do banco de dados SQL Server via Docker.
+Este guia fornece instruções detalhadas para executar o sistema PrimeCare Software em seu PC, começando pela criação do banco de dados SQL Server via Docker.
 
 ## 📑 Índice
 
@@ -104,7 +104,7 @@ Abra o terminal (PowerShell, CMD, ou Terminal Linux/macOS) e execute:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 
 # Entre no diretório do projeto
 cd MW.Code
@@ -161,10 +161,10 @@ Aguarde alguns segundos para o SQL Server inicializar completamente, depois exec
 # Conectar ao SQL Server e criar o banco de dados
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse; SELECT name FROM sys.databases;"
+  -Q "CREATE DATABASE PrimeCare Software; SELECT name FROM sys.databases;"
 ```
 
-Você deve ver a lista de bancos de dados, incluindo `MedicWarehouse`.
+Você deve ver a lista de bancos de dados, incluindo `PrimeCare Software`.
 
 ### Opção 2: Executar Tudo com Docker Compose (Recomendado)
 
@@ -181,13 +181,13 @@ O arquivo de configuração principal está em `src/MedicSoft.Api/appsettings.js
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=sqlserver;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=sqlserver;Database=PrimeCare Software;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
   },
   "JwtSettings": {
-    "SecretKey": "MedicWarehouse-SuperSecretKey-2024-Development",
+    "SecretKey": "PrimeCare Software-SuperSecretKey-2024-Development",
     "ExpiryMinutes": 60,
-    "Issuer": "MedicWarehouse",
-    "Audience": "MedicWarehouse-API"
+    "Issuer": "PrimeCare Software",
+    "Audience": "PrimeCare Software-API"
   }
 }
 ```
@@ -199,7 +199,7 @@ Se você for executar sem Docker, edite o arquivo para usar `localhost`:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=MedicWarehouse;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=localhost,1433;Database=PrimeCare Software;User Id=sa;Password=MedicW@rehouse2024!;TrustServerCertificate=True;MultipleActiveResultSets=true"
   }
 }
 ```
@@ -274,7 +274,7 @@ docker run -d \
 # Criar o banco de dados
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse;"
+  -Q "CREATE DATABASE PrimeCare Software;"
 ```
 
 ### 6.2. Executar a API .NET
@@ -342,7 +342,7 @@ Você pode conectar ao SQL Server usando ferramentas como:
 
 **Credenciais de Conexão:**
 - **Server**: `localhost,1433`
-- **Database**: `MedicWarehouse`
+- **Database**: `PrimeCare Software`
 - **User**: `sa`
 - **Password**: `MedicW@rehouse2024!`
 - **Authentication**: SQL Server Authentication
@@ -475,7 +475,7 @@ lsof -i :4200
 # 1. Criar o banco manualmente
 docker exec -it medicwarehouse-sqlserver /opt/mssql-tools/bin/sqlcmd \
   -S localhost -U sa -P "MedicW@rehouse2024!" \
-  -Q "CREATE DATABASE MedicWarehouse;"
+  -Q "CREATE DATABASE PrimeCare Software;"
 
 # 2. Ou usar migrations (se configuradas)
 cd src/MedicSoft.Api
@@ -646,7 +646,7 @@ MW.Code/
 ├── README.md                   # Documentação principal
 ├── GUIA_EXECUCAO.md           # Este guia
 ├── IMPLEMENTATION.md          # Detalhes de implementação
-├── MedicWarehouse.sln         # Solution .NET
+├── PrimeCare Software.sln         # Solution .NET
 │
 ├── src/                       # Backend .NET 8
 │   ├── MedicSoft.Api/         # API REST com JWT
@@ -698,10 +698,10 @@ Após executar o sistema com sucesso:
 Se você encontrar problemas não listados aqui:
 
 1. Verifique os logs dos containers: `docker-compose logs`
-2. Consulte a [documentação oficial](https://github.com/MedicWarehouse/MW.Code)
+2. Consulte a [documentação oficial](https://github.com/PrimeCare Software/MW.Code)
 3. Abra uma issue no GitHub
 4. Entre em contato: contato@medicwarehouse.com
 
 ---
 
-**Desenvolvido com ❤️ pela equipe MedicWarehouse**
+**Desenvolvido com ❤️ pela equipe PrimeCare Software**

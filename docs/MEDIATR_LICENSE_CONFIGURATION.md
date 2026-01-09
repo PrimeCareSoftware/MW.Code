@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document explains how to configure the LuckyPennySoftware MediatR license key in the MedicWarehouse application.
+This document explains how to configure the LuckyPennySoftware MediatR license key in the PrimeCare Software application.
 
 ## What is LuckyPennySoftware.MediatR.License?
 
@@ -210,7 +210,7 @@ For issues with the license key or questions about licensing:
 
 ## Summary
 
-The MediatR license key from LuckyPennySoftware is now properly configured in the MedicWarehouse application:
+The MediatR license key from LuckyPennySoftware is now properly configured in the PrimeCare Software application:
 - ✅ Stored in configuration files (appsettings.json)
 - ✅ Managed by dedicated service (MediatRLicenseService)
 - ✅ Initialized at application startup

@@ -1,4 +1,4 @@
-# 📚 Guia Completo de APIs - MedicWarehouse
+# 📚 Guia Completo de APIs - PrimeCare Software
 
 > **Última Atualização:** Janeiro 2026  
 > **Versão da API:** 2.0  
@@ -20,7 +20,7 @@
 
 ## 🎯 Visão Geral
 
-A API do MedicWarehouse é uma **API RESTful** completa que fornece acesso a todas as funcionalidades do sistema através de endpoints HTTP padronizados.
+A API do PrimeCare Software é uma **API RESTful** completa que fornece acesso a todas as funcionalidades do sistema através de endpoints HTTP padronizados.
 
 ### Características
 
@@ -553,13 +553,13 @@ curl -X GET "http://localhost:5000/api/reports/financial-summary?startDate=2026-
 
 Para facilitar os testes, importa a coleção completa do Postman:
 
-**Arquivo:** `MedicWarehouse-Postman-Collection.json` (na raiz do projeto)
+**Arquivo:** `PrimeCare Software-Postman-Collection.json` (na raiz do projeto)
 
 ### Como usar:
 
 1. Abra o Postman
 2. Clique em "Import"
-3. Selecione o arquivo `MedicWarehouse-Postman-Collection.json`
+3. Selecione o arquivo `PrimeCare Software-Postman-Collection.json`
 4. Configure as variáveis:
    - `base_url`: `http://localhost:5000/api`
    - `token`: (será preenchido automaticamente após login)
@@ -598,9 +598,9 @@ No Swagger você pode:
 
 ## 📞 Suporte
 
-- **GitHub Issues:** https://github.com/MedicWarehouse/MW.Code/issues
+- **GitHub Issues:** https://github.com/PrimeCare Software/MW.Code/issues
 - **Email:** contato@medicwarehouse.com
-- **Documentação:** https://github.com/MedicWarehouse/MW.Code/tree/main/docs
+- **Documentação:** https://github.com/PrimeCare Software/MW.Code/tree/main/docs
 
 ---
 

@@ -611,7 +611,7 @@ PUT /api/medicalrecords/{id}
 
 ---
 
-**Documento Elaborado Por:** Equipe MedicWarehouse  
+**Documento Elaborado Por:** Equipe PrimeCare Software  
 **Data de Atualização:** Janeiro 2026  
 **Versão:** 1.0  
 **Status:** Oficial

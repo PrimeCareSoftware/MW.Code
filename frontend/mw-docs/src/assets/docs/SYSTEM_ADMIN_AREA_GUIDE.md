@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no MedicWarehouse, visualizem métricas globais do sistema e controlem assinaturas.
+A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no PrimeCare Software, visualizem métricas globais do sistema e controlem assinaturas.
 
 ## Acesso
 
@@ -403,4 +403,4 @@ Para dúvidas ou problemas relacionados à área administrativa:
 
 **Última Atualização**: 14 de Outubro de 2024  
 **Versão**: 1.0.0  
-**Autor**: GitHub Copilot para MedicWarehouse
+**Autor**: GitHub Copilot para PrimeCare Software

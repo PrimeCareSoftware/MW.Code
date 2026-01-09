@@ -303,4 +303,4 @@
 ---
 
 **Última atualização**: 7 de Janeiro de 2026
-**Responsável**: Equipe de Desenvolvimento MedicWarehouse
+**Responsável**: Equipe de Desenvolvimento PrimeCare Software

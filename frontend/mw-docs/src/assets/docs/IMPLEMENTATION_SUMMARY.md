@@ -92,7 +92,7 @@ Documentação completa em português contendo:
 Mudanças realizadas:
 1. ✅ Adicionado badge do GitHub Actions no topo:
    ```markdown
-   [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
+   [![CI - Test Frontend e Backend](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/PrimeCare Software/MW.Code/actions/workflows/ci.yml)
    ```
 
 2. ✅ Adicionada seção "🔄 CI/CD" com:
@@ -209,7 +209,7 @@ npm test -- --watch=false --code-coverage
 
 ## 🎉 Conclusão
 
-Implementação completa do GitHub Actions para CI/CD do MedicWarehouse:
+Implementação completa do GitHub Actions para CI/CD do PrimeCare Software:
 - ✅ 3 jobs configurados
 - ✅ Testes backend e frontend
 - ✅ Build verification

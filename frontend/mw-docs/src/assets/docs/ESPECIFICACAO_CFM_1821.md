@@ -10,7 +10,7 @@
 
 ## 📖 Resumo Executivo
 
-A Resolução CFM 1.821/2007 estabelece normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio dos documentos dos prontuários dos pacientes. Este documento mapeia todos os requisitos obrigatórios e o status de implementação no MedicWarehouse.
+A Resolução CFM 1.821/2007 estabelece normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio dos documentos dos prontuários dos pacientes. Este documento mapeia todos os requisitos obrigatórios e o status de implementação no PrimeCare Software.
 
 ---
 

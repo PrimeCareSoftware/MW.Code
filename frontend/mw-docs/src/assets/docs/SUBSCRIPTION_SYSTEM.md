@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O MedicWarehouse implementa um sistema completo de assinaturas SaaS com gerenciamento de planos, permissões por usuário e controle de acesso a módulos.
+O PrimeCare Software implementa um sistema completo de assinaturas SaaS com gerenciamento de planos, permissões por usuário e controle de acesso a módulos.
 
 ## 1. Planos de Assinatura
 
@@ -118,7 +118,7 @@ Prezado(a) [Nome da Clínica],
 
 Identificamos que o pagamento da sua assinatura está em atraso.
 
-⚠️ ATENÇÃO: Seu acesso ao sistema MedicWarehouse 
+⚠️ ATENÇÃO: Seu acesso ao sistema PrimeCare Software 
 ficará indisponível até a regularização do pagamento.
 
 Valor: R$ XXX,XX
@@ -132,7 +132,7 @@ automaticamente.
 Dúvidas? Entre em contato conosco.
 
 Atenciosamente,
-Equipe MedicWarehouse
+Equipe PrimeCare Software
 ```
 
 ### 3.3 Bloqueio de Acesso

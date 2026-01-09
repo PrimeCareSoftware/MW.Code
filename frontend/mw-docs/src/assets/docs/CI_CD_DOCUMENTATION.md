@@ -1,6 +1,6 @@
 # 🚀 CI/CD com GitHub Actions
 
-Este documento descreve a implementação do pipeline de CI/CD para o MedicWarehouse usando GitHub Actions.
+Este documento descreve a implementação do pipeline de CI/CD para o PrimeCare Software usando GitHub Actions.
 
 ## 📋 Visão Geral
 
@@ -64,7 +64,7 @@ npm test -- --watch=false --browsers=ChromeHeadless
 
 **Configuração**:
 - **Organization**: medicwarehouse
-- **Project Key**: MedicWarehouse_MW.Code
+- **Project Key**: PrimeCare Software_MW.Code
 - **Coverage Format**: OpenCover
 - **Test Results**: TRX format
 
@@ -81,7 +81,7 @@ npm test -- --watch=false --browsers=ChromeHeadless
 
 **Configuração**:
 - **Organization**: medicwarehouse
-- **Project Key**: MedicWarehouse_MW.Code_Frontend
+- **Project Key**: PrimeCare Software_MW.Code_Frontend
 - **Coverage Format**: LCOV
 - **Source Directory**: src
 - **Test Inclusions**: \*\*/\*.spec.ts
@@ -235,7 +235,7 @@ O projeto utiliza **SonarCloud** para análise estática de código e qualidade.
 #### Backend (.NET)
 - **Scanner**: dotnet-sonarscanner
 - **Formato de Cobertura**: OpenCover
-- **Project Key**: MedicWarehouse_MW.Code
+- **Project Key**: PrimeCare Software_MW.Code
 - **Métricas Analisadas**:
   - Code Smells
   - Bugs
@@ -247,7 +247,7 @@ O projeto utiliza **SonarCloud** para análise estática de código e qualidade.
 #### Frontend (Angular)
 - **Scanner**: SonarCloud GitHub Action
 - **Formato de Cobertura**: LCOV
-- **Project Key**: MedicWarehouse_MW.Code_Frontend
+- **Project Key**: PrimeCare Software_MW.Code_Frontend
 - **Configuração**: sonar-project.properties
 - **Métricas Analisadas**:
   - Code Smells

@@ -1,7 +1,7 @@
 # Apple-Inspired Design System
 
 ## Overview
-This document describes the Apple-inspired design system implemented across all MedicWarehouse frontend applications (mw-site, mw-docs, medicwarehouse-app, and mw-system-admin).
+This document describes the Apple-inspired design system implemented across all PrimeCare Software frontend applications (mw-site, mw-docs, medicwarehouse-app, and mw-system-admin).
 
 ## Typography
 
@@ -242,4 +242,4 @@ To maintain consistency:
 ---
 
 **Last Updated**: December 23, 2025
-**Maintained by**: MedicWarehouse Development Team
+**Maintained by**: PrimeCare Software Development Team

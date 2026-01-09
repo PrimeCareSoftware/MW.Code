@@ -12,8 +12,8 @@ documentacao-portatil/
 ├── 🐧 gerar.sh                                     (Script Linux/Mac)
 ├── 🪟 gerar.bat                                    (Script Windows)
 ├── 🚫 .gitignore                                   (Ignora node_modules)
-├── 📱 MedicWarehouse-Documentacao-Completa.html    (553 KB - HTML responsivo)
-└── 📝 MedicWarehouse-Documentacao-Completa.md      (433 KB - Markdown consolidado)
+├── 📱 PrimeCare Software-Documentacao-Completa.html    (553 KB - HTML responsivo)
+└── 📝 PrimeCare Software-Documentacao-Completa.md      (433 KB - Markdown consolidado)
 ```
 
 ## 📊 Estatísticas
@@ -154,8 +154,8 @@ npm install
 npm run gerar
 
 # Resultado: 2 arquivos prontos para uso
-# - MedicWarehouse-Documentacao-Completa.html
-# - MedicWarehouse-Documentacao-Completa.md
+# - PrimeCare Software-Documentacao-Completa.html
+# - PrimeCare Software-Documentacao-Completa.md
 ```
 
 ## 💡 Casos de Uso
@@ -231,9 +231,9 @@ gerar.bat   # Windows
 
 # Visualizar HTML
 # Linux/Mac
-xdg-open MedicWarehouse-Documentacao-Completa.html
+xdg-open PrimeCare Software-Documentacao-Completa.html
 # Windows
-start MedicWarehouse-Documentacao-Completa.html
+start PrimeCare Software-Documentacao-Completa.html
 
 # Ver tamanho dos arquivos
 ls -lh *.html *.md
@@ -253,5 +253,5 @@ wc -l *.md  # Contar linhas
 
 **Status**: ✅ **COMPLETO E FUNCIONAL**
 
-*Desenvolvido com ❤️ pela equipe MedicWarehouse*
+*Desenvolvido com ❤️ pela equipe PrimeCare Software*
 *Outubro 2025*

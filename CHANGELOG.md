@@ -1,4 +1,4 @@
-# 📝 CHANGELOG - MedicWarehouse
+# 📝 CHANGELOG - PrimeCare Software
 
 > **Histórico de Desenvolvimento e Atualizações**  
 > **Última Atualização:** Janeiro 2026
@@ -65,7 +65,7 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
   - API completa com 15+ endpoints
 
 #### Frontend
-- **MedicWarehouse App** - Aplicativo principal das clínicas
+- **PrimeCare Software App** - Aplicativo principal das clínicas
   - 10+ páginas funcionais
   - Dashboard com estatísticas
   - Gestão completa de pacientes
@@ -405,11 +405,11 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](../LICENSE) para
 
 ## Contato
 
-- **Projeto**: MedicWarehouse
+- **Projeto**: PrimeCare Software
 - **Email**: contato@medicwarehouse.com
-- **GitHub**: https://github.com/MedicWarehouse/MW.Code
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **GitHub**: https://github.com/PrimeCare Software/MW.Code
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
 ---
 
-**Mantido com ❤️ pela equipe MedicWarehouse**
+**Mantido com ❤️ pela equipe PrimeCare Software**

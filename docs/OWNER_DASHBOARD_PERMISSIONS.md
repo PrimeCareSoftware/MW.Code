@@ -367,7 +367,7 @@ dotnet test --filter "FullyQualifiedName~SubscriptionServiceEnvironment"
 Para dúvidas ou problemas:
 - **Email**: contato@medicwarehouse.com
 - **Documentação**: https://docs.medicwarehouse.com
-- **Issues**: https://github.com/MedicWarehouse/MW.Code/issues
+- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
 ## Changelog
 

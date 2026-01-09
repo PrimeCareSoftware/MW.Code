@@ -1,13 +1,13 @@
-# Mapeamento Completo do Sistema MedicWarehouse
+# Mapeamento Completo do Sistema PrimeCare Software
 
 ## 📊 Visão Geral da Arquitetura
 
-O MedicWarehouse é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).
+O PrimeCare Software é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).
 
 ### Estrutura de Projetos
 
 ```
-MedicWarehouse.sln
+PrimeCare Software.sln
 ├── src/
 │   ├── MedicSoft.Domain         - Entidades, interfaces e lógica de domínio
 │   ├── MedicSoft.Application    - Serviços de aplicação e casos de uso
@@ -527,4 +527,4 @@ Os seeders criam um ambiente completo de teste com:
 
 ---
 
-Este mapeamento fornece uma visão completa e detalhada de todo o sistema MedicWarehouse, suas entidades, relacionamentos, fluxos e funcionalidades.
+Este mapeamento fornece uma visão completa e detalhada de todo o sistema PrimeCare Software, suas entidades, relacionamentos, fluxos e funcionalidades.

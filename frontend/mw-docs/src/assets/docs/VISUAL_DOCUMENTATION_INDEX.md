@@ -1,4 +1,4 @@
-# 📸 Visual Documentation Index - MedicWarehouse
+# 📸 Visual Documentation Index - PrimeCare Software
 
 ## Quick Navigation
 
@@ -196,7 +196,7 @@ Example:
 **Created**: October 28, 2025  
 **Version**: 1.0.0  
 **Last Updated**: October 28, 2025  
-**Authors**: MedicWarehouse Team  
+**Authors**: PrimeCare Software Team  
 **Purpose**: Navigation index for visual documentation  
 **Status**: ✅ Complete
 
@@ -204,10 +204,10 @@ Example:
 
 ## 🔗 External Links
 
-- **Repository**: [MedicWarehouse/MW.Code](../../)
+- **Repository**: [PrimeCare Software/MW.Code](../../)
 - **Documentation**: Included in repository (see links above)
 - **Issues**: [GitHub Issues](../../issues)
 
 ---
 
-**© 2025 MedicWarehouse - All rights reserved**
+**© 2025 PrimeCare Software - All rights reserved**

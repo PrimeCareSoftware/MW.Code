@@ -1,6 +1,6 @@
 # 🔍 SonarCloud Setup Guide
 
-Este guia explica como configurar o SonarCloud para o projeto MedicWarehouse.
+Este guia explica como configurar o SonarCloud para o projeto PrimeCare Software.
 
 ## 📋 Pré-requisitos
 
@@ -23,17 +23,17 @@ Este guia explica como configurar o SonarCloud para o projeto MedicWarehouse.
 
 #### Projeto Backend
 1. Na organização, clique em "Analyze new project"
-2. Selecione o repositório "MedicWarehouse/MW.Code"
+2. Selecione o repositório "PrimeCare Software/MW.Code"
 3. Configure:
-   - **Project Key**: `MedicWarehouse_MW.Code`
-   - **Project Name**: `MedicWarehouse Backend`
+   - **Project Key**: `PrimeCare Software_MW.Code`
+   - **Project Name**: `PrimeCare Software Backend`
 4. Escolha "With GitHub Actions"
 
 #### Projeto Frontend
 1. Clique novamente em "Analyze new project"
 2. Configure manualmente:
-   - **Project Key**: `MedicWarehouse_MW.Code_Frontend`
-   - **Project Name**: `MedicWarehouse Frontend`
+   - **Project Key**: `PrimeCare Software_MW.Code_Frontend`
+   - **Project Name**: `PrimeCare Software Frontend`
 3. Escolha "With GitHub Actions"
 
 ### 3. Obter Token de Autenticação
@@ -129,8 +129,8 @@ Após configurar tudo:
 ### Erro: "Project not found"
 
 **Solução**: Verifique se os Project Keys estão corretos:
-- Backend: `MedicWarehouse_MW.Code`
-- Frontend: `MedicWarehouse_MW.Code_Frontend`
+- Backend: `PrimeCare Software_MW.Code`
+- Frontend: `PrimeCare Software_MW.Code_Frontend`
 
 ### Erro: "Organization not found"
 

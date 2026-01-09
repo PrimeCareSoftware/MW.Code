@@ -1,4 +1,4 @@
-# 📊 Resumo Completo do Sistema MedicWarehouse
+# 📊 Resumo Completo do Sistema PrimeCare Software
 
 > **Data:** Novembro 2024  
 > **Status:** Sistema pronto para testes locais  
@@ -8,7 +8,7 @@
 
 ## 🎯 Visão Geral
 
-O **MedicWarehouse** é um sistema SaaS completo para gestão de consultórios médicos, construído com:
+O **PrimeCare Software** é um sistema SaaS completo para gestão de consultórios médicos, construído com:
 - **Backend:** .NET 8 + PostgreSQL
 - **Frontend:** Angular 20
 - **Arquitetura:** DDD (Domain-Driven Design)
@@ -43,7 +43,7 @@ O **MedicWarehouse** é um sistema SaaS completo para gestão de consultórios m
   - `DELETE /api/data-seeder/clear-database`
 
 #### Frontend Applications
-- ✅ **MedicWarehouse App** (porta 4200) - App principal
+- ✅ **PrimeCare Software App** (porta 4200) - App principal
 - ✅ **MW System Admin** (porta 4201) - Painel administrativo
 - ✅ **Angular 20** configurado
 - ✅ **Environments** configurados para desenvolvimento
@@ -75,7 +75,7 @@ Certifique-se de ter instalado:
 
 ```bash
 # Clone (se ainda não fez)
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/PrimeCare Software/MW.Code.git
 cd MW.Code
 
 # O arquivo .env já está configurado para desenvolvimento local
@@ -167,7 +167,7 @@ O script testa automaticamente 8 endpoints principais.
 
 ### 8️⃣ (Opcional) Iniciar Frontends
 
-#### MedicWarehouse App
+#### PrimeCare Software App
 
 ```bash
 cd frontend/medicwarehouse-app
@@ -212,7 +212,7 @@ Quando você executa `POST /api/data-seeder/seed-demo`, são criados:
 | Entidade | Quantidade | Detalhes |
 |----------|-----------|----------|
 | **Planos** | 5 | Trial, Básico, Standard, Premium, Enterprise |
-| **Clínica** | 1 | Clínica Demo MedicWarehouse |
+| **Clínica** | 1 | Clínica Demo PrimeCare Software |
 | **Assinatura** | 1 | Plano Standard ativo |
 | **Proprietário** | 1 | owner.demo |
 | **Usuários** | 3 | admin, dr.silva, recep.maria |
@@ -444,7 +444,7 @@ Execute este checklist para confirmar que tudo está funcionando:
 - **Swagger:** http://localhost:5000/swagger
 - **App Principal:** http://localhost:4200
 - **System Admin:** http://localhost:4201
-- **GitHub:** https://github.com/MedicWarehouse/MW.Code
+- **GitHub:** https://github.com/PrimeCare Software/MW.Code
 
 ### Comandos Úteis
 ```bash
@@ -469,7 +469,7 @@ curl -X POST http://localhost:5000/api/data-seeder/seed-demo
 
 ---
 
-**🎊 Parabéns! Você tem tudo pronto para rodar e testar o MedicWarehouse hoje mesmo!**
+**🎊 Parabéns! Você tem tudo pronto para rodar e testar o PrimeCare Software hoje mesmo!**
 
 ---
 

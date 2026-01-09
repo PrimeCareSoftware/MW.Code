@@ -5,7 +5,7 @@
 
 ## ✅ Problema Resolvido
 
-O sistema MedicWarehouse possuía múltiplos DbContexts (9 no total), mas apenas alguns tinham migrations EF Core criadas. Os microserviços usavam `EnsureCreated()` que não permite versionamento e controle de mudanças no schema do banco de dados.
+O sistema PrimeCare Software possuía múltiplos DbContexts (9 no total), mas apenas alguns tinham migrations EF Core criadas. Os microserviços usavam `EnsureCreated()` que não permite versionamento e controle de mudanças no schema do banco de dados.
 
 **Problema:** Não havia um processo padronizado para aplicar todas as migrations do sistema durante o desenvolvimento.
 

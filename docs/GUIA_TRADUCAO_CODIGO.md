@@ -1,7 +1,7 @@
 # 📝 Guia de Tradução de Código para Português
 
 ## 🎯 Objetivo
-Este guia estabelece o padrão para traduzir comentários, documentação e mensagens do código MedicWarehouse para português, mantendo os identificadores (classes, métodos, variáveis) em inglês.
+Este guia estabelece o padrão para traduzir comentários, documentação e mensagens do código PrimeCare Software para português, mantendo os identificadores (classes, métodos, variáveis) em inglês.
 
 ## ✅ O Que Traduzir
 
@@ -183,7 +183,7 @@ Assert.Equal("O nome não pode estar vazio (Parameter 'name')", exception.Messag
 ### Passo 4: Validar
 ```bash
 # Build do projeto
-dotnet build MedicWarehouse.sln
+dotnet build PrimeCare Software.sln
 
 # Executar testes
 dotnet test

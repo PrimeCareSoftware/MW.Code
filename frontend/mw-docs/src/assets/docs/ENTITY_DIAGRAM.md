@@ -1,4 +1,4 @@
-# Diagrama de Entidades - MedicWarehouse
+# Diagrama de Entidades - PrimeCare Software
 
 ## 📊 Relacionamentos Principais
 
@@ -317,4 +317,4 @@ Pending → Sent → Delivered → Read
 
 ---
 
-Este diagrama fornece uma visão clara e abrangente de todas as entidades e seus relacionamentos no sistema MedicWarehouse.
+Este diagrama fornece uma visão clara e abrangente de todas as entidades e seus relacionamentos no sistema PrimeCare Software.

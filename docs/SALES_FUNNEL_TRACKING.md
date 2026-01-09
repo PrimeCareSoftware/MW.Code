@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-This system implements comprehensive sales funnel tracking for the MedicWarehouse registration process. It monitors customer journey through all registration steps, identifies drop-off points, and provides actionable insights for improving conversion rates.
+This system implements comprehensive sales funnel tracking for the PrimeCare Software registration process. It monitors customer journey through all registration steps, identifies drop-off points, and provides actionable insights for improving conversion rates.
 
 ## 🎯 Features
 
@@ -333,4 +333,4 @@ For issues or questions:
 
 ## 📄 License
 
-Part of MedicWarehouse system - Internal use only
+Part of PrimeCare Software system - Internal use only
