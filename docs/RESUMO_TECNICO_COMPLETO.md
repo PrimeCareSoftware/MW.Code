@@ -748,7 +748,7 @@ telemedicine/
 
 - **GitHub:** https://github.com/PrimeCare Software/MW.Code
 - **Issues:** https://github.com/PrimeCare Software/MW.Code/issues
-- **Email:** contato@medicwarehouse.com
+- **Email:** contato@primecaresoftware.com
 - **Documentação:** `docs/DOCUMENTATION_INDEX.md`
 
 ---

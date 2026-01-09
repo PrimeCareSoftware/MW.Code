@@ -215,7 +215,7 @@ Se você não encontrou o que procura neste índice:
 1. Use a busca do GitHub no repositório
 2. Verifique as Issues existentes
 3. Abra uma nova Issue com sua dúvida
-4. Entre em contato: contato@medicwarehouse.com
+4. Entre em contato: contato@primecaresoftware.com
 
 ---
 

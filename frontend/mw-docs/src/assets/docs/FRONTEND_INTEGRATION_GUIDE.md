@@ -624,5 +624,5 @@ If you encounter CORS errors, make sure the backend is configured with your fron
 ## 🤝 Support
 
 For issues or questions:
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - GitHub: https://github.com/PrimeCare Software/MW.Code

@@ -302,7 +302,7 @@ A **Fase 5** da implementação do sistema conforme a Resolução CFM 1.821/2007
 - [CID-10 - OMS](https://icd.who.int/browse10/2019/en)
 
 ### Suporte Técnico
-- 📧 Email: suporte@medicwarehouse.com.br
+- 📧 Email: suporte@primecaresoftware.com.br
 - 📱 WhatsApp: Entre em contato pelo email para obter o número de suporte
 - 🌐 Portal: Em desenvolvimento
 - 📖 Docs: Consulte os arquivos MD na pasta `docs/`

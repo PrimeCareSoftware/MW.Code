@@ -388,5 +388,5 @@ If you're migrating from a version without authentication:
 ## Support
 
 For issues or questions:
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - GitHub: https://github.com/PrimeCare Software/MW.Code

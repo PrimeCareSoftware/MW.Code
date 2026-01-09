@@ -501,7 +501,7 @@ Todos os registros mantêm:
 
 Para dúvidas, sugestões ou suporte técnico:
 
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação Técnica**: Consulte README.md e IMPLEMENTATION.md
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 

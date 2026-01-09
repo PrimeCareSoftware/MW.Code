@@ -672,7 +672,7 @@ X-Tenant-Id: {guid-da-clinica}
 ## 📞 Suporte
 
 Para questões ou problemas:
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **GitHub Issues**: [https://github.com/PrimeCare Software/MW.Code/issues](https://github.com/PrimeCare Software/MW.Code/issues)
 - **Documentação**: `/frontend/mw-docs/src/assets/docs/`
 

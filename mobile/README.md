@@ -298,7 +298,7 @@ Contribuições são bem-vindas! Por favor:
 - **Documentação iOS**: [ios/README.md](ios/README.md)
 - **Documentação Android**: [android/README.md](android/README.md)
 - **Issues**: GitHub Issues
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 
 ---
 

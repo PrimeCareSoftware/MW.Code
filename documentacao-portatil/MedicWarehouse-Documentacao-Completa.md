@@ -1086,7 +1086,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 📞 Contato
 
 - **Projeto**: PrimeCare Software
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **GitHub**: [https://github.com/PrimeCare Software/MW.Code](https://github.com/PrimeCare Software/MW.Code)
 ## 🌐 MW.Site - Marketing Website
 
@@ -1579,7 +1579,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 📞 Contato
 
 - **Projeto**: PrimeCare Software
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **GitHub**: [https://github.com/PrimeCare Software/MW.Code](https://github.com/PrimeCare Software/MW.Code)
 ## 🌐 MW.Site - Marketing Website
 
@@ -2366,7 +2366,7 @@ Se você encontrar problemas não listados aqui:
 1. Verifique os logs dos containers: `docker-compose logs`
 2. Consulte a [documentação oficial](https://github.com/PrimeCare Software/MW.Code)
 3. Abra uma issue no GitHub
-4. Entre em contato: contato@medicwarehouse.com
+4. Entre em contato: contato@primecaresoftware.com
 
 ---
 
@@ -6664,7 +6664,7 @@ Apenas **você** e outros profissionais da **sua clínica** com permissão adequ
 
 Se tiver dúvidas sobre o uso do sistema ou precisar de suporte técnico:
 
-- 📧 **Email**: suporte@medicwarehouse.com.br
+- 📧 **Email**: suporte@primecaresoftware.com.br
 - 📱 **WhatsApp**: Entre em contato pelo email para obter o número de suporte
 - 🌐 **Portal de Suporte**: Em desenvolvimento
 - 📖 **Documentação**: Consulte os arquivos MD na pasta `docs/`
@@ -7366,7 +7366,7 @@ X-Tenant-Id: {guid-da-clinica}
 ## 📞 Suporte
 
 Para questões ou problemas:
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **GitHub Issues**: [https://github.com/PrimeCare Software/MW.Code/issues](https://github.com/PrimeCare Software/MW.Code/issues)
 - **Documentação**: `/frontend/mw-docs/src/assets/docs/`
 
@@ -8230,7 +8230,7 @@ If you're migrating from a version without authentication:
 ## Support
 
 For issues or questions:
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - GitHub: https://github.com/PrimeCare Software/MW.Code
 
 
@@ -14149,7 +14149,7 @@ Interessado em contribuir para os apps móveis?
 ## 📞 Suporte
 
 - **GitHub Issues**: Para bugs e feature requests
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: Consulte os READMEs específicos
 
 ---
@@ -20041,7 +20041,7 @@ Todos os registros mantêm:
 
 Para dúvidas, sugestões ou suporte técnico:
 
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação Técnica**: Consulte README.md e IMPLEMENTATION.md
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
@@ -26166,7 +26166,7 @@ Duration: 176 ms
 
 - **Documentação**: Veja `BUSINESS_RULES.md` e `TECHNICAL_IMPLEMENTATION.md`
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 
 ## 🎉 Conclusão
 
@@ -37186,7 +37186,7 @@ graph TD
 
 ## 📞 Suporte e Contato
 
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Telefone**: (11) 99999-9999
 - **WhatsApp**: +55 11 99999-9999
 - **Horário**: Segunda a Sexta, 8h às 18h | Sábados, 9h às 13h
@@ -37479,7 +37479,7 @@ Embora todos os requisitos tenham sido atendidos, melhorias futuras incluem:
 ## 📞 Informações de Contato
 
 **PrimeCare Software**
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - WhatsApp: +55 11 99999-9999
 - GitHub: https://github.com/PrimeCare Software/MW.Code
 
@@ -37905,7 +37905,7 @@ clinic-detail         | 10.83 kB | 3.00 kB
 ## Contato e Suporte
 
 Para dúvidas ou problemas relacionados à área administrativa:
-- **Email**: suporte@medicwarehouse.com
+- **Email**: suporte@primecaresoftware.com
 - **Documentação Técnica**: [README.md](../README.md)
 - **Issue Tracker**: GitHub Issues
 
@@ -38323,7 +38323,7 @@ Ambos os sistemas são totalmente responsivos:
 
 Para problemas ou dúvidas:
 
-- **Email**: suporte@medicwarehouse.com
+- **Email**: suporte@primecaresoftware.com
 - **GitHub Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 - **Documentação**: Veja os arquivos `.md` no repositório
 
@@ -39279,7 +39279,7 @@ dotnet test --filter "FullyQualifiedName~SubscriptionServiceEnvironment"
 ## Suporte
 
 Para dúvidas ou problemas:
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: https://docs.medicwarehouse.com
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
@@ -39645,7 +39645,7 @@ dotnet ef database update --project src/MedicSoft.Repository --startup-project s
 ## Suporte
 
 Para dúvidas ou problemas:
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: https://docs.medicwarehouse.com
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 
@@ -40897,7 +40897,7 @@ If you encounter CORS errors, make sure the backend is configured with your fron
 ## 🤝 Support
 
 For issues or questions:
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - GitHub: https://github.com/PrimeCare Software/MW.Code
 
 
@@ -40975,7 +40975,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:5000',  // ✅ Correto (sem /api - adicionado nos services)
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@medicwarehouse.com',
+  companyEmail: 'contato@primecaresoftware.com',
   companyPhone: '(11) 99999-9999'
 };
 ```
@@ -41037,7 +41037,7 @@ export const environment = {
   production: true,
   apiUrl: 'https://api.medicwarehouse.com',  // ✅ HTTPS obrigatório
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@medicwarehouse.com',
+  companyEmail: 'contato@primecaresoftware.com',
   companyPhone: '(11) 99999-9999'
 };
 ```
@@ -50168,7 +50168,7 @@ Como dev solo, você precisa ser **cirúrgico** nas prioridades:
 - [ ] Lista de leads qualificados (50-100)
 
 #### Suporte
-- [ ] Email de suporte configurado (suporte@medicwarehouse.com.br)
+- [ ] Email de suporte configurado (suporte@primecaresoftware.com.br)
 - [ ] Chat ao vivo (Crisp, Intercom ou Tawk.to)
 - [ ] Processos de onboarding documentados
 - [ ] Templates de resposta prontos
@@ -50362,7 +50362,7 @@ Em 6 meses você terá um produto no ar gerando receita recorrente. Em 12 meses,
 **Última atualização:** Janeiro 2025  
 **Versão:** 1.0  
 **Autor:** GitHub Copilot AI  
-**Para dúvidas:** suporte@medicwarehouse.com.br
+**Para dúvidas:** suporte@primecaresoftware.com.br
 
 
 ---
@@ -53421,7 +53421,7 @@ Com as melhorias implementadas, o **PrimeCare Software** estará posicionado par
 ## 📞 Suporte
 
 Para dúvidas ou discussões sobre esta análise:
-- **Email:** contato@medicwarehouse.com
+- **Email:** contato@primecaresoftware.com
 - **Issues:** https://github.com/PrimeCare Software/MW.Code/issues
 
 ---
@@ -55284,7 +55284,7 @@ Receita cresce linear, custo cresce devagar!
 ## 📞 Informações de Contato
 
 **PrimeCare Software**
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - GitHub: https://github.com/PrimeCare Software/MW.Code
 
 ---

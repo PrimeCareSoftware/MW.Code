@@ -377,7 +377,7 @@ Ambos os sistemas são totalmente responsivos:
 
 Para problemas ou dúvidas:
 
-- **Email**: suporte@medicwarehouse.com
+- **Email**: suporte@primecaresoftware.com
 - **GitHub Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 - **Documentação**: Veja os arquivos `.md` no repositório
 

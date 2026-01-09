@@ -401,7 +401,7 @@ Interessado em contribuir para os apps móveis?
 ## 📞 Suporte
 
 - **GitHub Issues**: Para bugs e feature requests
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: Consulte os READMEs específicos
 
 ---

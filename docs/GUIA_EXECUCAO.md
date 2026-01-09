@@ -700,7 +700,7 @@ Se você encontrar problemas não listados aqui:
 1. Verifique os logs dos containers: `docker-compose logs`
 2. Consulte a [documentação oficial](https://github.com/PrimeCare Software/MW.Code)
 3. Abra uma issue no GitHub
-4. Entre em contato: contato@medicwarehouse.com
+4. Entre em contato: contato@primecaresoftware.com
 
 ---
 

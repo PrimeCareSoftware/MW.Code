@@ -241,7 +241,7 @@ Embora todos os requisitos tenham sido atendidos, melhorias futuras incluem:
 ## 📞 Informações de Contato
 
 **PrimeCare Software**
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - WhatsApp: +55 11 99999-9999
 - GitHub: https://github.com/PrimeCare Software/MW.Code
 

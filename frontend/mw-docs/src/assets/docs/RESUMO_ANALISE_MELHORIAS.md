@@ -305,7 +305,7 @@ Com as melhorias implementadas, o **PrimeCare Software** estará posicionado par
 ## 📞 Suporte
 
 Para dúvidas ou discussões sobre esta análise:
-- **Email:** contato@medicwarehouse.com
+- **Email:** contato@primecaresoftware.com
 - **Issues:** https://github.com/PrimeCare Software/MW.Code/issues
 
 ---

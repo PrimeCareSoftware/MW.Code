@@ -550,7 +550,7 @@ Apenas **você** e outros profissionais da **sua clínica** com permissão adequ
 
 Se tiver dúvidas sobre o uso do sistema ou precisar de suporte técnico:
 
-- 📧 **Email**: suporte@medicwarehouse.com.br
+- 📧 **Email**: suporte@primecaresoftware.com.br
 - 📱 **WhatsApp**: Entre em contato pelo email para obter o número de suporte
 - 🌐 **Portal de Suporte**: Em desenvolvimento
 - 📖 **Documentação**: Consulte os arquivos MD na pasta `docs/`

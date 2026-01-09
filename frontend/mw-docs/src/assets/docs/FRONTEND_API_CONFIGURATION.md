@@ -59,7 +59,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:5000',  // ✅ Correto (sem /api - adicionado nos services)
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@medicwarehouse.com',
+  companyEmail: 'contato@primecaresoftware.com',
   companyPhone: '(11) 99999-9999'
 };
 ```
@@ -121,7 +121,7 @@ export const environment = {
   production: true,
   apiUrl: 'https://api.medicwarehouse.com',  // ✅ HTTPS obrigatório
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@medicwarehouse.com',
+  companyEmail: 'contato@primecaresoftware.com',
   companyPhone: '(11) 99999-9999'
 };
 ```

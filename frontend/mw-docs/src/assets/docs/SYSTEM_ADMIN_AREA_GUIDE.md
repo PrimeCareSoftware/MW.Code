@@ -395,7 +395,7 @@ clinic-detail         | 10.83 kB | 3.00 kB
 ## Contato e Suporte
 
 Para dúvidas ou problemas relacionados à área administrativa:
-- **Email**: suporte@medicwarehouse.com
+- **Email**: suporte@primecaresoftware.com
 - **Documentação Técnica**: [README.md](../README.md)
 - **Issue Tracker**: GitHub Issues
 

@@ -252,7 +252,7 @@ Este gerador faz parte do projeto PrimeCare Software e segue a mesma licença.
 ## 📞 Suporte
 
 Para dúvidas sobre a documentação ou este gerador:
-- Email: contato@medicwarehouse.com
+- Email: contato@primecaresoftware.com
 - GitHub: https://github.com/PrimeCare Software/MW.Code
 
 ---

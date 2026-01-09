@@ -406,7 +406,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](../LICENSE) para
 ## Contato
 
 - **Projeto**: PrimeCare Software
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **GitHub**: https://github.com/PrimeCare Software/MW.Code
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 

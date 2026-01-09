@@ -605,7 +605,7 @@ graph TD
 
 ## 📞 Suporte e Contato
 
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Telefone**: (11) 99999-9999
 - **WhatsApp**: +55 11 99999-9999
 - **Horário**: Segunda a Sexta, 8h às 18h | Sábados, 9h às 13h

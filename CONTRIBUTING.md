@@ -565,7 +565,7 @@ Não hesite em pedir ajuda:
 
 - Comente na issue
 - Entre no canal de discussões
-- Envie um email para contato@medicwarehouse.com
+- Envie um email para contato@primecaresoftware.com
 
 ---
 
@@ -614,7 +614,7 @@ Todos os contribuidores são listados no README e no arquivo AUTHORS.
 ## 📞 Contato
 
 - **GitHub Issues:** [github.com/PrimeCare Software/MW.Code/issues](https://github.com/PrimeCare Software/MW.Code/issues)
-- **Email:** contato@medicwarehouse.com
+- **Email:** contato@primecaresoftware.com
 - **Documentação:** [Índice Completo](docs/DOCUMENTATION_INDEX.md)
 
 ---

@@ -335,7 +335,7 @@ dotnet ef database update --project src/MedicSoft.Repository --startup-project s
 ## Suporte
 
 Para dúvidas ou problemas:
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 - **Documentação**: https://docs.medicwarehouse.com
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 

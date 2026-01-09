@@ -247,7 +247,7 @@ wc -l *.md  # Contar linhas
 - 📖 **README completo**: `documentacao-portatil/README.md`
 - 📱 **Guia de uso**: `COMO_LER_DOCUMENTACAO_NO_CELULAR.md`
 - 🐛 **Issues**: GitHub Issues do repositório
-- 📧 **Email**: contato@medicwarehouse.com
+- 📧 **Email**: contato@primecaresoftware.com
 
 ---
 

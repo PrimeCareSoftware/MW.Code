@@ -366,7 +366,7 @@ Migration will run automatically on first startup.
 
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
 - **Docs**: https://docs.medicwarehouse.com
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 
 ---
 

@@ -41,7 +41,7 @@ builder.Services.AddSwaggerGen(options =>
         Contact = new OpenApiContact
         {
             Name = "PrimeCare Software",
-            Email = "support@medicwarehouse.com"
+            Email = "support@primecaresoftware.com"
         },
         License = new OpenApiLicense
         {

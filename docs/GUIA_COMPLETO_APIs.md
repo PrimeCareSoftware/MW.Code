@@ -599,7 +599,7 @@ No Swagger você pode:
 ## 📞 Suporte
 
 - **GitHub Issues:** https://github.com/PrimeCare Software/MW.Code/issues
-- **Email:** contato@medicwarehouse.com
+- **Email:** contato@primecaresoftware.com
 - **Documentação:** https://github.com/PrimeCare Software/MW.Code/tree/main/docs
 
 ---

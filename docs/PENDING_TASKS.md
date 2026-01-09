@@ -2242,7 +2242,7 @@ Baixo Impacto, Alto Esforço (Avoid):
 - **Objetivo:** Centralizar todas as pendências e planejamento futuro
 - **Frequência de Atualização:** Trimestral (ou conforme necessário)
 - **Responsável:** Product Owner / Tech Lead
-- **Feedback:** Enviar para contato@medicwarehouse.com
+- **Feedback:** Enviar para contato@primecaresoftware.com
 
 ### Considerações Importantes
 

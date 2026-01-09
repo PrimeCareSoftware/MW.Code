@@ -272,7 +272,7 @@ Duration: 176 ms
 
 - **Documentação**: Veja `BUSINESS_RULES.md` e `TECHNICAL_IMPLEMENTATION.md`
 - **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
-- **Email**: contato@medicwarehouse.com
+- **Email**: contato@primecaresoftware.com
 
 ## 🎉 Conclusão
 
