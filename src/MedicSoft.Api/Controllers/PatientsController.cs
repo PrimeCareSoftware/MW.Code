@@ -57,6 +57,9 @@ namespace MedicSoft.Api.Controllers
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return BadRequest("Search term cannot be empty");
 
+            if (searchTerm.Length < 3)
+                return BadRequest("Search term must be at least 3 characters long");
+
             var patients = await _patientService.SearchPatientsAsync(searchTerm, GetTenantId());
             return Ok(patients);
         }

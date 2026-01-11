@@ -58,8 +58,9 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<IEnumerable<Patient>> SearchAsync(string searchTerm, string tenantId)
         {
+            var searchTermLower = searchTerm.ToLower();
             return await _dbSet
-                .Where(p => (p.Name.Contains(searchTerm) || 
+                .Where(p => (p.Name.ToLower().Contains(searchTermLower) || 
                             p.Document.Contains(searchTerm) || 
                             p.Phone.Number.Contains(searchTerm)) && 
                             p.TenantId == tenantId)
