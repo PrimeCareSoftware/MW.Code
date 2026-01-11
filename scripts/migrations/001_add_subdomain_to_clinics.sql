@@ -23,6 +23,10 @@ BEGIN
 END $$;
 
 -- Create index if it doesn't exist
+-- Note: Using a partial index (WHERE "Subdomain" IS NOT NULL) because:
+-- 1. Subdomain is nullable and NULL values don't need to be indexed
+-- 2. Allows multiple clinics with NULL subdomain (no unique constraint violation)
+-- 3. Ensures subdomain uniqueness only for clinics that have one assigned
 DO $$
 BEGIN
     IF NOT EXISTS (
