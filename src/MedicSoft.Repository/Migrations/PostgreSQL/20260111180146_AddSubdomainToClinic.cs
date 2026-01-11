@@ -1450,6 +1450,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 table: "Clinics",
                 type: "text",
                 nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clinics_Subdomain",
+                table: "Clinics",
+                column: "Subdomain",
+                unique: true,
+                filter: "\"Subdomain\" IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -2888,6 +2895,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 nullable: false,
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Clinics_Subdomain",
+                table: "Clinics");
 
             migrationBuilder.DropColumn(
                 name: "Subdomain",
