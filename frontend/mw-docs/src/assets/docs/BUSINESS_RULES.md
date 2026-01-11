@@ -92,6 +92,8 @@ O PrimeCare Software é um sistema multitenant de gestão para consultórios e c
    - Busca por CPF, Nome ou Telefone simultaneamente
    - Retorna pacientes vinculados à clínica atual (tenant)
    - Resultados ordenados por nome
+   - **Busca case-insensitive** (não diferencia maiúsculas de minúsculas)
+   - **Requer mínimo de 3 caracteres** no termo de busca
 
 2. **Busca por CPF Global** (GET `/api/patients/by-document/{cpf}`):
    - Busca paciente por CPF em todas as clínicas
