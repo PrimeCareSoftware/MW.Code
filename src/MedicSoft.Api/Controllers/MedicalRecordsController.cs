@@ -7,6 +7,8 @@ using MedicSoft.Domain.Entities;
 
 namespace MedicSoft.Api.Controllers
 {
+    [ApiController]
+    [Route("api/medical-records")]
     public class MedicalRecordsController : BaseController
     {
         private readonly IMedicalRecordService _medicalRecordService;

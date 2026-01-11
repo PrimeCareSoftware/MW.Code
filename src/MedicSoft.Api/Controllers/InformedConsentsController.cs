@@ -8,6 +8,8 @@ namespace MedicSoft.Api.Controllers
     /// <summary>
     /// Controller for managing Informed Consents (CFM 1.821)
     /// </summary>
+    [ApiController]
+    [Route("api/informed-consents")]
     public class InformedConsentsController : BaseController
     {
         private readonly IInformedConsentService _informedConsentService;

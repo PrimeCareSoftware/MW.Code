@@ -8,6 +8,8 @@ namespace MedicSoft.Api.Controllers
     /// <summary>
     /// Controller for managing Therapeutic Plans (CFM 1.821)
     /// </summary>
+    [ApiController]
+    [Route("api/therapeutic-plans")]
     public class TherapeuticPlansController : BaseController
     {
         private readonly ITherapeuticPlanService _therapeuticPlanService;

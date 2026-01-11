@@ -151,7 +151,7 @@ namespace MedicSoft.Domain.Entities
 
         public bool IsWithinWorkingHours(TimeSpan time)
         {
-            return time >= OpeningTime && time <= ClosingTime;
+            return time >= OpeningTime && time < ClosingTime;
         }
     }
 }

@@ -11,6 +11,14 @@ namespace MedicSoft.Repository.Repositories
         {
         }
 
+        public override async Task<IEnumerable<Patient>> GetAllAsync(string tenantId)
+        {
+            return await _dbSet
+                .Where(p => p.TenantId == tenantId && p.IsActive)
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
         public async Task<Patient?> GetByDocumentAsync(string document, string tenantId)
         {
             return await _dbSet

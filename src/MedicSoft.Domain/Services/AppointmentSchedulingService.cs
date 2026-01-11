@@ -37,7 +37,7 @@ namespace MedicSoft.Domain.Services
                 .OrderBy(a => a.ScheduledTime)
                 .ToList();
 
-            while (currentTime.Add(TimeSpan.FromMinutes(durationMinutes)) <= clinic.ClosingTime)
+            while (currentTime.Add(TimeSpan.FromMinutes(durationMinutes)) < clinic.ClosingTime)
             {
                 var proposedEndTime = currentTime.Add(TimeSpan.FromMinutes(durationMinutes));
                 var isSlotAvailable = !bookedSlots.Any(appointment =>
@@ -60,31 +60,48 @@ namespace MedicSoft.Domain.Services
             return availableSlots;
         }
 
-        public async Task<bool> CanScheduleAppointmentAsync(
+        public async Task<(bool IsValid, string? ErrorReason)> CanScheduleAppointmentWithReasonAsync(
             DateTime scheduledDate, TimeSpan scheduledTime, int durationMinutes, 
             Guid clinicId, string tenantId, Guid? excludeAppointmentId = null)
         {
             var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
             if (clinic == null)
-                return false;
+                return (false, "Clinic not found");
 
             // Check if time is within clinic working hours
             var endTime = scheduledTime.Add(TimeSpan.FromMinutes(durationMinutes));
-            if (!clinic.IsWithinWorkingHours(scheduledTime) || !clinic.IsWithinWorkingHours(endTime))
-                return false;
+            if (!clinic.IsWithinWorkingHours(scheduledTime))
+                return (false, $"Appointment start time {scheduledTime:hh\\:mm} is outside clinic working hours ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm})");
+            
+            if (!clinic.IsWithinWorkingHours(endTime))
+                return (false, $"Appointment end time {endTime:hh\\:mm} is outside clinic working hours ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm})");
 
             // Check for conflicts with existing appointments
-            return !await _appointmentRepository.HasConflictingAppointmentAsync(
+            var hasConflict = await _appointmentRepository.HasConflictingAppointmentAsync(
                 scheduledDate, scheduledTime, durationMinutes, clinicId, tenantId, excludeAppointmentId);
+            
+            if (hasConflict)
+                return (false, $"Time slot {scheduledTime:hh\\:mm}-{endTime:hh\\:mm} is already booked");
+
+            return (true, null);
+        }
+
+        public async Task<bool> CanScheduleAppointmentAsync(
+            DateTime scheduledDate, TimeSpan scheduledTime, int durationMinutes, 
+            Guid clinicId, string tenantId, Guid? excludeAppointmentId = null)
+        {
+            var (isValid, _) = await CanScheduleAppointmentWithReasonAsync(scheduledDate, scheduledTime, durationMinutes, clinicId, tenantId, excludeAppointmentId);
+            return isValid;
         }
 
         public async Task<Appointment> ScheduleAppointmentAsync(
             Guid patientId, Guid clinicId, DateTime scheduledDate, TimeSpan scheduledTime,
             int durationMinutes, AppointmentType type, string tenantId, string? notes = null)
         {
-            if (!await CanScheduleAppointmentAsync(scheduledDate, scheduledTime, durationMinutes, clinicId, tenantId))
+            var (isValid, errorReason) = await CanScheduleAppointmentWithReasonAsync(scheduledDate, scheduledTime, durationMinutes, clinicId, tenantId);
+            if (!isValid)
             {
-                throw new InvalidOperationException("Cannot schedule appointment at the requested time");
+                throw new InvalidOperationException(errorReason ?? "Cannot schedule appointment at the requested time");
             }
 
             var appointment = new Appointment(

@@ -1,5 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { DigitalPrescriptionService } from '../../services/prescriptions/digital-prescription.service';
 import { SNGPCReport, SNGPCReportStatus } from '../../models/prescriptions/digital-prescription.model';
 
@@ -11,7 +14,12 @@ import { SNGPCReport, SNGPCReportStatus } from '../../models/prescriptions/digit
 @Component({
   selector: 'app-sngpc-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule
+  ],
   templateUrl: './sngpc-dashboard.component.html',
   styleUrl: './sngpc-dashboard.component.scss'})
 export class SNGPCDashboardComponent implements OnInit {

@@ -74,21 +74,26 @@ namespace MedicSoft.Repository.Repositories
         {
             var endTime = scheduledTime.Add(TimeSpan.FromMinutes(durationMinutes));
 
+            // First, filter by database-translatable criteria
             var query = _dbSet
                 .Where(a => a.ScheduledDate.Date == scheduledDate.Date &&
                            a.ClinicId == clinicId &&
                            a.TenantId == tenantId &&
-                           a.Status != AppointmentStatus.Cancelled &&
-                           // Check for time overlap
-                           ((a.ScheduledTime < endTime) && 
-                            (a.ScheduledTime.Add(TimeSpan.FromMinutes(a.DurationMinutes)) > scheduledTime)));
+                           a.Status != AppointmentStatus.Cancelled);
 
             if (excludeAppointmentId.HasValue)
             {
                 query = query.Where(a => a.Id != excludeAppointmentId.Value);
             }
 
-            return await query.AnyAsync();
+            // Bring to memory and then check for time overlap
+            var appointments = await query.ToListAsync();
+            
+            return appointments.Any(a =>
+            {
+                var appointmentEnd = a.ScheduledTime.Add(TimeSpan.FromMinutes(a.DurationMinutes));
+                return a.ScheduledTime < endTime && appointmentEnd > scheduledTime;
+            });
         }
 
         public async Task<IEnumerable<Appointment>> GetUpcomingAppointmentsAsync(string tenantId, int days = 7)

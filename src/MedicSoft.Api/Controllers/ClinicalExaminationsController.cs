@@ -8,6 +8,8 @@ namespace MedicSoft.Api.Controllers
     /// <summary>
     /// Controller for managing Clinical Examinations (CFM 1.821)
     /// </summary>
+    [ApiController]
+    [Route("api/clinical-examinations")]
     public class ClinicalExaminationsController : BaseController
     {
         private readonly IClinicalExaminationService _clinicalExaminationService;

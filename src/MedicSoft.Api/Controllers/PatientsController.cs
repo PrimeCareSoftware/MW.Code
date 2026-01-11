@@ -7,6 +7,8 @@ using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class PatientsController : BaseController
     {
         private readonly IPatientService _patientService;

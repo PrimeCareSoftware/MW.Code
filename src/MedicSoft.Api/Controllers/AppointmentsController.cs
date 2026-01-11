@@ -5,6 +5,8 @@ using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers
 {
+    [ApiController]
+    [Route("api/appointments")]
     public class AppointmentsController : BaseController
     {
         private readonly IAppointmentService _appointmentService;
@@ -64,8 +66,25 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Get daily agenda for a clinic
         /// </summary>
-        [HttpGet("agenda")]
+        [HttpGet]
         public async Task<ActionResult<DailyAgendaDto>> GetDailyAgenda([FromQuery] DateTime date, [FromQuery] Guid clinicId)
+        {
+            try
+            {
+                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId());
+                return Ok(agenda);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get daily agenda for a clinic (alias endpoint)
+        /// </summary>
+        [HttpGet("agenda")]
+        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgendaAlias([FromQuery] DateTime date, [FromQuery] Guid clinicId)
         {
             try
             {

@@ -13,6 +13,7 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly IClinicRepository _clinicRepository;
+        private readonly IMedicalRecordRepository _medicalRecordRepository;
         private readonly AppointmentSchedulingService _schedulingService;
         private readonly IMapper _mapper;
 
@@ -20,12 +21,14 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             IAppointmentRepository appointmentRepository,
             IPatientRepository patientRepository,
             IClinicRepository clinicRepository,
+            IMedicalRecordRepository medicalRecordRepository,
             AppointmentSchedulingService schedulingService,
             IMapper mapper)
         {
             _appointmentRepository = appointmentRepository;
             _patientRepository = patientRepository;
             _clinicRepository = clinicRepository;
+            _medicalRecordRepository = medicalRecordRepository;
             _schedulingService = schedulingService;
             _mapper = mapper;
         }
@@ -63,6 +66,18 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 request.TenantId,
                 request.Appointment.Notes
             );
+
+            // Automatically create an empty MedicalRecord for this appointment
+            var medicalRecord = new MedicalRecord(
+                appointmentId: appointment.Id,
+                patientId: patient.Id,
+                tenantId: request.TenantId,
+                consultationStartTime: appointment.ScheduledDate,
+                chiefComplaint: "Consulta agendada",
+                historyOfPresentIllness: "Registro criado automaticamente no agendamento da consulta. Informações clínicas serão adicionadas pelo profissional de saúde durante o atendimento."
+            );
+
+            await _medicalRecordRepository.AddAsync(medicalRecord);
 
             return _mapper.Map<AppointmentDto>(appointment);
         }

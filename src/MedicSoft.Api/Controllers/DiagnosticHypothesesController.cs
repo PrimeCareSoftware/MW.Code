@@ -8,6 +8,8 @@ namespace MedicSoft.Api.Controllers
     /// <summary>
     /// Controller for managing Diagnostic Hypotheses with ICD-10 codes (CFM 1.821)
     /// </summary>
+    [ApiController]
+    [Route("api/diagnostic-hypotheses")]
     public class DiagnosticHypothesesController : BaseController
     {
         private readonly IDiagnosticHypothesisService _diagnosticHypothesisService;

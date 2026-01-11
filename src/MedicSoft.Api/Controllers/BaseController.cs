@@ -6,8 +6,6 @@ using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public abstract class BaseController : ControllerBase
     {
         protected readonly ITenantContext _tenantContext;
@@ -19,10 +17,28 @@ namespace MedicSoft.Api.Controllers
 
         protected string GetTenantId()
         {
-            // In a real implementation, this would extract tenant from JWT claims
-            // For demo purposes, we'll use a default tenant
+            // Try to get tenant from JWT claims first
+            var tenantClaim = User?.FindFirst("tenant_id");
+            if (tenantClaim != null && !string.IsNullOrEmpty(tenantClaim.Value))
+            {
+                return tenantClaim.Value;
+            }
+
+            // Try to get tenant from X-Tenant-Id header (set by TenantResolutionMiddleware)
             var tenantId = HttpContext.Request.Headers["X-Tenant-Id"].FirstOrDefault();
-            return !string.IsNullOrEmpty(tenantId) ? tenantId : "default-tenant";
+            if (!string.IsNullOrEmpty(tenantId))
+            {
+                return tenantId;
+            }
+
+            // Try to get tenant from HttpContext items (set by TenantResolutionMiddleware)
+            if (HttpContext.Items.TryGetValue("TenantId", out var tenantIdObj) && tenantIdObj is string contextTenantId)
+            {
+                return contextTenantId;
+            }
+
+            // Fall back to default tenant only if truly unavailable
+            return "default-tenant";
         }
 
         protected string? GetUserId()

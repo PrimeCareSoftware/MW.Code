@@ -7,6 +7,8 @@ using AutoMapper;
 
 namespace MedicSoft.Api.Controllers
 {
+    [ApiController]
+    [Route("api/exam-requests")]
     public class ExamRequestsController : BaseController
     {
         private readonly IExamRequestRepository _examRequestRepository;
@@ -26,6 +28,15 @@ namespace MedicSoft.Api.Controllers
             _patientRepository = patientRepository;
             _appointmentRepository = appointmentRepository;
             _mapper = mapper;
+        }
+
+        /// <summary>
+        /// Test endpoint to verify controller is accessible
+        /// </summary>
+        [HttpGet("test")]
+        public ActionResult<string> Test()
+        {
+            return Ok("ExamRequestsController is working");
         }
 
         /// <summary>
@@ -176,21 +187,38 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get exam request by ID
+        /// Get all pending exam requests
         /// </summary>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ExamRequestDto>> GetById(Guid id)
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<ExamRequestDto>>> GetPending()
         {
             try
             {
                 var tenantId = GetTenantId();
-                var examRequest = await _examRequestRepository.GetByIdAsync(id, tenantId);
+                var examRequests = await _examRequestRepository.GetPendingExamsAsync(tenantId);
 
-                if (examRequest == null)
-                    return NotFound($"Exam request with ID {id} not found");
+                var dtos = _mapper.Map<IEnumerable<ExamRequestDto>>(examRequests);
+                return Ok(dtos);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-                var dto = _mapper.Map<ExamRequestDto>(examRequest);
-                return Ok(dto);
+        /// <summary>
+        /// Get all urgent exam requests
+        /// </summary>
+        [HttpGet("urgent")]
+        public async Task<ActionResult<IEnumerable<ExamRequestDto>>> GetUrgent()
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var examRequests = await _examRequestRepository.GetUrgentExamsAsync(tenantId);
+
+                var dtos = _mapper.Map<IEnumerable<ExamRequestDto>>(examRequests);
+                return Ok(dtos);
             }
             catch (InvalidOperationException ex)
             {
@@ -239,38 +267,21 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all pending exam requests
+        /// Get exam request by ID
         /// </summary>
-        [HttpGet("pending")]
-        public async Task<ActionResult<IEnumerable<ExamRequestDto>>> GetPending()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ExamRequestDto>> GetById(Guid id)
         {
             try
             {
                 var tenantId = GetTenantId();
-                var examRequests = await _examRequestRepository.GetPendingExamsAsync(tenantId);
+                var examRequest = await _examRequestRepository.GetByIdAsync(id, tenantId);
 
-                var dtos = _mapper.Map<IEnumerable<ExamRequestDto>>(examRequests);
-                return Ok(dtos);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+                if (examRequest == null)
+                    return NotFound($"Exam request with ID {id} not found");
 
-        /// <summary>
-        /// Get all urgent exam requests
-        /// </summary>
-        [HttpGet("urgent")]
-        public async Task<ActionResult<IEnumerable<ExamRequestDto>>> GetUrgent()
-        {
-            try
-            {
-                var tenantId = GetTenantId();
-                var examRequests = await _examRequestRepository.GetUrgentExamsAsync(tenantId);
-
-                var dtos = _mapper.Map<IEnumerable<ExamRequestDto>>(examRequests);
-                return Ok(dtos);
+                var dto = _mapper.Map<ExamRequestDto>(examRequest);
+                return Ok(dto);
             }
             catch (InvalidOperationException ex)
             {

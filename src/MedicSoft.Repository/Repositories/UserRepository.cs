@@ -51,7 +51,8 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<User>> GetAllAsync(string tenantId)
         {
             return await _context.Users
-                .Where(u => u.TenantId == tenantId)
+                .Where(u => u.TenantId == tenantId && u.IsActive)
+                .OrderBy(u => u.FullName)
                 .ToListAsync();
         }
 

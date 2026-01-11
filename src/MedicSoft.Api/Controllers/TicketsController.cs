@@ -8,6 +8,7 @@ using System.Security.Claims;
 
 namespace MedicSoft.Api.Controllers
 {
+    [ApiController]
     [Authorize]
     [Route("api/[controller]")]
     public class TicketsController : BaseController
