@@ -656,7 +656,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.HasIndex("TenantId", "SequenceNumber")
                         .IsUnique()
                         .HasDatabaseName("IX_DigitalPrescriptions_TenantId_SequenceNumber")
-                        .HasFilter("[SequenceNumber] IS NOT NULL");
+                        .HasFilter("\"SequenceNumber\" IS NOT NULL");
 
                     b.HasIndex("TenantId", "Type")
                         .HasDatabaseName("IX_DigitalPrescriptions_TenantId_Type");

@@ -2930,7 +2930,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 table: "DigitalPrescriptions",
                 columns: new[] { "TenantId", "SequenceNumber" },
                 unique: true,
-                filter: "[SequenceNumber] IS NOT NULL");
+                filter: "\"SequenceNumber\" IS NOT NULL");
         }
     }
 }
