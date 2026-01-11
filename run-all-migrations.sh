@@ -23,13 +23,13 @@ CONNECTION_STRING="${1:-${DATABASE_CONNECTION_STRING}}"
 if [ -z "$CONNECTION_STRING" ]; then
     echo -e "${YELLOW}No connection string provided.${NC}"
     echo "Usage:"
-    echo "  $0 'Host=localhost;Database=medicsoft;Username=postgres;Password=yourpassword'"
+    echo "  $0 'Host=localhost;Database=primecare;Username=postgres;Password=Abc!123456'"
     echo "Or set DATABASE_CONNECTION_STRING environment variable"
     echo ""
     echo -e "${YELLOW}Using default connection string for local development...${NC}"
     echo -e "${RED}WARNING: Default credentials are for DEVELOPMENT ONLY!${NC}"
     echo -e "${RED}Never use default credentials in production environments!${NC}"
-    CONNECTION_STRING="Host=localhost;Database=medicsoft;Username=postgres;Password=postgres"
+    CONNECTION_STRING="Host=localhost;Database=primecare;Username=postgres;Password=Abc!123456"
 fi
 
 echo -e "${GREEN}Connection string: ${CONNECTION_STRING:0:50}...${NC}"
