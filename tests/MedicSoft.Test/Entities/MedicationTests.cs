@@ -190,6 +190,18 @@ namespace MedicSoft.Test.Entities
         }
 
         [Fact]
+        public void Constructor_WithControlledSubstanceAndNullControlledList_ThrowsArgumentException()
+        {
+            // Arrange & Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() =>
+                new Medication(
+                    "Tramadol", "50mg", "Cápsula", MedicationCategory.Analgesic,
+                    true, _tenantId, isControlled: true, controlledList: null));
+            
+            Assert.Contains("Controlled list must be specified for controlled substances", exception.Message);
+        }
+
+        [Fact]
         public void Constructor_TrimsWhitespaceFromStrings()
         {
             // Arrange & Act
