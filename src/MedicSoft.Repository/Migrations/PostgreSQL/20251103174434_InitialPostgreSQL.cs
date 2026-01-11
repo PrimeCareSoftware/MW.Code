@@ -278,6 +278,45 @@ CREATE TABLE IF NOT EXISTS ""Appointments"" (
         CONSTRAINT ""FK_Appointments_Patients_PatientId"" FOREIGN KEY (""PatientId"") REFERENCES ""Patients"" (""Id"") ON DELETE RESTRICT
     );
 
+CREATE TABLE IF NOT EXISTS ""WaitingQueueConfigurations"" (
+        ""Id"" uuid NOT NULL,
+        ""ClinicId"" uuid NOT NULL,
+        ""DisplayMode"" integer NOT NULL,
+        ""ShowEstimatedWaitTime"" boolean NOT NULL,
+        ""ShowPatientNames"" boolean NOT NULL,
+        ""ShowPriority"" boolean NOT NULL,
+        ""ShowPosition"" boolean NOT NULL,
+        ""AutoRefreshSeconds"" integer NOT NULL,
+        ""EnableSoundNotifications"" boolean NOT NULL,
+        ""CreatedAt"" timestamp with time zone NOT NULL,
+        ""UpdatedAt"" timestamp with time zone,
+        ""TenantId"" character varying(100) NOT NULL,
+        CONSTRAINT ""PK_WaitingQueueConfigurations"" PRIMARY KEY (""Id""),
+        CONSTRAINT ""FK_WaitingQueueConfigurations_Clinics_ClinicId"" FOREIGN KEY (""ClinicId"") REFERENCES ""Clinics"" (""Id"") ON DELETE RESTRICT
+    );
+
+CREATE TABLE IF NOT EXISTS ""WaitingQueueEntries"" (
+        ""Id"" uuid NOT NULL,
+        ""AppointmentId"" uuid NOT NULL,
+        ""ClinicId"" uuid NOT NULL,
+        ""PatientId"" uuid NOT NULL,
+        ""Position"" integer NOT NULL,
+        ""Priority"" integer NOT NULL,
+        ""Status"" integer NOT NULL,
+        ""CheckInTime"" timestamp with time zone NOT NULL,
+        ""CalledTime"" timestamp with time zone,
+        ""CompletedTime"" timestamp with time zone,
+        ""TriageNotes"" character varying(1000),
+        ""EstimatedWaitTimeMinutes"" integer NOT NULL,
+        ""CreatedAt"" timestamp with time zone NOT NULL,
+        ""UpdatedAt"" timestamp with time zone,
+        ""TenantId"" character varying(100) NOT NULL,
+        CONSTRAINT ""PK_WaitingQueueEntries"" PRIMARY KEY (""Id""),
+        CONSTRAINT ""FK_WaitingQueueEntries_Appointments_AppointmentId"" FOREIGN KEY (""AppointmentId"") REFERENCES ""Appointments"" (""Id"") ON DELETE RESTRICT,
+        CONSTRAINT ""FK_WaitingQueueEntries_Clinics_ClinicId"" FOREIGN KEY (""ClinicId"") REFERENCES ""Clinics"" (""Id"") ON DELETE RESTRICT,
+        CONSTRAINT ""FK_WaitingQueueEntries_Patients_PatientId"" FOREIGN KEY (""PatientId"") REFERENCES ""Patients"" (""Id"") ON DELETE RESTRICT
+    );
+
 CREATE TABLE IF NOT EXISTS ""HealthInsurancePlans"" (
         ""Id"" uuid NOT NULL,
         ""PatientId"" uuid NOT NULL,
@@ -680,7 +719,27 @@ CREATE INDEX IF NOT EXISTS ""IX_Users_Role"" ON ""Users"" (""Role"");
 
 CREATE INDEX IF NOT EXISTS ""IX_Users_TenantId_IsActive"" ON ""Users"" (""TenantId"", ""IsActive"");
 
-CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Username"" ON ""Users"" (""Username"");");
+CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Username"" ON ""Users"" (""Username"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueConfigurations_ClinicId"" ON ""WaitingQueueConfigurations"" (""ClinicId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueConfigurations_TenantId"" ON ""WaitingQueueConfigurations"" (""TenantId"");
+
+CREATE UNIQUE INDEX IF NOT EXISTS ""IX_WaitingQueueConfigurations_TenantId_Clinic"" ON ""WaitingQueueConfigurations"" (""TenantId"", ""ClinicId"");
+
+CREATE UNIQUE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_AppointmentId"" ON ""WaitingQueueEntries"" (""AppointmentId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_ClinicId"" ON ""WaitingQueueEntries"" (""ClinicId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_PatientId"" ON ""WaitingQueueEntries"" (""PatientId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId"" ON ""WaitingQueueEntries"" (""TenantId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId_CheckInTime"" ON ""WaitingQueueEntries"" (""TenantId"", ""CheckInTime"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId_Position"" ON ""WaitingQueueEntries"" (""TenantId"", ""Position"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId_Clinic_Status"" ON ""WaitingQueueEntries"" (""TenantId"", ""ClinicId"", ""Status"");");
         }
 
         /// <inheritdoc />
@@ -705,6 +764,8 @@ DROP TABLE IF EXISTS ""PrescriptionTemplates"";
 DROP TABLE IF EXISTS ""ProcedureMaterials"";
 DROP TABLE IF EXISTS ""Payments"";
 DROP TABLE IF EXISTS ""Users"";
+DROP TABLE IF EXISTS ""WaitingQueueEntries"";
+DROP TABLE IF EXISTS ""WaitingQueueConfigurations"";
 DROP TABLE IF EXISTS ""MedicalRecords"";
 DROP TABLE IF EXISTS ""Medications"";
 DROP TABLE IF EXISTS ""Materials"";
