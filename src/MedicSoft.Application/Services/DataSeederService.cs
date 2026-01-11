@@ -824,10 +824,10 @@ namespace MedicSoft.Application.Services
                 new Medication("Paracetamol", "750mg", "Comprimido", MedicationCategory.Analgesic, false, _demoTenantId, "Acetaminophen", "Medley", "Paracetamol", "750mg", "Oral", false, null, null, "Analgésico e antitérmico"),
                 new Medication("Paracetamol", "500mg", "Comprimido", MedicationCategory.Analgesic, false, _demoTenantId, "Acetaminophen", "EMS", "Paracetamol", "500mg", "Oral", false, null, null, "Analgésico"),
                 new Medication("Paracetamol Gotas", "200mg/ml", "Solução Oral", MedicationCategory.Analgesic, false, _demoTenantId, "Acetaminophen", "Prati-Donaduzzi", "Paracetamol", "200mg/ml", "Oral", false, null, null, "Gotas pediátricas"),
-                new Medication("Tramadol", "50mg", "Cápsula", MedicationCategory.Analgesic, true, _demoTenantId, "Tramadol", "Pfizer", "Cloridrato de tramadol", "50mg", "Oral", true, null, null, "Analgésico opioide"),
-                new Medication("Tramadol", "100mg", "Comprimido", MedicationCategory.Analgesic, true, _demoTenantId, "Tramadol", "EMS", "Cloridrato de tramadol", "100mg", "Oral", true, null, null, "Analgésico opioide forte"),
-                new Medication("Codeína + Paracetamol", "30mg/500mg", "Comprimido", MedicationCategory.Analgesic, true, _demoTenantId, "Codeine/Paracetamol", "Sanofi", "Fosfato de codeína + Paracetamol", "30mg/500mg", "Oral", true, null, null, "Tylex - Analgésico opioide"),
-                new Medication("Morfina", "10mg", "Comprimido", MedicationCategory.Analgesic, true, _demoTenantId, "Morphine", "Cristália", "Sulfato de morfina", "10mg", "Oral", true, null, null, "Analgésico opioide forte - uso controlado"),
+                new Medication("Tramadol", "50mg", "Cápsula", MedicationCategory.Analgesic, true, _demoTenantId, "Tramadol", "Pfizer", "Cloridrato de tramadol", "50mg", "Oral", true, ControlledSubstanceList.A1_Narcotics, null, "Analgésico opioide"),
+                new Medication("Tramadol", "100mg", "Comprimido", MedicationCategory.Analgesic, true, _demoTenantId, "Tramadol", "EMS", "Cloridrato de tramadol", "100mg", "Oral", true, ControlledSubstanceList.A1_Narcotics, null, "Analgésico opioide forte"),
+                new Medication("Codeína + Paracetamol", "30mg/500mg", "Comprimido", MedicationCategory.Analgesic, true, _demoTenantId, "Codeine/Paracetamol", "Sanofi", "Fosfato de codeína + Paracetamol", "30mg/500mg", "Oral", true, ControlledSubstanceList.A1_Narcotics, null, "Tylex - Analgésico opioide"),
+                new Medication("Morfina", "10mg", "Comprimido", MedicationCategory.Analgesic, true, _demoTenantId, "Morphine", "Cristália", "Sulfato de morfina", "10mg", "Oral", true, ControlledSubstanceList.A1_Narcotics, null, "Analgésico opioide forte - uso controlado"),
 
                 // Anti-inflamatórios / Anti-inflammatory
                 new Medication("Ibuprofeno", "600mg", "Comprimido", MedicationCategory.AntiInflammatory, false, _demoTenantId, "Ibuprofen", "Pfizer", "Ibuprofeno", "600mg", "Oral", false, null, null, "Anti-inflamatório não esteroidal"),
@@ -904,12 +904,12 @@ namespace MedicSoft.Application.Services
                 new Medication("Insulina Regular", "100 UI/ml", "Solução Injetável", MedicationCategory.Antidiabetic, true, _demoTenantId, "Regular Insulin", "Eli Lilly", "Insulina humana regular", "100 UI/ml", "Subcutânea/Intravenosa", false, null, null, "Insulina de ação rápida"),
 
                 // Ansiolíticos / Anxiolytics
-                new Medication("Clonazepam", "2mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Clonazepam", "Roche", "Clonazepam", "2mg", "Oral", true, null, null, "Rivotril - Benzodiazepínico"),
-                new Medication("Clonazepam Gotas", "2,5mg/ml", "Solução Oral", MedicationCategory.Anxiolytic, true, _demoTenantId, "Clonazepam", "Roche", "Clonazepam", "2,5mg/ml", "Oral", true, null, null, "Rivotril Gotas"),
-                new Medication("Alprazolam", "0,5mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Alprazolam", "Pfizer", "Alprazolam", "0,5mg", "Oral", true, null, null, "Frontal - Benzodiazepínico"),
-                new Medication("Diazepam", "10mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Diazepam", "Roche", "Diazepam", "10mg", "Oral", true, null, null, "Valium - Benzodiazepínico"),
-                new Medication("Bromazepam", "3mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Bromazepam", "Roche", "Bromazepam", "3mg", "Oral", true, null, null, "Lexotan - Benzodiazepínico"),
-                new Medication("Lorazepam", "2mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Lorazepam", "Pfizer", "Lorazepam", "2mg", "Oral", true, null, null, "Lorax - Benzodiazepínico"),
+                new Medication("Clonazepam", "2mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Clonazepam", "Roche", "Clonazepam", "2mg", "Oral", true, ControlledSubstanceList.B1_Psychotropics, null, "Rivotril - Benzodiazepínico"),
+                new Medication("Clonazepam Gotas", "2,5mg/ml", "Solução Oral", MedicationCategory.Anxiolytic, true, _demoTenantId, "Clonazepam", "Roche", "Clonazepam", "2,5mg/ml", "Oral", true, ControlledSubstanceList.B1_Psychotropics, null, "Rivotril Gotas"),
+                new Medication("Alprazolam", "0,5mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Alprazolam", "Pfizer", "Alprazolam", "0,5mg", "Oral", true, ControlledSubstanceList.B1_Psychotropics, null, "Frontal - Benzodiazepínico"),
+                new Medication("Diazepam", "10mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Diazepam", "Roche", "Diazepam", "10mg", "Oral", true, ControlledSubstanceList.B1_Psychotropics, null, "Valium - Benzodiazepínico"),
+                new Medication("Bromazepam", "3mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Bromazepam", "Roche", "Bromazepam", "3mg", "Oral", true, ControlledSubstanceList.B1_Psychotropics, null, "Lexotan - Benzodiazepínico"),
+                new Medication("Lorazepam", "2mg", "Comprimido", MedicationCategory.Anxiolytic, true, _demoTenantId, "Lorazepam", "Pfizer", "Lorazepam", "2mg", "Oral", true, ControlledSubstanceList.B1_Psychotropics, null, "Lorax - Benzodiazepínico"),
 
                 // Antidepressivos / Antidepressants
                 new Medication("Sertralina", "50mg", "Comprimido", MedicationCategory.Antidepressant, true, _demoTenantId, "Sertraline", "Pfizer", "Cloridrato de sertralina", "50mg", "Oral", false, null, null, "Zoloft - ISRS"),
