@@ -237,6 +237,22 @@ CREATE TABLE IF NOT EXISTS ""Owners"" (
         CONSTRAINT ""FK_Owners_Clinics_ClinicId"" FOREIGN KEY (""ClinicId"") REFERENCES ""Clinics"" (""Id"") ON DELETE RESTRICT
     );
 
+CREATE TABLE IF NOT EXISTS ""ExamCatalogs"" (
+        ""Id"" uuid NOT NULL,
+        ""Name"" character varying(300) NOT NULL,
+        ""ExamType"" character varying(50) NOT NULL,
+        ""Description"" character varying(1000),
+        ""Category"" character varying(100),
+        ""TussCode"" character varying(50),
+        ""Synonyms"" character varying(500),
+        ""Preparation"" character varying(500),
+        ""IsActive"" boolean NOT NULL,
+        ""CreatedAt"" timestamp with time zone NOT NULL,
+        ""UpdatedAt"" timestamp with time zone,
+        ""TenantId"" character varying(100) NOT NULL,
+        CONSTRAINT ""PK_ExamCatalogs"" PRIMARY KEY (""Id"")
+    );
+
 CREATE TABLE IF NOT EXISTS ""Users"" (
         ""Id"" uuid NOT NULL,
         ""Username"" character varying(100) NOT NULL,
@@ -276,6 +292,45 @@ CREATE TABLE IF NOT EXISTS ""Appointments"" (
         CONSTRAINT ""PK_Appointments"" PRIMARY KEY (""Id""),
         CONSTRAINT ""FK_Appointments_Clinics_ClinicId"" FOREIGN KEY (""ClinicId"") REFERENCES ""Clinics"" (""Id"") ON DELETE RESTRICT,
         CONSTRAINT ""FK_Appointments_Patients_PatientId"" FOREIGN KEY (""PatientId"") REFERENCES ""Patients"" (""Id"") ON DELETE RESTRICT
+    );
+
+CREATE TABLE IF NOT EXISTS ""WaitingQueueConfigurations"" (
+        ""Id"" uuid NOT NULL,
+        ""ClinicId"" uuid NOT NULL,
+        ""DisplayMode"" integer NOT NULL,
+        ""ShowEstimatedWaitTime"" boolean NOT NULL,
+        ""ShowPatientNames"" boolean NOT NULL,
+        ""ShowPriority"" boolean NOT NULL,
+        ""ShowPosition"" boolean NOT NULL,
+        ""AutoRefreshSeconds"" integer NOT NULL,
+        ""EnableSoundNotifications"" boolean NOT NULL,
+        ""CreatedAt"" timestamp with time zone NOT NULL,
+        ""UpdatedAt"" timestamp with time zone,
+        ""TenantId"" character varying(100) NOT NULL,
+        CONSTRAINT ""PK_WaitingQueueConfigurations"" PRIMARY KEY (""Id""),
+        CONSTRAINT ""FK_WaitingQueueConfigurations_Clinics_ClinicId"" FOREIGN KEY (""ClinicId"") REFERENCES ""Clinics"" (""Id"") ON DELETE RESTRICT
+    );
+
+CREATE TABLE IF NOT EXISTS ""WaitingQueueEntries"" (
+        ""Id"" uuid NOT NULL,
+        ""AppointmentId"" uuid NOT NULL,
+        ""ClinicId"" uuid NOT NULL,
+        ""PatientId"" uuid NOT NULL,
+        ""Position"" integer NOT NULL,
+        ""Priority"" integer NOT NULL,
+        ""Status"" integer NOT NULL,
+        ""CheckInTime"" timestamp with time zone NOT NULL,
+        ""CalledTime"" timestamp with time zone,
+        ""CompletedTime"" timestamp with time zone,
+        ""TriageNotes"" character varying(1000),
+        ""EstimatedWaitTimeMinutes"" integer NOT NULL,
+        ""CreatedAt"" timestamp with time zone NOT NULL,
+        ""UpdatedAt"" timestamp with time zone,
+        ""TenantId"" character varying(100) NOT NULL,
+        CONSTRAINT ""PK_WaitingQueueEntries"" PRIMARY KEY (""Id""),
+        CONSTRAINT ""FK_WaitingQueueEntries_Appointments_AppointmentId"" FOREIGN KEY (""AppointmentId"") REFERENCES ""Appointments"" (""Id"") ON DELETE RESTRICT,
+        CONSTRAINT ""FK_WaitingQueueEntries_Clinics_ClinicId"" FOREIGN KEY (""ClinicId"") REFERENCES ""Clinics"" (""Id"") ON DELETE RESTRICT,
+        CONSTRAINT ""FK_WaitingQueueEntries_Patients_PatientId"" FOREIGN KEY (""PatientId"") REFERENCES ""Patients"" (""Id"") ON DELETE RESTRICT
     );
 
 CREATE TABLE IF NOT EXISTS ""HealthInsurancePlans"" (
@@ -414,6 +469,47 @@ CREATE TABLE IF NOT EXISTS ""ExamRequests"" (
         CONSTRAINT ""FK_ExamRequests_Patients_PatientId"" FOREIGN KEY (""PatientId"") REFERENCES ""Patients"" (""Id"") ON DELETE RESTRICT
     );
 
+CREATE TABLE IF NOT EXISTS ""OwnerClinicLinks"" (
+        ""Id"" uuid NOT NULL,
+        ""OwnerId"" uuid NOT NULL,
+        ""ClinicId"" uuid NOT NULL,
+        ""IsPrimaryOwner"" boolean NOT NULL,
+        ""Role"" character varying(100),
+        ""OwnershipPercentage"" numeric(5,2),
+        ""LinkedDate"" timestamp with time zone NOT NULL,
+        ""IsActive"" boolean NOT NULL,
+        ""InactivatedDate"" timestamp with time zone,
+        ""InactivationReason"" character varying(500),
+        ""CreatedAt"" timestamp with time zone NOT NULL,
+        ""UpdatedAt"" timestamp with time zone,
+        ""TenantId"" character varying(100) NOT NULL,
+        CONSTRAINT ""PK_OwnerClinicLinks"" PRIMARY KEY (""Id""),
+        CONSTRAINT ""FK_OwnerClinicLinks_Owners_OwnerId"" FOREIGN KEY (""OwnerId"") REFERENCES ""Owners"" (""Id"") ON DELETE RESTRICT,
+        CONSTRAINT ""FK_OwnerClinicLinks_Clinics_ClinicId"" FOREIGN KEY (""ClinicId"") REFERENCES ""Clinics"" (""Id"") ON DELETE RESTRICT
+    );
+
+CREATE TABLE IF NOT EXISTS ""Notifications"" (
+        ""Id"" uuid NOT NULL,
+        ""PatientId"" uuid NOT NULL,
+        ""AppointmentId"" uuid,
+        ""Type"" character varying(50) NOT NULL,
+        ""Channel"" character varying(50) NOT NULL,
+        ""Recipient"" character varying(500) NOT NULL,
+        ""Message"" character varying(5000) NOT NULL,
+        ""Status"" character varying(50) NOT NULL,
+        ""SentAt"" timestamp with time zone,
+        ""DeliveredAt"" timestamp with time zone,
+        ""ReadAt"" timestamp with time zone,
+        ""ErrorMessage"" character varying(2000),
+        ""RetryCount"" integer NOT NULL,
+        ""CreatedAt"" timestamp with time zone NOT NULL,
+        ""UpdatedAt"" timestamp with time zone,
+        ""TenantId"" character varying(100) NOT NULL,
+        CONSTRAINT ""PK_Notifications"" PRIMARY KEY (""Id""),
+        CONSTRAINT ""FK_Notifications_Patients_PatientId"" FOREIGN KEY (""PatientId"") REFERENCES ""Patients"" (""Id"") ON DELETE RESTRICT,
+        CONSTRAINT ""FK_Notifications_Appointments_AppointmentId"" FOREIGN KEY (""AppointmentId"") REFERENCES ""Appointments"" (""Id"") ON DELETE RESTRICT
+    );
+
 CREATE TABLE IF NOT EXISTS ""MedicalRecords"" (
         ""Id"" uuid NOT NULL,
         ""AppointmentId"" uuid NOT NULL,
@@ -534,6 +630,16 @@ CREATE INDEX IF NOT EXISTS ""IX_ClinicSubscriptions_SubscriptionPlanId"" ON ""Cl
 
 CREATE INDEX IF NOT EXISTS ""IX_ClinicSubscriptions_TenantId_Status"" ON ""ClinicSubscriptions"" (""TenantId"", ""Status"");
 
+CREATE INDEX IF NOT EXISTS ""IX_ExamCatalogs_Category"" ON ""ExamCatalogs"" (""Category"");
+
+CREATE INDEX IF NOT EXISTS ""IX_ExamCatalogs_ExamType"" ON ""ExamCatalogs"" (""ExamType"");
+
+CREATE INDEX IF NOT EXISTS ""IX_ExamCatalogs_IsActive"" ON ""ExamCatalogs"" (""IsActive"");
+
+CREATE INDEX IF NOT EXISTS ""IX_ExamCatalogs_TenantId"" ON ""ExamCatalogs"" (""TenantId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_ExamCatalogs_TenantId_Name"" ON ""ExamCatalogs"" (""TenantId"", ""Name"");
+
 CREATE INDEX IF NOT EXISTS ""IX_ExamRequests_AppointmentId"" ON ""ExamRequests"" (""AppointmentId"");
 
 CREATE INDEX IF NOT EXISTS ""IX_ExamRequests_PatientId"" ON ""ExamRequests"" (""PatientId"");
@@ -610,6 +716,24 @@ CREATE INDEX IF NOT EXISTS ""IX_NotificationRoutines_TenantId_IsActive"" ON ""No
 
 CREATE INDEX IF NOT EXISTS ""IX_NotificationRoutines_Type_TenantId"" ON ""NotificationRoutines"" (""Type"", ""TenantId"");
 
+CREATE INDEX IF NOT EXISTS ""IX_Notifications_AppointmentId"" ON ""Notifications"" (""AppointmentId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_Notifications_CreatedAt"" ON ""Notifications"" (""CreatedAt"");
+
+CREATE INDEX IF NOT EXISTS ""IX_Notifications_PatientId"" ON ""Notifications"" (""PatientId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_Notifications_Status_RetryCount"" ON ""Notifications"" (""Status"", ""RetryCount"");
+
+CREATE INDEX IF NOT EXISTS ""IX_Notifications_TenantId_Status"" ON ""Notifications"" (""TenantId"", ""Status"");
+
+CREATE INDEX IF NOT EXISTS ""IX_OwnerClinicLinks_ClinicId_IsPrimaryOwner"" ON ""OwnerClinicLinks"" (""ClinicId"", ""IsPrimaryOwner"");
+
+CREATE INDEX IF NOT EXISTS ""IX_OwnerClinicLinks_OwnerId"" ON ""OwnerClinicLinks"" (""OwnerId"");
+
+CREATE UNIQUE INDEX IF NOT EXISTS ""IX_OwnerClinicLinks_Owner_Clinic"" ON ""OwnerClinicLinks"" (""OwnerId"", ""ClinicId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_OwnerClinicLinks_TenantId_ClinicId"" ON ""OwnerClinicLinks"" (""TenantId"", ""ClinicId"");
+
 CREATE INDEX IF NOT EXISTS ""IX_Owners_ClinicId"" ON ""Owners"" (""ClinicId"");
 
 CREATE INDEX IF NOT EXISTS ""IX_Owners_Email"" ON ""Owners"" (""Email"");
@@ -680,7 +804,27 @@ CREATE INDEX IF NOT EXISTS ""IX_Users_Role"" ON ""Users"" (""Role"");
 
 CREATE INDEX IF NOT EXISTS ""IX_Users_TenantId_IsActive"" ON ""Users"" (""TenantId"", ""IsActive"");
 
-CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Username"" ON ""Users"" (""Username"");");
+CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Username"" ON ""Users"" (""Username"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueConfigurations_ClinicId"" ON ""WaitingQueueConfigurations"" (""ClinicId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueConfigurations_TenantId"" ON ""WaitingQueueConfigurations"" (""TenantId"");
+
+CREATE UNIQUE INDEX IF NOT EXISTS ""IX_WaitingQueueConfigurations_TenantId_Clinic"" ON ""WaitingQueueConfigurations"" (""TenantId"", ""ClinicId"");
+
+CREATE UNIQUE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_AppointmentId"" ON ""WaitingQueueEntries"" (""AppointmentId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_ClinicId"" ON ""WaitingQueueEntries"" (""ClinicId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_PatientId"" ON ""WaitingQueueEntries"" (""PatientId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId"" ON ""WaitingQueueEntries"" (""TenantId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId_CheckInTime"" ON ""WaitingQueueEntries"" (""TenantId"", ""CheckInTime"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId_Position"" ON ""WaitingQueueEntries"" (""TenantId"", ""Position"");
+
+CREATE INDEX IF NOT EXISTS ""IX_WaitingQueueEntries_TenantId_Clinic_Status"" ON ""WaitingQueueEntries"" (""TenantId"", ""ClinicId"", ""Status"");");
         }
 
         /// <inheritdoc />
@@ -691,6 +835,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Username"" ON ""Users"" (""Username
             migrationBuilder.Sql(@"
 DROP TABLE IF EXISTS ""AppointmentProcedures"";
 DROP TABLE IF EXISTS ""ExamRequests"";
+DROP TABLE IF EXISTS ""Notifications"";
+DROP TABLE IF EXISTS ""OwnerClinicLinks"";
 DROP TABLE IF EXISTS ""Expenses"";
 DROP TABLE IF EXISTS ""HealthInsurancePlans"";
 DROP TABLE IF EXISTS ""Invoices"";
@@ -705,6 +851,8 @@ DROP TABLE IF EXISTS ""PrescriptionTemplates"";
 DROP TABLE IF EXISTS ""ProcedureMaterials"";
 DROP TABLE IF EXISTS ""Payments"";
 DROP TABLE IF EXISTS ""Users"";
+DROP TABLE IF EXISTS ""WaitingQueueEntries"";
+DROP TABLE IF EXISTS ""WaitingQueueConfigurations"";
 DROP TABLE IF EXISTS ""MedicalRecords"";
 DROP TABLE IF EXISTS ""Medications"";
 DROP TABLE IF EXISTS ""Materials"";
@@ -712,6 +860,7 @@ DROP TABLE IF EXISTS ""Procedures"";
 DROP TABLE IF EXISTS ""ClinicSubscriptions"";
 DROP TABLE IF EXISTS ""Appointments"";
 DROP TABLE IF EXISTS ""SubscriptionPlans"";
+DROP TABLE IF EXISTS ""ExamCatalogs"";
 DROP TABLE IF EXISTS ""Clinics"";
 DROP TABLE IF EXISTS ""Patients"";
 ");
