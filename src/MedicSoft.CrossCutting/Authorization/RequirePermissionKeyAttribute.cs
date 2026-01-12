@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using MedicSoft.Domain.Interfaces;
 using System.Security.Claims;
 
@@ -23,7 +24,7 @@ namespace MedicSoft.CrossCutting.Authorization
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             // Check if user is authenticated
-            if (!context.HttpContext.User.Identity?.IsAuthenticated ?? true)
+            if (context.HttpContext.User.Identity?.IsAuthenticated != true)
             {
                 context.Result = new UnauthorizedObjectResult(new 
                 { 
@@ -58,12 +59,7 @@ namespace MedicSoft.CrossCutting.Authorization
             }
 
             // Get user repository from DI
-            var userRepository = context.HttpContext.RequestServices.GetService(typeof(IUserRepository)) as IUserRepository;
-            if (userRepository == null)
-            {
-                context.Result = new StatusCodeResult(500);
-                return;
-            }
+            var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
 
             // Get user with profile
             var user = await userRepository.GetByIdAsync(userId, tenantId);
@@ -98,8 +94,6 @@ namespace MedicSoft.CrossCutting.Authorization
                 };
                 return;
             }
-
-            await Task.CompletedTask;
         }
     }
 }
