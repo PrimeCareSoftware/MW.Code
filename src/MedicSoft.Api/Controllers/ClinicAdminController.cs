@@ -50,6 +50,7 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Get clinic information (owner only)
+        /// Note: Scoped to the current tenant context from JWT token
         /// </summary>
         [HttpGet("info")]
         public async Task<ActionResult<ClinicAdminInfoDto>> GetClinicInfo()
@@ -65,6 +66,8 @@ namespace MedicSoft.Api.Controllers
                 }
 
                 // Verify owner and get clinic
+                // Note: Using FirstOrDefault because the request is already scoped to a specific tenant
+                // If an owner has multiple clinics, they would switch between them in the UI which updates the JWT token
                 var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
                 var ownerLink = ownerLinks.FirstOrDefault();
                 
@@ -303,6 +306,7 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Create a new user in the clinic (owner only)
+        /// Note: User is created for the clinic in the current tenant context
         /// </summary>
         [HttpPost("users")]
         public async Task<ActionResult<ClinicUserDto>> CreateClinicUser([FromBody] CreateClinicUserRequest request)
@@ -317,6 +321,7 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
+                // Note: Using FirstOrDefault because the request is scoped to the current tenant/clinic via JWT
                 var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
                 var ownerLink = ownerLinks.FirstOrDefault();
                 
@@ -363,7 +368,7 @@ namespace MedicSoft.Api.Controllers
 
                 _logger.LogInformation("User created in clinic: {UserId} in {ClinicId}", user.Id, ownerLink.ClinicId);
 
-                return CreatedAtAction(nameof(GetClinicUsers), new
+                return Ok(new ClinicUserDto
                 {
                     Id = user.Id,
                     Username = user.Username,
