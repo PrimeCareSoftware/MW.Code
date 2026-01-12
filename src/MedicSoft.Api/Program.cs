@@ -283,6 +283,9 @@ else
     app.UseHsts();
 }
 
+// Add global exception handler (should be first to catch all exceptions)
+app.UseGlobalExceptionHandler();
+
 // Add security headers
 app.UseSecurityHeaders();
 

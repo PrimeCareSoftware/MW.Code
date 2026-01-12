@@ -41,7 +41,7 @@ namespace MedicSoft.Api.Controllers
                 if (request == null)
                 {
                     _logger.LogWarning("User login attempt with null request body");
-                    return BadRequest(new { message = "Request body is required" });
+                    return BadRequest(new { message = "Dados de login não fornecidos." });
                 }
 
                 if (string.IsNullOrWhiteSpace(request.Username) || 
@@ -49,7 +49,7 @@ namespace MedicSoft.Api.Controllers
                 {
                     _logger.LogWarning("User login attempt with missing credentials. Username: {Username}", 
                         request.Username ?? "null");
-                    return BadRequest(new { message = "Username and password are required" });
+                    return BadRequest(new { message = "Nome de usuário e senha são obrigatórios." });
                 }
 
                 // Get tenantId from request or from middleware context
@@ -60,7 +60,7 @@ namespace MedicSoft.Api.Controllers
                     if (string.IsNullOrWhiteSpace(tenantId))
                     {
                         _logger.LogWarning("User login attempt without tenantId and no tenant context found");
-                        return BadRequest(new { message = "TenantId is required. Please access via clinic subdomain or provide tenantId." });
+                        return BadRequest(new { message = "Identificador da clínica não encontrado. Por favor, acesse através do domínio da clínica." });
                     }
                     _logger.LogInformation("Using tenantId from context: {TenantId}", tenantId);
                 }
@@ -78,7 +78,7 @@ namespace MedicSoft.Api.Controllers
                 {
                     _logger.LogWarning("Failed user login attempt for username: {Username}, tenantId: {TenantId}", 
                         request.Username, tenantId);
-                    return Unauthorized(new { message = "Invalid credentials or user not found" });
+                    return Unauthorized(new { message = "Usuário ou senha incorretos." });
                 }
 
                 _logger.LogInformation("User authenticated successfully: {UserId}, username: {Username}", 
@@ -95,7 +95,7 @@ namespace MedicSoft.Api.Controllers
                 {
                     // Log but don't fail the login if recording fails
                     _logger.LogError(recordEx, "Failed to record user login for: {UserId}", user.Id);
-                    return StatusCode(500, new { message = "Failed to record login session. Please try again." });
+                    return StatusCode(500, new { message = "Não foi possível registrar a sessão de login. Por favor, tente novamente." });
                 }
 
                 // Generate JWT token with session ID
@@ -124,7 +124,7 @@ namespace MedicSoft.Api.Controllers
             {
                 _logger.LogError(ex, "Unexpected error during user login for username: {Username}, tenantId: {TenantId}", 
                     request?.Username ?? "unknown", request?.TenantId ?? "unknown");
-                return StatusCode(500, new { message = "An error occurred during login. Please try again later." });
+                return StatusCode(500, new { message = "Ocorreu um erro ao processar o login. Por favor, tente novamente mais tarde." });
             }
         }
 
@@ -140,7 +140,7 @@ namespace MedicSoft.Api.Controllers
                 if (request == null)
                 {
                     _logger.LogWarning("Owner login attempt with null request body");
-                    return BadRequest(new { message = "Request body is required" });
+                    return BadRequest(new { message = "Dados de login não fornecidos." });
                 }
 
                 if (string.IsNullOrWhiteSpace(request.Username) || 
@@ -148,7 +148,7 @@ namespace MedicSoft.Api.Controllers
                 {
                     _logger.LogWarning("Owner login attempt with missing credentials. Username: {Username}", 
                         request.Username ?? "null");
-                    return BadRequest(new { message = "Username and password are required" });
+                    return BadRequest(new { message = "Nome de usuário e senha são obrigatórios." });
                 }
 
                 // Get tenantId from request or from middleware context
@@ -159,7 +159,7 @@ namespace MedicSoft.Api.Controllers
                     if (string.IsNullOrWhiteSpace(tenantId))
                     {
                         _logger.LogWarning("Owner login attempt without tenantId and no tenant context found");
-                        return BadRequest(new { message = "TenantId is required. Please access via clinic subdomain or provide tenantId." });
+                        return BadRequest(new { message = "Identificador da clínica não encontrado. Por favor, acesse através do domínio da clínica." });
                     }
                     _logger.LogInformation("Using tenantId from context: {TenantId}", tenantId);
                 }
@@ -178,7 +178,7 @@ namespace MedicSoft.Api.Controllers
                 {
                     _logger.LogWarning("Failed owner login attempt for username: {Username}, tenantId: {TenantId}", 
                         request.Username, tenantId);
-                    return Unauthorized(new { message = "Invalid credentials or owner not found" });
+                    return Unauthorized(new { message = "Usuário ou senha incorretos." });
                 }
 
                 _logger.LogInformation("Owner authenticated successfully: {OwnerId}, username: {Username}", 
@@ -195,7 +195,7 @@ namespace MedicSoft.Api.Controllers
                 {
                     // Log but don't fail the login if recording fails
                     _logger.LogError(recordEx, "Failed to record owner login for: {OwnerId}", owner.Id);
-                    return StatusCode(500, new { message = "Failed to record login session. Please try again." });
+                    return StatusCode(500, new { message = "Não foi possível registrar a sessão de login. Por favor, tente novamente." });
                 }
 
                 // Generate JWT token with session ID
