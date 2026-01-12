@@ -50,8 +50,8 @@ export class ProfileFormComponent implements OnInit {
       next: (categories) => {
         this.permissionCategories = categories;
       },
-      error: (error) => {
-        this.error = error.error?.message || 'Erro ao carregar permissões';
+      error: () => {
+        // Erro já tratado pelo interceptor
       }
     });
   }
@@ -67,8 +67,8 @@ export class ProfileFormComponent implements OnInit {
         this.selectedPermissions = new Set(profile.permissions);
         this.loading = false;
       },
-      error: (error) => {
-        this.error = error.error?.message || 'Erro ao carregar perfil';
+      error: () => {
+        // Erro já tratado pelo interceptor
         this.loading = false;
       }
     });
@@ -120,8 +120,8 @@ export class ProfileFormComponent implements OnInit {
       next: () => {
         this.router.navigate(['/admin/profiles']);
       },
-      error: (error) => {
-        this.error = error.error?.message || 'Erro ao salvar perfil';
+      error: () => {
+        // Erro já tratado pelo interceptor
         this.saving = false;
       }
     });

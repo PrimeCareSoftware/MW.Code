@@ -34,8 +34,8 @@ export class ProfileListComponent implements OnInit {
         this.profiles = profiles;
         this.loading = false;
       },
-      error: (error) => {
-        this.error = error.error?.message || 'Erro ao carregar perfis';
+      error: () => {
+        // Erro já tratado pelo interceptor
         this.loading = false;
       }
     });
@@ -65,8 +65,8 @@ export class ProfileListComponent implements OnInit {
         next: () => {
           this.loadProfiles();
         },
-        error: (error) => {
-          alert(error.error?.message || 'Erro ao excluir perfil');
+        error: () => {
+          // Erro já tratado pelo interceptor
         }
       });
     }

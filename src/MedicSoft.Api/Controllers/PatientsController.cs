@@ -7,6 +7,7 @@ using MedicSoft.Application.Queries.Patients;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
+using MedicSoft.Api.Helpers;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -61,10 +62,10 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<IEnumerable<PatientDto>>> Search([FromQuery] string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
-                return BadRequest("Search term cannot be empty");
+                return BadRequest(new { message = "O termo de busca não pode estar vazio." });
 
             if (searchTerm.Length < 3)
-                return BadRequest("Search term must be at least 3 characters long");
+                return BadRequest(new { message = "O termo de busca deve ter pelo menos 3 caracteres." });
 
             var patients = await _patientService.SearchPatientsAsync(searchTerm, GetTenantId());
             return Ok(patients);
@@ -80,7 +81,7 @@ namespace MedicSoft.Api.Controllers
             var patient = await _patientService.GetPatientByDocumentGlobalAsync(document);
             
             if (patient == null)
-                return NotFound($"Patient with document {document} not found");
+                return NotFound(new { message = $"Paciente com CPF {document} não encontrado." });
 
             return Ok(patient);
         }
@@ -95,7 +96,7 @@ namespace MedicSoft.Api.Controllers
             var patient = await _patientService.GetPatientByIdAsync(id, GetTenantId());
             
             if (patient == null)
-                return NotFound($"Patient with ID {id} not found");
+                return NotFound(new { message = $"Paciente não encontrado." });
 
             return Ok(patient);
         }
@@ -108,7 +109,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<PatientDto>> Create([FromBody] CreatePatientDto createPatientDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(ValidationHelper.GetValidationErrors(ModelState));
 
             try
             {
@@ -117,7 +118,7 @@ namespace MedicSoft.Api.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
 
@@ -129,7 +130,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<PatientDto>> Update(Guid id, [FromBody] UpdatePatientDto updatePatientDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(ValidationHelper.GetValidationErrors(ModelState));
 
             try
             {
@@ -138,7 +139,7 @@ namespace MedicSoft.Api.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
 
