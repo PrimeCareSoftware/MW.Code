@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -19,6 +21,9 @@ namespace MedicSoft.Api.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IOwnerClinicLinkRepository _ownerClinicLinkRepository;
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
+        private readonly ISubscriptionPlanRepository _planRepository;
+        private readonly IUserService _userService;
+        private readonly IPasswordHasher _passwordHasher;
         private readonly ILogger<ClinicAdminController> _logger;
 
         public ClinicAdminController(
@@ -26,6 +31,9 @@ namespace MedicSoft.Api.Controllers
             IUserRepository userRepository,
             IOwnerClinicLinkRepository ownerClinicLinkRepository,
             IClinicSubscriptionRepository subscriptionRepository,
+            ISubscriptionPlanRepository planRepository,
+            IUserService userService,
+            IPasswordHasher passwordHasher,
             ILogger<ClinicAdminController> logger,
             ITenantContext tenantContext)
             : base(tenantContext)
@@ -34,6 +42,9 @@ namespace MedicSoft.Api.Controllers
             _userRepository = userRepository;
             _ownerClinicLinkRepository = ownerClinicLinkRepository;
             _subscriptionRepository = subscriptionRepository;
+            _planRepository = planRepository;
+            _userService = userService;
+            _passwordHasher = passwordHasher;
             _logger = logger;
         }
 
@@ -290,6 +301,468 @@ namespace MedicSoft.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Create a new user in the clinic (owner only)
+        /// </summary>
+        [HttpPost("users")]
+        public async Task<ActionResult<ClinicUserDto>> CreateClinicUser([FromBody] CreateClinicUserRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var ownerLink = ownerLinks.FirstOrDefault();
+                
+                if (ownerLink == null)
+                {
+                    return Forbid();
+                }
+
+                // Check subscription limits
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                if (subscription == null || !subscription.IsActive())
+                {
+                    return BadRequest(new { message = "No active subscription found" });
+                }
+
+                var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+                if (plan == null)
+                {
+                    return BadRequest(new { message = "Invalid subscription plan" });
+                }
+
+                var currentUserCount = await _userService.GetUserCountByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                if (currentUserCount >= plan.MaxUsers)
+                {
+                    return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
+                }
+
+                // Parse role
+                if (!Enum.TryParse<UserRole>(request.Role, out var role))
+                {
+                    return BadRequest(new { message = "Invalid role" });
+                }
+
+                var user = await _userService.CreateUserAsync(
+                    request.Username,
+                    request.Email,
+                    request.Password,
+                    request.Name,
+                    request.Phone ?? "",
+                    role,
+                    tenantId,
+                    ownerLink.ClinicId
+                );
+
+                _logger.LogInformation("User created in clinic: {UserId} in {ClinicId}", user.Id, ownerLink.ClinicId);
+
+                return CreatedAtAction(nameof(GetClinicUsers), new
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Name = user.FullName,
+                    Email = user.Email,
+                    Role = user.Role.ToString(),
+                    IsActive = user.IsActive,
+                    CreatedAt = user.CreatedAt
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating clinic user");
+                return StatusCode(500, new { message = "An error occurred while creating user" });
+            }
+        }
+
+        /// <summary>
+        /// Update user information (owner only)
+        /// </summary>
+        [HttpPut("users/{id}")]
+        public async Task<ActionResult> UpdateClinicUser(Guid id, [FromBody] UpdateClinicUserRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var ownerLink = ownerLinks.FirstOrDefault();
+                
+                if (ownerLink == null)
+                {
+                    return Forbid();
+                }
+
+                // Verify user belongs to this clinic
+                var user = await _userRepository.GetByIdAsync(id, tenantId);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                if (user.ClinicId != ownerLink.ClinicId)
+                {
+                    return Forbid();
+                }
+
+                // Update profile
+                await _userService.UpdateUserProfileAsync(
+                    id,
+                    request.Email ?? user.Email,
+                    request.Name ?? user.FullName,
+                    request.Phone ?? user.Phone,
+                    tenantId
+                );
+
+                // Handle activation/deactivation
+                if (request.IsActive.HasValue)
+                {
+                    if (request.IsActive.Value && !user.IsActive)
+                    {
+                        await _userService.ActivateUserAsync(id, tenantId);
+                    }
+                    else if (!request.IsActive.Value && user.IsActive)
+                    {
+                        await _userService.DeactivateUserAsync(id, tenantId);
+                    }
+                }
+
+                _logger.LogInformation("User updated: {UserId}", id);
+
+                return Ok(new { message = "User updated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating clinic user");
+                return StatusCode(500, new { message = "An error occurred while updating user" });
+            }
+        }
+
+        /// <summary>
+        /// Change user password (owner only)
+        /// </summary>
+        [HttpPut("users/{id}/password")]
+        public async Task<ActionResult> ChangeUserPassword(Guid id, [FromBody] ChangeUserPasswordRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var ownerLink = ownerLinks.FirstOrDefault();
+                
+                if (ownerLink == null)
+                {
+                    return Forbid();
+                }
+
+                // Verify user belongs to this clinic
+                var user = await _userRepository.GetByIdAsync(id, tenantId);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                if (user.ClinicId != ownerLink.ClinicId)
+                {
+                    return Forbid();
+                }
+
+                // Validate password strength
+                var minPasswordLength = 8;
+                var (isValid, errorMessage) = _passwordHasher.ValidatePasswordStrength(
+                    request.NewPassword,
+                    minPasswordLength);
+
+                if (!isValid)
+                {
+                    return BadRequest(new { message = errorMessage });
+                }
+
+                // Change password
+                await _userService.ChangeUserPasswordAsync(id, request.NewPassword, tenantId);
+
+                _logger.LogInformation("Password changed for user: {UserId} by owner: {OwnerId}", id, userId);
+
+                return Ok(new { message = "Password changed successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error changing user password");
+                return StatusCode(500, new { message = "An error occurred while changing password" });
+            }
+        }
+
+        /// <summary>
+        /// Deactivate user (owner only)
+        /// </summary>
+        [HttpPost("users/{id}/deactivate")]
+        public async Task<ActionResult> DeactivateClinicUser(Guid id)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var ownerLink = ownerLinks.FirstOrDefault();
+                
+                if (ownerLink == null)
+                {
+                    return Forbid();
+                }
+
+                // Verify user belongs to this clinic
+                var user = await _userRepository.GetByIdAsync(id, tenantId);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                if (user.ClinicId != ownerLink.ClinicId)
+                {
+                    return Forbid();
+                }
+
+                await _userService.DeactivateUserAsync(id, tenantId);
+
+                _logger.LogInformation("User deactivated: {UserId}", id);
+
+                return Ok(new { message = "User deactivated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deactivating user");
+                return StatusCode(500, new { message = "An error occurred while deactivating user" });
+            }
+        }
+
+        /// <summary>
+        /// Activate user (owner only)
+        /// </summary>
+        [HttpPost("users/{id}/activate")]
+        public async Task<ActionResult> ActivateClinicUser(Guid id)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var ownerLink = ownerLinks.FirstOrDefault();
+                
+                if (ownerLink == null)
+                {
+                    return Forbid();
+                }
+
+                // Verify user belongs to this clinic
+                var user = await _userRepository.GetByIdAsync(id, tenantId);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                if (user.ClinicId != ownerLink.ClinicId)
+                {
+                    return Forbid();
+                }
+
+                await _userService.ActivateUserAsync(id, tenantId);
+
+                _logger.LogInformation("User activated: {UserId}", id);
+
+                return Ok(new { message = "User activated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error activating user");
+                return StatusCode(500, new { message = "An error occurred while activating user" });
+            }
+        }
+
+        /// <summary>
+        /// Change user role (owner only)
+        /// </summary>
+        [HttpPut("users/{id}/role")]
+        public async Task<ActionResult> ChangeClinicUserRole(Guid id, [FromBody] ChangeUserRoleRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var ownerLink = ownerLinks.FirstOrDefault();
+                
+                if (ownerLink == null)
+                {
+                    return Forbid();
+                }
+
+                // Verify user belongs to this clinic
+                var user = await _userRepository.GetByIdAsync(id, tenantId);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                if (user.ClinicId != ownerLink.ClinicId)
+                {
+                    return Forbid();
+                }
+
+                // Parse role
+                if (!Enum.TryParse<UserRole>(request.NewRole, out var newRole))
+                {
+                    return BadRequest(new { message = "Invalid role" });
+                }
+
+                await _userService.ChangeUserRoleAsync(id, newRole, tenantId);
+
+                _logger.LogInformation("User role changed: {UserId} to {NewRole}", id, newRole);
+
+                return Ok(new { message = "User role changed successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error changing user role");
+                return StatusCode(500, new { message = "An error occurred while changing user role" });
+            }
+        }
+
+        /// <summary>
+        /// Get subscription details with plan limits (owner only)
+        /// </summary>
+        [HttpGet("subscription/details")]
+        public async Task<ActionResult> GetSubscriptionDetails()
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var ownerLink = ownerLinks.FirstOrDefault();
+                
+                if (ownerLink == null)
+                {
+                    return Forbid();
+                }
+
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                
+                if (subscription == null)
+                {
+                    return NotFound(new { message = "No subscription found" });
+                }
+
+                var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+                if (plan == null)
+                {
+                    return NotFound(new { message = "Subscription plan not found" });
+                }
+
+                var currentUserCount = await _userService.GetUserCountByClinicIdAsync(ownerLink.ClinicId, tenantId);
+
+                return Ok(new
+                {
+                    subscription.Id,
+                    PlanId = subscription.SubscriptionPlanId,
+                    PlanName = plan.Name,
+                    PlanType = plan.Type.ToString(),
+                    subscription.Status,
+                    subscription.StartDate,
+                    subscription.EndDate,
+                    NextBillingDate = subscription.NextPaymentDate,
+                    CurrentPrice = subscription.CurrentPrice,
+                    IsTrial = subscription.Status == SubscriptionStatus.Trial,
+                    IsActive = subscription.IsActive(),
+                    Limits = new
+                    {
+                        MaxUsers = plan.MaxUsers,
+                        MaxPatients = plan.MaxPatients,
+                        CurrentUsers = currentUserCount
+                    },
+                    Features = new
+                    {
+                        HasReports = plan.HasReports,
+                        HasWhatsAppIntegration = plan.HasWhatsAppIntegration,
+                        HasSMSNotifications = plan.HasSMSNotifications,
+                        HasTissExport = plan.HasTissExport
+                    },
+                    subscription.CreatedAt
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting subscription details");
+                return StatusCode(500, new { message = "An error occurred while retrieving subscription details" });
+            }
+        }
+
         private static ClinicAdminInfoDto MapClinicToDto(Domain.Entities.Clinic clinic)
         {
             return new ClinicAdminInfoDto
@@ -309,5 +782,15 @@ namespace MedicSoft.Api.Controllers
                 IsActive = clinic.IsActive
             };
         }
+    }
+
+    public class ChangeUserPasswordRequest
+    {
+        public string NewPassword { get; set; } = string.Empty;
+    }
+
+    public class ChangeUserRoleRequest
+    {
+        public string NewRole { get; set; } = string.Empty;
     }
 }
