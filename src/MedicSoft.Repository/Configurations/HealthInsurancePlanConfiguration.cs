@@ -15,33 +15,52 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(h => h.Id)
                 .ValueGeneratedNever();
 
-            builder.Property(h => h.InsuranceName)
+            // NEW TISS Phase 1 fields
+            builder.Property(h => h.PlanName)
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(h => h.PlanNumber)
+            builder.Property(h => h.PlanCode)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(h => h.PlanType)
+            builder.Property(h => h.RegisterNumber)
+                .HasMaxLength(20);
+
+            // LEGACY fields (deprecated but maintained for backward compatibility)
+            builder.Property(h => h.InsuranceName)
+                .HasMaxLength(200);
+
+            builder.Property(h => h.PlanNumber)
+                .HasMaxLength(100);
+
+            builder.Property(h => h.OldPlanType)
+                .HasColumnName("PlanType") // Keep same column name for backward compatibility
                 .HasMaxLength(100);
 
             builder.Property(h => h.HolderName)
                 .HasMaxLength(200);
 
+            builder.Property(h => h.PatientId);
+
+            builder.Property(h => h.ValidFrom);
+
+            builder.Property(h => h.ValidUntil);
+
             builder.Property(h => h.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(h => h.ValidFrom)
-                .IsRequired();
-
-            builder.Property(h => h.ValidUntil);
-
             builder.Property(h => h.IsActive)
                 .IsRequired();
 
-            // Relationship with Patient
+            // Relationship with Operator (NEW)
+            builder.HasOne(h => h.Operator)
+                .WithMany()
+                .HasForeignKey(h => h.OperatorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Relationship with Patient (LEGACY - maintained for backward compatibility)
             builder.HasOne(h => h.Patient)
                 .WithMany(p => p.HealthInsurancePlans)
                 .HasForeignKey(h => h.PatientId)
@@ -56,6 +75,12 @@ namespace MedicSoft.Repository.Configurations
 
             builder.HasIndex(h => h.PlanNumber)
                 .HasDatabaseName("IX_HealthInsurancePlans_PlanNumber");
+                
+            builder.HasIndex(h => h.PlanCode)
+                .HasDatabaseName("IX_HealthInsurancePlans_PlanCode");
+                
+            builder.HasIndex(h => h.OperatorId)
+                .HasDatabaseName("IX_HealthInsurancePlans_OperatorId");
         }
     }
 }

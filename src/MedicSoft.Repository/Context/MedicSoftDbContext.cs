@@ -73,6 +73,15 @@ namespace MedicSoft.Repository.Context
         
         // Sales Funnel Metrics
         public DbSet<SalesFunnelMetric> SalesFunnelMetrics { get; set; } = null!;
+        
+        // TISS Phase 1 - Health Insurance and Authorization
+        public DbSet<HealthInsuranceOperator> HealthInsuranceOperators { get; set; } = null!;
+        public DbSet<PatientHealthInsurance> PatientHealthInsurances { get; set; } = null!;
+        public DbSet<AuthorizationRequest> AuthorizationRequests { get; set; } = null!;
+        public DbSet<TissBatch> TissBatches { get; set; } = null!;
+        public DbSet<TissGuide> TissGuides { get; set; } = null!;
+        public DbSet<TissGuideProcedure> TissGuideProcedures { get; set; } = null!;
+        public DbSet<TussProcedure> TussProcedures { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -133,6 +142,15 @@ namespace MedicSoft.Repository.Context
             
             // Sales Funnel Metrics
             modelBuilder.ApplyConfiguration(new SalesFunnelMetricConfiguration());
+            
+            // TISS Phase 1 - Health Insurance and Authorization
+            modelBuilder.ApplyConfiguration(new HealthInsuranceOperatorConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientHealthInsuranceConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthorizationRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new TissBatchConfiguration());
+            modelBuilder.ApplyConfiguration(new TissGuideConfiguration());
+            modelBuilder.ApplyConfiguration(new TissGuideProcedureConfiguration());
+            modelBuilder.ApplyConfiguration(new TussProcedureConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
