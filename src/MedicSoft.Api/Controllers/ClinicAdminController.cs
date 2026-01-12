@@ -48,13 +48,13 @@ namespace MedicSoft.Api.Controllers
                 var tenantId = GetTenantId();
                 var userId = GetUserId();
 
-                if (string.IsNullOrEmpty(userId))
+                if (userId == Guid.Empty)
                 {
                     return Unauthorized();
                 }
 
                 // Verify owner and get clinic
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(Guid.Parse(userId));
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
                 var ownerLink = ownerLinks.FirstOrDefault();
                 
                 if (ownerLink == null)
@@ -88,12 +88,12 @@ namespace MedicSoft.Api.Controllers
                 var tenantId = GetTenantId();
                 var userId = GetUserId();
 
-                if (string.IsNullOrEmpty(userId))
+                if (userId == Guid.Empty)
                 {
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(Guid.Parse(userId));
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
                 var ownerLink = ownerLinks.FirstOrDefault();
                 
                 if (ownerLink == null)
@@ -161,12 +161,12 @@ namespace MedicSoft.Api.Controllers
                 var tenantId = GetTenantId();
                 var userId = GetUserId();
 
-                if (string.IsNullOrEmpty(userId))
+                if (userId == Guid.Empty)
                 {
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(Guid.Parse(userId));
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
                 var ownerLink = ownerLinks.FirstOrDefault();
                 
                 if (ownerLink == null)
@@ -205,12 +205,12 @@ namespace MedicSoft.Api.Controllers
                 var tenantId = GetTenantId();
                 var userId = GetUserId();
 
-                if (string.IsNullOrEmpty(userId))
+                if (userId == Guid.Empty)
                 {
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(Guid.Parse(userId));
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
                 var ownerLink = ownerLinks.FirstOrDefault();
                 
                 if (ownerLink == null)
@@ -256,12 +256,12 @@ namespace MedicSoft.Api.Controllers
                 var tenantId = GetTenantId();
                 var userId = GetUserId();
 
-                if (string.IsNullOrEmpty(userId))
+                if (userId == Guid.Empty)
                 {
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(Guid.Parse(userId));
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
                 var ownerLink = ownerLinks.FirstOrDefault();
                 
                 if (ownerLink == null)
