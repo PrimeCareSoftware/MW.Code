@@ -18,6 +18,7 @@ namespace MedicSoft.Application.Services
         Task UpdateUserProfileAsync(Guid id, string email, string fullName, string phone, 
             string tenantId, string? professionalId = null, string? specialty = null);
         Task ChangeUserRoleAsync(Guid id, UserRole newRole, string tenantId);
+        Task ChangeUserPasswordAsync(Guid id, string newPassword, string tenantId);
         Task ActivateUserAsync(Guid id, string tenantId);
         Task DeactivateUserAsync(Guid id, string tenantId);
         Task<bool> UsernameExistsAsync(string username, string tenantId);
@@ -109,6 +110,17 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException("User not found");
 
             user.Deactivate();
+            await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task ChangeUserPasswordAsync(Guid id, string newPassword, string tenantId)
+        {
+            var user = await _userRepository.GetByIdAsync(id, tenantId);
+            if (user == null)
+                throw new InvalidOperationException("User not found");
+
+            var passwordHash = _passwordHasher.HashPassword(newPassword);
+            user.UpdatePassword(passwordHash);
             await _userRepository.UpdateAsync(user);
         }
 
