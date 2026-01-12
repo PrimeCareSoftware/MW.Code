@@ -19,11 +19,10 @@ export interface UpdateClinicInfoRequest {
 export interface ClinicUserDto {
   id: string;
   username: string;
+  name: string;
   email: string;
-  fullName?: string;
+  role: string;
   isActive: boolean;
-  profileId?: string;
-  profileName?: string;
   createdAt: string;
 }
 
@@ -31,15 +30,24 @@ export interface CreateClinicUserRequest {
   username: string;
   email: string;
   password: string;
-  fullName?: string;
-  profileId?: string;
+  name: string;
+  phone?: string;
+  role: string;
 }
 
 export interface UpdateClinicUserRequest {
   email?: string;
-  fullName?: string;
+  name?: string;
+  phone?: string;
   isActive?: boolean;
-  profileId?: string;
+}
+
+export interface ChangeUserPasswordRequest {
+  newPassword: string;
+}
+
+export interface ChangeUserRoleRequest {
+  newRole: string;
 }
 
 export interface SubscriptionDto {
@@ -51,4 +59,43 @@ export interface SubscriptionDto {
   maxUsers?: number;
   currentUsers?: number;
   features?: string[];
+}
+
+export interface SubscriptionDetailsDto {
+  id: string;
+  planId: string;
+  planName: string;
+  planType: string;
+  status: string;
+  startDate: string;
+  endDate?: string;
+  nextBillingDate?: string;
+  currentPrice: number;
+  isTrial: boolean;
+  isActive: boolean;
+  limits: {
+    maxUsers: number;
+    maxPatients: number;
+    currentUsers: number;
+  };
+  features: {
+    hasReports: boolean;
+    hasWhatsAppIntegration: boolean;
+    hasSMSNotifications: boolean;
+    hasTissExport: boolean;
+  };
+  createdAt: string;
+}
+
+export interface MyClinicDto {
+  clinicId: string;
+  name: string;
+  tradeName?: string;
+  document: string;
+  subdomain: string;
+  tenantId: string;
+  isActive: boolean;
+  isPrimaryOwner: boolean;
+  hasActiveSubscription: boolean;
+  subscriptionStatus?: string;
 }
