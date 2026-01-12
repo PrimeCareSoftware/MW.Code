@@ -41,9 +41,14 @@ namespace MedicSoft.Api.Controllers
             return "default-tenant";
         }
 
-        protected string? GetUserId()
+        protected Guid GetUserId()
         {
-            return User?.Identity?.Name;
+            var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim != null && Guid.TryParse(userIdClaim, out var userId))
+            {
+                return userId;
+            }
+            return Guid.Empty;
         }
 
         protected Guid? GetClinicId()

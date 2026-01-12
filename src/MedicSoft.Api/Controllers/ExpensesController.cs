@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -10,6 +13,7 @@ namespace MedicSoft.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ExpensesController : BaseController
     {
         private readonly IExpenseService _expenseService;
@@ -21,13 +25,14 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all expenses for the clinic
+        /// Get all expenses for the clinic (requires expenses.view permission)
         /// </summary>
         /// <param name="clinicId">Optional clinic ID filter</param>
         /// <param name="status">Optional status filter</param>
         /// <param name="category">Optional category filter</param>
         /// <returns>List of expenses</returns>
         [HttpGet]
+        [RequirePermissionKey(PermissionKeys.ExpensesView)]
         [ProducesResponseType(typeof(List<ExpenseDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<ExpenseDto>>> GetAll(
             [FromQuery] Guid? clinicId = null,
@@ -40,11 +45,12 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get expense by ID
+        /// Get expense by ID (requires expenses.view permission)
         /// </summary>
         /// <param name="id">Expense ID</param>
         /// <returns>Expense details</returns>
         [HttpGet("{id}")]
+        [RequirePermissionKey(PermissionKeys.ExpensesView)]
         [ProducesResponseType(typeof(ExpenseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ExpenseDto>> GetById(Guid id)
@@ -59,11 +65,12 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Create a new expense
+        /// Create a new expense (requires expenses.create permission)
         /// </summary>
         /// <param name="dto">Expense details</param>
         /// <returns>Created expense</returns>
         [HttpPost]
+        [RequirePermissionKey(PermissionKeys.ExpensesCreate)]
         [ProducesResponseType(typeof(ExpenseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ExpenseDto>> Create([FromBody] CreateExpenseDto dto)
@@ -84,12 +91,13 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Update an expense
+        /// Update an expense (requires expenses.edit permission)
         /// </summary>
         /// <param name="id">Expense ID</param>
         /// <param name="dto">Updated expense details</param>
         /// <returns>Success status</returns>
         [HttpPut("{id}")]
+        [RequirePermissionKey(PermissionKeys.ExpensesEdit)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -185,11 +193,12 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Delete an expense
+        /// Delete an expense (requires expenses.delete permission)
         /// </summary>
         /// <param name="id">Expense ID</param>
         /// <returns>Success status</returns>
         [HttpDelete("{id}")]
+        [RequirePermissionKey(PermissionKeys.ExpensesDelete)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Delete(Guid id)

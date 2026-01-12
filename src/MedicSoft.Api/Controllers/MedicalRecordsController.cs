@@ -1,14 +1,17 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 
 namespace MedicSoft.Api.Controllers
 {
     [ApiController]
     [Route("api/medical-records")]
+    [Authorize]
     public class MedicalRecordsController : BaseController
     {
         private readonly IMedicalRecordService _medicalRecordService;
@@ -20,10 +23,11 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Create a new medical record for an appointment
-        /// Requires ManageMedicalRecords permission (Doctor, Dentist, Nurse have this)
+        /// Create a new medical record for an appointment (requires medical-records.create permission)
+        /// Only Doctor, Dentist, Nurse have this permission
         /// </summary>
         [HttpPost]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsCreate)]
         public async Task<ActionResult<MedicalRecordDto>> Create([FromBody] CreateMedicalRecordDto createDto)
         {
             if (!ModelState.IsValid)
@@ -43,10 +47,11 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Update a medical record
-        /// Requires ManageMedicalRecords permission (Secretary does NOT have this)
+        /// Update a medical record (requires medical-records.edit permission)
+        /// Secretary does NOT have this permission
         /// </summary>
         [HttpPut("{id}")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsEdit)]
         public async Task<ActionResult<MedicalRecordDto>> Update(Guid id, [FromBody] UpdateMedicalRecordDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -64,9 +69,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Complete a medical record and finish consultation
+        /// Complete a medical record and finish consultation (requires medical-records.edit permission)
         /// </summary>
         [HttpPost("{id}/complete")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsEdit)]
         public async Task<ActionResult<MedicalRecordDto>> Complete(Guid id, [FromBody] CompleteMedicalRecordDto completeDto)
         {
             if (!ModelState.IsValid)
@@ -84,9 +90,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get medical record by appointment ID
+        /// Get medical record by appointment ID (requires medical-records.view permission)
         /// </summary>
         [HttpGet("appointment/{appointmentId}")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsView)]
         public async Task<ActionResult<MedicalRecordDto>> GetByAppointment(Guid appointmentId)
         {
             try
@@ -105,9 +112,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all medical records for a patient
+        /// Get all medical records for a patient (requires medical-records.view permission)
         /// </summary>
         [HttpGet("patient/{patientId}")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsView)]
         public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetByPatient(Guid patientId)
         {
             try

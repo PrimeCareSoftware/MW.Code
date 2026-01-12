@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -12,6 +14,7 @@ namespace MedicSoft.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : BaseController
     {
         private readonly IUserService _userService;
@@ -30,9 +33,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all users for the clinic
+        /// Get all users for the clinic (requires users.view permission)
         /// </summary>
         [HttpGet]
+        [RequirePermissionKey(PermissionKeys.UsersView)]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             var tenantId = GetTenantId();
@@ -56,9 +60,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get user by ID
+        /// Get user by ID (requires users.view permission)
         /// </summary>
         [HttpGet("{id}")]
+        [RequirePermissionKey(PermissionKeys.UsersView)]
         public async Task<ActionResult<UserDto>> GetUser(Guid id)
         {
             var tenantId = GetTenantId();
@@ -83,10 +88,11 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Create new user (requires ClinicOwner or SystemAdmin role)
+        /// Create new user (requires users.create permission)
         /// ClinicOwner can manage users in their clinic
         /// </summary>
         [HttpPost]
+        [RequirePermissionKey(PermissionKeys.UsersCreate)]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody] CreateUserRequest request)
         {
             try
@@ -144,9 +150,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Update user profile
+        /// Update user profile (requires users.edit permission)
         /// </summary>
         [HttpPut("{id}")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request)
         {
             try
@@ -171,10 +178,11 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Change user role (requires ClinicOwner or SystemAdmin)
+        /// Change user role (requires users.edit permission)
         /// Only ClinicOwner and SystemAdmin can change user roles
         /// </summary>
         [HttpPut("{id}/role")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> ChangeRole(Guid id, [FromBody] ChangeRoleRequest request)
         {
             try
@@ -195,9 +203,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Deactivate user (requires ManageUsers permission)
+        /// Deactivate user (requires users.delete permission)
         /// </summary>
         [HttpPost("{id}/deactivate")]
+        [RequirePermissionKey(PermissionKeys.UsersDelete)]
         public async Task<ActionResult> DeactivateUser(Guid id)
         {
             try
@@ -213,9 +222,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Activate user (requires ManageUsers permission)
+        /// Activate user (requires users.edit permission)
         /// </summary>
         [HttpPost("{id}/activate")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> ActivateUser(Guid id)
         {
             try
