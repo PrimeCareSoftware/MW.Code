@@ -27,7 +27,7 @@ import {
 })
 export class QueueManagementComponent implements OnInit, OnDestroy {
   // Constants
-  private readonly MIN_SEARCH_LENGTH = 2;
+  private readonly MIN_SEARCH_LENGTH = 3;
   private readonly AD_HOC_APPOINTMENT_ID = '00000000-0000-0000-0000-000000000000'; // Special ID for ad-hoc patients
   private readonly AUTO_REFRESH_INTERVAL = 30000; // 30 seconds
 

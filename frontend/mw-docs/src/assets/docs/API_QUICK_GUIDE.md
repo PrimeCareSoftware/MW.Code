@@ -7,7 +7,7 @@
 **Endpoint**: `GET /api/patients/search`
 
 **Query Parameters**:
-- `searchTerm` (string, obrigatório): Termo de busca
+- `searchTerm` (string, obrigatório): Termo de busca (mínimo 3 caracteres)
 
 **Exemplos**:
 ```bash
@@ -40,7 +40,8 @@ GET /api/patients/search?searchTerm=11987654321
 - ✅ Busca em CPF, Nome e Telefone simultaneamente
 - ✅ Filtrado automaticamente pela clínica atual (TenantId)
 - ✅ Ordenado por nome
-- ✅ Case-insensitive
+- ✅ Case-insensitive (não diferencia maiúsculas de minúsculas)
+- ✅ Requer mínimo de 3 caracteres
 
 ---
 
