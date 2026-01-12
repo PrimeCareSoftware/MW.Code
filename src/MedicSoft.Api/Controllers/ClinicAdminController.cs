@@ -763,6 +763,58 @@ namespace MedicSoft.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all clinics owned by the authenticated owner
+        /// </summary>
+        [HttpGet("my-clinics")]
+        public async Task<ActionResult> GetMyClinics()
+        {
+            try
+            {
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                
+                var clinicDetails = new List<object>();
+                
+                foreach (var link in ownerLinks)
+                {
+                    if (!link.IsActive) continue;
+                    
+                    var clinic = await _clinicRepository.GetByIdAsync(link.ClinicId, link.Clinic?.TenantId ?? "");
+                    if (clinic == null) continue;
+
+                    var subscription = await _subscriptionRepository.GetByClinicIdAsync(link.ClinicId, clinic.TenantId);
+                    
+                    clinicDetails.Add(new
+                    {
+                        ClinicId = clinic.Id,
+                        Name = clinic.Name,
+                        TradeName = clinic.TradeName,
+                        Document = clinic.Document,
+                        Subdomain = clinic.Subdomain,
+                        TenantId = clinic.TenantId,
+                        IsActive = clinic.IsActive,
+                        IsPrimaryOwner = link.IsPrimaryOwner,
+                        HasActiveSubscription = subscription?.IsActive() ?? false,
+                        SubscriptionStatus = subscription?.Status.ToString()
+                    });
+                }
+
+                return Ok(clinicDetails);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting owner clinics");
+                return StatusCode(500, new { message = "An error occurred while retrieving clinics" });
+            }
+        }
+
         private static ClinicAdminInfoDto MapClinicToDto(Domain.Entities.Clinic clinic)
         {
             return new ClinicAdminInfoDto
