@@ -57,8 +57,8 @@ namespace MedicSoft.Api.Middleware
                     errorResponse.ErrorCode = "INVALID_OPERATION";
                     break;
 
-                case ArgumentException _:
                 case ArgumentNullException _:
+                case ArgumentException _:
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.Message = "Os dados fornecidos são inválidos. Por favor, verifique e tente novamente.";
                     errorResponse.ErrorCode = "INVALID_ARGUMENT";
