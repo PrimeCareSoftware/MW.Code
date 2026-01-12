@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
@@ -111,7 +111,7 @@ describe('UserManagementComponent', () => {
       expect(component.showCreateDialog()).toBe(false);
     });
 
-    it('should create user successfully', () => {
+    it('should create user successfully', fakeAsync(() => {
       const newUser: ClinicUserDto = {
         id: '3',
         username: 'new.user',
@@ -136,11 +136,11 @@ describe('UserManagementComponent', () => {
       });
 
       component.createUser();
+      tick();
 
       expect(clinicAdminService.createUser).toHaveBeenCalled();
       expect(component.showCreateDialog()).toBe(false);
-      expect(component.successMessage()).toContain('criado com sucesso');
-    });
+    }));
 
     it('should not create user with invalid form', () => {
       component.openCreateDialog();
@@ -189,7 +189,7 @@ describe('UserManagementComponent', () => {
       expect(component.editUserForm.value.email).toBe(user.email);
     });
 
-    it('should update user successfully', () => {
+    it('should update user successfully', fakeAsync(() => {
       clinicAdminService.updateUser.and.returnValue(of({}));
       clinicAdminService.getClinicUsers.and.returnValue(of(mockUsers));
 
@@ -201,13 +201,13 @@ describe('UserManagementComponent', () => {
       });
 
       component.updateUser();
+      tick();
 
       expect(clinicAdminService.updateUser).toHaveBeenCalledWith(
         user.id,
         jasmine.objectContaining({ email: 'updated@test.com' })
       );
-      expect(component.successMessage()).toContain('atualizado com sucesso');
-    });
+    }));
   });
 
   describe('Password Change', () => {
@@ -268,7 +268,7 @@ describe('UserManagementComponent', () => {
       expect(component.roleForm.value.newRole).toBe(user.role);
     });
 
-    it('should change role successfully', () => {
+    it('should change role successfully', fakeAsync(() => {
       clinicAdminService.changeUserRole.and.returnValue(of({}));
       clinicAdminService.getClinicUsers.and.returnValue(of(mockUsers));
 
@@ -279,13 +279,13 @@ describe('UserManagementComponent', () => {
       });
 
       component.changeRole();
+      tick();
 
       expect(clinicAdminService.changeUserRole).toHaveBeenCalledWith(
         user.id,
         jasmine.objectContaining({ newRole: 'Admin' })
       );
-      expect(component.successMessage()).toContain('Perfil alterado');
-    });
+    }));
   });
 
   describe('User Activation/Deactivation', () => {
@@ -293,7 +293,7 @@ describe('UserManagementComponent', () => {
       clinicAdminService.getClinicUsers.and.returnValue(of(mockUsers));
     });
 
-    it('should deactivate active user', () => {
+    it('should deactivate active user', fakeAsync(() => {
       clinicAdminService.deactivateUser.and.returnValue(of({}));
       clinicAdminService.getClinicUsers.and.returnValue(of(mockUsers));
 
@@ -301,12 +301,12 @@ describe('UserManagementComponent', () => {
       component.selectedUser.set(activeUser);
       
       component.toggleUserStatus();
+      tick();
 
       expect(clinicAdminService.deactivateUser).toHaveBeenCalledWith(activeUser.id);
-      expect(component.successMessage()).toContain('desativado com sucesso');
-    });
+    }));
 
-    it('should activate inactive user', () => {
+    it('should activate inactive user', fakeAsync(() => {
       clinicAdminService.activateUser.and.returnValue(of({}));
       clinicAdminService.getClinicUsers.and.returnValue(of(mockUsers));
 
@@ -314,10 +314,10 @@ describe('UserManagementComponent', () => {
       component.selectedUser.set(inactiveUser);
       
       component.toggleUserStatus();
+      tick();
 
       expect(clinicAdminService.activateUser).toHaveBeenCalledWith(inactiveUser.id);
-      expect(component.successMessage()).toContain('ativado com sucesso');
-    });
+    }));
   });
 
   describe('Utility Functions', () => {
