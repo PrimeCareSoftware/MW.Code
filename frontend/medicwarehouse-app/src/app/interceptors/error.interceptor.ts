@@ -92,18 +92,3 @@ function getErrorMessage(error: HttpErrorResponse): string {
       return 'Ocorreu um erro inesperado. Por favor, tente novamente.';
   }
 }
-
-/**
- * Verifica se o erro contém detalhes técnicos que não devem ser expostos
- */
-function containsTechnicalDetails(message: string): boolean {
-  const technicalIndicators = [
-    'exception', 'stack', 'trace', 'null reference', 
-    'sql', 'database', 'assembly', 'system.', 'at ',
-    'inner exception', 'thread', 'memory'
-  ];
-
-  return technicalIndicators.some(indicator => 
-    message.toLowerCase().includes(indicator.toLowerCase())
-  );
-}
