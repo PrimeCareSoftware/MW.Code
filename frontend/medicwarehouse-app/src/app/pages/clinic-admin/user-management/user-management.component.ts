@@ -128,7 +128,7 @@ export class UserManagementComponent implements OnInit {
     this.editUserForm.patchValue({
       email: user.email,
       name: user.name,
-      phone: ''
+      phone: '' // Phone is not returned from backend, so keep empty
     });
     this.showEditDialog.set(true);
   }
