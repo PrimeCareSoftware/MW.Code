@@ -27,9 +27,17 @@
         <div class="subscription-header">
           <div class="plan-info">
             <h2>{{ subscription()!.planName }}</h2>
+            <span class="plan-type">{{ subscription()!.planType }}</span>
             <span [class]="'status-badge ' + getStatusClass(subscription()!.status)">
               {{ getStatusText(subscription()!.status) }}
             </span>
+            @if (subscription()!.isTrial) {
+              <span class="badge-info">Trial</span>
+            }
+          </div>
+          <div class="plan-price">
+            <span class="price-label">Valor</span>
+            <span class="price-value">{{ subscription()!.currentPrice | currency: 'BRL' }}</span>
           </div>
         </div>
 
@@ -46,32 +54,105 @@
             </div>
           }
 
-          @if (subscription()!.maxUsers) {
+          @if (subscription()!.nextBillingDate) {
             <div class="detail-item">
-              <label>Usuários</label>
-              <p>{{ subscription()!.currentUsers || 0 }} / {{ subscription()!.maxUsers }}</p>
+              <label>Próxima Cobrança</label>
+              <p>{{ subscription()!.nextBillingDate | date: 'dd/MM/yyyy' }}</p>
             </div>
           }
         </div>
 
-        @if (subscription()!.features && subscription()!.features!.length > 0) {
-          <div class="features-section">
-            <h3>Funcionalidades Incluídas</h3>
-            <ul class="features-list">
-              @for (feature of subscription()!.features; track feature) {
-                <li>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                    <polyline points="22 4 12 14.01 9 11.01"/>
-                  </svg>
-                  <span>{{ feature }}</span>
-                </li>
-              }
-            </ul>
+        <!-- Usage Limits -->
+        <div class="limits-section">
+          <h3>Limites do Plano</h3>
+          
+          <div class="limit-item">
+            <div class="limit-header">
+              <label>Usuários</label>
+              <span class="limit-value">
+                {{ subscription()!.limits.currentUsers }} / {{ subscription()!.limits.maxUsers }}
+              </span>
+            </div>
+            <div class="progress-bar">
+              <div 
+                class="progress-fill" 
+                [class]="getUserUsageClass()"
+                [style.width.%]="getUserUsagePercentage()"
+              ></div>
+            </div>
+            @if (getUserUsagePercentage() >= 90) {
+              <p class="limit-warning">Você está próximo do limite de usuários!</p>
+            }
           </div>
-        }
 
-        @if (subscription()!.status.toLowerCase() === 'active' || subscription()!.status.toLowerCase() === 'ativo') {
+          <div class="limit-item">
+            <div class="limit-header">
+              <label>Pacientes</label>
+              <span class="limit-value">{{ subscription()!.limits.maxPatients }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features-section">
+          <h3>Funcionalidades Incluídas</h3>
+          <ul class="features-list">
+            <li [class.feature-enabled]="subscription()!.features.hasReports">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                @if (subscription()!.features.hasReports) {
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                } @else {
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" x2="9" y1="9" y2="15"/>
+                  <line x1="9" x2="15" y1="9" y2="15"/>
+                }
+              </svg>
+              <span>Relatórios Avançados</span>
+            </li>
+            <li [class.feature-enabled]="subscription()!.features.hasWhatsAppIntegration">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                @if (subscription()!.features.hasWhatsAppIntegration) {
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                } @else {
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" x2="9" y1="9" y2="15"/>
+                  <line x1="9" x2="15" y1="9" y2="15"/>
+                }
+              </svg>
+              <span>Integração WhatsApp</span>
+            </li>
+            <li [class.feature-enabled]="subscription()!.features.hasSMSNotifications">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                @if (subscription()!.features.hasSMSNotifications) {
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                } @else {
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" x2="9" y1="9" y2="15"/>
+                  <line x1="9" x2="15" y1="9" y2="15"/>
+                }
+              </svg>
+              <span>Notificações SMS</span>
+            </li>
+            <li [class.feature-enabled]="subscription()!.features.hasTissExport">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                @if (subscription()!.features.hasTissExport) {
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                } @else {
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" x2="9" y1="9" y2="15"/>
+                  <line x1="9" x2="15" y1="9" y2="15"/>
+                }
+              </svg>
+              <span>Exportação TISS</span>
+            </li>
+          </ul>
+        </div>
+
+        @if (subscription()!.isActive) {
           <div class="actions-section">
             <button 
               type="button" 

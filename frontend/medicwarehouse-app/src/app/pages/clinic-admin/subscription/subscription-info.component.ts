@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
-import { SubscriptionDto } from '../../../models/clinic-admin.model';
+import { SubscriptionDetailsDto } from '../../../models/clinic-admin.model';
 
 @Component({
   selector: 'app-subscription-info',
@@ -10,7 +10,7 @@ import { SubscriptionDto } from '../../../models/clinic-admin.model';
   styleUrl: './subscription-info.component.scss'
 })
 export class SubscriptionInfoComponent implements OnInit {
-  subscription = signal<SubscriptionDto | null>(null);
+  subscription = signal<SubscriptionDetailsDto | null>(null);
   isLoading = signal<boolean>(false);
   isCancelling = signal<boolean>(false);
   errorMessage = signal<string>('');
@@ -27,7 +27,7 @@ export class SubscriptionInfoComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.clinicAdminService.getSubscription().subscribe({
+    this.clinicAdminService.getSubscriptionDetails().subscribe({
       next: (data) => {
         this.subscription.set(data);
         this.isLoading.set(false);
@@ -77,6 +77,8 @@ export class SubscriptionInfoComponent implements OnInit {
       case 'pending':
       case 'pendente':
         return 'badge-warning';
+      case 'trial':
+        return 'badge-info';
       default:
         return 'badge-default';
     }
@@ -87,8 +89,22 @@ export class SubscriptionInfoComponent implements OnInit {
       'active': 'Ativo',
       'cancelled': 'Cancelado',
       'pending': 'Pendente',
-      'suspended': 'Suspenso'
+      'suspended': 'Suspenso',
+      'trial': 'Trial'
     };
     return statusMap[status.toLowerCase()] || status;
+  }
+
+  getUserUsagePercentage(): number {
+    const sub = this.subscription();
+    if (!sub || !sub.limits.maxUsers) return 0;
+    return (sub.limits.currentUsers / sub.limits.maxUsers) * 100;
+  }
+
+  getUserUsageClass(): string {
+    const percentage = this.getUserUsagePercentage();
+    if (percentage >= 90) return 'usage-critical';
+    if (percentage >= 75) return 'usage-warning';
+    return 'usage-normal';
   }
 }
