@@ -1,14 +1,18 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
 using MedicSoft.Application.Queries.Patients;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PatientsController : BaseController
     {
         private readonly IPatientService _patientService;
@@ -25,9 +29,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all patients
+        /// Get all patients (requires patients.view permission)
         /// </summary>
         [HttpGet]
+        [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
         {
             // Get clinicId from JWT token
@@ -49,9 +54,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Search patients by CPF, Name or Phone
+        /// Search patients by CPF, Name or Phone (requires patients.view permission)
         /// </summary>
         [HttpGet("search")]
+        [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<IEnumerable<PatientDto>>> Search([FromQuery] string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
@@ -65,9 +71,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get patient by document (CPF) across all clinics
+        /// Get patient by document (CPF) across all clinics (requires patients.view permission)
         /// </summary>
         [HttpGet("by-document/{document}")]
+        [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<PatientDto>> GetByDocument(string document)
         {
             var patient = await _patientService.GetPatientByDocumentGlobalAsync(document);
@@ -79,9 +86,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get patient by ID
+        /// Get patient by ID (requires patients.view permission)
         /// </summary>
         [HttpGet("{id}")]
+        [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<PatientDto>> GetById(Guid id)
         {
             var patient = await _patientService.GetPatientByIdAsync(id, GetTenantId());
@@ -93,9 +101,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Create a new patient
+        /// Create a new patient (requires patients.create permission)
         /// </summary>
         [HttpPost]
+        [RequirePermissionKey(PermissionKeys.PatientsCreate)]
         public async Task<ActionResult<PatientDto>> Create([FromBody] CreatePatientDto createPatientDto)
         {
             if (!ModelState.IsValid)
@@ -113,9 +122,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Update an existing patient
+        /// Update an existing patient (requires patients.edit permission)
         /// </summary>
         [HttpPut("{id}")]
+        [RequirePermissionKey(PermissionKeys.PatientsEdit)]
         public async Task<ActionResult<PatientDto>> Update(Guid id, [FromBody] UpdatePatientDto updatePatientDto)
         {
             if (!ModelState.IsValid)
@@ -133,9 +143,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Delete a patient
+        /// Delete a patient (requires patients.delete permission)
         /// </summary>
         [HttpDelete("{id}")]
+        [RequirePermissionKey(PermissionKeys.PatientsDelete)]
         public async Task<ActionResult> Delete(Guid id)
         {
             try
@@ -154,9 +165,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Link patient to a clinic
+        /// Link patient to a clinic (requires patients.edit permission)
         /// </summary>
         [HttpPost("{patientId}/link-clinic/{clinicId}")]
+        [RequirePermissionKey(PermissionKeys.PatientsEdit)]
         public async Task<ActionResult> LinkToClinic(Guid patientId, Guid clinicId)
         {
             try
@@ -171,9 +183,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Link child to guardian
+        /// Link child to guardian (requires patients.edit permission)
         /// </summary>
         [HttpPost("{childId}/link-guardian/{guardianId}")]
+        [RequirePermissionKey(PermissionKeys.PatientsEdit)]
         public async Task<ActionResult> LinkChildToGuardian(Guid childId, Guid guardianId)
         {
             try
@@ -188,9 +201,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get children of a guardian
+        /// Get children of a guardian (requires patients.view permission)
         /// </summary>
         [HttpGet("{guardianId}/children")]
+        [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetChildren(Guid guardianId)
         {
             var children = await _patientService.GetChildrenOfGuardianAsync(guardianId, GetTenantId());
@@ -198,20 +212,32 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get appointment history for a patient
+        /// Get appointment history for a patient (requires patients.view permission)
         /// Includes payment information for all appointments
         /// Medical records are only included if user has 'medical-records.view' permission
         /// </summary>
         [HttpGet("{patientId}/appointment-history")]
+        [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<PatientCompleteHistoryDto>> GetAppointmentHistory(
             Guid patientId,
             [FromQuery] bool includeMedicalRecords = false)
         {
             try
             {
-                // TODO: Check if user has permission to view medical records
-                // For now, we'll allow includeMedicalRecords based on the parameter
-                // In production, validate: User.HasClaim("Permission", "medical-records.view")
+                // Check if user has permission to view medical records when requested
+                if (includeMedicalRecords)
+                {
+                    var userId = GetUserId();
+                    var userRepository = HttpContext.RequestServices.GetService<MedicSoft.Domain.Interfaces.IUserRepository>();
+                    if (userRepository != null)
+                    {
+                        var user = await userRepository.GetByIdAsync(userId, GetTenantId());
+                        if (user != null && !user.HasPermissionKey(PermissionKeys.MedicalRecordsView))
+                        {
+                            includeMedicalRecords = false; // Silently exclude medical records if no permission
+                        }
+                    }
+                }
                 
                 var query = new GetPatientAppointmentHistoryQuery(
                     patientId, 
@@ -228,10 +254,11 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get procedure history for a patient
+        /// Get procedure history for a patient (requires patients.view permission)
         /// Includes payment information for all procedures
         /// </summary>
         [HttpGet("{patientId}/procedure-history")]
+        [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<IEnumerable<PatientProcedureHistoryDto>>> GetProcedureHistory(Guid patientId)
         {
             try

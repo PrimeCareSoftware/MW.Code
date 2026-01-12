@@ -1,14 +1,18 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Commands.Procedures;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Queries.Procedures;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProceduresController : BaseController
     {
         private readonly IMediator _mediator;
@@ -20,9 +24,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all procedures for the clinic
+        /// Get all procedures for the clinic (requires procedures.view permission)
         /// </summary>
         [HttpGet]
+        [RequirePermissionKey(PermissionKeys.ProceduresView)]
         public async Task<ActionResult<IEnumerable<ProcedureDto>>> GetAll([FromQuery] bool activeOnly = true)
         {
             var query = new GetProceduresByClinicQuery(GetTenantId(), activeOnly);
@@ -31,9 +36,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get procedure by ID
+        /// Get procedure by ID (requires procedures.view permission)
         /// </summary>
         [HttpGet("{id}")]
+        [RequirePermissionKey(PermissionKeys.ProceduresView)]
         public async Task<ActionResult<ProcedureDto>> GetById(Guid id)
         {
             var query = new GetProcedureByIdQuery(id, GetTenantId());
@@ -46,9 +52,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Create a new procedure
+        /// Create a new procedure (requires procedures.create permission)
         /// </summary>
         [HttpPost]
+        [RequirePermissionKey(PermissionKeys.ProceduresCreate)]
         public async Task<ActionResult<ProcedureDto>> Create([FromBody] CreateProcedureDto dto)
         {
             var command = new CreateProcedureCommand(dto, GetTenantId());
@@ -57,9 +64,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Update an existing procedure
+        /// Update an existing procedure (requires procedures.edit permission)
         /// </summary>
         [HttpPut("{id}")]
+        [RequirePermissionKey(PermissionKeys.ProceduresEdit)]
         public async Task<ActionResult<ProcedureDto>> Update(Guid id, [FromBody] UpdateProcedureDto dto)
         {
             var command = new UpdateProcedureCommand(id, dto, GetTenantId());
@@ -68,9 +76,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Delete (deactivate) a procedure
+        /// Delete (deactivate) a procedure (requires procedures.delete permission)
         /// </summary>
         [HttpDelete("{id}")]
+        [RequirePermissionKey(PermissionKeys.ProceduresDelete)]
         public async Task<ActionResult> Delete(Guid id)
         {
             var command = new DeleteProcedureCommand(id, GetTenantId());
@@ -83,9 +92,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Add a procedure to an appointment
+        /// Add a procedure to an appointment (requires procedures.create permission)
         /// </summary>
         [HttpPost("appointments/{appointmentId}/procedures")]
+        [RequirePermissionKey(PermissionKeys.ProceduresCreate)]
         public async Task<ActionResult<AppointmentProcedureDto>> AddProcedureToAppointment(
             Guid appointmentId,
             [FromBody] AddProcedureToAppointmentDto dto)
@@ -96,9 +106,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all procedures for an appointment
+        /// Get all procedures for an appointment (requires procedures.view permission)
         /// </summary>
         [HttpGet("appointments/{appointmentId}/procedures")]
+        [RequirePermissionKey(PermissionKeys.ProceduresView)]
         public async Task<ActionResult<IEnumerable<AppointmentProcedureDto>>> GetAppointmentProcedures(Guid appointmentId)
         {
             var query = new GetAppointmentProceduresQuery(appointmentId, GetTenantId());
@@ -107,9 +118,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get billing summary for an appointment with all procedures and totals
+        /// Get billing summary for an appointment with all procedures and totals (requires procedures.view permission)
         /// </summary>
         [HttpGet("appointments/{appointmentId}/billing-summary")]
+        [RequirePermissionKey(PermissionKeys.ProceduresView)]
         public async Task<ActionResult<AppointmentBillingSummaryDto>> GetAppointmentBillingSummary(Guid appointmentId)
         {
             var query = new GetAppointmentBillingSummaryQuery(appointmentId, GetTenantId());

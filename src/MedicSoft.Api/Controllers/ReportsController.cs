@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Context;
 
@@ -12,6 +15,7 @@ namespace MedicSoft.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ReportsController : BaseController
     {
         private readonly MedicSoftDbContext _context;
@@ -23,13 +27,14 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get financial summary for a period
+        /// Get financial summary for a period (requires reports.financial permission)
         /// </summary>
         /// <param name="clinicId">Clinic ID</param>
         /// <param name="startDate">Period start date</param>
         /// <param name="endDate">Period end date</param>
         /// <returns>Financial summary</returns>
         [HttpGet("financial-summary")]
+        [RequirePermissionKey(PermissionKeys.ReportsFinancial)]
         [ProducesResponseType(typeof(FinancialSummaryDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<FinancialSummaryDto>> GetFinancialSummary(

@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Api.Controllers
 {
     [ApiController]
     [Route("api/appointments")]
+    [Authorize]
     public class AppointmentsController : BaseController
     {
         private readonly IAppointmentService _appointmentService;
@@ -18,9 +22,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Create a new appointment
+        /// Create a new appointment (requires appointments.create permission)
         /// </summary>
         [HttpPost]
+        [RequirePermissionKey(PermissionKeys.AppointmentsCreate)]
         public async Task<ActionResult<AppointmentDto>> Create([FromBody] CreateAppointmentDto createAppointmentDto)
         {
             if (!ModelState.IsValid)
@@ -40,9 +45,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Cancel an appointment
+        /// Cancel an appointment (requires appointments.edit permission)
         /// </summary>
         [HttpPut("{id}/cancel")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsEdit)]
         public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelAppointmentRequest request)
         {
             if (!ModelState.IsValid)
@@ -64,9 +70,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get daily agenda for a clinic
+        /// Get daily agenda for a clinic (requires appointments.view permission)
         /// </summary>
         [HttpGet]
+        [RequirePermissionKey(PermissionKeys.AppointmentsView)]
         public async Task<ActionResult<DailyAgendaDto>> GetDailyAgenda([FromQuery] DateTime date, [FromQuery] Guid clinicId)
         {
             try
@@ -81,9 +88,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get daily agenda for a clinic (alias endpoint)
+        /// Get daily agenda for a clinic - alias endpoint (requires appointments.view permission)
         /// </summary>
         [HttpGet("agenda")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsView)]
         public async Task<ActionResult<DailyAgendaDto>> GetDailyAgendaAlias([FromQuery] DateTime date, [FromQuery] Guid clinicId)
         {
             try
@@ -98,9 +106,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get appointment by ID
+        /// Get appointment by ID (requires appointments.view permission)
         /// </summary>
         [HttpGet("{id}")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsView)]
         public async Task<ActionResult<AppointmentDto>> GetById(Guid id)
         {
             try
