@@ -213,6 +213,12 @@ builder.Services.AddScoped<IDiagnosticHypothesisRepository, DiagnosticHypothesis
 builder.Services.AddScoped<ITherapeuticPlanRepository, TherapeuticPlanRepository>();
 builder.Services.AddScoped<IInformedConsentRepository, InformedConsentRepository>();
 
+// Digital Prescriptions and SNGPC - CFM 1.643/2002 + ANVISA
+builder.Services.AddScoped<IDigitalPrescriptionRepository, DigitalPrescriptionRepository>();
+builder.Services.AddScoped<IDigitalPrescriptionItemRepository, DigitalPrescriptionItemRepository>();
+builder.Services.AddScoped<ISNGPCReportRepository, SNGPCReportRepository>();
+builder.Services.AddScoped<IPrescriptionSequenceControlRepository, PrescriptionSequenceControlRepository>();
+
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
@@ -237,6 +243,10 @@ builder.Services.AddScoped<IClinicalExaminationService, ClinicalExaminationServi
 builder.Services.AddScoped<IDiagnosticHypothesisService, DiagnosticHypothesisService>();
 builder.Services.AddScoped<ITherapeuticPlanService, TherapeuticPlanService>();
 builder.Services.AddScoped<IInformedConsentService, InformedConsentService>();
+
+// Digital Prescriptions and SNGPC Services
+builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
+builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSignatureService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();

@@ -53,6 +53,11 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<DigitalPrescription>> GetExpiringSoonAsync(int days, string tenantId);
 
         /// <summary>
+        /// Gets a prescription by ID with all its items included.
+        /// </summary>
+        Task<DigitalPrescription?> GetByIdWithItemsAsync(Guid id, string tenantId);
+
+        /// <summary>
         /// Checks if a prescription with the given sequence number exists.
         /// </summary>
         Task<bool> SequenceNumberExistsAsync(string sequenceNumber, string tenantId);

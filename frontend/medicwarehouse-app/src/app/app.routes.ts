@@ -83,6 +83,21 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/analytics/analytics-dashboard').then(m => m.AnalyticsDashboard),
     canActivate: [authGuard]
   },
+  { 
+    path: 'prescriptions/new/:medicalRecordId', 
+    loadComponent: () => import('./pages/prescriptions/digital-prescription-form.component').then(m => m.DigitalPrescriptionFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'prescriptions/view/:id', 
+    loadComponent: () => import('./pages/prescriptions/digital-prescription-view.component').then(m => m.DigitalPrescriptionViewComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'sngpc/dashboard', 
+    loadComponent: () => import('./pages/prescriptions/sngpc-dashboard.component').then(m => m.SNGPCDashboardComponent),
+    canActivate: [authGuard]
+  },
   ...CLINIC_ADMIN_ROUTES,
   { path: '**', redirectTo: '/dashboard' }
 ];

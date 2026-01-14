@@ -707,6 +707,35 @@
   display: none;
 }
 
+// Digital Prescription Section Styles
+.prescription-info {
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  margin-top: 1rem;
+  
+  .info-text {
+    color: white;
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  .text-warning {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    color: #d35400;
+    font-weight: 500;
+  }
+}
+
 @media print {
   .attendance-container {
     display: none;
