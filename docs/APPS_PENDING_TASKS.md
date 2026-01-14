@@ -2,23 +2,24 @@
 
 > **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema PrimeCare Software.
 
-> **Última Atualização:** Novembro 2025  
-> **Status:** Em desenvolvimento ativo
+> **Última Atualização:** Janeiro 2026  
+> **Status:** Em desenvolvimento ativo - Atualizado conforme implementações recentes
 
 ---
 
 ## 📊 Visão Geral do Ecossistema
 
-O PrimeCare Software possui **6 aplicativos** que compõem o ecossistema completo:
+O PrimeCare Software possui **7 aplicativos** que compõem o ecossistema completo:
 
 | Aplicativo | Tecnologia | Localização | Status |
 |------------|-----------|-------------|--------|
-| 🏥 **PrimeCare Software App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Beta |
-| 🔧 **MW System Admin** | Angular 20 | `frontend/mw-system-admin` | ✅ Beta |
-| 🌐 **MW Site** | Angular 20 | `frontend/mw-site` | ✅ Em desenvolvimento |
-| 📚 **MW Docs** | Angular 20 | `frontend/mw-docs` | ✅ Produção |
-| 📱 **iOS App** | Swift/SwiftUI | `mobile/ios` | ✅ Beta |
-| 🤖 **Android App** | Kotlin/Compose | `mobile/android` | 🚧 Em desenvolvimento |
+| 🏥 **PrimeCare Software App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Produção (60%) |
+| 🔧 **MW System Admin** | Angular 20 | `frontend/mw-system-admin` | ✅ Beta (30%) |
+| 🌐 **MW Site** | Angular 20 | `frontend/mw-site` | ✅ Produção (40%) |
+| 📚 **MW Docs** | Angular 20 | `frontend/mw-docs` | ✅ Produção (45%) |
+| 🏥 **Patient Portal** | Angular 20 | `frontend/patient-portal` | 🚧 Dev (Backend 100%, Frontend 30%) |
+| 📱 **iOS App** | Swift/SwiftUI | `mobile/ios` | ✅ Beta (50%) |
+| 🤖 **Android App** | Kotlin/Compose | `mobile/android` | 🚧 Em desenvolvimento (25%) |
 
 ---
 
@@ -43,6 +44,8 @@ O PrimeCare Software possui **6 aplicativos** que compõem o ecossistema complet
 | Agendamentos | ✅ | Agenda, filtros por status, calendário |
 | Atendimento | ✅ | Prontuário, prescrições, fechamento |
 | Fila de Espera | ✅ | Gerenciamento de fila em tempo real |
+| **CFM Components** | ✅ | **4 componentes (Jan 2026): Consent, Examination, Diagnostic, Therapeutic** |
+| **Receitas Digitais** | ✅ | **4 componentes (Jan 2026): Form, View, Selector, SNGPC Dashboard** |
 
 ### 🚧 Pendências de Desenvolvimento
 
@@ -239,6 +242,122 @@ frontend/mw-docs/src/app/
 
 ---
 
+## 🏥 Patient Portal (Portal do Paciente)
+
+**Descrição:** Portal web para pacientes acessarem suas informações médicas, agendamentos, documentos e realizarem ações self-service.
+
+**Tecnologias:**
+- **Backend:** .NET 8, Clean Architecture, EF Core, JWT
+- **Frontend:** Angular 20 (em desenvolvimento)
+- PostgreSQL (database compartilhado)
+
+### ✅ Funcionalidades Implementadas (Backend API - Janeiro 2026)
+
+| Módulo | Status | Descrição |
+|--------|--------|-----------|
+| **Auth API** | ✅ 100% | Login, Register, Refresh Token, Logout, Change Password |
+| **Appointments API** | ✅ 100% | Listagem, filtros por status, upcoming, histórico |
+| **Documents API** | ✅ 100% | Listagem, download PDF, compartilhamento |
+| **Profile API** | ✅ 100% | Visualização e atualização de perfil |
+| **Notifications API** | ✅ 100% | Preferências, listagem de notificações |
+| **Medications API** | ✅ 100% | Prescrições ativas, histórico de medicamentos |
+| **Payments API** | ✅ 100% | Faturas, pagamento online, histórico |
+| **Messages API** | ✅ 100% | Comunicação com clínica, envio de mensagens |
+
+**Total: 8 Controllers REST + 50+ Endpoints implementados**
+
+### 🚧 Pendências de Desenvolvimento
+
+#### Backend API - ✅ COMPLETO (Janeiro 2026)
+- [x] Arquitetura Clean Architecture (4 camadas)
+- [x] Autenticação JWT + Refresh Token
+- [x] Password hashing PBKDF2 (100k iterações)
+- [x] Account lockout (5 tentativas, 15min)
+- [x] Database migrations
+- [x] Views otimizadas (vw_PatientAppointments, vw_PatientDocuments)
+- [x] 8 Controllers REST completos
+- [x] Documentação completa (IMPLEMENTATION_SUMMARY.md, README.md, INTEGRATION_GUIDE.md)
+
+#### Frontend Angular - 🚧 EM PROGRESSO (30%)
+
+##### Prioridade Alta (Q1/2026)
+- [ ] **Tela de Login/Registro** - Autenticação de pacientes
+- [ ] **Dashboard** - Visão geral com próximas consultas e ações rápidas
+- [ ] **Meus Agendamentos** - Listagem e filtros
+- [ ] **Detalhes da Consulta** - Informações completas do agendamento
+- [ ] **Meus Documentos** - Listagem de receitas, atestados, laudos
+- [ ] **Visualizador de Documentos** - PDF viewer integrado
+- [ ] **Perfil** - Visualização e edição de dados pessoais
+- [ ] **Notificações** - Centro de notificações e preferências
+
+##### Prioridade Média (Q2/2026)
+- [ ] **Agendamento Online** - Agendar nova consulta pelo portal
+- [ ] **Confirmar/Cancelar Consulta** - Ações sobre agendamentos
+- [ ] **Histórico Médico** - Timeline de atendimentos
+- [ ] **Prescrições Ativas** - Lista de medicamentos em uso
+- [ ] **Mensagens** - Chat com a clínica
+- [ ] **Pagamentos** - Visualizar e pagar faturas online
+- [ ] **Compartilhamento** - Enviar documentos via WhatsApp/Email
+
+##### Prioridade Baixa (Futuro)
+- [ ] **Telemedicina** - Entrar em videochamadas
+- [ ] **Upload de Documentos** - Anexar exames
+- [ ] **Familiares** - Gerenciar múltiplos perfis (pais, filhos)
+- [ ] **PWA** - Progressive Web App para instalação
+- [ ] **Dark Mode** - Tema escuro
+- [ ] **Multiidioma** - PT-BR, EN, ES
+
+### 📁 Estrutura do Projeto
+
+#### Backend API
+```
+patient-portal-api/
+├── PatientPortal.sln                    # Solution principal
+├── PatientPortal.Domain/                # Camada de Domínio (✅ 100%)
+│   ├── Entities/                        # PatientUser, RefreshToken, etc
+│   ├── Enums/                           # AppointmentStatus, DocumentType
+│   └── Interfaces/                      # IRepository interfaces
+├── PatientPortal.Application/           # Camada de Aplicação (✅ 100%)
+│   ├── DTOs/                            # Data Transfer Objects
+│   ├── Interfaces/                      # IService interfaces
+│   └── Services/                        # AuthService, TokenService, etc
+├── PatientPortal.Infrastructure/        # Camada de Infraestrutura (✅ 100%)
+│   ├── Data/                            # DbContext, Migrations
+│   └── Repositories/                    # Repository implementations
+├── PatientPortal.Api/                   # Camada de API (✅ 100%)
+│   ├── Controllers/                     # 8 REST Controllers
+│   ├── Middleware/                      # Error handling, JWT
+│   └── Program.cs                       # API startup
+└── PatientPortal.Tests/                 # Testes Unitários
+```
+
+#### Frontend Angular
+```
+frontend/patient-portal/
+├── src/
+│   ├── app/
+│   │   ├── pages/                       # 🚧 EM PROGRESSO
+│   │   │   ├── login/                   # [ ] A implementar
+│   │   │   ├── dashboard/               # [ ] A implementar
+│   │   │   ├── appointments/            # [ ] A implementar
+│   │   │   ├── documents/               # [ ] A implementar
+│   │   │   └── profile/                 # [ ] A implementar
+│   │   ├── components/                  # [ ] A implementar
+│   │   ├── services/                    # [ ] A implementar
+│   │   └── models/                      # [ ] A implementar
+│   └── assets/                          # [ ] A implementar
+└── angular.json                         # ✅ Configurado
+```
+
+### 📖 Documentação de Referência
+
+- **[IMPLEMENTATION_SUMMARY.md](../patient-portal-api/IMPLEMENTATION_SUMMARY.md)** - Resumo completo da implementação backend
+- **[README.md](../patient-portal-api/README.md)** - Guia de uso da API
+- **[INTEGRATION_GUIDE.md](../patient-portal-api/INTEGRATION_GUIDE.md)** - Guia de integração frontend-backend
+- **[PENDING_TASKS.md](PENDING_TASKS.md)** - Seção #2: Portal do Paciente
+
+---
+
 ## 📱 iOS App (Swift/SwiftUI)
 
 **Descrição:** Aplicativo nativo iOS para acesso mobile ao sistema PrimeCare Software.
@@ -377,61 +496,67 @@ mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 
 ## 📅 Roadmap de Desenvolvimento
 
-### Q1 2025 - Consolidação Mobile
+### Q1 2026 - Patient Portal Frontend + Finalização Compliance (ATUALIZADO)
 
 | Tarefa | App | Esforço | Status |
 |--------|-----|---------|--------|
+| **Patient Portal Backend API** | 🏥 Patient Portal | - | ✅ **COMPLETO (Jan 2026)** |
+| **Patient Portal Frontend** | 🏥 Patient Portal | 6-8 semanas | 🚧 **EM PROGRESSO (30%)** |
 | Completar Android | 🤖 Android | 4-6 semanas | 🚧 |
 | Paridade iOS/Android | 📱 iOS + 🤖 Android | 2-3 semanas | 🚧 |
 | Notificações Push | 📱 + 🤖 | 2 semanas | ❌ |
 | Biometria | 📱 + 🤖 | 1 semana | ❌ |
+| **Integração CFM no Fluxo** | 🏥 App | 1 semana | ❌ |
+| **Integração SNGPC XML** | 🏥 App | 2-3 semanas | ❌ |
 
-### Q2 2025 - Funcionalidades Avançadas Web
+### Q2 2026 - Funcionalidades Avançadas Web (AJUSTADO)
 
 | Tarefa | App | Esforço | Status |
 |--------|-----|---------|--------|
 | Dashboard Relatórios | 🏥 App | 3-4 semanas | ❌ |
-| Módulo Financeiro | 🏥 App | 4-6 semanas | ❌ |
+| Módulo Financeiro Avançado | 🏥 App | 4-6 semanas | ❌ |
 | Blog no Site | 🌐 Site | 2-3 semanas | ❌ |
 | Gestão System Owners | 🔧 Admin | 2 semanas | ❌ |
+| **Telemedicina Compliance CFM** | 🏥 App | 2-3 semanas | ❌ |
 
-### Q3 2025 - Telemedicina
+### Q3 2026 - Telemedicina (AJUSTADO)
 
 | Tarefa | App | Esforço | Status |
 |--------|-----|---------|--------|
-| Telemedicina Web | 🏥 App | 6-8 semanas | ❌ |
+| Telemedicina Web | 🏥 App | 6-8 semanas | ⚠️ **MVP 80% (backend)** |
 | Telemedicina iOS | 📱 iOS | 3-4 semanas | ❌ |
 | Telemedicina Android | 🤖 Android | 3-4 semanas | ❌ |
 
-### Q4 2025 - Portal do Paciente
+### Q4 2026 - TISS e Integração Convênios (AJUSTADO)
 
 | Tarefa | App | Esforço | Status |
 |--------|-----|---------|--------|
-| Portal Web | 🆕 Patient Portal | 8-10 semanas | ❌ |
-| App Paciente iOS | 📱 Patient iOS | 6-8 semanas | ❌ |
-| App Paciente Android | 🤖 Patient Android | 6-8 semanas | ❌ |
+| TISS Integração Frontend | 🏥 App | 8-10 semanas | ❌ |
+| Apps Paciente Mobile | 📱 Patient iOS + 🤖 Patient Android | 12-16 semanas | ❌ |
 
 ---
 
 ## 📊 Métricas de Progresso
 
-### Progresso por Aplicativo
+### Progresso por Aplicativo (Atualizado Janeiro 2026)
 
 | Aplicativo | Implementado | Pendente | % Completo |
 |------------|--------------|----------|------------|
-| 🏥 App | 7 módulos | 12 features | 60% |
+| 🏥 App | 9 módulos (+2 CFM, Receitas) | 10 features | 65% (+5%) |
 | 🔧 Admin | 3 módulos | 11 features | 30% |
 | 🌐 Site | 4 módulos | 10 features | 40% |
 | 📚 Docs | 4 módulos | 9 features | 45% |
+| 🏥 **Patient Portal** | **Backend 100% (8 APIs)** | **Frontend 70%** | **55%** ✨ |
 | 📱 iOS | 5 módulos | 12 features | 50% |
 | 🤖 Android | 3 módulos | 14 features | 25% |
 
 ### Total de Tarefas
 
-- **Total de Funcionalidades Pendentes:** 68
-- **Alta Prioridade:** 25
-- **Média Prioridade:** 28
-- **Baixa Prioridade:** 15
+- **Total de Funcionalidades Pendentes:** 78 (+10 do Patient Portal Frontend)
+- **Alta Prioridade:** 28 (+3)
+- **Média Prioridade:** 32 (+4)
+- **Baixa Prioridade:** 18 (+3)
+- **✅ Completo em Janeiro 2026:** Backend Patient Portal API (8 controllers, 50+ endpoints)
 
 ---
 
@@ -440,12 +565,15 @@ mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 - [PENDING_TASKS.md](PENDING_TASKS.md) - Pendências gerais do sistema
 - [MOBILE_APPS_GUIDE.md](MOBILE_APPS_GUIDE.md) - Guia dos aplicativos mobile
 - [MOBILE_IMPLEMENTATION_SUMMARY.md](MOBILE_IMPLEMENTATION_SUMMARY.md) - Resumo da implementação mobile
+- **[patient-portal-api/IMPLEMENTATION_SUMMARY.md](../patient-portal-api/IMPLEMENTATION_SUMMARY.md)** - ✨ **Resumo completo do Patient Portal Backend**
+- **[patient-portal-api/README.md](../patient-portal-api/README.md)** - ✨ **Guia de uso da Patient Portal API**
+- **[patient-portal-api/INTEGRATION_GUIDE.md](../patient-portal-api/INTEGRATION_GUIDE.md)** - ✨ **Guia de integração frontend**
 - [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) - Índice geral de documentação
 
 ---
 
 **Documento Elaborado Por:** GitHub Copilot  
-**Data:** Novembro 2025  
-**Versão:** 1.0
+**Data:** Janeiro 2026 (Atualizado)  
+**Versão:** 2.0
 
 **Este documento deve ser atualizado sempre que houver progresso significativo nos aplicativos.**
