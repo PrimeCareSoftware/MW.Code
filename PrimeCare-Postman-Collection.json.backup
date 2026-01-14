@@ -53,14 +53,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/login",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
             },
             "description": "Autentica um usuário e retorna um token JWT"
           },
@@ -79,14 +73,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/auth/me",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "me"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
             },
             "description": "Obtém informações do usuário autenticado"
           },
@@ -111,13 +99,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients"]
             },
             "description": "Lista todos os pacientes da clínica"
           },
@@ -136,14 +119,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -168,14 +145,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients/search?searchTerm=",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                "search"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", "search"],
               "query": [
                 {
                   "key": "searchTerm",
@@ -201,15 +172,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients/by-document/:cpf",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                "by-document",
-                ":cpf"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", "by-document", ":cpf"],
               "variable": [
                 {
                   "key": "cpf",
@@ -242,13 +206,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/patients",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients"]
             },
             "description": "Cria um novo paciente (guardianId opcional para crianças)"
           },
@@ -275,14 +234,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/patients/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -307,14 +260,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -339,16 +286,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients/:patientId/link-clinic/:clinicId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                ":patientId",
-                "link-clinic",
-                ":clinicId"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":patientId", "link-clinic", ":clinicId"],
               "variable": [
                 {
                   "key": "patientId",
@@ -377,16 +316,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients/:childId/link-guardian/:guardianId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                ":childId",
-                "link-guardian",
-                ":guardianId"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":childId", "link-guardian", ":guardianId"],
               "variable": [
                 {
                   "key": "childId",
@@ -415,15 +346,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/patients/:guardianId/children",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "patients",
-                ":guardianId",
-                "children"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "patients", ":guardianId", "children"],
               "variable": [
                 {
                   "key": "guardianId",
@@ -462,13 +386,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/appointments",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "appointments"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments"]
             },
             "description": "Cria um novo agendamento"
           },
@@ -487,14 +406,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/appointments/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "appointments",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -519,15 +432,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/appointments/:id/cancel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "appointments",
-                ":id",
-                "cancel"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", ":id", "cancel"],
               "variable": [
                 {
                   "key": "id",
@@ -552,14 +458,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/appointments/agenda",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "appointments",
-                "agenda"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", "agenda"]
             },
             "description": "Obtém a agenda diária"
           },
@@ -578,14 +478,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/appointments/available-slots",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "appointments",
-                "available-slots"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "appointments", "available-slots"]
             },
             "description": "Lista horários disponíveis para agendamento"
           },
@@ -618,13 +512,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/medical-records",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "medical-records"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records"]
             },
             "description": "Cria um novo prontuário médico"
           },
@@ -651,14 +540,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/medical-records/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "medical-records",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -683,15 +566,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/medical-records/:id/complete",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "medical-records",
-                ":id",
-                "complete"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", ":id", "complete"],
               "variable": [
                 {
                   "key": "id",
@@ -716,15 +592,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/medical-records/appointment/:appointmentId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "medical-records",
-                "appointment",
-                ":appointmentId"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", "appointment", ":appointmentId"],
               "variable": [
                 {
                   "key": "appointmentId",
@@ -749,15 +618,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/medical-records/patient/:patientId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "medical-records",
-                "patient",
-                ":patientId"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "medical-records", "patient", ":patientId"],
               "variable": [
                 {
                   "key": "patientId",
@@ -788,13 +650,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/procedures",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures"]
             },
             "description": "Lista todos os procedimentos da clínica"
           },
@@ -813,14 +670,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/procedures/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -853,13 +704,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/procedures",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures"]
             },
             "description": "Cria um novo procedimento"
           },
@@ -886,14 +732,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/procedures/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -918,14 +758,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/procedures/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -958,16 +792,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/procedures/appointments/:appointmentId/procedures",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures",
-                "appointments",
-                ":appointmentId",
-                "procedures"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", "appointments", ":appointmentId", "procedures"],
               "variable": [
                 {
                   "key": "appointmentId",
@@ -992,16 +818,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/procedures/appointments/:appointmentId/procedures",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures",
-                "appointments",
-                ":appointmentId",
-                "procedures"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", "appointments", ":appointmentId", "procedures"],
               "variable": [
                 {
                   "key": "appointmentId",
@@ -1026,16 +844,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/procedures/appointments/:appointmentId/billing-summary",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "procedures",
-                "appointments",
-                ":appointmentId",
-                "billing-summary"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "procedures", "appointments", ":appointmentId", "billing-summary"],
               "variable": [
                 {
                   "key": "appointmentId",
@@ -1066,13 +876,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/expenses",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "expenses"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses"],
               "query": [
                 {
                   "key": "clinicId",
@@ -1108,14 +913,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/expenses/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "expenses",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -1148,13 +947,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/expenses",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "expenses"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses"]
             },
             "description": "Cria uma nova despesa"
           },
@@ -1181,14 +975,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/expenses/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "expenses",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -1213,15 +1001,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/expenses/:id/pay",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "expenses",
-                ":id",
-                "pay"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id", "pay"],
               "variable": [
                 {
                   "key": "id",
@@ -1246,15 +1027,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/expenses/:id/cancel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "expenses",
-                ":id",
-                "cancel"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id", "cancel"],
               "variable": [
                 {
                   "key": "id",
@@ -1279,14 +1053,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/expenses/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "expenses",
-                ":id"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "expenses", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -1317,14 +1085,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/financial-summary",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "financial-summary"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "financial-summary"]
             },
             "description": "Resumo financeiro completo (receitas, despesas, lucro)"
           },
@@ -1343,14 +1105,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/revenue",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "revenue"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "revenue"]
             },
             "description": "Relatório de receita com breakdown diário"
           },
@@ -1369,14 +1125,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/appointments",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "appointments"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "appointments"]
             },
             "description": "Relatório de agendamentos (estatísticas, status, tipos)"
           },
@@ -1395,14 +1145,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/patients",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "patients"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "patients"]
             },
             "description": "Relatório de crescimento de pacientes"
           },
@@ -1421,14 +1165,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/accounts-receivable",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "accounts-receivable"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "accounts-receivable"]
             },
             "description": "Contas a receber (pendentes e vencidas)"
           },
@@ -1447,14 +1185,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/accounts-payable",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "accounts-payable"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "accounts-payable"]
             },
             "description": "Contas a pagar (pendentes e vencidas)"
           },
@@ -1464,7 +1196,7 @@
     },
     {
       "name": "Data Seeder",
-      "description": "🌱 Endpoints para geração e gerenciamento de dados de teste/exemplo\n\n⚠️ IMPORTANTE: Estes endpoints são destinados apenas para desenvolvimento e testes.\n\n📚 Documentação completa: docs/SEED_API_GUIDE.md",
+      "description": "Endpoints para geração de dados de teste",
       "item": [
         {
           "name": "Get Demo Info",
@@ -1473,166 +1205,24 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/data-seeder/demo-info",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "data-seeder",
-                "demo-info"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "data-seeder", "demo-info"]
             },
-            "description": "📋 Retorna informações detalhadas sobre os dados de exemplo que serão criados.\n\n**Não cria nenhum dado no banco**, apenas mostra o que será criado.\n\n**Dados que serão criados:**\n- 5 Planos de assinatura\n- 1 Clínica Demo\n- 1 Proprietário (Owner)\n- 3 Usuários (Admin, Médico, Recepcionista)\n- 6 Pacientes (incluindo crianças)\n- 8 Procedimentos\n- 5 Agendamentos\n- 2 Pagamentos\n- 8 Medicamentos\n- 2 Prontuários médicos\n- 4 Templates de prescrição\n- 3 Templates de prontuário\n- 5 Notificações\n- 5 Rotinas de notificação\n- 10 Despesas\n- 5 Solicitações de exames"
+            "description": "Informações sobre os dados demo disponíveis"
           },
           "response": []
         },
         {
           "name": "Seed Demo Data",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "// Salva as credenciais nas variáveis da coleção para uso posterior",
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    ",
-                  "    // Salva o tenant ID",
-                  "    pm.collectionVariables.set('tenant_id', jsonData.tenantId);",
-                  "    ",
-                  "    console.log('✅ Demo data seeded successfully!');",
-                  "    console.log('📋 TenantID:', jsonData.tenantId);",
-                  "    console.log('');",
-                  "    console.log('🔑 Credenciais de acesso:');",
-                  "    console.log('');",
-                  "    console.log('👑 Owner:');",
-                  "    console.log('   Username:', jsonData.credentials.owner.username);",
-                  "    console.log('   Password:', jsonData.credentials.owner.password);",
-                  "    console.log('');",
-                  "    console.log('👥 Users:');",
-                  "    jsonData.credentials.users.forEach(user => {",
-                  "        console.log('   -', user.role, ':', user.username, '/', user.password);",
-                  "    });",
-                  "    console.log('');",
-                  "    console.log('📚 Próximo passo: Execute o endpoint \"Login\" na pasta Auth');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
           "request": {
             "method": "POST",
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/data-seeder/seed-demo",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "data-seeder",
-                "seed-demo"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "data-seeder", "seed-demo"]
             },
-            "description": "🌱 **Cria TODOS os dados de exemplo no banco de dados.**\n\n⚠️ **IMPORTANTE**: Este endpoint só pode ser executado UMA vez. Se você tentar executar novamente com dados já existentes, receberá um erro.\n\n**O que este endpoint cria:**\n\n✅ **5 Planos de assinatura** (Trial, Básico, Standard, Premium, Enterprise)\n✅ **1 Clínica Demo** completa com configurações\n✅ **1 Assinatura ativa** (Plano Standard)\n✅ **1 Proprietário** da clínica (Owner)\n✅ **3 Usuários** com diferentes perfis:\n   - Admin (SystemAdmin)\n   - Dr. Silva (Doctor)\n   - Maria Santos (Receptionist)\n✅ **6 Pacientes** incluindo 2 crianças com responsável\n✅ **8 Procedimentos** diversos (consultas, exames, vacinas, etc.)\n✅ **5 Agendamentos** (passados, hoje e futuros)\n✅ **2 Pagamentos** processados\n✅ **8 Medicamentos** cadastrados\n✅ **2 Prontuários médicos** completos\n✅ **4 Templates de prescrição**\n✅ **3 Templates de prontuário**\n✅ **5 Notificações** em diversos estados\n✅ **5 Rotinas de notificação** automatizadas\n✅ **10 Despesas** (pagas, pendentes, vencidas)\n✅ **5 Solicitações de exames**\n\n**Credenciais criadas:**\n\n🔑 **Owner**: owner.demo / Owner@123\n🔑 **Admin**: admin / Admin@123\n🔑 **Médico**: dr.silva / Doctor@123\n🔑 **Recepcionista**: recep.maria / Recep@123\n\n**TenantID**: demo-clinic-001\n\n**Após executar este endpoint:**\n1. Vá para a pasta \"Auth\"\n2. Execute o endpoint \"Login\" com um dos usuários acima\n3. Copie o token retornado\n4. Cole o token na variável `bearer_token` da coleção\n5. Pronto! Todos os endpoints estão prontos para uso\n\n📚 **Documentação completa**: docs/SEED_API_GUIDE.md"
-          },
-          "response": []
-        },
-        {
-          "name": "Seed System Owner",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "// Exibe as credenciais do System Owner",
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    ",
-                  "    console.log('✅ System Owner created successfully!');",
-                  "    console.log('');",
-                  "    console.log('🔑 Credenciais:');",
-                  "    console.log('   Username:', jsonData.owner.username);",
-                  "    console.log('   Password:', jsonData.owner.password);",
-                  "    console.log('   Email:', jsonData.owner.email);",
-                  "    console.log('   TenantID:', jsonData.owner.tenantId);",
-                  "    console.log('');",
-                  "    console.log('⚠️ IMPORTANTE: Troque a senha após o primeiro login!');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/data-seeder/seed-system-owner",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "data-seeder",
-                "seed-system-owner"
-              ]
-            },
-            "description": "👑 **Cria um proprietário do sistema (System Owner).**\n\n**O que é um System Owner?**\nÉ o administrador máximo da plataforma, com acesso a TODAS as clínicas e configurações do sistema.\n\n**Credenciais criadas:**\n- **Username**: admin\n- **Password**: Admin@123\n- **Email**: admin@medicwarehouse.com\n- **TenantID**: system\n\n⚠️ **ATENÇÃO**: \n- Este endpoint só está disponível em ambiente de desenvolvimento\n- Ou quando `Development:EnableDevEndpoints` está configurado como `true`\n- Se o System Owner já existir, retorna as informações dele\n\n**Para fazer login:**\n1. Use o endpoint `POST /api/auth/owner-login`\n2. Username: admin\n3. Password: Admin@123\n4. TenantID: system\n\n⚠️ **IMPORTANTE**: Troque a senha após o primeiro login!"
-          },
-          "response": []
-        },
-        {
-          "name": "Clear Database",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "// Aviso antes de executar",
-                  "console.log('⚠️ ATENÇÃO: Este endpoint irá deletar TODOS os dados de exemplo!');",
-                  "console.log('');",
-                  "console.log('Se você realmente deseja continuar, execute o request.');",
-                  "console.log('');",
-                  "console.log('Após limpar, você pode recriar os dados executando \"Seed Demo Data\".');"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    ",
-                  "    console.log('✅ Database cleared successfully!');",
-                  "    console.log('');",
-                  "    console.log('📋 Tabelas limpas:', jsonData.deletedTables.length);",
-                  "    console.log('');",
-                  "    console.log('🌱 Para recriar os dados, execute: \"Seed Demo Data\"');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/data-seeder/clear-database",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "data-seeder",
-                "clear-database"
-              ]
-            },
-            "description": "🗑️ **REMOVE TODOS OS DADOS DE EXEMPLO DO BANCO DE DADOS**\n\n⚠️ **PERIGO**: Este endpoint deleta TODOS os dados de teste. Use com extremo cuidado!\n\n**O que será deletado:**\n- ❌ Planos de assinatura\n- ❌ Clínicas\n- ❌ Proprietários (Owners)\n- ❌ Usuários\n- ❌ Pacientes\n- ❌ Procedimentos\n- ❌ Agendamentos\n- ❌ Pagamentos\n- ❌ Prontuários médicos\n- ❌ Prescrições\n- ❌ Medicamentos\n- ❌ Templates\n- ❌ Notificações\n- ❌ Despesas\n- ❌ Solicitações de exames\n- ❌ E tudo mais relacionado\n\n⚠️ **ATENÇÃO**:\n- Este endpoint só está disponível em ambiente de desenvolvimento\n- Ou quando `Development:EnableDevEndpoints` está configurado como `true`\n- A deleção segue a ordem correta respeitando foreign keys\n- Após limpar, você pode recriar os dados executando \"Seed Demo Data\"\n\n**Quando usar:**\n- Quando você quer começar do zero\n- Quando os dados de teste ficaram inconsistentes\n- Para testar a criação de dados novamente\n\n**NÃO use em produção!** Este endpoint deve estar sempre desabilitado em produção."
+            "description": "Gera dados de teste completos: clínica, usuários, pacientes, procedimentos, agendamentos e pagamentos"
           },
           "response": []
         }

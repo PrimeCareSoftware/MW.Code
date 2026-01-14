@@ -652,6 +652,58 @@ dotnet ef database update --context MedicSoftDbContext \
 > 📖 **Guia completo de setup do PostgreSQL**: [PODMAN_POSTGRES_SETUP.md](docs/PODMAN_POSTGRES_SETUP.md)  
 > 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](docs/MIGRACAO_POSTGRESQL.md)
 
+#### 🌱 Popular Banco de Dados com Dados de Exemplo
+
+Após aplicar as migrations, popule o banco com dados de teste completos para começar a usar o sistema imediatamente:
+
+**Opção 1: Script Automatizado (Recomendado)**
+
+```bash
+# Linux/macOS
+./scripts/seed-demo-data.sh
+
+# Windows PowerShell
+.\scripts\seed-demo-data.ps1
+```
+
+**Opção 2: Usando cURL/API diretamente**
+
+```bash
+# Popular dados
+curl -X POST http://localhost:5000/api/data-seeder/seed-demo
+
+# Fazer login
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "dr.silva", "password": "Doctor@123", "tenantId": "demo-clinic-001"}'
+```
+
+**Opção 3: Usando Postman**
+1. Importe `PrimeCare-Postman-Collection.json`
+2. Execute: `Data Seeder > Seed Demo Data`
+3. Execute: `Auth > Login`
+
+**O que é criado:**
+- ✅ 5 Planos de assinatura
+- ✅ 1 Clínica Demo completa
+- ✅ 4 Usuários (Owner, Admin, Médico, Recepcionista)
+- ✅ 6 Pacientes (incluindo 2 crianças com responsável)
+- ✅ 8 Procedimentos diversos
+- ✅ 5 Agendamentos (passados, hoje e futuros)
+- ✅ 2 Prontuários médicos completos
+- ✅ 10 Despesas categorizadas
+- ✅ 5 Solicitações de exames
+- ✅ E muito mais...
+
+**Credenciais de acesso:**
+- **Médico**: dr.silva / Doctor@123
+- **Recepcionista**: recep.maria / Recep@123
+- **Owner**: owner.demo / Owner@123
+- **Admin**: admin / Admin@123
+- **TenantID**: demo-clinic-001
+
+> 📖 **Guia Completo da API de Seed**: [SEED_API_GUIDE.md](docs/SEED_API_GUIDE.md) - Documentação detalhada com todos os dados criados, cenários de teste e troubleshooting
+
 ## 📖 Documentação da API
 
 Após executar a aplicação, acesse a documentação interativa do Swagger:
