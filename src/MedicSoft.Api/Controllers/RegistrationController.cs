@@ -148,7 +148,7 @@ namespace MedicSoft.Api.Controllers
                 IsActive = p.IsActive,
                 Type = (int)p.Type,
                 Features = GeneratePlanFeatures(p),
-                IsRecommended = p.Type == PlanType.Standard // Mark Standard plan as recommended
+                IsRecommended = p.Type == SubscriptionPlanType.Standard // Mark Standard plan as recommended
             }).ToList();
 
             return Ok(planDtos);
@@ -183,11 +183,11 @@ namespace MedicSoft.Api.Controllers
             features.Add("Prontuário médico digital");
 
             // Add conditional features based on plan type
-            if (plan.Type == PlanType.Trial)
+            if (plan.Type == SubscriptionPlanType.Trial)
             {
                 features.Add("Suporte por email");
             }
-            else if (plan.Type == PlanType.Basic)
+            else if (plan.Type == SubscriptionPlanType.Basic)
             {
                 if (plan.HasReports)
                     features.Add("Relatórios básicos");
@@ -195,7 +195,7 @@ namespace MedicSoft.Api.Controllers
                     features.Add("Lembretes de consulta");
                 features.Add("Suporte por email");
             }
-            else if (plan.Type == PlanType.Standard)
+            else if (plan.Type == SubscriptionPlanType.Standard)
             {
                 if (plan.HasReports)
                     features.Add("Relatórios gerenciais");
@@ -205,7 +205,7 @@ namespace MedicSoft.Api.Controllers
                     features.Add("Lembretes de consulta");
                 features.Add("Suporte prioritário");
             }
-            else if (plan.Type == PlanType.Premium)
+            else if (plan.Type == SubscriptionPlanType.Premium)
             {
                 if (plan.HasReports)
                     features.Add("Relatórios gerenciais");
@@ -219,7 +219,7 @@ namespace MedicSoft.Api.Controllers
                 features.Add("API de integração");
                 features.Add("Suporte 24/7");
             }
-            else if (plan.Type == PlanType.Enterprise)
+            else if (plan.Type == SubscriptionPlanType.Enterprise)
             {
                 if (plan.HasReports)
                     features.Add("Todos os recursos Premium");

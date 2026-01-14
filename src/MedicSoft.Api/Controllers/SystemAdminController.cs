@@ -699,7 +699,7 @@ namespace MedicSoft.Api.Controllers
                 request.TrialDays,
                 request.MaxUsers,
                 request.MaxPatients,
-                PlanType.Standard,
+                SubscriptionPlanType.Standard,
                 "system" // System-wide plan
             );
 

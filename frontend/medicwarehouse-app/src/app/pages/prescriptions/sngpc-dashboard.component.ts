@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
 import { DigitalPrescriptionService } from '../../services/prescriptions/digital-prescription.service';
 import { SNGPCReport, SNGPCReportStatus } from '../../models/prescriptions/digital-prescription.model';
 
@@ -18,7 +21,10 @@ import { SNGPCReport, SNGPCReportStatus } from '../../models/prescriptions/digit
     CommonModule,
     MatTableModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule,
+    MatMenuModule,
+    MatChipsModule
   ],
   templateUrl: './sngpc-dashboard.component.html',
   styleUrl: './sngpc-dashboard.component.scss'})

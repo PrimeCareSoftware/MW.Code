@@ -35,7 +35,7 @@ namespace MedicSoft.Test.Entities
             Assert.Equal(validFrom, plan.ValidFrom);
             Assert.True(plan.IsActive);
             Assert.Null(plan.ValidUntil);
-            Assert.Null(plan.PlanType);
+            Assert.Null(plan.OldPlanType);
             Assert.Null(plan.HolderName);
         }
 
@@ -63,7 +63,7 @@ namespace MedicSoft.Test.Entities
             );
 
             // Assert
-            Assert.Equal(planType, plan.PlanType);
+            Assert.Equal(planType, plan.OldPlanType);
             Assert.Equal(validUntil, plan.ValidUntil);
             Assert.Equal(holderName, plan.HolderName);
         }
@@ -157,7 +157,7 @@ namespace MedicSoft.Test.Entities
             // Assert
             Assert.Equal(newInsuranceName, plan.InsuranceName);
             Assert.Equal(newPlanNumber, plan.PlanNumber);
-            Assert.Equal(newPlanType, plan.PlanType);
+            Assert.Equal(newPlanType, plan.OldPlanType);
             Assert.Equal(newHolderName, plan.HolderName);
             Assert.NotNull(plan.UpdatedAt);
         }
