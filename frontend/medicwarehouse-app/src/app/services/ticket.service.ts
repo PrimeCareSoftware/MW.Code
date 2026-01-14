@@ -28,7 +28,9 @@ export class TicketService {
     private apiConfig: ApiConfigService
   ) {
     this.apiUrl = `${this.apiConfig.systemAdminUrl}/tickets`;
-    this.loadUnreadCount();
+    // Defer loading to avoid circular dependency with error interceptor
+    // The error interceptor injects NotificationService which makes HTTP calls
+    setTimeout(() => this.loadUnreadCount(), 0);
   }
 
   /**

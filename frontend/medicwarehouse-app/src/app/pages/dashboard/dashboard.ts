@@ -64,19 +64,23 @@ export class Dashboard implements OnInit {
       const { firstValueFrom } = await import('rxjs');
       
       // Load patients count
-      const patients = await firstValueFrom(this.http.get<any[]>(`${environment.apiUrl}/patients?clinicId=${clinicId}`));
-      this.stats.totalPatients = patients?.length || 0;
+      const patientsResponse = await firstValueFrom(this.http.get<any[]>(`${environment.apiUrl}/patients?clinicId=${clinicId}`));
+      const patients = Array.isArray(patientsResponse) ? patientsResponse : [];
+      this.stats.totalPatients = patients.length;
 
       // Load today's appointments
-      const appointments = await firstValueFrom(this.http.get<any[]>(
+      const appointmentsResponse = await firstValueFrom(this.http.get<any[]>(
         `${environment.apiUrl}/appointments?clinicId=${clinicId}&date=${today}`
       ));
       
-      this.stats.todayAppointments = appointments?.length || 0;
-      this.stats.completedAppointments = appointments?.filter(a => a.status === 'Completed').length || 0;
+      // Ensure appointments is always an array
+      const appointments = Array.isArray(appointmentsResponse) ? appointmentsResponse : [];
+      
+      this.stats.todayAppointments = appointments.length;
+      this.stats.completedAppointments = appointments.filter(a => a.status === 'Completed').length;
       
       // Map appointments to schedule
-      this.stats.todaySchedule = (appointments || []).slice(0, 5).map(apt => ({
+      this.stats.todaySchedule = appointments.slice(0, 5).map(apt => ({
         id: apt.id,
         time: format(new Date(apt.scheduledDate), 'HH:mm'),
         patientName: apt.patient?.name || 'Unknown',
