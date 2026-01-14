@@ -1,7 +1,7 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { TenantResolverService } from '../../services/tenant-resolver.service';
 import { ClinicCustomizationService } from '../../services/clinic-customization.service';
@@ -27,6 +27,7 @@ export class Login implements OnInit {
     private fb: FormBuilder,
     private authService: Auth,
     private router: Router,
+    private route: ActivatedRoute,
     private tenantResolver: TenantResolverService,
     private clinicCustomizationService: ClinicCustomizationService
   ) {
@@ -46,6 +47,25 @@ export class Login implements OnInit {
     if (navigation?.extras?.state?.['message']) {
       this.infoMessage.set(navigation.extras.state['message']);
     }
+
+    // Check for query parameters (e.g., from checkout page)
+    this.route.queryParams.subscribe(params => {
+      // Auto-fill username if provided
+      if (params['username']) {
+        this.loginForm.patchValue({ username: params['username'] });
+      }
+      
+      // Auto-fill tenantId if provided
+      if (params['tenantId']) {
+        this.loginForm.patchValue({ tenantId: params['tenantId'] });
+      }
+      
+      // Auto-set owner login toggle if specified
+      if (params['isOwner'] === 'true') {
+        this.isOwnerLogin.set(true);
+        this.infoMessage.set('Você está prestes a fazer login como proprietário da clínica. Use suas credenciais de registro.');
+      }
+    });
   }
 
   detectTenantFromUrl(): void {

@@ -96,8 +96,11 @@
       </div>
 
       <div class="action-buttons">
-        <a href="http://localhost:4200" class="btn btn-primary btn-large">
-          Acessar o Sistema
+        <a 
+          [href]="'http://localhost:4200/login?isOwner=true&tenantId=' + tenantId + '&username=' + username" 
+          class="btn btn-primary btn-large"
+        >
+          Fazer Login como Proprietário
         </a>
         <a routerLink="/" class="btn btn-secondary btn-large">
           Voltar ao Site
