@@ -35,7 +35,7 @@ export class Navbar {
   
   isOwner(): boolean {
     const user = this.authService.currentUser();
-    return user ? (user.role === 'Owner' || user.isSystemOwner === true) : false;
+    return user ? (user.role === 'Owner' || user.role === 'ClinicOwner' || user.isSystemOwner === true) : false;
   }
 
   @HostListener('document:click', ['$event'])

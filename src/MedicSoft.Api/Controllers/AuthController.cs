@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
+using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -203,7 +204,7 @@ namespace MedicSoft.Api.Controllers
                     username: owner.Username,
                     userId: owner.Id.ToString(),
                     tenantId: tenantId,
-                    role: "Owner",
+                    role: RoleNames.ClinicOwner,
                     clinicId: owner.ClinicId?.ToString(),
                     isSystemOwner: owner.IsSystemOwner,
                     sessionId: sessionId
@@ -216,7 +217,7 @@ namespace MedicSoft.Api.Controllers
                     Token = token,
                     Username = owner.Username,
                     TenantId = tenantId,
-                    Role = "Owner",
+                    Role = RoleNames.ClinicOwner,
                     ClinicId = owner.ClinicId,
                     IsSystemOwner = owner.IsSystemOwner,
                     ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
@@ -435,7 +436,7 @@ namespace MedicSoft.Api.Controllers
                 bool isSessionValid;
                 
                 // Check if this is an owner or regular user
-                if (roleClaim == "Owner")
+                if (roleClaim == "Owner" || roleClaim == RoleNames.ClinicOwner)
                 {
                     isSessionValid = await _authService.ValidateOwnerSessionAsync(userId, sessionIdClaim, tenantIdClaim);
                 }
