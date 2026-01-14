@@ -13,6 +13,7 @@ import { NotificationPanel } from '../notification-panel/notification-panel';
 export class Navbar {
   dropdownOpen = false;
   mobileMenuOpen = false;
+  adminDropdownOpen = false;
   
   constructor(public authService: Auth) {}
 
@@ -24,8 +25,17 @@ export class Navbar {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
   
+  toggleAdminDropdown(): void {
+    this.adminDropdownOpen = !this.adminDropdownOpen;
+  }
+  
   closeMobileMenu(): void {
     this.mobileMenuOpen = false;
+  }
+  
+  isOwner(): boolean {
+    const user = this.authService.currentUser();
+    return user ? (user.role === 'Owner' || user.isSystemOwner === true) : false;
   }
 
   @HostListener('document:click', ['$event'])
@@ -34,11 +44,15 @@ export class Navbar {
     if (!target.closest('.user-dropdown')) {
       this.dropdownOpen = false;
     }
+    if (!target.closest('.admin-dropdown')) {
+      this.adminDropdownOpen = false;
+    }
   }
 
   logout(): void {
     this.dropdownOpen = false;
     this.mobileMenuOpen = false;
+    this.adminDropdownOpen = false;
     this.authService.logout();
   }
 }
