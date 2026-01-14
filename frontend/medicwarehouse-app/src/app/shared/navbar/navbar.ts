@@ -77,7 +77,6 @@ export class Navbar implements OnInit, OnDestroy {
 
   logout(): void {
     this.dropdownOpen = false;
-    this.sidebarOpen = false;
     this.adminDropdownOpen = false;
     this.authService.logout();
   }
