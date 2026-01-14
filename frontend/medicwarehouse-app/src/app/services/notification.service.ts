@@ -26,7 +26,9 @@ export class NotificationService {
   public toasts = signal<ToastMessage[]>([]);
 
   constructor(private http: HttpClient) {
-    this.loadNotifications();
+    // Defer loading to avoid circular dependency with error interceptor
+    // The error interceptor injects this service, so we can't make HTTP calls in the constructor
+    setTimeout(() => this.loadNotifications(), 0);
   }
 
   // Observable for real-time notifications
