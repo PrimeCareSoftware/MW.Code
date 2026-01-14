@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
@@ -13,17 +14,20 @@ namespace MedicSoft.Api.Controllers
     {
         private readonly ISNGPCReportRepository _reportRepository;
         private readonly IDigitalPrescriptionRepository _prescriptionRepository;
+        private readonly ISNGPCXmlGeneratorService _xmlGeneratorService;
         private readonly IMapper _mapper;
 
         public SNGPCReportsController(
             ISNGPCReportRepository reportRepository,
             IDigitalPrescriptionRepository prescriptionRepository,
+            ISNGPCXmlGeneratorService xmlGeneratorService,
             IMapper mapper,
             ITenantContext tenantContext)
             : base(tenantContext)
         {
             _reportRepository = reportRepository;
             _prescriptionRepository = prescriptionRepository;
+            _xmlGeneratorService = xmlGeneratorService;
             _mapper = mapper;
         }
 
@@ -167,22 +171,30 @@ namespace MedicSoft.Api.Controllers
                 if (report == null)
                     return NotFound($"Report {id} not found");
 
-                // TODO: Implement actual XML generation with ANVISA schema
-                // For now, create a placeholder XML
-                var xmlContent = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
-<SNGPC xmlns=""http://www.anvisa.gov.br/sngpc"">
-    <Report>
-        <Period>{report.Month}/{report.Year}</Period>
-        <Generated>{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ}</Generated>
-        <Prescriptions>{report.TotalPrescriptions}</Prescriptions>
-        <Items>{report.TotalItems}</Items>
-    </Report>
-</SNGPC>";
+                // Get all prescriptions for this report
+                var prescriptions = new List<DigitalPrescription>();
+                foreach (var prescriptionId in report.PrescriptionIds)
+                {
+                    var prescription = await _prescriptionRepository.GetByIdWithItemsAsync(prescriptionId, GetTenantId());
+                    if (prescription != null)
+                    {
+                        prescriptions.Add(prescription);
+                    }
+                }
 
-                report.GenerateXML(xmlContent, report.TotalItems);
+                if (!prescriptions.Any())
+                    return BadRequest("No prescriptions found for this report");
+
+                // Generate XML using ANVISA schema v2.1
+                var xmlContent = await _xmlGeneratorService.GenerateXmlAsync(report, prescriptions);
+                
+                // Count total items from prescriptions
+                var totalItems = prescriptions.Sum(p => p.Items.Count(i => i.IsControlledSubstance));
+
+                report.GenerateXML(xmlContent, totalItems);
                 await _reportRepository.UpdateAsync(report);
 
-                return Ok(new { message = "XML generated successfully" });
+                return Ok(new { message = "XML generated successfully using ANVISA schema v2.1" });
             }
             catch (Exception ex)
             {

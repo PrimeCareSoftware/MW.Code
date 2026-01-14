@@ -727,6 +727,40 @@
             }
           </div>
 
+          <!-- Digital Prescriptions Section - CFM 1.643/2002 + ANVISA -->
+          <div class="card">
+            <div class="card-header-flex">
+              <h3>Receitas Médicas Digitais - CFM 1.643/2002 + ANVISA</h3>
+              @if (medicalRecord()?.id) {
+                <button 
+                  type="button" 
+                  class="btn btn-primary" 
+                  [routerLink]="['/prescriptions/new', medicalRecord()!.id]"
+                  title="Criar nova receita digital conforme CFM e ANVISA"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                  </svg>
+                  Nova Receita Digital
+                </button>
+              }
+            </div>
+            <div class="prescription-info">
+              <p class="info-text">
+                <strong>Sistema de Receitas Digitais:</strong> Crie receitas em conformidade com CFM 1.643/2002 e ANVISA 344/1998.
+                Suporta receitas simples, controladas (A, B, C1) e antimicrobianas com rastreamento SNGPC.
+              </p>
+              @if (!medicalRecord()?.id) {
+                <p class="text-warning">
+                  ⚠️ Salve o prontuário primeiro para habilitar a criação de receitas digitais.
+                </p>
+              }
+            </div>
+          </div>
+
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" (click)="onSave()" [disabled]="isLoading()">
               Salvar Prontuário

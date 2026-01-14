@@ -107,6 +107,13 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<DigitalPrescription?> GetByIdWithItemsAsync(Guid id, string tenantId)
+        {
+            return await _dbSet
+                .Include(dp => dp.Items)
+                .FirstOrDefaultAsync(dp => dp.Id == id && dp.TenantId == tenantId);
+        }
+
         public async Task<bool> SequenceNumberExistsAsync(string sequenceNumber, string tenantId)
         {
             return await _dbSet
