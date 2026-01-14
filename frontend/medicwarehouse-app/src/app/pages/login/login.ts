@@ -137,13 +137,18 @@ export class Login implements OnInit {
         },
         error: (error) => {
           this.isLoading.set(false);
+          
+          // Try to get error message and code from response
+          const errorCode = error.error?.code;
           const errorMsg = error.error?.message || 'Falha no login. Por favor, verifique suas credenciais.';
           
-          // Provide helpful hints based on login type
-          if (this.isOwnerLogin() && errorMsg.includes('incorretos')) {
-            this.errorMessage.set(errorMsg + ' Certifique-se de que você está usando as credenciais de proprietário da clínica.');
-          } else if (!this.isOwnerLogin() && errorMsg.includes('incorretos')) {
-            this.errorMessage.set(errorMsg + ' Se você é o proprietário da clínica, ative a opção "Login como Proprietário".');
+          // Provide helpful hints based on login type and error
+          if (errorCode === 'UNAUTHORIZED' || errorMsg.toLowerCase().includes('incorretos') || errorMsg.toLowerCase().includes('incorrect')) {
+            if (this.isOwnerLogin()) {
+              this.errorMessage.set(errorMsg + ' Certifique-se de que você está usando as credenciais de proprietário da clínica.');
+            } else {
+              this.errorMessage.set(errorMsg + ' Se você é o proprietário da clínica, ative a opção "Login como Proprietário".');
+            }
           } else {
             this.errorMessage.set(errorMsg);
           }
