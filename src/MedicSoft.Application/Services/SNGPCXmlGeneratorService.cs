@@ -29,7 +29,7 @@ namespace MedicSoft.Application.Services
             _prescriptionRepository = prescriptionRepository;
         }
 
-        public async Task<string> GenerateXmlAsync(SNGPCReport report, IEnumerable<DigitalPrescription> prescriptions)
+        public Task<string> GenerateXmlAsync(SNGPCReport report, IEnumerable<DigitalPrescription> prescriptions)
         {
             if (report == null)
                 throw new ArgumentNullException(nameof(report));
@@ -57,7 +57,7 @@ namespace MedicSoft.Application.Services
             xmlDocument.Save(xmlWriter);
             xmlWriter.Flush();
 
-            return stringWriter.ToString();
+            return Task.FromResult(stringWriter.ToString());
         }
 
         private XElement CreateRootElement(SNGPCReport report, IEnumerable<DigitalPrescription> prescriptions)
