@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using MedicSoft.Domain.Interfaces;
+using MedicSoft.Domain.Common;
 using System.Security.Claims;
 
 namespace MedicSoft.CrossCutting.Authorization
@@ -61,8 +62,9 @@ namespace MedicSoft.CrossCutting.Authorization
             // Get role from claims to determine if this is an owner or user
             var roleClaim = context.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             
-            // If role is "Owner", check Owner permissions (owners have full access)
-            if (roleClaim == "Owner")
+            // If role is "ClinicOwner" or "Owner" (for backwards compatibility), check Owner permissions
+            // Owners have full access to all features
+            if (roleClaim == RoleNames.ClinicOwner || roleClaim == "Owner")
             {
                 // Get owner repository from DI
                 var ownerRepository = context.HttpContext.RequestServices.GetRequiredService<IOwnerRepository>();
