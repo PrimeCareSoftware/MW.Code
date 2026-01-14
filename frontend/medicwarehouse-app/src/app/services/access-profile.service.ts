@@ -14,7 +14,7 @@ import {
   providedIn: 'root'
 })
 export class AccessProfileService {
-  private apiUrl = `${environment.apiUrl}/access-profiles`;
+  private apiUrl = `${environment.apiUrl}/AccessProfiles`;
 
   constructor(private http: HttpClient) {}
 

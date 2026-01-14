@@ -66,17 +66,17 @@ export const routes: Routes = [
   { 
     path: 'admin/profiles', 
     loadComponent: () => import('./pages/admin/profiles/profile-list.component').then(m => m.ProfileListComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, ownerGuard]
   },
   { 
     path: 'admin/profiles/new', 
     loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, ownerGuard]
   },
   { 
     path: 'admin/profiles/edit/:id', 
     loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, ownerGuard]
   },
   { 
     path: 'analytics', 
