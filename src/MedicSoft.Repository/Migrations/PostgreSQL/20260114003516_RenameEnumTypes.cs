@@ -1082,7 +1082,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 table: "HealthInsurancePlans",
                 type: "integer",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 1); // Individual = 1
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
