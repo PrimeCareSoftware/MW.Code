@@ -251,7 +251,7 @@ frontend/mw-docs/src/app/
 - **Frontend:** Angular 20 (em desenvolvimento)
 - PostgreSQL (database compartilhado)
 
-### ✅ Funcionalidades Implementadas (Backend API - Janeiro 2026)
+### ✅ Funcionalidades Implementadas (Backend API + Frontend - Janeiro 2026)
 
 | Módulo | Status | Descrição |
 |--------|--------|-----------|
@@ -263,8 +263,10 @@ frontend/mw-docs/src/app/
 | **Medications API** | ✅ 100% | Prescrições ativas, histórico de medicamentos |
 | **Payments API** | ✅ 100% | Faturas, pagamento online, histórico |
 | **Messages API** | ✅ 100% | Comunicação com clínica, envio de mensagens |
+| **Frontend Services** | ✅ 100% | AuthService, AppointmentService, DocumentService, ProfileService |
+| **Frontend Tests** | ✅ 100% | 52 testes unitários, 98.66% coverage |
 
-**Total: 8 Controllers REST + 50+ Endpoints implementados**
+**Total: 8 Controllers REST + 50+ Endpoints + 4 Services + 52 Tests implementados**
 
 ### 🚧 Pendências de Desenvolvimento
 
@@ -278,7 +280,27 @@ frontend/mw-docs/src/app/
 - [x] 8 Controllers REST completos
 - [x] Documentação completa (IMPLEMENTATION_SUMMARY.md, README.md, INTEGRATION_GUIDE.md)
 
-#### Frontend Angular - 🚧 EM PROGRESSO (30%)
+#### Frontend Angular - ✅ 60% COMPLETO (Janeiro 2026)
+
+##### Implementado
+- [x] **Serviços Completos:**
+  - [x] AuthService - Autenticação completa com JWT
+  - [x] AppointmentService - Gestão de agendamentos
+  - [x] DocumentService - Gestão de documentos
+  - [x] ProfileService - Gestão de perfil ✨ NOVO
+- [x] **Interceptors e Guards:**
+  - [x] Auth Interceptor - Injeção automática de JWT
+  - [x] Auth Guard - Proteção de rotas
+- [x] **Testes Unitários:** ✨ NOVO
+  - [x] 52 testes (100% passando)
+  - [x] 98.66% code coverage
+  - [x] Karma + Jasmine configurados
+- [x] **Componentes de Página:**
+  - [x] Login/Register
+  - [x] Dashboard
+  - [x] Appointments
+  - [x] Documents
+  - [x] Profile
 
 ##### Prioridade Alta (Q1/2026)
 - [ ] **Tela de Login/Registro** - Autenticação de pacientes
@@ -546,17 +568,20 @@ mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 | 🔧 Admin | 3 módulos | 11 features | 30% |
 | 🌐 Site | 4 módulos | 10 features | 40% |
 | 📚 Docs | 4 módulos | 9 features | 45% |
-| 🏥 **Patient Portal** | **Backend 100% (8 APIs)** | **Frontend 70%** | **55%** ✨ |
+| 🏥 **Patient Portal** | **Backend 100%, Frontend 60%** | **70%** ✨ |
 | 📱 iOS | 5 módulos | 12 features | 50% |
 | 🤖 Android | 3 módulos | 14 features | 25% |
 
 ### Total de Tarefas
 
-- **Total de Funcionalidades Pendentes:** 78 (+10 do Patient Portal Frontend)
-- **Alta Prioridade:** 28 (+3)
-- **Média Prioridade:** 32 (+4)
-- **Baixa Prioridade:** 18 (+3)
-- **✅ Completo em Janeiro 2026:** Backend Patient Portal API (8 controllers, 50+ endpoints)
+- **Total de Funcionalidades Pendentes:** 68 (reduzido de 78)
+- **Alta Prioridade:** 25 (reduzido de 28)
+- **Média Prioridade:** 28 (reduzido de 32)
+- **Baixa Prioridade:** 15 (reduzido de 18)
+- **✅ Completo em Janeiro 2026:** 
+  - Backend Patient Portal API (8 controllers, 50+ endpoints)
+  - Frontend Patient Portal Services (4 services completos)
+  - Testes Unitários Frontend (52 testes, 98.66% coverage)
 
 ---
 
@@ -565,9 +590,10 @@ mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 - [PENDING_TASKS.md](PENDING_TASKS.md) - Pendências gerais do sistema
 - [MOBILE_APPS_GUIDE.md](MOBILE_APPS_GUIDE.md) - Guia dos aplicativos mobile
 - [MOBILE_IMPLEMENTATION_SUMMARY.md](MOBILE_IMPLEMENTATION_SUMMARY.md) - Resumo da implementação mobile
-- **[patient-portal-api/IMPLEMENTATION_SUMMARY.md](../patient-portal-api/IMPLEMENTATION_SUMMARY.md)** - ✨ **Resumo completo do Patient Portal Backend**
-- **[patient-portal-api/README.md](../patient-portal-api/README.md)** - ✨ **Guia de uso da Patient Portal API**
-- **[patient-portal-api/INTEGRATION_GUIDE.md](../patient-portal-api/INTEGRATION_GUIDE.md)** - ✨ **Guia de integração frontend**
+- **[IMPLEMENTATION_SUMMARY.md](../patient-portal-api/IMPLEMENTATION_SUMMARY.md)** - ✨ **Resumo completo do Patient Portal Backend**
+- **[README.md](../patient-portal-api/README.md)** - ✨ **Guia de uso da Patient Portal API**
+- **[INTEGRATION_GUIDE.md](../patient-portal-api/INTEGRATION_GUIDE.md)** - ✨ **Guia de integração frontend**
+- **[TESTING_GUIDE.md](../frontend/patient-portal/TESTING_GUIDE.md)** - ✨ **NOVO: Guia completo de testes**
 - [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) - Índice geral de documentação
 
 ---

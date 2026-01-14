@@ -203,9 +203,43 @@ Veja [CI_CD_GUIDE.md](../../patient-portal-api/CI_CD_GUIDE.md) para mais detalhe
 ## 📚 Documentação Adicional
 
 Para mais informações sobre o projeto completo:
+- **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** - ✨ **NOVO: Guia completo de testes**
 - [PATIENT_PORTAL_GUIDE.md](../../docs/PATIENT_PORTAL_GUIDE.md) - Guia geral
 - [README.md](../../patient-portal-api/README.md) - Documentação do backend
 - [ARCHITECTURE.md](../../patient-portal-api/ARCHITECTURE.md) - Arquitetura técnica
+
+## 🧪 Testes e Qualidade
+
+### Métricas de Qualidade (Janeiro 2026)
+```
+✅ Testes Unitários: 52/52 passando (100%)
+✅ Code Coverage: 98.66%
+  - Statements: 74/75 (98.66%)
+  - Branches: 13/14 (92.85%)
+  - Functions: 33/33 (100%)
+  - Lines: 73/74 (98.64%)
+```
+
+### Testes Implementados
+- **AuthService:** 18 testes - Login, registro, refresh token, logout
+- **AppointmentService:** 12 testes - Listagem, filtros, paginação
+- **DocumentService:** 12 testes - Listagem, download, tipos
+- **ProfileService:** 9 testes - Visualização e atualização de perfil
+- **App Component:** 1 teste - Criação do app
+
+### Executar Testes
+```bash
+# Todos os testes
+npm test
+
+# Com coverage report
+npm test -- --code-coverage
+
+# Headless (CI)
+npm test -- --browsers=ChromeHeadless --watch=false
+```
+
+Veja o [TESTING_GUIDE.md](./TESTING_GUIDE.md) para guia completo de testes.
 
 ---
 
