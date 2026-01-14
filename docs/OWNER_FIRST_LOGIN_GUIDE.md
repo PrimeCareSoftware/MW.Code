@@ -209,7 +209,7 @@ O sistema automaticamente concede todas as permissões aos proprietários atrav�
 2. ✅ Você marcou "Login como Proprietário" na tela de login?
 3. ✅ Seu token JWT está válido? (tente fazer logout e login novamente)
 
-### Problema: Não consigo ver o menu de usuários
+### Problema: Não consigo ver o menu de usuários e perfis
 
 **Causa:** Você provavelmente fez login como usuário regular em vez de proprietário.
 
@@ -217,6 +217,13 @@ O sistema automaticamente concede todas as permissões aos proprietários atrav�
 1. Faça logout
 2. Faça login novamente
 3. **Marque** a opção "Login como Proprietário"
+4. Após o login bem-sucedido, você verá o menu **"Administração"** na barra de navegação
+5. Clique em "Administração" para acessar:
+   - **Usuários**: Criar e gerenciar usuários da clínica
+   - **Perfis de Acesso**: Criar e gerenciar perfis personalizados
+   - **Informações da Clínica**: Editar dados da clínica
+   - **Personalização**: Customizar aparência (logo, cores)
+   - **Assinatura**: Gerenciar plano e pagamentos
 
 ---
 
