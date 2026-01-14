@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AccessProfileService } from '../../../services/access-profile.service';
 import { AccessProfile } from '../../../models/access-profile.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-profile-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Navbar],
   templateUrl: './profile-list.component.html',
   styleUrls: ['./profile-list.component.scss']
 })

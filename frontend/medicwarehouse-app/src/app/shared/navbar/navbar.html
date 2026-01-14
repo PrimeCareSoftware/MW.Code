@@ -1,235 +1,134 @@
-<nav class="navbar">
-  <div class="navbar-container">
-    <div class="navbar-left">
-      <a routerLink="/dashboard" class="navbar-brand">
-        <div class="brand-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
-        </div>
-        <span class="brand-text">PrimeCare Software</span>
-      </a>
-    </div>
-    
-    <div class="navbar-menu">
-      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"/>
-          <rect x="14" y="3" width="7" height="7"/>
-          <rect x="14" y="14" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/>
-        </svg>
-        <span>Dashboard</span>
-      </a>
-      <a routerLink="/patients" routerLinkActive="active" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>Pacientes</span>
-      </a>
-      <a routerLink="/appointments" routerLinkActive="active" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
-        </svg>
-        <span>Agendamentos</span>
-      </a>
-      <a routerLink="/waiting-queue" routerLinkActive="active" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <line x1="19" y1="8" x2="19" y2="14"/>
-          <line x1="22" y1="11" x2="16" y2="11"/>
-        </svg>
-        <span>Fila de Espera</span>
-      </a>
-      <a routerLink="/analytics" routerLinkActive="active" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 3v18h18"/>
-          <path d="M18 17V9"/>
-          <path d="M13 17V5"/>
-          <path d="M8 17v-3"/>
-        </svg>
-        <span>Relatórios</span>
-      </a>
-      @if (isOwner()) {
-        <div class="admin-dropdown">
-          <button class="nav-item dropdown-trigger" (click)="toggleAdminDropdown()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M12 1v6m0 6v6m10-10h-6m-6 0H4"/>
-            </svg>
-            <span>Administração</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-down">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
-          <div class="admin-dropdown-menu" [class.show]="adminDropdownOpen">
-            <a routerLink="/clinic-admin/users" routerLinkActive="active" class="dropdown-item" (click)="adminDropdownOpen = false">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <line x1="23" y1="8" x2="23" y2="14"/>
-                <line x1="20" y1="11" x2="24" y2="11"/>
-              </svg>
-              <span>Usuários</span>
-            </a>
-            <a routerLink="/admin/profiles" routerLinkActive="active" class="dropdown-item" (click)="adminDropdownOpen = false">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-              <span>Perfis de Acesso</span>
-            </a>
-            <a routerLink="/clinic-admin/info" routerLinkActive="active" class="dropdown-item" (click)="adminDropdownOpen = false">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-              </svg>
-              <span>Informações da Clínica</span>
-            </a>
-            <a routerLink="/clinic-admin/customization" routerLinkActive="active" class="dropdown-item" (click)="adminDropdownOpen = false">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
-                <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
-                <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
-                <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
-                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
-              </svg>
-              <span>Personalização</span>
-            </a>
-            <a routerLink="/clinic-admin/subscription" routerLinkActive="active" class="dropdown-item" (click)="adminDropdownOpen = false">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M3 9h18"/>
-                <path d="M9 21V9"/>
-              </svg>
-              <span>Assinatura</span>
-            </a>
-          </div>
-        </div>
-      }
-    </div>
-
-    <div class="navbar-right">
-      <app-notification-panel></app-notification-panel>
-      @if (authService.currentUser(); as user) {
-        <div class="user-dropdown">
-          <button class="user-button" (click)="toggleDropdown()">
-            <div class="user-avatar">
-              {{ user.username.charAt(0).toUpperCase() }}
-            </div>
-            <span class="user-name">{{ user.username }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
-          <div class="dropdown-menu" [class.show]="dropdownOpen">
-            <div class="dropdown-header">
-              <span class="user-role">Usuário</span>
-              <span class="user-email">{{ user.username }}</span>
-            </div>
-            <div class="dropdown-divider"></div>
-            <button class="dropdown-item" (click)="logout()">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                <polyline points="16 17 21 12 16 7"/>
-                <line x1="21" y1="12" x2="9" y2="12"/>
-              </svg>
-              <span>Sair</span>
-            </button>
-          </div>
-        </div>
-      }
-    </div>
-    
-    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+<!-- Top Bar -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <button class="sidebar-toggle" (click)="toggleSidebar()" title="Toggle menu">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
+    <a routerLink="/dashboard" class="top-bar-brand">
+      <div class="brand-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-text">PrimeCare Software</span>
+    </a>
   </div>
   
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" [class.open]="mobileMenuOpen">
-    <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="mobile-nav-item" (click)="closeMobileMenu()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"/>
-        <rect x="14" y="3" width="7" height="7"/>
-        <rect x="14" y="14" width="7" height="7"/>
-        <rect x="3" y="14" width="7" height="7"/>
-      </svg>
-      <span>Dashboard</span>
-    </a>
-    <a routerLink="/patients" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-      <span>Pacientes</span>
-    </a>
-    <a routerLink="/appointments" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-        <line x1="16" y1="2" x2="16" y2="6"/>
-        <line x1="8" y1="2" x2="8" y2="6"/>
-        <line x1="3" y1="10" x2="21" y2="10"/>
-      </svg>
-      <span>Agendamentos</span>
-    </a>
-    <a routerLink="/waiting-queue" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <line x1="19" y1="8" x2="19" y2="14"/>
-        <line x1="22" y1="11" x2="16" y2="11"/>
-      </svg>
-      <span>Fila de Espera</span>
-    </a>
-    <a routerLink="/analytics" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 3v18h18"/>
-        <path d="M18 17V9"/>
-        <path d="M13 17V5"/>
-        <path d="M8 17v-3"/>
-      </svg>
-      <span>Relatórios</span>
-    </a>
-    @if (isOwner()) {
-      <div class="mobile-menu-divider"></div>
-      <div class="mobile-nav-section">
-        <div class="mobile-nav-section-title">Administração</div>
-        <a routerLink="/clinic-admin/users" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
+  <div class="top-bar-right">
+    <app-notification-panel></app-notification-panel>
+    @if (authService.currentUser(); as user) {
+      <div class="user-dropdown">
+        <button class="user-button" (click)="toggleDropdown()">
+          <div class="user-avatar">
+            {{ user.username.charAt(0).toUpperCase() }}
+          </div>
+          <span class="user-name">{{ user.username }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu" [class.show]="dropdownOpen">
+          <div class="dropdown-header">
+            <span class="user-role">Usuário</span>
+            <span class="user-email">{{ user.username }}</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" (click)="logout()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Sair</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar" [class.open]="sidebarOpen">
+  <div class="sidebar-content">
+    <div class="sidebar-menu">
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span class="nav-text">Dashboard</span>
+      </a>
+      <a routerLink="/patients" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span class="nav-text">Pacientes</span>
+      </a>
+      <a routerLink="/appointments" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <span class="nav-text">Agendamentos</span>
+      </a>
+      <a routerLink="/waiting-queue" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <line x1="19" y1="8" x2="19" y2="14"/>
+          <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+        <span class="nav-text">Fila de Espera</span>
+      </a>
+      <a routerLink="/analytics" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 3v18h18"/>
+          <path d="M18 17V9"/>
+          <path d="M13 17V5"/>
+          <path d="M8 17v-3"/>
+        </svg>
+        <span class="nav-text">Relatórios</span>
+      </a>
+      
+      @if (isOwner()) {
+        <div class="nav-divider"></div>
+        <div class="nav-section-title">
+          <span class="nav-text">Administração</span>
+        </div>
+        <a routerLink="/clinic-admin/users" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
             <line x1="23" y1="8" x2="23" y2="14"/>
             <line x1="20" y1="11" x2="24" y2="11"/>
           </svg>
-          <span>Usuários</span>
+          <span class="nav-text">Usuários</span>
         </a>
-        <a routerLink="/admin/profiles" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
+        <a routerLink="/admin/profiles" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
           </svg>
-          <span>Perfis de Acesso</span>
+          <span class="nav-text">Perfis de Acesso</span>
         </a>
-        <a routerLink="/clinic-admin/info" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
+        <a routerLink="/clinic-admin/info" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-          <span>Informações da Clínica</span>
+          <span class="nav-text">Informações da Clínica</span>
         </a>
-        <a routerLink="/clinic-admin/customization" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
+        <a routerLink="/clinic-admin/customization" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
             <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
@@ -237,26 +136,20 @@
             <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
             <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
           </svg>
-          <span>Personalização</span>
+          <span class="nav-text">Personalização</span>
         </a>
-        <a routerLink="/clinic-admin/subscription" routerLinkActive="active" class="mobile-nav-item" (click)="closeMobileMenu()">
+        <a routerLink="/clinic-admin/subscription" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
             <path d="M3 9h18"/>
             <path d="M9 21V9"/>
           </svg>
-          <span>Assinatura</span>
+          <span class="nav-text">Assinatura</span>
         </a>
-      </div>
-    }
-    <div class="mobile-menu-divider"></div>
-    <button class="mobile-nav-item logout" (click)="logout()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-        <polyline points="16 17 21 12 16 7"/>
-        <line x1="21" y1="12" x2="9" y2="12"/>
-      </svg>
-      <span>Sair</span>
-    </button>
+      }
+    </div>
   </div>
 </nav>
+
+<!-- Sidebar Overlay for mobile -->
+<div class="sidebar-overlay" [class.show]="sidebarOpen" (click)="toggleSidebar()"></div>

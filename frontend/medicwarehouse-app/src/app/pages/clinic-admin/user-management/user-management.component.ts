@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicUserDto, CreateClinicUserRequest, UpdateClinicUserRequest } from '../../../models/clinic-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-user-management',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, Navbar],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss'
 })

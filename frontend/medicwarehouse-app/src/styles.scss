@@ -153,6 +153,8 @@
   /* Z-Index Scale */
   --z-dropdown: 1000;
   --z-sticky: 1020;
+  --z-sidebar-overlay: 1028;
+  --z-sidebar: 1029;
   --z-fixed: 1030;
   --z-modal-backdrop: 1040;
   --z-modal: 1050;
@@ -819,4 +821,20 @@ img {
   h1 { font-size: var(--font-size-3xl); }
   h2 { font-size: var(--font-size-2xl); }
   h3 { font-size: var(--font-size-xl); }
+}
+
+/* Layout adjustments for sidebar */
+body {
+  padding-top: var(--navbar-height);
+}
+
+/* Adjust main content area based on sidebar state */
+@media (min-width: 1024px) {
+  body {
+    padding-left: var(--sidebar-collapsed-width);
+  }
+  
+  body.sidebar-open {
+    padding-left: var(--sidebar-width);
+  }
 }
