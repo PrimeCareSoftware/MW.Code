@@ -203,7 +203,22 @@ h1 {
       p {
         color: #7f8c8d;
         line-height: 1.5;
-        margin: 0;
+        margin: 0 0 0.5rem 0;
+      }
+
+      .info-highlight {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        border-radius: 5px;
+        color: #856404;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        
+        strong {
+          color: #664d03;
+        }
       }
     }
   }

@@ -21,6 +21,7 @@ export class Login implements OnInit {
   tenantFromUrl = signal<string | null>(null);
   clinicName = signal<string | null>(null);
   customization = signal<ClinicCustomizationPublicDto | null>(null);
+  isOwnerLogin = signal<boolean>(false);
 
   constructor(
     private fb: FormBuilder,
@@ -94,19 +95,38 @@ export class Login implements OnInit {
     return hexColorRegex.test(color);
   }
 
+  toggleLoginType(): void {
+    this.isOwnerLogin.set(!this.isOwnerLogin());
+    this.errorMessage.set(''); // Clear any existing errors
+  }
+
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
       this.errorMessage.set('');
 
-      this.authService.login(this.loginForm.value).subscribe({
+      // Use owner login if the toggle is enabled
+      const loginMethod = this.isOwnerLogin() 
+        ? this.authService.ownerLogin(this.loginForm.value)
+        : this.authService.login(this.loginForm.value, false);
+
+      loginMethod.subscribe({
         next: () => {
           this.isLoading.set(false);
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.isLoading.set(false);
-          this.errorMessage.set(error.error?.message || 'Login failed. Please check your credentials.');
+          const errorMsg = error.error?.message || 'Falha no login. Por favor, verifique suas credenciais.';
+          
+          // Provide helpful hints based on login type
+          if (this.isOwnerLogin() && errorMsg.includes('incorretos')) {
+            this.errorMessage.set(errorMsg + ' Certifique-se de que você está usando as credenciais de proprietário da clínica.');
+          } else if (!this.isOwnerLogin() && errorMsg.includes('incorretos')) {
+            this.errorMessage.set(errorMsg + ' Se você é o proprietário da clínica, ative a opção "Login como Proprietário".');
+          } else {
+            this.errorMessage.set(errorMsg);
+          }
         }
       });
     }

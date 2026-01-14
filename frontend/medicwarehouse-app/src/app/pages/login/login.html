@@ -134,6 +134,22 @@
           }
         </div>
 
+        <!-- Owner Login Toggle -->
+        <div class="form-group owner-toggle">
+          <label class="checkbox-container">
+            <input 
+              type="checkbox" 
+              [checked]="isOwnerLogin()"
+              (change)="toggleLoginType()"
+            />
+            <span class="checkmark"></span>
+            <span class="checkbox-label">
+              <strong>Login como Proprietário</strong>
+              <span class="help-text">Marque esta opção se você é o proprietário da clínica</span>
+            </span>
+          </label>
+        </div>
+
         @if (!tenantFromUrl()) {
           <div class="form-group">
             <label for="tenantId">Tenant ID</label>

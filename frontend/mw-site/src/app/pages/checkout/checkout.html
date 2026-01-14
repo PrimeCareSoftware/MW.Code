@@ -56,20 +56,30 @@
         <div class="step-card">
           <div class="step-number">1</div>
           <div class="step-content">
-            <h3>Acesse sua conta</h3>
+            <h3>Acesse sua conta como Proprietário</h3>
             <p *ngIf="tenantId && username">Use o TenantID <strong>{{ tenantId }}</strong>, usuário <strong>{{ username }}</strong> e a senha que você cadastrou para fazer login</p>
             <p *ngIf="!tenantId || !username">Use o usuário e senha que você cadastrou para fazer login no sistema</p>
+            <div class="info-highlight">
+              <strong>⚠️ IMPORTANTE:</strong> Ao fazer o login, marque a opção <strong>"Login como Proprietário"</strong> na tela de login. Como proprietário da clínica, você terá acesso completo para gerenciar usuários, configurar perfis de acesso e todas as configurações da clínica.
+            </div>
           </div>
         </div>
         <div class="step-card">
           <div class="step-number">2</div>
           <div class="step-content">
-            <h3>Configure sua clínica</h3>
-            <p>Adicione médicos, configure horários de atendimento e personalize seu sistema</p>
+            <h3>Configure usuários e perfis de acesso</h3>
+            <p>Como proprietário, você é responsável por criar os demais usuários (médicos, secretárias, recepcionistas) e configurar seus perfis de acesso conforme necessário</p>
           </div>
         </div>
         <div class="step-card">
           <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Configure sua clínica</h3>
+            <p>Adicione horários de atendimento, especializações e personalize o sistema conforme suas necessidades</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">4</div>
           <div class="step-content">
             <h3>Comece a atender</h3>
             <p>Cadastre pacientes, agende consultas e aproveite todos os recursos</p>
