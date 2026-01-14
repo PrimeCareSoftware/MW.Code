@@ -20,7 +20,7 @@ namespace MedicSoft.Domain.Entities
         public bool HasSMSNotifications { get; private set; }
         public bool HasTissExport { get; private set; }
         public bool IsActive { get; private set; }
-        public PlanType Type { get; private set; }
+        public SubscriptionPlanType Type { get; private set; }
 
         private SubscriptionPlan()
         {
@@ -30,7 +30,7 @@ namespace MedicSoft.Domain.Entities
         }
 
         public SubscriptionPlan(string name, string description, decimal monthlyPrice,
-            int trialDays, int maxUsers, int maxPatients, PlanType type, string tenantId,
+            int trialDays, int maxUsers, int maxPatients, SubscriptionPlanType type, string tenantId,
             bool hasReports = false, bool hasWhatsAppIntegration = false,
             bool hasSMSNotifications = false, bool hasTissExport = false) : base(tenantId)
         {
@@ -104,7 +104,7 @@ namespace MedicSoft.Domain.Entities
         }
     }
 
-    public enum PlanType
+    public enum SubscriptionPlanType
     {
         Trial,      // Free trial
         Basic,      // Basic paid plan

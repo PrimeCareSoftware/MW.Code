@@ -19,7 +19,7 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
-        public async Task<SubscriptionPlan?> GetByTypeAsync(PlanType type, string tenantId)
+        public async Task<SubscriptionPlan?> GetByTypeAsync(SubscriptionPlanType type, string tenantId)
         {
             return await _dbSet
                 .FirstOrDefaultAsync(p => p.Type == type && p.TenantId == tenantId && p.IsActive);

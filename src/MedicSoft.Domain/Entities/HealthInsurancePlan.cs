@@ -9,7 +9,7 @@ namespace MedicSoft.Domain.Entities
         public string PlanName { get; private set; } // Nome do plano
         public string PlanCode { get; private set; } // Código do plano na operadora
         public string? RegisterNumber { get; private set; } // Registro ANS do plano
-        public PlanType Type { get; private set; } // Individual, Empresarial, Coletivo
+        public HealthInsurancePlanType Type { get; private set; } // Individual, Empresarial, Coletivo
         public bool IsActive { get; private set; } = true;
         
         // Cobertura
@@ -52,7 +52,7 @@ namespace MedicSoft.Domain.Entities
             Guid operatorId,
             string planName,
             string planCode,
-            PlanType type,
+            HealthInsurancePlanType type,
             string tenantId,
             string? registerNumber = null,
             bool coversConsultations = true,
@@ -114,7 +114,7 @@ namespace MedicSoft.Domain.Entities
             OperatorId = Guid.Empty; // Will need manual migration
             PlanName = insuranceName.Trim();
             PlanCode = planNumber.Trim();
-            Type = PlanType.Individual;
+            Type = HealthInsurancePlanType.Individual;
             CoversConsultations = true;
             CoversExams = true;
             CoversProcedures = true;
@@ -122,7 +122,7 @@ namespace MedicSoft.Domain.Entities
         }
 
         // MÉTODOS NOVOS - TISS Phase 1
-        public void UpdatePlanInfo(string planName, string planCode, string? registerNumber, PlanType type)
+        public void UpdatePlanInfo(string planName, string planCode, string? registerNumber, HealthInsurancePlanType type)
         {
             if (string.IsNullOrWhiteSpace(planName))
                 throw new ArgumentException("Plan name cannot be empty", nameof(planName));
@@ -210,7 +210,7 @@ namespace MedicSoft.Domain.Entities
     /// <summary>
     /// Tipo de plano de saúde
     /// </summary>
-    public enum PlanType
+    public enum HealthInsurancePlanType
     {
         Individual = 1,   // Plano individual/familiar
         Enterprise = 2,   // Plano empresarial

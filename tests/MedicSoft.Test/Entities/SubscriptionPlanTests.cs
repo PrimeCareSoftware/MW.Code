@@ -18,7 +18,7 @@ namespace MedicSoft.Test.Entities
             var trialDays = 15;
             var maxUsers = 5;
             var maxPatients = 100;
-            var type = PlanType.Basic;
+            var type = SubscriptionPlanType.Basic;
 
             // Act
             var plan = new SubscriptionPlan(name, description, monthlyPrice, trialDays,
@@ -41,7 +41,7 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange & Act
             var plan = new SubscriptionPlan("Premium Plan", "Premium features", 299.90m,
-                15, 20, 1000, PlanType.Premium, _tenantId,
+                15, 20, 1000, SubscriptionPlanType.Premium, _tenantId,
                 hasReports: true, hasWhatsAppIntegration: true,
                 hasSMSNotifications: true, hasTissExport: true);
 
@@ -57,7 +57,7 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange & Act & Assert
             Assert.Throws<ArgumentException>(() =>
-                new SubscriptionPlan("", "Description", 99.90m, 15, 5, 100, PlanType.Basic, _tenantId));
+                new SubscriptionPlan("", "Description", 99.90m, 15, 5, 100, SubscriptionPlanType.Basic, _tenantId));
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange & Act & Assert
             Assert.Throws<ArgumentException>(() =>
-                new SubscriptionPlan("Plan", "Description", -10m, 15, 5, 100, PlanType.Basic, _tenantId));
+                new SubscriptionPlan("Plan", "Description", -10m, 15, 5, 100, SubscriptionPlanType.Basic, _tenantId));
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange & Act & Assert
             Assert.Throws<ArgumentException>(() =>
-                new SubscriptionPlan("Plan", "Description", 99.90m, -5, 5, 100, PlanType.Basic, _tenantId));
+                new SubscriptionPlan("Plan", "Description", 99.90m, -5, 5, 100, SubscriptionPlanType.Basic, _tenantId));
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange & Act & Assert
             Assert.Throws<ArgumentException>(() =>
-                new SubscriptionPlan("Plan", "Description", 99.90m, 15, 0, 100, PlanType.Basic, _tenantId));
+                new SubscriptionPlan("Plan", "Description", 99.90m, 15, 0, 100, SubscriptionPlanType.Basic, _tenantId));
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange & Act & Assert
             Assert.Throws<ArgumentException>(() =>
-                new SubscriptionPlan("Plan", "Description", 99.90m, 15, 5, 0, PlanType.Basic, _tenantId));
+                new SubscriptionPlan("Plan", "Description", 99.90m, 15, 5, 0, SubscriptionPlanType.Basic, _tenantId));
         }
 
         [Fact]
@@ -158,11 +158,11 @@ namespace MedicSoft.Test.Entities
         public void PlanType_HasAllExpectedValues()
         {
             // Assert
-            Assert.True(Enum.IsDefined(typeof(PlanType), PlanType.Trial));
-            Assert.True(Enum.IsDefined(typeof(PlanType), PlanType.Basic));
-            Assert.True(Enum.IsDefined(typeof(PlanType), PlanType.Standard));
-            Assert.True(Enum.IsDefined(typeof(PlanType), PlanType.Premium));
-            Assert.True(Enum.IsDefined(typeof(PlanType), PlanType.Enterprise));
+            Assert.True(Enum.IsDefined(typeof(SubscriptionPlanType), SubscriptionPlanType.Trial));
+            Assert.True(Enum.IsDefined(typeof(SubscriptionPlanType), SubscriptionPlanType.Basic));
+            Assert.True(Enum.IsDefined(typeof(SubscriptionPlanType), SubscriptionPlanType.Standard));
+            Assert.True(Enum.IsDefined(typeof(SubscriptionPlanType), SubscriptionPlanType.Premium));
+            Assert.True(Enum.IsDefined(typeof(SubscriptionPlanType), SubscriptionPlanType.Enterprise));
         }
 
         [Fact]
@@ -170,17 +170,17 @@ namespace MedicSoft.Test.Entities
         {
             // Arrange & Act
             var plan = new SubscriptionPlan("Starter", "Starter plan with 15 days trial",
-                79.90m, 15, 3, 50, PlanType.Trial, _tenantId);
+                79.90m, 15, 3, 50, SubscriptionPlanType.Trial, _tenantId);
 
             // Assert
             Assert.Equal(15, plan.TrialDays);
-            Assert.Equal(PlanType.Trial, plan.Type);
+            Assert.Equal(SubscriptionPlanType.Trial, plan.Type);
         }
 
         private SubscriptionPlan CreateValidPlan()
         {
             return new SubscriptionPlan("Basic Plan", "Description", 99.90m,
-                15, 5, 100, PlanType.Basic, _tenantId);
+                15, 5, 100, SubscriptionPlanType.Basic, _tenantId);
         }
     }
 }
