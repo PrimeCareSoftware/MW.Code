@@ -42,6 +42,7 @@
     "@angular/build": "^20.3.13",
     "@angular/cli": "^20.3.13",
     "@angular/compiler-cli": "^20.3.0",
+    "@angular/platform-browser-dynamic": "^20.3.16",
     "@playwright/test": "^1.48.0",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^22.10.2",
