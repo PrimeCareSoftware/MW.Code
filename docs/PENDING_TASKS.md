@@ -3,8 +3,8 @@
 > **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema PrimeCare Software.
 
 > **Última Atualização:** Janeiro 2026  
-> **Status:** Sistema em produção - 92% completo - Atualizando roadmap  
-> **Versão:** 3.0 - Com Implementações Realizadas em 2025
+> **Status:** Sistema em produção - 93% completo - Atualizando roadmap  
+> **Versão:** 3.1 - Com Implementações Recentes em Janeiro 2026
 
 ---
 
@@ -14,10 +14,10 @@
 
 O PrimeCare Software possui uma **base técnica sólida** com:
 - ✅ Arquitetura DDD bem implementada
-- ✅ 670+ testes automatizados (100% cobertura domínio)
+- ✅ 734+ testes automatizados (100% cobertura domínio)
 - ✅ Sistema de assinaturas SaaS completo
 - ✅ Multi-tenancy robusto
-- ✅ Funcionalidades core implementadas (92% completo)
+- ✅ Funcionalidades core implementadas (93% completo)
 - ✅ Agendamento e prontuários funcionando
 - ✅ Gestão financeira completa (receitas e despesas)
 - ✅ Sistema de comunicação (WhatsApp, SMS, Email)
@@ -26,6 +26,10 @@ O PrimeCare Software possui uma **base técnica sólida** com:
 - ✅ Editor de texto rico com autocomplete
 - ✅ Relatórios e dashboards financeiros
 - ✅ Sistema de tickets integrado
+- ✅ **Portal do Paciente API completo** (Janeiro 2026)
+- ✅ **Componentes CFM 1.821** (Janeiro 2026)
+- ✅ **Receitas Médicas Digitais** (Janeiro 2026)
+- ✅ **Dashboard SNGPC** (Janeiro 2026)
 
 ### Gaps Identificados em Relação ao Mercado
 
@@ -45,15 +49,22 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 - [ ] **Auditoria Completa (LGPD)** - Compliance obrigatório
 - [ ] **Criptografia de Dados Médicos** - Segurança crítica
 - [x] **🇧🇷 Receitas Médicas Digitais** - Compliance CFM + ANVISA ✅ **80% completo - Janeiro 2026**
-  - [x] Backend completo (entidades, API, validações)
-  - [x] Frontend completo (4 componentes criados)
+  - [x] Backend completo (entidades, API, validações) - DigitalPrescription, DigitalPrescriptionItem
+  - [x] Frontend completo (4 componentes criados - ~2.236 linhas):
+    - [x] DigitalPrescriptionFormComponent - Formulário completo (~950 linhas)
+    - [x] DigitalPrescriptionViewComponent - Visualização e impressão (~700 linhas)
+    - [x] PrescriptionTypeSelectorComponent - Seleção visual de tipo (~210 linhas)
+    - [x] SNGPCDashboardComponent - Dashboard de medicamentos controlados (~376 linhas)
+  - [x] Suporte a 5 tipos de receita (Simples, Controladas A/B/C1, Antimicrobiana)
   - [ ] Integração ICP-Brasil (preparado mas não implementado)
-  - [ ] Integração no fluxo de atendimento
+  - [ ] Integração completa no fluxo de atendimento
 - [x] **🇧🇷 SNGPC (Controlados)** - Obrigatório ANVISA ✅ **80% completo - Janeiro 2026**
-  - [x] Backend completo (SNGPCReport, PrescriptionSequenceControl)
-  - [x] Frontend - Dashboard SNGPC criado
-  - [ ] Geração de XML ANVISA schema v2.1 completo
-  - [ ] Integração com sistema SNGPC da ANVISA
+  - [x] Backend completo (SNGPCReport, PrescriptionSequenceControl, SequentialNumber)
+  - [x] API completa com 15+ endpoints de prescrições
+  - [x] Frontend - Dashboard SNGPC criado (~376 linhas)
+  - [x] Controle de numeração sequencial implementado
+  - [ ] Geração de XML ANVISA schema v2.1 completo (70% pronto)
+  - [ ] Integração com sistema SNGPC da ANVISA via WebService
 
 #### 🔥 Médio
 - [ ] **Assinatura Digital (ICP-Brasil)** - Exigido por CFM
@@ -72,6 +83,9 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 ## 🎉 FUNCIONALIDADES IMPLEMENTADAS EM 2025
 
 ### ✅ Completamente Implementado (Janeiro 2026)
+
+> **Última Verificação:** Janeiro 2026  
+> **Status:** Validado e atualizado conforme implementações recentes
 
 #### Backend - Funcionalidades Core
 - ✅ **Sistema de Agendamento Completo** - 100%
@@ -205,13 +219,15 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - Falta: compliance completo CFM 2.314
 
 ### 📊 Estatísticas de Conclusão (Janeiro 2026)
-- **Controllers Backend:** 40+
-- **Entidades de Domínio:** 47
-- **Componentes Frontend:** 163+
+- **Controllers Backend:** 50+ (incluindo 8 do Patient Portal API)
+- **Entidades de Domínio:** 51+ (incluindo PatientUser, RefreshToken, AppointmentView, DocumentView)
+- **Componentes Frontend:** 171+ (incluindo 4 CFM, 4 Receitas Digitais, Patient Portal iniciado)
+- **Apps Frontend:** 5 (PrimeCare Software App, MW System Admin, MW Site, MW Docs, Patient Portal) + 2 mobile
 - **Apps Mobile:** 2 (iOS + Android MVP)
-- **Microservices:** 7
-- **Testes Automatizados:** 670+
-- **Completude Geral:** 92%
+- **Microservices:** 8 (incluindo Telemedicine e Patient Portal API)
+- **Testes Automatizados:** 734+ (64 WhatsApp AI + testes do Patient Portal)
+- **Completude Geral:** 93% (+1% com Patient Portal backend)
+- **Linhas de Código de Compliance:** ~4.276 linhas (CFM + Receitas Digitais)
 
 ---
 
@@ -221,14 +237,14 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
-| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ✅ 85% Completo (Jan 2026) | 2 semanas, 1 dev | Q1/2026 |
-| 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2025 |
-| 🔥🔥🔥 | Telemedicina Completa | ⚠️ MVP Implementado (80%) | 4-6 meses, 2 devs | Q3/2025 |
-| 🔥🔥🔥 | Portal do Paciente | ❌ Não iniciado | 2-3 meses, 2 devs | Q2/2025 |
-| 🔥🔥🔥 | Integração TISS Fase 1 | ❌ Não iniciado | 3 meses, 2-3 devs | Q4/2025 |
-| 🔥🔥🔥 | Integração TISS Fase 2 | ❌ Não iniciado | 3 meses, 2-3 devs | Q1/2026 |
-| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ⚠️ Sistema básico (falta compliance) | 3 meses, 2 devs | Q2/2025 |
-| 🔥🔥 | SNGPC (ANVISA) | ❌ Não iniciado | 2 meses, 1 dev | Q2/2025 |
+| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ✅ 85% Completo (Jan 2026) | 1 semana, 1 dev (integração) | Q1/2026 |
+| 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2026 |
+| 🔥🔥🔥 | Telemedicina Completa | ⚠️ MVP Implementado (80%) | 2-3 meses, 2 devs (compliance) | Q2/2026 |
+| 🔥🔥🔥 | Portal do Paciente Frontend | ⚠️ Backend 100%, Frontend 30% | 1-2 meses, 1 dev | Q1/2026 |
+| 🔥🔥🔥 | Integração TISS Fase 1 | ❌ Não iniciado | 3 meses, 2-3 devs | Q3/2026 |
+| 🔥🔥🔥 | Integração TISS Fase 2 | ❌ Não iniciado | 3 meses, 2-3 devs | Q4/2026 |
+| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ✅ 80% Completo (Jan 2026) | 3-4 semanas, 1 dev (ICP-Brasil + integração) | Q1/2026 |
+| 🔥🔥 | SNGPC (ANVISA) | ✅ 80% Completo (Jan 2026) | 2-3 semanas, 1 dev (XML + WebService) | Q1/2026 |
 
 ### Melhorias de UX e Produtividade
 
@@ -1164,14 +1180,41 @@ Sistema de teleconsulta integrado permitindo videochamadas seguras entre médico
 
 ### 2. Portal do Paciente
 
-**Status:** ❌ Não iniciado  
+**Status:** ⚠️ Em Desenvolvimento (Backend 100%, Frontend 30%) ✨ Janeiro 2026  
 **Prioridade:** CRÍTICA  
 **Impacto:** Alto - Redução de custos operacionais  
-**Esforço:** 2-3 meses | 2 devs full-time  
-**Prazo:** Q2/2025
+**Esforço Restante:** 1-2 meses | 1 dev (apenas frontend)  
+**Prazo Original:** Q2/2025  
+**Novo Prazo:** Q1/2026 (backend pronto, frontend em progresso)
 
 #### Descrição
 Interface web e mobile para pacientes gerenciarem suas consultas e dados.
+
+#### ✅ Progresso Atual (Janeiro 2026)
+
+**Backend API - 100% COMPLETO ✅**
+- API REST completa em .NET 8 com Clean Architecture
+- 4 camadas implementadas (Domain, Application, Infrastructure, API)
+- Autenticação JWT + Refresh Token com rotação
+- Password hashing PBKDF2 (100k iterações)
+- Account lockout (5 tentativas, 15min bloqueio)
+- 8 controllers REST implementados:
+  - AuthController (login, register, refresh, logout, change-password)
+  - AppointmentsController (listagem, filtros, detalhes)
+  - DocumentsController (listagem, download, compartilhamento)
+  - ProfileController (perfil, atualização, histórico médico)
+  - NotificationsController (preferências, listagem)
+  - MedicationsController (prescrições ativas, histórico)
+  - PaymentsController (faturas, pagamento online)
+  - MessagesController (comunicação com clínica)
+- Database views para leitura otimizada (vw_PatientAppointments, vw_PatientDocuments)
+- Migrations completas
+- Documentação completa em IMPLEMENTATION_SUMMARY.md
+
+**Frontend Angular - 30% EM PROGRESSO 🚧**
+- Aplicação Angular 20 iniciada
+- Estrutura base criada em `frontend/patient-portal/`
+- Ainda falta: componentes de UI, integração com API, telas completas
 
 #### Justificativa
 - 90% dos concorrentes têm portal do paciente
@@ -1181,49 +1224,56 @@ Interface web e mobile para pacientes gerenciarem suas consultas e dados.
 
 #### Funcionalidades Essenciais
 
-**1. Autenticação**
-- Cadastro self-service
-- Login (CPF + senha)
-- Recuperação de senha
-- 2FA opcional
-- Biometria (mobile)
+**1. Autenticação - ✅ 100% COMPLETO**
+- ✅ Cadastro self-service (implementado)
+- ✅ Login (CPF + senha) (implementado)
+- ✅ Recuperação de senha (implementado)
+- ✅ 2FA opcional (implementado)
+- [ ] Biometria (mobile) - futuro
 
-**2. Dashboard**
-- Próximas consultas
-- Histórico de atendimentos
-- Prescrições ativas
-- Documentos disponíveis
+**2. Dashboard - 🚧 EM PROGRESSO**
+- [ ] Próximas consultas
+- [ ] Histórico de atendimentos
+- [ ] Prescrições ativas
+- [ ] Documentos disponíveis
 
-**3. Agendamento Online**
-- Ver agenda do médico
-- Agendar consulta
-- Reagendar
-- Cancelar (com regras)
+**3. Agendamento Online - ✅ Backend 100%, Frontend Pendente**
+- ✅ API para ver agenda do médico (implementado)
+- ✅ API para agendar consulta (implementado)
+- [ ] Interface frontend para agendamento
+- [ ] Reagendar via interface
+- [ ] Cancelar (com regras) via interface
 
-**4. Confirmação de Consultas**
-- Notificação 24h antes
-- Confirmar ou Cancelar
-- Reduz no-show
+**4. Confirmação de Consultas - ✅ Backend 100%**
+- ✅ API de listagem de agendamentos (implementado)
+- ✅ API de atualização de status (implementado)
+- [ ] Notificação 24h antes via interface
+- [ ] Confirmar ou Cancelar via interface
+- [ ] Reduz no-show
 
-**5. Documentos**
-- Download de receitas (PDF)
-- Download de atestados
-- Compartilhar via WhatsApp
+**5. Documentos - ✅ Backend 100%, Frontend Pendente**
+- ✅ API para listar documentos (implementado)
+- ✅ API para download de receitas (PDF) (implementado)
+- ✅ API para download de atestados (implementado)
+- [ ] Interface de visualização
+- [ ] Compartilhar via WhatsApp
 
-**6. Telemedicina** (se #1 implementado)
-- Entrar na consulta
-- Teste de equipamento
-- Sala de espera
+**6. Telemedicina - ❌ NÃO INICIADO** (se #1 implementado)
+- [ ] Entrar na consulta
+- [ ] Teste de equipamento
+- [ ] Sala de espera
 
-**7. Pagamentos** (futuro)
-- Ver faturas
-- Pagar online
-- Histórico
+**7. Pagamentos - ✅ Backend 100%, Frontend Pendente** (futuro)
+- ✅ API para ver faturas (implementado)
+- ✅ API para pagar online (implementado)
+- [ ] Interface de pagamento
+- [ ] Histórico de pagamentos
 
 #### Tecnologias
-- Angular 18 (PWA)
-- React Native (app nativo futuro)
-- API REST existente + novos endpoints
+- **Backend:** .NET 8, Clean Architecture, EF Core, JWT ✅ IMPLEMENTADO
+- **Frontend:** Angular 20 (PWA) 🚧 EM PROGRESSO
+- React Native (app nativo futuro) ❌ NÃO INICIADO
+- API REST existente ✅ COMPLETA
 
 #### Retorno Esperado
 - Redução de 40-50% em ligações
@@ -1233,6 +1283,9 @@ Interface web e mobile para pacientes gerenciarem suas consultas e dados.
 
 #### Documentação de Referência
 - [ANALISE_MELHORIAS_SISTEMA.md](ANALISE_MELHORIAS_SISTEMA.md) - Seção "Portal do Paciente"
+- [patient-portal-api/IMPLEMENTATION_SUMMARY.md](../patient-portal-api/IMPLEMENTATION_SUMMARY.md) - ✨ **Documentação completa do backend implementado**
+- [patient-portal-api/README.md](../patient-portal-api/README.md) - ✨ **Guia de uso da API**
+- [patient-portal-api/INTEGRATION_GUIDE.md](../patient-portal-api/INTEGRATION_GUIDE.md) - ✨ **Guia de integração frontend**
 
 ---
 
