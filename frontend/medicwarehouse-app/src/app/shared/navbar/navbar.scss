@@ -251,16 +251,6 @@
 }
 
 
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-4);
-  
-  @media (max-width: 1024px) {
-    display: none;
-  }
-}
-
 .user-dropdown {
   position: relative;
 }
