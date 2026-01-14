@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicAdminInfoDto } from '../../../models/clinic-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-clinic-info',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Navbar],
   templateUrl: './clinic-info.component.html',
   styleUrl: './clinic-info.component.scss'
 })

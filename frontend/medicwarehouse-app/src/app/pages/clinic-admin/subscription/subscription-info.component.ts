@@ -2,10 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { SubscriptionDetailsDto } from '../../../models/clinic-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-subscription-info',
-  imports: [CommonModule],
+  imports: [CommonModule, Navbar],
   templateUrl: './subscription-info.component.html',
   styleUrl: './subscription-info.component.scss'
 })

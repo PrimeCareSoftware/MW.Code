@@ -820,3 +820,19 @@ img {
   h2 { font-size: var(--font-size-2xl); }
   h3 { font-size: var(--font-size-xl); }
 }
+
+/* Layout adjustments for sidebar */
+body {
+  padding-top: var(--navbar-height);
+}
+
+/* Adjust main content area based on sidebar state */
+@media (min-width: 1024px) {
+  body {
+    padding-left: var(--sidebar-collapsed-width);
+  }
+  
+  body.sidebar-open {
+    padding-left: var(--sidebar-width);
+  }
+}
