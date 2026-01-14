@@ -58,6 +58,40 @@ namespace MedicSoft.CrossCutting.Authorization
                 return;
             }
 
+            // Get role from claims to determine if this is an owner or user
+            var roleClaim = context.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            
+            // If role is "Owner", check Owner permissions (owners have full access)
+            if (roleClaim == "Owner")
+            {
+                // Get owner repository from DI
+                var ownerRepository = context.HttpContext.RequestServices.GetRequiredService<IOwnerRepository>();
+                
+                // Get owner
+                var owner = await ownerRepository.GetByIdAsync(userId, tenantId);
+                if (owner == null)
+                {
+                    context.Result = new UnauthorizedObjectResult(new 
+                    { 
+                        message = "Owner not found",
+                        code = "OWNER_NOT_FOUND"
+                    });
+                    return;
+                }
+
+                // Check if owner is active
+                if (!owner.IsActive)
+                {
+                    context.Result = new ForbidResult();
+                    return;
+                }
+
+                // Owners have all permissions by default
+                // They can manage users, profiles, and all clinic settings
+                return;
+            }
+
+            // For regular users, check their profile-based permissions
             // Get user repository from DI
             var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
 

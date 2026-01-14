@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-checkout',
@@ -20,6 +21,9 @@ export class CheckoutComponent implements OnInit {
   ownerName = '';
   ownerEmail = '';
   username = '';
+  
+  // Use environment URL for app link
+  readonly appUrl = environment.appUrl;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {

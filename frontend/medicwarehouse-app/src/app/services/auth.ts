@@ -30,7 +30,7 @@ export class Auth {
     }
   }
 
-  login(credentials: LoginRequest): Observable<AuthResponse> {
+  login(credentials: LoginRequest, isOwner: boolean = false): Observable<AuthResponse> {
     // Try to get tenant from URL if not provided in credentials
     if (!credentials.tenantId) {
       const tenantFromUrl = this.tenantResolver.extractTenantFromUrl();
@@ -39,7 +39,10 @@ export class Auth {
       }
     }
 
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
+    // Use owner-login endpoint for owners, regular login for users
+    const endpoint = isOwner ? '/auth/owner-login' : '/auth/login';
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}${endpoint}`, credentials)
       .pipe(
         tap(response => {
           // Ensure clinicId is converted to string if it exists
@@ -64,6 +67,13 @@ export class Auth {
           this.startSessionValidation();
         })
       );
+  }
+
+  /**
+   * Login as owner (clinic owner or system owner)
+   */
+  ownerLogin(credentials: LoginRequest): Observable<AuthResponse> {
+    return this.login(credentials, true);
   }
 
   logout(showMessage: boolean = false): void {

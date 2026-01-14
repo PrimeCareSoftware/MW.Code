@@ -1,7 +1,7 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { TenantResolverService } from '../../services/tenant-resolver.service';
 import { ClinicCustomizationService } from '../../services/clinic-customization.service';
@@ -21,11 +21,13 @@ export class Login implements OnInit {
   tenantFromUrl = signal<string | null>(null);
   clinicName = signal<string | null>(null);
   customization = signal<ClinicCustomizationPublicDto | null>(null);
+  isOwnerLogin = signal<boolean>(false);
 
   constructor(
     private fb: FormBuilder,
     private authService: Auth,
     private router: Router,
+    private route: ActivatedRoute,
     private tenantResolver: TenantResolverService,
     private clinicCustomizationService: ClinicCustomizationService
   ) {
@@ -45,6 +47,25 @@ export class Login implements OnInit {
     if (navigation?.extras?.state?.['message']) {
       this.infoMessage.set(navigation.extras.state['message']);
     }
+
+    // Check for query parameters (e.g., from checkout page)
+    this.route.queryParams.subscribe(params => {
+      // Auto-fill username if provided
+      if (params['username']) {
+        this.loginForm.patchValue({ username: params['username'] });
+      }
+      
+      // Auto-fill tenantId if provided
+      if (params['tenantId']) {
+        this.loginForm.patchValue({ tenantId: params['tenantId'] });
+      }
+      
+      // Auto-set owner login toggle if specified
+      if (params['isOwner'] === 'true') {
+        this.isOwnerLogin.set(true);
+        this.infoMessage.set('Você está prestes a fazer login como proprietário da clínica. Use suas credenciais de registro.');
+      }
+    });
   }
 
   detectTenantFromUrl(): void {
@@ -94,19 +115,43 @@ export class Login implements OnInit {
     return hexColorRegex.test(color);
   }
 
+  toggleLoginType(): void {
+    this.isOwnerLogin.set(!this.isOwnerLogin());
+    this.errorMessage.set(''); // Clear any existing errors
+  }
+
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
       this.errorMessage.set('');
 
-      this.authService.login(this.loginForm.value).subscribe({
+      // Use owner login if the toggle is enabled
+      const loginMethod = this.isOwnerLogin() 
+        ? this.authService.ownerLogin(this.loginForm.value)
+        : this.authService.login(this.loginForm.value, false);
+
+      loginMethod.subscribe({
         next: () => {
           this.isLoading.set(false);
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.isLoading.set(false);
-          this.errorMessage.set(error.error?.message || 'Login failed. Please check your credentials.');
+          
+          // Try to get error message and code from response
+          const errorCode = error.error?.code;
+          const errorMsg = error.error?.message || 'Falha no login. Por favor, verifique suas credenciais.';
+          
+          // Provide helpful hints based on login type and error
+          if (errorCode === 'UNAUTHORIZED' || errorMsg.toLowerCase().includes('incorretos') || errorMsg.toLowerCase().includes('incorrect')) {
+            if (this.isOwnerLogin()) {
+              this.errorMessage.set(errorMsg + ' Certifique-se de que você está usando as credenciais de proprietário da clínica.');
+            } else {
+              this.errorMessage.set(errorMsg + ' Se você é o proprietário da clínica, ative a opção "Login como Proprietário".');
+            }
+          } else {
+            this.errorMessage.set(errorMsg);
+          }
         }
       });
     }
