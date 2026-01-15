@@ -17,7 +17,7 @@ O PrimeCare Software possui **7 aplicativos** que compõem o ecossistema complet
 | 🔧 **MW System Admin** | Angular 20 | `frontend/mw-system-admin` | ✅ Beta (30%) |
 | 🌐 **MW Site** | Angular 20 | `frontend/mw-site` | ✅ Produção (40%) |
 | 📚 **MW Docs** | Angular 20 | `frontend/mw-docs` | ✅ Produção (45%) |
-| 🏥 **Patient Portal** | Angular 20 | `frontend/patient-portal` | 🚧 Dev (Backend 100%, Frontend 30%) |
+| 🏥 **Patient Portal** | Angular 20 | `frontend/patient-portal` | ✅ Dev (Backend 100%, Frontend 75%) ✨ ATUALIZADO |
 | 📱 **iOS App** | Swift/SwiftUI | `mobile/ios` | ✅ Beta (50%) |
 | 🤖 **Android App** | Kotlin/Compose | `mobile/android` | 🚧 Em desenvolvimento (25%) |
 
@@ -280,36 +280,45 @@ frontend/mw-docs/src/app/
 - [x] 8 Controllers REST completos
 - [x] Documentação completa (IMPLEMENTATION_SUMMARY.md, README.md, INTEGRATION_GUIDE.md)
 
-#### Frontend Angular - ✅ 60% COMPLETO (Janeiro 2026)
+#### Frontend Angular - ✅ 75% COMPLETO (Janeiro 2026) ✨ ATUALIZADO
 
 ##### Implementado
 - [x] **Serviços Completos:**
   - [x] AuthService - Autenticação completa com JWT
   - [x] AppointmentService - Gestão de agendamentos
   - [x] DocumentService - Gestão de documentos
-  - [x] ProfileService - Gestão de perfil ✨ NOVO
+  - [x] ProfileService - Gestão de perfil
+  - [x] NotificationService - Notificações toast ✨ NOVO
 - [x] **Interceptors e Guards:**
   - [x] Auth Interceptor - Injeção automática de JWT
   - [x] Auth Guard - Proteção de rotas
-- [x] **Testes Unitários:** ✨ NOVO
-  - [x] 52 testes (100% passando)
-  - [x] 98.66% code coverage
+- [x] **Testes Unitários:**
+  - [x] 58 testes (100% passando) ✨ ATUALIZADO
+  - [x] 98.79% code coverage ✨ MELHORADO
   - [x] Karma + Jasmine configurados
-- [x] **Componentes de Página:**
-  - [x] Login/Register
-  - [x] Dashboard
-  - [x] Appointments
-  - [x] Documents
-  - [x] Profile
+- [x] **Componentes de Página - UI/UX Melhorado:** ✨ NOVO
+  - [x] Login - Password toggle, validações melhoradas, logo
+  - [x] Dashboard - Loading states, error handling, cards melhorados
+  - [x] Appointments - Tabs de filtro, avatares, cards redesenhados
+  - [x] Profile - Formatação CPF/Tel, password toggle, layout melhorado
+  - [x] Documents - Estrutura básica
+- [x] **UI/UX Improvements:** ✨ NOVO
+  - [x] Material Design components otimizados
+  - [x] Notificações toast (success, error, warning, info)
+  - [x] Estados de loading melhorados
+  - [x] Empty states com mensagens claras
+  - [x] Responsive mobile-first
+  - [x] Hover effects e transitions
+  - [x] Accessibility (tooltips, ARIA labels)
 
 ##### Prioridade Alta (Q1/2026)
-- [ ] **Tela de Login/Registro** - Autenticação de pacientes
-- [ ] **Dashboard** - Visão geral com próximas consultas e ações rápidas
-- [ ] **Meus Agendamentos** - Listagem e filtros
+- [x] ~~**Tela de Login/Registro**~~ - ✅ Implementado e melhorado
+- [x] ~~**Dashboard**~~ - ✅ Implementado com loading states e error handling
+- [x] ~~**Meus Agendamentos**~~ - ✅ Implementado com tabs de filtro
 - [ ] **Detalhes da Consulta** - Informações completas do agendamento
-- [ ] **Meus Documentos** - Listagem de receitas, atestados, laudos
+- [ ] **Meus Documentos** - Listagem melhorada (estrutura básica existe)
 - [ ] **Visualizador de Documentos** - PDF viewer integrado
-- [ ] **Perfil** - Visualização e edição de dados pessoais
+- [x] ~~**Perfil**~~ - ✅ Implementado com formatação e password toggle
 - [ ] **Notificações** - Centro de notificações e preferências
 
 ##### Prioridade Média (Q2/2026)

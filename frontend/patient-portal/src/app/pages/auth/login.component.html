@@ -1,6 +1,9 @@
 <div class="login-container">
   <mat-card class="login-card">
     <mat-card-header>
+      <div class="logo-container">
+        <mat-icon class="logo-icon">local_hospital</mat-icon>
+      </div>
       <mat-card-title>Portal do Paciente</mat-card-title>
       <mat-card-subtitle>Acesse sua conta</mat-card-subtitle>
     </mat-card-header>
@@ -9,7 +12,8 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email ou CPF</mat-label>
-          <input matInput formControlName="emailOrCPF" placeholder="Digite seu email ou CPF">
+          <input matInput formControlName="emailOrCPF" placeholder="Digite seu email ou CPF" autocomplete="username">
+          <mat-icon matPrefix>person</mat-icon>
           <mat-error *ngIf="loginForm.get('emailOrCPF')?.hasError('required')">
             Email ou CPF é obrigatório
           </mat-error>
@@ -17,26 +21,45 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Senha</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Digite sua senha">
+          <input matInput 
+                 [type]="hidePassword ? 'password' : 'text'" 
+                 formControlName="password" 
+                 placeholder="Digite sua senha"
+                 autocomplete="current-password">
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" 
+                  (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="'Mostrar senha'"
+                  [attr.aria-pressed]="!hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
           <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
             Senha é obrigatória
           </mat-error>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+            Senha deve ter no mínimo 6 caracteres
+          </mat-error>
         </mat-form-field>
 
-        <div *ngIf="errorMessage" class="error-message">
-          {{ errorMessage }}
-        </div>
-
         <button mat-raised-button color="primary" type="submit" 
-                [disabled]="loginForm.invalid || loading" 
+                [disabled]="loading" 
                 class="full-width login-button">
           <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
-          <span *ngIf="!loading">Entrar</span>
+          <span *ngIf="!loading">
+            <mat-icon>login</mat-icon>
+            Entrar
+          </span>
         </button>
       </form>
 
+      <div class="additional-actions">
+        <a routerLink="/auth/forgot-password" class="link">Esqueceu sua senha?</a>
+      </div>
+
+      <mat-divider></mat-divider>
+
       <div class="register-link">
-        <p>Não tem uma conta? <a routerLink="/auth/register">Cadastre-se aqui</a></p>
+        <p>Não tem uma conta? <a routerLink="/auth/register" class="primary-link">Cadastre-se aqui</a></p>
       </div>
     </mat-card-content>
   </mat-card>

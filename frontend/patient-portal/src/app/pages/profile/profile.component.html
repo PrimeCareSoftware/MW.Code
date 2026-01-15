@@ -1,6 +1,6 @@
 <div class="profile-container">
   <header class="page-header">
-    <button mat-icon-button routerLink="/dashboard">
+    <button mat-icon-button routerLink="/dashboard" [matTooltip]="'Voltar ao Dashboard'">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1>Meu Perfil</h1>
@@ -10,46 +10,69 @@
     <!-- User Info Card -->
     <mat-card class="user-info-card">
       <mat-card-header>
-        <mat-card-title>
-          <mat-icon>person</mat-icon>
-          Informações Pessoais
-        </mat-card-title>
+        <div class="avatar-container">
+          <div class="avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+        </div>
+        <mat-card-title-group>
+          <mat-card-title>{{ currentUser.fullName }}</mat-card-title>
+          <mat-card-subtitle>{{ currentUser.email }}</mat-card-subtitle>
+        </mat-card-title-group>
       </mat-card-header>
+
+      <mat-divider></mat-divider>
+
       <mat-card-content>
-        <div class="info-grid">
-          <div class="info-item">
-            <label>Nome Completo</label>
-            <p>{{ currentUser.fullName }}</p>
+        <div class="info-section">
+          <h3>
+            <mat-icon>person_outline</mat-icon>
+            Informações Pessoais
+          </h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Nome Completo</label>
+              <p>{{ currentUser.fullName }}</p>
+            </div>
+            
+            <div class="info-item">
+              <label>Email</label>
+              <p>{{ currentUser.email }}</p>
+            </div>
+            
+            <div class="info-item">
+              <label>CPF</label>
+              <p>{{ formatCPF(currentUser.cpf) }}</p>
+            </div>
+            
+            <div class="info-item">
+              <label>Telefone</label>
+              <p>{{ formatPhone(currentUser.phoneNumber) }}</p>
+            </div>
+            
+            <div class="info-item">
+              <label>Data de Nascimento</label>
+              <p>{{ formatDate(currentUser.dateOfBirth) }}</p>
+            </div>
           </div>
-          
-          <div class="info-item">
-            <label>Email</label>
-            <p>{{ currentUser.email }}</p>
-          </div>
-          
-          <div class="info-item">
-            <label>CPF</label>
-            <p>{{ currentUser.cpf }}</p>
-          </div>
-          
-          <div class="info-item">
-            <label>Telefone</label>
-            <p>{{ currentUser.phoneNumber }}</p>
-          </div>
-          
-          <div class="info-item">
-            <label>Data de Nascimento</label>
-            <p>{{ formatDate(currentUser.dateOfBirth) }}</p>
-          </div>
-          
-          <div class="info-item">
-            <label>Autenticação de Dois Fatores</label>
-            <p>
-              <span [class.enabled]="currentUser.twoFactorEnabled" 
-                    [class.disabled]="!currentUser.twoFactorEnabled">
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <div class="info-section">
+          <h3>
+            <mat-icon>security</mat-icon>
+            Segurança
+          </h3>
+          <div class="security-info">
+            <div class="security-item">
+              <label>Autenticação de Dois Fatores</label>
+              <mat-chip [class.enabled]="currentUser.twoFactorEnabled" 
+                        [class.disabled]="!currentUser.twoFactorEnabled">
+                <mat-icon>{{ currentUser.twoFactorEnabled ? 'check_circle' : 'cancel' }}</mat-icon>
                 {{ currentUser.twoFactorEnabled ? 'Ativado' : 'Desativado' }}
-              </span>
-            </p>
+              </mat-chip>
+            </div>
           </div>
         </div>
       </mat-card-content>
@@ -63,11 +86,24 @@
           Alterar Senha
         </mat-card-title>
       </mat-card-header>
+
+      <mat-divider></mat-divider>
+
       <mat-card-content>
         <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Senha Atual</mat-label>
-            <input matInput type="password" formControlName="currentPassword">
+            <input matInput 
+                   [type]="hideCurrentPassword ? 'password' : 'text'" 
+                   formControlName="currentPassword"
+                   autocomplete="current-password">
+            <mat-icon matPrefix>lock_outline</mat-icon>
+            <button mat-icon-button matSuffix type="button" 
+                    (click)="toggleCurrentPasswordVisibility()"
+                    [attr.aria-label]="'Mostrar senha atual'"
+                    [attr.aria-pressed]="!hideCurrentPassword">
+              <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <mat-error *ngIf="passwordForm.get('currentPassword')?.hasError('required')">
               Senha atual é obrigatória
             </mat-error>
@@ -75,7 +111,17 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Nova Senha</mat-label>
-            <input matInput type="password" formControlName="newPassword">
+            <input matInput 
+                   [type]="hideNewPassword ? 'password' : 'text'" 
+                   formControlName="newPassword"
+                   autocomplete="new-password">
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" 
+                    (click)="toggleNewPasswordVisibility()"
+                    [attr.aria-label]="'Mostrar nova senha'"
+                    [attr.aria-pressed]="!hideNewPassword">
+              <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
               Nova senha é obrigatória
             </mat-error>
@@ -85,13 +131,20 @@
             <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('pattern')">
               Senha deve conter maiúsculas, minúsculas, números e caracteres especiais
             </mat-error>
+            <mat-hint>Mínimo 8 caracteres com maiúsculas, minúsculas, números e símbolos</mat-hint>
           </mat-form-field>
 
-          <button mat-raised-button color="primary" type="submit" 
-                  [disabled]="passwordForm.invalid || changingPassword">
-            <mat-spinner *ngIf="changingPassword" diameter="20"></mat-spinner>
-            <span *ngIf="!changingPassword">Alterar Senha</span>
-          </button>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" 
+                    [disabled]="passwordForm.invalid || changingPassword">
+              <mat-spinner *ngIf="changingPassword" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="!changingPassword">save</mat-icon>
+              <span *ngIf="!changingPassword">Alterar Senha</span>
+            </button>
+            <button mat-button type="button" (click)="passwordForm.reset()" [disabled]="changingPassword">
+              Limpar
+            </button>
+          </div>
         </form>
       </mat-card-content>
     </mat-card>

@@ -1,6 +1,6 @@
 .appointments-container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
 }
 
 .page-header {
@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
   button {
     color: white;
@@ -19,32 +20,114 @@
     margin: 0;
     font-size: 24px;
     font-weight: 600;
+    flex: 1;
   }
 }
 
 .appointments-content {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 24px;
 }
 
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  background-color: #fff3e0;
+  border-left: 4px solid #ff9800;
+  border-radius: 4px;
+
+  mat-icon {
+    color: #f57c00;
+  }
+
+  button {
+    margin-left: auto;
+  }
+}
+
+.appointments-tabs {
+  margin-bottom: 24px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.appointments-list {
+  min-height: 300px;
+  padding-top: 24px;
+}
+
 .appointment-card {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  mat-card-content {
+    padding: 24px !important;
+  }
 
   .appointment-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
 
-    h2 {
-      margin: 0 0 4px 0;
-      font-size: 20px;
-    }
+    .doctor-info {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      flex: 1;
+      min-width: 250px;
 
-    .specialty {
-      margin: 0;
-      color: #666;
-      font-weight: 500;
+      .avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        mat-icon {
+          color: white;
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+
+      h2 {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .specialty {
+        margin: 0;
+        color: #667eea;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
     }
 
     .appointment-date {
@@ -53,32 +136,40 @@
       .date {
         margin: 0;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 18px;
+        color: #333;
       }
 
       .time {
-        margin: 4px 0 0 0;
+        margin: 8px 0 0 0;
         color: #666;
+        font-size: 16px;
       }
     }
+  }
+
+  .divider {
+    margin: 20px 0;
   }
 
   .appointment-details {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 12px;
+    margin-bottom: 20px;
 
     .detail-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       color: #666;
+      font-size: 15px;
 
       mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        color: #999;
       }
     }
   }
@@ -87,52 +178,86 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 16px;
+    padding-top: 20px;
     border-top: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 12px;
 
-    .status-badge {
-      padding: 6px 16px;
-      border-radius: 16px;
-      font-size: 13px;
+    mat-chip {
       font-weight: 500;
 
-      &.scheduled {
+      &.status-primary {
         background-color: #e3f2fd;
         color: #1976d2;
       }
 
-      &.confirmed {
+      &.status-accent {
         background-color: #e8f5e9;
         color: #388e3c;
       }
 
-      &.completed {
-        background-color: #f5f5f5;
-        color: #757575;
+      &.status-success {
+        background-color: #e8f5e9;
+        color: #2e7d32;
       }
 
-      &.cancelled {
+      &.status-warn {
         background-color: #ffebee;
-        color: #d32f2f;
+        color: #c62828;
+      }
+
+      &.status-default {
+        background-color: #f5f5f5;
+        color: #757575;
       }
     }
 
     .actions {
       display: flex;
-      gap: 8px;
+      gap: 12px;
+      flex-wrap: wrap;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
     }
   }
 
   .notes {
-    margin-top: 16px;
-    padding: 12px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+
+    mat-icon {
+      color: #667eea;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
 
     p {
       margin: 0;
       font-size: 14px;
       color: #666;
+      flex: 1;
+
+      strong {
+        color: #333;
+      }
     }
   }
 }
@@ -142,24 +267,27 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 60px 20px;
+    padding: 80px 40px !important;
     text-align: center;
 
     mat-icon {
-      font-size: 80px;
-      width: 80px;
-      height: 80px;
-      color: #ccc;
-      margin-bottom: 16px;
+      font-size: 96px;
+      width: 96px;
+      height: 96px;
+      color: #ddd;
+      margin-bottom: 24px;
     }
 
     h2 {
-      margin: 0 0 8px 0;
+      margin: 0 0 12px 0;
+      font-size: 22px;
+      font-weight: 600;
       color: #666;
     }
 
     p {
       margin: 0;
+      font-size: 16px;
       color: #999;
     }
   }
@@ -171,9 +299,51 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  gap: 16px;
+  gap: 24px;
 
-  p {
+  .loading-text {
     color: #666;
+    font-size: 18px;
+    font-weight: 500;
   }
 }
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .appointment-header {
+    .doctor-info {
+      min-width: 100%;
+    }
+
+    .appointment-date {
+      text-align: left !important;
+      width: 100%;
+    }
+  }
+
+  .appointment-footer {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .actions {
+      width: 100%;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+}
+
+// Accessibility
+:host ::ng-deep {
+  .mat-mdc-tab-labels {
+    gap: 8px;
+  }
+
+  button:focus-visible {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+  }
+}
+
