@@ -951,6 +951,18 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
   - PostgreSQL incluído
   - SSL e backups automáticos
 
+- **[DEPLOY_HOSTINGER_GUIA_COMPLETO.md](docs/DEPLOY_HOSTINGER_GUIA_COMPLETO.md)** - 🏢 **Deploy no Hostinger VPS** 🆕
+  - Guia completo para iniciantes
+  - Configuração passo a passo de VPS
+  - Instalação de todos os componentes
+  - Domínio e SSL explicados
+  - R$ 20-60/mês
+
+- **[DEPLOY_HOSTINGER_INICIO_RAPIDO.md](docs/DEPLOY_HOSTINGER_INICIO_RAPIDO.md)** - ⚡ **Hostinger em 30 min** 🆕
+  - Comandos prontos para uso
+  - Deploy rápido no Hostinger
+  - Checklist de verificação
+
 - **[MIGRACAO_POSTGRESQL.md](docs/MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
   - Migração SQL Server → PostgreSQL
   - Guia técnico completo
