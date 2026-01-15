@@ -66,6 +66,37 @@ Escolha o documento conforme sua necessidade:
 
 ---
 
+### [DEPLOY_HOSTINGER_GUIA_COMPLETO.md](DEPLOY_HOSTINGER_GUIA_COMPLETO.md) 🆕
+**🏢 Guia completo Hostinger VPS | Para iniciantes**
+
+- ✅ Explicações detalhadas para iniciantes
+- ✅ Contratação e configuração do VPS
+- ✅ Instalação de componentes (.NET, PostgreSQL, Node.js)
+- ✅ Deploy backend e frontend passo a passo
+- ✅ Configuração de domínio e SSL
+- ✅ Backups automáticos
+- ✅ Monitoramento e manutenção
+- ✅ Troubleshooting extensivo
+- ✅ Conceitos explicados (API, VPS, SSH, etc)
+
+**👉 Use se prefere Hostinger ou quer entender cada passo!**
+
+---
+
+### [DEPLOY_HOSTINGER_INICIO_RAPIDO.md](DEPLOY_HOSTINGER_INICIO_RAPIDO.md) 🆕
+**⚡ Início rápido Hostinger | 30 minutos**
+
+- ✅ Comandos prontos para copiar/colar
+- ✅ Setup completo em 30 minutos
+- ✅ Checklist de verificação
+- ✅ Comandos úteis para manutenção
+- ✅ Troubleshooting rápido
+- ✅ Links para guia completo
+
+**👉 Use para deploy rápido no Hostinger VPS!**
+
+---
+
 ### [MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)
 **🔄 Migração técnica | SQL Server → PostgreSQL**
 
@@ -235,9 +266,16 @@ Escolha o documento conforme sua necessidade:
 ## 🎓 Ordem de Leitura Recomendada
 
 ### Para Iniciantes (Quer começar rápido)
+
+**Opção 1 - Railway (Mais Simples):**
 1. [QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md) - 30 min
 2. [CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md) - 10 min
 3. [DEPLOY_RAILWAY_GUIDE.md](DEPLOY_RAILWAY_GUIDE.md) - Execute!
+
+**Opção 2 - Hostinger VPS:** 🆕
+1. [DEPLOY_HOSTINGER_INICIO_RAPIDO.md](DEPLOY_HOSTINGER_INICIO_RAPIDO.md) - 30 min
+2. [DEPLOY_HOSTINGER_GUIA_COMPLETO.md](DEPLOY_HOSTINGER_GUIA_COMPLETO.md) - Consulta detalhada
+3. [CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md) - 10 min
 
 ### Para Técnicos (Quer entender tudo)
 1. [INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md) - 45 min
