@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -68,6 +70,7 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpGet]
         [Authorize]
+        [RequirePermissionKey(PermissionKeys.ClinicView)]
         public async Task<ActionResult<ClinicCustomizationDto>> GetCurrentClinicCustomization()
         {
             try
@@ -80,21 +83,19 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                // Get owner's clinics
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
-                    return NotFound(new { message = "Clinic not found for owner" });
+                    return Forbid();
                 }
 
-                var customization = await _customizationRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 // If no customization exists, create default one
                 if (customization == null)
                 {
-                    customization = new ClinicCustomization(ownerLink.ClinicId, tenantId);
+                    customization = new ClinicCustomization(clinicId, tenantId);
                     await _customizationRepository.AddAsync(customization);
                 }
 
@@ -112,6 +113,7 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpPut("colors")]
         [Authorize]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
         public async Task<ActionResult<ClinicCustomizationDto>> UpdateColors([FromBody] UpdateClinicCustomizationRequest request)
         {
             try
@@ -124,27 +126,25 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                // Verify owner
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var customization = await _customizationRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 if (customization == null)
                 {
-                    customization = new ClinicCustomization(ownerLink.ClinicId, tenantId);
+                    customization = new ClinicCustomization(clinicId, tenantId);
                     await _customizationRepository.AddAsync(customization);
                 }
 
                 customization.UpdateColors(request.PrimaryColor, request.SecondaryColor, request.FontColor);
                 await _customizationRepository.UpdateAsync(customization);
 
-                _logger.LogInformation("Clinic customization colors updated for clinic: {ClinicId}", ownerLink.ClinicId);
+                _logger.LogInformation("Clinic customization colors updated for clinic: {ClinicId}", clinicId);
 
                 return Ok(MapToDto(customization));
             }
@@ -164,6 +164,7 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpPut("logo")]
         [Authorize]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
         public async Task<ActionResult<ClinicCustomizationDto>> UpdateLogo([FromBody] string logoUrl)
         {
             try
@@ -176,26 +177,25 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var customization = await _customizationRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 if (customization == null)
                 {
-                    customization = new ClinicCustomization(ownerLink.ClinicId, tenantId);
+                    customization = new ClinicCustomization(clinicId, tenantId);
                     await _customizationRepository.AddAsync(customization);
                 }
 
                 customization.SetLogoUrl(logoUrl);
                 await _customizationRepository.UpdateAsync(customization);
 
-                _logger.LogInformation("Clinic logo updated for clinic: {ClinicId}", ownerLink.ClinicId);
+                _logger.LogInformation("Clinic logo updated for clinic: {ClinicId}", clinicId);
 
                 return Ok(MapToDto(customization));
             }
@@ -211,6 +211,7 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpPut("background")]
         [Authorize]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
         public async Task<ActionResult<ClinicCustomizationDto>> UpdateBackground([FromBody] string backgroundImageUrl)
         {
             try
@@ -223,26 +224,25 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var customization = await _customizationRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 if (customization == null)
                 {
-                    customization = new ClinicCustomization(ownerLink.ClinicId, tenantId);
+                    customization = new ClinicCustomization(clinicId, tenantId);
                     await _customizationRepository.AddAsync(customization);
                 }
 
                 customization.SetBackgroundImageUrl(backgroundImageUrl);
                 await _customizationRepository.UpdateAsync(customization);
 
-                _logger.LogInformation("Clinic background image updated for clinic: {ClinicId}", ownerLink.ClinicId);
+                _logger.LogInformation("Clinic background image updated for clinic: {ClinicId}", clinicId);
 
                 return Ok(MapToDto(customization));
             }
@@ -251,6 +251,40 @@ namespace MedicSoft.Api.Controllers
                 _logger.LogError(ex, "Error updating clinic background image");
                 return StatusCode(500, new { message = "An error occurred while updating background image" });
             }
+        }
+
+        /// <summary>
+        /// Get clinic ID - from token for Users with ClinicOwner role, or from owner link for Owners
+        /// </summary>
+        private async Task<(Guid clinicId, bool isAuthorized)> GetClinicIdForOwnerAsync(Guid userId, string tenantId)
+        {
+            // Try to get clinic ID from token first (for Users with ClinicOwner role)
+            var clinicId = GetClinicIdFromToken();
+            
+            if (clinicId != Guid.Empty)
+            {
+                return (clinicId, true);
+            }
+            
+            // If no clinic ID in token, try to get from owner link (for Owner entities)
+            var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+            var ownerLink = ownerLinks.FirstOrDefault();
+            
+            if (ownerLink == null)
+            {
+                return (Guid.Empty, false);
+            }
+            
+            return (ownerLink.ClinicId, true);
+        }
+
+        /// <summary>
+        /// Get clinic ID from JWT token
+        /// </summary>
+        private Guid GetClinicIdFromToken()
+        {
+            var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
+            return Guid.TryParse(clinicIdClaim, out var clinicId) ? clinicId : Guid.Empty;
         }
 
         private static ClinicCustomizationDto MapToDto(ClinicCustomization customization)
