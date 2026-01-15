@@ -13,6 +13,13 @@ import { AppointmentService } from '../../services/appointment.service';
 import { NotificationService } from '../../services/notification.service';
 import { Appointment } from '../../models/appointment.model';
 
+enum TabFilter {
+  All = 0,
+  Upcoming = 1,
+  Past = 2,
+  Cancelled = 3
+}
+
 @Component({
   selector: 'app-appointments',
   standalone: true,
@@ -75,20 +82,20 @@ export class AppointmentsComponent implements OnInit {
     const now = new Date();
     
     switch(tabIndex) {
-      case 0: // Todas
+      case TabFilter.All:
         this.filteredAppointments = this.appointments;
         break;
-      case 1: // Próximas
+      case TabFilter.Upcoming:
         this.filteredAppointments = this.appointments.filter(apt => 
           new Date(apt.appointmentDate) >= now && apt.status !== 'Cancelado'
         );
         break;
-      case 2: // Passadas
+      case TabFilter.Past:
         this.filteredAppointments = this.appointments.filter(apt => 
           new Date(apt.appointmentDate) < now || apt.status === 'Concluído'
         );
         break;
-      case 3: // Canceladas
+      case TabFilter.Cancelled:
         this.filteredAppointments = this.appointments.filter(apt => 
           apt.status === 'Cancelado'
         );

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { forkJoin } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { AppointmentService } from '../../services/appointment.service';
 import { DocumentService } from '../../services/document.service';
@@ -55,62 +56,31 @@ export class DashboardComponent implements OnInit {
   loadDashboardData(): void {
     this.loading = true;
     this.loadingError = false;
-    let completedRequests = 0;
-    const totalRequests = 4;
 
-    const checkAllLoaded = () => {
-      completedRequests++;
-      if (completedRequests === totalRequests) {
+    // Use forkJoin for parallel requests
+    const appointments$ = this.appointmentService.getUpcomingAppointments(5);
+    const documents$ = this.documentService.getRecentDocuments(5);
+    const appointmentsCount$ = this.appointmentService.getAppointmentsCount();
+    const documentsCount$ = this.documentService.getDocumentsCount();
+
+    // Combine all requests
+    forkJoin({
+      appointments: appointments$,
+      documents: documents$,
+      appointmentsCount: appointmentsCount$,
+      documentsCount: documentsCount$
+    }).subscribe({
+      next: (results) => {
+        this.upcomingAppointments = results.appointments;
+        this.recentDocuments = results.documents;
+        this.appointmentsCount = results.appointmentsCount.count;
+        this.documentsCount = results.documentsCount.count;
         this.loading = false;
-      }
-    };
-
-    // Load upcoming appointments
-    this.appointmentService.getUpcomingAppointments(5).subscribe({
-      next: (appointments) => {
-        this.upcomingAppointments = appointments;
-        checkAllLoaded();
       },
       error: (error) => {
-        console.error('Error loading appointments:', error);
+        console.error('Error loading dashboard data:', error);
         this.loadingError = true;
-        checkAllLoaded();
-      }
-    });
-
-    // Load recent documents
-    this.documentService.getRecentDocuments(5).subscribe({
-      next: (documents) => {
-        this.recentDocuments = documents;
-        checkAllLoaded();
-      },
-      error: (error) => {
-        console.error('Error loading documents:', error);
-        this.loadingError = true;
-        checkAllLoaded();
-      }
-    });
-
-    // Load counts
-    this.appointmentService.getAppointmentsCount().subscribe({
-      next: (result) => {
-        this.appointmentsCount = result.count;
-        checkAllLoaded();
-      },
-      error: (error) => {
-        console.error('Error loading appointments count:', error);
-        checkAllLoaded();
-      }
-    });
-
-    this.documentService.getDocumentsCount().subscribe({
-      next: (result) => {
-        this.documentsCount = result.count;
-        checkAllLoaded();
-      },
-      error: (error) => {
-        console.error('Error loading documents count:', error);
-        checkAllLoaded();
+        this.loading = false;
       }
     });
   }
