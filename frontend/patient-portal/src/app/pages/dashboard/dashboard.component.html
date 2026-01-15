@@ -1,61 +1,84 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <div class="header-content">
-      <h1>Portal do Paciente</h1>
+      <div class="header-left">
+        <mat-icon class="header-logo">local_hospital</mat-icon>
+        <h1>Portal do Paciente</h1>
+      </div>
       <div class="user-info">
-        <span>Olá, {{ currentUser?.fullName }}</span>
-        <button mat-button (click)="logout()">
+        <span class="welcome-text">Olá, <strong>{{ currentUser?.fullName }}</strong></span>
+        <button mat-icon-button [matTooltip]="'Perfil'" routerLink="/profile">
+          <mat-icon>person</mat-icon>
+        </button>
+        <button mat-icon-button [matTooltip]="'Sair'" (click)="logout()">
           <mat-icon>logout</mat-icon>
-          Sair
         </button>
       </div>
     </div>
   </header>
 
   <div class="dashboard-content" *ngIf="!loading; else loadingTemplate">
+    <!-- Error State -->
+    <div *ngIf="loadingError" class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>Alguns dados não puderam ser carregados.</span>
+      <button mat-button (click)="retry()">Tentar novamente</button>
+    </div>
+
     <!-- Stats Cards -->
     <div class="stats-grid">
-      <mat-card class="stat-card">
+      <mat-card class="stat-card stat-card-appointments">
         <mat-card-content>
-          <mat-icon color="primary">event</mat-icon>
-          <h2>{{ appointmentsCount }}</h2>
-          <p>Consultas</p>
+          <div class="stat-icon-wrapper">
+            <mat-icon color="primary">event</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">{{ appointmentsCount }}</h2>
+            <p class="stat-label">Consultas</p>
+          </div>
         </mat-card-content>
       </mat-card>
 
-      <mat-card class="stat-card">
+      <mat-card class="stat-card stat-card-documents">
         <mat-card-content>
-          <mat-icon color="accent">description</mat-icon>
-          <h2>{{ documentsCount }}</h2>
-          <p>Documentos</p>
+          <div class="stat-icon-wrapper">
+            <mat-icon color="accent">description</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">{{ documentsCount }}</h2>
+            <p class="stat-label">Documentos</p>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>
 
     <!-- Quick Actions -->
-    <div class="quick-actions">
+    <section class="quick-actions">
       <h2>Acesso Rápido</h2>
       <div class="actions-grid">
-        <button mat-raised-button color="primary" routerLink="/appointments">
+        <button mat-raised-button color="primary" routerLink="/appointments" class="action-button">
           <mat-icon>event</mat-icon>
-          Ver Consultas
+          <span>Ver Consultas</span>
         </button>
-        <button mat-raised-button color="accent" routerLink="/documents">
+        <button mat-raised-button color="accent" routerLink="/documents" class="action-button">
           <mat-icon>description</mat-icon>
-          Meus Documentos
+          <span>Meus Documentos</span>
         </button>
-        <button mat-raised-button routerLink="/profile">
+        <button mat-raised-button routerLink="/profile" class="action-button">
           <mat-icon>person</mat-icon>
-          Meu Perfil
+          <span>Meu Perfil</span>
         </button>
       </div>
-    </div>
+    </section>
 
     <!-- Upcoming Appointments -->
-    <div class="section">
+    <section class="section">
       <div class="section-header">
         <h2>Próximas Consultas</h2>
-        <a mat-button routerLink="/appointments">Ver Todas</a>
+        <a mat-button routerLink="/appointments" class="view-all-link">
+          Ver Todas
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
       </div>
 
       <div *ngIf="upcomingAppointments.length > 0; else noAppointments">
@@ -64,8 +87,14 @@
             <div class="appointment-info">
               <div class="appointment-details">
                 <h3>{{ appointment.doctorName }}</h3>
-                <p class="specialty">{{ appointment.doctorSpecialty }}</p>
-                <p class="clinic">{{ appointment.clinicName }}</p>
+                <p class="specialty">
+                  <mat-icon>medical_services</mat-icon>
+                  {{ appointment.doctorSpecialty }}
+                </p>
+                <p class="clinic">
+                  <mat-icon>location_on</mat-icon>
+                  {{ appointment.clinicName }}
+                </p>
               </div>
               <div class="appointment-datetime">
                 <p class="date">{{ formatDate(appointment.appointmentDate) }}</p>
@@ -73,10 +102,11 @@
               </div>
             </div>
             <div class="appointment-badges">
-              <span class="badge" [class.telehealth]="appointment.isTelehealth">
+              <mat-chip [class.telehealth]="appointment.isTelehealth">
+                <mat-icon>{{ appointment.isTelehealth ? 'videocam' : 'place' }}</mat-icon>
                 {{ appointment.isTelehealth ? 'Telemedicina' : 'Presencial' }}
-              </span>
-              <span class="badge status">{{ appointment.status }}</span>
+              </mat-chip>
+              <mat-chip class="status-chip">{{ appointment.status }}</mat-chip>
             </div>
           </mat-card-content>
         </mat-card>
@@ -86,31 +116,39 @@
         <mat-card class="empty-state">
           <mat-card-content>
             <mat-icon>event_busy</mat-icon>
-            <p>Você não tem consultas agendadas</p>
+            <h3>Nenhuma consulta agendada</h3>
+            <p>Você não tem consultas agendadas no momento</p>
           </mat-card-content>
         </mat-card>
       </ng-template>
-    </div>
+    </section>
 
     <!-- Recent Documents -->
-    <div class="section">
+    <section class="section">
       <div class="section-header">
         <h2>Documentos Recentes</h2>
-        <a mat-button routerLink="/documents">Ver Todos</a>
+        <a mat-button routerLink="/documents" class="view-all-link">
+          Ver Todos
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
       </div>
 
       <div *ngIf="recentDocuments.length > 0; else noDocuments">
         <mat-card *ngFor="let document of recentDocuments" class="document-card">
           <mat-card-content>
             <div class="document-info">
-              <mat-icon>description</mat-icon>
+              <div class="document-icon">
+                <mat-icon>description</mat-icon>
+              </div>
               <div class="document-details">
                 <h3>{{ document.title }}</h3>
-                <p>{{ document.documentType }} - {{ document.doctorName }}</p>
+                <p class="document-meta">{{ document.documentType }} - {{ document.doctorName }}</p>
                 <p class="date">{{ formatDate(document.issuedDate) }}</p>
               </div>
             </div>
-            <button mat-icon-button color="primary" [routerLink]="['/documents', document.id]">
+            <button mat-icon-button color="primary" 
+                    [routerLink]="['/documents', document.id]"
+                    [matTooltip]="'Visualizar documento'">
               <mat-icon>visibility</mat-icon>
             </button>
           </mat-card-content>
@@ -121,17 +159,18 @@
         <mat-card class="empty-state">
           <mat-card-content>
             <mat-icon>description</mat-icon>
-            <p>Você não tem documentos disponíveis</p>
+            <h3>Nenhum documento disponível</h3>
+            <p>Você não tem documentos médicos no momento</p>
           </mat-card-content>
         </mat-card>
       </ng-template>
-    </div>
+    </section>
   </div>
 
   <ng-template #loadingTemplate>
     <div class="loading-container">
-      <mat-spinner></mat-spinner>
-      <p>Carregando seus dados...</p>
+      <mat-spinner diameter="64"></mat-spinner>
+      <p class="loading-text">Carregando seus dados...</p>
     </div>
   </ng-template>
 </div>
