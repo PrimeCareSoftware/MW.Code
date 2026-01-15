@@ -8,8 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { User } from '../../models/auth.model';
 
 @Component({
@@ -25,7 +28,9 @@ import { User } from '../../models/auth.model';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatTooltipModule,
+    MatDividerModule,
+    MatChipsModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
@@ -34,11 +39,13 @@ export class ProfileComponent implements OnInit {
   currentUser: User | null = null;
   passwordForm: FormGroup;
   changingPassword = false;
+  hideCurrentPassword = true;
+  hideNewPassword = true;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificationService
   ) {
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
@@ -55,11 +62,35 @@ export class ProfileComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('pt-BR');
+    return new Date(date).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  formatCPF(cpf: string): string {
+    if (!cpf) return '';
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  }
+
+  formatPhone(phone: string): string {
+    if (!phone) return '';
+    return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  }
+
+  toggleCurrentPasswordVisibility(): void {
+    this.hideCurrentPassword = !this.hideCurrentPassword;
+  }
+
+  toggleNewPasswordVisibility(): void {
+    this.hideNewPassword = !this.hideNewPassword;
   }
 
   onChangePassword(): void {
     if (this.passwordForm.invalid) {
+      this.markFormGroupTouched(this.passwordForm);
+      this.notificationService.warning('Por favor, preencha todos os campos corretamente');
       return;
     }
 
@@ -67,20 +98,26 @@ export class ProfileComponent implements OnInit {
 
     this.authService.changePassword(this.passwordForm.value).subscribe({
       next: () => {
-        this.snackBar.open('Senha alterada com sucesso!', 'Fechar', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
+        this.notificationService.success('Senha alterada com sucesso!');
         this.passwordForm.reset();
         this.changingPassword = false;
       },
       error: (error) => {
-        this.snackBar.open(
-          error.error?.message || 'Erro ao alterar senha',
-          'Fechar',
-          { duration: 3000, panelClass: ['error-snackbar'] }
+        this.notificationService.error(
+          error.error?.message || 'Erro ao alterar senha. Verifique sua senha atual.'
         );
         this.changingPassword = false;
+      }
+    });
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      control?.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
     });
   }
