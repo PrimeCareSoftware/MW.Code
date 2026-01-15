@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.CrossCutting.Security;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -53,6 +55,7 @@ namespace MedicSoft.Api.Controllers
         /// Note: Scoped to the current tenant context from JWT token
         /// </summary>
         [HttpGet("info")]
+        [RequirePermissionKey(PermissionKeys.ClinicView)]
         public async Task<ActionResult<ClinicAdminInfoDto>> GetClinicInfo()
         {
             try
@@ -65,18 +68,15 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                // Verify owner and get clinic
-                // Note: Using FirstOrDefault because the request is already scoped to a specific tenant
-                // If an owner has multiple clinics, they would switch between them in the UI which updates the JWT token
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                // Get clinic ID - works for both Owner entities and Users with ClinicOwner role
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var clinic = await _clinicRepository.GetByIdAsync(ownerLink.ClinicId, tenantId);
+                var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
                 if (clinic == null)
                 {
                     return NotFound(new { message = "Clinic not found" });
@@ -95,6 +95,7 @@ namespace MedicSoft.Api.Controllers
         /// Update clinic information (owner only)
         /// </summary>
         [HttpPut("info")]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
         public async Task<ActionResult<ClinicAdminInfoDto>> UpdateClinicInfo([FromBody] UpdateClinicInfoRequest request)
         {
             try
@@ -107,15 +108,14 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var clinic = await _clinicRepository.GetByIdAsync(ownerLink.ClinicId, tenantId);
+                var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
                 if (clinic == null)
                 {
                     return NotFound(new { message = "Clinic not found" });
@@ -168,6 +168,7 @@ namespace MedicSoft.Api.Controllers
         /// Get clinic users (owner only)
         /// </summary>
         [HttpGet("users")]
+        [RequirePermissionKey(PermissionKeys.UsersView)]
         public async Task<ActionResult<IEnumerable<ClinicUserDto>>> GetClinicUsers()
         {
             try
@@ -180,15 +181,14 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var users = await _userRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var users = await _userRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 return Ok(users.Select(u => new ClinicUserDto
                 {
@@ -212,6 +212,7 @@ namespace MedicSoft.Api.Controllers
         /// Get clinic subscription information (owner only)
         /// </summary>
         [HttpGet("subscription")]
+        [RequirePermissionKey(PermissionKeys.ClinicView)]
         public async Task<ActionResult> GetSubscription()
         {
             try
@@ -224,15 +225,14 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var subscription = await _subscriptionRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 if (subscription == null || !subscription.IsActive())
                 {
@@ -263,6 +263,7 @@ namespace MedicSoft.Api.Controllers
         /// Cancel clinic subscription (owner only)
         /// </summary>
         [HttpPut("subscription/cancel")]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
         public async Task<ActionResult> CancelSubscription()
         {
             try
@@ -275,15 +276,14 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var subscription = await _subscriptionRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 if (subscription == null || !subscription.IsActive())
                 {
@@ -293,7 +293,7 @@ namespace MedicSoft.Api.Controllers
                 subscription.Cancel("Cancelled by clinic owner");
                 await _subscriptionRepository.UpdateAsync(subscription);
 
-                _logger.LogInformation("Subscription cancelled for clinic: {ClinicId}", ownerLink.ClinicId);
+                _logger.LogInformation("Subscription cancelled for clinic: {ClinicId}", clinicId);
 
                 return Ok(new { message = "Subscription cancelled successfully" });
             }
@@ -309,6 +309,7 @@ namespace MedicSoft.Api.Controllers
         /// Note: User is created for the clinic in the current tenant context
         /// </summary>
         [HttpPost("users")]
+        [RequirePermissionKey(PermissionKeys.UsersCreate)]
         public async Task<ActionResult<ClinicUserDto>> CreateClinicUser([FromBody] CreateClinicUserRequest request)
         {
             try
@@ -321,17 +322,15 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                // Note: Using FirstOrDefault because the request is scoped to the current tenant/clinic via JWT
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
                 // Check subscription limits
-                var subscription = await _subscriptionRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
                 if (subscription == null || !subscription.IsActive())
                 {
                     return BadRequest(new { message = "No active subscription found" });
@@ -343,7 +342,7 @@ namespace MedicSoft.Api.Controllers
                     return BadRequest(new { message = "Invalid subscription plan" });
                 }
 
-                var currentUserCount = await _userService.GetUserCountByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var currentUserCount = await _userService.GetUserCountByClinicIdAsync(clinicId, tenantId);
                 if (currentUserCount >= plan.MaxUsers)
                 {
                     return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
@@ -363,10 +362,10 @@ namespace MedicSoft.Api.Controllers
                     request.Phone ?? "",
                     role,
                     tenantId,
-                    ownerLink.ClinicId
+                    clinicId
                 );
 
-                _logger.LogInformation("User created in clinic: {UserId} in {ClinicId}", user.Id, ownerLink.ClinicId);
+                _logger.LogInformation("User created in clinic: {UserId} in {ClinicId}", user.Id, clinicId);
 
                 return Ok(new ClinicUserDto
                 {
@@ -394,6 +393,7 @@ namespace MedicSoft.Api.Controllers
         /// Update user information (owner only)
         /// </summary>
         [HttpPut("users/{id}")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> UpdateClinicUser(Guid id, [FromBody] UpdateClinicUserRequest request)
         {
             try
@@ -406,10 +406,9 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
@@ -421,7 +420,7 @@ namespace MedicSoft.Api.Controllers
                     return NotFound(new { message = "User not found" });
                 }
 
-                if (user.ClinicId != ownerLink.ClinicId)
+                if (user.ClinicId != clinicId)
                 {
                     return Forbid();
                 }
@@ -467,6 +466,7 @@ namespace MedicSoft.Api.Controllers
         /// Change user password (owner only)
         /// </summary>
         [HttpPut("users/{id}/password")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> ChangeUserPassword(Guid id, [FromBody] ChangeUserPasswordRequest request)
         {
             try
@@ -479,10 +479,9 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
@@ -494,7 +493,7 @@ namespace MedicSoft.Api.Controllers
                     return NotFound(new { message = "User not found" });
                 }
 
-                if (user.ClinicId != ownerLink.ClinicId)
+                if (user.ClinicId != clinicId)
                 {
                     return Forbid();
                 }
@@ -532,6 +531,7 @@ namespace MedicSoft.Api.Controllers
         /// Deactivate user (owner only)
         /// </summary>
         [HttpPost("users/{id}/deactivate")]
+        [RequirePermissionKey(PermissionKeys.UsersDelete)]
         public async Task<ActionResult> DeactivateClinicUser(Guid id)
         {
             try
@@ -544,10 +544,9 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
@@ -559,7 +558,7 @@ namespace MedicSoft.Api.Controllers
                     return NotFound(new { message = "User not found" });
                 }
 
-                if (user.ClinicId != ownerLink.ClinicId)
+                if (user.ClinicId != clinicId)
                 {
                     return Forbid();
                 }
@@ -585,6 +584,7 @@ namespace MedicSoft.Api.Controllers
         /// Activate user (owner only)
         /// </summary>
         [HttpPost("users/{id}/activate")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> ActivateClinicUser(Guid id)
         {
             try
@@ -597,10 +597,9 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
@@ -612,7 +611,7 @@ namespace MedicSoft.Api.Controllers
                     return NotFound(new { message = "User not found" });
                 }
 
-                if (user.ClinicId != ownerLink.ClinicId)
+                if (user.ClinicId != clinicId)
                 {
                     return Forbid();
                 }
@@ -638,6 +637,7 @@ namespace MedicSoft.Api.Controllers
         /// Change user role (owner only)
         /// </summary>
         [HttpPut("users/{id}/role")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> ChangeClinicUserRole(Guid id, [FromBody] ChangeUserRoleRequest request)
         {
             try
@@ -650,10 +650,9 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
-                
-                if (ownerLink == null)
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
@@ -665,7 +664,7 @@ namespace MedicSoft.Api.Controllers
                     return NotFound(new { message = "User not found" });
                 }
 
-                if (user.ClinicId != ownerLink.ClinicId)
+                if (user.ClinicId != clinicId)
                 {
                     return Forbid();
                 }
@@ -697,6 +696,7 @@ namespace MedicSoft.Api.Controllers
         /// Get subscription details with plan limits (owner only)
         /// </summary>
         [HttpGet("subscription/details")]
+        [RequirePermissionKey(PermissionKeys.ClinicView)]
         public async Task<ActionResult> GetSubscriptionDetails()
         {
             try
@@ -709,15 +709,14 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized();
                 }
 
-                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
-                var ownerLink = ownerLinks.FirstOrDefault();
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
                 
-                if (ownerLink == null)
+                if (!isAuthorized)
                 {
                     return Forbid();
                 }
 
-                var subscription = await _subscriptionRepository.GetByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 if (subscription == null)
                 {
@@ -730,7 +729,7 @@ namespace MedicSoft.Api.Controllers
                     return NotFound(new { message = "Subscription plan not found" });
                 }
 
-                var currentUserCount = await _userService.GetUserCountByClinicIdAsync(ownerLink.ClinicId, tenantId);
+                var currentUserCount = await _userService.GetUserCountByClinicIdAsync(clinicId, tenantId);
 
                 return Ok(new
                 {
@@ -818,6 +817,40 @@ namespace MedicSoft.Api.Controllers
                 _logger.LogError(ex, "Error getting owner clinics");
                 return StatusCode(500, new { message = "An error occurred while retrieving clinics" });
             }
+        }
+
+        /// <summary>
+        /// Get clinic ID - from token for Users with ClinicOwner role, or from owner link for Owners
+        /// </summary>
+        private async Task<(Guid clinicId, bool isAuthorized)> GetClinicIdForOwnerAsync(Guid userId, string tenantId)
+        {
+            // Try to get clinic ID from token first (for Users with ClinicOwner role)
+            var clinicId = GetClinicIdFromToken();
+            
+            if (clinicId != Guid.Empty)
+            {
+                return (clinicId, true);
+            }
+            
+            // If no clinic ID in token, try to get from owner link (for Owner entities)
+            var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+            var ownerLink = ownerLinks.FirstOrDefault();
+            
+            if (ownerLink == null)
+            {
+                return (Guid.Empty, false);
+            }
+            
+            return (ownerLink.ClinicId, true);
+        }
+
+        /// <summary>
+        /// Get clinic ID from JWT token
+        /// </summary>
+        private Guid GetClinicIdFromToken()
+        {
+            var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
+            return Guid.TryParse(clinicIdClaim, out var clinicId) ? clinicId : Guid.Empty;
         }
 
         private static ClinicAdminInfoDto MapClinicToDto(Domain.Entities.Clinic clinic)
