@@ -584,7 +584,7 @@ namespace MedicSoft.Api.Controllers
         /// Activate user (owner only)
         /// </summary>
         [HttpPost("users/{id}/activate")]
-        [RequirePermissionKey(PermissionKeys.UsersDelete)]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
         public async Task<ActionResult> ActivateClinicUser(Guid id)
         {
             try
@@ -845,7 +845,7 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get clinic ID from JWT token or from owner link
+        /// Get clinic ID from JWT token
         /// </summary>
         private Guid GetClinicIdFromToken()
         {
