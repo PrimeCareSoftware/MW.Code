@@ -1,8 +1,41 @@
-# PrimeCare Software Mobile Apps
+# PrimeCare Software Mobile Apps - DESCONTINUADO
 
-Aplicativos móveis nativos para o sistema PrimeCare Software, disponíveis para **iOS** (iPhone/iPad) e **Android**.
+> ⚠️ **IMPORTANTE**: Os aplicativos nativos iOS e Android foram **descontinuados** em Janeiro de 2026.
+> 
+> **Migre para o PWA**: [Guia de Instalação do PWA](../docs/PWA_INSTALLATION_GUIDE.md) | [Documentação da Migração](../docs/MOBILE_TO_PWA_MIGRATION.md)
 
-## 📱 Plataformas Suportadas
+## 📱 Por que migramos para PWA?
+
+O PrimeCare Software migrou de apps nativos para **PWA (Progressive Web App)** com os seguintes benefícios:
+
+### Para Usuários:
+- ✅ **Instalação Mais Simples**: Sem necessidade de ir à loja de apps
+- ✅ **Sempre Atualizado**: Atualizações automáticas e instantâneas
+- ✅ **Menos Espaço**: Apps PWA usam ~90% menos espaço
+- ✅ **Multiplataforma**: Funciona em iOS, Android, Windows, macOS, Linux
+- ✅ **Todas as Funcionalidades**: Tudo que estava nos apps nativos está no PWA
+
+### Para a Empresa:
+- ✅ **Sem Taxas de Loja**: Economia de 30% que Apple/Google cobram
+- ✅ **Deploy Instantâneo**: Atualizações chegam imediatamente
+- ✅ **Menor Custo**: Uma base de código ao invés de três
+- ✅ **Mais Recursos**: Investimos em funcionalidades ao invés de manutenção
+
+## 📖 Novo PWA
+
+Acesse o novo PWA em: **https://app.primecaresoftware.com.br**
+
+- 📱 [Como Instalar no iOS/Android](../docs/PWA_INSTALLATION_GUIDE.md)
+- 📖 [Documentação Completa da Migração](../docs/MOBILE_TO_PWA_MIGRATION.md)
+
+---
+
+## 🗂️ Apps Nativos (Arquivados)
+
+Os aplicativos nativos abaixo foram **descontinuados** mas o código permanece disponível para referência.
+
+**Data de Descontinuação**: Janeiro 2026  
+**Status**: Somente leitura - Não receberão mais atualizações
 
 ### iOS (Swift/SwiftUI)
 - **Localização**: `mobile/ios/`
