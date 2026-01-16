@@ -22,6 +22,35 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ## [2.0.0] - Janeiro 2026
 
+### 🔥 Removido
+
+#### Microserviços Descontinuados
+- **Removidos 6 microserviços**: auth, patients, appointments, medicalrecords, billing e systemadmin
+  - Todas as funcionalidades foram consolidadas na API monolítica principal (src/MedicSoft.Api)
+  - Mantido apenas o microserviço de telemedicina que continua ativo como serviço separado
+  - **Motivo**: Complexidade operacional desnecessária, todas as funcionalidades já existem na API principal
+  - Redução de overhead operacional e simplificação da arquitetura
+
+#### Apps Móveis Nativos Deletados
+- **iOS (Swift/SwiftUI)**: Código completamente removido do repositório
+- **Android (Kotlin/Jetpack Compose)**: Código completamente removido do repositório
+- **Migração completa para PWA**: Progressive Web App oferece melhor custo-benefício
+  - Economia de 30% em taxas de lojas de aplicativos
+  - Atualizações instantâneas sem processo de aprovação
+  - Multiplataforma (iOS, Android, Windows, macOS, Linux)
+  - ~90% menos espaço de armazenamento
+
+### 🔄 Modificado
+
+#### Configuração Docker
+- **docker-compose.microservices.yml**: Atualizado para conter apenas telemedicine, API principal e frontends
+- Simplificação da infraestrutura de desenvolvimento
+
+#### Documentação
+- **microservices/README.md**: Marcado como descontinuado com referências para API principal
+- **mobile/README.md**: Atualizado para refletir deleção dos apps nativos e migração para PWA
+- Adicionadas instruções de como usar a API principal para todas as funcionalidades
+
 ### ✨ Adicionado
 
 #### Backend

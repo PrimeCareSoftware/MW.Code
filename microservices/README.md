@@ -1,151 +1,94 @@
-# PrimeCare Software Microservices Architecture
+# PrimeCare Software Microservices - DESCONTINUADO
 
-This directory contains the microservices implementation of PrimeCare Software, migrated from the monolithic architecture.
+> ⚠️ **IMPORTANTE**: Os microserviços foram **descontinuados** em Janeiro de 2026.
+> 
+> **Todas as funcionalidades foram consolidadas na API principal** (`src/MedicSoft.Api`)
+> 
+> **Motivo da descontinuação**: Complexidade operacional desnecessária para o escopo atual do projeto. Todas as funcionalidades dos microserviços já existiam (ou existem no domínio) da API monolítica principal.
 
-## Architecture Overview
+## 🚫 Microserviços Descontinuados
 
-The application has been decomposed into the following microservices:
+Os seguintes microserviços foram **removidos**:
 
-| Service | Port | Description |
-|---------|------|-------------|
-| Auth | 5001 | Authentication, JWT token generation, session management |
-| Patients | 5002 | Patient management, patient-clinic links |
-| Appointments | 5003 | Scheduling, agenda, check-in, consultation workflow |
-| MedicalRecords | 5004 | Medical records, medications, prescriptions, exam requests |
-| Billing | 5005 | Subscriptions, invoices, payments, expenses |
-| SystemAdmin | 5006 | Multi-tenant management, clinics, system owners |
+| Service | Port | Status | Migração |
+|---------|------|--------|----------|
+| Auth | 5001 | ❌ DELETADO | ✅ Funcionalidade completa na API principal |
+| Patients | 5002 | ❌ DELETADO | ✅ Funcionalidade completa na API principal |
+| Appointments | 5003 | ❌ DELETADO | ✅ Funcionalidade completa na API principal |
+| MedicalRecords | 5004 | ❌ DELETADO | ✅ Funcionalidade completa na API principal |
+| Billing | 5005 | ❌ DELETADO | ✅ Funcionalidade completa na API principal |
+| SystemAdmin | 5006 | ❌ DELETADO | ✅ Funcionalidade completa na API principal |
 
-## Shared Authentication
+## 🎯 API Principal (Monolítica)
 
-All microservices use a shared authentication library (`MedicSoft.Shared.Authentication`) that provides:
+Toda a funcionalidade está disponível na **API principal**:
 
-- JWT token validation configuration
-- Common claim constants (`tenant_id`, `clinic_id`, `session_id`, etc.)
-- `MicroserviceBaseController` with authentication helpers
-- Claims principal extension methods
+- 📁 **Localização**: `src/MedicSoft.Api`
+- 🌐 **URL Desenvolvimento**: `http://localhost:5000/api`
+- 📖 **Swagger**: `http://localhost:5000/swagger`
+- 🐳 **Docker**: Use `docker-compose.yml` (não mais `docker-compose.microservices.yml`)
 
-### Authentication Flow
+## 📖 Funcionalidades Disponíveis na API Principal
 
-1. User authenticates via Auth Microservice (`/api/auth/login` or `/api/auth/owner-login`)
-2. Auth service generates JWT token with claims: `tenant_id`, `clinic_id`, `session_id`, `role`
-3. Frontend stores token and includes it in all requests via HTTP interceptor
-4. Each microservice validates the JWT using shared configuration (same secret key)
-5. Controllers extend `MicroserviceBaseController` to extract tenant/clinic context from claims
+Todas as funcionalidades dos microserviços estão disponíveis nos seguintes controllers:
 
-## Building Microservices
+### Autenticação e Autorização
+- **AuthController** (`/api/auth`)
+  - Login, Owner Login, Token Validation, Session Validation
+  
+### Gestão de Pacientes
+- **PatientsController** (`/api/patients`)
+  - CRUD completo, busca por documento, vinculação clínica/responsável
 
-### Build Individual Service
+### Agendamentos
+- **AppointmentsController** (`/api/appointments`)
+  - Criação, cancelamento, agenda diária, slots disponíveis
+  - ⚠️ Nota: CheckIn/CheckOut existem na entidade de domínio mas não estão expostos como endpoints
+
+### Prontuários e Medicações
+- **MedicalRecordsController** (`/api/medical-records`)
+  - CRUD completo, completar prontuário
+- **MedicationsController** (`/api/medications`)
+  - CRUD completo, busca por categoria/termo
+
+### Faturamento
+- **SubscriptionsController** (`/api/subscriptions`)
+- **PaymentsController** (`/api/payments`)
+- **ExpensesController** (`/api/expenses`)
+- **InvoicesController** (`/api/invoices`)
+
+### Administração do Sistema
+- **TenantController** (`/api/tenant`)
+  - Resolução de subdomínios
+- **SystemAdmin-related controllers**
+  - Gerenciamento de clínicas, proprietários, tickets
+  - Subscription override
+
+## 🚀 Como Usar a API Principal
+
+### Desenvolvimento Local
 ```bash
-cd microservices/{service-name}
-dotnet build
+cd src/MedicSoft.Api
+dotnet run
 ```
 
-### Build All Services
+### Com Docker
 ```bash
-cd microservices
-for dir in auth patients appointments medicalrecords billing systemadmin; do
-  cd $dir && dotnet build && cd ..
-done
+docker-compose up -d
 ```
 
-## Running with Docker Compose
-
-### Prerequisites
-Set the required environment variables:
-```bash
-export POSTGRES_PASSWORD=your_secure_password
-export JWT_SECRET_KEY=your_jwt_secret_key_minimum_32_chars
+### Acessar Swagger
+```
+http://localhost:5000/swagger
 ```
 
-### Start All Services
-```bash
-docker-compose -f docker-compose.microservices.yml up -d
-```
+## 📚 Documentação Adicional
 
-### Service URLs (Local Development)
-- Auth API: http://localhost:5001
-- Patients API: http://localhost:5002
-- Appointments API: http://localhost:5003
-- MedicalRecords API: http://localhost:5004
-- Billing API: http://localhost:5005
-- SystemAdmin API: http://localhost:5006
+- [Guia de Início Rápido](../docs/GUIA_INICIO_RAPIDO_LOCAL.md)
+- [Resumo Técnico Completo](../docs/RESUMO_TECNICO_COMPLETO.md)
+- [README Principal](../README.md)
 
-## Frontend Configuration
+---
 
-The frontend applications support both monolithic and microservices modes:
-
-```typescript
-// environment.ts
-export const environment = {
-  useMicroservices: false, // Set to true to use microservices
-  apiUrl: 'http://localhost:5000/api', // Monolithic API
-  microservices: {
-    auth: 'http://localhost:5001/api',
-    patients: 'http://localhost:5002/api',
-    appointments: 'http://localhost:5003/api',
-    medicalRecords: 'http://localhost:5004/api',
-    billing: 'http://localhost:5005/api',
-    systemAdmin: 'http://localhost:5006/api'
-  }
-};
-```
-
-Use `ApiConfigService` to get the correct URLs based on the configuration.
-
-## Creating a New Microservice
-
-1. Create a new solution:
-   ```bash
-   cd microservices
-   mkdir new-service && cd new-service
-   dotnet new sln -n MedicSoft.NewService
-   dotnet new webapi -n MedicSoft.NewService.Api -f net8.0
-   dotnet sln add MedicSoft.NewService.Api
-   dotnet sln add ../shared/MedicSoft.Shared.Authentication
-   ```
-
-2. Add reference to shared authentication:
-   ```xml
-   <ProjectReference Include="../../shared/MedicSoft.Shared.Authentication/MedicSoft.Shared.Authentication.csproj" />
-   ```
-
-3. Configure authentication in Program.cs:
-   ```csharp
-   builder.Services.AddMicroserviceAuthentication(builder.Configuration);
-   
-   // In middleware pipeline:
-   app.UseAuthentication();
-   app.UseAuthorization();
-   ```
-
-4. Create controllers extending `MicroserviceBaseController`:
-   ```csharp
-   [Route("api/[controller]")]
-   public class MyController : MicroserviceBaseController
-   {
-       [HttpGet]
-       public async Task<ActionResult> Get()
-       {
-           var tenantId = GetTenantId();
-           var clinicId = GetClinicId();
-           // ...
-       }
-   }
-   ```
-
-## Configuration
-
-Each microservice uses the same JWT settings to ensure token compatibility:
-
-```json
-{
-  "JwtSettings": {
-    "SecretKey": "your-shared-secret-key",
-    "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Software",
-    "Audience": "PrimeCare Software-API"
-  }
-}
-```
-
-**Important**: All microservices must use the same `SecretKey`, `Issuer`, and `Audience` for authentication to work across services.
+**Data de Descontinuação**: Janeiro 2026  
+**Motivo**: Consolidação na API monolítica para simplificar arquitetura e operações

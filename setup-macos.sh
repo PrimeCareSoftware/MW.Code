@@ -2,6 +2,10 @@
 
 # Script de Configuração Inicial para macOS - PrimeCare Software
 # Este script configura o ambiente de desenvolvimento no macOS
+# 
+# NOTA: Microserviços (auth, patients, appointments, medicalrecords, billing,
+#       systemadmin) foram DESCONTINUADOS em Janeiro 2026. Use a API principal.
+#       Apenas o microserviço de telemedicina permanece ativo.
 
 set -e
 
@@ -271,20 +275,14 @@ echo -e "   • PostgreSQL: ${YELLOW}http://localhost:5432${NC} (Database: medic
 echo ""
 echo -e "${BLUE}🚀 Backend APIs Disponíveis:${NC}"
 echo ""
-echo -e "${CYAN}Monolítico (Modo Tradicional):${NC}"
-echo -e "   • API Principal: ${YELLOW}http://localhost:5000${NC}"
-echo -e "     - Swagger: ${YELLOW}http://localhost:5000/swagger${NC}"
-echo -e "     - Inicie com: ${YELLOW}cd src/MedicSoft.Api && dotnet run${NC}"
+echo -e "${CYAN}API Principal (Monolítica):${NC}"
+echo -e "   • API: ${YELLOW}http://localhost:5000${NC}"
+echo -e "   • Swagger: ${YELLOW}http://localhost:5000/swagger${NC}"
+echo -e "   • Inicie com: ${YELLOW}cd src/MedicSoft.Api && dotnet run${NC}"
 echo ""
-echo -e "${CYAN}Microserviços (Modo Arquitetura Moderna):${NC}"
-echo -e "   • Auth API: ${YELLOW}http://localhost:5001${NC}"
-echo -e "   • Patients API: ${YELLOW}http://localhost:5002${NC}"
-echo -e "   • Appointments API: ${YELLOW}http://localhost:5003${NC}"
-echo -e "   • Medical Records API: ${YELLOW}http://localhost:5004${NC}"
-echo -e "   • Billing API: ${YELLOW}http://localhost:5005${NC}"
-echo -e "   • System Admin API: ${YELLOW}http://localhost:5006${NC}"
-echo -e "   • Telemedicine API: ${YELLOW}http://localhost:5084${NC}"
-echo -e "   - Inicie todos com: ${YELLOW}podman-compose -f docker-compose.microservices.yml up -d${NC}"
+echo -e "${CYAN}Telemedicina (Microserviço Separado):${NC}"
+echo -e "   • API: ${YELLOW}http://localhost:5084${NC}"
+echo -e "   • Inicie com docker-compose ou individualmente"
 echo ""
 echo -e "${BLUE}🖥️  Frontend Applications:${NC}"
 echo -e "   • PrimeCare Software App (Clínicas): ${YELLOW}http://localhost:4200${NC}"

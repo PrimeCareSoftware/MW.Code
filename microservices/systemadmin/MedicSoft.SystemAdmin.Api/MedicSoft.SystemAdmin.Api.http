@@ -1,6 +1,0 @@
-@MedicSoft.SystemAdmin.Api_HostAddress = http://localhost:5195
-
-GET {{MedicSoft.SystemAdmin.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
