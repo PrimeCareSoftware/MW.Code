@@ -78,34 +78,49 @@ Os aplicativos nativos iOS (Swift) e Android (Kotlin) foram **descontinuados** e
 
 **Código dos apps nativos arquivado em**: `mobile/ios/` e `mobile/android/` (somente referência)
 
-## 🖥️ Frontend Applications
+## 🖥️ Frontend Application
 
-O PrimeCare Software possui **dois aplicativos Angular independentes**:
+O PrimeCare Software agora possui **um único aplicativo Angular unificado** que consolida todas as funcionalidades:
 
-### 1. **PrimeCare App** (`frontend/medicwarehouse-app`)
-Aplicativo principal para uso diário das clínicas:
+### **PrimeCare Frontend** (`frontend/medicwarehouse-app`)
+Aplicativo unificado acessando diferentes seções por rotas:
+
+#### 📱 **Clínica** (rotas principais)
 - 👨‍⚕️ **Usuários**: Proprietários de clínicas, médicos, secretárias, enfermeiros
 - 📊 **Dashboard** da clínica individual
 - 👥 **Gestão de pacientes** e prontuários
 - 📅 **Agendamentos** e atendimentos
 - 💊 **Prescrições** médicas e procedimentos
-- 🎥 **Telemedicina** com videochamadas (NOVO!) 🆕
-- 🌐 **Login por Subdomínio** - Acesso personalizado por clínica (NOVO!) 🆕
-- 🧪 **Dados Mockados** - Desenvolvimento sem backend (NOVO!) 🆕
+- 🎥 **Telemedicina** com videochamadas
+- 🌐 **Login por Subdomínio** - Acesso personalizado por clínica
+- 🧪 **Dados Mockados** - Desenvolvimento sem backend
 - **URL desenvolvimento**: `http://localhost:4200`
 - **Exemplo com subdomínio**: `http://clinic1.localhost:4200`
 
-### 2. **MW System Admin** (`frontend/mw-system-admin`) 🆕
-Painel administrativo para gestão do sistema completo:
+#### ⚙️ **System Admin** (`/system-admin/*`)
 - 🔧 **Usuários**: System Owners (administradores do sistema)
 - 🏥 **Gestão de todas as clínicas** (criar, ativar, desativar)
 - 💰 **Métricas financeiras** (MRR, receitas, churn)
 - 📊 **Analytics globais** do sistema
 - ⚙️ **Controle de assinaturas** e override manual
 - 👤 **Gestão de system owners**
-- 🧪 **Dados Mockados** - Desenvolvimento sem backend (NOVO!) 🆕
-- **URL desenvolvimento**: `http://localhost:4201`
-- 📖 **Documentação**: [SYSTEM_OWNER_ACCESS.md](docs/SYSTEM_OWNER_ACCESS.md)
+- **URL**: `http://localhost:4200/system-admin`
+
+#### 🌐 **Site Marketing** (`/site/*`)
+- 🏠 **Landing page** e apresentação do produto
+- 💰 **Página de pricing** com planos
+- 📝 **Formulário de registro** de novas clínicas
+- 📞 **Página de contato**
+- 📜 **Termos de uso** e política de privacidade
+- **URL**: `http://localhost:4200/site`
+
+**Benefícios da Consolidação:**
+- ♻️ **Redução de 66%**: 3 apps → 1 app unificado
+- 🔧 **Manutenção Simplificada**: Uma base de código
+- 🚀 **Deploy Único**: Um build, um deploy
+- 🎨 **UX Consistente**: Design system unificado
+- 📦 **Menor footprint**: Dependências compartilhadas
+
 
 ## 🎥 Microserviço de Telemedicina 🆕
 
@@ -599,35 +614,30 @@ dotnet run
 
 #### Frontend (Angular)
 
-**PrimeCare App** (aplicativo principal das clínicas):
+**PrimeCare Frontend Unificado** (aplicativo único com todas as funcionalidades):
 ```bash
 # Navegar para o frontend
 cd frontend/medicwarehouse-app
 
 # Instalar dependências
-npm install
+npm install --legacy-peer-deps
 
 # Executar em modo de desenvolvimento
 npm start
 
 # O frontend estará disponível em: http://localhost:4200
+# Acessar diferentes seções por rotas:
+# - Clínica: http://localhost:4200/dashboard
+# - System Admin: http://localhost:4200/system-admin
+# - Site Marketing: http://localhost:4200/site
 ```
 
-**MW System Admin** (painel administrativo do sistema) 🆕:
-```bash
-# Navegar para o system admin
-cd frontend/mw-system-admin
+> **Nota**: Usamos `--legacy-peer-deps` devido a conflitos menores de versão entre @angular/material e @angular/cdk que não afetam a funcionalidade.
 
-# Instalar dependências
-npm install
 
-# Executar em modo de desenvolvimento (porta 4201)
-npm start
 
 # O admin estará disponível em: http://localhost:4201
 ```
-
-> 📖 **Documentação completa do System Admin**: [SYSTEM_OWNER_ACCESS.md](docs/SYSTEM_OWNER_ACCESS.md)
 
 #### Banco de Dados (PostgreSQL)
 
