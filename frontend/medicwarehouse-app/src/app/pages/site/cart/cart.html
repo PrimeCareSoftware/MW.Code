@@ -1,0 +1,56 @@
+<div class="cart">
+  <div class="container">
+    <h1>Carrinho</h1>
+    
+    <div class="cart-empty" *ngIf="cartService.getCart()().items.length === 0">
+      <div class="empty-icon">🛒</div>
+      <h2>Seu carrinho está vazio</h2>
+      <p>Escolha um de nossos planos para começar</p>
+      <a routerLink="/pricing" class="btn btn-primary">Ver Planos</a>
+    </div>
+
+    <div class="cart-content" *ngIf="cartService.getCart()().items.length > 0">
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of cartService.getCart()().items">
+          <div class="item-info">
+            <h3>{{ item.plan.name }}</h3>
+            <p>{{ item.plan.description }}</p>
+            <ul class="item-features">
+              <li *ngFor="let feature of item.plan.features.slice(0, 3)">✓ {{ feature }}</li>
+            </ul>
+          </div>
+          <div class="item-price">
+            <div class="price">
+              <span class="amount">R$ {{ item.plan.monthlyPrice }}</span>
+              <span class="period">/mês</span>
+            </div>
+            <button class="btn-remove" (click)="removeItem(item.plan.id)">Remover</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <h3>Resumo</h3>
+        <div class="summary-row">
+          <span>Plano Mensal</span>
+          <span>R$ {{ cartService.getCart()().total }}</span>
+        </div>
+        <div class="summary-row trial">
+          <span>Período de Teste (15 dias)</span>
+          <span class="free">Grátis</span>
+        </div>
+        <div class="summary-total">
+          <span>Total Hoje</span>
+          <span>R$ 0,00</span>
+        </div>
+        <p class="summary-note">
+          Você não será cobrado durante o período de teste de 15 dias. 
+          Após o término, será cobrado R$ {{ cartService.getCart()().total }} mensalmente.
+        </p>
+        <button class="btn btn-primary btn-large" (click)="proceedToCheckout()">
+          Prosseguir para Cadastro
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,233 @@
+<div class="home">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <span class="hero-badge">
+            ✨ Sistema #1 em Gestão Médica
+          </span>
+          <h1>Simplifique a Gestão do Seu Consultório</h1>
+          <p class="hero-subtitle">
+            Aumente sua produtividade e ofereça a melhor experiência aos seus pacientes. 
+            Prontuários, agendamentos e financeiro em uma única plataforma.
+          </p>
+          <div class="hero-actions">
+            <a routerLink="/register" class="btn btn-accent btn-large">
+              Começar Grátis
+            </a>
+            <a routerLink="/pricing" class="btn btn-secondary btn-large">
+              Ver Planos e Preços
+            </a>
+          </div>
+          <div class="hero-trust">
+            <div class="trust-item">
+              <span class="trust-icon">✓</span>
+              <span>15 dias grátis</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-icon">✓</span>
+              <span>Sem cartão de crédito</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-icon">✓</span>
+              <span>Cancele quando quiser</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-illustration">
+            <div class="mockup-card mockup-main" aria-hidden="true">
+              <div class="mockup-header">
+                <div class="mockup-dots" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="mockup-title">Dashboard</span>
+              </div>
+              <div class="mockup-content">
+                <div class="mockup-stat">
+                  <span class="stat-label">Pacientes Hoje</span>
+                  <span class="stat-value">12</span>
+                </div>
+                <div class="mockup-stat">
+                  <span class="stat-label">Consultas</span>
+                  <span class="stat-value">8</span>
+                </div>
+                <div class="mockup-chart"></div>
+              </div>
+            </div>
+            <div class="mockup-card mockup-float mockup-appointment">
+              <div class="mockup-icon">📅</div>
+              <div class="mockup-text">
+                <span class="mockup-small-title">Próximo Agendamento</span>
+                <span class="mockup-small-desc">João Silva - 14:30</span>
+              </div>
+            </div>
+            <div class="mockup-card mockup-float mockup-notification">
+              <div class="mockup-icon">💬</div>
+              <div class="mockup-text">
+                <span class="mockup-small-title">Lembrete enviado</span>
+                <span class="mockup-small-desc">Via WhatsApp</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number">+500</span>
+          <span class="stat-text">Consultórios Ativos</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">+50k</span>
+          <span class="stat-text">Pacientes Cadastrados</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">98%</span>
+          <span class="stat-text">Satisfação dos Clientes</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">70%</span>
+          <span class="stat-text">Redução de Faltas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Recursos</span>
+        <h2 class="section-title">Tudo que você precisa para gerenciar seu consultório</h2>
+        <p class="section-subtitle">Ferramentas poderosas e fáceis de usar para otimizar sua rotina clínica</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let feature of features">
+          <div class="feature-icon-wrapper">
+            <span class="feature-icon">{{ feature.icon }}</span>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits">
+    <div class="container">
+      <div class="benefits-layout">
+        <div class="benefits-content">
+          <span class="section-badge">Por que escolher o PrimeCare Software?</span>
+          <h2>Transforme a gestão do seu consultório</h2>
+          <p class="benefits-intro">
+            Nossa plataforma foi desenvolvida por profissionais de saúde e 
+            tecnologia para resolver os problemas reais do dia a dia clínico.
+          </p>
+          
+          <div class="benefits-list">
+            <div class="benefit-item" *ngFor="let benefit of benefits">
+              <div class="benefit-check" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="benefit-text">
+                <h4>{{ benefit.title }}</h4>
+                <p>{{ benefit.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="benefits-visual">
+          <div class="benefits-image-wrapper">
+            <div class="benefits-decoration"></div>
+            <div class="benefits-card">
+              <div class="card-header">
+                <span class="card-icon">📊</span>
+                <span class="card-title">Relatório Mensal</span>
+              </div>
+              <div class="card-stats">
+                <div class="card-stat">
+                  <span class="card-stat-value">+32%</span>
+                  <span class="card-stat-label">Produtividade</span>
+                </div>
+                <div class="card-stat">
+                  <span class="card-stat-value">-70%</span>
+                  <span class="card-stat-label">Faltas</span>
+                </div>
+              </div>
+              <div class="card-progress">
+                <div class="progress-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Como Funciona</span>
+        <h2 class="section-title">Comece a usar em 3 passos simples</h2>
+        <p class="section-subtitle">Configure sua clínica e comece a atender em minutos</p>
+      </div>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Crie sua conta</h3>
+            <p>Cadastre-se em menos de 5 minutos com seus dados básicos</p>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Configure sua agenda</h3>
+            <p>Personalize horários, especialidades e sua equipe médica</p>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Comece a atender</h3>
+            <p>Agende consultas e atenda seus pacientes com eficiência</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Pronto para transformar seu consultório?</h2>
+        <p>Junte-se a centenas de profissionais de saúde que já confiam no PrimeCare Software</p>
+        <div class="cta-actions">
+          <a routerLink="/register" class="btn btn-white btn-large">
+            Começar Agora — É Grátis
+          </a>
+          <button (click)="openWhatsApp()" class="btn btn-whatsapp btn-large">
+            <span>💬</span> Falar com Consultor
+          </button>
+        </div>
+        <p class="cta-note">Sem compromisso • Suporte especializado • Migração gratuita</p>
+      </div>
+    </div>
+  </section>
+</div>

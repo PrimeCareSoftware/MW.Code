@@ -1,6 +1,6 @@
 {
-  "name": "medicwarehouse-app",
-  "version": "0.0.0",
+  "name": "primecare-frontend",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
