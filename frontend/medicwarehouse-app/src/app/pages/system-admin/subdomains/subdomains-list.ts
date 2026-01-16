@@ -97,7 +97,7 @@ export class SubdomainsList implements OnInit {
         this.loadSubdomains();
         alert('Subdomínio criado com sucesso!');
       },
-      error: (err) => {
+      error: (err: any) => {
         this.modalError.set(err.error?.message || 'Erro ao criar subdomínio');
         this.submitting.set(false);
       }
@@ -113,7 +113,7 @@ export class SubdomainsList implements OnInit {
       next: () => {
         this.loadSubdomains();
       },
-      error: (err) => {
+      error: (err: any) => {
         alert(err.error?.message || 'Erro ao excluir subdomínio');
       }
     });

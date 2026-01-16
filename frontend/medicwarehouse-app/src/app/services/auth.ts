@@ -101,7 +101,7 @@ export class Auth {
     localStorage.setItem(this.tokenKey, token);
   }
 
-  private hasToken(): boolean {
+  hasToken(): boolean {
     return !!this.getToken();
   }
 
@@ -109,7 +109,7 @@ export class Auth {
     localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 
-  private getUserInfo(): UserInfo | null {
+  getUserInfo(): UserInfo | null {
     const userStr = localStorage.getItem(this.userKey);
     return userStr ? JSON.parse(userStr) : null;
   }
