@@ -14,7 +14,7 @@ NC='\033[0m'
 
 # Configurações
 API_URL="http://localhost:5000/api"
-AUTH_API_URL="http://localhost:5001/api"  # Auth microservice port
+AUTH_API_URL="http://localhost:5000/api"  # Main API (microservices descontinuados)
 TENANT_ID="demo-clinic-001"
 
 echo -e "${BLUE}╔══════════════════════════════════════════════════════════════╗${NC}"
@@ -26,7 +26,7 @@ echo ""
 echo -e "${YELLOW}→${NC} Verificando se a API está disponível..."
 if ! curl -s -f "${AUTH_API_URL}/auth/health" > /dev/null 2>&1; then
     echo -e "${RED}✗${NC} API não está rodando em ${AUTH_API_URL}"
-    echo -e "${YELLOW}Dica:${NC} Execute 'cd microservices/auth/MedicSoft.Auth.Api && dotnet run'"
+    echo -e "${YELLOW}Dica:${NC} Execute 'cd src/MedicSoft.Api && dotnet run'"
     exit 1
 fi
 echo -e "${GREEN}✓${NC} API está disponível"

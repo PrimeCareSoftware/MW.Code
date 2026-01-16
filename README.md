@@ -21,8 +21,8 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 | **Completude Geral** | ✅ **92%** |
 | **Controllers Backend** | 40+ |
 | **Componentes Frontend** | 163+ |
-| **Apps Mobile** | 2 (iOS + Android) |
-| **Microservices** | 7 |
+| **Apps Mobile** | ❌ Descontinuados (migrados para PWA) |
+| **Microserviços** | 1 (Telemedicina) - Demais descontinuados |
 | **Testes Automatizados** | 670+ |
 | **Documentos** | 49+ |
 

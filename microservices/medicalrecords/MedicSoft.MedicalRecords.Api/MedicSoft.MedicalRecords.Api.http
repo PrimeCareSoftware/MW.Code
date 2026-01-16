@@ -1,6 +1,0 @@
-@MedicSoft.MedicalRecords.Api_HostAddress = http://localhost:5299
-
-GET {{MedicSoft.MedicalRecords.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
