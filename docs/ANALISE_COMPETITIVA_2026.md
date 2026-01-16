@@ -701,8 +701,9 @@ Precisamos identificar e FOCAR nos 20% que realmente vendem.
 - Sem Portal: -40% conversão
 - Sem NF-e: Compliance issues
 - Sem TISS: -70% de mercado
+- Perda estimada de receita: ~R$ 500k/ano
 
-**Total desperdício: ~R$ 900k/ano**
+**Total desperdício (custos + oportunidade perdida): ~R$ 1.3M/ano**
 
 ---
 
@@ -718,7 +719,9 @@ Precisamos identificar e FOCAR nos 20% que realmente vendem.
 - PWA (sem builds mobile): R$ 0/mês
 - Total: R$ 9.6k/ano
 
-**Economia: ~R$ 475k/ano (53%)**
+**Economia total: R$ 476.4k/ano (56%)**
+- Redução desenvolvimento: R$ 450k/ano
+- Redução infraestrutura: R$ 26.4k/ano
 
 ---
 

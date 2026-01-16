@@ -32,7 +32,7 @@ O PrimeCare Software possui:
 - ❌ Documentação Portátil → Remover
 - ❌ 7 Microservices → Consolidar para 1-2
 
-**Economia: ~R$ 475k/ano (53%)**
+**Economia: R$ 476.4k/ano (56%)**
 
 #### 2. 🟢 PRIORIZAR (Top 5)
 1. 🔥 **Portal do Paciente** - 90% dos concorrentes têm
