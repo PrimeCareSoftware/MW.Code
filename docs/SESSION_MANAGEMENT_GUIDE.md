@@ -2,15 +2,16 @@
 
 ## Visão Geral
 
-Este guia documenta o sistema de gerenciamento de sessões implementado no PrimeCare Software, que garante que apenas uma sessão ativa por usuário seja permitida por vez.
+Este guia documenta o sistema de gerenciamento de sessões implementado no PrimeCare Software, que garante que **apenas uma sessão ativa por usuário** seja permitida por vez.
 
 ## Funcionalidade
 
 ### Objetivo
-Garantir que apenas um dispositivo/navegador possa estar autenticado com as mesmas credenciais ao mesmo tempo. Quando um usuário faz login em um novo dispositivo, a sessão anterior é automaticamente invalidada.
+Garantir que apenas um dispositivo/navegador possa estar autenticado com as mesmas credenciais ao mesmo tempo. Quando um usuário faz login em um novo dispositivo, **todas as sessões anteriores são automaticamente invalidadas**.
 
 ### Características
 - **Sessão única por usuário**: Apenas uma sessão ativa por credencial
+- **Invalidação automática**: Ao fazer login, todas as sessões anteriores são encerradas
 - **Validação periódica**: O frontend valida a sessão a cada 30 segundos
 - **Notificação ao usuário**: Mensagem clara quando a sessão é invalidada
 - **Logout automático**: Redirecionamento automático para tela de login
@@ -43,10 +44,12 @@ Response:
 #### Fluxo de Login
 1. Usuário fornece credenciais
 2. Sistema valida credenciais
-3. Gera novo `SessionId` (UUID)
-4. Armazena `SessionId` na entidade User/Owner
-5. Inclui `SessionId` no token JWT
-6. Retorna token ao cliente
+3. **Sistema invalida TODAS as sessões anteriores do usuário**
+4. Gera novo `SessionId` (UUID)
+5. Armazena novo `SessionId` na tabela UserSessions/OwnerSessions
+6. Atualiza campo `CurrentSessionId` na entidade User/Owner (compatibilidade)
+7. Inclui `SessionId` no token JWT
+8. Retorna token ao cliente
 
 #### Fluxo de Validação
 1. Cliente envia token JWT
@@ -112,8 +115,8 @@ Não são necessárias configurações adicionais. O sistema funciona automatica
 1. Faça login em um navegador
 2. Copie o token JWT
 3. Faça login novamente com as mesmas credenciais em outro navegador
-4. Observe que o primeiro navegador é desconectado automaticamente após ~30 segundos
-5. Verifique a mensagem exibida na tela de login
+4. **O primeiro navegador é desconectado imediatamente** (não precisa esperar ~30 segundos)
+5. Verifique a mensagem exibida na tela de login no primeiro navegador: "Sua sessão foi encerrada porque você fez login em outro dispositivo ou navegador."
 
 ## Troubleshooting
 
