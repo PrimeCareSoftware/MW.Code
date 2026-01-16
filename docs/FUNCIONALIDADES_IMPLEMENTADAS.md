@@ -457,8 +457,8 @@ public class Procedure : BaseEntity
 ### ✨ Destaques das Novas Implementações
 
 1. **WhatsApp AI Agent**: Agendamento automático via IA (Fase 1 completa)
-2. **Apps Mobile Nativos**: iOS (Swift/SwiftUI) e Android (Kotlin/Compose)
-3. **Microservices Architecture**: 7 microservices independentes
+2. **Progressive Web App (PWA)**: Migração completa dos apps nativos para PWA multiplataforma
+3. **Arquitetura Consolidada**: Microserviços descontinuados, API principal otimizada + Telemedicina separada
 4. **Contas a Pagar**: Sistema completo para gestão de despesas
 5. **Dashboard Financeiro**: Visualização completa de desempenho
 6. **Relatórios Avançados**: 6 tipos de relatórios diferentes

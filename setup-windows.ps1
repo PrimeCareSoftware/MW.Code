@@ -1,5 +1,9 @@
 # Script de Configuração Inicial para Windows - PrimeCare Software
 # Execute este script no PowerShell como Administrador
+# 
+# NOTA: Microserviços (auth, patients, appointments, medicalrecords, billing,
+#       systemadmin) foram DESCONTINUADOS em Janeiro 2026. Use a API principal.
+#       Apenas o microserviço de telemedicina permanece ativo.
 
 # Requer execução como administrador
 #Requires -RunAsAdministrator
