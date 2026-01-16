@@ -49,6 +49,21 @@ namespace MedicSoft.Repository.Repositories
                 .ExecuteDeleteAsync();
         }
 
+        public async Task DeleteAllOwnerSessionsAsync(Guid ownerId, string tenantId)
+        {
+            await _context.OwnerSessions
+                .Where(s => s.OwnerId == ownerId && s.TenantId == tenantId)
+                .ExecuteDeleteAsync();
+        }
+
+        public async Task<int> GetActiveSessionCountAsync(Guid ownerId, string tenantId)
+        {
+            return await _context.OwnerSessions
+                .CountAsync(s => s.OwnerId == ownerId &&
+                                 s.TenantId == tenantId &&
+                                 s.ExpiresAt > DateTime.UtcNow);
+        }
+
         public Task SaveChangesAsync()
         {
             return _context.SaveChangesAsync();

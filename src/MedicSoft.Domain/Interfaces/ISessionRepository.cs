@@ -11,6 +11,8 @@ namespace MedicSoft.Domain.Interfaces
         Task<bool> IsSessionValidAsync(Guid userId, string sessionId, string tenantId);
         Task DeleteAsync(UserSession session);
         Task DeleteExpiredSessionsAsync();
+        Task DeleteAllUserSessionsAsync(Guid userId, string tenantId);
+        Task<int> GetActiveSessionCountAsync(Guid userId, string tenantId);
         Task SaveChangesAsync();
     }
 
@@ -21,6 +23,8 @@ namespace MedicSoft.Domain.Interfaces
         Task<bool> IsSessionValidAsync(Guid ownerId, string sessionId, string tenantId);
         Task DeleteAsync(OwnerSession session);
         Task DeleteExpiredSessionsAsync();
+        Task DeleteAllOwnerSessionsAsync(Guid ownerId, string tenantId);
+        Task<int> GetActiveSessionCountAsync(Guid ownerId, string tenantId);
         Task SaveChangesAsync();
     }
 }

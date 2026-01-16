@@ -71,6 +71,9 @@ namespace MedicSoft.Application.Services
 
             var sessionId = Guid.NewGuid().ToString();
             
+            // IMPORTANT: Invalidate ALL previous sessions (single session enforcement)
+            await _userSessionRepository.DeleteAllUserSessionsAsync(userId, tenantId);
+            
             // Update legacy field for backward compatibility
             user.RecordLogin(sessionId);
             await _userRepository.UpdateAsync(user);
@@ -90,6 +93,9 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException("Owner not found");
 
             var sessionId = Guid.NewGuid().ToString();
+            
+            // IMPORTANT: Invalidate ALL previous sessions (single session enforcement)
+            await _ownerSessionRepository.DeleteAllOwnerSessionsAsync(ownerId, tenantId);
             
             // Update legacy field for backward compatibility
             owner.RecordLogin(sessionId);

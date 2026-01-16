@@ -43,34 +43,40 @@ O PrimeCare Software é **100% cross-platform**:
 
 > 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](docs/MOCK_DATA_GUIDE.md)
 
-> 📱 **NOVO!** Aplicativos Móveis Nativos! Apps para iOS (Swift/SwiftUI) e Android (Kotlin/Compose) disponíveis! [→ Ver Documentação Mobile](mobile/README.md)
+> 📱 **IMPORTANTE**: Migração para PWA! Descontinuamos os apps nativos iOS/Android em favor de um PWA multiplataforma. [Ver guia de migração →](docs/MOBILE_TO_PWA_MIGRATION.md) | [Como instalar PWA →](docs/PWA_INSTALLATION_GUIDE.md)
 
-## 📱 Mobile Applications 🆕
+## 📱 Aplicativo Móvel (PWA) 🆕
 
-O PrimeCare Software agora possui **aplicativos nativos** para dispositivos móveis:
+O PrimeCare Software agora é um **Progressive Web App (PWA)** que funciona em todos os dispositivos:
 
-### iOS App (Swift/SwiftUI)
-- 🍎 **iPhone e iPad**: iOS 17.0+
-- 🎨 **SwiftUI**: Interface nativa e moderna
-- 📂 **Localização**: `mobile/ios/`
-- 📖 **[Documentação →](mobile/ios/README.md)**
+### Características do PWA:
+- 📱 **Multiplataforma**: Funciona em iOS, Android, Windows, macOS e Linux
+- ⚡ **Instalável**: Adicione à tela inicial como um app nativo
+- 🔄 **Atualizações Automáticas**: Sempre a versão mais recente
+- 💾 **Funciona Offline**: Acesso básico sem internet
+- 🚀 **Performance**: Rápido e responsivo
+- 🎨 **Interface Nativa**: Visual moderno e intuitivo
 
-### Android App (Kotlin/Jetpack Compose)
-- 🤖 **Android**: API 24+ (Android 7.0+)
-- 🎨 **Jetpack Compose**: UI declarativa moderna
-- 📂 **Localização**: `mobile/android/`
-- 📖 **[Documentação →](mobile/android/README.md)**
+### Compatibilidade:
+- ✅ **iOS 16.4+** (iPhone e iPad via Safari)
+- ✅ **Android 7.0+** (via Chrome)
+- ✅ **Windows 10+** (via Chrome/Edge)
+- ✅ **macOS 10.15+** (via Safari/Chrome)
+- ✅ **Linux** (via Chrome/Firefox)
 
-**Funcionalidades Mobile:**
-- ✅ Autenticação JWT (usuários e proprietários)
-- ✅ Dashboard com estatísticas em tempo real
-- ✅ Listagem de pacientes com busca
-- ✅ Listagem de agendamentos com filtros
-- 🚧 Criação/edição (em desenvolvimento)
-- 🚧 Prontuários médicos (planejado)
-- 🚧 Notificações push (planejado)
+**📖 [Guia de Instalação do PWA →](docs/PWA_INSTALLATION_GUIDE.md)**
+**📖 [Documentação da Migração →](docs/MOBILE_TO_PWA_MIGRATION.md)**
 
-**[📚 Ver documentação completa dos apps mobile →](mobile/README.md)**
+### ⚠️ Apps Nativos Descontinuados
+
+Os aplicativos nativos iOS (Swift) e Android (Kotlin) foram **descontinuados** em Janeiro de 2026. Todos os recursos foram migrados para o PWA com melhorias significativas:
+
+- 💰 **Economia**: Sem taxas de 30% das lojas de apps
+- ⚡ **Mais Rápido**: Atualizações instantâneas sem aprovação
+- 🌍 **Mais Alcance**: Funciona em qualquer dispositivo
+- 🔧 **Mais Fácil**: Uma base de código ao invés de três
+
+**Código dos apps nativos arquivado em**: `mobile/ios/` e `mobile/android/` (somente referência)
 
 ## 🖥️ Frontend Applications
 
