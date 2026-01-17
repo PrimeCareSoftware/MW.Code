@@ -22,5 +22,5 @@ export const routes: Routes = [
   { path: 'terms', component: TermsComponent },
   { path: 'error', component: ErrorComponent },
   { path: 'error/:code', component: ErrorComponent },
-  { path: '**', component: ErrorComponent }
+  { path: '**', redirectTo: '/error/404' }
 ];

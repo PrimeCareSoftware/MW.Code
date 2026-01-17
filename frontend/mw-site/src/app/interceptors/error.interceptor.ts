@@ -25,8 +25,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         if (errorCodes.includes(statusCode)) {
           // Navigate to error page with the status code
           router.navigate(['/error'], { 
-            queryParams: { code: statusCode },
-            skipLocationChange: false 
+            queryParams: { code: statusCode }
           });
         }
       } else if (error.error instanceof ErrorEvent) {

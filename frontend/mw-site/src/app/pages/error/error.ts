@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 
 interface ErrorInfo {
   code: string;
@@ -15,7 +16,7 @@ interface ErrorInfo {
   templateUrl: './error.html',
   styleUrl: './error.scss'
 })
-export class ErrorComponent implements OnInit {
+export class ErrorComponent implements OnInit, OnDestroy {
   errorInfo: ErrorInfo = {
     code: '404',
     title: 'Página não encontrada',
@@ -23,23 +24,30 @@ export class ErrorComponent implements OnInit {
     icon: '🔍'
   };
 
+  private destroy$ = new Subject<void>();
+
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     // Get error code from route params or query params
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const code = params['code'];
       if (code) {
         this.errorInfo = this.getErrorInfo(code);
       }
     });
 
-    this.route.queryParams.subscribe(queryParams => {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queryParams => {
       const code = queryParams['code'];
       if (code) {
         this.errorInfo = this.getErrorInfo(code);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private getErrorInfo(code: string): ErrorInfo {
