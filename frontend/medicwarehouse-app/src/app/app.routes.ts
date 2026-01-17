@@ -59,8 +59,7 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full',
-        canActivate: [systemAdminGuard]
+        pathMatch: 'full'
       },
       {
         path: 'dashboard',
