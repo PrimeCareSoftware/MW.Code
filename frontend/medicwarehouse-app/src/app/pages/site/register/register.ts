@@ -13,10 +13,12 @@ import { CpfMaskDirective } from '../../../directives/cpf-mask.directive';
 import { CnpjMaskDirective } from '../../../directives/cnpj-mask.directive';
 import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
 import { CepMaskDirective } from '../../../directives/cep-mask.directive';
+import { HeaderComponent } from '../../../components/site/header/header';
+import { FooterComponent } from '../../../components/site/footer/footer';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule, RouterLink, CpfMaskDirective, CnpjMaskDirective, PhoneMaskDirective, CepMaskDirective],
+  imports: [CommonModule, FormsModule, RouterLink, CpfMaskDirective, CnpjMaskDirective, PhoneMaskDirective, CepMaskDirective, HeaderComponent, FooterComponent],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
@@ -283,7 +285,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         // Clear sales funnel tracking session
         this.salesFunnelTracking.clearSession();
         
-        this.router.navigate(['/checkout'], { 
+        this.router.navigate(['/site/checkout'], { 
           queryParams: { 
             success: true,
             clinicId: response.clinicId,

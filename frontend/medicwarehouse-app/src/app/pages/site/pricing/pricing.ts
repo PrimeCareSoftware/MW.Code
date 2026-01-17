@@ -5,10 +5,12 @@ import { SubscriptionService } from '../../../services/subscription';
 import { CartService } from '../../../services/cart';
 import { SubscriptionPlan } from '../../../models/subscription-plan.model';
 import { environment } from '../../../../environments/environment';
+import { HeaderComponent } from '../../../components/site/header/header';
+import { FooterComponent } from '../../../components/site/footer/footer';
 
 @Component({
   selector: 'app-pricing',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
   templateUrl: './pricing.html',
   styleUrl: './pricing.scss'
 })
@@ -39,7 +41,7 @@ export class PricingComponent {
       this.contactForCustomPlan();
     } else {
       this.cartService.addToCart(plan);
-      this.router.navigate(['/register'], { queryParams: { plan: plan.id } });
+      this.router.navigate(['/site/register'], { queryParams: { plan: plan.id } });
     }
   }
 

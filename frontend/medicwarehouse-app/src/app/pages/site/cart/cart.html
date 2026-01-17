@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="cart">
   <div class="container">
     <h1>Carrinho</h1>
@@ -6,7 +7,7 @@
       <div class="empty-icon">🛒</div>
       <h2>Seu carrinho está vazio</h2>
       <p>Escolha um de nossos planos para começar</p>
-      <a routerLink="/pricing" class="btn btn-primary">Ver Planos</a>
+      <a routerLink="/site/pricing" class="btn btn-primary">Ver Planos</a>
     </div>
 
     <div class="cart-content" *ngIf="cartService.getCart()().items.length > 0">
@@ -54,3 +55,4 @@
     </div>
   </div>
 </div>
+<app-footer></app-footer>
