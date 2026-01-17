@@ -30,14 +30,8 @@ export class TicketService {
     private auth: Auth
   ) {
     this.apiUrl = `${this.apiConfig.systemAdminUrl}/tickets`;
-    // Defer loading to avoid circular dependency with error interceptor
-    // The error interceptor injects NotificationService which makes HTTP calls
-    // Only load unread count if user is authenticated to prevent 401 errors on public pages
-    setTimeout(() => {
-      if (this.auth.isAuthenticated()) {
-        this.loadUnreadCount();
-      }
-    }, 0);
+    // Note: Unread count loading is now done explicitly by components when needed
+    // to prevent 401 errors on app initialization before authentication
   }
 
   /**
@@ -174,8 +168,9 @@ export class TicketService {
 
   /**
    * Load unread count and update signal
+   * This should be called explicitly by components when needed
    */
-  private loadUnreadCount(): void {
+  public loadUnreadCount(): void {
     this.getUnreadCount().subscribe({
       next: (response) => this.unreadTicketCount.set(response.count),
       error: () => this.unreadTicketCount.set(0)

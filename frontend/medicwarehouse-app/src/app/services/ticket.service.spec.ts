@@ -47,21 +47,24 @@ describe('TicketService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should NOT load unread count when user is not authenticated', (done) => {
+  it('should NOT load unread count automatically in constructor', (done) => {
     setupTestBed(false);
     
-    // Wait for setTimeout to execute
+    // Wait for any potential async operations
     setTimeout(() => {
-      // Verify no HTTP requests were made
+      // Verify no HTTP requests were made automatically
       httpMock.expectNone('http://localhost:5293/api/tickets/unread-count');
       done();
     }, 10);
   });
 
-  it('should load unread count when user is authenticated', (done) => {
+  it('should load unread count when explicitly called via loadUnreadCount', (done) => {
     setupTestBed(true);
     
-    // Wait for setTimeout to execute
+    // Explicitly call loadUnreadCount
+    service.loadUnreadCount();
+    
+    // Wait for HTTP request
     setTimeout(() => {
       // Verify HTTP request was made
       const req = httpMock.expectOne('http://localhost:5293/api/tickets/unread-count');
