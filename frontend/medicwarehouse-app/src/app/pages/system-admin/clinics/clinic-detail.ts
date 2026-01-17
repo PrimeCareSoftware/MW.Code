@@ -2,8 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { SystemAdminService } from '../../services/system-admin';
-import { ClinicDetail as ClinicDetailModel, UpdateClinicRequest, EnableManualOverrideRequest, SubscriptionPlan, UpdateSubscriptionRequest } from '../../models/system-admin.model';
+import { SystemAdminService } from '../../../services/system-admin';
+import { ClinicDetail as ClinicDetailModel, UpdateClinicRequest, EnableManualOverrideRequest, SubscriptionPlan, UpdateSubscriptionRequest } from '../../../models/system-admin.model';
 
 @Component({
   selector: 'app-clinic-detail',

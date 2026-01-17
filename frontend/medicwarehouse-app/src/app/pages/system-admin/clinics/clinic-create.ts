@@ -2,8 +2,8 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { SystemAdminService } from '../../services/system-admin';
-import { CreateClinicRequest, SubscriptionPlan } from '../../models/system-admin.model';
+import { SystemAdminService } from '../../../services/system-admin';
+import { CreateClinicRequest, SubscriptionPlan } from '../../../models/system-admin.model';
 
 @Component({
   selector: 'app-clinic-create',

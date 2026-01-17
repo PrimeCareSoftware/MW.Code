@@ -1,8 +1,8 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { SystemAdminService } from '../../services/system-admin';
-import { SystemAnalytics } from '../../models/system-admin.model';
+import { SystemAdminService } from '../../../services/system-admin';
+import { SystemAnalytics } from '../../../models/system-admin.model';
 
 @Component({
   selector: 'app-dashboard',
