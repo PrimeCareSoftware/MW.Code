@@ -216,24 +216,22 @@ namespace MedicSoft.Api.Controllers
             });
         }
 
-        private string GenerateRandomCNPJ()
+        private static string GenerateRandomCNPJ()
         {
-            var random = new Random();
             var cnpj = "";
             for (int i = 0; i < 14; i++)
             {
-                cnpj += random.Next(0, 9).ToString();
+                cnpj += Random.Shared.Next(0, 9).ToString();
             }
             return cnpj;
         }
 
-        private string GenerateRandomCPF()
+        private static string GenerateRandomCPF()
         {
-            var random = new Random();
             var cpf = "";
             for (int i = 0; i < 11; i++)
             {
-                cpf += random.Next(0, 9).ToString();
+                cpf += Random.Shared.Next(0, 9).ToString();
             }
             return cpf;
         }
