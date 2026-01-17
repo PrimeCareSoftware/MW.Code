@@ -113,7 +113,7 @@ services:
   # Frontend Angular (Build de produção otimizado)
   frontend:
     build:
-      context: ./frontend/primecare-app
+      context: ./frontend/medicwarehouse-app
       dockerfile: Dockerfile.production
       args:
         API_URL: ${API_URL:-http://api:8080}

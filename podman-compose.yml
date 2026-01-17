@@ -53,7 +53,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend/primecare-app
+      context: ./frontend/medicwarehouse-app
       dockerfile: Dockerfile
     container_name: primecare-frontend
     ports:
