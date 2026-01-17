@@ -16,15 +16,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       let errorMessage = getErrorMessage(error);
       
-      // Exibe notificação para o usuário apenas se não for erro de autenticação
-      // (erros de autenticação são tratados pelo auth guard)
-      if (error.status !== 401) {
+      // Exibe notificação para o usuário apenas se não for erro de autenticação ou autorização
+      // (erros de autenticação/autorização são tratados pelas páginas de erro)
+      if (error.status !== 401 && error.status !== 403) {
         notificationService.error(errorMessage);
       }
 
-      // Se for erro 401, redireciona para login
+      // Se for erro 401, redireciona para página de não autorizado
       if (error.status === 401) {
-        router.navigate(['/login']);
+        router.navigate(['/401']);
+      }
+
+      // Se for erro 403, redireciona para página de acesso negado
+      if (error.status === 403) {
+        router.navigate(['/403']);
       }
 
       // Retorna erro com mensagem tratada

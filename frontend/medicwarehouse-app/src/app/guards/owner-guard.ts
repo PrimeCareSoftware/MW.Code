@@ -12,6 +12,7 @@ export const ownerGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  router.navigate(['/dashboard']);
+  // Redirect to 403 forbidden page for permission denied
+  router.navigate(['/403']);
   return false;
 };
