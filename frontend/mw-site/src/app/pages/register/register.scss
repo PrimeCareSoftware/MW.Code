@@ -200,6 +200,14 @@
   gap: 1.5rem;
 }
 
+.form-row-street {
+  grid-template-columns: 3fr 1fr;
+}
+
+.form-row-address {
+  grid-template-columns: 1fr 1fr 0.5fr;
+}
+
 .form-group {
   margin-bottom: 2rem;
   
@@ -377,7 +385,9 @@
     }
   }
   
-  .form-row {
+  .form-row,
+  .form-row-street,
+  .form-row-address {
     grid-template-columns: 1fr;
   }
   
@@ -726,6 +736,15 @@
   
   .plan-features-compact {
     grid-template-columns: 1fr;
+  }
+  
+  .plans-selection {
+    gap: 1rem;
+  }
+  
+  .plan-option {
+    padding: 1.5rem;
+    gap: 1rem;
   }
 }
 
