@@ -19,6 +19,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IRegistrationService _registrationService;
         private readonly IUserRepository _userRepository;
         private readonly IClinicRepository _clinicRepository;
+        private readonly IOwnerRepository _ownerRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IWebHostEnvironment _environment;
         private readonly IConfiguration _configuration;
@@ -27,6 +28,7 @@ namespace MedicSoft.Api.Controllers
             IRegistrationService registrationService,
             IUserRepository userRepository,
             IClinicRepository clinicRepository,
+            IOwnerRepository ownerRepository,
             IPasswordHasher passwordHasher,
             IWebHostEnvironment environment,
             IConfiguration configuration)
@@ -34,6 +36,7 @@ namespace MedicSoft.Api.Controllers
             _registrationService = registrationService;
             _userRepository = userRepository;
             _clinicRepository = clinicRepository;
+            _ownerRepository = ownerRepository;
             _passwordHasher = passwordHasher;
             _environment = environment;
             _configuration = configuration;
@@ -111,22 +114,20 @@ namespace MedicSoft.Api.Controllers
                     return BadRequest(new { error = result.Message });
                 }
 
-                // Create system admin user for the clinic
+                // Create system owner (Owner without ClinicId) for system-admin access
                 var adminPasswordHash = _passwordHasher.HashPassword(adminPassword);
-                var clinic = await _clinicRepository.GetByIdAsync(result.ClinicId!.Value, result.TenantId!);
                 
-                var adminUser = new User(
+                var systemOwner = new Owner(
                     username: adminUsername,
                     email: adminEmail,
                     passwordHash: adminPasswordHash,
                     fullName: request.AdminName ?? "Administrador Teste",
                     phone: "+5511977777777",
-                    role: UserRole.SystemAdmin,
                     tenantId: result.TenantId!,
-                    clinicId: clinic!.Id
+                    clinicId: null // null ClinicId makes this a System Owner
                 );
 
-                await _userRepository.AddAsync(adminUser);
+                await _ownerRepository.AddAsync(systemOwner);
 
                 return Ok(new
                 {
@@ -145,13 +146,14 @@ namespace MedicSoft.Api.Controllers
                         email = ownerEmail,
                         loginEndpoint = "/api/auth/owner-login"
                     },
-                    systemAdmin = new
+                    systemOwner = new
                     {
-                        id = adminUser.Id,
+                        id = systemOwner.Id,
                         username = adminUsername,
                         password = adminPassword,
                         email = adminEmail,
-                        loginEndpoint = "/api/auth/login"
+                        loginEndpoint = "/api/auth/owner-login",
+                        note = "This is a System Owner with system-admin access (Owner with null ClinicId)"
                     },
                     note = "Use the credentials above to login and test the system"
                 });

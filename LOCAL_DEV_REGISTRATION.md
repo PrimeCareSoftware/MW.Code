@@ -84,12 +84,13 @@ Antes de usar esta funcionalidade, você precisa:
     "email": "owner@teste.local",
     "loginEndpoint": "/api/auth/owner-login"
   },
-  "systemAdmin": {
+  "systemOwner": {
     "id": "guid",
     "username": "admin",
     "password": "Admin@123",
     "email": "admin@teste.local",
-    "loginEndpoint": "/api/auth/login"
+    "loginEndpoint": "/api/auth/owner-login",
+    "note": "This is a System Owner with system-admin access (Owner with null ClinicId)"
   },
   "note": "Use the credentials above to login and test the system"
 }
@@ -101,9 +102,8 @@ Quando você usa esta funcionalidade, o sistema cria:
 
 1. **Clínica completa** com todos os dados necessários (endereço, CNPJ gerado automaticamente, etc.)
 2. **Owner (Proprietário)** com perfil de proprietário da clínica
-3. **System Admin** com perfil de administrador do sistema e acesso total
+3. **System Owner** - Owner sem ClinicId, com acesso total ao sistema (isSystemOwner = true)
 4. **Assinatura** usando plano Trial (ou primeiro plano ativo disponível)
-5. **Perfil de Acesso** SystemAdmin com todas as permissões
 
 ## Valores Padrão
 
@@ -129,7 +129,7 @@ Esta funcionalidade possui as seguintes proteções:
 
 ## Como Fazer Login
 
-### Login como Owner:
+### Login como Owner (Clinic Owner):
 ```
 POST /api/auth/owner-login
 {
@@ -139,14 +139,17 @@ POST /api/auth/owner-login
 }
 ```
 
-### Login como System Admin:
+### Login como System Owner (System Admin):
 ```
-POST /api/auth/login
+POST /api/auth/owner-login
 {
   "username": "admin",
-  "password": "Admin@123"
+  "password": "Admin@123",
+  "tenantId": "<tenantId retornado>"
 }
 ```
+
+**Nota:** Ambos usam o mesmo endpoint `/api/auth/owner-login`. A diferença é que o System Owner tem `isSystemOwner: true` no token JWT porque não tem ClinicId associado.
 
 ## Outras Funcionalidades de Desenvolvimento
 
@@ -238,12 +241,13 @@ curl -X POST http://localhost:5000/api/auth/owner-login \
     "tenantId": "clinica-teste-local"
   }'
 
-# System Admin login
-curl -X POST http://localhost:5000/api/auth/login \
+# System Owner login (for system-admin access)
+curl -X POST http://localhost:5000/api/auth/owner-login \
   -H "Content-Type: application/json" \
   -d '{
     "username": "admin",
-    "password": "Admin@123"
+    "password": "Admin@123",
+    "tenantId": "clinica-teste-local"
   }'
 ```
 
