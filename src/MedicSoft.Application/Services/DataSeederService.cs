@@ -118,7 +118,7 @@ namespace MedicSoft.Application.Services
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(clinicSubscription);
 
                 // 1.2. Create Demo Owner for the clinic
-                var owner = CreateDemoOwner();
+                var owner = CreateDemoOwner(clinic.Id);
                 await _ownerRepository.AddWithoutSaveAsync(owner);
 
                 // 2. Create Users (Admin, Doctor, Receptionist)
@@ -1439,7 +1439,7 @@ RETORNO: {{return_date}}",
             return subscription;
         }
 
-        private Owner CreateDemoOwner()
+        private Owner CreateDemoOwner(Guid clinicId)
         {
             var ownerPassword = _passwordHasher.HashPassword("Owner@123");
             return new Owner(
@@ -1448,7 +1448,8 @@ RETORNO: {{return_date}}",
                 ownerPassword,
                 "Dr. Roberto Almeida",
                 "+55 11 98765-4320",
-                _demoTenantId
+                _demoTenantId,
+                clinicId
             );
         }
 
