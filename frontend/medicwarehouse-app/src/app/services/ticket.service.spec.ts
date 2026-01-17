@@ -10,19 +10,17 @@ describe('TicketService', () => {
   let httpMock: HttpTestingController;
   let mockApiConfig: jasmine.SpyObj<ApiConfigService>;
 
-  afterEach(() => {
-    httpMock.verify();
-  });
-
-  it('should be created', () => {
-    // Create mock Auth service with authentication = false
-    const mockAuth = {
-      isAuthenticated: signal(false),
+  function createMockAuth(isAuthenticated: boolean): any {
+    return {
+      isAuthenticated: signal(isAuthenticated),
       login: jasmine.createSpy('login'),
       logout: jasmine.createSpy('logout')
-    } as any;
+    };
+  }
+
+  function setupTestBed(isAuthenticated: boolean): void {
+    const mockAuth = createMockAuth(isAuthenticated);
     
-    // Create mock ApiConfigService
     mockApiConfig = jasmine.createSpyObj('ApiConfigService', [], {
       systemAdminUrl: 'http://localhost:5293/api'
     });
@@ -38,33 +36,19 @@ describe('TicketService', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TicketService);
+  }
+
+  afterEach(() => {
+    httpMock?.verify();
+  });
+
+  it('should be created', () => {
+    setupTestBed(false);
     expect(service).toBeTruthy();
   });
 
   it('should NOT load unread count when user is not authenticated', (done) => {
-    // Create mock Auth service with authentication = false
-    const mockAuth = {
-      isAuthenticated: signal(false),
-      login: jasmine.createSpy('login'),
-      logout: jasmine.createSpy('logout')
-    } as any;
-    
-    // Create mock ApiConfigService
-    mockApiConfig = jasmine.createSpyObj('ApiConfigService', [], {
-      systemAdminUrl: 'http://localhost:5293/api'
-    });
-
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        TicketService,
-        { provide: Auth, useValue: mockAuth },
-        { provide: ApiConfigService, useValue: mockApiConfig }
-      ]
-    });
-
-    httpMock = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(TicketService);
+    setupTestBed(false);
     
     // Wait for setTimeout to execute
     setTimeout(() => {
@@ -75,29 +59,7 @@ describe('TicketService', () => {
   });
 
   it('should load unread count when user is authenticated', (done) => {
-    // Create mock Auth service with authentication = true
-    const mockAuth = {
-      isAuthenticated: signal(true),
-      login: jasmine.createSpy('login'),
-      logout: jasmine.createSpy('logout')
-    } as any;
-    
-    // Create mock ApiConfigService
-    mockApiConfig = jasmine.createSpyObj('ApiConfigService', [], {
-      systemAdminUrl: 'http://localhost:5293/api'
-    });
-
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        TicketService,
-        { provide: Auth, useValue: mockAuth },
-        { provide: ApiConfigService, useValue: mockApiConfig }
-      ]
-    });
-
-    httpMock = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(TicketService);
+    setupTestBed(true);
     
     // Wait for setTimeout to execute
     setTimeout(() => {
