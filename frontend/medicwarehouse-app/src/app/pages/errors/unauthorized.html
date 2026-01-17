@@ -1,0 +1,18 @@
+<div class="error-container">
+  <div class="error-content">
+    <div class="error-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <h1>401</h1>
+    <h2>Não Autorizado</h2>
+    <p>Você precisa estar autenticado para acessar esta área.</p>
+    <p>Por favor, faça login para continuar.</p>
+    <div class="error-actions">
+      <button (click)="navigateToLogin()" class="btn btn-primary">Fazer Login</button>
+    </div>
+  </div>
+</div>

@@ -109,8 +109,21 @@ export const routes: Routes = [
     ]
   },
 
-  // Default redirect to dashboard for authenticated users, or to site for public
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  // Error pages - no authentication required
+  { 
+    path: '401', 
+    loadComponent: () => import('./pages/errors/unauthorized').then(m => m.Unauthorized)
+  },
+  { 
+    path: '403', 
+    loadComponent: () => import('./pages/errors/forbidden').then(m => m.Forbidden)
+  },
+  { 
+    path: '404', 
+    loadComponent: () => import('./pages/errors/not-found').then(m => m.NotFound)
+  },
+
+  // Login route - accessible only via URL (not redirected to by guards)
   { 
     path: 'login', 
     loadComponent: () => import('./pages/login/login').then(m => m.Login)
@@ -119,6 +132,11 @@ export const routes: Routes = [
     path: 'register', 
     loadComponent: () => import('./pages/register/register').then(m => m.Register)
   },
+
+  // Homepage - redirect to dashboard (will be protected by authGuard)
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+
+  // Main application routes - require authentication
   { 
     path: 'dashboard', 
     loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard),
@@ -205,5 +223,7 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   ...CLINIC_ADMIN_ROUTES,
-  { path: '**', redirectTo: '/dashboard' }
+
+  // Wildcard route - redirect to 404 page for unknown routes
+  { path: '**', redirectTo: '/404' }
 ];
