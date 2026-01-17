@@ -57,13 +57,13 @@ Write-Host ""
 if ([string]::IsNullOrEmpty($ConnectionString)) {
     Write-ColorOutput "No connection string provided." -Color Yellow
     Write-Host "Usage:"
-    Write-Host "  .\run-all-migrations.ps1 -ConnectionString 'Host=localhost;Database=medicsoft;Username=postgres;Password=yourpassword'"
+    Write-Host "  .\run-all-migrations.ps1 -ConnectionString 'Host=localhost;Database=primecare;Username=postgres;Password=Abc!123456'"
     Write-Host "Or set DATABASE_CONNECTION_STRING environment variable"
     Write-Host ""
     Write-ColorOutput "Using default connection string for local development..." -Color Yellow
     Write-ColorOutput "WARNING: Default credentials are for DEVELOPMENT ONLY!" -Color Red
     Write-ColorOutput "Never use default credentials in production environments!" -Color Red
-    $ConnectionString = "Host=localhost;Database=medicsoft;Username=postgres;Password=postgres"
+    $ConnectionString = "Host=localhost;Database=primecare;Username=postgres;Password=Abc!123456"
 }
 
 Write-ColorOutput "Connection string: $($ConnectionString.Substring(0, [Math]::Min(50, $ConnectionString.Length)))..." -Color Green
