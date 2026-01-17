@@ -16,7 +16,7 @@ export class SubscriptionService {
   constructor(private http: HttpClient) { }
 
   getPlans(): Observable<SubscriptionPlan[]> {
-    return this.http.get<SubscriptionPlan[]>(`${this.apiUrl}/api/registration/plans`).pipe(
+    return this.http.get<SubscriptionPlan[]>(`${this.apiUrl}/registration/plans`).pipe(
       map(plans => plans.map(p => ({
         ...p,
         id: String(p.id) // Convert Guid to string for frontend compatibility
@@ -35,18 +35,18 @@ export class SubscriptionService {
   }
 
   register(request: RegistrationRequest): Observable<RegistrationResponse> {
-    return this.http.post<RegistrationResponse>(`${this.apiUrl}/api/registration`, request);
+    return this.http.post<RegistrationResponse>(`${this.apiUrl}/registration`, request);
   }
 
   sendContactMessage(request: ContactRequest): Observable<ContactResponse> {
-    return this.http.post<ContactResponse>(`${this.apiUrl}/api/contact`, request);
+    return this.http.post<ContactResponse>(`${this.apiUrl}/contact`, request);
   }
 
   checkCNPJ(cnpj: string): Observable<{ exists: boolean }> {
-    return this.http.get<{ exists: boolean }>(`${this.apiUrl}/api/registration/check-cnpj/${cnpj}`);
+    return this.http.get<{ exists: boolean }>(`${this.apiUrl}/registration/check-cnpj/${cnpj}`);
   }
 
   checkUsername(username: string): Observable<{ available: boolean }> {
-    return this.http.get<{ available: boolean }>(`${this.apiUrl}/api/registration/check-username/${username}`);
+    return this.http.get<{ available: boolean }>(`${this.apiUrl}/registration/check-username/${username}`);
   }
 }

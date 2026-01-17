@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5293',
+  apiUrl: 'http://localhost:5293/api',
   appUrl: 'http://localhost:4200', // Main application URL
   whatsappNumber: '5511999999999',
   companyEmail: 'contato@medicwarehouse.com',

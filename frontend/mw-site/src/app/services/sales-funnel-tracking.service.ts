@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class SalesFunnelTrackingService {
-  private readonly API_URL = `${environment.apiUrl}/api/salesfunnel`;
+  private readonly API_URL = `${environment.apiUrl}/salesfunnel`;
   private sessionId: string = '';
   private stepStartTimes: Map<number, number> = new Map();
 
