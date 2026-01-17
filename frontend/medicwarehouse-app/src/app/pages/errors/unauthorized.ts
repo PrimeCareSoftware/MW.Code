@@ -1,12 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-unauthorized',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './unauthorized.html',
   styleUrl: './unauthorized.scss'
 })
-export class Unauthorized {
+export class Unauthorized implements OnInit {
+  returnUrl: string = '/dashboard';
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    // Get return URL from query parameters or default to dashboard
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login'], { queryParams: { returnUrl: this.returnUrl } });
+  }
 }
