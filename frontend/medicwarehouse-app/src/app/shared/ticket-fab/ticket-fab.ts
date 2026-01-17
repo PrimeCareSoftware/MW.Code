@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TicketService } from '../../services/ticket.service';
@@ -11,7 +11,7 @@ import { CreateTicketRequest, TicketType, TicketPriority, getTicketTypeLabel, ge
   templateUrl: './ticket-fab.html',
   styleUrl: './ticket-fab.scss'
 })
-export class TicketFab {
+export class TicketFab implements OnInit {
   showModal = signal<boolean>(false);
   isSubmitting = signal<boolean>(false);
   
@@ -53,6 +53,11 @@ export class TicketFab {
     private ticketService: TicketService,
     private notificationService: NotificationService
   ) {}
+
+  ngOnInit(): void {
+    // Load unread count when component initializes (component only shows when authenticated)
+    this.ticketService.initUnreadCount();
+  }
 
   openModal(): void {
     this.showModal.set(true);
