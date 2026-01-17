@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { Loading } from '../../shared/loading/loading';
 import { Auth } from '../../services/auth';
+import { NotificationService } from '../../services/notification.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { format } from 'date-fns';
@@ -44,11 +45,14 @@ export class Dashboard implements OnInit {
 
   constructor(
     public authService: Auth,
-    private http: HttpClient
+    private http: HttpClient,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
     this.loadDashboardStats();
+    // Load notifications for authenticated users
+    this.notificationService.loadNotifications();
   }
 
   async loadDashboardStats() {
