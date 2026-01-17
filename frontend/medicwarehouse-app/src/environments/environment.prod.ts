@@ -1,17 +1,17 @@
 export const environment = {
   production: true,
   // Default API URL (for backward compatibility)
-  apiUrl: 'https://api.medicwarehouse.com/api',
+  apiUrl: 'https://api.primecare.com/api',
   
   // Microservices URLs (configure with actual production URLs)
   microservices: {
-    auth: 'https://auth.medicwarehouse.com/api',
-    patients: 'https://patients.medicwarehouse.com/api',
-    appointments: 'https://appointments.medicwarehouse.com/api',
-    medicalRecords: 'https://medicalrecords.medicwarehouse.com/api',
-    billing: 'https://billing.medicwarehouse.com/api',
-    systemAdmin: 'https://systemadmin.medicwarehouse.com/api',
-    telemedicine: 'https://telemedicine.medicwarehouse.com/api'
+    auth: 'https://auth.primecare.com/api',
+    patients: 'https://patients.primecare.com/api',
+    appointments: 'https://appointments.primecare.com/api',
+    medicalRecords: 'https://medicalrecords.primecare.com/api',
+    billing: 'https://billing.primecare.com/api',
+    systemAdmin: 'https://systemadmin.primecare.com/api',
+    telemedicine: 'https://telemedicine.primecare.com/api'
   },
   
   // Flag to enable microservices mode
@@ -27,7 +27,7 @@ export const environment = {
     // Paths that should not be treated as tenant identifiers
     excludedPaths: ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets', 'health', 'swagger'],
     // Domain suffix for subdomain display (can be changed to any domain)
-    // Examples: 'medicwarehouse.com', 'medicwarehouse.com.br', 'yourdomain.com'
-    domainSuffix: 'medicwarehouse.com'
+    // Examples: 'primecare.com', 'primecare.com.br', 'yourdomain.com'
+    domainSuffix: 'primecare.com'
   }
 };

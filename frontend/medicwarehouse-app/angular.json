@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "medicwarehouse-app": {
+    "primecare-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -75,10 +75,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "medicwarehouse-app:build:production"
+              "buildTarget": "primecare-frontend:build:production"
             },
             "development": {
-              "buildTarget": "medicwarehouse-app:build:development"
+              "buildTarget": "primecare-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"

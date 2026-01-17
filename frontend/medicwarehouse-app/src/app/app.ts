@@ -10,7 +10,7 @@ import { Auth } from './services/auth';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('medicwarehouse-app');
+  protected readonly title = signal('primecare-frontend');
   
   constructor(public authService: Auth) {}
   
