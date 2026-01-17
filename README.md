@@ -121,6 +121,35 @@ Aplicativo unificado acessando diferentes seções por rotas:
 - 🎨 **UX Consistente**: Design system unificado
 - 📦 **Menor footprint**: Dependências compartilhadas
 
+### 🏥 **Portal do Paciente** (`frontend/patient-portal`)
+Portal dedicado para acesso de pacientes (separado da aplicação principal):
+
+- 👤 **Usuários**: Pacientes (acesso externo)
+- 📋 **Ver Agendamentos**: Consulta de agendamentos confirmados
+- 📄 **Documentos Médicos**: Download de receitas, exames, atestados
+- 👤 **Perfil**: Gerenciamento de dados pessoais
+- 🔐 **Autenticação**: Login por CPF/Email + Senha
+- 🔒 **Segurança**: JWT + LGPD compliant
+- **URL desenvolvimento**: `http://localhost:4201` (quando executado separadamente)
+- **API Backend**: `patient-portal-api/` (API dedicada)
+
+**Por que separado?**
+- 🔒 Isolamento de segurança (dados de pacientes)
+- 🎯 Interface simplificada para usuários finais
+- 📱 Autenticação independente
+- ⚖️ Conformidade LGPD/CFM
+
+### 📚 **Portal de Documentação** (`frontend/mw-docs`)
+Portal de documentação técnica (GitHub Pages):
+
+- 📖 **36+ Documentos** técnicos organizados
+- 🔍 **Busca em tempo real** por título, categoria e descrição
+- 📊 **Diagramas Mermaid** interativos
+- 📝 **Renderização Markdown** com syntax highlighting
+- **URL produção**: `https://primecaresoftware.github.io/MW.Code/`
+- **Deploy**: Automático via GitHub Actions
+
+> **Nota**: Os projetos `mw-site` e `mw-system-admin` foram **descontinuados e deletados** em Janeiro 2026, pois suas funcionalidades foram completamente migradas e integradas ao `medicwarehouse-app`.
 
 ## 🎥 Microserviço de Telemedicina 🆕
 
@@ -746,7 +775,7 @@ Para facilitar o teste e integração, todas as APIs foram exportadas para o Pos
 
 Para instruções detalhadas, consulte o [Guia de Importação do Postman](docs/POSTMAN_IMPORT_GUIDE.md).
 
-> 📖 **Guia Completo**: Para um passo a passo detalhado de como configurar e cadastrar tudo no sistema, consulte o [Guia de Configuração do Sistema](frontend/mw-docs/src/assets/docs/SYSTEM_SETUP_GUIDE.md).
+> 📖 **Guia Completo**: Para um passo a passo detalhado de como configurar e cadastrar tudo no sistema, consulte o [Guia de Configuração do Sistema](docs/SYSTEM_SETUP_GUIDE.md).
 
 ### Endpoints Principais
 
@@ -933,7 +962,7 @@ O PrimeCare Software implementa múltiplas camadas de segurança para proteger d
 
 Para detalhes completos sobre segurança, autenticação e melhores práticas:
 - 📖 **[AUTHENTICATION_GUIDE.md](docs/AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
-- 📖 **[SECURITY_GUIDE.md](frontend/mw-docs/src/assets/docs/SECURITY_GUIDE.md)** - Guia completo de segurança
+- 📖 **[SECURITY_GUIDE.md](docs/SECURITY_GUIDE.md)** - Guia completo de segurança
 
 ## 🚀 Deploy e Infraestrutura de Produção
 
@@ -1066,71 +1095,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 - **Projeto**: PrimeCare Software
 - **Email**: contato@primecaresoftware.com
 - **GitHub**: [https://github.com/MedicWarehouse/MW.Code](https://github.com/MedicWarehouse/MW.Code)
-## 🌐 MW.Site - Marketing Website
-
-**Novo!** Site de marketing e contratação do PrimeCare Software SaaS.
-
-### Características
-
-- **Angular 20**: Framework moderno e performático
-- **Landing Page**: Home page com hero, features e benefícios
-- **Pricing Page**: 4 planos disponíveis (Básico, Médio, Premium, Personalizado)
-- **Registro Completo**: Wizard de 5 etapas para cadastro de clínicas
-- **Período de Teste**: 15 dias gratuitos automaticamente
-- **Integração WhatsApp**: Contato direto via WhatsApp
-- **Carrinho de Compras**: Visualização antes de finalizar cadastro
-- **Responsive Design**: Funciona perfeitamente em mobile, tablet e desktop
-
-### Planos Disponíveis
-
-| Plano | Preço | Usuários | Pacientes | Recursos |
-|-------|-------|----------|-----------|----------|
-| **Básico** | R$ 190/mês | 2 | 100 | Funcionalidades básicas |
-| **Médio** ⭐ | R$ 240/mês | 3 | 300 | WhatsApp + Relatórios |
-| **Premium** | R$ 320/mês | 5 | Ilimitados | Todos os recursos + SMS + TISS |
-| **Personalizado** | Sob consulta | Customizado | Ilimitados | Recursos exclusivos |
-
-### Como Executar MW.Site
-
-```bash
-# Navegar para o diretório
-cd frontend/mw-site
-
-# Instalar dependências
-npm install
-
-# Executar em modo de desenvolvimento
-npm start
-
-# Build para produção
-npm run build
-```
-
-Acesse: `http://localhost:4200`
-
-### Documentação Completa
-
-Para informações detalhadas sobre MW.Site, consulte: [MW_SITE_DOCUMENTATION.md](docs/MW_SITE_DOCUMENTATION.md)
-
-### API Endpoints para MW.Site
-
-#### Registro de Nova Clínica
-```bash
-POST /api/registration
-```
-
-#### Verificar CNPJ
-```bash
-GET /api/registration/check-cnpj/{cnpj}
-```
-
-#### Verificar Username
-```bash
-GET /api/registration/check-username/{username}
-```
-
-#### Enviar Formulário de Contato
-```bash
-POST /api/contact
-```
 

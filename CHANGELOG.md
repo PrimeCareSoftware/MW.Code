@@ -24,6 +24,19 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ### 🔥 Removido
 
+#### Projetos Frontend Consolidados
+- **frontend/mw-site**: Completamente integrado em `medicwarehouse-app` sob rotas `/site/*`
+  - Todas as 9 páginas (home, pricing, contact, register, cart, checkout, privacy, terms, testimonials) migradas
+  - Todos os serviços, diretivas e modelos transferidos
+  - **Motivo**: Eliminação de redundância, simplificação de deploy e manutenção
+- **frontend/mw-system-admin**: Completamente integrado em `medicwarehouse-app` sob rotas `/system-admin/*`
+  - Todas as 10 páginas (dashboard, clinics, plans, owners, subdomains, tickets, metrics) migradas
+  - Funcionalidade 100% preservada com guards aprimorados
+  - **Motivo**: Consolidação em aplicação única, redução de 40% nos projetos frontend
+- **Serviço system-admin nos compose files**: Removido de docker-compose.yml e podman-compose.yml
+  - Porta 4201 não mais necessária
+  - Todos os acessos via porta 4200 do medicwarehouse-app
+
 #### Microserviços Descontinuados
 - **Removidos 6 microserviços**: auth, patients, appointments, medicalrecords, billing e systemadmin
   - Todas as funcionalidades foram consolidadas na API monolítica principal (src/MedicSoft.Api)
@@ -39,6 +52,25 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
   - Atualizações instantâneas sem processo de aprovação
   - Multiplataforma (iOS, Android, Windows, macOS, Linux)
   - ~90% menos espaço de armazenamento
+
+### ✨ Adicionado
+
+#### Documentação de Consolidação
+- **docs/FRONTEND_CONSOLIDATION_COMPLETE.md**: Documento completo detalhando a consolidação frontend
+  - Análise de todos os projetos frontend
+  - Decisões de manutenção vs remoção
+  - Checklist de validação
+  - Benefícios técnicos e operacionais
+
+#### Seções no README
+- Adicionada seção sobre **Portal do Paciente** (patient-portal)
+  - Explicação de funcionalidades únicas
+  - Justificativa para manter como projeto separado
+  - Instruções de acesso e uso
+- Adicionada seção sobre **Portal de Documentação** (mw-docs)
+  - Características do portal técnico
+  - Deploy via GitHub Pages
+  - Sistema de busca e visualização
 
 ### 🔄 Modificado
 
