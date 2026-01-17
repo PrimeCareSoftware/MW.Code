@@ -1,4 +1,4 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -80,6 +80,8 @@ export class NotificationService {
 
   loadNotifications(): void {
     // Check if user has a token before making the request
+    // We check localStorage directly to avoid circular dependency with Auth service
+    // (error interceptor -> NotificationService -> Auth service -> error interceptor)
     const token = localStorage.getItem('auth_token');
     if (!token) {
       // User is not authenticated, skip loading notifications
