@@ -232,7 +232,7 @@ namespace MedicSoft.Api.Controllers
             var sum = 0;
             for (int i = 0; i < 12; i++)
             {
-                sum += int.Parse(cnpj[i].ToString()) * multiplier1[i];
+                sum += (cnpj[i] - '0') * multiplier1[i];
             }
             var remainder = sum % 11;
             var firstCheckDigit = remainder < 2 ? 0 : 11 - remainder;
@@ -243,7 +243,7 @@ namespace MedicSoft.Api.Controllers
             sum = 0;
             for (int i = 0; i < 13; i++)
             {
-                sum += int.Parse(cnpj[i].ToString()) * multiplier2[i];
+                sum += (cnpj[i] - '0') * multiplier2[i];
             }
             remainder = sum % 11;
             var secondCheckDigit = remainder < 2 ? 0 : 11 - remainder;
@@ -265,7 +265,7 @@ namespace MedicSoft.Api.Controllers
             var sum = 0;
             for (int i = 0; i < 9; i++)
             {
-                sum += int.Parse(cpf[i].ToString()) * (10 - i);
+                sum += (cpf[i] - '0') * (10 - i);
             }
             var remainder = sum % 11;
             var firstCheckDigit = remainder < 2 ? 0 : 11 - remainder;
@@ -275,7 +275,7 @@ namespace MedicSoft.Api.Controllers
             sum = 0;
             for (int i = 0; i < 10; i++)
             {
-                sum += int.Parse(cpf[i].ToString()) * (11 - i);
+                sum += (cpf[i] - '0') * (11 - i);
             }
             remainder = sum % 11;
             var secondCheckDigit = remainder < 2 ? 0 : 11 - remainder;
