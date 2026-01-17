@@ -1,4 +1,4 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import {
@@ -26,15 +26,15 @@ export class TicketService {
 
   constructor(
     private http: HttpClient,
-    private apiConfig: ApiConfigService
+    private apiConfig: ApiConfigService,
+    private auth: Auth
   ) {
     this.apiUrl = `${this.apiConfig.systemAdminUrl}/tickets`;
     // Defer loading to avoid circular dependency with error interceptor
     // The error interceptor injects NotificationService which makes HTTP calls
     // Only load unread count if user is authenticated to prevent 401 errors on public pages
     setTimeout(() => {
-      const auth = inject(Auth);
-      if (auth.isAuthenticated()) {
+      if (this.auth.isAuthenticated()) {
         this.loadUnreadCount();
       }
     }, 0);
