@@ -22,9 +22,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         notificationService.error(errorMessage);
       }
 
-      // Se for erro 401, redireciona para página de não autorizado
+      // Se for erro 401, redireciona para página de não autorizado com URL atual
       if (error.status === 401) {
-        router.navigate(['/401']);
+        const currentUrl = router.url;
+        router.navigate(['/401'], { queryParams: { returnUrl: currentUrl } });
       }
 
       // Se for erro 403, redireciona para página de acesso negado
