@@ -58,11 +58,11 @@ describe('TicketService', () => {
     }, 10);
   });
 
-  it('should load unread count when explicitly called via initUnreadCount', (done) => {
+  it('should load unread count when explicitly called via loadUnreadCount', (done) => {
     setupTestBed(true);
     
-    // Explicitly call initUnreadCount
-    service.initUnreadCount();
+    // Explicitly call loadUnreadCount
+    service.loadUnreadCount();
     
     // Wait for HTTP request
     setTimeout(() => {

@@ -178,13 +178,6 @@ export class TicketService {
   }
 
   /**
-   * Initialize unread count loading (should be called when user is authenticated)
-   */
-  public initUnreadCount(): void {
-    this.loadUnreadCount();
-  }
-
-  /**
    * Convert image file to base64
    */
   async fileToBase64(file: File): Promise<string> {

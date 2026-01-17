@@ -56,7 +56,7 @@ export class TicketFab implements OnInit {
 
   ngOnInit(): void {
     // Load unread count when component initializes (component only shows when authenticated)
-    this.ticketService.initUnreadCount();
+    this.ticketService.loadUnreadCount();
   }
 
   openModal(): void {
