@@ -8,7 +8,7 @@ export const environment = {
   
   // Company contact information (for marketing site)
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@medicwarehouse.com',
+  companyEmail: 'contato@primecare.com',
   companyPhone: '(11) 99999-9999',
   
   // Microservices URLs
@@ -35,7 +35,7 @@ export const environment = {
     // Paths that should not be treated as tenant identifiers
     excludedPaths: ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets', 'health', 'swagger'],
     // Domain suffix for subdomain display (can be changed to any domain)
-    // Examples: 'localhost:4200', 'medicwarehouse.com.br', 'yourdomain.com'
+    // Examples: 'localhost:4200', 'primecare.com', 'yourdomain.com'
     domainSuffix: 'localhost:4200'
   }
 };

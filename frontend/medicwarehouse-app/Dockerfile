@@ -1,4 +1,4 @@
-# Development Dockerfile for medicwarehouse-app
+# Development Dockerfile for primecare-frontend
 FROM node:20-alpine
 
 WORKDIR /app

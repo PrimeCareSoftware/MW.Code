@@ -24,7 +24,7 @@ RUN npm run build -- --configuration production
 FROM nginx:alpine
 
 # Copiar build otimizado
-COPY --from=build /app/dist/medicwarehouse-app/browser /usr/share/nginx/html
+COPY --from=build /app/dist/primecare-frontend/browser /usr/share/nginx/html
 
 # Copiar configuração customizada do Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -40,6 +40,6 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 CMD ["nginx", "-g", "daemon off;"]
 
 # Metadados
-LABEL maintainer="MedicWarehouse"
-LABEL description="MedicWarehouse Frontend - Produção"
+LABEL maintainer="PrimeCare"
+LABEL description="PrimeCare Frontend - Produção"
 LABEL version="1.0"
