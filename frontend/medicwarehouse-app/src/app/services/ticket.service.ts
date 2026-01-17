@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import {
@@ -13,6 +13,7 @@ import {
   AssignTicketRequest
 } from '../models/ticket.model';
 import { ApiConfigService } from './api-config.service';
+import { Auth } from './auth';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,13 @@ export class TicketService {
     this.apiUrl = `${this.apiConfig.systemAdminUrl}/tickets`;
     // Defer loading to avoid circular dependency with error interceptor
     // The error interceptor injects NotificationService which makes HTTP calls
-    setTimeout(() => this.loadUnreadCount(), 0);
+    // Only load unread count if user is authenticated to prevent 401 errors on public pages
+    setTimeout(() => {
+      const auth = inject(Auth);
+      if (auth.isAuthenticated()) {
+        this.loadUnreadCount();
+      }
+    }, 0);
   }
 
   /**
