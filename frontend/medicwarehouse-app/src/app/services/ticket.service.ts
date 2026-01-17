@@ -13,6 +13,7 @@ import {
   AssignTicketRequest
 } from '../models/ticket.model';
 import { ApiConfigService } from './api-config.service';
+import { Auth } from './auth';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +26,18 @@ export class TicketService {
 
   constructor(
     private http: HttpClient,
-    private apiConfig: ApiConfigService
+    private apiConfig: ApiConfigService,
+    private auth: Auth
   ) {
     this.apiUrl = `${this.apiConfig.systemAdminUrl}/tickets`;
     // Defer loading to avoid circular dependency with error interceptor
     // The error interceptor injects NotificationService which makes HTTP calls
-    setTimeout(() => this.loadUnreadCount(), 0);
+    // Only load unread count if user is authenticated to prevent 401 errors on public pages
+    setTimeout(() => {
+      if (this.auth.isAuthenticated()) {
+        this.loadUnreadCount();
+      }
+    }, 0);
   }
 
   /**
