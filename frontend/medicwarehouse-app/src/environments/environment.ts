@@ -3,6 +3,14 @@ export const environment = {
   // Default API URL (for backward compatibility)
   apiUrl: 'http://localhost:5293/api',
   
+  // App URL (for marketing site redirects)
+  appUrl: 'http://localhost:4200',
+  
+  // Company contact information (for marketing site)
+  whatsappNumber: '5511999999999',
+  companyEmail: 'contato@medicwarehouse.com',
+  companyPhone: '(11) 99999-9999',
+  
   // Microservices URLs
   microservices: {
     auth: 'http://localhost:5001/api',

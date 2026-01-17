@@ -1,0 +1,310 @@
+<div class="register">
+  <div class="container">
+    <!-- Data Consent Dialog -->
+    <div class="consent-dialog-overlay" *ngIf="showDataConsentDialog">
+      <div class="consent-dialog">
+        <h3>🔒 Dados Salvos Encontrados</h3>
+        <p>
+          Encontramos dados de um cadastro anterior que você não concluiu. 
+          Gostaria de recuperá-los para continuar de onde parou?
+        </p>
+        <div class="consent-info">
+          <p><strong>Sobre seus dados:</strong></p>
+          <ul>
+            <li>✓ Armazenados de forma segura em seu navegador</li>
+            <li>✓ Mantidos por 7 dias após o último acesso</li>
+            <li>✓ Você pode apagá-los a qualquer momento</li>
+            <li>✓ Em conformidade com a LGPD</li>
+          </ul>
+        </div>
+        <div class="consent-actions">
+          <button class="btn btn-primary" (click)="acceptDataConsent()">
+            Sim, recuperar meus dados
+          </button>
+          <button class="btn btn-secondary" (click)="declineDataConsent()">
+            Não, começar do zero
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="register-card">
+      <h1>Cadastro de Nova Clínica</h1>
+      <p class="subtitle">Complete o cadastro e comece seu teste gratuito por 15 dias</p>
+
+      <div class="plan-summary" *ngIf="selectedPlan">
+        <h3>Plano Selecionado: {{ selectedPlan.name }}</h3>
+        <p class="plan-price" *ngIf="selectedPlan.monthlyPrice > 0">
+          R$ {{ selectedPlan.monthlyPrice }}/mês
+        </p>
+        <p class="trial-badge">✨ 15 dias grátis</p>
+      </div>
+
+      <div class="steps-indicator">
+        <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+          <span class="step-number">1</span>
+          <span class="step-label">Clínica</span>
+        </div>
+        <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+          <span class="step-number">2</span>
+          <span class="step-label">Endereço</span>
+        </div>
+        <div class="step" [class.active]="currentStep >= 3" [class.completed]="currentStep > 3">
+          <span class="step-number">3</span>
+          <span class="step-label">Responsável</span>
+        </div>
+        <div class="step" [class.active]="currentStep >= 4" [class.completed]="currentStep > 4">
+          <span class="step-number">4</span>
+          <span class="step-label">Acesso</span>
+        </div>
+        <div class="step" [class.active]="currentStep >= 5" [class.completed]="currentStep > 5">
+          <span class="step-number">5</span>
+          <span class="step-label">Plano</span>
+        </div>
+        <div class="step" [class.active]="currentStep >= 6">
+          <span class="step-number">6</span>
+          <span class="step-label">Confirmar</span>
+        </div>
+      </div>
+
+      <div class="alert alert-error" *ngIf="submitError">
+        ✗ {{ submitError }}
+      </div>
+
+      <form>
+        <!-- Step 1: Clinic Info -->
+        <div class="step-content" *ngIf="currentStep === 1">
+          <h2>Informações da Clínica</h2>
+          <div class="form-group">
+            <label>Nome da Clínica *</label>
+            <input type="text" [(ngModel)]="model.clinicName" name="clinicName" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>CNPJ *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="model.clinicCNPJ" 
+                appCnpjMask
+                name="clinicCNPJ" 
+                placeholder="00.000.000/0000-00"
+                required 
+              />
+            </div>
+            <div class="form-group">
+              <label>Telefone *</label>
+              <input type="tel" [(ngModel)]="model.clinicPhone" appPhoneMask name="clinicPhone" placeholder="(11) 99999-9999" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email da Clínica *</label>
+            <input type="email" [(ngModel)]="model.clinicEmail" name="clinicEmail" required />
+          </div>
+        </div>
+
+        <!-- Step 2: Address -->
+        <div class="step-content" *ngIf="currentStep === 2">
+          <h2>Endereço da Clínica</h2>
+          <div class="form-group">
+            <label>CEP *</label>
+            <input 
+              type="text" 
+              [(ngModel)]="model.zipCode" 
+              (blur)="onCepBlur()"
+              appCepMask
+              name="zipCode" 
+              placeholder="00000-000"
+              required 
+            />
+            <small *ngIf="isLoadingCep" class="loading-text">Consultando CEP...</small>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 3;">
+              <label>Rua *</label>
+              <input type="text" [(ngModel)]="model.street" name="street" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Número *</label>
+              <input type="text" [(ngModel)]="model.number" name="number" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Complemento</label>
+            <input type="text" [(ngModel)]="model.complement" name="complement" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bairro *</label>
+              <input type="text" [(ngModel)]="model.neighborhood" name="neighborhood" required />
+            </div>
+            <div class="form-group">
+              <label>Cidade *</label>
+              <input type="text" [(ngModel)]="model.city" name="city" required />
+            </div>
+            <div class="form-group" style="flex: 0.5;">
+              <label>UF *</label>
+              <input type="text" [(ngModel)]="model.state" name="state" maxlength="2" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Owner Info -->
+        <div class="step-content" *ngIf="currentStep === 3">
+          <h2>Dados do Responsável</h2>
+          <div class="form-group">
+            <label>Nome Completo *</label>
+            <input type="text" [(ngModel)]="model.ownerName" name="ownerName" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>CPF *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="model.ownerCPF" 
+                appCpfMask
+                name="ownerCPF" 
+                placeholder="000.000.000-00"
+                required 
+              />
+            </div>
+            <div class="form-group">
+              <label>Telefone *</label>
+              <input type="tel" [(ngModel)]="model.ownerPhone" appPhoneMask name="ownerPhone" placeholder="(11) 99999-9999" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" [(ngModel)]="model.ownerEmail" name="ownerEmail" required />
+          </div>
+        </div>
+
+        <!-- Step 4: Login Credentials -->
+        <div class="step-content" *ngIf="currentStep === 4">
+          <h2>Criar Acesso</h2>
+          <div class="form-group">
+            <label>Nome de Usuário *</label>
+            <input type="text" [(ngModel)]="model.username" name="username" required />
+          </div>
+          <div class="form-group">
+            <label>Senha *</label>
+            <input type="password" [(ngModel)]="model.password" name="password" required />
+            <small>Mínimo 8 caracteres, incluindo letras e números</small>
+          </div>
+          <div class="form-group">
+            <label>Confirmar Senha *</label>
+            <input type="password" [(ngModel)]="passwordConfirm" name="passwordConfirm" required />
+          </div>
+          <div class="password-match" *ngIf="passwordConfirm && model.password !== passwordConfirm">
+            <span class="error">✗ As senhas não coincidem</span>
+          </div>
+          <div class="password-match" *ngIf="passwordConfirm && model.password === passwordConfirm">
+            <span class="success">✓ As senhas coincidem</span>
+          </div>
+        </div>
+
+        <!-- Step 5: Confirmation -->
+        <div class="step-content" *ngIf="currentStep === 5">
+          <h2>Escolha seu Plano</h2>
+          <p class="step-subtitle">Revise ou altere o plano selecionado antes de finalizar</p>
+
+          <div class="plans-selection">
+            <div class="plan-option" 
+                 *ngFor="let plan of allPlans"
+                 [class.selected]="plan.id === selectedPlan?.id"
+                 [class.recommended]="plan.isRecommended"
+                 (click)="changePlan(plan)">
+              <div class="plan-radio">
+                <input 
+                  type="radio" 
+                  [checked]="plan.id === selectedPlan?.id"
+                  [value]="plan.id"
+                  name="selectedPlan"
+                  (change)="changePlan(plan)"
+                />
+              </div>
+              <div class="plan-details">
+                <div class="plan-badge" *ngIf="plan.isRecommended">
+                  Mais Indicado
+                </div>
+                <h3>{{ plan.name }}</h3>
+                <p class="plan-description">{{ plan.description }}</p>
+                <div class="plan-price-inline">
+                  <span class="price" *ngIf="plan.monthlyPrice > 0">
+                    <strong>R$ {{ plan.monthlyPrice }}</strong>/mês
+                  </span>
+                  <span class="price custom" *ngIf="plan.monthlyPrice === 0">
+                    <strong>Sob Consulta</strong>
+                  </span>
+                  <span class="trial-tag" *ngIf="plan.trialDays > 0">
+                    ✨ {{ plan.trialDays }} dias grátis
+                  </span>
+                </div>
+                <ul class="plan-features-compact">
+                  <li *ngFor="let feature of plan.features.slice(0, 4)">
+                    <span class="check">✓</span> {{ feature }}
+                  </li>
+                  <li *ngIf="plan.features.length > 4" class="more-features">
+                    +{{ plan.features.length - 4 }} recursos adicionais
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="plan-note">
+            <strong>📋 Nota:</strong> Você poderá mudar de plano a qualquer momento após o cadastro, 
+            sem qualquer custo adicional ou taxa de cancelamento.
+          </div>
+        </div>
+
+        <!-- Step 6: Confirmation -->
+        <div class="step-content" *ngIf="currentStep === 6">
+          <h2>Confirme seus Dados</h2>
+          <div class="summary-section">
+            <h3>Clínica</h3>
+            <p><strong>Nome:</strong> {{ model.clinicName }}</p>
+            <p><strong>CNPJ:</strong> {{ model.clinicCNPJ }}</p>
+            <p><strong>Email:</strong> {{ model.clinicEmail }}</p>
+          </div>
+          <div class="summary-section">
+            <h3>Endereço</h3>
+            <p>{{ model.street }}, {{ model.number }} {{ model.complement }}</p>
+            <p>{{ model.neighborhood }} - {{ model.city }}/{{ model.state }}</p>
+            <p>CEP: {{ model.zipCode }}</p>
+          </div>
+          <div class="summary-section">
+            <h3>Responsável</h3>
+            <p><strong>Nome:</strong> {{ model.ownerName }}</p>
+            <p><strong>CPF:</strong> {{ model.ownerCPF }}</p>
+            <p><strong>Email:</strong> {{ model.ownerEmail }}</p>
+          </div>
+          <div class="summary-section">
+            <h3>Plano</h3>
+            <p *ngIf="selectedPlan"><strong>{{ selectedPlan.name }}</strong> - R$ {{ selectedPlan.monthlyPrice }}/mês</p>
+            <p class="trial-info">✨ Período de teste: 15 dias grátis</p>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="model.acceptTerms" name="acceptTerms" />
+              <span>Aceito os <a routerLink="/terms" target="_blank">Termos de Uso</a> e a <a routerLink="/privacy" target="_blank">Política de Privacidade</a> *</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="prevStep()" *ngIf="currentStep > 1" [disabled]="isSubmitting">
+            Voltar
+          </button>
+          <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 6" [disabled]="!validateStep(currentStep)">
+            Próximo
+          </button>
+          <button type="button" class="btn btn-primary" (click)="onSubmit()" *ngIf="currentStep === 6" [disabled]="!model.acceptTerms || isSubmitting">
+            <span *ngIf="!isSubmitting">Finalizar Cadastro</span>
+            <span *ngIf="isSubmitting">Processando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
