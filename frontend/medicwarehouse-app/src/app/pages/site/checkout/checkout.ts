@@ -2,10 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { HeaderComponent } from '../../../components/site/header/header';
+import { FooterComponent } from '../../../components/site/footer/footer';
 
 @Component({
   selector: 'app-checkout',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss'
 })

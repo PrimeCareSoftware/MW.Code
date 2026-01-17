@@ -2,10 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../../services/cart';
+import { HeaderComponent } from '../../../components/site/header/header';
+import { FooterComponent } from '../../../components/site/footer/footer';
 
 @Component({
   selector: 'app-cart',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
   templateUrl: './cart.html',
   styleUrl: './cart.scss'
 })
@@ -20,7 +22,7 @@ export class CartComponent {
   proceedToCheckout(): void {
     const cart = this.cartService.getCart()();
     if (cart.items.length > 0) {
-      this.router.navigate(['/register'], { 
+      this.router.navigate(['/site/register'], { 
         queryParams: { plan: cart.items[0].plan.id } 
       });
     }

@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { SubscriptionService } from '../../../services/subscription';
 import { ContactRequest } from '../../../models/contact.model';
 import { environment } from '../../../../environments/environment';
+import { HeaderComponent } from '../../../components/site/header/header';
+import { FooterComponent } from '../../../components/site/footer/footer';
 
 @Component({
   selector: 'app-contact',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
   templateUrl: './contact.html',
   styleUrl: './contact.scss'
 })
