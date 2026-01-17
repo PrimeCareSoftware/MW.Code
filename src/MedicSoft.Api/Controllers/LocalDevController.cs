@@ -220,21 +220,67 @@ namespace MedicSoft.Api.Controllers
 
         private static string GenerateRandomCNPJ()
         {
+            // Generate the first 12 digits randomly
             var cnpj = "";
-            for (int i = 0; i < 14; i++)
+            for (int i = 0; i < 12; i++)
             {
-                cnpj += Random.Shared.Next(0, 9).ToString();
+                cnpj += Random.Shared.Next(0, 10).ToString();
             }
+
+            // Calculate the first check digit
+            int[] multiplier1 = { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            var sum = 0;
+            for (int i = 0; i < 12; i++)
+            {
+                sum += int.Parse(cnpj[i].ToString()) * multiplier1[i];
+            }
+            var remainder = sum % 11;
+            var firstCheckDigit = remainder < 2 ? 0 : 11 - remainder;
+            cnpj += firstCheckDigit.ToString();
+
+            // Calculate the second check digit
+            int[] multiplier2 = { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            sum = 0;
+            for (int i = 0; i < 13; i++)
+            {
+                sum += int.Parse(cnpj[i].ToString()) * multiplier2[i];
+            }
+            remainder = sum % 11;
+            var secondCheckDigit = remainder < 2 ? 0 : 11 - remainder;
+            cnpj += secondCheckDigit.ToString();
+
             return cnpj;
         }
 
         private static string GenerateRandomCPF()
         {
+            // Generate the first 9 digits randomly
             var cpf = "";
-            for (int i = 0; i < 11; i++)
+            for (int i = 0; i < 9; i++)
             {
-                cpf += Random.Shared.Next(0, 9).ToString();
+                cpf += Random.Shared.Next(0, 10).ToString();
             }
+
+            // Calculate the first check digit
+            var sum = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                sum += int.Parse(cpf[i].ToString()) * (10 - i);
+            }
+            var remainder = sum % 11;
+            var firstCheckDigit = remainder < 2 ? 0 : 11 - remainder;
+            cpf += firstCheckDigit.ToString();
+
+            // Calculate the second check digit
+            sum = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                sum += int.Parse(cpf[i].ToString()) * (11 - i);
+            }
+            remainder = sum % 11;
+            var secondCheckDigit = remainder < 2 ? 0 : 11 - remainder;
+            cpf += secondCheckDigit.ToString();
+
             return cpf;
         }
     }
