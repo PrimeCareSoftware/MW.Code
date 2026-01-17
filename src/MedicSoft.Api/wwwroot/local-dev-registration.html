@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Rápido - Desenvolvimento Local</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 4px;
+            color: #856404;
+        }
+
+        .warning strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .result h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .credentials {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .credentials h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .credential-item {
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .credential-item strong {
+            display: inline-block;
+            width: 120px;
+            color: #555;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Cadastro Rápido</h1>
+            <p>Crie registros completos para testes - Somente Desenvolvimento Local</p>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ AVISO: Ambiente de Desenvolvimento</strong>
+            Esta tela funciona APENAS localmente e não estará disponível em produção.
+            Use para agilizar seus testes criando Clínica + Owner + System Admin rapidamente.
+        </div>
+
+        <div class="form-container">
+            <form id="registrationForm">
+                <div class="form-section">
+                    <h2>🏥 Informações da Clínica</h2>
+                    <div class="form-group">
+                        <label for="clinicName">Nome da Clínica</label>
+                        <input type="text" id="clinicName" name="clinicName" placeholder="Ex: Clínica São Paulo">
+                        <small>Deixe em branco para usar valor padrão: "Clínica Teste Local"</small>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>👤 Proprietário (Owner)</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ownerUsername">Username</label>
+                            <input type="text" id="ownerUsername" name="ownerUsername" placeholder="owner">
+                            <small>Padrão: owner</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="ownerPassword">Senha</label>
+                            <input type="text" id="ownerPassword" name="ownerPassword" placeholder="Owner@123">
+                            <small>Padrão: Owner@123</small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ownerName">Nome Completo</label>
+                            <input type="text" id="ownerName" name="ownerName" placeholder="Dr. João Silva">
+                            <small>Padrão: Proprietário Teste</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="ownerEmail">Email</label>
+                            <input type="email" id="ownerEmail" name="ownerEmail" placeholder="owner@teste.local">
+                            <small>Padrão: owner@teste.local</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>🔧 Administrador do Sistema</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adminUsername">Username</label>
+                            <input type="text" id="adminUsername" name="adminUsername" placeholder="admin">
+                            <small>Padrão: admin</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminPassword">Senha</label>
+                            <input type="text" id="adminPassword" name="adminPassword" placeholder="Admin@123">
+                            <small>Padrão: Admin@123</small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adminName">Nome Completo</label>
+                            <input type="text" id="adminName" name="adminName" placeholder="Administrador">
+                            <small>Padrão: Administrador Teste</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminEmail">Email</label>
+                            <input type="email" id="adminEmail" name="adminEmail" placeholder="admin@teste.local">
+                            <small>Padrão: admin@teste.local</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-container">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Limpar</button>
+                    <button type="submit" class="btn btn-primary">Criar Cadastro Completo</button>
+                </div>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Criando cadastro...</p>
+            </div>
+
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Show loading
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            // Get form data
+            const formData = new FormData(form);
+            const data = {};
+            
+            // Only include non-empty values
+            for (let [key, value] of formData.entries()) {
+                if (value.trim()) {
+                    data[key] = value.trim();
+                }
+            }
+
+            try {
+                const response = await fetch('/api/local-dev/quick-register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const responseData = await response.json();
+                
+                loading.style.display = 'none';
+                result.style.display = 'block';
+
+                if (response.ok) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <h3>✅ Cadastro criado com sucesso!</h3>
+                        <p>${responseData.message}</p>
+                        
+                        <div class="credentials">
+                            <h4>🏥 Clínica</h4>
+                            <div class="credential-item"><strong>Nome:</strong> ${responseData.clinic.name}</div>
+                            <div class="credential-item"><strong>Tenant ID:</strong> ${responseData.clinic.tenantId}</div>
+                        </div>
+
+                        <div class="credentials">
+                            <h4>👤 Proprietário (Owner)</h4>
+                            <div class="credential-item"><strong>Username:</strong> ${responseData.owner.username}</div>
+                            <div class="credential-item"><strong>Senha:</strong> ${responseData.owner.password}</div>
+                            <div class="credential-item"><strong>Email:</strong> ${responseData.owner.email}</div>
+                            <div class="credential-item"><strong>Login:</strong> POST ${responseData.owner.loginEndpoint}</div>
+                        </div>
+
+                        <div class="credentials">
+                            <h4>🔧 Administrador do Sistema</h4>
+                            <div class="credential-item"><strong>Username:</strong> ${responseData.systemAdmin.username}</div>
+                            <div class="credential-item"><strong>Senha:</strong> ${responseData.systemAdmin.password}</div>
+                            <div class="credential-item"><strong>Email:</strong> ${responseData.systemAdmin.email}</div>
+                            <div class="credential-item"><strong>Login:</strong> POST ${responseData.systemAdmin.loginEndpoint}</div>
+                        </div>
+
+                        <p style="margin-top: 15px; font-weight: 600;">${responseData.note}</p>
+                    `;
+                    
+                    // Reset form after success
+                    form.reset();
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <h3>❌ Erro ao criar cadastro</h3>
+                        <p>${responseData.error || responseData.message || 'Erro desconhecido'}</p>
+                        ${responseData.details ? `<p style="margin-top: 10px;"><strong>Detalhes:</strong> ${responseData.details}</p>` : ''}
+                    `;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                result.style.display = 'block';
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Erro de conexão</h3>
+                    <p>Não foi possível conectar ao servidor. Verifique se a API está rodando.</p>
+                    <p style="margin-top: 10px;"><strong>Detalhes:</strong> ${error.message}</p>
+                `;
+            }
+        });
+
+        function resetForm() {
+            form.reset();
+            result.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
