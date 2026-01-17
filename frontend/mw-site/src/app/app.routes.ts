@@ -8,6 +8,7 @@ import { CartComponent } from './pages/cart/cart';
 import { CheckoutComponent } from './pages/checkout/checkout';
 import { PrivacyComponent } from './pages/privacy/privacy';
 import { TermsComponent } from './pages/terms/terms';
+import { ErrorComponent } from './pages/error/error';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,5 +20,7 @@ export const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },
-  { path: '**', redirectTo: '' }
+  { path: 'error', component: ErrorComponent },
+  { path: 'error/:code', component: ErrorComponent },
+  { path: '**', redirectTo: '/error/404' }
 ];
