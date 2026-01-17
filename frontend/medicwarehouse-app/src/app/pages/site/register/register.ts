@@ -2,17 +2,17 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { SubscriptionService } from '../../services/subscription';
-import { CartService } from '../../services/cart';
-import { FormPersistenceService } from '../../services/form-persistence';
-import { CepService } from '../../services/cep.service';
-import { SalesFunnelTrackingService } from '../../services/sales-funnel-tracking.service';
-import { RegistrationRequest } from '../../models/registration.model';
-import { SubscriptionPlan } from '../../models/subscription-plan.model';
-import { CpfMaskDirective } from '../../directives/cpf-mask.directive';
-import { CnpjMaskDirective } from '../../directives/cnpj-mask.directive';
-import { PhoneMaskDirective } from '../../directives/phone-mask.directive';
-import { CepMaskDirective } from '../../directives/cep-mask.directive';
+import { SubscriptionService } from '../../../services/subscription';
+import { CartService } from '../../../services/cart';
+import { FormPersistenceService } from '../../../services/form-persistence';
+import { CepService } from '../../../services/cep.service';
+import { SalesFunnelTrackingService } from '../../../services/sales-funnel-tracking.service';
+import { RegistrationRequest } from '../../../models/registration.model';
+import { SubscriptionPlan } from '../../../models/subscription-plan.model';
+import { CpfMaskDirective } from '../../../directives/cpf-mask.directive';
+import { CnpjMaskDirective } from '../../../directives/cnpj-mask.directive';
+import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
+import { CepMaskDirective } from '../../../directives/cep-mask.directive';
 
 @Component({
   selector: 'app-register',

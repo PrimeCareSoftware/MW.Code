@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { SubscriptionService } from '../../services/subscription';
-import { CartService } from '../../services/cart';
-import { SubscriptionPlan } from '../../models/subscription-plan.model';
+import { SubscriptionService } from '../../../services/subscription';
+import { CartService } from '../../../services/cart';
+import { SubscriptionPlan } from '../../../models/subscription-plan.model';
 import { environment } from '../../../../environments/environment';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TicketService } from '../../services/ticket.service';
+import { TicketService } from '../../../services/ticket.service';
 import { 
   TicketSummary, 
   Ticket,
@@ -16,7 +16,7 @@ import {
   UpdateTicketStatusRequest,
   AddTicketCommentRequest,
   AssignTicketRequest
-} from '../../models/ticket.model';
+} from '../../../models/ticket.model';
 
 interface KanbanColumn {
   status: TicketStatus;
