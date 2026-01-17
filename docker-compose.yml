@@ -54,20 +54,6 @@ services:
     networks:
       - primecare-network
 
-  system-admin:
-    build:
-      context: ./frontend/mw-system-admin
-      dockerfile: Dockerfile
-    container_name: primecare-system-admin
-    ports:
-      - "4201:4200"
-    environment:
-      - API_URL=http://api:8080
-    depends_on:
-      - api
-    networks:
-      - primecare-network
-
 volumes:
   postgres_data:
 
