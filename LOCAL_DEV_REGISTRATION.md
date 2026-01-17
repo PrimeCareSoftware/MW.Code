@@ -6,6 +6,32 @@ Esta funcionalidade permite criar rapidamente registros completos (Clínica + Ow
 
 **IMPORTANTE:** Esta tela NÃO estará disponível em produção e só funciona quando a aplicação está rodando em modo Development.
 
+## Pré-requisitos
+
+Antes de usar esta funcionalidade, você precisa:
+
+1. **Banco de dados rodando:**
+   ```bash
+   docker compose up -d postgres
+   ```
+
+2. **Dados iniciais (planos de assinatura):**
+   ```bash
+   # Após iniciar a API, execute:
+   curl -X POST http://localhost:5000/api/data-seeder/seed-demo
+   ```
+   
+   Ou, se quiser apenas os planos:
+   ```bash
+   # Use o endpoint de registro normal uma vez para criar os planos automaticamente
+   ```
+
+3. **API rodando em modo Development:**
+   ```bash
+   cd src/MedicSoft.Api
+   dotnet run --environment Development
+   ```
+
 ## Como Usar
 
 ### Opção 1: Interface Web (Recomendado)
@@ -15,6 +41,8 @@ Esta funcionalidade permite criar rapidamente registros completos (Clínica + Ow
 3. Preencha os campos desejados (ou deixe em branco para usar valores padrão)
 4. Clique em "Criar Cadastro Completo"
 5. Use as credenciais retornadas para fazer login e testar
+
+> **Dica:** Para testar rapidamente, deixe todos os campos em branco e clique em "Criar Cadastro Completo". O sistema usará valores padrão.
 
 ### Opção 2: API Direta
 
@@ -130,16 +158,94 @@ POST /api/auth/login
 ## Troubleshooting
 
 ### Erro 403 Forbidden
-- Verifique se está rodando em modo Development
+- Verifique se está rodando em modo Development:
+  ```bash
+  dotnet run --environment Development
+  ```
 - Ou adicione `"Development:EnableDevEndpoints": true` no appsettings.Development.json
 
 ### Página HTML não carrega
 - Verifique se está em modo Development
-- A aplicação deve estar configurada para servir arquivos estáticos
+- A aplicação deve estar configurada para servir arquivos estáticos (já configurado no Program.cs linha ~288)
+- Acesse: `http://localhost:5000/local-dev-registration.html` (porta pode variar)
 
 ### Erro "No subscription plans available"
-- Execute primeiro: `POST /api/data-seeder/seed-demo`
-- Ou crie planos de assinatura manualmente
+- **Opção 1 (Recomendado):** Execute o seed completo:
+  ```bash
+  curl -X POST http://localhost:5000/api/data-seeder/seed-demo
+  ```
+- **Opção 2:** Faça um registro normal primeiro usando o endpoint `/api/registration` para criar os planos automaticamente
+- **Opção 3:** Crie planos de assinatura manualmente via SQL ou API
+
+### Erro de conexão com banco de dados
+- Verifique se o PostgreSQL está rodando:
+  ```bash
+  docker compose up -d postgres
+  docker ps | grep primecare-postgres
+  ```
+- Verifique a connection string no `appsettings.Development.json`
+- Teste a conexão:
+  ```bash
+  docker exec -it primecare-postgres psql -U postgres -d primecare -c "\dt"
+  ```
+
+## Testando a Implementação
+
+### 1. Teste o endpoint info:
+```bash
+curl http://localhost:5000/api/local-dev/info
+```
+
+Resposta esperada:
+```json
+{
+  "title": "Local Development Quick Registration",
+  "description": "...",
+  "endpoints": { ... }
+}
+```
+
+### 2. Teste a criação rápida (com valores padrão):
+```bash
+curl -X POST http://localhost:5000/api/local-dev/quick-register \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+### 3. Teste a criação rápida (com valores personalizados):
+```bash
+curl -X POST http://localhost:5000/api/local-dev/quick-register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clinicName": "Clínica Teste API",
+    "ownerUsername": "testowner",
+    "ownerPassword": "Test@123",
+    "ownerEmail": "testowner@teste.local",
+    "adminUsername": "testadmin",
+    "adminPassword": "TestAdmin@123",
+    "adminEmail": "testadmin@teste.local"
+  }'
+```
+
+### 4. Teste o login com as credenciais criadas:
+```bash
+# Owner login
+curl -X POST http://localhost:5000/api/auth/owner-login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "owner",
+    "password": "Owner@123",
+    "tenantId": "clinica-teste-local"
+  }'
+
+# System Admin login
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "password": "Admin@123"
+  }'
+```
 
 ## Arquivos Relacionados
 
