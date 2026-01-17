@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs.Registration;
 using MedicSoft.Application.Services;
@@ -11,7 +12,8 @@ namespace MedicSoft.Api.Controllers
     /// ONLY for local development - disabled in production
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/local-dev")]
+    [AllowAnonymous]
     public class LocalDevController : ControllerBase
     {
         private readonly IRegistrationService _registrationService;
