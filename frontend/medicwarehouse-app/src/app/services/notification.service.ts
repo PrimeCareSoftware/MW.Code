@@ -26,9 +26,8 @@ export class NotificationService {
   public toasts = signal<ToastMessage[]>([]);
 
   constructor(private http: HttpClient) {
-    // Defer loading to avoid circular dependency with error interceptor
-    // The error interceptor injects this service, so we can't make HTTP calls in the constructor
-    setTimeout(() => this.loadNotifications(), 0);
+    // Don't load notifications in constructor to avoid 401 errors on public pages
+    // Notifications will be loaded when explicitly requested by authenticated components
   }
 
   // Observable for real-time notifications
@@ -80,13 +79,25 @@ export class NotificationService {
   }
 
   loadNotifications(): void {
+    // Check if user has a token before making the request
+    // We check localStorage directly to avoid circular dependency with Auth service
+    // (error interceptor -> NotificationService -> Auth service -> error interceptor)
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      // User is not authenticated, skip loading notifications
+      return;
+    }
+
     this.http.get<Notification[]>(this.apiUrl).subscribe({
       next: (notifications) => {
         this.notifications.set(notifications);
         this.updateUnreadCount();
       },
       error: (error) => {
-        console.error('Error loading notifications:', error);
+        // Only log error if it's not a 401 (unauthorized)
+        if (error.status !== 401) {
+          console.error('Error loading notifications:', error);
+        }
       }
     });
   }
