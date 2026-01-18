@@ -373,5 +373,144 @@ namespace MedicSoft.Test.Entities
 
             return patient;
         }
+
+        // New tests for TISS functionality
+        [Fact]
+        public void Constructor_NewConstructor_CreatesHealthInsurancePlanWithTissSupport()
+        {
+            // Arrange
+            var operatorId = Guid.NewGuid();
+            var planName = "Unimed Premium";
+            var planCode = "UNI-PREM-001";
+            var registerNumber = "ANS-123456";
+
+            // Act
+            var plan = new HealthInsurancePlan(
+                operatorId,
+                planName,
+                planCode,
+                HealthInsurancePlanType.Enterprise,
+                _tenantId,
+                registerNumber,
+                coversConsultations: true,
+                coversExams: true,
+                coversProcedures: true,
+                requiresPriorAuthorization: true,
+                tissEnabled: true
+            );
+
+            // Assert
+            Assert.Equal(operatorId, plan.OperatorId);
+            Assert.Equal(planName, plan.PlanName);
+            Assert.Equal(planCode, plan.PlanCode);
+            Assert.Equal(registerNumber, plan.RegisterNumber);
+            Assert.Equal(HealthInsurancePlanType.Enterprise, plan.Type);
+            Assert.True(plan.CoversConsultations);
+            Assert.True(plan.CoversExams);
+            Assert.True(plan.CoversProcedures);
+            Assert.True(plan.RequiresPriorAuthorization);
+            Assert.True(plan.TissEnabled);
+        }
+
+        [Fact]
+        public void EnableTiss_EnablesTissForPlan()
+        {
+            // Arrange
+            var operatorId = Guid.NewGuid();
+            var plan = new HealthInsurancePlan(
+                operatorId,
+                "Test Plan",
+                "TEST-001",
+                HealthInsurancePlanType.Individual,
+                _tenantId,
+                tissEnabled: false
+            );
+
+            // Act
+            plan.EnableTiss();
+
+            // Assert
+            Assert.True(plan.TissEnabled);
+            Assert.NotNull(plan.UpdatedAt);
+        }
+
+        [Fact]
+        public void DisableTiss_DisablesTissForPlan()
+        {
+            // Arrange
+            var operatorId = Guid.NewGuid();
+            var plan = new HealthInsurancePlan(
+                operatorId,
+                "Test Plan",
+                "TEST-001",
+                HealthInsurancePlanType.Individual,
+                _tenantId,
+                tissEnabled: true
+            );
+
+            // Act
+            plan.DisableTiss();
+
+            // Assert
+            Assert.False(plan.TissEnabled);
+            Assert.NotNull(plan.UpdatedAt);
+        }
+
+        [Fact]
+        public void UpdatePlanInfo_NewMethod_UpdatesPlanInfoCorrectly()
+        {
+            // Arrange
+            var operatorId = Guid.NewGuid();
+            var plan = new HealthInsurancePlan(
+                operatorId,
+                "Old Name",
+                "OLD-001",
+                HealthInsurancePlanType.Individual,
+                _tenantId
+            );
+
+            // Act
+            plan.UpdatePlanInfo("New Name", "NEW-001", "ANS-999", HealthInsurancePlanType.Enterprise);
+
+            // Assert
+            Assert.Equal("New Name", plan.PlanName);
+            Assert.Equal("NEW-001", plan.PlanCode);
+            Assert.Equal("ANS-999", plan.RegisterNumber);
+            Assert.Equal(HealthInsurancePlanType.Enterprise, plan.Type);
+            Assert.NotNull(plan.UpdatedAt);
+        }
+
+        [Fact]
+        public void UpdateCoverage_UpdatesCoverageSettings()
+        {
+            // Arrange
+            var operatorId = Guid.NewGuid();
+            var plan = new HealthInsurancePlan(
+                operatorId,
+                "Test Plan",
+                "TEST-001",
+                HealthInsurancePlanType.Individual,
+                _tenantId,
+                coversConsultations: true,
+                coversExams: true,
+                coversProcedures: false,
+                requiresPriorAuthorization: false
+            );
+
+            // Act
+            plan.UpdateCoverage(
+                coversConsultations: false,
+                coversExams: true,
+                coversProcedures: true,
+                requiresPriorAuthorization: true
+            );
+
+            // Assert
+            Assert.False(plan.CoversConsultations);
+            Assert.True(plan.CoversExams);
+            Assert.True(plan.CoversProcedures);
+            Assert.True(plan.RequiresPriorAuthorization);
+            Assert.NotNull(plan.UpdatedAt);
+        }
     }
 }
