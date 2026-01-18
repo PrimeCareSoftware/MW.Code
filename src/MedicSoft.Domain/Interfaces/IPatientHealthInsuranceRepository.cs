@@ -12,5 +12,6 @@ namespace MedicSoft.Domain.Interfaces
         Task<PatientHealthInsurance?> GetByCardNumberAsync(string cardNumber, string tenantId);
         Task<IEnumerable<PatientHealthInsurance>> GetByPlanIdAsync(Guid planId, string tenantId);
         Task<bool> IsCardNumberUniqueAsync(string cardNumber, string tenantId, Guid? excludeId = null);
+        Task<PatientHealthInsurance?> GetByIdWithDetailsAsync(Guid id, string tenantId);
     }
 }

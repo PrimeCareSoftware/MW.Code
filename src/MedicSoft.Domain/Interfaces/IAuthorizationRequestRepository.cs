@@ -13,5 +13,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<AuthorizationRequest>> GetPendingAuthorizationsAsync(string tenantId);
         Task<IEnumerable<AuthorizationRequest>> GetExpiredAuthorizationsAsync(string tenantId);
         Task<AuthorizationRequest?> GetByAuthorizationNumberAsync(string authorizationNumber, string tenantId);
+        Task<AuthorizationRequest?> GetByIdWithDetailsAsync(Guid id, string tenantId);
+        Task<IEnumerable<AuthorizationRequest>> GetAllWithDetailsAsync(string tenantId);
     }
 }

@@ -159,6 +159,44 @@ namespace MedicSoft.Application.Mappings
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
                 .ForMember(dest => dest.DaysUntilDeadline, opt => opt.MapFrom(src => src.DaysUntilDeadline()))
                 .ForMember(dest => dest.IsOverdue, opt => opt.MapFrom(src => src.IsOverdue()));
+
+            // TISS/TUSS mappings
+            CreateMap<HealthInsuranceOperator, HealthInsuranceOperatorDto>()
+                .ForMember(dest => dest.IntegrationType, opt => opt.MapFrom(src => src.IntegrationType.ToString()));
+
+            CreateMap<PatientHealthInsurance, PatientHealthInsuranceDto>()
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient != null ? src.Patient.Name : string.Empty))
+                .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.HealthInsurancePlan != null ? src.HealthInsurancePlan.PlanName : string.Empty))
+                .ForMember(dest => dest.OperatorName, opt => opt.MapFrom(src => src.HealthInsurancePlan != null && src.HealthInsurancePlan.Operator != null ? src.HealthInsurancePlan.Operator.TradeName : string.Empty))
+                .ForMember(dest => dest.IsValid, opt => opt.MapFrom(src => src.IsValid(null)));
+
+            CreateMap<AuthorizationRequest, AuthorizationRequestDto>()
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient != null ? src.Patient.Name : string.Empty))
+                .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.PatientHealthInsurance != null && src.PatientHealthInsurance.HealthInsurancePlan != null ? src.PatientHealthInsurance.HealthInsurancePlan.PlanName : string.Empty))
+                .ForMember(dest => dest.OperatorName, opt => opt.MapFrom(src => src.PatientHealthInsurance != null && src.PatientHealthInsurance.HealthInsurancePlan != null && src.PatientHealthInsurance.HealthInsurancePlan.Operator != null ? src.PatientHealthInsurance.HealthInsurancePlan.Operator.TradeName : string.Empty))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.IsExpired, opt => opt.MapFrom(src => src.IsExpired()))
+                .ForMember(dest => dest.IsValidForUse, opt => opt.MapFrom(src => src.IsValidForUse()));
+
+            CreateMap<TussProcedure, TussProcedureDto>();
+
+            CreateMap<TissGuideProcedure, TissGuideProcedureDto>();
+
+            CreateMap<TissGuide, TissGuideDto>()
+                .ForMember(dest => dest.BatchNumber, opt => opt.MapFrom(src => src.TissBatch != null ? src.TissBatch.BatchNumber : string.Empty))
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.PatientHealthInsurance != null && src.PatientHealthInsurance.Patient != null ? src.PatientHealthInsurance.Patient.Name : string.Empty))
+                .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.PatientHealthInsurance != null && src.PatientHealthInsurance.HealthInsurancePlan != null ? src.PatientHealthInsurance.HealthInsurancePlan.PlanName : string.Empty))
+                .ForMember(dest => dest.GuideType, opt => opt.MapFrom(src => src.GuideType.ToString()))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Procedures, opt => opt.MapFrom(src => src.Procedures));
+
+            CreateMap<TissBatch, TissBatchDto>()
+                .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic != null ? src.Clinic.Name : string.Empty))
+                .ForMember(dest => dest.OperatorName, opt => opt.MapFrom(src => src.Operator != null ? src.Operator.TradeName : string.Empty))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.GetTotalAmount()))
+                .ForMember(dest => dest.GuideCount, opt => opt.MapFrom(src => src.GetGuideCount()))
+                .ForMember(dest => dest.Guides, opt => opt.MapFrom(src => src.Guides));
         }
     }
 }
