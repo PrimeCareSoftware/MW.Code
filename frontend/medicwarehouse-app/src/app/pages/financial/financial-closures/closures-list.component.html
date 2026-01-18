@@ -1,0 +1,68 @@
+<app-navbar></app-navbar>
+<div class="closures-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Fechamentos Financeiros</h1>
+      <p>Gerenciamento de fechamentos de consultas</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/financial/closures/new">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Novo Fechamento
+    </button>
+  </div>
+  @if (isLoading()) {
+    <div class="loading-container"><div class="loading">Carregando...</div></div>
+  } @else if (closures().length === 0) {
+    <div class="empty-state">Nenhum fechamento encontrado</div>
+  } @else {
+    <div class="closures-card">
+      <table class="closures-table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Data</th>
+            <th>Tipo Pagamento</th>
+            <th>Valor Total</th>
+            <th>Saldo</th>
+            <th>Status</th>
+            <th class="actions-col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (closure of closures(); track closure.id) {
+            <tr>
+              <td><strong>{{ closure.closureNumber }}</strong></td>
+              <td>{{ formatDate(closure.closureDate) }}</td>
+              <td>{{ closure.paymentType }}</td>
+              <td class="currency-cell">{{ formatCurrency(closure.totalAmount) }}</td>
+              <td class="currency-cell outstanding">{{ formatCurrency(closure.outstandingAmount) }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusBadgeClass(closure.status)">
+                  {{ formatStatus(closure.status) }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="action-buttons">
+                  <button class="btn-action btn-view" [routerLink]="['/financial/closures', closure.id]" title="Ver">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                  <button class="btn-action btn-delete" (click)="deleteClosure(closure.id)" title="Excluir">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

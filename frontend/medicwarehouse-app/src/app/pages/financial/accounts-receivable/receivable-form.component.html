@@ -1,0 +1,186 @@
+<app-navbar></app-navbar>
+
+<div class="receivable-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <a routerLink="/financial/receivables" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Voltar para lista
+      </a>
+      <h1>{{ isEditMode() ? 'Ver Conta a Receber' : 'Nova Conta a Receber' }}</h1>
+      <p>{{ isEditMode() ? 'Detalhes da conta a receber' : 'Preencha os dados para cadastrar uma nova conta a receber' }}</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <div class="form-card">
+    <form [formGroup]="receivableForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3>Informações Básicas</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="documentNumber">Número do Documento*</label>
+            <input 
+              type="text" 
+              id="documentNumber" 
+              formControlName="documentNumber"
+              placeholder="Ex: REC-001"
+              [readonly]="isEditMode()"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="type">Tipo*</label>
+            <select id="type" formControlName="type" [disabled]="isEditMode()">
+              <option value="">Selecione o tipo</option>
+              @for (type of receivableTypes; track type.value) {
+                <option [value]="type.value">{{ type.label }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dueDate">Data de Vencimento*</label>
+            <input 
+              type="date" 
+              id="dueDate" 
+              formControlName="dueDate"
+              [readonly]="isEditMode()"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="totalAmount">Valor Total*</label>
+            <input 
+              type="number" 
+              id="totalAmount" 
+              formControlName="totalAmount"
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+              [readonly]="isEditMode()"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descrição</label>
+          <textarea 
+            id="description" 
+            formControlName="description"
+            placeholder="Adicione uma descrição (opcional)"
+            rows="3"
+            [readonly]="isEditMode()"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Parcelamento (Opcional)</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="installmentNumber">Número da Parcela</label>
+            <input 
+              type="number" 
+              id="installmentNumber" 
+              formControlName="installmentNumber"
+              min="1"
+              [readonly]="isEditMode()"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="totalInstallments">Total de Parcelas</label>
+            <input 
+              type="number" 
+              id="totalInstallments" 
+              formControlName="totalInstallments"
+              min="1"
+              [readonly]="isEditMode()"
+            />
+          </div>
+        </div>
+      </div>
+
+      @if (isEditMode() && receivable()) {
+        <div class="info-section">
+          <h3>Informações de Pagamento</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Valor Total:</span>
+              <span class="info-value">{{ formatCurrency(receivable()!.totalAmount) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Valor Pago:</span>
+              <span class="info-value success">{{ formatCurrency(receivable()!.paidAmount) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Saldo Devedor:</span>
+              <span class="info-value primary">{{ formatCurrency(receivable()!.outstandingAmount) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Status:</span>
+              <span class="badge" [class.badge-success]="receivable()!.status === 'Paid'" 
+                    [class.badge-warning]="receivable()!.status === 'Pending'"
+                    [class.badge-error]="receivable()!.status === 'Overdue'">
+                {{ receivable()!.status }}
+              </span>
+            </div>
+          </div>
+
+          @if (receivable()!.payments && receivable()!.payments.length > 0) {
+            <div class="payments-list">
+              <h4>Histórico de Pagamentos</h4>
+              <table class="payments-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Valor</th>
+                    <th>Transação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (payment of receivable()!.payments; track payment.id) {
+                    <tr>
+                      <td>{{ formatDate(payment.paymentDate) }}</td>
+                      <td class="currency-cell">{{ formatCurrency(payment.amount) }}</td>
+                      <td>{{ payment.transactionId || '—' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      }
+
+      @if (!isEditMode()) {
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" routerLink="/financial/receivables">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!receivableForm.valid || isLoading()">
+            @if (isLoading()) {
+              <span>Cadastrando...</span>
+            } @else {
+              <span>Cadastrar Conta</span>
+            }
+          </button>
+        </div>
+      }
+    </form>
+  </div>
+</div>

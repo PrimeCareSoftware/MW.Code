@@ -1,0 +1,99 @@
+<app-navbar></app-navbar>
+<div class="supplier-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <a routerLink="/financial/suppliers" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Voltar
+      </a>
+      <h1>{{ isEditMode() ? 'Editar Fornecedor' : 'Novo Fornecedor' }}</h1>
+    </div>
+  </div>
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+  <div class="form-card">
+    <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3>Dados Básicos</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Nome*</label>
+            <input type="text" id="name" formControlName="name"/>
+          </div>
+          <div class="form-group">
+            <label for="tradeName">Nome Fantasia</label>
+            <input type="text" id="tradeName" formControlName="tradeName"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="documentNumber">CNPJ/CPF</label>
+            <input type="text" id="documentNumber" formControlName="documentNumber"/>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" formControlName="email"/>
+          </div>
+          <div class="form-group">
+            <label for="phone">Telefone</label>
+            <input type="text" id="phone" formControlName="phone"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>Endereço</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="address">Endereço</label>
+            <input type="text" id="address" formControlName="address"/>
+          </div>
+          <div class="form-group">
+            <label for="city">Cidade</label>
+            <input type="text" id="city" formControlName="city"/>
+          </div>
+          <div class="form-group">
+            <label for="state">Estado</label>
+            <input type="text" id="state" formControlName="state"/>
+          </div>
+          <div class="form-group">
+            <label for="zipCode">CEP</label>
+            <input type="text" id="zipCode" formControlName="zipCode"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>Dados Bancários</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bankName">Banco</label>
+            <input type="text" id="bankName" formControlName="bankName"/>
+          </div>
+          <div class="form-group">
+            <label for="bankAccount">Conta</label>
+            <input type="text" id="bankAccount" formControlName="bankAccount"/>
+          </div>
+          <div class="form-group">
+            <label for="pixKey">Chave PIX</label>
+            <input type="text" id="pixKey" formControlName="pixKey"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="notes">Observações</label>
+        <textarea id="notes" formControlName="notes" rows="3"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/financial/suppliers">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!supplierForm.valid || isLoading()">
+          {{ isLoading() ? 'Salvando...' : (isEditMode() ? 'Atualizar' : 'Cadastrar') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

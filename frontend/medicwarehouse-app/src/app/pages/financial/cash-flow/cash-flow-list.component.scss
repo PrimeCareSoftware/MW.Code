@@ -1,0 +1,63 @@
+.cash-flow-list-container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-6);
+}
+.page-header {
+  margin-bottom: var(--spacing-6);
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    color: var(--primary-600);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    margin-bottom: var(--spacing-3);
+    svg { width: 16px; height: 16px; }
+  }
+  h1 {
+    color: var(--gray-900);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-bold);
+  }
+}
+.entries-card {
+  background: white;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+.entries-table {
+  width: 100%;
+  border-collapse: collapse;
+  thead {
+    background: var(--gray-50);
+    th {
+      padding: var(--spacing-4) var(--spacing-5);
+      text-align: left;
+      font-weight: var(--font-semibold);
+      color: var(--gray-600);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--gray-100);
+      &:hover { background: var(--gray-50); }
+    }
+    td {
+      padding: var(--spacing-4) var(--spacing-5);
+      color: var(--gray-700);
+      font-size: var(--font-size-sm);
+      
+      &.currency-cell {
+        font-family: var(--font-family-mono);
+        font-weight: var(--font-semibold);
+        &.income { color: var(--success-600); }
+        &.expense { color: var(--error-600); }
+      }
+    }
+  }
+}
