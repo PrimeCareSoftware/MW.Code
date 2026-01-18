@@ -43,7 +43,7 @@ export class Login {
     this.loading.set(true);
     this.error.set(null);
 
-    this.authService.login(this.loginForm.value).subscribe({
+    this.authService.ownerLogin(this.loginForm.value).subscribe({
       next: (response) => {
         if (response.isSystemOwner) {
           this.router.navigate(['/system-admin/dashboard']);
