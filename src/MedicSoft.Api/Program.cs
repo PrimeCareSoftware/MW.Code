@@ -219,6 +219,16 @@ builder.Services.AddScoped<IDigitalPrescriptionItemRepository, DigitalPrescripti
 builder.Services.AddScoped<ISNGPCReportRepository, SNGPCReportRepository>();
 builder.Services.AddScoped<IPrescriptionSequenceControlRepository, PrescriptionSequenceControlRepository>();
 
+// TISS/TUSS - Health Insurance Integration
+builder.Services.AddScoped<IHealthInsuranceOperatorRepository, HealthInsuranceOperatorRepository>();
+builder.Services.AddScoped<IHealthInsurancePlanRepository, HealthInsurancePlanRepository>();
+builder.Services.AddScoped<IPatientHealthInsuranceRepository, PatientHealthInsuranceRepository>();
+builder.Services.AddScoped<IAuthorizationRequestRepository, AuthorizationRequestRepository>();
+builder.Services.AddScoped<ITissGuideRepository, TissGuideRepository>();
+builder.Services.AddScoped<ITissBatchRepository, TissBatchRepository>();
+builder.Services.AddScoped<ITussProcedureRepository, TussProcedureRepository>();
+builder.Services.AddScoped<ITissGuideProcedureRepository, TissGuideProcedureRepository>();
+
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
@@ -247,6 +257,16 @@ builder.Services.AddScoped<IInformedConsentService, InformedConsentService>();
 // Digital Prescriptions and SNGPC Services
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
 builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSignatureService>();
+
+// TISS/TUSS Services
+builder.Services.AddScoped<IHealthInsuranceOperatorService, HealthInsuranceOperatorService>();
+builder.Services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();
+builder.Services.AddScoped<IPatientHealthInsuranceService, PatientHealthInsuranceService>();
+builder.Services.AddScoped<IAuthorizationRequestService, AuthorizationRequestService>();
+builder.Services.AddScoped<ITissGuideService, TissGuideService>();
+builder.Services.AddScoped<ITissBatchService, TissBatchService>();
+builder.Services.AddScoped<ITussProcedureService, TussProcedureService>();
+builder.Services.AddScoped<ITissXmlGeneratorService, TissXmlGeneratorService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();

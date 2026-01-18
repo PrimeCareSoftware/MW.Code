@@ -86,6 +86,28 @@ namespace MedicSoft.Domain.Common
         public const string WaitingQueueView = "waiting-queue.view";
         public const string WaitingQueueManage = "waiting-queue.manage";
 
+        // Health Insurance
+        public const string HealthInsuranceView = "health-insurance.view";
+        public const string HealthInsuranceCreate = "health-insurance.create";
+        public const string HealthInsuranceEdit = "health-insurance.edit";
+        public const string HealthInsuranceDelete = "health-insurance.delete";
+
+        // TISS/TUSS
+        public const string TissView = "tiss.view";
+        public const string TissCreate = "tiss.create";
+        public const string TissEdit = "tiss.edit";
+        public const string TissDelete = "tiss.delete";
+        public const string TussView = "tuss.view";
+        public const string TussCreate = "tuss.create";
+        public const string TussEdit = "tuss.edit";
+        public const string TussDelete = "tuss.delete";
+
+        // Authorizations
+        public const string AuthorizationsView = "authorizations.view";
+        public const string AuthorizationsCreate = "authorizations.create";
+        public const string AuthorizationsEdit = "authorizations.edit";
+        public const string AuthorizationsDelete = "authorizations.delete";
+
         /// <summary>
         /// Gets all available permissions grouped by category
         /// </summary>
@@ -216,6 +238,42 @@ namespace MedicSoft.Domain.Common
                     {
                         new(WaitingQueueView, "Visualizar fila de espera"),
                         new(WaitingQueueManage, "Gerenciar fila de espera")
+                    }
+                },
+                {
+                    "Convênios e Operadoras", new List<PermissionInfo>
+                    {
+                        new(HealthInsuranceView, "Visualizar convênios e operadoras"),
+                        new(HealthInsuranceCreate, "Cadastrar convênios e operadoras"),
+                        new(HealthInsuranceEdit, "Editar convênios e operadoras"),
+                        new(HealthInsuranceDelete, "Excluir convênios e operadoras")
+                    }
+                },
+                {
+                    "TISS - Troca de Informações", new List<PermissionInfo>
+                    {
+                        new(TissView, "Visualizar guias e lotes TISS"),
+                        new(TissCreate, "Criar guias e lotes TISS"),
+                        new(TissEdit, "Editar guias e lotes TISS"),
+                        new(TissDelete, "Excluir guias e lotes TISS")
+                    }
+                },
+                {
+                    "TUSS - Procedimentos", new List<PermissionInfo>
+                    {
+                        new(TussView, "Visualizar procedimentos TUSS"),
+                        new(TussCreate, "Cadastrar procedimentos TUSS"),
+                        new(TussEdit, "Editar procedimentos TUSS"),
+                        new(TussDelete, "Excluir procedimentos TUSS")
+                    }
+                },
+                {
+                    "Autorizações de Procedimentos", new List<PermissionInfo>
+                    {
+                        new(AuthorizationsView, "Visualizar autorizações"),
+                        new(AuthorizationsCreate, "Criar autorizações"),
+                        new(AuthorizationsEdit, "Editar autorizações"),
+                        new(AuthorizationsDelete, "Excluir autorizações")
                     }
                 }
             };

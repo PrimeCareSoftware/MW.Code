@@ -197,6 +197,10 @@ namespace MedicSoft.Application.Mappings
                 .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.GetTotalAmount()))
                 .ForMember(dest => dest.GuideCount, opt => opt.MapFrom(src => src.GetGuideCount()))
                 .ForMember(dest => dest.Guides, opt => opt.MapFrom(src => src.Guides));
+
+            CreateMap<HealthInsurancePlan, HealthInsurancePlanDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.OperatorName, opt => opt.MapFrom(src => src.Operator != null ? src.Operator.TradeName : null));
         }
     }
 }
