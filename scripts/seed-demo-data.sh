@@ -55,7 +55,7 @@ check_api_health() {
         print_error "API não está acessível em $API_URL"
         print_info "Verifique se a aplicação está rodando:"
         print_info "  - dotnet run (no diretório src/MedicSoft.Api)"
-        print_info "  - ou docker-compose up -d / podman-compose up -d"
+        print_info "  - ou podman-compose up -d"
         return 1
     fi
 }
