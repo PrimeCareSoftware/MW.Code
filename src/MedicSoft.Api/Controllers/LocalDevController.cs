@@ -123,7 +123,7 @@ namespace MedicSoft.Api.Controllers
                     passwordHash: adminPasswordHash,
                     fullName: request.AdminName ?? "Administrador Teste",
                     phone: "+5511977777777",
-                    tenantId: result.TenantId!,
+                    tenantId: "system", // System owners use "system" tenantId
                     clinicId: null // null ClinicId makes this a System Owner
                 );
 
@@ -144,7 +144,8 @@ namespace MedicSoft.Api.Controllers
                         username = ownerUsername,
                         password = ownerPassword,
                         email = ownerEmail,
-                        loginEndpoint = "/api/auth/owner-login"
+                        loginEndpoint = "/api/auth/owner-login",
+                        tenantId = result.TenantId
                     },
                     systemOwner = new
                     {
@@ -153,7 +154,8 @@ namespace MedicSoft.Api.Controllers
                         password = adminPassword,
                         email = adminEmail,
                         loginEndpoint = "/api/auth/owner-login",
-                        note = "This is a System Owner with system-admin access (Owner with null ClinicId)"
+                        tenantId = "system",
+                        note = "This is a System Owner with system-admin access (Owner with null ClinicId). Use tenantId='system' for login."
                     },
                     note = "Use the credentials above to login and test the system"
                 });

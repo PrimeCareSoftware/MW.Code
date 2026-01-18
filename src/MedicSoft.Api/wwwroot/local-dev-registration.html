@@ -384,15 +384,18 @@
                             <div class="credential-item"><strong>Username:</strong> ${responseData.owner.username}</div>
                             <div class="credential-item"><strong>Senha:</strong> ${responseData.owner.password}</div>
                             <div class="credential-item"><strong>Email:</strong> ${responseData.owner.email}</div>
+                            <div class="credential-item"><strong>Tenant ID:</strong> ${responseData.owner.tenantId}</div>
                             <div class="credential-item"><strong>Login:</strong> POST ${responseData.owner.loginEndpoint}</div>
                         </div>
 
                         <div class="credentials">
                             <h4>🔧 Administrador do Sistema</h4>
-                            <div class="credential-item"><strong>Username:</strong> ${responseData.systemAdmin.username}</div>
-                            <div class="credential-item"><strong>Senha:</strong> ${responseData.systemAdmin.password}</div>
-                            <div class="credential-item"><strong>Email:</strong> ${responseData.systemAdmin.email}</div>
-                            <div class="credential-item"><strong>Login:</strong> POST ${responseData.systemAdmin.loginEndpoint}</div>
+                            <div class="credential-item"><strong>Username:</strong> ${responseData.systemOwner.username}</div>
+                            <div class="credential-item"><strong>Senha:</strong> ${responseData.systemOwner.password}</div>
+                            <div class="credential-item"><strong>Email:</strong> ${responseData.systemOwner.email}</div>
+                            <div class="credential-item"><strong>Tenant ID:</strong> ${responseData.systemOwner.tenantId}</div>
+                            <div class="credential-item"><strong>Login:</strong> POST ${responseData.systemOwner.loginEndpoint}</div>
+                            <div class="credential-item" style="color: #856404; font-style: italic;"><strong>Nota:</strong> ${responseData.systemOwner.note}</div>
                         </div>
 
                         <p style="margin-top: 15px; font-weight: 600;">${responseData.note}</p>
