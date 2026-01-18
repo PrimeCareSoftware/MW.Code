@@ -73,18 +73,18 @@ export class Dashboard implements OnInit {
   }
 
   navigateToClinics(status: string): void {
-    this.router.navigate(['/clinics'], { queryParams: status ? { status } : {} });
+    this.router.navigate(['/system-admin/clinics'], { queryParams: status ? { status } : {} });
   }
 
   navigateToPlans(): void {
-    this.router.navigate(['/plans']);
+    this.router.navigate(['/system-admin/plans']);
   }
 
   navigateToOwners(): void {
-    this.router.navigate(['/clinic-owners']);
+    this.router.navigate(['/system-admin/clinic-owners']);
   }
 
   navigateToSubdomains(): void {
-    this.router.navigate(['/subdomains']);
+    this.router.navigate(['/system-admin/subdomains']);
   }
 }
