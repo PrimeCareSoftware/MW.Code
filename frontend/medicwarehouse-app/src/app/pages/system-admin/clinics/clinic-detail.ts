@@ -4,11 +4,12 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../../services/system-admin';
 import { ClinicDetail as ClinicDetailModel, UpdateClinicRequest, EnableManualOverrideRequest, SubscriptionPlan, UpdateSubscriptionRequest } from '../../../models/system-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-clinic-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar],
   templateUrl: './clinic-detail.html',
   styleUrl: './clinic-detail.scss'})
 export class ClinicDetail implements OnInit {

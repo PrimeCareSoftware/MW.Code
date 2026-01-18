@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { SystemAdminService } from '../../../services/system-admin';
 import { ClinicSummary, PaginatedClinics } from '../../../models/system-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-clinics-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Navbar],
   templateUrl: './clinics-list.html',
   styleUrl: './clinics-list.scss'})
 export class ClinicsList implements OnInit {

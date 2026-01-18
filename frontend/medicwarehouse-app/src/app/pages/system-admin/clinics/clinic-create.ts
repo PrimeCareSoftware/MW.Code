@@ -4,11 +4,12 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../../services/system-admin';
 import { CreateClinicRequest, SubscriptionPlan } from '../../../models/system-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-clinic-create',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar],
   templateUrl: './clinic-create.html',
   styleUrl: './clinic-create.scss'})
 export class ClinicCreate {

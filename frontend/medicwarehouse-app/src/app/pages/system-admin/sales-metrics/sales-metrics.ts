@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 interface FunnelStats {
   totalSessions: number;
@@ -52,7 +53,7 @@ interface SalesFunnelMetric {
 
 @Component({
   selector: 'app-sales-metrics',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './sales-metrics.html',
   styleUrl: './sales-metrics.scss',
   standalone: true
