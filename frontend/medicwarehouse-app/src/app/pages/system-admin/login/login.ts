@@ -46,7 +46,7 @@ export class Login {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         if (response.isSystemOwner) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/system-admin/dashboard']);
         } else {
           this.error.set('Acesso negado. Apenas System Owners podem acessar esta área.');
           this.authService.logout();
