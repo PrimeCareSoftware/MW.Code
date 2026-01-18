@@ -56,7 +56,7 @@ function Test-ApiHealth {
         Write-ErrorMsg "API não está acessível em $ApiUrl"
         Write-Info "Verifique se a aplicação está rodando:"
         Write-Info "  - dotnet run (no diretório src/MedicSoft.Api)"
-        Write-Info "  - ou docker-compose up -d / podman-compose up -d"
+        Write-Info "  - ou podman-compose up -d"
         return $false
     }
 }

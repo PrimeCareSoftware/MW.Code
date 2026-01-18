@@ -39,8 +39,7 @@ if (-not (Test-CommandExists "winget")) {
     Write-Host "    1. .NET 8 SDK: https://dotnet.microsoft.com/download/dotnet/8.0" -ForegroundColor Yellow
     Write-Host "    2. Node.js 20+: https://nodejs.org/" -ForegroundColor Yellow
     Write-Host "    3. Git: https://git-scm.com/download/win" -ForegroundColor Yellow
-    Write-Host "    4. Docker Desktop: https://www.docker.com/products/docker-desktop" -ForegroundColor Yellow
-    Write-Host "       ou Podman Desktop: https://podman-desktop.io/" -ForegroundColor Yellow
+    Write-Host "    4. Podman Desktop: https://podman-desktop.io/" -ForegroundColor Yellow
     Write-Host ""
     Read-Host "Pressione Enter para continuar ou Ctrl+C para sair"
 } else {
@@ -88,29 +87,28 @@ if (Test-CommandExists "node") {
 }
 Write-Host ""
 
-# Verificar Docker ou Podman
-Write-Host "[4/7] Verificando Docker/Podman..." -ForegroundColor Blue
-$hasDocker = Test-CommandExists "docker"
+# Verificar Podman ou Docker
+Write-Host "[4/7] Verificando Podman/Docker..." -ForegroundColor Blue
 $hasPodman = Test-CommandExists "podman"
+$hasDocker = Test-CommandExists "docker"
 
-if ($hasDocker) {
-    Write-Host "✓ Docker já está instalado" -ForegroundColor Green
-    try {
-        docker --version
-    } catch {
-        Write-Host "⚠️  Docker instalado mas não está rodando. Inicie o Docker Desktop." -ForegroundColor Yellow
-    }
-} elseif ($hasPodman) {
+if ($hasPodman) {
     Write-Host "✓ Podman já está instalado" -ForegroundColor Green
     try {
         podman --version
     } catch {
         Write-Host "⚠️  Podman instalado mas pode não estar configurado corretamente." -ForegroundColor Yellow
     }
+} elseif ($hasDocker) {
+    Write-Host "✓ Docker já está instalado" -ForegroundColor Green
+    try {
+        docker --version
+    } catch {
+        Write-Host "⚠️  Docker instalado mas não está rodando. Inicie o Docker Desktop." -ForegroundColor Yellow
+    }
 } else {
-    Write-Host "⚠️  Nem Docker nem Podman foram encontrados." -ForegroundColor Yellow
+    Write-Host "⚠️  Nem Podman nem Docker foram encontrados." -ForegroundColor Yellow
     Write-Host "    Recomendado para desenvolvimento:" -ForegroundColor Yellow
-    Write-Host "    • Docker Desktop: https://www.docker.com/products/docker-desktop" -ForegroundColor Yellow
     Write-Host "    • Podman Desktop: https://podman-desktop.io/" -ForegroundColor Yellow
     Write-Host "    • Ou use WSL2 com Linux" -ForegroundColor Yellow
 }
@@ -212,16 +210,16 @@ Write-Host ""
 Write-Host "📚 Próximos passos:" -ForegroundColor Blue
 
 # Determinar comando de container
-$containerCmd = "docker-compose"
-if ($hasPodman -and -not $hasDocker) {
-    $containerCmd = "podman-compose"
+$containerCmd = "podman-compose"
+if ($hasDocker -and -not $hasPodman) {
+    $containerCmd = "docker-compose"
 }
 
-if ($hasDocker -or $hasPodman) {
+if ($hasPodman -or $hasDocker) {
     Write-Host "   1. Configure o banco de dados: " -NoNewline -ForegroundColor White
     Write-Host "$containerCmd up postgres -d" -ForegroundColor Yellow
 } else {
-    Write-Host "   1. Instale Docker ou Podman e configure o banco de dados" -ForegroundColor Yellow
+    Write-Host "   1. Instale Podman ou Docker e configure o banco de dados" -ForegroundColor Yellow
 }
 Write-Host "   2. Aplique as migrations: " -NoNewline -ForegroundColor White
 Write-Host "cd src\MedicSoft.Api; dotnet ef database update" -ForegroundColor Yellow

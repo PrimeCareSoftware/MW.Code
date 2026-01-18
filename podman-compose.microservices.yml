@@ -1,0 +1,113 @@
+version: '3.8'
+
+# Podman Compose para PrimeCare Software - Modo Microserviços
+# Este arquivo também é compatível com Docker Compose
+#
+# Executar com Podman (recomendado - livre e open-source):
+#   podman-compose -f podman-compose.microservices.yml up -d
+#
+# Ou com Docker (alternativa):
+#   docker-compose -f podman-compose.microservices.yml up -d
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: primecare-postgres
+    environment:
+      POSTGRES_DB: primecare
+      POSTGRES_USER: postgres
+      # SECURITY: POSTGRES_PASSWORD must be set in production. Never use default values in production.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD environment variable is required}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - primecare-network
+    healthcheck:
+      test: pg_isready -U postgres -d primecare
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Telemedicine Microservice (Video Calls) - MANTIDO ATIVO
+  telemedicine-api:
+    build:
+      context: .
+      dockerfile: telemedicine/src/MedicSoft.Telemedicine.Api/Dockerfile
+    container_name: primecare-telemedicine-api
+    ports:
+      - "5084:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=telemedicine;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - DailyCo__ApiKey=${DAILYCO_API_KEY}
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
+      - Cors__AllowedOrigins__0=http://localhost:4200
+      - Cors__AllowedOrigins__1=http://localhost:4201
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - primecare-network
+
+  # Original API (Monolithic - Todas as funcionalidades dos microservices descontinuados)
+  api:
+    build:
+      context: .
+      dockerfile: src/MedicSoft.Api/Dockerfile
+    container_name: primecare-api
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare Software-API
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - primecare-network
+
+  frontend:
+    build:
+      context: ./frontend/medicwarehouse-app
+      dockerfile: Dockerfile
+    container_name: primecare-frontend
+    ports:
+      - "4200:4200"
+    environment:
+      - API_URL=http://api:8080
+    depends_on:
+      - api
+    networks:
+      - primecare-network
+
+  system-admin:
+    build:
+      context: ./frontend/mw-system-admin
+      dockerfile: Dockerfile
+    container_name: primecare-system-admin
+    ports:
+      - "4201:4200"
+    environment:
+      - API_URL=http://api:8080
+    depends_on:
+      - api
+    networks:
+      - primecare-network
+
+volumes:
+  postgres_data:
+
+networks:
+  primecare-network:
+    driver: bridge
