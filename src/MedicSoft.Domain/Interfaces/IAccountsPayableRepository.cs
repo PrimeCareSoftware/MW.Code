@@ -11,13 +11,13 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<AccountsPayable>> GetAllAsync(string tenantId);
         Task<IEnumerable<AccountsPayable>> GetBySupplierIdAsync(Guid supplierId, string tenantId);
         Task<IEnumerable<AccountsPayable>> GetByStatusAsync(PayableStatus status, string tenantId);
-        Task<IEnumerable<AccountsPayable>> GetByCategoryAsync(ExpenseCategory category, string tenantId);
+        Task<IEnumerable<AccountsPayable>> GetByCategoryAsync(PayableCategory category, string tenantId);
         Task<IEnumerable<AccountsPayable>> GetOverdueAsync(string tenantId);
         Task<IEnumerable<AccountsPayable>> GetByDueDateRangeAsync(DateTime startDate, DateTime endDate, string tenantId);
         Task<decimal> GetTotalOutstandingAsync(string tenantId);
         Task<decimal> GetTotalOverdueAsync(string tenantId);
         Task<AccountsPayable?> GetByDocumentNumberAsync(string documentNumber, string tenantId);
-        Task AddAsync(AccountsPayable payable);
+        Task<AccountsPayable> AddAsync(AccountsPayable payable);
         Task UpdateAsync(AccountsPayable payable);
         Task DeleteAsync(Guid id, string tenantId);
     }

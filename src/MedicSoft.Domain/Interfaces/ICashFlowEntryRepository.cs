@@ -16,7 +16,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<decimal> GetTotalExpenseAsync(DateTime startDate, DateTime endDate, string tenantId);
         Task<decimal> GetBalanceAsync(DateTime startDate, DateTime endDate, string tenantId);
         Task<IEnumerable<CashFlowEntry>> GetByAppointmentIdAsync(Guid appointmentId, string tenantId);
-        Task AddAsync(CashFlowEntry entry);
+        Task<CashFlowEntry> AddAsync(CashFlowEntry entry);
         Task UpdateAsync(CashFlowEntry entry);
         Task DeleteAsync(Guid id, string tenantId);
     }

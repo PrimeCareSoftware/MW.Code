@@ -15,7 +15,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<FinancialClosure>> GetByDateRangeAsync(DateTime startDate, DateTime endDate, string tenantId);
         Task<FinancialClosure?> GetByClosureNumberAsync(string closureNumber, string tenantId);
         Task<decimal> GetTotalOutstandingAsync(string tenantId);
-        Task AddAsync(FinancialClosure closure);
+        Task<FinancialClosure> AddAsync(FinancialClosure closure);
         Task UpdateAsync(FinancialClosure closure);
         Task DeleteAsync(Guid id, string tenantId);
     }

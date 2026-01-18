@@ -17,7 +17,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<decimal> GetTotalOutstandingAsync(string tenantId);
         Task<decimal> GetTotalOverdueAsync(string tenantId);
         Task<AccountsReceivable?> GetByDocumentNumberAsync(string documentNumber, string tenantId);
-        Task AddAsync(AccountsReceivable receivable);
+        Task<AccountsReceivable> AddAsync(AccountsReceivable receivable);
         Task UpdateAsync(AccountsReceivable receivable);
         Task DeleteAsync(Guid id, string tenantId);
     }

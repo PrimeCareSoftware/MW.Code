@@ -18,9 +18,9 @@ namespace MedicSoft.Domain.Entities
     }
 
     /// <summary>
-    /// Categoria de despesa
+    /// Categoria de despesa para contas a pagar
     /// </summary>
-    public enum ExpenseCategory
+    public enum PayableCategory
     {
         Rent = 1,              // Aluguel
         Salaries = 2,          // Salários
@@ -44,7 +44,7 @@ namespace MedicSoft.Domain.Entities
     {
         public string DocumentNumber { get; private set; }
         public Guid? SupplierId { get; private set; }
-        public ExpenseCategory Category { get; private set; }
+        public PayableCategory Category { get; private set; }
         public PayableStatus Status { get; private set; }
         public DateTime IssueDate { get; private set; }
         public DateTime DueDate { get; private set; }
@@ -79,7 +79,7 @@ namespace MedicSoft.Domain.Entities
 
         public AccountsPayable(
             string documentNumber,
-            ExpenseCategory category,
+            PayableCategory category,
             DateTime dueDate,
             decimal totalAmount,
             string description,

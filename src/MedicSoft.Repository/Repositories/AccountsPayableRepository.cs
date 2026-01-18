@@ -33,7 +33,7 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<AccountsPayable>> GetByCategoryAsync(ExpenseCategory category, string tenantId)
+        public async Task<IEnumerable<AccountsPayable>> GetByCategoryAsync(PayableCategory category, string tenantId)
         {
             return await _dbSet
                 .Where(p => p.Category == category && p.TenantId == tenantId)
