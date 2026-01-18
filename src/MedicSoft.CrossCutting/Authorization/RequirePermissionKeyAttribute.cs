@@ -59,8 +59,15 @@ namespace MedicSoft.CrossCutting.Authorization
                 return;
             }
 
-            // Get role from claims to determine if this is an owner or user
+            // Get role from claims to determine if this is a system admin, owner or user
             var roleClaim = context.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            
+            // If role is "SystemAdmin", grant full access
+            // SystemAdmin users have full access to all system functionalities
+            if (roleClaim == RoleNames.SystemAdmin)
+            {
+                return;
+            }
             
             // If role is "ClinicOwner" or "Owner" (for backwards compatibility), check Owner permissions
             // Owners have full access to all features
