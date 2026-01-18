@@ -33,6 +33,6 @@ export class HealthInsuranceOperatorService {
   }
 
   search(searchTerm: string): Observable<HealthInsuranceOperator[]> {
-    return this.http.get<HealthInsuranceOperator[]>(`${this.apiUrl}/search?searchTerm=${encodeURIComponent(searchTerm)}`);
+    return this.http.get<HealthInsuranceOperator[]>(`${this.apiUrl}/search?name=${encodeURIComponent(searchTerm)}`);
   }
 }

@@ -34,7 +34,7 @@ export class TussProcedureService {
   }
 
   search(searchTerm: string): Observable<TussProcedure[]> {
-    return this.http.get<TussProcedure[]>(`${this.apiUrl}/search?searchTerm=${encodeURIComponent(searchTerm)}`);
+    return this.http.get<TussProcedure[]>(`${this.apiUrl}/search?query=${encodeURIComponent(searchTerm)}`);
   }
 
   getCategories(): Observable<TussCategory[]> {
