@@ -90,7 +90,8 @@ Antes de usar esta funcionalidade, você precisa:
     "password": "Admin@123",
     "email": "admin@teste.local",
     "loginEndpoint": "/api/auth/owner-login",
-    "note": "This is a System Owner with system-admin access (Owner with null ClinicId)"
+    "tenantId": "system",
+    "note": "This is a System Owner with system-admin access (Owner with null ClinicId). Use tenantId='system' for login."
   },
   "note": "Use the credentials above to login and test the system"
 }
@@ -145,11 +146,11 @@ POST /api/auth/owner-login
 {
   "username": "admin",
   "password": "Admin@123",
-  "tenantId": "<tenantId retornado>"
+  "tenantId": "system"
 }
 ```
 
-**Nota:** Ambos usam o mesmo endpoint `/api/auth/owner-login`. A diferença é que o System Owner tem `isSystemOwner: true` no token JWT porque não tem ClinicId associado.
+**Nota:** System Owners usam `tenantId: "system"` para login, enquanto Clinic Owners usam o tenantId específico da clínica. Ambos usam o mesmo endpoint `/api/auth/owner-login`. A diferença é que o System Owner tem `isSystemOwner: true` no token JWT porque não tem ClinicId associado.
 
 ## Outras Funcionalidades de Desenvolvimento
 
@@ -247,7 +248,7 @@ curl -X POST http://localhost:5000/api/auth/owner-login \
   -d '{
     "username": "admin",
     "password": "Admin@123",
-    "tenantId": "clinica-teste-local"
+    "tenantId": "system"
   }'
 ```
 
