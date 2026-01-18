@@ -86,11 +86,15 @@ namespace MedicSoft.Api.Middleware
                             responseSize);
                     }
 
-                    // Log error responses with details
+                    // Log error responses with details (limited for performance)
                     if (statusCode >= 400)
                     {
                         responseBody.Seek(0, SeekOrigin.Begin);
-                        var responseContent = await new StreamReader(responseBody).ReadToEndAsync();
+                        var maxLength = 4096; // Limit to 4KB to avoid memory issues
+                        var buffer = new char[maxLength];
+                        using var reader = new StreamReader(responseBody, leaveOpen: true);
+                        var readCount = await reader.ReadAsync(buffer, 0, maxLength);
+                        var responseContent = new string(buffer, 0, readCount);
                         
                         _logger.LogWarning(
                             "Error response: {Method} {Path} - Status: {StatusCode}, Duration: {ElapsedMs}ms, Response: {Response}",

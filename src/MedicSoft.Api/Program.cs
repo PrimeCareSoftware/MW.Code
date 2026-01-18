@@ -119,17 +119,13 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
             {
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
+                
+                // Log SQL queries with execution time
+                options.LogTo(
+                    message => Log.Debug("Database: {Message}", message),
+                    new[] { DbLoggerCategory.Database.Command.Name },
+                    LogLevel.Information);
             }
-            
-            // Log SQL queries that take longer than threshold
-            options.LogTo(
-                message => {
-                    if (message.Contains("Executed DbCommand"))
-                    {
-                        Log.Debug("Database Query: {Message}", message);
-                    }
-                },
-                LogLevel.Information);
         }
         else
         {
@@ -147,6 +143,12 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
             {
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
+                
+                // Log SQL queries with execution time
+                options.LogTo(
+                    message => Log.Debug("Database: {Message}", message),
+                    new[] { DbLoggerCategory.Database.Command.Name },
+                    LogLevel.Information);
             }
         }
     }
