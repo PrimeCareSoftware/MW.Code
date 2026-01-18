@@ -276,6 +276,13 @@ builder.Services.AddScoped<ITissBatchRepository, TissBatchRepository>();
 builder.Services.AddScoped<ITussProcedureRepository, TussProcedureRepository>();
 builder.Services.AddScoped<ITissGuideProcedureRepository, TissGuideProcedureRepository>();
 
+// Financial Module - Repositories
+builder.Services.AddScoped<IAccountsReceivableRepository, AccountsReceivableRepository>();
+builder.Services.AddScoped<IAccountsPayableRepository, AccountsPayableRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ICashFlowEntryRepository, CashFlowEntryRepository>();
+builder.Services.AddScoped<IFinancialClosureRepository, FinancialClosureRepository>();
+
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();

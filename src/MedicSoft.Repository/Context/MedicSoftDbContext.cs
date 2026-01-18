@@ -82,6 +82,16 @@ namespace MedicSoft.Repository.Context
         public DbSet<TissGuide> TissGuides { get; set; } = null!;
         public DbSet<TissGuideProcedure> TissGuideProcedures { get; set; } = null!;
         public DbSet<TussProcedure> TussProcedures { get; set; } = null!;
+        
+        // Financial Module
+        public DbSet<AccountsReceivable> AccountsReceivable { get; set; } = null!;
+        public DbSet<ReceivablePayment> ReceivablePayments { get; set; } = null!;
+        public DbSet<AccountsPayable> AccountsPayable { get; set; } = null!;
+        public DbSet<PayablePayment> PayablePayments { get; set; } = null!;
+        public DbSet<Supplier> Suppliers { get; set; } = null!;
+        public DbSet<CashFlowEntry> CashFlowEntries { get; set; } = null!;
+        public DbSet<FinancialClosure> FinancialClosures { get; set; } = null!;
+        public DbSet<FinancialClosureItem> FinancialClosureItems { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -151,6 +161,16 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new TissGuideConfiguration());
             modelBuilder.ApplyConfiguration(new TissGuideProcedureConfiguration());
             modelBuilder.ApplyConfiguration(new TussProcedureConfiguration());
+            
+            // Financial Module
+            modelBuilder.ApplyConfiguration(new AccountsReceivableConfiguration());
+            modelBuilder.ApplyConfiguration(new ReceivablePaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new AccountsPayableConfiguration());
+            modelBuilder.ApplyConfiguration(new PayablePaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
+            modelBuilder.ApplyConfiguration(new CashFlowEntryConfiguration());
+            modelBuilder.ApplyConfiguration(new FinancialClosureConfiguration());
+            modelBuilder.ApplyConfiguration(new FinancialClosureItemConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

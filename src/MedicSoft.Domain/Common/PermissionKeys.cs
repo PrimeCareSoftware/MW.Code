@@ -66,6 +66,26 @@ namespace MedicSoft.Domain.Common
         public const string ExpensesEdit = "expenses.edit";
         public const string ExpensesDelete = "expenses.delete";
 
+        // Financial - Accounts Receivable
+        public const string AccountsReceivableView = "accounts-receivable.view";
+        public const string AccountsReceivableManage = "accounts-receivable.manage";
+
+        // Financial - Accounts Payable
+        public const string AccountsPayableView = "accounts-payable.view";
+        public const string AccountsPayableManage = "accounts-payable.manage";
+
+        // Financial - Suppliers
+        public const string SuppliersView = "suppliers.view";
+        public const string SuppliersManage = "suppliers.manage";
+
+        // Financial - Cash Flow
+        public const string CashFlowView = "cash-flow.view";
+        public const string CashFlowManage = "cash-flow.manage";
+
+        // Financial - Financial Closure
+        public const string FinancialClosureView = "financial-closure.view";
+        public const string FinancialClosureManage = "financial-closure.manage";
+
         // Reports
         public const string ReportsFinancial = "reports.financial";
         public const string ReportsOperational = "reports.operational";
@@ -203,6 +223,41 @@ namespace MedicSoft.Domain.Common
                         new(ExpensesCreate, "Criar despesas"),
                         new(ExpensesEdit, "Editar despesas"),
                         new(ExpensesDelete, "Excluir despesas")
+                    }
+                },
+                {
+                    "Financeiro - Contas a Receber", new List<PermissionInfo>
+                    {
+                        new(AccountsReceivableView, "Visualizar contas a receber"),
+                        new(AccountsReceivableManage, "Gerenciar contas a receber")
+                    }
+                },
+                {
+                    "Financeiro - Contas a Pagar", new List<PermissionInfo>
+                    {
+                        new(AccountsPayableView, "Visualizar contas a pagar"),
+                        new(AccountsPayableManage, "Gerenciar contas a pagar")
+                    }
+                },
+                {
+                    "Financeiro - Fornecedores", new List<PermissionInfo>
+                    {
+                        new(SuppliersView, "Visualizar fornecedores"),
+                        new(SuppliersManage, "Gerenciar fornecedores")
+                    }
+                },
+                {
+                    "Financeiro - Fluxo de Caixa", new List<PermissionInfo>
+                    {
+                        new(CashFlowView, "Visualizar fluxo de caixa"),
+                        new(CashFlowManage, "Gerenciar fluxo de caixa")
+                    }
+                },
+                {
+                    "Financeiro - Fechamentos", new List<PermissionInfo>
+                    {
+                        new(FinancialClosureView, "Visualizar fechamentos financeiros"),
+                        new(FinancialClosureManage, "Gerenciar fechamentos financeiros")
                     }
                 },
                 {
