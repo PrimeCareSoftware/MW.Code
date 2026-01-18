@@ -7,8 +7,8 @@ export const ownerGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   const user = authService.currentUser();
-  // Check if user is an owner - either has role "Owner", "ClinicOwner", or is a system owner
-  if (user && (user.role === 'Owner' || user.role === 'ClinicOwner' || user.isSystemOwner)) {
+  // Check if user is an owner or system admin - either has role "Owner", "ClinicOwner", "SystemAdmin", or is a system owner
+  if (user && (user.role === 'Owner' || user.role === 'ClinicOwner' || user.role === 'SystemAdmin' || user.isSystemOwner)) {
     return true;
   }
 

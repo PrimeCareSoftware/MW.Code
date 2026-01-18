@@ -89,6 +89,22 @@ Este documento serve como guia de navegação para toda a documentação do sist
 - ✅ CFM 1.643/2002 (Receitas Digitais): 80% completo - 4 componentes frontend (~2.236 linhas)
 - ✅ ANVISA 344/1998 (SNGPC): 80% completo - Backend e dashboard completos
 
+### 🏥 Integração com Convênios (TISS/TUSS)
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [GUIA_USUARIO_TISS.md](./GUIA_USUARIO_TISS.md) | ✨ **NOVO!** Guia completo do usuário para TISS (Troca de Informações em Saúde Suplementar) | 60 min |
+| [GUIA_USUARIO_TUSS.md](./GUIA_USUARIO_TUSS.md) | ✨ **NOVO!** Guia completo do usuário para TUSS (Terminologia Unificada da Saúde Suplementar) | 50 min |
+| [HEALTH_INSURANCE_INTEGRATION_GUIDE.md](./HEALTH_INSURANCE_INTEGRATION_GUIDE.md) | Guia técnico de integração com operadoras de planos de saúde | 30 min |
+| [TISS_PHASE1_IMPLEMENTATION_STATUS.md](./TISS_PHASE1_IMPLEMENTATION_STATUS.md) | Status de implementação TISS Fase 1 | 15 min |
+
+**Status de Implementação (Janeiro 2026):**
+- ✅ Entidades de Domínio (HealthInsuranceOperator, PatientHealthInsurance, TissGuide, TissBatch, TussProcedure, etc.): 100% completo
+- ✅ Repositórios e Configurações: 100% completo
+- ⏳ Serviços e Controllers: 60% completo
+- ⏳ Frontend: 30% completo
+- 📚 Documentação de Usuário: 100% completo
+
 ### 👥 Funcionalidades Específicas
 
 | Documento | Descrição | Tempo de Leitura |
