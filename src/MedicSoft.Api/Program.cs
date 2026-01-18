@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
 using MedicSoft.Api.JsonConverters;
 using MedicSoft.Api.Middleware;
 using MedicSoft.Application.Mappings;
@@ -20,7 +22,27 @@ using MedicSoft.Repository.Repositories;
 // This must be set before any Npgsql/EF Core operations
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+// Configure Serilog before building the application
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
+        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+        .Build())
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithThreadId()
+    .Enrich.WithProcessId()
+    .CreateLogger();
+
+try
+{
+    Log.Information("Iniciando PrimeCare Software API...");
+    Log.Information("Configuração de logging Serilog aplicada com sucesso");
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Use Serilog for all logging
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -91,6 +113,23 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
                     errorCodesToAdd: null);
                 npgsqlOptions.CommandTimeout(60);
             });
+            
+            // Enable sensitive data logging and detailed errors in development
+            if (builder.Environment.IsDevelopment())
+            {
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            }
+            
+            // Log SQL queries that take longer than threshold
+            options.LogTo(
+                message => {
+                    if (message.Contains("Executed DbCommand"))
+                    {
+                        Log.Debug("Database Query: {Message}", message);
+                    }
+                },
+                LogLevel.Information);
         }
         else
         {
@@ -103,6 +142,12 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
                     errorNumbersToAdd: null);
                 sqlOptions.CommandTimeout(60);
             });
+            
+            if (builder.Environment.IsDevelopment())
+            {
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            }
         }
     }
 });
@@ -319,6 +364,18 @@ else
 // Add global exception handler (should be first to catch all exceptions)
 app.UseGlobalExceptionHandler();
 
+// Add request logging middleware (logs all requests with timing)
+if (builder.Configuration.GetValue<bool>("Monitoring:EnableRequestLogging", true))
+{
+    app.UseRequestLogging();
+}
+
+// Add performance monitoring middleware
+if (builder.Configuration.GetValue<bool>("Monitoring:EnablePerformanceMonitoring", true))
+{
+    app.UsePerformanceMonitoring();
+}
+
 // Add security headers
 app.UseSecurityHeaders();
 
@@ -366,19 +423,30 @@ using (var scope = app.Services.CreateScope())
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
-    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     
     try
     {
-        logger.LogInformation("Applying database migrations...");
+        Log.Information("Aplicando migrações do banco de dados...");
         context.Database.Migrate();
-        logger.LogInformation("Database migrations applied successfully");
+        Log.Information("Migrações do banco de dados aplicadas com sucesso");
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "Database migration failed: {Message}", ex.Message);
+        Log.Fatal(ex, "Falha ao aplicar migrações do banco de dados: {Message}", ex.Message);
         Console.WriteLine($"Database migration failed: {ex.Message}");
     }
 }
 
-app.Run();
+    Log.Information("PrimeCare Software API iniciada com sucesso");
+    app.Run();
+    Log.Information("PrimeCare Software API finalizada com sucesso");
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Falha crítica ao iniciar a aplicação: {Message}", ex.Message);
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
+}

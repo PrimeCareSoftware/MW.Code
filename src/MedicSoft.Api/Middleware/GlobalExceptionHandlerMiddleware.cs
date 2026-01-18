@@ -34,7 +34,25 @@ namespace MedicSoft.Api.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro não tratado: {Message}", ex.Message);
+                // Log detalhado com contexto completo para análise
+                using (_logger.BeginScope(new Dictionary<string, object>
+                {
+                    ["ExceptionType"] = ex.GetType().FullName ?? "Unknown",
+                    ["RequestPath"] = context.Request.Path,
+                    ["RequestMethod"] = context.Request.Method,
+                    ["UserId"] = context.User?.Identity?.Name ?? "Anonymous",
+                    ["TenantId"] = context.Items["TenantId"]?.ToString() ?? "None",
+                    ["RemoteIpAddress"] = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
+                    ["StackTrace"] = ex.StackTrace ?? "No stack trace available"
+                }))
+                {
+                    _logger.LogError(ex, 
+                        "Erro não tratado: {Message} | Tipo: {ExceptionType} | Path: {Path} | Method: {Method}",
+                        ex.Message,
+                        ex.GetType().Name,
+                        context.Request.Path,
+                        context.Request.Method);
+                }
                 await HandleExceptionAsync(context, ex);
             }
         }
