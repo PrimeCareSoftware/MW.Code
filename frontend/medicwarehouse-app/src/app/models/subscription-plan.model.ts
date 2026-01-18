@@ -10,6 +10,7 @@ export interface SubscriptionPlan {
   hasWhatsAppIntegration: boolean;
   hasSMSNotifications: boolean;
   hasTissExport: boolean;
+  hasFinancialModule: boolean;
   isActive: boolean;
   type: PlanType;
   features: string[];
@@ -37,6 +38,7 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
     hasWhatsAppIntegration: false,
     hasSMSNotifications: false,
     hasTissExport: false,
+    hasFinancialModule: false,
     isActive: true,
     type: PlanType.Basic,
     features: [
@@ -60,6 +62,7 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
     hasWhatsAppIntegration: true,
     hasSMSNotifications: false,
     hasTissExport: false,
+    hasFinancialModule: true,
     isActive: true,
     type: PlanType.Standard,
     isRecommended: true,
@@ -69,6 +72,7 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
       'Todas as funcionalidades do Básico',
       'Integração WhatsApp',
       'Relatórios gerenciais',
+      'Módulo Financeiro',
       'Lembretes de consulta',
       'Suporte prioritário'
     ]
@@ -85,6 +89,7 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
     hasWhatsAppIntegration: true,
     hasSMSNotifications: true,
     hasTissExport: true,
+    hasFinancialModule: true,
     isActive: true,
     type: PlanType.Premium,
     features: [
@@ -93,6 +98,7 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
       'Todas as funcionalidades do Médio',
       'Notificações por SMS',
       'Exportação TISS',
+      'Módulo Financeiro Completo',
       'Dashboard avançado',
       'API de integração',
       'Suporte 24/7'
@@ -110,12 +116,14 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
     hasWhatsAppIntegration: true,
     hasSMSNotifications: true,
     hasTissExport: true,
+    hasFinancialModule: true,
     isActive: true,
     type: PlanType.Enterprise,
     features: [
       'Usuários ilimitados',
       'Pacientes ilimitados',
       'Todos os recursos Premium',
+      'Módulo Financeiro Completo',
       'Desenvolvimento de funcionalidades específicas',
       'Treinamento personalizado',
       'Gerente de conta dedicado',
