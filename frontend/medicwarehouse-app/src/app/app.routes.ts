@@ -265,6 +265,78 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
+  // Financial Module routes
+  { 
+    path: 'financial/receivables', 
+    loadComponent: () => import('./pages/financial/accounts-receivable/receivables-list.component').then(m => m.ReceivablesListComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/receivables/new', 
+    loadComponent: () => import('./pages/financial/accounts-receivable/receivable-form.component').then(m => m.ReceivableFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/receivables/:id', 
+    loadComponent: () => import('./pages/financial/accounts-receivable/receivable-form.component').then(m => m.ReceivableFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/payables', 
+    loadComponent: () => import('./pages/financial/accounts-payable/payables-list.component').then(m => m.PayablesListComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/payables/new', 
+    loadComponent: () => import('./pages/financial/accounts-payable/payable-form.component').then(m => m.PayableFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/payables/:id', 
+    loadComponent: () => import('./pages/financial/accounts-payable/payable-form.component').then(m => m.PayableFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/suppliers', 
+    loadComponent: () => import('./pages/financial/suppliers/suppliers-list.component').then(m => m.SuppliersListComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/suppliers/new', 
+    loadComponent: () => import('./pages/financial/suppliers/supplier-form.component').then(m => m.SupplierFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/suppliers/:id', 
+    loadComponent: () => import('./pages/financial/suppliers/supplier-form.component').then(m => m.SupplierFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/cash-flow', 
+    loadComponent: () => import('./pages/financial/cash-flow/cash-flow-dashboard.component').then(m => m.CashFlowDashboardComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/cash-flow/entries', 
+    loadComponent: () => import('./pages/financial/cash-flow/cash-flow-list.component').then(m => m.CashFlowListComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/closures', 
+    loadComponent: () => import('./pages/financial/financial-closures/closures-list.component').then(m => m.ClosuresListComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/closures/new', 
+    loadComponent: () => import('./pages/financial/financial-closures/closure-form.component').then(m => m.ClosureFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/closures/:id', 
+    loadComponent: () => import('./pages/financial/financial-closures/closure-form.component').then(m => m.ClosureFormComponent),
+    canActivate: [authGuard]
+  },
+  
   ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes

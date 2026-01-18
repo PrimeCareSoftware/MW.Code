@@ -103,6 +103,53 @@
 
       <div class="nav-divider"></div>
       <div class="nav-section-title">
+        <span class="nav-text">Financeiro</span>
+      </div>
+      <a routerLink="/financial/cash-flow" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+        <span class="nav-text">Fluxo de Caixa</span>
+      </a>
+      <a routerLink="/financial/receivables" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          <path d="M12 21 5 14"/>
+          <path d="M9 5v5"/>
+          <path d="M15 5v5"/>
+        </svg>
+        <span class="nav-text">Contas a Receber</span>
+      </a>
+      <a routerLink="/financial/payables" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M7 15h0"/>
+          <path d="M2 9.5h20"/>
+        </svg>
+        <span class="nav-text">Contas a Pagar</span>
+      </a>
+      <a routerLink="/financial/suppliers" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+          <path d="m3.3 7 8.7 5 8.7-5"/>
+          <path d="M12 22V12"/>
+        </svg>
+        <span class="nav-text">Fornecedores</span>
+      </a>
+      <a routerLink="/financial/closures" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <line x1="16" y1="9" x2="8" y2="9"/>
+        </svg>
+        <span class="nav-text">Fechamentos</span>
+      </a>
+
+      <div class="nav-divider"></div>
+      <div class="nav-section-title">
         <span class="nav-text">Compliance</span>
       </div>
       <a routerLink="/sngpc/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
