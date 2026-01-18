@@ -58,5 +58,14 @@ namespace MedicSoft.Repository.Repositories
 
             return !await query.AnyAsync();
         }
+
+        public async Task<PatientHealthInsurance?> GetByIdWithDetailsAsync(Guid id, string tenantId)
+        {
+            return await _dbSet
+                .Include(phi => phi.Patient)
+                .Include(phi => phi.HealthInsurancePlan)
+                    .ThenInclude(plan => plan!.Operator)
+                .FirstOrDefaultAsync(phi => phi.Id == id && phi.TenantId == tenantId);
+        }
     }
 }

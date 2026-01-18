@@ -1,0 +1,93 @@
+<app-navbar></app-navbar>
+
+<div class="batch-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Lotes de Faturamento</h1>
+      <p>Gerenciamento de lotes TISS</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/tiss/batches/new">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Novo Lote
+    </button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando lotes...</div>
+    </div>
+  } @else {
+    <div class="batches-card">
+      <div class="table-container">
+        <table class="batches-table">
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Operadora</th>
+              <th>Competência</th>
+              <th>Guias</th>
+              <th>Valor Total</th>
+              <th>Status</th>
+              <th class="actions-col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (batch of batches(); track batch.id) {
+              <tr>
+                <td><span class="batch-number">{{ batch.batchNumber }}</span></td>
+                <td>{{ batch.operatorName }}</td>
+                <td>{{ batch.competence }}</td>
+                <td><span class="badge badge-info">{{ batch.guideCount }}</span></td>
+                <td>{{ batch.totalAmount | currency:'BRL' }}</td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusClass(batch.status)">
+                    {{ getStatusLabel(batch.status) }}
+                  </span>
+                </td>
+                <td class="actions-cell">
+                  <div class="action-buttons">
+                    <button class="btn-icon btn-view" (click)="viewDetails(batch.id)" title="Ver detalhes">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                    @if (batch.status === BatchStatus.Draft) {
+                      <button class="btn-icon btn-generate" (click)="generateXml(batch.id)" title="Gerar XML">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                      </button>
+                    }
+                    @if (batch.xmlFilePath) {
+                      <button class="btn-icon btn-download" (click)="downloadXml(batch.id)" title="Baixar XML">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

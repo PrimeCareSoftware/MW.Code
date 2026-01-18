@@ -65,5 +65,27 @@ namespace MedicSoft.Repository.Repositories
                 .Where(ar => ar.AuthorizationNumber == authorizationNumber && ar.TenantId == tenantId)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<AuthorizationRequest?> GetByIdWithDetailsAsync(Guid id, string tenantId)
+        {
+            return await _dbSet
+                .Include(ar => ar.Patient)
+                .Include(ar => ar.PatientHealthInsurance)
+                    .ThenInclude(phi => phi!.HealthInsurancePlan)
+                        .ThenInclude(plan => plan!.Operator)
+                .FirstOrDefaultAsync(ar => ar.Id == id && ar.TenantId == tenantId);
+        }
+
+        public async Task<IEnumerable<AuthorizationRequest>> GetAllWithDetailsAsync(string tenantId)
+        {
+            return await _dbSet
+                .Include(ar => ar.Patient)
+                .Include(ar => ar.PatientHealthInsurance)
+                    .ThenInclude(phi => phi!.HealthInsurancePlan)
+                        .ThenInclude(plan => plan!.Operator)
+                .Where(ar => ar.TenantId == tenantId)
+                .OrderByDescending(ar => ar.RequestDate)
+                .ToListAsync();
+        }
     }
 }

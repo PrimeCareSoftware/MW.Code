@@ -1,0 +1,102 @@
+<app-navbar></app-navbar>
+
+<div class="guide-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Guias TISS</h1>
+      <p>Gerenciamento de guias de atendimento</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/tiss/guides/new">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nova Guia
+    </button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando guias...</div>
+    </div>
+  } @else {
+    <div class="guides-card">
+      <div class="card-header">
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Buscar por número, paciente..." 
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
+        </div>
+        <div class="filter-group">
+          <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="filter-select">
+            @for (option of statusOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table class="guides-table">
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Tipo</th>
+              <th>Paciente</th>
+              <th>Plano</th>
+              <th>Data Serviço</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th class="actions-col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (guide of filteredGuides(); track guide.id) {
+              <tr>
+                <td><span class="guide-number">{{ guide.guideNumber }}</span></td>
+                <td>{{ getGuideTypeLabel(guide.guideType) }}</td>
+                <td>{{ guide.patientName }}</td>
+                <td>{{ guide.planName }}</td>
+                <td>{{ guide.serviceDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ guide.totalAmount | currency:'BRL' }}</td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusClass(guide.status)">
+                    {{ getStatusLabel(guide.status) }}
+                  </span>
+                </td>
+                <td class="actions-cell">
+                  <div class="action-buttons">
+                    <button class="btn-icon btn-view" (click)="viewDetails(guide.id)" title="Ver detalhes">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                    <button class="btn-icon btn-delete" (click)="deleteGuide(guide.id)" title="Excluir">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

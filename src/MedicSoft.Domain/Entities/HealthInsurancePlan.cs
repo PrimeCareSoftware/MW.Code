@@ -18,6 +18,9 @@ namespace MedicSoft.Domain.Entities
         public bool CoversProcedures { get; private set; }
         public bool RequiresPriorAuthorization { get; private set; }
         
+        // TISS Configuration
+        public bool TissEnabled { get; private set; } = false; // Habilitar TISS para este plano
+        
         // Navigation properties
         public HealthInsuranceOperator? Operator { get; private set; }
         
@@ -58,7 +61,8 @@ namespace MedicSoft.Domain.Entities
             bool coversConsultations = true,
             bool coversExams = true,
             bool coversProcedures = true,
-            bool requiresPriorAuthorization = false) : base(tenantId)
+            bool requiresPriorAuthorization = false,
+            bool tissEnabled = false) : base(tenantId)
         {
             if (operatorId == Guid.Empty)
                 throw new ArgumentException("Operator ID cannot be empty", nameof(operatorId));
@@ -78,6 +82,7 @@ namespace MedicSoft.Domain.Entities
             CoversExams = coversExams;
             CoversProcedures = coversProcedures;
             RequiresPriorAuthorization = requiresPriorAuthorization;
+            TissEnabled = tissEnabled;
         }
 
         // CONSTRUTOR LEGADO - Manter para retrocompatibilidade
@@ -143,6 +148,18 @@ namespace MedicSoft.Domain.Entities
             CoversExams = coversExams;
             CoversProcedures = coversProcedures;
             RequiresPriorAuthorization = requiresPriorAuthorization;
+            UpdateTimestamp();
+        }
+
+        public void EnableTiss()
+        {
+            TissEnabled = true;
+            UpdateTimestamp();
+        }
+
+        public void DisableTiss()
+        {
+            TissEnabled = false;
             UpdateTimestamp();
         }
 

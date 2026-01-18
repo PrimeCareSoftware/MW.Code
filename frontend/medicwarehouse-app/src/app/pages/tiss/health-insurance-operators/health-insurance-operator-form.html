@@ -1,0 +1,268 @@
+<app-navbar></app-navbar>
+
+<div class="operator-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>{{ isEditMode() ? 'Editar Operadora' : 'Nova Operadora' }}</h1>
+      <p>{{ isEditMode() ? 'Atualizar dados da operadora de saúde' : 'Cadastrar nova operadora de saúde' }}</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <div class="form-card">
+    <form [formGroup]="operatorForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3 class="section-title">Identificação</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ansCode">Código ANS *</label>
+            <input 
+              type="text" 
+              id="ansCode" 
+              formControlName="ansCode"
+              class="form-control"
+              [class.error]="isFieldInvalid('ansCode')"
+            />
+            @if (isFieldInvalid('ansCode')) {
+              <span class="error-message">Código ANS é obrigatório</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="cnpj">CNPJ *</label>
+            <input 
+              type="text" 
+              id="cnpj" 
+              formControlName="cnpj"
+              appCnpjMask
+              class="form-control"
+              [class.error]="isFieldInvalid('cnpj')"
+            />
+            @if (isFieldInvalid('cnpj')) {
+              <span class="error-message">CNPJ é obrigatório</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tradeName">Nome Fantasia *</label>
+            <input 
+              type="text" 
+              id="tradeName" 
+              formControlName="tradeName"
+              class="form-control"
+              [class.error]="isFieldInvalid('tradeName')"
+            />
+            @if (isFieldInvalid('tradeName')) {
+              <span class="error-message">Nome fantasia é obrigatório</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="legalName">Razão Social *</label>
+            <input 
+              type="text" 
+              id="legalName" 
+              formControlName="legalName"
+              class="form-control"
+              [class.error]="isFieldInvalid('legalName')"
+            />
+            @if (isFieldInvalid('legalName')) {
+              <span class="error-message">Razão social é obrigatória</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Contato</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">E-mail *</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              class="form-control"
+              [class.error]="isFieldInvalid('email')"
+            />
+            @if (isFieldInvalid('email')) {
+              <span class="error-message">E-mail válido é obrigatório</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 0 0 120px;">
+            <label for="phoneCountryCode">Código País *</label>
+            <input 
+              type="text" 
+              id="phoneCountryCode" 
+              formControlName="phoneCountryCode"
+              class="form-control"
+              [class.error]="isFieldInvalid('phoneCountryCode')"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber">Telefone *</label>
+            <input 
+              type="text" 
+              id="phoneNumber" 
+              formControlName="phoneNumber"
+              appPhoneMask
+              class="form-control"
+              [class.error]="isFieldInvalid('phoneNumber')"
+            />
+            @if (isFieldInvalid('phoneNumber')) {
+              <span class="error-message">Telefone é obrigatório</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section" formGroupName="address">
+        <h3 class="section-title">Endereço</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="zipCode">CEP *</label>
+            <input 
+              type="text" 
+              id="zipCode" 
+              formControlName="zipCode"
+              appCepMask
+              (blur)="onCepChange()"
+              class="form-control"
+              [class.error]="isFieldInvalid('address.zipCode')"
+            />
+            @if (isLoadingCep()) {
+              <span class="loading-text">Buscando CEP...</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="country">País *</label>
+            <input 
+              type="text" 
+              id="country" 
+              formControlName="country"
+              class="form-control"
+              [class.error]="isFieldInvalid('address.country')"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 3;">
+            <label for="street">Rua *</label>
+            <input 
+              type="text" 
+              id="street" 
+              formControlName="street"
+              class="form-control"
+              [class.error]="isFieldInvalid('address.street')"
+            />
+          </div>
+
+          <div class="form-group" style="flex: 1;">
+            <label for="number">Número *</label>
+            <input 
+              type="text" 
+              id="number" 
+              formControlName="number"
+              class="form-control"
+              [class.error]="isFieldInvalid('address.number')"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="complement">Complemento</label>
+            <input 
+              type="text" 
+              id="complement" 
+              formControlName="complement"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="neighborhood">Bairro *</label>
+            <input 
+              type="text" 
+              id="neighborhood" 
+              formControlName="neighborhood"
+              class="form-control"
+              [class.error]="isFieldInvalid('address.neighborhood')"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">Cidade *</label>
+            <input 
+              type="text" 
+              id="city" 
+              formControlName="city"
+              class="form-control"
+              [class.error]="isFieldInvalid('address.city')"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="state">Estado *</label>
+            <input 
+              type="text" 
+              id="state" 
+              formControlName="state"
+              class="form-control"
+              [class.error]="isFieldInvalid('address.state')"
+            />
+          </div>
+        </div>
+      </div>
+
+      @if (isEditMode()) {
+        <div class="form-section">
+          <h3 class="section-title">Status</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  formControlName="isActive"
+                />
+                <span>Operadora ativa</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/tiss/operators">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+          {{ isLoading() ? 'Salvando...' : (isEditMode() ? 'Atualizar' : 'Cadastrar') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

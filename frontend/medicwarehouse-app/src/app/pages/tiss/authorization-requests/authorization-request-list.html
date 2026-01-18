@@ -1,0 +1,93 @@
+<app-navbar></app-navbar>
+
+<div class="auth-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Solicitações de Autorização</h1>
+      <p>Gerenciamento de autorizações de procedimentos</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/tiss/authorizations/new">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nova Solicitação
+    </button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando autorizações...</div>
+    </div>
+  } @else {
+    <div class="auth-card">
+      <div class="card-header">
+        <div class="filter-group">
+          <label>Status:</label>
+          <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="filter-select">
+            @for (option of statusOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="results-info">
+          <span class="badge badge-primary">{{ filteredRequests().length }} solicitações</span>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table class="auth-table">
+          <thead>
+            <tr>
+              <th>Data Solicitação</th>
+              <th>Paciente</th>
+              <th>Plano</th>
+              <th>Procedimento</th>
+              <th>Quantidade</th>
+              <th>Número Autorização</th>
+              <th>Status</th>
+              <th class="actions-col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (request of filteredRequests(); track request.id) {
+              <tr>
+                <td>{{ request.requestDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ request.patientName }}</td>
+                <td>{{ request.planName }}</td>
+                <td>{{ request.procedureName || request.procedureCode }}</td>
+                <td>{{ request.quantity }}</td>
+                <td>
+                  @if (request.authorizationNumber) {
+                    <span class="auth-number">{{ request.authorizationNumber }}</span>
+                  } @else {
+                    <span class="text-muted">-</span>
+                  }
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusClass(request.status)">
+                    {{ getStatusLabel(request.status) }}
+                  </span>
+                </td>
+                <td class="actions-cell">
+                  <div class="action-buttons">
+                    <button class="btn-icon btn-view" (click)="viewDetails(request.id)" title="Ver detalhes">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>
