@@ -1,0 +1,85 @@
+<app-navbar></app-navbar>
+
+<div class="insurance-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Convênios do Paciente</h1>
+      <p>Planos de saúde vinculados</p>
+    </div>
+    <button class="btn btn-primary" [routerLink]="['/tiss/patient-insurance', patientId(), 'new']">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Adicionar Convênio
+    </button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando convênios...</div>
+    </div>
+  } @else {
+    @if (insurances().length === 0) {
+      <div class="empty-state-card">
+        <h3>Nenhum convênio cadastrado</h3>
+        <p>Vincule um plano de saúde ao paciente</p>
+        <button class="btn btn-primary" [routerLink]="['/tiss/patient-insurance', patientId(), 'new']">
+          Adicionar Primeiro Convênio
+        </button>
+      </div>
+    } @else {
+      <div class="insurance-card">
+        <div class="table-container">
+          <table class="insurance-table">
+            <thead>
+              <tr>
+                <th>Plano</th>
+                <th>Operadora</th>
+                <th>Número Cartão</th>
+                <th>Validade</th>
+                <th>Status</th>
+                <th class="actions-col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (insurance of insurances(); track insurance.id) {
+                <tr>
+                  <td><strong>{{ insurance.planName }}</strong></td>
+                  <td>{{ insurance.operatorName }}</td>
+                  <td>{{ insurance.cardNumber }}</td>
+                  <td>{{ insurance.validityDate | date:'MM/yyyy' }}</td>
+                  <td>
+                    <span class="badge" [class.badge-success]="insurance.isActive" [class.badge-secondary]="!insurance.isActive">
+                      {{ insurance.isActive ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  </td>
+                  <td class="actions-cell">
+                    <div class="action-buttons">
+                      <button class="btn-icon btn-edit" [routerLink]="['/tiss/patient-insurance', patientId(), 'edit', insurance.id]" title="Editar">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon btn-delete" (click)="deleteInsurance(insurance.id)" title="Excluir">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  }
+</div>

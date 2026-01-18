@@ -1,0 +1,340 @@
+
+.tiss-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  .header-content {
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 0.5rem 0;
+    }
+
+    p {
+      color: #6b7280;
+      margin: 0;
+    }
+  }
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  &.alert-error {
+    background-color: #fee2e2;
+    border-left: 4px solid #dc2626;
+    color: #991b1b;
+  }
+
+  &.alert-success {
+    background-color: #d1fae5;
+    border-left: 4px solid #10b981;
+    color: #065f46;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  flex: 1;
+  max-width: 400px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: #9ca3af;
+    margin-right: 0.5rem;
+  }
+
+  .search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-size: 0.875rem;
+  }
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+  }
+
+  .filter-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: white;
+    font-size: 0.875rem;
+    outline: none;
+
+    &:focus {
+      border-color: #3b82f6;
+    }
+  }
+}
+
+.results-info {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &.badge-primary {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+
+  &.badge-success {
+    background-color: #d1fae5;
+    color: #065f46;
+  }
+
+  &.badge-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+
+  &.badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+
+  &.badge-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+
+  &.badge-secondary {
+    background-color: #e5e7eb;
+    color: #4b5563;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.tiss-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    background-color: #f9fafb;
+
+    th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #e5e7eb;
+
+      &.actions-col {
+        text-align: center;
+        width: 120px;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #e5e7eb;
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background-color: #f9fafb;
+      }
+
+      td {
+        padding: 1rem;
+        font-size: 0.875rem;
+        color: #374151;
+
+        &.actions-cell {
+          text-align: center;
+        }
+
+        .text-muted {
+          color: #9ca3af;
+        }
+      }
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn,
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+    gap: 0.5rem;
+
+    &:hover {
+      background-color: #2563eb;
+    }
+  }
+
+  &.btn-secondary {
+    background-color: #6b7280;
+    color: white;
+    gap: 0.5rem;
+
+    &:hover {
+      background-color: #4b5563;
+    }
+  }
+}
+
+.btn-icon {
+  padding: 0.5rem;
+  background-color: transparent;
+  border: 1px solid #e5e7eb;
+
+  &.btn-view {
+    color: #3b82f6;
+
+    &:hover {
+      background-color: #eff6ff;
+      border-color: #3b82f6;
+    }
+  }
+
+  &.btn-edit {
+    color: #f59e0b;
+
+    &:hover {
+      background-color: #fffbeb;
+      border-color: #f59e0b;
+    }
+  }
+
+  &.btn-delete {
+    color: #ef4444;
+
+    &:hover {
+      background-color: #fef2f2;
+      border-color: #ef4444;
+    }
+  }
+
+  &.btn-generate,
+  &.btn-download {
+    color: #10b981;
+
+    &:hover {
+      background-color: #d1fae5;
+      border-color: #10b981;
+    }
+  }
+}
+
+// Component-specific extensions
+.guide-list-container,
+.batch-list-container,
+.auth-list-container,
+.insurance-list-container,
+.procedure-list-container {
+  @extend .tiss-container;
+}
+
+.guides-card,
+.batches-card,
+.auth-card,
+.insurance-card,
+.procedures-card {
+  @extend .card;
+}
+
+.guides-table,
+.batches-table,
+.auth-table,
+.insurance-table,
+.procedures-table {
+  @extend .tiss-table;
+}
+
+.guide-number,
+.batch-number,
+.auth-number {
+  font-family: monospace;
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.813rem;
+  font-weight: 600;
+}

@@ -222,6 +222,49 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/prescriptions/sngpc-dashboard.component').then(m => m.SNGPCDashboardComponent),
     canActivate: [authGuard]
   },
+  
+  // TISS/TUSS routes
+  { 
+    path: 'tiss/operators', 
+    loadComponent: () => import('./pages/tiss/health-insurance-operators/health-insurance-operators-list').then(m => m.HealthInsuranceOperatorsList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/operators/new', 
+    loadComponent: () => import('./pages/tiss/health-insurance-operators/health-insurance-operator-form').then(m => m.HealthInsuranceOperatorForm),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/operators/edit/:id', 
+    loadComponent: () => import('./pages/tiss/health-insurance-operators/health-insurance-operator-form').then(m => m.HealthInsuranceOperatorForm),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/guides', 
+    loadComponent: () => import('./pages/tiss/tiss-guides/tiss-guide-list').then(m => m.TissGuideList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/batches', 
+    loadComponent: () => import('./pages/tiss/tiss-batches/tiss-batch-list').then(m => m.TissBatchList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/authorizations', 
+    loadComponent: () => import('./pages/tiss/authorization-requests/authorization-request-list').then(m => m.AuthorizationRequestList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/patient-insurance/:patientId', 
+    loadComponent: () => import('./pages/tiss/patient-insurance/patient-insurance-list').then(m => m.PatientInsuranceList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/procedures', 
+    loadComponent: () => import('./pages/tiss/tuss-procedures/tuss-procedure-list').then(m => m.TussProcedureList),
+    canActivate: [authGuard]
+  },
+  
   ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes
