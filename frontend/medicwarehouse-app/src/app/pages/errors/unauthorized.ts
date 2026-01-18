@@ -22,6 +22,10 @@ export class Unauthorized implements OnInit {
   }
 
   navigateToLogin() {
-    this.router.navigate(['/login'], { queryParams: { returnUrl: this.returnUrl } });
+    // If the return URL is a system-admin route, redirect to system-admin login
+    const isSystemAdminRoute = this.returnUrl.startsWith('/system-admin');
+    const loginPath = isSystemAdminRoute ? '/system-admin/login' : '/login';
+    
+    this.router.navigate([loginPath], { queryParams: { returnUrl: this.returnUrl } });
   }
 }

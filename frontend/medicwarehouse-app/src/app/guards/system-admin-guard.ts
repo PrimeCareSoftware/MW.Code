@@ -19,8 +19,8 @@ export const systemAdminGuard: CanActivateFn = (route: ActivatedRouteSnapshot, s
 
   // Check if user is authenticated
   if (!authService.hasToken()) {
-    // Not authenticated - redirect to 401 with return URL
-    router.navigate(['/401'], { queryParams: { returnUrl: state.url } });
+    // Not authenticated - redirect to system admin login with return URL
+    router.navigate(['/system-admin/login'], { queryParams: { returnUrl: state.url } });
   } else {
     // Authenticated but not a system owner - redirect to 403
     router.navigate(['/403']);
