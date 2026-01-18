@@ -63,11 +63,11 @@ export class ClinicsList implements OnInit {
   }
 
   navigateToCreate(): void {
-    this.router.navigate(['/clinics/create']);
+    this.router.navigate(['/system-admin/clinics/create']);
   }
 
   viewDetails(id: string): void {
-    this.router.navigate(['/clinics', id]);
+    this.router.navigate(['/system-admin/clinics', id]);
   }
 
   toggleStatus(id: string, currentStatus: boolean): void {

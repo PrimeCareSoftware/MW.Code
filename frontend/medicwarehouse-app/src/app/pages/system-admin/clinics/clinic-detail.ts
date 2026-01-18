@@ -178,12 +178,12 @@ export class ClinicDetail implements OnInit {
   navigateToOwners(): void {
     const c = this.clinic();
     if (c) {
-      this.router.navigate(['/clinic-owners'], { queryParams: { clinicId: c.id } });
+      this.router.navigate(['/system-admin/clinic-owners'], { queryParams: { clinicId: c.id } });
     }
   }
 
   goBack(): void {
-    this.router.navigate(['/clinics']);
+    this.router.navigate(['/system-admin/clinics']);
   }
 
   formatDate(date?: string): string {

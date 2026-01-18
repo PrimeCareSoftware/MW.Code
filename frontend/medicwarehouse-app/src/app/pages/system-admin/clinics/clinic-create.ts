@@ -88,7 +88,7 @@ export class ClinicCreate {
 
         // Navigate back after 5 seconds
         setTimeout(() => {
-          this.router.navigate(['/clinics']);
+          this.router.navigate(['/system-admin/clinics']);
         }, 5000);
       },
       error: (err) => {
@@ -99,6 +99,6 @@ export class ClinicCreate {
   }
 
   goBack(): void {
-    this.router.navigate(['/clinics']);
+    this.router.navigate(['/system-admin/clinics']);
   }
 }
