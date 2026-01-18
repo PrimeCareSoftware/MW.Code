@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { SystemAdminService } from '../../../services/system-admin';
 import { SystemAnalytics } from '../../../models/system-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Navbar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'})
 export class Dashboard implements OnInit {

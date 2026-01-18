@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TicketService } from '../../../services/ticket.service';
+import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   TicketSummary, 
   Ticket,
@@ -27,7 +28,7 @@ interface KanbanColumn {
 
 @Component({
   selector: 'app-tickets',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './tickets.html',
   styleUrl: './tickets.scss'
 })

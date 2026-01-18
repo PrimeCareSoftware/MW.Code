@@ -4,11 +4,12 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../../services/system-admin';
 import { ClinicOwner, ResetPasswordRequest } from '../../../models/system-admin.model';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-clinic-owners-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar],
   templateUrl: './clinic-owners-list.html',
   styleUrl: './clinic-owners-list.scss'})
 export class ClinicOwnersList implements OnInit {

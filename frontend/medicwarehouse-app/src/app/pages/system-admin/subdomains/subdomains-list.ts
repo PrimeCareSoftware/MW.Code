@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../../services/system-admin';
 import { Subdomain, CreateSubdomainRequest, ClinicSummary } from '../../../models/system-admin.model';
 import { environment } from '../../../../environments/environment';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-subdomains-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar],
   templateUrl: './subdomains-list.html',
   styleUrl: './subdomains-list.scss'})
 export class SubdomainsList implements OnInit {
