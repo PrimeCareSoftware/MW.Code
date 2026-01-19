@@ -77,7 +77,7 @@ namespace MedicSoft.Api.Controllers
                         examRequests = 5,
                         digitalPrescriptions = 2,
                         healthInsurancePlans = 3,
-                        invoices = 3
+                        invoices = 2
                     },
                     note = "Use these credentials to login and test the system. Complete database seeded with realistic demo data including CFM/ANVISA compliant digital prescriptions."
                 });
@@ -136,7 +136,7 @@ namespace MedicSoft.Api.Controllers
                     examRequests = 5,
                     digitalPrescriptions = 2,
                     healthInsurancePlans = 3,
-                    invoices = 3
+                    invoices = 2
                 },
                 entities = new[]
                 {
@@ -161,7 +161,7 @@ namespace MedicSoft.Api.Controllers
                     "✅ 10 Despesas (pagas, pendentes, vencidas e canceladas)",
                     "✅ 5 Solicitações de exames (laboratoriais, imagem, cardiológicos)",
                     "✅ 3 Planos de saúde ativos para pacientes",
-                    "✅ 3 Notas fiscais (2 pagas, 1 pendente)"
+                    "✅ 2 Notas fiscais (emitidas e pagas)"
                 },
                 note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features with full CFM/ANVISA compliance"
             });

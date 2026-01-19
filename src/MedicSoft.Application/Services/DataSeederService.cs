@@ -267,7 +267,7 @@ namespace MedicSoft.Application.Services
                 }
 
                 // 21. Create Invoices for appointments
-                var invoices = CreateDemoInvoices(appointments, clinic.Id);
+                var invoices = CreateDemoInvoices(appointments, payments, clinic.Id);
                 foreach (var invoice in invoices)
                 {
                     await _invoiceRepository.AddWithoutSaveAsync(invoice);
@@ -2178,16 +2178,15 @@ RETORNO: {{return_date}}",
             return plans;
         }
 
-        private List<Invoice> CreateDemoInvoices(List<Appointment> appointments, Guid clinicId)
+        private List<Invoice> CreateDemoInvoices(List<Appointment> appointments, List<Payment> payments, Guid clinicId)
         {
             var invoices = new List<Invoice>();
             var today = DateTime.UtcNow.Date;
 
-            // Invoice for first completed appointment (Carlos) - requires a Payment first
-            // Note: Invoices are linked to payments, so we generate invoice numbers based on existing payments
+            // Invoice for first completed appointment (Carlos) - linked to first payment
             var invoice1 = new Invoice(
                 $"INV-{today.Year:D4}{today.Month:D2}-0001",
-                Guid.NewGuid(), // This should be linked to the actual payment, but for seed we'll use a placeholder
+                payments[0].Id, // Use actual payment ID
                 InvoiceType.Appointment,
                 150.00m, // Amount
                 0.00m,   // No tax
@@ -2202,10 +2201,10 @@ RETORNO: {{return_date}}",
             invoice1.MarkAsPaid(today.AddDays(-7));
             invoices.Add(invoice1);
 
-            // Invoice for second completed appointment (Ana)
+            // Invoice for second completed appointment (Ana) - linked to second payment
             var invoice2 = new Invoice(
                 $"INV-{today.Year:D4}{today.Month:D2}-0002",
-                Guid.NewGuid(),
+                payments[1].Id, // Use actual payment ID
                 InvoiceType.Appointment,
                 370.00m, // 250 + 120
                 0.00m,
@@ -2220,23 +2219,8 @@ RETORNO: {{return_date}}",
             invoice2.MarkAsPaid(today.AddDays(-5));
             invoices.Add(invoice2);
 
-            // Invoice for today's appointment (Pedro) - pending
-            var invoice3 = new Invoice(
-                $"INV-{today.Year:D4}{today.Month:D2}-0003",
-                Guid.NewGuid(),
-                InvoiceType.Appointment,
-                150.00m,
-                0.00m,
-                today.AddDays(30),
-                "Pedro Henrique Costa",
-                _demoTenantId,
-                description: "Consulta Médica",
-                customerDocument: "123.891.234-65",
-                customerAddress: "Rua Augusta, 300 - Consolação, São Paulo - SP"
-            );
-            invoice3.Issue();
-            invoice3.MarkAsSent(); // Invoice sent but not paid yet
-            invoices.Add(invoice3);
+            // Note: Third invoice omitted as there's no corresponding payment yet for today's appointment
+            // Invoices should only be created when there's an associated payment
 
             return invoices;
         }
