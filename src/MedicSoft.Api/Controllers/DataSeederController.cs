@@ -76,6 +76,7 @@ namespace MedicSoft.Api.Controllers
                         expenses = 10,
                         examRequests = 5,
                         digitalPrescriptions = 2,
+                        healthInsuranceOperators = 3,
                         healthInsurancePlans = 3,
                         invoices = 2
                     },
@@ -135,6 +136,7 @@ namespace MedicSoft.Api.Controllers
                     expenses = 10,
                     examRequests = 5,
                     digitalPrescriptions = 2,
+                    healthInsuranceOperators = 3,
                     healthInsurancePlans = 3,
                     invoices = 2
                 },
@@ -160,6 +162,7 @@ namespace MedicSoft.Api.Controllers
                     "✅ 5 Rotinas de notificação automatizadas",
                     "✅ 10 Despesas (pagas, pendentes, vencidas e canceladas)",
                     "✅ 5 Solicitações de exames (laboratoriais, imagem, cardiológicos)",
+                    "✅ 3 Operadoras de plano de saúde (Unimed, Bradesco, SulAmérica)",
                     "✅ 3 Planos de saúde ativos para pacientes",
                     "✅ 2 Notas fiscais (emitidas e pagas)"
                 },
@@ -291,11 +294,14 @@ namespace MedicSoft.Api.Controllers
                         "ExamRequests",
                         "Notifications",
                         "NotificationRoutines",
+                        "DigitalPrescriptions",
                         "MedicalRecords",
+                        "Invoices",
                         "Payments",
                         "AppointmentProcedures",
                         "Appointments",
                         "PatientClinicLinks",
+                        "HealthInsurancePlans",
                         "Patients",
                         "PrescriptionTemplates",
                         "MedicalRecordTemplates",
@@ -308,6 +314,7 @@ namespace MedicSoft.Api.Controllers
                         "ClinicSubscriptions",
                         "Owners",
                         "Clinics",
+                        "HealthInsuranceOperators",
                         "SubscriptionPlans"
                     },
                     note = "All demo data has been removed from the database. You can now re-seed the database using POST /api/data-seeder/seed-demo"
