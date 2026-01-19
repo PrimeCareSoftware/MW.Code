@@ -74,9 +74,12 @@ namespace MedicSoft.Api.Controllers
                         notifications = 5,
                         notificationRoutines = 5,
                         expenses = 10,
-                        examRequests = 5
+                        examRequests = 5,
+                        digitalPrescriptions = 2,
+                        healthInsurancePlans = 3,
+                        invoices = 3
                     },
-                    note = "Use these credentials to login and test the system. Complete database seeded with realistic demo data."
+                    note = "Use these credentials to login and test the system. Complete database seeded with realistic demo data including CFM/ANVISA compliant digital prescriptions."
                 });
             }
             catch (InvalidOperationException ex)
@@ -130,7 +133,10 @@ namespace MedicSoft.Api.Controllers
                     notifications = 5,
                     notificationRoutines = 5,
                     expenses = 10,
-                    examRequests = 5
+                    examRequests = 5,
+                    digitalPrescriptions = 2,
+                    healthInsurancePlans = 3,
+                    invoices = 3
                 },
                 entities = new[]
                 {
@@ -139,7 +145,7 @@ namespace MedicSoft.Api.Controllers
                     "✅ 1 Assinatura ativa (Plano Standard)",
                     "✅ 1 Proprietário da clínica (Owner)",
                     "✅ 3 Usuários (Admin, Médico, Recepcionista)",
-                    "✅ 6 Pacientes (incluindo 2 crianças com responsável)",
+                    "✅ 6 Pacientes com nome da mãe (CFM 1.821) incluindo 2 crianças com responsável",
                     "✅ 8 Procedimentos diversos (consultas, exames, vacinas, etc.)",
                     "✅ 5 Agendamentos (passados, hoje e futuros)",
                     "✅ 3 Procedimentos vinculados a agendamentos",
@@ -147,14 +153,17 @@ namespace MedicSoft.Api.Controllers
                     "✅ 8 Medicamentos (antibióticos, analgésicos, anti-hipertensivos, etc.)",
                     "✅ 2 Prontuários médicos com consultas finalizadas",
                     "✅ 3 Itens de prescrição vinculados aos prontuários",
+                    "✅ 2 Prescrições digitais assinadas (CFM 1.643/2002 e ANVISA 344/1998)",
                     "✅ 4 Templates de prescrição (antibióticos, anti-hipertensivos, analgésicos, diabetes)",
                     "✅ 3 Templates de prontuário (clínica geral, cardiologia, pediatria)",
                     "✅ 5 Notificações (SMS, WhatsApp, Email) em diversos estados",
                     "✅ 5 Rotinas de notificação automatizadas",
                     "✅ 10 Despesas (pagas, pendentes, vencidas e canceladas)",
-                    "✅ 5 Solicitações de exames (laboratoriais, imagem, cardiológicos)"
+                    "✅ 5 Solicitações de exames (laboratoriais, imagem, cardiológicos)",
+                    "✅ 3 Planos de saúde ativos para pacientes",
+                    "✅ 3 Notas fiscais (2 pagas, 1 pendente)"
                 },
-                note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features"
+                note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features with full CFM/ANVISA compliance"
             });
         }
 
