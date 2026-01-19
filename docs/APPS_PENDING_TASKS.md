@@ -46,6 +46,7 @@ O PrimeCare Software possui **7 aplicativos** que compõem o ecossistema complet
 | Fila de Espera | ✅ | Gerenciamento de fila em tempo real |
 | **CFM Components** | ✅ | **4 componentes (Jan 2026): Consent, Examination, Diagnostic, Therapeutic** |
 | **Receitas Digitais** | ✅ | **4 componentes (Jan 2026): Form, View, Selector, SNGPC Dashboard** |
+| **TISS/Convênios** | ⚠️ | **Listagens completas (Jan 2026): Operadoras, Planos, Guias, Lotes, TUSS** ✨ NOVO |
 
 ### 🚧 Pendências de Desenvolvimento
 
@@ -54,7 +55,12 @@ O PrimeCare Software possui **7 aplicativos** que compõem o ecossistema complet
 - [ ] **Módulo Financeiro** - Contas a pagar/receber, fluxo de caixa
 - [ ] **Notificações em Tempo Real** - Push notifications e alertas
 - [ ] **Prontuário SOAP** - Estruturar prontuário no padrão SOAP
-- [ ] **Integração com Convênios** - TISS para faturamento
+- [x] ~~**Integração com Convênios**~~ ✅ **70% Completo (Jan 2026)** - TISS para faturamento
+  - [x] Listagens de operadoras, planos, guias, lotes ✅
+  - [x] Formulário de operadoras ✅
+  - [ ] Formulários de guias e lotes (30% - em progresso)
+  - [ ] Dashboard de análise TISS
+  - Ver: [TISS_TUSS_IMPLEMENTATION_ANALYSIS.md](TISS_TUSS_IMPLEMENTATION_ANALYSIS.md)
 
 #### Prioridade Média
 - [ ] **Telemedicina** - Videochamadas integradas
@@ -78,7 +84,14 @@ frontend/medicwarehouse-app/src/app/pages/
 ├── login/            # Autenticação
 ├── patients/         # Pacientes
 ├── register/         # Cadastro de clínica
-└── waiting-queue/    # Fila de espera
+├── waiting-queue/    # Fila de espera
+└── tiss/             # ✨ TISS/Convênios (Jan 2026)
+    ├── authorization-requests/
+    ├── health-insurance-operators/
+    ├── patient-insurance/
+    ├── tiss-batches/
+    ├── tiss-guides/
+    └── tuss-procedures/
 ```
 
 ---
@@ -558,12 +571,25 @@ mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 | Telemedicina iOS | 📱 iOS | 3-4 semanas | ❌ |
 | Telemedicina Android | 🤖 Android | 3-4 semanas | ❌ |
 
-### Q4 2026 - TISS e Integração Convênios (AJUSTADO)
+### Q4 2026 - TISS e Integração Convênios (ATUALIZADO - Jan 2026) ⚠️
 
-| Tarefa | App | Esforço | Status |
-|--------|-----|---------|--------|
-| TISS Integração Frontend | 🏥 App | 8-10 semanas | ❌ |
+**Status Atualizado:** ✅ **70% Completo** (Listagens e backend prontos, formulários em progresso)
+
+| Tarefa | App | Esforço Original | Status |
+|--------|-----|------------------|--------|
+| TISS Integração Backend | API | 8-10 semanas | ✅ 90% COMPLETO |
+| TISS Integração Frontend | 🏥 App | 8-10 semanas | ⚠️ 70% COMPLETO (Listagens ✅, Formulários 30%) |
 | Apps Paciente Mobile | 📱 Patient iOS + 🤖 Patient Android | 12-16 semanas | ❌ |
+
+**Ver análise completa:** [TISS_TUSS_IMPLEMENTATION_ANALYSIS.md](TISS_TUSS_IMPLEMENTATION_ANALYSIS.md)
+
+**Progresso Detalhado:**
+- ✅ Backend: 8 entidades + 7 repositórios + 4 serviços + 3 controllers
+- ✅ Frontend: 6 componentes de listagem + 4 serviços Angular
+- ⚠️ Pendente: Formulários de criação/edição (3-5 dias)
+- ⚠️ Pendente: Testes de serviços e controllers (1-2 semanas)
+
+**Esforço Restante:** 2-3 semanas | 1-2 devs
 
 ---
 
