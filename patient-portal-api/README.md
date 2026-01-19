@@ -1,5 +1,12 @@
 # Portal do Paciente (Patient Portal) - PrimeCare Software
 
+> **📚 Documentação Completa**: Para documentação detalhada, consulte:
+> - [PATIENT_PORTAL_ARCHITECTURE.md](../docs/PATIENT_PORTAL_ARCHITECTURE.md) - Arquitetura detalhada
+> - [PATIENT_PORTAL_SECURITY_GUIDE.md](../docs/PATIENT_PORTAL_SECURITY_GUIDE.md) - Guia de segurança
+> - [PATIENT_PORTAL_USER_MANUAL.md](../docs/PATIENT_PORTAL_USER_MANUAL.md) - Manual do usuário
+> - [PATIENT_PORTAL_CI_CD_GUIDE.md](../docs/PATIENT_PORTAL_CI_CD_GUIDE.md) - CI/CD
+> - [PATIENT_PORTAL_DEPLOYMENT_GUIDE.md](../docs/PATIENT_PORTAL_DEPLOYMENT_GUIDE.md) - Deploy
+
 ## 📋 Visão Geral
 
 O Portal do Paciente é uma aplicação web dedicada que permite aos pacientes acessar suas informações médicas, gerenciar agendamentos e interagir com documentos de forma segura e independente.
