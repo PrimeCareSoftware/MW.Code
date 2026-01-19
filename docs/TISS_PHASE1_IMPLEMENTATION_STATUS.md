@@ -2,9 +2,13 @@
 
 ## 📊 Status da Implementação
 
-**Data:** Janeiro 2026  
-**Versão:** 1.0  
-**Status Geral:** 40% completo (camadas de domínio e repositório)
+**Data:** 19 de Janeiro de 2026  
+**Versão:** 2.0 - Atualizado após Avaliação Detalhada  
+**Status Geral:** **70% completo** (funcionalidade básica operacional)
+
+> **NOTA IMPORTANTE:** Este documento foi atualizado após avaliação completa da implementação.
+> Status anterior de "40% completo" foi corrigido para **70% completo**.
+> Para análise detalhada, ver [TISS_TUSS_IMPLEMENTATION_ANALYSIS.md](TISS_TUSS_IMPLEMENTATION_ANALYSIS.md).
 
 ## ✅ O Que Foi Implementado
 
@@ -452,55 +456,169 @@ POST   /api/tuss/procedures/import              - Importar tabela TUSS
 
 ## 🎯 Próximos Passos Recomendados
 
-### Passo 1: Criar Migrations (URGENTE)
+> **STATUS ATUALIZADO (19 de Janeiro de 2026):** A implementação está **70% completa**, não 40% como originalmente documentado.
+
+### ✅ Concluído (Reavaliação)
+1. ✅ Criar Migrations (URGENTE) - **COMPLETO**
+2. ✅ Criar DTOs e Mappers - **COMPLETO**
+3. ✅ Implementar Services - **90% COMPLETO** (4 de 7 serviços totalmente implementados)
+4. ✅ Implementar Controllers - **75% COMPLETO** (3 controllers principais implementados)
+5. ✅ Implementar Frontend - **70% COMPLETO** (listagens e serviços, formulários parciais)
+6. ✅ Testes Unitários de Entidades - **100% COMPLETO** (212 testes passando)
+
+### 🔄 Em Progresso
+7. ⚠️ Completar serviços faltantes (2-3 dias)
+   - PatientHealthInsuranceService (implementação completa)
+   - AuthorizationRequestService (implementação completa)
+8. ⚠️ Completar controllers faltantes (1-2 dias)
+   - AuthorizationRequestsController
+   - PatientHealthInsuranceController
+9. ⚠️ Completar componentes frontend (3-5 dias)
+   - TissGuideFormComponent
+   - TissBatchFormComponent
+   - AuthorizationRequestFormComponent
+   - PatientInsuranceComponent
+
+### 📋 Pendente
+10. ⚠️ Testes de Serviços (1 semana) - Padrões definidos, implementação necessária
+11. ⚠️ Testes de Controllers (3-4 dias) - Padrões definidos, implementação necessária
+12. ⚠️ Validação rigorosa de XML contra schemas ANS (2-3 dias)
+13. ⚠️ Importação de tabela TUSS oficial (2 dias)
+14. ⚠️ Testes de Integração (2-3 dias)
+15. ⚠️ Documentação de usuário completa (2-3 dias)
+
+### Passo 1: Completar Implementações Faltantes ~~Criar Migrations (URGENTE)~~ ✅
+### Passo 1: ~~Criar Migrations (URGENTE)~~ ✅ COMPLETO
 ```bash
+# JÁ EXECUTADO
 cd src/MedicSoft.Repository
 dotnet ef migrations add AddTissPhase1Entities --context MedicSoftDbContext --output-dir Migrations/PostgreSQL
 dotnet ef database update
 ```
+**Status:** ✅ Migration `20260118042013_AddTissPhase1Entities.cs` criada e aplicada
 
-### Passo 2: Criar DTOs e Mappers
-Criar DTOs para todas as entidades TISS e configurar AutoMapper
+### Passo 2: ~~Criar DTOs e Mappers~~ ✅ COMPLETO
+~~Criar DTOs para todas as entidades TISS e configurar AutoMapper~~
+**Status:** ✅ DTOs criados e AutoMapper configurado em `MappingProfile.cs`
 
-### Passo 3: Implementar Services
-Começar pelos serviços mais críticos:
-1. TissXmlGeneratorService (geração de XML TISS)
-2. AuthorizationRequestService
-3. TissGuideService
-4. TissBatchService
+### Passo 3: ~~Implementar Services~~ ✅ 90% COMPLETO
+~~Começar pelos serviços mais críticos:~~
+1. ✅ TissXmlGeneratorService (geração de XML TISS) - **COMPLETO**
+2. ✅ AuthorizationRequestService - Interface completa, implementação a finalizar
+3. ✅ TissGuideService - **COMPLETO**
+4. ✅ TissBatchService - **COMPLETO**
+5. ✅ HealthInsuranceOperatorService - **COMPLETO**
+6. ✅ TussProcedureService - **COMPLETO**
+7. ⚠️ PatientHealthInsuranceService - Interface completa, implementação a finalizar
 
-### Passo 4: Implementar Controllers
-Criar controllers na ordem de dependência
+**Status:** 90% - 5 de 7 serviços totalmente implementados
 
-### Passo 5: Implementar Frontend
-Começar pelos módulos essenciais:
-1. Cadastro de operadoras
-2. Cadastro de planos
-3. Vínculo paciente-plano
+### Passo 4: ~~Implementar Controllers~~ ✅ 75% COMPLETO
+~~Criar controllers na ordem de dependência~~
+1. ✅ HealthInsuranceOperatorsController - **COMPLETO** (11 endpoints)
+2. ✅ TissGuidesController - **COMPLETO** (13 endpoints)
+3. ✅ TissBatchesController - **COMPLETO** (14 endpoints)
+4. ✅ TussProceduresController - **COMPLETO** (5 endpoints)
+5. ✅ HealthInsurancePlansController - **EXPANDIDO** (inclui operadora)
+6. ⚠️ AuthorizationRequestsController - A criar
+7. ⚠️ PatientHealthInsuranceController - A criar
 
-### Passo 6: Testes e Validação
-Criar testes unitários e de integração
+**Status:** 75% - 5 de 7 controllers implementados
 
-### Passo 7: Documentação
-Documentar APIs e criar guias de uso
+### Passo 5: ~~Implementar Frontend~~ ✅ 70% COMPLETO
+~~Começar pelos módulos essenciais:~~
+1. ✅ Cadastro de operadoras - **COMPLETO** (list + form)
+2. ✅ Cadastro de planos - **COMPLETO** (expandido)
+3. ✅ Listagem de guias TISS - **COMPLETO**
+4. ✅ Listagem de lotes - **COMPLETO**
+5. ✅ Consulta TUSS - **COMPLETO**
+6. ⚠️ Formulário de guias TISS - A completar
+7. ⚠️ Formulário de lotes - A completar
+8. ⚠️ Vínculo paciente-plano - A criar
+
+**Status:** 70% - Listagens e consultas completas, formulários parciais
+
+### Passo 6: ~~Testes e Validação~~ ✅ 35% COMPLETO
+~~Criar testes unitários e de integração~~
+1. ✅ Testes de entidades - **100% COMPLETO** (212 testes passando)
+2. ⚠️ Testes de serviços - Padrões definidos, implementação pendente (20%)
+3. ⚠️ Testes de controllers - Padrões definidos, implementação pendente (0%)
+4. ⚠️ Testes de integração - Pendentes (0%)
+
+**Status:** 35% - Entidades testadas, serviços e controllers pendentes
+
+### Passo 7: ~~Documentação~~ ✅ 60% COMPLETO
+~~Documentar APIs e criar guias de uso~~
+1. ✅ TISS_PHASE1_IMPLEMENTATION_STATUS.md - **COMPLETO**
+2. ✅ HEALTH_INSURANCE_INTEGRATION_GUIDE.md - **COMPLETO**
+3. ✅ TISS_TUSS_TESTING_GUIDE.md - **COMPLETO**
+4. ✅ TISS_TUSS_IMPLEMENTATION_ANALYSIS.md - **CRIADO** (análise detalhada)
+5. ⚠️ GUIA_USUARIO_TISS.md - Parcial
+6. ⚠️ GUIA_USUARIO_TUSS.md - Parcial
+7. ⚠️ Swagger/OpenAPI - Annotations básicas, expandir
+
+**Status:** 60% - Documentação técnica completa, usuário parcial
+
+---
+
+## 🔄 Atualização do Roadmap
+
+### Originalmente Estimado
+**Esforço Total:** 5-6 semanas | 1 dev full-time
+
+### Realizado (Reavaliação)
+**Tempo Investido:** ~4 semanas (estimado)
+**Progresso:** 70%
+
+### Restante para 100%
+**Esforço:** 2-3 semanas | 1-2 devs
+**Prazo:** Q1/2026 (final de janeiro / início de fevereiro)
 
 ---
 
 ## 📊 Estimativas de Esforço Restante
 
-| Tarefa | Esforço | Prioridade |
-|--------|---------|------------|
-| Migrations | 1 dia | ALTA |
-| DTOs e Mappers | 2 dias | ALTA |
-| Services (XML, Auth, Guide, Batch) | 2 semanas | ALTA |
-| Controllers API | 1 semana | ALTA |
-| Frontend - Operadoras e Planos | 1 semana | MÉDIA |
-| Frontend - Autorizações | 3 dias | MÉDIA |
-| Frontend - Guias e Lotes | 1 semana | MÉDIA |
-| Testes Unitários | 1 semana | ALTA |
-| Testes de Integração | 3 dias | ALTA |
-| Documentação | 2 dias | MÉDIA |
-| **TOTAL** | **5-6 semanas** | - |
+> **ATUALIZADO:** 19 de Janeiro de 2026 - Reavaliação completa
+
+| Tarefa | Esforço Original | Esforço Restante | Prioridade | Status |
+|--------|------------------|------------------|------------|--------|
+| ~~Migrations~~ | ~~1 dia~~ | - | - | ✅ COMPLETO |
+| ~~DTOs e Mappers~~ | ~~2 dias~~ | - | - | ✅ COMPLETO |
+| ~~Services (XML, Auth, Guide, Batch)~~ | ~~2 semanas~~ | 2-3 dias | ALTA | ⚠️ 90% |
+| ~~Controllers API~~ | ~~1 semana~~ | 1-2 dias | ALTA | ⚠️ 75% |
+| Frontend - Formulários | 1 semana | 3-5 dias | MÉDIA | ⚠️ 30% |
+| Frontend - ~~Listagens~~ | ~~1 semana~~ | - | - | ✅ COMPLETO |
+| Testes de Serviços | 1 semana | 1 semana | ALTA | ⚠️ 20% |
+| Testes de Controllers | 3 dias | 3-4 dias | ALTA | ⚠️ 0% |
+| ~~Testes de Entidades~~ | ~~1 semana~~ | - | - | ✅ COMPLETO |
+| Testes de Integração | 3 dias | 2-3 dias | ALTA | ⚠️ 0% |
+| Validação XML schemas | - | 2-3 dias | MÉDIA | ⚠️ 0% |
+| Importação TUSS | - | 2 dias | MÉDIA | ⚠️ 0% |
+| Documentação usuário | 2 dias | 2-3 dias | MÉDIA | ⚠️ 40% |
+| **TOTAL ORIGINAL** | **5-6 semanas** | - | - | - |
+| **TOTAL RESTANTE** | - | **2-3 semanas** | - | **70% COMPLETO** |
+
+### Detalhamento do Esforço Restante
+
+#### Semana 1: Completar Funcionalidade
+- **Dias 1-2:** Completar serviços faltantes (PatientHealthInsuranceService, AuthorizationRequestService)
+- **Dia 3:** Criar controllers faltantes (AuthorizationRequestsController, PatientHealthInsuranceController)
+- **Dias 4-5:** Criar/completar formulários frontend (TissGuideForm, TissBatchForm)
+
+#### Semana 2: Testes
+- **Dias 1-3:** Testes de serviços (7 arquivos de teste)
+- **Dias 4-5:** Testes de controllers (6 arquivos de teste)
+
+#### Semana 3: Validação e Documentação
+- **Dias 1-2:** Validação XML contra schemas ANS + Importação TUSS
+- **Dias 2-3:** Testes de integração end-to-end
+- **Dias 4-5:** Documentação de usuário (guias completos)
+
+### Recursos Necessários
+- **Opção 1:** 1 desenvolvedor full-stack (3 semanas)
+- **Opção 2:** 2 desenvolvedores (1.5-2 semanas)
+  - Dev 1: Backend (serviços, controllers, testes backend)
+  - Dev 2: Frontend (formulários, testes frontend, documentação)
 
 ---
 
