@@ -200,7 +200,7 @@ namespace MedicSoft.Application.Services
                 }
 
                 // 11. Create Prescription Items
-                var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications, patients);
+                var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications);
                 foreach (var item in prescriptionItems)
                 {
                     await _prescriptionItemRepository.AddWithoutSaveAsync(item);
@@ -256,7 +256,7 @@ namespace MedicSoft.Application.Services
                 }
 
                 // 19. Create Digital Prescriptions (CFM 1.643/2002 compliance)
-                var digitalPrescriptions = CreateDemoDigitalPrescriptions(medicalRecords, patients, users);
+                var digitalPrescriptions = CreateDemoDigitalPrescriptions(medicalRecords, patients, users, medications);
                 foreach (var prescription in digitalPrescriptions)
                 {
                     await _digitalPrescriptionRepository.AddWithoutSaveAsync(prescription);
@@ -1109,45 +1109,64 @@ namespace MedicSoft.Application.Services
 
         private List<PrescriptionItem> CreateDemoPrescriptionItems(
             List<MedicalRecord> medicalRecords,
-            List<Medication> medications,
-            List<Patient> patients)
+            List<Medication> medications)
         {
             var items = new List<PrescriptionItem>();
 
+            // Validate we have enough medical records
+            if (medicalRecords.Count < 2)
+            {
+                return items; // Return empty list if insufficient data
+            }
+
+            // Find medications by name to avoid index issues
+            var losartana = medications.FirstOrDefault(m => m.Name == "Losartana Potássica" && m.Dosage == "50mg");
+            var metformina = medications.FirstOrDefault(m => m.Name == "Metformina" && m.Dosage == "850mg");
+            var omeprazol = medications.FirstOrDefault(m => m.Name == "Omeprazol" && m.Dosage == "20mg");
+
             // Prescription items for first medical record (Carlos - Hypertension)
-            items.Add(new PrescriptionItem(
-                medicalRecords[0].Id,
-                medications[3].Id, // Losartana
-                "50mg",
-                "1 comprimido ao dia pela manhã em jejum",
-                30,
-                30,
-                _demoTenantId,
-                "Tomar pela manhã em jejum"
-            ));
+            if (losartana != null)
+            {
+                items.Add(new PrescriptionItem(
+                    medicalRecords[0].Id,
+                    losartana.Id,
+                    "50mg",
+                    "1 comprimido ao dia pela manhã em jejum",
+                    30,
+                    30,
+                    _demoTenantId,
+                    "Tomar pela manhã em jejum"
+                ));
+            }
 
             // Prescription items for second medical record (Ana - Diabetes)
-            items.Add(new PrescriptionItem(
-                medicalRecords[1].Id,
-                medications[6].Id, // Metformina
-                "850mg",
-                "1 comprimido 2x ao dia",
-                30,
-                60,
-                _demoTenantId,
-                "Tomar junto com as refeições (almoço e jantar)"
-            ));
+            if (metformina != null)
+            {
+                items.Add(new PrescriptionItem(
+                    medicalRecords[1].Id,
+                    metformina.Id,
+                    "850mg",
+                    "1 comprimido 2x ao dia",
+                    30,
+                    60,
+                    _demoTenantId,
+                    "Tomar junto com as refeições (almoço e jantar)"
+                ));
+            }
 
-            items.Add(new PrescriptionItem(
-                medicalRecords[1].Id,
-                medications[4].Id, // Omeprazol
-                "20mg",
-                "1 cápsula ao dia",
-                30,
-                30,
-                _demoTenantId,
-                "Tomar em jejum, 30 minutos antes do café da manhã"
-            ));
+            if (omeprazol != null)
+            {
+                items.Add(new PrescriptionItem(
+                    medicalRecords[1].Id,
+                    omeprazol.Id,
+                    "20mg",
+                    "1 cápsula ao dia",
+                    30,
+                    30,
+                    _demoTenantId,
+                    "Tomar em jejum, 30 minutos antes do café da manhã"
+                ));
+            }
 
             return items;
         }
@@ -2060,10 +2079,23 @@ RETORNO: {{return_date}}",
         private List<DigitalPrescription> CreateDemoDigitalPrescriptions(
             List<MedicalRecord> medicalRecords,
             List<Patient> patients,
-            List<User> users)
+            List<User> users,
+            List<Medication> medications)
         {
             var prescriptions = new List<DigitalPrescription>();
+            
+            // Validate we have enough data
+            if (medicalRecords.Count < 2 || patients.Count < 2 || !users.Any(u => u.Role == UserRole.Doctor))
+            {
+                return prescriptions; // Return empty list if insufficient data
+            }
+            
             var doctor = users.First(u => u.Role == UserRole.Doctor);
+
+            // Find medications by name to avoid index issues
+            var losartana = medications.FirstOrDefault(m => m.Name == "Losartana Potássica" && m.Dosage == "50mg");
+            var metformina = medications.FirstOrDefault(m => m.Name == "Metformina" && m.Dosage == "850mg");
+            var omeprazol = medications.FirstOrDefault(m => m.Name == "Omeprazol" && m.Dosage == "20mg");
 
             // Digital prescription for first completed appointment (Carlos - Hypertension)
             var prescription1 = new DigitalPrescription(
@@ -2082,23 +2114,26 @@ RETORNO: {{return_date}}",
             );
 
             // Add prescription item
-            var item1 = new DigitalPrescriptionItem(
-                prescription1.Id,
-                Guid.NewGuid(), // medicationId - Losartana
-                "Losartana Potássica",
-                "50mg",
-                "Comprimido",
-                "1 comprimido ao dia",
-                30, // duration
-                30, // quantity
-                _demoTenantId,
-                genericName: "Losartan",
-                activeIngredient: "Losartana potássica",
-                isControlledSubstance: false,
-                administrationRoute: "Via oral",
-                instructions: "Tomar pela manhã em jejum"
-            );
-            prescription1.AddItem(item1);
+            if (losartana != null)
+            {
+                var item1 = new DigitalPrescriptionItem(
+                    prescription1.Id,
+                    losartana.Id,
+                    "Losartana Potássica",
+                    "50mg",
+                    "Comprimido",
+                    "1 comprimido ao dia",
+                    30, // duration
+                    30, // quantity
+                    _demoTenantId,
+                    genericName: "Losartan",
+                    activeIngredient: "Losartana potássica",
+                    isControlledSubstance: false,
+                    administrationRoute: "Via oral",
+                    instructions: "Tomar pela manhã em jejum"
+                );
+                prescription1.AddItem(item1);
+            }
 
             // Sign the prescription
             prescription1.SignPrescription(
@@ -2125,41 +2160,47 @@ RETORNO: {{return_date}}",
             );
 
             // Add prescription items
-            var item2a = new DigitalPrescriptionItem(
-                prescription2.Id,
-                Guid.NewGuid(), // medicationId - Metformina
-                "Metformina",
-                "850mg",
-                "Comprimido",
-                "1 comprimido 2x ao dia",
-                30, // duration
-                60, // quantity
-                _demoTenantId,
-                genericName: "Metformin",
-                activeIngredient: "Cloridrato de metformina",
-                isControlledSubstance: false,
-                administrationRoute: "Via oral",
-                instructions: "Tomar junto com as refeições (almoço e jantar)"
-            );
-            prescription2.AddItem(item2a);
+            if (metformina != null)
+            {
+                var item2a = new DigitalPrescriptionItem(
+                    prescription2.Id,
+                    metformina.Id,
+                    "Metformina",
+                    "850mg",
+                    "Comprimido",
+                    "1 comprimido 2x ao dia",
+                    30, // duration
+                    60, // quantity
+                    _demoTenantId,
+                    genericName: "Metformin",
+                    activeIngredient: "Cloridrato de metformina",
+                    isControlledSubstance: false,
+                    administrationRoute: "Via oral",
+                    instructions: "Tomar junto com as refeições (almoço e jantar)"
+                );
+                prescription2.AddItem(item2a);
+            }
 
-            var item2b = new DigitalPrescriptionItem(
-                prescription2.Id,
-                Guid.NewGuid(), // medicationId - Omeprazol
-                "Omeprazol",
-                "20mg",
-                "Cápsula",
-                "1 cápsula ao dia",
-                30, // duration
-                30, // quantity
-                _demoTenantId,
-                genericName: "Omeprazole",
-                activeIngredient: "Omeprazol magnésico",
-                isControlledSubstance: false,
-                administrationRoute: "Via oral",
-                instructions: "Tomar em jejum, 30 minutos antes do café da manhã"
-            );
-            prescription2.AddItem(item2b);
+            if (omeprazol != null)
+            {
+                var item2b = new DigitalPrescriptionItem(
+                    prescription2.Id,
+                    omeprazol.Id,
+                    "Omeprazol",
+                    "20mg",
+                    "Cápsula",
+                    "1 cápsula ao dia",
+                    30, // duration
+                    30, // quantity
+                    _demoTenantId,
+                    genericName: "Omeprazole",
+                    activeIngredient: "Omeprazol",
+                    isControlledSubstance: false,
+                    administrationRoute: "Via oral",
+                    instructions: "Tomar em jejum, 30 minutos antes do café da manhã"
+                );
+                prescription2.AddItem(item2b);
+            }
 
             // Sign the prescription
             prescription2.SignPrescription(
