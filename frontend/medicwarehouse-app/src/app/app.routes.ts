@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { ownerGuard } from './guards/owner-guard';
-import { systemAdminGuard } from './guards/system-admin-guard';
 import { CLINIC_ADMIN_ROUTES } from './pages/clinic-admin/clinic-admin.routes';
 
 export const routes: Routes = [
@@ -48,67 +47,6 @@ export const routes: Routes = [
       { 
         path: 'terms', 
         loadComponent: () => import('./pages/site/terms/terms').then(m => m.TermsComponent)
-      }
-    ]
-  },
-  
-  // System Admin routes - requires system owner authentication
-  { 
-    path: 'system-admin', 
-    children: [
-      {
-        path: 'login',
-        loadComponent: () => import('./pages/system-admin/login/login').then(m => m.Login)
-      },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-      {
-        path: 'dashboard',
-        loadComponent: () => import('./pages/system-admin/dashboard/dashboard').then(m => m.Dashboard),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'clinics',
-        loadComponent: () => import('./pages/system-admin/clinics/clinics-list').then(m => m.ClinicsList),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'clinics/create',
-        loadComponent: () => import('./pages/system-admin/clinics/clinic-create').then(m => m.ClinicCreate),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'clinics/:id',
-        loadComponent: () => import('./pages/system-admin/clinics/clinic-detail').then(m => m.ClinicDetail),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'plans',
-        loadComponent: () => import('./pages/system-admin/plans/plans-list').then(m => m.PlansList),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'clinic-owners',
-        loadComponent: () => import('./pages/system-admin/clinic-owners/clinic-owners-list').then(m => m.ClinicOwnersList),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'subdomains',
-        loadComponent: () => import('./pages/system-admin/subdomains/subdomains-list').then(m => m.SubdomainsList),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'tickets',
-        loadComponent: () => import('./pages/system-admin/tickets/tickets').then(m => m.TicketsPage),
-        canActivate: [systemAdminGuard]
-      },
-      {
-        path: 'sales-metrics',
-        loadComponent: () => import('./pages/system-admin/sales-metrics/sales-metrics').then(m => m.SalesMetrics),
-        canActivate: [systemAdminGuard]
       }
     ]
   },
