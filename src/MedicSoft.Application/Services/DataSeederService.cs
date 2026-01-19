@@ -2174,38 +2174,42 @@ RETORNO: {{return_date}}",
 
         private List<HealthInsuranceOperator> CreateDemoHealthInsuranceOperators()
         {
+            // NOTE: These are SAMPLE/DEMO values for testing purposes only.
+            // ANS register numbers and CNPJs are fictional or representative examples.
+            // In production, use real ANS-registered operators with valid documentation.
+            
             var operators = new List<HealthInsuranceOperator>();
 
-            // Unimed São Paulo
+            // Unimed São Paulo (Sample ANS: 324701, Sample CNPJ: 43.202.472/0001-90)
             operators.Add(new HealthInsuranceOperator(
                 "Unimed São Paulo",
                 "Unimed São Paulo - Cooperativa de Trabalho Médico",
-                "324701", // ANS Register Number
-                "43.202.472/0001-90", // CNPJ
+                "324701", // ANS Register Number (DEMO)
+                "43.202.472/0001-90", // CNPJ (DEMO)
                 _demoTenantId,
                 "+55 11 3265-6000",
                 "contato@unimedsp.com.br",
                 "João Silva"
             ));
 
-            // Bradesco Saúde
+            // Bradesco Saúde (Sample ANS: 005711, Sample CNPJ: 92.693.118/0001-60)
             operators.Add(new HealthInsuranceOperator(
                 "Bradesco Saúde",
                 "Bradesco Saúde S.A.",
-                "005711", // ANS Register Number
-                "92.693.118/0001-60", // CNPJ
+                "005711", // ANS Register Number (DEMO)
+                "92.693.118/0001-60", // CNPJ (DEMO)
                 _demoTenantId,
                 "+55 11 4004-5477",
                 "atendimento@bradescosaude.com.br",
                 "Maria Santos"
             ));
 
-            // SulAmérica Saúde
+            // SulAmérica Saúde (Sample ANS: 005070, Sample CNPJ: 01.685.053/0001-56)
             operators.Add(new HealthInsuranceOperator(
                 "SulAmérica Saúde",
                 "SulAmérica Companhia de Seguro Saúde",
-                "005070", // ANS Register Number
-                "01.685.053/0001-56", // CNPJ
+                "005070", // ANS Register Number (DEMO)
+                "01.685.053/0001-56", // CNPJ (DEMO)
                 _demoTenantId,
                 "+55 11 3175-3000",
                 "atendimento@sulamericasaude.com.br",
@@ -2217,6 +2221,10 @@ RETORNO: {{return_date}}",
 
         private List<HealthInsurancePlan> CreateDemoHealthInsurancePlans(List<Patient> patients, List<HealthInsuranceOperator> operators)
         {
+            // NOTE: These are SAMPLE/DEMO plan register numbers for testing purposes only.
+            // ANS plan register numbers are fictional examples.
+            // In production, use real ANS-registered plan numbers from actual operators.
+            
             var plans = new List<HealthInsurancePlan>();
 
             // Health insurance for Carlos (patient[0]) - Unimed São Paulo
@@ -2226,7 +2234,7 @@ RETORNO: {{return_date}}",
                 "UNIMED-BAS-001",
                 HealthInsurancePlanType.Individual,
                 _demoTenantId,
-                "455.981.234-56", // ANS Plan Register Number
+                "455.981.234-56", // ANS Plan Register Number (DEMO)
                 coversConsultations: true,
                 coversExams: true,
                 coversProcedures: true,
@@ -2241,7 +2249,7 @@ RETORNO: {{return_date}}",
                 "BRAD-PREM-001",
                 HealthInsurancePlanType.Individual,
                 _demoTenantId,
-                "471.234.567-89", // ANS Plan Register Number
+                "471.234.567-89", // ANS Plan Register Number (DEMO)
                 coversConsultations: true,
                 coversExams: true,
                 coversProcedures: true,
@@ -2256,7 +2264,7 @@ RETORNO: {{return_date}}",
                 "SULA-EXEC-001",
                 HealthInsurancePlanType.Enterprise,
                 _demoTenantId,
-                "492.345.678-90", // ANS Plan Register Number
+                "492.345.678-90", // ANS Plan Register Number (DEMO)
                 coversConsultations: true,
                 coversExams: true,
                 coversProcedures: true,
