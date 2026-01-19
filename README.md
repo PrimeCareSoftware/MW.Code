@@ -18,12 +18,12 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 
 | Métrica | Valor |
 |---------|-------|
-| **Completude Geral** | ✅ **92%** |
-| **Controllers Backend** | 40+ |
-| **Componentes Frontend** | 163+ |
+| **Completude Geral** | ✅ **95%** |
+| **Controllers Backend** | 50+ |
+| **Componentes Frontend** | 171+ |
 | **Apps Mobile** | ❌ Descontinuados (migrados para PWA) |
 | **Microserviços** | 1 (Telemedicina) - Demais descontinuados |
-| **Testes Automatizados** | 670+ |
+| **Testes Automatizados** | 792+ |
 | **Documentos** | 49+ |
 
 [→ Ver Resumo Técnico Completo](docs/RESUMO_TECNICO_COMPLETO.md)
@@ -121,17 +121,20 @@ Aplicativo unificado acessando diferentes seções por rotas:
 - 🎨 **UX Consistente**: Design system unificado
 - 📦 **Menor footprint**: Dependências compartilhadas
 
-### 🏥 **Portal do Paciente** (`frontend/patient-portal`)
+### 🏥 **Portal do Paciente** (`frontend/patient-portal`) ✅ COMPLETO
 Portal dedicado para acesso de pacientes (separado da aplicação principal):
 
 - 👤 **Usuários**: Pacientes (acesso externo)
+- ✅ **Login e Cadastro**: Sistema completo de autenticação
 - 📋 **Ver Agendamentos**: Consulta de agendamentos confirmados
 - 📄 **Documentos Médicos**: Download de receitas, exames, atestados
 - 👤 **Perfil**: Gerenciamento de dados pessoais
-- 🔐 **Autenticação**: Login por CPF/Email + Senha
-- 🔒 **Segurança**: JWT + LGPD compliant
+- 🔐 **Autenticação**: JWT + Refresh Tokens
+- 🔒 **Segurança**: Account lockout, password hashing, LGPD compliant
+- ✅ **58 Testes**: Cobertura completa de unit tests
+- ✅ **Build**: Produção otimizado (394 KB)
 - **URL desenvolvimento**: `http://localhost:4202` (quando executado separadamente)
-- **API Backend**: `patient-portal-api/` (API dedicada)
+- **API Backend**: `patient-portal-api/` (API dedicada - 100% completa)
 
 **Por que separado?**
 - 🔒 Isolamento de segurança (dados de pacientes)

@@ -1,12 +1,22 @@
 <div class="documents-container">
   <header class="page-header">
-    <button mat-icon-button routerLink="/dashboard">
+    <button mat-icon-button routerLink="/dashboard" [matTooltip]="'Voltar ao Dashboard'">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1>Meus Documentos</h1>
+    <button mat-icon-button (click)="retry()" [matTooltip]="'Atualizar'" *ngIf="!loading">
+      <mat-icon>refresh</mat-icon>
+    </button>
   </header>
 
   <div class="documents-content" *ngIf="!loading; else loadingTemplate">
+    <!-- Error State -->
+    <div *ngIf="loadingError" class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>Não foi possível carregar seus documentos.</span>
+      <button mat-button color="primary" (click)="retry()">Tentar novamente</button>
+    </div>
+
     <div *ngIf="documents.length > 0; else noDocuments">
       <mat-card *ngFor="let document of documents" class="document-card">
         <mat-card-content>
@@ -17,17 +27,25 @@
           <div class="document-info">
             <h2>{{ document.title }}</h2>
             <div class="document-meta">
-              <span class="document-type">{{ document.documentType }}</span>
+              <mat-chip [class]="'type-' + getDocumentTypeColor(document.documentType)">
+                {{ document.documentType }}
+              </mat-chip>
               <span class="separator">•</span>
-              <span>{{ document.doctorName }}</span>
+              <span class="doctor-name">
+                <mat-icon>person</mat-icon>
+                {{ document.doctorName }}
+              </span>
             </div>
-            <p class="document-date">Emitido em {{ formatDate(document.issuedDate) }}</p>
+            <p class="document-date">
+              <mat-icon>calendar_today</mat-icon>
+              Emitido em {{ formatDate(document.issuedDate) }}
+            </p>
             <p class="document-description" *ngIf="document.description">
               {{ document.description }}
             </p>
             <div class="document-file-info" *ngIf="document.fileName">
               <mat-icon>attach_file</mat-icon>
-              <span>{{ document.fileName }}</span>
+              <span class="file-name">{{ document.fileName }}</span>
               <span *ngIf="document.fileSizeFormatted" class="file-size">
                 ({{ document.fileSizeFormatted }})
               </span>
@@ -36,10 +54,14 @@
 
           <div class="document-actions">
             <button mat-raised-button color="primary" 
-                    [disabled]="!document.isAvailable"
-                    (click)="downloadDocument(document)">
-              <mat-icon>download</mat-icon>
-              Baixar
+                    [disabled]="!document.isAvailable || isDownloading(document.id)"
+                    (click)="downloadDocument(document)"
+                    [matTooltip]="!document.isAvailable ? 'Documento indisponível' : 'Baixar documento'">
+              <mat-spinner *ngIf="isDownloading(document.id)" diameter="20"></mat-spinner>
+              <span *ngIf="!isDownloading(document.id)">
+                <mat-icon>download</mat-icon>
+                Baixar
+              </span>
             </button>
           </div>
         </mat-card-content>
@@ -59,8 +81,8 @@
 
   <ng-template #loadingTemplate>
     <div class="loading-container">
-      <mat-spinner></mat-spinner>
-      <p>Carregando documentos...</p>
+      <mat-spinner diameter="64"></mat-spinner>
+      <p class="loading-text">Carregando documentos...</p>
     </div>
   </ng-template>
 </div>
