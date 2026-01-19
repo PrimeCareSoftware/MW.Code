@@ -30,6 +30,12 @@ O PrimeCare Software possui uma **base técnica sólida** com:
 - ✅ **Componentes CFM 1.821** (Janeiro 2026)
 - ✅ **Receitas Médicas Digitais** (Janeiro 2026)
 - ✅ **Dashboard SNGPC** (Janeiro 2026)
+- ✅ **Integração TISS Fase 1 - Base Funcional** (Janeiro 2026) 🎉
+  - Backend: 8 entidades + 7 repositórios + 4 serviços + 3 controllers
+  - Frontend: 6 componentes + 4 serviços Angular
+  - Testes: 212 testes de entidades passando
+  - Migrations aplicadas
+  - 70% completo, funcionalidade básica operacional
 
 ### Gaps Identificados em Relação ao Mercado
 
@@ -86,6 +92,8 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 > **Última Verificação:** Janeiro 2026  
 > **Status:** Validado e atualizado conforme implementações recentes
+
+**NOTA IMPORTANTE:** A implementação TISS/Convênios foi **REAVALIADA em Janeiro 2026**. Anteriormente listada como "não iniciada", a análise detalhada confirmou que a implementação está **70% completa** com funcionalidade básica operacional. Ver detalhes em [TISS_TUSS_IMPLEMENTATION_ANALYSIS.md](TISS_TUSS_IMPLEMENTATION_ANALYSIS.md).
 
 #### Backend - Funcionalidades Core
 - ✅ **Sistema de Agendamento Completo** - 100%
@@ -223,15 +231,16 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - Falta: compliance completo CFM 2.314
 
 ### 📊 Estatísticas de Conclusão (Janeiro 2026)
-- **Controllers Backend:** 50+ (incluindo 8 do Patient Portal API)
-- **Entidades de Domínio:** 51+ (incluindo PatientUser, RefreshToken, AppointmentView, DocumentView)
-- **Componentes Frontend:** 171+ (incluindo 4 CFM, 4 Receitas Digitais, **Patient Portal Completo**)
+- **Controllers Backend:** 53+ (incluindo 8 do Patient Portal API + 3 TISS/Convênios)
+- **Entidades de Domínio:** 59+ (incluindo PatientUser, RefreshToken, AppointmentView, DocumentView + 8 TISS)
+- **Componentes Frontend:** 177+ (incluindo 4 CFM, 4 Receitas Digitais, **Patient Portal Completo** + 6 TISS)
 - **Apps Frontend:** 5 (PrimeCare Software App, MW System Admin, MW Site, MW Docs, **Patient Portal ✅ COMPLETO**) + 2 mobile
 - **Apps Mobile:** 2 (iOS + Android MVP)
 - **Microservices:** 8 (incluindo Telemedicine e Patient Portal API)
-- **Testes Automatizados:** 792+ (64 WhatsApp AI + 58 Patient Portal Frontend + testes do Patient Portal Backend)
-- **Completude Geral:** 95% (+2% com Patient Portal Frontend completo)
-- **Linhas de Código de Compliance:** ~4.276 linhas (CFM + Receitas Digitais)
+- **Testes Automatizados:** 1.004+ (64 WhatsApp AI + 58 Patient Portal Frontend + testes do Patient Portal Backend + **212 TISS entidades** ✅)
+- **Completude Geral:** 97% (+2% com TISS Fase 1 básico funcional)
+- **Linhas de Código de Compliance:** ~14.776 linhas (CFM + Receitas Digitais + **TISS ~10.500 linhas**)
+- **Arquivos TISS Criados:** 71 arquivos (50 backend + 21 frontend)
 
 ---
 
@@ -245,8 +254,8 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 | 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2026 |
 | 🔥🔥🔥 | Telemedicina Completa | ⚠️ MVP Implementado (80%) | 2-3 meses, 2 devs (compliance) | Q2/2026 |
 | 🔥🔥🔥 | Portal do Paciente Frontend | ⚠️ Backend 100%, Frontend 30% | 1-2 meses, 1 dev | Q1/2026 |
-| 🔥🔥🔥 | Integração TISS Fase 1 | ❌ Não iniciado | 3 meses, 2-3 devs | Q3/2026 |
-| 🔥🔥🔥 | Integração TISS Fase 2 | ❌ Não iniciado | 3 meses, 2-3 devs | Q4/2026 |
+| 🔥🔥🔥 | Integração TISS Fase 1 | ✅ 70% Completo (Jan 2026) | 2-3 semanas, 1-2 devs | Q1/2026 |
+| 🔥🔥🔥 | Integração TISS Fase 2 | ⚠️ 30% Completo | 3 meses, 2-3 devs | Q2/2026 |
 | 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ✅ 90% Completo (Jan 2026) | 2-3 semanas, 1 dev (ICP-Brasil) | Q1/2026 |
 | 🔥🔥 | SNGPC (ANVISA) | ✅ 85% Completo (Jan 2026) | 2-3 semanas, 1 dev (XML + WebService) | Q1/2026 |
 
@@ -536,42 +545,140 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 
 ### 🏛️ 3. CONFORMIDADE COM ANS (AGÊNCIA NACIONAL DE SAÚDE SUPLEMENTAR)
 
-**Status:** ❌ Não Iniciado (já planejado item #3)  
+**Status:** ✅ 70% Completo - **FASE 1 FUNCIONAL** (Janeiro 2026) 🎉  
 **Prioridade:** 🔥🔥🔥 CRÍTICA  
 **Impacto:** Muito Alto - 70% do mercado  
-**Esforço:** 6-8 meses | 2-3 devs  
-**Prazo:** Q4/2025 - Q1/2026
+**Esforço Restante:** 2-3 semanas (Fase 1) + 3 meses (Fase 2) | 1-2 devs  
+**Prazo:** Q1/2026 (Fase 1 completa) + Q2/2026 (Fase 2)
+
+#### Implementação Atual (Janeiro 2026)
+
+**✅ Fase 1 - Base Funcional (70% completo):**
+
+1. **Entidades de Domínio** ✅ 100%
+   - HealthInsuranceOperator (operadoras)
+   - HealthInsurancePlan (planos)
+   - PatientHealthInsurance (vínculos paciente-plano)
+   - TussProcedure (procedimentos TUSS)
+   - AuthorizationRequest (autorizações)
+   - TissGuide (guias TISS)
+   - TissGuideProcedure (procedimentos da guia)
+   - TissBatch (lotes de faturamento)
+
+2. **Repositórios e Persistência** ✅ 100%
+   - 7 repositórios completos com multi-tenancy
+   - Configurações Entity Framework
+   - Migrations aplicadas
+
+3. **Serviços de Aplicação** ✅ 90%
+   - HealthInsuranceOperatorService ✅
+   - TissGuideService ✅
+   - TissBatchService ✅
+   - TissXmlGeneratorService ✅ (TISS 4.02.00)
+   - TussProcedureService ✅
+   - PatientHealthInsuranceService ⚠️ (interface pronta, implementação parcial)
+   - AuthorizationRequestService ⚠️ (interface pronta, implementação parcial)
+
+4. **Controllers REST API** ✅ 75%
+   - HealthInsuranceOperatorsController ✅ (11 endpoints)
+   - TissGuidesController ✅ (13 endpoints)
+   - TissBatchesController ✅ (14 endpoints)
+   - TussProceduresController ✅ (5 endpoints)
+   - HealthInsurancePlansController ✅ (expandido)
+   - AuthorizationRequestsController ⚠️ (a criar)
+   - PatientHealthInsuranceController ⚠️ (a criar)
+
+5. **Frontend Angular** ✅ 70%
+   - Componentes de listagem: 100%
+     - HealthInsuranceOperatorsList ✅
+     - TissGuideList ✅
+     - TissBatchList ✅
+     - TussProcedureList ✅
+   - Formulários: 50%
+     - HealthInsuranceOperatorForm ✅
+     - TissGuideForm ⚠️ (a completar)
+     - TissBatchForm ⚠️ (a completar)
+     - AuthorizationRequestForm ⚠️ (a criar)
+   - Serviços Angular: 100%
+     - TissGuideService ✅
+     - TissBatchService ✅
+     - TussProcedureService ✅
+     - HealthInsuranceOperatorService ✅
+
+6. **Testes Automatizados** ✅ 35%
+   - Testes de Entidades: 212 testes ✅ 100%
+   - Testes de Serviços: Padrões definidos ⚠️ 20%
+   - Testes de Controllers: Padrões definidos ⚠️ 0%
+   - Testes de Integração: ⚠️ 0%
+
+**Ver análise completa:** [TISS_TUSS_IMPLEMENTATION_ANALYSIS.md](TISS_TUSS_IMPLEMENTATION_ANALYSIS.md)
+
+**Funcionalidades Operacionais AGORA:**
+- ✅ Cadastro e gestão de operadoras de planos de saúde
+- ✅ Cadastro e gestão de planos
+- ✅ Consulta de procedimentos TUSS
+- ✅ Criação e gestão de guias TISS (API completa)
+- ✅ Criação e gestão de lotes de faturamento (API completa)
+- ✅ Geração de XML TISS 4.02.00
+- ✅ Persistência com multi-tenancy
+- ✅ Autorização baseada em permissões
+
+**Pendências para 100% Fase 1:**
+- ⚠️ Completar serviços de autorização e vínculo paciente-plano (2-3 dias)
+- ⚠️ Criar controllers faltantes (1-2 dias)
+- ⚠️ Completar formulários frontend (3-5 dias)
+- ⚠️ Testes de serviços e controllers (1 semana)
+- ⚠️ Validação rigorosa de XML contra schemas ANS (2-3 dias)
+- ⚠️ Importação de tabela TUSS oficial (2 dias)
+
+**Esforço restante Fase 1:** 2-3 semanas | 1-2 devs  
+**Prazo Fase 1:** Q1/2026
 
 #### 3.1 Padrão TISS (Troca de Informações na Saúde Suplementar)
 
-**Já detalhado no item #3 do documento. Adicionar:**
+**Status Atualizado (Janeiro 2026):** ✅ 70% Completo - Base Funcional Implementada
+
+**✅ Implementado:**
 
 ##### Versão TISS Obrigatória
-- **Versão Atual:** TISS 4.02.00 (ANS, 2024)
-- **Atualização:** Trimestral conforme releases ANS
-- **Validação:** Schemas XSD oficiais
+- ✅ **Versão Atual:** TISS 4.02.00 (implementado no TissXmlGeneratorService)
+- ⚠️ **Atualização:** Mecanismo de atualização trimestral (a implementar)
+- ⚠️ **Validação:** Schemas XSD oficiais (validação básica, rigorosa pendente)
 
-##### Guias TISS Obrigatórias
-1. **Guia de Consulta (Guia SP/SADT)**
-2. **Guia de Internação**
-3. **Guia de Resumo de Internação**
-4. **Guia de Honorários Individuais**
-5. **Guia de Outras Despesas**
+##### Guias TISS Implementadas
+1. ✅ **Guia de Consulta (Guia SP/SADT)** - Entidade e API completas
+2. ⚠️ **Guia de Internação** - Estrutura preparada, não testada
+3. ⚠️ **Guia de Resumo de Internação** - Estrutura preparada, não testada
+4. ⚠️ **Guia de Honorários Individuais** - Estrutura preparada, não testada
+5. ⚠️ **Guia de Outras Despesas** - Estrutura preparada, não testada
 
 ##### Tabelas Obrigatórias
-- [ ] **CBHPM** - Classificação Brasileira Hierarquizada de Procedimentos Médicos
-- [ ] **TUSS** - Terminologia Unificada da Saúde Suplementar
-- [ ] **Rol ANS** - Procedimentos de cobertura obrigatória
-- [ ] **Tabela de Operadoras** (cadastro nacional ANS)
+- ✅ **TUSS** - Entidade TussProcedure implementada, importação pendente
+- ⚠️ **CBHPM** - Campo referencePrice na TussProcedure, importação pendente
+- ⚠️ **Rol ANS** - Estrutura preparada, importação pendente
+- ✅ **Tabela de Operadoras** - HealthInsuranceOperator implementado (cadastro manual)
 
-**Ações Adicionais:**
-1. Implementar atualização automática das tabelas TISS
-2. Validação de procedimentos conforme Rol ANS
-3. Cálculo de coparticipação e franquia
-4. Integração com portal ANS para operadoras
+**Já detalhado no item #3 do documento. Adicionado:**
 
-**Esforço:** Incluído no item #3 (TISS Fase 1 e 2)  
-**Prazo:** Q4/2025 - Q1/2026
+**Ações Concluídas (Janeiro 2026):**
+1. ✅ Implementar estrutura base de guias TISS
+2. ✅ Implementar lotes de faturamento
+3. ✅ Criar entidades de domínio com regras de negócio
+4. ✅ Criar repositórios com multi-tenancy
+5. ✅ Implementar serviços de aplicação
+6. ✅ Criar controllers REST
+7. ✅ Criar componentes frontend de listagem
+8. ✅ Geração básica de XML TISS 4.02.00
+9. ✅ Migrations e persistência
+
+**Ações Adicionais Pendentes:**
+1. ⚠️ Implementar atualização automática das tabelas TISS (2-3 dias)
+2. ⚠️ Validação rigorosa de procedimentos conforme Rol ANS (2-3 dias)
+3. ⚠️ Cálculo de coparticipação e franquia (1 semana)
+4. ⚠️ Integração com portal ANS para operadoras (Fase 2, Q2/2026)
+
+**Esforço:** Fase 1 quase completa (2-3 semanas restantes), Fase 2 pendente (3 meses)  
+**Prazo:** Q1/2026 (Fase 1) + Q2/2026 (Fase 2)
 
 ---
 
@@ -1126,6 +1233,8 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 **Prazo:** Q3/2025  
 **Progresso:** Microserviço criado, falta compliance completo CFM 2.314
 
+**NOTA:** A implementação TISS/Convênios foi incorretamente listada como "Não iniciado" em versões anteriores deste documento. Após avaliação detalhada em Janeiro 2026, confirmou-se que a implementação está **70% completa** com base sólida. Ver análise completa em [TISS_TUSS_IMPLEMENTATION_ANALYSIS.md](TISS_TUSS_IMPLEMENTATION_ANALYSIS.md).
+
 #### Descrição
 Sistema de teleconsulta integrado permitindo videochamadas seguras entre médico e paciente.
 
@@ -1319,11 +1428,24 @@ Interface web e mobile para pacientes gerenciarem suas consultas e dados.
 
 ### 3. Integração TISS / Convênios
 
-**Status:** ❌ Não iniciado  
+**Status:** ✅ 70% Completo - **REVISADO EM JANEIRO 2026** 🎉  
 **Prioridade:** CRÍTICA  
 **Impacto:** Muito Alto - Abre 70% do mercado  
-**Esforço:** 6-8 meses total | 2-3 devs full-time  
-**Prazo:** Q4/2025 (Fase 1) + Q1/2026 (Fase 2)
+**Esforço Restante:** 2-3 semanas | 1-2 devs  
+**Prazo:** Q1/2026 (conclusão prevista)
+
+**Progresso Atual:**
+- ✅ Camada de Domínio: 8 entidades implementadas (100%)
+- ✅ Repositórios: 7 repositórios completos (100%)
+- ✅ Migrations: Migration principal criada e aplicada (100%)
+- ✅ Serviços: 4 serviços principais implementados (90%)
+- ✅ Controllers: 3 controllers REST implementados (75%)
+- ✅ Frontend: 6 componentes e 4 serviços Angular (70%)
+- ✅ Testes de Entidades: 212 testes passando (100%)
+- ⚠️ Testes de Serviços: Padrões definidos, implementação pendente (20%)
+- ⚠️ Formulários Frontend: Listagens prontas, formulários pendentes (60%)
+
+**Ver detalhes completos em:** [TISS_TUSS_IMPLEMENTATION_ANALYSIS.md](TISS_TUSS_IMPLEMENTATION_ANALYSIS.md)
 
 #### Descrição
 Faturamento automatizado com operadoras de planos de saúde via padrão TISS (ANS).
