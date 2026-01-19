@@ -36,7 +36,7 @@ export class ClosuresListComponent implements OnInit {
     });
   }
 
-  deleteEndoser(id: string): void {
+  deleteClosure(id: string): void {
     if (confirm('Tem certeza que deseja excluir este fechamento?')) {
       this.financialService.deleteClosure(id).subscribe({
         next: () => this.loadClosures(),

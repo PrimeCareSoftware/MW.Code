@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { SubscriptionService } from '../../../services/subscription';
 import { CartService } from '../../../services/cart';
 import { SubscriptionPlan } from '../../../models/subscription-plan.model';
@@ -10,7 +10,7 @@ import { FooterComponent } from '../../../components/site/footer/footer';
 
 @Component({
   selector: 'app-pricing',
-  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
+  imports: [CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './pricing.html',
   styleUrl: './pricing.scss'
 })
