@@ -18,64 +18,13 @@ Este projeto foi criado para resolver o problema de ter vários arquivos de docu
 
 ## 📦 Documentos Incluídos
 
-Este projeto integra **36 documentos** organizados em **13 categorias**:
+Este projeto agora referencia **todos os documentos** centralizados na pasta `/docs` do repositório principal através de um symlink.
 
-### Categorias
+**Localização dos documentos**: `src/assets/docs/` → symlink para `/docs`
 
-1. **📱 Interface e Experiência do Usuário**
-   - SCREENS_DOCUMENTATION.md
-   - VISUAL_FLOW_SUMMARY.md
-
-2. **📋 Regras de Negócio e Requisitos**
-   - BUSINESS_RULES.md
-
-3. **🔧 Implementação Técnica**
-   - TECHNICAL_IMPLEMENTATION.md
-   - IMPLEMENTATION.md
-
-4. **🚀 Guias de Uso**
-   - README.md
-   - GUIA_EXECUCAO.md
-   - SYSTEM_SETUP_GUIDE.md
-   - API_QUICK_GUIDE.md
-   - AUTHENTICATION_GUIDE.md
-
-5. **🔄 CI/CD e Qualidade**
-   - CI_CD_DOCUMENTATION.md
-   - TEST_SUMMARY.md
-   - SECURITY_VALIDATIONS.md
-   - SONARCLOUD_SETUP.md
-
-6. **📝 Resumos de Implementação**
-   - IMPLEMENTATION_SUMMARY.md
-   - IMPLEMENTATION_NEW_FEATURES.md
-   - IMPLEMENTATION_SUMMARY_BUSINESS_RULES.md
-   - MIGRATION_IMPLEMENTATION_SUMMARY.md
-
-7. **🔐 Segurança**
-   - SECURITY_GUIDE.md
-   - SECURITY_IMPLEMENTATION_SUMMARY.md
-
-8. **💰 Sistema de Pagamentos**
-   - IMPLEMENTATION_PAYMENT_SYSTEM.md
-   - PAYMENT_FLOW.md
-
-9. **🔔 Notificações**
-   - NOTIFICATION_ROUTINES_DOCUMENTATION.md
-   - IMPLEMENTATION_NOTIFICATION_ROUTINES.md
-   - NOTIFICATION_ROUTINES_EXAMPLE.md
-
-10. **👨‍👩‍👧 Recursos Especiais**
-    - IMPLEMENTATION_GUARDIAN_CHILD.md
-
-11. **🌐 MW.Site - Marketing**
-    - MW_SITE_DOCUMENTATION.md
-    - MW_SITE_IMPLEMENTATION_SUMMARY.md
-
-12. **📚 Índice e Referências**
-    - DOCUMENTATION_INDEX.md
-    - INDEX.md
-    - GLOSSARIO_TERMOS_EMPRESARIAIS.md
+Todos os documentos markdown do projeto estão organizados por categoria na pasta `/docs`. Para ver a lista completa de categorias e documentos, consulte:
+- [DOCUMENTATION_INDEX.md](../../docs/DOCUMENTATION_INDEX.md) - Índice principal com navegação completa
+- [README.md](../../README.md) - Visão geral do projeto
 
 ## 🚀 Como Executar
 
@@ -221,8 +170,8 @@ server {
 
 Para adicionar novos documentos:
 
-1. **Copie o arquivo .md** para `src/assets/docs/`
-2. **Atualize o serviço** `documentation.service.ts`:
+1. **Adicione o arquivo .md** na pasta `/docs` do repositório principal
+2. **Atualize o serviço** `documentation.service.ts` se quiser que apareça na interface web:
    - Adicione o documento na categoria apropriada
    - Configure: id, title, category, path, description
 
@@ -238,6 +187,8 @@ Para adicionar novos documentos:
 ```
 
 3. **Rebuild** a aplicação
+
+**Nota**: Os documentos são automaticamente acessíveis via symlink em `src/assets/docs/` que aponta para `/docs`.
 
 ## 🔧 Customização
 

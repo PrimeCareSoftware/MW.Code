@@ -227,23 +227,23 @@ All frontend projects are configured with unique ports to allow running them sim
 - 📖 **[`CHANGELOG.md`](CHANGELOG.md)** - ⭐ Histórico completo de desenvolvimento
 
 ### 📱 Documentação Portátil
-**Leia toda a documentação no celular ou gere um PDF completo!**
-- 📂 **Localização**: `documentacao-portatil/`
-- 📖 **Guia de uso**: [`documentacao-portatil/README.md`](documentacao-portatil/README.md)
-- ✨ **O que faz**: Consolida todos os documentos em um único arquivo HTML responsivo ou PDF
-- 🚀 **Como usar**: `cd documentacao-portatil && npm run gerar`
-
 ### 🌐 Documentação Completa
-Toda a documentação detalhada do projeto está disponível e organizada:
-- 📂 **Índice Principal**: [`docs/DOCUMENTATION_INDEX.md`](docs/DOCUMENTATION_INDEX.md) - ⭐ **Comece aqui!** Navegação completa para toda documentação
-- 📋 **Plano de Desenvolvimento**: [`docs/PLANO_DESENVOLVIMENTO.md`](docs/PLANO_DESENVOLVIMENTO.md) - Roadmap 2025-2026 com prioridades e regras de negócio
-- 📖 **Principais Documentos**:
-  - [`BUSINESS_RULES.md`](docs/BUSINESS_RULES.md) - ⭐ **ESSENCIAL** - Regras de negócio do sistema
-  - [`PENDING_TASKS.md`](docs/PENDING_TASKS.md) - Documento centralizado com todas as pendências
-  - [`GUIA_INICIO_RAPIDO_LOCAL.md`](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup rápido em 10 minutos
-  - [`AUTHENTICATION_GUIDE.md`](docs/AUTHENTICATION_GUIDE.md) - Guia de autenticação JWT
-  - [`SEEDER_GUIDE.md`](docs/SEEDER_GUIDE.md) - Guia completo dos seeders
-  - [`SYSTEM_MAPPING.md`](docs/SYSTEM_MAPPING.md) - Mapeamento completo do sistema
+
+**📍 Toda a documentação foi consolidada na pasta `/docs`!**
+
+- 📂 **Índice Principal**: [`docs/DOCUMENTATION_INDEX.md`](docs/DOCUMENTATION_INDEX.md) - ⭐ **Comece aqui!** Navegação completa
+- 🌐 **Interface Web Interativa**: [`frontend/mw-docs`](frontend/mw-docs/README.md) - Documentação navegável via Angular
+- 📋 **Plano de Desenvolvimento**: [`docs/PLANO_DESENVOLVIMENTO.md`](docs/PLANO_DESENVOLVIMENTO.md) - Roadmap 2025-2026
+
+**📖 Principais Documentos**:
+- [`BUSINESS_RULES.md`](docs/BUSINESS_RULES.md) - ⭐ **ESSENCIAL** - Regras de negócio do sistema
+- [`PENDING_TASKS.md`](docs/PENDING_TASKS.md) - Documento centralizado com todas as pendências
+- [`GUIA_INICIO_RAPIDO_LOCAL.md`](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup rápido em 10 minutos
+- [`AUTHENTICATION_GUIDE.md`](docs/AUTHENTICATION_GUIDE.md) - Guia de autenticação JWT
+- [`SEEDER_GUIDE.md`](docs/SEEDER_GUIDE.md) - Guia completo dos seeders
+- [`SYSTEM_MAPPING.md`](docs/SYSTEM_MAPPING.md) - Mapeamento completo do sistema
+
+**🎯 Consolidação Janeiro 2026**: Removidos 137 arquivos duplicados/desnecessários. Toda documentação agora em `/docs`.
 
 ## 🏗️ Arquitetura
 
