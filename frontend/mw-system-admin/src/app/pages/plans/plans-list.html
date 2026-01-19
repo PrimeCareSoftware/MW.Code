@@ -1,0 +1,214 @@
+<app-navbar></app-navbar>
+
+<div class="plans-list">
+      <div class="header">
+        <div>
+          <h1>Gerenciar Planos de Assinatura</h1>
+          <p class="subtitle">Configure os planos disponíveis para as clínicas</p>
+        </div>
+        <button class="btn btn-primary" (click)="openCreateModal()">
+          <span>➕ Novo Plano</span>
+        </button>
+      </div>
+
+      @if (loading()) {
+        <div class="loading">Carregando planos...</div>
+      } @else if (error()) {
+        <div class="error">
+          <p>Erro: {{ error() }}</p>
+          <button (click)="loadPlans()" class="btn-retry">Tentar novamente</button>
+        </div>
+      } @else {
+        <div class="table-container">
+          <table class="plans-table">
+            <thead>
+              <tr>
+                <th>Plano</th>
+                <th>Preço Mensal</th>
+                <th>Preço Anual</th>
+                <th>Trial (dias)</th>
+                <th>Max Usuários</th>
+                <th>Max Pacientes</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (plan of plans(); track plan.id) {
+                <tr>
+                  <td>
+                    <div class="plan-info">
+                      <div class="plan-name">{{ plan.name }}</div>
+                      @if (plan.description) {
+                        <div class="plan-desc">{{ plan.description }}</div>
+                      }
+                    </div>
+                  </td>
+                  <td>{{ formatCurrency(plan.monthlyPrice) }}</td>
+                  <td>{{ formatCurrency(plan.yearlyPrice) }}</td>
+                  <td>{{ plan.trialDays }} dias</td>
+                  <td>{{ plan.maxUsers }}</td>
+                  <td>{{ plan.maxPatients }}</td>
+                  <td>
+                    <span class="status-badge" [class.active]="plan.isActive" [class.inactive]="!plan.isActive">
+                      {{ plan.isActive ? '✅ Ativo' : '🚫 Inativo' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="actions">
+                      <button class="btn-icon" (click)="openEditModal(plan)" title="Editar">
+                        ✏️
+                      </button>
+                      <button 
+                        class="btn-icon" 
+                        [class.btn-danger]="plan.isActive"
+                        [class.btn-success]="!plan.isActive"
+                        (click)="toggleStatus(plan.id, plan.isActive)" 
+                        [title]="plan.isActive ? 'Desativar' : 'Ativar'"
+                      >
+                        {{ plan.isActive ? '🚫' : '✅' }}
+                      </button>
+                      <button class="btn-icon btn-danger" (click)="deletePlan(plan.id)" title="Excluir">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (plans().length === 0) {
+            <div class="empty-state">
+              <p>Nenhum plano cadastrado</p>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Create/Edit Modal -->
+      @if (showModal) {
+        <div class="modal-overlay" (click)="closeModal()">
+          <div class="modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <h2>{{ editingPlan ? 'Editar Plano' : 'Criar Novo Plano' }}</h2>
+              <button class="btn-close" (click)="closeModal()">✕</button>
+            </div>
+            
+            <form (ngSubmit)="onSubmit()" class="modal-body">
+              <div class="form-group">
+                <label>Nome do Plano *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.name"
+                  name="name"
+                  required
+                  placeholder="Ex: Plano Básico"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Descrição</label>
+                <textarea
+                  [(ngModel)]="formData.description"
+                  name="description"
+                  rows="3"
+                  placeholder="Descrição opcional do plano"
+                ></textarea>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Preço Mensal (R$) *</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="formData.monthlyPrice"
+                    name="monthlyPrice"
+                    required
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Preço Anual (R$) *</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="formData.yearlyPrice"
+                    name="yearlyPrice"
+                    required
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Dias de Trial *</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="formData.trialDays"
+                    name="trialDays"
+                    required
+                    min="0"
+                    placeholder="14"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Max Usuários *</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="formData.maxUsers"
+                    name="maxUsers"
+                    required
+                    min="1"
+                    placeholder="10"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Max Pacientes *</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="formData.maxPatients"
+                    name="maxPatients"
+                    required
+                    min="1"
+                    placeholder="100"
+                  />
+                </div>
+
+                @if (editingPlan) {
+                  <div class="form-group">
+                    <label>Status</label>
+                    <select [(ngModel)]="formDataUpdate.isActive" name="isActive">
+                      <option [value]="true">Ativo</option>
+                      <option [value]="false">Inativo</option>
+                    </select>
+                  </div>
+                }
+              </div>
+
+              @if (modalError()) {
+                <div class="error-message">{{ modalError() }}</div>
+              }
+            </form>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">
+                Cancelar
+              </button>
+              <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="submitting()">
+                @if (submitting()) {
+                  <span>Salvando...</span>
+                } @else {
+                  <span>{{ editingPlan ? 'Salvar' : 'Criar' }}</span>
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>

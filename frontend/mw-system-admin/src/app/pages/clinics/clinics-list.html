@@ -1,0 +1,137 @@
+<app-navbar></app-navbar>
+
+<div class="clinics-list">
+      <div class="header">
+        <div>
+          <h1>Gerenciar Clínicas</h1>
+          <p class="subtitle">Visualize e gerencie todas as clínicas cadastradas</p>
+        </div>
+        <button class="btn btn-primary" (click)="navigateToCreate()">
+          <span>➕ Nova Clínica</span>
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter() === ''"
+          (click)="applyFilter('')"
+        >
+          Todas ({{ paginatedClinics()?.totalCount || 0 }})
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter() === 'active'"
+          (click)="applyFilter('active')"
+        >
+          Ativas
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter() === 'inactive'"
+          (click)="applyFilter('inactive')"
+        >
+          Inativas
+        </button>
+      </div>
+
+      @if (loading()) {
+        <div class="loading">Carregando clínicas...</div>
+      } @else if (error()) {
+        <div class="error">
+          <p>Erro: {{ error() }}</p>
+          <button (click)="loadClinics()" class="btn-retry">Tentar novamente</button>
+        </div>
+      } @else {
+        <div class="table-container">
+          <table class="clinics-table">
+            <thead>
+              <tr>
+                <th>Clínica</th>
+                <th>CNPJ</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Plano</th>
+                <th>Status Assinatura</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (clinic of paginatedClinics()?.clinics; track clinic.id) {
+                <tr>
+                  <td>
+                    <div class="clinic-info">
+                      <div class="clinic-name">{{ clinic.name }}</div>
+                      <div class="clinic-date">Criada em {{ formatDate(clinic.createdAt) }}</div>
+                    </div>
+                  </td>
+                  <td>{{ clinic.document }}</td>
+                  <td>{{ clinic.email }}</td>
+                  <td>{{ clinic.phone }}</td>
+                  <td>
+                    <span class="badge badge-plan">{{ clinic.planName }}</span>
+                  </td>
+                  <td>
+                    <span class="badge" [class]="getStatusClass(clinic.subscriptionStatus)">
+                      {{ getStatusLabel(clinic.subscriptionStatus) }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="status-badge" [class.active]="clinic.isActive" [class.inactive]="!clinic.isActive">
+                      {{ clinic.isActive ? '✅ Ativa' : '🚫 Inativa' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="actions">
+                      <button class="btn-icon" (click)="viewDetails(clinic.id)" title="Ver detalhes">
+                        👁️
+                      </button>
+                      <button 
+                        class="btn-icon" 
+                        [class.btn-danger]="clinic.isActive"
+                        [class.btn-success]="!clinic.isActive"
+                        (click)="toggleStatus(clinic.id, clinic.isActive)" 
+                        [title]="clinic.isActive ? 'Desativar' : 'Ativar'"
+                      >
+                        {{ clinic.isActive ? '🚫' : '✅' }}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (paginatedClinics() && paginatedClinics()!.clinics.length === 0) {
+            <div class="empty-state">
+              <p>Nenhuma clínica encontrada</p>
+            </div>
+          }
+        </div>
+
+        <!-- Pagination -->
+        @if (paginatedClinics() && paginatedClinics()!.totalPages > 1) {
+          <div class="pagination">
+            <button 
+              class="btn-page" 
+              (click)="changePage(currentPage() - 1)"
+              [disabled]="currentPage() === 1"
+            >
+              ‹ Anterior
+            </button>
+            <span class="page-info">
+              Página {{ currentPage() }} de {{ paginatedClinics()!.totalPages }}
+            </span>
+            <button 
+              class="btn-page" 
+              (click)="changePage(currentPage() + 1)"
+              [disabled]="currentPage() === paginatedClinics()!.totalPages"
+            >
+              Próxima ›
+            </button>
+          </div>
+        }
+      }
+    </div>

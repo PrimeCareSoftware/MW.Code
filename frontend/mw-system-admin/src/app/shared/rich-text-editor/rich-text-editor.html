@@ -1,0 +1,154 @@
+<div class="rich-text-editor">
+  @if (label) {
+    <label [for]="id" class="editor-label">{{ label }}</label>
+  }
+
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <button type="button" class="toolbar-btn" title="Negrito (Ctrl+B)" (click)="applyFormat('bold')">
+        <strong>B</strong>
+      </button>
+      <button type="button" class="toolbar-btn" title="Itálico (Ctrl+I)" (click)="applyFormat('italic')">
+        <em>I</em>
+      </button>
+      <button type="button" class="toolbar-btn" title="Sublinhado" (click)="applyFormat('underline')">
+        <u>U</u>
+      </button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group">
+      <button type="button" class="toolbar-btn" title="Lista com marcadores" (click)="applyFormat('list')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+      </button>
+      <button type="button" class="toolbar-btn" title="Lista numerada" (click)="applyFormat('numbered')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="10" y1="6" x2="21" y2="6"></line>
+          <line x1="10" y1="12" x2="21" y2="12"></line>
+          <line x1="10" y1="18" x2="21" y2="18"></line>
+          <path d="M4 6h1v4"></path>
+          <path d="M4 10h2"></path>
+          <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
+        </svg>
+      </button>
+      <button type="button" class="toolbar-btn" title="Título" (click)="applyFormat('heading')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 12h8"></path>
+          <path d="M4 18V6"></path>
+          <path d="M12 18V6"></path>
+          <path d="M17 10v8"></path>
+          <path d="M21 10v8"></path>
+          <path d="M17 14h4"></path>
+        </svg>
+      </button>
+    </div>
+
+    @if (enableMedicationAutocomplete || enableExamAutocomplete) {
+      <div class="toolbar-divider"></div>
+
+      <div class="toolbar-group">
+        @if (enableMedicationAutocomplete) {
+          <button type="button" class="toolbar-btn toolbar-btn-special" title="Inserir medicação (@@)" (click)="insertMedicationTrigger()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path>
+              <path d="m8.5 8.5 7 7"></path>
+            </svg>
+            <span class="btn-label">Medicação</span>
+          </button>
+        }
+        @if (enableExamAutocomplete) {
+          <button type="button" class="toolbar-btn toolbar-btn-special" title="Inserir exame (##)" (click)="insertExamTrigger()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <line x1="10" y1="9" x2="8" y2="9"></line>
+            </svg>
+            <span class="btn-label">Exame</span>
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="editor-container">
+    <textarea
+      #editor
+      [id]="id"
+      [value]="content()"
+      [placeholder]="placeholder"
+      [rows]="rows"
+      class="editor-textarea"
+      (input)="onInput($event)"
+      (keydown)="onKeyDown($event)"
+      (blur)="onBlur()"
+    ></textarea>
+
+    @if (showAutocomplete() && autocompleteItems().length > 0) {
+      <div
+        class="autocomplete-dropdown"
+        [style.top.px]="autocompletePosition().top"
+        [style.left.px]="autocompletePosition().left"
+      >
+        <div class="autocomplete-header">
+          @if (autocompleteType() === 'medication') {
+            <span>💊 Medicações</span>
+          } @else {
+            <span>🔬 Exames</span>
+          }
+          @if (isLoading()) {
+            <span class="loading-indicator">Buscando...</span>
+          }
+        </div>
+        <ul class="autocomplete-list">
+          @for (item of autocompleteItems(); track item.id; let i = $index) {
+            <li
+              class="autocomplete-item"
+              [class.selected]="i === selectedIndex()"
+              (click)="selectItem(i)"
+              (mouseenter)="selectedIndex.set(i)"
+            >
+              @if (item.type === 'medication') {
+                <span class="item-icon">💊</span>
+              } @else {
+                <span class="item-icon">🔬</span>
+              }
+              <span class="item-text">{{ item.text }}</span>
+            </li>
+          }
+        </ul>
+        <div class="autocomplete-hint">
+          Use ↑↓ para navegar, Enter para selecionar, Esc para fechar
+        </div>
+      </div>
+    }
+
+    @if (showAutocomplete() && autocompleteItems().length === 0 && searchTerm().length >= minSearchLength && !isLoading()) {
+      <div
+        class="autocomplete-dropdown autocomplete-empty"
+        [style.top.px]="autocompletePosition().top"
+        [style.left.px]="autocompletePosition().left"
+      >
+        <p>Nenhum resultado encontrado para "{{ searchTerm() }}"</p>
+      </div>
+    }
+  </div>
+
+  <div class="editor-hints">
+    @if (enableMedicationAutocomplete) {
+      <span class="hint">💊 Digite <code>@@</code> para buscar medicações</span>
+    }
+    @if (enableExamAutocomplete) {
+      <span class="hint">🔬 Digite <code>##</code> para buscar exames</span>
+    }
+  </div>
+</div>

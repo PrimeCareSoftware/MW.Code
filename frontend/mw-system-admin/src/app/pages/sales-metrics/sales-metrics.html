@@ -1,0 +1,232 @@
+<app-navbar></app-navbar>
+
+<div class="sales-metrics">
+  <div class="page-header">
+    <h1>📊 Métricas do Funil de Vendas</h1>
+    <p class="subtitle">
+      Analise o desempenho do processo de cadastro e identifique pontos de abandono
+    </p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-card">
+    <h3>Filtros</h3>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>Data Início</label>
+        <input 
+          type="date" 
+          [ngModel]="dateRange().startDate"
+          (ngModelChange)="updateStartDate($event)"
+          (change)="applyFilters()"
+        />
+      </div>
+      <div class="filter-group">
+        <label>Data Fim</label>
+        <input 
+          type="date" 
+          [ngModel]="dateRange().endDate"
+          (ngModelChange)="updateEndDate($event)"
+          (change)="applyFilters()"
+        />
+      </div>
+      <div class="filter-group">
+        <label>Sessões incompletas (horas)</label>
+        <input 
+          type="number" 
+          [ngModel]="hoursOld()"
+          (ngModelChange)="updateHoursOld($event)"
+          (change)="loadIncompleteSessions()"
+          min="1"
+        />
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-secondary" (click)="resetFilters()">
+          Resetar Filtros
+        </button>
+        <button class="btn btn-primary" (click)="exportData()">
+          📥 Exportar Dados
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading()" class="loading">
+    <div class="spinner"></div>
+    <p>Carregando métricas...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error()" class="error-message">
+    ⚠️ {{ error() }}
+  </div>
+
+  <!-- Overview Stats -->
+  <div *ngIf="stats() && !isLoading()" class="stats-overview">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-content">
+        <div class="stat-label">Total de Sessões</div>
+        <div class="stat-value">{{ stats()!.totalSessions }}</div>
+      </div>
+    </div>
+    
+    <div class="stat-card success">
+      <div class="stat-icon">✅</div>
+      <div class="stat-content">
+        <div class="stat-label">Conversões</div>
+        <div class="stat-value">{{ stats()!.conversions }}</div>
+      </div>
+    </div>
+    
+    <div class="stat-card primary">
+      <div class="stat-icon">📈</div>
+      <div class="stat-content">
+        <div class="stat-label">Taxa de Conversão</div>
+        <div class="stat-value">{{ stats()!.conversionRate.toFixed(2) }}%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Funnel Visualization -->
+  <div *ngIf="stats() && !isLoading()" class="funnel-card">
+    <h3>🔽 Funil de Cadastro</h3>
+    <div class="funnel-steps">
+      <div 
+        *ngFor="let step of getStepArray()" 
+        class="funnel-step"
+        [class.has-data]="getStepStats(step)"
+      >
+        <div class="step-header">
+          <span class="step-number">Etapa {{ step }}</span>
+          <span class="step-name">{{ getStepStats(step)?.stepName }}</span>
+        </div>
+        
+        <div *ngIf="getStepStats(step)" class="step-stats">
+          <div class="stat-row">
+            <span class="stat-label">Entraram:</span>
+            <span class="stat-number">{{ getStepStats(step)!.entered }}</span>
+          </div>
+          <div class="stat-row success">
+            <span class="stat-label">Completaram:</span>
+            <span class="stat-number">{{ getStepStats(step)!.completed }}</span>
+            <span class="stat-percentage">({{ getStepStats(step)!.completionRate.toFixed(1) }}%)</span>
+          </div>
+          <div class="stat-row danger">
+            <span class="stat-label">Abandonaram:</span>
+            <span class="stat-number">{{ getStepStats(step)!.abandoned }}</span>
+            <span class="stat-percentage">({{ getStepStats(step)!.abandonmentRate.toFixed(1) }}%)</span>
+          </div>
+        </div>
+        
+        <div *ngIf="!getStepStats(step)" class="no-data">
+          Sem dados para esta etapa
+        </div>
+        
+        <!-- Funnel Bar -->
+        <div class="funnel-bar">
+          <div 
+            class="funnel-bar-fill"
+            [style.width.%]="getStepStats(step) ? (getStepStats(step)!.entered / stats()!.totalSessions * 100) : 0"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Incomplete Sessions -->
+  <div class="incomplete-sessions-card">
+    <h3>⏳ Sessões Incompletas (últimas {{ hoursOld() }}h)</h3>
+    
+    <div *ngIf="incompleteSessions().length === 0" class="no-sessions">
+      Nenhuma sessão incompleta encontrada.
+    </div>
+    
+    <div *ngIf="incompleteSessions().length > 0" class="sessions-table-container">
+      <table class="sessions-table">
+        <thead>
+          <tr>
+            <th>Session ID</th>
+            <th>Última Etapa</th>
+            <th>Plano</th>
+            <th>Última Atividade</th>
+            <th>Horas Inativo</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let session of incompleteSessions()">
+            <td><code>{{ session.sessionId.substring(0, 16) }}...</code></td>
+            <td>
+              <span class="badge">Etapa {{ session.lastStep }}</span>
+              {{ session.lastStepName }}
+            </td>
+            <td>{{ session.planId || 'N/A' }}</td>
+            <td>{{ formatDate(session.lastActivity) }}</td>
+            <td>{{ session.hoursSinceLastActivity }}h</td>
+            <td>
+              <button 
+                class="btn btn-sm btn-primary" 
+                (click)="viewSessionDetails(session.sessionId)"
+              >
+                Ver Detalhes
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Session Details Modal -->
+  <div *ngIf="selectedSession()" class="modal-overlay" (click)="closeSessionDetails()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>📋 Detalhes da Sessão</h3>
+        <button class="btn-close" (click)="closeSessionDetails()">×</button>
+      </div>
+      
+      <div class="modal-body">
+        <div *ngFor="let metric of selectedSession()" class="metric-item">
+          <div class="metric-header">
+            <span class="badge">Etapa {{ metric.step }}</span>
+            <span class="metric-step-name">{{ metric.stepName }}</span>
+            <span class="metric-action" [class]="metric.action">{{ metric.action }}</span>
+          </div>
+          
+          <div class="metric-details">
+            <div class="detail-row">
+              <strong>Data/Hora:</strong> {{ formatDate(metric.createdAt) }}
+            </div>
+            <div class="detail-row" *ngIf="metric.durationMs">
+              <strong>Duração:</strong> {{ (metric.durationMs / 1000).toFixed(2) }}s
+            </div>
+            <div class="detail-row" *ngIf="metric.ipAddress">
+              <strong>IP:</strong> {{ metric.ipAddress }}
+            </div>
+            <div class="detail-row" *ngIf="metric.referrer">
+              <strong>Referrer:</strong> {{ metric.referrer }}
+            </div>
+            <div class="detail-row" *ngIf="metric.planId">
+              <strong>Plano:</strong> {{ metric.planId }}
+            </div>
+            <div class="detail-row" *ngIf="metric.isConverted">
+              <strong>Status:</strong> <span class="badge success">Convertido ✓</span>
+            </div>
+            
+            <!-- Captured Data -->
+            <div *ngIf="metric.capturedData" class="captured-data">
+              <strong>Dados Capturados:</strong>
+              <pre>{{ parseCapturedData(metric.capturedData) | json }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeSessionDetails()">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

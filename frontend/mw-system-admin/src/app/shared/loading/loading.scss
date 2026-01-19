@@ -1,0 +1,72 @@
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-8);
+
+  &.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+  }
+
+  .spinner-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-4);
+  }
+
+  .spinner {
+    border-radius: 50%;
+    border-top-color: var(--primary-500);
+    animation: spin 0.8s linear infinite;
+  }
+
+  &.small .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary-500);
+  }
+
+  &.medium .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--gray-200);
+    border-top-color: var(--primary-500);
+  }
+
+  &.large .spinner {
+    width: 64px;
+    height: 64px;
+    border: 5px solid var(--gray-200);
+    border-top-color: var(--primary-500);
+  }
+
+  .loading-message {
+    color: var(--gray-600);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-medium);
+    margin: 0;
+  }
+
+  &.small .loading-message {
+    font-size: var(--font-size-sm);
+  }
+
+  &.large .loading-message {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
