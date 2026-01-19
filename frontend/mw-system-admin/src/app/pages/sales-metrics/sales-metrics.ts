@@ -60,7 +60,7 @@ interface SalesFunnelMetric {
 })
 export class SalesMetrics implements OnInit {
   private http = inject(HttpClient);
-  private readonly API_URL = `${environment.apiUrl}/api/salesfunnel`;
+  private readonly API_URL = `${environment.apiUrl}/salesfunnel`;
 
   // Reactive state
   stats = signal<FunnelStats | null>(null);
