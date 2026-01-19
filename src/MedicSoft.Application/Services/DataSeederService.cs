@@ -1113,6 +1113,12 @@ namespace MedicSoft.Application.Services
         {
             var items = new List<PrescriptionItem>();
 
+            // Validate we have enough medical records
+            if (medicalRecords.Count < 2)
+            {
+                return items; // Return empty list if insufficient data
+            }
+
             // Find medications by name to avoid index issues
             var losartana = medications.FirstOrDefault(m => m.Name == "Losartana Potássica" && m.Dosage == "50mg");
             var metformina = medications.FirstOrDefault(m => m.Name == "Metformina" && m.Dosage == "850mg");
@@ -2077,6 +2083,13 @@ RETORNO: {{return_date}}",
             List<Medication> medications)
         {
             var prescriptions = new List<DigitalPrescription>();
+            
+            // Validate we have enough data
+            if (medicalRecords.Count < 2 || patients.Count < 2 || !users.Any(u => u.Role == UserRole.Doctor))
+            {
+                return prescriptions; // Return empty list if insufficient data
+            }
+            
             var doctor = users.First(u => u.Role == UserRole.Doctor);
 
             // Find medications by name to avoid index issues
