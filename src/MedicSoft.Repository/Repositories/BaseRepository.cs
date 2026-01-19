@@ -189,5 +189,25 @@ namespace MedicSoft.Repository.Repositories
                 }
             });
         }
+
+        /// <summary>
+        /// Gets an entity by ID without tenant filtering.
+        /// Use only for public APIs where tenant isolation is not required.
+        /// </summary>
+        public virtual async Task<T?> GetByIdWithoutTenantAsync(Guid id)
+        {
+            return await _dbSet
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Gets a queryable for custom queries.
+        /// Use with caution - ensure tenant filtering is applied when needed.
+        /// </summary>
+        public virtual IQueryable<T> GetAllQueryable()
+        {
+            return _dbSet.AsQueryable();
+        }
     }
 }

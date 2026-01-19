@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,5 +37,17 @@ namespace MedicSoft.Domain.Interfaces
         Task<int> CountAsync(string tenantId);
         Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation, CancellationToken cancellationToken = default);
         Task ExecuteInTransactionAsync(Func<Task> operation, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// Gets an entity by ID without tenant filtering.
+        /// Use only for public APIs where tenant isolation is not required.
+        /// </summary>
+        Task<T?> GetByIdWithoutTenantAsync(Guid id);
+        
+        /// <summary>
+        /// Gets a queryable for custom queries.
+        /// Use with caution - ensure tenant filtering is applied when needed.
+        /// </summary>
+        IQueryable<T> GetAllQueryable();
     }
 }
