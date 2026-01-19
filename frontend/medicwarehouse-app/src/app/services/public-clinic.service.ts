@@ -82,11 +82,21 @@ export class PublicClinicService {
   searchClinics(request: SearchClinicsRequest): Observable<SearchClinicsResult> {
     let params = new HttpParams();
     
-    if (request.name) params = params.set('name', request.name);
-    if (request.city) params = params.set('city', request.city);
-    if (request.state) params = params.set('state', request.state);
-    if (request.pageNumber) params = params.set('pageNumber', request.pageNumber.toString());
-    if (request.pageSize) params = params.set('pageSize', request.pageSize.toString());
+    if (request.name !== undefined && request.name !== null) {
+      params = params.set('name', request.name);
+    }
+    if (request.city !== undefined && request.city !== null) {
+      params = params.set('city', request.city);
+    }
+    if (request.state !== undefined && request.state !== null) {
+      params = params.set('state', request.state);
+    }
+    if (request.pageNumber !== undefined && request.pageNumber !== null) {
+      params = params.set('pageNumber', request.pageNumber.toString());
+    }
+    if (request.pageSize !== undefined && request.pageSize !== null) {
+      params = params.set('pageSize', request.pageSize.toString());
+    }
 
     return this.http.get<SearchClinicsResult>(`${this.apiUrl}/search`, { params });
   }

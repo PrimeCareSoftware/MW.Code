@@ -166,13 +166,10 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
             var digitsOnly = new string(phoneNumber.Where(char.IsDigit).ToArray());
 
             // Formato esperado: DDD + número (10 ou 11 dígitos)
-            if (digitsOnly.Length >= 10)
-            {
-                return new Phone("+55", digitsOnly);
-            }
+            if (digitsOnly.Length < 10)
+                throw new InvalidOperationException("Número de telefone inválido. Deve conter DDD e número (mínimo 10 dígitos).");
 
-            // Se não conseguir parsear, retorna com código de país padrão
-            return new Phone("+55", phoneNumber);
+            return new Phone("+55", digitsOnly);
         }
     }
 }
