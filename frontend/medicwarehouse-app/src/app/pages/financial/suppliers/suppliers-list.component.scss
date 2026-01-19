@@ -1,0 +1,111 @@
+.suppliers-list-container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-6);
+}
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-6);
+  .header-content h1 {
+    color: var(--gray-900);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-bold);
+  }
+  .header-content p {
+    color: var(--gray-500);
+  }
+  .btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+.suppliers-card {
+  background: white;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+.table-container {
+  overflow-x: auto;
+}
+.suppliers-table {
+  width: 100%;
+  border-collapse: collapse;
+  thead {
+    background: var(--gray-50);
+    th {
+      padding: var(--spacing-4) var(--spacing-5);
+      text-align: left;
+      font-weight: var(--font-semibold);
+      color: var(--gray-600);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      &.actions-col {
+        text-align: right;
+        width: 140px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--gray-100);
+      &:hover { background: var(--gray-50); }
+    }
+    td {
+      padding: var(--spacing-4) var(--spacing-5);
+      color: var(--gray-700);
+      font-size: var(--font-size-sm);
+    }
+  }
+}
+.actions-cell {
+  text-align: right;
+}
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: flex-end;
+}
+.btn-action {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+  &.btn-edit {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    &:hover {
+      background: var(--primary-100);
+      color: var(--primary-600);
+      transform: scale(1.1);
+    }
+  }
+  &.btn-toggle {
+    background: var(--warning-50);
+    color: var(--warning-600);
+    &:hover {
+      background: var(--warning-100);
+      transform: scale(1.1);
+    }
+  }
+  &.btn-delete {
+    background: var(--error-50);
+    color: var(--error-500);
+    &:hover {
+      background: var(--error-100);
+      transform: scale(1.1);
+    }
+  }
+}

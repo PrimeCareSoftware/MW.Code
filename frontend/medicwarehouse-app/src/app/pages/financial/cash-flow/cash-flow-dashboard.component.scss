@@ -1,0 +1,111 @@
+.cash-flow-dashboard-container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-6);
+}
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-6);
+  .header-content h1 {
+    color: var(--gray-900);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-bold);
+  }
+  .header-content p {
+    color: var(--gray-500);
+  }
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+.summary-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  padding: var(--spacing-6);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  
+  .card-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+  
+  &.income .card-icon {
+    background: var(--success-100);
+    svg { color: var(--success-600); }
+  }
+  
+  &.expense .card-icon {
+    background: var(--error-100);
+    svg { color: var(--error-600); }
+  }
+  
+  &.net .card-icon {
+    background: var(--primary-100);
+    svg { color: var(--primary-600); }
+  }
+  
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    
+    .card-label {
+      font-size: var(--font-size-sm);
+      color: var(--gray-500);
+      font-weight: var(--font-medium);
+    }
+    
+    .card-value {
+      font-size: var(--font-size-2xl);
+      color: var(--gray-900);
+      font-weight: var(--font-bold);
+      
+      &.positive { color: var(--success-600); }
+      &.negative { color: var(--error-600); }
+    }
+  }
+}
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-4);
+}
+.info-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  padding: var(--spacing-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  
+  .info-label {
+    font-size: var(--font-size-sm);
+    color: var(--gray-500);
+    font-weight: var(--font-medium);
+  }
+  
+  .info-value {
+    font-size: var(--font-size-lg);
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+  }
+}

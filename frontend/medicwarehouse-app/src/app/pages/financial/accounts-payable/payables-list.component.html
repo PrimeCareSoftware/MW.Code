@@ -1,0 +1,184 @@
+<app-navbar></app-navbar>
+
+<div class="payables-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Contas a Pagar</h1>
+      <p>Gerenciamento de contas a pagar e fornecedores</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/financial/payables/new">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nova Conta a Pagar
+    </button>
+  </div>
+
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="summary-icon warning">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div class="summary-content">
+        <span class="summary-label">Total a Pagar</span>
+        <span class="summary-value">{{ formatCurrency(totalOutstanding()) }}</span>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon error">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="summary-content">
+        <span class="summary-label">Total Vencido</span>
+        <span class="summary-value error">{{ formatCurrency(totalOverdue()) }}</span>
+      </div>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando contas a pagar...</div>
+    </div>
+  } @else {
+    @if (payables().length === 0) {
+      <div class="empty-state-card">
+        <div class="empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <h3>Nenhuma conta a pagar cadastrada</h3>
+        <p>Comece registrando a primeira conta a pagar</p>
+        <button class="btn btn-primary" routerLink="/financial/payables/new">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Cadastrar Primeira Conta
+        </button>
+      </div>
+    } @else {
+      <div class="payables-card">
+        <div class="card-header">
+          <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Buscar por documento, descrição ou fornecedor..." class="search-input" (input)="onSearchChange($event)"/>
+          </div>
+          
+          <div class="filter-buttons">
+            <button class="filter-btn" [class.active]="statusFilter() === 'all'" (click)="onStatusFilterChange('all')">Todos</button>
+            <button class="filter-btn" [class.active]="statusFilter() === 'Pending'" (click)="onStatusFilterChange('Pending')">Pendentes</button>
+            <button class="filter-btn" [class.active]="statusFilter() === 'Overdue'" (click)="onStatusFilterChange('Overdue')">Vencidas</button>
+            <button class="filter-btn" [class.active]="statusFilter() === 'Paid'" (click)="onStatusFilterChange('Paid')">Pagas</button>
+          </div>
+          
+          <div class="results-info">
+            <span class="badge badge-primary">{{ filteredPayables().length }} registros</span>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="payables-table">
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th>Fornecedor</th>
+                <th>Categoria</th>
+                <th>Emissão</th>
+                <th>Vencimento</th>
+                <th>Valor Total</th>
+                <th>Saldo</th>
+                <th>Status</th>
+                <th class="actions-col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (payable of filteredPayables(); track payable.id) {
+                <tr [class.overdue-row]="payable.isOverdue">
+                  <td>
+                    <div class="document-cell">
+                      <span class="document-number">{{ payable.documentNumber }}</span>
+                      @if (payable.description) {
+                        <span class="document-desc">{{ payable.description }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td>{{ payable.supplier?.name || '—' }}</td>
+                  <td>
+                    <span class="category-badge">{{ formatCategory(payable.category) }}</span>
+                  </td>
+                  <td>{{ formatDate(payable.issueDate) }}</td>
+                  <td>
+                    <div class="due-date-cell">
+                      {{ formatDate(payable.dueDate) }}
+                      @if (payable.isOverdue) {
+                        <span class="overdue-label">{{ payable.daysOverdue }} dias</span>
+                      }
+                    </div>
+                  </td>
+                  <td class="currency-cell">{{ formatCurrency(payable.totalAmount) }}</td>
+                  <td class="currency-cell outstanding">{{ formatCurrency(payable.outstandingAmount) }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="getStatusBadgeClass(payable.status)">
+                      {{ formatStatus(payable.status) }}
+                    </span>
+                  </td>
+                  <td class="actions-cell">
+                    <div class="action-buttons">
+                      @if (payable.status === 'Pending' || payable.status === 'PartiallyPaid' || payable.status === 'Overdue') {
+                        <button class="btn-action btn-pay" [routerLink]="['/financial/payables', payable.id, 'payment']" title="Registrar Pagamento">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                          </svg>
+                        </button>
+                      }
+                      <button class="btn-action btn-view" [routerLink]="['/financial/payables', payable.id]" title="Ver detalhes">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                      @if (payable.status === 'Pending' || payable.status === 'PartiallyPaid') {
+                        <button class="btn-action btn-cancel" (click)="cancelPayable(payable.id)" title="Cancelar">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                          </svg>
+                        </button>
+                      }
+                      <button class="btn-action btn-delete" (click)="deletePayable(payable.id)" title="Excluir">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  }
+</div>

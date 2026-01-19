@@ -1,0 +1,231 @@
+<app-navbar></app-navbar>
+
+<div class="receivables-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Contas a Receber</h1>
+      <p>Gerenciamento de contas a receber e pagamentos</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/financial/receivables/new">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nova Conta a Receber
+    </button>
+  </div>
+
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="summary-icon success">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div class="summary-content">
+        <span class="summary-label">Total a Receber</span>
+        <span class="summary-value">{{ formatCurrency(totalOutstanding()) }}</span>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon error">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="summary-content">
+        <span class="summary-label">Total Vencido</span>
+        <span class="summary-value error">{{ formatCurrency(totalOverdue()) }}</span>
+      </div>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando contas a receber...</div>
+    </div>
+  } @else {
+    @if (receivables().length === 0) {
+      <div class="empty-state-card">
+        <div class="empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <h3>Nenhuma conta a receber cadastrada</h3>
+        <p>Comece registrando a primeira conta a receber</p>
+        <button class="btn btn-primary" routerLink="/financial/receivables/new">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Cadastrar Primeira Conta
+        </button>
+      </div>
+    } @else {
+      <div class="receivables-card">
+        <div class="card-header">
+          <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input 
+              type="text" 
+              placeholder="Buscar por número de documento ou descrição..." 
+              class="search-input"
+              (input)="onSearchChange($event)"
+            />
+          </div>
+          
+          <div class="filter-buttons">
+            <button 
+              class="filter-btn" 
+              [class.active]="statusFilter() === 'all'"
+              (click)="onStatusFilterChange('all')"
+            >
+              Todos
+            </button>
+            <button 
+              class="filter-btn" 
+              [class.active]="statusFilter() === 'Pending'"
+              (click)="onStatusFilterChange('Pending')"
+            >
+              Pendentes
+            </button>
+            <button 
+              class="filter-btn" 
+              [class.active]="statusFilter() === 'Overdue'"
+              (click)="onStatusFilterChange('Overdue')"
+            >
+              Vencidas
+            </button>
+            <button 
+              class="filter-btn" 
+              [class.active]="statusFilter() === 'Paid'"
+              (click)="onStatusFilterChange('Paid')"
+            >
+              Pagas
+            </button>
+          </div>
+          
+          <div class="results-info">
+            <span class="badge badge-primary">{{ filteredReceivables().length }} registros</span>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="receivables-table">
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th>Tipo</th>
+                <th>Emissão</th>
+                <th>Vencimento</th>
+                <th>Valor Total</th>
+                <th>Valor Pago</th>
+                <th>Saldo</th>
+                <th>Status</th>
+                <th class="actions-col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (receivable of filteredReceivables(); track receivable.id) {
+                <tr [class.overdue-row]="receivable.isOverdue">
+                  <td>
+                    <div class="document-cell">
+                      <span class="document-number">{{ receivable.documentNumber }}</span>
+                      @if (receivable.description) {
+                        <span class="document-desc">{{ receivable.description }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <span class="type-badge">{{ formatType(receivable.type) }}</span>
+                  </td>
+                  <td>{{ formatDate(receivable.issueDate) }}</td>
+                  <td>
+                    <div class="due-date-cell">
+                      {{ formatDate(receivable.dueDate) }}
+                      @if (receivable.isOverdue) {
+                        <span class="overdue-label">{{ receivable.daysOverdue }} dias</span>
+                      }
+                    </div>
+                  </td>
+                  <td class="currency-cell">{{ formatCurrency(receivable.totalAmount) }}</td>
+                  <td class="currency-cell">{{ formatCurrency(receivable.paidAmount) }}</td>
+                  <td class="currency-cell outstanding">{{ formatCurrency(receivable.outstandingAmount) }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="getStatusBadgeClass(receivable.status)">
+                      {{ formatStatus(receivable.status) }}
+                    </span>
+                  </td>
+                  <td class="actions-cell">
+                    <div class="action-buttons">
+                      @if (receivable.status === 'Pending' || receivable.status === 'PartiallyPaid' || receivable.status === 'Overdue') {
+                        <button 
+                          class="btn-action btn-pay" 
+                          [routerLink]="['/financial/receivables', receivable.id, 'payment']"
+                          title="Registrar Pagamento"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                          </svg>
+                        </button>
+                      }
+                      <button 
+                        class="btn-action btn-view" 
+                        [routerLink]="['/financial/receivables', receivable.id]"
+                        title="Ver detalhes"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                      @if (receivable.status === 'Pending' || receivable.status === 'PartiallyPaid') {
+                        <button 
+                          class="btn-action btn-cancel" 
+                          (click)="cancelReceivable(receivable.id)"
+                          title="Cancelar"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                          </svg>
+                        </button>
+                      }
+                      <button 
+                        class="btn-action btn-delete" 
+                        (click)="deleteReceivable(receivable.id)"
+                        title="Excluir"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  }
+</div>

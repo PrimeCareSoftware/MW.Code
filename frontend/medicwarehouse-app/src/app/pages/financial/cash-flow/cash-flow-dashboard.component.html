@@ -1,0 +1,70 @@
+<app-navbar></app-navbar>
+<div class="cash-flow-dashboard-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Fluxo de Caixa</h1>
+      <p>Visão geral de entradas e saídas</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/financial/cash-flow/entries">Ver Lançamentos</button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container"><div class="loading">Carregando...</div></div>
+  } @else if (summary()) {
+    <div class="summary-grid">
+      <div class="summary-card income">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Total de Entradas</span>
+          <span class="card-value">{{ formatCurrency(summary()!.totalIncome) }}</span>
+        </div>
+      </div>
+
+      <div class="summary-card expense">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Total de Saídas</span>
+          <span class="card-value">{{ formatCurrency(summary()!.totalExpense) }}</span>
+        </div>
+      </div>
+
+      <div class="summary-card net">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Resultado Líquido</span>
+          <span class="card-value" [class.positive]="summary()!.netCashFlow > 0" [class.negative]="summary()!.netCashFlow < 0">
+            {{ formatCurrency(summary()!.netCashFlow) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <span class="info-label">Saldo Inicial</span>
+        <span class="info-value">{{ formatCurrency(summary()!.openingBalance) }}</span>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Saldo Final</span>
+        <span class="info-value">{{ formatCurrency(summary()!.closingBalance) }}</span>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Período</span>
+        <span class="info-value">{{ formatDate(summary()!.startDate) }} - {{ formatDate(summary()!.endDate) }}</span>
+      </div>
+    </div>
+  }
+</div>

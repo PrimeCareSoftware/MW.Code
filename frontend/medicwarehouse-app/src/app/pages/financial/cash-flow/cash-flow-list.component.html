@@ -1,0 +1,48 @@
+<app-navbar></app-navbar>
+<div class="cash-flow-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <a routerLink="/financial/cash-flow" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Voltar ao Dashboard
+      </a>
+      <h1>Lançamentos de Fluxo de Caixa</h1>
+    </div>
+  </div>
+  @if (isLoading()) {
+    <div class="loading-container"><div class="loading">Carregando...</div></div>
+  } @else if (entries().length === 0) {
+    <div class="empty-state">Nenhum lançamento encontrado</div>
+  } @else {
+    <div class="entries-card">
+      <table class="entries-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of entries(); track entry.id) {
+            <tr>
+              <td>{{ formatDate(entry.transactionDate) }}</td>
+              <td>
+                <span class="badge" [class.badge-success]="entry.type === 'Income'" [class.badge-error]="entry.type === 'Expense'">
+                  {{ entry.type === 'Income' ? 'Entrada' : 'Saída' }}
+                </span>
+              </td>
+              <td>{{ entry.description }}</td>
+              <td class="currency-cell" [class.income]="entry.type === 'Income'" [class.expense]="entry.type === 'Expense'">
+                {{ formatCurrency(entry.amount) }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
