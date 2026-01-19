@@ -1,0 +1,148 @@
+<app-header></app-header>
+
+<div class="clinic-search-container">
+  <div class="search-header">
+    <h1>Encontre uma Clínica</h1>
+    <p>Busque clínicas próximas e agende sua consulta de forma rápida e fácil</p>
+  </div>
+
+  <!-- Filtros de Busca -->
+  <div class="search-filters card">
+    <div class="filter-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchName" 
+        placeholder="Nome da clínica"
+        class="form-control"
+        (keyup.enter)="onSearch()"
+      />
+      <input 
+        type="text" 
+        [(ngModel)]="searchCity" 
+        placeholder="Cidade"
+        class="form-control"
+        (keyup.enter)="onSearch()"
+      />
+      <input 
+        type="text" 
+        [(ngModel)]="searchState" 
+        placeholder="Estado (ex: SP)"
+        class="form-control"
+        maxlength="2"
+        (keyup.enter)="onSearch()"
+      />
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-primary" (click)="onSearch()">
+        <span class="icon">🔍</span> Buscar
+      </button>
+      <button class="btn btn-secondary" (click)="clearFilters()">
+        Limpar Filtros
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando clínicas...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state alert alert-danger">
+    <span class="icon">⚠️</span>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="searchClinics()">Tentar Novamente</button>
+  </div>
+
+  <!-- Results -->
+  <div *ngIf="!loading && !error" class="search-results">
+    <div class="results-header">
+      <p *ngIf="totalCount > 0">
+        Encontramos <strong>{{ totalCount }}</strong> clínica<span *ngIf="totalCount !== 1">s</span>
+      </p>
+      <p *ngIf="totalCount === 0">
+        Nenhuma clínica encontrada. Tente ajustar os filtros de busca.
+      </p>
+    </div>
+
+    <!-- Clinic Cards -->
+    <div class="clinic-grid">
+      <div *ngFor="let clinic of clinics" class="clinic-card card">
+        <div class="clinic-header">
+          <h3>{{ clinic.name }}</h3>
+          <span class="badge" [class.badge-success]="clinic.isAcceptingNewPatients" 
+                              [class.badge-secondary]="!clinic.isAcceptingNewPatients">
+            {{ clinic.isAcceptingNewPatients ? 'Aceitando Pacientes' : 'Indisponível' }}
+          </span>
+        </div>
+        
+        <div class="clinic-info">
+          <p class="trade-name" *ngIf="clinic.tradeName !== clinic.name">{{ clinic.tradeName }}</p>
+          
+          <div class="info-row">
+            <span class="icon">📍</span>
+            <span>{{ clinic.address }}</span>
+          </div>
+          
+          <div class="info-row" *ngIf="clinic.city && clinic.state">
+            <span class="icon">🏙️</span>
+            <span>{{ clinic.city }} - {{ clinic.state }}</span>
+          </div>
+          
+          <div class="info-row">
+            <span class="icon">📞</span>
+            <a [href]="'tel:' + clinic.phone">{{ clinic.phone }}</a>
+          </div>
+          
+          <div class="info-row">
+            <span class="icon">📧</span>
+            <a [href]="'mailto:' + clinic.email">{{ clinic.email }}</a>
+          </div>
+          
+          <div class="info-row">
+            <span class="icon">🕐</span>
+            <span>Horário: {{ formatTime(clinic.openingTime) }} - {{ formatTime(clinic.closingTime) }}</span>
+          </div>
+        </div>
+
+        <div class="clinic-actions">
+          <button 
+            class="btn btn-primary" 
+            (click)="scheduleAppointment(clinic)"
+            [disabled]="!clinic.isAcceptingNewPatients">
+            <span class="icon">📅</span>
+            Agendar Consulta
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages > 1" class="pagination">
+      <button 
+        class="btn btn-sm" 
+        (click)="goToPage(currentPage - 1)"
+        [disabled]="currentPage === 1">
+        ‹ Anterior
+      </button>
+      
+      <button 
+        *ngFor="let page of getPaginationArray()"
+        class="btn btn-sm"
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+      
+      <button 
+        class="btn btn-sm" 
+        (click)="goToPage(currentPage + 1)"
+        [disabled]="currentPage === totalPages">
+        Próxima ›
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
