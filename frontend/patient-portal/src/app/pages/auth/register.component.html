@@ -36,7 +36,7 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>CPF</mat-label>
-          <input matInput formControlName="cpf" placeholder="12345678901" maxlength="11">
+          <input matInput formControlName="cpf" placeholder="12345678901" maxlength="11" autocomplete="off">
           <mat-icon matPrefix>badge</mat-icon>
           <mat-error *ngIf="registerForm.get('cpf')?.hasError('required')">
             CPF é obrigatório
@@ -58,7 +58,7 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Data de Nascimento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="maxDate">
+          <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="maxDate" autocomplete="bday">
           <mat-icon matPrefix>cake</mat-icon>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>

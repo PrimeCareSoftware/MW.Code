@@ -91,9 +91,10 @@ export class DocumentsComponent implements OnInit {
       return;
     }
 
-    this.downloadingIds.add(doc.id);
+    const docId = doc.id; // Store in local variable to satisfy TypeScript
+    this.downloadingIds.add(docId);
 
-    this.documentService.downloadDocument(doc.id).subscribe({
+    this.documentService.downloadDocument(docId).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const link = window.document.createElement('a');
@@ -101,12 +102,12 @@ export class DocumentsComponent implements OnInit {
         link.download = doc.fileName || `${doc.title}.pdf`;
         link.click();
         window.URL.revokeObjectURL(url);
-        this.downloadingIds.delete(doc.id);
+        this.downloadingIds.delete(docId);
         this.notificationService.success('Download iniciado com sucesso!');
       },
       error: (error) => {
         console.error('Error downloading document:', error);
-        this.downloadingIds.delete(doc.id);
+        this.downloadingIds.delete(docId);
         this.notificationService.error('Erro ao baixar documento. Tente novamente.');
       }
     });
