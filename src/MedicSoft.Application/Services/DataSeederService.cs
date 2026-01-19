@@ -40,6 +40,9 @@ namespace MedicSoft.Application.Services
         private readonly IHealthInsurancePlanRepository _healthInsurancePlanRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly string _demoTenantId = "demo-clinic-001";
+        private const string _demoDoctorCRM = "CRM-123456";
+        private const string _demoDoctorSpecialty = "Clínico Geral";
+        private const string _demoDoctorCRMState = "SP";
 
         public DataSeederService(
             IClinicRepository clinicRepository,
@@ -490,8 +493,8 @@ namespace MedicSoft.Application.Services
                 UserRole.Doctor,
                 _demoTenantId,
                 clinicId,
-                "CRM-123456",
-                "Clínico Geral"
+                _demoDoctorCRM,
+                _demoDoctorSpecialty
             ));
 
             // Receptionist - Must have clinicId
@@ -2031,8 +2034,8 @@ RETORNO: {{return_date}}",
                 doctor.Id,
                 PrescriptionType.Simple,
                 doctor.FullName,
-                doctor.ProfessionalId ?? "CRM-123456",
-                doctor.Specialty ?? "SP",
+                doctor.ProfessionalId ?? _demoDoctorCRM,
+                doctor.Specialty ?? _demoDoctorCRMState,
                 patients[0].Name,
                 patients[0].Document,
                 _demoTenantId,
@@ -2074,8 +2077,8 @@ RETORNO: {{return_date}}",
                 doctor.Id,
                 PrescriptionType.Simple,
                 doctor.FullName,
-                doctor.ProfessionalId ?? "CRM-123456",
-                doctor.Specialty ?? "SP",
+                doctor.ProfessionalId ?? _demoDoctorCRM,
+                doctor.Specialty ?? _demoDoctorCRMState,
                 patients[1].Name,
                 patients[1].Document,
                 _demoTenantId,
