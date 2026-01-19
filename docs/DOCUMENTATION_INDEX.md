@@ -1,9 +1,26 @@
 # 📚 Índice de Documentação - PrimeCare Software
 
 > **Última Atualização:** Janeiro 2026  
-> **Status:** Documentação consolidada e atualizada
+> **Status:** Documentação consolidada e atualizada  
+> **Localização Centralizada:** Toda a documentação está agora consolidada na pasta `/docs`
 
 Este documento serve como guia de navegação para toda a documentação do sistema PrimeCare Software.
+
+## 📍 Localização da Documentação
+
+**Toda a documentação foi consolidada em um único local**: `/docs`
+
+- ✅ Documentos principais em `/docs/*.md`
+- ✅ Documentos arquivados em `/docs/archive/*.md`
+- ✅ Migração de documentos em `/docs/migrations/*.md`
+- ✅ Interface web interativa em `/frontend/mw-docs` (usa symlink para `/docs`)
+
+**Removido:**
+- ❌ Documentação duplicada em `patient-portal-api/` → movida para `/docs` com prefixo PATIENT_PORTAL_*
+- ❌ Documentação duplicada em `telemedicine/` → movida para `/docs` com prefixo TELEMEDICINE_*
+- ❌ Documentação duplicada em `microservices/` → movida para `/docs`
+- ❌ Pasta `documentacao-portatil/` → removida (substituída por mw-docs)
+- ❌ Arquivos de resumo temporários na raiz → removidos (PR summaries, implementation summaries)
 
 ---
 
@@ -286,11 +303,21 @@ MW.Code/
 
 ## 📊 Estatísticas da Documentação
 
-- **Total de Documentos:** 51 arquivos markdown (incluindo RESUMO_TECNICO_COMPLETO.md e GUIA_COMPLETO_APIs.md)
+- **Total de Documentos:** 167 arquivos markdown ativos na pasta `/docs`
+- **Documentos Arquivados:** 27 arquivos em `/docs/archive`
 - **Documentos Essenciais:** 8
 - **Tempo Total de Leitura:** ~4 horas (documentos essenciais)
 - **Idioma Principal:** Português (PT-BR)
-- **Última Atualização:** 2026-01-06
+- **Última Atualização:** 2026-01-19
+
+### 🆕 Limpeza de Documentação (Janeiro 2026)
+
+A documentação foi consolidada e organizada:
+- ✅ **Removidos**: 9 arquivos de resumo temporários da raiz do projeto
+- ✅ **Consolidados**: Documentação de patient-portal-api, telemedicine e microservices movida para `/docs`
+- ✅ **Removidos**: 10 arquivos da pasta `documentacao-portatil/` (substituída por mw-docs)
+- ✅ **Centralizados**: 127 arquivos duplicados em `mw-docs/src/assets/docs` substituídos por symlink para `/docs`
+- ✅ **Total economizado**: ~137 arquivos duplicados/desnecessários removidos
 
 ### 🆕 Novos Documentos (Janeiro 2026)
 
