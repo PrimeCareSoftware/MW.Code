@@ -1,6 +1,9 @@
 <div class="register-container">
   <mat-card class="register-card">
     <mat-card-header>
+      <div class="logo-container">
+        <mat-icon class="logo-icon">local_hospital</mat-icon>
+      </div>
       <mat-card-title>Criar Conta</mat-card-title>
       <mat-card-subtitle>Cadastre-se no Portal do Paciente</mat-card-subtitle>
     </mat-card-header>
@@ -9,7 +12,8 @@
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nome Completo</mat-label>
-          <input matInput formControlName="fullName" placeholder="Digite seu nome completo">
+          <input matInput formControlName="fullName" placeholder="Digite seu nome completo" autocomplete="name">
+          <mat-icon matPrefix>person</mat-icon>
           <mat-error *ngIf="registerForm.get('fullName')?.hasError('required')">
             Nome completo é obrigatório
           </mat-error>
@@ -20,7 +24,8 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="seu.email@exemplo.com">
+          <input matInput type="email" formControlName="email" placeholder="seu.email@exemplo.com" autocomplete="email">
+          <mat-icon matPrefix>email</mat-icon>
           <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
             Email é obrigatório
           </mat-error>
@@ -32,17 +37,20 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>CPF</mat-label>
           <input matInput formControlName="cpf" placeholder="12345678901" maxlength="11">
+          <mat-icon matPrefix>badge</mat-icon>
           <mat-error *ngIf="registerForm.get('cpf')?.hasError('required')">
             CPF é obrigatório
           </mat-error>
           <mat-error *ngIf="registerForm.get('cpf')?.hasError('pattern')">
             CPF deve conter 11 dígitos
           </mat-error>
+          <mat-hint>Apenas números, sem pontos ou traços</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Telefone</mat-label>
-          <input matInput formControlName="phoneNumber" placeholder="(11) 98765-4321">
+          <input matInput formControlName="phoneNumber" placeholder="(11) 98765-4321" autocomplete="tel">
+          <mat-icon matPrefix>phone</mat-icon>
           <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('required')">
             Telefone é obrigatório
           </mat-error>
@@ -50,17 +58,29 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Data de Nascimento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+          <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="maxDate">
+          <mat-icon matPrefix>cake</mat-icon>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="registerForm.get('dateOfBirth')?.hasError('required')">
             Data de nascimento é obrigatória
           </mat-error>
+          <mat-hint>Você deve ter pelo menos 18 anos</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Senha</mat-label>
-          <input matInput type="password" formControlName="password">
+          <input matInput 
+                 [type]="hidePassword ? 'password' : 'text'" 
+                 formControlName="password"
+                 autocomplete="new-password">
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" 
+                  (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="'Mostrar senha'"
+                  [attr.aria-pressed]="!hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
           <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
             Senha é obrigatória
           </mat-error>
@@ -70,11 +90,22 @@
           <mat-error *ngIf="registerForm.get('password')?.hasError('pattern')">
             Senha deve conter maiúsculas, minúsculas, números e caracteres especiais
           </mat-error>
+          <mat-hint>Mínimo 8 caracteres com maiúsculas, minúsculas, números e símbolos</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Confirmar Senha</mat-label>
-          <input matInput type="password" formControlName="confirmPassword">
+          <input matInput 
+                 [type]="hideConfirmPassword ? 'password' : 'text'" 
+                 formControlName="confirmPassword"
+                 autocomplete="new-password">
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <button mat-icon-button matSuffix type="button" 
+                  (click)="toggleConfirmPasswordVisibility()"
+                  [attr.aria-label]="'Mostrar senha de confirmação'"
+                  [attr.aria-pressed]="!hideConfirmPassword">
+            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
           <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">
             Confirmação de senha é obrigatória
           </mat-error>
@@ -83,20 +114,21 @@
           </mat-error>
         </mat-form-field>
 
-        <div *ngIf="errorMessage" class="error-message">
-          {{ errorMessage }}
-        </div>
-
         <button mat-raised-button color="primary" type="submit" 
-                [disabled]="registerForm.invalid || loading" 
+                [disabled]="loading" 
                 class="full-width register-button">
           <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
-          <span *ngIf="!loading">Cadastrar</span>
+          <span *ngIf="!loading">
+            <mat-icon>person_add</mat-icon>
+            Cadastrar
+          </span>
         </button>
       </form>
 
+      <mat-divider></mat-divider>
+
       <div class="login-link">
-        <p>Já tem uma conta? <a routerLink="/auth/login">Faça login aqui</a></p>
+        <p>Já tem uma conta? <a routerLink="/auth/login" class="primary-link">Faça login aqui</a></p>
       </div>
     </mat-card-content>
   </mat-card>

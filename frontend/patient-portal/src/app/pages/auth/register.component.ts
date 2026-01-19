@@ -9,7 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +27,9 @@ import { AuthService } from '../../services/auth.service';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatIconModule,
+    MatDividerModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
@@ -32,13 +37,19 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   registerForm: FormGroup;
   loading = false;
-  errorMessage = '';
+  hidePassword = true;
+  hideConfirmPassword = true;
+  maxDate: Date;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
+    // Maximum date is 18 years ago (minimum age requirement)
+    this.maxDate = new Date();
+    this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
     this.registerForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
       email: ['', [Validators.required, Validators.email]],
@@ -66,21 +77,43 @@ export class RegisterComponent {
     return null;
   }
 
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.hideConfirmPassword = !this.hideConfirmPassword;
+  }
+
   onSubmit(): void {
     if (this.registerForm.invalid) {
+      this.markFormGroupTouched(this.registerForm);
+      this.notificationService.warning('Por favor, preencha todos os campos obrigatórios corretamente');
       return;
     }
 
     this.loading = true;
-    this.errorMessage = '';
 
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {
+        this.notificationService.success('Cadastro realizado com sucesso!');
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
-        this.errorMessage = error.error?.message || 'Erro ao registrar. Tente novamente.';
+        const errorMessage = error.error?.message || 'Erro ao registrar. Tente novamente.';
+        this.notificationService.error(errorMessage);
         this.loading = false;
+      }
+    });
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      control?.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
     });
   }
