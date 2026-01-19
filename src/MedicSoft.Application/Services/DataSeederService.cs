@@ -2194,7 +2194,7 @@ RETORNO: {{return_date}}",
                     30, // quantity
                     _demoTenantId,
                     genericName: "Omeprazole",
-                    activeIngredient: "Omeprazol magnésico",
+                    activeIngredient: "Omeprazol",
                     isControlledSubstance: false,
                     administrationRoute: "Via oral",
                     instructions: "Tomar em jejum, 30 minutos antes do café da manhã"
