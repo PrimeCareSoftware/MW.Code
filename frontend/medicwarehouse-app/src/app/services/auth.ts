@@ -77,25 +77,20 @@ export class Auth {
   }
 
   logout(showMessage: boolean = false): void {
-    const userInfo = this.getUserInfo();
-    const isSystemOwner = userInfo?.isSystemOwner || false;
-    
     this.stopSessionValidation();
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
     this.isAuthenticated.set(false);
     this.currentUser.set(null);
     
-    // Determine correct login page based on user role
-    const loginPath = isSystemOwner ? '/system-admin/login' : '/login';
-    
+    // Navigate to login page
     if (showMessage) {
       // Navigate with a state to show the message on the login page
-      this.router.navigate([loginPath], { 
+      this.router.navigate(['/login'], { 
         state: { message: 'Sua sessão foi encerrada porque você fez login em outro dispositivo ou navegador.' }
       });
     } else {
-      this.router.navigate([loginPath]);
+      this.router.navigate(['/login']);
     }
   }
 
