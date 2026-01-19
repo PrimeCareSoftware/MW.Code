@@ -38,6 +38,7 @@ namespace MedicSoft.Application.Services
         private readonly IExamCatalogRepository _examCatalogRepository;
         private readonly IDigitalPrescriptionRepository _digitalPrescriptionRepository;
         private readonly IHealthInsurancePlanRepository _healthInsurancePlanRepository;
+        private readonly IHealthInsuranceOperatorRepository _healthInsuranceOperatorRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly string _demoTenantId = "demo-clinic-001";
         private const string _demoDoctorCRM = "CRM-123456";
@@ -70,6 +71,7 @@ namespace MedicSoft.Application.Services
             IExamCatalogRepository examCatalogRepository,
             IDigitalPrescriptionRepository digitalPrescriptionRepository,
             IHealthInsurancePlanRepository healthInsurancePlanRepository,
+            IHealthInsuranceOperatorRepository healthInsuranceOperatorRepository,
             IInvoiceRepository invoiceRepository)
         {
             _clinicRepository = clinicRepository;
@@ -97,6 +99,7 @@ namespace MedicSoft.Application.Services
             _examCatalogRepository = examCatalogRepository;
             _digitalPrescriptionRepository = digitalPrescriptionRepository;
             _healthInsurancePlanRepository = healthInsurancePlanRepository;
+            _healthInsuranceOperatorRepository = healthInsuranceOperatorRepository;
             _invoiceRepository = invoiceRepository;
         }
 
@@ -259,14 +262,21 @@ namespace MedicSoft.Application.Services
                     await _digitalPrescriptionRepository.AddWithoutSaveAsync(prescription);
                 }
 
-                // 20. Create Health Insurance Plans for patients
-                var healthInsurancePlans = CreateDemoHealthInsurancePlans(patients);
+                // 20. Create Health Insurance Operators
+                var healthInsuranceOperators = CreateDemoHealthInsuranceOperators();
+                foreach (var healthOperator in healthInsuranceOperators)
+                {
+                    await _healthInsuranceOperatorRepository.AddWithoutSaveAsync(healthOperator);
+                }
+
+                // 21. Create Health Insurance Plans for patients
+                var healthInsurancePlans = CreateDemoHealthInsurancePlans(patients, healthInsuranceOperators);
                 foreach (var plan in healthInsurancePlans)
                 {
                     await _healthInsurancePlanRepository.AddWithoutSaveAsync(plan);
                 }
 
-                // 21. Create Invoices for appointments
+                // 22. Create Invoices for appointments
                 var invoices = CreateDemoInvoices(appointments, payments, clinic.Id);
                 foreach (var invoice in invoices)
                 {
@@ -325,11 +335,25 @@ namespace MedicSoft.Application.Services
                     await _medicalRecordRepository.DeleteWithoutSaveAsync(record.Id, _demoTenantId);
                 }
 
+                // 5.1. Delete DigitalPrescriptions (depends on MedicalRecords)
+                var digitalPrescriptions = await _digitalPrescriptionRepository.GetAllAsync(_demoTenantId);
+                foreach (var prescription in digitalPrescriptions)
+                {
+                    await _digitalPrescriptionRepository.DeleteWithoutSaveAsync(prescription.Id, _demoTenantId);
+                }
+
                 // 6. Delete Payments (depends on Appointments)
                 var payments = await _paymentRepository.GetAllAsync(_demoTenantId);
                 foreach (var payment in payments)
                 {
                     await _paymentRepository.DeleteWithoutSaveAsync(payment.Id, _demoTenantId);
+                }
+
+                // 6.1. Delete Invoices (depends on Payments)
+                var invoices = await _invoiceRepository.GetAllAsync(_demoTenantId);
+                foreach (var invoice in invoices)
+                {
+                    await _invoiceRepository.DeleteWithoutSaveAsync(invoice.Id, _demoTenantId);
                 }
 
                 // 7. Delete AppointmentProcedures (depends on Appointments and Procedures)
@@ -351,6 +375,13 @@ namespace MedicSoft.Application.Services
                 foreach (var link in patientLinks)
                 {
                     await _patientClinicLinkRepository.DeleteWithoutSaveAsync(link.Id, _demoTenantId);
+                }
+
+                // 9.1. Delete HealthInsurancePlans (depends on HealthInsuranceOperators and Patients)
+                var healthInsurancePlans = await _healthInsurancePlanRepository.GetAllAsync(_demoTenantId);
+                foreach (var plan in healthInsurancePlans)
+                {
+                    await _healthInsurancePlanRepository.DeleteWithoutSaveAsync(plan.Id, _demoTenantId);
                 }
 
                 // 10. Delete Patients
@@ -435,6 +466,13 @@ namespace MedicSoft.Application.Services
                 foreach (var clinic in clinics)
                 {
                     await _clinicRepository.DeleteWithoutSaveAsync(clinic.Id, _demoTenantId);
+                }
+
+                // 20.1. Delete HealthInsuranceOperators (should be deleted after HealthInsurancePlans)
+                var healthInsuranceOperators = await _healthInsuranceOperatorRepository.GetAllAsync(_demoTenantId);
+                foreach (var healthOperator in healthInsuranceOperators)
+                {
+                    await _healthInsuranceOperatorRepository.DeleteWithoutSaveAsync(healthOperator.Id, _demoTenantId);
                 }
 
                 // 21. Delete SubscriptionPlans (system-wide, delete the demo plans)
@@ -2134,45 +2172,96 @@ RETORNO: {{return_date}}",
             return prescriptions;
         }
 
-        private List<HealthInsurancePlan> CreateDemoHealthInsurancePlans(List<Patient> patients)
+        private List<HealthInsuranceOperator> CreateDemoHealthInsuranceOperators()
+        {
+            var operators = new List<HealthInsuranceOperator>();
+
+            // Unimed São Paulo
+            operators.Add(new HealthInsuranceOperator(
+                "Unimed São Paulo",
+                "Unimed São Paulo - Cooperativa de Trabalho Médico",
+                "324701", // ANS Register Number
+                "43.202.472/0001-90", // CNPJ
+                _demoTenantId,
+                "+55 11 3265-6000",
+                "contato@unimedsp.com.br",
+                "João Silva"
+            ));
+
+            // Bradesco Saúde
+            operators.Add(new HealthInsuranceOperator(
+                "Bradesco Saúde",
+                "Bradesco Saúde S.A.",
+                "005711", // ANS Register Number
+                "92.693.118/0001-60", // CNPJ
+                _demoTenantId,
+                "+55 11 4004-5477",
+                "atendimento@bradescosaude.com.br",
+                "Maria Santos"
+            ));
+
+            // SulAmérica Saúde
+            operators.Add(new HealthInsuranceOperator(
+                "SulAmérica Saúde",
+                "SulAmérica Companhia de Seguro Saúde",
+                "005070", // ANS Register Number
+                "01.685.053/0001-56", // CNPJ
+                _demoTenantId,
+                "+55 11 3175-3000",
+                "atendimento@sulamericasaude.com.br",
+                "Pedro Costa"
+            ));
+
+            return operators;
+        }
+
+        private List<HealthInsurancePlan> CreateDemoHealthInsurancePlans(List<Patient> patients, List<HealthInsuranceOperator> operators)
         {
             var plans = new List<HealthInsurancePlan>();
-            var today = DateTime.UtcNow.Date;
 
-            // Health insurance for Carlos (patient[0])
+            // Health insurance for Carlos (patient[0]) - Unimed São Paulo
             plans.Add(new HealthInsurancePlan(
-                patients[0].Id,
-                "Unimed São Paulo",
-                "12345678",
-                today.AddYears(-2), // Started 2 years ago
+                operators[0].Id, // Unimed São Paulo OperatorId
+                "Plano Básico Unimed",
+                "UNIMED-BAS-001",
+                HealthInsurancePlanType.Individual,
                 _demoTenantId,
-                "Plano Básico",
-                today.AddYears(1),  // Valid for 1 more year
-                patients[0].Name    // Holder name
+                "455.981.234-56", // ANS Plan Register Number
+                coversConsultations: true,
+                coversExams: true,
+                coversProcedures: true,
+                requiresPriorAuthorization: false,
+                tissEnabled: true
             ));
 
-            // Health insurance for Ana (patient[1])
+            // Health insurance for Ana (patient[1]) - Bradesco Saúde
             plans.Add(new HealthInsurancePlan(
-                patients[1].Id,
-                "Bradesco Saúde",
-                "87654321",
-                today.AddMonths(-6), // Started 6 months ago
+                operators[1].Id, // Bradesco Saúde OperatorId
+                "Plano Premium Bradesco",
+                "BRAD-PREM-001",
+                HealthInsurancePlanType.Individual,
                 _demoTenantId,
-                "Plano Premium",
-                today.AddMonths(18), // Valid for 18 more months
-                patients[1].Name
+                "471.234.567-89", // ANS Plan Register Number
+                coversConsultations: true,
+                coversExams: true,
+                coversProcedures: true,
+                requiresPriorAuthorization: true,
+                tissEnabled: true
             ));
 
-            // Health insurance for Pedro (patient[2])
+            // Health insurance for Pedro (patient[2]) - SulAmérica Saúde
             plans.Add(new HealthInsurancePlan(
-                patients[2].Id,
-                "SulAmérica Saúde",
-                "11223344",
-                today.AddMonths(-3), // Started 3 months ago
+                operators[2].Id, // SulAmérica Saúde OperatorId
+                "Plano Executivo SulAmérica",
+                "SULA-EXEC-001",
+                HealthInsurancePlanType.Enterprise,
                 _demoTenantId,
-                "Plano Executivo",
-                today.AddMonths(21), // Valid for 21 more months
-                patients[2].Name
+                "492.345.678-90", // ANS Plan Register Number
+                coversConsultations: true,
+                coversExams: true,
+                coversProcedures: true,
+                requiresPriorAuthorization: false,
+                tissEnabled: true
             ));
 
             return plans;
