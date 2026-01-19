@@ -1,78 +1,91 @@
-# Architecture Update Summary
+# Architecture Update Summary - Frontend Separation
 
 ## Overview
-This document summarizes the changes made to align all environment setup scripts with the new frontend architecture introduced in PR #212.
+This document summarizes the architectural changes made to separate the System Admin application from the main MedicWarehouse application, improving maintainability and reducing complexity.
 
-## Previous Architecture (Deprecated)
-- **Frontend**: Multiple separate applications
-  - `frontend/primecare-app` - Main clinic application
-  - `frontend/mw-system-admin` - System admin application
-  - Other standalone apps
-
-## New Architecture (Current)
+## Previous Architecture (Deprecated as of January 2026)
 - **Frontend**: Single unified Angular application
   - `frontend/medicwarehouse-app` - Main unified application serving:
     - Main clinic interface at `/`
     - System admin at `/system-admin/*`
     - Marketing site at `/site/*`
   - Port: 4200
+
+## New Architecture (Current)
+- **Frontend**: Separated applications for better organization
+  - `frontend/medicwarehouse-app` - Main clinic application serving:
+    - Main clinic interface at `/`
+    - Marketing site at `/site/*`
+    - Port: 4200
   
-- **Separate Applications** (Still Available):
-  - `frontend/mw-system-admin` - Standalone system admin (port 4201)
+  - `frontend/mw-system-admin` - Standalone system admin application
+    - System admin interface at `/`
+    - Port: 4201
+    - Independent deployment and development
+  
+- **Other Applications** (Still Available):
   - `frontend/mw-docs` - Documentation site
-  - `frontend/mw-site` - Marketing site
   - `frontend/patient-portal` - Patient portal
 
-## Files Updated
+## Changes Made
 
-### Docker/Podman Compose Files (5 files)
-All compose files were updated to reference `frontend/medicwarehouse-app` instead of `frontend/primecare-app`:
+### 1. New System Admin Application
+Created a new standalone Angular application at `frontend/mw-system-admin` with:
+- All system admin pages (dashboard, clinics, plans, clinic-owners, subdomains, tickets, sales-metrics)
+- Dedicated services (Auth, SystemAdminService, TicketService)
+- Dedicated models (auth.model.ts, system-admin.model.ts, ticket.model.ts)
+- System admin guard for route protection
+- Independent routing without `/system-admin` prefix
+- Port: 4201
+
+### 2. Cleaned Up Main Application
+From `frontend/medicwarehouse-app`, removed:
+- `/pages/system-admin/*` directory and all subdirectories
+- `services/system-admin.ts`
+- `models/system-admin.model.ts`
+- `guards/system-admin-guard.ts`
+- All system admin routes from `app.routes.ts`
+- System admin login path logic from Auth service
+
+### 3. Updated Docker/Podman Compose Files
+Updated 4 compose files to include the new system-admin service:
 
 1. **docker-compose.yml**
-   - Development environment
-   - Frontend service now builds from `./frontend/medicwarehouse-app`
+   - Added `system-admin` service on port 4201
+   - Uses `./frontend/mw-system-admin` context
 
 2. **docker-compose.production.yml**
-   - Production environment with resource limits
-   - Frontend service now builds from `./frontend/medicwarehouse-app`
-   - Uses `Dockerfile.production` for optimized builds
+   - Added `system-admin` service with production build
+   - Resource limits: 128M memory, 0.25 CPU
+   - Port mapping: 4201:80
 
-3. **docker-compose.microservices.yml**
-   - Microservices architecture (legacy)
-   - Frontend service now builds from `./frontend/medicwarehouse-app`
+3. **podman-compose.yml**
+   - Added `system-admin` service on port 4201
+   - Uses `./frontend/mw-system-admin` context
 
-4. **podman-compose.yml**
-   - Podman development environment
-   - Frontend service now builds from `./frontend/medicwarehouse-app`
-
-5. **podman-compose.production.yml**
-   - Podman production environment
-   - Frontend service now builds from `./frontend/medicwarehouse-app`
-
-### Setup Scripts (Already Correct)
-The following setup scripts already referenced the correct directories and did not need changes:
-- `setup-macos.sh` - macOS setup script
-- `setup-windows.ps1` - Windows setup script
+4. **podman-compose.production.yml**
+   - Added `system-admin` service with production build
+   - Same resource limits as docker version
 
 ## Migration Benefits
 
 ### For Developers
-- ✅ Single codebase to maintain instead of multiple apps
-- ✅ Shared components and services reduce duplication
-- ✅ Consistent UI/UX across all sections
-- ✅ Simplified dependency management
+- ✅ Clear separation of concerns between clinic app and system admin
+- ✅ Easier to maintain and understand each application
+- ✅ Reduced bundle size for each application
+- ✅ Independent development and deployment cycles
+- ✅ Simpler debugging and testing
 
 ### For DevOps
-- ✅ Reduced container image size (one frontend instead of multiple)
-- ✅ Simplified deployment process
-- ✅ Lower memory and CPU requirements
-- ✅ Easier to maintain and update
+- ✅ Can scale each application independently
+- ✅ Can deploy updates to one without affecting the other
+- ✅ Better resource allocation (system admin used less frequently)
+- ✅ Easier to implement different security policies per application
 
 ### For End Users
-- ✅ Seamless navigation between sections
-- ✅ Consistent user experience
-- ✅ Faster page transitions (SPA routing)
-- ✅ Better performance
+- ✅ Better performance - smaller application bundles
+- ✅ Clearer separation between clinic and admin interfaces
+- ✅ Independent availability (clinic app remains available if admin app has issues)
 
 ## How to Use
 
@@ -80,14 +93,15 @@ The following setup scripts already referenced the correct directories and did n
 
 #### Using Docker Compose:
 ```bash
-# Start all services
+# Start all services including both frontend applications
 docker compose up -d
 
 # Start only specific services
-docker compose up -d postgres api frontend
+docker compose up -d postgres api frontend system-admin
 
 # View logs
 docker compose logs -f frontend
+docker compose logs -f system-admin
 ```
 
 #### Using Podman Compose:
@@ -96,10 +110,26 @@ docker compose logs -f frontend
 podman-compose up -d
 
 # Start only specific services
-podman-compose up -d postgres api frontend
+podman-compose up -d postgres api frontend system-admin
 
 # View logs
 podman-compose logs -f frontend
+podman-compose logs -f system-admin
+```
+
+#### Local Development (without containers):
+```bash
+# Terminal 1 - Main Application
+cd frontend/medicwarehouse-app
+npm install
+npm start
+# Access at http://localhost:4200
+
+# Terminal 2 - System Admin
+cd frontend/mw-system-admin
+npm install
+npm start
+# Access at http://localhost:4201
 ```
 
 ### Production Environment
@@ -109,96 +139,77 @@ podman-compose logs -f frontend
 # Build and start
 docker compose -f docker-compose.production.yml up -d
 
-# Scale frontend if needed
-docker compose -f docker-compose.production.yml up -d --scale frontend=2
+# View logs
+docker compose -f docker-compose.production.yml logs -f
+
+# Stop
+docker compose -f docker-compose.production.yml down
 ```
 
 #### Using Podman Compose:
 ```bash
 # Build and start
 podman-compose -f podman-compose.production.yml up -d
+
+# View logs
+podman-compose -f podman-compose.production.yml logs -f
+
+# Stop
+podman-compose -f podman-compose.production.yml down
 ```
 
-### Local Development (Without Containers)
+## URL Structure
 
-#### Backend:
-```bash
-cd src/MedicSoft.Api
-dotnet run
-```
-
-#### Frontend:
-```bash
-cd frontend/medicwarehouse-app
-npm install
-npm start
-```
-
-Access:
-- Main App: http://localhost:4200
-- System Admin: http://localhost:4200/system-admin
-- Marketing Site: http://localhost:4200/site
+### Development
+- Main Application: http://localhost:4200
+  - Clinic Interface: http://localhost:4200/
+  - Marketing Site: http://localhost:4200/site
+- System Admin: http://localhost:4201
+  - Dashboard: http://localhost:4201/dashboard
+  - Clinics: http://localhost:4201/clinics
+  - Plans: http://localhost:4201/plans
 - API: http://localhost:5000
-- Swagger: http://localhost:5000/swagger
 
-## Verification
+### Production
+- Main Application: Port 4200 (80 inside container)
+- System Admin: Port 4201 (80 inside container)
+- API: Port 5000 (8080 inside container)
 
-All changes have been verified:
-- ✅ Docker Compose syntax validation passed
-- ✅ All referenced directories exist
-- ✅ Dockerfiles are properly configured
-- ✅ nginx.conf exists for production builds
-- ✅ No old references to `primecare-app` remain
-- ✅ Code review completed with no issues
-- ✅ Security scan completed (no code changes)
+## Architecture History
 
-## Troubleshooting
+1. **Pre-2024**: Multiple separate applications
+   - `frontend/primecare-app` - Main clinic application
+   - `frontend/mw-system-admin` - System admin application
+   - Other standalone apps
 
-### Issue: "Cannot find Dockerfile"
-**Solution:** Ensure you're in the project root directory when running compose commands.
+2. **Mid-2024 (PR #212)**: Unified architecture
+   - Merged everything into `frontend/medicwarehouse-app`
+   - Single application serving all routes
 
-### Issue: "Port already in use"
-**Solution:** Stop any running containers or services using the same ports:
-```bash
-# Docker
-docker compose down
+3. **January 2026 (Current)**: Separated architecture
+   - Split system-admin back into separate application
+   - Kept main clinic app and site together
+   - Better balance between unified and modular approaches
 
-# Podman
-podman-compose down
-```
+## Migration Notes
 
-### Issue: "Build fails with npm errors"
-**Solution:** Clear npm cache and rebuild:
-```bash
-docker compose build --no-cache frontend
-# or
-podman-compose build --no-cache frontend
-```
+### For Existing Deployments
+1. Deploy the new `mw-system-admin` application alongside existing `medicwarehouse-app`
+2. Update nginx/load balancer configuration to route requests appropriately
+3. Update environment variables if needed
+4. Test both applications independently
+5. Update any hardcoded URLs that referenced `/system-admin` paths
 
-## Next Steps
+### Breaking Changes
+- System admin is no longer accessible at `/system-admin/*` in the main application
+- System admin must be accessed via the new standalone application on port 4201
+- Auth service no longer includes system admin specific login redirect logic
 
-1. ✅ All environment setup scripts updated
-2. ✅ Documentation updated
-3. ✅ CI/CD pipelines will work with new architecture
-4. ⏭️ Deploy to staging environment for testing
-5. ⏭️ Deploy to production
-
-## Related Documentation
-
-- [README.md](README.md) - Main project documentation
-- [REFACTORING_SUMMARY.md](REFACTORING_SUMMARY.md) - Frontend refactoring details
-- [PR_SUMMARY.md](PR_SUMMARY.md) - Recent changes summary
-- [docs/GUIA_INICIO_RAPIDO_LOCAL.md](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Quick start guide
+## Security Considerations
+- Both applications share the same backend API
+- Authentication tokens are valid across both applications
+- System admin guard ensures only users with `isSystemOwner` flag can access admin routes
+- Consider using separate domains or subdomains in production (e.g., `admin.medicwarehouse.com`)
 
 ## Support
-
-If you encounter any issues with the new architecture:
-1. Check the [Troubleshooting](#troubleshooting) section above
-2. Review the [documentation](docs/)
-3. Open an issue on GitHub with details about your problem
-
----
-
-**Date:** January 2026  
-**PR:** #212 (Frontend Migration) + Current Changes  
-**Status:** ✅ Complete
+For questions or issues related to this architectural change, please contact the development team or create an issue in the repository.
