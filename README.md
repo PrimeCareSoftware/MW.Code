@@ -130,7 +130,7 @@ Portal dedicado para acesso de pacientes (separado da aplicação principal):
 - 👤 **Perfil**: Gerenciamento de dados pessoais
 - 🔐 **Autenticação**: Login por CPF/Email + Senha
 - 🔒 **Segurança**: JWT + LGPD compliant
-- **URL desenvolvimento**: `http://localhost:4201` (quando executado separadamente)
+- **URL desenvolvimento**: `http://localhost:4202` (quando executado separadamente)
 - **API Backend**: `patient-portal-api/` (API dedicada)
 
 **Por que separado?**
@@ -150,6 +150,17 @@ Portal de documentação técnica (GitHub Pages):
 - **Deploy**: Automático via GitHub Actions
 
 > **Nota**: Os projetos `mw-site` e `mw-system-admin` foram **descontinuados e deletados** em Janeiro 2026, pois suas funcionalidades foram completamente migradas e integradas ao `medicwarehouse-app`.
+
+### 🔌 Port Configuration
+
+All frontend projects are configured with unique ports to allow running them simultaneously during development:
+
+- **medicwarehouse-app**: Port 4200
+- **mw-system-admin**: Port 4201
+- **patient-portal**: Port 4202
+- **mw-docs**: Port 4203
+
+📖 **[Complete Port Configuration Guide →](docs/FRONTEND_PORTS.md)**
 
 ## 🎥 Microserviço de Telemedicina 🆕
 
@@ -664,8 +675,6 @@ npm start
 > **Nota**: Usamos `--legacy-peer-deps` devido a conflitos menores de versão entre @angular/material e @angular/cdk que não afetam a funcionalidade.
 
 
-
-# O admin estará disponível em: http://localhost:4201
 ```
 
 #### Banco de Dados (PostgreSQL)
