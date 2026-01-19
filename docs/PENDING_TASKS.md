@@ -48,7 +48,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 - [ ] **Prontuário SOAP Estruturado** - Padrão de mercado
 - [ ] **Auditoria Completa (LGPD)** - Compliance obrigatório
 - [ ] **Criptografia de Dados Médicos** - Segurança crítica
-- [x] **🇧🇷 Receitas Médicas Digitais** - Compliance CFM + ANVISA ✅ **85% completo - Janeiro 2026**
+- [x] **🇧🇷 Receitas Médicas Digitais** - Compliance CFM + ANVISA ✅ **90% completo - Janeiro 2026**
   - [x] Backend completo (entidades, API, validações) - DigitalPrescription, DigitalPrescriptionItem
   - [x] Frontend completo (4 componentes criados - ~2.236 linhas):
     - [x] DigitalPrescriptionFormComponent - Formulário completo (~950 linhas)
@@ -56,8 +56,8 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
     - [x] PrescriptionTypeSelectorComponent - Seleção visual de tipo (~210 linhas)
     - [x] SNGPCDashboardComponent - Dashboard de medicamentos controlados (~376 linhas)
   - [x] Suporte a 5 tipos de receita (Simples, Controladas A/B/C1, Antimicrobiana)
+  - [x] Integração completa no fluxo de atendimento (botão "Nova Receita Digital")
   - [ ] Integração ICP-Brasil (preparado mas não implementado)
-  - [ ] Navegação direta do fluxo de atendimento
 - [x] **🇧🇷 SNGPC (Controlados)** - Obrigatório ANVISA ✅ **85% completo - Janeiro 2026**
   - [x] Backend completo (SNGPCReport, PrescriptionSequenceControl, SequentialNumber)
   - [x] API completa com 15+ endpoints de prescrições
@@ -194,17 +194,18 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 ### ⚠️ Parcialmente Implementado
 
-- ⚠️ **Conformidade CFM 1.821/2007** - 90% ✨ (Janeiro 2026)
+- ✅ **Conformidade CFM 1.821/2007** - 95% ✨ (Janeiro 2026)
   - ✅ Prontuário base implementado
-  - ✅ Consentimento informado estruturado (backend + frontend completo)
-  - ✅ Exame clínico com sinais vitais (backend + frontend completo)
-  - ✅ Hipóteses diagnósticas com CID-10 (backend + frontend completo)
-  - ✅ Plano terapêutico detalhado (backend + frontend completo)
+  - ✅ Consentimento informado estruturado (backend + frontend completo + integrado no fluxo)
+  - ✅ Exame clínico com sinais vitais (backend + frontend completo + integrado no fluxo)
+  - ✅ Hipóteses diagnósticas com CID-10 (backend + frontend completo + integrado no fluxo)
+  - ✅ Plano terapêutico detalhado (backend + frontend completo + integrado no fluxo)
   - ✅ Componentes integrados no attendance.ts (loadCFMEntities, formulários inline)
   - ✅ Services completos (ClinicalExaminationService, DiagnosticHypothesisService, TherapeuticPlanService, InformedConsentService)
-  - Falta: Interface visual melhorada para consentimento informado (modal/página dedicada)
+  - ✅ InformedConsentFormComponent integrado na página de atendimento
+  - Falta apenas: Melhorias visuais opcionais e templates por especialidade (futuro)
   
-- ⚠️ **Receitas Médicas Digitais** - 85% ✨ (Janeiro 2026)
+- ✅ **Receitas Médicas Digitais** - 90% ✨ (Janeiro 2026)
   - ✅ Backend completo (entidades, API, validações ANVISA)
   - ✅ Frontend completo - 4 componentes criados (~2.236 linhas):
     - DigitalPrescriptionFormComponent - Formulário completo
@@ -213,7 +214,8 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
     - SNGPCDashboardComponent - Dashboard ANVISA
   - ✅ Suporte a 5 tipos de receita (Simples, Controladas A/B/C1, Antimicrobiana)
   - ✅ Sistema SNGPC para medicamentos controlados
-  - Falta: Integração ICP-Brasil, navegação direta do fluxo de atendimento para prescrição digital
+  - ✅ Integração completa no fluxo de atendimento (botão "Nova Receita Digital" com routerLink)
+  - Falta apenas: Integração ICP-Brasil (assinatura digital)
   
 - ⚠️ **Telemedicina** - 80%
   - Microserviço criado
@@ -239,13 +241,13 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 
 | Prioridade | Item | Status | Esforço | Prazo |
 |------------|------|--------|---------|-------|
-| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ✅ 90% Completo (Jan 2026) | 2-3 dias, 1 dev (interface consentimento) | Q1/2026 |
+| 🔥🔥🔥 | Conformidade CFM (Prontuários) | ✅ 95% Completo (Jan 2026) | 1-2 dias, 1 dev (melhorias opcionais) | Q1/2026 |
 | 🔥🔥🔥 | Emissão NF-e/NFS-e | ❌ Não iniciado | 3 meses, 2 devs | Q2/2026 |
 | 🔥🔥🔥 | Telemedicina Completa | ⚠️ MVP Implementado (80%) | 2-3 meses, 2 devs (compliance) | Q2/2026 |
 | 🔥🔥🔥 | Portal do Paciente Frontend | ⚠️ Backend 100%, Frontend 30% | 1-2 meses, 1 dev | Q1/2026 |
 | 🔥🔥🔥 | Integração TISS Fase 1 | ❌ Não iniciado | 3 meses, 2-3 devs | Q3/2026 |
 | 🔥🔥🔥 | Integração TISS Fase 2 | ❌ Não iniciado | 3 meses, 2-3 devs | Q4/2026 |
-| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ✅ 85% Completo (Jan 2026) | 3-4 semanas, 1 dev (ICP-Brasil + navegação) | Q1/2026 |
+| 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ✅ 90% Completo (Jan 2026) | 2-3 semanas, 1 dev (ICP-Brasil) | Q1/2026 |
 | 🔥🔥 | SNGPC (ANVISA) | ✅ 85% Completo (Jan 2026) | 2-3 semanas, 1 dev (XML + WebService) | Q1/2026 |
 
 ### Melhorias de UX e Produtividade
@@ -340,7 +342,7 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 #### Resoluções CFM Aplicáveis
 
 ##### 1.1 Resolução CFM 1.821/2007 - Prontuário Médico
-**Status:** ⚠️ 90% Completo (backend 100%, frontend 100%, integração 80%) ✨
+**Status:** ✅ 95% Completo (backend 100%, frontend 100%, integração 95%) ✨
 
 **Requisitos Obrigatórios:**
 - [x] Identificação completa do paciente
@@ -361,12 +363,12 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 3. ✅ Validar preenchimento mínimo antes de salvar ✨
 4. ✅ Integrar componentes no fluxo de atendimento (attendance.ts com loadCFMEntities) ✨
 5. ✅ Adicionar workflow de consentimento informado digital ✨
-6. [ ] Melhorar interface de consentimento informado (modal/página dedicada) (em progresso)
+6. ✅ Integrar InformedConsentFormComponent na página de atendimento ✨
 7. [ ] Criar templates por especialidade médica (opcional, futuro)
-8. [ ] Implementar alertas visuais para campos obrigatórios faltantes (futuro)
+8. [ ] Implementar alertas visuais avançados para campos obrigatórios (opcional, futuro)
 
-**Esforço Restante:** 2-3 dias | 1 dev  
-**Prazo:** Q1/2026 (90% completo)
+**Esforço Restante:** 1-2 dias | 1 dev (melhorias opcionais)  
+**Prazo:** Q1/2026 (95% completo - funcional e em conformidade)
 
 ---
 
@@ -423,7 +425,7 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 ---
 
 ##### 1.4 Resolução CFM 1.643/2002 - Receita Médica Digital
-**Status:** ⚠️ 85% Completo (backend 100%, frontend 100%, falta ICP-Brasil e navegação direta)
+**Status:** ✅ 90% Completo (backend 100%, frontend 100%, integração 100%, falta apenas ICP-Brasil)
 
 **Requisitos Obrigatórios:**
 - [x] **Identificação do médico** com CRM e UF (implementado)
@@ -451,9 +453,9 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 5. ✅ Adicionar campo de validade automático conforme tipo
 6. ✅ Integrar com SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados)
 7. ✅ Criar controle de numeração de receitas controladas
-8. [ ] Adicionar navegação direta do fluxo de atendimento (em progresso)
+8. ✅ Adicionar navegação direta do fluxo de atendimento (botão "Nova Receita Digital" com routerLink)
 
-**Esforço:** 3-4 semanas | 1 dev (ICP-Brasil + navegação)  
+**Esforço:** 2-3 semanas | 1 dev (apenas ICP-Brasil)  
 **Prazo:** Q1/2026
 
 ---
