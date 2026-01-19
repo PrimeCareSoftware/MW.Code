@@ -200,7 +200,7 @@ namespace MedicSoft.Application.Services
                 }
 
                 // 11. Create Prescription Items
-                var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications, patients);
+                var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications);
                 foreach (var item in prescriptionItems)
                 {
                     await _prescriptionItemRepository.AddWithoutSaveAsync(item);
@@ -1109,8 +1109,7 @@ namespace MedicSoft.Application.Services
 
         private List<PrescriptionItem> CreateDemoPrescriptionItems(
             List<MedicalRecord> medicalRecords,
-            List<Medication> medications,
-            List<Patient> patients)
+            List<Medication> medications)
         {
             var items = new List<PrescriptionItem>();
 
