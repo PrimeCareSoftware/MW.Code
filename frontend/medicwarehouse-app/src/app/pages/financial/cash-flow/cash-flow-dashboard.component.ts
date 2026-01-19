@@ -18,15 +18,18 @@ export class CashFlowDashboardComponent implements OnInit {
   startDate = '';
   endDate = '';
 
-  constructor(private financialService: FinancialService) {
+  constructor(private financialService: FinancialService) {}
+
+  ngOnInit(): void {
+    this.initializeDates();
+    this.loadSummary();
+  }
+
+  initializeDates(): void {
     const today = new Date();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
     this.startDate = firstDay.toISOString().split('T')[0];
     this.endDate = today.toISOString().split('T')[0];
-  }
-
-  ngOnInit(): void {
-    this.loadSummary();
   }
 
   loadSummary(): void {

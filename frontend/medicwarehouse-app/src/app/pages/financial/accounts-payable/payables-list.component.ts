@@ -65,9 +65,9 @@ export class PayablesListComponent implements OnInit {
     if (this.searchTerm()) {
       const term = this.searchTerm().toLowerCase();
       filtered = filtered.filter(p => 
-        p.documentNumber.toLowerCase().includes(term) ||
+        p.documentNumber?.toLowerCase().includes(term) ||
         p.description?.toLowerCase().includes(term) ||
-        p.supplier?.name.toLowerCase().includes(term)
+        p.supplier?.name?.toLowerCase().includes(term)
       );
     }
 

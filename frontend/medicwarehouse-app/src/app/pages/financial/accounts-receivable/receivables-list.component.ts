@@ -65,7 +65,7 @@ export class ReceivablesListComponent implements OnInit {
     if (this.searchTerm()) {
       const term = this.searchTerm().toLowerCase();
       filtered = filtered.filter(r => 
-        r.documentNumber.toLowerCase().includes(term) ||
+        r.documentNumber?.toLowerCase().includes(term) ||
         r.description?.toLowerCase().includes(term)
       );
     }
