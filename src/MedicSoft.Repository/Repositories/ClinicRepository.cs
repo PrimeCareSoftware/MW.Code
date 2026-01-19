@@ -64,5 +64,74 @@ namespace MedicSoft.Repository.Repositories
 
             return !await query.AnyAsync();
         }
+
+        public async Task<IEnumerable<Clinic>> SearchPublicClinicsAsync(
+            string? name,
+            string? city,
+            string? state,
+            int pageNumber,
+            int pageSize)
+        {
+            var query = _dbSet.Where(c => c.IsActive);
+
+            // Filtros opcionais
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                var searchTerm = name.ToLower();
+                query = query.Where(c => 
+                    c.Name.ToLower().Contains(searchTerm) || 
+                    c.TradeName.ToLower().Contains(searchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(city))
+            {
+                var citySearch = city.ToLower();
+                query = query.Where(c => c.Address.ToLower().Contains(citySearch));
+            }
+
+            if (!string.IsNullOrWhiteSpace(state))
+            {
+                var stateSearch = state.ToLower();
+                query = query.Where(c => c.Address.ToLower().Contains(stateSearch));
+            }
+
+            // Aplica paginação
+            return await query
+                .OrderBy(c => c.Name)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> CountPublicClinicsAsync(
+            string? name,
+            string? city,
+            string? state)
+        {
+            var query = _dbSet.Where(c => c.IsActive);
+
+            // Aplica os mesmos filtros
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                var searchTerm = name.ToLower();
+                query = query.Where(c => 
+                    c.Name.ToLower().Contains(searchTerm) || 
+                    c.TradeName.ToLower().Contains(searchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(city))
+            {
+                var citySearch = city.ToLower();
+                query = query.Where(c => c.Address.ToLower().Contains(citySearch));
+            }
+
+            if (!string.IsNullOrWhiteSpace(state))
+            {
+                var stateSearch = state.ToLower();
+                query = query.Where(c => c.Address.ToLower().Contains(stateSearch));
+            }
+
+            return await query.CountAsync();
+        }
     }
 }

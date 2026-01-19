@@ -9,5 +9,25 @@ namespace MedicSoft.Domain.Interfaces
         Task<Clinic?> GetByCNPJAsync(string cnpj);
         Task<Clinic?> GetBySubdomainAsync(string subdomain);
         Task<bool> IsSubdomainUniqueAsync(string subdomain, Guid? excludeId = null);
+        
+        /// <summary>
+        /// Busca clínicas públicas ativas com filtros opcionais.
+        /// Usado para API pública (sem autenticação).
+        /// </summary>
+        Task<IEnumerable<Clinic>> SearchPublicClinicsAsync(
+            string? name,
+            string? city,
+            string? state,
+            int pageNumber,
+            int pageSize);
+        
+        /// <summary>
+        /// Conta total de clínicas públicas ativas com filtros opcionais.
+        /// Usado para paginação na API pública.
+        /// </summary>
+        Task<int> CountPublicClinicsAsync(
+            string? name,
+            string? city,
+            string? state);
     }
 }

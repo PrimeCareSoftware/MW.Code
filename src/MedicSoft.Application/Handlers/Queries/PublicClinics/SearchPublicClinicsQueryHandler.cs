@@ -1,6 +1,5 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Queries.PublicClinics;
 using MedicSoft.Domain.Interfaces;
@@ -26,40 +25,20 @@ namespace MedicSoft.Application.Handlers.Queries.PublicClinics
 
         public async Task<SearchClinicsResultDto> Handle(SearchPublicClinicsQuery request, CancellationToken cancellationToken)
         {
-            // Busca todas as clínicas ativas (sem filtro de tenant, pois é público)
-            var query = _clinicRepository.GetAllQueryable()
-                .Where(c => c.IsActive);
+            // Busca todas as clínicas ativas usando o método do repositório
+            var clinics = await _clinicRepository.SearchPublicClinicsAsync(
+                request.Name,
+                request.City,
+                request.State,
+                request.PageNumber,
+                request.PageSize
+            );
 
-            // Filtros opcionais
-            if (!string.IsNullOrWhiteSpace(request.Name))
-            {
-                var searchTerm = request.Name.ToLower();
-                query = query.Where(c => 
-                    c.Name.ToLower().Contains(searchTerm) || 
-                    c.TradeName.ToLower().Contains(searchTerm));
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.City))
-            {
-                var citySearch = request.City.ToLower();
-                query = query.Where(c => c.Address.ToLower().Contains(citySearch));
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.State))
-            {
-                var stateSearch = request.State.ToLower();
-                query = query.Where(c => c.Address.ToLower().Contains(stateSearch));
-            }
-
-            // Conta total para paginação
-            var totalCount = await query.CountAsync(cancellationToken);
-
-            // Aplica paginação
-            var clinics = await query
-                .OrderBy(c => c.Name)
-                .Skip((request.PageNumber - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .ToListAsync(cancellationToken);
+            var totalCount = await _clinicRepository.CountPublicClinicsAsync(
+                request.Name,
+                request.City,
+                request.State
+            );
 
             // Mapeia para DTO público (apenas dados essenciais)
             var publicClinics = clinics.Select(c => new PublicClinicDto
