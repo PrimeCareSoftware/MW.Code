@@ -36,7 +36,13 @@ namespace MedicSoft.Application.Services
         private readonly IExpenseRepository _expenseRepository;
         private readonly IExamRequestRepository _examRequestRepository;
         private readonly IExamCatalogRepository _examCatalogRepository;
+        private readonly IDigitalPrescriptionRepository _digitalPrescriptionRepository;
+        private readonly IHealthInsurancePlanRepository _healthInsurancePlanRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
         private readonly string _demoTenantId = "demo-clinic-001";
+        private const string _demoDoctorCRM = "CRM-123456";
+        private const string _demoDoctorSpecialty = "Clínico Geral";
+        private const string _demoDoctorCRMState = "SP";
 
         public DataSeederService(
             IClinicRepository clinicRepository,
@@ -61,7 +67,10 @@ namespace MedicSoft.Application.Services
             IOwnerClinicLinkRepository ownerClinicLinkRepository,
             IExpenseRepository expenseRepository,
             IExamRequestRepository examRequestRepository,
-            IExamCatalogRepository examCatalogRepository)
+            IExamCatalogRepository examCatalogRepository,
+            IDigitalPrescriptionRepository digitalPrescriptionRepository,
+            IHealthInsurancePlanRepository healthInsurancePlanRepository,
+            IInvoiceRepository invoiceRepository)
         {
             _clinicRepository = clinicRepository;
             _userRepository = userRepository;
@@ -86,6 +95,9 @@ namespace MedicSoft.Application.Services
             _expenseRepository = expenseRepository;
             _examRequestRepository = examRequestRepository;
             _examCatalogRepository = examCatalogRepository;
+            _digitalPrescriptionRepository = digitalPrescriptionRepository;
+            _healthInsurancePlanRepository = healthInsurancePlanRepository;
+            _invoiceRepository = invoiceRepository;
         }
 
         public async Task SeedDemoDataAsync()
@@ -239,6 +251,28 @@ namespace MedicSoft.Application.Services
                 {
                     await _examCatalogRepository.AddWithoutSaveAsync(examCatalog);
                 }
+
+                // 19. Create Digital Prescriptions (CFM 1.643/2002 compliance)
+                var digitalPrescriptions = CreateDemoDigitalPrescriptions(medicalRecords, patients, users);
+                foreach (var prescription in digitalPrescriptions)
+                {
+                    await _digitalPrescriptionRepository.AddWithoutSaveAsync(prescription);
+                }
+
+                // 20. Create Health Insurance Plans for patients
+                var healthInsurancePlans = CreateDemoHealthInsurancePlans(patients);
+                foreach (var plan in healthInsurancePlans)
+                {
+                    await _healthInsurancePlanRepository.AddWithoutSaveAsync(plan);
+                }
+
+                // 21. Create Invoices for appointments
+                var invoices = CreateDemoInvoices(appointments, clinic.Id);
+                foreach (var invoice in invoices)
+                {
+                    await _invoiceRepository.AddWithoutSaveAsync(invoice);
+                }
+
 
                 // Save all changes at once at the end of the transaction
                 // This is compatible with NpgsqlRetryingExecutionStrategy
@@ -459,8 +493,8 @@ namespace MedicSoft.Application.Services
                 UserRole.Doctor,
                 _demoTenantId,
                 clinicId,
-                "CRM-123456",
-                "Clínico Geral"
+                _demoDoctorCRM,
+                _demoDoctorSpecialty
             ));
 
             // Receptionist - Must have clinicId
@@ -581,7 +615,8 @@ namespace MedicSoft.Application.Services
                 new Address("Rua das Flores", "100", "Centro", "São Paulo", "SP", "01000-000", "Brasil"),
                 _demoTenantId,
                 "Hipertensão arterial controlada",
-                "Penicilina"
+                "Penicilina",
+                "Maria das Graças Santos" // CFM 1.821 - Nome da mãe
             ));
 
             patients.Add(new Patient(
@@ -594,7 +629,8 @@ namespace MedicSoft.Application.Services
                 new Address("Avenida Paulista", "200", "Bela Vista", "São Paulo", "SP", "01310-100", "Brasil"),
                 _demoTenantId,
                 "Diabetes tipo 2",
-                "Nenhuma"
+                "Nenhuma",
+                "Rosa Oliveira de Souza" // CFM 1.821 - Nome da mãe
             ));
 
             patients.Add(new Patient(
@@ -607,7 +643,8 @@ namespace MedicSoft.Application.Services
                 new Address("Rua Augusta", "300", "Consolação", "São Paulo", "SP", "01305-000", "Brasil"),
                 _demoTenantId,
                 null,
-                null
+                null,
+                "Helena Costa Pereira" // CFM 1.821 - Nome da mãe
             ));
 
             // Guardian (mother)
@@ -621,7 +658,8 @@ namespace MedicSoft.Application.Services
                 new Address("Rua Oscar Freire", "400", "Jardins", "São Paulo", "SP", "01426-001", "Brasil"),
                 _demoTenantId,
                 null,
-                null
+                null,
+                "Tereza Martins da Silva" // CFM 1.821 - Nome da mãe
             );
             patients.Add(guardian);
 
@@ -636,7 +674,8 @@ namespace MedicSoft.Application.Services
                 new Address("Rua Oscar Freire", "400", "Jardins", "São Paulo", "SP", "01426-001", "Brasil"),
                 _demoTenantId,
                 "Asma leve",
-                "Nenhuma"
+                "Nenhuma",
+                "Juliana Martins Silva" // CFM 1.821 - Nome da mãe
             );
             child1.SetGuardian(guardian.Id);
             patients.Add(child1);
@@ -651,7 +690,8 @@ namespace MedicSoft.Application.Services
                 new Address("Rua Oscar Freire", "400", "Jardins", "São Paulo", "SP", "01426-001", "Brasil"),
                 _demoTenantId,
                 null,
-                "Lactose"
+                "Lactose",
+                "Juliana Martins Silva" // CFM 1.821 - Nome da mãe
             );
             child2.SetGuardian(guardian.Id);
             patients.Add(child2);
@@ -1977,6 +2017,228 @@ RETORNO: {{return_date}}",
                 new ExamCatalog("Cintilografia Óssea", ExamType.Other, _demoTenantId, "Avaliação de metástases ósseas", "Medicina Nuclear", "Boa hidratação", "cintilografia óssea,metástase,câncer", "40703030"),
                 new ExamCatalog("Cintilografia Renal (DMSA)", ExamType.Other, _demoTenantId, "Avaliação da função renal", "Medicina Nuclear", "Boa hidratação", "dmsa,cintilografia renal,rim,cicatriz", "40703049")
             };
+        }
+
+        private List<DigitalPrescription> CreateDemoDigitalPrescriptions(
+            List<MedicalRecord> medicalRecords,
+            List<Patient> patients,
+            List<User> users)
+        {
+            var prescriptions = new List<DigitalPrescription>();
+            var doctor = users.First(u => u.Role == UserRole.Doctor);
+
+            // Digital prescription for first completed appointment (Carlos - Hypertension)
+            var prescription1 = new DigitalPrescription(
+                medicalRecords[0].Id,
+                patients[0].Id,
+                doctor.Id,
+                PrescriptionType.Simple,
+                doctor.FullName,
+                doctor.ProfessionalId ?? _demoDoctorCRM,
+                doctor.Specialty ?? _demoDoctorCRMState,
+                patients[0].Name,
+                patients[0].Document,
+                _demoTenantId,
+                sequenceNumber: $"RX-{DateTime.UtcNow:yyyyMMdd}-0001",
+                notes: "Prescrição para controle de hipertensão arterial"
+            );
+
+            // Add prescription item
+            var item1 = new DigitalPrescriptionItem(
+                prescription1.Id,
+                Guid.NewGuid(), // medicationId - Losartana
+                "Losartana Potássica",
+                "50mg",
+                "Comprimido",
+                "1 comprimido ao dia",
+                30, // duration
+                30, // quantity
+                _demoTenantId,
+                genericName: "Losartan",
+                activeIngredient: "Losartana potássica",
+                isControlledSubstance: false,
+                administrationRoute: "Via oral",
+                instructions: "Tomar pela manhã em jejum"
+            );
+            prescription1.AddItem(item1);
+
+            // Sign the prescription
+            prescription1.SignPrescription(
+                "DIGITAL-SIGNATURE-" + Guid.NewGuid().ToString("N").Substring(0, 16).ToUpperInvariant(),
+                "CERT-THUMBPRINT-" + DateTime.UtcNow.Ticks
+            );
+
+            prescriptions.Add(prescription1);
+
+            // Digital prescription for second completed appointment (Ana - Diabetes)
+            var prescription2 = new DigitalPrescription(
+                medicalRecords[1].Id,
+                patients[1].Id,
+                doctor.Id,
+                PrescriptionType.Simple,
+                doctor.FullName,
+                doctor.ProfessionalId ?? _demoDoctorCRM,
+                doctor.Specialty ?? _demoDoctorCRMState,
+                patients[1].Name,
+                patients[1].Document,
+                _demoTenantId,
+                sequenceNumber: $"RX-{DateTime.UtcNow:yyyyMMdd}-0002",
+                notes: "Prescrição para controle de diabetes tipo 2"
+            );
+
+            // Add prescription items
+            var item2a = new DigitalPrescriptionItem(
+                prescription2.Id,
+                Guid.NewGuid(), // medicationId - Metformina
+                "Metformina",
+                "850mg",
+                "Comprimido",
+                "1 comprimido 2x ao dia",
+                30, // duration
+                60, // quantity
+                _demoTenantId,
+                genericName: "Metformin",
+                activeIngredient: "Cloridrato de metformina",
+                isControlledSubstance: false,
+                administrationRoute: "Via oral",
+                instructions: "Tomar junto com as refeições (almoço e jantar)"
+            );
+            prescription2.AddItem(item2a);
+
+            var item2b = new DigitalPrescriptionItem(
+                prescription2.Id,
+                Guid.NewGuid(), // medicationId - Omeprazol
+                "Omeprazol",
+                "20mg",
+                "Cápsula",
+                "1 cápsula ao dia",
+                30, // duration
+                30, // quantity
+                _demoTenantId,
+                genericName: "Omeprazole",
+                activeIngredient: "Omeprazol magnésico",
+                isControlledSubstance: false,
+                administrationRoute: "Via oral",
+                instructions: "Tomar em jejum, 30 minutos antes do café da manhã"
+            );
+            prescription2.AddItem(item2b);
+
+            // Sign the prescription
+            prescription2.SignPrescription(
+                "DIGITAL-SIGNATURE-" + Guid.NewGuid().ToString("N").Substring(0, 16).ToUpperInvariant(),
+                "CERT-THUMBPRINT-" + DateTime.UtcNow.Ticks
+            );
+
+            prescriptions.Add(prescription2);
+
+            return prescriptions;
+        }
+
+        private List<HealthInsurancePlan> CreateDemoHealthInsurancePlans(List<Patient> patients)
+        {
+            var plans = new List<HealthInsurancePlan>();
+            var today = DateTime.UtcNow.Date;
+
+            // Health insurance for Carlos (patient[0])
+            plans.Add(new HealthInsurancePlan(
+                patients[0].Id,
+                "Unimed São Paulo",
+                "12345678",
+                today.AddYears(-2), // Started 2 years ago
+                _demoTenantId,
+                "Plano Básico",
+                today.AddYears(1),  // Valid for 1 more year
+                patients[0].Name    // Holder name
+            ));
+
+            // Health insurance for Ana (patient[1])
+            plans.Add(new HealthInsurancePlan(
+                patients[1].Id,
+                "Bradesco Saúde",
+                "87654321",
+                today.AddMonths(-6), // Started 6 months ago
+                _demoTenantId,
+                "Plano Premium",
+                today.AddMonths(18), // Valid for 18 more months
+                patients[1].Name
+            ));
+
+            // Health insurance for Pedro (patient[2])
+            plans.Add(new HealthInsurancePlan(
+                patients[2].Id,
+                "SulAmérica Saúde",
+                "11223344",
+                today.AddMonths(-3), // Started 3 months ago
+                _demoTenantId,
+                "Plano Executivo",
+                today.AddMonths(21), // Valid for 21 more months
+                patients[2].Name
+            ));
+
+            return plans;
+        }
+
+        private List<Invoice> CreateDemoInvoices(List<Appointment> appointments, Guid clinicId)
+        {
+            var invoices = new List<Invoice>();
+            var today = DateTime.UtcNow.Date;
+
+            // Invoice for first completed appointment (Carlos) - requires a Payment first
+            // Note: Invoices are linked to payments, so we generate invoice numbers based on existing payments
+            var invoice1 = new Invoice(
+                $"INV-{today.Year:D4}{today.Month:D2}-0001",
+                Guid.NewGuid(), // This should be linked to the actual payment, but for seed we'll use a placeholder
+                InvoiceType.Appointment,
+                150.00m, // Amount
+                0.00m,   // No tax
+                today.AddDays(23),  // Due date
+                "Carlos Alberto Santos",
+                _demoTenantId,
+                description: "Consulta Médica Geral",
+                customerDocument: "529.982.247-25",
+                customerAddress: "Rua das Flores, 100 - Centro, São Paulo - SP"
+            );
+            invoice1.Issue();
+            invoice1.MarkAsPaid(today.AddDays(-7));
+            invoices.Add(invoice1);
+
+            // Invoice for second completed appointment (Ana)
+            var invoice2 = new Invoice(
+                $"INV-{today.Year:D4}{today.Month:D2}-0002",
+                Guid.NewGuid(),
+                InvoiceType.Appointment,
+                370.00m, // 250 + 120
+                0.00m,
+                today.AddDays(25),
+                "Ana Maria Oliveira",
+                _demoTenantId,
+                description: "Consulta Cardiológica + ECG",
+                customerDocument: "318.649.712-40",
+                customerAddress: "Avenida Paulista, 200 - Bela Vista, São Paulo - SP"
+            );
+            invoice2.Issue();
+            invoice2.MarkAsPaid(today.AddDays(-5));
+            invoices.Add(invoice2);
+
+            // Invoice for today's appointment (Pedro) - pending
+            var invoice3 = new Invoice(
+                $"INV-{today.Year:D4}{today.Month:D2}-0003",
+                Guid.NewGuid(),
+                InvoiceType.Appointment,
+                150.00m,
+                0.00m,
+                today.AddDays(30),
+                "Pedro Henrique Costa",
+                _demoTenantId,
+                description: "Consulta Médica",
+                customerDocument: "123.891.234-65",
+                customerAddress: "Rua Augusta, 300 - Consolação, São Paulo - SP"
+            );
+            invoice3.Issue();
+            invoice3.MarkAsSent(); // Invoice sent but not paid yet
+            invoices.Add(invoice3);
+
+            return invoices;
         }
     }
 }
