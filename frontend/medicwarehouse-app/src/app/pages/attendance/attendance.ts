@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { interval, Subscription, forkJoin } from 'rxjs';
 import { Navbar } from '../../shared/navbar/navbar';
 import { RichTextEditor } from '../../shared/rich-text-editor/rich-text-editor';
+import { InformedConsentFormComponent } from './components/informed-consent-form.component';
 import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
 import { PatientService } from '../../services/patient';
@@ -29,7 +30,7 @@ const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent],
   templateUrl: './attendance.html',
   styleUrl: './attendance.scss'
 })
@@ -697,5 +698,10 @@ export class Attendance implements OnInit, OnDestroy {
         setTimeout(() => this.errorMessage.set(''), 3000);
       }
     });
+  }
+
+  // CFM 1.821 - Informed Consent Management
+  onConsentCreated(consent: InformedConsent): void {
+    this.informedConsents.update(consents => [...consents, consent]);
   }
 }

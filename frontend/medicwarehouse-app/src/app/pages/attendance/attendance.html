@@ -399,6 +399,25 @@
             }
           </div>
 
+          <!-- CFM 1.821 - Informed Consent -->
+          <div class="card">
+            <div class="card-header-flex">
+              <h3>Consentimento Informado - CFM 1.821 <span class="required-badge">Obrigatório</span></h3>
+            </div>
+            
+            @if (medicalRecord()?.id && patient()?.id) {
+              <app-informed-consent-form 
+                [medicalRecordId]="medicalRecord()!.id"
+                [patientId]="patient()!.id"
+                (consentCreated)="onConsentCreated($event)"
+              ></app-informed-consent-form>
+            } @else {
+              <p class="text-muted">
+                ⚠️ Salve o prontuário primeiro para registrar o consentimento informado.
+              </p>
+            }
+          </div>
+
           <!-- CFM 1.821 - Therapeutic Plan -->
           <div class="card">
             <div class="card-header-flex">
