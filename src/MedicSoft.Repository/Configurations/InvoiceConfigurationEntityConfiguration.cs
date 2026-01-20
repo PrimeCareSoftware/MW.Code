@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MedicSoft.Domain.Entities;
+using InvoiceConfigEntity = MedicSoft.Domain.Entities.InvoiceConfiguration;
 
 namespace MedicSoft.Repository.Configurations
 {
-    public class InvoiceConfigurationEntityConfiguration : IEntityTypeConfiguration<InvoiceConfiguration>
+    public class InvoiceConfigurationEntityConfiguration : IEntityTypeConfiguration<InvoiceConfigEntity>
     {
-        public void Configure(EntityTypeBuilder<InvoiceConfiguration> builder)
+        public void Configure(EntityTypeBuilder<InvoiceConfigEntity> builder)
         {
             builder.ToTable("InvoiceConfigurations");
 

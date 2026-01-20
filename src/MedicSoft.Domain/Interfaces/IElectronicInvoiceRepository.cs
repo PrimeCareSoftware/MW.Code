@@ -7,7 +7,7 @@ namespace MedicSoft.Domain.Interfaces
 {
     public interface IElectronicInvoiceRepository : IRepository<ElectronicInvoice>
     {
-        Task<ElectronicInvoice?> GetByIdAsync(Guid id, string tenantId);
+        new Task<ElectronicInvoice?> GetByIdAsync(Guid id, string tenantId);
         Task<ElectronicInvoice?> GetByNumberAsync(string number, string series, string tenantId);
         Task<ElectronicInvoice?> GetByAccessKeyAsync(string accessKey);
         Task<ElectronicInvoice?> GetByPaymentIdAsync(Guid paymentId, string tenantId);

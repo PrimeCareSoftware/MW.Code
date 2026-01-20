@@ -15,7 +15,7 @@ namespace MedicSoft.Repository.Repositories
         {
         }
 
-        public async Task<ElectronicInvoice?> GetByIdAsync(Guid id, string tenantId)
+        public new async Task<ElectronicInvoice?> GetByIdAsync(Guid id, string tenantId)
         {
             return await _dbSet
                 .Where(i => i.Id == id && i.TenantId == tenantId)

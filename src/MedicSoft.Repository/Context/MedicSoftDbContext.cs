@@ -99,7 +99,7 @@ namespace MedicSoft.Repository.Context
         
         // Electronic Invoices (NF-e/NFS-e)
         public DbSet<ElectronicInvoice> ElectronicInvoices { get; set; } = null!;
-        public DbSet<InvoiceConfiguration> InvoiceConfigurations { get; set; } = null!;
+        public DbSet<Domain.Entities.InvoiceConfiguration> InvoiceConfigurations { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -117,7 +117,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new MedicationConfiguration());
             modelBuilder.ApplyConfiguration(new PrescriptionItemConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
-            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationRoutineConfiguration());
             modelBuilder.ApplyConfiguration(new SubscriptionPlanConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicSubscriptionConfiguration());
