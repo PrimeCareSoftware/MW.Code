@@ -80,6 +80,20 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Medications Management
+  {
+    path: 'medications',
+    loadComponent: () => import('./pages/medications/medications-list').then(m => m.MedicationsList),
+    canActivate: [systemAdminGuard]
+  },
+  
+  // Exam Catalog Management
+  {
+    path: 'exam-catalog',
+    loadComponent: () => import('./pages/exam-catalog/exam-catalog-list').then(m => m.ExamCatalogList),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];

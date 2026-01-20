@@ -1,0 +1,240 @@
+<app-navbar></app-navbar>
+
+<div class="medications-list">
+  <div class="header">
+    <div>
+      <h1>Gerenciar Medicações</h1>
+      <p class="subtitle">Catálogo de medicamentos do mercado brasileiro</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      <span>➕ Nova Medicação</span>
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Buscar por nome, princípio ativo, fabricante..."
+        class="filter-input"
+        (keyup.enter)="applyFilters()"
+      />
+      <select [(ngModel)]="selectedCategory" class="filter-select">
+        <option [value]="undefined">Todas as categorias</option>
+        @for (option of getCategoryOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+      <button class="btn btn-secondary" (click)="applyFilters()">🔍 Filtrar</button>
+      <button class="btn btn-secondary" (click)="clearFilters()">✖️ Limpar</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Carregando medicações...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Erro: {{ error() }}</p>
+      <button (click)="loadMedications()" class="btn-retry">Tentar novamente</button>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table class="medications-table">
+        <thead>
+          <tr>
+            <th>Medicação</th>
+            <th>Categoria</th>
+            <th>Dosagem</th>
+            <th>Forma Farmacêutica</th>
+            <th>Fabricante</th>
+            <th>Controlado</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (med of medications(); track med.id) {
+            <tr>
+              <td>
+                <div class="medication-info">
+                  <div class="medication-name">{{ med.name }}</div>
+                  @if (med.genericName) {
+                    <div class="medication-generic">{{ med.genericName }}</div>
+                  }
+                  @if (med.activeIngredient) {
+                    <div class="medication-ingredient">{{ med.activeIngredient }}</div>
+                  }
+                </div>
+              </td>
+              <td>
+                <span class="category-badge">{{ getCategoryLabel(med.category) }}</span>
+              </td>
+              <td>{{ med.dosage }}</td>
+              <td>{{ med.pharmaceuticalForm }}</td>
+              <td>{{ med.manufacturer || '-' }}</td>
+              <td>
+                @if (med.isControlled) {
+                  <span class="controlled-badge">🔒 {{ getControlledListLabel(med.controlledList) }}</span>
+                } @else {
+                  <span class="not-controlled">-</span>
+                }
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="med.isActive" [class.inactive]="!med.isActive">
+                  {{ med.isActive ? '✅ Ativo' : '🚫 Inativo' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-icon" (click)="openEditModal(med)" title="Editar">
+                    ✏️
+                  </button>
+                  <button 
+                    class="btn-icon" 
+                    [class.btn-danger]="med.isActive"
+                    [class.btn-success]="!med.isActive"
+                    (click)="toggleStatus(med)" 
+                    [title]="med.isActive ? 'Desativar' : 'Ativar'"
+                  >
+                    {{ med.isActive ? '🚫' : '✅' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (medications().length === 0) {
+        <div class="no-data">
+          <p>Nenhuma medicação encontrada</p>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingMedication ? 'Editar Medicação' : 'Nova Medicação' }}</h2>
+        <button class="btn-close" (click)="closeModal()">×</button>
+      </div>
+      
+      <form (ngSubmit)="onSubmit()" class="modal-body">
+        @if (modalError()) {
+          <div class="alert alert-error">{{ modalError() }}</div>
+        }
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>Nome <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="formData.name" name="name" required class="form-control" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Dosagem <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="formData.dosage" name="dosage" required class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome Genérico</label>
+            <input type="text" [(ngModel)]="formData.genericName" name="genericName" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Princípio Ativo</label>
+            <input type="text" [(ngModel)]="formData.activeIngredient" name="activeIngredient" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Forma Farmacêutica <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="formData.pharmaceuticalForm" name="pharmaceuticalForm" required class="form-control" placeholder="Ex: Comprimido, Cápsula, Xarope" />
+          </div>
+          <div class="form-group">
+            <label>Concentração</label>
+            <input type="text" [(ngModel)]="formData.concentration" name="concentration" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Via de Administração</label>
+            <input type="text" [(ngModel)]="formData.administrationRoute" name="administrationRoute" class="form-control" placeholder="Ex: Oral, Intravenosa, Tópica" />
+          </div>
+          <div class="form-group">
+            <label>Fabricante</label>
+            <input type="text" [(ngModel)]="formData.manufacturer" name="manufacturer" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Categoria <span class="required">*</span></label>
+            <select [(ngModel)]="formData.category" name="category" required class="form-control">
+              @for (option of getCategoryOptions(); track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Registro ANVISA</label>
+            <input type="text" [(ngModel)]="formData.anvisaRegistration" name="anvisaRegistration" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Código de Barras</label>
+            <input type="text" [(ngModel)]="formData.barcode" name="barcode" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="formData.requiresPrescription" name="requiresPrescription" />
+              Requer Prescrição
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="formData.isControlled" name="isControlled" />
+              Medicamento Controlado
+            </label>
+          </div>
+          @if (formData.isControlled) {
+            <div class="form-group">
+              <label>Lista de Substância Controlada</label>
+              <select [(ngModel)]="formData.controlledList" name="controlledList" class="form-control">
+                @for (option of getControlledListOptions(); track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea [(ngModel)]="formData.description" name="description" rows="3" class="form-control"></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="submitting()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+            {{ submitting() ? 'Salvando...' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

@@ -1,0 +1,189 @@
+<app-navbar></app-navbar>
+
+<div class="exam-catalog-list">
+  <div class="header">
+    <div>
+      <h1>Gerenciar Catálogo de Exames</h1>
+      <p class="subtitle">Catálogo de exames com códigos TUSS para o mercado brasileiro</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      <span>➕ Novo Exame</span>
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Buscar por nome, categoria, sinônimos, código TUSS..."
+        class="filter-input"
+        (keyup.enter)="applyFilters()"
+      />
+      <select [(ngModel)]="selectedType" class="filter-select">
+        <option [value]="undefined">Todos os tipos</option>
+        @for (option of getTypeOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+      <button class="btn btn-secondary" (click)="applyFilters()">🔍 Filtrar</button>
+      <button class="btn btn-secondary" (click)="clearFilters()">✖️ Limpar</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Carregando exames...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Erro: {{ error() }}</p>
+      <button (click)="loadExams()" class="btn-retry">Tentar novamente</button>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table class="exams-table">
+        <thead>
+          <tr>
+            <th>Exame</th>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Código TUSS</th>
+            <th>Preparo</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (exam of exams(); track exam.id) {
+            <tr>
+              <td>
+                <div class="exam-info">
+                  <div class="exam-name">{{ exam.name }}</div>
+                  @if (exam.description) {
+                    <div class="exam-desc">{{ exam.description }}</div>
+                  }
+                  @if (exam.synonyms) {
+                    <div class="exam-synonyms">Sinônimos: {{ exam.synonyms }}</div>
+                  }
+                </div>
+              </td>
+              <td>
+                <span class="type-badge">{{ getTypeLabel(exam.examType) }}</span>
+              </td>
+              <td>{{ exam.category || '-' }}</td>
+              <td>
+                @if (exam.tussCode) {
+                  <span class="tuss-code">{{ exam.tussCode }}</span>
+                } @else {
+                  <span class="no-code">-</span>
+                }
+              </td>
+              <td>
+                @if (exam.preparation) {
+                  <div class="preparation">{{ exam.preparation }}</div>
+                } @else {
+                  <span class="no-prep">Sem preparo</span>
+                }
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="exam.isActive" [class.inactive]="!exam.isActive">
+                  {{ exam.isActive ? '✅ Ativo' : '🚫 Inativo' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-icon" (click)="openEditModal(exam)" title="Editar">
+                    ✏️
+                  </button>
+                  <button 
+                    class="btn-icon" 
+                    [class.btn-danger]="exam.isActive"
+                    [class.btn-success]="!exam.isActive"
+                    (click)="toggleStatus(exam)" 
+                    [title]="exam.isActive ? 'Desativar' : 'Ativar'"
+                  >
+                    {{ exam.isActive ? '🚫' : '✅' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (exams().length === 0) {
+        <div class="no-data">
+          <p>Nenhum exame encontrado</p>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingExam ? 'Editar Exame' : 'Novo Exame' }}</h2>
+        <button class="btn-close" (click)="closeModal()">×</button>
+      </div>
+      
+      <form (ngSubmit)="onSubmit()" class="modal-body">
+        @if (modalError()) {
+          <div class="alert alert-error">{{ modalError() }}</div>
+        }
+
+        <div class="form-group">
+          <label>Nome do Exame <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="formData.name" name="name" required class="form-control" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tipo de Exame <span class="required">*</span></label>
+            <select [(ngModel)]="formData.examType" name="examType" required class="form-control">
+              @for (option of getTypeOptions(); track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Categoria</label>
+            <input type="text" [(ngModel)]="formData.category" name="category" class="form-control" placeholder="Ex: Bioquímica, Hematologia, Radiologia" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Código TUSS</label>
+            <input type="text" [(ngModel)]="formData.tussCode" name="tussCode" class="form-control" placeholder="Ex: 40302040" />
+          </div>
+          <div class="form-group">
+            <label>Sinônimos</label>
+            <input type="text" [(ngModel)]="formData.synonyms" name="synonyms" class="form-control" placeholder="Separados por vírgula" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea [(ngModel)]="formData.description" name="description" rows="2" class="form-control" placeholder="Breve descrição do exame"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Instruções de Preparo</label>
+          <textarea [(ngModel)]="formData.preparation" name="preparation" rows="3" class="form-control" placeholder="Ex: Jejum de 8 horas, não necessita preparo, etc."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="submitting()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+            {{ submitting() ? 'Salvando...' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
