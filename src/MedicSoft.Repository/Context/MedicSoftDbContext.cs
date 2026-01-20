@@ -92,6 +92,10 @@ namespace MedicSoft.Repository.Context
         public DbSet<CashFlowEntry> CashFlowEntries { get; set; } = null!;
         public DbSet<FinancialClosure> FinancialClosures { get; set; } = null!;
         public DbSet<FinancialClosureItem> FinancialClosureItems { get; set; } = null!;
+        
+        // Configurable Consultation Forms
+        public DbSet<ConsultationFormProfile> ConsultationFormProfiles { get; set; } = null!;
+        public DbSet<ConsultationFormConfiguration> ConsultationFormConfigurations { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -171,6 +175,10 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new CashFlowEntryConfiguration());
             modelBuilder.ApplyConfiguration(new FinancialClosureConfiguration());
             modelBuilder.ApplyConfiguration(new FinancialClosureItemConfiguration());
+            
+            // Configurable Consultation Forms
+            modelBuilder.ApplyConfiguration(new ConsultationFormProfileConfiguration());
+            modelBuilder.ApplyConfiguration(new ConsultationFormConfigurationConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
