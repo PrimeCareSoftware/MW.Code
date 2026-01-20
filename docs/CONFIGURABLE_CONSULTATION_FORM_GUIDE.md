@@ -4,6 +4,65 @@
 
 The Configurable Consultation Form feature allows clinic owners to customize their medical consultation forms based on their specialty (doctor, psychologist, nutritionist, etc.). This makes the PrimeCare Software adaptable to different types of healthcare professionals.
 
+## System Default Profiles
+
+When you run the data seeder (`POST /api/data-seeder/seed`), the system automatically creates 8 predefined system default profiles that serve as templates for different healthcare specialties:
+
+### Available System Default Profiles
+
+1. **Médico - Padrão CFM 1.821**
+   - Complete profile for medical doctors with all CFM 1.821 mandatory fields enabled
+   - Shows: Chief Complaint, History of Present Illness, Past Medical History, Family History, Lifestyle Habits, Current Medications
+   - Use case: General medical consultations requiring full regulatory compliance
+
+2. **Psicólogo - Saúde Mental**
+   - Psychology-focused profile with mental health custom fields
+   - Custom fields: Psychological evaluation, anxiety level scale (0-10), psychiatric medication usage
+   - Use case: Mental health consultations and psychological assessments
+
+3. **Nutricionista - Avaliação Nutricional**
+   - Nutrition profile with dietary assessment fields
+   - Custom fields: Current weight, height, nutritional goals, dietary restrictions
+   - Use case: Nutritional consultations and dietary planning
+
+4. **Fisioterapeuta - Avaliação Física**
+   - Physical therapy profile with physical assessment fields
+   - Custom fields: Affected area, pain level (0-10), mobility assessment
+   - Use case: Physical therapy sessions and rehabilitation
+
+5. **Dentista - Avaliação Odontológica**
+   - Dental profile with oral health assessment
+   - Custom fields: Affected tooth, oral hygiene level, use of dental floss
+   - Use case: Dental consultations and oral health assessments
+
+6. **Enfermeiro - Consulta de Enfermagem**
+   - Nursing profile with clinical assessment fields
+   - Custom fields: Vital signs, procedures performed
+   - Use case: Nursing consultations and clinical procedures
+
+7. **Terapeuta Ocupacional - Avaliação Funcional**
+   - Occupational therapy profile with functional assessment
+   - Custom fields: Activities of daily living (ADLs), independence level
+   - Use case: Occupational therapy and functional rehabilitation
+
+8. **Fonoaudiólogo - Avaliação Fonoaudiológica**
+   - Speech therapy profile with communication assessment
+   - Custom fields: Assessment areas (language, speech, voice, etc.), evaluation observations
+   - Use case: Speech therapy and communication disorders
+
+### Using System Default Profiles
+
+These system default profiles are marked with `isSystemDefault: true` and:
+- ✅ **Cannot be deleted** - They serve as permanent templates
+- ✅ **Can be copied** - You can create custom profiles based on them
+- ✅ **Are read-only** - They cannot be directly modified to maintain consistency
+- ✅ **Auto-created** - Automatically seeded when you initialize demo data
+
+To use a system default profile:
+1. Get the list of profiles: `GET /api/consultation-form-profiles`
+2. Find the system default profile for your specialty (check `isSystemDefault: true`)
+3. Use it as-is, or copy it to create a customized version for your clinic
+
 ## Features
 
 ### 1. Predefined Profiles

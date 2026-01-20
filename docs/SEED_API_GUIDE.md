@@ -14,6 +14,7 @@
 
 A API de Seed permite popular o banco de dados com dados de exemplo completos e realistas para desenvolvimento e testes. O sistema cria automaticamente:
 
+- ✅ **8 Perfis de formulário de consulta padrão do sistema** (Médico, Psicólogo, Nutricionista, Fisioterapeuta, Dentista, Enfermeiro, Terapeuta Ocupacional, Fonoaudiólogo) 🆕
 - ✅ **5 Planos de assinatura** (Trial, Básico, Standard, Premium, Enterprise)
 - ✅ **1 Clínica Demo** completa com configurações
 - ✅ **1 Assinatura ativa** (Plano Standard)
