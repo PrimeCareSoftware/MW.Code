@@ -9,6 +9,25 @@ namespace MedicSoft.Api.Controllers
 {
     /// <summary>
     /// Controller for managing invoices (nota fiscal)
+    /// 
+    /// NOTA IMPORTANTE / IMPORTANT NOTE:
+    /// =================================
+    /// Este sistema de nota fiscal está implementado, mas aguarda decisão sobre:
+    /// - Usar um serviço externo para emissão de NF-e/NFS-e (Focus NFe, ENotas, etc)
+    /// - Desenvolver integração própria com SEFAZ
+    /// 
+    /// This invoice system is implemented but awaits decision on:
+    /// - Using an external service for NF-e/NFS-e issuance (Focus NFe, ENotas, etc)
+    /// - Developing own integration with SEFAZ
+    /// 
+    /// TODO: Avaliar serviços externos para emissão de nota fiscal eletrônica
+    /// TODO: Evaluate external services for electronic invoice issuance
+    /// 
+    /// Serviços sugeridos / Suggested services:
+    /// - Focus NFe (https://focusnfe.com.br/)
+    /// - ENotas (https://enotas.com.br/)
+    /// - PlugNotas (https://plugnotas.com.br/)
+    /// - NFSe.io (https://nfse.io/)
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]

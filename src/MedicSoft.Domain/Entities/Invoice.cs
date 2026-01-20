@@ -23,6 +23,20 @@ namespace MedicSoft.Domain.Entities
     /// <summary>
     /// Represents an invoice (nota fiscal) for a payment.
     /// Supports appointment and subscription invoices.
+    /// 
+    /// NOTA IMPORTANTE / IMPORTANT NOTE:
+    /// =================================
+    /// Esta entidade representa o controle interno de invoices, mas NÃO emite
+    /// notas fiscais eletrônicas oficiais (NF-e/NFS-e). Aguarda decisão sobre:
+    /// - Integração com serviço externo (Focus NFe, ENotas, etc)
+    /// - Desenvolvimento de integração própria com SEFAZ
+    /// 
+    /// This entity represents internal invoice control, but does NOT issue
+    /// official electronic invoices (NF-e/NFS-e). Awaits decision on:
+    /// - Integration with external service (Focus NFe, ENotas, etc)
+    /// - Development of own integration with SEFAZ
+    /// 
+    /// Ver/See: docs/DECISAO_NOTA_FISCAL.md para análise completa
     /// </summary>
     public class Invoice : BaseEntity
     {
