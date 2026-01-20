@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotificationService } from '../../services/notification.service';
-import type { Notification } from '../../models/notification.model';
-import { NotificationType } from '../../models/notification.model';
+import { Notification, NotificationType } from '../../models/notification.model';
 
 @Component({
   selector: 'app-notification-panel',
@@ -73,7 +72,8 @@ export class NotificationPanel implements OnInit, OnDestroy {
     }
   }
 
-  formatTime(date: Date): string {
+  formatTime(date: Date | string | undefined): string {
+    if (!date) return '';
     const now = new Date();
     const notificationDate = new Date(date);
     const diffMs = now.getTime() - notificationDate.getTime();
@@ -90,8 +90,8 @@ export class NotificationPanel implements OnInit, OnDestroy {
   }
 
   private showBrowserNotification(notification: Notification): void {
-    if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification(notification.title, {
+    if ('Notification' in window && (window as any).Notification.permission === 'granted') {
+      new (window as any).Notification(notification.title, {
         body: notification.message,
         icon: '/assets/icons/icon-192x192.png'
       });
@@ -99,8 +99,8 @@ export class NotificationPanel implements OnInit, OnDestroy {
   }
 
   requestNotificationPermission(): void {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
+    if ('Notification' in window && (window as any).Notification.permission === 'default') {
+      (window as any).Notification.requestPermission();
     }
   }
 }

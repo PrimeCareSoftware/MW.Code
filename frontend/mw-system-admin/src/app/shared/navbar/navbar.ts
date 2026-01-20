@@ -13,7 +13,6 @@ import { NotificationPanel } from '../notification-panel/notification-panel';
 export class Navbar implements OnInit, OnDestroy {
   dropdownOpen = false;
   sidebarOpen = true;
-  adminDropdownOpen = false;
   
   constructor(public authService: Auth) {
     // Check localStorage for sidebar state
@@ -47,21 +46,12 @@ export class Navbar implements OnInit, OnDestroy {
     }
   }
   
-  toggleAdminDropdown(): void {
-    this.adminDropdownOpen = !this.adminDropdownOpen;
-  }
-  
   closeSidebar(): void {
     if (window.innerWidth < 1024) {
       this.sidebarOpen = false;
       localStorage.setItem('sidebarOpen', 'false');
       this.updateBodyClass();
     }
-  }
-  
-  isOwner(): boolean {
-    const user = this.authService.currentUser();
-    return user ? (user.role === 'Owner' || user.role === 'ClinicOwner' || !!user.isSystemOwner) : false;
   }
 
   isSystemAdmin(): boolean {
@@ -75,14 +65,10 @@ export class Navbar implements OnInit, OnDestroy {
     if (!target.closest('.user-dropdown')) {
       this.dropdownOpen = false;
     }
-    if (!target.closest('.admin-dropdown')) {
-      this.adminDropdownOpen = false;
-    }
   }
 
   logout(): void {
     this.dropdownOpen = false;
-    this.adminDropdownOpen = false;
     this.authService.logout();
   }
 }

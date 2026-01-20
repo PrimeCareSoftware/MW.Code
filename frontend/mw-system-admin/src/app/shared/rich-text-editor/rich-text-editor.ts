@@ -295,9 +295,9 @@ export class RichTextEditor implements OnInit, OnDestroy, ControlValueAccessor {
 
     if (type === 'medication') {
       this.medicationService.search(term).subscribe({
-        next: (results) => {
+        next: (results: any[]) => {
           this.autocompleteItems.set(
-            results.map((item) => ({
+            results.map((item: any) => ({
               id: item.id,
               text: `${item.name} ${item.dosage} - ${item.pharmaceuticalForm}`,
               type: 'medication' as const,
@@ -314,9 +314,9 @@ export class RichTextEditor implements OnInit, OnDestroy, ControlValueAccessor {
       });
     } else {
       this.examCatalogService.search(term).subscribe({
-        next: (results) => {
+        next: (results: any[]) => {
           this.autocompleteItems.set(
-            results.map((item) => ({
+            results.map((item: any) => ({
               id: item.id,
               text: item.name,
               type: 'exam' as const,
