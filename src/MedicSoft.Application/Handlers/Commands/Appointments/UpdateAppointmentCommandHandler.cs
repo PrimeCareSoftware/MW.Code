@@ -42,6 +42,19 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 appointment.Reschedule(request.UpdateData.ScheduledDate, request.UpdateData.ScheduledTime);
             }
 
+            // Update duration if changed
+            if (appointment.DurationMinutes != request.UpdateData.DurationMinutes)
+            {
+                appointment.UpdateDuration(request.UpdateData.DurationMinutes);
+            }
+
+            // Update type if changed
+            if (Enum.TryParse<AppointmentType>(request.UpdateData.Type, true, out var appointmentType) 
+                && appointment.Type != appointmentType)
+            {
+                appointment.UpdateType(appointmentType);
+            }
+
             // Update notes if provided
             if (request.UpdateData.Notes != null)
             {
