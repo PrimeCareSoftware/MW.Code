@@ -127,6 +127,10 @@ namespace MedicSoft.Domain.Common
         public const string AuthorizationsCreate = "authorizations.create";
         public const string AuthorizationsEdit = "authorizations.edit";
         public const string AuthorizationsDelete = "authorizations.delete";
+        
+        // Form Configuration (Clinic Owner only)
+        public const string FormConfigurationView = "form-configuration.view";
+        public const string FormConfigurationManage = "form-configuration.manage";
 
         /// <summary>
         /// Gets all available permissions grouped by category
@@ -329,6 +333,13 @@ namespace MedicSoft.Domain.Common
                         new(AuthorizationsCreate, "Criar autorizações"),
                         new(AuthorizationsEdit, "Editar autorizações"),
                         new(AuthorizationsDelete, "Excluir autorizações")
+                    }
+                },
+                {
+                    "Configuração de Formulário de Atendimento", new List<PermissionInfo>
+                    {
+                        new(FormConfigurationView, "Visualizar configuração de formulários"),
+                        new(FormConfigurationManage, "Gerenciar configuração de formulários")
                     }
                 }
             };
