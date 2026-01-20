@@ -283,6 +283,10 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ICashFlowEntryRepository, CashFlowEntryRepository>();
 builder.Services.AddScoped<IFinancialClosureRepository, FinancialClosureRepository>();
 
+// Consultation Form Configuration - Repositories
+builder.Services.AddScoped<IConsultationFormProfileRepository, ConsultationFormProfileRepository>();
+builder.Services.AddScoped<IConsultationFormConfigurationRepository, ConsultationFormConfigurationRepository>();
+
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
@@ -307,6 +311,9 @@ builder.Services.AddScoped<IClinicalExaminationService, ClinicalExaminationServi
 builder.Services.AddScoped<IDiagnosticHypothesisService, DiagnosticHypothesisService>();
 builder.Services.AddScoped<ITherapeuticPlanService, TherapeuticPlanService>();
 builder.Services.AddScoped<IInformedConsentService, InformedConsentService>();
+
+// Consultation Form Configuration - Services
+builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFormConfigurationService>();
 
 // Digital Prescriptions and SNGPC Services
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
