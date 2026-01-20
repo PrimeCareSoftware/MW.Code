@@ -32,6 +32,8 @@ export interface CreateAppointment {
 export interface UpdateAppointment {
   scheduledDate: string;
   scheduledTime: string;
+  durationMinutes: number;
+  type: string;
   notes?: string;
 }
 
