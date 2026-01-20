@@ -68,6 +68,23 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Patient>> SearchAsync(string searchTerm, string tenantId, Guid clinicId)
+        {
+            var searchTermLower = searchTerm.ToLower();
+            return await _dbSet
+                .Where(p => (p.Name.ToLower().Contains(searchTermLower) || 
+                            p.Document.Contains(searchTerm) ||  // CPF is numeric, case-insensitive not needed
+                            p.Phone.Number.Contains(searchTerm)) &&  // Phone is numeric, case-insensitive not needed
+                            p.TenantId == tenantId &&
+                            p.IsActive &&
+                            _context.Set<PatientClinicLink>().Any(cl => 
+                               cl.PatientId == p.Id && 
+                               cl.ClinicId == clinicId && 
+                               cl.IsActive))
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
         public async Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null)
         {
             var query = _dbSet.Where(p => p.Document == document && p.TenantId == tenantId);

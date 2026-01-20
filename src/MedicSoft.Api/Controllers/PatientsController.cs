@@ -36,21 +36,7 @@ namespace MedicSoft.Api.Controllers
         [RequirePermissionKey(PermissionKeys.PatientsView)]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
         {
-            // Get clinicId from JWT token
-            var clinicId = GetClinicId();
-            
-            // If user has a clinic ID, filter patients by clinic
-            // Otherwise, return all patients in the tenant (for system admins)
-            IEnumerable<PatientDto> patients;
-            if (clinicId.HasValue)
-            {
-                patients = await _patientService.GetPatientsByClinicIdAsync(clinicId.Value, GetTenantId());
-            }
-            else
-            {
-                patients = await _patientService.GetAllPatientsAsync(GetTenantId());
-            }
-            
+            var patients = await _patientService.GetAllPatientsAsync(GetTenantId());
             return Ok(patients);
         }
 
@@ -114,6 +100,14 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var patient = await _patientService.CreatePatientAsync(createPatientDto, GetTenantId());
+                
+                // Automatically link patient to user's clinic if user has a clinic
+                var clinicId = GetClinicId();
+                if (clinicId.HasValue)
+                {
+                    await _patientService.LinkPatientToClinicAsync(patient.Id, clinicId.Value, GetTenantId());
+                }
+                
                 return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
             }
             catch (InvalidOperationException ex)

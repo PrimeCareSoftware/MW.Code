@@ -13,6 +13,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<Patient>> SearchByNameAsync(string name, string tenantId);
         Task<IEnumerable<Patient>> SearchByPhoneAsync(string phoneNumber, string tenantId);
         Task<IEnumerable<Patient>> SearchAsync(string searchTerm, string tenantId);
+        Task<IEnumerable<Patient>> SearchAsync(string searchTerm, string tenantId, Guid clinicId);
         Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null);
         Task<bool> IsEmailUniqueAsync(string email, string tenantId, Guid? excludeId = null);
         Task<IEnumerable<Patient>> GetChildrenOfGuardianAsync(Guid guardianId, string tenantId);
