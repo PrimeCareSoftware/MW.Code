@@ -64,7 +64,7 @@ export class Navbar implements OnInit, OnDestroy {
   }
   
   closeSidebar(): void {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+    if (typeof window !== 'undefined' && typeof window.innerWidth === 'number' && window.innerWidth < 1024) {
       this.sidebarOpen = false;
       if (typeof localStorage !== 'undefined') {
         try {
@@ -84,9 +84,9 @@ export class Navbar implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== 'undefined' && event?.target) {
       const target = event.target as HTMLElement;
-      if (!target.closest('.user-dropdown')) {
+      if (target.closest && !target.closest('.user-dropdown')) {
         this.dropdownOpen = false;
       }
     }
