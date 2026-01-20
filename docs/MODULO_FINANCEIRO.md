@@ -1,5 +1,21 @@
 # Módulo Financeiro - Documentação Completa
 
+## ⚠️ NOTA IMPORTANTE SOBRE NOTA FISCAL ELETRÔNICA
+
+**Status:** Janeiro 2026  
+**Decisão Pendente:** Emissão de NF-e/NFS-e
+
+O módulo financeiro está **COMPLETO E FUNCIONAL**, com exceção da emissão oficial de notas fiscais eletrônicas (NF-e/NFS-e), que aguarda decisão estratégica sobre:
+
+1. **Usar serviço externo (RECOMENDADO):** Focus NFe, ENotas, PlugNotas, NFSe.io
+2. **Desenvolver integração própria:** Integração direta com SEFAZ
+
+📄 **Documentação Completa da Decisão:** [DECISAO_NOTA_FISCAL.md](DECISAO_NOTA_FISCAL.md)
+
+O sistema atual de Invoice está implementado para controle interno, mas NÃO emite notas fiscais oficiais. Para compliance total, é necessário implementar uma das opções acima.
+
+---
+
 ## Visão Geral
 
 O Módulo Financeiro é uma solução completa para gestão financeira de clínicas e consultórios médicos, incluindo contas a receber, contas a pagar, fluxo de caixa, fechamento de consultas e integração com TISS/TUSS.
