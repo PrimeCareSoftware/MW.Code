@@ -40,8 +40,19 @@ public class ConsentController : ControllerBase
                 return BadRequest("TenantId header is required");
 
             // Get IP address and user agent from request
-            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrWhiteSpace(ipAddress))
+            {
+                _logger.LogWarning("Unable to capture IP address for consent recording");
+                return BadRequest("Unable to capture client IP address for audit trail. Please ensure proper network configuration.");
+            }
+            
             var userAgent = HttpContext.Request.Headers.UserAgent.ToString();
+            if (string.IsNullOrWhiteSpace(userAgent))
+            {
+                userAgent = "unknown-agent";
+                _logger.LogWarning("Unable to capture user agent for consent recording");
+            }
 
             var result = await _telemedicineService.RecordConsentAsync(request, ipAddress, userAgent, tenantId);
             return CreatedAtAction(nameof(GetConsentById), new { id = result.Id }, result);

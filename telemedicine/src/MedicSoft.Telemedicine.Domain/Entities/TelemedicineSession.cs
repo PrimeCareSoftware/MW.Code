@@ -80,7 +80,12 @@ public class TelemedicineSession
     public DateTime? UpdatedAt { get; private set; }
     
     // EF Core requires parameterless constructor
-    private TelemedicineSession() { }
+    private TelemedicineSession() 
+    {
+        TenantId = string.Empty;
+        RoomId = string.Empty;
+        RoomUrl = string.Empty;
+    }
     
     public TelemedicineSession(
         string tenantId,

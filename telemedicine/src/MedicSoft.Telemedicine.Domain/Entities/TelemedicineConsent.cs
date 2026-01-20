@@ -65,7 +65,13 @@ public class TelemedicineConsent
     public DateTime? UpdatedAt { get; private set; }
     
     // EF Core requires parameterless constructor
-    private TelemedicineConsent() { }
+    private TelemedicineConsent() 
+    {
+        TenantId = string.Empty;
+        ConsentText = string.Empty;
+        IpAddress = string.Empty;
+        UserAgent = string.Empty;
+    }
     
     public TelemedicineConsent(
         string tenantId,
