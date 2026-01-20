@@ -49,12 +49,12 @@ O sistema PrimeCare Software possui uma implementação básica de gerenciamento
 
 **Serviços Recomendados:**
 
-| Serviço | Custo | Características |
-|---------|-------|-----------------|
-| **Focus NFe** | R$ 50-150/mês | - API REST completa<br>- Webhook para eventos<br>- Dashboard<br>- Suporte técnico<br>- Homologado nacionalmente |
-| **ENotas** | R$ 80-200/mês | - NF-e, NFS-e, NFC-e<br>- Integração fácil<br>- Planos escaláveis<br>- Dashboard completo |
-| **PlugNotas** | R$ 60-120/mês | - API REST e SOAP<br>- Multi-cidades<br>- Gestão de certificados<br>- Logs detalhados |
-| **NFSe.io** | R$ 40-100/mês | - Focado em NFS-e<br>- Simples e direto<br>- API REST<br>- Bom custo-benefício |
+| Serviço | Custo Mensal | Principais Características |
+|---------|--------------|----------------------------|
+| **Focus NFe** | R$ 50-150 | API REST completa, Webhook para eventos, Dashboard, Suporte técnico, Homologado nacionalmente |
+| **ENotas** | R$ 80-200 | NF-e, NFS-e, NFC-e, Integração fácil, Planos escaláveis, Dashboard completo |
+| **PlugNotas** | R$ 60-120 | API REST e SOAP, Multi-cidades, Gestão de certificados, Logs detalhados |
+| **NFSe.io** | R$ 40-100 | Focado em NFS-e, Simples e direto, API REST, Bom custo-benefício |
 
 **Esforço de Implementação:**
 - 1-2 semanas
@@ -260,7 +260,8 @@ Para tomar a decisão final, considerar:
 
 ---
 
-**Documento Criado:** Janeiro 2026  
+**Documento Criado:** 2026-01-20  
+**Última Atualização:** 2026-01-20  
 **Versão:** 1.0  
 **Autor:** GitHub Copilot  
 **Status:** AGUARDANDO DECISÃO
