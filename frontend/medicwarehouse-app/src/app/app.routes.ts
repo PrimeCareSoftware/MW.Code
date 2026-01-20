@@ -115,6 +115,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'appointments/:id/edit', 
+    loadComponent: () => import('./pages/appointments/appointment-form/appointment-form').then(m => m.AppointmentForm),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'appointments/:appointmentId/attendance', 
     loadComponent: () => import('./pages/attendance/attendance').then(m => m.Attendance),
     canActivate: [authGuard]

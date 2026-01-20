@@ -134,6 +134,27 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
 
+        public void UpdateDuration(int durationMinutes)
+        {
+            if (Status == AppointmentStatus.Completed || Status == AppointmentStatus.Cancelled)
+                throw new InvalidOperationException("Não é possível alterar a duração de consultas concluídas ou canceladas");
+
+            if (durationMinutes <= 0)
+                throw new ArgumentException("A duração deve ser positiva", nameof(durationMinutes));
+
+            DurationMinutes = durationMinutes;
+            UpdateTimestamp();
+        }
+
+        public void UpdateType(AppointmentType type)
+        {
+            if (Status == AppointmentStatus.Completed || Status == AppointmentStatus.Cancelled)
+                throw new InvalidOperationException("Não é possível alterar o tipo de consultas concluídas ou canceladas");
+
+            Type = type;
+            UpdateTimestamp();
+        }
+
         public void UpdateNotes(string notes)
         {
             Notes = notes?.Trim();

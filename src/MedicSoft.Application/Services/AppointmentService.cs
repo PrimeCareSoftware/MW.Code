@@ -8,6 +8,7 @@ namespace MedicSoft.Application.Services
     public interface IAppointmentService
     {
         Task<AppointmentDto> CreateAppointmentAsync(CreateAppointmentDto createAppointmentDto, string tenantId);
+        Task<AppointmentDto> UpdateAppointmentAsync(Guid appointmentId, UpdateAppointmentDto updateAppointmentDto, string tenantId);
         Task<bool> CancelAppointmentAsync(Guid appointmentId, string cancellationReason, string tenantId);
         Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId);
         Task<IEnumerable<AvailableSlotDto>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, int durationMinutes, string tenantId);
@@ -26,6 +27,12 @@ namespace MedicSoft.Application.Services
         public async Task<AppointmentDto> CreateAppointmentAsync(CreateAppointmentDto createAppointmentDto, string tenantId)
         {
             var command = new CreateAppointmentCommand(createAppointmentDto, tenantId);
+            return await _mediator.Send(command);
+        }
+
+        public async Task<AppointmentDto> UpdateAppointmentAsync(Guid appointmentId, UpdateAppointmentDto updateAppointmentDto, string tenantId)
+        {
+            var command = new UpdateAppointmentCommand(appointmentId, updateAppointmentDto, tenantId);
             return await _mediator.Send(command);
         }
 

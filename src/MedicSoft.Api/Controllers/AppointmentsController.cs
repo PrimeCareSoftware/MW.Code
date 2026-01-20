@@ -45,6 +45,27 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Update an existing appointment (requires appointments.edit permission)
+        /// </summary>
+        [HttpPut("{id}")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsEdit)]
+        public async Task<ActionResult<AppointmentDto>> Update(Guid id, [FromBody] UpdateAppointmentDto updateAppointmentDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var appointment = await _appointmentService.UpdateAppointmentAsync(id, updateAppointmentDto, GetTenantId());
+                return Ok(appointment);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Cancel an appointment (requires appointments.edit permission)
         /// </summary>
         [HttpPut("{id}/cancel")]

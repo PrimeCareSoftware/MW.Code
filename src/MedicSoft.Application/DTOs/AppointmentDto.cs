@@ -37,6 +37,8 @@ namespace MedicSoft.Application.DTOs
     {
         public DateTime ScheduledDate { get; set; }
         public TimeSpan ScheduledTime { get; set; }
+        public int DurationMinutes { get; set; }
+        public string Type { get; set; } = "Regular";
         public string? Notes { get; set; }
     }
 
