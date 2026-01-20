@@ -49,10 +49,17 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             }
 
             // Update type if changed
-            if (Enum.TryParse<AppointmentType>(request.UpdateData.Type, true, out var appointmentType) 
-                && appointment.Type != appointmentType)
+            if (!string.IsNullOrWhiteSpace(request.UpdateData.Type))
             {
-                appointment.UpdateType(appointmentType);
+                if (!Enum.TryParse<AppointmentType>(request.UpdateData.Type, true, out var appointmentType))
+                {
+                    throw new InvalidOperationException($"Invalid appointment type: {request.UpdateData.Type}");
+                }
+                
+                if (appointment.Type != appointmentType)
+                {
+                    appointment.UpdateType(appointmentType);
+                }
             }
 
             // Update notes if provided

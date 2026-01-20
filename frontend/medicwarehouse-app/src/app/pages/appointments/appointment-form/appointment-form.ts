@@ -90,10 +90,6 @@ export class AppointmentForm implements OnInit {
           notes: appointment.notes || ''
         });
         
-        // Disable patient and clinic fields in edit mode
-        this.appointmentForm.get('patientId')?.disable();
-        this.appointmentForm.get('clinicId')?.disable();
-        
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -123,7 +119,7 @@ export class AppointmentForm implements OnInit {
       this.successMessage.set('');
 
       if (this.isEditMode() && this.appointmentId) {
-        // Update existing appointment
+        // Update existing appointment - only send editable fields
         const updateData = {
           scheduledDate: this.appointmentForm.value.scheduledDate,
           scheduledTime: this.appointmentForm.value.scheduledTime,
@@ -145,7 +141,7 @@ export class AppointmentForm implements OnInit {
           }
         });
       } else {
-        // Create new appointment
+        // Create new appointment - send all fields
         this.appointmentService.create(this.appointmentForm.value).subscribe({
           next: () => {
             this.successMessage.set('Agendamento criado com sucesso!');

@@ -41,12 +41,15 @@
       
       <div class="form-group">
         <label for="patientId">Paciente <span class="required">*</span></label>
-        <select id="patientId" formControlName="patientId" class="form-control">
+        <select id="patientId" formControlName="patientId" class="form-control" [attr.disabled]="isEditMode() ? '' : null">
           <option value="">Selecione um paciente</option>
           @for (patient of patients(); track patient.id) {
             <option [value]="patient.id">{{ patient.name }}</option>
           }
         </select>
+        @if (isEditMode()) {
+          <small class="form-text">O paciente não pode ser alterado após o agendamento</small>
+        }
       </div>
 
       <div class="form-row">
