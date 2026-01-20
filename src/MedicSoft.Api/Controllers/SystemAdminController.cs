@@ -989,7 +989,9 @@ namespace MedicSoft.Api.Controllers
             [FromQuery] Guid? clinicId = null,
             [FromQuery] string? tenantId = null)
         {
-            // This endpoint is for system owners
+            if (!IsSystemOwner())
+                return Forbid();
+
             var tickets = await _ticketService.GetAllTicketsAsync(status, type, clinicId, tenantId);
             return Ok(tickets);
         }
@@ -1000,8 +1002,24 @@ namespace MedicSoft.Api.Controllers
         [HttpGet("tickets/statistics")]
         public async Task<ActionResult> GetTicketStatistics([FromQuery] Guid? clinicId = null, [FromQuery] string? tenantId = null)
         {
+            if (!IsSystemOwner())
+                return Forbid();
+
             var stats = await _ticketService.GetTicketStatisticsAsync(clinicId, tenantId);
             return Ok(stats);
+        }
+
+        /// <summary>
+        /// Check if current user is a system owner
+        /// </summary>
+        private bool IsSystemOwner()
+        {
+            var isSystemOwnerClaim = User.FindFirst("is_system_owner");
+            if (isSystemOwnerClaim != null && bool.TryParse(isSystemOwnerClaim.Value, out var isSystemOwner))
+            {
+                return isSystemOwner;
+            }
+            return false;
         }
     }
 
