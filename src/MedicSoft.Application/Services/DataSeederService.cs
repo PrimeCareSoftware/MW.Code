@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.ValueObjects;
 
@@ -40,6 +41,7 @@ namespace MedicSoft.Application.Services
         private readonly IHealthInsurancePlanRepository _healthInsurancePlanRepository;
         private readonly IHealthInsuranceOperatorRepository _healthInsuranceOperatorRepository;
         private readonly IInvoiceRepository _invoiceRepository;
+        private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
         private readonly string _demoTenantId = "demo-clinic-001";
         private const string _demoDoctorCRM = "CRM-123456";
         private const string _demoDoctorSpecialty = "Clínico Geral";
@@ -72,7 +74,8 @@ namespace MedicSoft.Application.Services
             IDigitalPrescriptionRepository digitalPrescriptionRepository,
             IHealthInsurancePlanRepository healthInsurancePlanRepository,
             IHealthInsuranceOperatorRepository healthInsuranceOperatorRepository,
-            IInvoiceRepository invoiceRepository)
+            IInvoiceRepository invoiceRepository,
+            IConsultationFormProfileRepository consultationFormProfileRepository)
         {
             _clinicRepository = clinicRepository;
             _userRepository = userRepository;
@@ -101,6 +104,7 @@ namespace MedicSoft.Application.Services
             _healthInsurancePlanRepository = healthInsurancePlanRepository;
             _healthInsuranceOperatorRepository = healthInsuranceOperatorRepository;
             _invoiceRepository = invoiceRepository;
+            _consultationFormProfileRepository = consultationFormProfileRepository;
         }
 
         public async Task SeedDemoDataAsync()
@@ -117,7 +121,14 @@ namespace MedicSoft.Application.Services
                     throw new InvalidOperationException("Demo data already exists for this tenant");
                 }
 
-                // 0. Create Subscription Plans (system-wide)
+                // 0. Create System Default Consultation Form Profiles (system-wide templates)
+                var consultationFormProfiles = CreateSystemDefaultConsultationFormProfiles();
+                foreach (var profile in consultationFormProfiles)
+                {
+                    await _consultationFormProfileRepository.AddWithoutSaveAsync(profile);
+                }
+
+                // 1. Create Subscription Plans (system-wide)
                 var subscriptionPlans = CreateDemoSubscriptionPlans();
                 foreach (var plan in subscriptionPlans)
                 {
@@ -2361,6 +2372,326 @@ RETORNO: {{return_date}}",
             // Invoices should only be created when there's an associated payment
 
             return invoices;
+        }
+
+        /// <summary>
+        /// Creates system default consultation form profiles for different healthcare specialties
+        /// These profiles serve as templates that clinics can use or customize
+        /// </summary>
+        private List<ConsultationFormProfile> CreateSystemDefaultConsultationFormProfiles()
+        {
+            var profiles = new List<ConsultationFormProfile>();
+
+            // 1. Médico (Doctor) - Complete CFM 1.821 compliance
+            var medicoProfile = new ConsultationFormProfile(
+                "Médico - Padrão CFM 1.821",
+                "Perfil completo para médicos com todos os campos obrigatórios CFM 1.821",
+                ProfessionalSpecialty.Medico,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: true,
+                showLifestyleHabits: true,
+                showCurrentMedications: true,
+                customFields: null, // All standard CFM fields
+                isSystemDefault: true
+            );
+            profiles.Add(medicoProfile);
+
+            // 2. Psicólogo (Psychologist) - Mental health focused
+            var psicologoProfile = new ConsultationFormProfile(
+                "Psicólogo - Saúde Mental",
+                "Perfil para psicólogos com foco em avaliação de saúde mental",
+                ProfessionalSpecialty.Psicologo,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: false, // Not typically needed for psychology
+                showFamilyHistory: true,
+                showLifestyleHabits: true,
+                showCurrentMedications: false, // Usually handled separately
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "motivo_consulta",
+                        "Motivo da Consulta",
+                        CustomFieldType.TextoLongo,
+                        isRequired: true,
+                        displayOrder: 1,
+                        helpText: "Descreva o motivo principal que trouxe o paciente à consulta"
+                    ),
+                    new CustomField(
+                        "historico_psiquiatrico",
+                        "Histórico Psiquiátrico",
+                        CustomFieldType.TextoLongo,
+                        isRequired: false,
+                        displayOrder: 2,
+                        helpText: "Histórico de tratamentos psiquiátricos anteriores"
+                    ),
+                    new CustomField(
+                        "nivel_ansiedade",
+                        "Nível de Ansiedade (0-10)",
+                        CustomFieldType.Numero,
+                        isRequired: true,
+                        displayOrder: 3,
+                        placeholder: "0-10",
+                        helpText: "Escala de 0 (sem ansiedade) a 10 (ansiedade extrema)"
+                    ),
+                    new CustomField(
+                        "uso_medicacao_psiquiatrica",
+                        "Faz uso de medicação psiquiátrica?",
+                        CustomFieldType.SimNao,
+                        isRequired: true,
+                        displayOrder: 4
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(psicologoProfile);
+
+            // 3. Nutricionista (Nutritionist) - Dietary assessment
+            var nutricionistaProfile = new ConsultationFormProfile(
+                "Nutricionista - Avaliação Nutricional",
+                "Perfil para nutricionistas com foco em avaliação dietética",
+                ProfessionalSpecialty.Nutricionista,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: true,
+                showLifestyleHabits: true,
+                showCurrentMedications: true,
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "peso_atual",
+                        "Peso Atual (kg)",
+                        CustomFieldType.Numero,
+                        isRequired: true,
+                        displayOrder: 1,
+                        placeholder: "Ex: 70.5"
+                    ),
+                    new CustomField(
+                        "altura",
+                        "Altura (cm)",
+                        CustomFieldType.Numero,
+                        isRequired: true,
+                        displayOrder: 2,
+                        placeholder: "Ex: 165"
+                    ),
+                    new CustomField(
+                        "objetivo_nutricional",
+                        "Objetivo Nutricional",
+                        CustomFieldType.SelecaoUnica,
+                        isRequired: true,
+                        displayOrder: 3,
+                        options: new List<string> { "Perda de peso", "Ganho de massa muscular", "Manutenção", "Reeducação alimentar", "Tratamento de doença" }
+                    ),
+                    new CustomField(
+                        "restricoes_alimentares",
+                        "Restrições Alimentares",
+                        CustomFieldType.SelecaoMultipla,
+                        isRequired: false,
+                        displayOrder: 4,
+                        options: new List<string> { "Lactose", "Glúten", "Frutos do mar", "Nozes", "Soja", "Ovo", "Outras" }
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(nutricionistaProfile);
+
+            // 4. Fisioterapeuta (Physiotherapist) - Physical therapy
+            var fisioterapeutaProfile = new ConsultationFormProfile(
+                "Fisioterapeuta - Avaliação Física",
+                "Perfil para fisioterapeutas com foco em avaliação física e motora",
+                ProfessionalSpecialty.Fisioterapeuta,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: false,
+                showLifestyleHabits: true,
+                showCurrentMedications: true,
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "area_acometida",
+                        "Área Acometida",
+                        CustomFieldType.TextoSimples,
+                        isRequired: true,
+                        displayOrder: 1,
+                        placeholder: "Ex: Joelho direito"
+                    ),
+                    new CustomField(
+                        "nivel_dor",
+                        "Nível de Dor (0-10)",
+                        CustomFieldType.Numero,
+                        isRequired: true,
+                        displayOrder: 2,
+                        placeholder: "0-10",
+                        helpText: "Escala de 0 (sem dor) a 10 (dor máxima)"
+                    ),
+                    new CustomField(
+                        "mobilidade",
+                        "Avaliação de Mobilidade",
+                        CustomFieldType.TextoLongo,
+                        isRequired: true,
+                        displayOrder: 3,
+                        helpText: "Descreva a capacidade de movimento e limitações"
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(fisioterapeutaProfile);
+
+            // 5. Dentista (Dentist) - Dental consultation
+            var dentistaProfile = new ConsultationFormProfile(
+                "Dentista - Avaliação Odontológica",
+                "Perfil para dentistas com foco em avaliação odontológica",
+                ProfessionalSpecialty.Dentista,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: false,
+                showLifestyleHabits: true,
+                showCurrentMedications: true,
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "dente_acometido",
+                        "Dente Acometido",
+                        CustomFieldType.TextoSimples,
+                        isRequired: false,
+                        displayOrder: 1,
+                        placeholder: "Ex: 16, 21, etc"
+                    ),
+                    new CustomField(
+                        "higiene_bucal",
+                        "Higiene Bucal",
+                        CustomFieldType.SelecaoUnica,
+                        isRequired: true,
+                        displayOrder: 2,
+                        options: new List<string> { "Excelente", "Boa", "Regular", "Ruim" }
+                    ),
+                    new CustomField(
+                        "usa_fio_dental",
+                        "Usa fio dental regularmente?",
+                        CustomFieldType.SimNao,
+                        isRequired: true,
+                        displayOrder: 3
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(dentistaProfile);
+
+            // 6. Enfermeiro (Nurse) - Nursing consultation
+            var enfermeiroProfile = new ConsultationFormProfile(
+                "Enfermeiro - Consulta de Enfermagem",
+                "Perfil para enfermeiros com campos de avaliação clínica",
+                ProfessionalSpecialty.Enfermeiro,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: true,
+                showLifestyleHabits: true,
+                showCurrentMedications: true,
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "sinais_vitais",
+                        "Sinais Vitais",
+                        CustomFieldType.TextoLongo,
+                        isRequired: true,
+                        displayOrder: 1,
+                        helpText: "PA, FC, FR, Temperatura, SpO2"
+                    ),
+                    new CustomField(
+                        "procedimento_realizado",
+                        "Procedimento Realizado",
+                        CustomFieldType.TextoLongo,
+                        isRequired: false,
+                        displayOrder: 2
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(enfermeiroProfile);
+
+            // 7. Terapeuta Ocupacional (Occupational Therapist)
+            var terapeutaOcupacionalProfile = new ConsultationFormProfile(
+                "Terapeuta Ocupacional - Avaliação Funcional",
+                "Perfil para terapeutas ocupacionais com foco em funcionalidade",
+                ProfessionalSpecialty.TerapeutaOcupacional,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: false,
+                showLifestyleHabits: true,
+                showCurrentMedications: true,
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "atividades_vida_diaria",
+                        "Atividades de Vida Diária (AVDs)",
+                        CustomFieldType.TextoLongo,
+                        isRequired: true,
+                        displayOrder: 1,
+                        helpText: "Avalie a capacidade de realizar atividades cotidianas"
+                    ),
+                    new CustomField(
+                        "nivel_independencia",
+                        "Nível de Independência",
+                        CustomFieldType.SelecaoUnica,
+                        isRequired: true,
+                        displayOrder: 2,
+                        options: new List<string> { "Totalmente independente", "Independente com adaptações", "Parcialmente dependente", "Totalmente dependente" }
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(terapeutaOcupacionalProfile);
+
+            // 8. Fonoaudiólogo (Speech Therapist)
+            var fonoaudiologoProfile = new ConsultationFormProfile(
+                "Fonoaudiólogo - Avaliação Fonoaudiológica",
+                "Perfil para fonoaudiólogos com foco em comunicação e deglutição",
+                ProfessionalSpecialty.Fonoaudiologo,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: true,
+                showLifestyleHabits: false,
+                showCurrentMedications: true,
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "area_avaliacao",
+                        "Área de Avaliação",
+                        CustomFieldType.SelecaoMultipla,
+                        isRequired: true,
+                        displayOrder: 1,
+                        options: new List<string> { "Linguagem", "Fala", "Voz", "Audição", "Deglutição", "Motricidade orofacial" }
+                    ),
+                    new CustomField(
+                        "observacoes_avaliacao",
+                        "Observações da Avaliação",
+                        CustomFieldType.TextoLongo,
+                        isRequired: true,
+                        displayOrder: 2,
+                        helpText: "Descreva os achados da avaliação fonoaudiológica"
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(fonoaudiologoProfile);
+
+            return profiles;
         }
     }
 }
