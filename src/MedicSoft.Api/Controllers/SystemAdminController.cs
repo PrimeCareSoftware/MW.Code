@@ -28,6 +28,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IPasswordHasher _passwordHasher;
         private readonly MedicSoftDbContext _context;
         private readonly IOwnerService _ownerService;
+        private readonly ITicketService _ticketService;
 
         public SystemAdminController(
             ITenantContext tenantContext,
@@ -37,7 +38,8 @@ namespace MedicSoft.Api.Controllers
             ISubscriptionPlanRepository planRepository,
             IPasswordHasher passwordHasher,
             MedicSoftDbContext context,
-            IOwnerService ownerService) : base(tenantContext)
+            IOwnerService ownerService,
+            ITicketService ticketService) : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
             _subscriptionRepository = subscriptionRepository;
@@ -46,6 +48,7 @@ namespace MedicSoft.Api.Controllers
             _passwordHasher = passwordHasher;
             _context = context;
             _ownerService = ownerService;
+            _ticketService = ticketService;
         }
 
         /// <summary>
@@ -974,6 +977,49 @@ namespace MedicSoft.Api.Controllers
             // In the monolithic API, deleting a subdomain would mean deleting a clinic
             // This is a dangerous operation and should be done through clinic deletion
             return Task.FromResult<ActionResult>(BadRequest(new { message = "Exclusão de subdomínios não é suportada. Para remover um subdomínio, desative a clínica correspondente." }));
+        }
+
+        /// <summary>
+        /// Get all tickets with filters (system owners only)
+        /// </summary>
+        [HttpGet("tickets")]
+        public async Task<ActionResult> GetAllTickets(
+            [FromQuery] TicketStatus? status = null,
+            [FromQuery] TicketType? type = null,
+            [FromQuery] Guid? clinicId = null,
+            [FromQuery] string? tenantId = null)
+        {
+            if (!IsSystemOwner())
+                return Forbid();
+
+            var tickets = await _ticketService.GetAllTicketsAsync(status, type, clinicId, tenantId);
+            return Ok(tickets);
+        }
+
+        /// <summary>
+        /// Get ticket statistics (system owners only)
+        /// </summary>
+        [HttpGet("tickets/statistics")]
+        public async Task<ActionResult> GetTicketStatistics([FromQuery] Guid? clinicId = null, [FromQuery] string? tenantId = null)
+        {
+            if (!IsSystemOwner())
+                return Forbid();
+
+            var stats = await _ticketService.GetTicketStatisticsAsync(clinicId, tenantId);
+            return Ok(stats);
+        }
+
+        /// <summary>
+        /// Check if current user is a system owner
+        /// </summary>
+        private bool IsSystemOwner()
+        {
+            var isSystemOwnerClaim = User.FindFirst("is_system_owner");
+            if (isSystemOwnerClaim != null && bool.TryParse(isSystemOwnerClaim.Value, out var isSystemOwner))
+            {
+                return isSystemOwner;
+            }
+            return false;
         }
     }
 
