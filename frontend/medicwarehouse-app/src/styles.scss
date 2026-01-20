@@ -823,18 +823,18 @@ img {
   h3 { font-size: var(--font-size-xl); }
 }
 
-/* Layout adjustments for sidebar */
-body {
+/* Layout adjustments for sidebar - Only apply to authenticated/dashboard pages */
+body.has-navbar {
   padding-top: var(--navbar-height);
 }
 
 /* Adjust main content area based on sidebar state */
 @media (min-width: 1024px) {
-  body {
+  body.has-sidebar {
     padding-left: var(--sidebar-collapsed-width);
   }
   
-  body.sidebar-open {
+  body.has-sidebar.sidebar-open {
     padding-left: var(--sidebar-width);
   }
 }

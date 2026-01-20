@@ -22,11 +22,12 @@ export class Navbar implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    document.body.classList.add('has-navbar', 'has-sidebar');
     this.updateBodyClass();
   }
 
   ngOnDestroy(): void {
-    document.body.classList.remove('sidebar-open');
+    document.body.classList.remove('sidebar-open', 'has-navbar', 'has-sidebar');
   }
 
   toggleDropdown(): void {
