@@ -20,11 +20,9 @@ server {
     }
 
     # Proxy API requests to backend
-    # For Docker deployments, use http://api:8080
-    # For development, use http://localhost:5293
-    # To use environment variables at runtime, use envsubst before starting nginx
+    # This template file uses environment variable substitution
     location /api/ {
-        proxy_pass http://localhost:5293;
+        proxy_pass ${API_URL};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

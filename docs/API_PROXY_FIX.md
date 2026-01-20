@@ -54,15 +54,30 @@ When you make a request to `http://localhost:4201/api/exam-catalog`:
 5. Response is returned to the browser
 
 ## Docker Configuration
-In Docker environments, the nginx configuration needs to be updated to use the correct backend URL. This can be done by:
+In Docker environments, nginx uses environment variable substitution to configure the backend API URL dynamically.
 
-1. Using environment variables in docker-compose:
+### How It Works
+The nginx Docker image automatically processes template files in `/etc/nginx/templates/` and substitutes environment variables before starting. We provide two files:
+
+1. **nginx.conf** - Used for local development/testing (hardcoded to `http://localhost:5293`)
+2. **nginx.conf.template** - Used in Docker production (uses `${API_URL}` environment variable)
+
+### Configuration
+The API URL can be configured in docker-compose.yml:
+
 ```yaml
-environment:
-  - API_URL=http://api:8080
+services:
+  system-admin:
+    build:
+      context: ./frontend/mw-system-admin
+      dockerfile: Dockerfile.production
+      args:
+        API_URL: ${API_URL:-http://api:8080}
+    environment:
+      - API_URL=${API_URL:-http://api:8080}
 ```
 
-2. Or by using a startup script to replace the API URL in the nginx.conf
+The default is `http://api:8080` which points to the API service within the Docker network.
 
 ## Testing
 To test if the fix is working:
@@ -83,9 +98,13 @@ npm start
 4. Check the browser's network tab to confirm API requests return JSON instead of HTML
 
 ## Files Modified
-- `frontend/mw-system-admin/proxy.conf.json` (created)
-- `frontend/medicwarehouse-app/proxy.conf.json` (created)
+- `frontend/mw-system-admin/proxy.conf.json` (created) - Angular dev proxy configuration
+- `frontend/medicwarehouse-app/proxy.conf.json` (created) - Angular dev proxy configuration
 - `frontend/mw-system-admin/angular.json` (updated to use proxy config)
 - `frontend/medicwarehouse-app/angular.json` (updated to use proxy config)
-- `frontend/mw-system-admin/nginx.conf` (added API proxy configuration)
-- `frontend/medicwarehouse-app/nginx.conf` (added API proxy configuration)
+- `frontend/mw-system-admin/nginx.conf` (added API proxy for local development)
+- `frontend/medicwarehouse-app/nginx.conf` (added API proxy for local development)
+- `frontend/mw-system-admin/nginx.conf.template` (created) - Template for Docker with env vars
+- `frontend/medicwarehouse-app/nginx.conf.template` (created) - Template for Docker with env vars
+- `frontend/mw-system-admin/Dockerfile.production` (updated to use template)
+- `frontend/medicwarehouse-app/Dockerfile.production` (updated to use template)
