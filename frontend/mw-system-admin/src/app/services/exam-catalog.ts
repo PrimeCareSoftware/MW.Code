@@ -8,7 +8,7 @@ import { ExamCatalog, CreateExamCatalogRequest, UpdateExamCatalogRequest } from 
   providedIn: 'root'
 })
 export class ExamCatalogService {
-  private readonly baseUrl = '/api/exam-catalog';
+  private readonly baseUrl = '/api/ExamCatalog';
 
   constructor(private http: HttpClient) {}
 
