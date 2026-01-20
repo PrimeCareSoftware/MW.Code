@@ -57,4 +57,41 @@ public interface ITelemedicineService
     /// Gets all sessions for a patient
     /// </summary>
     Task<IEnumerable<SessionResponse>> GetPatientSessionsAsync(Guid patientId, string tenantId, int skip = 0, int take = 50);
+    
+    // CFM 2.314/2022 Compliance - Consent Management
+    
+    /// <summary>
+    /// Records patient consent for telemedicine (CFM 2.314 requirement)
+    /// </summary>
+    Task<ConsentResponse> RecordConsentAsync(CreateConsentRequest request, string ipAddress, string userAgent, string tenantId);
+    
+    /// <summary>
+    /// Revokes an existing consent
+    /// </summary>
+    Task<ConsentResponse> RevokeConsentAsync(Guid consentId, string reason, string tenantId);
+    
+    /// <summary>
+    /// Gets consent by ID
+    /// </summary>
+    Task<ConsentResponse?> GetConsentByIdAsync(Guid consentId, string tenantId);
+    
+    /// <summary>
+    /// Gets all consents for a patient
+    /// </summary>
+    Task<IEnumerable<ConsentResponse>> GetPatientConsentsAsync(Guid patientId, string tenantId, bool activeOnly = true);
+    
+    /// <summary>
+    /// Checks if patient has valid active consent
+    /// </summary>
+    Task<bool> HasValidConsentAsync(Guid patientId, string tenantId);
+    
+    /// <summary>
+    /// Gets most recent consent for a patient
+    /// </summary>
+    Task<ConsentResponse?> GetMostRecentConsentAsync(Guid patientId, string tenantId);
+    
+    /// <summary>
+    /// Validates first appointment rule (CFM 2.314 requirement)
+    /// </summary>
+    Task<FirstAppointmentValidationResponse> ValidateFirstAppointmentAsync(ValidateFirstAppointmentRequest request, string tenantId);
 }

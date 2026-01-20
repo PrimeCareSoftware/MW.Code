@@ -13,13 +13,16 @@ namespace MedicSoft.Telemedicine.Application.Services;
 public class TelemedicineService : ITelemedicineService
 {
     private readonly ITelemedicineSessionRepository _sessionRepository;
+    private readonly ITelemedicineConsentRepository _consentRepository;
     private readonly IVideoCallService _videoCallService;
 
     public TelemedicineService(
         ITelemedicineSessionRepository sessionRepository,
+        ITelemedicineConsentRepository consentRepository,
         IVideoCallService videoCallService)
     {
         _sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
+        _consentRepository = consentRepository ?? throw new ArgumentNullException(nameof(consentRepository));
         _videoCallService = videoCallService ?? throw new ArgumentNullException(nameof(videoCallService));
     }
 
@@ -187,6 +190,159 @@ public class TelemedicineService : ITelemedicineService
             CreatedAt = session.CreatedAt,
             DurationMinutes = session.Duration?.GetDurationInMinutes(),
             RecordingUrl = session.RecordingUrl
+        };
+    }
+    
+    // ===== CFM 2.314/2022 Compliance - Consent Management =====
+    
+    public async Task<ConsentResponse> RecordConsentAsync(CreateConsentRequest request, string ipAddress, string userAgent, string tenantId)
+    {
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
+            
+        if (string.IsNullOrWhiteSpace(ipAddress))
+            throw new ArgumentException("IP address is required", nameof(ipAddress));
+            
+        if (string.IsNullOrWhiteSpace(userAgent))
+            throw new ArgumentException("User agent is required", nameof(userAgent));
+            
+        if (string.IsNullOrWhiteSpace(tenantId))
+            throw new ArgumentException("TenantId is required", nameof(tenantId));
+        
+        // Build consent text
+        var consentText = ConsentTexts.TelemedicineConsentText
+            .Replace("[DATA_HORA_UTC]", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss UTC"))
+            .Replace("[IP_ADDRESS]", ipAddress)
+            .Replace("[USER_AGENT]", userAgent);
+        
+        if (request.AcceptsRecording)
+        {
+            consentText += "\n\n" + ConsentTexts.RecordingConsentText;
+        }
+        
+        // Create consent entity
+        var consent = new TelemedicineConsent(
+            tenantId,
+            request.PatientId,
+            consentText,
+            ipAddress,
+            userAgent,
+            request.AcceptsRecording,
+            request.AcceptsDataSharing,
+            request.AppointmentId,
+            request.DigitalSignature
+        );
+        
+        // Persist
+        await _consentRepository.AddAsync(consent);
+        
+        // If linked to appointment, update session
+        if (request.AppointmentId.HasValue)
+        {
+            var session = await _sessionRepository.GetByAppointmentIdAsync(request.AppointmentId.Value, tenantId);
+            if (session != null)
+            {
+                session.RecordConsent(consent.Id, ipAddress);
+                await _sessionRepository.UpdateAsync(session);
+            }
+        }
+        
+        return MapToConsentResponse(consent);
+    }
+    
+    public async Task<ConsentResponse> RevokeConsentAsync(Guid consentId, string reason, string tenantId)
+    {
+        var consent = await _consentRepository.GetByIdAsync(consentId, tenantId)
+            ?? throw new InvalidOperationException($"Consent {consentId} not found");
+        
+        consent.Revoke(reason);
+        await _consentRepository.UpdateAsync(consent);
+        
+        return MapToConsentResponse(consent);
+    }
+    
+    public async Task<ConsentResponse?> GetConsentByIdAsync(Guid consentId, string tenantId)
+    {
+        var consent = await _consentRepository.GetByIdAsync(consentId, tenantId);
+        return consent != null ? MapToConsentResponse(consent) : null;
+    }
+    
+    public async Task<IEnumerable<ConsentResponse>> GetPatientConsentsAsync(Guid patientId, string tenantId, bool activeOnly = true)
+    {
+        var consents = await _consentRepository.GetByPatientIdAsync(patientId, tenantId, activeOnly);
+        return consents.Select(MapToConsentResponse);
+    }
+    
+    public async Task<bool> HasValidConsentAsync(Guid patientId, string tenantId)
+    {
+        return await _consentRepository.HasValidConsentAsync(patientId, tenantId);
+    }
+    
+    public async Task<ConsentResponse?> GetMostRecentConsentAsync(Guid patientId, string tenantId)
+    {
+        var consent = await _consentRepository.GetMostRecentConsentAsync(patientId, tenantId);
+        return consent != null ? MapToConsentResponse(consent) : null;
+    }
+    
+    public async Task<FirstAppointmentValidationResponse> ValidateFirstAppointmentAsync(ValidateFirstAppointmentRequest request, string tenantId)
+    {
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
+        
+        // Check if there are any previous sessions between this patient and provider
+        var previousSessions = await _sessionRepository.GetByPatientIdAsync(request.PatientId, tenantId, 0, 1);
+        var hasCompletedSessions = previousSessions.Any(s => 
+            s.ProviderId == request.ProviderId && 
+            s.Status == SessionStatus.Completed);
+        
+        var isFirstAppointment = !hasCompletedSessions;
+        
+        if (!isFirstAppointment)
+        {
+            // Not first appointment, can proceed with telemedicine
+            return new FirstAppointmentValidationResponse
+            {
+                IsFirstAppointment = false,
+                CanProceedWithTelemedicine = true,
+                ValidationMessage = "Paciente já possui histórico de atendimento com este profissional."
+            };
+        }
+        
+        // First appointment - check if justification is provided
+        if (string.IsNullOrWhiteSpace(request.Justification))
+        {
+            return new FirstAppointmentValidationResponse
+            {
+                IsFirstAppointment = true,
+                CanProceedWithTelemedicine = false,
+                ValidationMessage = "CFM 2.314/2022: Primeiro atendimento deve ser presencial, exceto em casos justificados.",
+                RequiredJustification = "Informe a justificativa para realização de teleconsulta no primeiro atendimento."
+            };
+        }
+        
+        // First appointment with justification - can proceed
+        return new FirstAppointmentValidationResponse
+        {
+            IsFirstAppointment = true,
+            CanProceedWithTelemedicine = true,
+            ValidationMessage = "Primeiro atendimento com justificativa para teleconsulta.",
+            RequiredJustification = null
+        };
+    }
+    
+    private static ConsentResponse MapToConsentResponse(TelemedicineConsent consent)
+    {
+        return new ConsentResponse
+        {
+            Id = consent.Id,
+            PatientId = consent.PatientId,
+            AppointmentId = consent.AppointmentId,
+            ConsentDate = consent.ConsentDate,
+            AcceptsRecording = consent.AcceptsRecording,
+            AcceptsDataSharing = consent.AcceptsDataSharing,
+            IsActive = consent.IsActive,
+            RevokedAt = consent.RevokedAt,
+            RevocationReason = consent.RevocationReason
         };
     }
 }
