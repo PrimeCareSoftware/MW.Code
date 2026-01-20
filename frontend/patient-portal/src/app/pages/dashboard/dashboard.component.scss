@@ -162,11 +162,16 @@
           font-size: 44px;
           font-weight: 800;
           line-height: 1;
-          color: #1a202c;
+          color: #667eea; // Fallback for browsers that don't support gradient text
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+          
+          // Fallback for browsers without gradient text support
+          @supports not (-webkit-background-clip: text) {
+            color: #667eea;
+          }
         }
 
         .stat-label {
