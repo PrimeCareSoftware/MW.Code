@@ -201,7 +201,7 @@ export class MedicationsList implements OnInit {
       category: MedicationCategory.Other,
       requiresPrescription: false,
       isControlled: false,
-      controlledList: ControlledSubstanceList.None,
+      controlledList: undefined,
       anvisaRegistration: '',
       barcode: '',
       description: ''
