@@ -71,6 +71,9 @@ public class TelemedicineConsent
         ConsentText = string.Empty;
         IpAddress = string.Empty;
         UserAgent = string.Empty;
+        AcceptsRecording = false;
+        AcceptsDataSharing = false;
+        IsActive = false;
     }
     
     public TelemedicineConsent(

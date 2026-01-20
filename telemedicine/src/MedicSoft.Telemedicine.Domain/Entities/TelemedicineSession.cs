@@ -85,6 +85,9 @@ public class TelemedicineSession
         TenantId = string.Empty;
         RoomId = string.Empty;
         RoomUrl = string.Empty;
+        ConnectionQuality = ConnectionQuality.Unknown;
+        PatientConsented = false;
+        IsFirstAppointment = false;
     }
     
     public TelemedicineSession(
