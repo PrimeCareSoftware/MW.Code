@@ -40,11 +40,55 @@ public class TelemedicineSession
     /// </summary>
     public string? SessionNotes { get; private set; }
     
+    /// <summary>
+    /// Connection quality during the session (CFM 2.314 requirement)
+    /// </summary>
+    public ConnectionQuality ConnectionQuality { get; private set; }
+    
+    /// <summary>
+    /// Whether patient has given consent for this telemedicine session
+    /// </summary>
+    public bool PatientConsented { get; private set; }
+    
+    /// <summary>
+    /// Date when patient gave consent
+    /// </summary>
+    public DateTime? ConsentDate { get; private set; }
+    
+    /// <summary>
+    /// Reference to the consent record
+    /// </summary>
+    public Guid? ConsentId { get; private set; }
+    
+    /// <summary>
+    /// IP address from which consent was given
+    /// </summary>
+    public string? ConsentIpAddress { get; private set; }
+    
+    /// <summary>
+    /// Whether this is the first appointment between this patient and provider
+    /// CFM 2.314 requires first appointments to be in-person with exceptions
+    /// </summary>
+    public bool IsFirstAppointment { get; private set; }
+    
+    /// <summary>
+    /// Justification for telemedicine on first appointment (if applicable)
+    /// </summary>
+    public string? FirstAppointmentJustification { get; private set; }
+    
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
     
     // EF Core requires parameterless constructor
-    private TelemedicineSession() { }
+    private TelemedicineSession() 
+    {
+        TenantId = string.Empty;
+        RoomId = string.Empty;
+        RoomUrl = string.Empty;
+        ConnectionQuality = ConnectionQuality.Unknown;
+        PatientConsented = false;
+        IsFirstAppointment = false;
+    }
     
     public TelemedicineSession(
         string tenantId,
@@ -85,6 +129,9 @@ public class TelemedicineSession
         RoomId = roomId;
         RoomUrl = roomUrl;
         Status = SessionStatus.Scheduled;
+        ConnectionQuality = ConnectionQuality.Unknown;
+        PatientConsented = false;
+        IsFirstAppointment = false;
         CreatedAt = DateTime.UtcNow;
     }
     
@@ -151,5 +198,61 @@ public class TelemedicineSession
             ? notes 
             : $"{SessionNotes}\n\n{notes}";
         UpdatedAt = DateTime.UtcNow;
+    }
+    
+    /// <summary>
+    /// Records patient consent for this session (CFM 2.314 requirement)
+    /// </summary>
+    public void RecordConsent(Guid consentId, string ipAddress)
+    {
+        if (consentId == Guid.Empty)
+            throw new ArgumentException("ConsentId is required", nameof(consentId));
+            
+        if (string.IsNullOrWhiteSpace(ipAddress))
+            throw new ArgumentException("IP address is required", nameof(ipAddress));
+            
+        if (PatientConsented)
+            throw new InvalidOperationException("Consent already recorded for this session");
+        
+        PatientConsented = true;
+        ConsentDate = DateTime.UtcNow;
+        ConsentId = consentId;
+        ConsentIpAddress = ipAddress;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    /// <summary>
+    /// Sets connection quality for this session (CFM 2.314 requirement)
+    /// </summary>
+    public void SetConnectionQuality(ConnectionQuality quality)
+    {
+        ConnectionQuality = quality;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    /// <summary>
+    /// Marks this as a first appointment and provides justification if needed
+    /// </summary>
+    public void MarkAsFirstAppointment(string? justification = null)
+    {
+        IsFirstAppointment = true;
+        FirstAppointmentJustification = justification;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    /// <summary>
+    /// Validates if session can start based on CFM 2.314 requirements
+    /// </summary>
+    public bool CanStart()
+    {
+        // Must have patient consent
+        if (!PatientConsented)
+            return false;
+            
+        // If first appointment without justification, cannot proceed via telemedicine
+        if (IsFirstAppointment && string.IsNullOrWhiteSpace(FirstAppointmentJustification))
+            return false;
+            
+        return Status == SessionStatus.Scheduled;
     }
 }

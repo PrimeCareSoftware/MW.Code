@@ -15,6 +15,7 @@ namespace MedicSoft.Telemedicine.Tests.Application;
 public class TelemedicineServiceTests
 {
     private readonly Mock<ITelemedicineSessionRepository> _mockRepository;
+    private readonly Mock<ITelemedicineConsentRepository> _mockConsentRepository;
     private readonly Mock<IVideoCallService> _mockVideoService;
     private readonly TelemedicineService _service;
     private const string TenantId = "tenant-123";
@@ -22,8 +23,12 @@ public class TelemedicineServiceTests
     public TelemedicineServiceTests()
     {
         _mockRepository = new Mock<ITelemedicineSessionRepository>();
+        _mockConsentRepository = new Mock<ITelemedicineConsentRepository>();
         _mockVideoService = new Mock<IVideoCallService>();
-        _service = new TelemedicineService(_mockRepository.Object, _mockVideoService.Object);
+        _service = new TelemedicineService(
+            _mockRepository.Object,
+            _mockConsentRepository.Object,
+            _mockVideoService.Object);
     }
 
     [Fact]
