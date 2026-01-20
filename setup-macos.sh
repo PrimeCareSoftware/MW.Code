@@ -165,7 +165,7 @@ echo ""
 
 # Restaurar dependências do .NET
 echo -e "${BLUE}[7/11] Restaurando dependências do .NET...${NC}"
-dotnet restore "$SCRIPT_DIR/PrimeCare Software.sln"
+dotnet restore "$SCRIPT_DIR/src/src.sln"
 echo -e "${GREEN}✓${NC} Dependências do .NET restauradas"
 echo ""
 

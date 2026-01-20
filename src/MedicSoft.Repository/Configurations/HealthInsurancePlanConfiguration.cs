@@ -41,7 +41,8 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(h => h.HolderName)
                 .HasMaxLength(200);
 
-            builder.Property(h => h.PatientId);
+            builder.Property(h => h.PatientId)
+                .IsRequired(false); // Nullable for TISS plans
 
             builder.Property(h => h.ValidFrom);
 
@@ -64,7 +65,8 @@ namespace MedicSoft.Repository.Configurations
             builder.HasOne(h => h.Patient)
                 .WithMany(p => p.HealthInsurancePlans)
                 .HasForeignKey(h => h.PatientId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false); // Optional relationship
 
             // Indexes
             builder.HasIndex(h => new { h.TenantId, h.PatientId })

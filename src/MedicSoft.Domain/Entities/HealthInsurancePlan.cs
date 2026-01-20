@@ -26,7 +26,7 @@ namespace MedicSoft.Domain.Entities
         
         // DEPRECATED: Manter para retrocompatibilidade, será removido em versão futura
         [Obsolete("Use PatientHealthInsurance entity instead")]
-        public Guid PatientId { get; private set; }
+        public Guid? PatientId { get; private set; }
         [Obsolete("Use OperatorId and PlanName instead")]
         public string? InsuranceName { get; private set; }
         [Obsolete("Use PlanCode instead")]
