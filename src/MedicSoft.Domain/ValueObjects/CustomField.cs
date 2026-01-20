@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Domain.ValueObjects
@@ -10,6 +11,10 @@ namespace MedicSoft.Domain.ValueObjects
     /// </summary>
     public record CustomField
     {
+        private static readonly Regex FieldKeyRegex = new Regex(
+            @"^[a-zA-Z_][a-zA-Z0-9_]*$",
+            RegexOptions.Compiled);
+
         public string FieldKey { get; init; }
         public string Label { get; init; }
         public CustomFieldType FieldType { get; init; }
@@ -38,7 +43,7 @@ namespace MedicSoft.Domain.ValueObjects
                 throw new ArgumentException("Label cannot be empty", nameof(label));
 
             // Validate field key format (alphanumeric and underscores only)
-            if (!System.Text.RegularExpressions.Regex.IsMatch(fieldKey, @"^[a-zA-Z_][a-zA-Z0-9_]*$"))
+            if (!FieldKeyRegex.IsMatch(fieldKey))
                 throw new ArgumentException("Field key must start with a letter or underscore and contain only alphanumeric characters and underscores", nameof(fieldKey));
 
             // Validate options for selection types
