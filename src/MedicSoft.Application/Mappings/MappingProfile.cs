@@ -201,6 +201,22 @@ namespace MedicSoft.Application.Mappings
             CreateMap<HealthInsurancePlan, HealthInsurancePlanDto>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
                 .ForMember(dest => dest.OperatorName, opt => opt.MapFrom(src => src.Operator != null ? src.Operator.TradeName : null));
+
+            // Electronic Invoice mappings
+            CreateMap<ElectronicInvoice, ElectronicInvoiceDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.HasXml, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.XmlContent)));
+
+            CreateMap<ElectronicInvoice, ElectronicInvoiceListDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
+            CreateMap<InvoiceConfiguration, InvoiceConfigurationDto>()
+                .ForMember(dest => dest.Gateway, opt => opt.MapFrom(src => src.Gateway.ToString()))
+                .ForMember(dest => dest.HasCertificate, opt => opt.MapFrom(src => src.DigitalCertificate != null && src.DigitalCertificate.Length > 0))
+                .ForMember(dest => dest.IsCertificateExpired, opt => opt.MapFrom(src => src.IsCertificateExpired()))
+                .ForMember(dest => dest.HasGatewayApiKey, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.GatewayApiKey)));
         }
     }
 }
