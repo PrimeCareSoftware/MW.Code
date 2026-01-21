@@ -24,14 +24,14 @@
       <p class="notification-message">{{ notification?.message }}</p>
       
       <div class="notification-details" *ngIf="notification?.data">
-        <div class="detail-item" *ngIf="notification.data.patientName">
-          <strong>Paciente:</strong> {{ notification.data.patientName }}
+        <div class="detail-item" *ngIf="notification?.data?.patientName">
+          <strong>Paciente:</strong> {{ notification?.data?.patientName }}
         </div>
-        <div class="detail-item" *ngIf="notification.data.doctorName">
-          <strong>Médico:</strong> {{ notification.data.doctorName }}
+        <div class="detail-item" *ngIf="notification?.data?.doctorName">
+          <strong>Médico:</strong> {{ notification?.data?.doctorName }}
         </div>
-        <div class="detail-item" *ngIf="notification.data.roomNumber">
-          <strong>Consultório:</strong> {{ notification.data.roomNumber }}
+        <div class="detail-item" *ngIf="notification?.data?.roomNumber">
+          <strong>Consultório:</strong> {{ notification?.data?.roomNumber }}
         </div>
       </div>
     </div>
