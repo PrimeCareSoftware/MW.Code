@@ -43,7 +43,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 table: "Clinics",
                 type: "integer",
                 nullable: false,
-                defaultValue: 2); // Secretary by default
+                defaultValue: 2); // PaymentReceiverType.Secretary by default
 
             // Create index for PaidByUserId
             migrationBuilder.CreateIndex(

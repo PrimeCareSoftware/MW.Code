@@ -218,7 +218,7 @@ namespace MedicSoft.Domain.Entities
         public void MarkAsPaid(Guid paidByUserId, PaymentReceiverType receiverType)
         {
             if (IsPaid)
-                throw new InvalidOperationException("Pagamento já foi registrado para este atendimento");
+                throw new InvalidOperationException("Payment has already been registered for this appointment");
 
             IsPaid = true;
             PaidAt = DateTime.UtcNow;
@@ -230,7 +230,7 @@ namespace MedicSoft.Domain.Entities
         public void UnmarkAsPaid()
         {
             if (!IsPaid)
-                throw new InvalidOperationException("Atendimento não está marcado como pago");
+                throw new InvalidOperationException("Appointment is not marked as paid");
 
             IsPaid = false;
             PaidAt = null;

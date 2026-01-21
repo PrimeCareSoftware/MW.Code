@@ -70,6 +70,10 @@ export class Attendance implements OnInit, OnDestroy {
   autosaveSubscription?: Subscription;
   startTime?: Date;
   lastSaveTime?: Date;
+  
+  // Autosave configuration
+  private readonly AUTOSAVE_INTERVAL_MS = 30000; // 30 seconds
+  private readonly MIN_TIME_BETWEEN_SAVES_MS = 5000; // 5 seconds
 
   // Procedures
   availableProcedures = signal<Procedure[]>([]);
@@ -316,7 +320,8 @@ export class Attendance implements OnInit, OnDestroy {
       }
     });
 
-    // Start autosave every 30 seconds
+    // Start autosave every 30 seconds (cleanup first to prevent duplicates)
+    this.stopAutosave();
     this.startAutosave();
   }
 
@@ -333,8 +338,8 @@ export class Attendance implements OnInit, OnDestroy {
       return; // Autosave já está ativo
     }
 
-    // Autosave every 30 seconds
-    this.autosaveSubscription = interval(30000).subscribe(() => {
+    // Autosave at configured interval
+    this.autosaveSubscription = interval(this.AUTOSAVE_INTERVAL_MS).subscribe(() => {
       this.autoSave();
     });
   }
@@ -350,8 +355,8 @@ export class Attendance implements OnInit, OnDestroy {
     if (!this.medicalRecord() || !this.attendanceForm.dirty) return;
 
     const now = new Date();
-    // Don't autosave if we just saved manually (within last 5 seconds)
-    if (this.lastSaveTime && (now.getTime() - this.lastSaveTime.getTime()) < 5000) {
+    // Don't autosave if we just saved manually
+    if (this.lastSaveTime && (now.getTime() - this.lastSaveTime.getTime()) < this.MIN_TIME_BETWEEN_SAVES_MS) {
       return;
     }
 
