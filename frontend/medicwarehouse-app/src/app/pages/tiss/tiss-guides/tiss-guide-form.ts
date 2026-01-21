@@ -134,15 +134,16 @@ export class TissGuideFormComponent implements OnInit {
       totalPrice: [0]
     });
 
-    const currentIndex = this.procedures.length;
-
     // Listen to quantity and unitPrice changes to update totalPrice
+    // Use a lambda to get the current index dynamically
     procedureGroup.get('quantity')?.valueChanges.subscribe(() => {
-      this.updateProcedureTotal(currentIndex);
+      const index = this.procedures.controls.indexOf(procedureGroup);
+      if (index !== -1) this.updateProcedureTotal(index);
     });
     
     procedureGroup.get('unitPrice')?.valueChanges.subscribe(() => {
-      this.updateProcedureTotal(currentIndex);
+      const index = this.procedures.controls.indexOf(procedureGroup);
+      if (index !== -1) this.updateProcedureTotal(index);
     });
 
     this.procedures.push(procedureGroup);
@@ -234,6 +235,7 @@ export class TissGuideFormComponent implements OnInit {
     this.guideService.create(guideData).subscribe({
       next: () => {
         this.successMessage.set('Guia criada com sucesso');
+        this.isLoading.set(false);
         setTimeout(() => this.router.navigate(['/tiss/guides']), 1500);
       },
       error: (error) => {
