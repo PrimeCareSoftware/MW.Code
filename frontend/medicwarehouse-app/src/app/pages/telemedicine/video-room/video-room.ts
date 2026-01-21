@@ -74,7 +74,7 @@ export class VideoRoom implements OnInit, OnDestroy {
     }
 
     const joinRequest = {
-      userId: user.id || user.username,
+      userId: user.username,
       userName: user.username,
       role: ParticipantRole.Provider // TODO: Determine role based on user type
     };

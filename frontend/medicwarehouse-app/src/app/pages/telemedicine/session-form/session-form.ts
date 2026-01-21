@@ -119,7 +119,7 @@ export class SessionForm implements OnInit {
     const request: CreateSessionRequest = {
       appointmentId: selectedAppointmentId,
       clinicId: this.clinicId,
-      providerId: selectedAppointment.providerId || user.id || user.username,
+      providerId: selectedAppointment.doctorId || user.username,
       patientId: selectedAppointment.patientId
     };
 

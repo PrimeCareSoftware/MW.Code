@@ -123,7 +123,8 @@ export class SessionDetails implements OnInit {
     return session.status === SessionStatus.Scheduled || session.status === SessionStatus.InProgress;
   }
 
-  formatDateTime(dateString: string): string {
+  formatDateTime(dateString: string | undefined): string {
+    if (!dateString) return '';
     return new Date(dateString).toLocaleString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
@@ -133,11 +134,13 @@ export class SessionDetails implements OnInit {
     });
   }
 
-  formatDate(dateString: string): string {
+  formatDate(dateString: string | undefined): string {
+    if (!dateString) return '';
     return new Date(dateString).toLocaleDateString('pt-BR');
   }
 
-  formatTime(dateString: string): string {
+  formatTime(dateString: string | undefined): string {
+    if (!dateString) return '';
     return new Date(dateString).toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit'

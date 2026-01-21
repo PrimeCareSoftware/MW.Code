@@ -230,7 +230,8 @@ export class InvoiceConfigComponent implements OnInit {
     });
   }
 
-  formatDate(dateString: string | Date): string {
+  formatDate(dateString: string | Date | undefined): string {
+    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR');
   }
