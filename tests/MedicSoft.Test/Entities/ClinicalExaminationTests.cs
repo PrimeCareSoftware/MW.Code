@@ -241,6 +241,124 @@ namespace MedicSoft.Test.Entities
             Assert.Equal("Good condition", clinical.GeneralState);
         }
 
+        [Fact]
+        public void BMI_WithWeightAndHeight_CalculatesCorrectly()
+        {
+            // Arrange
+            var examination = "Patient presents with normal cardiovascular examination.";
+            var weight = 70.0m; // kg
+            var height = 1.75m; // meters
+            var expectedBMI = 22.86m; // 70 / (1.75 * 1.75) = 22.857... rounded to 22.86
+
+            // Act
+            var clinical = new ClinicalExamination(
+                _medicalRecordId, _tenantId, examination,
+                weight: weight, height: height);
+
+            // Assert
+            Assert.NotNull(clinical.BMI);
+            Assert.Equal(expectedBMI, clinical.BMI.Value);
+        }
+
+        [Fact]
+        public void BMI_WithoutWeight_ReturnsNull()
+        {
+            // Arrange
+            var examination = "Patient presents with normal cardiovascular examination.";
+            var height = 1.75m;
+
+            // Act
+            var clinical = new ClinicalExamination(
+                _medicalRecordId, _tenantId, examination,
+                height: height);
+
+            // Assert
+            Assert.Null(clinical.BMI);
+        }
+
+        [Fact]
+        public void BMI_WithoutHeight_ReturnsNull()
+        {
+            // Arrange
+            var examination = "Patient presents with normal cardiovascular examination.";
+            var weight = 70.0m;
+
+            // Act
+            var clinical = new ClinicalExamination(
+                _medicalRecordId, _tenantId, examination,
+                weight: weight);
+
+            // Assert
+            Assert.Null(clinical.BMI);
+        }
+
+        [Fact]
+        public void BMI_WithZeroHeight_ReturnsNull()
+        {
+            // Arrange
+            var examination = "Patient presents with normal cardiovascular examination.";
+            var weight = 70.0m;
+            var height = 0m;
+
+            // Act
+            var clinical = new ClinicalExamination(
+                _medicalRecordId, _tenantId, examination,
+                weight: weight, height: height);
+
+            // Assert
+            Assert.Null(clinical.BMI);
+        }
+
+        [Theory]
+        [InlineData(50, 1.60, 19.53)]  // Peso normal
+        [InlineData(80, 1.80, 24.69)]  // Peso normal
+        [InlineData(100, 1.75, 32.65)] // Obesidade
+        [InlineData(55, 1.70, 19.03)]  // Peso normal
+        public void BMI_VariousWeightHeight_CalculatesCorrectly(decimal weight, decimal height, decimal expectedBMI)
+        {
+            // Arrange
+            var examination = "Patient presents with normal cardiovascular examination.";
+
+            // Act
+            var clinical = new ClinicalExamination(
+                _medicalRecordId, _tenantId, examination,
+                weight: weight, height: height);
+
+            // Assert
+            Assert.NotNull(clinical.BMI);
+            Assert.Equal(expectedBMI, clinical.BMI.Value);
+        }
+
+        [Fact]
+        public void Constructor_WithInvalidWeight_ThrowsArgumentException()
+        {
+            // Arrange
+            var examination = "Patient presents with normal cardiovascular examination.";
+            var invalidWeight = 600m; // Above 500 kg limit
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() =>
+                new ClinicalExamination(_medicalRecordId, _tenantId, examination,
+                    weight: invalidWeight, height: 1.75m));
+
+            Assert.Contains("Weight must be between 0.5 and 500 kg", exception.Message);
+        }
+
+        [Fact]
+        public void Constructor_WithInvalidHeight_ThrowsArgumentException()
+        {
+            // Arrange
+            var examination = "Patient presents with normal cardiovascular examination.";
+            var invalidHeight = 4.0m; // Above 3.0 meters limit
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() =>
+                new ClinicalExamination(_medicalRecordId, _tenantId, examination,
+                    weight: 70m, height: invalidHeight));
+
+            Assert.Contains("Height must be between 0.3 and 3.0 meters", exception.Message);
+        }
+
         private ClinicalExamination CreateValidExamination()
         {
             return new ClinicalExamination(
