@@ -1,0 +1,139 @@
+<app-navbar></app-navbar>
+
+<div class="auth-request-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Nova Solicitação de Autorização</h1>
+      <p>Solicitar autorização prévia para procedimento junto à operadora de saúde</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <div class="form-card">
+    <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3 class="section-title">Informações do Paciente</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="patientHealthInsuranceId">Convênio do Paciente *</label>
+            <select 
+              id="patientHealthInsuranceId" 
+              formControlName="patientHealthInsuranceId"
+              class="form-control"
+              [class.error]="isFieldInvalid('patientHealthInsuranceId')"
+            >
+              <option value="">Selecione o convênio do paciente</option>
+              @for (insurance of patientInsurances(); track insurance.id) {
+                <option [value]="insurance.id">
+                  {{ insurance.patientName }} - {{ insurance.planName }} ({{ insurance.operatorName }})
+                </option>
+              }
+            </select>
+            @if (isFieldInvalid('patientHealthInsuranceId')) {
+              <span class="error-message">Convênio do paciente é obrigatório</span>
+            }
+            <span class="help-text">Selecione o paciente e seu plano de saúde</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Procedimento</h3>
+        
+        <div class="form-row">
+          <div class="form-group" style="flex: 2;">
+            <label for="procedureCode">Código TUSS *</label>
+            <input 
+              type="text" 
+              id="procedureCode"
+              formControlName="procedureCode"
+              (input)="onProcedureSearch($any($event.target).value)"
+              class="form-control"
+              [class.error]="isFieldInvalid('procedureCode')"
+              placeholder="Digite para buscar procedimento"
+            />
+            
+            @if (procedureSearchResults().length > 0 && !isSearchingProcedures()) {
+              <div class="search-results">
+                @for (proc of procedureSearchResults(); track proc.id) {
+                  <div class="search-result-item" (click)="selectProcedure(proc)">
+                    <strong>{{ proc.code }}</strong> - {{ proc.name }}
+                  </div>
+                }
+              </div>
+            }
+            
+            @if (isFieldInvalid('procedureCode')) {
+              <span class="error-message">Código do procedimento é obrigatório</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">Quantidade *</label>
+            <input 
+              type="number" 
+              id="quantity"
+              formControlName="quantity"
+              class="form-control"
+              [class.error]="isFieldInvalid('quantity')"
+              min="1"
+            />
+            @if (isFieldInvalid('quantity')) {
+              <span class="error-message">Quantidade deve ser maior que zero</span>
+            }
+          </div>
+        </div>
+
+        @if (selectedProcedure()) {
+          <div class="selected-procedure">
+            <div class="procedure-badge">
+              <span class="procedure-code">{{ selectedProcedure()!.code }}</span>
+              <span class="procedure-name">{{ selectedProcedure()!.name }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Justificativa</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="justification">Justificativa Clínica *</label>
+            <textarea 
+              id="justification"
+              formControlName="justification"
+              class="form-control textarea"
+              [class.error]="isFieldInvalid('justification')"
+              rows="6"
+              placeholder="Descreva a justificativa clínica para a solicitação do procedimento. Inclua dados relevantes como diagnóstico, histórico clínico e necessidade do procedimento."
+            ></textarea>
+            @if (isFieldInvalid('justification')) {
+              <span class="error-message">Justificativa é obrigatória (mínimo 10 caracteres)</span>
+            }
+            <span class="help-text">
+              Forneça informações detalhadas que justifiquem a necessidade do procedimento
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/tiss/authorizations">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+          {{ isLoading() ? 'Enviando...' : 'Solicitar Autorização' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

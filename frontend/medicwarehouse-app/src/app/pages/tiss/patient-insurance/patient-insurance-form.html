@@ -1,0 +1,163 @@
+<app-navbar></app-navbar>
+
+<div class="insurance-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>{{ isEditMode() ? 'Editar Convênio do Paciente' : 'Novo Convênio do Paciente' }}</h1>
+      <p>{{ isEditMode() ? 'Atualizar dados do convênio' : 'Vincular paciente a um plano de saúde' }}</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <div class="form-card">
+    <form [formGroup]="insuranceForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3 class="section-title">Paciente</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="patientId">Paciente *</label>
+            <select 
+              id="patientId" 
+              formControlName="patientId"
+              class="form-control"
+              [class.error]="isFieldInvalid('patientId')"
+              [disabled]="isEditMode() || patientId() !== null"
+            >
+              <option value="">Selecione o paciente</option>
+              @for (patient of patients(); track patient.id) {
+                <option [value]="patient.id">
+                  {{ patient.fullName }} - CPF: {{ patient.cpf }}
+                </option>
+              }
+            </select>
+            @if (isFieldInvalid('patientId')) {
+              <span class="error-message">Paciente é obrigatório</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Plano de Saúde</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="operatorId">Operadora de Saúde *</label>
+            <select 
+              id="operatorId" 
+              formControlName="operatorId"
+              (change)="onOperatorChange()"
+              class="form-control"
+              [class.error]="isFieldInvalid('operatorId')"
+              [disabled]="isEditMode()"
+            >
+              <option value="">Selecione a operadora</option>
+              @for (operator of operators(); track operator.id) {
+                <option [value]="operator.id">{{ operator.tradeName }}</option>
+              }
+            </select>
+            @if (isFieldInvalid('operatorId')) {
+              <span class="error-message">Operadora é obrigatória</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="healthInsurancePlanId">Plano *</label>
+            <select 
+              id="healthInsurancePlanId" 
+              formControlName="healthInsurancePlanId"
+              class="form-control"
+              [class.error]="isFieldInvalid('healthInsurancePlanId')"
+              [disabled]="isEditMode() || !insuranceForm.get('operatorId')?.value"
+            >
+              <option value="">{{ isLoadingPlans() ? 'Carregando...' : 'Selecione o plano' }}</option>
+              @for (plan of plans(); track plan.id) {
+                <option [value]="plan.id">{{ plan.planName }} ({{ plan.planCode }})</option>
+              }
+            </select>
+            @if (isFieldInvalid('healthInsurancePlanId')) {
+              <span class="error-message">Plano é obrigatório</span>
+            }
+            @if (!insuranceForm.get('operatorId')?.value) {
+              <span class="help-text">Selecione primeiro uma operadora</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Dados do Cartão</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cardNumber">Número do Cartão *</label>
+            <input 
+              type="text" 
+              id="cardNumber" 
+              formControlName="cardNumber"
+              class="form-control"
+              [class.error]="isFieldInvalid('cardNumber')"
+              placeholder="Digite o número do cartão"
+            />
+            @if (isFieldInvalid('cardNumber')) {
+              <span class="error-message">Número do cartão é obrigatório</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="validityDate">Data de Validade *</label>
+            <input 
+              type="date" 
+              id="validityDate" 
+              formControlName="validityDate"
+              class="form-control"
+              [class.error]="isFieldInvalid('validityDate')"
+            />
+            @if (isFieldInvalid('validityDate')) {
+              <span class="error-message">Data de validade é obrigatória</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (isEditMode()) {
+        <div class="form-section">
+          <h3 class="section-title">Status</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  formControlName="isActive"
+                />
+                <span>Convênio ativo</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          [routerLink]="patientId() ? ['/tiss/patient-insurance', patientId()] : ['/patients']"
+        >
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+          {{ isLoading() ? 'Salvando...' : (isEditMode() ? 'Atualizar' : 'Cadastrar') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

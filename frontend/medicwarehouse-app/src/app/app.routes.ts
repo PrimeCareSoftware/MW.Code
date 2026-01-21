@@ -192,8 +192,28 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'tiss/guides/new', 
+    loadComponent: () => import('./pages/tiss/tiss-guides/tiss-guide-form').then(m => m.TissGuideFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/guides/edit/:id', 
+    loadComponent: () => import('./pages/tiss/tiss-guides/tiss-guide-form').then(m => m.TissGuideFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'tiss/batches', 
     loadComponent: () => import('./pages/tiss/tiss-batches/tiss-batch-list').then(m => m.TissBatchList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/batches/new', 
+    loadComponent: () => import('./pages/tiss/tiss-batches/tiss-batch-form').then(m => m.TissBatchFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/batches/:id', 
+    loadComponent: () => import('./pages/tiss/tiss-batches/tiss-batch-detail').then(m => m.TissBatchDetailComponent),
     canActivate: [authGuard]
   },
   { 
@@ -202,8 +222,23 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'tiss/authorizations/new', 
+    loadComponent: () => import('./pages/tiss/authorization-requests/authorization-request-form').then(m => m.AuthorizationRequestFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'tiss/patient-insurance/:patientId', 
     loadComponent: () => import('./pages/tiss/patient-insurance/patient-insurance-list').then(m => m.PatientInsuranceList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/patient-insurance/:patientId/new', 
+    loadComponent: () => import('./pages/tiss/patient-insurance/patient-insurance-form').then(m => m.PatientInsuranceFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/patient-insurance/:patientId/edit/:id', 
+    loadComponent: () => import('./pages/tiss/patient-insurance/patient-insurance-form').then(m => m.PatientInsuranceFormComponent),
     canActivate: [authGuard]
   },
   { 

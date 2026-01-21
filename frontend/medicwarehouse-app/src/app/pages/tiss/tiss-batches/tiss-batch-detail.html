@@ -1,0 +1,176 @@
+<app-navbar></app-navbar>
+
+<div class="batch-detail-container">
+  @if (isLoading()) {
+    <div class="loading-state">
+      <p>Carregando lote...</p>
+    </div>
+  } @else if (batch()) {
+    <div class="page-header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1>Lote TISS #{{ batch()!.batchNumber }}</h1>
+          <p>{{ batch()!.operatorName }}</p>
+        </div>
+        <div class="header-right">
+          <span class="batch-status" [ngClass]="getStatusClass(batch()!.status)">
+            {{ getStatusLabel(batch()!.status) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error">{{ errorMessage() }}</div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert alert-success">{{ successMessage() }}</div>
+    }
+
+    <div class="batch-info-card">
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Competência</span>
+          <span class="info-value">{{ batch()!.competence }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Quantidade de Guias</span>
+          <span class="info-value">{{ batch()!.guideCount }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Valor Total</span>
+          <span class="info-value amount">R$ {{ batch()!.totalAmount.toFixed(2) }}</span>
+        </div>
+        @if (batch()!.generatedAt) {
+          <div class="info-item">
+            <span class="info-label">Data de Geração</span>
+            <span class="info-value">{{ batch()!.generatedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        }
+        @if (batch()!.sentAt) {
+          <div class="info-item">
+            <span class="info-label">Data de Envio</span>
+            <span class="info-value">{{ batch()!.sentAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="action-buttons">
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          routerLink="/tiss/batches"
+        >
+          ← Voltar
+        </button>
+        
+        @if (canGenerateXml()) {
+          <button 
+            type="button" 
+            class="btn btn-primary"
+            (click)="onGenerateXml()"
+            [disabled]="isGeneratingXml()"
+          >
+            {{ isGeneratingXml() ? 'Gerando...' : '📄 Gerar XML' }}
+          </button>
+        }
+
+        @if (canDownloadXml()) {
+          <button 
+            type="button" 
+            class="btn btn-success"
+            (click)="onDownloadXml()"
+            [disabled]="isDownloadingXml()"
+          >
+            {{ isDownloadingXml() ? 'Baixando...' : '⬇️ Baixar XML' }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="guides-section">
+      <h2 class="section-title">Guias do Lote</h2>
+
+      @if (batch()!.guides && batch()!.guides!.length > 0) {
+        <div class="guides-list">
+          @for (guide of batch()!.guides; track guide.id) {
+            <div class="guide-card">
+              <div class="guide-header" (click)="toggleGuideExpansion(guide.id)">
+                <div class="guide-main-info">
+                  <span class="guide-number">{{ guide.guideNumber }}</span>
+                  <span class="guide-type">{{ guide.guideType }}</span>
+                  <span class="guide-patient">{{ guide.patientName }}</span>
+                </div>
+                <div class="guide-right">
+                  <span class="guide-amount">R$ {{ guide.totalAmount.toFixed(2) }}</span>
+                  <span class="expand-icon">{{ isGuideExpanded(guide.id) ? '▼' : '▶' }}</span>
+                </div>
+              </div>
+
+              @if (isGuideExpanded(guide.id)) {
+                <div class="guide-details">
+                  <div class="detail-row">
+                    <span class="detail-label">Data de Atendimento:</span>
+                    <span class="detail-value">{{ guide.serviceDate | date: 'dd/MM/yyyy' }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value">{{ guide.status }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Prestador:</span>
+                    <span class="detail-value">{{ guide.providerName }}</span>
+                  </div>
+                  @if (guide.authorizationNumber) {
+                    <div class="detail-row">
+                      <span class="detail-label">Nº Autorização:</span>
+                      <span class="detail-value">{{ guide.authorizationNumber }}</span>
+                    </div>
+                  }
+
+                  <div class="procedures-section">
+                    <h4>Procedimentos</h4>
+                    <table class="procedures-table">
+                      <thead>
+                        <tr>
+                          <th>Código</th>
+                          <th>Procedimento</th>
+                          <th>Qtd</th>
+                          <th>Valor Unit.</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (proc of guide.procedures; track proc.id) {
+                          <tr>
+                            <td>{{ proc.procedureCode }}</td>
+                            <td>{{ proc.procedureName }}</td>
+                            <td>{{ proc.quantity }}</td>
+                            <td>R$ {{ proc.unitPrice.toFixed(2) }}</td>
+                            <td>R$ {{ proc.totalPrice.toFixed(2) }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p>Nenhuma guia encontrada neste lote.</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="error-state">
+      <p>Lote não encontrado</p>
+      <button type="button" class="btn btn-secondary" routerLink="/tiss/batches">
+        Voltar
+      </button>
+    </div>
+  }
+</div>

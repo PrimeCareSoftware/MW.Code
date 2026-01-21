@@ -1,0 +1,22 @@
+@import '../health-insurance-operators/health-insurance-operator-form.scss';
+
+.insurance-form-container {
+  @extend .operator-form-container;
+}
+
+.help-text {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .insurance-form-container {
+    padding: 1rem;
+  }
+
+  .form-card {
+    padding: 1.5rem;
+  }
+}
