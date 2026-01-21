@@ -93,6 +93,7 @@ export class AuthorizationRequestFormComponent implements OnInit {
 
     this.authorizationService.create(requestData).subscribe({
       next: () => {
+        this.isLoading.set(false);
         this.successMessage.set('Solicitação de autorização criada com sucesso');
         setTimeout(() => this.router.navigate(['/tiss/authorizations']), 1500);
       },

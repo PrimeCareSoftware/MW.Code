@@ -154,6 +154,7 @@ export class TissBatchFormComponent implements OnInit {
 
     this.batchService.create(batchData).subscribe({
       next: (batch) => {
+        this.isLoading.set(false);
         this.successMessage.set('Lote criado com sucesso');
         setTimeout(() => this.router.navigate(['/tiss/batches', batch.id]), 1500);
       },

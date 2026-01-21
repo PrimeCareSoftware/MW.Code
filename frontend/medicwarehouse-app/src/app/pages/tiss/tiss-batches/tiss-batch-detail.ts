@@ -144,6 +144,6 @@ export class TissBatchDetailComponent implements OnInit {
 
   canDownloadXml(): boolean {
     const batch = this.batch();
-    return batch !== null && batch.xmlFilePath !== null && batch.xmlFilePath !== undefined;
+    return batch !== null && !!batch.xmlFilePath;
   }
 }

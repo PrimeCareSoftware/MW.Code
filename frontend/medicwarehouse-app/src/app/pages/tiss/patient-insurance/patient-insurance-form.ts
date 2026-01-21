@@ -162,6 +162,7 @@ export class PatientInsuranceFormComponent implements OnInit {
 
       this.insuranceService.update(id, updateData).subscribe({
         next: () => {
+          this.isLoading.set(false);
           this.successMessage.set('Convênio atualizado com sucesso');
           const patientId = this.patientId() || formValue.patientId;
           setTimeout(() => this.router.navigate(['/tiss/patient-insurance', patientId]), 1500);
@@ -182,6 +183,7 @@ export class PatientInsuranceFormComponent implements OnInit {
 
       this.insuranceService.create(createData).subscribe({
         next: () => {
+          this.isLoading.set(false);
           this.successMessage.set('Convênio cadastrado com sucesso');
           setTimeout(() => this.router.navigate(['/tiss/patient-insurance', formValue.patientId]), 1500);
         },

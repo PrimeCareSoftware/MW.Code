@@ -234,8 +234,8 @@ export class TissGuideFormComponent implements OnInit {
 
     this.guideService.create(guideData).subscribe({
       next: () => {
-        this.successMessage.set('Guia criada com sucesso');
         this.isLoading.set(false);
+        this.successMessage.set('Guia criada com sucesso');
         setTimeout(() => this.router.navigate(['/tiss/guides']), 1500);
       },
       error: (error) => {
