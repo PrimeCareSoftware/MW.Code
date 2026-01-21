@@ -901,7 +901,7 @@ namespace MedicSoft.Api.Controllers
 
                 // Update public display settings
                 clinic.UpdatePublicSiteSettings(request.ShowOnPublicSite, clinicType, request.WhatsAppNumber);
-                await _clinicRepository.UpdateAsync(clinic, tenantId);
+                await _clinicRepository.UpdateAsync(clinic);
 
                 _logger.LogInformation("Public display settings updated for clinic: {ClinicId}", clinicId);
 
