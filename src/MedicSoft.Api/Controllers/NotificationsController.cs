@@ -54,6 +54,23 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Call next patient
+        /// </summary>
+        [HttpPost("call-next-patient")]
+        [ProducesResponseType(typeof(NotificationDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<NotificationDto>> CallNextPatient(
+            [FromBody] CallNextPatientNotificationDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var tenantId = GetTenantId();
+            var notification = await _notificationService.CallNextPatientAsync(dto, tenantId);
+            return Ok(notification);
+        }
+
+        /// <summary>
         /// Mark a notification as read
         /// </summary>
         [HttpPut("{id}/read")]

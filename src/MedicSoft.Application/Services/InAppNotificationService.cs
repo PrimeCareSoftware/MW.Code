@@ -15,6 +15,7 @@ namespace MedicSoft.Application.Services
     {
         Task<NotificationDto> CreateNotificationAsync(string type, string title, string message, object? data, string tenantId);
         Task<NotificationDto> NotifyAppointmentCompletedAsync(AppointmentCompletedNotificationDto dto, string tenantId);
+        Task<NotificationDto> CallNextPatientAsync(CallNextPatientNotificationDto dto, string tenantId);
         Task<IEnumerable<NotificationDto>> GetNotificationsAsync(string tenantId, bool unreadOnly = false);
         Task<bool> MarkAsReadAsync(string notificationId, string tenantId);
         Task<bool> MarkAllAsReadAsync(string tenantId);
@@ -74,6 +75,26 @@ namespace MedicSoft.Application.Services
             return CreateNotificationAsync(
                 "AppointmentCompleted",
                 "Consulta Finalizada",
+                message,
+                dto,
+                tenantId
+            );
+        }
+
+        public Task<NotificationDto> CallNextPatientAsync(
+            CallNextPatientNotificationDto dto,
+            string tenantId)
+        {
+            var message = $"Dr(a). {dto.DoctorName} está chamando {dto.PatientName}";
+
+            if (!string.IsNullOrEmpty(dto.RoomNumber))
+            {
+                message += $" - Consultório {dto.RoomNumber}";
+            }
+
+            return CreateNotificationAsync(
+                "CallNextPatient",
+                "Chamar Próximo Paciente",
                 message,
                 dto,
                 tenantId

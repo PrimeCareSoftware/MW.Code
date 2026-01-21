@@ -63,4 +63,21 @@ export class PatientService {
   getProcedureHistory(patientId: string): Observable<PatientProcedureHistory[]> {
     return this.http.get<PatientProcedureHistory[]>(`${this.apiUrl}/${patientId}/procedure-history`);
   }
+
+  /**
+   * Get patient by document number (CPF or RG)
+   * @param document Document number
+   */
+  getByDocument(document: string): Observable<Patient> {
+    return this.http.get<Patient>(`${this.apiUrl}/by-document/${document}`);
+  }
+
+  /**
+   * Link patient to a clinic
+   * @param patientId Patient ID
+   * @param clinicId Clinic ID
+   */
+  linkPatientToClinic(patientId: string, clinicId: string): Observable<{ success: boolean }> {
+    return this.http.post<{ success: boolean }>(`${this.apiUrl}/${patientId}/link-clinic/${clinicId}`, {});
+  }
 }

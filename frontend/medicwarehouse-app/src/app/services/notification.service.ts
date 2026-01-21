@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import type { Notification, AppointmentCompletedNotification } from '../models/notification.model';
+import type { Notification, AppointmentCompletedNotification, CallNextPatientNotification } from '../models/notification.model';
 import { NotificationType } from '../models/notification.model';
 import { environment } from '../../environments/environment';
 
@@ -111,6 +111,27 @@ export class NotificationService {
           type: NotificationType.AppointmentCompleted,
           title: 'Consulta Finalizada',
           message: `Dr(a). ${data.doctorName} finalizou o atendimento de ${data.patientName}`,
+          data,
+          isRead: false,
+          createdAt: new Date()
+        };
+        
+        this.notifications.update(notifications => [notification, ...notifications]);
+        this.notificationSubject.next(notification);
+        this.updateUnreadCount();
+      })
+    );
+  }
+
+  callNextPatient(data: CallNextPatientNotification): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/call-next-patient`, data).pipe(
+      tap(() => {
+        // Create local notification
+        const notification: Notification = {
+          id: crypto.randomUUID(),
+          type: NotificationType.CallNextPatient,
+          title: 'Chamar Próximo Paciente',
+          message: `Dr(a). ${data.doctorName} está chamando ${data.patientName}`,
           data,
           isRead: false,
           createdAt: new Date()

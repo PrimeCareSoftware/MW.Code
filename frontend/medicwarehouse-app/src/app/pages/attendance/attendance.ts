@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -6,6 +6,7 @@ import { interval, Subscription, forkJoin } from 'rxjs';
 import { Navbar } from '../../shared/navbar/navbar';
 import { RichTextEditor } from '../../shared/rich-text-editor/rich-text-editor';
 import { InformedConsentFormComponent } from './components/informed-consent-form.component';
+import { NotificationModalComponent } from '../../shared/notification-modal/notification-modal';
 import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
 import { PatientService } from '../../services/patient';
@@ -23,6 +24,8 @@ import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLa
 import { ExamRequest, ExamType, ExamUrgency, ExamTypeLabels, ExamUrgencyLabels } from '../../models/exam-request.model';
 import { MedicationAutocomplete } from '../../models/medication.model';
 import { ExamAutocomplete } from '../../models/exam-catalog.model';
+import type { CallNextPatientNotification } from '../../models/notification.model';
+import { NotificationType } from '../../models/notification.model';
 
 // Constants
 const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
@@ -30,16 +33,19 @@ const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent, NotificationModalComponent],
   templateUrl: './attendance.html',
   styleUrl: './attendance.scss'
 })
 export class Attendance implements OnInit, OnDestroy {
+  @ViewChild(NotificationModalComponent) notificationModal?: NotificationModalComponent;
+  
   appointmentId = signal<string | null>(null);
   appointment = signal<Appointment | null>(null);
   patient = signal<Patient | null>(null);
   medicalRecord = signal<MedicalRecord | null>(null);
   patientHistory = signal<MedicalRecord[]>([]);
+  nextPatient = signal<Appointment | null>(null);
   
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
@@ -180,6 +186,18 @@ export class Attendance implements OnInit, OnDestroy {
       this.loadAppointmentProcedures(id);
       this.loadExamRequests(id);
     }
+
+    // Subscribe to notifications to show modal
+    this.notificationService.onNotification$.subscribe(notification => {
+      if (notification.type === NotificationType.CallNextPatient && !notification.isRead) {
+        // Show modal for call next patient notifications
+        setTimeout(() => {
+          if (this.notificationModal) {
+            this.notificationModal.show(notification);
+          }
+        }, 100);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -540,6 +558,82 @@ export class Attendance implements OnInit, OnDestroy {
       }
     });
   }
+
+  callNextPatient(): void {
+    const appointment = this.appointment();
+    const patient = this.patient();
+    
+    if (!appointment || !patient) {
+      this.errorMessage.set('Nenhum paciente selecionado');
+      setTimeout(() => this.errorMessage.set(''), 3000);
+      return;
+    }
+
+    // Get next patient from agenda
+    this.loadNextPatient(appointment.clinicId, appointment.scheduledDate);
+  }
+
+  private loadNextPatient(clinicId: string, date: string): void {
+    const currentTime = this.appointment()?.scheduledTime;
+    
+    this.appointmentService.getDailyAgenda(clinicId, date).subscribe({
+      next: (agenda) => {
+        // Find next appointment after current one
+        const upcomingAppointments = agenda.appointments
+          .filter(apt => apt.scheduledTime > (currentTime || '') && apt.status !== 'Cancelled' && apt.status !== 'Completed')
+          .sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
+        
+        const next = upcomingAppointments.length > 0 ? upcomingAppointments[0] : null;
+        
+        if (next) {
+          this.nextPatient.set(next);
+          this.triggerCallNextPatientNotification(next);
+        } else {
+          this.notificationService.info('Não há próximo paciente agendado');
+        }
+      },
+      error: (error) => {
+        console.error('Error loading next patient:', error);
+        this.errorMessage.set('Erro ao buscar próximo paciente');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
+  }
+
+  private triggerCallNextPatientNotification(nextAppointment: Appointment): void {
+    const notification: CallNextPatientNotification = {
+      appointmentId: nextAppointment.id,
+      patientName: nextAppointment.patientName,
+      doctorName: nextAppointment.doctorName || 'Dr. Sistema',
+      roomNumber: undefined // Could be determined from clinic configuration
+    };
+
+    this.notificationService.callNextPatient(notification).subscribe({
+      next: () => {
+        this.successMessage.set(`Chamando próximo paciente: ${nextAppointment.patientName}`);
+        setTimeout(() => this.successMessage.set(''), 5000);
+        this.notificationService.playNotificationSound();
+      },
+      error: (error) => {
+        console.error('Error calling next patient:', error);
+        this.errorMessage.set('Erro ao chamar próximo paciente');
+        setTimeout(() => this.errorMessage.set(''), 3000);
+      }
+    });
+  }
+
+  onNotificationConfirmed(notificationId: string): void {
+    // Mark notification as read
+    this.notificationService.markAsRead(notificationId).subscribe({
+      next: () => {
+        console.log('Notification marked as read');
+      },
+      error: (error) => {
+        console.error('Error marking notification as read:', error);
+      }
+    });
+  }
+
 
   onPrint(): void {
     window.print();

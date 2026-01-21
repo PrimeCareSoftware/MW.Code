@@ -37,4 +37,21 @@ namespace MedicSoft.Application.DTOs
         [StringLength(200, ErrorMessage = "NextPatientName cannot exceed 200 characters")]
         public string? NextPatientName { get; set; }
     }
+
+    public class CallNextPatientNotificationDto
+    {
+        [Required(ErrorMessage = "AppointmentId is required")]
+        public string AppointmentId { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "PatientName is required")]
+        [StringLength(200, ErrorMessage = "PatientName cannot exceed 200 characters")]
+        public string PatientName { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "DoctorName is required")]
+        [StringLength(200, ErrorMessage = "DoctorName cannot exceed 200 characters")]
+        public string DoctorName { get; set; } = string.Empty;
+        
+        [StringLength(50, ErrorMessage = "RoomNumber cannot exceed 50 characters")]
+        public string? RoomNumber { get; set; }
+    }
 }
