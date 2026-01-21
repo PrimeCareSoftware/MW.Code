@@ -20,8 +20,8 @@ export class AppointmentService {
     return this.http.put<Appointment>(`${this.apiUrl}/${id}`, appointment);
   }
 
-  cancel(id: string, reason: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/cancel`, { reason });
+  cancel(id: string, cancellationReason: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/cancel`, { cancellationReason });
   }
 
   getDailyAgenda(clinicId: string, date: string): Observable<DailyAgenda> {

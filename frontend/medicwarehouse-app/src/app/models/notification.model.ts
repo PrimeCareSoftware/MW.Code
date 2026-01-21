@@ -11,6 +11,7 @@ export interface Notification {
 export enum NotificationType {
   AppointmentCompleted = 'AppointmentCompleted',
   PatientReady = 'PatientReady',
+  CallNextPatient = 'CallNextPatient',
   AppointmentReminder = 'AppointmentReminder',
   General = 'General'
 }
@@ -22,4 +23,11 @@ export interface AppointmentCompletedNotification {
   completedAt: Date;
   nextPatientId?: string;
   nextPatientName?: string;
+}
+
+export interface CallNextPatientNotification {
+  appointmentId: string;
+  patientName: string;
+  doctorName: string;
+  roomNumber?: string;
 }
