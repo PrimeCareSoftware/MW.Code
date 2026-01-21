@@ -1,0 +1,297 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Carregando nota fiscal...</p>
+    </div>
+  }
+
+  @if (!isLoading() && invoice()) {
+    <div class="header">
+      <div>
+        <h1>Nota Fiscal {{ invoice()!.number }}</h1>
+        <span [class]="'badge ' + getStatusBadgeClass(invoice()!.status)">
+          {{ formatStatus(invoice()!.status) }}
+        </span>
+      </div>
+      <a routerLink="/financial/invoices" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Voltar
+      </a>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        {{ successMessage() }}
+      </div>
+    }
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <!-- Action Buttons -->
+    <div class="action-bar">
+      @if (invoice()!.status === 'Draft') {
+        <button (click)="issueInvoice()" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> Emitir Nota
+        </button>
+      }
+      @if (invoice()!.pdfUrl) {
+        <button (click)="downloadPdf()" class="btn btn-secondary">
+          <i class="fas fa-file-pdf"></i> Baixar PDF
+        </button>
+      }
+      @if (invoice()!.hasXml) {
+        <button (click)="downloadXml()" class="btn btn-secondary">
+          <i class="fas fa-file-code"></i> Baixar XML
+        </button>
+      }
+      <button (click)="sendEmail()" class="btn btn-secondary">
+        <i class="fas fa-envelope"></i> Enviar por E-mail
+      </button>
+      @if (invoice()!.status === 'Authorized') {
+        <button (click)="toggleCancelForm()" class="btn btn-danger">
+          <i class="fas fa-times-circle"></i> Cancelar
+        </button>
+        <button (click)="replaceInvoice()" class="btn btn-warning">
+          <i class="fas fa-exchange-alt"></i> Substituir
+        </button>
+      }
+    </div>
+
+    <!-- Cancellation Form -->
+    @if (showCancelForm()) {
+      <div class="cancel-form">
+        <h3>Cancelamento de Nota Fiscal</h3>
+        <textarea 
+          [(ngModel)]="cancellationReason"
+          placeholder="Informe o motivo do cancelamento..."
+          rows="4"
+          class="form-control"
+        ></textarea>
+        <div class="cancel-actions">
+          <button (click)="toggleCancelForm()" class="btn btn-secondary">
+            Fechar
+          </button>
+          <button (click)="cancelInvoice()" class="btn btn-danger">
+            Confirmar Cancelamento
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Invoice Details Grid -->
+    <div class="details-grid">
+      <!-- General Information -->
+      <div class="detail-card">
+        <h2>Informações Gerais</h2>
+        <div class="detail-row">
+          <span class="label">Tipo:</span>
+          <span class="value">{{ formatType(invoice()!.type) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Número:</span>
+          <span class="value">{{ invoice()!.number }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Série:</span>
+          <span class="value">{{ invoice()!.series }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Data de Emissão:</span>
+          <span class="value">{{ formatDate(invoice()!.issueDate) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Status:</span>
+          <span [class]="'badge ' + getStatusBadgeClass(invoice()!.status)">
+            {{ formatStatus(invoice()!.status) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Provider Information -->
+      <div class="detail-card">
+        <h2>Prestador (Emissor)</h2>
+        <div class="detail-row">
+          <span class="label">CNPJ:</span>
+          <span class="value">{{ invoice()!.providerCnpj }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Razão Social:</span>
+          <span class="value">{{ invoice()!.providerName }}</span>
+        </div>
+        @if (invoice()!.providerMunicipalRegistration) {
+          <div class="detail-row">
+            <span class="label">Inscrição Municipal:</span>
+            <span class="value">{{ invoice()!.providerMunicipalRegistration }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- Client Information -->
+      <div class="detail-card">
+        <h2>Tomador (Cliente)</h2>
+        <div class="detail-row">
+          <span class="label">CPF/CNPJ:</span>
+          <span class="value">{{ invoice()!.clientCpfCnpj }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Nome:</span>
+          <span class="value">{{ invoice()!.clientName }}</span>
+        </div>
+        @if (invoice()!.clientEmail) {
+          <div class="detail-row">
+            <span class="label">E-mail:</span>
+            <span class="value">{{ invoice()!.clientEmail }}</span>
+          </div>
+        }
+        @if (invoice()!.clientPhone) {
+          <div class="detail-row">
+            <span class="label">Telefone:</span>
+            <span class="value">{{ invoice()!.clientPhone }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- Service Information -->
+      <div class="detail-card full-width">
+        <h2>Serviço Prestado</h2>
+        <div class="detail-row">
+          <span class="label">Descrição:</span>
+          <span class="value">{{ invoice()!.serviceDescription }}</span>
+        </div>
+        @if (invoice()!.serviceCode) {
+          <div class="detail-row">
+            <span class="label">Código do Serviço:</span>
+            <span class="value">{{ invoice()!.serviceCode }}</span>
+          </div>
+        }
+        <div class="detail-row">
+          <span class="label">Valor do Serviço:</span>
+          <span class="value amount">{{ formatCurrency(invoice()!.serviceAmount) }}</span>
+        </div>
+      </div>
+
+      <!-- Tax Information -->
+      <div class="detail-card full-width tax-card">
+        <h2>Tributos</h2>
+        <div class="tax-grid">
+          <div class="tax-item">
+            <span class="label">ISS ({{ formatPercent(invoice()!.issRate) }})</span>
+            <span class="value">{{ formatCurrency(invoice()!.issAmount) }}</span>
+          </div>
+          <div class="tax-item">
+            <span class="label">PIS</span>
+            <span class="value">{{ formatCurrency(invoice()!.pisAmount) }}</span>
+          </div>
+          <div class="tax-item">
+            <span class="label">COFINS</span>
+            <span class="value">{{ formatCurrency(invoice()!.cofinsAmount) }}</span>
+          </div>
+          <div class="tax-item">
+            <span class="label">CSLL</span>
+            <span class="value">{{ formatCurrency(invoice()!.csllAmount) }}</span>
+          </div>
+          @if (invoice()!.inssAmount > 0) {
+            <div class="tax-item">
+              <span class="label">INSS</span>
+              <span class="value">{{ formatCurrency(invoice()!.inssAmount) }}</span>
+            </div>
+          }
+          @if (invoice()!.irAmount > 0) {
+            <div class="tax-item">
+              <span class="label">IR</span>
+              <span class="value">{{ formatCurrency(invoice()!.irAmount) }}</span>
+            </div>
+          }
+        </div>
+        <div class="totals">
+          <div class="total-row">
+            <span class="label">Total de Tributos:</span>
+            <span class="value">{{ formatCurrency(invoice()!.totalTaxes) }}</span>
+          </div>
+          <div class="total-row highlight">
+            <span class="label">Valor Líquido:</span>
+            <span class="value">{{ formatCurrency(invoice()!.netAmount) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEFAZ Information -->
+      @if (invoice()!.status === 'Authorized') {
+        <div class="detail-card full-width">
+          <h2>Informações SEFAZ</h2>
+          @if (invoice()!.authorizationCode) {
+            <div class="detail-row">
+              <span class="label">Código de Autorização:</span>
+              <span class="value">{{ invoice()!.authorizationCode }}</span>
+            </div>
+          }
+          @if (invoice()!.accessKey) {
+            <div class="detail-row">
+              <span class="label">Chave de Acesso:</span>
+              <span class="value code">{{ invoice()!.accessKey }}</span>
+            </div>
+          }
+          @if (invoice()!.verificationCode) {
+            <div class="detail-row">
+              <span class="label">Código de Verificação:</span>
+              <span class="value">{{ invoice()!.verificationCode }}</span>
+            </div>
+          }
+          @if (invoice()!.protocol) {
+            <div class="detail-row">
+              <span class="label">Protocolo:</span>
+              <span class="value">{{ invoice()!.protocol }}</span>
+            </div>
+          }
+          @if (invoice()!.authorizationDate) {
+            <div class="detail-row">
+              <span class="label">Data de Autorização:</span>
+              <span class="value">{{ formatDateTime(invoice()!.authorizationDate) }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Cancellation Information -->
+      @if (invoice()!.status === 'Cancelled' && invoice()!.cancellationDate) {
+        <div class="detail-card full-width alert-card">
+          <h2>Informações de Cancelamento</h2>
+          <div class="detail-row">
+            <span class="label">Data do Cancelamento:</span>
+            <span class="value">{{ formatDateTime(invoice()!.cancellationDate) }}</span>
+          </div>
+          @if (invoice()!.cancellationReason) {
+            <div class="detail-row">
+              <span class="label">Motivo:</span>
+              <span class="value">{{ invoice()!.cancellationReason }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Error Information -->
+      @if (invoice()!.status === 'Error' && invoice()!.errorMessage) {
+        <div class="detail-card full-width error-card">
+          <h2>Erro</h2>
+          @if (invoice()!.errorCode) {
+            <div class="detail-row">
+              <span class="label">Código:</span>
+              <span class="value">{{ invoice()!.errorCode }}</span>
+            </div>
+          }
+          <div class="detail-row">
+            <span class="label">Mensagem:</span>
+            <span class="value">{{ invoice()!.errorMessage }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

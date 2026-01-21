@@ -1,0 +1,436 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="header">
+    <h1>Configuração de Notas Fiscais Eletrônicas</h1>
+    <a routerLink="/financial/invoices" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+  </div>
+
+  <!-- Success/Error Messages -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Configuration Status -->
+  @if (configuration()) {
+    <div class="status-card" [class.active]="configuration()!.isActive">
+      <div class="status-info">
+        <div class="status-indicator" [class.active]="configuration()!.isActive"></div>
+        <div>
+          <h3>Status da Configuração</h3>
+          <p>{{ configuration()!.isActive ? 'Ativa' : 'Inativa' }}</p>
+        </div>
+      </div>
+      <div class="status-actions">
+        @if (configuration()!.isActive) {
+          <button (click)="deactivate()" class="btn btn-warning">
+            <i class="fas fa-pause"></i> Desativar
+          </button>
+        } @else {
+          <button (click)="activate()" class="btn btn-success">
+            <i class="fas fa-play"></i> Ativar
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <form [formGroup]="form" class="config-form">
+    <!-- Company Information -->
+    <div class="form-section">
+      <h2>Dados da Empresa</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>CNPJ *</label>
+          <input 
+            type="text" 
+            formControlName="cnpj"
+            (input)="onCnpjInput($event)"
+            placeholder="00.000.000/0000-00"
+            class="form-control"
+            maxlength="18"
+            [readonly]="isEditMode()"
+          />
+        </div>
+        <div class="form-group">
+          <label>Razão Social *</label>
+          <input 
+            type="text" 
+            formControlName="companyName"
+            placeholder="Razão social da empresa"
+            class="form-control"
+            [readonly]="isEditMode()"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome Fantasia</label>
+          <input 
+            type="text" 
+            formControlName="tradeName"
+            placeholder="Nome fantasia"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Inscrição Municipal</label>
+          <input 
+            type="text" 
+            formControlName="municipalRegistration"
+            placeholder="Número da inscrição"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Inscrição Estadual</label>
+          <input 
+            type="text" 
+            formControlName="stateRegistration"
+            placeholder="Número da inscrição"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Information -->
+    <div class="form-section">
+      <h2>Endereço</h2>
+      <div class="form-row">
+        <div class="form-group" style="flex: 2">
+          <label>Logradouro</label>
+          <input 
+            type="text" 
+            formControlName="address"
+            placeholder="Rua, Avenida, etc"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Número</label>
+          <input 
+            type="text" 
+            formControlName="addressNumber"
+            placeholder="Nº"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Complemento</label>
+          <input 
+            type="text" 
+            formControlName="addressComplement"
+            placeholder="Apto, Sala, etc"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Bairro</label>
+          <input 
+            type="text" 
+            formControlName="neighborhood"
+            placeholder="Bairro"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cidade</label>
+          <input 
+            type="text" 
+            formControlName="city"
+            placeholder="Cidade"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select formControlName="state" class="form-control">
+            <option value="">Selecione</option>
+            <option value="AC">AC</option>
+            <option value="AL">AL</option>
+            <option value="AP">AP</option>
+            <option value="AM">AM</option>
+            <option value="BA">BA</option>
+            <option value="CE">CE</option>
+            <option value="DF">DF</option>
+            <option value="ES">ES</option>
+            <option value="GO">GO</option>
+            <option value="MA">MA</option>
+            <option value="MT">MT</option>
+            <option value="MS">MS</option>
+            <option value="MG">MG</option>
+            <option value="PA">PA</option>
+            <option value="PB">PB</option>
+            <option value="PR">PR</option>
+            <option value="PE">PE</option>
+            <option value="PI">PI</option>
+            <option value="RJ">RJ</option>
+            <option value="RN">RN</option>
+            <option value="RS">RS</option>
+            <option value="RO">RO</option>
+            <option value="RR">RR</option>
+            <option value="SC">SC</option>
+            <option value="SP">SP</option>
+            <option value="SE">SE</option>
+            <option value="TO">TO</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>CEP</label>
+          <input 
+            type="text" 
+            formControlName="zipCode"
+            (input)="onZipCodeInput($event)"
+            placeholder="00000-000"
+            class="form-control"
+            maxlength="9"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Código do Município (IBGE)</label>
+          <input 
+            type="text" 
+            formControlName="cityCode"
+            placeholder="Ex: 3550308"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="form-section">
+      <h2>Contato</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Telefone</label>
+          <input 
+            type="text" 
+            formControlName="phone"
+            (input)="onPhoneInput($event)"
+            placeholder="(00) 00000-0000"
+            class="form-control"
+            maxlength="15"
+          />
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input 
+            type="email" 
+            formControlName="email"
+            placeholder="email@empresa.com"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Tax Information -->
+    <div class="form-section">
+      <h2>Configurações Fiscais</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Código do Serviço (CNAE)</label>
+          <input 
+            type="text" 
+            formControlName="serviceCode"
+            placeholder="Ex: 8630-5/03"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Alíquota ISS Padrão (%) *</label>
+          <input 
+            type="number" 
+            formControlName="defaultIssRate"
+            placeholder="5.0"
+            class="form-control"
+            step="0.01"
+            min="0"
+            max="100"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" formControlName="issRetainedByDefault" />
+            ISS Retido na Fonte
+          </label>
+        </div>
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" formControlName="isSimplifiedTaxRegime" />
+            Simples Nacional
+          </label>
+        </div>
+      </div>
+
+      @if (form.get('isSimplifiedTaxRegime')?.value) {
+        <div class="form-row">
+          <div class="form-group">
+            <label>Código do Regime Especial</label>
+            <select formControlName="simplifiedTaxRegimeCode" class="form-control">
+              <option value="1">1 - Microempresa Municipal</option>
+              <option value="2">2 - Estimativa</option>
+              <option value="3">3 - Sociedade de Profissionais</option>
+              <option value="4">4 - Cooperativa</option>
+              <option value="5">5 - Microempresário Individual (MEI)</option>
+              <option value="6">6 - Microempresário e Empresa de Pequeno Porte (ME/EPP)</option>
+            </select>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Gateway Configuration -->
+    <div class="form-section">
+      <h2>Gateway de Emissão</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Gateway *</label>
+          <select formControlName="gateway" class="form-control">
+            <option value="FocusNFe">Focus NFe</option>
+            <option value="ENotas">eNotas</option>
+            <option value="NFeCidades">NFe Cidades</option>
+            <option value="Direct">SEFAZ Direto</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ambiente</label>
+          <select formControlName="gatewayEnvironment" class="form-control">
+            <option value="homologacao">Homologação</option>
+            <option value="producao">Produção</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>API Key do Gateway</label>
+          <input 
+            type="password" 
+            formControlName="gatewayApiKey"
+            placeholder="Chave de API fornecida pelo gateway"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate Upload -->
+    @if (isEditMode()) {
+      <div class="form-section certificate-section">
+        <h2>Certificado Digital</h2>
+        
+        @if (configuration()!.hasCertificate) {
+          <div class="certificate-info" [class.expired]="configuration()!.isCertificateExpired">
+            <div class="cert-icon">
+              <i [class]="configuration()!.isCertificateExpired ? 'fas fa-exclamation-triangle' : 'fas fa-certificate'"></i>
+            </div>
+            <div>
+              <p class="cert-status">
+                {{ configuration()!.isCertificateExpired ? 'Certificado Expirado' : 'Certificado Ativo' }}
+              </p>
+              @if (configuration()!.certificateExpirationDate) {
+                <p class="cert-date">
+                  Validade: {{ formatDate(configuration()!.certificateExpirationDate) }}
+                </p>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="upload-section">
+          <div class="form-group">
+            <label>Arquivo .pfx do Certificado</label>
+            <input 
+              type="file" 
+              accept=".pfx,.p12"
+              (change)="onCertificateSelected($event)"
+              class="file-input"
+            />
+          </div>
+          <div class="form-group">
+            <label>Senha do Certificado</label>
+            <input 
+              type="password" 
+              [(ngModel)]="certificatePassword"
+              [ngModelOptions]="{standalone: true}"
+              placeholder="Senha do certificado"
+              class="form-control"
+            />
+          </div>
+          <button 
+            type="button" 
+            (click)="uploadCertificate()" 
+            class="btn btn-primary"
+            [disabled]="!certificateFile() || !certificatePassword()"
+          >
+            <i class="fas fa-upload"></i> Enviar Certificado
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Automation Settings -->
+    <div class="form-section">
+      <h2>Automações</h2>
+      <div class="form-row">
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" formControlName="autoIssueAfterPayment" />
+            Emitir automaticamente após pagamento
+          </label>
+        </div>
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" formControlName="sendEmailAfterIssuance" />
+            Enviar por e-mail após emissão
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        (click)="save()" 
+        class="btn btn-primary"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <div class="btn-spinner"></div>
+          Salvando...
+        } @else {
+          <i class="fas fa-save"></i> Salvar Configuração
+        }
+      </button>
+    </div>
+  </form>
+</div>
