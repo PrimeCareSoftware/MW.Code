@@ -71,6 +71,10 @@ namespace MedicSoft.Application.DTOs
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Nome deve ter entre 3 e 200 caracteres")]
         public string Name { get; set; } = null!;
         
+        [Required(ErrorMessage = "Código é obrigatório")]
+        [StringLength(50, ErrorMessage = "Código deve ter no máximo 50 caracteres")]
+        public string Code { get; set; } = null!;
+        
         [Required(ErrorMessage = "Descrição é obrigatória")]
         [StringLength(1000, MinimumLength = 10, ErrorMessage = "Descrição deve ter entre 10 e 1000 caracteres")]
         public string Description { get; set; } = null!;

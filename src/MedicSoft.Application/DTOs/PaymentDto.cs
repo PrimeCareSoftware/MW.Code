@@ -37,7 +37,6 @@ namespace MedicSoft.Application.DTOs
         
         public DateTime? CancellationDate { get; set; }
         
-        [StringLength(4, MinimumLength = 4, ErrorMessage = "Últimos 4 dígitos do cartão devem ter 4 caracteres")]
         [RegularExpression(@"^\d{4}$", ErrorMessage = "Últimos 4 dígitos do cartão devem ser numéricos")]
         public string? CardLastFourDigits { get; set; }
         
@@ -67,7 +66,6 @@ namespace MedicSoft.Application.DTOs
         [StringLength(1000, ErrorMessage = "Notas devem ter no máximo 1000 caracteres")]
         public string? Notes { get; set; }
         
-        [StringLength(4, MinimumLength = 4, ErrorMessage = "Últimos 4 dígitos do cartão devem ter 4 caracteres")]
         [RegularExpression(@"^\d{4}$", ErrorMessage = "Últimos 4 dígitos do cartão devem ser numéricos")]
         public string? CardLastFourDigits { get; set; }
         

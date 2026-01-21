@@ -107,7 +107,7 @@ namespace MedicSoft.Application.DTOs
         public string Email { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "Código do país é obrigatório")]
-        [StringLength(5, ErrorMessage = "Código do país deve ter no máximo 5 caracteres")]
+        [RegularExpression(@"^\+?\d{1,4}$", ErrorMessage = "Código do país deve ter entre 1 e 4 dígitos, opcionalmente com +")]
         public string PhoneCountryCode { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "Número de telefone é obrigatório")]
@@ -139,7 +139,7 @@ namespace MedicSoft.Application.DTOs
         public string Email { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "Código do país é obrigatório")]
-        [StringLength(5, ErrorMessage = "Código do país deve ter no máximo 5 caracteres")]
+        [RegularExpression(@"^\+?\d{1,4}$", ErrorMessage = "Código do país deve ter entre 1 e 4 dígitos, opcionalmente com +")]
         public string PhoneCountryCode { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "Número de telefone é obrigatório")]
