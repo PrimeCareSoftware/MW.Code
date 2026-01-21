@@ -80,15 +80,59 @@
             <label>Nome da Clínica *</label>
             <input type="text" [(ngModel)]="model.clinicName" name="clinicName" required />
           </div>
+          
+          <!-- Document Type Selector -->
+          <div class="form-group">
+            <label>Tipo de Cadastro *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input 
+                  type="radio" 
+                  name="documentType" 
+                  value="CNPJ" 
+                  [(ngModel)]="clinicDocumentType"
+                  (change)="onDocumentTypeChange('CNPJ')"
+                  checked
+                />
+                <span>CNPJ (Clínica/Empresa)</span>
+              </label>
+              <label class="radio-option">
+                <input 
+                  type="radio" 
+                  name="documentType" 
+                  value="CPF" 
+                  [(ngModel)]="clinicDocumentType"
+                  (change)="onDocumentTypeChange('CPF')"
+                />
+                <span>CPF (Profissional Autônomo)</span>
+              </label>
+            </div>
+            <small class="hint">
+              <span *ngIf="clinicDocumentType === 'CNPJ'">Para clínicas e empresas registradas</span>
+              <span *ngIf="clinicDocumentType === 'CPF'">Para profissionais que atuam de forma autônoma sem CNPJ. Você poderá alterar para CNPJ no futuro.</span>
+            </small>
+          </div>
+          
           <div class="form-row">
             <div class="form-group">
-              <label>CNPJ *</label>
+              <label *ngIf="clinicDocumentType === 'CNPJ'">CNPJ *</label>
+              <label *ngIf="clinicDocumentType === 'CPF'">CPF *</label>
               <input 
+                *ngIf="clinicDocumentType === 'CNPJ'"
                 type="text" 
-                [(ngModel)]="model.clinicCNPJ" 
+                [(ngModel)]="model.clinicDocument" 
                 appCnpjMask
-                name="clinicCNPJ" 
+                name="clinicDocument" 
                 placeholder="00.000.000/0000-00"
+                required 
+              />
+              <input 
+                *ngIf="clinicDocumentType === 'CPF'"
+                type="text" 
+                [(ngModel)]="model.clinicDocument" 
+                appCpfMask
+                name="clinicDocument" 
+                placeholder="000.000.000-00"
                 required 
               />
             </div>
@@ -264,7 +308,8 @@
           <div class="summary-section">
             <h3>Clínica</h3>
             <p><strong>Nome:</strong> {{ model.clinicName }}</p>
-            <p><strong>CNPJ:</strong> {{ model.clinicCNPJ }}</p>
+            <p *ngIf="clinicDocumentType === 'CNPJ'"><strong>CNPJ:</strong> {{ model.clinicDocument || model.clinicCNPJ }}</p>
+            <p *ngIf="clinicDocumentType === 'CPF'"><strong>CPF:</strong> {{ model.clinicDocument }}</p>
             <p><strong>Email:</strong> {{ model.clinicEmail }}</p>
           </div>
           <div class="summary-section">

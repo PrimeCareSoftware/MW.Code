@@ -1,7 +1,9 @@
 export interface RegistrationRequest {
   // Clinic Information
   clinicName: string;
-  clinicCNPJ: string;
+  clinicCNPJ: string; // Keep for backward compatibility
+  clinicDocument?: string; // New: can be CPF or CNPJ
+  clinicDocumentType?: 'CPF' | 'CNPJ'; // Type of document
   clinicPhone: string;
   clinicEmail: string;
   
