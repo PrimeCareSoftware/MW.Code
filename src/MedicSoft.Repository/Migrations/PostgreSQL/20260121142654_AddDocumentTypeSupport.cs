@@ -1730,7 +1730,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "character varying(10)",
                 maxLength: 10,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: "CNPJ"); // Default to CNPJ for backward compatibility with existing clinics
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
