@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MedicSoft.Application.DTOs.Registration;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Services
@@ -59,11 +60,33 @@ namespace MedicSoft.Application.Services
                 return RegistrationResult.CreateFailure($"Password validation failed: {passwordError}");
             }
 
-            // Check if CNPJ already exists (CNPJ is unique across all tenants, so safe to check outside transaction)
-            var existingClinic = await _clinicRepository.GetByCNPJAsync(request.ClinicCNPJ);
+            // Determine clinic document (support both old ClinicCNPJ and new ClinicDocument)
+            var clinicDocument = !string.IsNullOrWhiteSpace(request.ClinicDocument) 
+                ? request.ClinicDocument 
+                : request.ClinicCNPJ;
+
+            // Determine document type
+            DocumentType clinicDocumentType;
+            if (!string.IsNullOrWhiteSpace(request.ClinicDocumentType))
+            {
+                if (!Enum.TryParse<DocumentType>(request.ClinicDocumentType, true, out clinicDocumentType))
+                {
+                    return RegistrationResult.CreateFailure("Invalid document type specified");
+                }
+            }
+            else
+            {
+                // Auto-detect based on length for backward compatibility
+                var cleanDocument = new string(clinicDocument.Where(char.IsDigit).ToArray());
+                clinicDocumentType = cleanDocument.Length == 11 ? DocumentType.CPF : DocumentType.CNPJ;
+            }
+
+            // Check if document already exists
+            var existingClinic = await _clinicRepository.GetByDocumentAsync(clinicDocument);
             if (existingClinic != null)
             {
-                return RegistrationResult.CreateFailure("CNPJ already registered");
+                var docTypeLabel = clinicDocumentType == DocumentType.CPF ? "CPF" : "CNPJ";
+                return RegistrationResult.CreateFailure($"{docTypeLabel} already registered");
             }
 
             // Get subscription plan - plans are system-wide, so we use "system" as tenantId
@@ -100,6 +123,13 @@ namespace MedicSoft.Application.Services
             // Use the friendly subdomain as the tenant ID
             var tenantId = subdomain;
 
+            // Determine owner document type
+            DocumentType? ownerDocumentType = null;
+            if (!string.IsNullOrWhiteSpace(request.OwnerCPF))
+            {
+                ownerDocumentType = DocumentType.CPF;
+            }
+
             // Execute all creations within a transaction to ensure data consistency
             // Username and email validation is done inside the transaction with the unique tenantId
             return await _clinicRepository.ExecuteInTransactionAsync(async () =>
@@ -123,14 +153,15 @@ namespace MedicSoft.Application.Services
                 var clinic = new Clinic(
                     request.ClinicName,
                     request.ClinicName, // TradeName same as Name
-                    request.ClinicCNPJ,
+                    clinicDocument,
                     request.ClinicPhone,
                     request.ClinicEmail,
                     fullAddress,
                     new TimeSpan(8, 0, 0), // 8 AM
                     new TimeSpan(18, 0, 0), // 6 PM
                     tenantId,
-                    30 // 30 minute appointments
+                    30, // 30 minute appointments
+                    clinicDocumentType
                 );
 
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
@@ -147,7 +178,11 @@ namespace MedicSoft.Application.Services
                     request.OwnerName,
                     request.OwnerPhone,
                     tenantId,
-                    clinic.Id
+                    clinic.Id,
+                    null, // professionalId
+                    null, // specialty
+                    request.OwnerCPF, // document
+                    ownerDocumentType // documentType
                 );
                 await _ownerRepository.AddWithoutSaveAsync(owner);
 

@@ -27,6 +27,11 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(c => c.DocumentType)
+                .IsRequired()
+                .HasConversion<string>()
+                .HasMaxLength(10);
+
             builder.Property(c => c.Phone)
                 .IsRequired()
                 .HasMaxLength(30);
