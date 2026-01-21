@@ -1,4 +1,4 @@
-@import '../health-insurance-operators/health-insurance-operator-form.scss';
+@use '../health-insurance-operators/health-insurance-operator-form.scss';
 
 .insurance-form-container {
   @extend .operator-form-container;
