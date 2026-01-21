@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Repository.Context;
 

@@ -16,6 +16,7 @@ namespace MedicSoft.Application.DTOs
         public int AppointmentDurationMinutes { get; set; }
         public bool AllowEmergencySlots { get; set; }
         public bool IsActive { get; set; }
+        public string DefaultPaymentReceiverType { get; set; } = "Secretary"; // Doctor, Secretary, Other
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
@@ -44,5 +45,6 @@ namespace MedicSoft.Application.DTOs
         public TimeSpan ClosingTime { get; set; }
         public int AppointmentDurationMinutes { get; set; }
         public bool AllowEmergencySlots { get; set; }
+        public string? DefaultPaymentReceiverType { get; set; } // Doctor, Secretary, Other
     }
 }

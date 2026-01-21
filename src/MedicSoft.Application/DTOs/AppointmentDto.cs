@@ -43,6 +43,14 @@ namespace MedicSoft.Application.DTOs
         
         public DateTime? CheckInTime { get; set; }
         public DateTime? CheckOutTime { get; set; }
+        
+        // Payment tracking
+        public bool IsPaid { get; set; }
+        public DateTime? PaidAt { get; set; }
+        public Guid? PaidByUserId { get; set; }
+        public string? PaidByUserName { get; set; }
+        public string? PaymentReceivedBy { get; set; } // Doctor, Secretary, Other
+        
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

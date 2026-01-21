@@ -42,4 +42,12 @@ export class AppointmentService {
   getById(id: string): Observable<Appointment> {
     return this.http.get<Appointment>(`${this.apiUrl}/${id}`);
   }
+
+  markAsPaid(id: string, paymentReceiverType: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${id}/mark-as-paid`, { paymentReceiverType });
+  }
+
+  complete(id: string, notes?: string, registerPayment: boolean = false): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${id}/complete`, { notes, registerPayment });
+  }
 }

@@ -736,6 +736,94 @@
   }
 }
 
+// Payment styles
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &.badge-success {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  &.badge-warning {
+    background: #fff3cd;
+    color: #856404;
+  }
+}
+
+// Modal overlay and dialog
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-dialog {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+
+  .modal-body {
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+
+      .btn-block {
+        width: 100%;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
 @media print {
   .attendance-container {
     display: none;

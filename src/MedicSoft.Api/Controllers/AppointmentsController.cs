@@ -167,6 +167,58 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Mark appointment as paid (requires appointments.edit permission)
+        /// </summary>
+        [HttpPost("{id}/mark-as-paid")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsEdit)]
+        public async Task<ActionResult> MarkAsPaid(Guid id, [FromBody] MarkAppointmentAsPaidDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _appointmentService.MarkAppointmentAsPaidAsync(
+                    id, GetUserId(), dto.PaymentReceiverType, GetTenantId());
+                
+                if (!result)
+                    return NotFound($"Appointment with ID {id} not found");
+
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Complete appointment (check-out by doctor) (requires appointments.edit permission)
+        /// </summary>
+        [HttpPost("{id}/complete")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsEdit)]
+        public async Task<ActionResult> Complete(Guid id, [FromBody] CompleteAppointmentDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _appointmentService.CompleteAppointmentAsync(
+                    id, GetUserId(), GetTenantId(), dto.Notes, dto.RegisterPayment);
+                
+                if (!result)
+                    return NotFound($"Appointment with ID {id} not found");
+
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     public class CancelAppointmentRequest

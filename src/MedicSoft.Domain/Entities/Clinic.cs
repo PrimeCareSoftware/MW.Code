@@ -24,6 +24,7 @@ namespace MedicSoft.Domain.Entities
         public bool ShowOnPublicSite { get; private set; } = false; // Owner must approve public display
         public ClinicType ClinicType { get; private set; } = ClinicType.Medical;
         public string? WhatsAppNumber { get; private set; } // Optional WhatsApp for public contact
+        public PaymentReceiverType DefaultPaymentReceiverType { get; private set; } = PaymentReceiverType.Secretary; // Padrão: secretária recebe
 
         private Clinic() 
         { 
@@ -211,6 +212,12 @@ namespace MedicSoft.Domain.Entities
         public void DisablePublicDisplay()
         {
             ShowOnPublicSite = false;
+            UpdateTimestamp();
+        }
+
+        public void UpdatePaymentReceiverType(PaymentReceiverType receiverType)
+        {
+            DefaultPaymentReceiverType = receiverType;
             UpdateTimestamp();
         }
 

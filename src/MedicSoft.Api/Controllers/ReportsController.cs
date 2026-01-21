@@ -6,6 +6,7 @@ using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Api.Controllers

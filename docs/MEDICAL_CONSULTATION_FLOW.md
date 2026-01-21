@@ -29,6 +29,13 @@ Este documento descreve o fluxo otimizado de atendimento médico implementado no
   - `Completed` - Finalizado
   - `Cancelled` - Cancelado
   - `NoShow` - Faltou
+- `IsPaid` (bool) - Se o pagamento foi recebido
+- `PaidAt` (DateTime?) - Data/hora do recebimento do pagamento
+- `PaidByUserId` (Guid?) - ID do usuário que recebeu o pagamento
+- `PaymentReceivedBy` (PaymentReceiverType?) - Tipo de recebedor:
+  - `Doctor` - Médico
+  - `Secretary` - Secretária/Recepção
+  - `Other` - Outro funcionário
 
 ### 1.2 Dados Clínicos
 
@@ -135,7 +142,7 @@ Fluxo recomendado na interface:
 6. Prescrição (`PrescriptionItem`)
 
 ### 2.5 Finalização
-1. Médico finaliza o atendimento
+1. Médico finaliza o atendimento através do botão "Finalizar Atendimento"
 2. Método `CloseMedicalRecord(userId, signature)` é chamado
 3. Sistema valida campos obrigatórios:
    - Queixa principal
@@ -145,8 +152,19 @@ Fluxo recomendado na interface:
    - Pelo menos um plano terapêutico
 4. Status do prontuário alterado para `IsClosed = true`
 5. Método `CheckOut()` do `Appointment` altera status para `Completed`
+6. **Opcional**: Médico pode registrar que recebeu o pagamento neste momento
 
-### 2.6 Pós-Atendimento
+### 2.6 Controle de Pagamento
+1. **Antes do Atendimento**: Secretária pode registrar pagamento recebido
+2. **Durante/Após Atendimento**: Médico pode registrar pagamento ao finalizar consulta
+3. **Status Visível**: Indicador de pagamento (Pago/Pendente) exibido na tela de atendimento
+4. **Configuração da Clínica**: Owner define quem normalmente recebe pagamentos:
+   - Médico (ao finalizar atendimento)
+   - Secretária (antes/após atendimento)
+   - Outro funcionário
+5. **Rastreabilidade**: Sistema registra quem recebeu o pagamento e quando
+
+### 2.7 Pós-Atendimento
 1. Geração automática de documentos (receita, atestado, exames)
 2. Envio de documentos ao paciente
 3. Liberação para faturamento
@@ -159,7 +177,9 @@ Fluxo recomendado na interface:
 - **Autocomplete**: Busca assistida para CID-10 e medicamentos
 - **Templates por especialidade**: Formulários customizáveis via `ConsultationFormConfiguration`
 - **Atalhos de teclado**: Para agilizar navegação
-- **Salvamento automático**: Prevenção de perda de dados
+- **Salvamento automático**: Prevenção de perda de dados (a cada 30 segundos)
+- **Indicador de pagamento**: Exibe status de pagamento na tela de atendimento
+- **Opção de registro de pagamento**: Médico pode registrar recebimento ao finalizar
 
 ### 3.2 Regras de Negócio
 **Não permitir finalizar sem**:
@@ -338,13 +358,20 @@ Este fluxo está em conformidade com:
 ## 8. Próximos Passos
 
 ### Frontend
-- [ ] Implementar interface de registro de consulta
+- [x] Implementar interface de registro de consulta
+- [x] Adicionar salvamento automático (autosave a cada 30 segundos)
+- [x] Implementar botão de finalização de atendimento
+- [x] Exibir status de pagamento na tela de atendimento
+- [x] Implementar opção de registro de pagamento pelo médico
 - [ ] Adicionar calculadora de IMC visual
 - [ ] Implementar busca assistida de CID-10
 - [ ] Criar templates de consulta por especialidade
 - [ ] Implementar assinatura digital
 
 ### Backend
+- [x] Adicionar controle de pagamento aos agendamentos
+- [x] Implementar endpoint para finalizar atendimento pelo médico
+- [x] Adicionar configuração de tipo de recebedor de pagamento na clínica
 - [ ] Implementar geração de documentos (PDF)
 - [ ] Adicionar alertas de interação medicamentosa
 - [ ] Implementar faturamento automático
@@ -356,3 +383,26 @@ Este fluxo está em conformidade com:
 - [ ] Integração com laboratórios
 - [ ] Integração com farmácias
 - [ ] Integração com telemedicina
+
+## 9. Funcionalidades Implementadas (Janeiro 2026)
+
+### Autosave (Salvamento Automático)
+- **Frequência**: A cada 30 segundos
+- **Inteligente**: Não salva se não houver alterações ou se acabou de salvar manualmente
+- **Silencioso**: Não exibe mensagens de sucesso para não interromper o fluxo do médico
+- **Previne perda de dados**: Mesmo que o navegador seja fechado acidentalmente
+
+### Controle de Pagamento
+- **Visibilidade**: Status de pagamento (Pago/Pendente) exibido na tela de atendimento
+- **Flexibilidade**: Pagamento pode ser registrado:
+  - Pela secretária antes/após o atendimento
+  - Pelo médico ao finalizar a consulta
+  - Por outro funcionário autorizado
+- **Rastreabilidade**: Sistema registra quem recebeu e quando
+- **Configurável**: Owner define o padrão de recebimento da clínica
+
+### Finalização de Atendimento
+- **Botão dedicado**: "Finalizar Atendimento" substitui "Finalizar e Notificar Secretaria"
+- **Check-out automático**: Atualiza status do agendamento para "Completed"
+- **Opção de pagamento**: Checkbox para registrar recebimento ao finalizar
+- **Integração completa**: Finaliza prontuário médico e agendamento simultaneamente
