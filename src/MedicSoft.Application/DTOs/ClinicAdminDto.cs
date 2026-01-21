@@ -15,6 +15,7 @@ namespace MedicSoft.Application.DTOs
         public int AppointmentDurationMinutes { get; set; }
         public bool AllowEmergencySlots { get; set; }
         public bool IsActive { get; set; }
+        public string DefaultPaymentReceiverType { get; set; } = "Secretary";
     }
 
     public class UpdateClinicInfoRequest

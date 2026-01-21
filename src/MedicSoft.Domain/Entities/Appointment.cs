@@ -1,38 +1,9 @@
 using System;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Domain.Entities
 {
-    public enum AppointmentStatus
-    {
-        Scheduled = 1,
-        Confirmed = 2,
-        InProgress = 3,
-        Completed = 4,
-        Cancelled = 5,
-        NoShow = 6
-    }
-
-    public enum AppointmentType
-    {
-        Regular = 1,
-        Emergency = 2,
-        FollowUp = 3,
-        Consultation = 4
-    }
-
-    public enum AppointmentMode
-    {
-        InPerson = 1,      // Presencial
-        Telemedicine = 2   // Telemedicina
-    }
-
-    public enum PaymentType
-    {
-        Private = 1,       // Particular
-        HealthInsurance = 2 // Convênio
-    }
-
     public class Appointment : BaseEntity
     {
         public Guid PatientId { get; private set; }
@@ -50,6 +21,12 @@ namespace MedicSoft.Domain.Entities
         public string? CancellationReason { get; private set; }
         public DateTime? CheckInTime { get; private set; }
         public DateTime? CheckOutTime { get; private set; }
+        
+        // Controle de pagamento
+        public bool IsPaid { get; private set; }
+        public DateTime? PaidAt { get; private set; }
+        public Guid? PaidByUserId { get; private set; }
+        public PaymentReceiverType? PaymentReceivedBy { get; private set; }
 
         // Propriedades de navegação
         public Patient Patient { get; private set; } = null!;
@@ -236,6 +213,30 @@ namespace MedicSoft.Domain.Entities
             var appointmentEnd = GetEndDateTime();
             
             return appointmentStart < end && appointmentEnd > start;
+        }
+
+        public void MarkAsPaid(Guid paidByUserId, PaymentReceiverType receiverType)
+        {
+            if (IsPaid)
+                throw new InvalidOperationException("Pagamento já foi registrado para este atendimento");
+
+            IsPaid = true;
+            PaidAt = DateTime.UtcNow;
+            PaidByUserId = paidByUserId;
+            PaymentReceivedBy = receiverType;
+            UpdateTimestamp();
+        }
+
+        public void UnmarkAsPaid()
+        {
+            if (!IsPaid)
+                throw new InvalidOperationException("Atendimento não está marcado como pago");
+
+            IsPaid = false;
+            PaidAt = null;
+            PaidByUserId = null;
+            PaymentReceivedBy = null;
+            UpdateTimestamp();
         }
     }
 }

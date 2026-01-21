@@ -958,6 +958,54 @@ namespace MedicSoft.Api.Controllers
             return Guid.TryParse(clinicIdClaim, out var clinicId) ? clinicId : Guid.Empty;
         }
 
+        /// <summary>
+        /// Update payment receiver configuration (owner only)
+        /// </summary>
+        [HttpPut("payment-receiver")]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
+        public async Task<ActionResult> UpdatePaymentReceiver([FromBody] UpdatePaymentReceiverRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+                
+                if (!isAuthorized)
+                {
+                    return Forbid();
+                }
+
+                var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+                if (clinic == null)
+                {
+                    return NotFound(new { message = "Clinic not found" });
+                }
+
+                // Parse and update payment receiver type
+                if (!Enum.TryParse<MedicSoft.Domain.Enums.PaymentReceiverType>(request.PaymentReceiverType, out var receiverType))
+                {
+                    return BadRequest(new { message = $"Invalid payment receiver type: {request.PaymentReceiverType}" });
+                }
+
+                clinic.UpdatePaymentReceiverType(receiverType);
+                await _clinicRepository.UpdateAsync(clinic);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating payment receiver configuration");
+                return StatusCode(500, new { message = "An error occurred while updating payment receiver configuration" });
+            }
+        }
+
         private static ClinicAdminInfoDto MapClinicToDto(Domain.Entities.Clinic clinic)
         {
             return new ClinicAdminInfoDto
@@ -974,7 +1022,8 @@ namespace MedicSoft.Api.Controllers
                 ClosingTime = clinic.ClosingTime,
                 AppointmentDurationMinutes = clinic.AppointmentDurationMinutes,
                 AllowEmergencySlots = clinic.AllowEmergencySlots,
-                IsActive = clinic.IsActive
+                IsActive = clinic.IsActive,
+                DefaultPaymentReceiverType = clinic.DefaultPaymentReceiverType.ToString()
             };
         }
     }
@@ -994,5 +1043,10 @@ namespace MedicSoft.Api.Controllers
         public bool ShowOnPublicSite { get; set; }
         public string ClinicType { get; set; } = "Medical";
         public string? WhatsAppNumber { get; set; }
+    }
+
+    public class UpdatePaymentReceiverRequest
+    {
+        public string PaymentReceiverType { get; set; } = "Secretary"; // Doctor, Secretary, Other
     }
 }
