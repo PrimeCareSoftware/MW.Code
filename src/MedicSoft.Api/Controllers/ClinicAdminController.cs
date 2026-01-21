@@ -820,6 +820,111 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Get public display settings for the clinic
+        /// </summary>
+        [HttpGet("public-display-settings")]
+        [RequirePermissionKey(PermissionKeys.ClinicView)]
+        public async Task<ActionResult> GetPublicDisplaySettings()
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+                
+                if (!isAuthorized)
+                {
+                    return Forbid();
+                }
+
+                var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+                if (clinic == null)
+                {
+                    return NotFound(new { message = "Clinic not found" });
+                }
+
+                return Ok(new
+                {
+                    ShowOnPublicSite = clinic.ShowOnPublicSite,
+                    ClinicType = clinic.ClinicType.ToString(),
+                    WhatsAppNumber = clinic.WhatsAppNumber
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting public display settings");
+                return StatusCode(500, new { message = "An error occurred while retrieving settings" });
+            }
+        }
+
+        /// <summary>
+        /// Update public display settings for the clinic
+        /// </summary>
+        [HttpPut("public-display-settings")]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
+        public async Task<ActionResult> UpdatePublicDisplaySettings([FromBody] UpdatePublicDisplaySettingsRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+                
+                if (!isAuthorized)
+                {
+                    return Forbid();
+                }
+
+                var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+                if (clinic == null)
+                {
+                    return NotFound(new { message = "Clinic not found" });
+                }
+
+                // Parse clinic type
+                if (!Enum.TryParse<Domain.Enums.ClinicType>(request.ClinicType, true, out var clinicType))
+                {
+                    return BadRequest(new { message = "Invalid clinic type" });
+                }
+
+                // Update public display settings
+                clinic.UpdatePublicSiteSettings(request.ShowOnPublicSite, clinicType, request.WhatsAppNumber);
+                await _clinicRepository.UpdateAsync(clinic, tenantId);
+
+                _logger.LogInformation("Public display settings updated for clinic: {ClinicId}", clinicId);
+
+                return Ok(new
+                {
+                    message = "Settings updated successfully",
+                    ShowOnPublicSite = clinic.ShowOnPublicSite,
+                    ClinicType = clinic.ClinicType.ToString(),
+                    WhatsAppNumber = clinic.WhatsAppNumber
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating public display settings");
+                return StatusCode(500, new { message = "An error occurred while updating settings" });
+            }
+        }
+
+        /// <summary>
         /// Get clinic ID - from token for Users with ClinicOwner role, or from owner link for Owners
         /// </summary>
         private async Task<(Guid clinicId, bool isAuthorized)> GetClinicIdForOwnerAsync(Guid userId, string tenantId)
@@ -882,5 +987,12 @@ namespace MedicSoft.Api.Controllers
     public class ChangeUserRoleRequest
     {
         public string NewRole { get; set; } = string.Empty;
+    }
+
+    public class UpdatePublicDisplaySettingsRequest
+    {
+        public bool ShowOnPublicSite { get; set; }
+        public string ClinicType { get; set; } = "Medical";
+        public string? WhatsAppNumber { get; set; }
     }
 }
