@@ -1,4 +1,4 @@
-@use '../health-insurance-operators/health-insurance-operator-form.scss' as operator;
+@use '../health-insurance-operators/health-insurance-operator-form.scss';
 
 .guide-form-container {
   @extend .operator-form-container;
