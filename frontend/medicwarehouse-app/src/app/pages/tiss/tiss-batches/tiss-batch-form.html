@@ -1,0 +1,140 @@
+<app-navbar></app-navbar>
+
+<div class="batch-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Criar Lote TISS</h1>
+      <p>Agrupar guias não faturadas em um lote para envio à operadora</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <div class="form-card">
+    <form [formGroup]="batchForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3 class="section-title">Informações do Lote</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="healthInsuranceOperatorId">Operadora de Saúde *</label>
+            <select 
+              id="healthInsuranceOperatorId" 
+              formControlName="healthInsuranceOperatorId"
+              (change)="onOperatorChange()"
+              class="form-control"
+              [class.error]="isFieldInvalid('healthInsuranceOperatorId')"
+            >
+              <option value="">Selecione a operadora</option>
+              @for (operator of operators(); track operator.id) {
+                <option [value]="operator.id">{{ operator.tradeName }}</option>
+              }
+            </select>
+            @if (isFieldInvalid('healthInsuranceOperatorId')) {
+              <span class="error-message">Operadora é obrigatória</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="competence">Competência (Mês/Ano) *</label>
+            <input 
+              type="month" 
+              id="competence" 
+              formControlName="competence"
+              class="form-control"
+              [class.error]="isFieldInvalid('competence')"
+            />
+            @if (isFieldInvalid('competence')) {
+              <span class="error-message">Competência é obrigatória</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (batchForm.get('healthInsuranceOperatorId')?.value) {
+        <div class="form-section">
+          <div class="section-header">
+            <h3 class="section-title">Guias Disponíveis</h3>
+            @if (availableGuides().length > 0) {
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  [checked]="areAllGuidesSelected()"
+                  (change)="toggleAllGuides()"
+                />
+                <span>Selecionar todas</span>
+              </label>
+            }
+          </div>
+
+          @if (isLoadingGuides()) {
+            <div class="loading-state">
+              <p>Carregando guias...</p>
+            </div>
+          } @else if (availableGuides().length === 0) {
+            <div class="empty-state">
+              <p>Nenhuma guia não faturada encontrada para esta operadora.</p>
+            </div>
+          } @else {
+            <div class="guides-list">
+              @for (guide of availableGuides(); track guide.id) {
+                <div class="guide-item" [class.selected]="isGuideSelected(guide.id)">
+                  <label class="guide-checkbox">
+                    <input 
+                      type="checkbox"
+                      [checked]="isGuideSelected(guide.id)"
+                      (change)="toggleGuide(guide.id)"
+                    />
+                    <div class="guide-info">
+                      <div class="guide-header">
+                        <span class="guide-number">{{ guide.guideNumber }}</span>
+                        <span class="guide-type">{{ guide.guideType }}</span>
+                      </div>
+                      <div class="guide-details">
+                        <span class="guide-patient">{{ guide.patientName }}</span>
+                        <span class="guide-date">{{ guide.serviceDate | date: 'dd/MM/yyyy' }}</span>
+                      </div>
+                      <div class="guide-amount">R$ {{ guide.totalAmount.toFixed(2) }}</div>
+                    </div>
+                  </label>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="summary-section">
+          <div class="summary-card">
+            <div class="summary-item">
+              <span class="summary-label">Guias Selecionadas:</span>
+              <span class="summary-value">{{ guideCount() }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Valor Total:</span>
+              <span class="summary-value amount">R$ {{ totalAmount().toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/tiss/batches">
+          Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="isLoading() || selectedGuides().size === 0"
+        >
+          {{ isLoading() ? 'Criando...' : 'Criar Lote' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+@import '../health-insurance-operators/health-insurance-operator-form.scss';
+
+.auth-request-form-container {
+  @extend .operator-form-container;
+}
+
+.search-results {
+  position: absolute;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  width: calc(100% - 2rem);
+  margin-top: 0.25rem;
+
+  .search-result-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: #f3f4f6;
+    }
+
+    strong {
+      color: #3b82f6;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.selected-procedure {
+  margin-top: 1rem;
+  
+  .procedure-badge {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: #dbeafe;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #93c5fd;
+
+    .procedure-code {
+      font-weight: 600;
+      color: #1e40af;
+      font-size: 0.875rem;
+    }
+
+    .procedure-name {
+      color: #1e3a8a;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.help-text {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .selected-procedure .procedure-badge {
+    display: flex;
+  }
+}

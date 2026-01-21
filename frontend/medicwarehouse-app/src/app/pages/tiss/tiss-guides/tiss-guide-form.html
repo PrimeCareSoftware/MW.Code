@@ -1,0 +1,212 @@
+<app-navbar></app-navbar>
+
+<div class="guide-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>{{ isEditMode() ? 'Editar Guia TISS' : 'Nova Guia TISS' }}</h1>
+      <p>{{ isEditMode() ? 'Atualizar dados da guia TISS' : 'Cadastrar nova guia TISS para faturamento' }}</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  <div class="form-card">
+    <form [formGroup]="guideForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3 class="section-title">Informações Básicas</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="guideType">Tipo de Guia *</label>
+            <select 
+              id="guideType" 
+              formControlName="guideType"
+              class="form-control"
+              [class.error]="isFieldInvalid('guideType')"
+            >
+              <option value="">Selecione o tipo</option>
+              @for (type of guideTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+            @if (isFieldInvalid('guideType')) {
+              <span class="error-message">Tipo de guia é obrigatório</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="serviceDate">Data de Atendimento *</label>
+            <input 
+              type="date" 
+              id="serviceDate" 
+              formControlName="serviceDate"
+              class="form-control"
+              [class.error]="isFieldInvalid('serviceDate')"
+            />
+            @if (isFieldInvalid('serviceDate')) {
+              <span class="error-message">Data de atendimento é obrigatória</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="patientHealthInsuranceId">Convênio do Paciente *</label>
+            <select 
+              id="patientHealthInsuranceId" 
+              formControlName="patientHealthInsuranceId"
+              (change)="onPatientInsuranceChange()"
+              class="form-control"
+              [class.error]="isFieldInvalid('patientHealthInsuranceId')"
+            >
+              <option value="">Selecione o convênio</option>
+              @for (insurance of patientInsurances(); track insurance.id) {
+                <option [value]="insurance.id">
+                  {{ insurance.patientName }} - {{ insurance.planName }} ({{ insurance.operatorName }})
+                </option>
+              }
+            </select>
+            @if (isFieldInvalid('patientHealthInsuranceId')) {
+              <span class="error-message">Convênio do paciente é obrigatório</span>
+            }
+            <span class="help-text">Busque e selecione o paciente e seu plano de saúde</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="authorizationRequestId">Autorização (Opcional)</label>
+            <select 
+              id="authorizationRequestId" 
+              formControlName="authorizationRequestId"
+              class="form-control"
+            >
+              <option value="">Nenhuma autorização</option>
+              @for (auth of authorizationRequests(); track auth.id) {
+                <option [value]="auth.id">
+                  {{ auth.authorizationNumber }} - {{ auth.procedureName }} (Qtd: {{ auth.approvedQuantity }})
+                </option>
+              }
+            </select>
+            <span class="help-text">Vincule uma autorização aprovada se disponível</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-header">
+          <h3 class="section-title">Procedimentos</h3>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="addProcedure()">
+            + Adicionar Procedimento
+          </button>
+        </div>
+
+        @if (procedures.length === 0) {
+          <p class="empty-state">Nenhum procedimento adicionado. Clique em "Adicionar Procedimento" para começar.</p>
+        }
+
+        @for (procedure of procedures.controls; track $index; let i = $index) {
+          <div class="procedure-item" [formGroupName]="i">
+            <div class="procedure-header">
+              <span class="procedure-number">#{{ i + 1 }}</span>
+              <button type="button" class="btn-remove" (click)="removeProcedure(i)">
+                ✕
+              </button>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label [for]="'procedureCode-' + i">Código TUSS *</label>
+                <input 
+                  type="text" 
+                  [id]="'procedureCode-' + i"
+                  [formControlName]="'procedureCode'"
+                  (input)="onProcedureSearch(i, $any($event.target).value)"
+                  class="form-control"
+                  placeholder="Digite para buscar"
+                />
+                
+                @if (procedureSearchResults().length > 0 && isSearchingProcedures() === false) {
+                  <div class="search-results">
+                    @for (proc of procedureSearchResults(); track proc.id) {
+                      <div class="search-result-item" (click)="selectProcedure(i, proc)">
+                        <strong>{{ proc.code }}</strong> - {{ proc.name }}
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="form-group" style="flex: 3;">
+                <label [for]="'procedureName-' + i">Nome do Procedimento</label>
+                <input 
+                  type="text" 
+                  [id]="'procedureName-' + i"
+                  [formControlName]="'procedureName'"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label [for]="'quantity-' + i">Quantidade *</label>
+                <input 
+                  type="number" 
+                  [id]="'quantity-' + i"
+                  [formControlName]="'quantity'"
+                  class="form-control"
+                  min="1"
+                />
+              </div>
+
+              <div class="form-group">
+                <label [for]="'unitPrice-' + i">Valor Unitário (R$) *</label>
+                <input 
+                  type="number" 
+                  [id]="'unitPrice-' + i"
+                  [formControlName]="'unitPrice'"
+                  class="form-control"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+
+              <div class="form-group">
+                <label [for]="'totalPrice-' + i">Valor Total (R$)</label>
+                <input 
+                  type="number" 
+                  [id]="'totalPrice-' + i"
+                  [formControlName]="'totalPrice'"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="total-section">
+          <div class="total-label">Valor Total da Guia:</div>
+          <div class="total-value">R$ {{ totalAmount().toFixed(2) }}</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/tiss/guides">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+          {{ isLoading() ? 'Salvando...' : 'Criar Guia' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
