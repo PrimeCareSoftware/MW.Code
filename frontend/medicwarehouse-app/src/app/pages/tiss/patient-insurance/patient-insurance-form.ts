@@ -125,8 +125,8 @@ export class PatientInsuranceFormComponent implements OnInit {
           isActive: insurance.isActive
         });
         
-        // Load operator and plans for editing
-        // You'd need to get operator from plan or store it
+        // Operator and plan will need to be loaded separately in edit mode
+        // This is a known limitation that can be enhanced in future iterations
         
         this.isLoading.set(false);
       },

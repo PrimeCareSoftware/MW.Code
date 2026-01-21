@@ -42,7 +42,8 @@ export class AuthorizationRequestFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // In a real scenario, you'd load patient insurances based on search/filter
+    // Patient insurances will be loaded based on search/filter in a future enhancement
+    // For now, users can manually select from available patient insurances
   }
 
   onProcedureSearch(searchTerm: string): void {

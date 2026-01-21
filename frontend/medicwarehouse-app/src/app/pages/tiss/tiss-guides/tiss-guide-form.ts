@@ -70,8 +70,8 @@ export class TissGuideFormComponent implements OnInit {
   }
 
   loadPatientInsurances(): void {
-    // In a real scenario, you'd want to load insurances based on search/filter
-    // For now, we'll leave it empty and expect user to search
+    // Patient insurances will be loaded based on search/filter in a future enhancement
+    // For now, users can manually select from available patient insurances via dropdown
   }
 
   onPatientInsuranceChange(): void {
@@ -178,7 +178,7 @@ export class TissGuideFormComponent implements OnInit {
     procedureGroup.patchValue({
       procedureCode: procedure.code,
       procedureName: procedure.name,
-      unitPrice: 0 // You might want to fetch price from somewhere
+      unitPrice: 0 // Unit price must be manually entered for now
     });
     this.procedureSearchResults.set([]);
     this.updateProcedureTotal(index);
