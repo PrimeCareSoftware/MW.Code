@@ -59,60 +59,92 @@ namespace MedicSoft.Api.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
-            
-            var errorResponse = new ErrorResponse();
-
-            switch (exception)
+            // Check if response has already started or connection is aborted
+            // If so, we cannot write to the response stream
+            if (context.Response.HasStarted)
             {
-                case UnauthorizedAccessException _:
-                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    errorResponse.Message = "Você não tem permissão para realizar esta ação.";
-                    errorResponse.ErrorCode = "UNAUTHORIZED";
-                    break;
-
-                case InvalidOperationException _:
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    errorResponse.Message = SanitizeErrorMessage(exception.Message);
-                    errorResponse.ErrorCode = "INVALID_OPERATION";
-                    break;
-
-                case ArgumentNullException _:
-                case ArgumentException _:
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    errorResponse.Message = "Os dados fornecidos são inválidos. Por favor, verifique e tente novamente.";
-                    errorResponse.ErrorCode = "INVALID_ARGUMENT";
-                    break;
-
-                case KeyNotFoundException _:
-                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    errorResponse.Message = "O recurso solicitado não foi encontrado.";
-                    errorResponse.ErrorCode = "NOT_FOUND";
-                    break;
-
-                case TimeoutException _:
-                    context.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
-                    errorResponse.Message = "A operação demorou muito tempo. Por favor, tente novamente.";
-                    errorResponse.ErrorCode = "TIMEOUT";
-                    break;
-
-                default:
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    errorResponse.Message = "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde.";
-                    errorResponse.ErrorCode = "INTERNAL_ERROR";
-                    
-                    // Log detalhes completos do erro apenas no servidor
-                    _logger.LogError(exception, "Erro interno não categorizado: {ExceptionType}", exception.GetType().Name);
-                    break;
+                _logger.LogWarning(
+                    "Cannot write error response - the response has already started. Original exception: {ExceptionType}: {ExceptionMessage}",
+                    exception.GetType().Name,
+                    exception.Message);
+                return;
             }
 
-            var options = new JsonSerializerOptions
+            try
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
+                context.Response.ContentType = "application/json";
+                
+                var errorResponse = new ErrorResponse();
 
-            var result = JsonSerializer.Serialize(errorResponse, options);
-            await context.Response.WriteAsync(result);
+                switch (exception)
+                {
+                    case UnauthorizedAccessException _:
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        errorResponse.Message = "Você não tem permissão para realizar esta ação.";
+                        errorResponse.ErrorCode = "UNAUTHORIZED";
+                        break;
+
+                    case InvalidOperationException _:
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        errorResponse.Message = SanitizeErrorMessage(exception.Message);
+                        errorResponse.ErrorCode = "INVALID_OPERATION";
+                        break;
+
+                    case ArgumentNullException _:
+                    case ArgumentException _:
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        errorResponse.Message = "Os dados fornecidos são inválidos. Por favor, verifique e tente novamente.";
+                        errorResponse.ErrorCode = "INVALID_ARGUMENT";
+                        break;
+
+                    case KeyNotFoundException _:
+                        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        errorResponse.Message = "O recurso solicitado não foi encontrado.";
+                        errorResponse.ErrorCode = "NOT_FOUND";
+                        break;
+
+                    case TimeoutException _:
+                        context.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+                        errorResponse.Message = "A operação demorou muito tempo. Por favor, tente novamente.";
+                        errorResponse.ErrorCode = "TIMEOUT";
+                        break;
+
+                    default:
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        errorResponse.Message = "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde.";
+                        errorResponse.ErrorCode = "INTERNAL_ERROR";
+                        
+                        // Log detalhes completos do erro apenas no servidor
+                        _logger.LogError(exception, "Erro interno não categorizado: {ExceptionType}", exception.GetType().Name);
+                        break;
+                }
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+
+                var result = JsonSerializer.Serialize(errorResponse, options);
+                await context.Response.WriteAsync(result);
+            }
+            catch (ObjectDisposedException)
+            {
+                // The response stream has been disposed, likely due to a client disconnect
+                // Log this but don't throw - there's nothing we can do at this point
+                _logger.LogWarning(
+                    "Cannot write error response - the response stream has been disposed. Original exception: {ExceptionType}: {ExceptionMessage}",
+                    exception.GetType().Name,
+                    exception.Message);
+            }
+            catch (Exception ex)
+            {
+                // If we fail to write the error response, log it but don't throw
+                // to avoid cascading exceptions
+                _logger.LogError(ex,
+                    "Failed to write error response for original exception: {OriginalExceptionType}: {OriginalExceptionMessage}",
+                    exception.GetType().Name,
+                    exception.Message);
+            }
         }
 
         /// <summary>
