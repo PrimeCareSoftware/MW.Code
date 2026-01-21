@@ -224,6 +224,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'financial/receivables/:id/payment', 
+    loadComponent: () => import('./pages/financial/accounts-receivable/receivable-payment.component').then(m => m.ReceivablePaymentComponent),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'financial/receivables/:id', 
     loadComponent: () => import('./pages/financial/accounts-receivable/receivable-form.component').then(m => m.ReceivableFormComponent),
     canActivate: [authGuard]
@@ -236,6 +241,11 @@ export const routes: Routes = [
   { 
     path: 'financial/payables/new', 
     loadComponent: () => import('./pages/financial/accounts-payable/payable-form.component').then(m => m.PayableFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/payables/:id/payment', 
+    loadComponent: () => import('./pages/financial/accounts-payable/payable-payment.component').then(m => m.PayablePaymentComponent),
     canActivate: [authGuard]
   },
   { 

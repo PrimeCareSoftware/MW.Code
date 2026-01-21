@@ -1,0 +1,181 @@
+<app-navbar></app-navbar>
+
+<div class="payment-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Registrar Pagamento</h1>
+      <p>Registre um pagamento para a conta a pagar</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (isLoading() && !payable()) {
+    <div class="loading-container">
+      <div class="loading">Carregando dados...</div>
+    </div>
+  } @else if (payable()) {
+    <div class="payment-card">
+      <div class="payable-summary">
+        <h2>Dados da Conta a Pagar</h2>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span class="summary-label">Documento:</span>
+            <span class="summary-value">{{ payable()!.documentNumber }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Status:</span>
+            <span class="badge" [ngClass]="getStatusBadgeClass(payable()!.status)">
+              {{ formatStatus(payable()!.status) }}
+            </span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Categoria:</span>
+            <span class="summary-value">{{ formatCategory(payable()!.category) }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Vencimento:</span>
+            <span class="summary-value">{{ formatDate(payable()!.dueDate) }}</span>
+          </div>
+          <div class="summary-item full-width">
+            <span class="summary-label">Descrição:</span>
+            <span class="summary-value">{{ payable()!.description }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Valor Total:</span>
+            <span class="summary-value amount">{{ formatCurrency(payable()!.totalAmount) }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Valor Pago:</span>
+            <span class="summary-value amount-paid">{{ formatCurrency(payable()!.paidAmount) }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Saldo Devedor:</span>
+            <span class="summary-value amount-outstanding">{{ formatCurrency(payable()!.outstandingAmount) }}</span>
+          </div>
+        </div>
+
+        @if (payable()!.payments && payable()!.payments.length > 0) {
+          <div class="payment-history">
+            <h3>Histórico de Pagamentos</h3>
+            <table class="payments-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>ID Transação</th>
+                  <th>Observações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (payment of payable()!.payments; track payment.id) {
+                  <tr>
+                    <td>{{ formatDate(payment.paymentDate) }}</td>
+                    <td class="amount">{{ formatCurrency(payment.amount) }}</td>
+                    <td>{{ payment.transactionId || '-' }}</td>
+                    <td>{{ payment.notes || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+
+      <div class="payment-form-section">
+        <h2>Novo Pagamento</h2>
+        <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="amount" class="form-label required">Valor do Pagamento</label>
+            <input
+              type="number"
+              id="amount"
+              formControlName="amount"
+              class="form-control"
+              placeholder="0.00"
+              step="0.01"
+              min="0.01"
+              [max]="payable()!.outstandingAmount"
+            />
+            @if (paymentForm.get('amount')?.touched && paymentForm.get('amount')?.hasError('required')) {
+              <span class="error-message">Campo obrigatório</span>
+            }
+            @if (paymentForm.get('amount')?.touched && paymentForm.get('amount')?.hasError('min')) {
+              <span class="error-message">Valor mínimo é R$ 0,01</span>
+            }
+            <small class="form-hint">Máximo: {{ formatCurrency(payable()!.outstandingAmount) }}</small>
+          </div>
+
+          <div class="form-group">
+            <label for="paymentDate" class="form-label required">Data do Pagamento</label>
+            <input
+              type="date"
+              id="paymentDate"
+              formControlName="paymentDate"
+              class="form-control"
+            />
+            @if (paymentForm.get('paymentDate')?.touched && paymentForm.get('paymentDate')?.hasError('required')) {
+              <span class="error-message">Campo obrigatório</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="transactionId" class="form-label">ID da Transação</label>
+            <input
+              type="text"
+              id="transactionId"
+              formControlName="transactionId"
+              class="form-control"
+              placeholder="Código ou identificador da transação"
+            />
+            <small class="form-hint">Opcional: comprovante, número do cheque, etc.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="notes" class="form-label">Observações</label>
+            <textarea
+              id="notes"
+              formControlName="notes"
+              class="form-control"
+              rows="3"
+              placeholder="Observações adicionais sobre o pagamento"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cancel()"
+              [disabled]="isLoading()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="isLoading() || paymentForm.invalid"
+            >
+              @if (isLoading()) {
+                <span class="loading-spinner"></span>
+                Processando...
+              } @else {
+                Registrar Pagamento
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
