@@ -335,6 +335,8 @@ builder.Services.AddScoped<ITissGuideService, TissGuideService>();
 builder.Services.AddScoped<ITissBatchService, TissBatchService>();
 builder.Services.AddScoped<ITussProcedureService, TussProcedureService>();
 builder.Services.AddScoped<ITissXmlGeneratorService, TissXmlGeneratorService>();
+builder.Services.AddScoped<ITissXmlValidatorService, TissXmlValidatorService>();
+builder.Services.AddScoped<ITussImportService, TussImportService>();
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();

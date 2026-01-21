@@ -17,6 +17,13 @@ namespace MedicSoft.Application.Services
     {
         private const string TissVersion = "4.02.00";
         private const string TissNamespace = "http://www.ans.gov.br/padroes/tiss/schemas";
+        
+        private readonly ITissXmlValidatorService? _validatorService;
+
+        public TissXmlGeneratorService(ITissXmlValidatorService? validatorService = null)
+        {
+            _validatorService = validatorService;
+        }
 
         public string GetTissVersion() => TissVersion;
 
@@ -51,6 +58,20 @@ namespace MedicSoft.Application.Services
 
             await using var writer = XmlWriter.Create(xmlFilePath, settings);
             await doc.SaveAsync(writer, default);
+
+            // Optionally validate the generated XML
+            if (_validatorService != null)
+            {
+                var xmlContent = await File.ReadAllTextAsync(xmlFilePath);
+                var validationResult = await _validatorService.ValidateBatchXmlAsync(xmlContent);
+                
+                if (!validationResult.IsValid)
+                {
+                    // Log validation errors but don't fail the generation
+                    // In production, you might want to throw an exception or handle differently
+                    System.Diagnostics.Debug.WriteLine($"Generated XML has validation issues: {validationResult.ErrorCount} errors, {validationResult.WarningCount} warnings");
+                }
+            }
 
             return xmlFilePath;
         }
