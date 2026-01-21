@@ -767,6 +767,10 @@ namespace MedicSoft.Application.Services
                 30,
                 AppointmentType.Regular,
                 _demoTenantId,
+                AppointmentMode.InPerson,
+                PaymentType.Private,
+                null,
+                null,
                 "Consulta de rotina",
                 allowHistoricalData: true
             );
@@ -783,6 +787,10 @@ namespace MedicSoft.Application.Services
                 45,
                 AppointmentType.Regular,
                 _demoTenantId,
+                AppointmentMode.InPerson,
+                PaymentType.Private,
+                null,
+                null,
                 "Consulta cardiológica",
                 allowHistoricalData: true
             );
@@ -800,6 +808,10 @@ namespace MedicSoft.Application.Services
                 30,
                 AppointmentType.Regular,
                 _demoTenantId,
+                AppointmentMode.InPerson,
+                PaymentType.Private,
+                null,
+                null,
                 "Consulta médica"
             );
             todayAppointment.Confirm();
@@ -814,6 +826,10 @@ namespace MedicSoft.Application.Services
                 20,
                 AppointmentType.Regular,
                 _demoTenantId,
+                AppointmentMode.InPerson,
+                PaymentType.Private,
+                null,
+                null,
                 "Consulta pediátrica"
             ));
 
@@ -825,6 +841,10 @@ namespace MedicSoft.Application.Services
                 20,
                 AppointmentType.Regular,
                 _demoTenantId,
+                AppointmentMode.InPerson,
+                PaymentType.Private,
+                null,
+                null,
                 "Consulta pediátrica"
             ));
 

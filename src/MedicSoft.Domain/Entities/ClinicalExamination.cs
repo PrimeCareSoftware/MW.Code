@@ -24,6 +24,13 @@ namespace MedicSoft.Domain.Entities
         public decimal? Temperature { get; private set; }
         public decimal? OxygenSaturation { get; private set; }
         
+        // Medidas antropométricas
+        public decimal? Weight { get; private set; }  // Peso em kg
+        public decimal? Height { get; private set; }  // Altura em metros
+        
+        // IMC calculado automaticamente
+        public decimal? BMI => CalculateBMI();
+        
         // Exame físico sistemático (obrigatório)
         public string SystematicExamination { get; private set; }
         
@@ -46,6 +53,8 @@ namespace MedicSoft.Domain.Entities
             int? respiratoryRate = null,
             decimal? temperature = null,
             decimal? oxygenSaturation = null,
+            decimal? weight = null,
+            decimal? height = null,
             string? generalState = null) : base(tenantId)
         {
             if (medicalRecordId == Guid.Empty)
@@ -58,6 +67,7 @@ namespace MedicSoft.Domain.Entities
                 throw new ArgumentException("Systematic examination must have at least 20 characters", nameof(systematicExamination));
             
             ValidateVitalSigns(bloodPressureSystolic, bloodPressureDiastolic, heartRate, respiratoryRate, temperature, oxygenSaturation);
+            ValidateAnthropometricData(weight, height);
             
             MedicalRecordId = medicalRecordId;
             SystematicExamination = systematicExamination.Trim();
@@ -67,6 +77,8 @@ namespace MedicSoft.Domain.Entities
             RespiratoryRate = respiratoryRate;
             Temperature = temperature;
             OxygenSaturation = oxygenSaturation;
+            Weight = weight;
+            Height = height;
             GeneralState = generalState?.Trim();
         }
         
@@ -76,9 +88,12 @@ namespace MedicSoft.Domain.Entities
             int? heartRate,
             int? respiratoryRate = null,
             decimal? temperature = null,
-            decimal? oxygenSaturation = null)
+            decimal? oxygenSaturation = null,
+            decimal? weight = null,
+            decimal? height = null)
         {
             ValidateVitalSigns(bloodPressureSystolic, bloodPressureDiastolic, heartRate, respiratoryRate, temperature, oxygenSaturation);
+            ValidateAnthropometricData(weight, height);
             
             BloodPressureSystolic = bloodPressureSystolic;
             BloodPressureDiastolic = bloodPressureDiastolic;
@@ -86,6 +101,8 @@ namespace MedicSoft.Domain.Entities
             RespiratoryRate = respiratoryRate;
             Temperature = temperature;
             OxygenSaturation = oxygenSaturation;
+            Weight = weight;
+            Height = height;
             
             UpdateTimestamp();
         }
@@ -133,6 +150,23 @@ namespace MedicSoft.Domain.Entities
             
             if (oxygenSaturation.HasValue && (oxygenSaturation < 0 || oxygenSaturation > 100))
                 throw new ArgumentException("Oxygen saturation must be between 0 and 100%", nameof(oxygenSaturation));
+        }
+        
+        private void ValidateAnthropometricData(decimal? weight, decimal? height)
+        {
+            if (weight.HasValue && (weight < 0.5m || weight > 500m))
+                throw new ArgumentException("Weight must be between 0.5 and 500 kg", nameof(weight));
+            
+            if (height.HasValue && (height < 0.3m || height > 3.0m))
+                throw new ArgumentException("Height must be between 0.3 and 3.0 meters", nameof(height));
+        }
+        
+        private decimal? CalculateBMI()
+        {
+            if (!Weight.HasValue || !Height.HasValue || Height.Value == 0)
+                return null;
+            
+            return Math.Round(Weight.Value / (Height.Value * Height.Value), 2);
         }
     }
 }

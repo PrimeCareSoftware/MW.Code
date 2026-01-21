@@ -33,7 +33,9 @@ namespace MedicSoft.Application.Handlers.Commands.ClinicalExaminations
                 request.UpdateDto.HeartRate.HasValue ||
                 request.UpdateDto.RespiratoryRate.HasValue ||
                 request.UpdateDto.Temperature.HasValue ||
-                request.UpdateDto.OxygenSaturation.HasValue)
+                request.UpdateDto.OxygenSaturation.HasValue ||
+                request.UpdateDto.Weight.HasValue ||
+                request.UpdateDto.Height.HasValue)
             {
                 examination.UpdateVitalSigns(
                     request.UpdateDto.BloodPressureSystolic,
@@ -41,7 +43,9 @@ namespace MedicSoft.Application.Handlers.Commands.ClinicalExaminations
                     request.UpdateDto.HeartRate,
                     request.UpdateDto.RespiratoryRate,
                     request.UpdateDto.Temperature,
-                    request.UpdateDto.OxygenSaturation
+                    request.UpdateDto.OxygenSaturation,
+                    request.UpdateDto.Weight,
+                    request.UpdateDto.Height
                 );
             }
 
