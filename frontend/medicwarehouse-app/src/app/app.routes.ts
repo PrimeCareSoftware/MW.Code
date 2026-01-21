@@ -278,9 +278,58 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/financial/financial-closures/closure-form.component').then(m => m.ClosureFormComponent),
     canActivate: [authGuard]
   },
+  
+  // Electronic Invoices routes
+  { 
+    path: 'financial/invoices', 
+    loadComponent: () => import('./pages/financial/electronic-invoices/invoice-list.component').then(m => m.InvoiceListComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/invoices/config', 
+    loadComponent: () => import('./pages/financial/electronic-invoices/invoice-config.component').then(m => m.InvoiceConfigComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/invoices/new', 
+    loadComponent: () => import('./pages/financial/electronic-invoices/invoice-form.component').then(m => m.InvoiceFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/invoices/:id', 
+    loadComponent: () => import('./pages/financial/electronic-invoices/invoice-details.component').then(m => m.InvoiceDetailsComponent),
+    canActivate: [authGuard]
+  },
   { 
     path: 'financial/closures/:id', 
     loadComponent: () => import('./pages/financial/financial-closures/closure-form.component').then(m => m.ClosureFormComponent),
+    canActivate: [authGuard]
+  },
+  
+  // Telemedicine routes
+  { 
+    path: 'telemedicine', 
+    loadComponent: () => import('./pages/telemedicine/session-list/session-list').then(m => m.SessionList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/new', 
+    loadComponent: () => import('./pages/telemedicine/session-form/session-form').then(m => m.SessionForm),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/room/:id', 
+    loadComponent: () => import('./pages/telemedicine/video-room/video-room').then(m => m.VideoRoom),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/details/:id', 
+    loadComponent: () => import('./pages/telemedicine/session-details/session-details').then(m => m.SessionDetails),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/consent', 
+    loadComponent: () => import('./pages/telemedicine/consent-form/consent-form').then(m => m.ConsentForm),
     canActivate: [authGuard]
   },
   

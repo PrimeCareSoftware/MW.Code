@@ -1,0 +1,214 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="header">
+    <h1>Notas Fiscais Eletrônicas</h1>
+    <div class="actions">
+      <a routerLink="/financial/invoices/config" class="btn btn-secondary">
+        <i class="fas fa-cog"></i> Configuração
+      </a>
+      <a routerLink="/financial/invoices/new" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Emitir Nota Fiscal
+      </a>
+    </div>
+  </div>
+
+  <!-- Success/Error Messages -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Statistics Cards -->
+  @if (statistics()) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon bg-blue">
+          <i class="fas fa-file-invoice"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Emitidas</div>
+          <div class="stat-value">{{ statistics()!.totalInvoices }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon bg-green">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Autorizadas</div>
+          <div class="stat-value">{{ statistics()!.authorizedInvoices }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon bg-yellow">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Pendentes</div>
+          <div class="stat-value">{{ statistics()!.pendingInvoices }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon bg-purple">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Valor Total</div>
+          <div class="stat-value">{{ formatCurrency(statistics()!.totalAmount) }}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Filters -->
+  <div class="filters-container">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>Buscar:</label>
+        <input 
+          type="text" 
+          placeholder="Número, cliente, chave de acesso..." 
+          (input)="onSearchChange($event)"
+          class="search-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Status:</label>
+        <select (change)="onStatusFilterChange($event.target.value)" class="select-input">
+          <option value="all">Todos</option>
+          <option value="Draft">Rascunho</option>
+          <option value="Pending">Pendente</option>
+          <option value="Authorized">Autorizada</option>
+          <option value="Cancelled">Cancelada</option>
+          <option value="Error">Erro</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Data Inicial:</label>
+        <input 
+          type="date" 
+          [value]="startDate()"
+          (change)="startDate.set($event.target.value); onDateChange()"
+          class="date-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Data Final:</label>
+        <input 
+          type="date" 
+          [value]="endDate()"
+          (change)="endDate.set($event.target.value); onDateChange()"
+          class="date-input"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Carregando notas fiscais...</p>
+    </div>
+  }
+
+  <!-- Invoices Table -->
+  @if (!isLoading() && filteredInvoices().length > 0) {
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Número</th>
+            <th>Data Emissão</th>
+            <th>Cliente</th>
+            <th>Valor Serviço</th>
+            <th>Impostos</th>
+            <th>Valor Líquido</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (invoice of filteredInvoices(); track invoice.id) {
+            <tr (click)="viewDetails(invoice.id)" class="clickable-row">
+              <td>{{ formatType(invoice.type) }}</td>
+              <td>{{ invoice.number }}</td>
+              <td>{{ formatDate(invoice.issueDate) }}</td>
+              <td>{{ invoice.clientName }}</td>
+              <td class="text-right">{{ formatCurrency(invoice.serviceAmount) }}</td>
+              <td class="text-right">{{ formatCurrency(invoice.serviceAmount - invoice.netAmount) }}</td>
+              <td class="text-right">{{ formatCurrency(invoice.netAmount) }}</td>
+              <td>
+                <span [class]="'badge ' + getStatusBadgeClass(invoice.status)">
+                  {{ formatStatus(invoice.status) }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="action-buttons">
+                  @if (invoice.pdfUrl) {
+                    <button 
+                      (click)="downloadPdf(invoice.id, $event)"
+                      class="btn-icon"
+                      title="Baixar PDF"
+                    >
+                      <i class="fas fa-file-pdf"></i>
+                    </button>
+                  }
+                  <button 
+                    (click)="downloadXml(invoice.id, $event)"
+                    class="btn-icon"
+                    title="Baixar XML"
+                  >
+                    <i class="fas fa-file-code"></i>
+                  </button>
+                  <button 
+                    (click)="sendEmail(invoice.id, $event)"
+                    class="btn-icon"
+                    title="Enviar por E-mail"
+                  >
+                    <i class="fas fa-envelope"></i>
+                  </button>
+                  @if (invoice.status === 'Authorized') {
+                    <button 
+                      (click)="cancelInvoice(invoice.id, $event)"
+                      class="btn-icon btn-danger"
+                      title="Cancelar"
+                    >
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && filteredInvoices().length === 0) {
+    <div class="empty-state">
+      <i class="fas fa-file-invoice fa-3x"></i>
+      <h3>Nenhuma nota fiscal encontrada</h3>
+      <p>Comece emitindo sua primeira nota fiscal eletrônica</p>
+      <a routerLink="/financial/invoices/new" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Emitir Nota Fiscal
+      </a>
+    </div>
+  }
+</div>

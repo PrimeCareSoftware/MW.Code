@@ -1,0 +1,119 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Nova Sessão de Telemedicina</h1>
+      <p class="page-subtitle">Crie uma sessão de videoconsulta</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      {{ successMessage() }}
+    </div>
+  }
+
+  <div class="form-container">
+    <form [formGroup]="sessionForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2 class="section-title">Informações da Sessão</h2>
+        
+        <div class="form-group">
+          <label for="appointmentId" class="form-label required">
+            Agendamento
+          </label>
+          @if (isLoading()) {
+            <div class="loading-select">
+              <div class="spinner-small"></div>
+              <span>Carregando agendamentos...</span>
+            </div>
+          } @else if (appointments().length === 0) {
+            <div class="empty-appointments">
+              <p>Nenhum agendamento disponível hoje</p>
+              <a routerLink="/appointments/new" class="btn-link">Criar novo agendamento</a>
+            </div>
+          } @else {
+            <select
+              id="appointmentId"
+              formControlName="appointmentId"
+              (change)="onAppointmentChange($event)"
+              class="form-control"
+              [class.error]="sessionForm.get('appointmentId')?.invalid && sessionForm.get('appointmentId')?.touched">
+              <option value="">Selecione um agendamento</option>
+              @for (appointment of appointments(); track appointment.id) {
+                <option [value]="appointment.id">
+                  {{ getAppointmentDisplay(appointment) }}
+                </option>
+              }
+            </select>
+          }
+          @if (sessionForm.get('appointmentId')?.invalid && sessionForm.get('appointmentId')?.touched) {
+            <span class="error-message">Agendamento é obrigatório</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="notes" class="form-label">
+            Notas (Opcional)
+          </label>
+          <textarea
+            id="notes"
+            formControlName="notes"
+            class="form-control"
+            rows="4"
+            placeholder="Adicione notas sobre a sessão (opcional)"></textarea>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <div>
+          <h3>Sobre as sessões de telemedicina</h3>
+          <ul>
+            <li>As sessões são criadas a partir de agendamentos existentes</li>
+            <li>Uma sala de vídeo será criada automaticamente</li>
+            <li>Paciente e profissional poderão entrar na sala após a criação</li>
+            <li>A sessão ficará ativa até ser finalizada manualmente</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="cancel()" class="btn-outline" [disabled]="isSaving()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="sessionForm.invalid || isSaving()">
+          @if (isSaving()) {
+            <div class="spinner-small"></div>
+            <span>Criando...</span>
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+              <polyline points="17 2 12 7 7 2"></polyline>
+            </svg>
+            <span>Criar Sessão</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

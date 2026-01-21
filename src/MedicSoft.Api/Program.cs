@@ -266,6 +266,10 @@ builder.Services.AddScoped<IDigitalPrescriptionItemRepository, DigitalPrescripti
 builder.Services.AddScoped<ISNGPCReportRepository, SNGPCReportRepository>();
 builder.Services.AddScoped<IPrescriptionSequenceControlRepository, PrescriptionSequenceControlRepository>();
 
+// Electronic Invoices (NF-e/NFS-e)
+builder.Services.AddScoped<IElectronicInvoiceRepository, ElectronicInvoiceRepository>();
+builder.Services.AddScoped<IInvoiceConfigurationRepository, InvoiceConfigurationRepository>();
+
 // TISS/TUSS - Health Insurance Integration
 builder.Services.AddScoped<IHealthInsuranceOperatorRepository, HealthInsuranceOperatorRepository>();
 builder.Services.AddScoped<IHealthInsurancePlanRepository, HealthInsurancePlanRepository>();
@@ -318,6 +322,9 @@ builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFo
 // Digital Prescriptions and SNGPC Services
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
 builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSignatureService>();
+
+// Electronic Invoice Services
+builder.Services.AddScoped<IElectronicInvoiceService, ElectronicInvoiceService>();
 
 // TISS/TUSS Services
 builder.Services.AddScoped<IHealthInsuranceOperatorService, HealthInsuranceOperatorService>();

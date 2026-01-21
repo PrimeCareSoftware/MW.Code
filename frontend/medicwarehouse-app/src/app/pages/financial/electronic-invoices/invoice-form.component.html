@@ -1,0 +1,252 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="header">
+    <h1>Emitir Nota Fiscal Eletrônica</h1>
+    <a routerLink="/financial/invoices" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+  </div>
+
+  <!-- Success/Error Messages -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <form [formGroup]="form" class="invoice-form">
+    <!-- Invoice Type -->
+    <div class="form-section">
+      <h2>Tipo de Nota Fiscal</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo *</label>
+          <select formControlName="type" class="form-control">
+            <option value="NFSe">NFS-e (Serviço)</option>
+            <option value="NFe">NF-e (Produto)</option>
+            <option value="NFCe">NFC-e (Consumidor)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Client Information -->
+    <div class="form-section">
+      <h2>Dados do Cliente</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>CPF/CNPJ *</label>
+          <input 
+            type="text" 
+            formControlName="clientCpfCnpj"
+            (input)="onCpfCnpjInput($event)"
+            placeholder="000.000.000-00 ou 00.000.000/0000-00"
+            class="form-control"
+            maxlength="18"
+          />
+        </div>
+        <div class="form-group">
+          <label>Nome/Razão Social *</label>
+          <input 
+            type="text" 
+            formControlName="clientName"
+            placeholder="Nome completo ou razão social"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>E-mail</label>
+          <input 
+            type="email" 
+            formControlName="clientEmail"
+            placeholder="email@exemplo.com"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Telefone</label>
+          <input 
+            type="text" 
+            formControlName="clientPhone"
+            (input)="onPhoneInput($event)"
+            placeholder="(00) 00000-0000"
+            class="form-control"
+            maxlength="15"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Endereço</label>
+          <input 
+            type="text" 
+            formControlName="clientAddress"
+            placeholder="Rua, número"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cidade</label>
+          <input 
+            type="text" 
+            formControlName="clientCity"
+            placeholder="Cidade"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select formControlName="clientState" class="form-control">
+            <option value="">Selecione</option>
+            <option value="AC">Acre</option>
+            <option value="AL">Alagoas</option>
+            <option value="AP">Amapá</option>
+            <option value="AM">Amazonas</option>
+            <option value="BA">Bahia</option>
+            <option value="CE">Ceará</option>
+            <option value="DF">Distrito Federal</option>
+            <option value="ES">Espírito Santo</option>
+            <option value="GO">Goiás</option>
+            <option value="MA">Maranhão</option>
+            <option value="MT">Mato Grosso</option>
+            <option value="MS">Mato Grosso do Sul</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="PA">Pará</option>
+            <option value="PB">Paraíba</option>
+            <option value="PR">Paraná</option>
+            <option value="PE">Pernambuco</option>
+            <option value="PI">Piauí</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="RN">Rio Grande do Norte</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="RO">Rondônia</option>
+            <option value="RR">Roraima</option>
+            <option value="SC">Santa Catarina</option>
+            <option value="SP">São Paulo</option>
+            <option value="SE">Sergipe</option>
+            <option value="TO">Tocantins</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>CEP</label>
+          <input 
+            type="text" 
+            formControlName="clientZipCode"
+            (input)="onZipCodeInput($event)"
+            placeholder="00000-000"
+            class="form-control"
+            maxlength="9"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Information -->
+    <div class="form-section">
+      <h2>Dados do Serviço</h2>
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Descrição do Serviço *</label>
+          <textarea 
+            formControlName="serviceDescription"
+            placeholder="Descreva o serviço prestado"
+            class="form-control"
+            rows="4"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Código do Serviço (CNAE)</label>
+          <input 
+            type="text" 
+            formControlName="serviceCode"
+            placeholder="Ex: 8630-5/03"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Valor do Serviço *</label>
+          <input 
+            type="number" 
+            formControlName="serviceAmount"
+            placeholder="0,00"
+            class="form-control"
+            step="0.01"
+            min="0"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Tax Calculation -->
+    <div class="form-section tax-section">
+      <h2>Cálculo de Impostos</h2>
+      <div class="tax-grid">
+        <div class="tax-item">
+          <span class="tax-label">ISS ({{ formatPercent(issRate()) }})</span>
+          <span class="tax-value">{{ formatCurrency(calculatedTaxes().issAmount) }}</span>
+        </div>
+        <div class="tax-item">
+          <span class="tax-label">PIS (0,65%)</span>
+          <span class="tax-value">{{ formatCurrency(calculatedTaxes().pisAmount) }}</span>
+        </div>
+        <div class="tax-item">
+          <span class="tax-label">COFINS (3,00%)</span>
+          <span class="tax-value">{{ formatCurrency(calculatedTaxes().cofinsAmount) }}</span>
+        </div>
+        <div class="tax-item">
+          <span class="tax-label">CSLL (1,00%)</span>
+          <span class="tax-value">{{ formatCurrency(calculatedTaxes().csllAmount) }}</span>
+        </div>
+        <div class="tax-item highlight">
+          <span class="tax-label">Total de Impostos</span>
+          <span class="tax-value">{{ formatCurrency(calculatedTaxes().totalTaxes) }}</span>
+        </div>
+        <div class="tax-item highlight">
+          <span class="tax-label">Valor Líquido</span>
+          <span class="tax-value">{{ formatCurrency(calculatedTaxes().netAmount) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        (click)="saveDraft()" 
+        class="btn btn-secondary"
+        [disabled]="isLoading()"
+      >
+        <i class="fas fa-save"></i> Salvar Rascunho
+      </button>
+      <button 
+        type="button" 
+        (click)="issueInvoice()" 
+        class="btn btn-primary"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <div class="btn-spinner"></div>
+          Emitindo...
+        } @else {
+          <i class="fas fa-paper-plane"></i> Emitir Nota Fiscal
+        }
+      </button>
+    </div>
+  </form>
+</div>

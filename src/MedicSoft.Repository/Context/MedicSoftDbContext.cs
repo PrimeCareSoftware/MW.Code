@@ -96,6 +96,10 @@ namespace MedicSoft.Repository.Context
         // Configurable Consultation Forms
         public DbSet<ConsultationFormProfile> ConsultationFormProfiles { get; set; } = null!;
         public DbSet<ConsultationFormConfiguration> ConsultationFormConfigurations { get; set; } = null!;
+        
+        // Electronic Invoices (NF-e/NFS-e)
+        public DbSet<ElectronicInvoice> ElectronicInvoices { get; set; } = null!;
+        public DbSet<Domain.Entities.InvoiceConfiguration> InvoiceConfigurations { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -113,7 +117,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new MedicationConfiguration());
             modelBuilder.ApplyConfiguration(new PrescriptionItemConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
-            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationRoutineConfiguration());
             modelBuilder.ApplyConfiguration(new SubscriptionPlanConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicSubscriptionConfiguration());
@@ -179,6 +183,10 @@ namespace MedicSoft.Repository.Context
             // Configurable Consultation Forms
             modelBuilder.ApplyConfiguration(new ConsultationFormProfileConfiguration());
             modelBuilder.ApplyConfiguration(new ConsultationFormConfigurationConfiguration());
+            
+            // Electronic Invoices (NF-e/NFS-e)
+            modelBuilder.ApplyConfiguration(new ElectronicInvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceConfigurationEntityConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
