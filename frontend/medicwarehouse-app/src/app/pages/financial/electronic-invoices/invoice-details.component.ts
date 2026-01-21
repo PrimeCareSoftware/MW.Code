@@ -235,12 +235,14 @@ export class InvoiceDetailsComponent implements OnInit {
     return `${value.toFixed(2)}%`;
   }
 
-  formatDate(dateString: string | Date): string {
+  formatDate(dateString: string | Date | undefined): string {
+    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR');
   }
 
-  formatDateTime(dateString: string | Date): string {
+  formatDateTime(dateString: string | Date | undefined): string {
+    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleString('pt-BR');
   }

@@ -103,7 +103,8 @@ export class InvoiceListComponent implements OnInit {
     this.applyFilters();
   }
 
-  onStatusFilterChange(status: string): void {
+  onStatusFilterChange(event: Event): void {
+    const status = (event.target as HTMLSelectElement)?.value || 'all';
     this.statusFilter.set(status);
     this.loadInvoices();
     this.loadStatistics();
