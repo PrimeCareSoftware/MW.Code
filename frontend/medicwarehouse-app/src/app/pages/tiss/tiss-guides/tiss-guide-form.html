@@ -132,7 +132,7 @@
                   placeholder="Digite para buscar"
                 />
                 
-                @if (procedureSearchResults().length > 0 && isSearchingProcedures() === false) {
+                @if (procedureSearchResults().length > 0 && !isSearchingProcedures()) {
                   <div class="search-results">
                     @for (proc of procedureSearchResults(); track proc.id) {
                       <div class="search-result-item" (click)="selectProcedure(i, proc)">

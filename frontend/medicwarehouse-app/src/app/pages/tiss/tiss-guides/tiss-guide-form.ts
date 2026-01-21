@@ -134,13 +134,15 @@ export class TissGuideFormComponent implements OnInit {
       totalPrice: [0]
     });
 
+    const currentIndex = this.procedures.length;
+
     // Listen to quantity and unitPrice changes to update totalPrice
     procedureGroup.get('quantity')?.valueChanges.subscribe(() => {
-      this.updateProcedureTotal(this.procedures.length);
+      this.updateProcedureTotal(currentIndex);
     });
     
     procedureGroup.get('unitPrice')?.valueChanges.subscribe(() => {
-      this.updateProcedureTotal(this.procedures.length);
+      this.updateProcedureTotal(currentIndex);
     });
 
     this.procedures.push(procedureGroup);

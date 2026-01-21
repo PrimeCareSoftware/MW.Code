@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientHealthInsuranceService } from '../../../services/patient-health-insurance.service';
-import { PatientService } from '../../../services/patient.ts';
+import { PatientService } from '../../../services/patient';
 import { HealthInsuranceOperatorService } from '../../../services/health-insurance-operator.service';
 import { HealthInsurancePlanService, HealthInsurancePlan } from '../../../services/health-insurance-plan.service';
 import { Patient } from '../../../models/patient.model';
