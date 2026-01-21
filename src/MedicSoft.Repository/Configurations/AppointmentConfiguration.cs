@@ -22,6 +22,14 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired()
                 .HasConversion<int>();
 
+            builder.Property(a => a.Mode)
+                .IsRequired()
+                .HasConversion<int>();
+
+            builder.Property(a => a.PaymentType)
+                .IsRequired()
+                .HasConversion<int>();
+
             builder.Property(a => a.Status)
                 .IsRequired()
                 .HasConversion<int>();
@@ -46,6 +54,18 @@ namespace MedicSoft.Repository.Configurations
                 .WithMany()
                 .HasForeignKey(a => a.ClinicId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(a => a.Professional)
+                .WithMany()
+                .HasForeignKey(a => a.ProfessionalId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
+
+            builder.HasOne(a => a.HealthInsurancePlan)
+                .WithMany()
+                .HasForeignKey(a => a.HealthInsurancePlanId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
 
             // Indexes
             builder.HasIndex(a => new { a.TenantId, a.ScheduledDate, a.ClinicId })

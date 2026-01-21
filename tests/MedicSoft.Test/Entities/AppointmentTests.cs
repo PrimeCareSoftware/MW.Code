@@ -350,6 +350,10 @@ namespace MedicSoft.Test.Entities
                 30,
                 AppointmentType.Regular,
                 _tenantId,
+                AppointmentMode.InPerson,
+                PaymentType.Private,
+                null,
+                null,
                 notes
             );
         }

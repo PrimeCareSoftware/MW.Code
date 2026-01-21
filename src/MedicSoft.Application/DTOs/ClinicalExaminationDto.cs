@@ -29,6 +29,16 @@ namespace MedicSoft.Application.DTOs
         [Range(70, 100, ErrorMessage = "Saturação de oxigênio deve estar entre 70 e 100%")]
         public decimal? OxygenSaturation { get; set; }
         
+        // Anthropometric data
+        [Range(0.5, 500, ErrorMessage = "Peso deve estar entre 0.5 e 500 kg")]
+        public decimal? Weight { get; set; }
+        
+        [Range(0.3, 3.0, ErrorMessage = "Altura deve estar entre 0.3 e 3.0 metros")]
+        public decimal? Height { get; set; }
+        
+        // Calculated BMI (read-only)
+        public decimal? BMI { get; set; }
+        
         // Examination
         [Required(ErrorMessage = "Exame sistemático é obrigatório")]
         [StringLength(5000, MinimumLength = 20, ErrorMessage = "Exame sistemático deve ter entre 20 e 5000 caracteres")]
@@ -66,6 +76,13 @@ namespace MedicSoft.Application.DTOs
         [Range(70, 100, ErrorMessage = "Saturação de oxigênio deve estar entre 70 e 100%")]
         public decimal? OxygenSaturation { get; set; }
         
+        // Anthropometric data
+        [Range(0.5, 500, ErrorMessage = "Peso deve estar entre 0.5 e 500 kg")]
+        public decimal? Weight { get; set; }
+        
+        [Range(0.3, 3.0, ErrorMessage = "Altura deve estar entre 0.3 e 3.0 metros")]
+        public decimal? Height { get; set; }
+        
         // Examination (required - min 20 chars)
         [Required(ErrorMessage = "Exame sistemático é obrigatório")]
         [StringLength(5000, MinimumLength = 20, ErrorMessage = "Exame sistemático deve ter entre 20 e 5000 caracteres")]
@@ -95,6 +112,13 @@ namespace MedicSoft.Application.DTOs
         
         [Range(70, 100, ErrorMessage = "Saturação de oxigênio deve estar entre 70 e 100%")]
         public decimal? OxygenSaturation { get; set; }
+        
+        // Anthropometric data
+        [Range(0.5, 500, ErrorMessage = "Peso deve estar entre 0.5 e 500 kg")]
+        public decimal? Weight { get; set; }
+        
+        [Range(0.3, 3.0, ErrorMessage = "Altura deve estar entre 0.3 e 3.0 metros")]
+        public decimal? Height { get; set; }
         
         // Examination
         [StringLength(5000, ErrorMessage = "Exame sistemático deve ter no máximo 5000 caracteres")]

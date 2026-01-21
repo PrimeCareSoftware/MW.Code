@@ -33,6 +33,7 @@ namespace MedicSoft.Domain.Entities
         public bool IsClosed { get; private set; }
         public DateTime? ClosedAt { get; private set; }
         public Guid? ClosedByUserId { get; private set; }
+        public string? ProfessionalSignature { get; private set; }  // Assinatura digital do profissional
 
         // Navigation properties
         public Appointment Appointment { get; private set; } = null!;
@@ -227,7 +228,7 @@ namespace MedicSoft.Domain.Entities
         }
         
         // CFM 1.821 - Método para fechar prontuário (impedir alterações)
-        public void CloseMedicalRecord(Guid closedByUserId)
+        public void CloseMedicalRecord(Guid closedByUserId, string? professionalSignature = null)
         {
             if (IsClosed)
                 throw new InvalidOperationException("Medical record is already closed");
@@ -238,6 +239,7 @@ namespace MedicSoft.Domain.Entities
             IsClosed = true;
             ClosedAt = DateTime.UtcNow;
             ClosedByUserId = closedByUserId;
+            ProfessionalSignature = professionalSignature?.Trim();
             
             // Fechar consulta se ainda não foi fechada
             if (!ConsultationEndTime.HasValue)

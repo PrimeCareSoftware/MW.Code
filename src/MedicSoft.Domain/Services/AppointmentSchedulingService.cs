@@ -106,7 +106,7 @@ namespace MedicSoft.Domain.Services
 
             var appointment = new Appointment(
                 patientId, clinicId, scheduledDate, scheduledTime, 
-                durationMinutes, type, tenantId, notes);
+                durationMinutes, type, tenantId, AppointmentMode.InPerson, PaymentType.Private, null, null, notes);
 
             return await _appointmentRepository.AddAsync(appointment);
         }
@@ -131,7 +131,7 @@ namespace MedicSoft.Domain.Services
             
             var appointment = new Appointment(
                 patientId, clinicId, scheduledDate, emergencySlot, 
-                durationMinutes, AppointmentType.Emergency, tenantId, notes);
+                durationMinutes, AppointmentType.Emergency, tenantId, AppointmentMode.InPerson, PaymentType.Private, null, null, notes);
 
             return await _appointmentRepository.AddAsync(appointment);
         }

@@ -43,6 +43,8 @@ namespace MedicSoft.Application.Handlers.Commands.ClinicalExaminations
                 request.ExaminationDto.RespiratoryRate,
                 request.ExaminationDto.Temperature,
                 request.ExaminationDto.OxygenSaturation,
+                request.ExaminationDto.Weight,
+                request.ExaminationDto.Height,
                 request.ExaminationDto.GeneralState
             );
 
