@@ -284,6 +284,33 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
+  // Telemedicine routes
+  { 
+    path: 'telemedicine', 
+    loadComponent: () => import('./pages/telemedicine/session-list/session-list').then(m => m.SessionList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/new', 
+    loadComponent: () => import('./pages/telemedicine/session-form/session-form').then(m => m.SessionForm),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/room/:id', 
+    loadComponent: () => import('./pages/telemedicine/video-room/video-room').then(m => m.VideoRoom),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/details/:id', 
+    loadComponent: () => import('./pages/telemedicine/session-details/session-details').then(m => m.SessionDetails),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'telemedicine/consent', 
+    loadComponent: () => import('./pages/telemedicine/consent-form/consent-form').then(m => m.ConsentForm),
+    canActivate: [authGuard]
+  },
+  
   ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes

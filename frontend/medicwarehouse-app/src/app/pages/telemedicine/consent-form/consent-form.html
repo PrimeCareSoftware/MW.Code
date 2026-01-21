@@ -1,0 +1,175 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Termo de Consentimento</h1>
+      <p class="page-subtitle">CFM 1821/07 - Telemedicina</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      {{ successMessage() }}
+    </div>
+  }
+
+  <div class="form-container">
+    <div class="consent-document">
+      <h2>TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO PARA TELEMEDICINA</h2>
+      
+      <div class="consent-section">
+        <h3>1. Definição de Telemedicina</h3>
+        <p>
+          Telemedicina é o exercício da medicina através da utilização de metodologias interativas de 
+          comunicação audiovisual e de dados, com o objetivo de assistência, educação e pesquisa em saúde.
+        </p>
+      </div>
+
+      <div class="consent-section">
+        <h3>2. Objetivos da Consulta</h3>
+        <p>
+          A consulta por telemedicina tem por objetivo proporcionar atendimento médico à distância, 
+          oferecendo orientação, diagnóstico e, quando possível, prescrição de tratamento.
+        </p>
+      </div>
+
+      <div class="consent-section">
+        <h3>3. Limitações</h3>
+        <p>
+          O paciente está ciente de que existem limitações inerentes à consulta por telemedicina, 
+          incluindo a impossibilidade de realizar exame físico completo. Caso seja necessário, 
+          o profissional poderá solicitar consulta presencial.
+        </p>
+      </div>
+
+      <div class="consent-section">
+        <h3>4. Privacidade e Segurança</h3>
+        <p>
+          Todas as informações compartilhadas durante a teleconsulta são confidenciais e protegidas 
+          pela Lei Geral de Proteção de Dados (LGPD) e pelo Código de Ética Médica.
+        </p>
+      </div>
+
+      <div class="consent-section">
+        <h3>5. Gravação</h3>
+        <p>
+          A sessão poderá ser gravada para fins de documentação médica, auditoria e qualidade. 
+          As gravações serão armazenadas de forma segura e acessadas apenas por profissionais autorizados.
+        </p>
+      </div>
+    </div>
+
+    <form [formGroup]="consentForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2 class="section-title">Dados do Paciente</h2>
+        
+        <div class="form-group">
+          <label for="patientName" class="form-label required">
+            Nome Completo
+          </label>
+          <input
+            id="patientName"
+            type="text"
+            formControlName="patientName"
+            class="form-control"
+            placeholder="Digite o nome completo">
+        </div>
+
+        <div class="form-group">
+          <label for="patientCpf" class="form-label required">
+            CPF
+          </label>
+          <input
+            id="patientCpf"
+            type="text"
+            formControlName="patientCpf"
+            class="form-control"
+            placeholder="000.000.000-00">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="section-title">Consentimento</h2>
+        
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="acceptTerms">
+            <span>
+              Li e compreendi todas as informações acima e concordo em participar da 
+              teleconsulta médica. <span class="required">*</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="acceptDataProcessing">
+            <span>
+              Autorizo o tratamento dos meus dados pessoais e de saúde para fins de 
+              atendimento médico, conforme a LGPD. <span class="required">*</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="acceptRecording">
+            <span>
+              Autorizo a gravação da sessão para fins de documentação médica e qualidade 
+              (opcional).
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label for="signature" class="form-label required">
+            Assinatura Eletrônica
+          </label>
+          <input
+            id="signature"
+            type="text"
+            formControlName="signature"
+            class="form-control signature-input"
+            placeholder="Digite seu nome completo como assinatura">
+          <p class="help-text">
+            Ao digitar seu nome, você está assinando eletronicamente este termo de consentimento.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="cancel()" class="btn-outline" [disabled]="isSaving()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="consentForm.invalid || isSaving()">
+          @if (isSaving()) {
+            <div class="spinner-small"></div>
+            <span>Processando...</span>
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>Aceitar e Continuar</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
