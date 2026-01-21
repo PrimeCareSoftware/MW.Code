@@ -60,6 +60,11 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(c => c.WhatsAppNumber)
                 .HasMaxLength(30);
 
+            builder.Property(c => c.DefaultPaymentReceiverType)
+                .IsRequired()
+                .HasConversion<string>()
+                .HasMaxLength(50);
+
             // Indexes
             builder.HasIndex(c => new { c.TenantId, c.Document })
                 .IsUnique()
