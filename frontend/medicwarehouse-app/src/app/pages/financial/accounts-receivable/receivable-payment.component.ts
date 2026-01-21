@@ -1,14 +1,14 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { FinancialService } from '../../../services/financial.service';
 import { AccountsReceivable } from '../../../models/financial.model';
 
 @Component({
   selector: 'app-receivable-payment',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, Navbar],
   templateUrl: './receivable-payment.component.html',
   styleUrl: './receivable-payment.component.scss'
 })
