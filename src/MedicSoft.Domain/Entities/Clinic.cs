@@ -165,10 +165,13 @@ namespace MedicSoft.Domain.Entities
             
             if (!string.IsNullOrWhiteSpace(whatsAppNumber))
             {
-                // Validate WhatsApp number format (basic validation)
+                // Validate WhatsApp number format - should start with + for country code
+                if (!whatsAppNumber.TrimStart().StartsWith("+"))
+                    throw new ArgumentException("WhatsApp number must include country code (e.g., +5511999999999)", nameof(whatsAppNumber));
+                
                 var cleanNumber = new string(whatsAppNumber.Where(char.IsDigit).ToArray());
                 if (cleanNumber.Length < 10 || cleanNumber.Length > 15)
-                    throw new ArgumentException("WhatsApp number must be between 10 and 15 digits", nameof(whatsAppNumber));
+                    throw new ArgumentException("WhatsApp number must be between 10 and 15 digits (excluding country code)", nameof(whatsAppNumber));
                 
                 WhatsAppNumber = whatsAppNumber.Trim();
             }

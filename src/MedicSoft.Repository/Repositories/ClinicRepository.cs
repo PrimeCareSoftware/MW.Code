@@ -131,6 +131,8 @@ namespace MedicSoft.Repository.Repositories
                 {
                     query = query.Where(c => c.ClinicType == type);
                 }
+                // Note: Invalid clinic types are ignored to allow flexible filtering
+                // The frontend should validate clinic types before sending requests
             }
 
             return query;

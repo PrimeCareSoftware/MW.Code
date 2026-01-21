@@ -116,6 +116,10 @@ export class ClinicSearchComponent implements OnInit {
 
   openWhatsApp(clinic: PublicClinicDto): void {
     const phone = clinic.whatsAppNumber || clinic.phone;
+    if (!phone) {
+      console.error('No phone number available for WhatsApp');
+      return;
+    }
     // Remove all non-numeric characters
     const cleanPhone = phone.replace(/\D/g, '');
     // Create WhatsApp URL with pre-filled message
