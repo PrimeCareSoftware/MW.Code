@@ -65,6 +65,9 @@ namespace MedicSoft.Repository.Configurations
 
             builder.Property(mr => mr.ClosedByUserId);
 
+            builder.Property(mr => mr.ProfessionalSignature)
+                .HasMaxLength(500);
+
             builder.Property(mr => mr.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);

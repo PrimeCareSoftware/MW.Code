@@ -32,6 +32,13 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(ce => ce.OxygenSaturation)
                 .HasPrecision(5, 2);
 
+            // Medidas antropométricas
+            builder.Property(ce => ce.Weight)
+                .HasPrecision(6, 2);
+
+            builder.Property(ce => ce.Height)
+                .HasPrecision(4, 2);
+
             // Exame físico sistemático (obrigatório)
             builder.Property(ce => ce.SystematicExamination)
                 .IsRequired()

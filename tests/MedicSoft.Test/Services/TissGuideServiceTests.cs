@@ -849,6 +849,10 @@ namespace MedicSoft.Test.Services
                 30,
                 AppointmentType.Consultation,
                 TenantId,
+                AppointmentMode.InPerson,
+                PaymentType.Private,
+                null,
+                null,
                 "Regular checkup"
             );
             typeof(Appointment).GetProperty("Id")!.SetValue(appointment, appointmentId);
