@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Services;
+using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Domain.Entities
 {
@@ -19,6 +20,9 @@ namespace MedicSoft.Domain.Entities
         public int AppointmentDurationMinutes { get; private set; } = 30;
         public bool AllowEmergencySlots { get; private set; } = true;
         public bool IsActive { get; private set; } = true;
+        public bool ShowOnPublicSite { get; private set; } = false; // Owner must approve public display
+        public ClinicType ClinicType { get; private set; } = ClinicType.Medical;
+        public string? WhatsAppNumber { get; private set; } // Optional WhatsApp for public contact
 
         private Clinic() 
         { 
@@ -152,6 +156,40 @@ namespace MedicSoft.Domain.Entities
         public bool IsWithinWorkingHours(TimeSpan time)
         {
             return time >= OpeningTime && time < ClosingTime;
+        }
+
+        public void UpdatePublicSiteSettings(bool showOnPublicSite, ClinicType clinicType, string? whatsAppNumber = null)
+        {
+            ShowOnPublicSite = showOnPublicSite;
+            ClinicType = clinicType;
+            
+            if (!string.IsNullOrWhiteSpace(whatsAppNumber))
+            {
+                // Validate WhatsApp number format (basic validation)
+                var cleanNumber = new string(whatsAppNumber.Where(char.IsDigit).ToArray());
+                if (cleanNumber.Length < 10 || cleanNumber.Length > 15)
+                    throw new ArgumentException("WhatsApp number must be between 10 and 15 digits", nameof(whatsAppNumber));
+                
+                WhatsAppNumber = whatsAppNumber.Trim();
+            }
+            else
+            {
+                WhatsAppNumber = null;
+            }
+            
+            UpdateTimestamp();
+        }
+
+        public void EnablePublicDisplay()
+        {
+            ShowOnPublicSite = true;
+            UpdateTimestamp();
+        }
+
+        public void DisablePublicDisplay()
+        {
+            ShowOnPublicSite = false;
+            UpdateTimestamp();
         }
     }
 }

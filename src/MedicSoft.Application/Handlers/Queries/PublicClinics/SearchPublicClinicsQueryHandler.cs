@@ -30,6 +30,7 @@ namespace MedicSoft.Application.Handlers.Queries.PublicClinics
                 request.Name,
                 request.City,
                 request.State,
+                request.ClinicType,
                 request.PageNumber,
                 request.PageSize
             );
@@ -37,7 +38,8 @@ namespace MedicSoft.Application.Handlers.Queries.PublicClinics
             var totalCount = await _clinicRepository.CountPublicClinicsAsync(
                 request.Name,
                 request.City,
-                request.State
+                request.State,
+                request.ClinicType
             );
 
             // Mapeia para DTO público (apenas dados essenciais)
@@ -54,7 +56,9 @@ namespace MedicSoft.Application.Handlers.Queries.PublicClinics
                 OpeningTime = c.OpeningTime,
                 ClosingTime = c.ClosingTime,
                 AppointmentDurationMinutes = c.AppointmentDurationMinutes,
-                IsAcceptingNewPatients = c.IsActive && c.AllowEmergencySlots
+                IsAcceptingNewPatients = c.IsActive && c.AllowEmergencySlots,
+                ClinicType = c.ClinicType.ToString(),
+                WhatsAppNumber = c.WhatsAppNumber
             }).ToList();
 
             return new SearchClinicsResultDto

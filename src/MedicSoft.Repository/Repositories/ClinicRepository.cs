@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Repository.Repositories
@@ -69,10 +70,11 @@ namespace MedicSoft.Repository.Repositories
             string? name,
             string? city,
             string? state,
+            string? clinicType,
             int pageNumber,
             int pageSize)
         {
-            var query = ApplyPublicClinicsFilters(name, city, state);
+            var query = ApplyPublicClinicsFilters(name, city, state, clinicType);
 
             // Aplica paginação
             return await query
@@ -85,18 +87,21 @@ namespace MedicSoft.Repository.Repositories
         public async Task<int> CountPublicClinicsAsync(
             string? name,
             string? city,
-            string? state)
+            string? state,
+            string? clinicType)
         {
-            var query = ApplyPublicClinicsFilters(name, city, state);
+            var query = ApplyPublicClinicsFilters(name, city, state, clinicType);
             return await query.CountAsync();
         }
 
         private IQueryable<Clinic> ApplyPublicClinicsFilters(
             string? name,
             string? city,
-            string? state)
+            string? state,
+            string? clinicType)
         {
-            var query = _dbSet.Where(c => c.IsActive);
+            // Only show clinics that are active AND have explicitly enabled public display
+            var query = _dbSet.Where(c => c.IsActive && c.ShowOnPublicSite);
 
             // Filtros opcionais
             if (!string.IsNullOrWhiteSpace(name))
@@ -117,6 +122,15 @@ namespace MedicSoft.Repository.Repositories
             {
                 var stateSearch = state.ToLower();
                 query = query.Where(c => c.Address.ToLower().Contains(stateSearch));
+            }
+
+            if (!string.IsNullOrWhiteSpace(clinicType))
+            {
+                // Try to parse the clinic type enum
+                if (Enum.TryParse<ClinicType>(clinicType, true, out var type))
+                {
+                    query = query.Where(c => c.ClinicType == type);
+                }
             }
 
             return query;

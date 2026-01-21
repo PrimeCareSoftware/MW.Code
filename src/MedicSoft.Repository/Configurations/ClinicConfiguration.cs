@@ -43,6 +43,18 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.Property(c => c.ShowOnPublicSite)
+                .IsRequired()
+                .HasDefaultValue(false);
+
+            builder.Property(c => c.ClinicType)
+                .IsRequired()
+                .HasConversion<string>()
+                .HasMaxLength(50);
+
+            builder.Property(c => c.WhatsAppNumber)
+                .HasMaxLength(30);
+
             // Indexes
             builder.HasIndex(c => new { c.TenantId, c.Document })
                 .IsUnique()
@@ -50,6 +62,9 @@ namespace MedicSoft.Repository.Configurations
 
             builder.HasIndex(c => c.TenantId)
                 .HasDatabaseName("IX_Clinics_TenantId");
+
+            builder.HasIndex(c => c.ShowOnPublicSite)
+                .HasDatabaseName("IX_Clinics_ShowOnPublicSite");
         }
     }
 }
