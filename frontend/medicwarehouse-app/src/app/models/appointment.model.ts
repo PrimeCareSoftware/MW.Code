@@ -15,6 +15,11 @@ export interface Appointment {
   cancellationReason?: string;
   checkInTime?: string;
   checkOutTime?: string;
+  isPaid: boolean;
+  paidAt?: string;
+  paidByUserId?: string;
+  paidByUserName?: string;
+  paymentReceivedBy?: string; // Doctor, Secretary, Other
   createdAt: string;
   updatedAt?: string;
 }

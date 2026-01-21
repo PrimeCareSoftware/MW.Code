@@ -67,7 +67,9 @@ export class Attendance implements OnInit, OnDestroy {
   // Cronômetro
   elapsedSeconds = signal<number>(0);
   timerSubscription?: Subscription;
+  autosaveSubscription?: Subscription;
   startTime?: Date;
+  lastSaveTime?: Date;
 
   // Procedures
   availableProcedures = signal<Procedure[]>([]);
@@ -79,6 +81,10 @@ export class Attendance implements OnInit, OnDestroy {
   examRequests = signal<ExamRequest[]>([]);
   showAddExam = signal<boolean>(false);
   examForm: FormGroup;
+  
+  // Payment tracking
+  showPaymentDialog = signal<boolean>(false);
+  registerPaymentOnComplete = signal<boolean>(false);
   
   // Enum helpers
   procedureCategories = Object.values(ProcedureCategory).filter(v => typeof v === 'number') as ProcedureCategory[];
@@ -309,6 +315,9 @@ export class Attendance implements OnInit, OnDestroy {
         this.elapsedSeconds.set(diff);
       }
     });
+
+    // Start autosave every 30 seconds
+    this.startAutosave();
   }
 
   stopTimer(): void {
@@ -316,6 +325,62 @@ export class Attendance implements OnInit, OnDestroy {
       this.timerSubscription.unsubscribe();
       this.timerSubscription = undefined;
     }
+    this.stopAutosave();
+  }
+
+  startAutosave(): void {
+    if (this.autosaveSubscription) {
+      return; // Autosave já está ativo
+    }
+
+    // Autosave every 30 seconds
+    this.autosaveSubscription = interval(30000).subscribe(() => {
+      this.autoSave();
+    });
+  }
+
+  stopAutosave(): void {
+    if (this.autosaveSubscription) {
+      this.autosaveSubscription.unsubscribe();
+      this.autosaveSubscription = undefined;
+    }
+  }
+
+  autoSave(): void {
+    if (!this.medicalRecord() || !this.attendanceForm.dirty) return;
+
+    const now = new Date();
+    // Don't autosave if we just saved manually (within last 5 seconds)
+    if (this.lastSaveTime && (now.getTime() - this.lastSaveTime.getTime()) < 5000) {
+      return;
+    }
+
+    const formValue = this.attendanceForm.value;
+    
+    this.medicalRecordService.update(this.medicalRecord()!.id, {
+      chiefComplaint: formValue.chiefComplaint,
+      historyOfPresentIllness: formValue.historyOfPresentIllness,
+      pastMedicalHistory: formValue.pastMedicalHistory,
+      familyHistory: formValue.familyHistory,
+      lifestyleHabits: formValue.lifestyleHabits,
+      currentMedications: formValue.currentMedications,
+      diagnosis: formValue.diagnosis,
+      prescription: formValue.prescription,
+      notes: formValue.notes,
+      consultationDurationMinutes: Math.floor(this.elapsedSeconds() / 60)
+    }).subscribe({
+      next: (record) => {
+        this.medicalRecord.set(record);
+        this.lastSaveTime = new Date();
+        this.attendanceForm.markAsPristine();
+        // Silent autosave - no success message
+        console.log('Autosave completed');
+      },
+      error: (error) => {
+        console.error('Autosave error:', error);
+        // Don't show error to user for autosave failures
+      }
+    });
   }
 
   formatTime(seconds: number): string {
@@ -353,6 +418,8 @@ export class Attendance implements OnInit, OnDestroy {
     }).subscribe({
       next: (record) => {
         this.medicalRecord.set(record);
+        this.lastSaveTime = new Date();
+        this.attendanceForm.markAsPristine();
         this.successMessage.set('Prontuário salvo com sucesso!');
         this.isLoading.set(false);
       },
@@ -365,7 +432,7 @@ export class Attendance implements OnInit, OnDestroy {
   }
 
   onComplete(): void {
-    if (!this.medicalRecord()) return;
+    if (!this.medicalRecord() || !this.appointment()) return;
 
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -373,27 +440,74 @@ export class Attendance implements OnInit, OnDestroy {
 
     const formValue = this.attendanceForm.value;
     
+    // First complete the medical record
     this.medicalRecordService.complete(this.medicalRecord()!.id, {
       diagnosis: formValue.diagnosis,
       prescription: formValue.prescription,
       notes: formValue.notes
     }).subscribe({
       next: () => {
-        this.stopTimer();
-        this.successMessage.set('Atendimento finalizado com sucesso!');
-        this.isLoading.set(false);
-        
-        // Notify secretary about completion
-        this.notifySecretaryConsultationCompleted();
-        
-        // Redireciona após 2 segundos
-        setTimeout(() => {
-          this.router.navigate(['/appointments']);
-        }, 2000);
+        // Then complete the appointment (check-out)
+        this.appointmentService.complete(
+          this.appointment()!.id,
+          formValue.notes,
+          this.registerPaymentOnComplete()
+        ).subscribe({
+          next: () => {
+            this.stopTimer();
+            this.successMessage.set('Atendimento finalizado com sucesso!');
+            this.isLoading.set(false);
+            
+            // Notify secretary about completion
+            this.notifySecretaryConsultationCompleted();
+            
+            // Redireciona após 2 segundos
+            setTimeout(() => {
+              this.router.navigate(['/appointments']);
+            }, 2000);
+          },
+          error: (error) => {
+            console.error('Error completing appointment:', error);
+            this.errorMessage.set('Erro ao finalizar atendimento');
+            this.isLoading.set(false);
+          }
+        });
       },
       error: (error) => {
         console.error('Error completing consultation:', error);
         this.errorMessage.set('Erro ao finalizar atendimento');
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  togglePaymentRegistration(): void {
+    this.registerPaymentOnComplete.update(v => !v);
+  }
+
+  markAppointmentAsPaid(paymentReceiverType: string): void {
+    if (!this.appointment()) return;
+
+    this.isLoading.set(true);
+    this.appointmentService.markAsPaid(this.appointment()!.id, paymentReceiverType).subscribe({
+      next: () => {
+        // Reload appointment to get updated payment status
+        this.appointmentService.getById(this.appointment()!.id).subscribe({
+          next: (appointment) => {
+            this.appointment.set(appointment);
+            this.successMessage.set('Pagamento registrado com sucesso!');
+            this.isLoading.set(false);
+            this.showPaymentDialog.set(false);
+          },
+          error: (error) => {
+            console.error('Error reloading appointment:', error);
+            this.isLoading.set(false);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error marking payment:', error);
+        this.errorMessage.set('Erro ao registrar pagamento');
         this.isLoading.set(false);
       }
     });

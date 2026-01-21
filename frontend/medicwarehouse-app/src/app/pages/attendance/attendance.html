@@ -49,9 +49,31 @@
                   <span class="value">{{ patient()!.allergies }}</span>
                 </div>
               }
+              @if (appointment()) {
+                <div class="detail-row" [class.highlight]="!appointment()!.isPaid">
+                  <span class="label">Status de Pagamento:</span>
+                  <span class="value">
+                    @if (appointment()!.isPaid) {
+                      <span class="badge badge-success">✓ Pago</span>
+                      @if (appointment()!.paymentReceivedBy) {
+                        <small>({{ appointment()!.paymentReceivedBy }})</small>
+                      }
+                    } @else {
+                      <span class="badge badge-warning">⚠️ Pendente</span>
+                    }
+                  </span>
+                </div>
+              }
             </div>
           } @else {
             <p class="text-muted">Carregando informações do paciente...</p>
+          }
+          
+          <!-- Payment Action Button -->
+          @if (appointment() && !appointment()!.isPaid) {
+            <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="showPaymentDialog.set(true)">
+              Registrar Pagamento
+            </button>
           }
         </div>
 
@@ -782,26 +804,69 @@
 
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" (click)="onSave()" [disabled]="isLoading()">
-              Salvar Prontuário
+              💾 Salvar Prontuário
             </button>
-            <button type="button" class="btn btn-primary" (click)="onComplete()" [disabled]="isLoading() || medicalRecord()?.consultationEndTime">
-              {{ medicalRecord()?.consultationEndTime ? 'Consulta Finalizada' : 'Finalizar e Notificar Secretaria' }}
-            </button>
+            
+            @if (!medicalRecord()?.consultationEndTime) {
+              <!-- Show payment option checkbox if appointment is not paid yet -->
+              @if (appointment() && !appointment()!.isPaid) {
+                <div class="form-check mt-2 mb-2">
+                  <input 
+                    type="checkbox" 
+                    class="form-check-input" 
+                    id="registerPayment"
+                    [checked]="registerPaymentOnComplete()"
+                    (change)="togglePaymentRegistration()">
+                  <label class="form-check-label" for="registerPayment">
+                    Registrar que recebi o pagamento
+                  </label>
+                </div>
+              }
+              
+              <button type="button" class="btn btn-primary" (click)="onComplete()" [disabled]="isLoading()">
+                ✓ Finalizar Atendimento
+              </button>
+            } @else {
+              <div class="completion-notice">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Atendimento Finalizado
+              </div>
+            }
           </div>
-          @if (medicalRecord()?.consultationEndTime) {
-            <div class="completion-notice">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
-              Consulta finalizada - Secretaria foi notificada para chamar o próximo paciente
-            </div>
-          }
         </form>
       </div>
     </div>
   }
 </div>
+
+<!-- Payment Dialog -->
+@if (showPaymentDialog()) {
+  <div class="modal-overlay" (click)="showPaymentDialog.set(false)">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Registrar Pagamento</h3>
+        <button type="button" class="btn-close" (click)="showPaymentDialog.set(false)">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Quem está recebendo o pagamento desta consulta?</p>
+        <div class="payment-options">
+          <button type="button" class="btn btn-outline-primary btn-block" (click)="markAppointmentAsPaid('Doctor')">
+            👨‍⚕️ Médico
+          </button>
+          <button type="button" class="btn btn-outline-primary btn-block" (click)="markAppointmentAsPaid('Secretary')">
+            💼 Secretária/Recepção
+          </button>
+          <button type="button" class="btn btn-outline-primary btn-block" (click)="markAppointmentAsPaid('Other')">
+            👤 Outro Funcionário
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
 
 <!-- Print-only section -->
 <div class="print-only">
