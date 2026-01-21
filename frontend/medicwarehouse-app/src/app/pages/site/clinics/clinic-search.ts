@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
 import { PublicClinicService, PublicClinicDto, SearchClinicsRequest } from '../../../services/public-clinic.service';
 
 @Component({
   selector: 'app-clinic-search',
-  imports: [CommonModule, FormsModule, RouterLink, HeaderComponent, FooterComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
   templateUrl: './clinic-search.html',
   styleUrl: './clinic-search.scss'
 })

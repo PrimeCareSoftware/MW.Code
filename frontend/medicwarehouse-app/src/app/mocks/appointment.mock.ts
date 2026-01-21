@@ -13,6 +13,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     type: 'Consulta',
     status: 'Agendado',
     notes: 'Consulta de rotina',
+    isPaid: false,
     createdAt: '2024-11-01T10:00:00Z'
   },
   {
@@ -27,6 +28,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     type: 'Retorno',
     status: 'Confirmado',
     notes: 'Revisão de exames',
+    isPaid: false,
     createdAt: '2024-11-02T14:30:00Z'
   },
   {
@@ -43,6 +45,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     notes: 'Consulta pediátrica',
     checkInTime: '13:55',
     checkOutTime: '14:25',
+    isPaid: true,
     createdAt: '2024-11-03T09:15:00Z'
   }
 ];

@@ -34,7 +34,7 @@
               <option value="">Selecione o paciente</option>
               @for (patient of patients(); track patient.id) {
                 <option [value]="patient.id">
-                  {{ patient.fullName }} - CPF: {{ patient.cpf }}
+                  {{ patient.name }} - Documento: {{ patient.document }}
                 </option>
               }
             </select>
