@@ -105,9 +105,9 @@ export class NotificationService {
   notifyAppointmentCompleted(data: AppointmentCompletedNotification): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/appointment-completed`, data).pipe(
       tap(() => {
-        // Create local notification
+        // Create local notification with client prefix to avoid ID conflicts
         const notification: Notification = {
-          id: crypto.randomUUID(),
+          id: `client-${crypto.randomUUID()}`,
           type: NotificationType.AppointmentCompleted,
           title: 'Consulta Finalizada',
           message: `Dr(a). ${data.doctorName} finalizou o atendimento de ${data.patientName}`,
@@ -126,9 +126,9 @@ export class NotificationService {
   callNextPatient(data: CallNextPatientNotification): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/call-next-patient`, data).pipe(
       tap(() => {
-        // Create local notification
+        // Create local notification with client prefix to avoid ID conflicts
         const notification: Notification = {
-          id: crypto.randomUUID(),
+          id: `client-${crypto.randomUUID()}`,
           type: NotificationType.CallNextPatient,
           title: 'Chamar Próximo Paciente',
           message: `Dr(a). ${data.doctorName} está chamando ${data.patientName}`,
@@ -186,6 +186,7 @@ export class NotificationService {
 
   // Play notification sound
   playNotificationSound(): void {
+    // Audio path is configurable via assets folder
     const audio = new Audio('assets/notification-sound.mp3');
     audio.play().catch(err => console.error('Error playing notification sound:', err));
   }

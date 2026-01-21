@@ -191,11 +191,13 @@ export class Attendance implements OnInit, OnDestroy {
     this.notificationService.onNotification$.subscribe(notification => {
       if (notification.type === NotificationType.CallNextPatient && !notification.isRead) {
         // Show modal for call next patient notifications
+        // Delay ensures ViewChild is initialized after component render
+        const MODAL_DISPLAY_DELAY = 100; // milliseconds
         setTimeout(() => {
           if (this.notificationModal) {
             this.notificationModal.show(notification);
           }
-        }, 100);
+        }, MODAL_DISPLAY_DELAY);
       }
     });
   }
@@ -605,7 +607,7 @@ export class Attendance implements OnInit, OnDestroy {
       appointmentId: nextAppointment.id,
       patientName: nextAppointment.patientName,
       doctorName: nextAppointment.doctorName || 'Dr. Sistema',
-      roomNumber: undefined // Could be determined from clinic configuration
+      roomNumber: null // TODO: Room number could be determined from clinic configuration
     };
 
     this.notificationService.callNextPatient(notification).subscribe({
