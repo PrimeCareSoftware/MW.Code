@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Domain.Services

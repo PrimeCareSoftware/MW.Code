@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.Appointments;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.Services;
 using MedicSoft.Domain.Entities;

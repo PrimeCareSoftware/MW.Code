@@ -2,6 +2,7 @@ using MediatR;
 using MedicSoft.Application.Commands.PublicAppointments;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.ValueObjects;
 
