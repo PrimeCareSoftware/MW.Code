@@ -980,19 +980,6 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get ticket statistics (system owners only)
-        /// </summary>
-        [HttpGet("tickets/statistics")]
-        public async Task<ActionResult> GetTicketStatistics([FromQuery] Guid? clinicId = null, [FromQuery] string? tenantId = null)
-        {
-            if (!IsSystemOwner())
-                return Forbid();
-
-            var stats = await _ticketService.GetTicketStatisticsAsync(clinicId, tenantId);
-            return Ok(stats);
-        }
-
-        /// <summary>
         /// Check if current user is a system owner
         /// </summary>
         private bool IsSystemOwner()
