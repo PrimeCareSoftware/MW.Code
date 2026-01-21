@@ -28,7 +28,6 @@ namespace MedicSoft.Api.Controllers
         private readonly IPasswordHasher _passwordHasher;
         private readonly MedicSoftDbContext _context;
         private readonly IOwnerService _ownerService;
-        private readonly ITicketService _ticketService;
 
         public SystemAdminController(
             ITenantContext tenantContext,
@@ -38,8 +37,7 @@ namespace MedicSoft.Api.Controllers
             ISubscriptionPlanRepository planRepository,
             IPasswordHasher passwordHasher,
             MedicSoftDbContext context,
-            IOwnerService ownerService,
-            ITicketService ticketService) : base(tenantContext)
+            IOwnerService ownerService) : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
             _subscriptionRepository = subscriptionRepository;
@@ -48,7 +46,6 @@ namespace MedicSoft.Api.Controllers
             _passwordHasher = passwordHasher;
             _context = context;
             _ownerService = ownerService;
-            _ticketService = ticketService;
         }
 
         /// <summary>
