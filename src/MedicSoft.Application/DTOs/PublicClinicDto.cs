@@ -21,6 +21,8 @@ namespace MedicSoft.Application.DTOs
         public TimeSpan ClosingTime { get; set; }
         public int AppointmentDurationMinutes { get; set; }
         public bool IsAcceptingNewPatients { get; set; }
+        public string ClinicType { get; set; } = string.Empty; // Medical, Dental, Nutritionist, etc.
+        public string? WhatsAppNumber { get; set; }
     }
 
     /// <summary>
@@ -31,6 +33,7 @@ namespace MedicSoft.Application.DTOs
         public string? Name { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
+        public string? ClinicType { get; set; } // Medical, Dental, Nutritionist, etc.
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }

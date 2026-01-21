@@ -37,6 +37,7 @@ namespace MedicSoft.Api.Controllers
                     request.Name,
                     request.City,
                     request.State,
+                    request.ClinicType,
                     request.PageNumber,
                     request.PageSize
                 );

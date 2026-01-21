@@ -21,6 +21,19 @@ export class ClinicSearchComponent implements OnInit {
   searchName = '';
   searchCity = '';
   searchState = '';
+  searchClinicType = '';
+  
+  // Tipos de clínica disponíveis
+  clinicTypes = [
+    { value: '', label: 'Todos os Tipos' },
+    { value: 'Medical', label: 'Médica' },
+    { value: 'Dental', label: 'Odontológica' },
+    { value: 'Nutritionist', label: 'Nutricionista' },
+    { value: 'Psychology', label: 'Psicologia' },
+    { value: 'PhysicalTherapy', label: 'Fisioterapia' },
+    { value: 'Veterinary', label: 'Veterinária' },
+    { value: 'Other', label: 'Outros' }
+  ];
   
   // Paginação
   currentPage = 1;
@@ -45,6 +58,7 @@ export class ClinicSearchComponent implements OnInit {
       name: this.searchName || undefined,
       city: this.searchCity || undefined,
       state: this.searchState || undefined,
+      clinicType: this.searchClinicType || undefined,
       pageNumber: this.currentPage,
       pageSize: this.pageSize
     };
@@ -74,6 +88,7 @@ export class ClinicSearchComponent implements OnInit {
     this.searchName = '';
     this.searchCity = '';
     this.searchState = '';
+    this.searchClinicType = '';
     this.currentPage = 1;
     this.searchClinics();
   }
@@ -92,6 +107,29 @@ export class ClinicSearchComponent implements OnInit {
   formatTime(time: string): string {
     // Format time string (e.g., "08:00:00" to "08:00")
     return time.substring(0, 5);
+  }
+
+  getClinicTypeLabel(type: string): string {
+    const clinicType = this.clinicTypes.find(ct => ct.value === type);
+    return clinicType ? clinicType.label : type;
+  }
+
+  openWhatsApp(clinic: PublicClinicDto): void {
+    const phone = clinic.whatsAppNumber || clinic.phone;
+    if (!phone) {
+      console.error('No phone number available for WhatsApp');
+      return;
+    }
+    // Remove all non-numeric characters
+    const cleanPhone = phone.replace(/\D/g, '');
+    // Create WhatsApp URL with pre-filled message
+    const message = encodeURIComponent(`Olá! Gostaria de agendar uma consulta na ${clinic.name}.`);
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  }
+
+  hasWhatsApp(clinic: PublicClinicDto): boolean {
+    return !!(clinic.whatsAppNumber || clinic.phone);
   }
 
   getPaginationArray(): number[] {

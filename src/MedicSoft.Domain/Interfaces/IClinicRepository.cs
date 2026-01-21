@@ -18,6 +18,7 @@ namespace MedicSoft.Domain.Interfaces
             string? name,
             string? city,
             string? state,
+            string? clinicType,
             int pageNumber,
             int pageSize);
         
@@ -28,6 +29,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<int> CountPublicClinicsAsync(
             string? name,
             string? city,
-            string? state);
+            string? state,
+            string? clinicType);
     }
 }

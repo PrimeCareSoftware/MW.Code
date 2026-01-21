@@ -16,12 +16,15 @@ export interface PublicClinicDto {
   closingTime: string;
   appointmentDurationMinutes: number;
   isAcceptingNewPatients: boolean;
+  clinicType: string; // Medical, Dental, Nutritionist, etc.
+  whatsAppNumber?: string;
 }
 
 export interface SearchClinicsRequest {
   name?: string;
   city?: string;
   state?: string;
+  clinicType?: string;
   pageNumber?: number;
   pageSize?: number;
 }
@@ -90,6 +93,9 @@ export class PublicClinicService {
     }
     if (request.state !== undefined && request.state !== null) {
       params = params.set('state', request.state);
+    }
+    if (request.clinicType !== undefined && request.clinicType !== null) {
+      params = params.set('clinicType', request.clinicType);
     }
     if (request.pageNumber !== undefined && request.pageNumber !== null) {
       params = params.set('pageNumber', request.pageNumber.toString());

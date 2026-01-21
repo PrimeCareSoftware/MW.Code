@@ -2,42 +2,61 @@
 
 <div class="clinic-search-container">
   <div class="search-header">
-    <h1>Encontre uma Clínica</h1>
-    <p>Busque clínicas próximas e agende sua consulta de forma rápida e fácil</p>
+    <h1>🔍 Encontre sua Clínica Ideal</h1>
+    <p class="subtitle">Busque profissionais de saúde e agende sua consulta com facilidade</p>
   </div>
 
   <!-- Filtros de Busca -->
   <div class="search-filters card">
     <div class="filter-group">
-      <input 
-        type="text" 
-        [(ngModel)]="searchName" 
-        placeholder="Nome da clínica"
-        class="form-control"
-        (keyup.enter)="onSearch()"
-      />
-      <input 
-        type="text" 
-        [(ngModel)]="searchCity" 
-        placeholder="Cidade"
-        class="form-control"
-        (keyup.enter)="onSearch()"
-      />
-      <input 
-        type="text" 
-        [(ngModel)]="searchState" 
-        placeholder="Estado (ex: SP)"
-        class="form-control"
-        maxlength="2"
-        (keyup.enter)="onSearch()"
-      />
+      <div class="input-wrapper">
+        <input 
+          type="text" 
+          [(ngModel)]="searchName" 
+          placeholder="🏥 Nome da clínica"
+          class="form-control"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
+      
+      <div class="input-wrapper">
+        <select 
+          [(ngModel)]="searchClinicType" 
+          class="form-control"
+          (change)="onSearch()">
+          <option *ngFor="let type of clinicTypes" [value]="type.value">
+            {{ type.label }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="input-wrapper">
+        <input 
+          type="text" 
+          [(ngModel)]="searchCity" 
+          placeholder="📍 Cidade"
+          class="form-control"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
+      
+      <div class="input-wrapper">
+        <input 
+          type="text" 
+          [(ngModel)]="searchState" 
+          placeholder="🗺️ Estado (ex: SP)"
+          class="form-control"
+          maxlength="2"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
     </div>
     <div class="filter-actions">
       <button class="btn btn-primary" (click)="onSearch()">
         <span class="icon">🔍</span> Buscar
       </button>
       <button class="btn btn-secondary" (click)="clearFilters()">
-        Limpar Filtros
+        <span class="icon">🔄</span> Limpar
       </button>
     </div>
   </div>
@@ -70,10 +89,13 @@
     <div class="clinic-grid">
       <div *ngFor="let clinic of clinics" class="clinic-card card">
         <div class="clinic-header">
-          <h3>{{ clinic.name }}</h3>
+          <div class="clinic-title-section">
+            <h3>{{ clinic.name }}</h3>
+            <span class="clinic-type-badge">{{ getClinicTypeLabel(clinic.clinicType) }}</span>
+          </div>
           <span class="badge" [class.badge-success]="clinic.isAcceptingNewPatients" 
-                              [class.badge-secondary]="!clinic.isAcceptingNewPatients">
-            {{ clinic.isAcceptingNewPatients ? 'Aceitando Pacientes' : 'Indisponível' }}
+                            [class.badge-secondary]="!clinic.isAcceptingNewPatients">
+            {{ clinic.isAcceptingNewPatients ? '✅ Aceitando Pacientes' : '⏸️ Indisponível' }}
           </span>
         </div>
         
@@ -91,24 +113,43 @@
           </div>
           
           <div class="info-row">
-            <span class="icon">📞</span>
-            <a [href]="'tel:' + clinic.phone">{{ clinic.phone }}</a>
-          </div>
-          
-          <div class="info-row">
-            <span class="icon">📧</span>
-            <a [href]="'mailto:' + clinic.email">{{ clinic.email }}</a>
-          </div>
-          
-          <div class="info-row">
             <span class="icon">🕐</span>
             <span>Horário: {{ formatTime(clinic.openingTime) }} - {{ formatTime(clinic.closingTime) }}</span>
           </div>
         </div>
 
+        <div class="clinic-contact">
+          <div class="contact-buttons">
+            <button 
+              *ngIf="hasWhatsApp(clinic)"
+              class="btn btn-whatsapp" 
+              (click)="openWhatsApp(clinic)"
+              title="Entrar em contato via WhatsApp">
+              <span class="icon">💬</span>
+              WhatsApp
+            </button>
+            
+            <a 
+              [href]="'tel:' + clinic.phone"
+              class="btn btn-phone"
+              title="Ligar para a clínica">
+              <span class="icon">📞</span>
+              Ligar
+            </a>
+            
+            <a 
+              [href]="'mailto:' + clinic.email"
+              class="btn btn-email"
+              title="Enviar e-mail">
+              <span class="icon">📧</span>
+              E-mail
+            </a>
+          </div>
+        </div>
+
         <div class="clinic-actions">
           <button 
-            class="btn btn-primary" 
+            class="btn btn-primary btn-schedule" 
             (click)="scheduleAppointment(clinic)"
             [disabled]="!clinic.isAcceptingNewPatients">
             <span class="icon">📅</span>

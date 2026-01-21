@@ -11,6 +11,7 @@ namespace MedicSoft.Application.Queries.PublicClinics
         string? Name,
         string? City,
         string? State,
+        string? ClinicType,
         int PageNumber = 1,
         int PageSize = 10
     ) : IRequest<SearchClinicsResultDto>;
