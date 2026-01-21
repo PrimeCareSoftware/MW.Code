@@ -10,7 +10,7 @@ namespace MedicSoft.Api.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/system-admin/tickets")]
+    [Route("api/tickets")]
     public class TicketsController : BaseController
     {
         private readonly ITicketService _ticketService;
