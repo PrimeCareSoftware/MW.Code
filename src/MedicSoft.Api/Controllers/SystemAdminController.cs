@@ -980,23 +980,6 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all tickets with filters (system owners only)
-        /// </summary>
-        [HttpGet("tickets")]
-        public async Task<ActionResult> GetAllTickets(
-            [FromQuery] TicketStatus? status = null,
-            [FromQuery] TicketType? type = null,
-            [FromQuery] Guid? clinicId = null,
-            [FromQuery] string? tenantId = null)
-        {
-            if (!IsSystemOwner())
-                return Forbid();
-
-            var tickets = await _ticketService.GetAllTicketsAsync(status, type, clinicId, tenantId);
-            return Ok(tickets);
-        }
-
-        /// <summary>
         /// Get ticket statistics (system owners only)
         /// </summary>
         [HttpGet("tickets/statistics")]
