@@ -49,6 +49,13 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(o => o.Specialty)
                 .HasMaxLength(100);
 
+            builder.Property(o => o.Document)
+                .HasMaxLength(50);
+
+            builder.Property(o => o.DocumentType)
+                .HasConversion<string>()
+                .HasMaxLength(10);
+
             builder.Property(o => o.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);

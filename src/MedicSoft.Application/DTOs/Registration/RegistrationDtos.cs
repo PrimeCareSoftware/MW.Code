@@ -4,7 +4,9 @@ namespace MedicSoft.Application.DTOs.Registration
     {
         // Clinic Information
         public string ClinicName { get; set; } = string.Empty;
-        public string ClinicCNPJ { get; set; } = string.Empty;
+        public string ClinicCNPJ { get; set; } = string.Empty; // Keep for backward compatibility
+        public string? ClinicDocument { get; set; } // New: can be CPF or CNPJ
+        public string? ClinicDocumentType { get; set; } // "CPF" or "CNPJ"
         public string ClinicPhone { get; set; } = string.Empty;
         public string ClinicEmail { get; set; } = string.Empty;
         

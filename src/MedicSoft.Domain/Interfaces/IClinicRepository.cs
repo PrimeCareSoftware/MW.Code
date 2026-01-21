@@ -5,6 +5,7 @@ namespace MedicSoft.Domain.Interfaces
     public interface IClinicRepository : IRepository<Clinic>
     {
         Task<Clinic?> GetByDocumentAsync(string document, string tenantId);
+        Task<Clinic?> GetByDocumentAsync(string document); // Overload for registration check (document is unique across all tenants)
         Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null);
         Task<Clinic?> GetByCNPJAsync(string cnpj);
         Task<Clinic?> GetBySubdomainAsync(string subdomain);

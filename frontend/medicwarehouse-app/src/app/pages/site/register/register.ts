@@ -36,10 +36,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currentStep = 1;
   showDataConsentDialog = false;
   hasSavedData = false;
+  clinicDocumentType: 'CPF' | 'CNPJ' = 'CNPJ'; // Default to CNPJ for traditional clinics
   
   model: RegistrationRequest = {
     clinicName: '',
     clinicCNPJ: '',
+    clinicDocument: '',
+    clinicDocumentType: 'CNPJ',
     clinicPhone: '',
     clinicEmail: '',
     street: '',
@@ -238,7 +241,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   validateStep(step: number): boolean {
     switch (step) {
       case 1:
-        return !!(this.model.clinicName && this.model.clinicCNPJ && 
+        // Check if either clinicCNPJ (legacy) or clinicDocument (new) is filled
+        const hasDocument = !!(this.model.clinicCNPJ || this.model.clinicDocument);
+        return !!(this.model.clinicName && hasDocument && 
                   this.model.clinicPhone && this.model.clinicEmail);
       case 2:
         return !!(this.model.street && this.model.number && this.model.neighborhood && 
@@ -270,9 +275,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
     this.submitError = '';
 
-    // Add session ID to model for conversion tracking
-    const registrationData = {
+    // Prepare registration data with new document structure
+    const registrationData: RegistrationRequest = {
       ...this.model,
+      clinicDocument: this.model.clinicDocument || this.model.clinicCNPJ, // Use new field or fall back to legacy
+      clinicDocumentType: this.clinicDocumentType,
       sessionId: this.salesFunnelTracking.getSessionId()
     };
 
@@ -400,5 +407,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
       default:
         return {};
     }
+  }
+
+  /**
+   * Handle document type change
+   */
+  onDocumentTypeChange(type: 'CPF' | 'CNPJ'): void {
+    this.clinicDocumentType = type;
+    this.model.clinicDocumentType = type;
+    // Clear the document field when switching types
+    this.model.clinicDocument = '';
+    this.model.clinicCNPJ = '';
   }
 }

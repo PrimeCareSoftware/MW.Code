@@ -19,6 +19,15 @@ namespace MedicSoft.Repository.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Clinic?> GetByDocumentAsync(string document)
+        {
+            // Remove formatting from document
+            var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
+            
+            return await _dbSet
+                .FirstOrDefaultAsync(c => c.Document.Replace(".", "").Replace("/", "").Replace("-", "") == cleanDocument);
+        }
+
         public async Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null)
         {
             var query = _dbSet.Where(c => c.Document == document && c.TenantId == tenantId);

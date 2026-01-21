@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using MedicSoft.Domain.Common;
-using MedicSoft.Domain.Services;
 using MedicSoft.Domain.Enums;
+using MedicSoft.Domain.Services;
 
 namespace MedicSoft.Domain.Entities
 {
@@ -10,7 +10,8 @@ namespace MedicSoft.Domain.Entities
     {
         public string Name { get; private set; }
         public string TradeName { get; private set; }
-        public string Document { get; private set; } // CNPJ
+        public string Document { get; private set; } // CPF or CNPJ
+        public DocumentType DocumentType { get; private set; } // CPF or CNPJ
         public string Phone { get; private set; }
         public string Email { get; private set; }
         public string Address { get; private set; }
@@ -37,7 +38,7 @@ namespace MedicSoft.Domain.Entities
 
         public Clinic(string name, string tradeName, string document, string phone,
             string email, string address, TimeSpan openingTime, TimeSpan closingTime,
-            string tenantId, int appointmentDurationMinutes = 30) : base(tenantId)
+            string tenantId, int appointmentDurationMinutes = 30, DocumentType? documentType = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -63,14 +64,32 @@ namespace MedicSoft.Domain.Entities
             if (openingTime >= closingTime)
                 throw new ArgumentException("Opening time must be before closing time");
 
-            // Validate CNPJ format if document appears to be a CNPJ
+            // Validate document format
             var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
-            if (cleanDocument.Length == DocumentConstants.CnpjLength && !DocumentValidator.IsValidCnpj(document))
-                throw new ArgumentException("Invalid CNPJ format", nameof(document));
+            
+            // Determine document type if not provided
+            var docType = documentType ?? DetermineDocumentType(cleanDocument.Length);
+            
+            // Validate based on determined type
+            if (docType == Enums.DocumentType.CNPJ)
+            {
+                if (cleanDocument.Length != DocumentConstants.CnpjLength)
+                    throw new ArgumentException($"CNPJ must have {DocumentConstants.CnpjLength} digits", nameof(document));
+                if (!DocumentValidator.IsValidCnpj(document))
+                    throw new ArgumentException("Invalid CNPJ format", nameof(document));
+            }
+            else if (docType == Enums.DocumentType.CPF)
+            {
+                if (cleanDocument.Length != DocumentConstants.CpfLength)
+                    throw new ArgumentException($"CPF must have {DocumentConstants.CpfLength} digits", nameof(document));
+                if (!DocumentValidator.IsValidCpf(document))
+                    throw new ArgumentException("Invalid CPF format", nameof(document));
+            }
 
             Name = name.Trim();
             TradeName = tradeName.Trim();
             Document = document.Trim();
+            DocumentType = docType;
             Phone = phone.Trim();
             Email = email.Trim();
             Address = address.Trim();
@@ -193,6 +212,46 @@ namespace MedicSoft.Domain.Entities
         {
             ShowOnPublicSite = false;
             UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Updates the clinic's document. Useful for upgrading from CPF to CNPJ.
+        /// </summary>
+        public void UpdateDocument(string document, DocumentType documentType)
+        {
+            if (string.IsNullOrWhiteSpace(document))
+                throw new ArgumentException("Document cannot be empty", nameof(document));
+
+            var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
+            
+            if (documentType == Enums.DocumentType.CNPJ)
+            {
+                if (cleanDocument.Length != DocumentConstants.CnpjLength)
+                    throw new ArgumentException($"CNPJ must have {DocumentConstants.CnpjLength} digits", nameof(document));
+                if (!DocumentValidator.IsValidCnpj(document))
+                    throw new ArgumentException("Invalid CNPJ format", nameof(document));
+            }
+            else if (documentType == Enums.DocumentType.CPF)
+            {
+                if (cleanDocument.Length != DocumentConstants.CpfLength)
+                    throw new ArgumentException($"CPF must have {DocumentConstants.CpfLength} digits", nameof(document));
+                if (!DocumentValidator.IsValidCpf(document))
+                    throw new ArgumentException("Invalid CPF format", nameof(document));
+            }
+
+            Document = document.Trim();
+            DocumentType = documentType;
+            UpdateTimestamp();
+        }
+
+        private static DocumentType DetermineDocumentType(int digitCount)
+        {
+            return digitCount switch
+            {
+                DocumentConstants.CpfLength => Enums.DocumentType.CPF,
+                DocumentConstants.CnpjLength => Enums.DocumentType.CNPJ,
+                _ => throw new ArgumentException($"Document must have either {DocumentConstants.CpfLength} (CPF) or {DocumentConstants.CnpjLength} (CNPJ) digits")
+            };
         }
     }
 }
