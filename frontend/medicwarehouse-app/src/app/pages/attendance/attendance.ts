@@ -607,7 +607,7 @@ export class Attendance implements OnInit, OnDestroy {
       appointmentId: nextAppointment.id,
       patientName: nextAppointment.patientName,
       doctorName: nextAppointment.doctorName || 'Dr. Sistema',
-      roomNumber: null // TODO: Room number could be determined from clinic configuration
+      roomNumber: undefined // TODO: Room number could be determined from clinic configuration
     };
 
     this.notificationService.callNextPatient(notification).subscribe({
