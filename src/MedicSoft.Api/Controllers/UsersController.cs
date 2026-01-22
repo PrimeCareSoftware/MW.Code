@@ -252,11 +252,60 @@ namespace MedicSoft.Api.Controllers
             return Ok(roles);
         }
 
+        /// <summary>
+        /// Get doctor fields configuration for the clinic (requires clinic.view permission)
+        /// </summary>
+        [HttpGet("doctor-fields-config")]
+        [RequirePermissionKey(PermissionKeys.ClinicView)]
+        public async Task<ActionResult<DoctorFieldsConfigDto>> GetDoctorFieldsConfiguration()
+        {
+            var tenantId = GetTenantId();
+            var clinicId = GetClinicIdFromToken();
+
+            var config = await _userService.GetDoctorFieldsConfigurationAsync(clinicId, tenantId);
+
+            return Ok(new DoctorFieldsConfigDto
+            {
+                ProfessionalIdRequired = config.ProfessionalIdRequired,
+                SpecialtyRequired = config.SpecialtyRequired
+            });
+        }
+
+        /// <summary>
+        /// Update doctor fields configuration (requires clinic.manage permission)
+        /// Only ClinicOwner can configure this
+        /// </summary>
+        [HttpPut("doctor-fields-config")]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
+        public async Task<ActionResult> UpdateDoctorFieldsConfiguration([FromBody] DoctorFieldsConfigDto request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var clinicId = GetClinicIdFromToken();
+
+                var config = new DoctorFieldsConfiguration(request.ProfessionalIdRequired, request.SpecialtyRequired);
+                await _userService.UpdateDoctorFieldsConfigurationAsync(clinicId, tenantId, config);
+
+                return Ok(new { message = "Doctor fields configuration updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         private Guid GetClinicIdFromToken()
         {
             var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
             return Guid.TryParse(clinicIdClaim, out var clinicId) ? clinicId : Guid.Empty;
         }
+    }
+
+    public class DoctorFieldsConfigDto
+    {
+        public bool ProfessionalIdRequired { get; set; }
+        public bool SpecialtyRequired { get; set; }
     }
 
     public class CreateUserRequest

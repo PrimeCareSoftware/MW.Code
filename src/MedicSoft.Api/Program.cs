@@ -254,6 +254,7 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IAccessProfileRepository, AccessProfileRepository>();
 builder.Services.AddScoped<IClinicCustomizationRepository, ClinicCustomizationRepository>();
 builder.Services.AddScoped<ISalesFunnelMetricRepository, SalesFunnelMetricRepository>();
+builder.Services.AddScoped<IModuleConfigurationRepository, ModuleConfigurationRepository>();
 
 // CFM 1.821 - Register new repositories
 builder.Services.AddScoped<IClinicalExaminationRepository, ClinicalExaminationRepository>();
