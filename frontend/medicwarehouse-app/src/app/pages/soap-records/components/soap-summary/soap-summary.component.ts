@@ -378,7 +378,7 @@ export class SoapSummaryComponent implements OnInit {
         this.soapRecord = record;
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
         this.loading = false;
       }
@@ -413,7 +413,7 @@ export class SoapSummaryComponent implements OnInit {
         this.snackBar.open('Prontuário SOAP concluído e bloqueado com sucesso!', 'Fechar', { duration: 3000 });
         this.completing = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
         this.completing = false;
       }

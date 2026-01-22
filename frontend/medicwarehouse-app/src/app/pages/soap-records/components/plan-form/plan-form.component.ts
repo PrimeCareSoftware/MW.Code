@@ -540,7 +540,7 @@ export class PlanFormComponent implements OnInit {
           }
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
       }
     });
@@ -566,7 +566,7 @@ export class PlanFormComponent implements OnInit {
         this.saving = false;
         this.saved.emit();
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
         this.saving = false;
       }

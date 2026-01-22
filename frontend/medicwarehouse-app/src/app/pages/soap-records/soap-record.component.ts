@@ -324,7 +324,7 @@ export class SoapRecordComponent implements OnInit {
         this.loading = false;
         this.snackBar.open('Prontuário SOAP criado!', 'Fechar', { duration: 3000 });
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
         this.loading = false;
       }
@@ -338,7 +338,7 @@ export class SoapRecordComponent implements OnInit {
         this.soapRecord = record;
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
         this.loading = false;
       }

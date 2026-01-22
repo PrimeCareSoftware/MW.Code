@@ -222,7 +222,7 @@ export class SubjectiveFormComponent implements OnInit {
           this.form.patchValue(record.subjective);
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
       }
     });
@@ -244,7 +244,7 @@ export class SubjectiveFormComponent implements OnInit {
         this.saving = false;
         this.saved.emit();
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open(error.message, 'Fechar', { duration: 5000 });
         this.saving = false;
       }
