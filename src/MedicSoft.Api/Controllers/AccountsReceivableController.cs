@@ -18,12 +18,15 @@ namespace MedicSoft.Api.Controllers
     public class AccountsReceivableController : BaseController
     {
         private readonly IAccountsReceivableRepository _repository;
+        private readonly ILogger<AccountsReceivableController> _logger;
 
         public AccountsReceivableController(
             IAccountsReceivableRepository repository,
+            ILogger<AccountsReceivableController> logger,
             ITenantContext tenantContext) : base(tenantContext)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -215,29 +218,53 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AccountsReceivableDto>> AddPayment(Guid id, [FromBody] AddReceivablePaymentDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (id != dto.ReceivableId)
-                return BadRequest(new { message = "ID incompatível." });
-
-            var receivable = await _repository.GetByIdAsync(id, GetTenantId());
-            if (receivable == null)
-                return NotFound(new { message = "Conta a receber não encontrada." });
-
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("Invalid model state for AddPayment: {Errors}", 
+                        string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+                    return BadRequest(ModelState);
+                }
+
+                if (id != dto.ReceivableId)
+                {
+                    _logger.LogWarning("Mismatched IDs in AddPayment: route id={RouteId}, dto id={DtoId}", id, dto.ReceivableId);
+                    return BadRequest(new { message = "ID incompatível." });
+                }
+
+                var tenantId = GetTenantId();
+                var receivable = await _repository.GetByIdAsync(id, tenantId);
+                
+                if (receivable == null)
+                {
+                    _logger.LogWarning("Receivable not found: id={Id}, tenantId={TenantId}", id, tenantId);
+                    return NotFound(new { message = "Conta a receber não encontrada." });
+                }
+
+                _logger.LogInformation("Adding payment to receivable {ReceivableId}: amount={Amount}, date={Date}", 
+                    id, dto.Amount, dto.PaymentDate);
+
                 receivable.AddPayment(dto.Amount, dto.PaymentDate, dto.TransactionId, dto.Notes);
                 await _repository.UpdateAsync(receivable);
+
+                _logger.LogInformation("Payment added successfully to receivable {ReceivableId}", id);
                 return Ok(MapToDto(receivable));
             }
             catch (InvalidOperationException ex)
             {
+                _logger.LogWarning(ex, "Invalid operation when adding payment to receivable {ReceivableId}", id);
                 return BadRequest(new { message = ex.Message });
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(ex, "Invalid argument when adding payment to receivable {ReceivableId}", id);
                 return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error adding payment to receivable {ReceivableId}", id);
+                return StatusCode(500, new { message = "Ocorreu um erro ao processar o pagamento. Por favor, tente novamente." });
             }
         }
 
