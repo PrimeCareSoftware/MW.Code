@@ -4,7 +4,7 @@
 
 > **Última Atualização:** 22 de Janeiro 2026  
 > **Status:** Sistema em produção - 97% completo - Roadmap atualizado  
-> **Versão:** 3.3.1 - Com TISS/TUSS 95%, CFM 95%, Receitas Digitais 100%, e TISS Analytics (Janeiro 2026)
+> **Versão:** 3.3.1 - Com TISS/TUSS 97%, CFM 95%, Receitas Digitais 100%, e TISS Analytics (Janeiro 2026)
 
 ---
 
