@@ -175,4 +175,163 @@ namespace MedicSoft.Application.DTOs
         public int DaysOverdue { get; set; }
         public string? SupplierName { get; set; }
     }
+
+    /// <summary>
+    /// DRE - Demonstrativo de Resultados do Exercício (Income Statement)
+    /// </summary>
+    public class DREReportDto
+    {
+        public DateTime PeriodStart { get; set; }
+        public DateTime PeriodEnd { get; set; }
+        
+        // Receitas (Revenue)
+        public decimal GrossRevenue { get; set; }
+        public decimal Deductions { get; set; }
+        public decimal NetRevenue { get; set; }
+        
+        // Custos e Despesas (Costs and Expenses)
+        public decimal OperationalCosts { get; set; }
+        public decimal AdministrativeExpenses { get; set; }
+        public decimal SalesExpenses { get; set; }
+        public decimal FinancialExpenses { get; set; }
+        public decimal TotalExpenses { get; set; }
+        
+        // Resultados (Results)
+        public decimal OperationalProfit { get; set; }
+        public decimal NetProfit { get; set; }
+        public decimal ProfitMargin { get; set; }
+        
+        // Detalhamentos (Details)
+        public List<RevenueDetailDto> RevenueDetails { get; set; } = new();
+        public List<ExpenseDetailDto> ExpenseDetails { get; set; } = new();
+    }
+
+    /// <summary>
+    /// Revenue detail for DRE
+    /// </summary>
+    public class RevenueDetailDto
+    {
+        public string Category { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
+        public decimal Percentage { get; set; }
+    }
+
+    /// <summary>
+    /// Expense detail for DRE
+    /// </summary>
+    public class ExpenseDetailDto
+    {
+        public string Category { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
+        public decimal Percentage { get; set; }
+    }
+
+    /// <summary>
+    /// Cash Flow Forecast - Projeção de Fluxo de Caixa
+    /// </summary>
+    public class CashFlowForecastDto
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal CurrentBalance { get; set; }
+        public decimal ProjectedIncome { get; set; }
+        public decimal ProjectedExpenses { get; set; }
+        public decimal ProjectedBalance { get; set; }
+        public List<MonthlyForecastDto> MonthlyForecast { get; set; } = new();
+        public List<ReceivableForecastDto> PendingReceivables { get; set; } = new();
+        public List<PayableForecastDto> PendingPayables { get; set; } = new();
+    }
+
+    /// <summary>
+    /// Monthly forecast data
+    /// </summary>
+    public class MonthlyForecastDto
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public decimal ExpectedIncome { get; set; }
+        public decimal ExpectedExpenses { get; set; }
+        public decimal ExpectedBalance { get; set; }
+        public decimal CumulativeBalance { get; set; }
+    }
+
+    /// <summary>
+    /// Receivable forecast item
+    /// </summary>
+    public class ReceivableForecastDto
+    {
+        public Guid Id { get; set; }
+        public string DocumentNumber { get; set; } = string.Empty;
+        public DateTime DueDate { get; set; }
+        public decimal Amount { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public string PatientName { get; set; } = string.Empty;
+    }
+
+    /// <summary>
+    /// Payable forecast item
+    /// </summary>
+    public class PayableForecastDto
+    {
+        public Guid Id { get; set; }
+        public string DocumentNumber { get; set; } = string.Empty;
+        public DateTime DueDate { get; set; }
+        public decimal Amount { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public string? SupplierName { get; set; }
+    }
+
+    /// <summary>
+    /// Profitability Analysis - Análise de Rentabilidade
+    /// </summary>
+    public class ProfitabilityAnalysisDto
+    {
+        public DateTime PeriodStart { get; set; }
+        public DateTime PeriodEnd { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public decimal TotalCosts { get; set; }
+        public decimal TotalProfit { get; set; }
+        public decimal ProfitMargin { get; set; }
+        public List<ProfitabilityByProcedureDto> ByProcedure { get; set; } = new();
+        public List<ProfitabilityByDoctorDto> ByDoctor { get; set; } = new();
+        public List<ProfitabilityByInsuranceDto> ByInsurance { get; set; } = new();
+    }
+
+    /// <summary>
+    /// Profitability by procedure
+    /// </summary>
+    public class ProfitabilityByProcedureDto
+    {
+        public string ProcedureName { get; set; } = string.Empty;
+        public int Count { get; set; }
+        public decimal Revenue { get; set; }
+        public decimal AverageValue { get; set; }
+        public decimal Percentage { get; set; }
+    }
+
+    /// <summary>
+    /// Profitability by doctor
+    /// </summary>
+    public class ProfitabilityByDoctorDto
+    {
+        public Guid DoctorId { get; set; }
+        public string DoctorName { get; set; } = string.Empty;
+        public int AppointmentsCount { get; set; }
+        public decimal Revenue { get; set; }
+        public decimal AverageAppointmentValue { get; set; }
+        public decimal Percentage { get; set; }
+    }
+
+    /// <summary>
+    /// Profitability by insurance operator
+    /// </summary>
+    public class ProfitabilityByInsuranceDto
+    {
+        public Guid? InsuranceId { get; set; }
+        public string InsuranceName { get; set; } = string.Empty;
+        public int AppointmentsCount { get; set; }
+        public decimal Revenue { get; set; }
+        public decimal AverageValue { get; set; }
+        public decimal Percentage { get; set; }
+    }
 }
