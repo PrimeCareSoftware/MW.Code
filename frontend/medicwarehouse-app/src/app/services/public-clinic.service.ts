@@ -75,7 +75,7 @@ export interface PublicAppointmentResponse {
   providedIn: 'root'
 })
 export class PublicClinicService {
-  private readonly apiUrl = `${environment.apiUrl}/api/public/clinics`;
+  private readonly apiUrl = `${environment.apiUrl}/public/clinics`;
 
   constructor(private http: HttpClient) {}
 
