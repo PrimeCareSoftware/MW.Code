@@ -720,21 +720,214 @@ POST /api/accounts-payable
 GET /api/accounts-payable/by-supplier/{supplierId}
 ```
 
+### DRE - Demonstrativo de Resultados
+
+#### GET `/api/reports/dre`
+Gera o DRE (Demonstrativo de Resultados do Exercício) para análise financeira.
+
+**Permissão:** `ReportsFinancial`
+
+**Query params:**
+- `clinicId` (obrigatório) - ID da clínica
+- `startDate` (obrigatório) - Data inicial do período
+- `endDate` (obrigatório) - Data final do período
+
+**Resposta:**
+```json
+{
+  "periodStart": "2024-01-01",
+  "periodEnd": "2024-01-31",
+  "grossRevenue": 50000.00,
+  "deductions": 1000.00,
+  "netRevenue": 49000.00,
+  "operationalCosts": 8000.00,
+  "administrativeExpenses": 12000.00,
+  "salesExpenses": 2000.00,
+  "financialExpenses": 3000.00,
+  "totalExpenses": 25000.00,
+  "operationalProfit": 24000.00,
+  "netProfit": 24000.00,
+  "profitMargin": 48.98,
+  "revenueDetails": [
+    {
+      "category": "CreditCard",
+      "amount": 30000.00,
+      "percentage": 60.00
+    },
+    {
+      "category": "Pix",
+      "amount": 15000.00,
+      "percentage": 30.00
+    }
+  ],
+  "expenseDetails": [
+    {
+      "category": "Salary",
+      "amount": 10000.00,
+      "percentage": 40.00
+    },
+    {
+      "category": "Rent",
+      "amount": 5000.00,
+      "percentage": 20.00
+    }
+  ]
+}
+```
+
+### Previsão de Fluxo de Caixa
+
+#### GET `/api/reports/cash-flow-forecast`
+Gera projeção de fluxo de caixa baseada em contas a receber e pagar pendentes.
+
+**Permissão:** `ReportsFinancial`
+
+**Query params:**
+- `clinicId` (obrigatório) - ID da clínica
+- `months` (opcional, padrão: 3) - Número de meses a projetar (1-12)
+
+**Resposta:**
+```json
+{
+  "startDate": "2024-01-22",
+  "endDate": "2024-04-22",
+  "currentBalance": 15000.00,
+  "projectedIncome": 45000.00,
+  "projectedExpenses": 20000.00,
+  "projectedBalance": 40000.00,
+  "monthlyForecast": [
+    {
+      "year": 2024,
+      "month": 2,
+      "expectedIncome": 15000.00,
+      "expectedExpenses": 8000.00,
+      "expectedBalance": 7000.00,
+      "cumulativeBalance": 22000.00
+    },
+    {
+      "year": 2024,
+      "month": 3,
+      "expectedIncome": 18000.00,
+      "expectedExpenses": 7000.00,
+      "expectedBalance": 11000.00,
+      "cumulativeBalance": 33000.00
+    }
+  ],
+  "pendingReceivables": [
+    {
+      "id": "guid",
+      "documentNumber": "REC-2024-001",
+      "dueDate": "2024-02-15",
+      "amount": 350.00,
+      "status": "Pending",
+      "patientName": "João Silva"
+    }
+  ],
+  "pendingPayables": [
+    {
+      "id": "guid",
+      "documentNumber": "PAG-2024-001",
+      "dueDate": "2024-02-20",
+      "amount": 1200.00,
+      "category": "Supplies",
+      "supplierName": "Fornecedor Médico LTDA"
+    }
+  ]
+}
+```
+
+### Análise de Rentabilidade
+
+#### GET `/api/reports/profitability`
+Analisa a rentabilidade por procedimento, médico e convênio.
+
+**Permissão:** `ReportsFinancial`
+
+**Query params:**
+- `clinicId` (obrigatório) - ID da clínica
+- `startDate` (obrigatório) - Data inicial do período
+- `endDate` (obrigatório) - Data final do período
+
+**Resposta:**
+```json
+{
+  "periodStart": "2024-01-01",
+  "periodEnd": "2024-01-31",
+  "totalRevenue": 45000.00,
+  "totalCosts": 18500.00,
+  "totalProfit": 26500.00,
+  "profitMargin": 58.89,
+  "byProcedure": [
+    {
+      "procedureName": "Consultation",
+      "count": 50,
+      "revenue": 25000.00,
+      "averageValue": 500.00,
+      "percentage": 55.56
+    },
+    {
+      "procedureName": "Exam",
+      "count": 30,
+      "revenue": 15000.00,
+      "averageValue": 500.00,
+      "percentage": 33.33
+    }
+  ],
+  "byDoctor": [
+    {
+      "doctorId": "guid",
+      "doctorName": "Dr. João Silva",
+      "appointmentsCount": 35,
+      "revenue": 20000.00,
+      "averageAppointmentValue": 571.43,
+      "percentage": 44.44
+    },
+    {
+      "doctorId": "guid",
+      "doctorName": "Dra. Maria Santos",
+      "appointmentsCount": 25,
+      "revenue": 15000.00,
+      "averageAppointmentValue": 600.00,
+      "percentage": 33.33
+    }
+  ],
+  "byInsurance": [
+    {
+      "insuranceId": null,
+      "insuranceName": "Particular",
+      "appointmentsCount": 40,
+      "revenue": 25000.00,
+      "averageValue": 625.00,
+      "percentage": 55.56
+    },
+    {
+      "insuranceId": "guid",
+      "insuranceName": "Unimed",
+      "appointmentsCount": 20,
+      "revenue": 12000.00,
+      "averageValue": 600.00,
+      "percentage": 26.67
+    }
+  ]
+}
+```
+
 ## Próximos Passos
 
 ### Funcionalidades Pendentes
 
 1. **Relatórios Financeiros**
-   - [ ] DRE (Demonstrativo de Resultados)
-   - [ ] Análise de inadimplência
-   - [ ] Rentabilidade por procedimento
-   - [ ] Dashboard financeiro
+   - [x] DRE (Demonstrativo de Resultados) ✅ **Janeiro 2026**
+   - [x] Previsão de fluxo de caixa ✅ **Janeiro 2026**
+   - [x] Rentabilidade por procedimento ✅ **Janeiro 2026**
+   - [ ] Análise de inadimplência com dashboard
+   - [ ] Dashboard financeiro frontend
 
 2. **Automações**
    - [ ] Geração automática de contas a receber após fechamento
    - [ ] Alertas de vencimento
    - [ ] Reconciliação bancária
-   - [ ] Previsão de fluxo de caixa
+   - [ ] Alertas de fluxo de caixa negativo
 
 3. **Integrações**
    - [ ] Gateway de pagamento (Stripe, MercadoPago)
@@ -757,6 +950,7 @@ Para dúvidas ou suporte, consulte:
 
 ---
 
-**Versão:** 1.0.0  
-**Data:** Janeiro 2024  
+**Versão:** 1.1.0  
+**Data:** Janeiro 2026  
+**Última atualização:** 22 de Janeiro de 2026  
 **Autor:** Sistema MedicWare
