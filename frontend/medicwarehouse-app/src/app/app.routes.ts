@@ -405,6 +405,13 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
+  // SOAP Records routes
+  { 
+    path: 'soap-records', 
+    loadChildren: () => import('./pages/soap-records/soap-records.routes').then(m => m.SOAP_ROUTES),
+    canActivate: [authGuard]
+  },
+  
   ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes
