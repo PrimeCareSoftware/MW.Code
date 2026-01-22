@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { NotificationPanel } from '../notification-panel/notification-panel';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterLink, RouterLinkActive, NotificationPanel],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NotificationPanel, ThemeToggleComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })

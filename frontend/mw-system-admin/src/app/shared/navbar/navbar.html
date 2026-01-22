@@ -19,6 +19,7 @@
   </div>
   
   <div class="top-bar-right">
+    <app-theme-toggle></app-theme-toggle>
     <app-notification-panel></app-notification-panel>
     @if (authService.currentUser(); as user) {
       <div class="user-dropdown">

@@ -167,6 +167,131 @@
   --sidebar-collapsed-width: 80px;
   --navbar-height: 64px;
   --content-max-width: 1440px;
+  
+  /* Theme Variables - Default (Light) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --text-tertiary: #737373;
+  --border-color: #e5e5e5;
+  --border-color-hover: #d4d4d4;
+}
+
+/* Dark Theme */
+body.theme-dark {
+  /* Dark Theme Colors */
+  --primary-50: #1e3a8a;
+  --primary-100: #1e40af;
+  --primary-200: #3b82f6;
+  --primary-300: #60a5fa;
+  --primary-400: #93c5fd;
+  --primary-500: #3b82f6;
+  --primary-600: #60a5fa;
+  --primary-700: #93c5fd;
+  
+  --gray-50: #171717;
+  --gray-100: #262626;
+  --gray-200: #404040;
+  --gray-300: #525252;
+  --gray-400: #737373;
+  --gray-500: #a3a3a3;
+  --gray-600: #d4d4d4;
+  --gray-700: #e5e5e5;
+  --gray-800: #f5f5f5;
+  --gray-900: #fafafa;
+  
+  /* Dark Mode Backgrounds */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --border-color: #334155;
+  --border-color-hover: #475569;
+  
+  /* Adjust shadows for dark mode */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 20px -5px rgba(0, 0, 0, 0.6), 0 4px 8px -4px rgba(0, 0, 0, 0.5);
+  
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+/* High Contrast Theme */
+body.theme-high-contrast {
+  /* High Contrast Colors - Maximum contrast for accessibility */
+  --primary-50: #ffffff;
+  --primary-100: #ffffff;
+  --primary-200: #ffff00;
+  --primary-300: #ffff00;
+  --primary-400: #ffff00;
+  --primary-500: #ffff00;
+  --primary-600: #ffff00;
+  --primary-700: #ffffff;
+  
+  --gray-50: #000000;
+  --gray-100: #000000;
+  --gray-200: #333333;
+  --gray-300: #666666;
+  --gray-400: #999999;
+  --gray-500: #cccccc;
+  --gray-600: #ffffff;
+  --gray-700: #ffffff;
+  --gray-800: #ffffff;
+  --gray-900: #ffffff;
+  
+  /* High Contrast Backgrounds */
+  --bg-primary: #000000;
+  --bg-secondary: #000000;
+  --bg-tertiary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --text-tertiary: #cccccc;
+  --border-color: #ffffff;
+  --border-color-hover: #ffff00;
+  
+  /* High contrast semantic colors */
+  --success-500: #00ff00;
+  --success-600: #00ff00;
+  --success-700: #00ff00;
+  --warning-500: #ffff00;
+  --warning-600: #ffff00;
+  --error-500: #ff0000;
+  --error-600: #ff0000;
+  --error-700: #ff0000;
+  --info-500: #00ffff;
+  --info-600: #00ffff;
+  --info-700: #00ffff;
+  
+  /* Strong borders for high contrast */
+  --shadow-xs: none;
+  --shadow-sm: 0 0 0 2px #ffffff;
+  --shadow-md: 0 0 0 3px #ffffff;
+  --shadow-lg: 0 0 0 4px #ffffff;
+  
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  
+  /* Force all borders to be visible */
+  * {
+    border-color: var(--border-color) !important;
+  }
+  
+  /* Ensure all text is readable */
+  h1, h2, h3, h4, h5, h6, p, span, div, a, button, label, input, textarea, select {
+    color: var(--text-primary) !important;
+  }
+  
+  /* Make focus indicators very prominent */
+  *:focus-visible {
+    outline: 3px solid #ffff00 !important;
+    outline-offset: 2px;
+  }
 }
 
 /* Reset & Base Styles */
@@ -187,8 +312,8 @@ html {
 body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  background-color: white;
-  color: var(--gray-900);
+  background-color: var(--bg-primary, white);
+  color: var(--text-primary, var(--gray-900));
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -198,6 +323,7 @@ body {
   padding: 0;
   width: 100%;
   overflow-x: hidden;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 /* Focus styles for accessibility */
@@ -622,12 +748,12 @@ img {
   .form-control {
     width: 100%;
     padding: var(--spacing-3) var(--spacing-4);
-    border: var(--border-width-form) solid var(--gray-300);
+    border: var(--border-width-form) solid var(--border-color, var(--gray-300));
     border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
     transition: all var(--transition-fast);
-    background-color: white;
-    color: var(--gray-900);
+    background-color: var(--bg-primary, white);
+    color: var(--text-primary, var(--gray-900));
     
     &::placeholder {
       color: var(--gray-400);
@@ -762,10 +888,10 @@ img {
 
 /* Card Component */
 .card {
-  background: white;
+  background: var(--bg-primary, white);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--border-color, var(--gray-200));
   transition: all var(--transition-base);
   overflow: hidden;
 }
