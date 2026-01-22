@@ -77,7 +77,7 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(dp => dp.ReportedToSNGPCAt);
 
             builder.Property(dp => dp.Notes)
-                .HasMaxLength(1000);
+                .HasMaxLength(1500); // Increased for encryption overhead
 
             builder.Property(dp => dp.TenantId)
                 .IsRequired()

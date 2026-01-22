@@ -18,37 +18,37 @@ namespace MedicSoft.Repository.Configurations
             // CFM 1.821 - Campos obrigatórios de anamnese
             builder.Property(mr => mr.ChiefComplaint)
                 .IsRequired()
-                .HasMaxLength(500);
+                .HasMaxLength(750); // Increased for encryption overhead
 
             builder.Property(mr => mr.HistoryOfPresentIllness)
                 .IsRequired()
-                .HasMaxLength(5000);
+                .HasMaxLength(7000); // Increased for encryption overhead
 
             // CFM 1.821 - Campos recomendados de história clínica
             builder.Property(mr => mr.PastMedicalHistory)
-                .HasMaxLength(3000);
+                .HasMaxLength(4000); // Increased for encryption overhead
 
             builder.Property(mr => mr.FamilyHistory)
-                .HasMaxLength(2000);
+                .HasMaxLength(3000); // Increased for encryption overhead
 
             builder.Property(mr => mr.LifestyleHabits)
-                .HasMaxLength(2000);
+                .HasMaxLength(3000); // Increased for encryption overhead
 
             builder.Property(mr => mr.CurrentMedications)
-                .HasMaxLength(3000);
+                .HasMaxLength(4000); // Increased for encryption overhead
 
             // Campos legados (manter compatibilidade)
             builder.Property(mr => mr.Diagnosis)
                 .IsRequired()
-                .HasMaxLength(2000);
+                .HasMaxLength(3000); // Increased for encryption overhead
 
             builder.Property(mr => mr.Prescription)
                 .IsRequired()
-                .HasMaxLength(5000);
+                .HasMaxLength(7000); // Increased for encryption overhead
 
             builder.Property(mr => mr.Notes)
                 .IsRequired()
-                .HasMaxLength(3000);
+                .HasMaxLength(4000); // Increased for encryption overhead
 
             builder.Property(mr => mr.ConsultationDurationMinutes)
                 .IsRequired();
