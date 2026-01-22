@@ -343,6 +343,11 @@ builder.Services.AddScoped<ITissXmlValidatorService, TissXmlValidatorService>();
 builder.Services.AddScoped<ITussImportService, TussImportService>();
 builder.Services.AddScoped<ITissAnalyticsService, TissAnalyticsService>();
 
+// LGPD Audit System
+builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<IAuditRepository, AuditRepository>();
+builder.Services.AddScoped<IDataProcessingConsentRepository, DataProcessingConsentRepository>();
+
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();
 builder.Services.AddScoped<ISubscriptionService>(provider =>

@@ -101,6 +101,10 @@ namespace MedicSoft.Repository.Context
         // Electronic Invoices (NF-e/NFS-e)
         public DbSet<ElectronicInvoice> ElectronicInvoices { get; set; } = null!;
         public DbSet<Domain.Entities.InvoiceConfiguration> InvoiceConfigurations { get; set; } = null!;
+        
+        // LGPD Audit System
+        public DbSet<AuditLog> AuditLogs { get; set; } = null!;
+        public DbSet<DataProcessingConsent> DataProcessingConsents { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -189,6 +193,10 @@ namespace MedicSoft.Repository.Context
             // Electronic Invoices (NF-e/NFS-e)
             modelBuilder.ApplyConfiguration(new ElectronicInvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceConfigurationEntityConfiguration());
+            
+            // LGPD Audit System
+            modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
+            modelBuilder.ApplyConfiguration(new DataProcessingConsentConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
