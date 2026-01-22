@@ -9,7 +9,7 @@ using MedicSoft.Domain.Interfaces;
 namespace MedicSoft.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/SNGPCReports")]
     public class SNGPCReportsController : BaseController
     {
         private readonly ISNGPCReportRepository _reportRepository;

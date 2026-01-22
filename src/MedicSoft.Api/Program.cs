@@ -45,6 +45,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
 // Add services to the container.
+builder.Services.AddHttpClient(); // Add HttpClient factory for microservice proxying
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {

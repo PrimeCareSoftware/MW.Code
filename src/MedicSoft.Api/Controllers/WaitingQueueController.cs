@@ -25,6 +25,11 @@ namespace MedicSoft.Api.Controllers
         [HttpGet("summary")]
         public async Task<ActionResult<WaitingQueueSummaryDto>> GetQueueSummary([FromQuery] Guid clinicId)
         {
+            if (clinicId == Guid.Empty)
+            {
+                return BadRequest(new { message = "clinicId is required and cannot be empty" });
+            }
+
             try
             {
                 var summary = await _waitingQueueService.GetQueueSummaryAsync(clinicId, GetTenantId());
