@@ -70,6 +70,15 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - [x] Compliance: CFM 1821/2007 e CFM 2.314/2022
 - [x] **Portal do Paciente** - ✅ **100% completo - Janeiro 2026**
 - [x] **Integração TISS / Convênios** - ✅ **95% completo - Janeiro 2026** (sistema funcional em conformidade com ANS)
+  - [x] Backend: 8 entidades + 7 repositórios + 6 serviços + 4 controllers (100%)
+  - [x] Frontend: 9 componentes Angular completos (95%)
+  - [x] Validação XML TISS 4.02.00 contra schemas ANS (100%)
+  - [x] Importação de tabela TUSS oficial (CSV/Excel) (100%)
+  - [x] Testes: 206 testes de domínio + 15 testes de validação (100%)
+  - [ ] Dashboards analíticos de glosas (0%) - Ver PLANO_IMPLEMENTACAO_MELHORIAS_TISS_NF.md
+  - [ ] Relatórios TISS avançados (0%) - Ver PLANO_IMPLEMENTACAO_MELHORIAS_TISS_NF.md
+  - [ ] Envio automático para operadoras (0%) - Opcional, baixa prioridade
+  - 📄 Avaliação completa: docs/AVALIACAO_TISS_TUSS_NOTAS_FISCAIS.md
 - [x] **🇧🇷 Emissão de NF-e/NFS-e** - ✅ **100% completo - Janeiro 2026** 🎉
   - [x] Backend: ElectronicInvoice, InvoiceConfiguration entities
   - [x] API: 16 endpoints (emissão, cancelamento, consulta, configuração)
@@ -78,6 +87,10 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - [x] Cálculos fiscais: ISS, PIS, COFINS, CSLL, INSS, IR
   - [x] Gateways: FocusNFe, ENotas, NFeCidades, SEFAZ direto
   - [x] 22 testes unitários
+  - [ ] Dashboard fiscal completo (30%) - Ver PLANO_IMPLEMENTACAO_MELHORIAS_TISS_NF.md
+  - [ ] Relatórios fiscais avançados (0%) - Ver PLANO_IMPLEMENTACAO_MELHORIAS_TISS_NF.md
+  - [ ] Cálculo de DAS (Simples Nacional) (0%) - Ver PLANO_IMPLEMENTACAO_MELHORIAS_TISS_NF.md
+  - 📄 Avaliação completa: docs/AVALIACAO_TISS_TUSS_NOTAS_FISCAIS.md
 - [x] **🇧🇷 Conformidade CFM** - Resoluções obrigatórias (prontuário, receitas) ✅ **95% completo - Janeiro 2026**
   - [x] CFM 1.821/2007 - Prontuário Eletrônico (4 componentes frontend totalmente integrados no fluxo de atendimento)
   - [x] CFM 1.643/2002 - Receitas Digitais (4 componentes frontend totalmente integrados no fluxo de atendimento)
