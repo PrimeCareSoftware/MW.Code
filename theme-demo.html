@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Mode & High Contrast Demo - PrimeCare Software</title>
+  <style>
+    /* Design Tokens - Light Theme (Default) */
+    :root {
+      --primary-500: #1e40af;
+      --primary-600: #1e3a8a;
+      
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-900: #171717;
+      
+      --success-500: #22c55e;
+      --warning-500: #f59e0b;
+      --error-500: #ef4444;
+      
+      --bg-primary: #ffffff;
+      --bg-secondary: #fafafa;
+      --text-primary: #171717;
+      --text-secondary: #525252;
+      --border-color: #e5e5e5;
+      
+      --radius-lg: 1rem;
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Theme */
+    body.theme-dark {
+      --primary-500: #3b82f6;
+      --primary-600: #60a5fa;
+      
+      --gray-50: #171717;
+      --gray-100: #262626;
+      --gray-200: #404040;
+      --gray-300: #525252;
+      --gray-500: #a3a3a3;
+      --gray-600: #d4d4d4;
+      --gray-900: #fafafa;
+      
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border-color: #334155;
+    }
+
+    /* High Contrast Theme */
+    body.theme-high-contrast {
+      --primary-500: #ffff00;
+      --primary-600: #ffff00;
+      
+      --gray-50: #000000;
+      --gray-100: #000000;
+      --gray-600: #ffffff;
+      --gray-900: #ffffff;
+      
+      --success-500: #00ff00;
+      --warning-500: #ffff00;
+      --error-500: #ff0000;
+      
+      --bg-primary: #000000;
+      --bg-secondary: #000000;
+      --text-primary: #ffffff;
+      --text-secondary: #ffffff;
+      --border-color: #ffffff;
+    }
+
+    /* Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color var(--transition-base), color var(--transition-base);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--border-color);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 2rem 0 1rem 0;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      margin: 1.5rem 0 1rem 0;
+    }
+
+    .theme-toggle {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.25rem;
+      background: var(--gray-100);
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--border-color);
+      margin: 1rem 0;
+    }
+
+    .theme-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: calc(var(--radius-lg) - 4px);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .theme-btn:hover {
+      background: var(--gray-200);
+      color: var(--text-primary);
+    }
+
+    .theme-btn.active {
+      background: var(--bg-primary);
+      color: var(--primary-600);
+      border-color: var(--primary-500);
+    }
+
+    body.theme-high-contrast .theme-btn:focus {
+      outline: 3px solid #ffff00;
+      outline-offset: 2px;
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .button {
+      padding: 0.75rem 1.5rem;
+      background: var(--primary-600);
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      font-weight: 500;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      transition: all var(--transition-base);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    .button.success {
+      background: var(--success-500);
+    }
+
+    .button.warning {
+      background: var(--warning-500);
+    }
+
+    .button.error {
+      background: var(--error-500);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      font-size: 1rem;
+    }
+
+    body.theme-high-contrast input:focus,
+    body.theme-high-contrast select:focus,
+    body.theme-high-contrast button:focus {
+      outline: 3px solid #ffff00;
+      outline-offset: 2px;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 1rem;
+      border: 2px solid;
+    }
+
+    .alert.success {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: var(--success-500);
+      color: var(--success-500);
+    }
+
+    .alert.warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: var(--warning-500);
+      color: var(--warning-500);
+    }
+
+    .alert.error {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--error-500);
+      color: var(--error-500);
+    }
+
+    code {
+      background: var(--gray-100);
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-family: monospace;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-600);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body class="theme-light">
+  <header>
+    <div class="container">
+      <h1>🏥 PrimeCare Software</h1>
+      <p>Demonstração de Modo Noturno e Alto Contraste</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <section>
+      <h2>Seletor de Tema</h2>
+      <p style="margin-bottom: 1rem;">Escolha o tema que melhor se adequa às suas necessidades de acessibilidade:</p>
+      
+      <div class="theme-toggle">
+        <button class="theme-btn active" data-theme="light" onclick="setTheme('light')">
+          <span>☀️</span>
+          <span>Claro</span>
+        </button>
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">
+          <span>🌙</span>
+          <span>Noturno</span>
+        </button>
+        <button class="theme-btn" data-theme="high-contrast" onclick="setTheme('high-contrast')">
+          <span>◐</span>
+          <span>Alto Contraste</span>
+        </button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Componentes da Interface</h2>
+      
+      <h3>Botões</h3>
+      <div style="margin: 1rem 0;">
+        <button class="button">Botão Primário</button>
+        <button class="button success">Sucesso</button>
+        <button class="button warning">Aviso</button>
+        <button class="button error">Erro</button>
+      </div>
+
+      <h3>Alertas</h3>
+      <div class="alert success">
+        ✅ Operação realizada com sucesso!
+      </div>
+      <div class="alert warning">
+        ⚠️ Atenção: Verifique as informações antes de continuar.
+      </div>
+      <div class="alert error">
+        ❌ Erro: Não foi possível completar a operação.
+      </div>
+
+      <h3>Cartões e Estatísticas</h3>
+      <div class="grid">
+        <div class="stat-card">
+          <div class="stat-value">247</div>
+          <div class="stat-label">Pacientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">89</div>
+          <div class="stat-label">Consultas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">15</div>
+          <div class="stat-label">Hoje</div>
+        </div>
+      </div>
+
+      <h3>Formulários</h3>
+      <div class="card">
+        <form>
+          <div class="form-group">
+            <label for="name">Nome Completo</label>
+            <input type="text" id="name" placeholder="Digite seu nome">
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" placeholder="seu@email.com">
+          </div>
+          <div class="form-group">
+            <label for="specialty">Especialidade</label>
+            <select id="specialty">
+              <option>Selecione...</option>
+              <option>Clínica Geral</option>
+              <option>Pediatria</option>
+              <option>Cardiologia</option>
+              <option>Ortopedia</option>
+            </select>
+          </div>
+          <button type="button" class="button">Salvar</button>
+        </form>
+      </div>
+    </section>
+
+    <section>
+      <h2>Características dos Temas</h2>
+      
+      <div class="card">
+        <h3>Modo Claro (Padrão)</h3>
+        <ul>
+          <li>Interface tradicional com fundo branco</li>
+          <li>Ideal para ambientes bem iluminados</li>
+          <li>Cores vibrantes e contrastantes</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Modo Noturno</h3>
+        <ul>
+          <li>Reduz a fadiga ocular em ambientes com pouca luz</li>
+          <li>Economia de energia em telas OLED</li>
+          <li>Cores suaves e agradáveis aos olhos</li>
+          <li>Perfeito para uso noturno ou prolongado</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Alto Contraste</h3>
+        <ul>
+          <li>Máximo contraste para usuários com deficiência visual</li>
+          <li>Bordas fortes e indicadores visuais proeminentes</li>
+          <li>Cores brilhantes: amarelo, branco, verde, vermelho</li>
+          <li>Foco visual destacado (amarelo) para navegação por teclado</li>
+          <li>Compatível com WCAG 2.1 AA</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Informações Técnicas</h2>
+      <div class="card">
+        <p><strong>Implementação:</strong> Angular 18+ com Standalone Components</p>
+        <p><strong>Persistência:</strong> LocalStorage</p>
+        <p><strong>Detecção Automática:</strong> Sistema <code>prefers-color-scheme</code></p>
+        <p><strong>Acessibilidade:</strong> WCAG 2.1 Nível AA</p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function setTheme(theme) {
+      // Remove todas as classes de tema
+      document.body.classList.remove('theme-light', 'theme-dark', 'theme-high-contrast');
+      
+      // Adiciona a classe do tema selecionado
+      document.body.classList.add('theme-' + theme);
+      
+      // Salva no localStorage
+      localStorage.setItem('app-theme', theme);
+      
+      // Atualiza os botões
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+      
+      // Atualiza a meta tag theme-color
+      const colors = {
+        light: '#ffffff',
+        dark: '#0f172a',
+        'high-contrast': '#000000'
+      };
+      let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (!metaThemeColor) {
+        metaThemeColor = document.createElement('meta');
+        metaThemeColor.name = 'theme-color';
+        document.head.appendChild(metaThemeColor);
+      }
+      metaThemeColor.content = colors[theme];
+    }
+
+    // Carrega o tema salvo ao iniciar
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('app-theme');
+      if (savedTheme && ['light', 'dark', 'high-contrast'].includes(savedTheme)) {
+        setTheme(savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setTheme('dark');
+      }
+    });
+  </script>
+</body>
+</html>

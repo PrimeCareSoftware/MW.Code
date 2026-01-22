@@ -15,6 +15,7 @@ import { NotificationService } from '../../services/notification.service';
 import { User } from '../../models/auth.model';
 import { Appointment } from '../../models/appointment.model';
 import { Document } from '../../models/document.model';
+import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +28,8 @@ import { Document } from '../../models/document.model';
     MatIconModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    ThemeToggleComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
