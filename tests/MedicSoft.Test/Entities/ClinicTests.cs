@@ -305,6 +305,85 @@ namespace MedicSoft.Test.Entities
             Assert.Equal(expectedResult, result);
         }
 
+        [Fact]
+        public void EnablePublicDisplay_SetsShowOnPublicSiteToTrue()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+            Assert.False(clinic.ShowOnPublicSite); // Default is false
+
+            // Act
+            clinic.EnablePublicDisplay();
+
+            // Assert
+            Assert.True(clinic.ShowOnPublicSite);
+            Assert.NotNull(clinic.UpdatedAt);
+        }
+
+        [Fact]
+        public void DisablePublicDisplay_SetsShowOnPublicSiteToFalse()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+            clinic.EnablePublicDisplay();
+            Assert.True(clinic.ShowOnPublicSite);
+
+            // Act
+            clinic.DisablePublicDisplay();
+
+            // Assert
+            Assert.False(clinic.ShowOnPublicSite);
+            Assert.NotNull(clinic.UpdatedAt);
+        }
+
+        [Fact]
+        public void UpdatePublicSiteSettings_WithValidData_UpdatesSettings()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+            var whatsApp = "+5511999999999";
+
+            // Act
+            clinic.UpdatePublicSiteSettings(true, Domain.Enums.ClinicType.Dental, whatsApp);
+
+            // Assert
+            Assert.True(clinic.ShowOnPublicSite);
+            Assert.Equal(Domain.Enums.ClinicType.Dental, clinic.ClinicType);
+            Assert.Equal(whatsApp, clinic.WhatsAppNumber);
+            Assert.NotNull(clinic.UpdatedAt);
+        }
+
+        [Fact]
+        public void UpdatePublicSiteSettings_WithoutWhatsApp_UpdatesSettings()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+
+            // Act
+            clinic.UpdatePublicSiteSettings(true, Domain.Enums.ClinicType.Medical, null);
+
+            // Assert
+            Assert.True(clinic.ShowOnPublicSite);
+            Assert.Equal(Domain.Enums.ClinicType.Medical, clinic.ClinicType);
+            Assert.Null(clinic.WhatsAppNumber);
+        }
+
+        [Theory]
+        [InlineData("11999999999")]  // Missing country code
+        [InlineData("+55119")]        // Too short
+        [InlineData("+551199999999999999")]  // Too long
+        public void UpdatePublicSiteSettings_WithInvalidWhatsApp_ThrowsArgumentException(string whatsApp)
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() =>
+                clinic.UpdatePublicSiteSettings(true, Domain.Enums.ClinicType.Medical, whatsApp));
+
+            Assert.Contains("WhatsApp", exception.Message);
+        }
+
         private Clinic CreateValidClinic(int appointmentDuration = 30)
         {
             return new Clinic(

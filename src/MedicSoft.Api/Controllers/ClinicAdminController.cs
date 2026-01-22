@@ -1023,6 +1023,9 @@ namespace MedicSoft.Api.Controllers
                 AppointmentDurationMinutes = clinic.AppointmentDurationMinutes,
                 AllowEmergencySlots = clinic.AllowEmergencySlots,
                 IsActive = clinic.IsActive,
+                ShowOnPublicSite = clinic.ShowOnPublicSite,
+                ClinicType = clinic.ClinicType.ToString(),
+                WhatsAppNumber = clinic.WhatsAppNumber,
                 DefaultPaymentReceiverType = clinic.DefaultPaymentReceiverType.ToString()
             };
         }
