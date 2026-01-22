@@ -428,6 +428,21 @@
   margin-top: var(--spacing-2);
 }
 
+.doctor-info {
+  font-size: var(--font-size-sm);
+  
+  .professional-id {
+    font-weight: var(--font-medium);
+    color: var(--gray-900);
+  }
+  
+  .specialty {
+    color: var(--gray-600);
+    font-size: var(--font-size-xs);
+    margin-top: 2px;
+  }
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

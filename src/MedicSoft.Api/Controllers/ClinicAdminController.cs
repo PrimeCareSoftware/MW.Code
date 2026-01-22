@@ -1029,6 +1029,81 @@ namespace MedicSoft.Api.Controllers
                 DefaultPaymentReceiverType = clinic.DefaultPaymentReceiverType.ToString()
             };
         }
+
+        /// <summary>
+        /// Get doctor fields configuration (owner only)
+        /// </summary>
+        [HttpGet("doctor-fields-config")]
+        [RequirePermissionKey(PermissionKeys.ClinicView)]
+        public async Task<ActionResult<DoctorFieldsConfigDto>> GetDoctorFieldsConfiguration()
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+                
+                if (!isAuthorized)
+                {
+                    return Forbid();
+                }
+
+                var config = await _userService.GetDoctorFieldsConfigurationAsync(clinicId, tenantId);
+
+                return Ok(new DoctorFieldsConfigDto
+                {
+                    ProfessionalIdRequired = config.ProfessionalIdRequired,
+                    SpecialtyRequired = config.SpecialtyRequired
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting doctor fields configuration");
+                return StatusCode(500, new { message = "An error occurred while retrieving doctor fields configuration" });
+            }
+        }
+
+        /// <summary>
+        /// Update doctor fields configuration (owner only)
+        /// </summary>
+        [HttpPut("doctor-fields-config")]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
+        public async Task<ActionResult> UpdateDoctorFieldsConfiguration([FromBody] DoctorFieldsConfigDto request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized();
+                }
+
+                var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
+                
+                if (!isAuthorized)
+                {
+                    return Forbid();
+                }
+
+                var config = new DoctorFieldsConfiguration(request.ProfessionalIdRequired, request.SpecialtyRequired);
+                await _userService.UpdateDoctorFieldsConfigurationAsync(clinicId, tenantId, config);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating doctor fields configuration");
+                return StatusCode(500, new { message = "An error occurred while updating doctor fields configuration" });
+            }
+        }
     }
 
     public class ChangeUserPasswordRequest
@@ -1051,5 +1126,11 @@ namespace MedicSoft.Api.Controllers
     public class UpdatePaymentReceiverRequest
     {
         public string PaymentReceiverType { get; set; } = "Secretary"; // Doctor, Secretary, Other
+    }
+
+    public class DoctorFieldsConfigDto
+    {
+        public bool ProfessionalIdRequired { get; set; }
+        public bool SpecialtyRequired { get; set; }
     }
 }

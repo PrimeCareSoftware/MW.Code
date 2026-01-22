@@ -14,7 +14,8 @@ import {
   SubscriptionDetailsDto,
   MyClinicDto,
   PublicDisplaySettingsDto,
-  UpdatePublicDisplaySettingsRequest
+  UpdatePublicDisplaySettingsRequest,
+  DoctorFieldsConfigDto
 } from '../models/clinic-admin.model';
 
 @Injectable({
@@ -88,5 +89,14 @@ export class ClinicAdminService {
 
   updatePublicDisplaySettings(request: UpdatePublicDisplaySettingsRequest): Observable<any> {
     return this.http.put(`${this.apiUrl}/public-display-settings`, request);
+  }
+
+  // Doctor Fields Configuration
+  getDoctorFieldsConfiguration(): Observable<DoctorFieldsConfigDto> {
+    return this.http.get<DoctorFieldsConfigDto>(`${this.apiUrl}/doctor-fields-config`);
+  }
+
+  updateDoctorFieldsConfiguration(request: DoctorFieldsConfigDto): Observable<any> {
+    return this.http.put(`${this.apiUrl}/doctor-fields-config`, request);
   }
 }
