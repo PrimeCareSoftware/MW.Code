@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CartService } from '../../../services/cart';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,7 +9,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header.scss'
 })
 export class HeaderComponent {
-  protected cartService = inject(CartService);
   protected isMenuOpen = false;
 
   toggleMenu(): void {
