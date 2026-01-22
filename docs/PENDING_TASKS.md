@@ -81,11 +81,11 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
     - Frontend: GlosasDashboard e PerformanceDashboard components (Angular 20)
     - DTOs: 8 analytics DTOs implementados
     - Controller: TissAnalyticsController com REST endpoints
-  - [ ] Relatórios TISS avançados (40%) - Em progresso (PR #313)
+  - [ ] Relatórios TISS avançados (40%) - Parcialmente implementado (PR #313)
     - ✅ Analytics services implementados
     - ✅ Dashboards de glosas e performance
-    - 🔲 Exportação PDF pendente
-    - 🔲 Relatórios customizáveis pendentes
+    - [ ] Exportação PDF pendente
+    - [ ] Relatórios customizáveis pendentes
   - [ ] Envio automático para operadoras (0%) - Opcional, baixa prioridade
   - 📄 Avaliação completa: docs/AVALIACAO_TISS_TUSS_NOTAS_FISCAIS.md
 - [x] **🇧🇷 Emissão de NF-e/NFS-e** - ✅ **100% completo - Janeiro 2026** 🎉
