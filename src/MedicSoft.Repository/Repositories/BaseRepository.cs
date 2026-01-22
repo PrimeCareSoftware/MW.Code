@@ -76,7 +76,7 @@ namespace MedicSoft.Repository.Repositories
         {
             var entry = _context.Entry(entity);
             
-            // If entity is not tracked, attach and mark as modified
+            // If entity is detached, attach and mark as modified
             if (entry.State == EntityState.Detached)
             {
                 _dbSet.Update(entity);
