@@ -117,39 +117,54 @@
     }
 
     .theme-toggle {
-      display: flex;
-      gap: 0.5rem;
-      padding: 0.25rem;
-      background: var(--gray-100);
-      border-radius: var(--radius-lg);
-      border: 2px solid var(--border-color);
+      display: inline-flex;
+      gap: 0.25rem;
+      padding: 0.125rem;
+      background: transparent;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
       margin: 1rem 0;
     }
 
     .theme-btn {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1rem;
+      justify-content: center;
+      padding: 0.5rem;
       background: transparent;
-      border: 2px solid transparent;
-      border-radius: calc(var(--radius-lg) - 4px);
-      color: var(--text-secondary);
+      border: 1px solid transparent;
+      border-radius: 0.25rem;
+      color: var(--gray-500);
       cursor: pointer;
       transition: all var(--transition-base);
-      font-size: 0.875rem;
-      font-weight: 500;
+      font-size: 1.25rem;
+      min-width: 32px;
+      min-height: 32px;
     }
 
     .theme-btn:hover {
-      background: var(--gray-200);
+      background: var(--gray-100);
       color: var(--text-primary);
     }
 
     .theme-btn.active {
-      background: var(--bg-primary);
+      background: rgba(30, 64, 175, 0.1);
       color: var(--primary-600);
       border-color: var(--primary-500);
+    }
+
+    body.theme-dark .theme-btn {
+      color: var(--gray-500);
+    }
+
+    body.theme-dark .theme-btn:hover {
+      background: var(--gray-200);
+      color: var(--text-primary);
+    }
+
+    body.theme-dark .theme-btn.active {
+      background: var(--gray-200);
+      color: var(--primary-600);
     }
 
     body.theme-high-contrast .theme-btn:focus {
@@ -291,21 +306,18 @@
 
   <div class="container">
     <section>
-      <h2>Seletor de Tema</h2>
-      <p style="margin-bottom: 1rem;">Escolha o tema que melhor se adequa às suas necessidades de acessibilidade:</p>
+      <h2>Seletor de Tema - Botões Discretos</h2>
+      <p style="margin-bottom: 1rem;">Escolha o tema que melhor se adequa às suas necessidades de acessibilidade. Os botões agora são discretos e mostram apenas ícones:</p>
       
       <div class="theme-toggle">
-        <button class="theme-btn active" data-theme="light" onclick="setTheme('light')">
+        <button class="theme-btn active" data-theme="light" onclick="setTheme('light')" title="Modo Claro" aria-label="Modo Claro">
           <span>☀️</span>
-          <span>Claro</span>
         </button>
-        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" title="Modo Noturno" aria-label="Modo Noturno">
           <span>🌙</span>
-          <span>Noturno</span>
         </button>
-        <button class="theme-btn" data-theme="high-contrast" onclick="setTheme('high-contrast')">
+        <button class="theme-btn" data-theme="high-contrast" onclick="setTheme('high-contrast')" title="Alto Contraste" aria-label="Alto Contraste">
           <span>◐</span>
-          <span>Alto Contraste</span>
         </button>
       </div>
     </section>
