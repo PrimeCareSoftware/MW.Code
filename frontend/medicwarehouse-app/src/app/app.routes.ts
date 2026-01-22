@@ -256,6 +256,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/tiss/dashboards/performance-dashboard').then(m => m.PerformanceDashboard),
     canActivate: [authGuard]
   },
+  { 
+    path: 'tiss/reports', 
+    loadComponent: () => import('./pages/tiss/reports/tiss-reports').then(m => m.TissReports),
+    canActivate: [authGuard]
+  },
   
   // Financial Module routes
   { 
@@ -353,6 +358,11 @@ export const routes: Routes = [
   { 
     path: 'financial/invoices/:id', 
     loadComponent: () => import('./pages/financial/electronic-invoices/invoice-details.component').then(m => m.InvoiceDetailsComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/fiscal-dashboard', 
+    loadComponent: () => import('./pages/financial/dashboards/fiscal-dashboard').then(m => m.FiscalDashboard),
     canActivate: [authGuard]
   },
   { 

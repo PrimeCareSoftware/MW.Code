@@ -1,0 +1,399 @@
+<div class="dashboard-container">
+  <app-navbar></app-navbar>
+  
+  <div class="content">
+    <div class="header-section">
+      <div>
+        <h1>Dashboard Fiscal - NF-e/NFS-e</h1>
+        <p class="subtitle">Acompanhamento de Notas Fiscais Eletrônicas</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary" (click)="exportToExcel()">
+          <i class="bi bi-file-earmark-excel"></i> Excel
+        </button>
+        <button class="btn btn-primary" (click)="exportToPDF()">
+          <i class="bi bi-file-pdf"></i> PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <label for="selectedMonth" class="form-label">Mês</label>
+            <select 
+              id="selectedMonth"
+              class="form-select" 
+              [(ngModel)]="selectedMonth"
+              (change)="onMonthChange()"
+            >
+              <option [value]="1">Janeiro</option>
+              <option [value]="2">Fevereiro</option>
+              <option [value]="3">Março</option>
+              <option [value]="4">Abril</option>
+              <option [value]="5">Maio</option>
+              <option [value]="6">Junho</option>
+              <option [value]="7">Julho</option>
+              <option [value]="8">Agosto</option>
+              <option [value]="9">Setembro</option>
+              <option [value]="10">Outubro</option>
+              <option [value]="11">Novembro</option>
+              <option [value]="12">Dezembro</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="selectedYear" class="form-label">Ano</label>
+            <select 
+              id="selectedYear"
+              class="form-select" 
+              [(ngModel)]="selectedYear"
+              (change)="onYearChange()"
+            >
+              @for (year of generateYears(); track year) {
+                <option [value]="year">{{ year }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="invoiceTypeFilter" class="form-label">Tipo de Nota</label>
+            <select 
+              id="invoiceTypeFilter"
+              class="form-select" 
+              [(ngModel)]="invoiceTypeFilter"
+              (change)="onInvoiceTypeFilterChange()"
+            >
+              <option value="all">Todos</option>
+              <option value="NFSe">NFS-e</option>
+              <option value="NFe">NF-e</option>
+              <option value="NFCe">NFC-e</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="trendMonths" class="form-label">Período de Evolução</label>
+            <select 
+              id="trendMonths"
+              class="form-select" 
+              [(ngModel)]="trendMonths"
+              (change)="onTrendMonthsChange()"
+            >
+              <option [value]="6">6 meses</option>
+              <option [value]="12">12 meses</option>
+              <option [value]="18">18 meses</option>
+              <option [value]="24">24 meses</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p class="mt-2">Carregando dados fiscais...</p>
+      </div>
+    }
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ errorMessage() }}
+        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+      </div>
+    }
+
+    <!-- Dashboard Content -->
+    @if (!isLoading()) {
+      
+      <!-- Alerts Section -->
+      @if (alerts().length > 0) {
+        <div class="alerts-section mb-4">
+          @for (alert of alerts(); track alert.id) {
+            <div class="alert" [ngClass]="getAlertClass(alert.type)" role="alert">
+              <div class="alert-content">
+                <i class="bi" [ngClass]="{
+                  'bi-exclamation-triangle-fill': alert.type === 'warning',
+                  'bi-x-circle-fill': alert.type === 'error',
+                  'bi-info-circle-fill': alert.type === 'info'
+                }"></i>
+                <span>{{ alert.message }}</span>
+              </div>
+              <button type="button" class="btn-close" (click)="dismissAlert(alert.id)"></button>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Summary Cards -->
+      <div class="summary-section mb-4">
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <div class="card summary-card">
+              <div class="card-body">
+                <h6 class="text-muted">Total Emitido no Mês</h6>
+                <h3 class="text-primary">{{ formatCurrency(totalIssuedMonth()) }}</h3>
+                <small class="text-muted">{{ getMonthName(selectedMonth()) }}/{{ selectedYear() }}</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card summary-card">
+              <div class="card-body">
+                <h6 class="text-muted">Total de Impostos</h6>
+                <h3 class="text-danger">{{ formatCurrency(totalTaxesPaid()) }}</h3>
+                <small class="text-muted">Carga tributária: {{ formatPercentage(taxEffectiveRate()) }}</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card summary-card">
+              <div class="card-body">
+                <h6 class="text-muted">Total de Notas</h6>
+                <h3 class="text-success">{{ formatNumber(totalInvoices()) }}</h3>
+                <small class="text-muted">Todas as categorias</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card summary-card">
+              <div class="card-body">
+                <h6 class="text-muted">Ticket Médio</h6>
+                <h3 class="text-info">{{ formatCurrency(averageInvoiceValue()) }}</h3>
+                <small class="text-muted">Por nota emitida</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Status -->
+      <div class="status-section mb-4">
+        <h3>Status das Notas</h3>
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <div class="card status-card status-success">
+              <div class="card-body">
+                <div class="status-icon">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <div class="status-info">
+                  <h4>{{ invoiceStatus().authorized }}</h4>
+                  <span>Autorizadas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card status-card status-warning">
+              <div class="card-body">
+                <div class="status-icon">
+                  <i class="bi bi-x-circle-fill"></i>
+                </div>
+                <div class="status-info">
+                  <h4>{{ invoiceStatus().cancelled }}</h4>
+                  <span>Canceladas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card status-card status-danger">
+              <div class="card-body">
+                <div class="status-icon">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                </div>
+                <div class="status-info">
+                  <h4>{{ invoiceStatus().error }}</h4>
+                  <span>Com Erro</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card status-card status-info">
+              <div class="card-body">
+                <div class="status-icon">
+                  <i class="bi bi-clock-fill"></i>
+                </div>
+                <div class="status-info">
+                  <h4>{{ invoiceStatus().pending }}</h4>
+                  <span>Pendentes</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two column layout -->
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-lg-6">
+          
+          <!-- Invoice by Type -->
+          <div class="invoice-types-section mb-4">
+            <h3>Notas por Tipo</h3>
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Tipo</th>
+                        <th class="text-end">Quantidade</th>
+                        <th class="text-end">Valor Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (item of invoicesByType(); track item.type) {
+                        <tr>
+                          <td>
+                            <strong>{{ item.type }}</strong>
+                          </td>
+                          <td class="text-end">{{ formatNumber(item.quantity) }}</td>
+                          <td class="text-end">{{ formatCurrency(item.totalValue) }}</td>
+                        </tr>
+                      }
+                      @if (invoicesByType().length === 0) {
+                        <tr>
+                          <td colspan="3" class="text-center text-muted">
+                            Nenhuma nota emitida no período
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tax Breakdown -->
+          <div class="tax-breakdown-section mb-4">
+            <h3>Breakdown de Impostos</h3>
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Imposto</th>
+                        <th class="text-end">Alíquota</th>
+                        <th class="text-end">Valor</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (tax of taxBreakdown(); track tax.taxType) {
+                        <tr>
+                          <td><strong>{{ tax.taxType }}</strong></td>
+                          <td class="text-end">{{ formatPercentage(tax.percentage) }}</td>
+                          <td class="text-end">{{ formatCurrency(tax.amount) }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                    <tfoot>
+                      <tr class="table-active">
+                        <td colspan="2"><strong>Total</strong></td>
+                        <td class="text-end"><strong>{{ formatCurrency(totalTaxesPaid()) }}</strong></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-6">
+          
+          <!-- Top Clients -->
+          <div class="top-clients-section mb-4">
+            <h3>Top 5 Clientes por Faturamento</h3>
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th class="text-center">Notas</th>
+                        <th class="text-end">Faturamento</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (client of topClients(); track client.clientId; let index = $index) {
+                        <tr>
+                          <td>
+                            <div class="client-rank">
+                              <span class="rank-badge">{{ index + 1 }}º</span>
+                              <span>{{ client.clientName }}</span>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <span class="badge bg-secondary">{{ client.invoiceCount }}</span>
+                          </td>
+                          <td class="text-end">
+                            <strong>{{ formatCurrency(client.totalBilled) }}</strong>
+                          </td>
+                        </tr>
+                      }
+                      @if (topClients().length === 0) {
+                        <tr>
+                          <td colspan="3" class="text-center text-muted">
+                            Nenhum cliente encontrado
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly Trend -->
+          <div class="monthly-trend-section mb-4">
+            <h3>Evolução Mensal de Emissões</h3>
+            <div class="card">
+              <div class="card-body">
+                <div class="trend-chart-placeholder">
+                  <i class="bi bi-bar-chart-line"></i>
+                  <p>Gráfico de evolução mensal</p>
+                  <small class="text-muted">Implementação de gráfico em desenvolvimento</small>
+                </div>
+                <div class="table-responsive mt-3">
+                  <table class="table table-sm mb-0">
+                    <thead>
+                      <tr>
+                        <th>Período</th>
+                        <th class="text-center">Notas</th>
+                        <th class="text-end">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (trend of monthlyTrend(); track trend.month + trend.year) {
+                        <tr>
+                          <td>{{ trend.month }}/{{ trend.year }}</td>
+                          <td class="text-center">{{ formatNumber(trend.invoiceCount) }}</td>
+                          <td class="text-end">{{ formatCurrency(trend.totalIssued) }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    }
+  </div>
+</div>
