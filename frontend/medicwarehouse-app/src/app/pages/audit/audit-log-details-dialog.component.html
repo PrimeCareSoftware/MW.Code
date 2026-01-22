@@ -1,0 +1,278 @@
+<h2 mat-dialog-title>
+  <mat-icon>info</mat-icon>
+  Detalhes do Log de Auditoria
+</h2>
+
+<mat-dialog-content>
+  <mat-tab-group>
+    <!-- General Information Tab -->
+    <mat-tab label="Informações Gerais">
+      <div class="tab-content">
+        <div class="detail-section">
+          <h3>Informações da Ação</h3>
+          <dl class="detail-list">
+            <div class="detail-item">
+              <dt>
+                <mat-icon>schedule</mat-icon>
+                Data/Hora:
+              </dt>
+              <dd>{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>person</mat-icon>
+                Usuário:
+              </dt>
+              <dd>
+                <div class="user-info">
+                  <span class="user-name">{{ log.userName }}</span>
+                  <span class="user-email">{{ log.userEmail }}</span>
+                </div>
+              </dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>description</mat-icon>
+                Ação:
+              </dt>
+              <dd>
+                <mat-chip [style.background-color]="getActionColor(log.action)">
+                  {{ getActionText(log.action) }}
+                </mat-chip>
+                <div class="action-description" *ngIf="log.actionDescription">
+                  {{ log.actionDescription }}
+                </div>
+              </dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>check_circle</mat-icon>
+                Resultado:
+              </dt>
+              <dd>
+                <mat-icon [style.color]="getResultColor(log.result)">
+                  {{ getResultIcon(log.result) }}
+                </mat-icon>
+                <span [style.color]="getResultColor(log.result)">{{ log.result }}</span>
+              </dd>
+            </div>
+
+            <div class="detail-item" *ngIf="log.failureReason">
+              <dt>
+                <mat-icon color="warn">error</mat-icon>
+                Razão da Falha:
+              </dt>
+              <dd class="error-message">{{ log.failureReason }}</dd>
+            </div>
+
+            <div class="detail-item" *ngIf="log.statusCode">
+              <dt>
+                <mat-icon>code</mat-icon>
+                Status HTTP:
+              </dt>
+              <dd>{{ log.statusCode }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-section">
+          <h3>Entidade Afetada</h3>
+          <dl class="detail-list">
+            <div class="detail-item">
+              <dt>
+                <mat-icon>category</mat-icon>
+                Tipo:
+              </dt>
+              <dd>{{ log.entityType }}</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>fingerprint</mat-icon>
+                ID:
+              </dt>
+              <dd class="entity-id">{{ log.entityId }}</dd>
+            </div>
+
+            <div class="detail-item" *ngIf="log.entityDisplayName">
+              <dt>
+                <mat-icon>label</mat-icon>
+                Nome:
+              </dt>
+              <dd>{{ log.entityDisplayName }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-section">
+          <h3>Informações de Segurança</h3>
+          <dl class="detail-list">
+            <div class="detail-item">
+              <dt>
+                <mat-icon>computer</mat-icon>
+                Endereço IP:
+              </dt>
+              <dd>{{ log.ipAddress }}</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>devices</mat-icon>
+                User Agent:
+              </dt>
+              <dd class="user-agent">{{ log.userAgent }}</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>link</mat-icon>
+                URL:
+              </dt>
+              <dd class="request-path">{{ log.httpMethod }} {{ log.requestPath }}</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>priority_high</mat-icon>
+                Severidade:
+              </dt>
+              <dd>
+                <mat-chip [style.background-color]="getSeverityColor(log.severity)">
+                  {{ log.severity }}
+                </mat-chip>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-section">
+          <h3>Conformidade LGPD</h3>
+          <dl class="detail-list">
+            <div class="detail-item">
+              <dt>
+                <mat-icon>shield</mat-icon>
+                Categoria de Dados:
+              </dt>
+              <dd>
+                <mat-chip [style.background-color]="getDataCategoryColor(log.dataCategory)">
+                  {{ getDataCategoryLabel(log.dataCategory) }}
+                </mat-chip>
+              </dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>
+                <mat-icon>assignment</mat-icon>
+                Finalidade:
+              </dt>
+              <dd>{{ getPurposeLabel(log.purpose) }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Changes Tab -->
+    <mat-tab label="Alterações" [disabled]="!hasChanges">
+      <div class="tab-content">
+        <div class="detail-section" *ngIf="parsedChangedFields.length > 0">
+          <h3>Campos Alterados</h3>
+          <div class="changed-fields">
+            <mat-chip-set>
+              <mat-chip *ngFor="let field of parsedChangedFields" color="accent">
+                {{ field }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+
+        <mat-divider *ngIf="parsedChangedFields.length > 0"></mat-divider>
+
+        <div class="changes-container">
+          <!-- Old Values -->
+          <div class="values-section" *ngIf="log.oldValues">
+            <h3>
+              <mat-icon>history</mat-icon>
+              Valores Anteriores
+            </h3>
+            <div class="json-container">
+              <pre>{{ formatJson(oldValuesJson) }}</pre>
+            </div>
+          </div>
+
+          <!-- New Values -->
+          <div class="values-section" *ngIf="log.newValues">
+            <h3>
+              <mat-icon>update</mat-icon>
+              Valores Novos
+            </h3>
+            <div class="json-container">
+              <pre>{{ formatJson(newValuesJson) }}</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Field-by-Field Comparison -->
+        <div class="detail-section" *ngIf="oldValuesJson && newValuesJson && parsedChangedFields.length > 0">
+          <h3>Comparação Detalhada</h3>
+          <div class="comparison-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Campo</th>
+                  <th>Valor Anterior</th>
+                  <th>Valor Novo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let field of parsedChangedFields">
+                  <td class="field-name">{{ field }}</td>
+                  <td class="old-value">
+                    <code>{{ formatJson(getFieldValue(oldValuesJson, field)) }}</code>
+                  </td>
+                  <td class="new-value">
+                    <code>{{ formatJson(getFieldValue(newValuesJson, field)) }}</code>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- No Changes Message -->
+        <div class="empty-state" *ngIf="!hasChanges">
+          <mat-icon>info</mat-icon>
+          <p>Esta ação não resultou em alterações de dados</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Raw Data Tab -->
+    <mat-tab label="Dados Brutos">
+      <div class="tab-content">
+        <div class="detail-section">
+          <h3>Log Completo (JSON)</h3>
+          <div class="json-container raw-data">
+            <pre>{{ log | json }}</pre>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">
+    <mat-icon>close</mat-icon>
+    Fechar
+  </button>
+</mat-dialog-actions>
