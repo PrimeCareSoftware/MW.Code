@@ -2,9 +2,9 @@
 
 > **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema PrimeCare Software.
 
-> **Última Atualização:** 21 de Janeiro 2026  
+> **Última Atualização:** 22 de Janeiro 2026  
 > **Status:** Sistema em produção - 97% completo - Roadmap atualizado  
-> **Versão:** 3.3 - Com TISS/TUSS 95%, CFM 95%, e Receitas Digitais 100% (Janeiro 2026)
+> **Versão:** 3.3.1 - Com TISS/TUSS 97%, CFM 95%, Receitas Digitais 100%, e TISS Analytics (Janeiro 2026)
 
 ---
 
@@ -31,14 +31,15 @@ O PrimeCare Software possui uma **base técnica sólida** com:
 - ✅ **Receitas Médicas Digitais** (Janeiro 2026)
 - ✅ **Dashboard SNGPC** (Janeiro 2026)
 - ✅ **Integração TISS Fase 1 - Base Funcional** (Janeiro 2026) 🎉
-  - Backend: 8 entidades + 7 repositórios + 4 serviços + 3 controllers
-  - Frontend: 5 componentes + 2 serviços Angular (TissGuideForm, TissBatchForm, TissBatchDetail, AuthorizationRequestForm, PatientInsuranceForm)
+  - Backend: 8 entidades + 7 repositórios + 5 serviços + 4 controllers
+  - Frontend: 7 componentes + 3 serviços Angular (TissGuideForm, TissBatchForm, TissBatchDetail, AuthorizationRequestForm, PatientInsuranceForm, GlosasDashboard, PerformanceDashboard)
   - Validação XML TISS: TissXmlValidatorService com validação contra padrões ANS
   - Importação TUSS: TussImportService + TussImportController (4 endpoints)
+  - Analytics: TissAnalyticsService + TissAnalyticsController (8 endpoints) - PR #313
   - Testes: 212 testes de entidades + 15 testes de validação
   - Migrations aplicadas
   - Documentação completa: TISS_TUSS_IMPLEMENTATION.md
-  - 95% completo, sistema funcional em conformidade com ANS 🎉
+  - 97% completo, sistema funcional em conformidade com ANS + analytics 🎉
 - ✅ **Sistema de Notas Fiscais Eletrônicas (NF-e/NFS-e)** (Janeiro 2026) 🎉
   - Backend: ElectronicInvoice, InvoiceConfiguration entities
   - API: 16 endpoints (emissão, cancelamento, consulta, configuração)
@@ -69,14 +70,22 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - [x] Integração: Daily.co SDK para videochamadas
   - [x] Compliance: CFM 1821/2007 e CFM 2.314/2022
 - [x] **Portal do Paciente** - ✅ **100% completo - Janeiro 2026**
-- [x] **Integração TISS / Convênios** - ✅ **95% completo - Janeiro 2026** (sistema funcional em conformidade com ANS)
-  - [x] Backend: 8 entidades + 7 repositórios + 6 serviços + 4 controllers (100%)
-  - [x] Frontend: 9 componentes Angular completos (95%)
+- [x] **Integração TISS / Convênios** - ✅ **97% completo - Janeiro 2026** (sistema funcional em conformidade com ANS + analytics)
+  - [x] Backend: 8 entidades + 7 repositórios + 7 serviços + 5 controllers (100%)
+  - [x] Frontend: 11 componentes Angular completos (97%)
   - [x] Validação XML TISS 4.02.00 contra schemas ANS (100%)
   - [x] Importação de tabela TUSS oficial (CSV/Excel) (100%)
   - [x] Testes: 206 testes de domínio + 15 testes de validação (100%)
-  - [ ] Dashboards analíticos de glosas (0%) - Ver PLANO_IMPLEMENTACAO_MELHORIAS_TISS_NF.md
-  - [ ] Relatórios TISS avançados (0%) - Ver PLANO_IMPLEMENTACAO_MELHORIAS_TISS_NF.md
+  - [x] Dashboards analíticos de glosas (100%) - ✅ **Completo (PR #313)**
+    - Backend: TissAnalyticsService com 8 endpoints de analytics
+    - Frontend: GlosasDashboard e PerformanceDashboard components (Angular 20)
+    - DTOs: 8 analytics DTOs implementados
+    - Controller: TissAnalyticsController com REST endpoints
+  - [ ] Relatórios TISS avançados (40%) - Parcialmente implementado (PR #313)
+    - ✅ Analytics services implementados
+    - ✅ Dashboards de glosas e performance
+    - [ ] Exportação PDF pendente
+    - [ ] Relatórios customizáveis pendentes
   - [ ] Envio automático para operadoras (0%) - Opcional, baixa prioridade
   - 📄 Avaliação completa: docs/AVALIACAO_TISS_TUSS_NOTAS_FISCAIS.md
 - [x] **🇧🇷 Emissão de NF-e/NFS-e** - ✅ **100% completo - Janeiro 2026** 🎉
