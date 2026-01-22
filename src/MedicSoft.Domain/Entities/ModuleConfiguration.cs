@@ -73,6 +73,7 @@ namespace MedicSoft.Domain.Entities
         public const string InventoryManagement = "InventoryManagement";
         public const string UserManagement = "UserManagement";
         public const string WaitingQueue = "WaitingQueue";
+        public const string DoctorFieldsConfig = "DoctorFieldsConfig";
 
         public static string[] GetAllModules() => new[]
         {
@@ -87,7 +88,8 @@ namespace MedicSoft.Domain.Entities
             TissExport,
             InventoryManagement,
             UserManagement,
-            WaitingQueue
+            WaitingQueue,
+            DoctorFieldsConfig
         };
 
         public static bool IsModuleAvailableInPlan(string moduleName, SubscriptionPlan plan)

@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
-import { ClinicUserDto, CreateClinicUserRequest, UpdateClinicUserRequest } from '../../../models/clinic-admin.model';
+import { ClinicUserDto, CreateClinicUserRequest, UpdateClinicUserRequest, DoctorFieldsConfigDto } from '../../../models/clinic-admin.model';
 import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
@@ -16,6 +16,9 @@ export class UserManagementComponent implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
+  
+  // Doctor fields configuration
+  doctorFieldsConfig = signal<DoctorFieldsConfigDto>({ professionalIdRequired: false, specialtyRequired: false });
   
   // Dialogs
   showCreateDialog = signal<boolean>(false);
@@ -44,6 +47,7 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadDoctorFieldsConfig();
   }
 
   private initializeForms(): void {
@@ -53,13 +57,17 @@ export class UserManagementComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8)]],
       name: ['', Validators.required],
       phone: [''],
-      role: ['Doctor', Validators.required]
+      role: ['Doctor', Validators.required],
+      professionalId: [''],
+      specialty: ['']
     });
 
     this.editUserForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
-      phone: ['']
+      phone: [''],
+      professionalId: [''],
+      specialty: ['']
     });
 
     this.passwordForm = this.fb.group({
@@ -68,6 +76,11 @@ export class UserManagementComponent implements OnInit {
 
     this.roleForm = this.fb.group({
       newRole: ['', Validators.required]
+    });
+
+    // Subscribe to role changes to update validation
+    this.createUserForm.get('role')?.valueChanges.subscribe(() => {
+      this.updateDoctorFieldValidation();
     });
   }
 
@@ -86,6 +99,58 @@ export class UserManagementComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  loadDoctorFieldsConfig(): void {
+    this.clinicAdminService.getDoctorFieldsConfiguration().subscribe({
+      next: (config) => {
+        this.doctorFieldsConfig.set(config);
+        this.updateDoctorFieldValidation();
+      },
+      error: (error) => {
+        console.error('Error loading doctor fields configuration:', error);
+        // Show user-friendly error message
+        this.errorMessage.set('Aviso: Não foi possível carregar as configurações de campos para médicos. Usando configuração padrão (campos opcionais).');
+        // Use default configuration (both fields optional)
+        this.doctorFieldsConfig.set({ professionalIdRequired: false, specialtyRequired: false });
+      }
+    });
+  }
+
+  updateDoctorFieldValidation(): void {
+    const role = this.createUserForm.get('role')?.value;
+    const professionalIdControl = this.createUserForm.get('professionalId');
+    const specialtyControl = this.createUserForm.get('specialty');
+
+    if (role === 'Doctor') {
+      // Apply validation based on configuration
+      if (this.doctorFieldsConfig().professionalIdRequired) {
+        professionalIdControl?.setValidators([Validators.required]);
+      } else {
+        professionalIdControl?.clearValidators();
+      }
+
+      if (this.doctorFieldsConfig().specialtyRequired) {
+        specialtyControl?.setValidators([Validators.required]);
+      } else {
+        specialtyControl?.clearValidators();
+      }
+    } else {
+      // Clear validators for non-doctor roles
+      professionalIdControl?.clearValidators();
+      specialtyControl?.clearValidators();
+    }
+
+    professionalIdControl?.updateValueAndValidity();
+    specialtyControl?.updateValueAndValidity();
+  }
+
+  isDoctorRole(): boolean {
+    return this.createUserForm.get('role')?.value === 'Doctor';
+  }
+
+  isEditingDoctor(): boolean {
+    return this.selectedUser()?.role === 'Doctor';
   }
 
   // Create User
@@ -129,7 +194,9 @@ export class UserManagementComponent implements OnInit {
     this.editUserForm.patchValue({
       email: user.email,
       name: user.name,
-      phone: '' // Phone is not returned from backend, so keep empty
+      phone: '', // Phone is not returned from backend, so keep empty
+      professionalId: user.professionalId || '',
+      specialty: user.specialty || ''
     });
     this.showEditDialog.set(true);
   }

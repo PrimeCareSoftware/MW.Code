@@ -12,13 +12,18 @@ namespace MedicSoft.Test.Services
     {
         private readonly Mock<IUserRepository> _mockUserRepository;
         private readonly Mock<IPasswordHasher> _mockPasswordHasher;
+        private readonly Mock<IModuleConfigurationRepository> _mockModuleConfigRepository;
         private readonly IUserService _userService;
 
         public UserServiceTests()
         {
             _mockUserRepository = new Mock<IUserRepository>();
             _mockPasswordHasher = new Mock<IPasswordHasher>();
-            _userService = new UserService(_mockUserRepository.Object, _mockPasswordHasher.Object);
+            _mockModuleConfigRepository = new Mock<IModuleConfigurationRepository>();
+            _userService = new UserService(
+                _mockUserRepository.Object, 
+                _mockPasswordHasher.Object,
+                _mockModuleConfigRepository.Object);
         }
 
         [Fact]
@@ -254,6 +259,176 @@ namespace MedicSoft.Test.Services
             // Assert
             Assert.Equal(newRole, user.Role);
             _mockUserRepository.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task CreateUserAsync_Doctor_ShouldValidateProfessionalId_WhenRequired()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+            var configJson = "{\"ProfessionalIdRequired\":true,\"SpecialtyRequired\":false}";
+            
+            var moduleConfig = new ModuleConfiguration(
+                clinicId,
+                SystemModules.DoctorFieldsConfig,
+                tenantId,
+                true,
+                configJson
+            );
+
+            _mockUserRepository.Setup(r => r.GetUserByUsernameAsync(It.IsAny<string>(), tenantId))
+                .ReturnsAsync((User?)null);
+
+            _mockModuleConfigRepository.Setup(r => r.GetByClinicAndModuleAsync(clinicId, SystemModules.DoctorFieldsConfig, tenantId))
+                .ReturnsAsync(moduleConfig);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _userService.CreateUserAsync(
+                    "testdoctor",
+                    "doctor@test.com",
+                    "password123",
+                    "Dr. Test",
+                    "1234567890",
+                    UserRole.Doctor,
+                    tenantId,
+                    clinicId,
+                    null, // No professional ID provided
+                    "Cardiology"
+                )
+            );
+            
+            Assert.Equal("Professional ID (CRM) is required for doctors in this clinic", exception.Message);
+        }
+
+        [Fact]
+        public async Task CreateUserAsync_Doctor_ShouldValidateSpecialty_WhenRequired()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+            var configJson = "{\"ProfessionalIdRequired\":false,\"SpecialtyRequired\":true}";
+            
+            var moduleConfig = new ModuleConfiguration(
+                clinicId,
+                SystemModules.DoctorFieldsConfig,
+                tenantId,
+                true,
+                configJson
+            );
+
+            _mockUserRepository.Setup(r => r.GetUserByUsernameAsync(It.IsAny<string>(), tenantId))
+                .ReturnsAsync((User?)null);
+
+            _mockModuleConfigRepository.Setup(r => r.GetByClinicAndModuleAsync(clinicId, SystemModules.DoctorFieldsConfig, tenantId))
+                .ReturnsAsync(moduleConfig);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _userService.CreateUserAsync(
+                    "testdoctor",
+                    "doctor@test.com",
+                    "password123",
+                    "Dr. Test",
+                    "1234567890",
+                    UserRole.Doctor,
+                    tenantId,
+                    clinicId,
+                    "CRM-123456",
+                    null // No specialty provided
+                )
+            );
+            
+            Assert.Equal("Specialty is required for doctors in this clinic", exception.Message);
+        }
+
+        [Fact]
+        public async Task CreateUserAsync_Doctor_ShouldSucceed_WhenFieldsOptional()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+            var configJson = "{\"ProfessionalIdRequired\":false,\"SpecialtyRequired\":false}";
+            
+            var moduleConfig = new ModuleConfiguration(
+                clinicId,
+                SystemModules.DoctorFieldsConfig,
+                tenantId,
+                true,
+                configJson
+            );
+
+            _mockUserRepository.Setup(r => r.GetUserByUsernameAsync(It.IsAny<string>(), tenantId))
+                .ReturnsAsync((User?)null);
+
+            _mockModuleConfigRepository.Setup(r => r.GetByClinicAndModuleAsync(clinicId, SystemModules.DoctorFieldsConfig, tenantId))
+                .ReturnsAsync(moduleConfig);
+
+            _mockPasswordHasher.Setup(h => h.HashPassword(It.IsAny<string>()))
+                .Returns("hashed_password");
+
+            _mockUserRepository.Setup(r => r.AddAsync(It.IsAny<User>()))
+                .ReturnsAsync((User u) => u);
+
+            // Act - should not throw
+            var user = await _userService.CreateUserAsync(
+                "testdoctor",
+                "doctor@test.com",
+                "password123",
+                "Dr. Test",
+                "1234567890",
+                UserRole.Doctor,
+                tenantId,
+                clinicId,
+                null, // No professional ID
+                null  // No specialty
+            );
+
+            // Assert
+            Assert.NotNull(user);
+            Assert.Equal(UserRole.Doctor, user.Role);
+            _mockUserRepository.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task CreateUserAsync_NonDoctor_ShouldNotValidateDoctorFields()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+
+            _mockUserRepository.Setup(r => r.GetUserByUsernameAsync(It.IsAny<string>(), tenantId))
+                .ReturnsAsync((User?)null);
+
+            _mockPasswordHasher.Setup(h => h.HashPassword(It.IsAny<string>()))
+                .Returns("hashed_password");
+
+            _mockUserRepository.Setup(r => r.AddAsync(It.IsAny<User>()))
+                .ReturnsAsync((User u) => u);
+
+            // Act - should not throw even without doctor fields
+            var user = await _userService.CreateUserAsync(
+                "testnurse",
+                "nurse@test.com",
+                "password123",
+                "Nurse Test",
+                "1234567890",
+                UserRole.Nurse,
+                tenantId,
+                clinicId,
+                null,
+                null
+            );
+
+            // Assert
+            Assert.NotNull(user);
+            Assert.Equal(UserRole.Nurse, user.Role);
+            _mockUserRepository.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Once);
+            // Should not check module configuration for non-doctors
+            _mockModuleConfigRepository.Verify(
+                r => r.GetByClinicAndModuleAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), 
+                Times.Never);
         }
     }
 }

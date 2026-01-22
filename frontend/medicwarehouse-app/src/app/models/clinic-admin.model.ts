@@ -24,6 +24,8 @@ export interface ClinicUserDto {
   role: string;
   isActive: boolean;
   createdAt: string;
+  professionalId?: string;
+  specialty?: string;
 }
 
 export interface CreateClinicUserRequest {
@@ -33,6 +35,8 @@ export interface CreateClinicUserRequest {
   name: string;
   phone?: string;
   role: string;
+  professionalId?: string;
+  specialty?: string;
 }
 
 export interface UpdateClinicUserRequest {
@@ -40,6 +44,8 @@ export interface UpdateClinicUserRequest {
   name?: string;
   phone?: string;
   isActive?: boolean;
+  professionalId?: string;
+  specialty?: string;
 }
 
 export interface ChangeUserPasswordRequest {
@@ -110,4 +116,9 @@ export interface UpdatePublicDisplaySettingsRequest {
   showOnPublicSite: boolean;
   clinicType: string;
   whatsAppNumber?: string;
+}
+
+export interface DoctorFieldsConfigDto {
+  professionalIdRequired: boolean;
+  specialtyRequired: boolean;
 }

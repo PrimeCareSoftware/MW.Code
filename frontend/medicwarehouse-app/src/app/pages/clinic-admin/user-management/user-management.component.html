@@ -49,6 +49,7 @@
                 <th>Nome Completo</th>
                 <th>E-mail</th>
                 <th>Perfil</th>
+                <th>CRM/Especialidade</th>
                 <th>Status</th>
                 <th>Criado em</th>
                 <th>Ações</th>
@@ -71,6 +72,23 @@
                     <span class="profile-badge">
                       {{ getRoleText(user.role) }}
                     </span>
+                  </td>
+                  <td>
+                    @if (user.role === 'Doctor') {
+                      <div class="doctor-info">
+                        @if (user.professionalId) {
+                          <div class="professional-id">CRM: {{ user.professionalId }}</div>
+                        }
+                        @if (user.specialty) {
+                          <div class="specialty">{{ user.specialty }}</div>
+                        }
+                        @if (!user.professionalId && !user.specialty) {
+                          <span>-</span>
+                        }
+                      </div>
+                    } @else {
+                      <span>-</span>
+                    }
                   </td>
                   <td>
                     <span [class]="'status-badge ' + getStatusBadgeClass(user.isActive)">
@@ -227,6 +245,37 @@
                 }
               </select>
             </div>
+
+            <!-- Doctor-specific fields -->
+            @if (isDoctorRole()) {
+              <div class="form-group">
+                <label for="professionalId">CRM/Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <input 
+                  type="text" 
+                  id="professionalId" 
+                  formControlName="professionalId" 
+                  class="form-control"
+                  placeholder="Ex: CRM-123456"
+                />
+                @if (createUserForm.get('professionalId')?.invalid && createUserForm.get('professionalId')?.touched) {
+                  <span class="error-text">CRM é obrigatório para médicos</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="specialty">Especialidade {{ doctorFieldsConfig().specialtyRequired ? '*' : '' }}</label>
+                <input 
+                  type="text" 
+                  id="specialty" 
+                  formControlName="specialty" 
+                  class="form-control"
+                  placeholder="Ex: Clínico Geral"
+                />
+                @if (createUserForm.get('specialty')?.invalid && createUserForm.get('specialty')?.touched) {
+                  <span class="error-text">Especialidade é obrigatória para médicos</span>
+                }
+              </div>
+            }
           </div>
 
           <div class="modal-footer">
@@ -291,6 +340,31 @@
                 class="form-control"
               />
             </div>
+
+            <!-- Doctor-specific fields (only shown if user is a doctor) -->
+            @if (isEditingDoctor()) {
+              <div class="form-group">
+                <label for="edit-professionalId">CRM/Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <input 
+                  type="text" 
+                  id="edit-professionalId" 
+                  formControlName="professionalId" 
+                  class="form-control"
+                  placeholder="Ex: CRM-123456"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="edit-specialty">Especialidade {{ doctorFieldsConfig().specialtyRequired ? '*' : '' }}</label>
+                <input 
+                  type="text" 
+                  id="edit-specialty" 
+                  formControlName="specialty" 
+                  class="form-control"
+                  placeholder="Ex: Clínico Geral"
+                />
+              </div>
+            }
           </div>
 
           <div class="modal-footer">
