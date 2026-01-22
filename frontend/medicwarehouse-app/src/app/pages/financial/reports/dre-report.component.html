@@ -117,19 +117,19 @@
         <div class="report-table">
           <div class="report-row">
             <span class="row-label">Lucro Operacional</span>
-            <span class="row-value" [class.positive]="report()!.operationalProfit > 0" [class.negative]="report()!.operationalProfit < 0">
+            <span class="row-value" [ngClass]="getProfitClass(report()!.operationalProfit)">
               {{ formatCurrency(report()!.operationalProfit) }}
             </span>
           </div>
           <div class="report-row highlight">
             <span class="row-label bold">Lucro Líquido</span>
-            <span class="row-value bold" [class.positive]="report()!.netProfit > 0" [class.negative]="report()!.netProfit < 0">
+            <span class="row-value bold" [ngClass]="getProfitClass(report()!.netProfit)">
               {{ formatCurrency(report()!.netProfit) }}
             </span>
           </div>
           <div class="report-row">
             <span class="row-label bold">Margem de Lucro</span>
-            <span class="row-value bold" [class.positive]="report()!.profitMargin > 0" [class.negative]="report()!.profitMargin < 0">
+            <span class="row-value bold" [ngClass]="getProfitClass(report()!.profitMargin)">
               {{ formatPercent(report()!.profitMargin) }}
             </span>
           </div>

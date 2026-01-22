@@ -77,13 +77,13 @@
         </div>
         <div class="summary-card">
           <span class="card-label">Lucro Total</span>
-          <span class="card-value" [class.positive]="analysis()!.totalProfit > 0" [class.negative]="analysis()!.totalProfit < 0">
+          <span class="card-value" [ngClass]="getProfitClass(analysis()!.totalProfit)">
             {{ formatCurrency(analysis()!.totalProfit) }}
           </span>
         </div>
         <div class="summary-card highlight">
           <span class="card-label">Margem de Lucro</span>
-          <span class="card-value" [class.positive]="analysis()!.profitMargin > 0" [class.negative]="analysis()!.profitMargin < 0">
+          <span class="card-value" [ngClass]="getProfitClass(analysis()!.profitMargin)">
             {{ formatPercent(analysis()!.profitMargin) }}
           </span>
         </div>

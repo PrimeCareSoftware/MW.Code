@@ -105,4 +105,8 @@ export class ProfitabilityAnalysisComponent implements OnInit {
     // TODO: Implement Excel export
     alert('Exportação para Excel será implementada em breve');
   }
+
+  getProfitClass(value: number): string {
+    return value > 0 ? 'positive' : value < 0 ? 'negative' : '';
+  }
 }

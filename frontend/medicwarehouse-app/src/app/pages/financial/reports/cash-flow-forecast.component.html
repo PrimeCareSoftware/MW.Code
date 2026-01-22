@@ -60,7 +60,7 @@
       <div class="summary-grid">
         <div class="summary-card">
           <span class="card-label">Saldo Atual</span>
-          <span class="card-value" [class.positive]="forecast()!.currentBalance > 0" [class.negative]="forecast()!.currentBalance < 0">
+          <span class="card-value" [ngClass]="getProfitClass(forecast()!.currentBalance)">
             {{ formatCurrency(forecast()!.currentBalance) }}
           </span>
         </div>
@@ -74,7 +74,7 @@
         </div>
         <div class="summary-card balance">
           <span class="card-label">Saldo Projetado</span>
-          <span class="card-value" [class.positive]="forecast()!.projectedBalance > 0" [class.negative]="forecast()!.projectedBalance < 0">
+          <span class="card-value" [ngClass]="getProfitClass(forecast()!.projectedBalance)">
             {{ formatCurrency(forecast()!.projectedBalance) }}
           </span>
         </div>
@@ -100,10 +100,10 @@
                   <td>{{ getMonthName(month.month) }}/{{ month.year }}</td>
                   <td class="positive">{{ formatCurrency(month.expectedIncome) }}</td>
                   <td class="negative">{{ formatCurrency(month.expectedExpenses) }}</td>
-                  <td [class.positive]="month.expectedBalance > 0" [class.negative]="month.expectedBalance < 0">
+                  <td [ngClass]="getProfitClass(month.expectedBalance)">
                     {{ formatCurrency(month.expectedBalance) }}
                   </td>
-                  <td [class.positive]="month.cumulativeBalance > 0" [class.negative]="month.cumulativeBalance < 0">
+                  <td [ngClass]="getProfitClass(month.cumulativeBalance)">
                     <strong>{{ formatCurrency(month.cumulativeBalance) }}</strong>
                   </td>
                 </tr>
