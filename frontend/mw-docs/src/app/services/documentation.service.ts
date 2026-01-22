@@ -368,6 +368,84 @@ export class DocumentationService {
       ]
     },
     {
+      name: '🧪 Guias de Configuração e Testes',
+      icon: '🧪',
+      docs: [
+        {
+          id: 'testes-config-index',
+          title: 'Índice Geral de Testes',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/README.md',
+          description: 'Guia completo de configuração e testes do PrimeCare Software - Centro de testes com 200+ cenários',
+          size: '11KB / 315 linhas',
+          idealFor: 'Testadores, QA, desenvolvedores, administradores'
+        },
+        {
+          id: 'cadastro-paciente-test',
+          title: '01 - Cadastro de Paciente',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/01-CADASTRO-PACIENTE.md',
+          description: 'Guia completo para testar cadastro de pacientes: validações, convênios, busca e filtros - 25+ cenários',
+          size: '14KB / 450 linhas',
+          idealFor: 'Testadores, QA, secretárias, administradores'
+        },
+        {
+          id: 'atendimento-consulta-test',
+          title: '02 - Atendimento e Consulta',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/02-ATENDIMENTO-CONSULTA.md',
+          description: 'Testes completos de agendamento, sala de espera, atendimento, prontuário e prescrições - 30+ cenários',
+          size: '16KB / 520 linhas',
+          idealFor: 'Testadores, QA, médicos, secretárias'
+        },
+        {
+          id: 'modulo-financeiro-test',
+          title: '03 - Módulo Financeiro',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/03-MODULO-FINANCEIRO.md',
+          description: 'Testes de contas a receber/pagar, fluxo de caixa, fornecedores e relatórios - 25+ cenários',
+          size: '18KB / 580 linhas',
+          idealFor: 'Testadores, QA, gestores financeiros, contadores'
+        },
+        {
+          id: 'tiss-padrao-test',
+          title: '04 - TISS Padrão ANS',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/04-TISS-PADRAO.md',
+          description: 'Configuração e testes TISS: geração de guias, lotes, processamento e glosas - 20+ cenários',
+          size: '17KB / 540 linhas',
+          idealFor: 'Testadores, QA, faturistas, administradores'
+        },
+        {
+          id: 'tuss-tabela-test',
+          title: '05 - TUSS Tabela de Procedimentos',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/05-TUSS-TABELA.md',
+          description: 'Importação e gestão da tabela TUSS: busca, precificação e integração - 18+ cenários',
+          size: '15KB / 480 linhas',
+          idealFor: 'Testadores, QA, gestores, administradores'
+        },
+        {
+          id: 'telemedicina-test',
+          title: '06 - Telemedicina',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/06-TELEMEDICINA.md',
+          description: 'Testes completos de telemedicina: videoconsulta, gravação, prescrição digital - 22+ cenários',
+          size: '17KB / 550 linhas',
+          idealFor: 'Testadores, QA, médicos, administradores'
+        },
+        {
+          id: 'cenarios-completos-test',
+          title: '07 - Cenários Completos',
+          category: 'Testes e Configuração',
+          path: 'docs/testes-configuracao/07-CENARIOS-COMPLETOS.md',
+          description: 'Consolidação de TODOS os cenários de teste: fluxos completos, integrações, segurança - 200+ cenários',
+          size: '14KB / 450 linhas',
+          idealFor: 'Testadores, QA, gerentes de projeto, arquitetos'
+        }
+      ]
+    },
+    {
       name: '📚 Índice e Referências',
       icon: '📚',
       docs: [
