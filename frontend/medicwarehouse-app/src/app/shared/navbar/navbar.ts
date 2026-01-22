@@ -18,13 +18,22 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   private boundSaveScrollPosition: (() => void) | null = null;
   
   constructor(public authService: Auth, private elementRef: ElementRef) {
-    // Check localStorage for sidebar state
-    const savedState = localStorage.getItem('sidebarOpen');
-    this.sidebarOpen = savedState !== null ? savedState === 'true' : true;
+    // Check localStorage for sidebar state (only in browser environment)
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const savedState = localStorage.getItem('sidebarOpen');
+        this.sidebarOpen = savedState !== null ? savedState === 'true' : true;
+      } catch (error) {
+        console.warn('Could not access localStorage:', error);
+        this.sidebarOpen = true;
+      }
+    }
   }
 
   ngOnInit(): void {
-    document.body.classList.add('has-navbar', 'has-sidebar');
+    if (typeof document !== 'undefined') {
+      document.body.classList.add('has-navbar', 'has-sidebar');
+    }
     this.updateBodyClass();
   }
 
@@ -45,11 +54,13 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    document.body.classList.remove('sidebar-open', 'has-navbar', 'has-sidebar');
-    
-    // Remove scroll event listener
-    if (this.sidebarElement && this.boundSaveScrollPosition) {
-      this.sidebarElement.removeEventListener('scroll', this.boundSaveScrollPosition);
+    if (typeof document !== 'undefined') {
+      document.body.classList.remove('sidebar-open', 'has-navbar', 'has-sidebar');
+      
+      // Remove scroll event listener
+      if (this.sidebarElement && this.boundSaveScrollPosition) {
+        this.sidebarElement.removeEventListener('scroll', this.boundSaveScrollPosition);
+      }
     }
   }
 
@@ -82,15 +93,23 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   
   toggleSidebar(): void {
     this.sidebarOpen = !this.sidebarOpen;
-    localStorage.setItem('sidebarOpen', this.sidebarOpen.toString());
+    if (typeof localStorage !== 'undefined') {
+      try {
+        localStorage.setItem('sidebarOpen', this.sidebarOpen.toString());
+      } catch (error) {
+        console.warn('Could not save to localStorage:', error);
+      }
+    }
     this.updateBodyClass();
   }
 
   updateBodyClass(): void {
-    if (this.sidebarOpen) {
-      document.body.classList.add('sidebar-open');
-    } else {
-      document.body.classList.remove('sidebar-open');
+    if (typeof document !== 'undefined') {
+      if (this.sidebarOpen) {
+        document.body.classList.add('sidebar-open');
+      } else {
+        document.body.classList.remove('sidebar-open');
+      }
     }
   }
   
@@ -99,9 +118,15 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   }
   
   closeSidebar(): void {
-    if (window.innerWidth < 1024) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       this.sidebarOpen = false;
-      localStorage.setItem('sidebarOpen', 'false');
+      if (typeof localStorage !== 'undefined') {
+        try {
+          localStorage.setItem('sidebarOpen', 'false');
+        } catch (error) {
+          console.warn('Could not save to localStorage:', error);
+        }
+      }
       this.updateBodyClass();
     }
   }
@@ -118,12 +143,14 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.user-dropdown')) {
-      this.dropdownOpen = false;
-    }
-    if (!target.closest('.admin-dropdown')) {
-      this.adminDropdownOpen = false;
+    if (typeof document !== 'undefined' && event?.target) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.user-dropdown')) {
+        this.dropdownOpen = false;
+      }
+      if (!target.closest('.admin-dropdown')) {
+        this.adminDropdownOpen = false;
+      }
     }
   }
 
