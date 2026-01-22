@@ -1,0 +1,139 @@
+<app-navbar></app-navbar>
+
+<div class="tiss-config-container">
+  <div class="page-header">
+    <h1>Configurações TISS/TUSS</h1>
+    <p>Configure as funcionalidades TISS (Troca de Informações em Saúde Suplementar) e TUSS (Terminologia Unificada da Saúde Suplementar)</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando configurações...</p>
+    </div>
+  } @else {
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <form [formGroup]="configForm" (ngSubmit)="onSubmit()" class="config-form">
+      <div class="form-card">
+        <h3>Configurações Gerais</h3>
+        
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              formControlName="tissEnabled"
+              (change)="onTissEnabledChange($event)"
+            />
+            <span>Habilitar módulo TISS</span>
+          </label>
+          <p class="help-text">Ative para utilizar as funcionalidades de geração de guias TISS e envio para operadoras de saúde</p>
+        </div>
+
+        @if (configForm.get('tissEnabled')?.value) {
+          <div class="form-group">
+            <label for="tissProviderCode">Código do Prestador TISS</label>
+            <input 
+              type="text" 
+              id="tissProviderCode" 
+              formControlName="tissProviderCode"
+              placeholder="Ex: 123456"
+              class="form-control"
+            />
+            <p class="help-text">Código de identificação do prestador junto às operadoras de saúde</p>
+          </div>
+
+          <div class="form-group">
+            <label for="tissProviderName">Nome do Prestador</label>
+            <input 
+              type="text" 
+              id="tissProviderName" 
+              formControlName="tissProviderName"
+              placeholder="Nome da clínica para guias TISS"
+              class="form-control"
+            />
+          </div>
+        }
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              formControlName="tussEnabled"
+              [disabled]="!configForm.get('tissEnabled')?.value"
+            />
+            <span>Habilitar tabela TUSS</span>
+          </label>
+          <p class="help-text">Ative para utilizar a Terminologia Unificada da Saúde Suplementar para procedimentos</p>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h3>Configurações de Lotes</h3>
+        
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              formControlName="autoGenerateBatches"
+              [disabled]="!configForm.get('tissEnabled')?.value"
+            />
+            <span>Gerar lotes automaticamente</span>
+          </label>
+          <p class="help-text">Gera automaticamente lotes de guias no dia de competência configurado</p>
+        </div>
+
+        @if (configForm.get('autoGenerateBatches')?.value) {
+          <div class="form-group">
+            <label for="batchCompetenceDay">Dia de competência do lote</label>
+            <input 
+              type="number" 
+              id="batchCompetenceDay" 
+              formControlName="batchCompetenceDay"
+              min="1"
+              max="28"
+              class="form-control"
+            />
+            <p class="help-text">Dia do mês em que os lotes serão gerados automaticamente (1-28)</p>
+          </div>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="configForm.invalid || isSaving()"
+        >
+          @if (isSaving()) {
+            <span class="spinner"></span>
+            <span>Salvando...</span>
+          } @else {
+            <span>Salvar Configurações</span>
+          }
+        </button>
+      </div>
+    </form>
+
+    <div class="info-card">
+      <h3>Sobre TISS/TUSS</h3>
+      <div class="info-content">
+        <p><strong>TISS (Troca de Informações em Saúde Suplementar)</strong></p>
+        <p>Padrão obrigatório para troca de informações entre prestadores de serviços de saúde e operadoras de planos de saúde, definido pela ANS (Agência Nacional de Saúde Suplementar).</p>
+        
+        <p><strong>TUSS (Terminologia Unificada da Saúde Suplementar)</strong></p>
+        <p>Terminologia padronizada para identificação de procedimentos e eventos em saúde suplementar no Brasil.</p>
+      </div>
+    </div>
+  }
+</div>

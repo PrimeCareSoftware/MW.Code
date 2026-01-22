@@ -24,6 +24,10 @@ export const CLINIC_ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./subscription/subscription-info.component').then(m => m.SubscriptionInfoComponent)
       },
       {
+        path: 'tiss-config',
+        loadComponent: () => import('./tiss-config/tiss-config.component').then(m => m.TissConfigComponent)
+      },
+      {
         path: '',
         redirectTo: 'info',
         pathMatch: 'full'
