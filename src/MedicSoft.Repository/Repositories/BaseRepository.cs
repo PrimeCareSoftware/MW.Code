@@ -74,7 +74,14 @@ namespace MedicSoft.Repository.Repositories
 
         public virtual async Task UpdateAsync(T entity)
         {
-            _dbSet.Update(entity);
+            var entry = _context.Entry(entity);
+            
+            // If entity is not tracked, attach and mark as modified
+            if (entry.State == EntityState.Detached)
+            {
+                _dbSet.Update(entity);
+            }
+            
             await _context.SaveChangesAsync();
         }
 
