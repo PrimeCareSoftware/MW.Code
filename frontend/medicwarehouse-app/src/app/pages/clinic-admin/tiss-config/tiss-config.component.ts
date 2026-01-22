@@ -19,6 +19,11 @@ interface TissConfigDto {
   styleUrl: './tiss-config.component.scss'
 })
 export class TissConfigComponent implements OnInit {
+  private readonly SUCCESS_MESSAGE_TIMEOUT = 5000;
+  private readonly STORAGE_KEY = 'tissConfig';
+  readonly MIN_COMPETENCE_DAY = 1;
+  readonly MAX_COMPETENCE_DAY = 28;
+
   configForm: FormGroup;
   config = signal<TissConfigDto | null>(null);
   isLoading = signal<boolean>(false);
@@ -33,7 +38,7 @@ export class TissConfigComponent implements OnInit {
       tissProviderName: [''],
       tussEnabled: [false],
       autoGenerateBatches: [false],
-      batchCompetenceDay: [1]
+      batchCompetenceDay: [this.MIN_COMPETENCE_DAY]
     });
   }
 
@@ -47,11 +52,10 @@ export class TissConfigComponent implements OnInit {
 
     // TODO: Replace with actual service call when backend is ready
     // For now, use mock data from localStorage
-    const savedConfig = localStorage.getItem('tissConfig');
+    const savedConfig = this.getStoredConfig();
     if (savedConfig) {
-      const data = JSON.parse(savedConfig);
-      this.config.set(data);
-      this.configForm.patchValue(data);
+      this.config.set(savedConfig);
+      this.configForm.patchValue(savedConfig);
     } else {
       // Default configuration
       const defaultConfig: TissConfigDto = {
@@ -60,7 +64,7 @@ export class TissConfigComponent implements OnInit {
         tissProviderName: '',
         tussEnabled: false,
         autoGenerateBatches: false,
-        batchCompetenceDay: 1
+        batchCompetenceDay: this.MIN_COMPETENCE_DAY
       };
       this.config.set(defaultConfig);
     }
@@ -76,11 +80,11 @@ export class TissConfigComponent implements OnInit {
       // TODO: Replace with actual service call when backend is ready
       // For now, save to localStorage
       const configData = this.configForm.value;
-      localStorage.setItem('tissConfig', JSON.stringify(configData));
+      this.saveConfig(configData);
       this.config.set(configData);
       this.successMessage.set('Configurações TISS/TUSS atualizadas com sucesso!');
       this.isSaving.set(false);
-      setTimeout(() => this.successMessage.set(''), 5000);
+      setTimeout(() => this.successMessage.set(''), this.SUCCESS_MESSAGE_TIMEOUT);
     }
   }
 
@@ -93,5 +97,14 @@ export class TissConfigComponent implements OnInit {
         autoGenerateBatches: false
       });
     }
+  }
+
+  private getStoredConfig(): TissConfigDto | null {
+    const savedConfig = localStorage.getItem(this.STORAGE_KEY);
+    return savedConfig ? JSON.parse(savedConfig) : null;
+  }
+
+  private saveConfig(config: TissConfigDto): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(config));
   }
 }

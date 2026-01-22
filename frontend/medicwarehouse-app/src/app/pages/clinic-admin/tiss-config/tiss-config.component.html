@@ -100,11 +100,11 @@
               type="number" 
               id="batchCompetenceDay" 
               formControlName="batchCompetenceDay"
-              min="1"
-              max="28"
+              [min]="MIN_COMPETENCE_DAY"
+              [max]="MAX_COMPETENCE_DAY"
               class="form-control"
             />
-            <p class="help-text">Dia do mês em que os lotes serão gerados automaticamente (1-28)</p>
+            <p class="help-text">Dia do mês em que os lotes serão gerados automaticamente ({{ MIN_COMPETENCE_DAY }}-{{ MAX_COMPETENCE_DAY }})</p>
           </div>
         }
       </div>
