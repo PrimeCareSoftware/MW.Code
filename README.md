@@ -246,6 +246,19 @@ All frontend projects are configured with unique ports to allow running them sim
 - [`SEEDER_GUIDE.md`](docs/SEEDER_GUIDE.md) - Guia completo dos seeders
 - [`SYSTEM_MAPPING.md`](docs/SYSTEM_MAPPING.md) - Mapeamento completo do sistema
 
+### 🧪 Guias de Configuração e Testes (NOVO! - Janeiro 2026)
+**Documentação completa para testar TODAS as funcionalidades do sistema!**
+- 📖 **[Índice Geral de Testes](docs/testes-configuracao/README.md)** - ⭐ **Centro de Testes** - Navegação completa
+- 🏥 **[Cadastro de Paciente](docs/testes-configuracao/01-CADASTRO-PACIENTE.md)** - 25+ cenários de teste
+- 📅 **[Atendimento e Consulta](docs/testes-configuracao/02-ATENDIMENTO-CONSULTA.md)** - 30+ cenários de teste
+- 💰 **[Módulo Financeiro](docs/testes-configuracao/03-MODULO-FINANCEIRO.md)** - 25+ cenários de teste
+- 🏥 **[TISS - Padrão ANS](docs/testes-configuracao/04-TISS-PADRAO.md)** - 20+ cenários de teste
+- 📋 **[TUSS - Tabela de Procedimentos](docs/testes-configuracao/05-TUSS-TABELA.md)** - 18+ cenários de teste
+- 🎥 **[Telemedicina](docs/testes-configuracao/06-TELEMEDICINA.md)** - 22+ cenários (CFM 1821/2018)
+- ✅ **[Cenários Completos](docs/testes-configuracao/07-CENARIOS-COMPLETOS.md)** - 200+ cenários consolidados
+
+**📊 Total**: 200+ cenários de teste com configuração passo a passo, exemplos de API, troubleshooting e checklists de validação.
+
 **🎯 Consolidação Janeiro 2026**: Removidos 137 arquivos duplicados/desnecessários. Toda documentação agora em `/docs`.
 
 ## 🏗️ Arquitetura
