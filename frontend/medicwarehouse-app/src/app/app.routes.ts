@@ -361,6 +361,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'financial/fiscal-dashboard', 
+    loadComponent: () => import('./pages/financial/dashboards/fiscal-dashboard').then(m => m.FiscalDashboard),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'financial/closures/:id', 
     loadComponent: () => import('./pages/financial/financial-closures/closure-form.component').then(m => m.ClosureFormComponent),
     canActivate: [authGuard]
