@@ -102,7 +102,8 @@ export const routes: Routes = [
   { 
     path: 'appointments', 
     redirectTo: '/appointments/calendar', 
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [authGuard]
   },
   { 
     path: 'appointments/list', 
