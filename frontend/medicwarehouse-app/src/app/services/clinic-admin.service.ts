@@ -12,7 +12,9 @@ import {
   ChangeUserRoleRequest,
   SubscriptionDto,
   SubscriptionDetailsDto,
-  MyClinicDto
+  MyClinicDto,
+  PublicDisplaySettingsDto,
+  UpdatePublicDisplaySettingsRequest
 } from '../models/clinic-admin.model';
 
 @Injectable({
@@ -77,5 +79,14 @@ export class ClinicAdminService {
   // My Clinics
   getMyClinics(): Observable<MyClinicDto[]> {
     return this.http.get<MyClinicDto[]>(`${this.apiUrl}/my-clinics`);
+  }
+
+  // Public Display Settings
+  getPublicDisplaySettings(): Observable<PublicDisplaySettingsDto> {
+    return this.http.get<PublicDisplaySettingsDto>(`${this.apiUrl}/public-display-settings`);
+  }
+
+  updatePublicDisplaySettings(request: UpdatePublicDisplaySettingsRequest): Observable<any> {
+    return this.http.put(`${this.apiUrl}/public-display-settings`, request);
   }
 }

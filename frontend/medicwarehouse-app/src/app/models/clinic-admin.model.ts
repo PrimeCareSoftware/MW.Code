@@ -99,3 +99,15 @@ export interface MyClinicDto {
   hasActiveSubscription: boolean;
   subscriptionStatus?: string;
 }
+
+export interface PublicDisplaySettingsDto {
+  showOnPublicSite: boolean;
+  clinicType: string;
+  whatsAppNumber?: string;
+}
+
+export interface UpdatePublicDisplaySettingsRequest {
+  showOnPublicSite: boolean;
+  clinicType: string;
+  whatsAppNumber?: string;
+}
