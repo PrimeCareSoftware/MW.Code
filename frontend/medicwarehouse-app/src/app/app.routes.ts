@@ -351,6 +351,23 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
+  // Financial Reports routes
+  { 
+    path: 'financial/reports/dre', 
+    loadComponent: () => import('./pages/financial/reports/dre-report.component').then(m => m.DREReportComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/reports/cash-flow-forecast', 
+    loadComponent: () => import('./pages/financial/reports/cash-flow-forecast.component').then(m => m.CashFlowForecastComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'financial/reports/profitability', 
+    loadComponent: () => import('./pages/financial/reports/profitability-analysis.component').then(m => m.ProfitabilityAnalysisComponent),
+    canActivate: [authGuard]
+  },
+  
   // Telemedicine routes
   { 
     path: 'telemedicine', 

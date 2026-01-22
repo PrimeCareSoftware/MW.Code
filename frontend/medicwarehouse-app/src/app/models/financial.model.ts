@@ -348,3 +348,115 @@ export interface RecordClosurePayment {
   closureId: string;
   amount: number;
 }
+
+// Financial Reports Models (PR 309 implementation)
+
+// DRE - Demonstrativo de Resultados do Exercício (Income Statement)
+export interface DREReport {
+  periodStart: Date;
+  periodEnd: Date;
+  grossRevenue: number;
+  deductions: number;
+  netRevenue: number;
+  operationalCosts: number;
+  administrativeExpenses: number;
+  salesExpenses: number;
+  financialExpenses: number;
+  totalExpenses: number;
+  operationalProfit: number;
+  netProfit: number;
+  profitMargin: number;
+  revenueDetails: RevenueDetail[];
+  expenseDetails: ExpenseDetail[];
+}
+
+export interface RevenueDetail {
+  category: string;
+  amount: number;
+  percentage: number;
+}
+
+export interface ExpenseDetail {
+  category: string;
+  amount: number;
+  percentage: number;
+}
+
+// Cash Flow Forecast
+export interface CashFlowForecast {
+  startDate: Date;
+  endDate: Date;
+  currentBalance: number;
+  projectedIncome: number;
+  projectedExpenses: number;
+  projectedBalance: number;
+  monthlyForecast: MonthlyForecast[];
+  pendingReceivables: ReceivableForecast[];
+  pendingPayables: PayableForecast[];
+}
+
+export interface MonthlyForecast {
+  year: number;
+  month: number;
+  expectedIncome: number;
+  expectedExpenses: number;
+  expectedBalance: number;
+  cumulativeBalance: number;
+}
+
+export interface ReceivableForecast {
+  id: string;
+  documentNumber: string;
+  dueDate: Date;
+  amount: number;
+  status: string;
+  patientName: string;
+}
+
+export interface PayableForecast {
+  id: string;
+  documentNumber: string;
+  dueDate: Date;
+  amount: number;
+  category: string;
+  supplierName?: string;
+}
+
+// Profitability Analysis
+export interface ProfitabilityAnalysis {
+  periodStart: Date;
+  periodEnd: Date;
+  totalRevenue: number;
+  totalCosts: number;
+  totalProfit: number;
+  profitMargin: number;
+  byProcedure: ProfitabilityByProcedure[];
+  byDoctor: ProfitabilityByDoctor[];
+  byInsurance: ProfitabilityByInsurance[];
+}
+
+export interface ProfitabilityByProcedure {
+  procedureName: string;
+  count: number;
+  revenue: number;
+  averageValue: number;
+  percentage: number;
+}
+
+export interface ProfitabilityByDoctor {
+  doctorId: string;
+  doctorName: string;
+  appointmentsCount: number;
+  revenue: number;
+  averageAppointmentValue: number;
+  percentage: number;
+}
+
+export interface ProfitabilityByInsurance {
+  insuranceId?: string;
+  insuranceName?: string;
+  appointmentsCount: number;
+  revenue: number;
+  averageValue: number;
+  percentage: number;
+}
