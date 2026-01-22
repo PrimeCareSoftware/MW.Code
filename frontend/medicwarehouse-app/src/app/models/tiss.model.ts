@@ -260,3 +260,83 @@ export interface UpdateTussProcedure {
   description?: string;
   isActive: boolean;
 }
+
+// Analytics DTOs
+export interface GlosasSummary {
+  totalBilled: number;
+  totalApproved: number;
+  totalGlosed: number;
+  glosaPercentage: number;
+  totalBatches: number;
+  totalGuides: number;
+  glosedGuides: number;
+}
+
+export interface GlosasByOperator {
+  operatorId: string;
+  operatorName: string;
+  totalBilled: number;
+  totalGlosed: number;
+  glosaPercentage: number;
+  totalGuides: number;
+  glosedGuides: number;
+}
+
+export interface GlosasTrend {
+  year: number;
+  month: number;
+  monthName: string;
+  totalBilled: number;
+  totalGlosed: number;
+  glosaPercentage: number;
+  totalGuides: number;
+}
+
+export interface ProcedureGlosas {
+  procedureId: string;
+  procedureCode: string;
+  procedureName: string;
+  totalBilled: number;
+  totalGlosed: number;
+  glosaPercentage: number;
+  totalOccurrences: number;
+  glosedOccurrences: number;
+}
+
+export interface AuthorizationRate {
+  operatorId: string;
+  operatorName: string;
+  totalRequests: number;
+  approvedRequests: number;
+  rejectedRequests: number;
+  pendingRequests: number;
+  approvalRate: number;
+}
+
+export interface ApprovalTime {
+  operatorId: string;
+  operatorName: string;
+  averageApprovalDays: number;
+  totalProcessed: number;
+  minApprovalDays: number;
+  maxApprovalDays: number;
+}
+
+export interface MonthlyPerformance {
+  year: number;
+  month: number;
+  monthName: string;
+  totalBilled: number;
+  totalApproved: number;
+  glosaPercentage: number;
+  averageApprovalDays: number;
+  totalGuides: number;
+}
+
+export interface GlosaAlert {
+  alertType: string;
+  message: string;
+  severity: 'high' | 'medium' | 'low';
+  value: number;
+  threshold: number;
+}

@@ -1,0 +1,280 @@
+<div class="dashboard-container">
+  <app-navbar></app-navbar>
+  
+  <div class="content">
+    <div class="header-section">
+      <h1>Dashboard de Glosas TISS</h1>
+      <button class="btn btn-primary" (click)="exportToPDF()">
+        <i class="bi bi-file-pdf"></i> Exportar PDF
+      </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="startDate" class="form-label">Data Inicial</label>
+            <input 
+              type="date" 
+              id="startDate"
+              class="form-control" 
+              [(ngModel)]="startDate"
+              (change)="onDateRangeChange()"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="endDate" class="form-label">Data Final</label>
+            <input 
+              type="date" 
+              id="endDate"
+              class="form-control" 
+              [(ngModel)]="endDate"
+              (change)="onDateRangeChange()"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="trendMonths" class="form-label">Meses de Tendência</label>
+            <select 
+              id="trendMonths"
+              class="form-select" 
+              [(ngModel)]="trendMonths"
+              (change)="onTrendMonthsChange()"
+            >
+              <option [value]="3">3 meses</option>
+              <option [value]="6">6 meses</option>
+              <option [value]="12">12 meses</option>
+              <option [value]="24">24 meses</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p class="mt-2">Carregando dados...</p>
+      </div>
+    }
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ errorMessage() }}
+        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+      </div>
+    }
+
+    <!-- Dashboard Content -->
+    @if (hasData() && !isLoading()) {
+      
+      <!-- Alerts Section -->
+      @if (alerts().length > 0) {
+        <div class="alerts-section mb-4">
+          <h3>Alertas de Glosa</h3>
+          <div class="row">
+            @for (alert of alerts(); track alert.alertType) {
+              <div class="col-md-6 mb-3">
+                <div class="alert" [ngClass]="getSeverityClass(alert.severity)">
+                  <div class="d-flex align-items-center">
+                    <span class="me-2">{{ getSeverityIcon(alert.severity) }}</span>
+                    <div>
+                      <strong>{{ alert.alertType }}</strong><br>
+                      {{ alert.message }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Summary Cards -->
+      @if (summary()) {
+        <div class="summary-section mb-4">
+          <h3>Resumo Geral</h3>
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <div class="card summary-card">
+                <div class="card-body">
+                  <h6 class="text-muted">Total Faturado</h6>
+                  <h3 class="text-primary">{{ formatCurrency(summary()!.totalBilled) }}</h3>
+                  <small>{{ summary()!.totalGuides }} guias</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card summary-card">
+                <div class="card-body">
+                  <h6 class="text-muted">Total Aprovado</h6>
+                  <h3 class="text-success">{{ formatCurrency(summary()!.totalApproved) }}</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card summary-card">
+                <div class="card-body">
+                  <h6 class="text-muted">Total Glosado</h6>
+                  <h3 class="text-danger">{{ formatCurrency(summary()!.totalGlosed) }}</h3>
+                  <small>{{ summary()!.glosedGuides }} guias com glosa</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card summary-card">
+                <div class="card-body">
+                  <h6 class="text-muted">Taxa de Glosa</h6>
+                  <h3 [ngClass]="summary()!.glosaPercentage > 15 ? 'text-danger' : 'text-warning'">
+                    {{ formatPercentage(summary()!.glosaPercentage) }}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Glosas by Operator -->
+      @if (operatorData().length > 0) {
+        <div class="operator-section mb-4">
+          <h3>Glosas por Operadora</h3>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Operadora</th>
+                      <th>Total Faturado</th>
+                      <th>Total Glosado</th>
+                      <th>Taxa de Glosa</th>
+                      <th>Guias</th>
+                      <th>Guias Glosadas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (operator of operatorData(); track operator.operatorId) {
+                      <tr>
+                        <td>{{ operator.operatorName }}</td>
+                        <td>{{ formatCurrency(operator.totalBilled) }}</td>
+                        <td class="text-danger">{{ formatCurrency(operator.totalGlosed) }}</td>
+                        <td>
+                          <span 
+                            class="badge" 
+                            [ngClass]="operator.glosaPercentage > 15 ? 'bg-danger' : 'bg-warning'"
+                          >
+                            {{ formatPercentage(operator.glosaPercentage) }}
+                          </span>
+                        </td>
+                        <td>{{ operator.totalGuides }}</td>
+                        <td>{{ operator.glosedGuides }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Trend Chart -->
+      @if (trendData().length > 0) {
+        <div class="trend-section mb-4">
+          <h3>Evolução Temporal de Glosas</h3>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Período</th>
+                      <th>Total Faturado</th>
+                      <th>Total Glosado</th>
+                      <th>Taxa de Glosa</th>
+                      <th>Guias</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (trend of trendData(); track trend.monthName) {
+                      <tr>
+                        <td>{{ trend.monthName }}</td>
+                        <td>{{ formatCurrency(trend.totalBilled) }}</td>
+                        <td class="text-danger">{{ formatCurrency(trend.totalGlosed) }}</td>
+                        <td>
+                          <span 
+                            class="badge" 
+                            [ngClass]="trend.glosaPercentage > 15 ? 'bg-danger' : 'bg-success'"
+                          >
+                            {{ formatPercentage(trend.glosaPercentage) }}
+                          </span>
+                        </td>
+                        <td>{{ trend.totalGuides }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Top 10 Procedures with Glosas -->
+      @if (procedureData().length > 0) {
+        <div class="procedure-section mb-4">
+          <h3>Top 10 Procedimentos Glosados</h3>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Procedimento</th>
+                      <th>Total Faturado</th>
+                      <th>Total Glosado</th>
+                      <th>Taxa de Glosa</th>
+                      <th>Ocorrências</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (procedure of procedureData(); track procedure.procedureCode) {
+                      <tr>
+                        <td>{{ procedure.procedureCode }}</td>
+                        <td>{{ procedure.procedureName }}</td>
+                        <td>{{ formatCurrency(procedure.totalBilled) }}</td>
+                        <td class="text-danger">{{ formatCurrency(procedure.totalGlosed) }}</td>
+                        <td>
+                          <span 
+                            class="badge" 
+                            [ngClass]="procedure.glosaPercentage > 20 ? 'bg-danger' : 'bg-warning'"
+                          >
+                            {{ formatPercentage(procedure.glosaPercentage) }}
+                          </span>
+                        </td>
+                        <td>{{ procedure.glosedOccurrences }} / {{ procedure.totalOccurrences }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+
+    @if (!hasData() && !isLoading() && !errorMessage()) {
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i>
+        Selecione os filtros acima e clique em "Buscar" para carregar os dados.
+      </div>
+    }
+  </div>
+</div>

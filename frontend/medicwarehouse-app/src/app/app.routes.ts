@@ -246,6 +246,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/tiss/tuss-procedures/tuss-procedure-list').then(m => m.TussProcedureList),
     canActivate: [authGuard]
   },
+  { 
+    path: 'tiss/dashboards/glosas', 
+    loadComponent: () => import('./pages/tiss/dashboards/glosas-dashboard').then(m => m.GlosasDashboard),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'tiss/dashboards/performance', 
+    loadComponent: () => import('./pages/tiss/dashboards/performance-dashboard').then(m => m.PerformanceDashboard),
+    canActivate: [authGuard]
+  },
   
   // Financial Module routes
   { 
