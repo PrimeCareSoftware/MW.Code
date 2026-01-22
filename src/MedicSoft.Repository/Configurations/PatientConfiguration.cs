@@ -28,10 +28,10 @@ namespace MedicSoft.Repository.Configurations
                 .HasMaxLength(20);
 
             builder.Property(p => p.MedicalHistory)
-                .HasMaxLength(2000);
+                .HasMaxLength(3000); // Increased for encryption overhead (~33%)
 
             builder.Property(p => p.Allergies)
-                .HasMaxLength(1000);
+                .HasMaxLength(1500); // Increased for encryption overhead (~33%)
 
             builder.Property(p => p.MotherName)
                 .HasMaxLength(200); // CFM 1.821 - Campo recomendado
