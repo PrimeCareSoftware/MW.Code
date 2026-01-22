@@ -13,6 +13,8 @@ namespace MedicSoft.Api.Controllers
     [Authorize]
     public class SessionsController : BaseController
     {
+        private const string DefaultTelemedicineUrl = "http://localhost:5084/api";
+        
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly ILogger<SessionsController> _logger;
@@ -30,36 +32,48 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all sessions for a clinic (proxied to telemedicine microservice)
+        /// Gets the configured telemedicine service URL
         /// </summary>
-        [HttpGet("clinic/{clinicId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> GetClinicSessions(
-            Guid clinicId,
-            [FromQuery] int skip = 0,
-            [FromQuery] int take = 50)
+        private string GetTelemedicineUrl()
+        {
+            return _configuration.GetValue<string>("Microservices:TelemedicineUrl") ?? DefaultTelemedicineUrl;
+        }
+
+        /// <summary>
+        /// Configures HttpClient with required headers for telemedicine service
+        /// </summary>
+        private void ConfigureHttpClientHeaders(HttpClient httpClient)
+        {
+            // Clear any existing headers to prevent duplicates
+            httpClient.DefaultRequestHeaders.Clear();
+
+            // Forward tenant ID header
+            var tenantId = GetTenantId();
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-Tenant-Id", tenantId);
+
+            // Forward authorization header if present
+            if (Request.Headers.TryGetValue("Authorization", out var authHeader))
+            {
+                var authValue = authHeader.FirstOrDefault();
+                if (!string.IsNullOrEmpty(authValue))
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authValue);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Proxies GET request to telemedicine service
+        /// </summary>
+        private async Task<IActionResult> ProxyGetRequestAsync(string endpoint, string notFoundMessage)
         {
             try
             {
-                // Get telemedicine service URL from configuration
-                var telemedicineUrl = _configuration.GetValue<string>("Microservices:TelemedicineUrl") 
-                    ?? "http://localhost:5084/api";
+                var telemedicineUrl = GetTelemedicineUrl();
+                using var httpClient = _httpClientFactory.CreateClient();
+                ConfigureHttpClientHeaders(httpClient);
 
-                var httpClient = _httpClientFactory.CreateClient();
-                
-                // Forward tenant ID header
-                var tenantId = GetTenantId();
-                httpClient.DefaultRequestHeaders.Add("X-Tenant-Id", tenantId);
-
-                // Forward authorization header
-                if (Request.Headers.ContainsKey("Authorization"))
-                {
-                    httpClient.DefaultRequestHeaders.Add("Authorization", Request.Headers["Authorization"].ToString());
-                }
-
-                var url = $"{telemedicineUrl}/sessions/clinic/{clinicId}?skip={skip}&take={take}";
+                var url = $"{telemedicineUrl}{endpoint}";
                 _logger.LogInformation("Proxying request to telemedicine service: {Url}", url);
 
                 var response = await httpClient.GetAsync(url);
@@ -71,11 +85,12 @@ namespace MedicSoft.Api.Controllers
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    return NotFound(new { message = "No sessions found for this clinic" });
+                    return NotFound(new { message = notFoundMessage });
                 }
                 else
                 {
-                    _logger.LogWarning("Telemedicine service returned status code: {StatusCode}", response.StatusCode);
+                    _logger.LogWarning("Telemedicine service returned status code: {StatusCode} for {Url}", 
+                        response.StatusCode, url);
                     return StatusCode((int)response.StatusCode, new { message = "Error accessing telemedicine service" });
                 }
             }
@@ -90,8 +105,24 @@ namespace MedicSoft.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected error while proxying to telemedicine service");
-                return StatusCode(500, new { message = "An error occurred while retrieving sessions" });
+                return StatusCode(500, new { message = "An error occurred while retrieving data from telemedicine service" });
             }
+        }
+
+        /// <summary>
+        /// Gets all sessions for a clinic (proxied to telemedicine microservice)
+        /// </summary>
+        [HttpGet("clinic/{clinicId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        public async Task<IActionResult> GetClinicSessions(
+            Guid clinicId,
+            [FromQuery] int skip = 0,
+            [FromQuery] int take = 50)
+        {
+            var endpoint = $"/sessions/clinic/{clinicId}?skip={skip}&take={take}";
+            return await ProxyGetRequestAsync(endpoint, "No sessions found for this clinic");
         }
 
         /// <summary>
@@ -103,51 +134,8 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> GetSessionById(Guid id)
         {
-            try
-            {
-                var telemedicineUrl = _configuration.GetValue<string>("Microservices:TelemedicineUrl") 
-                    ?? "http://localhost:5084/api";
-
-                var httpClient = _httpClientFactory.CreateClient();
-                
-                var tenantId = GetTenantId();
-                httpClient.DefaultRequestHeaders.Add("X-Tenant-Id", tenantId);
-
-                if (Request.Headers.ContainsKey("Authorization"))
-                {
-                    httpClient.DefaultRequestHeaders.Add("Authorization", Request.Headers["Authorization"].ToString());
-                }
-
-                var url = $"{telemedicineUrl}/sessions/{id}";
-                var response = await httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    return Content(content, "application/json");
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return NotFound(new { message = $"Session {id} not found" });
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode, new { message = "Error accessing telemedicine service" });
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "Error connecting to telemedicine service");
-                return StatusCode(503, new { 
-                    message = "Telemedicine service is currently unavailable",
-                    details = ex.Message 
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error while proxying to telemedicine service");
-                return StatusCode(500, new { message = "An error occurred while retrieving session" });
-            }
+            var endpoint = $"/sessions/{id}";
+            return await ProxyGetRequestAsync(endpoint, $"Session {id} not found");
         }
 
         /// <summary>
@@ -159,51 +147,8 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> GetSessionByAppointmentId(Guid appointmentId)
         {
-            try
-            {
-                var telemedicineUrl = _configuration.GetValue<string>("Microservices:TelemedicineUrl") 
-                    ?? "http://localhost:5084/api";
-
-                var httpClient = _httpClientFactory.CreateClient();
-                
-                var tenantId = GetTenantId();
-                httpClient.DefaultRequestHeaders.Add("X-Tenant-Id", tenantId);
-
-                if (Request.Headers.ContainsKey("Authorization"))
-                {
-                    httpClient.DefaultRequestHeaders.Add("Authorization", Request.Headers["Authorization"].ToString());
-                }
-
-                var url = $"{telemedicineUrl}/sessions/appointment/{appointmentId}";
-                var response = await httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    return Content(content, "application/json");
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return NotFound(new { message = $"No session found for appointment {appointmentId}" });
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode, new { message = "Error accessing telemedicine service" });
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "Error connecting to telemedicine service");
-                return StatusCode(503, new { 
-                    message = "Telemedicine service is currently unavailable",
-                    details = ex.Message 
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error while proxying to telemedicine service");
-                return StatusCode(500, new { message = "An error occurred while retrieving session" });
-            }
+            var endpoint = $"/sessions/appointment/{appointmentId}";
+            return await ProxyGetRequestAsync(endpoint, $"No session found for appointment {appointmentId}");
         }
     }
 }
