@@ -11,8 +11,8 @@ namespace MedicSoft.Domain.ValueObjects
         public decimal? Temperature { get; private set; }  // °C
         public int? OxygenSaturation { get; private set; }  // %
         public decimal? Weight { get; private set; }  // kg
-        public decimal? Height { get; private set; }  // cm
-        public decimal? BMI { get; private set; }  // calculado
+        public decimal? Height { get; private set; }  // cm - BMI calculation expects height in centimeters
+        public decimal? BMI { get; private set; }  // calculado automaticamente
         public int? Pain { get; private set; }  // Escala 0-10
 
         private VitalSigns() { }
