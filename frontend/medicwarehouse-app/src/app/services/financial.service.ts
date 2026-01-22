@@ -18,7 +18,10 @@ import {
   CreateFinancialClosure,
   AddClosureItem,
   ApplyClosureDiscount,
-  RecordClosurePayment
+  RecordClosurePayment,
+  DREReport,
+  CashFlowForecast,
+  ProfitabilityAnalysis
 } from '../models/financial.model';
 
 @Injectable({
@@ -321,5 +324,50 @@ export class FinancialService {
 
   deleteClosure(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/financial-closures/${id}`);
+  }
+
+  // ===== FINANCIAL REPORTS =====
+
+  /**
+   * Get DRE - Demonstrativo de Resultados do Exercício (Income Statement)
+   * @param clinicId Clinic ID
+   * @param startDate Period start date (YYYY-MM-DD)
+   * @param endDate Period end date (YYYY-MM-DD)
+   * @returns DRE report
+   */
+  getDREReport(clinicId: string, startDate: string, endDate: string): Observable<DREReport> {
+    const params = new HttpParams()
+      .set('clinicId', clinicId)
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+    return this.http.get<DREReport>(`${this.apiUrl}/reports/dre`, { params });
+  }
+
+  /**
+   * Get Cash Flow Forecast - Projeção de Fluxo de Caixa
+   * @param clinicId Clinic ID
+   * @param months Number of months to forecast (1-12, default: 3)
+   * @returns Cash flow forecast
+   */
+  getCashFlowForecast(clinicId: string, months: number = 3): Observable<CashFlowForecast> {
+    const params = new HttpParams()
+      .set('clinicId', clinicId)
+      .set('months', months.toString());
+    return this.http.get<CashFlowForecast>(`${this.apiUrl}/reports/cash-flow-forecast`, { params });
+  }
+
+  /**
+   * Get Profitability Analysis - Análise de Rentabilidade
+   * @param clinicId Clinic ID
+   * @param startDate Period start date (YYYY-MM-DD)
+   * @param endDate Period end date (YYYY-MM-DD)
+   * @returns Profitability analysis
+   */
+  getProfitabilityAnalysis(clinicId: string, startDate: string, endDate: string): Observable<ProfitabilityAnalysis> {
+    const params = new HttpParams()
+      .set('clinicId', clinicId)
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+    return this.http.get<ProfitabilityAnalysis>(`${this.apiUrl}/reports/profitability`, { params });
   }
 }

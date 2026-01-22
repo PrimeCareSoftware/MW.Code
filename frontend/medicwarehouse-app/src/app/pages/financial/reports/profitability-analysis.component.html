@@ -1,0 +1,201 @@
+<app-navbar></app-navbar>
+<div class="profitability-analysis-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Análise de Rentabilidade</h1>
+      <p>Análise detalhada por procedimento, profissional e convênio</p>
+    </div>
+    <div class="header-actions">
+      @if (analysis()) {
+        <button class="btn btn-secondary" (click)="exportToExcel()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Excel
+        </button>
+        <button class="btn btn-secondary" (click)="exportToPDF()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          PDF
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filters-card">
+    <div class="filters-grid">
+      <div class="form-group">
+        <label>Clínica</label>
+        <select [(ngModel)]="selectedClinicId" class="form-control">
+          @for (clinic of clinics(); track clinic.id) {
+            <option [value]="clinic.id">{{ clinic.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Data Início</label>
+        <input type="date" [(ngModel)]="startDate" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Data Fim</label>
+        <input type="date" [(ngModel)]="endDate" class="form-control">
+      </div>
+      <div class="form-group align-end">
+        <button class="btn btn-primary" (click)="loadAnalysis()">Gerar Análise</button>
+      </div>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando análise...</div>
+    </div>
+  } @else if (analysis()) {
+    <div class="analysis-content">
+      <!-- Period Info -->
+      <div class="period-info">
+        <h3>Período: {{ formatDate(analysis()!.periodStart) }} - {{ formatDate(analysis()!.periodEnd) }}</h3>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <span class="card-label">Receita Total</span>
+          <span class="card-value positive">{{ formatCurrency(analysis()!.totalRevenue) }}</span>
+        </div>
+        <div class="summary-card">
+          <span class="card-label">Custos Totais</span>
+          <span class="card-value negative">{{ formatCurrency(analysis()!.totalCosts) }}</span>
+        </div>
+        <div class="summary-card">
+          <span class="card-label">Lucro Total</span>
+          <span class="card-value" [class.positive]="analysis()!.totalProfit > 0" [class.negative]="analysis()!.totalProfit < 0">
+            {{ formatCurrency(analysis()!.totalProfit) }}
+          </span>
+        </div>
+        <div class="summary-card highlight">
+          <span class="card-label">Margem de Lucro</span>
+          <span class="card-value" [class.positive]="analysis()!.profitMargin > 0" [class.negative]="analysis()!.profitMargin < 0">
+            {{ formatPercent(analysis()!.profitMargin) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- By Procedure -->
+      @if (analysis()!.byProcedure.length > 0) {
+        <div class="report-section">
+          <h2>Rentabilidade por Tipo de Procedimento</h2>
+          <div class="profitability-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Procedimento</th>
+                  <th>Quantidade</th>
+                  <th>Receita Total</th>
+                  <th>Valor Médio</th>
+                  <th>% do Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of analysis()!.byProcedure; track item.procedureName) {
+                  <tr>
+                    <td><strong>{{ item.procedureName }}</strong></td>
+                    <td>{{ item.count }}</td>
+                    <td class="positive">{{ formatCurrency(item.revenue) }}</td>
+                    <td>{{ formatCurrency(item.averageValue) }}</td>
+                    <td>
+                      <div class="percentage-bar">
+                        <div class="bar" [style.width.%]="item.percentage"></div>
+                        <span class="percentage-text">{{ formatPercent(item.percentage) }}</span>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- By Doctor -->
+      @if (analysis()!.byDoctor.length > 0) {
+        <div class="report-section">
+          <h2>Rentabilidade por Profissional</h2>
+          <div class="profitability-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Profissional</th>
+                  <th>Atendimentos</th>
+                  <th>Receita Total</th>
+                  <th>Valor Médio</th>
+                  <th>% do Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of analysis()!.byDoctor; track item.doctorId) {
+                  <tr>
+                    <td><strong>{{ item.doctorName }}</strong></td>
+                    <td>{{ item.appointmentsCount }}</td>
+                    <td class="positive">{{ formatCurrency(item.revenue) }}</td>
+                    <td>{{ formatCurrency(item.averageAppointmentValue) }}</td>
+                    <td>
+                      <div class="percentage-bar">
+                        <div class="bar" [style.width.%]="item.percentage"></div>
+                        <span class="percentage-text">{{ formatPercent(item.percentage) }}</span>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- By Insurance -->
+      @if (analysis()!.byInsurance.length > 0) {
+        <div class="report-section">
+          <h2>Rentabilidade por Convênio</h2>
+          <div class="profitability-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Convênio</th>
+                  <th>Atendimentos</th>
+                  <th>Receita Total</th>
+                  <th>Valor Médio</th>
+                  <th>% do Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of analysis()!.byInsurance; track item.insuranceId) {
+                  <tr>
+                    <td><strong>{{ item.insuranceName || 'Particular' }}</strong></td>
+                    <td>{{ item.appointmentsCount }}</td>
+                    <td class="positive">{{ formatCurrency(item.revenue) }}</td>
+                    <td>{{ formatCurrency(item.averageValue) }}</td>
+                    <td>
+                      <div class="percentage-bar">
+                        <div class="bar" [style.width.%]="item.percentage"></div>
+                        <span class="percentage-text">{{ formatPercent(item.percentage) }}</span>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,179 @@
+<app-navbar></app-navbar>
+<div class="cash-flow-forecast-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Previsão de Fluxo de Caixa</h1>
+      <p>Projeção de receitas e despesas futuras</p>
+    </div>
+    <div class="header-actions">
+      @if (forecast()) {
+        <button class="btn btn-secondary" (click)="exportToExcel()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Excel
+        </button>
+        <button class="btn btn-secondary" (click)="exportToPDF()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          PDF
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filters-card">
+    <div class="filters-grid">
+      <div class="form-group">
+        <label>Clínica</label>
+        <select [(ngModel)]="selectedClinicId" class="form-control">
+          @for (clinic of clinics(); track clinic.id) {
+            <option [value]="clinic.id">{{ clinic.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Meses de Previsão</label>
+        <input type="number" [(ngModel)]="months" min="1" max="12" class="form-control">
+      </div>
+      <div class="form-group align-end">
+        <button class="btn btn-primary" (click)="loadForecast()">Gerar Previsão</button>
+      </div>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando previsão...</div>
+    </div>
+  } @else if (forecast()) {
+    <div class="forecast-content">
+      <!-- Summary Cards -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <span class="card-label">Saldo Atual</span>
+          <span class="card-value" [class.positive]="forecast()!.currentBalance > 0" [class.negative]="forecast()!.currentBalance < 0">
+            {{ formatCurrency(forecast()!.currentBalance) }}
+          </span>
+        </div>
+        <div class="summary-card income">
+          <span class="card-label">Receitas Previstas</span>
+          <span class="card-value positive">{{ formatCurrency(forecast()!.projectedIncome) }}</span>
+        </div>
+        <div class="summary-card expense">
+          <span class="card-label">Despesas Previstas</span>
+          <span class="card-value negative">{{ formatCurrency(forecast()!.projectedExpenses) }}</span>
+        </div>
+        <div class="summary-card balance">
+          <span class="card-label">Saldo Projetado</span>
+          <span class="card-value" [class.positive]="forecast()!.projectedBalance > 0" [class.negative]="forecast()!.projectedBalance < 0">
+            {{ formatCurrency(forecast()!.projectedBalance) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Monthly Forecast -->
+      <div class="report-section">
+        <h2>Previsão Mensal</h2>
+        <div class="forecast-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th>Receitas</th>
+                <th>Despesas</th>
+                <th>Saldo do Mês</th>
+                <th>Saldo Acumulado</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (month of forecast()!.monthlyForecast; track month.month) {
+                <tr>
+                  <td>{{ getMonthName(month.month) }}/{{ month.year }}</td>
+                  <td class="positive">{{ formatCurrency(month.expectedIncome) }}</td>
+                  <td class="negative">{{ formatCurrency(month.expectedExpenses) }}</td>
+                  <td [class.positive]="month.expectedBalance > 0" [class.negative]="month.expectedBalance < 0">
+                    {{ formatCurrency(month.expectedBalance) }}
+                  </td>
+                  <td [class.positive]="month.cumulativeBalance > 0" [class.negative]="month.cumulativeBalance < 0">
+                    <strong>{{ formatCurrency(month.cumulativeBalance) }}</strong>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pending Receivables -->
+      @if (forecast()!.pendingReceivables.length > 0) {
+        <div class="report-section">
+          <h2>Contas a Receber Pendentes ({{ forecast()!.pendingReceivables.length }})</h2>
+          <div class="transactions-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Documento</th>
+                  <th>Paciente</th>
+                  <th>Vencimento</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (receivable of forecast()!.pendingReceivables; track receivable.id) {
+                  <tr>
+                    <td>{{ receivable.documentNumber }}</td>
+                    <td>{{ receivable.patientName }}</td>
+                    <td>{{ formatDate(receivable.dueDate) }}</td>
+                    <td class="positive">{{ formatCurrency(receivable.amount) }}</td>
+                    <td><span class="badge badge-warning">{{ receivable.status }}</span></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- Pending Payables -->
+      @if (forecast()!.pendingPayables.length > 0) {
+        <div class="report-section">
+          <h2>Contas a Pagar Pendentes ({{ forecast()!.pendingPayables.length }})</h2>
+          <div class="transactions-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Documento</th>
+                  <th>Categoria</th>
+                  <th>Fornecedor</th>
+                  <th>Vencimento</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (payable of forecast()!.pendingPayables; track payable.id) {
+                  <tr>
+                    <td>{{ payable.documentNumber }}</td>
+                    <td>{{ payable.category }}</td>
+                    <td>{{ payable.supplierName || 'N/A' }}</td>
+                    <td>{{ formatDate(payable.dueDate) }}</td>
+                    <td class="negative">{{ formatCurrency(payable.amount) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

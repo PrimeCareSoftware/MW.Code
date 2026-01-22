@@ -1,0 +1,194 @@
+<app-navbar></app-navbar>
+<div class="dre-report-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>DRE - Demonstrativo de Resultados</h1>
+      <p>Demonstrativo de Resultados do Exercício</p>
+    </div>
+    <div class="header-actions">
+      @if (report()) {
+        <button class="btn btn-secondary" (click)="exportToExcel()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Excel
+        </button>
+        <button class="btn btn-secondary" (click)="exportToPDF()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          PDF
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filters-card">
+    <div class="filters-grid">
+      <div class="form-group">
+        <label>Clínica</label>
+        <select [(ngModel)]="selectedClinicId" class="form-control">
+          @for (clinic of clinics(); track clinic.id) {
+            <option [value]="clinic.id">{{ clinic.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Data Início</label>
+        <input type="date" [(ngModel)]="startDate" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Data Fim</label>
+        <input type="date" [(ngModel)]="endDate" class="form-control">
+      </div>
+      <div class="form-group align-end">
+        <button class="btn btn-primary" (click)="loadReport()">Gerar Relatório</button>
+      </div>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando relatório...</div>
+    </div>
+  } @else if (report()) {
+    <div class="report-content">
+      <!-- Period Info -->
+      <div class="period-info">
+        <h3>Período: {{ formatDate(report()!.periodStart) }} - {{ formatDate(report()!.periodEnd) }}</h3>
+      </div>
+
+      <!-- Revenue Section -->
+      <div class="report-section">
+        <h2>Receitas</h2>
+        <div class="report-table">
+          <div class="report-row">
+            <span class="row-label">Receita Bruta</span>
+            <span class="row-value positive">{{ formatCurrency(report()!.grossRevenue) }}</span>
+          </div>
+          <div class="report-row">
+            <span class="row-label indent">(-) Deduções</span>
+            <span class="row-value negative">{{ formatCurrency(report()!.deductions) }}</span>
+          </div>
+          <div class="report-row total">
+            <span class="row-label bold">Receita Líquida</span>
+            <span class="row-value bold">{{ formatCurrency(report()!.netRevenue) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expenses Section -->
+      <div class="report-section">
+        <h2>Custos e Despesas</h2>
+        <div class="report-table">
+          <div class="report-row">
+            <span class="row-label">Custos Operacionais</span>
+            <span class="row-value negative">{{ formatCurrency(report()!.operationalCosts) }}</span>
+          </div>
+          <div class="report-row">
+            <span class="row-label">Despesas Administrativas</span>
+            <span class="row-value negative">{{ formatCurrency(report()!.administrativeExpenses) }}</span>
+          </div>
+          <div class="report-row">
+            <span class="row-label">Despesas de Vendas</span>
+            <span class="row-value negative">{{ formatCurrency(report()!.salesExpenses) }}</span>
+          </div>
+          <div class="report-row">
+            <span class="row-label">Despesas Financeiras</span>
+            <span class="row-value negative">{{ formatCurrency(report()!.financialExpenses) }}</span>
+          </div>
+          <div class="report-row total">
+            <span class="row-label bold">Total de Despesas</span>
+            <span class="row-value bold negative">{{ formatCurrency(report()!.totalExpenses) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="report-section">
+        <h2>Resultados</h2>
+        <div class="report-table">
+          <div class="report-row">
+            <span class="row-label">Lucro Operacional</span>
+            <span class="row-value" [class.positive]="report()!.operationalProfit > 0" [class.negative]="report()!.operationalProfit < 0">
+              {{ formatCurrency(report()!.operationalProfit) }}
+            </span>
+          </div>
+          <div class="report-row highlight">
+            <span class="row-label bold">Lucro Líquido</span>
+            <span class="row-value bold" [class.positive]="report()!.netProfit > 0" [class.negative]="report()!.netProfit < 0">
+              {{ formatCurrency(report()!.netProfit) }}
+            </span>
+          </div>
+          <div class="report-row">
+            <span class="row-label bold">Margem de Lucro</span>
+            <span class="row-value bold" [class.positive]="report()!.profitMargin > 0" [class.negative]="report()!.profitMargin < 0">
+              {{ formatPercent(report()!.profitMargin) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Details -->
+      @if (report()!.revenueDetails.length > 0) {
+        <div class="report-section">
+          <h2>Detalhamento de Receitas por Método</h2>
+          <div class="details-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Categoria</th>
+                  <th>Valor</th>
+                  <th>Percentual</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (detail of report()!.revenueDetails; track detail.category) {
+                  <tr>
+                    <td>{{ detail.category }}</td>
+                    <td>{{ formatCurrency(detail.amount) }}</td>
+                    <td>{{ formatPercent(detail.percentage) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- Expense Details -->
+      @if (report()!.expenseDetails.length > 0) {
+        <div class="report-section">
+          <h2>Detalhamento de Despesas por Categoria</h2>
+          <div class="details-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Categoria</th>
+                  <th>Valor</th>
+                  <th>Percentual</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (detail of report()!.expenseDetails; track detail.category) {
+                  <tr>
+                    <td>{{ detail.category }}</td>
+                    <td>{{ formatCurrency(detail.amount) }}</td>
+                    <td>{{ formatPercent(detail.percentage) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
