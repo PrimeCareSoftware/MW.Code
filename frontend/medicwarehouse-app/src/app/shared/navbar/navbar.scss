@@ -15,6 +15,18 @@
   z-index: var(--z-fixed);
 }
 
+// Dark theme styles for top-bar
+body.theme-dark .top-bar {
+  background-color: var(--bg-secondary);
+  border-bottom-color: var(--border-color);
+}
+
+// High contrast theme styles for top-bar
+body.theme-high-contrast .top-bar {
+  background-color: var(--bg-primary);
+  border-bottom: 3px solid var(--border-color);
+}
+
 .top-bar-left {
   display: flex;
   align-items: center;
@@ -41,6 +53,27 @@
   &:hover {
     background-color: var(--gray-100);
     color: var(--gray-900);
+  }
+}
+
+// Dark theme styles for sidebar-toggle
+body.theme-dark .sidebar-toggle {
+  color: var(--gray-400);
+  
+  &:hover {
+    background-color: var(--gray-800);
+    color: var(--gray-200);
+  }
+}
+
+// High contrast theme styles for sidebar-toggle
+body.theme-high-contrast .sidebar-toggle {
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  
+  &:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color-hover);
   }
 }
 
@@ -82,6 +115,16 @@
       display: none;
     }
   }
+}
+
+// Dark theme styles for top-bar-brand
+body.theme-dark .top-bar-brand .brand-text {
+  color: var(--text-primary);
+}
+
+// High contrast theme styles for top-bar-brand
+body.theme-high-contrast .top-bar-brand .brand-text {
+  color: var(--text-primary);
 }
 
 .top-bar-right {
@@ -136,6 +179,18 @@
       }
     }
   }
+}
+
+// Dark theme styles for sidebar
+body.theme-dark .sidebar {
+  background-color: var(--bg-secondary);
+  border-right-color: var(--border-color);
+}
+
+// High contrast theme styles for sidebar
+body.theme-high-contrast .sidebar {
+  background-color: var(--bg-primary);
+  border-right: 3px solid var(--border-color);
 }
 
 .sidebar-content {
@@ -201,10 +256,66 @@
     }
   }
 
+// Dark theme styles for nav-item
+body.theme-dark .nav-item {
+  color: var(--gray-400);
+
+  &:hover {
+    background-color: var(--gray-800);
+    color: var(--gray-200);
+  }
+
+  &.active {
+    background-color: var(--gray-800);
+    color: var(--primary-400);
+    
+    svg {
+      color: var(--primary-400);
+    }
+  }
+}
+
+// High contrast theme styles for nav-item
+body.theme-high-contrast .nav-item {
+  color: var(--text-primary);
+  border: 2px solid transparent;
+
+  &:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+  }
+
+  &.active {
+    background-color: var(--bg-tertiary);
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+    
+    svg {
+      color: var(--primary-500);
+    }
+    
+    &::before {
+      background: var(--primary-500);
+      width: 5px;
+    }
+  }
+}
+
 .nav-divider {
   height: 1px;
   background-color: var(--gray-200);
   margin: var(--spacing-4) var(--spacing-3);
+}
+
+// Dark theme styles for nav-divider
+body.theme-dark .nav-divider {
+  background-color: var(--border-color);
+}
+
+// High contrast theme styles for nav-divider
+body.theme-high-contrast .nav-divider {
+  height: 2px;
+  background-color: var(--border-color);
 }
 
 .nav-section-title {
@@ -215,6 +326,16 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: all var(--transition-fast);
+}
+
+// Dark theme styles for nav-section-title
+body.theme-dark .nav-section-title {
+  color: var(--gray-500);
+}
+
+// High contrast theme styles for nav-section-title
+body.theme-high-contrast .nav-section-title {
+  color: var(--text-primary);
 }
 
 .nav-text {
@@ -302,6 +423,42 @@
   }
 }
 
+// Dark theme styles for user-button
+body.theme-dark .user-button {
+  border-color: var(--border-color);
+  
+  &:hover {
+    background-color: var(--gray-800);
+    border-color: var(--border-color-hover);
+  }
+  
+  .user-name {
+    color: var(--text-secondary);
+  }
+  
+  .chevron {
+    color: var(--gray-500);
+  }
+}
+
+// High contrast theme styles for user-button
+body.theme-high-contrast .user-button {
+  border: 2px solid var(--border-color);
+  
+  &:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color-hover);
+  }
+  
+  .user-name {
+    color: var(--text-primary);
+  }
+  
+  .chevron {
+    color: var(--text-primary);
+  }
+}
+
 .dropdown-menu {
   position: absolute;
   top: calc(100% + var(--spacing-2));
@@ -373,6 +530,83 @@
     &:hover {
       background-color: var(--error-50);
       color: var(--error-600);
+      
+      svg {
+        color: var(--error-500);
+      }
+    }
+  }
+}
+
+// Dark theme styles for dropdown-menu
+body.theme-dark .dropdown-menu {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  
+  .dropdown-header {
+    .user-role {
+      color: var(--text-primary);
+    }
+    
+    .user-email {
+      color: var(--text-tertiary);
+    }
+  }
+  
+  .dropdown-divider {
+    background-color: var(--border-color);
+  }
+  
+  .dropdown-item {
+    color: var(--text-secondary);
+    
+    svg {
+      color: var(--gray-500);
+    }
+    
+    &:hover {
+      background-color: var(--gray-800);
+      color: var(--error-500);
+      
+      svg {
+        color: var(--error-500);
+      }
+    }
+  }
+}
+
+// High contrast theme styles for dropdown-menu
+body.theme-high-contrast .dropdown-menu {
+  background: var(--bg-primary);
+  border: 3px solid var(--border-color);
+  
+  .dropdown-header {
+    .user-role {
+      color: var(--text-primary);
+    }
+    
+    .user-email {
+      color: var(--text-primary);
+    }
+  }
+  
+  .dropdown-divider {
+    height: 2px;
+    background-color: var(--border-color);
+  }
+  
+  .dropdown-item {
+    color: var(--text-primary);
+    border: 2px solid transparent;
+    
+    svg {
+      color: var(--text-primary);
+    }
+    
+    &:hover {
+      background-color: var(--bg-tertiary);
+      color: var(--error-500);
+      border-color: var(--error-500);
       
       svg {
         color: var(--error-500);

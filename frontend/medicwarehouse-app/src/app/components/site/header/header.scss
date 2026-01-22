@@ -9,6 +9,20 @@
   transition: all var(--transition-base);
 }
 
+// Dark theme styles for header
+body.theme-dark .header {
+  background: rgba(30, 41, 59, 0.8);
+  border-bottom: 1px solid var(--border-color);
+}
+
+// High contrast theme styles for header
+body.theme-high-contrast .header {
+  background: var(--bg-primary);
+  border-bottom: 3px solid var(--border-color);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -39,6 +53,16 @@
     margin: 0;
     letter-spacing: -0.02em;
   }
+}
+
+// Dark theme styles for logo
+body.theme-dark .logo h1 {
+  color: var(--text-primary);
+}
+
+// High contrast theme styles for logo
+body.theme-high-contrast .logo h1 {
+  color: var(--text-primary);
 }
 
 .menu-toggle {
@@ -78,6 +102,31 @@
   }
 }
 
+// Dark theme styles for menu-toggle
+body.theme-dark .menu-toggle {
+  &:hover {
+    background: var(--gray-800);
+  }
+
+  span {
+    background: var(--text-primary);
+  }
+}
+
+// High contrast theme styles for menu-toggle
+body.theme-high-contrast .menu-toggle {
+  border: 2px solid var(--border-color);
+  
+  &:hover {
+    background: var(--bg-tertiary);
+  }
+
+  span {
+    background: var(--text-primary);
+    height: 3px;
+  }
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -109,6 +158,52 @@
       &:hover {
         background: var(--primary-700);
         transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+// Dark theme styles for nav
+body.theme-dark .nav {
+  a {
+    color: var(--text-secondary);
+
+    &:hover,
+    &.active {
+      color: var(--text-primary);
+    }
+
+    &.btn {
+      background: var(--primary-600);
+      color: white;
+
+      &:hover {
+        background: var(--primary-700);
+      }
+    }
+  }
+}
+
+// High contrast theme styles for nav
+body.theme-high-contrast .nav {
+  a {
+    color: var(--text-primary);
+    border: 2px solid transparent;
+
+    &:hover,
+    &.active {
+      border-color: var(--border-color);
+      background: var(--bg-tertiary);
+    }
+
+    &.btn {
+      background: var(--primary-500);
+      color: var(--bg-primary);
+      border: 2px solid var(--primary-500);
+
+      &:hover {
+        background: var(--bg-primary);
+        color: var(--primary-500);
       }
     }
   }
@@ -160,6 +255,23 @@
         padding: 1rem 2rem;
       }
     }
+  }
+}
+
+// Dark theme styles for mobile nav
+@media (max-width: 968px) {
+  body.theme-dark .nav {
+    background: var(--bg-secondary);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+  }
+}
+
+// High contrast theme styles for mobile nav
+@media (max-width: 968px) {
+  body.theme-high-contrast .nav {
+    background: var(--bg-primary);
+    border-left: 3px solid var(--border-color);
+    box-shadow: none;
   }
 }
 

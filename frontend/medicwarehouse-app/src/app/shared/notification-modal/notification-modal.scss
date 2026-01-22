@@ -12,6 +12,16 @@
   animation: fadeIn 0.2s ease-in-out;
 }
 
+// Dark theme styles for modal-overlay
+body.theme-dark .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+// High contrast theme styles for modal-overlay
+body.theme-high-contrast .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.95);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -30,6 +40,19 @@
   max-height: 90vh;
   overflow-y: auto;
   animation: slideUp 0.3s ease-out;
+}
+
+// Dark theme styles for modal-container
+body.theme-dark .modal-container {
+  background-color: var(--bg-secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+// High contrast theme styles for modal-container
+body.theme-high-contrast .modal-container {
+  background-color: var(--bg-primary);
+  border: 3px solid var(--border-color);
+  box-shadow: none;
 }
 
 @keyframes slideUp {
@@ -76,6 +99,51 @@
       outline: 2px solid #3b82f6;
       outline-offset: 2px;
       border-radius: 4px;
+    }
+  }
+}
+
+// Dark theme styles for modal-header
+body.theme-dark .modal-header {
+  border-bottom-color: var(--border-color);
+  
+  h2 {
+    color: var(--text-primary);
+  }
+  
+  .close-btn {
+    color: var(--gray-500);
+    
+    &:hover {
+      color: var(--text-primary);
+    }
+    
+    &:focus {
+      outline-color: var(--primary-500);
+    }
+  }
+}
+
+// High contrast theme styles for modal-header
+body.theme-high-contrast .modal-header {
+  border-bottom: 3px solid var(--border-color);
+  
+  h2 {
+    color: var(--text-primary);
+  }
+  
+  .close-btn {
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    
+    &:hover {
+      background-color: var(--bg-tertiary);
+    }
+    
+    &:focus {
+      outline: 3px solid var(--primary-500);
+      outline-offset: 2px;
     }
   }
 }
@@ -142,6 +210,53 @@
   }
 }
 
+// Dark theme styles for modal-body
+body.theme-dark .modal-body {
+  .notification-message {
+    color: var(--text-secondary);
+  }
+  
+  .notification-details {
+    background-color: var(--bg-tertiary);
+    
+    .detail-item {
+      color: var(--text-secondary);
+      
+      &:not(:last-child) {
+        border-bottom-color: var(--border-color);
+      }
+      
+      strong {
+        color: var(--text-primary);
+      }
+    }
+  }
+}
+
+// High contrast theme styles for modal-body
+body.theme-high-contrast .modal-body {
+  .notification-message {
+    color: var(--text-primary);
+  }
+  
+  .notification-details {
+    background-color: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    
+    .detail-item {
+      color: var(--text-primary);
+      
+      &:not(:last-child) {
+        border-bottom: 2px solid var(--border-color);
+      }
+      
+      strong {
+        color: var(--text-primary);
+      }
+    }
+  }
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -182,6 +297,69 @@
       
       &:active {
         transform: scale(0.98);
+      }
+    }
+  }
+}
+
+// Dark theme styles for modal-footer
+body.theme-dark .modal-footer {
+  border-top-color: var(--border-color);
+  
+  .btn {
+    &:focus {
+      outline-color: var(--primary-500);
+    }
+    
+    &.btn-secondary {
+      background-color: var(--gray-800);
+      color: var(--text-secondary);
+      
+      &:hover {
+        background-color: var(--gray-700);
+      }
+    }
+    
+    &.btn-primary {
+      background-color: var(--primary-600);
+      
+      &:hover {
+        background-color: var(--primary-700);
+      }
+    }
+  }
+}
+
+// High contrast theme styles for modal-footer
+body.theme-high-contrast .modal-footer {
+  border-top: 3px solid var(--border-color);
+  
+  .btn {
+    border: 2px solid var(--border-color);
+    
+    &:focus {
+      outline: 3px solid var(--primary-500);
+      outline-offset: 2px;
+    }
+    
+    &.btn-secondary {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      
+      &:hover {
+        background-color: var(--bg-primary);
+        border-color: var(--border-color-hover);
+      }
+    }
+    
+    &.btn-primary {
+      background-color: var(--primary-500);
+      color: var(--bg-primary);
+      border-color: var(--primary-500);
+      
+      &:hover {
+        background-color: var(--bg-primary);
+        color: var(--primary-500);
       }
     }
   }
