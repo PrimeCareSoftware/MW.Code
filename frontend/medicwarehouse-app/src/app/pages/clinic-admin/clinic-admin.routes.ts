@@ -28,6 +28,10 @@ export const CLINIC_ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./tiss-config/tiss-config.component').then(m => m.TissConfigComponent)
       },
       {
+        path: 'public-display',
+        loadComponent: () => import('./public-display/public-display.component').then(m => m.PublicDisplayComponent)
+      },
+      {
         path: '',
         redirectTo: 'info',
         pathMatch: 'full'
