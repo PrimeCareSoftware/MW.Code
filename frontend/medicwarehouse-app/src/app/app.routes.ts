@@ -101,6 +101,12 @@ export const routes: Routes = [
   },
   { 
     path: 'appointments', 
+    redirectTo: '/appointments/calendar', 
+    pathMatch: 'full',
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'appointments/list', 
     loadComponent: () => import('./pages/appointments/appointment-list/appointment-list').then(m => m.AppointmentList),
     canActivate: [authGuard]
   },
