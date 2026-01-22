@@ -912,16 +912,209 @@ Analisa a rentabilidade por procedimento, médico e convênio.
 }
 ```
 
+## Frontend - Implementação dos Relatórios Financeiros
+
+### Visão Geral
+
+A implementação frontend dos relatórios financeiros segue os padrões estabelecidos no projeto, utilizando:
+- **Framework:** Angular com standalone components
+- **State Management:** Angular Signals
+- **Estilo:** SCSS com design system customizado
+- **Responsividade:** Mobile-first approach
+
+### Componentes Implementados
+
+#### 1. DRE Report Component
+
+**Localização:** `frontend/medicwarehouse-app/src/app/pages/financial/reports/dre-report.component.ts`
+
+**Funcionalidades:**
+- Seleção de clínica e período (data início/fim)
+- Visualização de receita bruta, deduções e receita líquida
+- Breakdown de custos e despesas por categoria
+- Cálculo de lucro operacional, lucro líquido e margem de lucro
+- Detalhamento de receitas por método de pagamento
+- Detalhamento de despesas por categoria
+- Exportação para PDF e Excel (planejado)
+
+**Rota:** `/financial/reports/dre`
+
+**Exemplo de uso:**
+```typescript
+// O componente carrega dados do endpoint DRE
+this.financialService.getDREReport(clinicId, startDate, endDate)
+  .subscribe(report => {
+    // Exibe relatório com formatação de moeda brasileira
+    console.log(report.netProfit);
+    console.log(report.profitMargin);
+  });
+```
+
+#### 2. Cash Flow Forecast Component
+
+**Localização:** `frontend/medicwarehouse-app/src/app/pages/financial/reports/cash-flow-forecast.component.ts`
+
+**Funcionalidades:**
+- Seleção de clínica e número de meses para projeção (1-12 meses)
+- Visualização do saldo atual e projetado
+- Projeção mensal de receitas e despesas
+- Saldo acumulado por mês
+- Listagem de contas a receber pendentes
+- Listagem de contas a pagar pendentes
+- Exportação para PDF e Excel (planejado)
+
+**Rota:** `/financial/reports/cash-flow-forecast`
+
+**Exemplo de uso:**
+```typescript
+// Gera previsão de fluxo de caixa para 6 meses
+this.financialService.getCashFlowForecast(clinicId, 6)
+  .subscribe(forecast => {
+    console.log(forecast.projectedBalance);
+    console.log(forecast.monthlyForecast);
+  });
+```
+
+#### 3. Profitability Analysis Component
+
+**Localização:** `frontend/medicwarehouse-app/src/app/pages/financial/reports/profitability-analysis.component.ts`
+
+**Funcionalidades:**
+- Seleção de clínica e período (data início/fim)
+- Visão geral de receita, custos e lucro total
+- Análise de rentabilidade por tipo de procedimento
+- Análise de rentabilidade por profissional
+- Análise de rentabilidade por convênio (incluindo particular)
+- Gráficos de percentual com barra visual
+- Exportação para PDF e Excel (planejado)
+
+**Rota:** `/financial/reports/profitability`
+
+**Exemplo de uso:**
+```typescript
+// Carrega análise de rentabilidade
+this.financialService.getProfitabilityAnalysis(clinicId, startDate, endDate)
+  .subscribe(analysis => {
+    console.log(analysis.profitMargin);
+    console.log(analysis.byProcedure);
+    console.log(analysis.byDoctor);
+  });
+```
+
+### Models TypeScript
+
+Todos os modelos foram adicionados em `frontend/medicwarehouse-app/src/app/models/financial.model.ts`:
+
+```typescript
+// Interfaces principais
+export interface DREReport { ... }
+export interface CashFlowForecast { ... }
+export interface ProfitabilityAnalysis { ... }
+
+// Interfaces auxiliares
+export interface RevenueDetail { ... }
+export interface ExpenseDetail { ... }
+export interface MonthlyForecast { ... }
+export interface ReceivableForecast { ... }
+export interface PayableForecast { ... }
+export interface ProfitabilityByProcedure { ... }
+export interface ProfitabilityByDoctor { ... }
+export interface ProfitabilityByInsurance { ... }
+```
+
+### Service Methods
+
+O `FinancialService` foi atualizado com três novos métodos em `frontend/medicwarehouse-app/src/app/services/financial.service.ts`:
+
+```typescript
+// DRE Report
+getDREReport(clinicId: string, startDate: string, endDate: string): Observable<DREReport>
+
+// Cash Flow Forecast
+getCashFlowForecast(clinicId: string, months: number = 3): Observable<CashFlowForecast>
+
+// Profitability Analysis
+getProfitabilityAnalysis(clinicId: string, startDate: string, endDate: string): Observable<ProfitabilityAnalysis>
+```
+
+### Rotas
+
+As rotas foram adicionadas em `app.routes.ts`:
+
+```typescript
+// Financial Reports routes
+{ 
+  path: 'financial/reports/dre', 
+  loadComponent: () => import('./pages/financial/reports/dre-report.component')
+    .then(m => m.DREReportComponent),
+  canActivate: [authGuard]
+},
+{ 
+  path: 'financial/reports/cash-flow-forecast', 
+  loadComponent: () => import('./pages/financial/reports/cash-flow-forecast.component')
+    .then(m => m.CashFlowForecastComponent),
+  canActivate: [authGuard]
+},
+{ 
+  path: 'financial/reports/profitability', 
+  loadComponent: () => import('./pages/financial/reports/profitability-analysis.component')
+    .then(m => m.ProfitabilityAnalysisComponent),
+  canActivate: [authGuard]
+}
+```
+
+### Design e UX
+
+**Padrões de Design:**
+- Cards para resumos com indicadores visuais (cores verde para positivo, vermelho para negativo)
+- Tabelas responsivas com ordenação
+- Filtros intuitivos com seleção de clínica e período
+- Barras de progresso visual para percentuais
+- Loading states e mensagens de erro claras
+- Layout consistente com outras páginas do sistema
+
+**Cores e Temas:**
+- Receitas/Positivo: `#38a169` (verde)
+- Despesas/Negativo: `#e53e3e` (vermelho)
+- Neutral: `#4299e1` (azul)
+- Background: `white` com sombras sutis
+- Texto: `#2d3748` (primário), `#718096` (secundário)
+
+### Próximas Melhorias Frontend
+
+1. **Gráficos Interativos**
+   - Integrar biblioteca de charts (ApexCharts, Chart.js)
+   - Gráficos de linha para evolução temporal
+   - Gráficos de pizza para distribuição de receitas/despesas
+
+2. **Exportação de Relatórios**
+   - Implementar exportação para PDF com formatação profissional
+   - Implementar exportação para Excel com múltiplas planilhas
+   - Adicionar opção de envio por e-mail
+
+3. **Dashboard Consolidado**
+   - Criar página de dashboard com todos os KPIs principais
+   - Widgets personalizáveis
+   - Comparação de períodos
+
+4. **Filtros Avançados**
+   - Comparação entre períodos
+   - Filtro por profissional específico
+   - Filtro por tipo de convênio
+
 ## Próximos Passos
 
 ### Funcionalidades Pendentes
 
 1. **Relatórios Financeiros**
-   - [x] DRE (Demonstrativo de Resultados) ✅ **Janeiro 2026**
-   - [x] Previsão de fluxo de caixa ✅ **Janeiro 2026**
-   - [x] Rentabilidade por procedimento ✅ **Janeiro 2026**
+   - [x] DRE (Demonstrativo de Resultados) ✅ **Backend - Janeiro 2026**
+   - [x] Previsão de fluxo de caixa ✅ **Backend - Janeiro 2026**
+   - [x] Rentabilidade por procedimento ✅ **Backend - Janeiro 2026**
+   - [x] Frontend dos 3 relatórios ✅ **Janeiro 2026**
+   - [ ] Gráficos interativos (ApexCharts)
+   - [ ] Dashboard financeiro executivo
    - [ ] Análise de inadimplência com dashboard
-   - [ ] Dashboard financeiro frontend
+   - [ ] Exportação PDF/Excel funcional
 
 2. **Automações**
    - [ ] Geração automática de contas a receber após fechamento
