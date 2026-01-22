@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
@@ -187,7 +186,7 @@ namespace MedicSoft.Application.Services
             var procedureGroups = allProcedures.GroupBy(p => new 
             { 
                 p.ProcedureCode, 
-                p.ProcedureName 
+                p.ProcedureDescription 
             });
 
             var results = new List<ProcedureGlosasDto>();
@@ -203,7 +202,7 @@ namespace MedicSoft.Application.Services
                 {
                     ProcedureId = Guid.Empty, // Group by code/name, not specific ID
                     ProcedureCode = procedureGroup.Key.ProcedureCode,
-                    ProcedureName = procedureGroup.Key.ProcedureName,
+                    ProcedureName = procedureGroup.Key.ProcedureDescription,
                     TotalBilled = totalBilled,
                     TotalGlosed = totalGlosed,
                     GlosaPercentage = totalBilled > 0 ? (totalGlosed / totalBilled) * 100 : 0,
@@ -219,12 +218,20 @@ namespace MedicSoft.Application.Services
 
         public async Task<IEnumerable<AuthorizationRateDto>> GetAuthorizationRateAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId)
         {
-            var authorizations = await _authorizationRequestRepository.GetByClinicIdAsync(clinicId, tenantId);
-            var filteredAuths = authorizations.Where(a => 
+            // Get all authorizations for the tenant with details (including PatientHealthInsurance)
+            var allAuthorizations = await _authorizationRequestRepository.GetAllWithDetailsAsync(tenantId);
+            
+            // Filter by date range
+            var filteredAuths = allAuthorizations.Where(a => 
                 a.RequestDate >= startDate && 
-                a.RequestDate <= endDate).ToList();
+                a.RequestDate <= endDate &&
+                a.PatientHealthInsurance != null).ToList();
 
-            var operatorGroups = filteredAuths.GroupBy(a => a.OperatorId);
+            // Group by operator through PatientHealthInsurance -> HealthInsurancePlan -> OperatorId
+            var operatorGroups = filteredAuths
+                .Where(a => a.PatientHealthInsurance?.HealthInsurancePlan?.OperatorId != null)
+                .GroupBy(a => a.PatientHealthInsurance!.HealthInsurancePlan!.OperatorId);
+
             var results = new List<AuthorizationRateDto>();
 
             foreach (var operatorGroup in operatorGroups)
@@ -234,8 +241,8 @@ namespace MedicSoft.Application.Services
 
                 var total = auths.Count;
                 var approved = auths.Count(a => a.Status == AuthorizationStatus.Approved);
-                var rejected = auths.Count(a => a.Status == AuthorizationStatus.Rejected);
-                var pending = auths.Count(a => a.Status == AuthorizationStatus.Pending || a.Status == AuthorizationStatus.InAnalysis);
+                var rejected = auths.Count(a => a.Status == AuthorizationStatus.Denied);
+                var pending = auths.Count(a => a.Status == AuthorizationStatus.Pending);
 
                 var operatorEntity = await _operatorRepository.GetByIdAsync(operatorId, tenantId);
                 var operatorName = operatorEntity?.TradeName ?? "Desconhecida";
