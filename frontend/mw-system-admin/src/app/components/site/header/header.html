@@ -2,27 +2,20 @@
   <div class="container">
     <div class="header-content">
       <a routerLink="/site" class="logo">
-        <h1>PrimeCare Software</h1>
+        <h1>PrimeCare</h1>
       </a>
 
-      <button class="menu-toggle" (click)="toggleMenu()" [class.active]="isMenuOpen">
+      <button class="menu-toggle" (click)="toggleMenu()" [class.active]="isMenuOpen" aria-label="Toggle navigation menu">
         <span></span>
         <span></span>
         <span></span>
       </button>
 
       <nav class="nav" [class.open]="isMenuOpen">
-        <a routerLink="/site" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a routerLink="/site/pricing" routerLinkActive="active">Planos</a>
-        <a routerLink="/site/testimonials" routerLinkActive="active">Depoimentos</a>
+        <a routerLink="/site/pricing" routerLinkActive="active">Preços</a>
+        <a routerLink="/site/clinics" routerLinkActive="active">Clínicas</a>
         <a routerLink="/site/contact" routerLinkActive="active">Contato</a>
-        <a routerLink="/site/cart" class="cart-link">
-          <span class="cart-icon">🛒</span>
-          <span class="cart-count" *ngIf="cartService.getItemCount() > 0">
-            {{ cartService.getItemCount() }}
-          </span>
-        </a>
-        <a routerLink="/site/register" class="btn btn-primary">Cadastre-se</a>
+        <a routerLink="/site/register" class="btn btn-primary">Começar</a>
       </nav>
     </div>
   </div>
