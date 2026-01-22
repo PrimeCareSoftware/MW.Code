@@ -14,6 +14,7 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   dropdownOpen = false;
   sidebarOpen = true;
   private sidebarElement: HTMLElement | null = null;
+  private boundSaveScrollPosition: (() => void) | null = null;
   
   constructor(public authService: Auth, private elementRef: ElementRef) {
     // Check localStorage for sidebar state (only in browser environment)
@@ -41,8 +42,9 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
         // Restore scroll position
         this.restoreSidebarScrollPosition();
         
-        // Save scroll position on scroll
-        this.sidebarElement.addEventListener('scroll', this.saveSidebarScrollPosition.bind(this));
+        // Save scroll position on scroll - store bound function reference for cleanup
+        this.boundSaveScrollPosition = this.saveSidebarScrollPosition.bind(this);
+        this.sidebarElement.addEventListener('scroll', this.boundSaveScrollPosition);
       }
     }
   }
@@ -52,8 +54,8 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
       document.body.classList.remove('sidebar-open');
       
       // Remove scroll event listener
-      if (this.sidebarElement) {
-        this.sidebarElement.removeEventListener('scroll', this.saveSidebarScrollPosition.bind(this));
+      if (this.sidebarElement && this.boundSaveScrollPosition) {
+        this.sidebarElement.removeEventListener('scroll', this.boundSaveScrollPosition);
       }
     }
   }

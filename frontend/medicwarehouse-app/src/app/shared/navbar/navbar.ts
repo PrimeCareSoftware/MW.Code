@@ -15,6 +15,7 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   sidebarOpen = true;
   adminDropdownOpen = false;
   private sidebarElement: HTMLElement | null = null;
+  private boundSaveScrollPosition: (() => void) | null = null;
   
   constructor(public authService: Auth, private elementRef: ElementRef) {
     // Check localStorage for sidebar state
@@ -29,14 +30,17 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     // Get reference to sidebar element
-    this.sidebarElement = this.elementRef.nativeElement.querySelector('.sidebar');
-    
-    if (this.sidebarElement) {
-      // Restore scroll position
-      this.restoreSidebarScrollPosition();
+    if (typeof document !== 'undefined') {
+      this.sidebarElement = this.elementRef.nativeElement.querySelector('.sidebar');
       
-      // Save scroll position on scroll
-      this.sidebarElement.addEventListener('scroll', this.saveSidebarScrollPosition.bind(this));
+      if (this.sidebarElement) {
+        // Restore scroll position
+        this.restoreSidebarScrollPosition();
+        
+        // Save scroll position on scroll - store bound function reference for cleanup
+        this.boundSaveScrollPosition = this.saveSidebarScrollPosition.bind(this);
+        this.sidebarElement.addEventListener('scroll', this.boundSaveScrollPosition);
+      }
     }
   }
 
@@ -44,13 +48,13 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
     document.body.classList.remove('sidebar-open', 'has-navbar', 'has-sidebar');
     
     // Remove scroll event listener
-    if (this.sidebarElement) {
-      this.sidebarElement.removeEventListener('scroll', this.saveSidebarScrollPosition.bind(this));
+    if (this.sidebarElement && this.boundSaveScrollPosition) {
+      this.sidebarElement.removeEventListener('scroll', this.boundSaveScrollPosition);
     }
   }
 
   private saveSidebarScrollPosition(): void {
-    if (this.sidebarElement) {
+    if (this.sidebarElement && typeof localStorage !== 'undefined') {
       try {
         localStorage.setItem('sidebarScrollPosition', this.sidebarElement.scrollTop.toString());
       } catch (error) {
@@ -60,7 +64,7 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private restoreSidebarScrollPosition(): void {
-    if (this.sidebarElement) {
+    if (this.sidebarElement && typeof localStorage !== 'undefined') {
       try {
         const savedPosition = localStorage.getItem('sidebarScrollPosition');
         if (savedPosition !== null) {
