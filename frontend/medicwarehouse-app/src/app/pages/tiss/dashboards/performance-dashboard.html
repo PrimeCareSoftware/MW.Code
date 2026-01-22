@@ -1,0 +1,245 @@
+<div class="dashboard-container">
+  <app-navbar></app-navbar>
+  
+  <div class="content">
+    <div class="header-section">
+      <h1>Dashboard de Performance TISS</h1>
+      <button class="btn btn-primary" (click)="exportToPDF()">
+        <i class="bi bi-file-pdf"></i> Exportar PDF
+      </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="startDate" class="form-label">Data Inicial</label>
+            <input 
+              type="date" 
+              id="startDate"
+              class="form-control" 
+              [(ngModel)]="startDate"
+              (change)="onDateRangeChange()"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="endDate" class="form-label">Data Final</label>
+            <input 
+              type="date" 
+              id="endDate"
+              class="form-control" 
+              [(ngModel)]="endDate"
+              (change)="onDateRangeChange()"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="performanceMonths" class="form-label">Meses de Comparação</label>
+            <select 
+              id="performanceMonths"
+              class="form-select" 
+              [(ngModel)]="performanceMonths"
+              (change)="onPerformanceMonthsChange()"
+            >
+              <option [value]="6">6 meses</option>
+              <option [value]="12">12 meses</option>
+              <option [value]="18">18 meses</option>
+              <option [value]="24">24 meses</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p class="mt-2">Carregando dados...</p>
+      </div>
+    }
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ errorMessage() }}
+        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+      </div>
+    }
+
+    <!-- Dashboard Content -->
+    @if (hasData() && !isLoading()) {
+      
+      <!-- Summary Cards -->
+      <div class="summary-section mb-4">
+        <h3>Indicadores Gerais</h3>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="card summary-card">
+              <div class="card-body">
+                <h6 class="text-muted">Taxa Média de Aprovação</h6>
+                <h3 [ngClass]="getAuthRateClass(averageAuthorizationRate())">
+                  {{ formatPercentage(averageAuthorizationRate()) }}
+                </h3>
+                <small>Média entre todas as operadoras</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="card summary-card">
+              <div class="card-body">
+                <h6 class="text-muted">Tempo Médio de Aprovação</h6>
+                <h3 [ngClass]="getApprovalDaysClass(averageApprovalDays())">
+                  {{ formatDays(averageApprovalDays()) }}
+                </h3>
+                <small>Média entre todas as operadoras</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Authorization Rate by Operator -->
+      @if (authorizationData().length > 0) {
+        <div class="authorization-section mb-4">
+          <h3>Taxa de Aprovação de Autorizações Prévias</h3>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Operadora</th>
+                      <th>Total de Solicitações</th>
+                      <th>Aprovadas</th>
+                      <th>Rejeitadas</th>
+                      <th>Pendentes</th>
+                      <th>Taxa de Aprovação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (auth of authorizationData(); track auth.operatorId) {
+                      <tr>
+                        <td>{{ auth.operatorName }}</td>
+                        <td>{{ auth.totalRequests }}</td>
+                        <td class="text-success">{{ auth.approvedRequests }}</td>
+                        <td class="text-danger">{{ auth.rejectedRequests }}</td>
+                        <td class="text-warning">{{ auth.pendingRequests }}</td>
+                        <td>
+                          <span 
+                            class="badge" 
+                            [ngClass]="auth.approvalRate >= 90 ? 'bg-success' : 
+                                       auth.approvalRate >= 70 ? 'bg-warning' : 'bg-danger'"
+                          >
+                            {{ formatPercentage(auth.approvalRate) }}
+                          </span>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Approval Time by Operator -->
+      @if (approvalTimeData().length > 0) {
+        <div class="approval-time-section mb-4">
+          <h3>Tempo Médio de Aprovação por Operadora</h3>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Operadora</th>
+                      <th>Tempo Médio</th>
+                      <th>Tempo Mínimo</th>
+                      <th>Tempo Máximo</th>
+                      <th>Lotes Processados</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (approval of approvalTimeData(); track approval.operatorId) {
+                      <tr>
+                        <td>{{ approval.operatorName }}</td>
+                        <td>
+                          <span [ngClass]="getApprovalDaysClass(approval.averageApprovalDays)">
+                            {{ formatDays(approval.averageApprovalDays) }}
+                          </span>
+                        </td>
+                        <td class="text-success">{{ formatDays(approval.minApprovalDays) }}</td>
+                        <td class="text-danger">{{ formatDays(approval.maxApprovalDays) }}</td>
+                        <td>{{ approval.totalProcessed }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Monthly Performance Comparison -->
+      @if (monthlyPerformance().length > 0) {
+        <div class="monthly-performance-section mb-4">
+          <h3>Comparativo Mensal de Performance</h3>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Período</th>
+                      <th>Total Faturado</th>
+                      <th>Total Aprovado</th>
+                      <th>Taxa de Glosa</th>
+                      <th>Tempo Médio Aprovação</th>
+                      <th>Guias</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (month of monthlyPerformance(); track month.monthName) {
+                      <tr>
+                        <td>{{ month.monthName }}</td>
+                        <td>{{ formatCurrency(month.totalBilled) }}</td>
+                        <td class="text-success">{{ formatCurrency(month.totalApproved) }}</td>
+                        <td>
+                          <span 
+                            class="badge" 
+                            [ngClass]="month.glosaPercentage > 15 ? 'bg-danger' : 
+                                       month.glosaPercentage > 10 ? 'bg-warning' : 'bg-success'"
+                          >
+                            {{ formatPercentage(month.glosaPercentage) }}
+                          </span>
+                        </td>
+                        <td>
+                          <span [ngClass]="getApprovalDaysClass(month.averageApprovalDays)">
+                            {{ formatDays(month.averageApprovalDays) }}
+                          </span>
+                        </td>
+                        <td>{{ month.totalGuides }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+
+    @if (!hasData() && !isLoading() && !errorMessage()) {
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i>
+        Selecione os filtros acima para carregar os dados de performance.
+      </div>
+    }
+  </div>
+</div>
