@@ -15,6 +15,9 @@ namespace MedicSoft.Application.DTOs
         public int AppointmentDurationMinutes { get; set; }
         public bool AllowEmergencySlots { get; set; }
         public bool IsActive { get; set; }
+        public bool ShowOnPublicSite { get; set; }
+        public string ClinicType { get; set; } = string.Empty;
+        public string? WhatsAppNumber { get; set; }
         public string DefaultPaymentReceiverType { get; set; } = "Secretary";
     }
 
