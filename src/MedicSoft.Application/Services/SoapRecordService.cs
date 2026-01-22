@@ -12,11 +12,11 @@ namespace MedicSoft.Application.Services
     public class SoapRecordService : ISoapRecordService
     {
         private readonly ISoapRecordRepository _soapRecordRepository;
-        private readonly IRepository<Appointment> _appointmentRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
 
         public SoapRecordService(
             ISoapRecordRepository soapRecordRepository,
-            IRepository<Appointment> appointmentRepository)
+            IAppointmentRepository appointmentRepository)
         {
             _soapRecordRepository = soapRecordRepository;
             _appointmentRepository = appointmentRepository;

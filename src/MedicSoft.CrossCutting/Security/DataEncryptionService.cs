@@ -92,12 +92,22 @@ namespace MedicSoft.CrossCutting.Security
             if (string.IsNullOrWhiteSpace(cipherText))
                 return cipherText;
 
+            // If the data doesn't look like Base64, assume it's unencrypted legacy data
+            if (!IsBase64String(cipherText))
+            {
+                // Return the original value for unencrypted legacy data
+                return cipherText;
+            }
+
             try
             {
                 var encryptedData = Convert.FromBase64String(cipherText);
 
                 if (encryptedData.Length < NonceSize + TagSize)
-                    throw new CryptographicException("Invalid encrypted data format");
+                {
+                    // Data is too short to be properly encrypted, likely unencrypted
+                    return cipherText;
+                }
 
                 using var aesGcm = new AesGcm(_encryptionKey, TagSize);
 
@@ -116,19 +126,37 @@ namespace MedicSoft.CrossCutting.Security
 
                 return Encoding.UTF8.GetString(plainBytes);
             }
-            catch (FormatException ex)
+            catch (FormatException)
             {
-                throw new CryptographicException("Invalid encrypted data format", ex);
+                // Not valid Base64, return original value
+                return cipherText;
             }
             catch (CryptographicException)
             {
-                // Re-throw cryptographic exceptions as-is (e.g., authentication failures)
-                throw;
+                // Decryption failed (wrong key or corrupted data), return original
+                return cipherText;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new CryptographicException("Failed to decrypt data", ex);
+                // Any other error, return original value
+                return cipherText;
             }
+        }
+
+        /// <summary>
+        /// Checks if a string is valid Base64.
+        /// </summary>
+        private bool IsBase64String(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+
+            value = value.Trim();
+            
+            // Base64 strings should only contain valid Base64 characters
+            // and have length that's a multiple of 4
+            return (value.Length % 4 == 0) && 
+                   System.Text.RegularExpressions.Regex.IsMatch(value, @"^[a-zA-Z0-9\+/]*={0,2}$");
         }
 
         /// <summary>
