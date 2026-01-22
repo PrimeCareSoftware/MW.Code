@@ -41,7 +41,7 @@ namespace MedicSoft.Domain.ValueObjects
         private void ValidateVitalSigns(int? systolicBP, int? diastolicBP, 
             int? heartRate, int? respiratoryRate,
             decimal? temperature, int? oxygenSaturation,
-            decimal? weight, int? height, int? pain)
+            decimal? weight, decimal? height, int? pain)
         {
             if (systolicBP.HasValue && (systolicBP < 0 || systolicBP > 300))
                 throw new ArgumentException("Systolic BP must be between 0 and 300 mmHg");
@@ -98,8 +98,17 @@ namespace MedicSoft.Domain.ValueObjects
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(SystolicBP, DiastolicBP, HeartRate, 
-                RespiratoryRate, Temperature, OxygenSaturation, Weight, Height, Pain);
+            var hash = new HashCode();
+            hash.Add(SystolicBP);
+            hash.Add(DiastolicBP);
+            hash.Add(HeartRate);
+            hash.Add(RespiratoryRate);
+            hash.Add(Temperature);
+            hash.Add(OxygenSaturation);
+            hash.Add(Weight);
+            hash.Add(Height);
+            hash.Add(Pain);
+            return hash.ToHashCode();
         }
     }
 }
