@@ -333,14 +333,7 @@ namespace MedicSoft.Encryption.Tests
             var decrypted = _encryptionService.Decrypt(encrypted);
 
             // Assert
-            if (string.IsNullOrWhiteSpace(plainText))
-            {
-                decrypted.Should().Be(plainText);
-            }
-            else
-            {
-                decrypted.Should().Be(plainText);
-            }
+            decrypted.Should().Be(plainText);
         }
 
         [Fact]
