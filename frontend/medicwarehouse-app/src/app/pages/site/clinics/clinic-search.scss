@@ -57,7 +57,7 @@
           font-size: 0.9375rem;
           transition: all var(--transition-fast);
           background: white;
-          font-family: inherit;
+          font-family: var(--font-family);
 
           &:focus {
             outline: none;
@@ -164,12 +164,12 @@
     padding: 3rem;
 
     svg {
-      color: var(--red-500);
+      color: var(--error-500);
       margin-bottom: 1rem;
     }
 
     p {
-      color: var(--red-600);
+      color: var(--error-600);
       font-size: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -248,9 +248,9 @@
           flex-shrink: 0;
 
           &.badge-success {
-            background: var(--green-100);
-            color: var(--green-700);
-            border: 1px solid var(--green-200);
+            background: var(--success-100);
+            color: var(--success-700);
+            border: 1px solid var(--success-200);
           }
 
           &.badge-secondary {
