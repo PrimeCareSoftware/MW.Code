@@ -15,9 +15,9 @@ import { ThemeService, Theme } from '../../services/theme.service';
         [attr.aria-pressed]="currentTheme === 'light'"
         aria-label="Modo claro"
         title="Modo claro">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 3V2M10 18v-1M17 10h1M2 10h1M15.657 4.343l.707-.707M3.636 16.364l.707-.707M15.657 15.657l.707.707M3.636 3.636l.707.707M13 10a3 3 0 11-6 0 3 3 0 016 0z" 
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 2.7V1.8M9 16.2v-.9M15.3 9h.9M1.8 9h.9M14.091 3.909l.636-.636M3.273 14.727l.636-.636M14.091 14.091l.636.636M3.273 3.273l.636.636M11.7 9a2.7 2.7 0 11-5.4 0 2.7 2.7 0 015.4 0z" 
+            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
       
@@ -28,9 +28,9 @@ import { ThemeService, Theme } from '../../services/theme.service';
         [attr.aria-pressed]="currentTheme === 'dark'"
         aria-label="Modo noturno"
         title="Modo noturno">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" 
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.564 11.964A7.2 7.2 0 016.036 2.436a7.201 7.201 0 109.528 9.528z" 
+            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
       
@@ -41,9 +41,9 @@ import { ThemeService, Theme } from '../../services/theme.service';
         [attr.aria-pressed]="currentTheme === 'high-contrast'"
         aria-label="Alto contraste"
         title="Alto contraste">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM10 2v16" 
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 16.2a7.2 7.2 0 100-14.4 7.2 7.2 0 000 14.4zM9 1.8v14.4" 
+            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
     </div>
