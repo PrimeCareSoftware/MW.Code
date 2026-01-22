@@ -10,7 +10,7 @@ using MedicSoft.Domain.Interfaces;
 namespace MedicSoft.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/clinic-customization")]
     public class ClinicCustomizationController : BaseController
     {
         private readonly IClinicCustomizationRepository _customizationRepository;
