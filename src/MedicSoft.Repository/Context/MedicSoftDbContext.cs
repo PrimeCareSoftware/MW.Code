@@ -1,22 +1,33 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Configurations;
+using MedicSoft.Repository.Extensions;
 
 namespace MedicSoft.Repository.Context
 {
     public class MedicSoftDbContext : DbContext
     {
         private readonly IConfiguration? _configuration;
+        private readonly IDataEncryptionService? _encryptionService;
 
         public MedicSoftDbContext(DbContextOptions<MedicSoftDbContext> options) : base(options)
         {
             _configuration = null;
+            _encryptionService = null;
         }
 
         public MedicSoftDbContext(DbContextOptions<MedicSoftDbContext> options, IConfiguration? configuration) : base(options)
         {
             _configuration = configuration;
+            _encryptionService = null;
+        }
+
+        public MedicSoftDbContext(DbContextOptions<MedicSoftDbContext> options, IConfiguration? configuration, IDataEncryptionService? encryptionService) : base(options)
+        {
+            _configuration = configuration;
+            _encryptionService = encryptionService;
         }
 
         public DbSet<Patient> Patients { get; set; } = null!;
@@ -236,6 +247,12 @@ namespace MedicSoft.Repository.Context
             //modelBuilder.Entity<WaitingQueueConfiguration>().HasQueryFilter(wqc => EF.Property<string>(wqc, "TenantId") == GetTenantId());
             //modelBuilder.Entity<ExamCatalog>().HasQueryFilter(ec => EF.Property<string>(ec, "TenantId") == GetTenantId());
             //modelBuilder.Entity<Notification>().HasQueryFilter(n => EF.Property<string>(n, "TenantId") == GetTenantId());
+
+            // Apply encryption to sensitive medical data fields (LGPD compliance)
+            if (_encryptionService != null)
+            {
+                modelBuilder.ApplyMedicalDataEncryption(_encryptionService);
+            }
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

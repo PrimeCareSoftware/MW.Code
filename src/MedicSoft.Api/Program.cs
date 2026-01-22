@@ -217,6 +217,19 @@ builder.Services.Configure<MedicSoft.Application.Configuration.MediatRLicenseSet
     builder.Configuration.GetSection("MediatRLicense"));
 builder.Services.AddSingleton<MedicSoft.Application.Services.MediatRLicenseService>();
 
+// Configure Data Encryption Service for medical data protection (LGPD compliance)
+var encryptionKey = builder.Configuration["Security:DataEncryptionKey"];
+if (string.IsNullOrEmpty(encryptionKey))
+{
+    Log.Warning("Data encryption key not configured. Medical data will NOT be encrypted!");
+}
+else
+{
+    builder.Services.AddSingleton<IDataEncryptionService>(sp => 
+        new DataEncryptionService(encryptionKey));
+    Log.Information("Data encryption service configured for medical data protection (LGPD)");
+}
+
 // Configure MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
     typeof(MedicSoft.Application.Services.PatientService).Assembly));
