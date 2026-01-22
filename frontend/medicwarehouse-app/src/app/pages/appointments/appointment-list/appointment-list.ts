@@ -26,7 +26,7 @@ export class AppointmentList implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   selectedDate = signal<string>(new Date().toISOString().split('T')[0]);
-  viewMode = signal<'list' | 'calendar'>('list');
+  viewMode = signal<'list' | 'calendar'>('calendar');
   calendarDays = signal<CalendarDay[]>([]);
   currentMonth = signal<Date>(new Date());
   clinicId: string | null = null;
