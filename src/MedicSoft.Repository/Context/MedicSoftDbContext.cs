@@ -64,6 +64,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<DiagnosticHypothesis> DiagnosticHypotheses { get; set; } = null!;
         public DbSet<TherapeuticPlan> TherapeuticPlans { get; set; } = null!;
         public DbSet<InformedConsent> InformedConsents { get; set; } = null!;
+        public DbSet<SoapRecord> SoapRecords { get; set; } = null!;
         
         // Digital Prescriptions - CFM 1.643/2002 and ANVISA 344/1998
         public DbSet<DigitalPrescription> DigitalPrescriptions { get; set; } = null!;
@@ -151,6 +152,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new DiagnosticHypothesisConfiguration());
             modelBuilder.ApplyConfiguration(new TherapeuticPlanConfiguration());
             modelBuilder.ApplyConfiguration(new InformedConsentConfiguration());
+            modelBuilder.ApplyConfiguration(new SoapRecordConfiguration());
             
             // Digital Prescriptions - CFM 1.643/2002 and ANVISA 344/1998
             modelBuilder.ApplyConfiguration(new DigitalPrescriptionConfiguration());
