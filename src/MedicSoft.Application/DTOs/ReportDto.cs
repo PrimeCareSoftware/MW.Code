@@ -328,7 +328,7 @@ namespace MedicSoft.Application.DTOs
     public class ProfitabilityByInsuranceDto
     {
         public Guid? InsuranceId { get; set; }
-        public string InsuranceName { get; set; } = string.Empty;
+        public string? InsuranceName { get; set; }
         public int AppointmentsCount { get; set; }
         public decimal Revenue { get; set; }
         public decimal AverageValue { get; set; }

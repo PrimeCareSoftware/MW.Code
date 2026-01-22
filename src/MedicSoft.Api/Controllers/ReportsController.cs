@@ -529,6 +529,8 @@ namespace MedicSoft.Api.Controllers
             var endDate = today.AddMonths(months);
 
             // Saldo atual (aproximação baseada em contas a receber e pagar)
+            // Note: AccountsReceivable are filtered by clinic (via Appointment relationship)
+            // AccountsPayable are tenant-level (no direct clinic association), so filtered by TenantId
             var paidReceivables = await _context.AccountsReceivable
                 .Include(r => r.Appointment)
                 .Where(r => r.Appointment != null && 
@@ -712,12 +714,8 @@ namespace MedicSoft.Api.Controllers
             var byInsurance = payments
                 .GroupBy(p => new
                 {
-                    InsuranceId = p.Appointment!.HealthInsurancePlan != null
-                        ? p.Appointment.HealthInsurancePlan.OperatorId
-                        : (Guid?)null,
-                    InsuranceName = p.Appointment.HealthInsurancePlan != null && p.Appointment.HealthInsurancePlan.Operator != null
-                        ? p.Appointment.HealthInsurancePlan.Operator.TradeName
-                        : "Particular"
+                    InsuranceId = p.Appointment!.HealthInsurancePlan?.OperatorId,
+                    InsuranceName = p.Appointment.HealthInsurancePlan?.Operator?.TradeName ?? "Particular"
                 })
                 .Select(g => new ProfitabilityByInsuranceDto
                 {
