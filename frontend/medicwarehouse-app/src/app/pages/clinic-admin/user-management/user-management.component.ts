@@ -109,7 +109,10 @@ export class UserManagementComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading doctor fields configuration:', error);
+        // Show user-friendly error message
+        this.errorMessage.set('Aviso: Não foi possível carregar as configurações de campos para médicos. Usando configuração padrão (campos opcionais).');
         // Use default configuration (both fields optional)
+        this.doctorFieldsConfig.set({ professionalIdRequired: false, specialtyRequired: false });
       }
     });
   }
