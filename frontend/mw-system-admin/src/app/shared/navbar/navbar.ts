@@ -75,7 +75,10 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
       try {
         const savedPosition = localStorage.getItem('sidebarScrollPosition');
         if (savedPosition !== null) {
-          this.sidebarElement.scrollTop = parseInt(savedPosition, 10);
+          const scrollPosition = parseInt(savedPosition, 10);
+          if (!isNaN(scrollPosition)) {
+            this.sidebarElement.scrollTop = scrollPosition;
+          }
         }
       } catch (error) {
         console.warn('Could not restore sidebar scroll position:', error);
