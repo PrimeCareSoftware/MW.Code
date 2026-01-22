@@ -12,6 +12,8 @@ import { Navbar } from '../../../shared/navbar/navbar';
   styleUrl: './public-display.component.scss'
 })
 export class PublicDisplayComponent implements OnInit {
+  private readonly SUCCESS_MESSAGE_TIMEOUT = 5000;
+
   settingsForm: FormGroup;
   currentSettings = signal<PublicDisplaySettingsDto | null>(null);
   isLoading = signal<boolean>(false);
@@ -76,7 +78,7 @@ export class PublicDisplayComponent implements OnInit {
       const request = {
         showOnPublicSite: formValue.showOnPublicSite,
         clinicType: formValue.clinicType,
-        whatsAppNumber: formValue.whatsAppNumber || undefined
+        whatsAppNumber: formValue.whatsAppNumber?.trim() || undefined
       };
 
       this.clinicAdminService.updatePublicDisplaySettings(request).subscribe({
@@ -88,7 +90,7 @@ export class PublicDisplayComponent implements OnInit {
           });
           this.successMessage.set('Configurações atualizadas com sucesso!');
           this.isSaving.set(false);
-          setTimeout(() => this.successMessage.set(''), 5000);
+          setTimeout(() => this.successMessage.set(''), this.SUCCESS_MESSAGE_TIMEOUT);
         },
         error: (error) => {
           this.errorMessage.set('Erro ao atualizar configurações: ' + (error.error?.message || error.message));
