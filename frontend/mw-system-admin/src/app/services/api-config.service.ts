@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ApiConfigService {
   private apiUrl = '/api';
-  systemAdminUrl = '/api/system-admin';
+  systemAdminUrl = '/api';
 
   getApiUrl(): string {
     return this.apiUrl;

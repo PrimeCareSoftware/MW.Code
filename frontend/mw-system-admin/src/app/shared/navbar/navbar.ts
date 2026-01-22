@@ -1,4 +1,4 @@
-import { Component, HostListener, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, signal, OnInit, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -10,11 +10,12 @@ import { NotificationPanel } from '../notification-panel/notification-panel';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
-export class Navbar implements OnInit, OnDestroy {
+export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   dropdownOpen = false;
   sidebarOpen = true;
+  private sidebarElement: HTMLElement | null = null;
   
-  constructor(public authService: Auth) {
+  constructor(public authService: Auth, private elementRef: ElementRef) {
     // Check localStorage for sidebar state (only in browser environment)
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       try {
@@ -31,9 +32,52 @@ export class Navbar implements OnInit, OnDestroy {
     this.updateBodyClass();
   }
 
+  ngAfterViewInit(): void {
+    // Get reference to sidebar element
+    if (typeof document !== 'undefined') {
+      this.sidebarElement = this.elementRef.nativeElement.querySelector('.sidebar');
+      
+      if (this.sidebarElement) {
+        // Restore scroll position
+        this.restoreSidebarScrollPosition();
+        
+        // Save scroll position on scroll
+        this.sidebarElement.addEventListener('scroll', this.saveSidebarScrollPosition.bind(this));
+      }
+    }
+  }
+
   ngOnDestroy(): void {
     if (typeof document !== 'undefined') {
       document.body.classList.remove('sidebar-open');
+      
+      // Remove scroll event listener
+      if (this.sidebarElement) {
+        this.sidebarElement.removeEventListener('scroll', this.saveSidebarScrollPosition.bind(this));
+      }
+    }
+  }
+
+  private saveSidebarScrollPosition(): void {
+    if (this.sidebarElement && typeof localStorage !== 'undefined') {
+      try {
+        localStorage.setItem('sidebarScrollPosition', this.sidebarElement.scrollTop.toString());
+      } catch (error) {
+        console.warn('Could not save sidebar scroll position:', error);
+      }
+    }
+  }
+
+  private restoreSidebarScrollPosition(): void {
+    if (this.sidebarElement && typeof localStorage !== 'undefined') {
+      try {
+        const savedPosition = localStorage.getItem('sidebarScrollPosition');
+        if (savedPosition !== null) {
+          this.sidebarElement.scrollTop = parseInt(savedPosition, 10);
+        }
+      } catch (error) {
+        console.warn('Could not restore sidebar scroll position:', error);
+      }
     }
   }
 
