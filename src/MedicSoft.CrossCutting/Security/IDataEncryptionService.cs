@@ -1,0 +1,23 @@
+namespace MedicSoft.CrossCutting.Security
+{
+    /// <summary>
+    /// Interface for encrypting and decrypting sensitive medical data.
+    /// Implementations must use strong encryption algorithms (e.g., AES-256).
+    /// </summary>
+    public interface IDataEncryptionService
+    {
+        /// <summary>
+        /// Encrypts sensitive data.
+        /// </summary>
+        /// <param name="plainText">Data to encrypt</param>
+        /// <returns>Encrypted data, or null if input is null/empty</returns>
+        string? Encrypt(string? plainText);
+
+        /// <summary>
+        /// Decrypts previously encrypted data.
+        /// </summary>
+        /// <param name="cipherText">Encrypted data</param>
+        /// <returns>Decrypted plaintext, or null if input is null/empty</returns>
+        string? Decrypt(string? cipherText);
+    }
+}

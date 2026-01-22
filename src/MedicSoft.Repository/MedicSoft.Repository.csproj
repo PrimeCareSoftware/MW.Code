@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MedicSoft.Domain\MedicSoft.Domain.csproj" />
+    <ProjectReference Include="..\MedicSoft.CrossCutting\MedicSoft.CrossCutting.csproj" />
   </ItemGroup>
 
   <ItemGroup>
