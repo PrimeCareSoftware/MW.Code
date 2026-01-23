@@ -52,18 +52,40 @@ Reformular o processo de cadastro de clínicas de um modelo 1:1 (um proprietári
 
 ## Próximos Passos Necessários
 
-### 🔄 Fase 2: Migração de Banco de Dados
-1. Criar migration para adicionar tabelas:
-   - `Companies`
-   - `UserClinicLinks`
-   - Coluna `CompanyId` em `Clinics`
-   - Coluna `CurrentClinicId` em `Users`
+### ✅ Fase 2: Migração de Banco de Dados (COMPLETO)
 
-2. Script de migração de dados:
-   - Criar Company para cada Clinic existente
-   - Migrar dados de Clinic.Document para Company.Document
-   - Vincular Clinics às Companies criadas
-   - Criar UserClinicLink para cada User.ClinicId existente
+#### Migration Criada: `20260123150022_AddCompanyAndMultiClinicSupport.cs`
+
+1. ✅ Tabelas criadas:
+   - `Companies` - Entidade de empresa/tenant
+   - `UserClinicLinks` - Relacionamento N:N entre Users e Clinics
+   
+2. ✅ Colunas adicionadas:
+   - `CompanyId` em `Clinics` (foreign key para Companies)
+   - `CurrentClinicId` em `Users` (foreign key para Clinics)
+
+3. ✅ Script de migração de dados incluído:
+   - Cria Company para cada Clinic existente (agrupado por Document)
+   - Migra dados de Clinic.Document para Company.Document
+   - Vincula Clinics às Companies criadas
+   - Cria UserClinicLink para cada User.ClinicId existente
+   - Define User.CurrentClinicId para usuários existentes
+
+4. ✅ Índices criados:
+   - Índice único em Companies.Document
+   - Índice único em Companies.Subdomain (filtered)
+   - Índices de performance em UserClinicLinks
+   - Foreign keys com ReferentialAction.Restrict
+
+5. ✅ Documentação criada:
+   - `PHASE2_MIGRATION_GUIDE.md` - Guia completo da migração
+   - `scripts/phase2_migration_validation.sql` - Scripts de validação
+
+#### Como Aplicar a Migration:
+```bash
+cd src/MedicSoft.Repository
+dotnet ef database update --context MedicSoftDbContext
+```
 
 ### 📝 Fase 3: Serviços Backend
 1. **RegistrationService** - Refatorar para:
@@ -185,19 +207,25 @@ dotnet test
 ```
 
 ## Estimativa de Esforço Restante
-- Fase 2 (Migration): 4-6 horas
+- ~~Fase 2 (Migration): 4-6 horas~~ ✅ COMPLETO
 - Fase 3 (Backend Services): 8-12 horas
 - Fase 4 (API): 4-6 horas
 - Fase 5 (Frontend Site): 2-4 horas
 - Fase 6 (Frontend Sistema): 12-16 horas
 - Fase 7 (Testes): 8-12 horas
 
-**Total estimado: 38-56 horas**
+**Total estimado restante: 34-50 horas**
 
 ## Status Atual
-✅ Modelo de domínio completo
-✅ Repositórios implementados
-✅ Configurações EF Core
+✅ Fase 1: Modelo de domínio completo
+✅ Fase 1: Repositórios implementados
+✅ Fase 1: Configurações EF Core
+✅ Fase 2: Migration de banco de dados criada
+✅ Fase 2: Scripts de migração de dados incluídos
+✅ Fase 2: Documentação completa
 ✅ Build sem erros
 
-**Próximo passo recomendado:** Criar a migration de banco de dados e script de migração de dados.
+**Próximo passo recomendado:** 
+1. Aplicar a migration em ambiente de desenvolvimento/teste
+2. Validar migração de dados com scripts em `scripts/phase2_migration_validation.sql`
+3. Iniciar Fase 3: Refatorar serviços backend (RegistrationService, AuthenticationService, etc.)
