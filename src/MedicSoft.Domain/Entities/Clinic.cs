@@ -8,6 +8,7 @@ namespace MedicSoft.Domain.Entities
 {
     public class Clinic : BaseEntity
     {
+        public Guid? CompanyId { get; private set; } // Reference to the parent company
         public string Name { get; private set; }
         public string TradeName { get; private set; }
         public string Document { get; private set; } // CPF or CNPJ
@@ -28,6 +29,9 @@ namespace MedicSoft.Domain.Entities
         public int NumberOfRooms { get; private set; } = 1; // Número de salas de atendimento da clínica
         public bool NotifyPrimaryDoctorOnOtherDoctorAppointment { get; private set; } = true; // Notificar médico principal quando paciente é atendido por outro médico
 
+        // Navigation properties
+        public Company? Company { get; private set; }
+
         private Clinic() 
         { 
             // EF Constructor - nullable warnings suppressed as EF Core sets these via reflection
@@ -41,7 +45,8 @@ namespace MedicSoft.Domain.Entities
 
         public Clinic(string name, string tradeName, string document, string phone,
             string email, string address, TimeSpan openingTime, TimeSpan closingTime,
-            string tenantId, int appointmentDurationMinutes = 30, DocumentType? documentType = null) : base(tenantId)
+            string tenantId, int appointmentDurationMinutes = 30, DocumentType? documentType = null,
+            Guid? companyId = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -89,6 +94,7 @@ namespace MedicSoft.Domain.Entities
                     throw new ArgumentException("Invalid CPF format", nameof(document));
             }
 
+            CompanyId = companyId;
             Name = name.Trim();
             TradeName = tradeName.Trim();
             Document = document.Trim();
@@ -235,6 +241,18 @@ namespace MedicSoft.Domain.Entities
         public void UpdateNotifyPrimaryDoctorSetting(bool notifyPrimaryDoctor)
         {
             NotifyPrimaryDoctorOnOtherDoctorAppointment = notifyPrimaryDoctor;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Sets the company that owns this clinic.
+        /// </summary>
+        public void SetCompany(Guid companyId)
+        {
+            if (companyId == Guid.Empty)
+                throw new ArgumentException("Company ID cannot be empty", nameof(companyId));
+
+            CompanyId = companyId;
             UpdateTimestamp();
         }
 
