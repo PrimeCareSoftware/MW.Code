@@ -98,9 +98,13 @@ namespace MedicSoft.Application.Services
                     result.InvoiceId = invoice.Id;
                 }
 
-                // 7. TODO: Create TISS guide if health insurance
-                // This will be handled separately as TISS requires batch processing
-                // For now, we just mark the appointment as paid
+                // 7. Create TISS guide if health insurance
+                // TODO (GitHub Issue #TBD): Implement automatic TISS Guide creation for health insurance appointments
+                // This requires:
+                // - Configured TUSS procedures
+                // - Prior authorization from operator (when applicable)
+                // - Batch processing for sending to ANS
+                // Target: Q2 2026
 
                 result.Success = true;
                 return result;
@@ -193,20 +197,26 @@ namespace MedicSoft.Application.Services
 
                 return invoice;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Log error but don't fail the payment process
+                // Invoice is optional - payment success is what matters
+                // TODO: Add structured logging (e.g., ILogger) to track invoice creation failures
+                System.Console.WriteLine($"Failed to create invoice for payment {payment.Id}: {ex.Message}");
                 return null;
             }
         }
 
         private string GenerateInvoiceNumber(Guid clinicId, string tenantId)
         {
-            // Generate a unique invoice number
-            // Format: CLINIC-YYYYMM-SEQUENCE
-            var yearMonth = DateTime.UtcNow.ToString("yyyyMM");
-            var sequence = Guid.NewGuid().ToString("N")[..8].ToUpper();
-            return $"INV-{yearMonth}-{sequence}";
+            // Generate a unique invoice number using timestamp + random suffix
+            // Format: INV-YYYYMMDD-HHMMSS-XXXX
+            // Example: INV-20260123-143022-A7F3
+            var timestamp = DateTime.UtcNow;
+            var datePart = timestamp.ToString("yyyyMMdd");
+            var timePart = timestamp.ToString("HHmmss");
+            var randomSuffix = Guid.NewGuid().ToString("N")[..4].ToUpper();
+            return $"INV-{datePart}-{timePart}-{randomSuffix}";
         }
     }
 }
