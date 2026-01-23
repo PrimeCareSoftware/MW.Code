@@ -36,10 +36,10 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
 
             // CFM 1.821 - Validate completeness before closing
             var validationResult = await _cfm1821ValidationService.ValidateMedicalRecordCompleteness(request.Id, request.TenantId);
-            if (!validationResult.IsComplete)
+            if (!validationResult.IsCompliant)
             {
-                var missingFields = string.Join(", ", validationResult.MissingFields);
-                throw new InvalidOperationException($"Medical record is incomplete. Missing fields: {missingFields}. Complete all CFM 1.821 required fields before closing.");
+                var missingFields = string.Join(", ", validationResult.MissingRequirements);
+                throw new InvalidOperationException($"Medical record is incomplete. Missing requirements: {missingFields}. Complete all CFM 1.821 required fields before closing.");
             }
 
             // Close the medical record
