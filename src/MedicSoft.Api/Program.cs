@@ -287,6 +287,9 @@ builder.Services.AddScoped<IDigitalPrescriptionRepository, DigitalPrescriptionRe
 builder.Services.AddScoped<IDigitalPrescriptionItemRepository, DigitalPrescriptionItemRepository>();
 builder.Services.AddScoped<ISNGPCReportRepository, SNGPCReportRepository>();
 builder.Services.AddScoped<IPrescriptionSequenceControlRepository, PrescriptionSequenceControlRepository>();
+builder.Services.AddScoped<IPrescriptionPdfService, PrescriptionPdfService>();
+builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
+builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSignatureService>();
 
 // Electronic Invoices (NF-e/NFS-e)
 builder.Services.AddScoped<IElectronicInvoiceRepository, ElectronicInvoiceRepository>();
