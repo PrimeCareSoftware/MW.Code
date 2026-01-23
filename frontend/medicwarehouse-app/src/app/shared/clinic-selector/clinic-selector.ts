@@ -10,7 +10,7 @@ import { UserClinicDto } from '../../models/clinic.model';
   styleUrl: './clinic-selector.scss'
 })
 export class ClinicSelectorComponent implements OnInit {
-  dropdownOpen = false;
+  dropdownOpen = signal(false);
   
   // Use computed signals from the service
   availableClinics = computed(() => this.clinicSelectionService.availableClinics());
@@ -34,14 +34,14 @@ export class ClinicSelectorComponent implements OnInit {
   }
 
   toggleDropdown(): void {
-    this.dropdownOpen = !this.dropdownOpen;
+    this.dropdownOpen.set(!this.dropdownOpen());
   }
 
   selectClinic(clinicId: string): void {
     this.clinicSelectionService.selectClinic(clinicId).subscribe({
       next: (response) => {
         if (response.success) {
-          this.dropdownOpen = false;
+          this.dropdownOpen.set(false);
           // Optionally reload the page or emit an event to update data
           window.location.reload();
         }
@@ -67,7 +67,7 @@ export class ClinicSelectorComponent implements OnInit {
     if (typeof document !== 'undefined' && event?.target) {
       const target = event.target as HTMLElement;
       if (!target.closest('.clinic-selector')) {
-        this.dropdownOpen = false;
+        this.dropdownOpen.set(false);
       }
     }
   }
