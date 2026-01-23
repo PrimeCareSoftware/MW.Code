@@ -139,20 +139,7 @@ export class QuestionnaireComponent implements OnInit {
       const existing = currentAnswers.get(key);
       
       if (existing) {
-        let value: any = qa.answer;
-        
-        // Convert based on type
-        if (qa.type === QuestionType.YesNo) {
-          value = qa.booleanValue === true ? 'yes' : (qa.booleanValue === false ? 'no' : null);
-        } else if (qa.type === QuestionType.Number || qa.type === QuestionType.Scale) {
-          value = qa.numericValue;
-        } else if (qa.type === QuestionType.MultipleChoice) {
-          value = qa.selectedOptions || [];
-        } else if (qa.type === QuestionType.Date) {
-          value = qa.dateValue;
-        }
-        
-        existing.value = value;
+        existing.value = this.convertAnswerValue(qa);
         currentAnswers.set(key, existing);
       }
     });
@@ -237,15 +224,20 @@ export class QuestionnaireComponent implements OnInit {
         };
         
         // Add type-specific fields
-        if (answer.type === QuestionType.YesNo) {
-          qa.booleanValue = answer.value === 'yes' ? true : (answer.value === 'no' ? false : undefined);
-        } else if (answer.type === QuestionType.Number || answer.type === QuestionType.Scale) {
-          const numValue = Number(answer.value);
-          qa.numericValue = isNaN(numValue) ? undefined : numValue;
-        } else if (answer.type === QuestionType.MultipleChoice) {
-          qa.selectedOptions = Array.isArray(answer.value) ? answer.value : [];
-        } else if (answer.type === QuestionType.Date) {
-          qa.dateValue = answer.value;
+        switch (answer.type) {
+          case QuestionType.YesNo:
+            qa.booleanValue = answer.value === 'yes' ? true : (answer.value === 'no' ? false : undefined);
+            break;
+          case QuestionType.Number:
+          case QuestionType.Scale:
+            qa.numericValue = this.parseNumericValue(answer.value);
+            break;
+          case QuestionType.MultipleChoice:
+            qa.selectedOptions = Array.isArray(answer.value) ? answer.value : [];
+            break;
+          case QuestionType.Date:
+            qa.dateValue = answer.value;
+            break;
         }
         
         questionAnswers.push(qa);
@@ -327,11 +319,8 @@ export class QuestionnaireComponent implements OnInit {
     
     for (const section of tmpl.sections) {
       for (const question of section.questions) {
-        if (question.isRequired) {
-          const answer = this.getAnswer(question);
-          if (answer === null || answer === undefined || answer === '') {
-            return false;
-          }
+        if (question.isRequired && !this.isAnswerProvided(question)) {
+          return false;
         }
       }
     }
@@ -343,5 +332,26 @@ export class QuestionnaireComponent implements OnInit {
     if (confirm('Deseja sair sem salvar as alterações?')) {
       this.router.navigate(['/appointments', this.appointmentId, 'attendance']);
     }
+  }
+
+  private convertAnswerValue(qa: QuestionAnswer): any {
+    switch (qa.type) {
+      case QuestionType.YesNo:
+        return qa.booleanValue === true ? 'yes' : (qa.booleanValue === false ? 'no' : null);
+      case QuestionType.Number:
+      case QuestionType.Scale:
+        return qa.numericValue;
+      case QuestionType.MultipleChoice:
+        return qa.selectedOptions || [];
+      case QuestionType.Date:
+        return qa.dateValue;
+      default:
+        return qa.answer;
+    }
+  }
+
+  private parseNumericValue(value: any): number | undefined {
+    const numValue = Number(value);
+    return isNaN(numValue) ? undefined : numValue;
   }
 }

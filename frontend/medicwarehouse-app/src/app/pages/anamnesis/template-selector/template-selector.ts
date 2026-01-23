@@ -46,10 +46,17 @@ export class TemplateSelectorComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.appointmentId = params['appointmentId'] || '';
       if (params['specialty']) {
-        this.selectedSpecialty.set(Number(params['specialty']));
+        const specialty = Number(params['specialty']);
+        if (this.isValidSpecialty(specialty)) {
+          this.selectedSpecialty.set(specialty);
+        }
       }
     });
     this.loadTemplates();
+  }
+
+  private isValidSpecialty(value: number): boolean {
+    return Object.values(MedicalSpecialty).includes(value);
   }
 
   loadTemplates(): void {
