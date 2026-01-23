@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
@@ -9,7 +9,7 @@ import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-procedure-list',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './procedure-list.html',
   styleUrl: './procedure-list.scss'
 })

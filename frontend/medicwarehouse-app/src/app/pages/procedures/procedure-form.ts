@@ -1,14 +1,14 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
 import { Procedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
 
 @Component({
   selector: 'app-procedure-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, Navbar],
   templateUrl: './procedure-form.html',
   styleUrl: './procedure-form.scss'
 })
