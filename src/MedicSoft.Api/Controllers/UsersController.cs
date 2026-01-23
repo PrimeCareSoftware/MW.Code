@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
@@ -20,16 +21,19 @@ namespace MedicSoft.Api.Controllers
         private readonly IUserService _userService;
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
+        private readonly IClinicSelectionService _clinicSelectionService;
 
         public UsersController(
             ITenantContext tenantContext,
             IUserService userService,
             IClinicSubscriptionRepository subscriptionRepository,
-            ISubscriptionPlanRepository planRepository) : base(tenantContext)
+            ISubscriptionPlanRepository planRepository,
+            IClinicSelectionService clinicSelectionService) : base(tenantContext)
         {
             _userService = userService;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
+            _clinicSelectionService = clinicSelectionService;
         }
 
         /// <summary>
@@ -252,6 +256,77 @@ namespace MedicSoft.Api.Controllers
             return Ok(roles);
         }
 
+        /// <summary>
+        /// Get list of clinics the current user can access
+        /// </summary>
+        [HttpGet("clinics")]
+        public async Task<ActionResult<IEnumerable<UserClinicDto>>> GetUserClinics()
+        {
+            var tenantId = GetTenantId();
+            var userId = GetUserIdFromToken();
+
+            if (userId == Guid.Empty)
+            {
+                return BadRequest(new { message = "User ID not found in token" });
+            }
+
+            var clinics = await _clinicSelectionService.GetUserClinicsAsync(userId, tenantId);
+            return Ok(clinics);
+        }
+
+        /// <summary>
+        /// Get the current clinic the user is working in
+        /// </summary>
+        [HttpGet("current-clinic")]
+        public async Task<ActionResult<UserClinicDto>> GetCurrentClinic()
+        {
+            var tenantId = GetTenantId();
+            var userId = GetUserIdFromToken();
+
+            if (userId == Guid.Empty)
+            {
+                return BadRequest(new { message = "User ID not found in token" });
+            }
+
+            var currentClinic = await _clinicSelectionService.GetCurrentClinicAsync(userId, tenantId);
+            if (currentClinic == null)
+            {
+                return NotFound(new { message = "No current clinic set" });
+            }
+
+            return Ok(currentClinic);
+        }
+
+        /// <summary>
+        /// Switch to a different clinic
+        /// </summary>
+        [HttpPost("select-clinic/{clinicId}")]
+        public async Task<ActionResult<SwitchClinicResponse>> SelectClinic(Guid clinicId)
+        {
+            var tenantId = GetTenantId();
+            var userId = GetUserIdFromToken();
+
+            if (userId == Guid.Empty)
+            {
+                return BadRequest(new { message = "User ID not found in token" });
+            }
+
+            var result = await _clinicSelectionService.SwitchClinicAsync(userId, clinicId, tenantId);
+            
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        private Guid GetUserIdFromToken()
+        {
+            var userIdClaim = User.FindFirst("user_id")?.Value ?? User.FindFirst("nameid")?.Value;
+            return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
+        }
+
         private Guid GetClinicIdFromToken()
         {
             var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
@@ -297,5 +372,6 @@ namespace MedicSoft.Api.Controllers
         public DateTime? LastLoginAt { get; set; }
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
+        public Guid? CurrentClinicId { get; set; }
     }
 }

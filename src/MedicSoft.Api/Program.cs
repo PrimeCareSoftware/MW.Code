@@ -237,6 +237,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
 // Register repositories
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IUserClinicLinkRepository, UserClinicLinkRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<ISoapRecordRepository, SoapRecordRepository>();
@@ -317,6 +319,7 @@ builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IClinicSelectionService, ClinicSelectionService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IExamRequestService, ExamRequestService>();
 builder.Services.AddScoped<IWaitingQueueService, WaitingQueueService>();
