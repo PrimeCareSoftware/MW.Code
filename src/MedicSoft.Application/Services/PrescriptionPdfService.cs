@@ -385,8 +385,8 @@ namespace MedicSoft.Application.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error generating QR code for data: {data}");
-                // Return a small transparent PNG if QR code generation fails
-                return new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 }; // PNG header
+                // Return empty array if QR code generation fails - QuestPDF will handle this gracefully
+                return Array.Empty<byte>();
             }
         }
 

@@ -16,8 +16,8 @@ namespace MedicSoft.Api.Controllers
         private readonly IDigitalPrescriptionItemRepository _itemRepository;
         private readonly IPrescriptionSequenceControlRepository _sequenceRepository;
         private readonly IMapper _mapper;
-        private readonly IPrescriptionPdfService? _pdfService;
-        private readonly ISNGPCXmlGeneratorService? _xmlService;
+        private readonly IPrescriptionPdfService _pdfService;
+        private readonly ISNGPCXmlGeneratorService _xmlService;
 
         public DigitalPrescriptionsController(
             IDigitalPrescriptionRepository prescriptionRepository,
@@ -25,8 +25,8 @@ namespace MedicSoft.Api.Controllers
             IPrescriptionSequenceControlRepository sequenceRepository,
             IMapper mapper,
             ITenantContext tenantContext,
-            IPrescriptionPdfService? pdfService = null,
-            ISNGPCXmlGeneratorService? xmlService = null)
+            IPrescriptionPdfService pdfService,
+            ISNGPCXmlGeneratorService xmlService)
             : base(tenantContext)
         {
             _prescriptionRepository = prescriptionRepository;
@@ -256,9 +256,6 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(typeof(FileContentResult), 200)]
         public async Task<IActionResult> DownloadPdf(Guid id, [FromQuery] string? clinicName = null, [FromQuery] string? clinicAddress = null, [FromQuery] string? clinicPhone = null)
         {
-            if (_pdfService == null)
-                return StatusCode(501, "PDF service not available");
-
             try
             {
                 var prescription = await _prescriptionRepository.GetByIdAsync(id, GetTenantId());
@@ -292,9 +289,6 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(typeof(FileContentResult), 200)]
         public async Task<IActionResult> PreviewPdf(Guid id, [FromQuery] string? clinicName = null, [FromQuery] string? clinicAddress = null, [FromQuery] string? clinicPhone = null)
         {
-            if (_pdfService == null)
-                return StatusCode(501, "PDF service not available");
-
             try
             {
                 var prescription = await _prescriptionRepository.GetByIdAsync(id, GetTenantId());
@@ -327,9 +321,6 @@ namespace MedicSoft.Api.Controllers
         [Produces("application/xml")]
         public async Task<IActionResult> ExportXml(Guid id)
         {
-            if (_xmlService == null)
-                return StatusCode(501, "XML service not available");
-
             try
             {
                 var prescription = await _prescriptionRepository.GetByIdAsync(id, GetTenantId());
