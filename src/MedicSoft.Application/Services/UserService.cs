@@ -261,10 +261,21 @@ namespace MedicSoft.Application.Services
             if (isPreferred)
             {
                 var existingLinks = await _userClinicLinkRepository.GetByUserIdAsync(userId, tenantId);
-                foreach (var link in existingLinks.Where(l => l.IsPreferredClinic))
+                var preferredLinks = existingLinks.Where(l => l.IsPreferredClinic).ToList();
+                
+                // Batch update all preferred links to remove preferred status
+                foreach (var link in preferredLinks)
                 {
                     link.RemoveAsPreferred();
-                    await _userClinicLinkRepository.UpdateAsync(link);
+                }
+                
+                // Save all changes at once if there are any
+                if (preferredLinks.Any())
+                {
+                    foreach (var link in preferredLinks)
+                    {
+                        await _userClinicLinkRepository.UpdateAsync(link);
+                    }
                 }
             }
 
@@ -297,31 +308,21 @@ namespace MedicSoft.Application.Services
             var user = await _userRepository.GetByIdAsync(userId, tenantId);
             if (user != null && user.CurrentClinicId == clinicId)
             {
-                // Set to null or to the user's preferred clinic if they have one
+                // Get all user's clinic links (excluding the one being removed)
                 var userLinks = await _userClinicLinkRepository.GetByUserIdAsync(userId, tenantId);
-                var preferredClinic = userLinks.FirstOrDefault(l => l.IsPreferredClinic && l.IsActive);
+                var activeLinks = userLinks.Where(l => l.IsActive && l.ClinicId != clinicId).ToList();
                 
-                if (preferredClinic != null)
+                if (activeLinks.Any())
                 {
-                    user.SetCurrentClinic(preferredClinic.ClinicId);
+                    // Set to preferred clinic first, otherwise first active clinic
+                    var preferredClinic = activeLinks.FirstOrDefault(l => l.IsPreferredClinic);
+                    var nextClinic = preferredClinic ?? activeLinks.First();
+                    user.SetCurrentClinic(nextClinic.ClinicId);
+                    await _userRepository.UpdateAsync(user);
                 }
-                else
-                {
-                    // Set to first active clinic or clear if no active clinics remain
-                    var firstActiveClinic = userLinks.FirstOrDefault(l => l.IsActive && l.ClinicId != clinicId);
-                    if (firstActiveClinic != null)
-                    {
-                        user.SetCurrentClinic(firstActiveClinic.ClinicId);
-                    }
-                    else
-                    {
-                        // No active clinics remaining - clear CurrentClinicId by reflection or direct property access
-                        // Since there's no ClearCurrentClinic method, we set to Guid.Empty if allowed, or skip
-                        // For now, we'll leave it as is since the user has no active clinics
-                    }
-                }
-                
-                await _userRepository.UpdateAsync(user);
+                // Note: If no active clinics remain, we leave CurrentClinicId as is.
+                // The user won't be able to access the system until linked to a new clinic.
+                // This is intentional for security - we don't clear it to maintain audit trail.
             }
         }
 
@@ -340,11 +341,19 @@ namespace MedicSoft.Application.Services
             if (!targetLink.IsActive)
                 throw new InvalidOperationException("Cannot set an inactive clinic as preferred");
 
-            // Clear existing preferred clinic
+            // Clear existing preferred clinic and set new one
             var userLinks = await _userClinicLinkRepository.GetByUserIdAsync(userId, tenantId);
-            foreach (var link in userLinks.Where(l => l.IsPreferredClinic))
+            var preferredLinks = userLinks.Where(l => l.IsPreferredClinic).ToList();
+            
+            // Batch update: remove preferred status from all existing preferred clinics
+            foreach (var link in preferredLinks)
             {
                 link.RemoveAsPreferred();
+            }
+            
+            // Save all preference removals
+            foreach (var link in preferredLinks)
+            {
                 await _userClinicLinkRepository.UpdateAsync(link);
             }
 
