@@ -1,0 +1,149 @@
+<app-navbar></app-navbar>
+
+<div class="procedure-form-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>{{ procedureId() ? 'Editar Procedimento' : 'Novo Procedimento' }}</h1>
+      <p>{{ procedureId() ? 'Atualize as informações do procedimento' : 'Cadastre um novo procedimento para a clínica' }}</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando...</div>
+    </div>
+  } @else {
+    <div class="form-card">
+      <form [formGroup]="procedureForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3>Informações Básicas</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name" class="required">Nome do Procedimento</label>
+              <input 
+                type="text" 
+                id="name" 
+                formControlName="name" 
+                class="form-control"
+                placeholder="Ex: Consulta de Retorno"
+              />
+              @if (procedureForm.get('name')?.invalid && procedureForm.get('name')?.touched) {
+                <div class="error-message">Nome é obrigatório (mínimo 3 caracteres)</div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="code" class="required">Código</label>
+              <input 
+                type="text" 
+                id="code" 
+                formControlName="code" 
+                class="form-control"
+                placeholder="Ex: PROC-001"
+                [readonly]="procedureId() !== null"
+              />
+              @if (procedureForm.get('code')?.invalid && procedureForm.get('code')?.touched) {
+                <div class="error-message">Código é obrigatório</div>
+              }
+              @if (procedureId()) {
+                <small class="form-text">O código não pode ser alterado</small>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description" class="required">Descrição</label>
+            <textarea 
+              id="description" 
+              formControlName="description" 
+              class="form-control"
+              rows="3"
+              placeholder="Descreva o procedimento..."
+            ></textarea>
+            @if (procedureForm.get('description')?.invalid && procedureForm.get('description')?.touched) {
+              <div class="error-message">Descrição é obrigatória</div>
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Categoria e Valores</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category" class="required">Categoria</label>
+              <select id="category" formControlName="category" class="form-control">
+                @for (cat of procedureCategories; track cat) {
+                  <option [value]="cat">{{ procedureCategoryLabels[cat] }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="price" class="required">Preço (R$)</label>
+              <input 
+                type="number" 
+                id="price" 
+                formControlName="price" 
+                class="form-control"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+              />
+              @if (procedureForm.get('price')?.invalid && procedureForm.get('price')?.touched) {
+                <div class="error-message">Preço é obrigatório e deve ser maior que zero</div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="durationMinutes" class="required">Duração (minutos)</label>
+              <input 
+                type="number" 
+                id="durationMinutes" 
+                formControlName="durationMinutes" 
+                class="form-control"
+                placeholder="30"
+                min="1"
+              />
+              @if (procedureForm.get('durationMinutes')?.invalid && procedureForm.get('durationMinutes')?.touched) {
+                <div class="error-message">Duração é obrigatória</div>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-check">
+              <input 
+                type="checkbox" 
+                id="requiresMaterials" 
+                formControlName="requiresMaterials" 
+                class="form-check-input"
+              />
+              <label for="requiresMaterials" class="form-check-label">
+                Requer materiais especiais
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="procedureForm.invalid || isSaving()">
+            {{ isSaving() ? 'Salvando...' : (procedureId() ? 'Atualizar' : 'Criar') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</div>
