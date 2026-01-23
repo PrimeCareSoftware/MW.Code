@@ -147,15 +147,15 @@ dotnet ef database update --context MedicSoftDbContext
    - Requer permissão users.edit (ClinicOwner/Admin)
    - Incluem validações de segurança e tratamento de erros
 
-### 🎨 Fase 5: Frontend - Site (Cadastro)
-1. Atualizar formulário de registro:
-   - Manter campos de "Empresa" (já existe suporte a CPF/CNPJ)
-   - Clarificar que o cadastro é da empresa, não apenas da clínica
-   - Adicionar campo "Nome da primeira clínica" (opcional, pode usar nome da empresa)
+### ✅ Fase 5: Frontend - Site (Cadastro) (COMPLETO)
+1. ✅ Atualizar formulário de registro:
+   - ✅ Manter campos de "Empresa" (já existe suporte a CPF/CNPJ)
+   - ✅ Clarificar que o cadastro é da empresa, não apenas da clínica
+   - ✅ Adicionar campo "Nome da primeira clínica" (opcional, pode usar nome da empresa)
 
-2. Atualizar textos e labels:
-   - "Dados da Empresa" em vez de "Dados da Clínica"
-   - Explicar que mais clínicas podem ser adicionadas depois
+2. ✅ Atualizar textos e labels:
+   - ✅ "Dados da Empresa" em vez de "Dados da Clínica"
+   - ✅ Explicar que mais clínicas podem ser adicionadas depois
 
 ### 🖥️ Fase 6: Frontend - Sistema
 1. **Topbar/Navbar**:
@@ -230,11 +230,11 @@ dotnet test
 - ~~Fase 2 (Migration): 4-6 horas~~ ✅ COMPLETO
 - ~~Fase 3 (Backend Services): 8-12 horas~~ ✅ COMPLETO
 - ~~Fase 4 (API Endpoints): 2-4 horas~~ ✅ COMPLETO
-- Fase 5 (Frontend Site): 2-4 horas
+- ~~Fase 5 (Frontend Site): 2-4 horas~~ ✅ COMPLETO
 - Fase 6 (Frontend Sistema): 12-16 horas
 - Fase 7 (Testes): 8-12 horas
 
-**Total estimado restante: 22-32 horas**
+**Total estimado restante: 20-28 horas**
 
 ## Status Atual
 ✅ Fase 1: Modelo de domínio completo
@@ -252,6 +252,10 @@ dotnet test
 ✅ Fase 4: Endpoints de gestão de usuário-clínica implementados
 ✅ Fase 4: Testes unitários para novos métodos
 ✅ Fase 4: Code review e otimizações
+✅ Fase 5: Frontend Site - Formulário de registro atualizado
+✅ Fase 5: Labels e textos atualizados para refletir conceito de Empresa
+✅ Fase 5: Campo "Nome da primeira clínica" adicionado (opcional)
+✅ Fase 5: Documentação Phase 5 completa
 ✅ Build sem erros (API project)
 
 **Próximo passo recomendado:** 
@@ -260,9 +264,5 @@ dotnet test
 3. ~~Iniciar Fase 3: Refatorar serviços backend~~ ✅ COMPLETO
 4. ~~Testar manualmente o fluxo de registro e seleção de clínicas~~ ✅ COMPLETO (Fase 3)
 5. ~~Iniciar Fase 4: Endpoints adicionais~~ ✅ COMPLETO
-6. Iniciar Fase 5: Frontend - Atualizar site de registro
-7. Iniciar Fase 6: Frontend - Implementar seletor de clínicas no sistema
-4. Testar manualmente o fluxo de registro e seleção de clínicas
-5. Iniciar Fase 4: Endpoints adicionais (opcional, endpoints principais já criados)
-6. Iniciar Fase 5: Frontend - Atualizar site de registro
+6. ~~Iniciar Fase 5: Frontend - Atualizar site de registro~~ ✅ COMPLETO
 7. Iniciar Fase 6: Frontend - Implementar seletor de clínicas no sistema

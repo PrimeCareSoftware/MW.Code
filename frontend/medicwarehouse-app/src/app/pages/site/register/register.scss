@@ -778,6 +778,23 @@
   line-height: 1.4;
 }
 
+.info-text {
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  color: #1565c0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  
+  strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #0d47a1;
+  }
+}
+
 @media (max-width: 968px) {
   .consent-dialog {
     padding: 2rem;

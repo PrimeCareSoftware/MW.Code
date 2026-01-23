@@ -30,8 +30,8 @@
     </div>
 
     <div class="register-card">
-      <h1>Cadastro de Nova Clínica</h1>
-      <p class="subtitle">Complete o cadastro e comece seu teste gratuito por 15 dias</p>
+      <h1>Cadastro de Nova Empresa</h1>
+      <p class="subtitle">Complete o cadastro da sua empresa e comece seu teste gratuito por 15 dias</p>
 
       <div class="plan-summary" *ngIf="selectedPlan">
         <h3>Plano Selecionado: {{ selectedPlan.name }}</h3>
@@ -44,7 +44,7 @@
       <div class="steps-indicator">
         <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
           <span class="step-number">1</span>
-          <span class="step-label">Clínica</span>
+          <span class="step-label">Empresa</span>
         </div>
         <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
           <span class="step-number">2</span>
@@ -73,17 +73,27 @@
       </div>
 
       <form>
-        <!-- Step 1: Clinic Info -->
+        <!-- Step 1: Company/Clinic Info -->
         <div class="step-content" *ngIf="currentStep === 1">
-          <h2>Informações da Clínica</h2>
+          <h2>Informações da Empresa</h2>
+          <p class="info-text">
+            <strong>ℹ️ Sobre o cadastro:</strong> Você está cadastrando uma empresa que pode gerenciar uma ou mais clínicas. 
+            Após o cadastro, você poderá adicionar novas clínicas no sistema.
+          </p>
           <div class="form-group">
-            <label>Nome da Clínica *</label>
-            <input type="text" [(ngModel)]="model.clinicName" name="clinicName" required />
+            <label>Nome da Empresa *</label>
+            <input type="text" [(ngModel)]="model.companyName" name="companyName" required placeholder="Ex: Clínica São Paulo LTDA" />
+            <small class="hint">Este é o nome da sua empresa/razão social</small>
+          </div>
+          <div class="form-group">
+            <label>Nome da Primeira Clínica</label>
+            <input type="text" [(ngModel)]="model.clinicName" name="clinicName" placeholder="Ex: Unidade Centro (opcional)" />
+            <small class="hint">Opcional - Se não preenchido, usaremos o nome da empresa. Você pode adicionar mais clínicas depois.</small>
           </div>
           
           <!-- Document Type Selector -->
           <div class="form-group">
-            <label>Tipo de Cadastro *</label>
+            <label>Tipo de Documento da Empresa *</label>
             <div class="radio-group">
               <label class="radio-option">
                 <input 
@@ -94,7 +104,7 @@
                   (change)="onDocumentTypeChange('CNPJ')"
                   checked
                 />
-                <span>CNPJ (Clínica/Empresa)</span>
+                <span>CNPJ (Empresa Registrada)</span>
               </label>
               <label class="radio-option">
                 <input 
@@ -108,8 +118,8 @@
               </label>
             </div>
             <small class="hint">
-              <span *ngIf="clinicDocumentType === 'CNPJ'">Para clínicas e empresas registradas</span>
-              <span *ngIf="clinicDocumentType === 'CPF'">Para profissionais que atuam de forma autônoma sem CNPJ. Você poderá alterar para CNPJ no futuro.</span>
+              <span *ngIf="clinicDocumentType === 'CNPJ'">Para empresas com CNPJ registrado</span>
+              <span *ngIf="clinicDocumentType === 'CPF'">Para profissionais autônomos sem CNPJ. Você poderá alterar para CNPJ no futuro.</span>
             </small>
           </div>
           
@@ -142,14 +152,18 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Email da Clínica *</label>
-            <input type="email" [(ngModel)]="model.clinicEmail" name="clinicEmail" required />
+            <label>Email da Empresa *</label>
+            <input type="email" [(ngModel)]="model.clinicEmail" name="clinicEmail" required placeholder="contato@suaempresa.com.br" />
           </div>
         </div>
 
         <!-- Step 2: Address -->
         <div class="step-content" *ngIf="currentStep === 2">
-          <h2>Endereço da Clínica</h2>
+          <h2>Endereço da Primeira Clínica</h2>
+          <p class="info-text">
+            <strong>ℹ️ Informação:</strong> Este será o endereço da sua primeira clínica. 
+            Você pode adicionar endereços de outras clínicas depois no sistema.
+          </p>
           <div class="form-group">
             <label>CEP *</label>
             <input 
@@ -306,14 +320,18 @@
         <div class="step-content" *ngIf="currentStep === 6">
           <h2>Confirme seus Dados</h2>
           <div class="summary-section">
-            <h3>Clínica</h3>
-            <p><strong>Nome:</strong> {{ model.clinicName }}</p>
+            <h3>Empresa</h3>
+            <p><strong>Nome da Empresa:</strong> {{ model.companyName }}</p>
             <p *ngIf="clinicDocumentType === 'CNPJ'"><strong>CNPJ:</strong> {{ model.clinicDocument || model.clinicCNPJ }}</p>
             <p *ngIf="clinicDocumentType === 'CPF'"><strong>CPF:</strong> {{ model.clinicDocument }}</p>
             <p><strong>Email:</strong> {{ model.clinicEmail }}</p>
           </div>
+          <div class="summary-section" *ngIf="model.clinicName">
+            <h3>Primeira Clínica</h3>
+            <p><strong>Nome:</strong> {{ model.clinicName }}</p>
+          </div>
           <div class="summary-section">
-            <h3>Endereço</h3>
+            <h3>Endereço da Primeira Clínica</h3>
             <p>{{ model.street }}, {{ model.number }} {{ model.complement }}</p>
             <p>{{ model.neighborhood }} - {{ model.city }}/{{ model.state }}</p>
             <p>CEP: {{ model.zipCode }}</p>
