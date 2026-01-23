@@ -22,11 +22,16 @@ namespace MedicSoft.Domain.Entities
         public DateTime? CheckInTime { get; private set; }
         public DateTime? CheckOutTime { get; private set; }
         
+        // Número da sala de atendimento
+        public string? RoomNumber { get; private set; }
+        
         // Controle de pagamento
         public bool IsPaid { get; private set; }
         public DateTime? PaidAt { get; private set; }
         public Guid? PaidByUserId { get; private set; }
         public PaymentReceiverType? PaymentReceivedBy { get; private set; }
+        public decimal? PaymentAmount { get; private set; }
+        public PaymentMethod? PaymentMethod { get; private set; }
 
         // Propriedades de navegação
         public Patient Patient { get; private set; } = null!;
@@ -197,6 +202,12 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
 
+        public void UpdateRoomNumber(string? roomNumber)
+        {
+            RoomNumber = roomNumber?.Trim();
+            UpdateTimestamp();
+        }
+
         public DateTime GetScheduledDateTime()
         {
             return ScheduledDate.Add(ScheduledTime);
@@ -215,15 +226,20 @@ namespace MedicSoft.Domain.Entities
             return appointmentStart < end && appointmentEnd > start;
         }
 
-        public void MarkAsPaid(Guid paidByUserId, PaymentReceiverType receiverType)
+        public void MarkAsPaid(Guid paidByUserId, PaymentReceiverType receiverType, decimal? paymentAmount = null, PaymentMethod? paymentMethod = null)
         {
             if (IsPaid)
                 throw new InvalidOperationException("Payment has already been registered for this appointment");
+
+            if (paymentAmount.HasValue && paymentAmount.Value <= 0)
+                throw new ArgumentException("Payment amount must be greater than zero", nameof(paymentAmount));
 
             IsPaid = true;
             PaidAt = DateTime.UtcNow;
             PaidByUserId = paidByUserId;
             PaymentReceivedBy = receiverType;
+            PaymentAmount = paymentAmount;
+            PaymentMethod = paymentMethod;
             UpdateTimestamp();
         }
 
@@ -236,6 +252,8 @@ namespace MedicSoft.Domain.Entities
             PaidAt = null;
             PaidByUserId = null;
             PaymentReceivedBy = null;
+            PaymentAmount = null;
+            PaymentMethod = null;
             UpdateTimestamp();
         }
     }

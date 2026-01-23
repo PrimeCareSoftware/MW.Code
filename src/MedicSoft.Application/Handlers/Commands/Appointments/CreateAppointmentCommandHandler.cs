@@ -68,6 +68,12 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 request.Appointment.Notes
             );
 
+            // Set room number if provided (before creating medical record)
+            if (!string.IsNullOrWhiteSpace(request.Appointment.RoomNumber))
+            {
+                appointment.UpdateRoomNumber(request.Appointment.RoomNumber);
+            }
+
             // Automatically create an empty MedicalRecord for this appointment
             var medicalRecord = new MedicalRecord(
                 appointmentId: appointment.Id,

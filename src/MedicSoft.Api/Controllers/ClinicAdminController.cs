@@ -147,6 +147,12 @@ namespace MedicSoft.Api.Controllers
                     );
                 }
 
+                // Update number of rooms if provided
+                if (request.NumberOfRooms.HasValue)
+                {
+                    clinic.UpdateNumberOfRooms(request.NumberOfRooms.Value);
+                }
+
                 await _clinicRepository.UpdateAsync(clinic);
 
                 _logger.LogInformation("Clinic information updated: {ClinicId}", clinic.Id);
@@ -1026,7 +1032,8 @@ namespace MedicSoft.Api.Controllers
                 ShowOnPublicSite = clinic.ShowOnPublicSite,
                 ClinicType = clinic.ClinicType.ToString(),
                 WhatsAppNumber = clinic.WhatsAppNumber,
-                DefaultPaymentReceiverType = clinic.DefaultPaymentReceiverType.ToString()
+                DefaultPaymentReceiverType = clinic.DefaultPaymentReceiverType.ToString(),
+                NumberOfRooms = clinic.NumberOfRooms
             };
         }
 

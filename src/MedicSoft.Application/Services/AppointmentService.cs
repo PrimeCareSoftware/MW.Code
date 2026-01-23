@@ -13,8 +13,8 @@ namespace MedicSoft.Application.Services
         Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId);
         Task<IEnumerable<AvailableSlotDto>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, int durationMinutes, string tenantId);
         Task<AppointmentDto?> GetByIdAsync(Guid appointmentId, string tenantId);
-        Task<bool> MarkAppointmentAsPaidAsync(Guid appointmentId, Guid paidByUserId, string paymentReceiverType, string tenantId);
-        Task<bool> CompleteAppointmentAsync(Guid appointmentId, Guid completedByUserId, string tenantId, string? notes = null, bool registerPayment = false);
+        Task<bool> MarkAppointmentAsPaidAsync(Guid appointmentId, Guid paidByUserId, string paymentReceiverType, string tenantId, decimal? paymentAmount = null, string? paymentMethod = null);
+        Task<bool> CompleteAppointmentAsync(Guid appointmentId, Guid completedByUserId, string tenantId, string? notes = null, bool registerPayment = false, decimal? paymentAmount = null, string? paymentMethod = null);
     }
 
     public class AppointmentService : IAppointmentService
@@ -62,15 +62,15 @@ namespace MedicSoft.Application.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<bool> MarkAppointmentAsPaidAsync(Guid appointmentId, Guid paidByUserId, string paymentReceiverType, string tenantId)
+        public async Task<bool> MarkAppointmentAsPaidAsync(Guid appointmentId, Guid paidByUserId, string paymentReceiverType, string tenantId, decimal? paymentAmount = null, string? paymentMethod = null)
         {
-            var command = new MarkAppointmentAsPaidCommand(appointmentId, paidByUserId, paymentReceiverType, tenantId);
+            var command = new MarkAppointmentAsPaidCommand(appointmentId, paidByUserId, paymentReceiverType, tenantId, paymentAmount, paymentMethod);
             return await _mediator.Send(command);
         }
 
-        public async Task<bool> CompleteAppointmentAsync(Guid appointmentId, Guid completedByUserId, string tenantId, string? notes = null, bool registerPayment = false)
+        public async Task<bool> CompleteAppointmentAsync(Guid appointmentId, Guid completedByUserId, string tenantId, string? notes = null, bool registerPayment = false, decimal? paymentAmount = null, string? paymentMethod = null)
         {
-            var command = new CompleteAppointmentCommand(appointmentId, completedByUserId, tenantId, notes, registerPayment);
+            var command = new CompleteAppointmentCommand(appointmentId, completedByUserId, tenantId, notes, registerPayment, paymentAmount, paymentMethod);
             return await _mediator.Send(command);
         }
     }

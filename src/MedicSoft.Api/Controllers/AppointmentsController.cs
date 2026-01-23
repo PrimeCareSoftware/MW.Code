@@ -181,7 +181,7 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var result = await _appointmentService.MarkAppointmentAsPaidAsync(
-                    id, GetUserId(), dto.PaymentReceiverType, GetTenantId());
+                    id, GetUserId(), dto.PaymentReceiverType, GetTenantId(), dto.PaymentAmount, dto.PaymentMethod);
                 
                 if (!result)
                     return NotFound($"Appointment with ID {id} not found");
@@ -207,7 +207,7 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var result = await _appointmentService.CompleteAppointmentAsync(
-                    id, GetUserId(), GetTenantId(), dto.Notes, dto.RegisterPayment);
+                    id, GetUserId(), GetTenantId(), dto.Notes, dto.RegisterPayment, dto.PaymentAmount, dto.PaymentMethod);
                 
                 if (!result)
                     return NotFound($"Appointment with ID {id} not found");

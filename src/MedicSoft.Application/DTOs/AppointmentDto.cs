@@ -44,12 +44,18 @@ namespace MedicSoft.Application.DTOs
         public DateTime? CheckInTime { get; set; }
         public DateTime? CheckOutTime { get; set; }
         
+        // Room number
+        [StringLength(50, ErrorMessage = "Número da sala deve ter no máximo 50 caracteres")]
+        public string? RoomNumber { get; set; }
+        
         // Payment tracking
         public bool IsPaid { get; set; }
         public DateTime? PaidAt { get; set; }
         public Guid? PaidByUserId { get; set; }
         public string? PaidByUserName { get; set; }
         public string? PaymentReceivedBy { get; set; } // Doctor, Secretary, Other
+        public decimal? PaymentAmount { get; set; }
+        public string? PaymentMethod { get; set; } // Cash, CreditCard, DebitCard, Pix, BankTransfer, Check
         
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
@@ -77,6 +83,9 @@ namespace MedicSoft.Application.DTOs
         [StringLength(50, ErrorMessage = "Tipo deve ter no máximo 50 caracteres")]
         public string Type { get; set; } = "Regular";
         
+        [StringLength(50, ErrorMessage = "Número da sala deve ter no máximo 50 caracteres")]
+        public string? RoomNumber { get; set; }
+        
         [StringLength(1000, ErrorMessage = "Notas devem ter no máximo 1000 caracteres")]
         public string? Notes { get; set; }
     }
@@ -96,6 +105,9 @@ namespace MedicSoft.Application.DTOs
         [Required(ErrorMessage = "Tipo é obrigatório")]
         [StringLength(50, ErrorMessage = "Tipo deve ter no máximo 50 caracteres")]
         public string Type { get; set; } = "Regular";
+        
+        [StringLength(50, ErrorMessage = "Número da sala deve ter no máximo 50 caracteres")]
+        public string? RoomNumber { get; set; }
         
         [StringLength(1000, ErrorMessage = "Notas devem ter no máximo 1000 caracteres")]
         public string? Notes { get; set; }
