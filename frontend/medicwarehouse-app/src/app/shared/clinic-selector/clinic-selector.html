@@ -1,0 +1,40 @@
+<div class="clinic-selector" *ngIf="shouldShowSelector()">
+  <button 
+    class="clinic-selector-button" 
+    (click)="toggleDropdown()"
+    [title]="'Clínica atual: ' + (currentClinicName() || 'Selecione uma clínica')">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="location-icon">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+      <circle cx="12" cy="10" r="3"/>
+    </svg>
+    <span class="clinic-name">{{ currentClinicName() || 'Selecionar Clínica' }}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </button>
+  
+  <div class="dropdown-menu" [class.show]="dropdownOpen">
+    <div class="dropdown-header">
+      <span class="dropdown-title">Selecione a Clínica</span>
+    </div>
+    <div class="dropdown-divider"></div>
+    <div class="clinic-list">
+      <button 
+        *ngFor="let clinic of availableClinics()" 
+        class="clinic-item"
+        [class.active]="isCurrentClinic(clinic.clinicId)"
+        (click)="selectClinic(clinic.clinicId)">
+        <div class="clinic-item-content">
+          <div class="clinic-item-header">
+            <span class="clinic-item-name">{{ clinic.clinicName }}</span>
+            <svg *ngIf="isCurrentClinic(clinic.clinicId)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="check-icon">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <span class="clinic-item-address" *ngIf="clinic.clinicAddress">{{ clinic.clinicAddress }}</span>
+          <span class="clinic-item-badge" *ngIf="clinic.isPreferred">Preferencial</span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

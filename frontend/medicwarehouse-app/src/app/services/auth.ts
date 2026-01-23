@@ -54,7 +54,9 @@ export class Auth {
             tenantId: response.tenantId,
             clinicId: clinicId,
             role: response.role,
-            isSystemOwner: response.isSystemOwner
+            isSystemOwner: response.isSystemOwner,
+            availableClinics: response.availableClinics,
+            currentClinicId: response.currentClinicId || clinicId
           });
           this.isAuthenticated.set(true);
           this.currentUser.set({ 
@@ -62,7 +64,9 @@ export class Auth {
             tenantId: response.tenantId,
             clinicId: clinicId,
             role: response.role,
-            isSystemOwner: response.isSystemOwner
+            isSystemOwner: response.isSystemOwner,
+            availableClinics: response.availableClinics,
+            currentClinicId: response.currentClinicId || clinicId
           });
           this.startSessionValidation();
         })

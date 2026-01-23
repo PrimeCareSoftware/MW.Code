@@ -4,10 +4,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { NotificationPanel } from '../notification-panel/notification-panel';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
+import { ClinicSelectorComponent } from '../clinic-selector/clinic-selector';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterLink, RouterLinkActive, NotificationPanel, ThemeToggleComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NotificationPanel, ThemeToggleComponent, ClinicSelectorComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
