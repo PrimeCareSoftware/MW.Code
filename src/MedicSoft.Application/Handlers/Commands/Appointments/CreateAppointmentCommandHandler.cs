@@ -144,6 +144,8 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             var message = $"O paciente {patient.Name} foi agendado para consulta com Dr(a). {appointmentDoctor.FullName} " +
                          $"em {appointment.ScheduledDate:dd/MM/yyyy} às {appointment.ScheduledTime:hh\\:mm}.";
 
+            // Note: The current notification service implementation stores notifications per tenant.
+            // In a production system, this should be enhanced to target specific users (the primary doctor).
             await _notificationService.CreateNotificationAsync(
                 type: "DoctorAppointmentNotification",
                 title: "Paciente Agendado com Outro Médico",
@@ -156,6 +158,7 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                     AppointmentDoctorId = appointment.ProfessionalId,
                     AppointmentDoctorName = appointmentDoctor.FullName,
                     PrimaryDoctorId = patientClinicLink.PrimaryDoctorId,
+                    TargetUserId = patientClinicLink.PrimaryDoctorId, // For future filtering on the client side
                     ScheduledDate = appointment.ScheduledDate,
                     ScheduledTime = appointment.ScheduledTime
                 },
