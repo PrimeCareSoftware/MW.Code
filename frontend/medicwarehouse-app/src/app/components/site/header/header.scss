@@ -45,6 +45,23 @@ body.theme-high-contrast .header {
   text-decoration: none;
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+  
+  .logo-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover .logo-icon {
+    transform: rotate(5deg);
+  }
 
   h1 {
     color: var(--gray-900);
