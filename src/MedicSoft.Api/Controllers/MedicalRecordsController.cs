@@ -46,7 +46,7 @@ namespace MedicSoft.Api.Controllers
 
             try
             {
-                var medicalRecord = await _medicalRecordService.CreateMedicalRecordAsync(createDto, GetTenantId());
+                var medicalRecord = await _medicalRecordService.CreateMedicalRecordAsync(createDto, GetUserId(), GetTenantId());
                 return CreatedAtAction(nameof(GetByAppointment), 
                     new { appointmentId = medicalRecord.AppointmentId }, 
                     medicalRecord);
@@ -70,7 +70,7 @@ namespace MedicSoft.Api.Controllers
 
             try
             {
-                var medicalRecord = await _medicalRecordService.UpdateMedicalRecordAsync(id, updateDto, GetTenantId());
+                var medicalRecord = await _medicalRecordService.UpdateMedicalRecordAsync(id, updateDto, GetUserId(), GetTenantId());
                 return Ok(medicalRecord);
             }
             catch (InvalidOperationException ex)

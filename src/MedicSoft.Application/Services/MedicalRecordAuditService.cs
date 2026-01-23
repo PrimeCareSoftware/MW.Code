@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -9,10 +10,14 @@ namespace MedicSoft.Application.Services
     public class MedicalRecordAuditService : IMedicalRecordAuditService
     {
         private readonly IMedicalRecordAccessLogRepository _accessLogRepository;
+        private readonly ILogger<MedicalRecordAuditService> _logger;
 
-        public MedicalRecordAuditService(IMedicalRecordAccessLogRepository accessLogRepository)
+        public MedicalRecordAuditService(
+            IMedicalRecordAccessLogRepository accessLogRepository,
+            ILogger<MedicalRecordAuditService> logger)
         {
             _accessLogRepository = accessLogRepository;
+            _logger = logger;
         }
 
         public async Task LogAccessAsync(
@@ -40,9 +45,8 @@ namespace MedicSoft.Application.Services
             }
             catch (Exception ex)
             {
-                // Log error but don't fail the request
-                // In production, this should use proper logging
-                Console.WriteLine($"Error logging access: {ex.Message}");
+                // Log error but don't fail the request (audit failure should not block medical operations)
+                _logger.LogError(ex, "Error logging access for medical record {MedicalRecordId} by user {UserId}", recordId, userId);
             }
         }
 

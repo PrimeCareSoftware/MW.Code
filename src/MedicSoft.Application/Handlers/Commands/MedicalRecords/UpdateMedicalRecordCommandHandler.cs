@@ -93,7 +93,7 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
             await _versionService.CreateVersionAsync(
                 medicalRecordId: medicalRecord.Id,
                 changeType: "Updated",
-                userId: Guid.Empty, // TODO: Get from request context
+                userId: request.UserId,
                 tenantId: request.TenantId
             );
 
