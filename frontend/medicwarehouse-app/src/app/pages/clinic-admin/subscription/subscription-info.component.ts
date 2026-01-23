@@ -136,8 +136,8 @@ export class SubscriptionInfoComponent implements OnInit {
     return 'usage-normal';
   }
 
-  getStorageUsagePercentage(): number {
-    // Placeholder - implement when storage data is available
-    return 0;
-  }
+  // Storage tracking not yet implemented - future enhancement
+  // getStorageUsagePercentage(): number {
+  //   return 0;
+  // }
 }
