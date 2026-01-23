@@ -1,0 +1,88 @@
+<app-navbar></app-navbar>
+
+<div class="template-selector-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Selecionar Template de Anamnese</h1>
+      <p>Escolha o template adequado à especialidade do atendimento</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <div class="selector-card">
+    <div class="specialty-selector">
+      <label for="specialty">Especialidade Médica</label>
+      <select 
+        id="specialty"
+        class="specialty-select"
+        [(ngModel)]="selectedSpecialty"
+        (ngModelChange)="onSpecialtyChange()"
+      >
+        @for (specialty of specialties; track specialty) {
+          <option [value]="specialty">{{ specialtyNames[specialty] }}</option>
+        }
+      </select>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-container">
+        <div class="loading">Carregando templates...</div>
+      </div>
+    } @else {
+      @if (templates().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+              <rect x="9" y="3" width="6" height="4" rx="2"/>
+              <path d="M9 12h6"/>
+              <path d="M9 16h6"/>
+            </svg>
+          </div>
+          <h3>Nenhum template disponível</h3>
+          <p>Não há templates cadastrados para esta especialidade</p>
+        </div>
+      } @else {
+        <div class="templates-list">
+          @for (template of templates(); track template.id) {
+            <div class="template-card" (click)="selectTemplate(template)">
+              <div class="template-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div class="template-info">
+                <h3>{{ template.name }}</h3>
+                @if (template.description) {
+                  <p>{{ template.description }}</p>
+                }
+                <div class="template-meta">
+                  <span class="badge badge-info">
+                    {{ template.sections.length }} seções
+                  </span>
+                  @if (template.isDefault) {
+                    <span class="badge badge-success">Padrão</span>
+                  }
+                </div>
+              </div>
+              <div class="template-action">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>
