@@ -178,17 +178,17 @@ namespace MedicSoft.Application.Services
                     amount: payment.Amount,
                     taxAmount: taxAmount,
                     dueDate: DateTime.UtcNow, // Already paid
-                    customerName: patient.FullName,
+                    customerName: patient.Name,
                     tenantId: tenantId,
                     description: $"Consulta médica - {appointment.ScheduledDate:dd/MM/yyyy}",
-                    customerDocument: patient.Cpf
+                    customerDocument: patient.Document
                 );
 
                 await _invoiceRepository.AddAsync(invoice);
 
                 // Issue the invoice immediately since payment is already received
                 invoice.Issue();
-                invoice.MarkAsPaid();
+                invoice.MarkAsPaid(DateTime.UtcNow);
                 await _invoiceRepository.UpdateAsync(invoice);
 
                 return invoice;
