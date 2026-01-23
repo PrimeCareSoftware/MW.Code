@@ -35,7 +35,18 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 throw new ArgumentException($"Invalid PaymentReceiverType: {request.PaymentReceiverType}");
             }
 
-            appointment.MarkAsPaid(request.PaidByUserId, receiverType);
+            // Parse PaymentMethod if provided
+            PaymentMethod? paymentMethod = null;
+            if (!string.IsNullOrWhiteSpace(request.PaymentMethod))
+            {
+                if (!Enum.TryParse<PaymentMethod>(request.PaymentMethod, out var parsedMethod))
+                {
+                    throw new ArgumentException($"Invalid PaymentMethod: {request.PaymentMethod}");
+                }
+                paymentMethod = parsedMethod;
+            }
+
+            appointment.MarkAsPaid(request.PaidByUserId, receiverType, request.PaymentAmount, paymentMethod);
             await _appointmentRepository.UpdateAsync(appointment);
             
             return true;
@@ -76,7 +87,18 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 var clinic = await _clinicRepository.GetByIdAsync(appointment.ClinicId, request.TenantId);
                 var receiverType = clinic?.DefaultPaymentReceiverType ?? PaymentReceiverType.Doctor;
                 
-                appointment.MarkAsPaid(request.CompletedByUserId, receiverType);
+                // Parse PaymentMethod if provided
+                PaymentMethod? paymentMethod = null;
+                if (!string.IsNullOrWhiteSpace(request.PaymentMethod))
+                {
+                    if (!Enum.TryParse<PaymentMethod>(request.PaymentMethod, out var parsedMethod))
+                    {
+                        throw new ArgumentException($"Invalid PaymentMethod: {request.PaymentMethod}");
+                    }
+                    paymentMethod = parsedMethod;
+                }
+                
+                appointment.MarkAsPaid(request.CompletedByUserId, receiverType, request.PaymentAmount, paymentMethod);
             }
 
             await _appointmentRepository.UpdateAsync(appointment);

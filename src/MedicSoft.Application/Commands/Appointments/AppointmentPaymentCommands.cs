@@ -11,14 +11,18 @@ namespace MedicSoft.Application.Commands.Appointments
         public Guid AppointmentId { get; }
         public Guid PaidByUserId { get; }
         public string PaymentReceiverType { get; } // Doctor, Secretary, Other
+        public decimal? PaymentAmount { get; }
+        public string? PaymentMethod { get; }
         public string TenantId { get; }
 
         public MarkAppointmentAsPaidCommand(Guid appointmentId, Guid paidByUserId, 
-            string paymentReceiverType, string tenantId)
+            string paymentReceiverType, string tenantId, decimal? paymentAmount = null, string? paymentMethod = null)
         {
             AppointmentId = appointmentId;
             PaidByUserId = paidByUserId;
             PaymentReceiverType = paymentReceiverType;
+            PaymentAmount = paymentAmount;
+            PaymentMethod = paymentMethod;
             TenantId = tenantId;
         }
     }
@@ -32,15 +36,20 @@ namespace MedicSoft.Application.Commands.Appointments
         public Guid CompletedByUserId { get; }
         public string? Notes { get; }
         public bool RegisterPayment { get; }
+        public decimal? PaymentAmount { get; }
+        public string? PaymentMethod { get; }
         public string TenantId { get; }
 
         public CompleteAppointmentCommand(Guid appointmentId, Guid completedByUserId, 
-            string tenantId, string? notes = null, bool registerPayment = false)
+            string tenantId, string? notes = null, bool registerPayment = false, 
+            decimal? paymentAmount = null, string? paymentMethod = null)
         {
             AppointmentId = appointmentId;
             CompletedByUserId = completedByUserId;
             Notes = notes;
             RegisterPayment = registerPayment;
+            PaymentAmount = paymentAmount;
+            PaymentMethod = paymentMethod;
             TenantId = tenantId;
         }
     }

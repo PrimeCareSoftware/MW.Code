@@ -69,6 +69,12 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 appointment.UpdateNotes(request.UpdateData.Notes);
             }
 
+            // Update room number if provided
+            if (request.UpdateData.RoomNumber != null)
+            {
+                appointment.UpdateRoomNumber(request.UpdateData.RoomNumber);
+            }
+
             // Update the appointment in the repository
             await _appointmentRepository.UpdateAsync(appointment);
 

@@ -25,6 +25,7 @@ namespace MedicSoft.Domain.Entities
         public ClinicType ClinicType { get; private set; } = ClinicType.Medical;
         public string? WhatsAppNumber { get; private set; } // Optional WhatsApp for public contact
         public PaymentReceiverType DefaultPaymentReceiverType { get; private set; } = PaymentReceiverType.Secretary; // Padrão: secretária recebe
+        public int NumberOfRooms { get; private set; } = 1; // Número de salas de atendimento da clínica
 
         private Clinic() 
         { 
@@ -218,6 +219,15 @@ namespace MedicSoft.Domain.Entities
         public void UpdatePaymentReceiverType(PaymentReceiverType receiverType)
         {
             DefaultPaymentReceiverType = receiverType;
+            UpdateTimestamp();
+        }
+
+        public void UpdateNumberOfRooms(int numberOfRooms)
+        {
+            if (numberOfRooms <= 0)
+                throw new ArgumentException("Number of rooms must be positive", nameof(numberOfRooms));
+
+            NumberOfRooms = numberOfRooms;
             UpdateTimestamp();
         }
 
