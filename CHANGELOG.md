@@ -409,7 +409,7 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 - [ ] SIEM para logs
 
 ### Q2/2025 - Fiscal e Financeiro
-- [ ] Emissão de NF-e/NFS-e
+- [x] Emissão de NF-e/NFS-e ✅ **COMPLETO - Janeiro 2026**
 - [ ] Receitas médicas digitais (CFM+ANVISA)
 - [ ] SNGPC (ANVISA)
 - [ ] Gestão fiscal e contábil

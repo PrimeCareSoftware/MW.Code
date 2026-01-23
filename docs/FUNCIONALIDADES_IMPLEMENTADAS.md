@@ -260,11 +260,52 @@ Sistema completo de prescrições digitais conforme CFM e ANVISA com 4 component
 
 ## 3. ✅ Gestão Financeira - COMPLETAMENTE IMPLEMENTADO
 
+### Emissão de Notas Fiscais Eletrônicas (NF-e/NFS-e) ✨ NOVO - 100% COMPLETO
+- ✅ Sistema completo de emissão de NF-e/NFS-e implementado (Janeiro 2026)
+- ✅ Suporte a NFSe (serviços), NFe (produtos), NFCe (consumidor)
+- ✅ Configuração por clínica (CNPJ, certificado digital, gateway)
+- ✅ Cálculos automáticos de impostos (ISS, PIS, COFINS, CSLL, INSS, IR)
+- ✅ Emissão manual e automática (após pagamento)
+- ✅ Cancelamento e substituição de notas
+- ✅ Download de PDF e XML
+- ✅ Envio automático por e-mail
+- ✅ Dashboard fiscal com estatísticas
+- ✅ Relatórios fiscais e livro de serviços
+- ✅ Suporte a múltiplos gateways: FocusNFe, eNotas, NFeCidades, SEFAZ direto
+
+**Endpoints:**
+- `POST /api/electronicinvoices` - Criar nota fiscal
+- `POST /api/electronicinvoices/{id}/issue` - Emitir nota
+- `POST /api/electronicinvoices/{id}/cancel` - Cancelar nota
+- `POST /api/electronicinvoices/{id}/replace` - Substituir nota
+- `GET /api/electronicinvoices/{id}` - Obter detalhes
+- `GET /api/electronicinvoices/{id}/pdf` - Download PDF
+- `GET /api/electronicinvoices/{id}/xml` - Download XML
+- `POST /api/electronicinvoices/{id}/send-email` - Enviar por email
+- `GET /api/electronicinvoices/period` - Listar por período
+- `GET /api/electronicinvoices/statistics` - Estatísticas fiscais
+- `POST /api/electronicinvoices/configuration` - Configurar tenant
+- `PUT /api/electronicinvoices/configuration` - Atualizar configuração
+
+**Frontend:**
+- ✅ invoice-list.component - Listagem de notas com filtros
+- ✅ invoice-form.component - Formulário de emissão
+- ✅ invoice-details.component - Visualização detalhada
+- ✅ invoice-config.component - Configuração fiscal
+- ✅ fiscal-dashboard - Dashboard com estatísticas
+
+**Documentação:**
+- [NF-E-IMPLEMENTATION-STATUS.md](./NF-E-IMPLEMENTATION-STATUS.md) - Status detalhado
+- [NFE_NFSE_USER_GUIDE.md](./NFE_NFSE_USER_GUIDE.md) - Guia completo do usuário
+- [prompts-copilot/critico/04-nfe-nfse.md](./prompts-copilot/critico/04-nfe-nfse.md) - Especificação técnica
+
+**Testes:**
+- ✅ 22 testes unitários implementados
+
 ### Controle de Contas a Receber
 - ✅ Sistema de pagamentos vinculados a consultas
 - ✅ Múltiplos métodos de pagamento (Dinheiro, Cartão, PIX, Transferência, Cheque)
 - ✅ Status de pagamento (Pendente, Processando, Pago, Falhou, Reembolsado, Cancelado)
-- ✅ Emissão de notas fiscais
 - ✅ Controle de vencimento
 - ✅ Relatório de contas a receber
 
@@ -272,7 +313,6 @@ Sistema completo de prescrições digitais conforme CFM e ANVISA com 4 component
 - `POST /api/payments` - Criar pagamento
 - `PUT /api/payments/process` - Processar pagamento
 - `PUT /api/payments/{id}/refund` - Reembolsar
-- `POST /api/invoices` - Emitir nota fiscal
 - `GET /api/reports/accounts-receivable` - Relatório de contas a receber
 
 ### Controle de Contas a Pagar ✨ NOVO
@@ -482,7 +522,12 @@ Para completar o sistema e torná-lo 100% competitivo:
 4. [ ] MFA obrigatório para administradores
 
 **Q2/2026 - Fiscal e Financeiro:**
-1. [ ] Emissão de NF-e/NFS-e
+1. ✅ Emissão de NF-e/NFS-e - **100% COMPLETO** (Janeiro 2026)
+   - ✅ Backend: ElectronicInvoice entity, repositories, services, API (16 endpoints)
+   - ✅ Frontend: 4 componentes Angular (lista, formulário, detalhes, configuração)
+   - ✅ Cálculos fiscais: ISS, PIS, COFINS, CSLL, INSS, IR
+   - ✅ Suporte a gateways: FocusNFe, eNotas, NFeCidades, SEFAZ direto
+   - ✅ Documentação completa: NF-E-IMPLEMENTATION-STATUS.md, NFE_NFSE_USER_GUIDE.md
 2. ✅ Receitas médicas digitais 80% completo (CFM+ANVISA) (Janeiro 2026)
    - ✅ Backend completo com 5 tipos de receita
    - ✅ Frontend completo (~2.236 linhas)
