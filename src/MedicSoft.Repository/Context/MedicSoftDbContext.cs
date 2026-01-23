@@ -32,6 +32,7 @@ namespace MedicSoft.Repository.Context
 
         public DbSet<Patient> Patients { get; set; } = null!;
         public DbSet<Clinic> Clinics { get; set; } = null!;
+        public DbSet<Company> Companies { get; set; } = null!;
         public DbSet<Appointment> Appointments { get; set; } = null!;
         public DbSet<HealthInsurancePlan> HealthInsurancePlans { get; set; } = null!;
         public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
@@ -46,6 +47,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; } = null!;
         public DbSet<ClinicSubscription> ClinicSubscriptions { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<UserClinicLink> UserClinicLinks { get; set; } = null!;
         public DbSet<Owner> Owners { get; set; } = null!;
         public DbSet<OwnerClinicLink> OwnerClinicLinks { get; set; } = null!;
         public DbSet<ModuleConfiguration> ModuleConfigurations { get; set; } = null!;
@@ -128,6 +130,7 @@ namespace MedicSoft.Repository.Context
             // Apply configurations
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new HealthInsurancePlanConfiguration());
             modelBuilder.ApplyConfiguration(new MedicalRecordConfiguration());
@@ -142,6 +145,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new SubscriptionPlanConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicSubscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserClinicLinkConfiguration());
             modelBuilder.ApplyConfiguration(new OwnerConfiguration());
             modelBuilder.ApplyConfiguration(new OwnerClinicLinkConfiguration());
             modelBuilder.ApplyConfiguration(new ModuleConfigurationConfiguration());

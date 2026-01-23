@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.Entities
@@ -13,7 +15,7 @@ namespace MedicSoft.Domain.Entities
         public string PasswordHash { get; private set; }
         public string FullName { get; private set; }
         public string Phone { get; private set; }
-        public Guid? ClinicId { get; private set; }
+        public Guid? ClinicId { get; private set; } // Deprecated: For backward compatibility. Use ClinicLinks instead.
         public UserRole Role { get; private set; }
         public Guid? ProfileId { get; private set; } // New: Access profile for granular permissions
         public bool IsActive { get; private set; }
@@ -21,10 +23,16 @@ namespace MedicSoft.Domain.Entities
         public string? CurrentSessionId { get; private set; } // Tracks the current active session
         public string? ProfessionalId { get; private set; } // CRM, CRO, etc.
         public string? Specialty { get; private set; }
+        public Guid? CurrentClinicId { get; private set; } // The clinic where the user is currently working
 
         // Navigation properties
-        public Clinic? Clinic { get; private set; }
+        public Clinic? Clinic { get; private set; } // Deprecated navigation
         public AccessProfile? Profile { get; private set; }
+        public Clinic? CurrentClinic { get; private set; } // The clinic where the user is currently working
+        
+        // New: Collection of clinics this user can access
+        private readonly List<UserClinicLink> _clinicLinks = new();
+        public IReadOnlyCollection<UserClinicLink> ClinicLinks => _clinicLinks.AsReadOnly();
 
         private User()
         {
@@ -294,6 +302,68 @@ namespace MedicSoft.Domain.Entities
                 },
                 _ => Array.Empty<Permission>()
             };
+        }
+
+        /// <summary>
+        /// Sets the current clinic where the user is working.
+        /// The clinic must be one of the user's assigned clinics.
+        /// </summary>
+        public void SetCurrentClinic(Guid clinicId)
+        {
+            if (clinicId == Guid.Empty)
+                throw new ArgumentException("Clinic ID cannot be empty", nameof(clinicId));
+
+            // For backward compatibility, also check the legacy ClinicId
+            var hasAccess = _clinicLinks.Any(l => l.ClinicId == clinicId && l.IsActive) || 
+                           (ClinicId.HasValue && ClinicId.Value == clinicId);
+
+            if (!hasAccess)
+                throw new InvalidOperationException("User does not have access to this clinic");
+
+            CurrentClinicId = clinicId;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Adds a clinic link for this user
+        /// </summary>
+        public void AddClinicLink(UserClinicLink clinicLink)
+        {
+            if (clinicLink == null)
+                throw new ArgumentNullException(nameof(clinicLink));
+
+            if (clinicLink.UserId != Id)
+                throw new ArgumentException("Clinic link does not belong to this user", nameof(clinicLink));
+
+            _clinicLinks.Add(clinicLink);
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Gets all active clinic links for this user
+        /// </summary>
+        public IEnumerable<UserClinicLink> GetActiveClinicLinks()
+        {
+            return _clinicLinks.Where(l => l.IsActive);
+        }
+
+        /// <summary>
+        /// Gets the preferred clinic for this user (where they authenticate by default)
+        /// </summary>
+        public Guid? GetPreferredClinicId()
+        {
+            return _clinicLinks.FirstOrDefault(l => l.IsActive && l.IsPreferredClinic)?.ClinicId 
+                   ?? _clinicLinks.FirstOrDefault(l => l.IsActive)?.ClinicId
+                   ?? ClinicId; // Fallback to legacy ClinicId
+        }
+
+        /// <summary>
+        /// Checks if user has access to a specific clinic
+        /// </summary>
+        public bool HasAccessToClinic(Guid clinicId)
+        {
+            return _clinicLinks.Any(l => l.ClinicId == clinicId && l.IsActive) ||
+                   (ClinicId.HasValue && ClinicId.Value == clinicId);
         }
     }
 

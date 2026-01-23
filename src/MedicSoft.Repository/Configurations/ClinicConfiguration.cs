@@ -69,6 +69,13 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired()
                 .HasDefaultValue(true);
 
+            // Relationships
+            builder.HasOne(c => c.Company)
+                .WithMany()
+                .HasForeignKey(c => c.CompanyId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false); // Optional for backward compatibility
+
             // Indexes
             builder.HasIndex(c => new { c.TenantId, c.Document })
                 .IsUnique()
@@ -79,6 +86,9 @@ namespace MedicSoft.Repository.Configurations
 
             builder.HasIndex(c => c.ShowOnPublicSite)
                 .HasDatabaseName("IX_Clinics_ShowOnPublicSite");
+
+            builder.HasIndex(c => c.CompanyId)
+                .HasDatabaseName("IX_Clinics_CompanyId");
         }
     }
 }
