@@ -116,6 +116,10 @@ namespace MedicSoft.Repository.Context
         // LGPD Audit System
         public DbSet<AuditLog> AuditLogs { get; set; } = null!;
         public DbSet<DataProcessingConsent> DataProcessingConsents { get; set; } = null!;
+        
+        // Anamnesis System
+        public DbSet<AnamnesisTemplate> AnamnesisTemplates { get; set; } = null!;
+        public DbSet<AnamnesisResponse> AnamnesisResponses { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -208,6 +212,10 @@ namespace MedicSoft.Repository.Context
             // LGPD Audit System
             modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
             modelBuilder.ApplyConfiguration(new DataProcessingConsentConfiguration());
+            
+            // Anamnesis System
+            modelBuilder.ApplyConfiguration(new AnamnesisTemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new AnamnesisResponseConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

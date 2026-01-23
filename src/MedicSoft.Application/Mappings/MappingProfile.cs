@@ -217,6 +217,13 @@ namespace MedicSoft.Application.Mappings
                 .ForMember(dest => dest.HasCertificate, opt => opt.MapFrom(src => src.DigitalCertificate != null && src.DigitalCertificate.Length > 0))
                 .ForMember(dest => dest.IsCertificateExpired, opt => opt.MapFrom(src => src.IsCertificateExpired()))
                 .ForMember(dest => dest.HasGatewayApiKey, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.GatewayApiKey)));
+            
+            // Anamnesis Template mappings
+            CreateMap<AnamnesisTemplate, DTOs.Anamnesis.AnamnesisTemplateDto>();
+            
+            // Anamnesis Response mappings
+            CreateMap<AnamnesisResponse, DTOs.Anamnesis.AnamnesisResponseDto>()
+                .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => src.Template != null ? src.Template.Name : string.Empty));
         }
     }
 }
