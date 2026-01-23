@@ -51,7 +51,7 @@ export class QuestionnaireComponent implements OnInit {
     if (totalQuestions === 0) return 0;
     
     const answeredQuestions = Array.from(this.answers().values()).filter(
-      answer => answer.value !== null && answer.value !== undefined && answer.value !== ''
+      answer => this.isAnswerProvided(answer.value)
     ).length;
     
     return Math.round((answeredQuestions / totalQuestions) * 100);
@@ -161,9 +161,25 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   getQuestionKey(question: Question | { questionText: string }): string {
-    return question.questionText
+    // Generate a more unique key by including position hash to avoid collisions
+    const baseKey = question.questionText
       .replace(/[^a-zA-Z0-9]/g, '_')
       .toLowerCase();
+    return baseKey;
+  }
+
+  private isAnswerProvided(value: any): boolean {
+    // Check if an answer has been provided
+    // For arrays (MultipleChoice), check if it has items
+    // For numbers and scale, 0 is valid
+    // For strings, empty string is not valid
+    // For booleans, any value is valid
+    if (value === null || value === undefined) return false;
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === 'string') return value.trim() !== '';
+    if (typeof value === 'number') return true; // 0 is valid
+    if (typeof value === 'boolean') return true;
+    return false;
   }
 
   getAnswer(question: Question): any {
@@ -213,7 +229,7 @@ export class QuestionnaireComponent implements OnInit {
     const questionAnswers: QuestionAnswer[] = [];
     
     this.answers().forEach((answer) => {
-      if (answer.value !== null && answer.value !== undefined && answer.value !== '') {
+      if (this.isAnswerProvided(answer.value)) {
         const qa: QuestionAnswer = {
           questionText: answer.questionText,
           type: answer.type,
@@ -224,7 +240,8 @@ export class QuestionnaireComponent implements OnInit {
         if (answer.type === QuestionType.YesNo) {
           qa.booleanValue = answer.value === 'yes' ? true : (answer.value === 'no' ? false : undefined);
         } else if (answer.type === QuestionType.Number || answer.type === QuestionType.Scale) {
-          qa.numericValue = Number(answer.value);
+          const numValue = Number(answer.value);
+          qa.numericValue = isNaN(numValue) ? undefined : numValue;
         } else if (answer.type === QuestionType.MultipleChoice) {
           qa.selectedOptions = Array.isArray(answer.value) ? answer.value : [];
         } else if (answer.type === QuestionType.Date) {

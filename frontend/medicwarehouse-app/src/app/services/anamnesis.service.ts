@@ -22,7 +22,7 @@ export class AnamnesisService {
 
   // Template endpoints
   getTemplatesBySpecialty(specialty: MedicalSpecialty): Observable<AnamnesisTemplate[]> {
-    const params = new HttpParams().set('specialty', specialty);
+    const params = new HttpParams().set('specialty', specialty.toString());
     return this.http.get<AnamnesisTemplate[]>(`${this.apiUrl}/templates`, { params });
   }
 
