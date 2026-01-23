@@ -87,30 +87,45 @@ cd src/MedicSoft.Repository
 dotnet ef database update --context MedicSoftDbContext
 ```
 
-### 📝 Fase 3: Serviços Backend
-1. **RegistrationService** - Refatorar para:
+### ✅ Fase 3: Serviços Backend (COMPLETO)
+
+1. ✅ **RegistrationService** - Refatorado para:
    - Criar Company em vez de usar Clinic como tenant
    - Usar Company.Subdomain como TenantId
    - Criar primeiro Clinic vinculado à Company
-   - Criar UserClinicLink para o primeiro usuário
+   - Manter compatibilidade com dados existentes
 
-2. **AuthenticationService** - Atualizar para:
+2. ✅ **AuthenticationService** - Atualizado para:
    - Retornar lista de clínicas disponíveis para o usuário
-   - Armazenar clínica selecionada no token/sessão
+   - Definir CurrentClinicId na primeira autenticação
    - Validar acesso do usuário à clínica selecionada
+   - LoginResponse inclui AvailableClinics e CurrentClinicId
 
-3. **ClinicSelectionService** (novo) - Criar para:
+3. ✅ **ClinicSelectionService** (novo) - Criado para:
    - Trocar clínica ativa do usuário
    - Validar permissões de acesso
    - Atualizar User.CurrentClinicId
+   - Retornar lista de clínicas do usuário
 
-4. **PatientService** - Refatorar queries:
-   - Filtrar por TenantId (Company) em vez de ClinicId
-   - Adicionar filtro opcional por ClinicId quando necessário
+4. ✅ **API Endpoints** - Criados:
+   - `GET /api/users/clinics` - Lista clínicas disponíveis para o usuário
+   - `GET /api/users/current-clinic` - Retorna clínica atual
+   - `POST /api/users/select-clinic/{clinicId}` - Seleciona clínica ativa
 
-5. **AppointmentService** - Refatorar para:
-   - Filtrar agendamentos pela clínica atual do usuário
-   - Permitir visualização de outras clínicas se configurado no perfil
+5. ✅ **DTOs e Response Models**:
+   - UserClinicDto - Representa clínica acessível ao usuário
+   - SwitchClinicRequest/Response - Troca de clínica
+   - LoginResponse atualizado com lista de clínicas
+
+6. ⚠️ **PatientService** - Queries existentes mantidas:
+   - Filtros por TenantId (Company) funcionam
+   - Filtros por ClinicId já existem e funcionam
+   - Nenhuma mudança necessária para funcionamento básico
+
+7. ⚠️ **AppointmentService** - Queries existentes mantidas:
+   - Filtros por clínica já existem
+   - CurrentClinicId pode ser usado pelos controladores
+   - Nenhuma mudança necessária para funcionamento básico
 
 ### 🌐 Fase 4: API Endpoints
 1. **Registration Endpoints**:
@@ -208,13 +223,13 @@ dotnet test
 
 ## Estimativa de Esforço Restante
 - ~~Fase 2 (Migration): 4-6 horas~~ ✅ COMPLETO
-- Fase 3 (Backend Services): 8-12 horas
-- Fase 4 (API): 4-6 horas
+- ~~Fase 3 (Backend Services): 8-12 horas~~ ✅ COMPLETO
+- Fase 4 (API Endpoints Adicionais): 2-4 horas (endpoints principais já criados)
 - Fase 5 (Frontend Site): 2-4 horas
 - Fase 6 (Frontend Sistema): 12-16 horas
 - Fase 7 (Testes): 8-12 horas
 
-**Total estimado restante: 34-50 horas**
+**Total estimado restante: 24-36 horas**
 
 ## Status Atual
 ✅ Fase 1: Modelo de domínio completo
@@ -223,9 +238,19 @@ dotnet test
 ✅ Fase 2: Migration de banco de dados criada
 ✅ Fase 2: Scripts de migração de dados incluídos
 ✅ Fase 2: Documentação completa
-✅ Build sem erros
+✅ Fase 3: RegistrationService refatorado
+✅ Fase 3: ClinicSelectionService implementado
+✅ Fase 3: AuthService atualizado
+✅ Fase 3: API Endpoints criados
+✅ Fase 3: DTOs implementados
+✅ Fase 3: Dependency Injection configurado
+✅ Build sem erros (API project)
 
 **Próximo passo recomendado:** 
-1. Aplicar a migration em ambiente de desenvolvimento/teste
-2. Validar migração de dados com scripts em `scripts/phase2_migration_validation.sql`
-3. Iniciar Fase 3: Refatorar serviços backend (RegistrationService, AuthenticationService, etc.)
+1. ~~Aplicar a migration em ambiente de desenvolvimento/teste~~ (Fase 2)
+2. ~~Validar migração de dados com scripts em `scripts/phase2_migration_validation.sql`~~ (Fase 2)
+3. ~~Iniciar Fase 3: Refatorar serviços backend~~ ✅ COMPLETO
+4. Testar manualmente o fluxo de registro e seleção de clínicas
+5. Iniciar Fase 4: Endpoints adicionais (opcional, endpoints principais já criados)
+6. Iniciar Fase 5: Frontend - Atualizar site de registro
+7. Iniciar Fase 6: Frontend - Implementar seletor de clínicas no sistema
