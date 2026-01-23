@@ -1,6 +1,9 @@
 export interface RegistrationRequest {
+  // Company Information (new for multi-clinic support)
+  companyName?: string; // Name of the company/enterprise
+  
   // Clinic Information
-  clinicName: string;
+  clinicName: string; // Name of the first clinic (or company name if not provided)
   clinicCNPJ: string; // Keep for backward compatibility
   clinicDocument?: string; // New: can be CPF or CNPJ
   clinicDocumentType?: 'CPF' | 'CNPJ'; // Type of document

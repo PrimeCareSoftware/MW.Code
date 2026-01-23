@@ -39,6 +39,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   clinicDocumentType: 'CPF' | 'CNPJ' = 'CNPJ'; // Default to CNPJ for traditional clinics
   
   model: RegistrationRequest = {
+    companyName: '',
     clinicName: '',
     clinicCNPJ: '',
     clinicDocument: '',
@@ -243,7 +244,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       case 1:
         // Check if either clinicCNPJ (legacy) or clinicDocument (new) is filled
         const hasDocument = !!(this.model.clinicCNPJ || this.model.clinicDocument);
-        return !!(this.model.clinicName && hasDocument && 
+        // Company name is now required
+        return !!(this.model.companyName && hasDocument && 
                   this.model.clinicPhone && this.model.clinicEmail);
       case 2:
         return !!(this.model.street && this.model.number && this.model.neighborhood && 
@@ -278,6 +280,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     // Prepare registration data with new document structure
     const registrationData: RegistrationRequest = {
       ...this.model,
+      // If clinicName is not provided, use companyName as the first clinic name (required field)
+      clinicName: this.model.clinicName || this.model.companyName || '',
       clinicDocument: this.model.clinicDocument || this.model.clinicCNPJ, // Use new field or fall back to legacy
       clinicDocumentType: this.clinicDocumentType,
       sessionId: this.salesFunnelTracking.getSessionId()
@@ -369,8 +373,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
    */
   private getCapturedDataForStep(step: number): any {
     switch (step) {
-      case 1: // Clinic Info
+      case 1: // Company/Clinic Info
         return {
+          companyName: this.model.companyName,
           clinicName: this.model.clinicName,
           clinicCNPJ: this.model.clinicCNPJ ? '***' : '', // Masked for privacy
           clinicPhone: this.model.clinicPhone,
