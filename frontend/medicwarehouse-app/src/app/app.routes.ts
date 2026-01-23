@@ -252,6 +252,24 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/tiss/tuss-procedures/tuss-procedure-list').then(m => m.TussProcedureList),
     canActivate: [authGuard]
   },
+  
+  // Procedures routes
+  { 
+    path: 'procedures', 
+    loadComponent: () => import('./pages/procedures/procedure-list').then(m => m.ProcedureList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'procedures/new', 
+    loadComponent: () => import('./pages/procedures/procedure-form').then(m => m.ProcedureForm),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'procedures/edit/:id', 
+    loadComponent: () => import('./pages/procedures/procedure-form').then(m => m.ProcedureForm),
+    canActivate: [authGuard]
+  },
+  
   { 
     path: 'tiss/dashboards/glosas', 
     loadComponent: () => import('./pages/tiss/dashboards/glosas-dashboard').then(m => m.GlosasDashboard),
