@@ -1,3 +1,4 @@
+using System;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Interfaces;
 
@@ -13,6 +14,12 @@ namespace MedicSoft.Application.Services
         private readonly IDiagnosticHypothesisRepository _diagnosticHypothesisRepository;
         private readonly ITherapeuticPlanRepository _therapeuticPlanRepository;
         private readonly IInformedConsentRepository _informedConsentRepository;
+
+        // CFM 1.821 validation constants
+        private const int MIN_CHIEF_COMPLAINT_LENGTH = 10;
+        private const int MIN_HISTORY_LENGTH = 50;
+        private const int TOTAL_REQUIRED_FIELDS = 5; // ChiefComplaint, HDA, Examination, Diagnosis, Plan
+        private const double PERCENTAGE_MULTIPLIER = 100.0;
 
         public Cfm1821ValidationService(
             IMedicalRecordRepository medicalRecordRepository,
@@ -47,16 +54,16 @@ namespace MedicSoft.Application.Services
 
             // Check required anamnesis fields
             result.ComponentStatus.HasChiefComplaint = !string.IsNullOrWhiteSpace(medicalRecord.ChiefComplaint) 
-                && medicalRecord.ChiefComplaint.Length >= 10;
+                && medicalRecord.ChiefComplaint.Length >= MIN_CHIEF_COMPLAINT_LENGTH;
             
             result.ComponentStatus.HasHistoryOfPresentIllness = !string.IsNullOrWhiteSpace(medicalRecord.HistoryOfPresentIllness) 
-                && medicalRecord.HistoryOfPresentIllness.Length >= 50;
+                && medicalRecord.HistoryOfPresentIllness.Length >= MIN_HISTORY_LENGTH;
 
             if (!result.ComponentStatus.HasChiefComplaint)
-                result.MissingRequirements.Add("Chief complaint is required (minimum 10 characters)");
+                result.MissingRequirements.Add($"Chief complaint is required (minimum {MIN_CHIEF_COMPLAINT_LENGTH} characters)");
             
             if (!result.ComponentStatus.HasHistoryOfPresentIllness)
-                result.MissingRequirements.Add("History of present illness is required (minimum 50 characters)");
+                result.MissingRequirements.Add($"History of present illness is required (minimum {MIN_HISTORY_LENGTH} characters)");
 
             // Check optional but recommended fields
             result.ComponentStatus.HasPastMedicalHistory = !string.IsNullOrWhiteSpace(medicalRecord.PastMedicalHistory);
@@ -100,7 +107,6 @@ namespace MedicSoft.Application.Services
 
             // Calculate completeness
             int requiredFieldsComplete = 0;
-            int totalRequiredFields = 5; // ChiefComplaint, HDA, Examination, Diagnosis, Plan
 
             if (result.ComponentStatus.HasChiefComplaint) requiredFieldsComplete++;
             if (result.ComponentStatus.HasHistoryOfPresentIllness) requiredFieldsComplete++;
@@ -108,7 +114,7 @@ namespace MedicSoft.Application.Services
             if (result.ComponentStatus.HasDiagnosticHypothesis) requiredFieldsComplete++;
             if (result.ComponentStatus.HasTherapeuticPlan) requiredFieldsComplete++;
 
-            result.CompletenessPercentage = (requiredFieldsComplete / (double)totalRequiredFields) * 100;
+            result.CompletenessPercentage = (requiredFieldsComplete / (double)TOTAL_REQUIRED_FIELDS) * PERCENTAGE_MULTIPLIER;
             result.IsCompliant = result.MissingRequirements.Count == 0;
 
             return result;
