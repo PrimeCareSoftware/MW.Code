@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.MedicalRecords;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
@@ -9,13 +10,16 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
     public class UpdateMedicalRecordCommandHandler : IRequestHandler<UpdateMedicalRecordCommand, MedicalRecordDto>
     {
         private readonly IMedicalRecordRepository _medicalRecordRepository;
+        private readonly IMedicalRecordVersionService _versionService;
         private readonly IMapper _mapper;
 
         public UpdateMedicalRecordCommandHandler(
             IMedicalRecordRepository medicalRecordRepository,
+            IMedicalRecordVersionService versionService,
             IMapper mapper)
         {
             _medicalRecordRepository = medicalRecordRepository;
+            _versionService = versionService;
             _mapper = mapper;
         }
 
@@ -80,7 +84,18 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 medicalRecord.UpdateConsultationTime(request.UpdateDto.ConsultationDurationMinutes.Value);
             }
 
+            // CFM 1.638/2002 - Increment version before saving
+            medicalRecord.IncrementVersion();
+
             await _medicalRecordRepository.UpdateAsync(medicalRecord);
+
+            // CFM 1.638/2002 - Create version snapshot after update
+            await _versionService.CreateVersionAsync(
+                medicalRecordId: medicalRecord.Id,
+                changeType: "Updated",
+                userId: Guid.Empty, // TODO: Get from request context
+                tenantId: request.TenantId
+            );
 
             return _mapper.Map<MedicalRecordDto>(medicalRecord);
         }

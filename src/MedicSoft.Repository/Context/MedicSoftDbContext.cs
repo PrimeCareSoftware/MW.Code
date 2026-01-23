@@ -79,6 +79,11 @@ namespace MedicSoft.Repository.Context
         public DbSet<InformedConsent> InformedConsents { get; set; } = null!;
         public DbSet<SoapRecord> SoapRecords { get; set; } = null!;
         
+        // CFM 1.638/2002 - Versioning and Audit
+        public DbSet<MedicalRecordVersion> MedicalRecordVersions { get; set; } = null!;
+        public DbSet<MedicalRecordAccessLog> MedicalRecordAccessLogs { get; set; } = null!;
+        public DbSet<MedicalRecordSignature> MedicalRecordSignatures { get; set; } = null!;
+        
         // Digital Prescriptions - CFM 1.643/2002 and ANVISA 344/1998
         public DbSet<DigitalPrescription> DigitalPrescriptions { get; set; } = null!;
         public DbSet<DigitalPrescriptionItem> DigitalPrescriptionItems { get; set; } = null!;

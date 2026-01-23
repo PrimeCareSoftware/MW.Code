@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using MedicSoft.Application.Commands.MedicalRecords;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Queries.MedicalRecords;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
@@ -16,15 +19,18 @@ namespace MedicSoft.Api.Controllers
     {
         private readonly IMedicalRecordService _medicalRecordService;
         private readonly ICfm1821ValidationService _cfm1821ValidationService;
+        private readonly IMediator _mediator;
 
         public MedicalRecordsController(
             IMedicalRecordService medicalRecordService, 
             ICfm1821ValidationService cfm1821ValidationService,
+            IMediator mediator,
             ITenantContext tenantContext) 
             : base(tenantContext)
         {
             _medicalRecordService = medicalRecordService;
             _cfm1821ValidationService = cfm1821ValidationService;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -145,6 +151,94 @@ namespace MedicSoft.Api.Controllers
             {
                 var validationResult = await _cfm1821ValidationService.ValidateMedicalRecordCompleteness(id, GetTenantId());
                 return Ok(validationResult);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// CFM 1.638/2002 - Close medical record and make it immutable (requires medical-records.edit permission)
+        /// </summary>
+        [HttpPost("{id}/close")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsEdit)]
+        public async Task<ActionResult<MedicalRecordDto>> CloseMedicalRecord(Guid id)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var command = new CloseMedicalRecordCommand(id, userId, GetTenantId());
+                var result = await _mediator.Send(command);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// CFM 1.638/2002 - Reopen a closed medical record with mandatory justification (requires medical-records.edit permission)
+        /// </summary>
+        [HttpPost("{id}/reopen")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsEdit)]
+        public async Task<ActionResult<MedicalRecordDto>> ReopenMedicalRecord(Guid id, [FromBody] ReopenMedicalRecordDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var userId = GetUserId();
+                var command = new ReopenMedicalRecordCommand(id, userId, dto.Reason, GetTenantId());
+                var result = await _mediator.Send(command);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// CFM 1.638/2002 - Get version history for a medical record (requires medical-records.view permission)
+        /// </summary>
+        [HttpGet("{id}/versions")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsView)]
+        public async Task<ActionResult<List<MedicalRecordVersionDto>>> GetVersionHistory(Guid id)
+        {
+            try
+            {
+                var query = new GetMedicalRecordVersionsQuery(id, GetTenantId());
+                var versions = await _mediator.Send(query);
+                return Ok(versions);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// CFM 1.638/2002 - Get access logs for a medical record (requires medical-records.view permission)
+        /// </summary>
+        [HttpGet("{id}/access-logs")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsView)]
+        public async Task<ActionResult<List<MedicalRecordAccessLogDto>>> GetAccessLogs(
+            Guid id, 
+            [FromQuery] DateTime? startDate = null, 
+            [FromQuery] DateTime? endDate = null)
+        {
+            try
+            {
+                var query = new GetMedicalRecordAccessLogsQuery(id, GetTenantId(), startDate, endDate);
+                var logs = await _mediator.Send(query);
+                return Ok(logs);
             }
             catch (InvalidOperationException ex)
             {
