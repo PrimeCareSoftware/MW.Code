@@ -14,7 +14,7 @@ namespace MedicSoft.Application.Handlers.Commands.Anamnesis
         private readonly IAnamnesisTemplateRepository _repository;
         private readonly IMapper _mapper;
 
-        public CreateAnamnesisTemplateCommandHandler(IAnamnesisTemplateRepository repository, IMapper mapper)
+        public UpdateAnamnesisTemplateCommandHandler(IAnamnesisTemplateRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

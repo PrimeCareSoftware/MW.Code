@@ -29,6 +29,9 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(t => t.SectionsJson)
                 .IsRequired()
                 .HasColumnType("text");
+            
+            // Ignore the navigation property since we're using JSON serialization
+            builder.Ignore(t => t.Sections);
 
             builder.Property(t => t.IsActive)
                 .IsRequired()

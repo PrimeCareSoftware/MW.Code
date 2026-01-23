@@ -33,6 +33,9 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(r => r.AnswersJson)
                 .IsRequired()
                 .HasColumnType("text");
+            
+            // Ignore the navigation property since we're using JSON serialization
+            builder.Ignore(r => r.Answers);
 
             builder.Property(r => r.IsComplete)
                 .IsRequired()

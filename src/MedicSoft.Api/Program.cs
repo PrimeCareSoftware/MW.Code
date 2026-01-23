@@ -361,6 +361,10 @@ builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<IDataProcessingConsentRepository, DataProcessingConsentRepository>();
 
+// Anamnesis System
+builder.Services.AddScoped<IAnamnesisTemplateRepository, AnamnesisTemplateRepository>();
+builder.Services.AddScoped<IAnamnesisResponseRepository, AnamnesisResponseRepository>();
+
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();
 builder.Services.AddScoped<ISubscriptionService>(provider =>
