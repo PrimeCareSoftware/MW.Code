@@ -2,6 +2,7 @@ using MediatR;
 using MedicSoft.Application.Commands.Patients;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Queries.Patients;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Services
 {
@@ -19,15 +20,18 @@ namespace MedicSoft.Application.Services
         Task<bool> LinkPatientToClinicAsync(Guid patientId, Guid clinicId, string tenantId);
         Task<bool> LinkChildToGuardianAsync(Guid childId, Guid guardianId, string tenantId);
         Task<IEnumerable<PatientDto>> GetChildrenOfGuardianAsync(Guid guardianId, string tenantId);
+        Task SetPrimaryDoctorAsync(Guid patientId, Guid clinicId, Guid? primaryDoctorId, string tenantId);
     }
 
     public class PatientService : IPatientService
     {
         private readonly IMediator _mediator;
+        private readonly IPatientClinicLinkRepository _patientClinicLinkRepository;
 
-        public PatientService(IMediator mediator)
+        public PatientService(IMediator mediator, IPatientClinicLinkRepository patientClinicLinkRepository)
         {
             _mediator = mediator;
+            _patientClinicLinkRepository = patientClinicLinkRepository;
         }
 
         public async Task<PatientDto> CreatePatientAsync(CreatePatientDto createPatientDto, string tenantId)
@@ -100,6 +104,18 @@ namespace MedicSoft.Application.Services
         {
             var query = new GetChildrenOfGuardianQuery(guardianId, tenantId);
             return await _mediator.Send(query);
+        }
+
+        public async Task SetPrimaryDoctorAsync(Guid patientId, Guid clinicId, Guid? primaryDoctorId, string tenantId)
+        {
+            var link = await _patientClinicLinkRepository.GetLinkAsync(patientId, clinicId, tenantId);
+            if (link == null)
+            {
+                throw new InvalidOperationException("Patient is not linked to this clinic");
+            }
+
+            link.SetPrimaryDoctor(primaryDoctorId);
+            await _patientClinicLinkRepository.UpdateAsync(link);
         }
     }
 }

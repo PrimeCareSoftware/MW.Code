@@ -267,5 +267,33 @@ namespace MedicSoft.Api.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Set primary doctor for a patient in the clinic (requires patients.edit permission)
+        /// </summary>
+        [HttpPut("{patientId}/primary-doctor")]
+        [RequirePermissionKey(PermissionKeys.PatientsEdit)]
+        public async Task<ActionResult> SetPrimaryDoctor(Guid patientId, [FromBody] SetPrimaryDoctorRequest request)
+        {
+            try
+            {
+                await _patientService.SetPrimaryDoctorAsync(patientId, request.ClinicId, request.PrimaryDoctorId, GetTenantId());
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+    }
+
+    public class SetPrimaryDoctorRequest
+    {
+        public Guid ClinicId { get; set; }
+        public Guid? PrimaryDoctorId { get; set; }
     }
 }

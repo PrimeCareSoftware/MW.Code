@@ -20,6 +20,7 @@ namespace MedicSoft.Application.DTOs
         public string? WhatsAppNumber { get; set; }
         public string DefaultPaymentReceiverType { get; set; } = "Secretary";
         public int NumberOfRooms { get; set; } = 1;
+        public bool NotifyPrimaryDoctorOnOtherDoctorAppointment { get; set; } = true;
     }
 
     public class UpdateClinicInfoRequest
@@ -32,6 +33,7 @@ namespace MedicSoft.Application.DTOs
         public int? AppointmentDurationMinutes { get; set; }
         public bool? AllowEmergencySlots { get; set; }
         public int? NumberOfRooms { get; set; }
+        public bool? NotifyPrimaryDoctorOnOtherDoctorAppointment { get; set; }
     }
 
     public class ClinicUserDto
