@@ -274,7 +274,7 @@ namespace MedicSoft.Api.Controllers
                     IncludeWatermark = true
                 };
 
-                var pdf = await _pdfService.GeneratePdfAsync(id, options);
+                var pdf = await _pdfService.GeneratePdfAsync(id, GetTenantId(), options);
                 var fileName = $"receita_{prescription.SequenceNumber ?? id.ToString()}_{DateTime.Now:yyyyMMdd}.pdf";
 
                 return File(pdf, "application/pdf", fileName);
@@ -310,7 +310,7 @@ namespace MedicSoft.Api.Controllers
                     IncludeWatermark = true
                 };
 
-                var pdf = await _pdfService.GeneratePdfAsync(id, options);
+                var pdf = await _pdfService.GeneratePdfAsync(id, GetTenantId(), options);
 
                 return File(pdf, "application/pdf");
             }

@@ -11,7 +11,7 @@ namespace MedicSoft.Application.Services
         /// <summary>
         /// Generates a PDF for the specified prescription with default options.
         /// </summary>
-        Task<byte[]> GeneratePdfAsync(Guid prescriptionId, PrescriptionPdfOptions? options = null);
+        Task<byte[]> GeneratePdfAsync(Guid prescriptionId, string tenantId, PrescriptionPdfOptions? options = null);
 
         /// <summary>
         /// Generates a simple prescription PDF.

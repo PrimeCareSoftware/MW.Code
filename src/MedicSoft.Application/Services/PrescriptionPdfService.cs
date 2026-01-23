@@ -31,11 +31,11 @@ namespace MedicSoft.Application.Services
             QuestPDF.Settings.License = LicenseType.Community;
         }
 
-        public async Task<byte[]> GeneratePdfAsync(Guid prescriptionId, PrescriptionPdfOptions? options = null)
+        public async Task<byte[]> GeneratePdfAsync(Guid prescriptionId, string tenantId, PrescriptionPdfOptions? options = null)
         {
             options ??= new PrescriptionPdfOptions();
 
-            var prescription = await _prescriptionRepository.GetByIdAsync(prescriptionId);
+            var prescription = await _prescriptionRepository.GetByIdWithItemsAsync(prescriptionId, tenantId);
             if (prescription == null)
             {
                 throw new InvalidOperationException($"Prescription {prescriptionId} not found");
