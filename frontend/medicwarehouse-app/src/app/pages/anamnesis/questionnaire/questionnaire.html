@@ -1,0 +1,214 @@
+<app-navbar></app-navbar>
+
+<div class="questionnaire-container">
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <div class="loading">Carregando questionário...</div>
+    </div>
+  } @else if (template()) {
+    <div class="questionnaire-header">
+      <div class="header-content">
+        <h1>{{ template()!.name }}</h1>
+        @if (template()!.description) {
+          <p>{{ template()!.description }}</p>
+        }
+      </div>
+      
+      <div class="progress-section">
+        <div class="progress-bar-container">
+          <div class="progress-bar" [style.width.%]="completionPercentage()"></div>
+        </div>
+        <span class="progress-text">{{ completionPercentage() }}% completo</span>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <form class="questionnaire-form">
+      @for (section of template()!.sections; track section.sectionName) {
+        <div class="section-card">
+          <div class="section-header">
+            <h2>{{ section.sectionName }}</h2>
+          </div>
+          
+          <div class="section-content">
+            @for (question of section.questions; track question.questionText) {
+              <div class="question-group" [class.required]="question.isRequired">
+                <label class="question-label">
+                  {{ question.questionText }}
+                  @if (question.isRequired) {
+                    <span class="required-mark">*</span>
+                  }
+                </label>
+                
+                @if (question.helpText) {
+                  <p class="help-text">{{ question.helpText }}</p>
+                }
+
+                <!-- Text Input -->
+                @if (question.type === QuestionType.Text) {
+                  <textarea
+                    class="form-textarea"
+                    rows="3"
+                    [value]="getAnswer(question) || ''"
+                    (input)="setAnswer(question, $any($event.target).value)"
+                    [placeholder]="question.helpText || 'Digite sua resposta'"
+                  ></textarea>
+                }
+
+                <!-- Number Input -->
+                @if (question.type === QuestionType.Number) {
+                  <div class="number-input-group">
+                    <input
+                      type="number"
+                      class="form-input"
+                      [value]="getAnswer(question) || ''"
+                      (input)="setAnswer(question, $any($event.target).value)"
+                    />
+                    @if (question.unit) {
+                      <span class="input-unit">{{ question.unit }}</span>
+                    }
+                  </div>
+                }
+
+                <!-- Yes/No Radio -->
+                @if (question.type === QuestionType.YesNo) {
+                  <div class="radio-group">
+                    <label class="radio-option">
+                      <input
+                        type="radio"
+                        [name]="getQuestionKey(question)"
+                        value="yes"
+                        [checked]="getAnswer(question) === 'yes'"
+                        (change)="setAnswer(question, 'yes')"
+                      />
+                      <span>Sim</span>
+                    </label>
+                    <label class="radio-option">
+                      <input
+                        type="radio"
+                        [name]="getQuestionKey(question)"
+                        value="no"
+                        [checked]="getAnswer(question) === 'no'"
+                        (change)="setAnswer(question, 'no')"
+                      />
+                      <span>Não</span>
+                    </label>
+                  </div>
+                }
+
+                <!-- Single Choice Select -->
+                @if (question.type === QuestionType.SingleChoice && question.options) {
+                  <select
+                    class="form-select"
+                    [value]="getAnswer(question) || ''"
+                    (change)="setAnswer(question, $any($event.target).value)"
+                  >
+                    <option value="">Selecione uma opção</option>
+                    @for (option of question.options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                }
+
+                <!-- Multiple Choice Checkboxes -->
+                @if (question.type === QuestionType.MultipleChoice && question.options) {
+                  <div class="checkbox-group">
+                    @for (option of question.options; track option) {
+                      <label class="checkbox-option">
+                        <input
+                          type="checkbox"
+                          [checked]="isOptionSelected(question, option)"
+                          (change)="toggleMultipleChoice(question, option)"
+                        />
+                        <span>{{ option }}</span>
+                      </label>
+                    }
+                  </div>
+                }
+
+                <!-- Date Input -->
+                @if (question.type === QuestionType.Date) {
+                  <input
+                    type="date"
+                    class="form-input"
+                    [value]="getAnswer(question) || ''"
+                    (change)="setAnswer(question, $any($event.target).value)"
+                  />
+                }
+
+                <!-- Scale Slider -->
+                @if (question.type === QuestionType.Scale) {
+                  <div class="scale-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="1"
+                      class="form-range"
+                      [value]="getAnswer(question) || 0"
+                      (input)="setAnswer(question, $any($event.target).value)"
+                    />
+                    <div class="scale-labels">
+                      <span>0</span>
+                      <span class="scale-value">{{ getAnswer(question) || 0 }}</span>
+                      <span>10</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </form>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        [disabled]="isSaving()"
+      >
+        Cancelar
+      </button>
+      
+      <div class="action-buttons">
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="onSaveDraft()"
+          [disabled]="isSaving()"
+        >
+          @if (isSaving()) {
+            <span class="loading-spinner-sm"></span>
+          }
+          Salvar Rascunho
+        </button>
+        
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onFinalize()"
+          [disabled]="isSaving()"
+        >
+          @if (isSaving()) {
+            <span class="loading-spinner-sm"></span>
+          }
+          Finalizar Anamnese
+        </button>
+      </div>
+    </div>
+  }
+</div>

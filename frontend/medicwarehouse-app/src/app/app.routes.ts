@@ -428,6 +428,23 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
+  // Anamnesis routes
+  { 
+    path: 'anamnesis/templates', 
+    loadComponent: () => import('./pages/anamnesis/template-selector/template-selector').then(m => m.TemplateSelectorComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'anamnesis/questionnaire/:appointmentId', 
+    loadComponent: () => import('./pages/anamnesis/questionnaire/questionnaire').then(m => m.QuestionnaireComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'anamnesis/history/:patientId', 
+    loadComponent: () => import('./pages/anamnesis/history/history').then(m => m.AnamnesisHistoryComponent),
+    canActivate: [authGuard]
+  },
+  
   // Audit Logs route
   { 
     path: 'audit-logs', 
