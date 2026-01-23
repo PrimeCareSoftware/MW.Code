@@ -12,12 +12,14 @@ namespace MedicSoft.Domain.Entities
     {
         public Guid PatientId { get; private set; }
         public Guid ClinicId { get; private set; }
+        public Guid? PrimaryDoctorId { get; private set; }  // Médico responsável pelo paciente nesta clínica
         public DateTime LinkedAt { get; private set; }
         public bool IsActive { get; private set; }
 
         // Navigation properties
         public Patient Patient { get; private set; } = null!;
         public Clinic Clinic { get; private set; } = null!;
+        public User? PrimaryDoctor { get; private set; }
 
         private PatientClinicLink()
         {
@@ -47,6 +49,12 @@ namespace MedicSoft.Domain.Entities
         public void Deactivate()
         {
             IsActive = false;
+            UpdateTimestamp();
+        }
+
+        public void SetPrimaryDoctor(Guid? primaryDoctorId)
+        {
+            PrimaryDoctorId = primaryDoctorId;
             UpdateTimestamp();
         }
     }

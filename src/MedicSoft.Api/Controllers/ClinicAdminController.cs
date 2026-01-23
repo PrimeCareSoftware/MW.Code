@@ -153,6 +153,12 @@ namespace MedicSoft.Api.Controllers
                     clinic.UpdateNumberOfRooms(request.NumberOfRooms.Value);
                 }
 
+                // Update notification setting if provided
+                if (request.NotifyPrimaryDoctorOnOtherDoctorAppointment.HasValue)
+                {
+                    clinic.UpdateNotifyPrimaryDoctorSetting(request.NotifyPrimaryDoctorOnOtherDoctorAppointment.Value);
+                }
+
                 await _clinicRepository.UpdateAsync(clinic);
 
                 _logger.LogInformation("Clinic information updated: {ClinicId}", clinic.Id);
@@ -1033,7 +1039,8 @@ namespace MedicSoft.Api.Controllers
                 ClinicType = clinic.ClinicType.ToString(),
                 WhatsAppNumber = clinic.WhatsAppNumber,
                 DefaultPaymentReceiverType = clinic.DefaultPaymentReceiverType.ToString(),
-                NumberOfRooms = clinic.NumberOfRooms
+                NumberOfRooms = clinic.NumberOfRooms,
+                NotifyPrimaryDoctorOnOtherDoctorAppointment = clinic.NotifyPrimaryDoctorOnOtherDoctorAppointment
             };
         }
 

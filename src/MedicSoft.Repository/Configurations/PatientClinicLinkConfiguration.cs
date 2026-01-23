@@ -21,6 +21,9 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(l => l.IsActive)
                 .IsRequired();
 
+            builder.Property(l => l.PrimaryDoctorId)
+                .IsRequired(false);
+
             builder.Property(l => l.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -34,6 +37,11 @@ namespace MedicSoft.Repository.Configurations
             builder.HasOne(l => l.Clinic)
                 .WithMany()
                 .HasForeignKey(l => l.ClinicId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(l => l.PrimaryDoctor)
+                .WithMany()
+                .HasForeignKey(l => l.PrimaryDoctorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes

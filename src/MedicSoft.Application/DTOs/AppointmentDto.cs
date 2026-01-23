@@ -16,6 +16,10 @@ namespace MedicSoft.Application.DTOs
         public Guid ClinicId { get; set; }
         
         public string ClinicName { get; set; } = string.Empty;
+
+        public Guid? ProfessionalId { get; set; }
+
+        public string? ProfessionalName { get; set; }
         
         [Required(ErrorMessage = "Data agendada é obrigatória")]
         public DateTime ScheduledDate { get; set; }
@@ -68,6 +72,8 @@ namespace MedicSoft.Application.DTOs
         
         [Required(ErrorMessage = "ID da clínica é obrigatório")]
         public Guid ClinicId { get; set; }
+
+        public Guid? ProfessionalId { get; set; }
         
         [Required(ErrorMessage = "Data agendada é obrigatória")]
         public DateTime ScheduledDate { get; set; }
@@ -92,6 +98,8 @@ namespace MedicSoft.Application.DTOs
 
     public class UpdateAppointmentDto
     {
+        public Guid? ProfessionalId { get; set; }
+
         [Required(ErrorMessage = "Data agendada é obrigatória")]
         public DateTime ScheduledDate { get; set; }
         

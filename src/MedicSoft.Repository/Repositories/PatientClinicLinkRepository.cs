@@ -33,6 +33,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _dbSet
                 .Where(l => l.PatientId == patientId && l.ClinicId == clinicId && l.TenantId == tenantId)
+                .Include(l => l.PrimaryDoctor)
                 .FirstOrDefaultAsync();
         }
 
