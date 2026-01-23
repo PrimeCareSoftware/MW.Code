@@ -823,6 +823,33 @@
                 </div>
               }
               
+              <!-- CFM 1.821 Compliance Status -->
+              @if (cfm1821Status()) {
+                <div class="cfm1821-status mt-3 mb-3" [class.compliant]="cfm1821IsCompliant()" [class.non-compliant]="!cfm1821IsCompliant()">
+                  <div class="status-header">
+                    <strong>CFM 1.821 - Conformidade:</strong>
+                    <span class="badge" [class.bg-success]="cfm1821IsCompliant()" [class.bg-warning]="!cfm1821IsCompliant()">
+                      {{ cfm1821CompletenessPercentage() }}% Completo
+                    </span>
+                  </div>
+                  @if (!cfm1821IsCompliant() && cfm1821MissingRequirements().length > 0) {
+                    <div class="missing-requirements">
+                      <p><strong>Campos obrigatórios faltando:</strong></p>
+                      <ul>
+                        @for (req of cfm1821MissingRequirements(); track req) {
+                          <li>{{ req }}</li>
+                        }
+                      </ul>
+                    </div>
+                  }
+                  @if (cfm1821IsCompliant()) {
+                    <div class="compliance-ok">
+                      ✓ Todos os campos obrigatórios CFM 1.821 preenchidos
+                    </div>
+                  }
+                </div>
+              }
+              
               <button type="button" class="btn btn-secondary" (click)="callNextPatient()" [disabled]="isLoading()" style="margin-right: 1rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
@@ -830,7 +857,11 @@
                 Chamar Próximo Paciente
               </button>
               
-              <button type="button" class="btn btn-primary" (click)="onComplete()" [disabled]="isLoading()">
+              <button type="button" class="btn btn-info" (click)="checkCfm1821Compliance()" [disabled]="isLoading()" style="margin-right: 1rem;">
+                🔍 Verificar Conformidade CFM 1.821
+              </button>
+              
+              <button type="button" class="btn btn-primary" (click)="onComplete()" [disabled]="isLoading() || !cfm1821IsCompliant()">
                 ✓ Finalizar Atendimento
               </button>
             } @else {

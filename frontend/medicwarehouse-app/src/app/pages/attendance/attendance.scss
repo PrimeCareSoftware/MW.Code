@@ -859,4 +859,67 @@
       }
     }
   }
+
+  // CFM 1.821 Compliance Status Styles
+  .cfm1821-status {
+    border: 2px solid #f39c12;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fef5e7;
+
+    &.compliant {
+      border-color: #27ae60;
+      background: #eafaf1;
+    }
+
+    &.non-compliant {
+      border-color: #e74c3c;
+      background: #fadbd8;
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      strong {
+        color: #2c3e50;
+        font-size: 1rem;
+      }
+
+      .badge {
+        padding: 0.35rem 0.65rem;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+    }
+
+    .missing-requirements {
+      margin-top: 0.75rem;
+
+      p {
+        margin: 0 0 0.5rem 0;
+        font-weight: 600;
+        color: #c0392b;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 1.5rem;
+
+        li {
+          color: #e74c3c;
+          margin-bottom: 0.25rem;
+        }
+      }
+    }
+
+    .compliance-ok {
+      color: #27ae60;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+  }
 }
