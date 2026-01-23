@@ -335,6 +335,7 @@ builder.Services.AddScoped<IClinicalExaminationService, ClinicalExaminationServi
 builder.Services.AddScoped<IDiagnosticHypothesisService, DiagnosticHypothesisService>();
 builder.Services.AddScoped<ITherapeuticPlanService, TherapeuticPlanService>();
 builder.Services.AddScoped<IInformedConsentService, InformedConsentService>();
+builder.Services.AddScoped<ICfm1821ValidationService, Cfm1821ValidationService>();
 
 // Consultation Form Configuration - Services
 builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFormConfigurationService>();

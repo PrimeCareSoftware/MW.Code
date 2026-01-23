@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MedicalRecord, CreateMedicalRecord, UpdateMedicalRecord, CompleteMedicalRecord } from '../models/medical-record.model';
+import { MedicalRecord, CreateMedicalRecord, UpdateMedicalRecord, CompleteMedicalRecord, Cfm1821ValidationResult } from '../models/medical-record.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -30,5 +30,9 @@ export class MedicalRecordService {
 
   getPatientRecords(patientId: string): Observable<MedicalRecord[]> {
     return this.http.get<MedicalRecord[]>(`${this.apiUrl}/patient/${patientId}`);
+  }
+
+  getCfm1821Status(id: string): Observable<Cfm1821ValidationResult> {
+    return this.http.get<Cfm1821ValidationResult>(`${this.apiUrl}/${id}/cfm1821-status`);
   }
 }

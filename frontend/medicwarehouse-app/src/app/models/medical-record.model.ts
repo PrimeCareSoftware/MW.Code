@@ -70,6 +70,28 @@ export interface CompleteMedicalRecord {
   notes?: string;
 }
 
+// CFM 1.821 Validation
+export interface Cfm1821ValidationResult {
+  isCompliant: boolean;
+  missingRequirements: string[];
+  warnings: string[];
+  completenessPercentage: number;
+  componentStatus: Cfm1821ComponentStatus;
+}
+
+export interface Cfm1821ComponentStatus {
+  hasChiefComplaint: boolean;
+  hasHistoryOfPresentIllness: boolean;
+  hasClinicalExamination: boolean;
+  hasDiagnosticHypothesis: boolean;
+  hasTherapeuticPlan: boolean;
+  hasInformedConsent: boolean;
+  hasPastMedicalHistory: boolean;
+  hasFamilyHistory: boolean;
+  hasLifestyleHabits: boolean;
+  hasCurrentMedications: boolean;
+}
+
 // CFM 1.821 New Entities
 
 export interface ClinicalExamination {
