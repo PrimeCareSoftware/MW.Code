@@ -24,6 +24,8 @@ namespace MedicSoft.Application.Services
         private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
         private readonly IAccessProfileRepository _accessProfileRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly ICompanyRepository _companyRepository;
+        private readonly IUserClinicLinkRepository _userClinicLinkRepository;
         
         private const int MaxSubdomainAttempts = 100;
 
@@ -34,7 +36,9 @@ namespace MedicSoft.Application.Services
             ISubscriptionPlanRepository subscriptionPlanRepository,
             IClinicSubscriptionRepository clinicSubscriptionRepository,
             IAccessProfileRepository accessProfileRepository,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            ICompanyRepository companyRepository,
+            IUserClinicLinkRepository userClinicLinkRepository)
         {
             _clinicRepository = clinicRepository;
             _ownerService = ownerService;
@@ -43,6 +47,8 @@ namespace MedicSoft.Application.Services
             _clinicSubscriptionRepository = clinicSubscriptionRepository;
             _accessProfileRepository = accessProfileRepository;
             _passwordHasher = passwordHasher;
+            _companyRepository = companyRepository;
+            _userClinicLinkRepository = userClinicLinkRepository;
         }
 
         public async Task<RegistrationResult> RegisterClinicWithOwnerAsync(RegistrationRequestDto request)
@@ -60,16 +66,17 @@ namespace MedicSoft.Application.Services
                 return RegistrationResult.CreateFailure($"Password validation failed: {passwordError}");
             }
 
-            // Determine clinic document (support both old ClinicCNPJ and new ClinicDocument)
-            var clinicDocument = !string.IsNullOrWhiteSpace(request.ClinicDocument) 
+            // Determine company document (support both old ClinicCNPJ and new ClinicDocument)
+            // In the new model, this represents the company/enterprise document
+            var companyDocument = !string.IsNullOrWhiteSpace(request.ClinicDocument) 
                 ? request.ClinicDocument 
                 : request.ClinicCNPJ;
 
             // Determine document type
-            DocumentType clinicDocumentType;
+            DocumentType companyDocumentType;
             if (!string.IsNullOrWhiteSpace(request.ClinicDocumentType))
             {
-                if (!Enum.TryParse<DocumentType>(request.ClinicDocumentType, true, out clinicDocumentType))
+                if (!Enum.TryParse<DocumentType>(request.ClinicDocumentType, true, out companyDocumentType))
                 {
                     return RegistrationResult.CreateFailure("Invalid document type specified");
                 }
@@ -77,15 +84,15 @@ namespace MedicSoft.Application.Services
             else
             {
                 // Auto-detect based on length for backward compatibility
-                var cleanDocument = new string(clinicDocument.Where(char.IsDigit).ToArray());
-                clinicDocumentType = cleanDocument.Length == 11 ? DocumentType.CPF : DocumentType.CNPJ;
+                var cleanDocument = new string(companyDocument.Where(char.IsDigit).ToArray());
+                companyDocumentType = cleanDocument.Length == 11 ? DocumentType.CPF : DocumentType.CNPJ;
             }
 
-            // Check if document already exists
-            var existingClinic = await _clinicRepository.GetByDocumentAsync(clinicDocument);
-            if (existingClinic != null)
+            // Check if company document already exists
+            var existingCompany = await _companyRepository.GetByDocumentAsync(companyDocument);
+            if (existingCompany != null)
             {
-                var docTypeLabel = clinicDocumentType == DocumentType.CPF ? "CPF" : "CNPJ";
+                var docTypeLabel = companyDocumentType == DocumentType.CPF ? "CPF" : "CNPJ";
                 return RegistrationResult.CreateFailure($"{docTypeLabel} already registered");
             }
 
@@ -96,12 +103,13 @@ namespace MedicSoft.Application.Services
                 return RegistrationResult.CreateFailure("Invalid subscription plan");
             }
 
-            // Generate friendly subdomain from clinic name - this will be used as tenantId
+            // Generate friendly subdomain from company/clinic name - this will be used as tenantId
+            // In the new architecture, Company owns the subdomain/tenantId
             var baseSubdomain = GenerateFriendlySubdomain(request.ClinicName);
             var subdomain = baseSubdomain;
             
-            // Ensure subdomain uniqueness using sequential numbering
-            var isUnique = await _clinicRepository.IsSubdomainUniqueAsync(subdomain);
+            // Ensure subdomain uniqueness at Company level
+            var isUnique = await _companyRepository.IsSubdomainUniqueAsync(subdomain);
             if (!isUnique)
             {
                 // If not unique, append sequential numbers (2, 3, 4, etc.) to make it unique
@@ -110,7 +118,7 @@ namespace MedicSoft.Application.Services
                 while (!isUnique && counter <= MaxSubdomainAttempts)
                 {
                     subdomain = $"{baseSubdomain}-{counter}";
-                    isUnique = await _clinicRepository.IsSubdomainUniqueAsync(subdomain);
+                    isUnique = await _companyRepository.IsSubdomainUniqueAsync(subdomain);
                     counter++;
                 }
                 
@@ -120,7 +128,7 @@ namespace MedicSoft.Application.Services
                 }
             }
             
-            // Use the friendly subdomain as the tenant ID
+            // Use the friendly subdomain as the tenant ID (now owned by Company)
             var tenantId = subdomain;
 
             // Determine owner document type
@@ -146,14 +154,28 @@ namespace MedicSoft.Application.Services
                     return RegistrationResult.CreateFailure("Email already registered");
                 }
 
+                // Step 1: Create Company (the new tenant entity)
+                var company = new Company(
+                    request.ClinicName,  // Company name (using clinic name for now)
+                    request.ClinicName,  // Trade name
+                    companyDocument,
+                    companyDocumentType,
+                    request.ClinicPhone,
+                    request.ClinicEmail,
+                    tenantId
+                );
+                company.SetSubdomain(subdomain);
+                await _companyRepository.AddAsync(company);
+                await _companyRepository.SaveChangesAsync(); // Save to get Company.Id
+
                 // Build full address
                 var fullAddress = $"{request.Street}, {request.Number} {request.Complement}, {request.Neighborhood} - {request.City}/{request.State} - CEP: {request.ZipCode}";
 
-                // Create clinic with default schedule (8AM to 6PM)
+                // Step 2: Create the first clinic linked to this company
                 var clinic = new Clinic(
                     request.ClinicName,
                     request.ClinicName, // TradeName same as Name
-                    clinicDocument,
+                    companyDocument,    // For now, clinic uses same document as company
                     request.ClinicPhone,
                     request.ClinicEmail,
                     fullAddress,
@@ -161,15 +183,15 @@ namespace MedicSoft.Application.Services
                     new TimeSpan(18, 0, 0), // 6 PM
                     tenantId,
                     30, // 30 minute appointments
-                    clinicDocumentType
+                    companyDocumentType,
+                    company.Id  // Link to company
                 );
+                
+                clinic.SetSubdomain(subdomain); // Clinic can have subdomain for backward compatibility
 
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
-                
-                // Set the friendly subdomain
-                clinic.SetSubdomain(subdomain);
 
-                // Create owner
+                // Step 3: Create owner
                 var passwordHash = _passwordHasher.HashPassword(request.Password);
                 var owner = new Owner(
                     request.Username,
@@ -185,8 +207,13 @@ namespace MedicSoft.Application.Services
                     ownerDocumentType // documentType
                 );
                 await _ownerRepository.AddWithoutSaveAsync(owner);
-
-                // Create subscription
+                
+                // Step 4: Create UserClinicLink for the owner (if owner is also a User in the system)
+                // Note: Owner is separate from User, but in multi-clinic setup, if owner acts as user,
+                // this would be created. For now, we create it for future compatibility.
+                // The migration will handle existing users.
+                
+                // Step 5: Create subscription
                 var trialDays = request.UseTrial ? plan.TrialDays : 0;
                 var subscription = new ClinicSubscription(
                     clinic.Id,
@@ -199,7 +226,7 @@ namespace MedicSoft.Application.Services
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
 
-                // Create default access profiles for the clinic
+                // Step 6: Create default access profiles for the clinic
                 var defaultProfiles = new[]
                 {
                     AccessProfile.CreateDefaultOwnerProfile(tenantId, clinic.Id),

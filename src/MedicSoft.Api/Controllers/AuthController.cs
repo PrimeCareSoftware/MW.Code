@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Api.Controllers
@@ -19,15 +22,18 @@ namespace MedicSoft.Api.Controllers
         private readonly IAuthService _authService;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly ILogger<AuthController> _logger;
+        private readonly IClinicSelectionService _clinicSelectionService;
 
         public AuthController(
             IAuthService authService, 
             IJwtTokenService jwtTokenService,
-            ILogger<AuthController> logger)
+            ILogger<AuthController> logger,
+            IClinicSelectionService clinicSelectionService)
         {
             _authService = authService;
             _jwtTokenService = jwtTokenService;
             _logger = logger;
+            _clinicSelectionService = clinicSelectionService;
         }
 
         /// <summary>
@@ -85,6 +91,18 @@ namespace MedicSoft.Api.Controllers
                 _logger.LogInformation("User authenticated successfully: {UserId}, username: {Username}", 
                     user.Id, user.Username);
 
+                // Get available clinics for the user
+                var availableClinics = await _clinicSelectionService.GetUserClinicsAsync(user.Id, tenantId);
+                var clinicList = availableClinics.ToList();
+
+                // Set current clinic if not already set
+                if (!user.CurrentClinicId.HasValue && clinicList.Any())
+                {
+                    var preferredClinic = clinicList.FirstOrDefault(c => c.IsPreferred) ?? clinicList.First();
+                    await _clinicSelectionService.SwitchClinicAsync(user.Id, preferredClinic.ClinicId, tenantId);
+                    user = await _authService.AuthenticateUserAsync(request.Username, request.Password, tenantId); // Reload user
+                }
+
                 // Record login and get session ID
                 string sessionId;
                 try
@@ -118,6 +136,8 @@ namespace MedicSoft.Api.Controllers
                     TenantId = tenantId,
                     Role = user.Role.ToString(),
                     ClinicId = user.ClinicId,
+                    CurrentClinicId = user.CurrentClinicId ?? user.ClinicId,
+                    AvailableClinics = clinicList,
                     ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
                 });
             }
@@ -485,8 +505,10 @@ namespace MedicSoft.Api.Controllers
         public string TenantId { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public Guid? ClinicId { get; set; }
+        public Guid? CurrentClinicId { get; set; } // The clinic currently selected by the user
         public bool IsSystemOwner { get; set; }
         public DateTime ExpiresAt { get; set; }
+        public List<UserClinicDto>? AvailableClinics { get; set; } // List of clinics user can access
     }
 
     public class TokenValidationRequest
