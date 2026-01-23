@@ -136,7 +136,7 @@ namespace MedicSoft.Test.Entities
                 "(11) 98765-4321", "old@company.com", TenantId);
             var oldUpdatedAt = company.UpdatedAt;
 
-            // Wait a moment to ensure timestamp changes
+            // Wait briefly to ensure timestamp resolution (testing timestamp update behavior)
             System.Threading.Thread.Sleep(10);
 
             // Act
