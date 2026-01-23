@@ -280,8 +280,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     // Prepare registration data with new document structure
     const registrationData: RegistrationRequest = {
       ...this.model,
-      // If clinicName is not provided, use companyName as the first clinic name (required field)
-      clinicName: this.model.clinicName || this.model.companyName || '',
+      // If clinicName is not provided, use companyName as the first clinic name
+      // companyName is validated as required in validateStep(), so it will always have a value here
+      clinicName: this.model.clinicName || this.model.companyName!,
       clinicDocument: this.model.clinicDocument || this.model.clinicCNPJ, // Use new field or fall back to legacy
       clinicDocumentType: this.clinicDocumentType,
       sessionId: this.salesFunnelTracking.getSessionId()
