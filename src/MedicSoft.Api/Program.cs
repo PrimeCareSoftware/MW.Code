@@ -343,6 +343,9 @@ builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSi
 // Electronic Invoice Services
 builder.Services.AddScoped<IElectronicInvoiceService, ElectronicInvoiceService>();
 
+// Payment Flow Orchestration Service
+builder.Services.AddScoped<IPaymentFlowService, PaymentFlowService>();
+
 // TISS/TUSS Services
 builder.Services.AddScoped<IHealthInsuranceOperatorService, HealthInsuranceOperatorService>();
 builder.Services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();

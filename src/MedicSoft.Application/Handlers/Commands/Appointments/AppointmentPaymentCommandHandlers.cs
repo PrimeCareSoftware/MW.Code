@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using MedicSoft.Application.Commands.Appointments;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
@@ -11,62 +12,65 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
 {
     /// <summary>
     /// Handler para marcar atendimento como pago
+    /// Now integrates with PaymentFlowService to create Payment entity and Invoice automatically
     /// </summary>
     public class MarkAppointmentAsPaidCommandHandler : IRequestHandler<MarkAppointmentAsPaidCommand, bool>
     {
-        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IPaymentFlowService _paymentFlowService;
 
-        public MarkAppointmentAsPaidCommandHandler(IAppointmentRepository appointmentRepository)
+        public MarkAppointmentAsPaidCommandHandler(IPaymentFlowService paymentFlowService)
         {
-            _appointmentRepository = appointmentRepository;
+            _paymentFlowService = paymentFlowService;
         }
 
         public async Task<bool> Handle(MarkAppointmentAsPaidCommand request, CancellationToken cancellationToken)
         {
-            var appointment = await _appointmentRepository.GetByIdAsync(request.AppointmentId, request.TenantId);
-            if (appointment == null)
+            // Validate that payment amount and method are provided
+            if (!request.PaymentAmount.HasValue || request.PaymentAmount.Value <= 0)
             {
-                return false;
+                throw new ArgumentException("Payment amount is required and must be greater than zero");
             }
 
-            // Parse PaymentReceiverType
-            if (!Enum.TryParse<PaymentReceiverType>(request.PaymentReceiverType, out var receiverType))
+            if (string.IsNullOrWhiteSpace(request.PaymentMethod))
             {
-                throw new ArgumentException($"Invalid PaymentReceiverType: {request.PaymentReceiverType}");
+                throw new ArgumentException("Payment method is required");
             }
 
-            // Parse PaymentMethod if provided
-            PaymentMethod? paymentMethod = null;
-            if (!string.IsNullOrWhiteSpace(request.PaymentMethod))
+            // Use PaymentFlowService to orchestrate complete payment flow
+            // This will: 1) Mark appointment as paid, 2) Create Payment entity, 3) Generate Invoice
+            var result = await _paymentFlowService.RegisterAppointmentPaymentAsync(
+                request.AppointmentId,
+                request.PaidByUserId,
+                request.PaymentReceiverType,
+                request.PaymentAmount.Value,
+                request.PaymentMethod,
+                request.TenantId
+            );
+
+            if (!result.Success)
             {
-                if (!Enum.TryParse<PaymentMethod>(request.PaymentMethod, out var parsedMethod))
-                {
-                    throw new ArgumentException($"Invalid PaymentMethod: {request.PaymentMethod}");
-                }
-                paymentMethod = parsedMethod;
+                throw new InvalidOperationException(result.ErrorMessage ?? "Failed to process payment");
             }
 
-            appointment.MarkAsPaid(request.PaidByUserId, receiverType, request.PaymentAmount, paymentMethod);
-            await _appointmentRepository.UpdateAsync(appointment);
-            
             return true;
         }
     }
 
     /// <summary>
     /// Handler para finalizar atendimento (check-out pelo médico)
+    /// Now integrates with PaymentFlowService for complete payment integration
     /// </summary>
     public class CompleteAppointmentCommandHandler : IRequestHandler<CompleteAppointmentCommand, bool>
     {
         private readonly IAppointmentRepository _appointmentRepository;
-        private readonly IClinicRepository _clinicRepository;
+        private readonly IPaymentFlowService _paymentFlowService;
 
         public CompleteAppointmentCommandHandler(
             IAppointmentRepository appointmentRepository,
-            IClinicRepository clinicRepository)
+            IPaymentFlowService paymentFlowService)
         {
             _appointmentRepository = appointmentRepository;
-            _clinicRepository = clinicRepository;
+            _paymentFlowService = paymentFlowService;
         }
 
         public async Task<bool> Handle(CompleteAppointmentCommand request, CancellationToken cancellationToken)
@@ -79,29 +83,37 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
 
             // Finaliza o atendimento (check-out)
             appointment.CheckOut(request.Notes);
+            await _appointmentRepository.UpdateAsync(appointment);
 
             // Se deve registrar pagamento e ainda não foi pago
             if (request.RegisterPayment && !appointment.IsPaid)
             {
-                // Busca a configuração da clínica para saber o tipo padrão
-                var clinic = await _clinicRepository.GetByIdAsync(appointment.ClinicId, request.TenantId);
-                var receiverType = clinic?.DefaultPaymentReceiverType ?? PaymentReceiverType.Doctor;
-                
-                // Parse PaymentMethod if provided
-                PaymentMethod? paymentMethod = null;
-                if (!string.IsNullOrWhiteSpace(request.PaymentMethod))
+                // Validate payment data
+                if (!request.PaymentAmount.HasValue || request.PaymentAmount.Value <= 0)
                 {
-                    if (!Enum.TryParse<PaymentMethod>(request.PaymentMethod, out var parsedMethod))
-                    {
-                        throw new ArgumentException($"Invalid PaymentMethod: {request.PaymentMethod}");
-                    }
-                    paymentMethod = parsedMethod;
+                    throw new ArgumentException("Payment amount is required and must be greater than zero when registering payment");
                 }
-                
-                appointment.MarkAsPaid(request.CompletedByUserId, receiverType, request.PaymentAmount, paymentMethod);
-            }
 
-            await _appointmentRepository.UpdateAsync(appointment);
+                if (string.IsNullOrWhiteSpace(request.PaymentMethod))
+                {
+                    throw new ArgumentException("Payment method is required when registering payment");
+                }
+
+                // Use PaymentFlowService to orchestrate complete payment flow
+                var result = await _paymentFlowService.RegisterPaymentOnCompletionAsync(
+                    request.AppointmentId,
+                    request.CompletedByUserId,
+                    request.PaymentAmount.Value,
+                    request.PaymentMethod,
+                    request.TenantId,
+                    request.Notes
+                );
+
+                if (!result.Success)
+                {
+                    throw new InvalidOperationException(result.ErrorMessage ?? "Failed to process payment on completion");
+                }
+            }
             
             return true;
         }
