@@ -428,6 +428,13 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
+  // Audit Logs route
+  { 
+    path: 'audit-logs', 
+    loadComponent: () => import('./pages/audit/audit-log-list.component').then(m => m.AuditLogListComponent),
+    canActivate: [authGuard, ownerGuard]
+  },
+  
   ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes

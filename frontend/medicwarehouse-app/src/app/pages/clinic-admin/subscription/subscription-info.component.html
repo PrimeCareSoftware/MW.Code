@@ -151,11 +151,53 @@
               </svg>
               <span>Exportação TISS</span>
             </li>
+            <li class="feature-enabled">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Módulo Financeiro</span>
+            </li>
+            <li class="feature-enabled">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Telemedicina</span>
+            </li>
+            <li class="feature-enabled">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Prontuário Eletrônico</span>
+            </li>
+            <li class="feature-enabled">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Agendamento Online</span>
+            </li>
           </ul>
         </div>
 
         @if (subscription()!.isActive) {
           <div class="actions-section">
+            <button 
+              type="button" 
+              class="btn btn-primary" 
+              (click)="openUpgradeDialog()"
+            >
+              Fazer Upgrade
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-secondary" 
+              (click)="openDowngradeDialog()"
+            >
+              Fazer Downgrade
+            </button>
             <button 
               type="button" 
               class="btn btn-danger" 
@@ -179,6 +221,55 @@
         <p>Entre em contato com o suporte para ativar sua assinatura.</p>
       </div>
     }
+  }
+
+  @if (showUpgradeDialog()) {
+    <div class="modal-overlay" (click)="closeUpgradeDialog()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Fazer Upgrade do Plano</h3>
+        <p>Entre em contato com nossa equipe de vendas para fazer upgrade do seu plano e ter acesso a mais recursos.</p>
+        <p class="info-text">Email: vendas@primecare.com.br</p>
+        <p class="info-text">WhatsApp: (11) 99999-9999</p>
+        
+        <div class="modal-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="closeUpgradeDialog()"
+          >
+            Fechar
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-primary" 
+            (click)="navigateToPricing()"
+          >
+            Ver Planos
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showDowngradeDialog()) {
+    <div class="modal-overlay" (click)="closeDowngradeDialog()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Fazer Downgrade do Plano</h3>
+        <p>Entre em contato com nossa equipe de suporte para fazer downgrade do seu plano.</p>
+        <p class="warning-text">Atenção: O downgrade resultará na perda de algumas funcionalidades.</p>
+        <p class="info-text">Email: suporte@primecare.com.br</p>
+        
+        <div class="modal-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="closeDowngradeDialog()"
+          >
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
   }
 
   @if (showCancelConfirm()) {
