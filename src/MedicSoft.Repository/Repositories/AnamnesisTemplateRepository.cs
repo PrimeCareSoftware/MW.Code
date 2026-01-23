@@ -10,6 +10,9 @@ using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Repository.Repositories
 {
+    /// <summary>
+    /// Repository for managing anamnesis templates with specialty-based filtering
+    /// </summary>
     public class AnamnesisTemplateRepository : BaseRepository<AnamnesisTemplate>, IAnamnesisTemplateRepository
     {
         public AnamnesisTemplateRepository(MedicSoftDbContext context) : base(context)

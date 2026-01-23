@@ -4,6 +4,9 @@ using MedicSoft.Domain.Entities;
 
 namespace MedicSoft.Repository.Configurations
 {
+    /// <summary>
+    /// Entity Framework Core configuration for AnamnesisResponse entity
+    /// </summary>
     public class AnamnesisResponseConfiguration : IEntityTypeConfiguration<AnamnesisResponse>
     {
         public void Configure(EntityTypeBuilder<AnamnesisResponse> builder)

@@ -9,6 +9,9 @@ using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Repository.Repositories
 {
+    /// <summary>
+    /// Repository for managing patient responses to anamnesis questionnaires
+    /// </summary>
     public class AnamnesisResponseRepository : BaseRepository<AnamnesisResponse>, IAnamnesisResponseRepository
     {
         public AnamnesisResponseRepository(MedicSoftDbContext context) : base(context)
