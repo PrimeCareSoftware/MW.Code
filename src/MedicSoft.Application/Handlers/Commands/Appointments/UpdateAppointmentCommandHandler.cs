@@ -147,7 +147,7 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 return;
 
             // Send notification to primary doctor
-            var message = $"O paciente {patient.Name} foi agendado para consulta com Dr(a). {appointmentDoctor.Name} " +
+            var message = $"O paciente {patient.Name} foi agendado para consulta com Dr(a). {appointmentDoctor.FullName} " +
                          $"em {appointment.ScheduledDate:dd/MM/yyyy} às {appointment.ScheduledTime:hh\\:mm}.";
 
             await _notificationService.CreateNotificationAsync(
@@ -160,7 +160,7 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                     PatientId = patient.Id,
                     PatientName = patient.Name,
                     AppointmentDoctorId = appointment.ProfessionalId,
-                    AppointmentDoctorName = appointmentDoctor.Name,
+                    AppointmentDoctorName = appointmentDoctor.FullName,
                     PrimaryDoctorId = patientClinicLink.PrimaryDoctorId,
                     ScheduledDate = appointment.ScheduledDate,
                     ScheduledTime = appointment.ScheduledTime
