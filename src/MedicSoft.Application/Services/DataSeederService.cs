@@ -42,6 +42,7 @@ namespace MedicSoft.Application.Services
         private readonly IHealthInsuranceOperatorRepository _healthInsuranceOperatorRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
+        private readonly IAnamnesisTemplateRepository _anamnesisTemplateRepository;
         private readonly string _demoTenantId = "demo-clinic-001";
         private const string _demoDoctorCRM = "CRM-123456";
         private const string _demoDoctorSpecialty = "Clínico Geral";
@@ -75,7 +76,8 @@ namespace MedicSoft.Application.Services
             IHealthInsurancePlanRepository healthInsurancePlanRepository,
             IHealthInsuranceOperatorRepository healthInsuranceOperatorRepository,
             IInvoiceRepository invoiceRepository,
-            IConsultationFormProfileRepository consultationFormProfileRepository)
+            IConsultationFormProfileRepository consultationFormProfileRepository,
+            IAnamnesisTemplateRepository anamnesisTemplateRepository)
         {
             _clinicRepository = clinicRepository;
             _userRepository = userRepository;
@@ -105,6 +107,7 @@ namespace MedicSoft.Application.Services
             _healthInsuranceOperatorRepository = healthInsuranceOperatorRepository;
             _invoiceRepository = invoiceRepository;
             _consultationFormProfileRepository = consultationFormProfileRepository;
+            _anamnesisTemplateRepository = anamnesisTemplateRepository;
         }
 
         public async Task SeedDemoDataAsync()
@@ -292,6 +295,13 @@ namespace MedicSoft.Application.Services
                 foreach (var invoice in invoices)
                 {
                     await _invoiceRepository.AddWithoutSaveAsync(invoice);
+                }
+
+                // 23. Create Anamnesis Templates
+                var anamnesisTemplates = CreateDemoAnamnesisTemplates(users[1].Id); // Created by doctor
+                foreach (var template in anamnesisTemplates)
+                {
+                    await _anamnesisTemplateRepository.AddWithoutSaveAsync(template);
                 }
 
 
@@ -2712,6 +2722,172 @@ RETORNO: {{return_date}}",
             profiles.Add(fonoaudiologoProfile);
 
             return profiles;
+        }
+
+        private List<AnamnesisTemplate> CreateDemoAnamnesisTemplates(Guid createdByUserId)
+        {
+            var templates = new List<AnamnesisTemplate>();
+
+            // 1. Cardiology Template (Cardiologia)
+            var cardiologySections = new List<QuestionSection>
+            {
+                new QuestionSection("Sintomas Cardiovasculares", 1)
+                {
+                    Questions = new List<Question>
+                    {
+                        new Question("Apresenta dor torácica?", QuestionType.YesNo, isRequired: true, order: 1),
+                        new Question("Tipo de dor (se sim)", QuestionType.SingleChoice, isRequired: false, order: 2)
+                        {
+                            Options = new List<string> { "Aperto", "Queimação", "Pontada", "Peso" }
+                        },
+                        new Question("Palpitações?", QuestionType.YesNo, isRequired: true, order: 3),
+                        new Question("Dispneia aos esforços?", QuestionType.Scale, isRequired: false, order: 4)
+                        {
+                            HelpText = "0 = Nenhuma, 10 = Extrema"
+                        },
+                        new Question("Edema de membros inferiores?", QuestionType.YesNo, isRequired: false, order: 5),
+                        new Question("Síncope ou pré-síncope?", QuestionType.YesNo, isRequired: false, order: 6)
+                    }
+                },
+                new QuestionSection("Fatores de Risco", 2)
+                {
+                    Questions = new List<Question>
+                    {
+                        new Question("História familiar de cardiopatia?", QuestionType.YesNo, isRequired: true, order: 1),
+                        new Question("Fumante?", QuestionType.SingleChoice, isRequired: false, order: 2)
+                        {
+                            Options = new List<string> { "Nunca fumou", "Ex-fumante", "Fumante atual" }
+                        },
+                        new Question("Diabetes mellitus?", QuestionType.YesNo, isRequired: false, order: 3),
+                        new Question("Hipertensão arterial?", QuestionType.YesNo, isRequired: false, order: 4),
+                        new Question("Dislipidemia?", QuestionType.YesNo, isRequired: false, order: 5),
+                        new Question("Sedentarismo?", QuestionType.YesNo, isRequired: false, order: 6)
+                    }
+                }
+            };
+
+            var cardiologyTemplate = new AnamnesisTemplate(
+                "Anamnese Cardiológica",
+                MedicalSpecialty.Cardiology,
+                cardiologySections,
+                _demoTenantId,
+                createdByUserId,
+                "Template de anamnese para consultas cardiológicas com avaliação de sintomas cardiovasculares e fatores de risco",
+                isDefault: true
+            );
+            templates.Add(cardiologyTemplate);
+
+            // 2. Pediatrics Template (Pediatria)
+            var pediatricsSections = new List<QuestionSection>
+            {
+                new QuestionSection("Desenvolvimento", 1)
+                {
+                    Questions = new List<Question>
+                    {
+                        new Question("Vacinação em dia?", QuestionType.YesNo, isRequired: true, order: 1),
+                        new Question("Peso ao nascer (kg)", QuestionType.Number, isRequired: false, order: 2)
+                        {
+                            Unit = "kg"
+                        },
+                        new Question("Idade gestacional", QuestionType.Number, isRequired: false, order: 3)
+                        {
+                            Unit = "semanas"
+                        },
+                        new Question("Desenvolvimento neuropsicomotor adequado?", QuestionType.YesNo, isRequired: false, order: 4),
+                        new Question("Com quantos meses sentou sem apoio?", QuestionType.Number, isRequired: false, order: 5),
+                        new Question("Com quantos meses andou?", QuestionType.Number, isRequired: false, order: 6),
+                        new Question("Já fala palavras?", QuestionType.YesNo, isRequired: false, order: 7)
+                    }
+                },
+                new QuestionSection("Alimentação", 2)
+                {
+                    Questions = new List<Question>
+                    {
+                        new Question("Tipo de alimentação", QuestionType.SingleChoice, isRequired: false, order: 1)
+                        {
+                            Options = new List<string> { "Aleitamento materno exclusivo", "Fórmula", "Misto", "Alimentação complementar" }
+                        },
+                        new Question("Idade de introdução alimentar", QuestionType.Number, isRequired: false, order: 2)
+                        {
+                            Unit = "meses"
+                        },
+                        new Question("Alergias alimentares conhecidas?", QuestionType.MultipleChoice, isRequired: false, order: 3)
+                        {
+                            Options = new List<string> { "Nenhuma", "Leite", "Ovo", "Glúten", "Frutos do mar", "Outras" }
+                        }
+                    }
+                }
+            };
+
+            var pediatricsTemplate = new AnamnesisTemplate(
+                "Anamnese Pediátrica",
+                MedicalSpecialty.Pediatrics,
+                pediatricsSections,
+                _demoTenantId,
+                createdByUserId,
+                "Template de anamnese para consultas pediátricas com avaliação de desenvolvimento e alimentação",
+                isDefault: true
+            );
+            templates.Add(pediatricsTemplate);
+
+            // 3. Dermatology Template (Dermatologia)
+            var dermatologySections = new List<QuestionSection>
+            {
+                new QuestionSection("Lesão Cutânea", 1)
+                {
+                    Questions = new List<Question>
+                    {
+                        new Question("Tipo de lesão", QuestionType.MultipleChoice, isRequired: true, order: 1)
+                        {
+                            Options = new List<string> { "Mancha", "Pápula", "Vesícula", "Pústula", "Nódulo", "Úlcera" }
+                        },
+                        new Question("Localização", QuestionType.Text, isRequired: true, order: 2),
+                        new Question("Tempo de evolução", QuestionType.Text, isRequired: false, order: 3)
+                        {
+                            HelpText = "Ex: 2 semanas, 1 mês"
+                        },
+                        new Question("Prurido (coceira)?", QuestionType.Scale, isRequired: false, order: 4)
+                        {
+                            HelpText = "0 = Nenhum, 10 = Intenso"
+                        },
+                        new Question("Dor?", QuestionType.YesNo, isRequired: false, order: 5),
+                        new Question("Alteração de cor?", QuestionType.YesNo, isRequired: false, order: 6),
+                        new Question("Crescimento progressivo?", QuestionType.YesNo, isRequired: false, order: 7)
+                    }
+                },
+                new QuestionSection("Histórico Dermatológico", 2)
+                {
+                    Questions = new List<Question>
+                    {
+                        new Question("História familiar de câncer de pele?", QuestionType.YesNo, isRequired: false, order: 1),
+                        new Question("Exposição solar", QuestionType.SingleChoice, isRequired: false, order: 2)
+                        {
+                            Options = new List<string> { "Mínima", "Moderada", "Intensa" }
+                        },
+                        new Question("Uso de protetor solar?", QuestionType.SingleChoice, isRequired: false, order: 3)
+                        {
+                            Options = new List<string> { "Nunca", "Às vezes", "Diariamente" }
+                        },
+                        new Question("Alergias conhecidas?", QuestionType.MultipleChoice, isRequired: false, order: 4)
+                        {
+                            Options = new List<string> { "Nenhuma", "Cosméticos", "Medicamentos", "Metais", "Outras" }
+                        }
+                    }
+                }
+            };
+
+            var dermatologyTemplate = new AnamnesisTemplate(
+                "Anamnese Dermatológica",
+                MedicalSpecialty.Dermatology,
+                dermatologySections,
+                _demoTenantId,
+                createdByUserId,
+                "Template de anamnese para consultas dermatológicas com avaliação de lesões cutâneas e histórico dermatológico",
+                isDefault: true
+            );
+            templates.Add(dermatologyTemplate);
+
+            return templates;
         }
     }
 }
