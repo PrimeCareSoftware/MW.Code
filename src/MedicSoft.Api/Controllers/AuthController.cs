@@ -96,11 +96,15 @@ namespace MedicSoft.Api.Controllers
                 var clinicList = availableClinics.ToList();
 
                 // Set current clinic if not already set
-                if (!user.CurrentClinicId.HasValue && clinicList.Any())
+                Guid? currentClinicId = user.CurrentClinicId;
+                if (!currentClinicId.HasValue && clinicList.Any())
                 {
                     var preferredClinic = clinicList.FirstOrDefault(c => c.IsPreferred) ?? clinicList.First();
-                    await _clinicSelectionService.SwitchClinicAsync(user.Id, preferredClinic.ClinicId, tenantId);
-                    user = await _authService.AuthenticateUserAsync(request.Username, request.Password, tenantId); // Reload user
+                    var switchResult = await _clinicSelectionService.SwitchClinicAsync(user.Id, preferredClinic.ClinicId, tenantId);
+                    if (switchResult.Success)
+                    {
+                        currentClinicId = switchResult.CurrentClinicId;
+                    }
                 }
 
                 // Record login and get session ID
@@ -136,7 +140,7 @@ namespace MedicSoft.Api.Controllers
                     TenantId = tenantId,
                     Role = user.Role.ToString(),
                     ClinicId = user.ClinicId,
-                    CurrentClinicId = user.CurrentClinicId ?? user.ClinicId,
+                    CurrentClinicId = currentClinicId ?? user.ClinicId,
                     AvailableClinics = clinicList,
                     ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
                 });

@@ -155,9 +155,11 @@ namespace MedicSoft.Application.Services
                 }
 
                 // Step 1: Create Company (the new tenant entity)
+                // NOTE: Initially using clinic name for company name. In a future phase,
+                // the registration form will have separate fields for company and clinic names.
                 var company = new Company(
-                    request.ClinicName,  // Company name (using clinic name for now)
-                    request.ClinicName,  // Trade name
+                    request.ClinicName,  // Company name (using clinic name during migration)
+                    request.ClinicName,  // Trade name (same as name during migration)
                     companyDocument,
                     companyDocumentType,
                     request.ClinicPhone,
@@ -208,10 +210,13 @@ namespace MedicSoft.Application.Services
                 );
                 await _ownerRepository.AddWithoutSaveAsync(owner);
                 
-                // Step 4: Create UserClinicLink for the owner (if owner is also a User in the system)
-                // Note: Owner is separate from User, but in multi-clinic setup, if owner acts as user,
-                // this would be created. For now, we create it for future compatibility.
-                // The migration will handle existing users.
+                // Step 4: UserClinicLinks
+                // NOTE: Owner entity is separate from User entity in this system.
+                // - Owners are clinic proprietors who manage the business
+                // - Users are staff (doctors, receptionists, etc.) who work at clinics
+                // When an Owner also works as a User (doctor/staff), a separate User record
+                // will be created and linked via UserClinicLink.
+                // The Phase 2 migration handles creating UserClinicLinks for existing users.
                 
                 // Step 5: Create subscription
                 var trialDays = request.UseTrial ? plan.TrialDays : 0;
