@@ -12,6 +12,14 @@ export interface AuthResponse {
   role?: string;
   isSystemOwner?: boolean;
   expiresAt: string;
+  availableClinics?: UserClinicInfo[];
+  currentClinicId?: string;
+}
+
+export interface UserClinicInfo {
+  clinicId: string;
+  clinicName: string;
+  isPreferred: boolean;
 }
 
 export interface SessionValidationRequest {
@@ -29,6 +37,8 @@ export interface UserInfo {
   clinicId?: string;
   role?: string;
   isSystemOwner?: boolean;
+  availableClinics?: UserClinicInfo[];
+  currentClinicId?: string;
 }
 
 export interface RegisterRequest {
