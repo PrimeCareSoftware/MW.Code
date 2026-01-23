@@ -1,0 +1,223 @@
+# 📋 Plano de Desenvolvimento - Prompts Otimizados
+
+> **Data de Criação:** 23 de Janeiro de 2026  
+> **Baseado em:** [PLANO_DESENVOLVIMENTO.md](../docs/PLANO_DESENVOLVIMENTO.md) (1814 linhas)  
+> **Status do Sistema:** 95% completo | ~58-76 meses/dev restantes
+
+## 🎯 Visão Geral
+
+Esta pasta contém **prompts otimizados** para todas as tarefas pendentes do PrimeCare Software, organizados por fase de prioridade. Cada prompt foi desenhado para ser executado diretamente pelo GitHub Copilot ou outro agente de IA, com especificações técnicas completas e critérios de sucesso claros.
+
+## 📁 Estrutura de Pastas
+
+```
+Plano_Desenvolvimento/
+├── README.md (este arquivo)
+├── DEPENDENCIES.md (matriz de dependências entre tarefas)
+├── EFFORT_ESTIMATES.md (estimativas detalhadas por fase)
+│
+├── fase-1-conformidade-legal/     (P0 - Crítico - 12-14 meses)
+│   ├── 01-cfm-1821-finalizacao.md
+│   ├── 02-cfm-1638-versionamento.md
+│   ├── 03-prescricoes-digitais-finalizacao.md
+│   ├── 04-sngpc-integracao.md
+│   ├── 05-cfm-2314-telemedicina.md
+│   ├── 06-tiss-fase1-convenios.md
+│   └── 07-telemedicina-mvp-finalizacao.md
+│
+├── fase-2-seguranca-lgpd/         (P1 - Alta - 9-11 meses)
+│   ├── 08-auditoria-lgpd.md
+│   ├── 09-criptografia-dados.md
+│   ├── 10-portal-paciente.md
+│   ├── 11-prontuario-soap.md
+│   └── 12-melhorias-seguranca.md
+│
+├── fase-3-experiencia-usuario/    (P1 - Alta - integrado em fase-2)
+│   └── (veja portal-paciente em fase-2)
+│
+├── fase-4-analytics-otimizacao/   (P2 - Média - 17-19 meses)
+│   ├── 13-tiss-fase2.md
+│   ├── 14-fila-espera-avancada.md
+│   ├── 15-bi-analytics.md
+│   ├── 16-assinatura-digital.md
+│   ├── 17-crm-avancado.md
+│   ├── 18-gestao-fiscal.md
+│   └── 19-acessibilidade-wcag.md
+│
+└── fase-5-features-empresariais/  (P3 - Baixa - 9-14 meses)
+    ├── 20-api-publica.md
+    ├── 21-integracao-laboratorios.md
+    ├── 22-marketplace.md
+    └── 23-programa-referral.md
+```
+
+## 🔥 Ordem de Execução Recomendada
+
+### Q1 2026 (Jan-Mar) - Conformidade Legal Urgente
+**Foco:** Finalizar implementações parciais e compliance crítico
+
+1. ✅ **CFM 1.821 - Finalização** (15% restante - 1 mês)
+   - Integrar componentes no fluxo de atendimento
+   - Testes com médicos reais
+
+2. ✅ **CFM 1.638 - Versionamento** (1.5 meses)
+   - Implementar Event Sourcing para prontuários
+   - Sistema de auditoria completo
+
+3. ✅ **CFM 2.314 - Telemedicina Compliance** (1 mês)
+   - Termo de consentimento específico
+   - Verificação de identidade bidirecional
+
+4. ✅ **Telemedicina MVP → Produção** (1-2 meses)
+   - Completar compliance CFM 2.314
+   - Deploy gradual
+
+### Q2 2026 (Abr-Jun) - Prescrições e Integração ANVISA
+**Foco:** Finalizar prescrições digitais e SNGPC
+
+5. ✅ **Prescrições Digitais - Finalização** (20% restante - 2 meses)
+   - Templates de PDF profissionais
+   - Assinatura digital ICP-Brasil
+   - XML ANVISA v2.1 completo
+
+6. ✅ **SNGPC - Integração ANVISA** (2 meses)
+   - Transmissão mensal automática
+   - Livro digital de medicamentos controlados
+
+### Q3 2026 (Jul-Set) - Convênios e Portal do Paciente
+**Foco:** TISS e experiência do paciente
+
+7. ✅ **TISS Fase 1 - Integração Convênios** (3 meses, 2-3 devs)
+   - Cadastro de operadoras
+   - Geração de XML TISS 4.02.00
+   - Sistema de autorização
+
+8. ✅ **Portal do Paciente** (2-3 meses, 2 devs)
+   - Auto-agendamento
+   - Confirmação de consultas
+   - Download de documentos
+
+### Q4 2026 (Out-Dez) - Segurança e LGPD
+**Foco:** Compliance LGPD e endurecimento de segurança
+
+9. ✅ **Auditoria Completa - LGPD** (2 meses)
+   - Log centralizado de acessos
+   - Tracking de consentimento
+   - Exportação de dados
+
+10. ✅ **Criptografia de Dados Médicos** (1-2 meses)
+    - AES-256-GCM com Azure Key Vault
+    - Criptografia de campos sensíveis
+    - Rotação automática de chaves
+
+11. ✅ **Prontuário SOAP Estruturado** (1-2 meses)
+    - Interface S-O-A-P
+    - Templates por especialidade
+
+12. ✅ **Melhorias de Segurança** (3 meses)
+    - MFA obrigatório para admins
+    - WAF (Cloudflare)
+    - SIEM (ELK Stack)
+    - Refresh Token Pattern
+
+## 📊 Estatísticas Gerais
+
+### Por Prioridade
+
+| Prioridade | Tarefas | Esforço | Investimento | Prazo |
+|------------|---------|---------|--------------|-------|
+| 🔥🔥🔥 **P0 - CRÍTICO** | 8 | 12-14 meses/dev | R$ 262.500 | 2026 |
+| 🔥🔥 **P1 - ALTA** | 5 | 9-11 meses/dev | R$ 210.000 | 2026 |
+| 🔥 **P2 - MÉDIA** | 7 | 17-19 meses/dev | R$ 602.500 | 2026-2027 |
+| ⚪ **P3 - BAIXA** | 4 | 9-14 meses/dev | R$ 180.000 | 2026-2027 |
+| **TOTAL** | **24** | **58-76 meses/dev** | **R$ 1.255.000** | **2026-2027** |
+
+### Progresso Atual (Janeiro 2026)
+
+- ✅ **Sistema Core:** 95% completo
+- ✅ **Apps Frontend:** 4 aplicações completas
+- ✅ **Microserviços:** 1 ativo (Telemedicina)
+- ✅ **Testes Automatizados:** 734+
+- ✅ **Investimento Realizado:** R$ 400-500k
+- ✅ **Economia Anual (pós-simplificação):** R$ 300-420k
+
+## 🎯 Como Usar os Prompts
+
+### 1. Seleção de Tarefa
+- Escolha a tarefa seguindo a **ordem de prioridade** recomendada
+- Verifique **dependências** no arquivo `DEPENDENCIES.md`
+- Confirme que **pré-requisitos** foram atendidos
+
+### 2. Execução
+- Abra o arquivo `.md` da tarefa escolhida
+- Copie o prompt completo
+- Execute no GitHub Copilot ou agente de IA
+- Siga os passos na ordem especificada
+
+### 3. Validação
+- Execute todos os **testes automatizados**
+- Verifique **critérios de sucesso**
+- Obtenha aprovação de **stakeholders** (quando aplicável)
+- Atualize status no `PLANO_DESENVOLVIMENTO.md`
+
+### 4. Documentação
+- Marque a tarefa como completa
+- Documente desvios ou adaptações
+- Atualize estimativas de tarefas dependentes
+
+## 📚 Documentos de Apoio
+
+### Principais
+- [PLANO_DESENVOLVIMENTO.md](../docs/PLANO_DESENVOLVIMENTO.md) - Documento master com todas as especificações
+- [DEPENDENCIES.md](./DEPENDENCIES.md) - Matriz de dependências entre tarefas
+- [EFFORT_ESTIMATES.md](./EFFORT_ESTIMATES.md) - Estimativas detalhadas e breakdown por fase
+
+### Documentação Técnica Existente
+- Implementações já completas documentadas em `/docs`
+- APIs documentadas em controllers
+- Componentes frontend documentados inline
+- Postman Collection: `PrimeCare-Postman-Collection.json`
+
+## ⚠️ Avisos Importantes
+
+### Obrigatoriedades Legais (P0)
+- ⚠️ **Não pular tarefas P0** - São obrigatórias por lei brasileira
+- ⚠️ **CFM, ANVISA, ANS, Receita Federal** - Multas e sanções aplicáveis
+- ⚠️ **Prazo crítico:** Q1-Q3 2026 para compliance total
+
+### Arquitetura Atual (Janeiro 2026)
+- ✅ **Arquitetura simplificada** - 1 API monolítica + 1 microserviço
+- ✅ **PWA substituiu apps nativos** - Economia de R$ 180-240k/ano
+- ✅ **Zero taxas de app stores** - Economia de 30%
+- ✅ **-70% complexidade operacional**
+
+### Segurança
+- 🔐 Nunca commit secrets ou chaves em código
+- 🔐 Sempre usar Azure Key Vault ou AWS KMS
+- 🔐 Seguir OWASP Top 10
+- 🔐 Criptografar dados sensíveis (AES-256)
+
+## 🤝 Contribuindo
+
+### Atualizando Prompts
+1. Sempre baseie mudanças no `PLANO_DESENVOLVIMENTO.md` master
+2. Mantenha estrutura consistente (Contexto → Tarefas → Critérios)
+3. Adicione estimativas realistas
+4. Documente dependências claramente
+
+### Reportando Issues
+- Use GitHub Issues para reportar problemas nos prompts
+- Tag: `documentation`, `prompt-improvement`
+- Inclua sugestões de melhoria
+
+## 📞 Contato
+
+**PrimeCare Software - Equipe de Desenvolvimento**
+- GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- Documentação completa em `/docs`
+
+---
+
+> **Última Atualização:** 23 de Janeiro de 2026  
+> **Versão:** 1.0  
+> **Baseado em:** PLANO_DESENVOLVIMENTO.md v2.1
