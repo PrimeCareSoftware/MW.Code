@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { SubscriptionDetailsDto } from '../../../models/clinic-admin.model';
 import { Navbar } from '../../../shared/navbar/navbar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-subscription-info',
@@ -17,8 +18,14 @@ export class SubscriptionInfoComponent implements OnInit {
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
   showCancelConfirm = signal<boolean>(false);
+  showUpgradeDialog = signal<boolean>(false);
+  showDowngradeDialog = signal<boolean>(false);
+  availablePlans = signal<any[]>([]);
 
-  constructor(private clinicAdminService: ClinicAdminService) {}
+  constructor(
+    private clinicAdminService: ClinicAdminService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadSubscription();
@@ -67,6 +74,26 @@ export class SubscriptionInfoComponent implements OnInit {
     this.showCancelConfirm.set(false);
   }
 
+  openUpgradeDialog(): void {
+    this.showUpgradeDialog.set(true);
+  }
+
+  openDowngradeDialog(): void {
+    this.showDowngradeDialog.set(true);
+  }
+
+  closeUpgradeDialog(): void {
+    this.showUpgradeDialog.set(false);
+  }
+
+  closeDowngradeDialog(): void {
+    this.showDowngradeDialog.set(false);
+  }
+
+  navigateToPricing(): void {
+    this.router.navigate(['/site/pricing']);
+  }
+
   getStatusClass(status: string): string {
     switch (status.toLowerCase()) {
       case 'active':
@@ -108,4 +135,9 @@ export class SubscriptionInfoComponent implements OnInit {
     if (percentage >= 75) return 'usage-warning';
     return 'usage-normal';
   }
+
+  // Storage tracking not yet implemented - future enhancement
+  // getStorageUsagePercentage(): number {
+  //   return 0;
+  // }
 }
