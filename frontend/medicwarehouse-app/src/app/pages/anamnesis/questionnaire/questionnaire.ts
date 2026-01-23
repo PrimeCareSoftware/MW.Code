@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AnamnesisService } from '../../../services/anamnesis.service';
 import { 
@@ -247,10 +248,12 @@ export class QuestionnaireComponent implements OnInit {
     try {
       // Create response if it doesn't exist
       if (!this.response()) {
-        const createResponse = await this.anamnesisService.createResponse({
-          appointmentId: this.appointmentId,
-          templateId: this.templateId
-        }).toPromise();
+        const createResponse = await firstValueFrom(
+          this.anamnesisService.createResponse({
+            appointmentId: this.appointmentId,
+            templateId: this.templateId
+          })
+        );
         
         if (createResponse) {
           this.response.set(createResponse);
@@ -263,10 +266,12 @@ export class QuestionnaireComponent implements OnInit {
       }
       
       // Save answers
-      const updatedResponse = await this.anamnesisService.saveAnswers(responseId, {
-        answers: questionAnswers,
-        isComplete: isComplete
-      }).toPromise();
+      const updatedResponse = await firstValueFrom(
+        this.anamnesisService.saveAnswers(responseId, {
+          answers: questionAnswers,
+          isComplete: isComplete
+        })
+      );
       
       if (updatedResponse) {
         this.response.set(updatedResponse);
