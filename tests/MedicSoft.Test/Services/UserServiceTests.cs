@@ -13,6 +13,8 @@ namespace MedicSoft.Test.Services
         private readonly Mock<IUserRepository> _mockUserRepository;
         private readonly Mock<IPasswordHasher> _mockPasswordHasher;
         private readonly Mock<IModuleConfigurationRepository> _mockModuleConfigRepository;
+        private readonly Mock<IUserClinicLinkRepository> _mockUserClinicLinkRepository;
+        private readonly Mock<IClinicRepository> _mockClinicRepository;
         private readonly IUserService _userService;
 
         public UserServiceTests()
@@ -20,10 +22,14 @@ namespace MedicSoft.Test.Services
             _mockUserRepository = new Mock<IUserRepository>();
             _mockPasswordHasher = new Mock<IPasswordHasher>();
             _mockModuleConfigRepository = new Mock<IModuleConfigurationRepository>();
+            _mockUserClinicLinkRepository = new Mock<IUserClinicLinkRepository>();
+            _mockClinicRepository = new Mock<IClinicRepository>();
             _userService = new UserService(
                 _mockUserRepository.Object, 
                 _mockPasswordHasher.Object,
-                _mockModuleConfigRepository.Object);
+                _mockModuleConfigRepository.Object,
+                _mockUserClinicLinkRepository.Object,
+                _mockClinicRepository.Object);
         }
 
         [Fact]
@@ -429,6 +435,184 @@ namespace MedicSoft.Test.Services
             _mockModuleConfigRepository.Verify(
                 r => r.GetByClinicAndModuleAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), 
                 Times.Never);
+        }
+
+        [Fact]
+        public async Task LinkUserToClinicAsync_ShouldCreateLinkSuccessfully()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var clinicId = Guid.NewGuid();
+            var tenantId = "test-tenant";
+
+            var user = new User("testuser", "test@example.com", "hash", "Test User", "1234567890", UserRole.Doctor, tenantId, Guid.NewGuid());
+            var clinic = new Clinic("Test Clinic", "123 Main St", "1234567890", "test@clinic.com", Guid.NewGuid(), tenantId);
+
+            _mockUserRepository.Setup(r => r.GetByIdAsync(userId, tenantId))
+                .ReturnsAsync(user);
+            
+            _mockClinicRepository.Setup(r => r.GetByIdAsync(clinicId, tenantId))
+                .ReturnsAsync(clinic);
+
+            _mockUserClinicLinkRepository.Setup(r => r.GetByUserAndClinicAsync(userId, clinicId, tenantId))
+                .ReturnsAsync((UserClinicLink?)null);
+
+            _mockUserClinicLinkRepository.Setup(r => r.AddAsync(It.IsAny<UserClinicLink>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var link = await _userService.LinkUserToClinicAsync(userId, clinicId, tenantId, false);
+
+            // Assert
+            Assert.NotNull(link);
+            Assert.Equal(userId, link.UserId);
+            Assert.Equal(clinicId, link.ClinicId);
+            Assert.True(link.IsActive);
+            _mockUserClinicLinkRepository.Verify(r => r.AddAsync(It.IsAny<UserClinicLink>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task LinkUserToClinicAsync_ShouldThrowException_WhenUserNotFound()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var clinicId = Guid.NewGuid();
+            var tenantId = "test-tenant";
+
+            _mockUserRepository.Setup(r => r.GetByIdAsync(userId, tenantId))
+                .ReturnsAsync((User?)null);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _userService.LinkUserToClinicAsync(userId, clinicId, tenantId, false)
+            );
+
+            Assert.Contains("not found", exception.Message);
+        }
+
+        [Fact]
+        public async Task LinkUserToClinicAsync_ShouldThrowException_WhenClinicNotFound()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var clinicId = Guid.NewGuid();
+            var tenantId = "test-tenant";
+
+            var user = new User("testuser", "test@example.com", "hash", "Test User", "1234567890", UserRole.Doctor, tenantId, Guid.NewGuid());
+
+            _mockUserRepository.Setup(r => r.GetByIdAsync(userId, tenantId))
+                .ReturnsAsync(user);
+            
+            _mockClinicRepository.Setup(r => r.GetByIdAsync(clinicId, tenantId))
+                .ReturnsAsync((Clinic?)null);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _userService.LinkUserToClinicAsync(userId, clinicId, tenantId, false)
+            );
+
+            Assert.Contains("not found", exception.Message);
+        }
+
+        [Fact]
+        public async Task RemoveUserClinicLinkAsync_ShouldDeactivateLinkSuccessfully()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var clinicId = Guid.NewGuid();
+            var tenantId = "test-tenant";
+
+            var link = new UserClinicLink(userId, clinicId, tenantId, false);
+            var user = new User("testuser", "test@example.com", "hash", "Test User", "1234567890", UserRole.Doctor, tenantId, clinicId);
+
+            _mockUserClinicLinkRepository.Setup(r => r.GetByUserAndClinicAsync(userId, clinicId, tenantId))
+                .ReturnsAsync(link);
+
+            _mockUserClinicLinkRepository.Setup(r => r.UpdateAsync(It.IsAny<UserClinicLink>()))
+                .Returns(Task.CompletedTask);
+
+            _mockUserRepository.Setup(r => r.GetByIdAsync(userId, tenantId))
+                .ReturnsAsync(user);
+
+            _mockUserClinicLinkRepository.Setup(r => r.GetByUserIdAsync(userId, tenantId))
+                .ReturnsAsync(new List<UserClinicLink> { link });
+
+            _mockUserRepository.Setup(r => r.UpdateAsync(It.IsAny<User>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            await _userService.RemoveUserClinicLinkAsync(userId, clinicId, tenantId);
+
+            // Assert
+            Assert.False(link.IsActive);
+            _mockUserClinicLinkRepository.Verify(r => r.UpdateAsync(It.IsAny<UserClinicLink>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task RemoveUserClinicLinkAsync_ShouldThrowException_WhenLinkNotFound()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var clinicId = Guid.NewGuid();
+            var tenantId = "test-tenant";
+
+            _mockUserClinicLinkRepository.Setup(r => r.GetByUserAndClinicAsync(userId, clinicId, tenantId))
+                .ReturnsAsync((UserClinicLink?)null);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _userService.RemoveUserClinicLinkAsync(userId, clinicId, tenantId)
+            );
+
+            Assert.Contains("No link found", exception.Message);
+        }
+
+        [Fact]
+        public async Task SetPreferredClinicAsync_ShouldSetPreferredSuccessfully()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var clinicId = Guid.NewGuid();
+            var tenantId = "test-tenant";
+
+            var targetLink = new UserClinicLink(userId, clinicId, tenantId, false);
+            var otherLink = new UserClinicLink(userId, Guid.NewGuid(), tenantId, true);
+
+            _mockUserClinicLinkRepository.Setup(r => r.GetByUserAndClinicAsync(userId, clinicId, tenantId))
+                .ReturnsAsync(targetLink);
+
+            _mockUserClinicLinkRepository.Setup(r => r.GetByUserIdAsync(userId, tenantId))
+                .ReturnsAsync(new List<UserClinicLink> { targetLink, otherLink });
+
+            _mockUserClinicLinkRepository.Setup(r => r.UpdateAsync(It.IsAny<UserClinicLink>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            await _userService.SetPreferredClinicAsync(userId, clinicId, tenantId);
+
+            // Assert
+            Assert.True(targetLink.IsPreferredClinic);
+            Assert.False(otherLink.IsPreferredClinic);
+            _mockUserClinicLinkRepository.Verify(r => r.UpdateAsync(It.IsAny<UserClinicLink>()), Times.Exactly(2));
+        }
+
+        [Fact]
+        public async Task SetPreferredClinicAsync_ShouldThrowException_WhenUserHasNoAccessToClinic()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var clinicId = Guid.NewGuid();
+            var tenantId = "test-tenant";
+
+            _mockUserClinicLinkRepository.Setup(r => r.GetByUserAndClinicAsync(userId, clinicId, tenantId))
+                .ReturnsAsync((UserClinicLink?)null);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _userService.SetPreferredClinicAsync(userId, clinicId, tenantId)
+            );
+
+            Assert.Contains("does not have access", exception.Message);
         }
     }
 }
