@@ -52,7 +52,7 @@ export class ProcedureList implements OnInit {
   }
 
   filterProcedures(term: string): void {
-    if (!term || term.length === 0) {
+    if (!term) {
       this.filteredProcedures.set(this.procedures());
       return;
     }

@@ -63,7 +63,7 @@
                 <td><span class="procedure-code">{{ procedure.code }}</span></td>
                 <td><strong>{{ procedure.name }}</strong></td>
                 <td>{{ procedureCategoryLabels[procedure.category] }}</td>
-                <td>R$ {{ procedure.price.toFixed(2) }}</td>
+                <td>{{ procedure.price | currency:'BRL':'symbol':'1.2-2' }}</td>
                 <td>{{ procedure.durationMinutes }} min</td>
                 <td>
                   <span class="badge" [class.badge-success]="procedure.isActive" [class.badge-secondary]="!procedure.isActive">

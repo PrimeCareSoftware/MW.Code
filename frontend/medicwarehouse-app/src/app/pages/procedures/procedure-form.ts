@@ -98,9 +98,10 @@ export class ProcedureForm implements OnInit {
         next: () => {
           this.successMessage.set('Procedimento atualizado com sucesso!');
           this.isSaving.set(false);
+          // Navigate after a short delay to show success message
           setTimeout(() => {
             this.router.navigate(['/procedures']);
-          }, 1500);
+          }, 1000);
         },
         error: (error) => {
           console.error('Error updating procedure:', error);
@@ -122,9 +123,10 @@ export class ProcedureForm implements OnInit {
         next: () => {
           this.successMessage.set('Procedimento criado com sucesso!');
           this.isSaving.set(false);
+          // Navigate after a short delay to show success message
           setTimeout(() => {
             this.router.navigate(['/procedures']);
-          }, 1500);
+          }, 1000);
         },
         error: (error) => {
           console.error('Error creating procedure:', error);
