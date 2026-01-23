@@ -295,9 +295,9 @@ Sistema completo de prescrições digitais conforme CFM e ANVISA com 4 component
 - ✅ fiscal-dashboard - Dashboard com estatísticas
 
 **Documentação:**
-- [NF-E-IMPLEMENTATION-STATUS.md](NF-E-IMPLEMENTATION-STATUS.md) - Status detalhado
-- [NFE_NFSE_USER_GUIDE.md](NFE_NFSE_USER_GUIDE.md) - Guia completo do usuário
-- [prompts-copilot/critico/04-nfe-nfse.md](prompts-copilot/critico/04-nfe-nfse.md) - Especificação técnica
+- [NF-E-IMPLEMENTATION-STATUS.md](./NF-E-IMPLEMENTATION-STATUS.md) - Status detalhado
+- [NFE_NFSE_USER_GUIDE.md](./NFE_NFSE_USER_GUIDE.md) - Guia completo do usuário
+- [prompts-copilot/critico/04-nfe-nfse.md](./prompts-copilot/critico/04-nfe-nfse.md) - Especificação técnica
 
 **Testes:**
 - ✅ 22 testes unitários implementados

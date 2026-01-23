@@ -891,18 +891,18 @@ O sistema de emissão de NF-e/NFS-e foi totalmente implementado e está pronto p
 
 ## 📊 Resumo Financeiro P0 (Tarefas Críticas) - ATUALIZADO
 
-### Tarefas Completas/Parciais (Janeiro 2026)
+### Tarefas Completas (Janeiro 2026)
 
-| # | Tarefa | Status | Esforço Original | Realizado |
-|---|--------|--------|------------------|-----------|
-| 8 | Telemedicina MVP | ⚠️ 80% Completo | 4-6 meses, 2 devs | ~R$ 105k |
+| # | Tarefa | Status | Esforço Original | Realizado | Data Conclusão |
+|---|--------|--------|------------------|-----------|----------------|
+| 2 | NF-e/NFS-e | ✅ COMPLETO | 3 meses, 2 devs | R$ 90k | Janeiro 2026 |
+| 8 | Telemedicina MVP | ⚠️ 80% Completo | 4-6 meses, 2 devs | ~R$ 105k | Em andamento |
 
 ### Tarefas Pendentes
 
 | # | Tarefa | Esforço Restante | Custo Restante | Prazo |
 |---|--------|------------------|----------------|-------|
 | 1 | Conformidade CFM 1.821 | 1 mês, 1 dev (finalizar) | R$ 15k | Q1/2026 |
-| ~~2~~ | ~~NF-e/NFS-e~~ | ✅ **COMPLETO - Jan 2026** | ~~R$ 90k~~ | ✅ Entregue |
 | 3 | Receitas Digitais CFM+ANVISA | 2 meses, 1 dev (finalizar) | R$ 30k | Q2/2026 |
 | 4 | TISS Fase 1 | 3 meses, 2-3 devs | R$ 135k | Q3/2026 |
 | 5 | Conformidade CFM 1.638 | 1.5 meses, 1 dev | R$ 22.5k | Q1/2026 |
