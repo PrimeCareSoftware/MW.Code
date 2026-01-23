@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.MedicalRecords;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
@@ -10,15 +11,18 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
     {
         private readonly IMedicalRecordRepository _medicalRecordRepository;
         private readonly IAppointmentRepository _appointmentRepository;
+        private readonly ICfm1821ValidationService _cfm1821ValidationService;
         private readonly IMapper _mapper;
 
         public CompleteMedicalRecordCommandHandler(
             IMedicalRecordRepository medicalRecordRepository,
             IAppointmentRepository appointmentRepository,
+            ICfm1821ValidationService cfm1821ValidationService,
             IMapper mapper)
         {
             _medicalRecordRepository = medicalRecordRepository;
             _appointmentRepository = appointmentRepository;
+            _cfm1821ValidationService = cfm1821ValidationService;
             _mapper = mapper;
         }
 
@@ -30,6 +34,14 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 if (medicalRecord == null)
                 {
                     throw new InvalidOperationException("Medical record not found");
+                }
+
+                // CFM 1.821 - Validate completeness before closing
+                var validationResult = await _cfm1821ValidationService.ValidateMedicalRecordCompleteness(request.Id, request.TenantId);
+                if (!validationResult.IsCompliant)
+                {
+                    var missingFields = string.Join("; ", validationResult.MissingRequirements);
+                    throw new InvalidOperationException($"Cannot complete medical record - CFM 1.821 compliance failed: {missingFields}");
                 }
 
                 // Complete the medical record

@@ -15,11 +15,16 @@ namespace MedicSoft.Api.Controllers
     public class MedicalRecordsController : BaseController
     {
         private readonly IMedicalRecordService _medicalRecordService;
+        private readonly ICfm1821ValidationService _cfm1821ValidationService;
 
-        public MedicalRecordsController(IMedicalRecordService medicalRecordService, ITenantContext tenantContext) 
+        public MedicalRecordsController(
+            IMedicalRecordService medicalRecordService, 
+            ICfm1821ValidationService cfm1821ValidationService,
+            ITenantContext tenantContext) 
             : base(tenantContext)
         {
             _medicalRecordService = medicalRecordService;
+            _cfm1821ValidationService = cfm1821ValidationService;
         }
 
         /// <summary>
@@ -122,6 +127,24 @@ namespace MedicSoft.Api.Controllers
             {
                 var medicalRecords = await _medicalRecordService.GetPatientMedicalRecordsAsync(patientId, GetTenantId());
                 return Ok(medicalRecords);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Check CFM 1.821 compliance status for a medical record (requires medical-records.view permission)
+        /// </summary>
+        [HttpGet("{id}/cfm1821-status")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsView)]
+        public async Task<ActionResult<Cfm1821ValidationResult>> GetCfm1821Status(Guid id)
+        {
+            try
+            {
+                var validationResult = await _cfm1821ValidationService.ValidateMedicalRecordCompleteness(id, GetTenantId());
+                return Ok(validationResult);
             }
             catch (InvalidOperationException ex)
             {
