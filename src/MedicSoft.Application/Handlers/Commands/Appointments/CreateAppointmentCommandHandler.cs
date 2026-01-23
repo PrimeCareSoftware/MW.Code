@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.Appointments;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.Services;
@@ -15,6 +16,9 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
         private readonly IPatientRepository _patientRepository;
         private readonly IClinicRepository _clinicRepository;
         private readonly IMedicalRecordRepository _medicalRecordRepository;
+        private readonly IPatientClinicLinkRepository _patientClinicLinkRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IInAppNotificationService _notificationService;
         private readonly AppointmentSchedulingService _schedulingService;
         private readonly IMapper _mapper;
 
@@ -23,6 +27,9 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             IPatientRepository patientRepository,
             IClinicRepository clinicRepository,
             IMedicalRecordRepository medicalRecordRepository,
+            IPatientClinicLinkRepository patientClinicLinkRepository,
+            IUserRepository userRepository,
+            IInAppNotificationService notificationService,
             AppointmentSchedulingService schedulingService,
             IMapper mapper)
         {
@@ -30,6 +37,9 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             _patientRepository = patientRepository;
             _clinicRepository = clinicRepository;
             _medicalRecordRepository = medicalRecordRepository;
+            _patientClinicLinkRepository = patientClinicLinkRepository;
+            _userRepository = userRepository;
+            _notificationService = notificationService;
             _schedulingService = schedulingService;
             _mapper = mapper;
         }
@@ -68,6 +78,12 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 request.Appointment.Notes
             );
 
+            // Set professional if provided
+            if (request.Appointment.ProfessionalId.HasValue)
+            {
+                appointment.UpdateProfessional(request.Appointment.ProfessionalId.Value);
+            }
+
             // Set room number if provided (before creating medical record)
             if (!string.IsNullOrWhiteSpace(request.Appointment.RoomNumber))
             {
@@ -86,7 +102,65 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
 
             await _medicalRecordRepository.AddAsync(medicalRecord);
 
+            // Check if notification to primary doctor should be sent
+            await NotifyPrimaryDoctorIfNeededAsync(appointment, patient, clinic, request.TenantId);
+
             return _mapper.Map<AppointmentDto>(appointment);
+        }
+
+        private async Task NotifyPrimaryDoctorIfNeededAsync(
+            Appointment appointment, 
+            Patient patient, 
+            Clinic clinic, 
+            string tenantId)
+        {
+            // Check if clinic has notification enabled
+            if (!clinic.NotifyPrimaryDoctorOnOtherDoctorAppointment)
+                return;
+
+            // Check if appointment has a professional assigned
+            if (!appointment.ProfessionalId.HasValue)
+                return;
+
+            // Get patient-clinic link to check primary doctor
+            var patientClinicLink = await _patientClinicLinkRepository.GetLinkAsync(
+                patient.Id, 
+                clinic.Id, 
+                tenantId);
+
+            if (patientClinicLink == null || !patientClinicLink.PrimaryDoctorId.HasValue)
+                return;
+
+            // Check if the appointment professional is different from primary doctor
+            if (patientClinicLink.PrimaryDoctorId == appointment.ProfessionalId)
+                return;
+
+            // Get user information for notification
+            var appointmentDoctor = await _userRepository.GetByIdAsync(appointment.ProfessionalId.Value, tenantId);
+            if (appointmentDoctor == null)
+                return;
+
+            // Send notification to primary doctor
+            var message = $"O paciente {patient.Name} foi agendado para consulta com Dr(a). {appointmentDoctor.Name} " +
+                         $"em {appointment.ScheduledDate:dd/MM/yyyy} às {appointment.ScheduledTime:hh\\:mm}.";
+
+            await _notificationService.CreateNotificationAsync(
+                type: "DoctorAppointmentNotification",
+                title: "Paciente Agendado com Outro Médico",
+                message: message,
+                data: new
+                {
+                    AppointmentId = appointment.Id,
+                    PatientId = patient.Id,
+                    PatientName = patient.Name,
+                    AppointmentDoctorId = appointment.ProfessionalId,
+                    AppointmentDoctorName = appointmentDoctor.Name,
+                    PrimaryDoctorId = patientClinicLink.PrimaryDoctorId,
+                    ScheduledDate = appointment.ScheduledDate,
+                    ScheduledTime = appointment.ScheduledTime
+                },
+                tenantId: tenantId
+            );
         }
     }
 }

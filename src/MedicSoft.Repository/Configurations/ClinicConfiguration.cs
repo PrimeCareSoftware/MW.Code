@@ -65,6 +65,10 @@ namespace MedicSoft.Repository.Configurations
                 .HasConversion<string>()
                 .HasMaxLength(50);
 
+            builder.Property(c => c.NotifyPrimaryDoctorOnOtherDoctorAppointment)
+                .IsRequired()
+                .HasDefaultValue(true);
+
             // Indexes
             builder.HasIndex(c => new { c.TenantId, c.Document })
                 .IsUnique()
