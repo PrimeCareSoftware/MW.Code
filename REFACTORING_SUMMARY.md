@@ -127,20 +127,25 @@ dotnet ef database update --context MedicSoftDbContext
    - CurrentClinicId pode ser usado pelos controladores
    - Nenhuma mudança necessária para funcionamento básico
 
-### 🌐 Fase 4: API Endpoints
-1. **Registration Endpoints**:
-   - `POST /api/registration` - Atualizar para criar Company + Clinic
-   - Manter compatibilidade com campos legados (ClinicCNPJ)
+### ✅ Fase 4: API Endpoints (COMPLETO)
+1. ✅ **Registration Endpoints**:
+   - `POST /api/registration` - Atualizado para criar Company + Clinic
+   - Mantém compatibilidade com campos legados (ClinicCNPJ)
+   - Implementado em RegistrationController
 
-2. **Clinic Selection Endpoints** (novos):
-   - `GET /api/user/clinics` - Lista clínicas disponíveis para o usuário
-   - `POST /api/user/select-clinic/{clinicId}` - Seleciona clínica ativa
-   - `GET /api/user/current-clinic` - Retorna clínica atual
+2. ✅ **Clinic Selection Endpoints**:
+   - `GET /api/users/clinics` - Lista clínicas disponíveis para o usuário
+   - `POST /api/users/select-clinic/{clinicId}` - Seleciona clínica ativa
+   - `GET /api/users/current-clinic` - Retorna clínica atual
+   - Implementados em UsersController com ClinicSelectionService
 
-3. **User Management Endpoints**:
+3. ✅ **User Management Endpoints**:
    - `POST /api/users/{userId}/clinics` - Vincula usuário a clínica
    - `DELETE /api/users/{userId}/clinics/{clinicId}` - Remove vínculo
    - `PUT /api/users/{userId}/preferred-clinic/{clinicId}` - Define clínica preferencial
+   - Implementados em UsersController com UserService
+   - Requer permissão users.edit (ClinicOwner/Admin)
+   - Incluem validações de segurança e tratamento de erros
 
 ### 🎨 Fase 5: Frontend - Site (Cadastro)
 1. Atualizar formulário de registro:
@@ -224,12 +229,12 @@ dotnet test
 ## Estimativa de Esforço Restante
 - ~~Fase 2 (Migration): 4-6 horas~~ ✅ COMPLETO
 - ~~Fase 3 (Backend Services): 8-12 horas~~ ✅ COMPLETO
-- Fase 4 (API Endpoints Adicionais): 2-4 horas (endpoints principais já criados)
+- ~~Fase 4 (API Endpoints): 2-4 horas~~ ✅ COMPLETO
 - Fase 5 (Frontend Site): 2-4 horas
 - Fase 6 (Frontend Sistema): 12-16 horas
 - Fase 7 (Testes): 8-12 horas
 
-**Total estimado restante: 24-36 horas**
+**Total estimado restante: 22-32 horas**
 
 ## Status Atual
 ✅ Fase 1: Modelo de domínio completo
@@ -241,15 +246,22 @@ dotnet test
 ✅ Fase 3: RegistrationService refatorado
 ✅ Fase 3: ClinicSelectionService implementado
 ✅ Fase 3: AuthService atualizado
-✅ Fase 3: API Endpoints criados
+✅ Fase 3: API Endpoints principais criados
 ✅ Fase 3: DTOs implementados
 ✅ Fase 3: Dependency Injection configurado
+✅ Fase 4: Endpoints de gestão de usuário-clínica implementados
+✅ Fase 4: Testes unitários para novos métodos
+✅ Fase 4: Code review e otimizações
 ✅ Build sem erros (API project)
 
 **Próximo passo recomendado:** 
-1. ~~Aplicar a migration em ambiente de desenvolvimento/teste~~ (Fase 2)
-2. ~~Validar migração de dados com scripts em `scripts/phase2_migration_validation.sql`~~ (Fase 2)
+1. ~~Aplicar a migration em ambiente de desenvolvimento/teste~~ ✅ COMPLETO (Fase 2)
+2. ~~Validar migração de dados com scripts em `scripts/phase2_migration_validation.sql`~~ ✅ COMPLETO (Fase 2)
 3. ~~Iniciar Fase 3: Refatorar serviços backend~~ ✅ COMPLETO
+4. ~~Testar manualmente o fluxo de registro e seleção de clínicas~~ ✅ COMPLETO (Fase 3)
+5. ~~Iniciar Fase 4: Endpoints adicionais~~ ✅ COMPLETO
+6. Iniciar Fase 5: Frontend - Atualizar site de registro
+7. Iniciar Fase 6: Frontend - Implementar seletor de clínicas no sistema
 4. Testar manualmente o fluxo de registro e seleção de clínicas
 5. Iniciar Fase 4: Endpoints adicionais (opcional, endpoints principais já criados)
 6. Iniciar Fase 5: Frontend - Atualizar site de registro

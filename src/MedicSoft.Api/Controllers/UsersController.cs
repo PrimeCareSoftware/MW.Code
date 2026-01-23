@@ -321,6 +321,76 @@ namespace MedicSoft.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Link a user to a clinic - allows the user to access and work in that clinic
+        /// Requires users.edit permission (typically ClinicOwner or Admin)
+        /// </summary>
+        [HttpPost("{userId}/clinics")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
+        public async Task<ActionResult<UserClinicLinkDto>> LinkUserToClinic(Guid userId, [FromBody] LinkUserToClinicRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+
+                // Validate that the clinic belongs to the same tenant
+                var link = await _userService.LinkUserToClinicAsync(userId, request.ClinicId, tenantId, request.IsPreferred);
+
+                return Ok(new UserClinicLinkDto
+                {
+                    UserId = link.UserId,
+                    ClinicId = link.ClinicId,
+                    LinkedDate = link.LinkedDate,
+                    IsActive = link.IsActive,
+                    IsPreferredClinic = link.IsPreferredClinic
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Remove user's access to a clinic
+        /// Requires users.edit permission (typically ClinicOwner or Admin)
+        /// </summary>
+        [HttpDelete("{userId}/clinics/{clinicId}")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
+        public async Task<ActionResult> RemoveUserClinicLink(Guid userId, Guid clinicId)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                await _userService.RemoveUserClinicLinkAsync(userId, clinicId, tenantId);
+                return Ok(new { message = "User clinic link removed successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Set a clinic as the user's preferred (default) clinic
+        /// Requires users.edit permission (typically ClinicOwner or Admin)
+        /// </summary>
+        [HttpPut("{userId}/preferred-clinic/{clinicId}")]
+        [RequirePermissionKey(PermissionKeys.UsersEdit)]
+        public async Task<ActionResult> SetPreferredClinic(Guid userId, Guid clinicId)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                await _userService.SetPreferredClinicAsync(userId, clinicId, tenantId);
+                return Ok(new { message = "Preferred clinic set successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         private Guid GetUserIdFromToken()
         {
             var userIdClaim = User.FindFirst("user_id")?.Value ?? User.FindFirst("nameid")?.Value;
@@ -373,5 +443,20 @@ namespace MedicSoft.Api.Controllers
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
         public Guid? CurrentClinicId { get; set; }
+    }
+
+    public class LinkUserToClinicRequest
+    {
+        public Guid ClinicId { get; set; }
+        public bool IsPreferred { get; set; } = false;
+    }
+
+    public class UserClinicLinkDto
+    {
+        public Guid UserId { get; set; }
+        public Guid ClinicId { get; set; }
+        public DateTime LinkedDate { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsPreferredClinic { get; set; }
     }
 }
