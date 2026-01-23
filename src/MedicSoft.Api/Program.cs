@@ -278,6 +278,10 @@ builder.Services.AddScoped<IDiagnosticHypothesisRepository, DiagnosticHypothesis
 builder.Services.AddScoped<ITherapeuticPlanRepository, TherapeuticPlanRepository>();
 builder.Services.AddScoped<IInformedConsentRepository, InformedConsentRepository>();
 
+// CFM 1.638/2002 - Register versioning and audit repositories
+builder.Services.AddScoped<IMedicalRecordVersionRepository, MedicalRecordVersionRepository>();
+builder.Services.AddScoped<IMedicalRecordAccessLogRepository, MedicalRecordAccessLogRepository>();
+
 // Digital Prescriptions and SNGPC - CFM 1.643/2002 + ANVISA
 builder.Services.AddScoped<IDigitalPrescriptionRepository, DigitalPrescriptionRepository>();
 builder.Services.AddScoped<IDigitalPrescriptionItemRepository, DigitalPrescriptionItemRepository>();
@@ -336,6 +340,10 @@ builder.Services.AddScoped<IDiagnosticHypothesisService, DiagnosticHypothesisSer
 builder.Services.AddScoped<ITherapeuticPlanService, TherapeuticPlanService>();
 builder.Services.AddScoped<IInformedConsentService, InformedConsentService>();
 builder.Services.AddScoped<ICfm1821ValidationService, Cfm1821ValidationService>();
+
+// CFM 1.638/2002 - Register versioning and audit services
+builder.Services.AddScoped<IMedicalRecordVersionService, MedicalRecordVersionService>();
+builder.Services.AddScoped<IMedicalRecordAuditService, MedicalRecordAuditService>();
 
 // Consultation Form Configuration - Services
 builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFormConfigurationService>();

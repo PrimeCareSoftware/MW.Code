@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.MedicalRecords;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -12,17 +13,20 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
         private readonly IMedicalRecordRepository _medicalRecordRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IMedicalRecordVersionService _versionService;
         private readonly IMapper _mapper;
 
         public CreateMedicalRecordCommandHandler(
             IMedicalRecordRepository medicalRecordRepository,
             IPatientRepository patientRepository,
             IAppointmentRepository appointmentRepository,
+            IMedicalRecordVersionService versionService,
             IMapper mapper)
         {
             _medicalRecordRepository = medicalRecordRepository;
             _patientRepository = patientRepository;
             _appointmentRepository = appointmentRepository;
+            _versionService = versionService;
             _mapper = mapper;
         }
 
@@ -73,6 +77,14 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 );
 
                 await _medicalRecordRepository.AddAsync(medicalRecord);
+
+                // CFM 1.638/2002 - Create initial version snapshot
+                await _versionService.CreateVersionAsync(
+                    medicalRecordId: medicalRecord.Id,
+                    changeType: "Created",
+                    userId: request.UserId,
+                    tenantId: request.TenantId
+                );
 
                 var dto = _mapper.Map<MedicalRecordDto>(medicalRecord);
                 dto.PatientName = patient.Name;

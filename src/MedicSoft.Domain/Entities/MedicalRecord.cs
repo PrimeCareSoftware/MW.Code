@@ -34,6 +34,12 @@ namespace MedicSoft.Domain.Entities
         public DateTime? ClosedAt { get; private set; }
         public Guid? ClosedByUserId { get; private set; }
         public string? ProfessionalSignature { get; private set; }  // Assinatura digital do profissional
+        
+        // CFM 1.638/2002 - Versionamento e Auditoria
+        public int CurrentVersion { get; private set; }
+        public DateTime? ReopenedAt { get; private set; }
+        public Guid? ReopenedByUserId { get; private set; }
+        public string? ReopenReason { get; private set; }
 
         // Navigation properties
         public Appointment Appointment { get; private set; } = null!;
@@ -55,6 +61,14 @@ namespace MedicSoft.Domain.Entities
         
         private readonly List<InformedConsent> _consents = new();
         public IReadOnlyCollection<InformedConsent> Consents => _consents.AsReadOnly();
+        
+        // CFM 1.638/2002 - Version history
+        private readonly List<MedicalRecordVersion> _versions = new();
+        public IReadOnlyCollection<MedicalRecordVersion> Versions => _versions.AsReadOnly();
+        
+        // CFM 1.638/2002 - Access logs
+        private readonly List<MedicalRecordAccessLog> _accessLogs = new();
+        public IReadOnlyCollection<MedicalRecordAccessLog> AccessLogs => _accessLogs.AsReadOnly();
 
         private MedicalRecord() 
         { 
@@ -118,6 +132,7 @@ namespace MedicSoft.Domain.Entities
             
             ConsultationDurationMinutes = 0;
             IsClosed = false;
+            CurrentVersion = 1; // Start at version 1
         }
 
         public void UpdateDiagnosis(string? diagnosis)
@@ -252,15 +267,33 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
         
-        public void ReopenMedicalRecord()
+        // CFM 1.638/2002 - Reopen with mandatory justification
+        public void ReopenMedicalRecord(Guid reopenedByUserId, string reopenReason)
         {
             if (!IsClosed)
                 throw new InvalidOperationException("Medical record is not closed");
             
+            if (string.IsNullOrWhiteSpace(reopenReason))
+                throw new ArgumentException("Justification is required to reopen a medical record (CFM 1.638/2002)", nameof(reopenReason));
+            
+            if (reopenReason.Length < 20)
+                throw new ArgumentException("Reopen justification must have at least 20 characters", nameof(reopenReason));
+            
             IsClosed = false;
             ClosedAt = null;
             ClosedByUserId = null;
+            ReopenedAt = DateTime.UtcNow;
+            ReopenedByUserId = reopenedByUserId;
+            ReopenReason = reopenReason.Trim();
+            CurrentVersion++;
             
+            UpdateTimestamp();
+        }
+        
+        // CFM 1.638/2002 - Increment version on updates
+        public void IncrementVersion()
+        {
+            CurrentVersion++;
             UpdateTimestamp();
         }
         

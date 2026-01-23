@@ -224,6 +224,13 @@ namespace MedicSoft.Application.Mappings
             // Anamnesis Response mappings
             CreateMap<AnamnesisResponse, DTOs.Anamnesis.AnamnesisResponseDto>()
                 .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => src.Template != null ? src.Template.Name : string.Empty));
+            
+            // CFM 1.638/2002 - Versioning and Audit mappings
+            CreateMap<MedicalRecordVersion, MedicalRecordVersionDto>()
+                .ForMember(dest => dest.ChangedByUserName, opt => opt.MapFrom(src => src.ChangedBy != null ? src.ChangedBy.FullName : string.Empty));
+            
+            CreateMap<MedicalRecordAccessLog, MedicalRecordAccessLogDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.FullName : string.Empty));
         }
     }
 }

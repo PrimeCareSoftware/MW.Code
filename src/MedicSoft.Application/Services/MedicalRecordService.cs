@@ -7,8 +7,8 @@ namespace MedicSoft.Application.Services
 {
     public interface IMedicalRecordService
     {
-        Task<MedicalRecordDto> CreateMedicalRecordAsync(CreateMedicalRecordDto createDto, string tenantId);
-        Task<MedicalRecordDto> UpdateMedicalRecordAsync(Guid id, UpdateMedicalRecordDto updateDto, string tenantId);
+        Task<MedicalRecordDto> CreateMedicalRecordAsync(CreateMedicalRecordDto createDto, Guid userId, string tenantId);
+        Task<MedicalRecordDto> UpdateMedicalRecordAsync(Guid id, UpdateMedicalRecordDto updateDto, Guid userId, string tenantId);
         Task<MedicalRecordDto> CompleteMedicalRecordAsync(Guid id, CompleteMedicalRecordDto completeDto, string tenantId);
         Task<MedicalRecordDto?> GetByAppointmentIdAsync(Guid appointmentId, string tenantId);
         Task<IEnumerable<MedicalRecordDto>> GetPatientMedicalRecordsAsync(Guid patientId, string tenantId);
@@ -23,15 +23,15 @@ namespace MedicSoft.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<MedicalRecordDto> CreateMedicalRecordAsync(CreateMedicalRecordDto createDto, string tenantId)
+        public async Task<MedicalRecordDto> CreateMedicalRecordAsync(CreateMedicalRecordDto createDto, Guid userId, string tenantId)
         {
-            var command = new CreateMedicalRecordCommand(createDto, tenantId);
+            var command = new CreateMedicalRecordCommand(createDto, userId, tenantId);
             return await _mediator.Send(command);
         }
 
-        public async Task<MedicalRecordDto> UpdateMedicalRecordAsync(Guid id, UpdateMedicalRecordDto updateDto, string tenantId)
+        public async Task<MedicalRecordDto> UpdateMedicalRecordAsync(Guid id, UpdateMedicalRecordDto updateDto, Guid userId, string tenantId)
         {
-            var command = new UpdateMedicalRecordCommand(id, updateDto, tenantId);
+            var command = new UpdateMedicalRecordCommand(id, updateDto, userId, tenantId);
             return await _mediator.Send(command);
         }
 
