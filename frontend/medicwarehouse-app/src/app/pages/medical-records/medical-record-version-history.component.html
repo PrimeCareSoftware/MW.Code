@@ -1,0 +1,60 @@
+<mat-card class="version-history-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>history</mat-icon>
+      Histórico de Versões
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Carregando histórico...</p>
+    </div>
+
+    <div *ngIf="error && !loading" class="error-message">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <div *ngIf="!loading && !error && versions.length === 0" class="empty-state">
+      <mat-icon>info</mat-icon>
+      <p>Nenhuma versão encontrada</p>
+    </div>
+
+    <mat-list *ngIf="!loading && !error && versions.length > 0" class="version-list">
+      <mat-list-item *ngFor="let version of versions; let last = last" class="version-item">
+        <mat-icon 
+          matListItemIcon 
+          [color]="getChangeTypeColor(version.changeType)"
+          [matTooltip]="version.changeType">
+          {{ getChangeTypeIcon(version.changeType) }}
+        </mat-icon>
+        
+        <div matListItemTitle class="version-header">
+          <span class="version-number">Versão {{ version.version }}</span>
+          <span class="version-type">{{ version.changeType }}</span>
+        </div>
+        
+        <div matListItemLine class="version-details">
+          <div class="version-meta">
+            <span class="version-date">{{ version.changedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span class="version-user" *ngIf="version.changedByUserName">
+              por {{ version.changedByUserName }}
+            </span>
+          </div>
+          
+          <div class="version-summary" *ngIf="version.changesSummary">
+            <strong>Alterações:</strong> {{ version.changesSummary }}
+          </div>
+          
+          <div class="version-reason" *ngIf="version.changeReason">
+            <strong>Justificativa:</strong> {{ version.changeReason }}
+          </div>
+        </div>
+
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

@@ -231,15 +231,18 @@ namespace MedicSoft.Test.Entities
 
             // Add mock clinical examination
             var examination = new ClinicalExamination(
-                record.Id,
-                _tenantId,
-                "Physical examination reveals clear lungs bilaterally",
-                80,
-                120,
-                98.6m,
-                16,
-                98,
-                "Good"
+                medicalRecordId: record.Id,
+                tenantId: _tenantId,
+                systematicExamination: "Physical examination reveals clear lungs bilaterally",
+                bloodPressureSystolic: 120m,
+                bloodPressureDiastolic: 80m,
+                heartRate: 72,
+                respiratoryRate: 16,
+                temperature: 36.6m,
+                oxygenSaturation: 98m,
+                weight: null,
+                height: null,
+                generalState: "Good"
             );
             examinations?.Add(examination);
 
