@@ -228,3 +228,37 @@ export interface AcceptInformedConsent {
   ipAddress?: string;
   digitalSignature?: string;
 }
+
+// CFM 1.638/2002 - Versioning and Audit
+
+export interface MedicalRecordVersion {
+  id: string;
+  medicalRecordId: string;
+  version: number;
+  changeType: string; // Created, Updated, Closed, Reopened
+  changedAt: string;
+  changedByUserId: string;
+  changedByUserName?: string;
+  changeReason?: string;
+  changesSummary?: string;
+  snapshotJson: string;
+  contentHash: string;
+  previousVersionHash?: string;
+}
+
+export interface MedicalRecordAccessLog {
+  id: string;
+  medicalRecordId: string;
+  userId: string;
+  userName?: string;
+  accessType: string; // View, Edit, Close, Reopen, Print, Export
+  accessedAt: string;
+  ipAddress?: string;
+  userAgent?: string;
+  details?: string;
+}
+
+export interface ReopenMedicalRecordRequest {
+  reason: string;
+}
+

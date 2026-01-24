@@ -472,6 +472,9 @@ app.UseTenantResolution();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// CFM 1.638/2002 - Add medical record audit middleware (after authentication)
+app.UseMiddleware<MedicalRecordAuditMiddleware>();
+
 // Enable rate limiting
 if (rateLimitEnabled)
 {
