@@ -15,12 +15,14 @@ namespace MedicSoft.Api.Controllers
         private readonly ISNGPCReportRepository _reportRepository;
         private readonly IDigitalPrescriptionRepository _prescriptionRepository;
         private readonly ISNGPCXmlGeneratorService _xmlGeneratorService;
+        private readonly ISngpcTransmissionService _transmissionService;
         private readonly IMapper _mapper;
 
         public SNGPCReportsController(
             ISNGPCReportRepository reportRepository,
             IDigitalPrescriptionRepository prescriptionRepository,
             ISNGPCXmlGeneratorService xmlGeneratorService,
+            ISngpcTransmissionService transmissionService,
             IMapper mapper,
             ITenantContext tenantContext)
             : base(tenantContext)
@@ -28,6 +30,7 @@ namespace MedicSoft.Api.Controllers
             _reportRepository = reportRepository;
             _prescriptionRepository = prescriptionRepository;
             _xmlGeneratorService = xmlGeneratorService;
+            _transmissionService = transmissionService;
             _mapper = mapper;
         }
 
@@ -203,10 +206,10 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Mark report as transmitted
+        /// Transmit report to ANVISA
         /// </summary>
         [HttpPost("{id}/transmit")]
-        public async Task<ActionResult> MarkAsTransmitted(Guid id, [FromBody] TransmitReportDto dto)
+        public async Task<ActionResult<SngpcTransmission>> TransmitReport(Guid id)
         {
             try
             {
@@ -215,25 +218,27 @@ namespace MedicSoft.Api.Controllers
                 if (report == null)
                     return NotFound($"Report {id} not found");
 
-                report.MarkAsTransmitted(dto.TransmissionProtocol);
-                await _reportRepository.UpdateAsync(report);
+                if (string.IsNullOrEmpty(report.XmlContent))
+                    return BadRequest("Report XML must be generated before transmission");
 
-                // Mark prescriptions as reported
-                foreach (var prescriptionId in report.PrescriptionIds)
-                {
-                    var prescription = await _prescriptionRepository.GetByIdAsync(prescriptionId, GetTenantId());
-                    if (prescription != null)
-                    {
-                        prescription.MarkAsReportedToSNGPC();
-                        await _prescriptionRepository.UpdateAsync(prescription);
-                    }
-                }
+                var transmission = await _transmissionService.TransmitReportAsync(
+                    id,
+                    GetTenantId(),
+                    GetUserId());
 
-                return Ok(new { message = "Report marked as transmitted successfully" });
+                return Ok(transmission);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -279,6 +284,85 @@ namespace MedicSoft.Api.Controllers
             var bytes = System.Text.Encoding.UTF8.GetBytes(report.XmlContent);
 
             return File(bytes, "application/xml", fileName);
+        }
+
+        /// <summary>
+        /// Get transmission history for a report
+        /// </summary>
+        [HttpGet("{id}/transmissions")]
+        public async Task<ActionResult<IEnumerable<SngpcTransmission>>> GetTransmissions(Guid id)
+        {
+            try
+            {
+                var report = await _reportRepository.GetByIdAsync(id, GetTenantId());
+
+                if (report == null)
+                    return NotFound($"Report {id} not found");
+
+                var transmissions = await _transmissionService.GetTransmissionHistoryAsync(
+                    id,
+                    GetTenantId());
+
+                return Ok(transmissions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Retry a failed transmission
+        /// </summary>
+        [HttpPost("transmissions/{transmissionId}/retry")]
+        public async Task<ActionResult<SngpcTransmission>> RetryTransmission(Guid transmissionId)
+        {
+            try
+            {
+                var transmission = await _transmissionService.RetryTransmissionAsync(
+                    transmissionId,
+                    GetTenantId());
+
+                return Ok(transmission);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Get transmission statistics for a date range
+        /// </summary>
+        [HttpGet("transmissions/statistics")]
+        public async Task<ActionResult<TransmissionStatistics>> GetTransmissionStatistics(
+            [FromQuery] DateTime startDate,
+            [FromQuery] DateTime endDate)
+        {
+            try
+            {
+                if (endDate < startDate)
+                    return BadRequest("End date must be after start date");
+
+                var statistics = await _transmissionService.GetStatisticsAsync(
+                    startDate,
+                    endDate,
+                    GetTenantId());
+
+                return Ok(statistics);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 
