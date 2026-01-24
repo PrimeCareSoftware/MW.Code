@@ -125,6 +125,18 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
   - Sistema SNGPC para medicamentos controlados
   - API completa com 15+ endpoints
 
+- **Sistema de Versionamento e Auditoria CFM 1.638/2002** ✨ (Janeiro 2026)
+  - Event Sourcing completo para prontuários médicos
+  - Versionamento automático em cada alteração
+  - Imutabilidade após fechamento (com reabertura justificada)
+  - Auditoria completa de acessos (View, Edit, Close, Reopen, Print, Export)
+  - Hash SHA-256 para integridade de versões
+  - Blockchain-like chain (previousVersionHash)
+  - Entidades: MedicalRecordVersion, MedicalRecordAccessLog, MedicalRecordSignature
+  - Preparação para assinatura digital ICP-Brasil
+  - Conformidade LGPD com logs de processamento de dados
+  - API completa: close, reopen, versions, access-logs
+
 #### Frontend
 - **PrimeCare Software App** - Aplicativo principal das clínicas
   - 10+ páginas funcionais
