@@ -112,7 +112,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] PublicAppointmentRequestDto request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new { message = "Os dados fornecidos são inválidos. Por favor, verifique e tente novamente." });
 
             try
             {

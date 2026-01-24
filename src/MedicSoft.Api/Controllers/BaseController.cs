@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers
@@ -62,6 +63,16 @@ namespace MedicSoft.Api.Controllers
                 return clinicId;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns a sanitized BadRequest response without exposing internal field names.
+        /// Only use this method when ModelState is invalid.
+        /// </summary>
+        /// <returns>BadRequest with generic validation error message</returns>
+        protected ActionResult BadRequestInvalidModel()
+        {
+            return BadRequest(new { message = "Os dados fornecidos são inválidos. Por favor, verifique e tente novamente." });
         }
     }
 }

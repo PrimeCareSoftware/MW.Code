@@ -69,7 +69,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<WaitingQueueEntryDto>> AddToQueue([FromBody] CreateWaitingQueueEntryDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -89,7 +89,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<WaitingQueueEntryDto>> UpdateTriage(Guid entryId, [FromBody] UpdateQueueTriageDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -204,7 +204,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] UpdateWaitingQueueConfigurationDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

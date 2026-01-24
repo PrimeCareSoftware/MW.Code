@@ -174,7 +174,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<CashFlowEntryDto>> Create([FromBody] CreateCashFlowEntryDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -215,7 +215,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<CashFlowEntryDto>> Update(Guid id, [FromBody] UpdateCashFlowEntryDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             var entry = await _repository.GetByIdAsync(id, GetTenantId());
             if (entry == null)

@@ -46,7 +46,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] AppointmentCompletedNotificationDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             var tenantId = GetTenantId();
             var notification = await _notificationService.NotifyAppointmentCompletedAsync(dto, tenantId);
@@ -63,7 +63,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] CallNextPatientNotificationDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             var tenantId = GetTenantId();
             var notification = await _notificationService.CallNextPatientAsync(dto, tenantId);

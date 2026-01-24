@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.DTOs.Registration;
 using MedicSoft.Application.Services;
@@ -17,15 +18,18 @@ namespace MedicSoft.Api.Controllers
         private readonly IRegistrationService _registrationService;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly ISalesFunnelService _salesFunnelService;
+        private readonly ILogger<RegistrationController> _logger;
 
         public RegistrationController(
             IRegistrationService registrationService,
             ISubscriptionPlanRepository planRepository,
-            ISalesFunnelService salesFunnelService)
+            ISalesFunnelService salesFunnelService,
+            ILogger<RegistrationController> logger)
         {
             _registrationService = registrationService;
             _planRepository = planRepository;
             _salesFunnelService = salesFunnelService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace MedicSoft.Api.Controllers
                     catch (Exception ex)
                     {
                         // Log error but don't fail registration
-                        Console.Error.WriteLine($"Failed to track conversion: {ex.Message}");
+                        _logger.LogError(ex, "Failed to track conversion for SessionId: {SessionId}", request.SessionId);
                     }
                 }
 

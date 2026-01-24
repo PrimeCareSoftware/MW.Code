@@ -89,7 +89,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<ConsultationFormProfileDto>> Create([FromBody] CreateConsultationFormProfileDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -110,7 +110,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<ConsultationFormProfileDto>> Update(Guid id, [FromBody] UpdateConsultationFormProfileDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

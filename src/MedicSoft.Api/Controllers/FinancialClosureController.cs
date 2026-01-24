@@ -128,7 +128,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<FinancialClosureDto>> Create([FromBody] CreateFinancialClosureDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -161,7 +161,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<FinancialClosureDto>> AddItem(Guid id, [FromBody] AddClosureItemDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != dto.ClosureId)
                 return BadRequest(new { message = "ID incompatível." });
@@ -222,7 +222,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<FinancialClosureDto>> ApplyDiscount(Guid id, [FromBody] ApplyClosureDiscountDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != dto.ClosureId)
                 return BadRequest(new { message = "ID incompatível." });
@@ -258,7 +258,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<FinancialClosureDto>> RecordPayment(Guid id, [FromBody] RecordClosurePaymentDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != dto.ClosureId)
                 return BadRequest(new { message = "ID incompatível." });
@@ -320,7 +320,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelClosureDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != dto.ClosureId)
                 return BadRequest(new { message = "ID incompatível." });

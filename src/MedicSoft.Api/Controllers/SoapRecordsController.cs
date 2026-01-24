@@ -54,7 +54,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] UpdateSubjectiveDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -81,7 +81,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] UpdateObjectiveDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -108,7 +108,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] UpdateAssessmentDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -135,7 +135,7 @@ namespace MedicSoft.Api.Controllers
             [FromBody] UpdatePlanDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

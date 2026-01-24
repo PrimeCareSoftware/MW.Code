@@ -6,6 +6,7 @@ import { SubscriptionPlan, AVAILABLE_PLANS } from '../models/subscription-plan.m
 import { RegistrationRequest, RegistrationResponse } from '../models/registration.model';
 import { ContactRequest, ContactResponse } from '../models/contact.model';
 import { environment } from '../../environments/environment';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,10 @@ import { environment } from '../../environments/environment';
 export class SubscriptionService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) { }
 
   getPlans(): Observable<SubscriptionPlan[]> {
     return this.http.get<SubscriptionPlan[]>(`${this.apiUrl}/registration/plans`).pipe(
@@ -23,6 +27,8 @@ export class SubscriptionService {
       }))),
       catchError(error => {
         console.error('Error fetching plans from API, using fallback plans', error);
+        // Show warning to user that fallback plans are being used
+        this.notificationService.warning('Não foi possível carregar os planos atualizados. Mostrando planos padrão.');
         return of(AVAILABLE_PLANS); // Fallback to hardcoded plans if API fails
       })
     );

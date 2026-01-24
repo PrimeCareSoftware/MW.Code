@@ -9,7 +9,7 @@ namespace PatientPortal.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AppointmentsController : ControllerBase
+public class AppointmentsController : BaseController
 {
     private readonly IAppointmentService _appointmentService;
     private readonly ILogger<AppointmentsController> _logger;
@@ -226,13 +226,5 @@ public class AppointmentsController : ControllerBase
             _logger.LogError(ex, "Error getting appointments count");
             return StatusCode(500, new { message = "An error occurred while counting appointments" });
         }
-    }
-
-    private Guid? GetUserId()
-    {
-        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-            return null;
-        return userId;
     }
 }

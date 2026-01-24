@@ -29,7 +29,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AppointmentDto>> Create([FromBody] CreateAppointmentDto createAppointmentDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -52,7 +52,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AppointmentDto>> Update(Guid id, [FromBody] UpdateAppointmentDto updateAppointmentDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -73,7 +73,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelAppointmentRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -176,7 +176,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> MarkAsPaid(Guid id, [FromBody] MarkAppointmentAsPaidDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -202,7 +202,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Complete(Guid id, [FromBody] CompleteAppointmentDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

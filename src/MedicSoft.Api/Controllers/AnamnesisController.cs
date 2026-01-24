@@ -79,7 +79,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AnamnesisTemplateDto>> CreateTemplate([FromBody] CreateAnamnesisTemplateDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -101,7 +101,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AnamnesisTemplateDto>> UpdateTemplate(Guid id, [FromBody] UpdateAnamnesisTemplateDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -127,7 +127,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AnamnesisResponseDto>> CreateResponse([FromBody] CreateAnamnesisResponseDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -158,7 +158,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AnamnesisResponseDto>> SaveAnswers(Guid id, [FromBody] SaveAnswersDto saveDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

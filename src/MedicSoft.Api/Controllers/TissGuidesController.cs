@@ -105,7 +105,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<TissGuideDto>> Create([FromBody] CreateTissGuideDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -126,7 +126,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<TissGuideDto>> AddProcedure(Guid id, [FromBody] AddProcedureToGuideDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -183,7 +183,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<TissGuideDto>> ProcessResponse(Guid id, [FromBody] ProcessGuideResponseDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

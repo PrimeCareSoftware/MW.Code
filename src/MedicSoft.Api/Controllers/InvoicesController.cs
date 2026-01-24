@@ -52,7 +52,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<InvoiceDto>> Create([FromBody] CreateInvoiceDto createInvoiceDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -104,7 +104,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelInvoiceDto cancelDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != cancelDto.InvoiceId)
                 return BadRequest("Invoice ID mismatch");

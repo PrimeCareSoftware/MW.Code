@@ -95,7 +95,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<SupplierDto>> Create([FromBody] CreateSupplierDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -145,7 +145,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<SupplierDto>> Update(Guid id, [FromBody] UpdateSupplierDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             var supplier = await _repository.GetByIdAsync(id, GetTenantId());
             if (supplier == null)
