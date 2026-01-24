@@ -44,7 +44,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             var tenantId = GetTenantId();
-            var clinicId = GetClinicIdFromToken();
+            var clinicId = GetClinicId() ?? Guid.Empty;
 
             var users = await _userService.GetUsersByClinicIdAsync(clinicId, tenantId);
 
@@ -102,7 +102,7 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                var clinicId = GetClinicIdFromToken();
+                var clinicId = GetClinicId() ?? Guid.Empty;
 
                 // Validate subscription limits
                 var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
@@ -263,7 +263,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<IEnumerable<UserClinicDto>>> GetUserClinics()
         {
             var tenantId = GetTenantId();
-            var userId = GetUserIdFromToken();
+            var userId = GetUserId();
 
             if (userId == Guid.Empty)
             {
@@ -281,7 +281,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<UserClinicDto>> GetCurrentClinic()
         {
             var tenantId = GetTenantId();
-            var userId = GetUserIdFromToken();
+            var userId = GetUserId();
 
             if (userId == Guid.Empty)
             {
@@ -304,7 +304,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<SwitchClinicResponse>> SelectClinic(Guid clinicId)
         {
             var tenantId = GetTenantId();
-            var userId = GetUserIdFromToken();
+            var userId = GetUserId();
 
             if (userId == Guid.Empty)
             {
@@ -389,18 +389,6 @@ namespace MedicSoft.Api.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-        }
-
-        private Guid GetUserIdFromToken()
-        {
-            var userIdClaim = User.FindFirst("user_id")?.Value ?? User.FindFirst("nameid")?.Value;
-            return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
-        }
-
-        private Guid GetClinicIdFromToken()
-        {
-            var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
-            return Guid.TryParse(clinicIdClaim, out var clinicId) ? clinicId : Guid.Empty;
         }
     }
 
