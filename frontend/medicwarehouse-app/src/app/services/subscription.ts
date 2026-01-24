@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -13,9 +13,11 @@ import { NotificationService } from './notification.service';
 })
 export class SubscriptionService {
   private apiUrl = environment.apiUrl;
-  private notificationService = inject(NotificationService);
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) { }
 
   getPlans(): Observable<SubscriptionPlan[]> {
     return this.http.get<SubscriptionPlan[]>(`${this.apiUrl}/registration/plans`).pipe(

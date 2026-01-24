@@ -66,17 +66,6 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Returns a sanitized BadRequest response without exposing internal field names
-        /// </summary>
-        /// <param name="modelState">The ModelStateDictionary containing validation errors</param>
-        /// <returns>BadRequest with generic error message</returns>
-        protected ActionResult BadRequestWithGenericMessage(ModelStateDictionary modelState)
-        {
-            // Don't expose internal field names - return generic message
-            return BadRequest(new { message = "Os dados fornecidos são inválidos. Por favor, verifique e tente novamente." });
-        }
-
-        /// <summary>
         /// Returns a sanitized BadRequest response without exposing internal field names.
         /// Only use this method when ModelState is invalid.
         /// </summary>
