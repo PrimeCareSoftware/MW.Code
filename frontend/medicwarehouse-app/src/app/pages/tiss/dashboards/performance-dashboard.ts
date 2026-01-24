@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { TissAnalyticsService } from '../../../services/tiss-analytics.service';
-import { AuthService } from '../../../services/auth.service';
+import { Auth } from '../../../services/auth';
 import {
   AuthorizationRate,
   ApprovalTime,
@@ -55,7 +55,7 @@ export class PerformanceDashboard implements OnInit {
 
   constructor(
     private analyticsService: TissAnalyticsService,
-    private authService: AuthService
+    private authService: Auth
   ) {
     // Set default date range (last 90 days)
     const endDate = new Date();
@@ -71,7 +71,7 @@ export class PerformanceDashboard implements OnInit {
   }
 
   private loadClinicId(): void {
-    const currentUser = this.authService.currentUserValue;
+    const currentUser = this.authService.currentUser();
     if (currentUser?.clinicId) {
       this.clinicId.set(currentUser.clinicId);
       this.loadAllData();

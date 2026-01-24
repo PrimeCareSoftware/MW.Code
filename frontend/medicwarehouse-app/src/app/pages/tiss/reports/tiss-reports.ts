@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { TissAnalyticsService } from '../../../services/tiss-analytics.service';
 import { HealthInsuranceOperatorService } from '../../../services/health-insurance-operator.service';
-import { AuthService } from '../../../services/auth.service';
+import { Auth } from '../../../services/auth';
 import {
   GlosasByOperator,
   ProcedureGlosas,
@@ -13,7 +13,7 @@ import {
   HealthInsuranceOperator
 } from '../../../models/tiss.model';
 
-type ReportType = 'billing' | 'glosas' | 'denials' | 'approval-time' | 'procedures';
+type ReportType = 'billing' | 'glosas' | 'denials' | 'approvalTime' | 'procedures';
 
 interface ReportData {
   billing?: GlosasByOperator[];
@@ -85,18 +85,44 @@ export class TissReports implements OnInit {
     return data[reportType] || [];
   });
 
+  // Type-specific computed properties for template use
+  billingData = computed(() => {
+    const data = this.filteredReportData();
+    return this.selectedReportType() === 'billing' ? data as GlosasByOperator[] : [];
+  });
+
+  glosasData = computed(() => {
+    const data = this.filteredReportData();
+    return this.selectedReportType() === 'glosas' ? data as GlosasByOperator[] : [];
+  });
+
+  denialsData = computed(() => {
+    const data = this.filteredReportData();
+    return this.selectedReportType() === 'denials' ? data as AuthorizationRate[] : [];
+  });
+
+  approvalTimeData = computed(() => {
+    const data = this.filteredReportData();
+    return this.selectedReportType() === 'approvalTime' ? data as ApprovalTime[] : [];
+  });
+
+  proceduresData = computed(() => {
+    const data = this.filteredReportData();
+    return this.selectedReportType() === 'procedures' ? data as ProcedureGlosas[] : [];
+  });
+
   reportTypes = [
     { value: 'billing', label: 'Faturamento por Operadora' },
     { value: 'glosas', label: 'Glosas Detalhadas' },
     { value: 'denials', label: 'Autorizações Negadas' },
-    { value: 'approval-time', label: 'Tempo de Aprovação' },
+    { value: 'approvalTime', label: 'Tempo de Aprovação' },
     { value: 'procedures', label: 'Procedimentos Mais Utilizados' }
   ];
 
   constructor(
     private analyticsService: TissAnalyticsService,
     private operatorService: HealthInsuranceOperatorService,
-    private authService: AuthService
+    private authService: Auth
   ) {
     // Set default date range (last 30 days)
     const endDate = new Date();
@@ -113,7 +139,7 @@ export class TissReports implements OnInit {
   }
 
   private loadClinicId(): void {
-    const currentUser = this.authService.currentUserValue;
+    const currentUser = this.authService.currentUser();
     if (currentUser?.clinicId) {
       this.clinicId.set(currentUser.clinicId);
     } else {
@@ -154,7 +180,7 @@ export class TissReports implements OnInit {
       case 'denials':
         this.loadDenialsReport();
         break;
-      case 'approval-time':
+      case 'approvalTime':
         this.loadApprovalTimeReport();
         break;
       case 'procedures':
@@ -296,6 +322,28 @@ export class TissReports implements OnInit {
     // });
     
     alert('Funcionalidade de exportação em Excel será implementada usando a biblioteca ExcelJS.');
+  }
+
+  // Helper methods for totals calculation
+  getTotalBilled(data: GlosasByOperator[]): number {
+    return data.reduce((sum, item) => sum + item.totalBilled, 0);
+  }
+
+  getTotalApproved(data: GlosasByOperator[]): number {
+    return data.reduce((sum, item) => sum + (item.totalBilled - item.totalGlosed), 0);
+  }
+
+  getTotalGlosed(data: GlosasByOperator[]): number {
+    return data.reduce((sum, item) => sum + item.totalGlosed, 0);
+  }
+
+  getTotalGuides(data: GlosasByOperator[]): number {
+    return data.reduce((sum, item) => sum + item.totalGuides, 0);
+  }
+
+  getSelectedOperatorName(): string {
+    const operator = this.operators().find(o => o.id === this.selectedOperatorId());
+    return operator?.tradeName || '';
   }
 
   formatCurrency(value: number): string {

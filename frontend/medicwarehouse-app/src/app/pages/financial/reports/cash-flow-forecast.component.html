@@ -31,8 +31,8 @@
       <div class="form-group">
         <label>Clínica</label>
         <select [(ngModel)]="selectedClinicId" class="form-control">
-          @for (clinic of clinics(); track clinic.id) {
-            <option [value]="clinic.id">{{ clinic.name }}</option>
+          @for (clinic of clinics(); track clinic.clinicId) {
+            <option [value]="clinic.clinicId">{{ clinic.name }}</option>
           }
         </select>
       </div>
