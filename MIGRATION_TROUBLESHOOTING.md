@@ -72,8 +72,9 @@ To ensure your local migrations match the repository:
 ls -la src/MedicSoft.Repository/Migrations/PostgreSQL/ | grep "20260124002922"
 
 # Should show:
-# 20260124002922_AddSngpcControlledMedicationTables.cs (14787 bytes)
-# 20260124002922_AddSngpcControlledMedicationTables.Designer.cs (302131 bytes)
+# 20260124002922_AddSngpcControlledMedicationTables.cs (~15KB)
+# 20260124002922_AddSngpcControlledMedicationTables.Designer.cs (~300KB)
+# Note: File sizes are approximate and may vary slightly with updates
 
 # 2. Verify no duplicate files exist
 ls -la src/MedicSoft.Repository/Migrations/PostgreSQL/ | grep "AddSngpc"
@@ -143,7 +144,7 @@ WHERE schemaname = 'public'
 
 If you continue to experience issues:
 
-1. Ensure you're using .NET 8.0 SDK
+1. Ensure you're using .NET 8.0 SDK (check with `dotnet --version`)
 2. Verify PostgreSQL version is 12 or higher
 3. Check that Entity Framework Core tools are installed: `dotnet tool restore`
 4. Review the full error message and stack trace
@@ -155,7 +156,7 @@ If you continue to experience issues:
   - `src/MedicSoft.Domain/Entities/ControlledMedicationRegistry.cs`
   - `src/MedicSoft.Domain/Entities/MonthlyControlledBalance.cs`
   - `src/MedicSoft.Domain/Entities/SngpcTransmission.cs`
-  - `src/MedicSoft.Domain/Entities/SNGPCReport.cs`
+  - `src/MedicSoft.Domain/Entities/SNGPCReport.cs` (Note: Uses uppercase SNGPC as per ANVISA naming)
 
 - Entity Configurations:
   - `src/MedicSoft.Repository/Configurations/ControlledMedicationRegistryConfiguration.cs`
