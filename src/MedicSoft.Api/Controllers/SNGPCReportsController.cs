@@ -16,6 +16,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IDigitalPrescriptionRepository _prescriptionRepository;
         private readonly ISNGPCXmlGeneratorService _xmlGeneratorService;
         private readonly ISngpcTransmissionService _transmissionService;
+        private readonly ISngpcAlertService _alertService;
         private readonly IMapper _mapper;
 
         public SNGPCReportsController(
@@ -23,6 +24,7 @@ namespace MedicSoft.Api.Controllers
             IDigitalPrescriptionRepository prescriptionRepository,
             ISNGPCXmlGeneratorService xmlGeneratorService,
             ISngpcTransmissionService transmissionService,
+            ISngpcAlertService alertService,
             IMapper mapper,
             ITenantContext tenantContext)
             : base(tenantContext)
@@ -31,6 +33,7 @@ namespace MedicSoft.Api.Controllers
             _prescriptionRepository = prescriptionRepository;
             _xmlGeneratorService = xmlGeneratorService;
             _transmissionService = transmissionService;
+            _alertService = alertService;
             _mapper = mapper;
         }
 
@@ -358,6 +361,93 @@ namespace MedicSoft.Api.Controllers
                     GetTenantId());
 
                 return Ok(statistics);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Get SNGPC alerts for approaching deadlines
+        /// </summary>
+        [HttpGet("alerts/deadlines")]
+        public async Task<ActionResult<IEnumerable<SngpcAlert>>> GetApproachingDeadlines([FromQuery] int daysBeforeDeadline = 5)
+        {
+            try
+            {
+                var alerts = await _alertService.CheckApproachingDeadlinesAsync(GetTenantId(), daysBeforeDeadline);
+                return Ok(alerts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Get overdue SNGPC reports
+        /// </summary>
+        [HttpGet("alerts/overdue")]
+        public async Task<ActionResult<IEnumerable<SngpcAlert>>> GetOverdueReports()
+        {
+            try
+            {
+                var alerts = await _alertService.CheckOverdueReportsAsync(GetTenantId());
+                return Ok(alerts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Validate SNGPC compliance
+        /// </summary>
+        [HttpGet("alerts/compliance")]
+        public async Task<ActionResult<IEnumerable<SngpcAlert>>> ValidateCompliance()
+        {
+            try
+            {
+                var alerts = await _alertService.ValidateComplianceAsync(GetTenantId());
+                return Ok(alerts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Detect anomalies in controlled medication movements
+        /// </summary>
+        [HttpGet("alerts/anomalies")]
+        public async Task<ActionResult<IEnumerable<SngpcAlert>>> DetectAnomalies(
+            [FromQuery] DateTime startDate,
+            [FromQuery] DateTime endDate)
+        {
+            try
+            {
+                var alerts = await _alertService.DetectAnomaliesAsync(GetTenantId(), startDate, endDate);
+                return Ok(alerts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Get all active alerts
+        /// </summary>
+        [HttpGet("alerts")]
+        public async Task<ActionResult<IEnumerable<SngpcAlert>>> GetActiveAlerts([FromQuery] AlertSeverity? severity = null)
+        {
+            try
+            {
+                var alerts = await _alertService.GetActiveAlertsAsync(GetTenantId(), severity);
+                return Ok(alerts);
             }
             catch (Exception ex)
             {
