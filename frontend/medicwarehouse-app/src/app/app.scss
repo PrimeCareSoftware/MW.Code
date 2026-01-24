@@ -5,58 +5,13 @@
   min-height: 100vh;
 }
 
-/* Ensure body has proper layout with navbar */
-body {
-  margin: 0;
-  padding: 0;
-  padding-top: var(--navbar-height);
-  min-height: 100vh;
-  overflow-x: hidden;
+/* Router outlet styling */
+router-outlet {
+  display: none;
 }
 
-/* Adjust layout for sidebar on desktop */
-@media (min-width: 1024px) {
-  body {
-    padding-left: var(--sidebar-collapsed-width);
-  }
-  
-  body.sidebar-open {
-    padding-left: var(--sidebar-width);
-  }
-}
-
-/* Router outlet container */
 router-outlet + * {
   display: block;
   width: 100%;
-}
-
-/* Main content area wrapper */
-.main-content {
-  width: 100%;
   min-height: calc(100vh - var(--navbar-height));
-  padding: var(--spacing-6);
-  transition: padding-left var(--transition-base);
-  
-  @media (max-width: 768px) {
-    padding: var(--spacing-4);
-  }
-}
-
-/* Page container */
-.page-container {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  width: 100%;
-}
-
-/* Ensure proper z-index layering */
-app-navbar {
-  position: relative;
-  z-index: var(--z-fixed);
-}
-
-app-ticket-fab {
-  position: fixed;
-  z-index: var(--z-tooltip);
 }
