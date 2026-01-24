@@ -535,13 +535,15 @@ public async Task AllChanges_CreateNewVersion()
 - [x] Médicos conseguem fechar/reabrir prontuários
 - [x] Histórico de versões acessível e claro
 - [x] Logs de acesso disponíveis para administradores
-- [ ] Alertas de atividade suspeita funcionando (futuro)
 
 ### Conformidade Legal (CFM 1.638/2002)
 - [x] ✅ Versionamento completo implementado
 - [x] ✅ Imutabilidade após fechamento
 - [x] ✅ Auditoria de acessos funcional
 - [x] ✅ Preparação para assinatura digital
+
+### Melhorias Futuras (Fora do Escopo CFM 1.638)
+- [ ] Alertas de atividade suspeita funcionando
 
 ## 📦 Entregáveis
 

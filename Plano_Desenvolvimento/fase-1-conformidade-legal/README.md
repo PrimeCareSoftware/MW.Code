@@ -9,7 +9,7 @@ Esta fase contém **7 prompts críticos** de conformidade legal que devem ser im
 | # | Prompt | Status | Esforço | Custo | Prazo |
 |---|--------|--------|---------|-------|-------|
 | 01 | [CFM 1.821 - Finalização](01-cfm-1821-finalizacao.md) | 85% ✅ | 1 mês | R$ 15k | Q1 2026 |
-| 02 | [CFM 1.638 - Versionamento](02-cfm-1638-versionamento.md) | 100% ✅ | 1.5 mês | R$ 22.5k | Q1 2026 - Completo |
+| 02 | [CFM 1.638 - Versionamento](02-cfm-1638-versionamento.md) | 100% ✅ | 1.5 mês | R$ 22.5k | Completo Jan 2026 |
 | 03 | [Prescrições Digitais](03-prescricoes-digitais-finalizacao.md) | 80% ✅ | 2 meses | R$ 30k | Q1-Q2 2026 |
 | 04 | [SNGPC ANVISA](04-sngpc-integracao.md) | 30% ⏳ | 2 meses | R$ 30k | Q2 2026 |
 | 05 | [CFM 2.314 Telemedicina](05-cfm-2314-telemedicina.md) | 0% ⏳ | 1 mês | R$ 15k | Q2 2026 |
