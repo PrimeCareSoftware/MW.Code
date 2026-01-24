@@ -2,7 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
-import { AuthService } from '../../../services/auth.service';
+import { Auth } from '../../../services/auth';
 
 // TODO: Create ElectronicInvoiceService similar to TissAnalyticsService
 // TODO: Backend analytics endpoints need to be created similar to TissAnalyticsController pattern
@@ -110,7 +110,7 @@ export class FiscalDashboard implements OnInit {
   });
 
   constructor(
-    private authService: AuthService
+    private authService: Auth
     // TODO: Inject ElectronicInvoiceService when created
     // private electronicInvoiceService: ElectronicInvoiceService
   ) {}
@@ -121,7 +121,7 @@ export class FiscalDashboard implements OnInit {
   }
 
   private loadClinicId(): void {
-    const currentUser = this.authService.currentUserValue;
+    const currentUser = this.authService.currentUser();
     if (currentUser?.clinicId) {
       this.clinicId.set(currentUser.clinicId);
     } else {

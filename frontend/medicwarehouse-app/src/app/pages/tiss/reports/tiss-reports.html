@@ -124,7 +124,7 @@
           <small class="text-muted">
             Período: {{ startDate() }} a {{ endDate() }}
             @if (selectedOperatorId() !== 'all') {
-              <span class="ms-2">| Operadora: {{ operators().find(o => o.id === selectedOperatorId())?.tradeName }}</span>
+              <span class="ms-2">| Operadora: {{ getSelectedOperatorName() }}</span>
             }
           </small>
         </div>
@@ -145,7 +145,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of filteredReportData(); track item.operatorId) {
+                  @for (item of billingData(); track item.operatorId) {
                     <tr>
                       <td>{{ item.operatorName }}</td>
                       <td class="text-end">{{ formatCurrency(item.totalBilled) }}</td>
@@ -166,28 +166,28 @@
                     </tr>
                   }
                 </tbody>
-                @if (filteredReportData().length > 1) {
+                @if (billingData().length > 1) {
                   <tfoot>
                     <tr class="table-light fw-bold">
                       <td>TOTAL</td>
                       <td class="text-end">
-                        {{ formatCurrency(filteredReportData().reduce((sum, item) => sum + item.totalBilled, 0)) }}
+                        {{ formatCurrency(getTotalBilled(billingData())) }}
                       </td>
                       <td class="text-end text-success">
-                        {{ formatCurrency(filteredReportData().reduce((sum, item) => sum + (item.totalBilled - item.totalGlosed), 0)) }}
+                        {{ formatCurrency(getTotalApproved(billingData())) }}
                       </td>
                       <td class="text-end text-danger">
-                        {{ formatCurrency(filteredReportData().reduce((sum, item) => sum + item.totalGlosed, 0)) }}
+                        {{ formatCurrency(getTotalGlosed(billingData())) }}
                       </td>
                       <td class="text-center">
-                        @if (filteredReportData().reduce((sum, item) => sum + item.totalBilled, 0) > 0) {
+                        @if (getTotalBilled(billingData()) > 0) {
                           <span class="badge bg-secondary">
-                            {{ formatPercentage((filteredReportData().reduce((sum, item) => sum + item.totalGlosed, 0) / filteredReportData().reduce((sum, item) => sum + item.totalBilled, 0)) * 100) }}
+                            {{ formatPercentage((getTotalGlosed(billingData()) / getTotalBilled(billingData())) * 100) }}
                           </span>
                         }
                       </td>
                       <td class="text-center">
-                        {{ formatNumber(filteredReportData().reduce((sum, item) => sum + item.totalGuides, 0)) }}
+                        {{ formatNumber(getTotalGuides(billingData())) }}
                       </td>
                     </tr>
                   </tfoot>
@@ -210,7 +210,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of filteredReportData(); track item.operatorId) {
+                  @for (item of glosasData(); track item.operatorId) {
                     <tr>
                       <td>{{ item.operatorName }}</td>
                       <td class="text-end text-danger">{{ formatCurrency(item.totalGlosed) }}</td>
@@ -246,7 +246,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of filteredReportData(); track item.operatorId) {
+                  @for (item of denialsData(); track item.operatorId) {
                     <tr>
                       <td>{{ item.operatorName }}</td>
                       <td class="text-center">{{ formatNumber(item.totalRequests) }}</td>
@@ -269,7 +269,7 @@
           }
 
           <!-- Approval Time Report -->
-          @if (selectedReportType() === 'approval-time') {
+          @if (selectedReportType() === 'approvalTime') {
             <div class="table-responsive">
               <table class="table table-hover table-striped">
                 <thead>
@@ -282,7 +282,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of filteredReportData(); track item.operatorId) {
+                  @for (item of approvalTimeData(); track item.operatorId) {
                     <tr>
                       <td>{{ item.operatorName }}</td>
                       <td class="text-center">
@@ -318,7 +318,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of filteredReportData(); track item.procedureCode) {
+                  @for (item of proceduresData(); track item.procedureCode) {
                     <tr>
                       <td><code>{{ item.procedureCode }}</code></td>
                       <td>{{ item.procedureName }}</td>

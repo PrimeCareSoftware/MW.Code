@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { FinancialService } from '../../../services/financial.service';
-import { ClinicService } from '../../../services/clinic.service';
+import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ProfitabilityAnalysis } from '../../../models/financial.model';
-import { Clinic } from '../../../models/clinic.model';
+import { MyClinicDto } from '../../../models/clinic-admin.model';
 
 @Component({
   selector: 'app-profitability-analysis',
@@ -17,7 +17,7 @@ import { Clinic } from '../../../models/clinic.model';
 })
 export class ProfitabilityAnalysisComponent implements OnInit {
   analysis = signal<ProfitabilityAnalysis | null>(null);
-  clinics = signal<Clinic[]>([]);
+  clinics = signal<MyClinicDto[]>([]);
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   
@@ -27,7 +27,7 @@ export class ProfitabilityAnalysisComponent implements OnInit {
 
   constructor(
     private financialService: FinancialService,
-    private clinicService: ClinicService
+    private clinicService: ClinicAdminService
   ) {}
 
   ngOnInit(): void {
@@ -36,14 +36,14 @@ export class ProfitabilityAnalysisComponent implements OnInit {
   }
 
   loadClinics(): void {
-    this.clinicService.getAllClinics().subscribe({
-      next: (clinics) => {
+    this.clinicService.getMyClinics().subscribe({
+      next: (clinics: MyClinicDto[]) => {
         this.clinics.set(clinics);
         if (clinics.length > 0) {
-          this.selectedClinicId = clinics[0].id;
+          this.selectedClinicId = clinics[0].clinicId;
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading clinics:', error);
         this.errorMessage.set('Erro ao carregar clínicas');
       }

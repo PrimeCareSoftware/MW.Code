@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { TissAnalyticsService } from '../../../services/tiss-analytics.service';
-import { AuthService } from '../../../services/auth.service';
+import { Auth } from '../../../services/auth';
 import {
   GlosasSummary,
   GlosasByOperator,
@@ -43,7 +43,7 @@ export class GlosasDashboard implements OnInit {
 
   constructor(
     private analyticsService: TissAnalyticsService,
-    private authService: AuthService
+    private authService: Auth
   ) {
     // Set default date range (last 30 days)
     const endDate = new Date();
@@ -59,7 +59,7 @@ export class GlosasDashboard implements OnInit {
   }
 
   private loadClinicId(): void {
-    const currentUser = this.authService.currentUserValue;
+    const currentUser = this.authService.currentUser();
     if (currentUser?.clinicId) {
       this.clinicId.set(currentUser.clinicId);
       this.loadAllData();
