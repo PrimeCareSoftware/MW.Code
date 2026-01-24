@@ -40,25 +40,8 @@ namespace MedicSoft.Api.Middleware
                         var userAgent = context.Request.Headers["User-Agent"].ToString();
                         var tenantId = tenantContext.TenantId;
 
-                        // Log access asynchronously (don't block the request)
-                        _ = Task.Run(async () =>
-                        {
-                            try
-                            {
-                                await auditService.LogAccessAsync(
-                                    recordId: recordId.Value,
-                                    userId: userId,
-                                    accessType: accessType,
-                                    tenantId: tenantId,
-                                    ipAddress: ipAddress,
-                                    userAgent: userAgent
-                                );
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError(ex, "Failed to log medical record access for record {RecordId}", recordId);
-                            }
-                        });
+                        // Log access in background (non-blocking, doesn't capture sync context)
+                        _ = LogAccessInBackgroundAsync(auditService, recordId.Value, userId, accessType, tenantId, ipAddress, userAgent);
                     }
                     catch (Exception ex)
                     {
@@ -127,6 +110,32 @@ namespace MedicSoft.Api.Middleware
                 "DELETE" => "Delete",
                 _ => "Unknown"
             };
+        }
+
+        private async Task LogAccessInBackgroundAsync(
+            IMedicalRecordAuditService auditService,
+            Guid recordId,
+            Guid userId,
+            string accessType,
+            string tenantId,
+            string? ipAddress,
+            string? userAgent)
+        {
+            try
+            {
+                await auditService.LogAccessAsync(
+                    recordId: recordId,
+                    userId: userId,
+                    accessType: accessType,
+                    tenantId: tenantId,
+                    ipAddress: ipAddress,
+                    userAgent: userAgent
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to log medical record access for record {RecordId}", recordId);
+            }
         }
     }
 }

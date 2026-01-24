@@ -121,4 +121,8 @@ export class MedicalRecordAccessLogComponent implements OnInit {
     };
     return iconMap[accessType] || 'info';
   }
+
+  getUserDisplayName(log: MedicalRecordAccessLog): string {
+    return log.userName || 'Usuário Desconhecido';
+  }
 }
