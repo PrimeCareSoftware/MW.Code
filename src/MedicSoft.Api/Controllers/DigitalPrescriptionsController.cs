@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
@@ -15,19 +16,25 @@ namespace MedicSoft.Api.Controllers
         private readonly IDigitalPrescriptionItemRepository _itemRepository;
         private readonly IPrescriptionSequenceControlRepository _sequenceRepository;
         private readonly IMapper _mapper;
+        private readonly IPrescriptionPdfService _pdfService;
+        private readonly ISNGPCXmlGeneratorService _xmlService;
 
         public DigitalPrescriptionsController(
             IDigitalPrescriptionRepository prescriptionRepository,
             IDigitalPrescriptionItemRepository itemRepository,
             IPrescriptionSequenceControlRepository sequenceRepository,
             IMapper mapper,
-            ITenantContext tenantContext)
+            ITenantContext tenantContext,
+            IPrescriptionPdfService pdfService,
+            ISNGPCXmlGeneratorService xmlService)
             : base(tenantContext)
         {
             _prescriptionRepository = prescriptionRepository;
             _itemRepository = itemRepository;
             _sequenceRepository = sequenceRepository;
             _mapper = mapper;
+            _pdfService = pdfService;
+            _xmlService = xmlService;
         }
 
         /// <summary>
@@ -240,6 +247,102 @@ namespace MedicSoft.Api.Controllers
 
             var prescriptions = await _prescriptionRepository.GetUnreportedToSNGPCAsync(start, end, GetTenantId());
             return Ok(_mapper.Map<IEnumerable<DigitalPrescriptionDto>>(prescriptions));
+        }
+
+        /// <summary>
+        /// Download prescription as PDF
+        /// </summary>
+        [HttpGet("{id}/pdf")]
+        [ProducesResponseType(typeof(FileContentResult), 200)]
+        public async Task<IActionResult> DownloadPdf(Guid id, [FromQuery] string? clinicName = null, [FromQuery] string? clinicAddress = null, [FromQuery] string? clinicPhone = null)
+        {
+            try
+            {
+                var prescription = await _prescriptionRepository.GetByIdAsync(id, GetTenantId());
+                if (prescription == null)
+                    return NotFound($"Prescription {id} not found");
+
+                var options = new PrescriptionPdfOptions
+                {
+                    ClinicName = clinicName,
+                    ClinicAddress = clinicAddress,
+                    ClinicPhone = clinicPhone,
+                    IncludeQRCode = true,
+                    IncludeWatermark = true
+                };
+
+                var pdf = await _pdfService.GeneratePdfAsync(id, GetTenantId(), options);
+                var fileName = $"receita_{prescription.SequenceNumber ?? id.ToString()}_{DateTime.Now:yyyyMMdd}.pdf";
+
+                return File(pdf, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error generating PDF: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Preview prescription PDF (inline display)
+        /// </summary>
+        [HttpGet("{id}/pdf/preview")]
+        [ProducesResponseType(typeof(FileContentResult), 200)]
+        public async Task<IActionResult> PreviewPdf(Guid id, [FromQuery] string? clinicName = null, [FromQuery] string? clinicAddress = null, [FromQuery] string? clinicPhone = null)
+        {
+            try
+            {
+                var prescription = await _prescriptionRepository.GetByIdAsync(id, GetTenantId());
+                if (prescription == null)
+                    return NotFound($"Prescription {id} not found");
+
+                var options = new PrescriptionPdfOptions
+                {
+                    ClinicName = clinicName,
+                    ClinicAddress = clinicAddress,
+                    ClinicPhone = clinicPhone,
+                    IncludeQRCode = true,
+                    IncludeWatermark = true
+                };
+
+                var pdf = await _pdfService.GeneratePdfAsync(id, GetTenantId(), options);
+
+                return File(pdf, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error generating PDF preview: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Export prescription as ANVISA XML
+        /// </summary>
+        [HttpGet("{id}/xml")]
+        [Produces("application/xml")]
+        public async Task<IActionResult> ExportXml(Guid id)
+        {
+            try
+            {
+                var prescription = await _prescriptionRepository.GetByIdAsync(id, GetTenantId());
+                if (prescription == null)
+                    return NotFound($"Prescription {id} not found");
+
+                if (!prescription.RequiresSNGPCReport)
+                    return BadRequest("This prescription type does not require SNGPC reporting");
+
+                var report = new SNGPCReport(
+                    prescription.IssuedAt.Month,
+                    prescription.IssuedAt.Year,
+                    GetTenantId()
+                );
+
+                var xml = await _xmlService.GenerateXmlAsync(report, new[] { prescription });
+                return Content(xml, "application/xml");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error generating XML: {ex.Message}");
+            }
         }
     }
 
