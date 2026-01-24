@@ -286,6 +286,9 @@ builder.Services.AddScoped<IMedicalRecordAccessLogRepository, MedicalRecordAcces
 builder.Services.AddScoped<IDigitalPrescriptionRepository, DigitalPrescriptionRepository>();
 builder.Services.AddScoped<IDigitalPrescriptionItemRepository, DigitalPrescriptionItemRepository>();
 builder.Services.AddScoped<ISNGPCReportRepository, SNGPCReportRepository>();
+builder.Services.AddScoped<IControlledMedicationRegistryRepository, ControlledMedicationRegistryRepository>();
+builder.Services.AddScoped<IMonthlyControlledBalanceRepository, MonthlyControlledBalanceRepository>();
+builder.Services.AddScoped<ISngpcTransmissionRepository, SngpcTransmissionRepository>();
 builder.Services.AddScoped<IPrescriptionSequenceControlRepository, PrescriptionSequenceControlRepository>();
 builder.Services.AddScoped<IPrescriptionPdfService, PrescriptionPdfService>();
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
@@ -354,6 +357,9 @@ builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFo
 // Digital Prescriptions and SNGPC Services
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
 builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSignatureService>();
+builder.Services.AddScoped<IControlledMedicationRegistryService, ControlledMedicationRegistryService>();
+builder.Services.AddScoped<IMonthlyBalanceService, MonthlyBalanceService>();
+builder.Services.AddScoped<ISngpcTransmissionService, SngpcTransmissionService>();
 
 // Electronic Invoice Services
 builder.Services.AddScoped<IElectronicInvoiceService, ElectronicInvoiceService>();
