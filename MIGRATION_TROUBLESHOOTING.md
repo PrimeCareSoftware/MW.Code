@@ -10,10 +10,49 @@ The SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) migration 
 - ✅ No duplicate attributes or methods
 - ✅ Properly configured entity relationships
 - ✅ All indexes and constraints properly defined
+- ✅ **Idempotent implementation**: Uses `CREATE TABLE IF NOT EXISTS` to safely handle existing tables
 
 ### Common Issues and Solutions
 
-#### Issue 1: Duplicate Migration Files
+#### Issue 1: Table Already Exists Error (42P07)
+**Symptoms:**
+- Error: `42P07: relation "ControlledMedicationRegistries" already exists`
+- Error occurs when running migrations
+- Application fails to start due to migration failure
+
+**Cause:**
+This happens when:
+1. The table was created in a previous migration attempt that failed partway through
+2. The table was created manually in the database
+3. The migration was run multiple times without proper rollback
+4. The database state is out of sync with the migration history
+
+**Solution:**
+The migration is now idempotent and will handle existing tables gracefully. Simply re-run the migration:
+
+```bash
+# The migration will now succeed even if tables already exist
+dotnet ef database update --project src/MedicSoft.Repository/MedicSoft.Repository.csproj --startup-project src/MedicSoft.Api/MedicSoft.Api.csproj
+```
+
+If you still encounter issues, you can manually check the database state:
+
+```sql
+-- Check if tables exist
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'public' 
+  AND table_name IN ('ControlledMedicationRegistries', 'MonthlyControlledBalances', 'SngpcTransmissions');
+
+-- Check migration history
+SELECT * FROM "__EFMigrationsHistory" 
+WHERE "MigrationId" LIKE '%AddSngpcControlledMedicationTables%';
+```
+
+**Why this is fixed:**
+The migration now uses PostgreSQL's `CREATE TABLE IF NOT EXISTS` and conditional foreign key/index creation. This makes it safe to run multiple times without errors, even if tables already exist.
+
+#### Issue 2: Duplicate Migration Files
 **Symptoms:**
 - Build errors mentioning duplicate `DbContext` attributes
 - Build errors mentioning duplicate `Migration` attributes
@@ -38,7 +77,7 @@ dotnet ef migrations remove --project src/MedicSoft.Repository/MedicSoft.Reposit
 dotnet build
 ```
 
-#### Issue 2: PostgreSQL Syntax Error with "[" Character
+#### Issue 3: PostgreSQL Syntax Error with "[" Character
 **Symptoms:**
 - Error: `syntax error at or near "["`
 - Error occurs during migration execution (not compilation)
