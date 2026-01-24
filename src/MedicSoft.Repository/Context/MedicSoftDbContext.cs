@@ -89,6 +89,9 @@ namespace MedicSoft.Repository.Context
         public DbSet<DigitalPrescriptionItem> DigitalPrescriptionItems { get; set; } = null!;
         public DbSet<PrescriptionSequenceControl> PrescriptionSequenceControls { get; set; } = null!;
         public DbSet<SNGPCReport> SNGPCReports { get; set; } = null!;
+        public DbSet<ControlledMedicationRegistry> ControlledMedicationRegistries { get; set; } = null!;
+        public DbSet<MonthlyControlledBalance> MonthlyControlledBalances { get; set; } = null!;
+        public DbSet<SngpcTransmission> SngpcTransmissions { get; set; } = null!;
         
         // Sales Funnel Metrics
         public DbSet<SalesFunnelMetric> SalesFunnelMetrics { get; set; } = null!;
@@ -187,6 +190,9 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new DigitalPrescriptionItemConfiguration());
             modelBuilder.ApplyConfiguration(new PrescriptionSequenceControlConfiguration());
             modelBuilder.ApplyConfiguration(new SNGPCReportConfiguration());
+            modelBuilder.ApplyConfiguration(new ControlledMedicationRegistryConfiguration());
+            modelBuilder.ApplyConfiguration(new MonthlyControlledBalanceConfiguration());
+            modelBuilder.ApplyConfiguration(new SngpcTransmissionConfiguration());
             
             // Sales Funnel Metrics
             modelBuilder.ApplyConfiguration(new SalesFunnelMetricConfiguration());
