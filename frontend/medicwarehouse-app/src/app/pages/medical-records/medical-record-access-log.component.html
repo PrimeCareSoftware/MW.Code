@@ -1,0 +1,112 @@
+<mat-card class="access-log-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>visibility</mat-icon>
+      Log de Acesso
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Filter Section -->
+    <div class="filter-section" [formGroup]="filterForm">
+      <div class="filter-row">
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>Data Inicial</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>Data Final</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="applyFilter()" [disabled]="loading">
+          <mat-icon>filter_list</mat-icon>
+          Filtrar
+        </button>
+
+        <button mat-button (click)="clearFilter()" [disabled]="loading">
+          <mat-icon>clear</mat-icon>
+          Limpar
+        </button>
+
+        <button mat-icon-button (click)="refresh()" [disabled]="loading" matTooltip="Atualizar">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Carregando logs de acesso...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-message">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && !error && dataSource.data.length === 0" class="empty-state">
+      <mat-icon>info</mat-icon>
+      <p>Nenhum log de acesso encontrado</p>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!loading && !error && dataSource.data.length > 0" class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort class="access-log-table">
+        <!-- Accessed At Column -->
+        <ng-container matColumnDef="accessedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Data/Hora</th>
+          <td mat-cell *matCellDef="let log">
+            {{ log.accessedAt | date:'dd/MM/yyyy HH:mm:ss' }}
+          </td>
+        </ng-container>
+
+        <!-- User Name Column -->
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuário</th>
+          <td mat-cell *matCellDef="let log">
+            {{ getUserDisplayName(log) }}
+          </td>
+        </ng-container>
+
+        <!-- Access Type Column -->
+        <ng-container matColumnDef="accessType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Acesso</th>
+          <td mat-cell *matCellDef="let log">
+            <div class="access-type-cell">
+              <mat-icon [matTooltip]="log.accessType">
+                {{ getAccessTypeIcon(log.accessType) }}
+              </mat-icon>
+              <span>{{ log.accessType }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- IP Address Column -->
+        <ng-container matColumnDef="ipAddress">
+          <th mat-header-cell *matHeaderCellDef>Endereço IP</th>
+          <td mat-cell *matCellDef="let log">
+            {{ log.ipAddress || '-' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator 
+        [pageSizeOptions]="[10, 25, 50, 100]"
+        [pageSize]="25"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
