@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, throwError, timeout } from 'rxjs';
 import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -20,7 +20,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   return next(req).pipe(
+    // Add timeout to prevent hanging requests (30 seconds)
+    timeout(30000),
     catchError(error => {
+      // If timeout error, convert to a more user-friendly error
+      if (error.name === 'TimeoutError') {
+        return throwError(() => ({
+          status: 408,
+          statusText: 'Request Timeout',
+          message: 'A operação demorou muito tempo. Por favor, tente novamente.'
+        }));
+      }
+      
       // If 401 Unauthorized, try to refresh token
       if (error.status === 401 && !req.url.includes('/auth/refresh') && !req.url.includes('/auth/login')) {
         return authService.refreshToken().pipe(

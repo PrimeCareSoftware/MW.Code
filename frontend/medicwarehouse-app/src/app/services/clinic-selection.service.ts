@@ -58,6 +58,10 @@ export class ClinicSelectionService {
             const clinic = this.availableClinics().find(c => c.clinicId === response.currentClinicId);
             if (clinic) {
               this.currentClinic.set(clinic);
+            } else {
+              // Clinic not found in available clinics, fetch updated clinic list
+              console.warn('Clinic not found in available clinics, refreshing clinic list');
+              this.getUserClinics().subscribe();
             }
           }
         })

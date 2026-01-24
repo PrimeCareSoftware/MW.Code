@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -6,12 +6,14 @@ import { SubscriptionPlan, AVAILABLE_PLANS } from '../models/subscription-plan.m
 import { RegistrationRequest, RegistrationResponse } from '../models/registration.model';
 import { ContactRequest, ContactResponse } from '../models/contact.model';
 import { environment } from '../../environments/environment';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubscriptionService {
   private apiUrl = environment.apiUrl;
+  private notificationService = inject(NotificationService);
 
   constructor(private http: HttpClient) { }
 
@@ -23,6 +25,8 @@ export class SubscriptionService {
       }))),
       catchError(error => {
         console.error('Error fetching plans from API, using fallback plans', error);
+        // Show warning to user that fallback plans are being used
+        this.notificationService.warning('Não foi possível carregar os planos atualizados. Mostrando planos padrão.');
         return of(AVAILABLE_PLANS); // Fallback to hardcoded plans if API fails
       })
     );
