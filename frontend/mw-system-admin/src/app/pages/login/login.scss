@@ -5,6 +5,9 @@
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+  /* Compensate for body's navbar padding on login page */
+  margin-top: calc(-1 * var(--navbar-height));
+  padding-top: calc(20px + var(--navbar-height));
 }
 
 .login-card {

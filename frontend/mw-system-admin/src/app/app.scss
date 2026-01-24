@@ -1,0 +1,17 @@
+/* Application Root Styles */
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+/* Router outlet styling */
+router-outlet {
+  display: none;
+}
+
+router-outlet + * {
+  display: block;
+  width: 100%;
+  min-height: calc(100vh - var(--navbar-height));
+}
