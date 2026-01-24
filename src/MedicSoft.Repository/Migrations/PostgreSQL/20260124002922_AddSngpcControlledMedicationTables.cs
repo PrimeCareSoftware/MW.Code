@@ -11,238 +11,212 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "ControlledMedicationRegistries",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    RegistryType = table.Column<int>(type: "integer", nullable: false),
-                    MedicationName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    ActiveIngredient = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    AnvisaList = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Concentration = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    PharmaceuticalForm = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    QuantityIn = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
-                    QuantityOut = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
-                    Balance = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
-                    DocumentType = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    DocumentNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    DocumentDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    PrescriptionId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PatientName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    PatientCPF = table.Column<string>(type: "character varying(14)", maxLength: 14, nullable: true),
-                    DoctorName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    DoctorCRM = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
-                    SupplierName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    SupplierCNPJ = table.Column<string>(type: "character varying(18)", maxLength: 18, nullable: true),
-                    RegisteredByUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RegisteredAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    TenantId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ControlledMedicationRegistries", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ControlledMedicationRegistries_DigitalPrescriptions_Prescri~",
-                        column: x => x.PrescriptionId,
-                        principalTable: "DigitalPrescriptions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ControlledMedicationRegistries_Users_RegisteredByUserId",
-                        column: x => x.RegisteredByUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            // Idempotent migration using CREATE TABLE/INDEX IF NOT EXISTS
+            // This allows the migration to be safely re-run even if tables already exist
+            migrationBuilder.Sql(@"
+CREATE TABLE IF NOT EXISTS ""ControlledMedicationRegistries"" (
+    ""Id"" uuid NOT NULL,
+    ""Date"" timestamp without time zone NOT NULL,
+    ""RegistryType"" integer NOT NULL,
+    ""MedicationName"" character varying(200) NOT NULL,
+    ""ActiveIngredient"" character varying(200) NOT NULL,
+    ""AnvisaList"" character varying(10) NOT NULL,
+    ""Concentration"" character varying(50) NOT NULL,
+    ""PharmaceuticalForm"" character varying(50) NOT NULL,
+    ""QuantityIn"" numeric(18,3) NOT NULL,
+    ""QuantityOut"" numeric(18,3) NOT NULL,
+    ""Balance"" numeric(18,3) NOT NULL,
+    ""DocumentType"" character varying(50) NOT NULL,
+    ""DocumentNumber"" character varying(100) NOT NULL,
+    ""DocumentDate"" timestamp without time zone,
+    ""PrescriptionId"" uuid,
+    ""PatientName"" character varying(200),
+    ""PatientCPF"" character varying(14),
+    ""DoctorName"" character varying(200),
+    ""DoctorCRM"" character varying(20),
+    ""SupplierName"" character varying(200),
+    ""SupplierCNPJ"" character varying(18),
+    ""RegisteredByUserId"" uuid NOT NULL,
+    ""RegisteredAt"" timestamp without time zone NOT NULL,
+    ""CreatedAt"" timestamp without time zone NOT NULL,
+    ""UpdatedAt"" timestamp without time zone,
+    ""TenantId"" character varying(100) NOT NULL,
+    CONSTRAINT ""PK_ControlledMedicationRegistries"" PRIMARY KEY (""Id"")
+);
 
-            migrationBuilder.CreateTable(
-                name: "MonthlyControlledBalances",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Year = table.Column<int>(type: "integer", nullable: false),
-                    Month = table.Column<int>(type: "integer", nullable: false),
-                    MedicationName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    ActiveIngredient = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    AnvisaList = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    InitialBalance = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
-                    TotalIn = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
-                    TotalOut = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
-                    CalculatedFinalBalance = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
-                    PhysicalBalance = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: true),
-                    Discrepancy = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: true),
-                    DiscrepancyReason = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    ClosedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    ClosedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    TenantId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MonthlyControlledBalances", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MonthlyControlledBalances_Users_ClosedByUserId",
-                        column: x => x.ClosedByUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+CREATE TABLE IF NOT EXISTS ""MonthlyControlledBalances"" (
+    ""Id"" uuid NOT NULL,
+    ""Year"" integer NOT NULL,
+    ""Month"" integer NOT NULL,
+    ""MedicationName"" character varying(200) NOT NULL,
+    ""ActiveIngredient"" character varying(200) NOT NULL,
+    ""AnvisaList"" character varying(10) NOT NULL,
+    ""InitialBalance"" numeric(18,3) NOT NULL,
+    ""TotalIn"" numeric(18,3) NOT NULL,
+    ""TotalOut"" numeric(18,3) NOT NULL,
+    ""CalculatedFinalBalance"" numeric(18,3) NOT NULL,
+    ""PhysicalBalance"" numeric(18,3),
+    ""Discrepancy"" numeric(18,3),
+    ""DiscrepancyReason"" character varying(500),
+    ""Status"" integer NOT NULL,
+    ""ClosedAt"" timestamp without time zone,
+    ""ClosedByUserId"" uuid,
+    ""CreatedAt"" timestamp without time zone NOT NULL,
+    ""UpdatedAt"" timestamp without time zone,
+    ""TenantId"" character varying(100) NOT NULL,
+    CONSTRAINT ""PK_MonthlyControlledBalances"" PRIMARY KEY (""Id"")
+);
 
-            migrationBuilder.CreateTable(
-                name: "SngpcTransmissions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SNGPCReportId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AttemptNumber = table.Column<int>(type: "integer", nullable: false),
-                    AttemptedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    ProtocolNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    AnvisaResponse = table.Column<string>(type: "text", nullable: true),
-                    ErrorMessage = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                    ErrorCode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    TransmissionMethod = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    EndpointUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    HttpStatusCode = table.Column<int>(type: "integer", nullable: true),
-                    ResponseTimeMs = table.Column<long>(type: "bigint", nullable: true),
-                    XmlHash = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
-                    XmlSizeBytes = table.Column<long>(type: "bigint", nullable: true),
-                    InitiatedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    TenantId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SngpcTransmissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SngpcTransmissions_SNGPCReports_SNGPCReportId",
-                        column: x => x.SNGPCReportId,
-                        principalTable: "SNGPCReports",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SngpcTransmissions_Users_InitiatedByUserId",
-                        column: x => x.InitiatedByUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+CREATE TABLE IF NOT EXISTS ""SngpcTransmissions"" (
+    ""Id"" uuid NOT NULL,
+    ""SNGPCReportId"" uuid NOT NULL,
+    ""AttemptNumber"" integer NOT NULL,
+    ""AttemptedAt"" timestamp without time zone NOT NULL,
+    ""Status"" integer NOT NULL,
+    ""ProtocolNumber"" character varying(100),
+    ""AnvisaResponse"" text,
+    ""ErrorMessage"" character varying(1000),
+    ""ErrorCode"" character varying(50),
+    ""TransmissionMethod"" character varying(50),
+    ""EndpointUrl"" character varying(500),
+    ""HttpStatusCode"" integer,
+    ""ResponseTimeMs"" bigint,
+    ""XmlHash"" character varying(64),
+    ""XmlSizeBytes"" bigint,
+    ""InitiatedByUserId"" uuid,
+    ""CreatedAt"" timestamp without time zone NOT NULL,
+    ""UpdatedAt"" timestamp without time zone,
+    ""TenantId"" character varying(100) NOT NULL,
+    CONSTRAINT ""PK_SngpcTransmissions"" PRIMARY KEY (""Id"")
+);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_DocumentNumber",
-                table: "ControlledMedicationRegistries",
-                column: "DocumentNumber");
+-- Add foreign keys only if they don't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'FK_ControlledMedicationRegistries_DigitalPrescriptions_Prescri~'
+    ) THEN
+        ALTER TABLE ""ControlledMedicationRegistries""
+            ADD CONSTRAINT ""FK_ControlledMedicationRegistries_DigitalPrescriptions_Prescri~""
+            FOREIGN KEY (""PrescriptionId"") REFERENCES ""DigitalPrescriptions"" (""Id"")
+            ON DELETE RESTRICT;
+    END IF;
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_PrescriptionId",
-                table: "ControlledMedicationRegistries",
-                column: "PrescriptionId");
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'FK_ControlledMedicationRegistries_Users_RegisteredByUserId'
+    ) THEN
+        ALTER TABLE ""ControlledMedicationRegistries""
+            ADD CONSTRAINT ""FK_ControlledMedicationRegistries_Users_RegisteredByUserId""
+            FOREIGN KEY (""RegisteredByUserId"") REFERENCES ""Users"" (""Id"")
+            ON DELETE RESTRICT;
+    END IF;
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_RegisteredByUserId",
-                table: "ControlledMedicationRegistries",
-                column: "RegisteredByUserId");
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'FK_MonthlyControlledBalances_Users_ClosedByUserId'
+    ) THEN
+        ALTER TABLE ""MonthlyControlledBalances""
+            ADD CONSTRAINT ""FK_MonthlyControlledBalances_Users_ClosedByUserId""
+            FOREIGN KEY (""ClosedByUserId"") REFERENCES ""Users"" (""Id"")
+            ON DELETE RESTRICT;
+    END IF;
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_TenantId_AnvisaList",
-                table: "ControlledMedicationRegistries",
-                columns: new[] { "TenantId", "AnvisaList" });
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'FK_SngpcTransmissions_SNGPCReports_SNGPCReportId'
+    ) THEN
+        ALTER TABLE ""SngpcTransmissions""
+            ADD CONSTRAINT ""FK_SngpcTransmissions_SNGPCReports_SNGPCReportId""
+            FOREIGN KEY (""SNGPCReportId"") REFERENCES ""SNGPCReports"" (""Id"")
+            ON DELETE CASCADE;
+    END IF;
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_TenantId_Date",
-                table: "ControlledMedicationRegistries",
-                columns: new[] { "TenantId", "Date" });
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'FK_SngpcTransmissions_Users_InitiatedByUserId'
+    ) THEN
+        ALTER TABLE ""SngpcTransmissions""
+            ADD CONSTRAINT ""FK_SngpcTransmissions_Users_InitiatedByUserId""
+            FOREIGN KEY (""InitiatedByUserId"") REFERENCES ""Users"" (""Id"")
+            ON DELETE RESTRICT;
+    END IF;
+END $$;
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_TenantId_MedicationName",
-                table: "ControlledMedicationRegistries",
-                columns: new[] { "TenantId", "MedicationName" });
+-- Create indexes only if they don't exist
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_DocumentNumber"" 
+    ON ""ControlledMedicationRegistries"" (""DocumentNumber"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_TenantId_PrescriptionId",
-                table: "ControlledMedicationRegistries",
-                columns: new[] { "TenantId", "PrescriptionId" });
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_PrescriptionId"" 
+    ON ""ControlledMedicationRegistries"" (""PrescriptionId"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ControlledMedicationRegistries_TenantId_Type_Date",
-                table: "ControlledMedicationRegistries",
-                columns: new[] { "TenantId", "RegistryType", "Date" });
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_RegisteredByUserId"" 
+    ON ""ControlledMedicationRegistries"" (""RegisteredByUserId"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MonthlyControlledBalances_ClosedByUserId",
-                table: "MonthlyControlledBalances",
-                column: "ClosedByUserId");
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_TenantId_AnvisaList"" 
+    ON ""ControlledMedicationRegistries"" (""TenantId"", ""AnvisaList"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MonthlyControlledBalances_TenantId_Medication_Year",
-                table: "MonthlyControlledBalances",
-                columns: new[] { "TenantId", "MedicationName", "Year" });
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_TenantId_Date"" 
+    ON ""ControlledMedicationRegistries"" (""TenantId"", ""Date"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MonthlyControlledBalances_TenantId_Status",
-                table: "MonthlyControlledBalances",
-                columns: new[] { "TenantId", "Status" });
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_TenantId_MedicationName"" 
+    ON ""ControlledMedicationRegistries"" (""TenantId"", ""MedicationName"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MonthlyControlledBalances_TenantId_Year_Month",
-                table: "MonthlyControlledBalances",
-                columns: new[] { "TenantId", "Year", "Month" });
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_TenantId_PrescriptionId"" 
+    ON ""ControlledMedicationRegistries"" (""TenantId"", ""PrescriptionId"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MonthlyControlledBalances_TenantId_Year_Month_Medication",
-                table: "MonthlyControlledBalances",
-                columns: new[] { "TenantId", "Year", "Month", "MedicationName" },
-                unique: true);
+CREATE INDEX IF NOT EXISTS ""IX_ControlledMedicationRegistries_TenantId_Type_Date"" 
+    ON ""ControlledMedicationRegistries"" (""TenantId"", ""RegistryType"", ""Date"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SngpcTransmissions_InitiatedByUserId",
-                table: "SngpcTransmissions",
-                column: "InitiatedByUserId");
+CREATE INDEX IF NOT EXISTS ""IX_MonthlyControlledBalances_ClosedByUserId"" 
+    ON ""MonthlyControlledBalances"" (""ClosedByUserId"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SngpcTransmissions_ProtocolNumber",
-                table: "SngpcTransmissions",
-                column: "ProtocolNumber");
+CREATE INDEX IF NOT EXISTS ""IX_MonthlyControlledBalances_TenantId_Medication_Year"" 
+    ON ""MonthlyControlledBalances"" (""TenantId"", ""MedicationName"", ""Year"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SngpcTransmissions_ReportId_Status",
-                table: "SngpcTransmissions",
-                columns: new[] { "SNGPCReportId", "Status" });
+CREATE INDEX IF NOT EXISTS ""IX_MonthlyControlledBalances_TenantId_Status"" 
+    ON ""MonthlyControlledBalances"" (""TenantId"", ""Status"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SngpcTransmissions_TenantId_AttemptedAt",
-                table: "SngpcTransmissions",
-                columns: new[] { "TenantId", "AttemptedAt" });
+CREATE INDEX IF NOT EXISTS ""IX_MonthlyControlledBalances_TenantId_Year_Month"" 
+    ON ""MonthlyControlledBalances"" (""TenantId"", ""Year"", ""Month"");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SngpcTransmissions_TenantId_ReportId_Attempt",
-                table: "SngpcTransmissions",
-                columns: new[] { "TenantId", "SNGPCReportId", "AttemptNumber" });
+-- Create unique index only if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_indexes 
+        WHERE indexname = 'IX_MonthlyControlledBalances_TenantId_Year_Month_Medication'
+    ) THEN
+        CREATE UNIQUE INDEX ""IX_MonthlyControlledBalances_TenantId_Year_Month_Medication"" 
+            ON ""MonthlyControlledBalances"" (""TenantId"", ""Year"", ""Month"", ""MedicationName"");
+    END IF;
+END $$;
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SngpcTransmissions_TenantId_Status",
-                table: "SngpcTransmissions",
-                columns: new[] { "TenantId", "Status" });
+CREATE INDEX IF NOT EXISTS ""IX_SngpcTransmissions_InitiatedByUserId"" 
+    ON ""SngpcTransmissions"" (""InitiatedByUserId"");
+
+CREATE INDEX IF NOT EXISTS ""IX_SngpcTransmissions_ProtocolNumber"" 
+    ON ""SngpcTransmissions"" (""ProtocolNumber"");
+
+CREATE INDEX IF NOT EXISTS ""IX_SngpcTransmissions_ReportId_Status"" 
+    ON ""SngpcTransmissions"" (""SNGPCReportId"", ""Status"");
+
+CREATE INDEX IF NOT EXISTS ""IX_SngpcTransmissions_TenantId_AttemptedAt"" 
+    ON ""SngpcTransmissions"" (""TenantId"", ""AttemptedAt"");
+
+CREATE INDEX IF NOT EXISTS ""IX_SngpcTransmissions_TenantId_ReportId_Attempt"" 
+    ON ""SngpcTransmissions"" (""TenantId"", ""SNGPCReportId"", ""AttemptNumber"");
+
+CREATE INDEX IF NOT EXISTS ""IX_SngpcTransmissions_TenantId_Status"" 
+    ON ""SngpcTransmissions"" (""TenantId"", ""Status"");
+");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ControlledMedicationRegistries");
-
-            migrationBuilder.DropTable(
-                name: "MonthlyControlledBalances");
-
-            migrationBuilder.DropTable(
-                name: "SngpcTransmissions");
+            // Idempotent rollback using DROP TABLE IF EXISTS
+            migrationBuilder.Sql(@"
+DROP TABLE IF EXISTS ""ControlledMedicationRegistries"" CASCADE;
+DROP TABLE IF EXISTS ""MonthlyControlledBalances"" CASCADE;
+DROP TABLE IF EXISTS ""SngpcTransmissions"" CASCADE;
+");
         }
     }
 }
