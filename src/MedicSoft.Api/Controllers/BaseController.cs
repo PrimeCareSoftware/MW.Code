@@ -43,7 +43,9 @@ namespace MedicSoft.Api.Controllers
 
         protected Guid GetUserId()
         {
-            var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? User?.FindFirst("nameid")?.Value
+                ?? User?.FindFirst("sub")?.Value;
             if (userIdClaim != null && Guid.TryParse(userIdClaim, out var userId))
             {
                 return userId;
