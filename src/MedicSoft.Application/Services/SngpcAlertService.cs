@@ -63,8 +63,7 @@ namespace MedicSoft.Application.Services
                 if (daysUntilDeadline > 0 && daysUntilDeadline <= daysBeforeDeadline)
                 {
                     // Check if report exists and is not transmitted
-                    var reports = await _reportRepository.GetByPeriodAsync(year, month, tenantId);
-                    var report = reports.FirstOrDefault();
+                    var report = await _reportRepository.GetByMonthYearAsync(month, year, tenantId);
 
                     if (report == null || report.Status != SNGPCReportStatus.Transmitted)
                     {
@@ -117,8 +116,7 @@ namespace MedicSoft.Application.Services
                     continue;
 
                 // Check if report exists and is transmitted
-                var reports = await _reportRepository.GetByPeriodAsync(year, month, tenantId);
-                var report = reports.FirstOrDefault();
+                var report = await _reportRepository.GetByMonthYearAsync(month, year, tenantId);
 
                 if (report == null)
                 {

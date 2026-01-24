@@ -38,6 +38,11 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<DigitalPrescription>> GetUnreportedToSNGPCAsync(DateTime startDate, DateTime endDate, string tenantId);
 
         /// <summary>
+        /// Gets controlled substance prescriptions within a specific period for SNGPC reporting.
+        /// </summary>
+        Task<IEnumerable<DigitalPrescription>> GetControlledPrescriptionsByPeriodAsync(string tenantId, DateTime startDate, DateTime endDate);
+
+        /// <summary>
         /// Gets prescriptions by verification code (for QR code lookup).
         /// </summary>
         Task<DigitalPrescription?> GetByVerificationCodeAsync(string verificationCode);
