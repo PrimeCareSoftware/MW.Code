@@ -105,7 +105,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AuthorizationRequestDto>> Create([FromBody] CreateAuthorizationRequestDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -126,7 +126,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AuthorizationRequestDto>> Approve(Guid id, [FromBody] ApproveAuthorizationDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -147,7 +147,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AuthorizationRequestDto>> Deny(Guid id, [FromBody] DenyAuthorizationDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

@@ -29,7 +29,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<DiagnosticHypothesisDto>> Create([FromBody] CreateDiagnosticHypothesisDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -55,7 +55,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<DiagnosticHypothesisDto>> Update(Guid id, [FromBody] UpdateDiagnosticHypothesisDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

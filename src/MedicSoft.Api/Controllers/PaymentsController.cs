@@ -38,7 +38,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<PaymentDto>> Create([FromBody] CreatePaymentDto createPaymentDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -66,7 +66,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<PaymentDto>> Process([FromBody] ProcessPaymentDto processPaymentDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -95,7 +95,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Refund(Guid id, [FromBody] RefundPaymentDto refundDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != refundDto.PaymentId)
                 return BadRequest("Payment ID mismatch");
@@ -126,7 +126,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelPaymentDto cancelDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != cancelDto.PaymentId)
                 return BadRequest("Payment ID mismatch");

@@ -147,7 +147,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AccountsReceivableDto>> Create([FromBody] CreateAccountsReceivableDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -185,7 +185,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<AccountsReceivableDto>> Update(Guid id, [FromBody] UpdateAccountsReceivableDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             var receivable = await _repository.GetByIdAsync(id, GetTenantId());
             if (receivable == null)
@@ -224,7 +224,7 @@ namespace MedicSoft.Api.Controllers
                 {
                     _logger.LogWarning("Invalid model state for AddPayment: {Errors}", 
                         string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
-                    return BadRequest(ModelState);
+                    return BadRequestInvalidModel();
                 }
 
                 if (id != dto.ReceivableId)
@@ -279,7 +279,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelReceivableDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             if (id != dto.ReceivableId)
                 return BadRequest(new { message = "ID incompatível." });

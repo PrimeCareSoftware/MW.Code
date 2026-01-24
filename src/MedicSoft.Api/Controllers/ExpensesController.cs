@@ -76,7 +76,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<ExpenseDto>> Create([FromBody] CreateExpenseDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -104,7 +104,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Update(Guid id, [FromBody] UpdateExpenseDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -139,7 +139,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Pay(Guid id, [FromBody] PayExpenseDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -174,7 +174,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult> Cancel(Guid id, [FromBody] CancelExpenseDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

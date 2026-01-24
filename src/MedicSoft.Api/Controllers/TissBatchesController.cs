@@ -91,7 +91,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<TissBatchDto>> Create([FromBody] CreateTissBatchDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -223,7 +223,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<TissBatchDto>> ProcessResponse(Guid id, [FromBody] ProcessBatchResponseDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

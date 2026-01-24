@@ -73,7 +73,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<ConsultationFormConfigurationDto>> Create([FromBody] CreateConsultationFormConfigurationDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -94,7 +94,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<ConsultationFormConfigurationDto>> CreateFromProfile([FromBody] CreateConfigurationFromProfileRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -118,7 +118,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<ConsultationFormConfigurationDto>> Update(Guid id, [FromBody] UpdateConsultationFormConfigurationDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {

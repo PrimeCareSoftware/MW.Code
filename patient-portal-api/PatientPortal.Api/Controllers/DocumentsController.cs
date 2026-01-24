@@ -9,7 +9,7 @@ namespace PatientPortal.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class DocumentsController : ControllerBase
+public class DocumentsController : BaseController
 {
     private readonly IDocumentService _documentService;
     private readonly ILogger<DocumentsController> _logger;
@@ -281,13 +281,5 @@ public class DocumentsController : ControllerBase
             _logger.LogError(ex, "Error downloading document {DocumentId}", id);
             return StatusCode(500, new { message = "An error occurred while downloading the document" });
         }
-    }
-
-    private Guid? GetUserId()
-    {
-        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-            return null;
-        return userId;
     }
 }

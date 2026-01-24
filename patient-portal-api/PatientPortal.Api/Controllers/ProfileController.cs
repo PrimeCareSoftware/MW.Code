@@ -7,7 +7,7 @@ namespace PatientPortal.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ProfileController : ControllerBase
+public class ProfileController : BaseController
 {
     private readonly IPatientUserRepository _patientUserRepository;
     private readonly ILogger<ProfileController> _logger;
@@ -155,14 +155,6 @@ public class ProfileController : ControllerBase
             _logger.LogError(ex, "Error updating user profile");
             return StatusCode(500, new { message = "An error occurred while updating profile" });
         }
-    }
-
-    private Guid? GetUserId()
-    {
-        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-            return null;
-        return userId;
     }
 }
 

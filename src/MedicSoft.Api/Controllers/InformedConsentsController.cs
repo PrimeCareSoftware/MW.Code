@@ -29,7 +29,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<InformedConsentDto>> Create([FromBody] CreateInformedConsentDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
@@ -55,7 +55,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<InformedConsentDto>> Accept(Guid id, [FromBody] AcceptInformedConsentDto acceptDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequestInvalidModel();
 
             try
             {
