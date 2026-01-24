@@ -348,9 +348,18 @@ namespace MedicSoft.Application.Services
 
         public Task AcknowledgeAlertAsync(Guid alertId, Guid userId, string? notes = null)
         {
-            // This would be implemented with a proper alerts repository
+            // NOTE: This is a stub implementation. A full implementation would:
+            // 1. Have an ISngpcAlertRepository to persist alerts
+            // 2. Load the alert from the repository
+            // 3. Mark it as acknowledged with timestamp and user
+            // 4. Save the changes back to the database
+            // 
+            // For now, alerts are generated on-demand and not persisted.
+            // This is sufficient for compliance monitoring and notifications,
+            // but a production system should persist alerts for audit trail.
+            
             _logger.LogInformation(
-                "Acknowledging alert {AlertId} by user {UserId}",
+                "Alert acknowledgment called for {AlertId} by user {UserId} (stub implementation)",
                 alertId, userId);
 
             return Task.CompletedTask;
@@ -358,9 +367,18 @@ namespace MedicSoft.Application.Services
 
         public Task ResolveAlertAsync(Guid alertId, Guid userId, string resolution)
         {
-            // This would be implemented with a proper alerts repository
+            // NOTE: This is a stub implementation. A full implementation would:
+            // 1. Have an ISngpcAlertRepository to persist alerts
+            // 2. Load the alert from the repository
+            // 3. Mark it as resolved with timestamp, user, and resolution notes
+            // 4. Save the changes back to the database
+            // 
+            // For now, alerts are generated on-demand and not persisted.
+            // This is sufficient for compliance monitoring and notifications,
+            // but a production system should persist alerts for audit trail.
+            
             _logger.LogInformation(
-                "Resolving alert {AlertId} by user {UserId}: {Resolution}",
+                "Alert resolution called for {AlertId} by user {UserId}: {Resolution} (stub implementation)",
                 alertId, userId, resolution);
 
             return Task.CompletedTask;

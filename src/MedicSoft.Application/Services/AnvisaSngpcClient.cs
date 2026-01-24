@@ -49,7 +49,10 @@ namespace MedicSoft.Application.Services
             }
 
             // Path to XSD schema for validation
-            _xsdSchemaPath = configuration["Anvisa:Sngpc:XsdSchemaPath"] ?? "docs/schemas/sngpc_v2.1.xsd";
+            var schemaBasePath = configuration["Anvisa:Sngpc:XsdSchemaBasePath"] 
+                ?? Path.Combine(AppContext.BaseDirectory, "docs", "schemas");
+            var schemaFileName = configuration["Anvisa:Sngpc:XsdSchemaFileName"] ?? "sngpc_v2.1.xsd";
+            _xsdSchemaPath = Path.Combine(schemaBasePath, schemaFileName);
 
             _logger.LogInformation("ANVISA SNGPC Client initialized with base URL: {BaseUrl}", baseUrl);
         }
@@ -227,8 +230,16 @@ namespace MedicSoft.Application.Services
                     _logger.LogWarning(
                         "XSD schema file not found at {SchemaPath}, skipping validation",
                         _xsdSchemaPath);
-                    // In production, you might want to return false here
-                    // For now, we'll allow it to proceed with basic XML validation
+                    
+                    // Check configuration to decide behavior
+                    var requireValidation = _configuration.GetValue<bool>("Anvisa:Sngpc:RequireValidation", false);
+                    if (requireValidation)
+                    {
+                        _logger.LogError("Validation is required but schema file is missing");
+                        return false;
+                    }
+                    
+                    // Fall back to basic XML structure validation
                     return await ValidateBasicXmlStructure(xmlContent);
                 }
 
