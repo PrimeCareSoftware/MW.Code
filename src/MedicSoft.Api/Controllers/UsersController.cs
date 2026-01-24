@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
@@ -393,7 +394,10 @@ namespace MedicSoft.Api.Controllers
 
         private Guid GetUserIdFromToken()
         {
-            var userIdClaim = User.FindFirst("user_id")?.Value ?? User.FindFirst("nameid")?.Value;
+            var userIdClaim = User.FindFirst("user_id")?.Value 
+                ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? User.FindFirst("nameid")?.Value
+                ?? User.FindFirst("sub")?.Value;
             return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
         }
 
