@@ -462,14 +462,14 @@ Currently, alerts are generated on-demand by `SngpcAlertService`. For production
 ## 📊 Metrics and Performance
 
 ### Code Statistics
-- **Total Lines of Code:** 3,000+
-- **Entities:** 3 (817 lines)
-- **Services:** 6 (1,800+ lines)
-- **Controllers:** 2 (500+ lines)
-- **Repositories:** 6 (450+ lines)
-- **Database Indexes:** 15
-- **API Endpoints:** 19+
-- **Test Coverage:** 75%+ (backend)
+- **Total Lines of Code:** 3,000+ (backend only)
+- **Entities:** 3 (817 lines total)
+- **Services:** 6 (1,800+ lines total)
+- **Controllers:** 2 (500+ lines total)
+- **Repositories:** 6 (450+ lines total)
+- **Database Indexes:** 15 (exact count)
+- **API Endpoints:** 19+ (minimum count)
+- **Test Coverage:** 75%+ (backend only)
 
 ### Performance Targets
 - XML Generation: < 10 seconds (100 prescriptions)

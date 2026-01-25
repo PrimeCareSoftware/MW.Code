@@ -33,7 +33,9 @@ dotnet ef database update
 
 2. **Configure ANVISA (Optional - for production)**
 
-Edit `appsettings.json`:
+**SECURITY WARNING:** Never store sensitive credentials in plain text files!
+
+For **development/testing**, you can use `appsettings.Development.json`:
 ```json
 {
   "Anvisa": {
@@ -45,6 +47,35 @@ Edit `appsettings.json`:
     }
   }
 }
+```
+
+For **production**, use secure storage:
+
+**Option 1: Environment Variables (Recommended)**
+```bash
+export ANVISA__SNGPC__APIKEY="your-api-key"
+export ANVISA__SNGPC__CERTIFICATEPASSWORD="your-cert-password"
+```
+
+**Option 2: Azure Key Vault (Recommended)**
+```csharp
+// In Program.cs
+builder.Configuration.AddAzureKeyVault(
+    new Uri($"https://{keyVaultName}.vault.azure.net/"),
+    new DefaultAzureCredential());
+```
+
+**Option 3: AWS Secrets Manager**
+```csharp
+// In Program.cs
+builder.Configuration.AddSecretsManager();
+```
+
+**Option 4: User Secrets (Development Only)**
+```bash
+cd src/MedicSoft.Api
+dotnet user-secrets set "Anvisa:Sngpc:ApiKey" "your-api-key"
+dotnet user-secrets set "Anvisa:Sngpc:CertificatePassword" "your-password"
 ```
 
 3. **Start Backend**

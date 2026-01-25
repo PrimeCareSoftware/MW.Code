@@ -22,6 +22,10 @@ Currently, alerts are generated on-demand and not persisted. For production audi
 #### A. Domain Entity
 **File:** `src/MedicSoft.Domain/Entities/SngpcAlert.cs`
 
+**Purpose:** This entity provides persistent storage for SNGPC alerts, enabling audit trail, acknowledgement tracking, and resolution workflow. Currently, alerts are generated on-demand by SngpcAlertService. This entity will store alerts in the database for historical tracking and compliance reporting.
+
+**Integration:** Links to SNGPCReport, ControlledMedicationRegistry, and MonthlyControlledBalance entities to provide context for each alert.
+
 ```csharp
 using System;
 using MedicSoft.Domain.Common;
@@ -31,6 +35,8 @@ namespace MedicSoft.Domain.Entities
     /// <summary>
     /// Represents a SNGPC compliance alert that requires attention.
     /// Alerts are generated for deadline warnings, compliance violations, and anomalies.
+    /// Provides audit trail, acknowledgement tracking, and resolution workflow.
+    /// Complies with ANVISA RDC 27/2007 requirements for monitoring and compliance reporting.
     /// </summary>
     public class SngpcAlert : BaseEntity
     {
@@ -444,13 +450,31 @@ private async Task<SngpcAlert> PersistAlertAsync(
 ```
 
 #### F. Database Migration
-Run in terminal:
+
+**Important:** Before creating a new migration, verify that no similar migration exists:
 
 ```bash
+# First, check existing migrations
 cd src/MedicSoft.Repository
+dotnet ef migrations list
+
+# If "AddSngpcAlertsTable" or similar doesn't exist, create it:
 dotnet ef migrations add AddSngpcAlertsTable
+
+# Review the generated migration file before applying
+# File location: Migrations/{timestamp}_AddSngpcAlertsTable.cs
+
+# Apply the migration to database
 dotnet ef database update
+
+# Verify the table was created
+# Check PostgreSQL: SELECT * FROM "SngpcAlerts" LIMIT 1;
 ```
+
+**Troubleshooting:**
+- If migration already exists: Skip creation, just run `dotnet ef database update`
+- If migration fails: Check connection string in appsettings.json
+- If constraint errors: Ensure foreign key tables exist (SNGPCReports, ControlledMedicationRegistry, etc.)
 
 ### Testing Checklist
 - [ ] Create alert programmatically
