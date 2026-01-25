@@ -31,7 +31,7 @@ namespace MedicSoft.Application.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<SngpcAlert>> CheckApproachingDeadlinesAsync(
+        public async Task<IEnumerable<SngpcAlertDto>> CheckApproachingDeadlinesAsync(
             string tenantId, 
             int daysBeforeDeadline = 5)
         {
@@ -42,7 +42,7 @@ namespace MedicSoft.Application.Services
                 "Checking for approaching SNGPC deadlines for tenant {TenantId} (alert {Days} days before)",
                 tenantId, daysBeforeDeadline);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             // Check current month and previous months
@@ -67,7 +67,7 @@ namespace MedicSoft.Application.Services
 
                     if (report == null || report.Status != SNGPCReportStatus.Transmitted)
                     {
-                        alerts.Add(new SngpcAlert
+                        alerts.Add(new SngpcAlertDto
                         {
                             Id = Guid.NewGuid(),
                             TenantId = tenantId,
@@ -89,14 +89,14 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public async Task<IEnumerable<SngpcAlert>> CheckOverdueReportsAsync(string tenantId)
+        public async Task<IEnumerable<SngpcAlertDto>> CheckOverdueReportsAsync(string tenantId)
         {
             if (string.IsNullOrWhiteSpace(tenantId))
                 throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
 
             _logger.LogInformation("Checking for overdue SNGPC reports for tenant {TenantId}", tenantId);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             // Check previous 12 months for overdue reports
@@ -121,7 +121,7 @@ namespace MedicSoft.Application.Services
                 if (report == null)
                 {
                     var daysOverdue = (now - deadline).Days;
-                    alerts.Add(new SngpcAlert
+                    alerts.Add(new SngpcAlertDto
                     {
                         Id = Guid.NewGuid(),
                         TenantId = tenantId,
@@ -135,7 +135,7 @@ namespace MedicSoft.Application.Services
                 else if (report.Status != SNGPCReportStatus.Transmitted)
                 {
                     var daysOverdue = (now - deadline).Days;
-                    alerts.Add(new SngpcAlert
+                    alerts.Add(new SngpcAlertDto
                     {
                         Id = Guid.NewGuid(),
                         TenantId = tenantId,
@@ -156,14 +156,14 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public async Task<IEnumerable<SngpcAlert>> ValidateComplianceAsync(string tenantId)
+        public async Task<IEnumerable<SngpcAlertDto>> ValidateComplianceAsync(string tenantId)
         {
             if (string.IsNullOrWhiteSpace(tenantId))
                 throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
 
             _logger.LogInformation("Validating SNGPC compliance for tenant {TenantId}", tenantId);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             // Get all registry entries for the current month
@@ -182,7 +182,7 @@ namespace MedicSoft.Application.Services
             foreach (var group in negativeBalances)
             {
                 var latestEntry = group.OrderByDescending(e => e.Date).First();
-                alerts.Add(new SngpcAlert
+                alerts.Add(new SngpcAlertDto
                 {
                     Id = Guid.NewGuid(),
                     TenantId = tenantId,
@@ -217,7 +217,7 @@ namespace MedicSoft.Application.Services
                     
                     if (Math.Abs(expectedBalance - current.Balance) > 0.01m)
                     {
-                        alerts.Add(new SngpcAlert
+                        alerts.Add(new SngpcAlertDto
                         {
                             Id = Guid.NewGuid(),
                             TenantId = tenantId,
@@ -240,7 +240,7 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public async Task<IEnumerable<SngpcAlert>> DetectAnomaliesAsync(
+        public async Task<IEnumerable<SngpcAlertDto>> DetectAnomaliesAsync(
             string tenantId, 
             DateTime startDate, 
             DateTime endDate)
@@ -255,7 +255,7 @@ namespace MedicSoft.Application.Services
                 "Detecting anomalies for tenant {TenantId} from {StartDate} to {EndDate}",
                 tenantId, startDate, endDate);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             var entries = await _registryRepository.GetByPeriodAsync(startDate, endDate, tenantId);
@@ -291,7 +291,7 @@ namespace MedicSoft.Application.Services
 
                 foreach (var entry in excessiveDispensing)
                 {
-                    alerts.Add(new SngpcAlert
+                    alerts.Add(new SngpcAlertDto
                     {
                         Id = Guid.NewGuid(),
                         TenantId = tenantId,
@@ -311,7 +311,7 @@ namespace MedicSoft.Application.Services
 
                 foreach (var entry in largeInbound)
                 {
-                    alerts.Add(new SngpcAlert
+                    alerts.Add(new SngpcAlertDto
                     {
                         Id = Guid.NewGuid(),
                         TenantId = tenantId,
@@ -333,7 +333,7 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public Task<IEnumerable<SngpcAlert>> GetActiveAlertsAsync(
+        public Task<IEnumerable<SngpcAlertDto>> GetActiveAlertsAsync(
             string tenantId, 
             AlertSeverity? severity = null)
         {
@@ -343,7 +343,7 @@ namespace MedicSoft.Application.Services
                 "Getting active alerts for tenant {TenantId} with severity filter: {Severity}",
                 tenantId, severity);
 
-            return Task.FromResult(Enumerable.Empty<SngpcAlert>());
+            return Task.FromResult(Enumerable.Empty<SngpcAlertDto>());
         }
 
         public Task AcknowledgeAlertAsync(Guid alertId, Guid userId, string? notes = null)

@@ -19,14 +19,14 @@ namespace MedicSoft.Application.Services
         /// <param name="tenantId">The tenant to check</param>
         /// <param name="daysBeforeDeadline">How many days before deadline to alert (default: 5)</param>
         /// <returns>List of reports approaching deadline</returns>
-        Task<IEnumerable<SngpcAlert>> CheckApproachingDeadlinesAsync(string tenantId, int daysBeforeDeadline = 5);
+        Task<IEnumerable<SngpcAlertDto>> CheckApproachingDeadlinesAsync(string tenantId, int daysBeforeDeadline = 5);
 
         /// <summary>
         /// Checks for overdue reports that should have been submitted.
         /// </summary>
         /// <param name="tenantId">The tenant to check</param>
         /// <returns>List of overdue reports</returns>
-        Task<IEnumerable<SngpcAlert>> CheckOverdueReportsAsync(string tenantId);
+        Task<IEnumerable<SngpcAlertDto>> CheckOverdueReportsAsync(string tenantId);
 
         /// <summary>
         /// Validates compliance of controlled medication registry.
@@ -34,7 +34,7 @@ namespace MedicSoft.Application.Services
         /// </summary>
         /// <param name="tenantId">The tenant to validate</param>
         /// <returns>List of compliance issues found</returns>
-        Task<IEnumerable<SngpcAlert>> ValidateComplianceAsync(string tenantId);
+        Task<IEnumerable<SngpcAlertDto>> ValidateComplianceAsync(string tenantId);
 
         /// <summary>
         /// Detects anomalies in controlled medication movements.
@@ -44,7 +44,7 @@ namespace MedicSoft.Application.Services
         /// <param name="startDate">Start of period to analyze</param>
         /// <param name="endDate">End of period to analyze</param>
         /// <returns>List of detected anomalies</returns>
-        Task<IEnumerable<SngpcAlert>> DetectAnomaliesAsync(string tenantId, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<SngpcAlertDto>> DetectAnomaliesAsync(string tenantId, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Gets all active alerts for a tenant.
@@ -52,7 +52,7 @@ namespace MedicSoft.Application.Services
         /// <param name="tenantId">The tenant to check</param>
         /// <param name="severity">Optional severity filter</param>
         /// <returns>List of active alerts</returns>
-        Task<IEnumerable<SngpcAlert>> GetActiveAlertsAsync(string tenantId, AlertSeverity? severity = null);
+        Task<IEnumerable<SngpcAlertDto>> GetActiveAlertsAsync(string tenantId, AlertSeverity? severity = null);
 
         /// <summary>
         /// Marks an alert as acknowledged.
@@ -72,9 +72,9 @@ namespace MedicSoft.Application.Services
     }
 
     /// <summary>
-    /// Represents an SNGPC-related alert
+    /// Represents an SNGPC-related alert DTO
     /// </summary>
-    public class SngpcAlert
+    public class SngpcAlertDto
     {
         public Guid Id { get; set; }
         public string TenantId { get; set; } = string.Empty;
@@ -99,33 +99,5 @@ namespace MedicSoft.Application.Services
         // Additional data (JSON serialized)
         public string? AdditionalData { get; set; }
     }
-
-    /// <summary>
-    /// Types of SNGPC alerts
-    /// </summary>
-    public enum AlertType
-    {
-        DeadlineApproaching = 1,
-        DeadlineOverdue = 2,
-        MissingReport = 3,
-        InvalidBalance = 4,
-        NegativeBalance = 5,
-        MissingRegistryEntry = 6,
-        TransmissionFailed = 7,
-        UnusualMovement = 8,
-        ExcessiveDispensing = 9,
-        ComplianceViolation = 10,
-        SystemError = 11
-    }
-
-    /// <summary>
-    /// Severity levels for alerts
-    /// </summary>
-    public enum AlertSeverity
-    {
-        Info = 1,
-        Warning = 2,
-        Error = 3,
-        Critical = 4
-    }
 }
+
