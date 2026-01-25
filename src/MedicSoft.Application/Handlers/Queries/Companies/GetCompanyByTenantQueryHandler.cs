@@ -1,4 +1,3 @@
-using System.Linq;
 using AutoMapper;
 using MediatR;
 using MedicSoft.Application.DTOs;
@@ -21,7 +20,7 @@ namespace MedicSoft.Application.Handlers.Queries.Companies
         public async Task<CompanyDto?> Handle(GetCompanyByTenantQuery request, CancellationToken cancellationToken)
         {
             var companies = await _companyRepository.GetAllAsync(request.TenantId);
-            var company = companies.FirstOrDefault();
+            var company = companies.SingleOrDefault();
             return company == null ? null : _mapper.Map<CompanyDto>(company);
         }
     }

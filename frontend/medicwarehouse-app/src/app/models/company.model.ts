@@ -24,6 +24,7 @@ export interface CreateCompany {
   documentType: DocumentType;
   phone: string;
   email: string;
+  subdomain?: string;
 }
 
 export interface UpdateCompany {

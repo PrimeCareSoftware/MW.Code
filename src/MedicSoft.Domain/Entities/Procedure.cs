@@ -57,7 +57,6 @@ namespace MedicSoft.Domain.Entities
                 throw new ArgumentException("Duration must be greater than zero", nameof(durationMinutes));
 
             Name = name.Trim();
-            TradeName = tradeName.Trim();
             Code = code.Trim();
             Description = description?.Trim() ?? string.Empty;
             Category = category;

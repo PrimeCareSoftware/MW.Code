@@ -48,6 +48,11 @@ namespace MedicSoft.Repository.Configurations
             
             builder.Property(p => p.ClinicId);
             
+            builder.HasOne<Clinic>()
+                .WithMany()
+                .HasForeignKey(p => p.ClinicId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
             builder.Property(p => p.AcceptedHealthInsurances)
                 .HasMaxLength(500);
             

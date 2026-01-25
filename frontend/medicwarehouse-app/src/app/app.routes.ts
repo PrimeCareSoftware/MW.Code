@@ -278,7 +278,7 @@ export const routes: Routes = [
   { 
     path: 'settings/company', 
     loadComponent: () => import('./pages/settings/company-info').then(m => m.CompanyInfo),
-    canActivate: [authGuard]
+    canActivate: [authGuard, ownerGuard]
   },
   
   { 
