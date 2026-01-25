@@ -1,280 +1,319 @@
-<div class="dashboard-container">
+<div class="glosas-dashboard-container">
   <app-navbar></app-navbar>
   
-  <div class="content">
-    <div class="header-section">
+  <div class="page-header">
+    <div class="header-content">
       <h1>Dashboard de Glosas TISS</h1>
+      <p>Análise detalhada de glosas e tendências por operadora</p>
+    </div>
+    <div class="header-actions">
       <button class="btn btn-primary" (click)="exportToPDF()">
-        <i class="bi bi-file-pdf"></i> Exportar PDF
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Exportar PDF
       </button>
     </div>
+  </div>
 
-    <!-- Filters -->
-    <div class="filters-section card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-4">
-            <label for="startDate" class="form-label">Data Inicial</label>
-            <input 
-              type="date" 
-              id="startDate"
-              class="form-control" 
-              [(ngModel)]="startDate"
-              (change)="onDateRangeChange()"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="endDate" class="form-label">Data Final</label>
-            <input 
-              type="date" 
-              id="endDate"
-              class="form-control" 
-              [(ngModel)]="endDate"
-              (change)="onDateRangeChange()"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="trendMonths" class="form-label">Meses de Tendência</label>
-            <select 
-              id="trendMonths"
-              class="form-select" 
-              [(ngModel)]="trendMonths"
-              (change)="onTrendMonthsChange()"
-            >
-              <option [value]="3">3 meses</option>
-              <option [value]="6">6 meses</option>
-              <option [value]="12">12 meses</option>
-              <option [value]="24">24 meses</option>
-            </select>
-          </div>
-        </div>
+  <!-- Filters -->
+  <div class="form-section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+      </div>
+      <div>
+        <h3>Filtros</h3>
+        <p>Configure o período e opções para análise de glosas</p>
       </div>
     </div>
 
-    <!-- Loading State -->
-    @if (isLoading()) {
-      <div class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Carregando...</span>
-        </div>
-        <p class="mt-2">Carregando dados...</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="startDate">Data Inicial</label>
+        <input 
+          type="date" 
+          id="startDate"
+          class="form-control" 
+          [(ngModel)]="startDate"
+          (change)="onDateRangeChange()"
+        />
       </div>
-    }
-
-    <!-- Error Message -->
-    @if (errorMessage()) {
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ errorMessage() }}
-        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+      <div class="form-group">
+        <label for="endDate">Data Final</label>
+        <input 
+          type="date" 
+          id="endDate"
+          class="form-control" 
+          [(ngModel)]="endDate"
+          (change)="onDateRangeChange()"
+        />
       </div>
-    }
-
-    <!-- Dashboard Content -->
-    @if (hasData() && !isLoading()) {
-      
-      <!-- Alerts Section -->
-      @if (alerts().length > 0) {
-        <div class="alerts-section mb-4">
-          <h3>Alertas de Glosa</h3>
-          <div class="row">
-            @for (alert of alerts(); track alert.alertType) {
-              <div class="col-md-6 mb-3">
-                <div class="alert" [ngClass]="getSeverityClass(alert.severity)">
-                  <div class="d-flex align-items-center">
-                    <span class="me-2">{{ getSeverityIcon(alert.severity) }}</span>
-                    <div>
-                      <strong>{{ alert.alertType }}</strong><br>
-                      {{ alert.message }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-      }
-
-      <!-- Summary Cards -->
-      @if (summary()) {
-        <div class="summary-section mb-4">
-          <h3>Resumo Geral</h3>
-          <div class="row">
-            <div class="col-md-3 mb-3">
-              <div class="card summary-card">
-                <div class="card-body">
-                  <h6 class="text-muted">Total Faturado</h6>
-                  <h3 class="text-primary">{{ formatCurrency(summary()!.totalBilled) }}</h3>
-                  <small>{{ summary()!.totalGuides }} guias</small>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="card summary-card">
-                <div class="card-body">
-                  <h6 class="text-muted">Total Aprovado</h6>
-                  <h3 class="text-success">{{ formatCurrency(summary()!.totalApproved) }}</h3>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="card summary-card">
-                <div class="card-body">
-                  <h6 class="text-muted">Total Glosado</h6>
-                  <h3 class="text-danger">{{ formatCurrency(summary()!.totalGlosed) }}</h3>
-                  <small>{{ summary()!.glosedGuides }} guias com glosa</small>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="card summary-card">
-                <div class="card-body">
-                  <h6 class="text-muted">Taxa de Glosa</h6>
-                  <h3 [ngClass]="summary()!.glosaPercentage > 15 ? 'text-danger' : 'text-warning'">
-                    {{ formatPercentage(summary()!.glosaPercentage) }}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-
-      <!-- Glosas by Operator -->
-      @if (operatorData().length > 0) {
-        <div class="operator-section mb-4">
-          <h3>Glosas por Operadora</h3>
-          <div class="card">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>Operadora</th>
-                      <th>Total Faturado</th>
-                      <th>Total Glosado</th>
-                      <th>Taxa de Glosa</th>
-                      <th>Guias</th>
-                      <th>Guias Glosadas</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (operator of operatorData(); track operator.operatorId) {
-                      <tr>
-                        <td>{{ operator.operatorName }}</td>
-                        <td>{{ formatCurrency(operator.totalBilled) }}</td>
-                        <td class="text-danger">{{ formatCurrency(operator.totalGlosed) }}</td>
-                        <td>
-                          <span 
-                            class="badge" 
-                            [ngClass]="operator.glosaPercentage > 15 ? 'bg-danger' : 'bg-warning'"
-                          >
-                            {{ formatPercentage(operator.glosaPercentage) }}
-                          </span>
-                        </td>
-                        <td>{{ operator.totalGuides }}</td>
-                        <td>{{ operator.glosedGuides }}</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-
-      <!-- Trend Chart -->
-      @if (trendData().length > 0) {
-        <div class="trend-section mb-4">
-          <h3>Evolução Temporal de Glosas</h3>
-          <div class="card">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-sm">
-                  <thead>
-                    <tr>
-                      <th>Período</th>
-                      <th>Total Faturado</th>
-                      <th>Total Glosado</th>
-                      <th>Taxa de Glosa</th>
-                      <th>Guias</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (trend of trendData(); track trend.monthName) {
-                      <tr>
-                        <td>{{ trend.monthName }}</td>
-                        <td>{{ formatCurrency(trend.totalBilled) }}</td>
-                        <td class="text-danger">{{ formatCurrency(trend.totalGlosed) }}</td>
-                        <td>
-                          <span 
-                            class="badge" 
-                            [ngClass]="trend.glosaPercentage > 15 ? 'bg-danger' : 'bg-success'"
-                          >
-                            {{ formatPercentage(trend.glosaPercentage) }}
-                          </span>
-                        </td>
-                        <td>{{ trend.totalGuides }}</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-
-      <!-- Top 10 Procedures with Glosas -->
-      @if (procedureData().length > 0) {
-        <div class="procedure-section mb-4">
-          <h3>Top 10 Procedimentos Glosados</h3>
-          <div class="card">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>Código</th>
-                      <th>Procedimento</th>
-                      <th>Total Faturado</th>
-                      <th>Total Glosado</th>
-                      <th>Taxa de Glosa</th>
-                      <th>Ocorrências</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (procedure of procedureData(); track procedure.procedureCode) {
-                      <tr>
-                        <td>{{ procedure.procedureCode }}</td>
-                        <td>{{ procedure.procedureName }}</td>
-                        <td>{{ formatCurrency(procedure.totalBilled) }}</td>
-                        <td class="text-danger">{{ formatCurrency(procedure.totalGlosed) }}</td>
-                        <td>
-                          <span 
-                            class="badge" 
-                            [ngClass]="procedure.glosaPercentage > 20 ? 'bg-danger' : 'bg-warning'"
-                          >
-                            {{ formatPercentage(procedure.glosaPercentage) }}
-                          </span>
-                        </td>
-                        <td>{{ procedure.glosedOccurrences }} / {{ procedure.totalOccurrences }}</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-    }
-
-    @if (!hasData() && !isLoading() && !errorMessage()) {
-      <div class="alert alert-info">
-        <i class="bi bi-info-circle"></i>
-        Selecione os filtros acima e clique em "Buscar" para carregar os dados.
+      <div class="form-group">
+        <label for="trendMonths">Meses de Tendência</label>
+        <select 
+          id="trendMonths"
+          class="form-control" 
+          [(ngModel)]="trendMonths"
+          (change)="onTrendMonthsChange()"
+        >
+          <option [value]="3">3 meses</option>
+          <option [value]="6">6 meses</option>
+          <option [value]="12">12 meses</option>
+          <option [value]="24">24 meses</option>
+        </select>
       </div>
-    }
+    </div>
   </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando dados de glosas...</p>
+    </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Dashboard Content -->
+  @if (hasData() && !isLoading()) {
+    
+    <!-- Alerts Section -->
+    @if (alerts().length > 0) {
+      <div class="alerts-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div>
+            <h3>Alertas de Glosa</h3>
+            <p>Notificações importantes sobre glosas detectadas</p>
+          </div>
+        </div>
+
+        <div class="alerts-grid">
+          @for (alert of alerts(); track alert.alertType) {
+            <div class="alert" [ngClass]="getSeverityClass(alert.severity)">
+              <strong>{{ alert.alertType }}</strong>
+              <p>{{ alert.message }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Summary Cards -->
+    @if (summary()) {
+      <div class="summary-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <div>
+            <h3>Resumo Geral</h3>
+            <p>Indicadores consolidados de faturamento e glosas</p>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h6>Total Faturado</h6>
+            <h3 class="text-primary">{{ formatCurrency(summary()!.totalBilled) }}</h3>
+            <small>{{ summary()!.totalGuides }} guias</small>
+          </div>
+          <div class="summary-card">
+            <h6>Total Aprovado</h6>
+            <h3 class="text-success">{{ formatCurrency(summary()!.totalApproved) }}</h3>
+          </div>
+          <div class="summary-card">
+            <h6>Total Glosado</h6>
+            <h3 class="text-danger">{{ formatCurrency(summary()!.totalGlosed) }}</h3>
+            <small>{{ summary()!.glosedGuides }} guias com glosa</small>
+          </div>
+          <div class="summary-card">
+            <h6>Taxa de Glosa</h6>
+            <h3 [ngClass]="summary()!.glosaPercentage > 15 ? 'text-danger' : 'text-warning'">
+              {{ formatPercentage(summary()!.glosaPercentage) }}
+            </h3>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Glosas by Operator -->
+    @if (operatorData().length > 0) {
+      <div class="operator-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <div>
+            <h3>Glosas por Operadora</h3>
+            <p>Análise detalhada de glosas por operadora de saúde</p>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Operadora</th>
+                <th>Total Faturado</th>
+                <th>Total Glosado</th>
+                <th>Taxa de Glosa</th>
+                <th>Guias</th>
+                <th>Guias Glosadas</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (operator of operatorData(); track operator.operatorId) {
+                <tr>
+                  <td>{{ operator.operatorName }}</td>
+                  <td>{{ formatCurrency(operator.totalBilled) }}</td>
+                  <td class="text-danger">{{ formatCurrency(operator.totalGlosed) }}</td>
+                  <td>
+                    <span 
+                      class="badge" 
+                      [ngClass]="operator.glosaPercentage > 15 ? 'badge-error' : 'badge-warning'"
+                    >
+                      {{ formatPercentage(operator.glosaPercentage) }}
+                    </span>
+                  </td>
+                  <td>{{ operator.totalGuides }}</td>
+                  <td>{{ operator.glosedGuides }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- Trend Chart -->
+    @if (trendData().length > 0) {
+      <div class="trend-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+            </svg>
+          </div>
+          <div>
+            <h3>Evolução Temporal de Glosas</h3>
+            <p>Histórico e tendências de glosas ao longo do tempo</p>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Período</th>
+                <th>Total Faturado</th>
+                <th>Total Glosado</th>
+                <th>Taxa de Glosa</th>
+                <th>Guias</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (trend of trendData(); track trend.monthName) {
+                <tr>
+                  <td>{{ trend.monthName }}</td>
+                  <td>{{ formatCurrency(trend.totalBilled) }}</td>
+                  <td class="text-danger">{{ formatCurrency(trend.totalGlosed) }}</td>
+                  <td>
+                    <span 
+                      class="badge" 
+                      [ngClass]="trend.glosaPercentage > 15 ? 'badge-error' : 'badge-success'"
+                    >
+                      {{ formatPercentage(trend.glosaPercentage) }}
+                    </span>
+                  </td>
+                  <td>{{ trend.totalGuides }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- Top 10 Procedures with Glosas -->
+    @if (procedureData().length > 0) {
+      <div class="procedure-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+          <div>
+            <h3>Top 10 Procedimentos Glosados</h3>
+            <p>Procedimentos com maior incidência de glosas</p>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Procedimento</th>
+                <th>Total Faturado</th>
+                <th>Total Glosado</th>
+                <th>Taxa de Glosa</th>
+                <th>Ocorrências</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (procedure of procedureData(); track procedure.procedureCode) {
+                <tr>
+                  <td>{{ procedure.procedureCode }}</td>
+                  <td>{{ procedure.procedureName }}</td>
+                  <td>{{ formatCurrency(procedure.totalBilled) }}</td>
+                  <td class="text-danger">{{ formatCurrency(procedure.totalGlosed) }}</td>
+                  <td>
+                    <span 
+                      class="badge" 
+                      [ngClass]="procedure.glosaPercentage > 20 ? 'badge-error' : 'badge-warning'"
+                    >
+                      {{ formatPercentage(procedure.glosaPercentage) }}
+                    </span>
+                  </td>
+                  <td>{{ procedure.glosedOccurrences }} / {{ procedure.totalOccurrences }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  }
+
+  @if (!hasData() && !isLoading() && !errorMessage()) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+      <h3>Nenhum dado disponível</h3>
+      <p>Selecione os filtros acima e clique em "Buscar" para carregar os dados</p>
+    </div>
+  }
 </div>
