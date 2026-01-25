@@ -22,16 +22,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         notificationService.error(errorMessage);
       }
 
-      // Se for erro 401, redireciona para dashboard (sistema) ou página 401 (site)
+      // Se for erro 401, redireciona apenas para rotas protegidas (não-site)
       if (error.status === 401) {
         const currentUrl = router.url;
-        // Se for uma página do site público, redireciona para página 401
-        if (currentUrl.startsWith('/site')) {
+        // Se for uma página do site público, não redireciona (permite acesso ao site mesmo com 401)
+        if (!currentUrl.startsWith('/site')) {
+          // Se for uma página do sistema (protegida), redireciona para página 401
           router.navigate(['/401'], { queryParams: { returnUrl: currentUrl } });
-        } else {
-          // Se for uma página do sistema, redireciona para dashboard
-          router.navigate(['/dashboard']);
         }
+        // Páginas /site permanecem acessíveis mesmo com erros 401
       }
 
       // Se for erro 403, redireciona para página de acesso negado
