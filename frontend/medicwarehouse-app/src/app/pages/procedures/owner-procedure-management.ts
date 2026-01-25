@@ -1,11 +1,11 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
 import { Procedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-owner-procedure-management',
@@ -13,9 +13,10 @@ import { debounceTime, Subject } from 'rxjs';
   templateUrl: './owner-procedure-management.html',
   styleUrl: './owner-procedure-management.scss'
 })
-export class OwnerProcedureManagement implements OnInit {
+export class OwnerProcedureManagement implements OnInit, OnDestroy {
   procedures = signal<Procedure[]>([]);
   filteredProcedures = signal<Procedure[]>([]);
+  activeProceduresCount = signal<number>(0);
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   searchTerm = '';
@@ -23,18 +24,23 @@ export class OwnerProcedureManagement implements OnInit {
   procedureCategoryLabels = ProcedureCategoryLabels;
   procedureCategory = ProcedureCategory;
   private searchSubject = new Subject<string>();
+  private searchSubscription?: Subscription;
 
   constructor(
     private procedureService: ProcedureService,
     private router: Router
   ) {
-    this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+    this.searchSubscription = this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
       this.filterProcedures();
     });
   }
 
   ngOnInit(): void {
     this.loadProcedures();
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
   }
 
   loadProcedures(): void {
@@ -44,6 +50,7 @@ export class OwnerProcedureManagement implements OnInit {
       next: (data) => {
         this.procedures.set(data);
         this.filteredProcedures.set(data);
+        this.updateActiveProceduresCount(data);
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -76,6 +83,11 @@ export class OwnerProcedureManagement implements OnInit {
     this.filteredProcedures.set(filtered);
   }
 
+  updateActiveProceduresCount(procedures: Procedure[]): void {
+    const count = procedures.filter(p => p.isActive).length;
+    this.activeProceduresCount.set(count);
+  }
+
   onSearch(): void {
     this.searchSubject.next(this.searchTerm);
   }
@@ -94,9 +106,5 @@ export class OwnerProcedureManagement implements OnInit {
 
   navigateToView(id: string): void {
     this.router.navigate(['/procedures/edit', id]);
-  }
-
-  getActiveProceduresCount(): number {
-    return this.procedures().filter(p => p.isActive).length;
   }
 }
