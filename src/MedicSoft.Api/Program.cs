@@ -360,6 +360,8 @@ builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSi
 builder.Services.AddScoped<IControlledMedicationRegistryService, ControlledMedicationRegistryService>();
 builder.Services.AddScoped<IMonthlyBalanceService, MonthlyBalanceService>();
 builder.Services.AddScoped<ISngpcTransmissionService, SngpcTransmissionService>();
+builder.Services.AddHttpClient<IAnvisaSngpcClient, AnvisaSngpcClient>();
+builder.Services.AddScoped<ISngpcAlertService, SngpcAlertService>();
 
 // Electronic Invoice Services
 builder.Services.AddScoped<IElectronicInvoiceService, ElectronicInvoiceService>();

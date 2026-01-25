@@ -69,6 +69,18 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<DigitalPrescription>> GetControlledPrescriptionsByPeriodAsync(string tenantId, DateTime startDate, DateTime endDate)
+        {
+            return await _dbSet
+                .Include(dp => dp.Items)
+                .Where(dp => dp.RequiresSNGPCReport && 
+                            dp.IssuedAt >= startDate &&
+                            dp.IssuedAt <= endDate &&
+                            dp.TenantId == tenantId)
+                .OrderBy(dp => dp.IssuedAt)
+                .ToListAsync();
+        }
+
         public async Task<DigitalPrescription?> GetByVerificationCodeAsync(string verificationCode)
         {
             return await _dbSet

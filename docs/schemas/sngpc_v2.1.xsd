@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.anvisa.gov.br/sngpc/v2.1"
+           targetNamespace="http://www.anvisa.gov.br/sngpc/v2.1"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified"
+           version="2.1">
+
+    <xs:annotation>
+        <xs:documentation>
+            SNGPC - Sistema Nacional de Gerenciamento de Produtos Controlados
+            ANVISA RDC 27/2007
+            Schema versão 2.1
+            
+            NOTA: Este é um schema simplificado para validação básica.
+            Para o schema oficial completo, consulte: https://www.gov.br/anvisa/pt-br/assuntos/fiscalizacao-e-monitoramento/sngpc
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- Root Element -->
+    <xs:element name="SNGPC">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Cabecalho" type="CabecalhoType"/>
+                <xs:element name="Receitas" type="ReceitasType"/>
+            </xs:sequence>
+            <xs:attribute name="versao" type="xs:string" fixed="2.1"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Header Type -->
+    <xs:complexType name="CabecalhoType">
+        <xs:sequence>
+            <xs:element name="Versao" type="xs:string"/>
+            <xs:element name="TipoDocumento" type="xs:string"/>
+            <xs:element name="PeriodoInicio" type="xs:date"/>
+            <xs:element name="PeriodoFim" type="xs:date"/>
+            <xs:element name="DataGeracao" type="xs:dateTime"/>
+            <xs:element name="MesReferencia" type="xs:integer"/>
+            <xs:element name="AnoReferencia" type="xs:integer"/>
+            <xs:element name="QuantidadeReceitas" type="xs:integer"/>
+            <xs:element name="QuantidadeItens" type="xs:integer"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Prescriptions Container Type -->
+    <xs:complexType name="ReceitasType">
+        <xs:sequence>
+            <xs:element name="Receita" type="ReceitaType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Prescription Type -->
+    <xs:complexType name="ReceitaType">
+        <xs:sequence>
+            <xs:element name="NumeroReceita" type="xs:string"/>
+            <xs:element name="TipoReceituario" type="xs:string"/>
+            <xs:element name="DataEmissao" type="xs:date"/>
+            <xs:element name="Prescritor" type="PrescritorType"/>
+            <xs:element name="Paciente" type="PacienteType"/>
+            <xs:element name="Itens" type="ItensType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Prescriber Type -->
+    <xs:complexType name="PrescritorType">
+        <xs:sequence>
+            <xs:element name="Nome" type="xs:string"/>
+            <xs:element name="CRM" type="xs:string"/>
+            <xs:element name="UF" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Patient Type -->
+    <xs:complexType name="PacienteType">
+        <xs:sequence>
+            <xs:element name="Nome" type="xs:string"/>
+            <xs:element name="CPF" type="xs:string" minOccurs="0"/>
+            <xs:element name="RG" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Items Container Type -->
+    <xs:complexType name="ItensType">
+        <xs:sequence>
+            <xs:element name="Item" type="ItemType" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Item Type -->
+    <xs:complexType name="ItemType">
+        <xs:sequence>
+            <xs:element name="Medicamento" type="xs:string"/>
+            <xs:element name="Quantidade" type="xs:decimal"/>
+            <xs:element name="Unidade" type="xs:string"/>
+            <xs:element name="NomeGenerico" type="xs:string" minOccurs="0"/>
+            <xs:element name="PrincipioAtivo" type="xs:string" minOccurs="0"/>
+            <xs:element name="RegistroANVISA" type="xs:string" minOccurs="0"/>
+            <xs:element name="ListaControlada" type="xs:string" minOccurs="0"/>
+            <xs:element name="Dosagem" type="xs:string" minOccurs="0"/>
+            <xs:element name="FormaFarmaceutica" type="xs:string" minOccurs="0"/>
+            <xs:element name="Posologia" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

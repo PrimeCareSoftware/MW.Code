@@ -18,19 +18,27 @@ namespace MedicSoft.Application.Services
     {
         private const int MaxTransmissionAttempts = 5;
         private const string TransmissionMethod = "WebService";
-        private const string AnvisaEndpoint = "https://sngpc.anvisa.gov.br/webservice"; // Simulated endpoint
 
         private readonly ISngpcTransmissionRepository _transmissionRepository;
         private readonly ISNGPCReportRepository _reportRepository;
+        private readonly IAnvisaSngpcClient _anvisaClient;
+        private readonly ISNGPCXmlGeneratorService _xmlGenerator;
+        private readonly IDigitalPrescriptionRepository _prescriptionRepository;
         private readonly ILogger<SngpcTransmissionService> _logger;
 
         public SngpcTransmissionService(
             ISngpcTransmissionRepository transmissionRepository,
             ISNGPCReportRepository reportRepository,
+            IAnvisaSngpcClient anvisaClient,
+            ISNGPCXmlGeneratorService xmlGenerator,
+            IDigitalPrescriptionRepository prescriptionRepository,
             ILogger<SngpcTransmissionService> logger)
         {
             _transmissionRepository = transmissionRepository ?? throw new ArgumentNullException(nameof(transmissionRepository));
             _reportRepository = reportRepository ?? throw new ArgumentNullException(nameof(reportRepository));
+            _anvisaClient = anvisaClient ?? throw new ArgumentNullException(nameof(anvisaClient));
+            _xmlGenerator = xmlGenerator ?? throw new ArgumentNullException(nameof(xmlGenerator));
+            _prescriptionRepository = prescriptionRepository ?? throw new ArgumentNullException(nameof(prescriptionRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -76,8 +84,9 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException($"Maximum transmission attempts ({MaxTransmissionAttempts}) exceeded");
             }
 
-            // Generate XML hash (simulated - in real implementation, would use actual XML content)
-            var xmlContent = GenerateSimulatedXmlContent(report);
+            // Generate XML content using the XML generator service
+            var prescriptions = await GetPrescriptionsForReportAsync(report.TenantId, report.Year, report.Month);
+            var xmlContent = await _xmlGenerator.GenerateXmlAsync(report, prescriptions);
             var xmlHash = ComputeSha256Hash(xmlContent);
             var xmlSize = Encoding.UTF8.GetByteCount(xmlContent);
 
@@ -87,7 +96,7 @@ namespace MedicSoft.Application.Services
                 sngpcReportId: reportId,
                 attemptNumber: attemptCount + 1,
                 transmissionMethod: TransmissionMethod,
-                endpointUrl: AnvisaEndpoint,
+                endpointUrl: _anvisaClient.GetType().Name, // Use client type as endpoint identifier
                 xmlHash: xmlHash,
                 xmlSizeBytes: xmlSize,
                 initiatedByUserId: userId
@@ -99,32 +108,44 @@ namespace MedicSoft.Application.Services
             transmission.MarkAsInProgress();
             await _transmissionRepository.UpdateAsync(transmission);
 
-            // Simulate transmission to ANVISA
-            // In real implementation, this would call actual ANVISA web service
+            // Transmit to ANVISA using the real client
             var stopwatch = Stopwatch.StartNew();
             
             try
             {
-                await SimulateAnvisaTransmission(xmlContent);
+                var response = await _anvisaClient.SendSngpcXmlAsync(xmlContent);
                 stopwatch.Stop();
 
-                // Mark as successful with fake protocol number
-                var protocolNumber = GenerateProtocolNumber();
-                var anvisaResponse = $"Transmission successful. Protocol: {protocolNumber}";
-                
-                transmission.MarkAsSuccessful(
-                    protocolNumber: protocolNumber,
-                    anvisaResponse: anvisaResponse,
-                    httpStatusCode: 200,
-                    responseTimeMs: stopwatch.ElapsedMilliseconds
-                );
+                if (response.Success)
+                {
+                    // Mark as successful
+                    transmission.MarkAsSuccessful(
+                        protocolNumber: response.ProtocolNumber ?? "N/A",
+                        anvisaResponse: response.Message ?? "Transmission successful",
+                        httpStatusCode: response.HttpStatusCode ?? 200,
+                        responseTimeMs: stopwatch.ElapsedMilliseconds
+                    );
+
+                    _logger.LogInformation(
+                        "Successfully transmitted report {ReportId}. Protocol: {Protocol}",
+                        reportId, response.ProtocolNumber);
+                }
+                else
+                {
+                    // Mark as failed
+                    transmission.MarkAsFailed(
+                        errorMessage: response.ErrorMessage ?? "Unknown error",
+                        errorCode: response.ErrorCode ?? "UNKNOWN",
+                        httpStatusCode: response.HttpStatusCode ?? 500,
+                        responseTimeMs: stopwatch.ElapsedMilliseconds
+                    );
+
+                    _logger.LogError(
+                        "Failed to transmit report {ReportId}: {ErrorMessage}",
+                        reportId, response.ErrorMessage);
+                }
 
                 await _transmissionRepository.UpdateAsync(transmission);
-
-                _logger.LogInformation(
-                    "Successfully transmitted report {ReportId}. Protocol: {Protocol}",
-                    reportId, protocolNumber);
-
                 return transmission;
             }
             catch (Exception ex)
@@ -236,19 +257,20 @@ namespace MedicSoft.Application.Services
         #region Private Helper Methods
 
         /// <summary>
-        /// Generates simulated XML content for the report.
-        /// In a real implementation, this would use the actual XML generator service.
+        /// Gets controlled medication prescriptions for the specified period
         /// </summary>
-        private string GenerateSimulatedXmlContent(SNGPCReport report)
+        private async Task<IEnumerable<DigitalPrescription>> GetPrescriptionsForReportAsync(
+            string tenantId, 
+            int year, 
+            int month)
         {
-            return $@"<?xml version=""1.0"" encoding=""UTF-8""?>
-<sngpc>
-    <reportId>{report.Id}</reportId>
-    <month>{report.Month}</month>
-    <year>{report.Year}</year>
-    <generatedAt>{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ss}</generatedAt>
-    <status>{report.Status}</status>
-</sngpc>";
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            var prescriptions = await _prescriptionRepository.GetControlledPrescriptionsByPeriodAsync(
+                tenantId, startDate, endDate);
+
+            return prescriptions;
         }
 
         /// <summary>
@@ -262,36 +284,6 @@ namespace MedicSoft.Application.Services
                 var hash = sha256.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }
-        }
-
-        /// <summary>
-        /// Simulates ANVISA transmission.
-        /// In a real implementation, this would call the actual ANVISA web service.
-        /// </summary>
-        private async Task SimulateAnvisaTransmission(string xmlContent)
-        {
-            // Simulate network delay
-            await Task.Delay(500);
-
-            // Simulate random failures (10% failure rate for testing)
-            var random = new Random();
-            if (random.Next(100) < 10)
-            {
-                throw new Exception("Simulated ANVISA service error");
-            }
-
-            // Success - in real implementation, would validate response from ANVISA
-        }
-
-        /// <summary>
-        /// Generates a simulated ANVISA protocol number.
-        /// In a real implementation, this would come from ANVISA's response.
-        /// </summary>
-        private string GenerateProtocolNumber()
-        {
-            var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
-            var random = new Random().Next(1000, 9999);
-            return $"SNGPC-{timestamp}-{random}";
         }
 
         #endregion
