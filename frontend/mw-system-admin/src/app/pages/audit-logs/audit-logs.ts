@@ -204,7 +204,8 @@ export class AuditLogs implements OnInit {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `audit-logs-${new Date().toISOString()}.json`;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    link.download = `audit-logs-${timestamp}.json`;
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -212,6 +213,17 @@ export class AuditLogs implements OnInit {
   exportToCsv(): void {
     const logs = this.logs();
     if (logs.length === 0) return;
+    
+    // Helper function to sanitize CSV cells and prevent injection
+    const sanitizeCsvCell = (value: any): string => {
+      if (value === null || value === undefined) return '';
+      const str = String(value);
+      // Prevent CSV injection by escaping cells that start with dangerous characters
+      if (str.match(/^[=+\-@\t]/)) {
+        return `'${str}`;
+      }
+      return str;
+    };
     
     // CSV headers
     const headers = [
@@ -223,23 +235,23 @@ export class AuditLogs implements OnInit {
     // CSV rows
     const rows = logs.map(log => [
       this.formatTimestamp(log.timestamp),
-      log.userName,
-      log.userEmail,
-      log.action,
-      log.actionDescription,
-      log.entityType,
-      log.entityId,
-      log.result,
-      log.severity,
-      log.ipAddress,
-      log.httpMethod,
-      log.requestPath
+      log.userName || '',
+      log.userEmail || '',
+      log.action || '',
+      log.actionDescription || '',
+      log.entityType || '',
+      log.entityId || '',
+      log.result || '',
+      log.severity || '',
+      log.ipAddress || '',
+      log.httpMethod || '',
+      log.requestPath || ''
     ]);
     
-    // Combine headers and rows
+    // Combine headers and rows with proper escaping
     const csvContent = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ...rows.map(row => row.map(cell => `"${sanitizeCsvCell(cell).replace(/"/g, '""')}"`).join(','))
     ].join('\n');
     
     // Download
@@ -247,7 +259,8 @@ export class AuditLogs implements OnInit {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `audit-logs-${new Date().toISOString()}.csv`;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    link.download = `audit-logs-${timestamp}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   }
