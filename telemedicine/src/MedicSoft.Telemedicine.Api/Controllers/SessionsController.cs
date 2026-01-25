@@ -87,10 +87,12 @@ public class SessionsController : ControllerBase
 
     /// <summary>
     /// Starts a scheduled session
+    /// CFM 2.314/2022: Validates consent and identity verification before starting
     /// </summary>
     [HttpPost("{sessionId}/start")]
     [ProducesResponseType(typeof(SessionResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<SessionResponse>> StartSession(
         Guid sessionId,
         [FromHeader(Name = "X-Tenant-Id")] string tenantId)
@@ -100,6 +102,51 @@ public class SessionsController : ControllerBase
             if (string.IsNullOrWhiteSpace(tenantId))
                 return BadRequest("TenantId header is required");
 
+            // Get session to validate participants
+            var session = await _telemedicineService.GetSessionByIdAsync(sessionId, tenantId);
+            if (session == null)
+                return NotFound($"Session {sessionId} not found");
+
+            // CFM 2.314 Validation: Check patient consent
+            var hasPatientConsent = await _telemedicineService.HasValidConsentAsync(session.PatientId, tenantId);
+            if (!hasPatientConsent)
+            {
+                _logger.LogWarning("Session {SessionId} cannot start: Patient {PatientId} has no valid consent", sessionId, session.PatientId);
+                return BadRequest(new
+                {
+                    error = "CFM_2314_NO_CONSENT",
+                    message = "Paciente não possui consentimento válido para teleconsulta. O consentimento é obrigatório conforme Resolução CFM 2.314/2022.",
+                    patientId = session.PatientId
+                });
+            }
+
+            // CFM 2.314 Validation: Check provider identity verification
+            var hasProviderVerification = await _telemedicineService.HasValidIdentityVerificationAsync(session.ProviderId, "Provider", tenantId);
+            if (!hasProviderVerification)
+            {
+                _logger.LogWarning("Session {SessionId} cannot start: Provider {ProviderId} identity not verified", sessionId, session.ProviderId);
+                return BadRequest(new
+                {
+                    error = "CFM_2314_PROVIDER_NOT_VERIFIED",
+                    message = "Identidade do médico não verificada. A verificação bidirecional é obrigatória conforme Resolução CFM 2.314/2022.",
+                    providerId = session.ProviderId
+                });
+            }
+
+            // CFM 2.314 Validation: Check patient identity verification
+            var hasPatientVerification = await _telemedicineService.HasValidIdentityVerificationAsync(session.PatientId, "Patient", tenantId);
+            if (!hasPatientVerification)
+            {
+                _logger.LogWarning("Session {SessionId} cannot start: Patient {PatientId} identity not verified", sessionId, session.PatientId);
+                return BadRequest(new
+                {
+                    error = "CFM_2314_PATIENT_NOT_VERIFIED",
+                    message = "Identidade do paciente não verificada. A verificação bidirecional é obrigatória conforme Resolução CFM 2.314/2022.",
+                    patientId = session.PatientId
+                });
+            }
+
+            // All validations passed, start the session
             var result = await _telemedicineService.StartSessionAsync(sessionId, tenantId);
             return Ok(result);
         }
@@ -112,6 +159,75 @@ public class SessionsController : ControllerBase
         {
             _logger.LogError(ex, "Error starting session {SessionId}", sessionId);
             return StatusCode(500, "An error occurred while starting the session");
+        }
+    }
+
+    /// <summary>
+    /// Validates CFM 2.314 compliance for a session before starting
+    /// Checks consent and identity verification for both participants
+    /// </summary>
+    [HttpGet("{sessionId}/validate-compliance")]
+    [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<object>> ValidateSessionCompliance(
+        Guid sessionId,
+        [FromHeader(Name = "X-Tenant-Id")] string tenantId)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(tenantId))
+                return BadRequest("TenantId header is required");
+
+            var session = await _telemedicineService.GetSessionByIdAsync(sessionId, tenantId);
+            if (session == null)
+                return NotFound($"Session {sessionId} not found");
+
+            var hasPatientConsent = await _telemedicineService.HasValidConsentAsync(session.PatientId, tenantId);
+            var hasProviderVerification = await _telemedicineService.HasValidIdentityVerificationAsync(session.ProviderId, "Provider", tenantId);
+            var hasPatientVerification = await _telemedicineService.HasValidIdentityVerificationAsync(session.PatientId, "Patient", tenantId);
+
+            var isCompliant = hasPatientConsent && hasProviderVerification && hasPatientVerification;
+
+            var result = new
+            {
+                sessionId,
+                isCompliant,
+                compliance = new
+                {
+                    patientConsent = new
+                    {
+                        isValid = hasPatientConsent,
+                        required = true,
+                        message = hasPatientConsent 
+                            ? "Consentimento válido" 
+                            : "Consentimento necessário (CFM 2.314/2022)"
+                    },
+                    providerIdentity = new
+                    {
+                        isVerified = hasProviderVerification,
+                        required = true,
+                        message = hasProviderVerification 
+                            ? "Identidade verificada" 
+                            : "Verificação de identidade necessária (CFM 2.314/2022)"
+                    },
+                    patientIdentity = new
+                    {
+                        isVerified = hasPatientVerification,
+                        required = true,
+                        message = hasPatientVerification 
+                            ? "Identidade verificada" 
+                            : "Verificação de identidade necessária (CFM 2.314/2022)"
+                    }
+                },
+                canStart = isCompliant
+            };
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error validating compliance for session {SessionId}", sessionId);
+            return StatusCode(500, "An error occurred while validating session compliance");
         }
     }
 

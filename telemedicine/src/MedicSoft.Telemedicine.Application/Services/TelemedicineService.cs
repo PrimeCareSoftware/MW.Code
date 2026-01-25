@@ -191,6 +191,8 @@ public class TelemedicineService : ITelemedicineService
             Id = session.Id,
             AppointmentId = session.AppointmentId,
             ClinicId = session.ClinicId,
+            ProviderId = session.ProviderId,
+            PatientId = session.PatientId,
             RoomUrl = session.RoomUrl,
             Status = session.Status.ToString(),
             CreatedAt = session.CreatedAt,
