@@ -1,141 +1,184 @@
-<div class="reports-container">
+<div class="tiss-reports-container">
   <app-navbar></app-navbar>
   
-  <div class="content">
-    <div class="header-section">
+  <div class="page-header">
+    <div class="header-content">
       <h1>Relatórios TISS</h1>
-      <div class="export-buttons">
-        <button 
-          class="btn btn-outline-danger" 
-          (click)="exportToPDF()"
-          [disabled]="!hasReportData() || isLoading()"
-        >
-          <i class="bi bi-file-pdf"></i> Exportar PDF
-        </button>
-        <button 
-          class="btn btn-outline-success" 
-          (click)="exportToExcel()"
-          [disabled]="!hasReportData() || isLoading()"
-        >
-          <i class="bi bi-file-earmark-excel"></i> Exportar Excel
-        </button>
+      <p>Relatórios analíticos sobre faturamento, glosas e procedimentos TISS</p>
+    </div>
+    <div class="header-actions">
+      <button 
+        type="button"
+        class="btn btn-secondary" 
+        (click)="exportToPDF()"
+        [disabled]="!hasReportData() || isLoading()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        Exportar PDF
+      </button>
+      <button 
+        type="button"
+        class="btn btn-primary" 
+        (click)="exportToExcel()"
+        [disabled]="!hasReportData() || isLoading()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Exportar Excel
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="form-section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+      </div>
+      <div>
+        <h3>Filtros do Relatório</h3>
+        <p>Selecione os parâmetros para gerar o relatório desejado</p>
       </div>
     </div>
-
-    <!-- Filters Section -->
-    <div class="filters-section card">
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-md-3 col-sm-6">
-            <label for="reportType" class="form-label">Tipo de Relatório *</label>
-            <select 
-              id="reportType"
-              class="form-select" 
-              [(ngModel)]="selectedReportType"
-              (change)="onReportTypeChange()"
-            >
-              @for (type of reportTypes; track type.value) {
-                <option [value]="type.value">{{ type.label }}</option>
-              }
-            </select>
-          </div>
-          
-          <div class="col-md-3 col-sm-6">
-            <label for="startDate" class="form-label">Data Inicial *</label>
-            <input 
-              type="date" 
-              id="startDate"
-              class="form-control" 
-              [(ngModel)]="startDate"
-            />
-          </div>
-          
-          <div class="col-md-3 col-sm-6">
-            <label for="endDate" class="form-label">Data Final *</label>
-            <input 
-              type="date" 
-              id="endDate"
-              class="form-control" 
-              [(ngModel)]="endDate"
-            />
-          </div>
-          
-          <div class="col-md-3 col-sm-6">
-            <label for="operator" class="form-label">Operadora</label>
-            <select 
-              id="operator"
-              class="form-select" 
-              [(ngModel)]="selectedOperatorId"
-            >
-              <option value="all">Todas as Operadoras</option>
-              @for (operator of operators(); track operator.id) {
-                <option [value]="operator.id">{{ operator.tradeName }}</option>
-              }
-            </select>
-          </div>
-        </div>
-        
-        <div class="row mt-3">
-          <div class="col-12">
-            <button 
-              class="btn btn-primary" 
-              (click)="generateReport()"
-              [disabled]="isLoading()"
-            >
-              @if (isLoading()) {
-                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                Gerando...
-              } @else {
-                <i class="bi bi-bar-chart"></i> Gerar Relatório
-              }
-            </button>
-          </div>
-        </div>
+    
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="reportType">Tipo de Relatório <span class="required">*</span></label>
+        <select 
+          id="reportType"
+          class="form-control" 
+          [(ngModel)]="selectedReportType"
+          (change)="onReportTypeChange()"
+        >
+          @for (type of reportTypes; track type.value) {
+            <option [value]="type.value">{{ type.label }}</option>
+          }
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="startDate">Data Inicial <span class="required">*</span></label>
+        <input 
+          type="date" 
+          id="startDate"
+          class="form-control" 
+          [(ngModel)]="startDate"
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="endDate">Data Final <span class="required">*</span></label>
+        <input 
+          type="date" 
+          id="endDate"
+          class="form-control" 
+          [(ngModel)]="endDate"
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="operator">Operadora</label>
+        <select 
+          id="operator"
+          class="form-control" 
+          [(ngModel)]="selectedOperatorId"
+        >
+          <option value="all">Todas as Operadoras</option>
+          @for (operator of operators(); track operator.id) {
+            <option [value]="operator.id">{{ operator.tradeName }}</option>
+          }
+        </select>
       </div>
     </div>
+    
+    <div class="form-actions">
+      <button 
+        type="button"
+        class="btn btn-primary" 
+        (click)="generateReport()"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          <span>Gerando...</span>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="20" x2="12" y2="10"/>
+            <line x1="18" y1="20" x2="18" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="16"/>
+          </svg>
+          <span>Gerar Relatório</span>
+        }
+      </button>
+    </div>
+  </div>
 
-    <!-- Error Message -->
-    @if (errorMessage()) {
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        {{ errorMessage() }}
-        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
-      </div>
-    }
+  <!-- Error Message -->
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage() }}</span>
+      <button type="button" class="btn-close" (click)="errorMessage.set('')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  }
 
-    <!-- Loading State -->
-    @if (isLoading()) {
-      <div class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Carregando...</span>
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <span class="spinner"></span>
+      <p>Gerando relatório...</p>
+    </div>
+  }
+
+  <!-- Report Preview Section -->
+  @if (hasReportData() && !isLoading()) {
+    <div class="report-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
         </div>
-        <p class="mt-3">Gerando relatório...</p>
-      </div>
-    }
-
-    <!-- Report Preview Section -->
-    @if (hasReportData() && !isLoading()) {
-      <div class="report-preview-section card">
-        <div class="card-header">
-          <h3 class="mb-0">
-            <i class="bi bi-file-text me-2"></i>
-            Prévia: {{ getReportTitle() }}
-          </h3>
-          <small class="text-muted">
+        <div>
+          <h3>{{ getReportTitle() }}</h3>
+          <p>
             Período: {{ startDate() }} a {{ endDate() }}
             @if (selectedOperatorId() !== 'all') {
-              <span class="ms-2">| Operadora: {{ getSelectedOperatorName() }}</span>
+              <span class="mx-2">|</span>
+              <span>Operadora: {{ getSelectedOperatorName() }}</span>
             }
-          </small>
+          </p>
         </div>
-        <div class="card-body">
-          
-          <!-- Billing Report -->
-          @if (selectedReportType() === 'billing') {
-            <div class="table-responsive">
-              <table class="table table-hover table-striped">
-                <thead>
-                  <tr>
+      </div>
+      
+      <div class="table-container">
+        <!-- Billing Report -->
+        @if (selectedReportType() === 'billing') {
+          <div class="table-responsive">
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
                     <th>Operadora</th>
                     <th class="text-end">Total Faturado</th>
                     <th class="text-end">Total Aprovado</th>
@@ -154,7 +197,7 @@
                       <td class="text-center">
                         <span 
                           class="badge" 
-                          [ngClass]="item.glosaPercentage > 15 ? 'bg-danger' : item.glosaPercentage > 10 ? 'bg-warning' : 'bg-success'"
+                          [ngClass]="item.glosaPercentage > 15 ? 'badge-error' : item.glosaPercentage > 10 ? 'badge-warning' : 'badge-success'"
                         >
                           {{ formatPercentage(item.glosaPercentage) }}
                         </span>
@@ -217,7 +260,7 @@
                       <td class="text-center">
                         <span 
                           class="badge" 
-                          [ngClass]="item.glosaPercentage > 15 ? 'bg-danger' : item.glosaPercentage > 10 ? 'bg-warning' : 'bg-success'"
+                          [ngClass]="item.glosaPercentage > 15 ? 'badge-error' : item.glosaPercentage > 10 ? 'badge-warning' : 'badge-success'"
                         >
                           {{ formatPercentage(item.glosaPercentage) }}
                         </span>
@@ -256,7 +299,7 @@
                       <td class="text-center">
                         <span 
                           class="badge" 
-                          [ngClass]="item.approvalRate >= 80 ? 'bg-success' : item.approvalRate >= 60 ? 'bg-warning' : 'bg-danger'"
+                          [ngClass]="item.approvalRate >= 80 ? 'badge-success' : item.approvalRate >= 60 ? 'badge-warning' : 'badge-error'"
                         >
                           {{ formatPercentage(item.approvalRate) }}
                         </span>
@@ -288,7 +331,7 @@
                       <td class="text-center">
                         <span 
                           class="badge" 
-                          [ngClass]="item.averageApprovalDays <= 5 ? 'bg-success' : item.averageApprovalDays <= 10 ? 'bg-warning' : 'bg-danger'"
+                          [ngClass]="item.averageApprovalDays <= 5 ? 'badge-success' : item.averageApprovalDays <= 10 ? 'badge-warning' : 'badge-error'"
                         >
                           {{ formatDays(item.averageApprovalDays) }}
                         </span>
@@ -327,7 +370,7 @@
                       <td class="text-center">
                         <span 
                           class="badge" 
-                          [ngClass]="item.glosaPercentage > 20 ? 'bg-danger' : item.glosaPercentage > 10 ? 'bg-warning' : 'bg-success'"
+                          [ngClass]="item.glosaPercentage > 20 ? 'badge-error' : item.glosaPercentage > 10 ? 'badge-warning' : 'badge-success'"
                         >
                           {{ formatPercentage(item.glosaPercentage) }}
                         </span>
@@ -343,19 +386,22 @@
           }
         </div>
       </div>
-    }
+    </div>
+  }
 
-    <!-- Empty State -->
-    @if (!hasReportData() && !isLoading() && !errorMessage()) {
-      <div class="empty-state card">
-        <div class="card-body text-center py-5">
-          <i class="bi bi-file-earmark-bar-graph display-1 text-muted mb-3"></i>
-          <h4 class="text-muted">Nenhum relatório gerado</h4>
-          <p class="text-muted">
-            Selecione os filtros desejados e clique em "Gerar Relatório" para visualizar os dados.
-          </p>
-        </div>
-      </div>
-    }
-  </div>
+  <!-- Empty State -->
+  @if (!hasReportData() && !isLoading() && !errorMessage()) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      <h3>Nenhum relatório gerado</h3>
+      <p>
+        Selecione os filtros desejados e clique em "Gerar Relatório" para visualizar os dados.
+      </p>
+    </div>
+  }
 </div>
