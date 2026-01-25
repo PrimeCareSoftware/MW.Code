@@ -20,6 +20,54 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ---
 
+## [2.2.0] - Janeiro 2026
+
+### ✨ Adicionado
+
+#### CRUD de Clínicas para Proprietários
+- **Gerenciamento Multi-Clínica**: Proprietários agora podem criar e gerenciar múltiplas clínicas
+  - Nova tela integrada em "Informações da Clínica"
+  - Listagem de todas as clínicas do proprietário com detalhes
+  - Modal de criação de nova clínica com validação completa
+  - Modal de edição de clínica existente
+  - Validação automática de limites do plano de assinatura
+- **Limites de Plano**: Adicionado campo `MaxClinics` aos planos de assinatura
+  - Controle automático de quantas clínicas podem ser criadas
+  - Mensagem de erro clara quando o limite é atingido
+  - Requer upgrade do plano para adicionar mais clínicas
+- **API Endpoints**:
+  - `GET /api/owner-clinics` - Lista clínicas do proprietário
+  - `GET /api/owner-clinics/{id}` - Obtém clínica específica
+  - `POST /api/owner-clinics` - Cria nova clínica (auto-vincula proprietário)
+  - `PUT /api/owner-clinics/{id}` - Atualiza clínica existente
+  - Deleção não permitida conforme requisitos
+
+#### Pré-Cadastro de Procedimentos
+- **CRUD Completo de Procedimentos**: Sistema já existente agora documentado
+  - Criação de procedimentos para pré-cadastro (ex: "preenchimento labial")
+  - Edição de procedimentos existentes
+  - Desativação de procedimentos (soft delete)
+  - Listagem com busca e filtros por categoria
+  - Seleção múltipla durante atendimento médico
+- **Campos Avançados**:
+  - `ClinicId` - Procedimentos específicos por clínica
+  - `AcceptedHealthInsurances` - Convênios aceitos
+  - `AllowInMedicalAttendance` - Permitir em consulta médica
+  - `AllowInExclusiveProcedureAttendance` - Permitir em atendimento exclusivo
+
+### 🔄 Modificado
+
+#### Melhorias de Procedimentos
+- Removido campo `Code` do UpdateProcedureDto (código é imutável após criação)
+- Interface de proprietário para visualização cross-clinic de procedimentos
+
+### 🐛 Corrigido
+
+- Validação de documento único ao criar clínicas
+- Verificação de limites de plano antes de criar nova clínica
+
+---
+
 ## [2.1.0] - Janeiro 2026
 
 ### ✨ Adicionado

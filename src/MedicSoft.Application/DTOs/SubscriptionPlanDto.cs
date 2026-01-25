@@ -15,6 +15,7 @@ namespace MedicSoft.Application.DTOs
         public int TrialDays { get; set; }
         public int MaxUsers { get; set; }
         public int MaxPatients { get; set; }
+        public int MaxClinics { get; set; }
         public bool HasReports { get; set; }
         public bool HasWhatsAppIntegration { get; set; }
         public bool HasSMSNotifications { get; set; }
