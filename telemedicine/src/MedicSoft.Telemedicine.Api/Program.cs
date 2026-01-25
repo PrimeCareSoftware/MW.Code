@@ -57,6 +57,8 @@ builder.Services.AddScoped<ITelemedicineService, TelemedicineService>();
 // Register Domain Services
 builder.Services.AddScoped<ITelemedicineSessionRepository, TelemedicineSessionRepository>();
 builder.Services.AddScoped<ITelemedicineConsentRepository, TelemedicineConsentRepository>();
+builder.Services.AddScoped<IIdentityVerificationRepository, IdentityVerificationRepository>();
+builder.Services.AddScoped<ITelemedicineRecordingRepository, TelemedicineRecordingRepository>();
 
 // Register Infrastructure Services
 builder.Services.AddHttpClient<IVideoCallService, DailyCoVideoService>();
