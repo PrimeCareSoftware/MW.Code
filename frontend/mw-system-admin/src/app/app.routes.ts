@@ -101,6 +101,13 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Documentation
+  {
+    path: 'documentation',
+    loadComponent: () => import('./pages/documentation/documentation').then(m => m.Documentation),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];
