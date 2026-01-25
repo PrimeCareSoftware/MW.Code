@@ -11,5 +11,6 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<Procedure>> GetByClinicAsync(string tenantId, bool activeOnly = true);
         Task<IEnumerable<Procedure>> GetByCategoryAsync(ProcedureCategory category, string tenantId, bool activeOnly = true);
         Task<bool> IsCodeUniqueAsync(string code, string tenantId, Guid? excludeId = null);
+        Task<IEnumerable<Procedure>> GetByOwnerAsync(Guid ownerId, bool activeOnly = true);
     }
 }

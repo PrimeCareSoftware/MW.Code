@@ -51,6 +51,7 @@ namespace MedicSoft.Domain.Common
         public const string ProceduresCreate = "procedures.create";
         public const string ProceduresEdit = "procedures.edit";
         public const string ProceduresDelete = "procedures.delete";
+        public const string ProceduresManage = "procedures.manage"; // Owner-level: manage procedures across all owned clinics
 
         // Financial - Payments
         public const string PaymentsView = "payments.view";
@@ -203,7 +204,8 @@ namespace MedicSoft.Domain.Common
                         new(ProceduresView, "Visualizar procedimentos"),
                         new(ProceduresCreate, "Criar procedimentos"),
                         new(ProceduresEdit, "Editar procedimentos"),
-                        new(ProceduresDelete, "Excluir procedimentos")
+                        new(ProceduresDelete, "Excluir procedimentos"),
+                        new(ProceduresManage, "Gerenciar procedimentos (proprietário)")
                     }
                 },
                 {

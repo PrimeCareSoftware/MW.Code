@@ -57,5 +57,26 @@ namespace MedicSoft.Repository.Repositories
 
             return !await query.AnyAsync();
         }
+
+        public async Task<IEnumerable<Procedure>> GetByOwnerAsync(Guid ownerId, bool activeOnly = true)
+        {
+            // Get all clinic IDs owned by this owner through OwnerClinicLink
+            var clinicIds = await _context.OwnerClinicLinks
+                .Where(ocl => ocl.OwnerId == ownerId && ocl.IsActive)
+                .Select(ocl => ocl.ClinicId)
+                .ToListAsync();
+
+            // Get procedures from all owned clinics
+            var query = _dbSet.Where(p => clinicIds.Contains(Guid.Parse(p.TenantId)));
+            
+            if (activeOnly)
+            {
+                query = query.Where(p => p.IsActive);
+            }
+
+            return await query
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
     }
 }
