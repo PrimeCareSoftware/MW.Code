@@ -60,14 +60,12 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<IEnumerable<Procedure>> GetByOwnerAsync(Guid ownerId, bool activeOnly = true)
         {
-            // Get all clinic IDs owned by this owner through OwnerClinicLink
-            var clinicIds = await _context.OwnerClinicLinks
-                .Where(ocl => ocl.OwnerId == ownerId && ocl.IsActive)
-                .Select(ocl => ocl.ClinicId.ToString())
-                .ToListAsync();
-
-            // Get procedures from all owned clinics
-            var query = _dbSet.Where(p => clinicIds.Contains(p.TenantId));
+            // Query procedures directly by joining with OwnerClinicLink for better performance
+            var query = from procedure in _dbSet
+                        join link in _context.OwnerClinicLinks
+                            on procedure.TenantId equals link.ClinicId.ToString()
+                        where link.OwnerId == ownerId && link.IsActive
+                        select procedure;
             
             if (activeOnly)
             {
@@ -75,6 +73,7 @@ namespace MedicSoft.Repository.Repositories
             }
 
             return await query
+                .Distinct() // In case a procedure is returned multiple times
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
