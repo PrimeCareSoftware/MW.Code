@@ -1,10 +1,10 @@
 .dashboard-container {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: var(--gray-50);
 
   .content {
-    padding: 2rem;
-    max-width: 1400px;
+    padding: var(--spacing-8);
+    max-width: var(--content-max-width, 1400px);
     margin: 0 auto;
   }
 
@@ -12,56 +12,65 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-8);
 
     h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      color: #333;
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-semibold);
+      color: var(--gray-900);
       margin: 0;
     }
   }
 
   .filters-section {
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: var(--spacing-8);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-xl);
+    transition: box-shadow var(--transition-base);
+    
+    &:hover {
+      box-shadow: var(--shadow-md);
+    }
   }
 
   .summary-section {
     h3 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #333;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-semibold);
+      margin-bottom: var(--spacing-4);
+      color: var(--gray-900);
     }
 
     .summary-card {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border: none;
-      transition: transform 0.2s;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      transition: all var(--transition-base);
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
       }
 
       .card-body {
         h6 {
-          font-size: 0.875rem;
+          font-size: var(--font-size-xs);
           text-transform: uppercase;
-          font-weight: 600;
-          margin-bottom: 0.5rem;
+          font-weight: var(--font-semibold);
+          margin-bottom: var(--spacing-2);
+          letter-spacing: 0.05em;
         }
 
         h3 {
-          font-size: 1.75rem;
-          font-weight: 700;
-          margin-bottom: 0.25rem;
+          font-size: var(--font-size-2xl);
+          font-weight: var(--font-bold);
+          margin-bottom: var(--spacing-1);
         }
 
         small {
-          font-size: 0.875rem;
-          color: #6c757d;
+          font-size: var(--font-size-sm);
+          color: var(--gray-500);
         }
       }
     }
@@ -71,64 +80,75 @@
   .approval-time-section,
   .monthly-performance-section {
     h3 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #333;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-semibold);
+      margin-bottom: var(--spacing-4);
+      color: var(--gray-900);
     }
 
     .card {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border: none;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      transition: box-shadow var(--transition-base);
+      
+      &:hover {
+        box-shadow: var(--shadow-md);
+      }
     }
 
     .table {
       margin-bottom: 0;
 
       thead {
-        background-color: #f8f9fa;
+        background-color: var(--gray-50);
         
         th {
-          font-weight: 600;
-          color: #495057;
-          border-bottom: 2px solid #dee2e6;
+          font-weight: var(--font-semibold);
+          color: var(--gray-700);
+          border-bottom: 2px solid var(--gray-200);
+          font-size: var(--font-size-sm);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
         }
       }
 
       tbody {
         tr {
+          transition: background-color var(--transition-base);
+          
           &:hover {
-            background-color: #f8f9fa;
+            background-color: var(--gray-50);
           }
         }
       }
 
       .badge {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.75rem;
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-2) var(--spacing-3);
       }
     }
   }
 
   @media (max-width: 768px) {
     .content {
-      padding: 1rem;
+      padding: var(--spacing-4);
     }
 
     .header-section {
       flex-direction: column;
       align-items: flex-start;
-      gap: 1rem;
+      gap: var(--spacing-4);
 
       h1 {
-        font-size: 1.5rem;
+        font-size: var(--font-size-2xl);
       }
     }
 
     .summary-card {
       .card-body {
         h3 {
-          font-size: 1.5rem;
+          font-size: var(--font-size-xl);
         }
       }
     }
