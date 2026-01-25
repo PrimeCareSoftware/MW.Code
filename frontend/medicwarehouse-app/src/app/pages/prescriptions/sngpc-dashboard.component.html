@@ -1,149 +1,203 @@
-<div class="sngpc-dashboard">
+<div class="sngpc-dashboard-container">
+  <div class="page-header">
+    <div class="header-content">
       <h1>Dashboard SNGPC</h1>
-      <p class="subtitle">Sistema Nacional de Gerenciamento de Produtos Controlados - ANVISA</p>
+      <p>Sistema Nacional de Gerenciamento de Produtos Controlados - ANVISA</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="createNewReport()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Gerar Novo Relatório
+      </button>
+    </div>
+  </div>
 
-      <!-- Quick Stats -->
-      <div class="stats-grid">
-        <mat-card class="stat-card">
-          <mat-card-content>
-            <mat-icon class="stat-icon" color="primary">assignment</mat-icon>
-            <div class="stat-value">{{ unreportedCount }}</div>
-            <div class="stat-label">Prescrições Não Reportadas</div>
-          </mat-card-content>
-        </mat-card>
+  <!-- Quick Stats -->
+  <div class="stats-section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      </div>
+      <div>
+        <h3>Indicadores</h3>
+        <p>Resumo geral dos relatórios SNGPC</p>
+      </div>
+    </div>
 
-        <mat-card class="stat-card">
-          <mat-card-content>
-            <mat-icon class="stat-icon" color="accent">schedule</mat-icon>
-            <div class="stat-value">{{ overdueReports.length }}</div>
-            <div class="stat-label">Relatórios Atrasados</div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card class="stat-card">
-          <mat-card-content>
-            <mat-icon class="stat-icon" color="primary">check_circle</mat-icon>
-            <div class="stat-value">{{ transmittedThisYear }}</div>
-            <div class="stat-label">Transmitidos Este Ano</div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card class="stat-card" *ngIf="latestReport">
-          <mat-card-content>
-            <mat-icon class="stat-icon" [color]="latestReport.isOverdue ? 'warn' : 'primary'">timer</mat-icon>
-            <div class="stat-value">{{ latestReport.daysUntilDeadline }}</div>
-            <div class="stat-label">Dias até Prazo (Último)</div>
-          </mat-card-content>
-        </mat-card>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div class="stat-value">{{ unreportedCount }}</div>
+        <div class="stat-label">Prescrições Não Reportadas</div>
       </div>
 
-      <!-- Overdue Reports Alert -->
-      <mat-card class="alert-card" *ngIf="overdueReports.length > 0">
-        <mat-card-content>
-          <div class="alert-content">
-            <mat-icon class="alert-icon">warning</mat-icon>
-            <div>
-              <h3>Atenção: Relatórios Vencidos!</h3>
-              <p>Você tem {{ overdueReports.length }} relatório(s) SNGPC com prazo vencido. 
-                 Transmita imediatamente para evitar multas da ANVISA.</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div class="stat-value stat-warning">{{ overdueReports.length }}</div>
+        <div class="stat-label">Relatórios Atrasados</div>
+      </div>
 
-      <!-- Reports Table -->
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Histórico de Relatórios SNGPC</mat-card-title>
-          <button mat-raised-button color="primary" (click)="createNewReport()">
-            <mat-icon>add</mat-icon>
-            Gerar Novo Relatório
-          </button>
-        </mat-card-header>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div class="stat-value stat-success">{{ transmittedThisYear }}</div>
+        <div class="stat-label">Transmitidos Este Ano</div>
+      </div>
 
-        <mat-card-content>
-          <table mat-table [dataSource]="reports" class="reports-table">
-            <!-- Period Column -->
-            <ng-container matColumnDef="period">
-              <th mat-header-cell *matHeaderCellDef>Período</th>
-              <td mat-cell *matCellDef="let report">
-                {{ report.month | number:'2.0' }}/{{ report.year }}
-              </td>
-            </ng-container>
-
-            <!-- Status Column -->
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Status</th>
-              <td mat-cell *matCellDef="let report">
-                <mat-chip [class]="'status-' + report.status.toLowerCase()">
-                  {{ getStatusLabel(report.status) }}
-                </mat-chip>
-              </td>
-            </ng-container>
-
-            <!-- Prescriptions Column -->
-            <ng-container matColumnDef="prescriptions">
-              <th mat-header-cell *matHeaderCellDef>Prescrições</th>
-              <td mat-cell *matCellDef="let report">{{ report.totalPrescriptions }}</td>
-            </ng-container>
-
-            <!-- Items Column -->
-            <ng-container matColumnDef="items">
-              <th mat-header-cell *matHeaderCellDef>Itens</th>
-              <td mat-cell *matCellDef="let report">{{ report.totalItems }}</td>
-            </ng-container>
-
-            <!-- Deadline Column -->
-            <ng-container matColumnDef="deadline">
-              <th mat-header-cell *matHeaderCellDef>Prazo</th>
-              <td mat-cell *matCellDef="let report">
-                <span [class.overdue]="report.isOverdue">
-                  {{ report.daysUntilDeadline }} dias
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Ações</th>
-              <td mat-cell *matCellDef="let report">
-                <button mat-icon-button [matMenuTriggerFor]="menu">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="generateXML(report.id)">
-                    <mat-icon>code</mat-icon>
-                    <span>Gerar XML</span>
-                  </button>
-                  <button mat-menu-item (click)="downloadXML(report.id)">
-                    <mat-icon>download</mat-icon>
-                    <span>Baixar XML</span>
-                  </button>
-                  <button mat-menu-item (click)="transmitReport(report.id)">
-                    <mat-icon>send</mat-icon>
-                    <span>Transmitir</span>
-                  </button>
-                </mat-menu>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Info Panel -->
-      <mat-card class="info-card">
-        <mat-card-content>
-          <h3><mat-icon>info</mat-icon> Informações Importantes</h3>
-          <ul>
-            <li>Relatórios devem ser transmitidos até o dia 10 do mês seguinte</li>
-            <li>Inclui todas as prescrições de medicamentos controlados (Listas A, B e C1)</li>
-            <li>Multas por atraso: de R$ 5.000 a R$ 100.000 (Lei 6.360/76)</li>
-            <li>Formato XML deve seguir o schema ANVISA v2.1</li>
-            <li>Assinatura digital ICP-Brasil é obrigatória</li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
+      <div class="stat-card" *ngIf="latestReport">
+        <div class="stat-icon" [class.stat-warning]="latestReport.isOverdue">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div class="stat-value" [class.stat-warning]="latestReport.isOverdue">{{ latestReport.daysUntilDeadline }}</div>
+        <div class="stat-label">Dias até Prazo (Último)</div>
+      </div>
     </div>
+  </div>
+
+  <!-- Overdue Reports Alert -->
+  <div class="alert alert-warning" *ngIf="overdueReports.length > 0">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+    <div>
+      <strong>Atenção: Relatórios Vencidos!</strong>
+      <p>Você tem {{ overdueReports.length }} relatório(s) SNGPC com prazo vencido. Transmita imediatamente para evitar multas da ANVISA.</p>
+    </div>
+  </div>
+
+  <!-- Reports Table -->
+  <div class="reports-section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <div>
+        <h3>Histórico de Relatórios SNGPC</h3>
+        <p>Acompanhamento e gerenciamento dos relatórios gerados</p>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="reports" class="reports-table">
+        <!-- Period Column -->
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>Período</th>
+          <td mat-cell *matCellDef="let report">
+            {{ report.month | number:'2.0' }}/{{ report.year }}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let report">
+            <span 
+              class="badge" 
+              [ngClass]="{
+                'badge-default': report.status.toLowerCase() === 'draft',
+                'badge-info': report.status.toLowerCase() === 'generated',
+                'badge-success': report.status.toLowerCase() === 'transmitted' || report.status.toLowerCase() === 'validated',
+                'badge-error': report.status.toLowerCase() === 'transmissionfailed'
+              }"
+            >
+              {{ getStatusLabel(report.status) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Prescriptions Column -->
+        <ng-container matColumnDef="prescriptions">
+          <th mat-header-cell *matHeaderCellDef>Prescrições</th>
+          <td mat-cell *matCellDef="let report">{{ report.totalPrescriptions }}</td>
+        </ng-container>
+
+        <!-- Items Column -->
+        <ng-container matColumnDef="items">
+          <th mat-header-cell *matHeaderCellDef>Itens</th>
+          <td mat-cell *matCellDef="let report">{{ report.totalItems }}</td>
+        </ng-container>
+
+        <!-- Deadline Column -->
+        <ng-container matColumnDef="deadline">
+          <th mat-header-cell *matHeaderCellDef>Prazo</th>
+          <td mat-cell *matCellDef="let report">
+            <span [class.text-danger]="report.isOverdue" [class.text-success]="!report.isOverdue">
+              {{ report.daysUntilDeadline }} dias
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let report">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="generateXML(report.id)">
+                <mat-icon>code</mat-icon>
+                <span>Gerar XML</span>
+              </button>
+              <button mat-menu-item (click)="downloadXML(report.id)">
+                <mat-icon>download</mat-icon>
+                <span>Baixar XML</span>
+              </button>
+              <button mat-menu-item (click)="transmitReport(report.id)">
+                <mat-icon>send</mat-icon>
+                <span>Transmitir</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Info Panel -->
+  <div class="info-section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div>
+        <h3>Informações Importantes</h3>
+        <p>Diretrizes e requisitos para transmissão SNGPC</p>
+      </div>
+    </div>
+
+    <div class="info-content">
+      <ul>
+        <li>Relatórios devem ser transmitidos até o dia 10 do mês seguinte</li>
+        <li>Inclui todas as prescrições de medicamentos controlados (Listas A, B e C1)</li>
+        <li>Multas por atraso: de R$ 5.000 a R$ 100.000 (Lei 6.360/76)</li>
+        <li>Formato XML deve seguir o schema ANVISA v2.1</li>
+        <li>Assinatura digital ICP-Brasil é obrigatória</li>
+      </ul>
+    </div>
+  </div>
+</div>
