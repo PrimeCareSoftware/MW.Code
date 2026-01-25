@@ -133,6 +133,10 @@ namespace MedicSoft.Domain.Common
         public const string FormConfigurationView = "form-configuration.view";
         public const string FormConfigurationManage = "form-configuration.manage";
 
+        // Company Management (Owner only)
+        public const string CompanyView = "company.view";
+        public const string CompanyEdit = "company.edit";
+
         /// <summary>
         /// Gets all available permissions grouped by category
         /// </summary>
@@ -342,6 +346,13 @@ namespace MedicSoft.Domain.Common
                     {
                         new(FormConfigurationView, "Visualizar configuração de formulários"),
                         new(FormConfigurationManage, "Gerenciar configuração de formulários")
+                    }
+                },
+                {
+                    "Empresa", new List<PermissionInfo>
+                    {
+                        new(CompanyView, "Visualizar informações da empresa"),
+                        new(CompanyEdit, "Editar informações da empresa")
                     }
                 }
             };

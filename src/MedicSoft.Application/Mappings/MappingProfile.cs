@@ -182,6 +182,9 @@ namespace MedicSoft.Application.Mappings
 
             CreateMap<TissGuideProcedure, TissGuideProcedureDto>();
 
+            // Company mappings
+            CreateMap<Company, CompanyDto>();
+
             CreateMap<TissGuide, TissGuideDto>()
                 .ForMember(dest => dest.BatchNumber, opt => opt.MapFrom(src => src.TissBatch != null ? src.TissBatch.BatchNumber : string.Empty))
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.PatientHealthInsurance != null && src.PatientHealthInsurance.Patient != null ? src.PatientHealthInsurance.Patient.Name : string.Empty))
