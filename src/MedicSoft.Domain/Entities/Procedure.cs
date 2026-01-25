@@ -19,6 +19,12 @@ namespace MedicSoft.Domain.Entities
         public int DurationMinutes { get; private set; }
         public bool RequiresMaterials { get; private set; }
         public bool IsActive { get; private set; }
+        
+        // New fields for enhanced procedure management
+        public Guid? ClinicId { get; private set; }
+        public string? AcceptedHealthInsurances { get; private set; }
+        public bool AllowInMedicalAttendance { get; private set; }
+        public bool AllowInExclusiveProcedureAttendance { get; private set; }
 
         // Navigation property for materials
         private readonly List<ProcedureMaterial> _materials = new();
@@ -34,7 +40,9 @@ namespace MedicSoft.Domain.Entities
 
         public Procedure(string name, string code, string description,
             ProcedureCategory category, decimal price, int durationMinutes,
-            string tenantId, bool requiresMaterials = false) : base(tenantId)
+            string tenantId, bool requiresMaterials = false, Guid? clinicId = null,
+            string? acceptedHealthInsurances = null, bool allowInMedicalAttendance = true,
+            bool allowInExclusiveProcedureAttendance = false) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -56,10 +64,16 @@ namespace MedicSoft.Domain.Entities
             DurationMinutes = durationMinutes;
             RequiresMaterials = requiresMaterials;
             IsActive = true;
+            ClinicId = clinicId;
+            AcceptedHealthInsurances = acceptedHealthInsurances?.Trim();
+            AllowInMedicalAttendance = allowInMedicalAttendance;
+            AllowInExclusiveProcedureAttendance = allowInExclusiveProcedureAttendance;
         }
 
         public void Update(string name, string description, ProcedureCategory category,
-            decimal price, int durationMinutes, bool requiresMaterials)
+            decimal price, int durationMinutes, bool requiresMaterials, Guid? clinicId = null,
+            string? acceptedHealthInsurances = null, bool allowInMedicalAttendance = true,
+            bool allowInExclusiveProcedureAttendance = false)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -76,6 +90,10 @@ namespace MedicSoft.Domain.Entities
             Price = price;
             DurationMinutes = durationMinutes;
             RequiresMaterials = requiresMaterials;
+            ClinicId = clinicId;
+            AcceptedHealthInsurances = acceptedHealthInsurances?.Trim();
+            AllowInMedicalAttendance = allowInMedicalAttendance;
+            AllowInExclusiveProcedureAttendance = allowInExclusiveProcedureAttendance;
             UpdateTimestamp();
         }
 

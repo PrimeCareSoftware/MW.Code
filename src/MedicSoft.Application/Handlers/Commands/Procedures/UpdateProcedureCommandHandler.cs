@@ -31,7 +31,11 @@ namespace MedicSoft.Application.Handlers.Commands.Procedures
                 request.Procedure.Category,
                 request.Procedure.Price,
                 request.Procedure.DurationMinutes,
-                request.Procedure.RequiresMaterials
+                request.Procedure.RequiresMaterials,
+                request.Procedure.ClinicId,
+                request.Procedure.AcceptedHealthInsurances,
+                request.Procedure.AllowInMedicalAttendance,
+                request.Procedure.AllowInExclusiveProcedureAttendance
             );
 
             await _procedureRepository.UpdateAsync(procedure);

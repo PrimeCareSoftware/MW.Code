@@ -45,6 +45,19 @@ namespace MedicSoft.Repository.Configurations
 
             builder.Property(p => p.IsActive)
                 .IsRequired();
+            
+            builder.Property(p => p.ClinicId);
+            
+            builder.Property(p => p.AcceptedHealthInsurances)
+                .HasMaxLength(500);
+            
+            builder.Property(p => p.AllowInMedicalAttendance)
+                .IsRequired()
+                .HasDefaultValue(true);
+            
+            builder.Property(p => p.AllowInExclusiveProcedureAttendance)
+                .IsRequired()
+                .HasDefaultValue(false);
 
             builder.Property(p => p.TenantId)
                 .IsRequired()
