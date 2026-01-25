@@ -6,6 +6,7 @@ using MedicSoft.Telemedicine.Domain.Interfaces;
 using MedicSoft.Telemedicine.Infrastructure.ExternalServices;
 using MedicSoft.Telemedicine.Infrastructure.Persistence;
 using MedicSoft.Telemedicine.Infrastructure.Repositories;
+using MedicSoft.Telemedicine.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,7 @@ builder.Services.AddDbContext<TelemedicineDbContext>(options =>
 
 // Register Application Services
 builder.Services.AddScoped<ITelemedicineService, TelemedicineService>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
 // Register Domain Services
 builder.Services.AddScoped<ITelemedicineSessionRepository, TelemedicineSessionRepository>();
