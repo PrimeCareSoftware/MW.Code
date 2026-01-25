@@ -125,7 +125,7 @@ export interface LogDataAccessRequest {
   providedIn: 'root'
 })
 export class AuditService {
-  private apiUrl = `${environment.apiUrl}/api/Audit`;
+  private apiUrl = `${environment.apiUrl}/Audit`;
 
   constructor(private http: HttpClient) {}
 
