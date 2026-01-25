@@ -30,6 +30,7 @@ import { SoapRecord } from './models/soap-record.model';
     PlanFormComponent,
     SoapSummaryComponent
   ],
+  styleUrls: ['./soap-record.component.scss'],
   template: `
     <div class="soap-record-container">
       @if (loading) {
@@ -176,113 +177,7 @@ import { SoapRecord } from './models/soap-record.model';
         </mat-card>
       }
     </div>
-  `,
-  styles: [`
-    .soap-record-container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      font-size: 18px;
-      color: #666;
-    }
-
-    .header-card {
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-
-    .locked-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-left: 16px;
-      padding: 4px 12px;
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      font-size: 14px;
-    }
-
-    .locked-badge mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .locked-message {
-      text-align: center;
-      padding: 40px;
-      background-color: #fff3cd;
-      border: 1px solid #ffc107;
-    }
-
-    .locked-message mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: #ff9800;
-    }
-
-    .locked-message p {
-      font-size: 16px;
-      margin: 20px 0;
-    }
-
-    .error-card {
-      text-align: center;
-      padding: 40px;
-    }
-
-    .error-card mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: #f44336;
-    }
-
-    .step-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .step-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-
-    .step-icon.complete {
-      color: #4caf50;
-    }
-
-    .step-actions {
-      display: flex;
-      justify-content: space-between;
-      padding-top: 20px;
-      margin-top: 20px;
-      border-top: 1px solid #e0e0e0;
-    }
-
-    :host ::ng-deep .mat-stepper-horizontal {
-      background-color: transparent;
-    }
-
-    :host ::ng-deep .mat-step-header {
-      padding: 16px;
-    }
-
-    :host ::ng-deep .mat-step-header.cdk-keyboard-focused,
-    :host ::ng-deep .mat-step-header.cdk-program-focused,
-    :host ::ng-deep .mat-step-header:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-  `]
+  `
 })
 export class SoapRecordComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
