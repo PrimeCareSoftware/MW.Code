@@ -231,7 +231,8 @@ namespace MedicSoft.Api.Controllers
                     role: RoleNames.ClinicOwner,
                     clinicId: owner.ClinicId?.ToString(),
                     isSystemOwner: owner.IsSystemOwner,
-                    sessionId: sessionId
+                    sessionId: sessionId,
+                    ownerId: owner.Id.ToString()
                 );
 
                 _logger.LogInformation("JWT token generated successfully for owner: {OwnerId}", owner.Id);

@@ -96,6 +96,41 @@ namespace MedicSoft.Test.Services
         }
 
         [Fact]
+        public void GenerateToken_WithOwnerId_ShouldIncludeOwnerIdClaim()
+        {
+            // Arrange
+            var username = "clinicowner";
+            var userId = Guid.NewGuid().ToString();
+            var ownerId = Guid.NewGuid().ToString();
+            var tenantId = "clinic-tenant";
+            var role = "Owner";
+
+            // Act
+            var token = _jwtTokenService.GenerateToken(
+                username, 
+                userId, 
+                tenantId, 
+                role, 
+                clinicId: null, 
+                isSystemOwner: false, 
+                sessionId: null, 
+                ownerId: ownerId
+            );
+
+            // Assert
+            Assert.NotNull(token);
+            Assert.NotEmpty(token);
+
+            // Validate the token and check for owner_id claim
+            var principal = _jwtTokenService.ValidateToken(token);
+            Assert.NotNull(principal);
+
+            var ownerIdClaim = principal.Claims.FirstOrDefault(c => c.Type == "owner_id");
+            Assert.NotNull(ownerIdClaim);
+            Assert.Equal(ownerId, ownerIdClaim.Value);
+        }
+
+        [Fact]
         public void ValidateToken_WithInvalidToken_ShouldReturnNull()
         {
             // Arrange
