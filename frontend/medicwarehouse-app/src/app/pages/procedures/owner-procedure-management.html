@@ -12,8 +12,8 @@
         <span class="stat-label">Procedimentos</span>
       </div>
       <div class="stat-card">
-        <span class="stat-value">{{ getUniqueClinicCount() }}</span>
-        <span class="stat-label">Clínicas</span>
+        <span class="stat-value">{{ getActiveProceduresCount() }}</span>
+        <span class="stat-label">Ativos</span>
       </div>
     </div>
   </div>
@@ -52,7 +52,7 @@
           >
             <option value="">Todas</option>
             @for (category of getCategoryOptions(); track category) {
-              <option [value]="category">{{ procedureCategoryLabels[category] }}</option>
+              <option [value]="category">{{ getCategoryLabel(category) }}</option>
             }
           </select>
         </div>

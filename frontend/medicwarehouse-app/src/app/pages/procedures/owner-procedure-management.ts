@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
-import { Procedure, ProcedureCategoryLabels } from '../../models/procedure.model';
+import { Procedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
 import { debounceTime, Subject } from 'rxjs';
 
 @Component({
@@ -19,8 +19,9 @@ export class OwnerProcedureManagement implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   searchTerm = '';
-  selectedCategory = '';
+  selectedCategory: ProcedureCategory | '' = '';
   procedureCategoryLabels = ProcedureCategoryLabels;
+  procedureCategory = ProcedureCategory;
   private searchSubject = new Subject<string>();
 
   constructor(
@@ -67,8 +68,9 @@ export class OwnerProcedureManagement implements OnInit {
     }
 
     // Filter by category
-    if (this.selectedCategory) {
-      filtered = filtered.filter(proc => proc.category === this.selectedCategory);
+    if (this.selectedCategory !== '') {
+      const categoryValue = this.selectedCategory;
+      filtered = filtered.filter(proc => proc.category === categoryValue);
     }
 
     this.filteredProcedures.set(filtered);
@@ -82,16 +84,19 @@ export class OwnerProcedureManagement implements OnInit {
     this.filterProcedures();
   }
 
-  getCategoryOptions(): string[] {
-    return Object.keys(ProcedureCategoryLabels);
+  getCategoryOptions(): ProcedureCategory[] {
+    return Object.values(ProcedureCategory).filter(v => typeof v === 'number') as ProcedureCategory[];
+  }
+
+  getCategoryLabel(category: ProcedureCategory): string {
+    return this.procedureCategoryLabels[category];
   }
 
   navigateToView(id: string): void {
     this.router.navigate(['/procedures/edit', id]);
   }
 
-  getUniqueClinicCount(): number {
-    const clinicIds = new Set(this.filteredProcedures().map(p => p.tenantId));
-    return clinicIds.size;
+  getActiveProceduresCount(): number {
+    return this.procedures().filter(p => p.isActive).length;
   }
 }
