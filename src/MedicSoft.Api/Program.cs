@@ -289,6 +289,7 @@ builder.Services.AddScoped<ISNGPCReportRepository, SNGPCReportRepository>();
 builder.Services.AddScoped<IControlledMedicationRegistryRepository, ControlledMedicationRegistryRepository>();
 builder.Services.AddScoped<IMonthlyControlledBalanceRepository, MonthlyControlledBalanceRepository>();
 builder.Services.AddScoped<ISngpcTransmissionRepository, SngpcTransmissionRepository>();
+builder.Services.AddScoped<ISngpcAlertRepository, SngpcAlertRepository>();
 builder.Services.AddScoped<IPrescriptionSequenceControlRepository, PrescriptionSequenceControlRepository>();
 builder.Services.AddScoped<IPrescriptionPdfService, PrescriptionPdfService>();
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
