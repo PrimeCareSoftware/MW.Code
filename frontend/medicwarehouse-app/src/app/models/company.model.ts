@@ -31,6 +31,7 @@ export interface UpdateCompany {
   tradeName: string;
   phone: string;
   email: string;
+  subdomain?: string;
 }
 
 export const DocumentTypeLabels: Record<DocumentType, string> = {

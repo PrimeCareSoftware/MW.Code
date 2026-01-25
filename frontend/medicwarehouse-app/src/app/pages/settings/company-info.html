@@ -74,7 +74,7 @@
               <input 
                 type="text" 
                 id="documentType" 
-                [value]="documentTypeLabels[companyForm.get('documentType')?.value]"
+                [value]="getDocumentTypeLabel()"
                 class="form-control"
                 readonly
               />

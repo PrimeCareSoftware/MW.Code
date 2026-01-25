@@ -21,6 +21,7 @@ export class CompanyInfo implements OnInit {
   successMessage = signal<string>('');
   
   documentTypeLabels = DocumentTypeLabels;
+  DocumentType = DocumentType; // Make enum available in template
 
   constructor(
     private fb: FormBuilder,
@@ -110,5 +111,12 @@ export class CompanyInfo implements OnInit {
 
   onCancel(): void {
     this.router.navigate(['/dashboard']);
+  }
+
+  getDocumentTypeLabel(): string {
+    const docType = this.companyForm.get('documentType')?.value;
+    return docType !== null && docType !== undefined 
+      ? this.documentTypeLabels[docType as DocumentType] 
+      : '';
   }
 }
