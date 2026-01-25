@@ -16,6 +16,7 @@ namespace MedicSoft.Application.Services
     {
         private readonly ISNGPCReportRepository _reportRepository;
         private readonly IControlledMedicationRegistryRepository _registryRepository;
+        private readonly ISngpcAlertRepository _alertRepository;
         private readonly ILogger<SngpcAlertService> _logger;
         
         // ANVISA deadline: reports must be submitted by the 15th of the following month
@@ -24,14 +25,16 @@ namespace MedicSoft.Application.Services
         public SngpcAlertService(
             ISNGPCReportRepository reportRepository,
             IControlledMedicationRegistryRepository registryRepository,
+            ISngpcAlertRepository alertRepository,
             ILogger<SngpcAlertService> logger)
         {
             _reportRepository = reportRepository ?? throw new ArgumentNullException(nameof(reportRepository));
             _registryRepository = registryRepository ?? throw new ArgumentNullException(nameof(registryRepository));
+            _alertRepository = alertRepository ?? throw new ArgumentNullException(nameof(alertRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<SngpcAlert>> CheckApproachingDeadlinesAsync(
+        public async Task<IEnumerable<SngpcAlertDto>> CheckApproachingDeadlinesAsync(
             string tenantId, 
             int daysBeforeDeadline = 5)
         {
@@ -42,7 +45,7 @@ namespace MedicSoft.Application.Services
                 "Checking for approaching SNGPC deadlines for tenant {TenantId} (alert {Days} days before)",
                 tenantId, daysBeforeDeadline);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             // Check current month and previous months
@@ -67,17 +70,16 @@ namespace MedicSoft.Application.Services
 
                     if (report == null || report.Status != SNGPCReportStatus.Transmitted)
                     {
-                        alerts.Add(new SngpcAlert
-                        {
-                            Id = Guid.NewGuid(),
-                            TenantId = tenantId,
-                            Type = AlertType.DeadlineApproaching,
-                            Severity = daysUntilDeadline <= 2 ? AlertSeverity.Error : AlertSeverity.Warning,
-                            Title = $"Prazo SNGPC se aproximando - {month:D2}/{year}",
-                            Description = $"O relatório SNGPC de {month:D2}/{year} deve ser enviado à ANVISA até {deadline:dd/MM/yyyy}. Faltam {daysUntilDeadline} dias.",
-                            CreatedAt = now,
-                            RelatedReportId = report?.Id
-                        });
+                        var alert = await CreateAndPersistAlertAsync(
+                            tenantId,
+                            AlertType.DeadlineApproaching,
+                            daysUntilDeadline <= 2 ? AlertSeverity.Error : AlertSeverity.Warning,
+                            $"Prazo SNGPC se aproximando - {month:D2}/{year}",
+                            $"O relatório SNGPC de {month:D2}/{year} deve ser enviado à ANVISA até {deadline:dd/MM/yyyy}. Faltam {daysUntilDeadline} dias.",
+                            reportId: report?.Id
+                        );
+                        
+                        alerts.Add(alert);
                     }
                 }
             }
@@ -89,14 +91,14 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public async Task<IEnumerable<SngpcAlert>> CheckOverdueReportsAsync(string tenantId)
+        public async Task<IEnumerable<SngpcAlertDto>> CheckOverdueReportsAsync(string tenantId)
         {
             if (string.IsNullOrWhiteSpace(tenantId))
                 throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
 
             _logger.LogInformation("Checking for overdue SNGPC reports for tenant {TenantId}", tenantId);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             // Check previous 12 months for overdue reports
@@ -121,31 +123,27 @@ namespace MedicSoft.Application.Services
                 if (report == null)
                 {
                     var daysOverdue = (now - deadline).Days;
-                    alerts.Add(new SngpcAlert
-                    {
-                        Id = Guid.NewGuid(),
-                        TenantId = tenantId,
-                        Type = AlertType.MissingReport,
-                        Severity = AlertSeverity.Critical,
-                        Title = $"Relatório SNGPC não gerado - {month:D2}/{year}",
-                        Description = $"O relatório SNGPC de {month:D2}/{year} não foi gerado. Prazo vencido há {daysOverdue} dias. ANVISA pode aplicar multa.",
-                        CreatedAt = now
-                    });
+                    var alert = await CreateAndPersistAlertAsync(
+                        tenantId,
+                        AlertType.MissingReport,
+                        AlertSeverity.Critical,
+                        $"Relatório SNGPC não gerado - {month:D2}/{year}",
+                        $"O relatório SNGPC de {month:D2}/{year} não foi gerado. Prazo vencido há {daysOverdue} dias. ANVISA pode aplicar multa."
+                    );
+                    alerts.Add(alert);
                 }
                 else if (report.Status != SNGPCReportStatus.Transmitted)
                 {
                     var daysOverdue = (now - deadline).Days;
-                    alerts.Add(new SngpcAlert
-                    {
-                        Id = Guid.NewGuid(),
-                        TenantId = tenantId,
-                        Type = AlertType.DeadlineOverdue,
-                        Severity = AlertSeverity.Critical,
-                        Title = $"Relatório SNGPC não transmitido - {month:D2}/{year}",
-                        Description = $"O relatório SNGPC de {month:D2}/{year} foi gerado mas não transmitido à ANVISA. Prazo vencido há {daysOverdue} dias.",
-                        CreatedAt = now,
-                        RelatedReportId = report.Id
-                    });
+                    var alert = await CreateAndPersistAlertAsync(
+                        tenantId,
+                        AlertType.DeadlineOverdue,
+                        AlertSeverity.Critical,
+                        $"Relatório SNGPC vencido - {month:D2}/{year}",
+                        $"O relatório SNGPC de {month:D2}/{year} está vencido há {daysOverdue} dias. Transmissão urgente necessária para evitar multa ANVISA.",
+                        reportId: report.Id
+                    );
+                    alerts.Add(alert);
                 }
             }
 
@@ -156,14 +154,14 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public async Task<IEnumerable<SngpcAlert>> ValidateComplianceAsync(string tenantId)
+        public async Task<IEnumerable<SngpcAlertDto>> ValidateComplianceAsync(string tenantId)
         {
             if (string.IsNullOrWhiteSpace(tenantId))
                 throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
 
             _logger.LogInformation("Validating SNGPC compliance for tenant {TenantId}", tenantId);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             // Get all registry entries for the current month
@@ -182,18 +180,16 @@ namespace MedicSoft.Application.Services
             foreach (var group in negativeBalances)
             {
                 var latestEntry = group.OrderByDescending(e => e.Date).First();
-                alerts.Add(new SngpcAlert
-                {
-                    Id = Guid.NewGuid(),
-                    TenantId = tenantId,
-                    Type = AlertType.NegativeBalance,
-                    Severity = AlertSeverity.Critical,
-                    Title = $"Saldo negativo detectado: {group.Key}",
-                    Description = $"O medicamento controlado '{group.Key}' apresenta saldo negativo ({latestEntry.Balance}). Isso viola as normas da ANVISA.",
-                    CreatedAt = now,
-                    RelatedRegistryId = latestEntry.Id,
-                    RelatedMedication = group.Key
-                });
+                var alert = await CreateAndPersistAlertAsync(
+                    tenantId,
+                    AlertType.NegativeBalance,
+                    AlertSeverity.Critical,
+                    $"Saldo negativo detectado: {group.Key}",
+                    $"O medicamento controlado '{group.Key}' apresenta saldo negativo ({latestEntry.Balance}). Isso viola as normas da ANVISA.",
+                    registryId: latestEntry.Id,
+                    medicationName: group.Key
+                );
+                alerts.Add(alert);
             }
 
             // Check for missing consecutive entries
@@ -217,18 +213,16 @@ namespace MedicSoft.Application.Services
                     
                     if (Math.Abs(expectedBalance - current.Balance) > 0.01m)
                     {
-                        alerts.Add(new SngpcAlert
-                        {
-                            Id = Guid.NewGuid(),
-                            TenantId = tenantId,
-                            Type = AlertType.InvalidBalance,
-                            Severity = AlertSeverity.Error,
-                            Title = $"Inconsistência no saldo: {group.Key}",
-                            Description = $"O saldo registrado ({current.Balance}) não corresponde ao saldo calculado ({expectedBalance}) para '{group.Key}' em {current.Date:dd/MM/yyyy}.",
-                            CreatedAt = now,
-                            RelatedRegistryId = current.Id,
-                            RelatedMedication = group.Key
-                        });
+                        var alert = await CreateAndPersistAlertAsync(
+                            tenantId,
+                            AlertType.InvalidBalance,
+                            AlertSeverity.Error,
+                            $"Inconsistência no saldo: {group.Key}",
+                            $"O saldo registrado ({current.Balance}) não corresponde ao saldo calculado ({expectedBalance}) para '{group.Key}' em {current.Date:dd/MM/yyyy}.",
+                            registryId: current.Id,
+                            medicationName: group.Key
+                        );
+                        alerts.Add(alert);
                     }
                 }
             }
@@ -240,7 +234,7 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public async Task<IEnumerable<SngpcAlert>> DetectAnomaliesAsync(
+        public async Task<IEnumerable<SngpcAlertDto>> DetectAnomaliesAsync(
             string tenantId, 
             DateTime startDate, 
             DateTime endDate)
@@ -255,7 +249,7 @@ namespace MedicSoft.Application.Services
                 "Detecting anomalies for tenant {TenantId} from {StartDate} to {EndDate}",
                 tenantId, startDate, endDate);
 
-            var alerts = new List<SngpcAlert>();
+            var alerts = new List<SngpcAlertDto>();
             var now = DateTime.UtcNow;
 
             var entries = await _registryRepository.GetByPeriodAsync(startDate, endDate, tenantId);
@@ -291,18 +285,16 @@ namespace MedicSoft.Application.Services
 
                 foreach (var entry in excessiveDispensing)
                 {
-                    alerts.Add(new SngpcAlert
-                    {
-                        Id = Guid.NewGuid(),
-                        TenantId = tenantId,
-                        Type = AlertType.ExcessiveDispensing,
-                        Severity = AlertSeverity.Warning,
-                        Title = $"Dispensação excessiva detectada: {group.Key}",
-                        Description = $"Foram dispensadas {entry.QuantityOut} unidades de '{group.Key}' em {entry.Date:dd/MM/yyyy}, significativamente acima da média diária ({averagePerDay:F2}).",
-                        CreatedAt = now,
-                        RelatedRegistryId = entry.Id,
-                        RelatedMedication = group.Key
-                    });
+                    var alert = await CreateAndPersistAlertAsync(
+                        tenantId,
+                        AlertType.ExcessiveDispensing,
+                        AlertSeverity.Warning,
+                        $"Dispensação excessiva detectada: {group.Key}",
+                        $"Foram dispensadas {entry.QuantityOut} unidades de '{group.Key}' em {entry.Date:dd/MM/yyyy}, significativamente acima da média diária ({averagePerDay:F2}).",
+                        registryId: entry.Id,
+                        medicationName: group.Key
+                    );
+                    alerts.Add(alert);
                 }
 
                 // Check for unusual movement patterns (large stock entries without corresponding dispensing)
@@ -311,18 +303,16 @@ namespace MedicSoft.Application.Services
 
                 foreach (var entry in largeInbound)
                 {
-                    alerts.Add(new SngpcAlert
-                    {
-                        Id = Guid.NewGuid(),
-                        TenantId = tenantId,
-                        Type = AlertType.UnusualMovement,
-                        Severity = AlertSeverity.Info,
-                        Title = $"Entrada de estoque incomum: {group.Key}",
-                        Description = $"Entrada de {entry.QuantityIn} unidades de '{group.Key}' em {entry.Date:dd/MM/yyyy} é significativamente maior que o padrão de dispensação.",
-                        CreatedAt = now,
-                        RelatedRegistryId = entry.Id,
-                        RelatedMedication = group.Key
-                    });
+                    var alert = await CreateAndPersistAlertAsync(
+                        tenantId,
+                        AlertType.UnusualMovement,
+                        AlertSeverity.Info,
+                        $"Entrada de estoque incomum: {group.Key}",
+                        $"Entrada de {entry.QuantityIn} unidades de '{group.Key}' em {entry.Date:dd/MM/yyyy} é significativamente maior que o padrão de dispensação.",
+                        registryId: entry.Id,
+                        medicationName: group.Key
+                    );
+                    alerts.Add(alert);
                 }
             }
 
@@ -333,55 +323,112 @@ namespace MedicSoft.Application.Services
             return alerts;
         }
 
-        public Task<IEnumerable<SngpcAlert>> GetActiveAlertsAsync(
+        public async Task<IEnumerable<SngpcAlertDto>> GetActiveAlertsAsync(
             string tenantId, 
             AlertSeverity? severity = null)
         {
-            // This would be implemented with a proper alerts repository
-            // For now, we'll return an empty list as alerts are generated on-demand
+            if (string.IsNullOrWhiteSpace(tenantId))
+                throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
+            
             _logger.LogInformation(
                 "Getting active alerts for tenant {TenantId} with severity filter: {Severity}",
                 tenantId, severity);
 
-            return Task.FromResult(Enumerable.Empty<SngpcAlert>());
+            var alerts = await _alertRepository.GetActiveAlertsAsync(tenantId, severity);
+            return alerts.Select(ToDto).ToList();
         }
 
-        public Task AcknowledgeAlertAsync(Guid alertId, Guid userId, string? notes = null)
+        public async Task AcknowledgeAlertAsync(Guid alertId, Guid userId, string? notes = null)
         {
-            // NOTE: This is a stub implementation. A full implementation would:
-            // 1. Have an ISngpcAlertRepository to persist alerts
-            // 2. Load the alert from the repository
-            // 3. Mark it as acknowledged with timestamp and user
-            // 4. Save the changes back to the database
-            // 
-            // For now, alerts are generated on-demand and not persisted.
-            // This is sufficient for compliance monitoring and notifications,
-            // but a production system should persist alerts for audit trail.
-            
             _logger.LogInformation(
-                "Alert acknowledgment called for {AlertId} by user {UserId} (stub implementation)",
+                "Acknowledging alert {AlertId} by user {UserId}",
                 alertId, userId);
 
-            return Task.CompletedTask;
+            var alert = await _alertRepository.GetByIdAsync(alertId);
+            if (alert == null)
+                throw new InvalidOperationException($"Alert {alertId} not found");
+
+            alert.Acknowledge(userId, notes);
+            await _alertRepository.UpdateAsync(alert);
         }
 
-        public Task ResolveAlertAsync(Guid alertId, Guid userId, string resolution)
+        public async Task ResolveAlertAsync(Guid alertId, Guid userId, string resolution)
         {
-            // NOTE: This is a stub implementation. A full implementation would:
-            // 1. Have an ISngpcAlertRepository to persist alerts
-            // 2. Load the alert from the repository
-            // 3. Mark it as resolved with timestamp, user, and resolution notes
-            // 4. Save the changes back to the database
-            // 
-            // For now, alerts are generated on-demand and not persisted.
-            // This is sufficient for compliance monitoring and notifications,
-            // but a production system should persist alerts for audit trail.
+            if (string.IsNullOrWhiteSpace(resolution))
+                throw new ArgumentException("Resolution is required", nameof(resolution));
             
             _logger.LogInformation(
-                "Alert resolution called for {AlertId} by user {UserId}: {Resolution} (stub implementation)",
+                "Resolving alert {AlertId} by user {UserId}: {Resolution}",
                 alertId, userId, resolution);
 
-            return Task.CompletedTask;
+            var alert = await _alertRepository.GetByIdAsync(alertId);
+            if (alert == null)
+                throw new InvalidOperationException($"Alert {alertId} not found");
+
+            alert.Resolve(userId, resolution);
+            await _alertRepository.UpdateAsync(alert);
+        }
+
+        /// <summary>
+        /// Helper method to convert domain entity to DTO
+        /// </summary>
+        private SngpcAlertDto ToDto(SngpcAlert alert)
+        {
+            return new SngpcAlertDto
+            {
+                Id = alert.Id,
+                TenantId = alert.TenantId,
+                Type = alert.Type,
+                Severity = alert.Severity,
+                Title = alert.Title,
+                Description = alert.Description,
+                CreatedAt = alert.CreatedAt,
+                AcknowledgedAt = alert.AcknowledgedAt,
+                AcknowledgedByUserId = alert.AcknowledgedByUserId,
+                AcknowledgmentNotes = alert.AcknowledgmentNotes,
+                ResolvedAt = alert.ResolvedAt,
+                ResolvedByUserId = alert.ResolvedByUserId,
+                Resolution = alert.Resolution,
+                RelatedReportId = alert.RelatedReportId,
+                RelatedRegistryId = alert.RelatedRegistryId,
+                RelatedMedication = alert.RelatedMedication,
+                AdditionalData = alert.AdditionalData
+            };
+        }
+
+        /// <summary>
+        /// Helper method to create and persist an alert
+        /// </summary>
+        private async Task<SngpcAlertDto> CreateAndPersistAlertAsync(
+            string tenantId,
+            AlertType type,
+            AlertSeverity severity,
+            string title,
+            string description,
+            Guid? reportId = null,
+            Guid? registryId = null,
+            string? medicationName = null)
+        {
+            SngpcAlert alert;
+
+            if (reportId.HasValue)
+            {
+                alert = SngpcAlert.CreateReportAlert(tenantId, type, severity, title, description, reportId.Value);
+            }
+            else if (registryId.HasValue)
+            {
+                alert = SngpcAlert.CreateRegistryAlert(tenantId, type, severity, title, description, registryId.Value, medicationName);
+            }
+            else
+            {
+                alert = new SngpcAlert(tenantId, type, severity, title, description);
+            }
+
+            await _alertRepository.AddAsync(alert);
+            
+            _logger.LogDebug("Created and persisted alert: {Type} - {Title}", type, title);
+            
+            return ToDto(alert);
         }
     }
 }

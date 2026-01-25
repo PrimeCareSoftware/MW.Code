@@ -1,7 +1,7 @@
 # SNGPC Integration - Implementation Status
 
 **Date:** January 25, 2026  
-**Overall Status:** 95% Complete  
+**Overall Status:** 97% Complete  
 **Compliance:** ✅ ANVISA RDC 27/2007 + Portaria 344/1998  
 **Production Ready:** Backend Yes | Frontend Partial
 
@@ -9,9 +9,9 @@
 
 ## 📊 Executive Summary
 
-The SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) implementation is **95% complete**. All critical backend infrastructure, business logic, data layer, and API endpoints are production-ready and fully compliant with ANVISA regulations. 
+The SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) implementation is **97% complete**. All critical backend infrastructure, business logic, data layer, and API endpoints are production-ready and fully compliant with ANVISA regulations. 
 
-**What's Complete (95%):**
+**What's Complete (97%):**
 - ✅ All domain entities with business logic
 - ✅ Complete data access layer with optimized queries
 - ✅ All application services (Registry, Balance, Transmission, Alerts)
@@ -19,12 +19,12 @@ The SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) implementa
 - ✅ XML generation per ANVISA schema v2.1
 - ✅ ANVISA webservice client with retry logic
 - ✅ Comprehensive alert and monitoring system
+- ✅ **Alert persistence layer with full audit trail** (NEW - January 25, 2026)
 - ✅ Dashboard component (Angular)
 - ✅ Database migrations
 
-**What's Remaining (5%):**
-- ⏳ Additional frontend components (registry browser, inventory recorder)
-- ⏳ Alert persistence layer (currently alerts are generated on-demand)
+**What's Remaining (3%):**
+- ⏳ Additional frontend components (registry browser, inventory recorder, reconciliation UI, transmission history viewer)
 - ⏳ Real ANVISA API credentials configuration
 - ⏳ End-to-end integration testing with ANVISA homologation environment
 
@@ -100,6 +100,35 @@ The SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) implementa
 - `MarkAsRetrying()` - Prepare for retry
 - `CanRetry()` - Check if retry is possible
 
+#### SngpcAlert
+**Purpose:** Persistent storage for SNGPC compliance alerts  
+**Location:** `src/MedicSoft.Domain/Entities/SngpcAlert.cs`  
+**Lines of Code:** 194  
+**Status:** ✅ Production Ready (Added January 25, 2026)
+
+**Features:**
+- Persistent alert storage with full audit trail
+- Support for 11 alert types (deadline, compliance, anomalies)
+- 4 severity levels (Info, Warning, Error, Critical)
+- Acknowledgement tracking (who, when, notes)
+- Resolution workflow (who, when, resolution description)
+- Links to related entities (reports, registries, balances)
+- JSON storage for additional contextual data
+
+**Business Methods:**
+- `Acknowledge()` - Mark alert as acknowledged
+- `Resolve()` - Mark alert as resolved
+- `Reopen()` - Reopen a resolved alert
+- `IsActive()` - Check if alert needs attention
+- `IsAcknowledged()` - Check acknowledgement status
+- `GetAgeInDays()` - Calculate alert age
+
+**Alert Types:**
+- DeadlineApproaching, DeadlineOverdue, MissingReport
+- InvalidBalance, NegativeBalance, MissingRegistryEntry
+- TransmissionFailed, UnusualMovement, ExcessiveDispensing
+- ComplianceViolation, SystemError
+
 ---
 
 ### 2. Data Access Layer (100%)
@@ -125,6 +154,16 @@ The SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) implementa
    - `GetByReportIdAsync()` - Get transmissions for report
    - `GetFailedTransmissionsAsync()` - Find failed attempts
    - `GetTransmissionStatisticsAsync()` - Calculate metrics
+
+4. **ISngpcAlertRepository** (NEW - January 25, 2026)
+   - `AddAsync()` / `UpdateAsync()` - Persist alerts
+   - `GetActiveAlertsAsync()` - Get active alerts by tenant
+   - `GetByTypeAsync()` - Filter by alert type
+   - `GetByReportIdAsync()` / `GetByRegistryIdAsync()` / `GetByBalanceIdAsync()` - Get related alerts
+   - `GetUnacknowledgedAlertsAsync()` - Get alerts needing attention
+   - `GetResolvedAlertsAsync()` - Get historical alerts
+   - `GetActiveAlertCountBySeverityAsync()` - Statistics
+   - `DeleteOldResolvedAlertsAsync()` - Cleanup old alerts
 
 #### Repository Implementations
 **Location:** `src/MedicSoft.Repository/Repositories/`  

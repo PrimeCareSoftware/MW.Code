@@ -92,6 +92,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<ControlledMedicationRegistry> ControlledMedicationRegistries { get; set; } = null!;
         public DbSet<MonthlyControlledBalance> MonthlyControlledBalances { get; set; } = null!;
         public DbSet<SngpcTransmission> SngpcTransmissions { get; set; } = null!;
+        public DbSet<SngpcAlert> SngpcAlerts { get; set; } = null!;
         
         // Sales Funnel Metrics
         public DbSet<SalesFunnelMetric> SalesFunnelMetrics { get; set; } = null!;
@@ -193,6 +194,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ControlledMedicationRegistryConfiguration());
             modelBuilder.ApplyConfiguration(new MonthlyControlledBalanceConfiguration());
             modelBuilder.ApplyConfiguration(new SngpcTransmissionConfiguration());
+            modelBuilder.ApplyConfiguration(new SngpcAlertConfiguration());
             
             // Sales Funnel Metrics
             modelBuilder.ApplyConfiguration(new SalesFunnelMetricConfiguration());
