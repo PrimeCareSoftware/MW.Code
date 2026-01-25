@@ -207,7 +207,7 @@ export class SoapListComponent implements OnInit {
 
   ngOnInit(): void {
     // For now, we'll load all records. In a real app, you'd filter by patient
-    // this.loadRecords();
+    this.loadRecords();
   }
 
   loadRecords(): void {
