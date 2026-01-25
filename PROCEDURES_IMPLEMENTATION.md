@@ -111,7 +111,7 @@ The system now provides two options for managing and recording procedures perfor
 
 ---
 
-## Integration Between Both Options
+## Integration Between All Options
 
 ### How They Work Together
 
@@ -126,7 +126,13 @@ The system now provides two options for managing and recording procedures perfor
    - System uses default price or allows customization
    - Procedures are recorded against the appointment
 
-3. **Billing Integration**
+3. **Cross-Clinic Oversight** (Option 3)
+   - Owners view consolidated procedures from all their clinics
+   - Monitor pricing and catalog consistency
+   - Access details and navigate to specific clinics for editing
+   - Maintain quality standards across clinic network
+
+4. **Billing Integration**
    - All procedures added during attendance contribute to total cost
    - System maintains detailed record of each procedure performed
    - Payment registration links to specific procedures
@@ -153,10 +159,97 @@ The system now provides two options for managing and recording procedures perfor
 - `procedures.create` - Create new procedures
 - `procedures.edit` - Edit existing procedures
 - `procedures.delete` - Deactivate procedures
+- `procedures.manage` - Owner-level: Manage procedures across all owned clinics (see Option 3 below)
+
+---
+
+## Option 3: Owner Procedures Management (Cross-Clinic View)
+
+### Location
+- **Menu Path**: Procedimentos → Gerenciar Procedimentos (Proprietário)
+- **Direct URL**: `/procedures/owner-management`
+- **Availability**: Only visible to clinic owners
+
+### Overview
+For clinic owners who manage multiple clinics, this option provides a consolidated view of all procedures across all owned clinics. This is a read-only view designed for oversight and monitoring.
+
+### Workflow
+1. **Accessing Owner Management**
+   - Menu item appears only for users with Owner or ClinicOwner role
+   - Click "Gerenciar Procedimentos (Proprietário)" in the Procedimentos section
+   - System automatically fetches procedures from all clinics owned by the user
+
+2. **Viewing Consolidated Procedures**
+   - See all procedures from all owned clinics in a single view
+   - Statistics dashboard shows:
+     - Total procedures count
+     - Active procedures count
+   - Data updates automatically based on ownership relationships
+
+3. **Filtering and Search**
+   - **Search**: Real-time search by code, name, or description
+   - **Category Filter**: Filter by procedure category (Consultation, Exam, Surgery, etc.)
+   - **Debounced Search**: Smooth UX with 300ms delay
+   - Filters work on client-side for fast response
+
+4. **Viewing Details**
+   - Click view icon to see full procedure details
+   - Redirects to the procedure edit form (in the context of that specific clinic)
+   - Maintains proper clinic context for editing
+
+### Features
+- ✅ Cross-clinic visibility for procedures
+- ✅ Consolidated statistics and counts
+- ✅ Advanced filtering by category
+- ✅ Real-time search functionality
+- ✅ Automatic owner detection and verification
+- ✅ Permission-based menu visibility
+- ✅ Read-only view mode (viewing only, editing via clinic-specific interface)
+
+### Use Cases
+- **Multi-Clinic Oversight**: View all procedures across clinic network
+- **Standardization Review**: Compare procedures between clinics
+- **Price Monitoring**: Check procedure pricing consistency
+- **Catalog Auditing**: Verify all clinics have necessary procedures
+- **Quality Assurance**: Ensure procedure definitions are consistent
+
+### Security & Permissions
+- Requires `procedures.manage` permission
+- Protected by both `authGuard` and `ownerGuard`
+- Backend verifies owner status via database (not just JWT claims)
+- Respects clinic ownership relationships via `OwnerClinicLink` table
+- Prevents permission spoofing through server-side validation
+
+### Technical Implementation
+- **Backend**: Uses `GetByOwnerAsync()` with SQL JOIN on `OwnerClinicLink`
+- **Performance**: Single query with JOIN avoids N+1 problem
+- **Frontend**: Angular standalone component with lazy loading
+- **State Management**: Uses Angular signals for reactive updates
+- **Data Flow**: Automatic role detection → owner ID → cross-clinic query
+
+### Differences from Option 2
+| Feature | Option 2 (Clinic) | Option 3 (Owner) |
+|---------|------------------|------------------|
+| Scope | Single clinic | All owned clinics |
+| Permissions | `procedures.*` | `procedures.manage` |
+| Editing | Full CRUD | View only |
+| Navigation | Create, Edit, Delete | View details |
+| Use Case | Daily management | Oversight & monitoring |
+| User Roles | Clinic admins | Clinic owners |
+
+### Implementation Details
+For full technical documentation, see: `PR367_OWNER_PROCEDURES_IMPLEMENTATION.md`
 
 ---
 
 ## User Guide Summary
+
+### For System/Clinic Owners
+Use **Option 3** (Owner Management) to:
+- View procedures across all your clinics
+- Monitor pricing and catalog consistency
+- Oversee procedure standardization
+- Audit procedure availability across clinic network
 
 ### For Clinic Administrators
 Use **Option 2** (Standalone Management) to:
@@ -181,12 +274,14 @@ Use **Option 1** (Attendance Form) to:
 
 ## Benefits of This Implementation
 
-1. ✅ **Flexibility**: Two ways to work with procedures based on context
-2. ✅ **Integration**: Both options share same data and billing system
+1. ✅ **Flexibility**: Three ways to work with procedures based on role and context
+2. ✅ **Integration**: All options share same data and billing system
 3. ✅ **Accuracy**: Pre-configured procedures reduce data entry errors
 4. ✅ **Control**: Centralized procedure management with proper permissions
 5. ✅ **Traceability**: Every procedure is recorded with patient, date, and cost
 6. ✅ **Billing**: Automatic cost calculation for accurate patient billing
+7. ✅ **Multi-Clinic Support**: Owners can oversee multiple clinics efficiently
+8. ✅ **Security**: Proper permission checks and role-based access control
 
 ---
 
@@ -200,7 +295,12 @@ Use **Option 1** (Attendance Form) to:
 - Existing attendance form already has procedure integration
 - Cost calculation working
 - Payment registration functional
+- **Owner procedures management with cross-clinic visibility**
+- **Permission-based menu item visibility**
+- **Automatic owner detection and verification**
 
-✅ **Both Required Options Implemented**:
+✅ **All Required Options Implemented**:
 1. Procedures in attendance form (already existed, now documented)
-2. Standalone procedures management page (newly created)
+2. Standalone procedures management page (existing feature)
+3. Owner cross-clinic procedures management (newly created - PR 367)
+

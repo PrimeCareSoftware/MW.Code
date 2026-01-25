@@ -1,0 +1,108 @@
+<app-navbar></app-navbar>
+
+<div class="procedure-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Gerenciar Procedimentos (Proprietário)</h1>
+      <p>Visualize procedimentos de todas as suas clínicas</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-card">
+        <span class="stat-value">{{ filteredProcedures().length }}</span>
+        <span class="stat-label">Procedimentos</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ activeProceduresCount() }}</span>
+        <span class="stat-label">Ativos</span>
+      </div>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando procedimentos...</div>
+    </div>
+  } @else {
+    <div class="procedures-card">
+      <div class="card-header">
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Buscar por código, nome ou descrição..." 
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
+        </div>
+        <div class="filter-box">
+          <label for="categoryFilter">Categoria:</label>
+          <select 
+            id="categoryFilter" 
+            class="filter-select"
+            [(ngModel)]="selectedCategory"
+            (change)="onCategoryChange()"
+          >
+            <option value="">Todas</option>
+            @for (category of getCategoryOptions(); track category) {
+              <option [value]="category">{{ getCategoryLabel(category) }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table class="procedures-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Preço</th>
+              <th>Duração</th>
+              <th>Status</th>
+              <th class="actions-col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (procedure of filteredProcedures(); track procedure.id) {
+              <tr>
+                <td><span class="procedure-code">{{ procedure.code }}</span></td>
+                <td><strong>{{ procedure.name }}</strong></td>
+                <td>{{ procedureCategoryLabels[procedure.category] }}</td>
+                <td>{{ procedure.price | currency:'BRL':'symbol':'1.2-2' }}</td>
+                <td>{{ procedure.durationMinutes }} min</td>
+                <td>
+                  <span class="badge" [class.badge-success]="procedure.isActive" [class.badge-secondary]="!procedure.isActive">
+                    {{ procedure.isActive ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+                <td class="actions-cell">
+                  <div class="action-buttons">
+                    <button class="btn-icon btn-view" (click)="navigateToView(procedure.id)" title="Visualizar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center text-muted">Nenhum procedimento encontrado</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>
