@@ -19,8 +19,16 @@ namespace MedicSoft.Application.Handlers.Queries.Procedures
 
         public async Task<IEnumerable<ProcedureDto>> Handle(GetProceduresByClinicQuery request, CancellationToken cancellationToken)
         {
-            var procedures = await _procedureRepository.GetByClinicAsync(request.TenantId, request.ActiveOnly);
-            return _mapper.Map<IEnumerable<ProcedureDto>>(procedures);
+            // If OwnerId is provided, get procedures across all owned clinics
+            if (request.OwnerId.HasValue)
+            {
+                var procedures = await _procedureRepository.GetByOwnerAsync(request.OwnerId.Value, request.ActiveOnly);
+                return _mapper.Map<IEnumerable<ProcedureDto>>(procedures);
+            }
+            
+            // Otherwise, get procedures for the specific clinic
+            var clinicProcedures = await _procedureRepository.GetByClinicAsync(request.TenantId, request.ActiveOnly);
+            return _mapper.Map<IEnumerable<ProcedureDto>>(clinicProcedures);
         }
     }
 }

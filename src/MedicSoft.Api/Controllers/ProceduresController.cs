@@ -7,6 +7,7 @@ using MedicSoft.Application.Queries.Procedures;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -16,21 +17,41 @@ namespace MedicSoft.Api.Controllers
     public class ProceduresController : BaseController
     {
         private readonly IMediator _mediator;
+        private readonly IOwnerRepository _ownerRepository;
 
-        public ProceduresController(IMediator mediator, ITenantContext tenantContext)
+        public ProceduresController(IMediator mediator, ITenantContext tenantContext, IOwnerRepository ownerRepository)
             : base(tenantContext)
         {
             _mediator = mediator;
+            _ownerRepository = ownerRepository;
         }
 
         /// <summary>
         /// Get all procedures for the clinic (requires procedures.view permission)
+        /// For clinic owners, returns procedures from all owned clinics
         /// </summary>
         [HttpGet]
         [RequirePermissionKey(PermissionKeys.ProceduresView)]
         public async Task<ActionResult<IEnumerable<ProcedureDto>>> GetAll([FromQuery] bool activeOnly = true)
         {
-            var query = new GetProceduresByClinicQuery(GetTenantId(), activeOnly);
+            var userId = GetUserId();
+            var tenantId = GetTenantId();
+            Guid? ownerId = null;
+
+            // Check if user is authenticated as an owner
+            var roleClaim = User?.FindFirst("role")?.Value;
+            
+            if (roleClaim == RoleNames.ClinicOwner && userId != Guid.Empty)
+            {
+                // Verify the user is indeed an owner
+                var owner = await _ownerRepository.GetByIdAsync(userId, tenantId);
+                if (owner != null)
+                {
+                    ownerId = owner.Id;
+                }
+            }
+
+            var query = new GetProceduresByClinicQuery(tenantId, activeOnly, ownerId);
             var procedures = await _mediator.Send(query);
             return Ok(procedures);
         }

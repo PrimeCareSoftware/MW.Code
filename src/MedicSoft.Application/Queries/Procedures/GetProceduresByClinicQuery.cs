@@ -7,11 +7,13 @@ namespace MedicSoft.Application.Queries.Procedures
     {
         public string TenantId { get; }
         public bool ActiveOnly { get; }
+        public Guid? OwnerId { get; }
 
-        public GetProceduresByClinicQuery(string tenantId, bool activeOnly = true)
+        public GetProceduresByClinicQuery(string tenantId, bool activeOnly = true, Guid? ownerId = null)
         {
             TenantId = tenantId;
             ActiveOnly = activeOnly;
+            OwnerId = ownerId;
         }
     }
 }
