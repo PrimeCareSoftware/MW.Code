@@ -41,7 +41,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             var firstClinicLink = ownerClinics.FirstOrDefault();
             if (firstClinicLink != null)
             {
-                var subscription = await _subscriptionRepository.GetByClinicIdAsync(firstClinicLink.ClinicId);
+                var subscription = await _subscriptionRepository.GetByClinicIdAsync(firstClinicLink.ClinicId, request.TenantId);
                 if (subscription != null)
                 {
                     var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, request.TenantId);
@@ -81,7 +81,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
                 request.OwnerId,
                 createdClinic.Id,
                 request.TenantId,
-                isPrimary: true,
+                isPrimaryOwner: true,
                 ownershipPercentage: 100
             );
             await _ownerClinicLinkRepository.AddAsync(ownerLink);

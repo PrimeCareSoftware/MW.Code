@@ -62,7 +62,7 @@ namespace MedicSoft.Api.Controllers
         /// Create a new clinic (owner will be automatically linked as primary owner)
         /// </summary>
         [HttpPost]
-        [RequirePermissionKey(PermissionKeys.ClinicEdit)]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
         public async Task<ActionResult<ClinicDto>> Create([FromBody] CreateClinicDto dto)
         {
             var ownerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "owner_id");
@@ -85,7 +85,7 @@ namespace MedicSoft.Api.Controllers
         /// Update an existing clinic
         /// </summary>
         [HttpPut("{id}")]
-        [RequirePermissionKey(PermissionKeys.ClinicEdit)]
+        [RequirePermissionKey(PermissionKeys.ClinicManage)]
         public async Task<ActionResult<ClinicDto>> Update(Guid id, [FromBody] UpdateClinicDto dto)
         {
             try
