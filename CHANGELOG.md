@@ -20,6 +20,40 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ---
 
+## [2.1.0] - Janeiro 2026
+
+### ✨ Adicionado
+
+#### Gerenciamento de Procedimentos para Proprietários (PR 367)
+- **Nova tela de gerenciamento cross-clinic**: Interface dedicada para proprietários de múltiplas clínicas
+  - Localização: Menu → Procedimentos → "Gerenciar Procedimentos (Proprietário)"
+  - Rota: `/procedures/owner-management`
+  - Visibilidade automática baseada em permissões (apenas para proprietários)
+- **Visão consolidada**: Visualização de todos os procedimentos de todas as clínicas pertencentes ao proprietário
+  - Busca em tempo real por código, nome ou descrição
+  - Filtro por categoria de procedimento
+  - Estatísticas: contagem total e contagem de ativos
+  - Design responsivo para desktop, tablet e mobile
+- **Backend aprimorado**: 
+  - Nova permissão `procedures.manage` para acesso de nível proprietário
+  - Método `GetByOwnerAsync()` no repositório com JOIN otimizado
+  - Detecção automática de papel ClinicOwner
+  - Verificação de segurança server-side previne falsificação de claims
+- **Performance**: 
+  - Query única com JOIN evita problema N+1
+  - Busca com debounce de 300ms para UX suave
+  - Lazy loading do componente
+  - Filtros client-side para resposta rápida
+- **Segurança**:
+  - Proteção de rota com `authGuard` e `ownerGuard`
+  - Verificação de propriedade via banco de dados
+  - Respeito aos limites de tenant através de `OwnerClinicLink`
+- **Documentação**: 
+  - Novo arquivo `PR367_OWNER_PROCEDURES_IMPLEMENTATION.md` com documentação técnica completa
+  - Atualização de `PROCEDURES_IMPLEMENTATION.md` com Opção 3 (Owner Management)
+
+---
+
 ## [2.0.0] - Janeiro 2026
 
 ### 🔥 Removido
