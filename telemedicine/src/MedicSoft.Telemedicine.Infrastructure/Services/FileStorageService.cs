@@ -47,6 +47,13 @@ public class FileStorageService : IFileStorageService
         if (file == null || file.Length == 0)
             throw new ArgumentException("File is empty or null", nameof(file));
 
+        // CFM 2.314/2022 Compliance: Identity documents MUST be encrypted
+        if (!encrypt)
+        {
+            _logger.LogWarning("Attempting to save file without encryption. Forcing encryption for CFM 2.314/2022 compliance.");
+            encrypt = true;
+        }
+
         // Validate file
         await ValidateFileAsync(file, _allowedImageExtensions.Concat(_allowedDocumentExtensions).ToArray(), MaxFileSizeBytes);
         
@@ -65,19 +72,9 @@ public class FileStorageService : IFileStorageService
         
         try
         {
-            if (encrypt)
-            {
-                // Encrypt file before saving
-                await SaveEncryptedFileAsync(file, filePath);
-                _logger.LogInformation($"Encrypted file saved: {uniqueFileName} in {containerName}");
-            }
-            else
-            {
-                // Save file directly
-                using var stream = new FileStream(filePath, FileMode.Create);
-                await file.CopyToAsync(stream);
-                _logger.LogInformation($"File saved: {uniqueFileName} in {containerName}");
-            }
+            // Always encrypt for CFM compliance
+            await SaveEncryptedFileAsync(file, filePath);
+            _logger.LogInformation($"Encrypted file saved: {uniqueFileName} in {containerName}");
             
             // Return relative path (container/filename)
             return $"{containerName}/{uniqueFileName}";
@@ -202,9 +199,9 @@ public class FileStorageService : IFileStorageService
         var invalidChars = Path.GetInvalidFileNameChars();
         var sanitized = new string(fileName.Where(ch => !invalidChars.Contains(ch) && ch != '/' && ch != '\\').ToArray());
         
-        // Limit length
+        // Limit length - use modern string slicing
         if (sanitized.Length > 200)
-            sanitized = sanitized.Substring(0, 200);
+            sanitized = sanitized[..200];
         
         return sanitized;
     }
@@ -233,34 +230,50 @@ public class FileStorageService : IFileStorageService
     private async Task<Stream> DecryptFileAsync(string filePath)
     {
         // Read encrypted file
-        using var inputStream = new FileStream(filePath, FileMode.Open);
+        var inputStream = new FileStream(filePath, FileMode.Open);
         
-        using var aes = Aes.Create();
-        
-        // Read IV from file (first 16 bytes)
-        var iv = new byte[16];
-        await inputStream.ReadAsync(iv, 0, 16);
-        aes.IV = iv;
-        
-        // Get encryption key
-        var encryptionKey = GetEncryptionKey();
-        aes.Key = encryptionKey;
-        
-        // Decrypt file
-        var memoryStream = new MemoryStream();
-        using (var cryptoStream = new CryptoStream(inputStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+        try
         {
-            await cryptoStream.CopyToAsync(memoryStream);
+            using var aes = Aes.Create();
+            
+            // Read IV from file (first 16 bytes)
+            var iv = new byte[16];
+            await inputStream.ReadAsync(iv, 0, 16);
+            aes.IV = iv;
+            
+            // Get encryption key
+            var encryptionKey = GetEncryptionKey();
+            aes.Key = encryptionKey;
+            
+            // Decrypt file to memory stream
+            var memoryStream = new MemoryStream();
+            using (var cryptoStream = new CryptoStream(inputStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+            {
+                await cryptoStream.CopyToAsync(memoryStream);
+            }
+            
+            memoryStream.Position = 0;
+            return memoryStream;
         }
-        
-        memoryStream.Position = 0;
-        return memoryStream;
+        finally
+        {
+            // Dispose inputStream after decryption is complete
+            inputStream.Dispose();
+        }
     }
 
     private byte[] GetEncryptionKey()
     {
-        // TODO: Retrieve from Azure Key Vault or AWS KMS in production
-        var keyString = _configuration["FileStorage:EncryptionKey"] ?? "DefaultKey123456789012345678901";
+        // Retrieve from Azure Key Vault or AWS KMS in production
+        var keyString = _configuration["FileStorage:EncryptionKey"];
+        
+        if (string.IsNullOrWhiteSpace(keyString))
+        {
+            throw new InvalidOperationException(
+                "FileStorage:EncryptionKey configuration is required for security. " +
+                "Please configure a secure encryption key in appsettings.json or environment variables. " +
+                "For production, use Azure Key Vault or AWS KMS.");
+        }
         
         // Derive a 256-bit key
         using var sha256 = SHA256.Create();
