@@ -22,7 +22,7 @@ namespace MedicSoft.Application.Handlers.Commands.Companies
             var company = await _companyRepository.GetByIdAsync(request.CompanyId, request.TenantId);
             if (company == null)
             {
-                throw new InvalidOperationException("Company not found");
+                throw new KeyNotFoundException("Company not found");
             }
 
             company.UpdateInfo(
