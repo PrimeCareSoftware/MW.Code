@@ -63,11 +63,11 @@ namespace MedicSoft.Repository.Repositories
             // Get all clinic IDs owned by this owner through OwnerClinicLink
             var clinicIds = await _context.OwnerClinicLinks
                 .Where(ocl => ocl.OwnerId == ownerId && ocl.IsActive)
-                .Select(ocl => ocl.ClinicId)
+                .Select(ocl => ocl.ClinicId.ToString())
                 .ToListAsync();
 
             // Get procedures from all owned clinics
-            var query = _dbSet.Where(p => clinicIds.Contains(Guid.Parse(p.TenantId)));
+            var query = _dbSet.Where(p => clinicIds.Contains(p.TenantId));
             
             if (activeOnly)
             {

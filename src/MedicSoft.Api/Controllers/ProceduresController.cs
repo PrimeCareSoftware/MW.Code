@@ -28,7 +28,7 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Get all procedures for the clinic (requires procedures.view permission)
-        /// For clinic owners with procedures.manage permission, returns procedures from all owned clinics
+        /// For clinic owners, returns procedures from all owned clinics
         /// </summary>
         [HttpGet]
         [RequirePermissionKey(PermissionKeys.ProceduresView)]
@@ -38,8 +38,7 @@ namespace MedicSoft.Api.Controllers
             var tenantId = GetTenantId();
             Guid? ownerId = null;
 
-            // Check if user has owner-level manage permission and is authenticated as an owner
-            var isSystemOwnerClaim = User?.FindFirst("is_system_owner")?.Value;
+            // Check if user is authenticated as an owner
             var roleClaim = User?.FindFirst("role")?.Value;
             
             if (roleClaim == RoleNames.ClinicOwner && userId != Guid.Empty)
