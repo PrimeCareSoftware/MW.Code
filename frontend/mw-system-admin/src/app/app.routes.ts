@@ -94,6 +94,13 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Audit Logs
+  {
+    path: 'audit-logs',
+    loadComponent: () => import('./pages/audit-logs/audit-logs').then(m => m.AuditLogs),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];
