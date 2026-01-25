@@ -13,6 +13,8 @@ public class SessionResponse
     public Guid Id { get; set; }
     public Guid AppointmentId { get; set; }
     public Guid ClinicId { get; set; }
+    public Guid ProviderId { get; set; }
+    public Guid PatientId { get; set; }
     public string RoomUrl { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }

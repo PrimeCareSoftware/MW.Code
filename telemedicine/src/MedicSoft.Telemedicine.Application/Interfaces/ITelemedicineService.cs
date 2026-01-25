@@ -94,4 +94,78 @@ public interface ITelemedicineService
     /// Validates first appointment rule (CFM 2.314 requirement)
     /// </summary>
     Task<FirstAppointmentValidationResponse> ValidateFirstAppointmentAsync(ValidateFirstAppointmentRequest request, string tenantId);
+    
+    // CFM 2.314/2022 Compliance - Identity Verification
+    
+    /// <summary>
+    /// Creates identity verification for a user (CFM 2.314 requirement)
+    /// </summary>
+    Task<IdentityVerificationResponse> CreateIdentityVerificationAsync(CreateIdentityVerificationRequest request, string documentPhotoPath, string? selfiePath, string? crmCardPhotoPath, string tenantId);
+    
+    /// <summary>
+    /// Approves or rejects identity verification
+    /// </summary>
+    Task<IdentityVerificationResponse> VerifyIdentityAsync(Guid verificationId, VerifyIdentityRequest request, Guid verifiedByUserId, string tenantId);
+    
+    /// <summary>
+    /// Gets identity verification by ID
+    /// </summary>
+    Task<IdentityVerificationResponse?> GetIdentityVerificationByIdAsync(Guid verificationId, string tenantId);
+    
+    /// <summary>
+    /// Gets latest identity verification for a user
+    /// </summary>
+    Task<IdentityVerificationResponse?> GetLatestIdentityVerificationAsync(Guid userId, string userType, string tenantId);
+    
+    /// <summary>
+    /// Checks if user has valid identity verification
+    /// </summary>
+    Task<bool> HasValidIdentityVerificationAsync(Guid userId, string userType, string tenantId);
+    
+    /// <summary>
+    /// Gets pending identity verifications
+    /// </summary>
+    Task<IEnumerable<IdentityVerificationResponse>> GetPendingVerificationsAsync(string tenantId, int skip = 0, int take = 50);
+    
+    // CFM 2.314/2022 Compliance - Recording Management
+    
+    /// <summary>
+    /// Creates a recording for a session (CFM 2.314 requirement)
+    /// </summary>
+    Task<RecordingResponse> CreateRecordingAsync(CreateRecordingRequest request, string tenantId);
+    
+    /// <summary>
+    /// Marks recording as started
+    /// </summary>
+    Task<RecordingResponse> StartRecordingAsync(Guid recordingId, string tenantId);
+    
+    /// <summary>
+    /// Marks recording as completed
+    /// </summary>
+    Task<RecordingResponse> CompleteRecordingAsync(Guid recordingId, CompleteRecordingRequest request, string tenantId);
+    
+    /// <summary>
+    /// Marks recording as failed
+    /// </summary>
+    Task<RecordingResponse> FailRecordingAsync(Guid recordingId, string reason, string tenantId);
+    
+    /// <summary>
+    /// Deletes a recording (LGPD compliance)
+    /// </summary>
+    Task<RecordingResponse> DeleteRecordingAsync(Guid recordingId, DeleteRecordingRequest request, Guid deletedByUserId, string tenantId);
+    
+    /// <summary>
+    /// Gets recording by ID
+    /// </summary>
+    Task<RecordingResponse?> GetRecordingByIdAsync(Guid recordingId, string tenantId);
+    
+    /// <summary>
+    /// Gets recording by session ID
+    /// </summary>
+    Task<RecordingResponse?> GetRecordingBySessionIdAsync(Guid sessionId, string tenantId);
+    
+    /// <summary>
+    /// Gets available recordings for tenant
+    /// </summary>
+    Task<IEnumerable<RecordingResponse>> GetAvailableRecordingsAsync(string tenantId, int skip = 0, int take = 50);
 }

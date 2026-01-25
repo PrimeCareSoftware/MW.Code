@@ -16,6 +16,8 @@ public class TelemedicineConsentServiceTests
 {
     private readonly Mock<ITelemedicineSessionRepository> _sessionRepositoryMock;
     private readonly Mock<ITelemedicineConsentRepository> _consentRepositoryMock;
+    private readonly Mock<IIdentityVerificationRepository> _verificationRepositoryMock;
+    private readonly Mock<ITelemedicineRecordingRepository> _recordingRepositoryMock;
     private readonly Mock<IVideoCallService> _videoCallServiceMock;
     private readonly TelemedicineService _service;
     private const string TestTenantId = "test-tenant";
@@ -24,11 +26,15 @@ public class TelemedicineConsentServiceTests
     {
         _sessionRepositoryMock = new Mock<ITelemedicineSessionRepository>();
         _consentRepositoryMock = new Mock<ITelemedicineConsentRepository>();
+        _verificationRepositoryMock = new Mock<IIdentityVerificationRepository>();
+        _recordingRepositoryMock = new Mock<ITelemedicineRecordingRepository>();
         _videoCallServiceMock = new Mock<IVideoCallService>();
         
         _service = new TelemedicineService(
             _sessionRepositoryMock.Object,
             _consentRepositoryMock.Object,
+            _verificationRepositoryMock.Object,
+            _recordingRepositoryMock.Object,
             _videoCallServiceMock.Object);
     }
 
