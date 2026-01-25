@@ -15,6 +15,7 @@ namespace MedicSoft.Domain.Entities
         public int TrialDays { get; private set; }
         public int MaxUsers { get; private set; }
         public int MaxPatients { get; private set; }
+        public int MaxClinics { get; private set; }
         public bool HasReports { get; private set; }
         public bool HasWhatsAppIntegration { get; private set; }
         public bool HasSMSNotifications { get; private set; }
@@ -32,7 +33,7 @@ namespace MedicSoft.Domain.Entities
         public SubscriptionPlan(string name, string description, decimal monthlyPrice,
             int trialDays, int maxUsers, int maxPatients, SubscriptionPlanType type, string tenantId,
             bool hasReports = false, bool hasWhatsAppIntegration = false,
-            bool hasSMSNotifications = false, bool hasTissExport = false) : base(tenantId)
+            bool hasSMSNotifications = false, bool hasTissExport = false, int maxClinics = 1) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -49,12 +50,17 @@ namespace MedicSoft.Domain.Entities
             if (maxPatients <= 0)
                 throw new ArgumentException("Max patients must be greater than zero", nameof(maxPatients));
 
+            if (maxClinics <= 0)
+                throw new ArgumentException("Max clinics must be greater than zero", nameof(maxClinics));
+
             Name = name.Trim();
             Description = description?.Trim() ?? string.Empty;
             MonthlyPrice = monthlyPrice;
             TrialDays = trialDays;
             MaxUsers = maxUsers;
             MaxPatients = maxPatients;
+            MaxClinics = maxClinics;
+            MaxClinics = maxClinics;
             Type = type;
             HasReports = hasReports;
             HasWhatsAppIntegration = hasWhatsAppIntegration;
@@ -65,7 +71,7 @@ namespace MedicSoft.Domain.Entities
 
         public void Update(string name, string description, decimal monthlyPrice,
             int maxUsers, int maxPatients, bool hasReports, bool hasWhatsAppIntegration,
-            bool hasSMSNotifications, bool hasTissExport)
+            bool hasSMSNotifications, bool hasTissExport, int maxClinics = 1)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -79,11 +85,15 @@ namespace MedicSoft.Domain.Entities
             if (maxPatients <= 0)
                 throw new ArgumentException("Max patients must be greater than zero", nameof(maxPatients));
 
+            if (maxClinics <= 0)
+                throw new ArgumentException("Max clinics must be greater than zero", nameof(maxClinics));
+
             Name = name.Trim();
             Description = description?.Trim() ?? string.Empty;
             MonthlyPrice = monthlyPrice;
             MaxUsers = maxUsers;
             MaxPatients = maxPatients;
+            MaxClinics = maxClinics;
             HasReports = hasReports;
             HasWhatsAppIntegration = hasWhatsAppIntegration;
             HasSMSNotifications = hasSMSNotifications;
