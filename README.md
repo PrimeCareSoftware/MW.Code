@@ -2,15 +2,17 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
-> 📊 **NOVO!** Quer ver tudo que foi desenvolvido? [→ Ver Resumo Técnico Completo](docs/RESUMO_TECNICO_COMPLETO.md) - Visão geral de **92% de completude do sistema**!
+> 📚 **NOVO!** Toda a documentação foi reorganizada! [→ Ver Central de Documentação](system-admin/README.md) | [→ Ver Índice Completo](system-admin/INDICE.md)
 
-> 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
+> 📊 **NOVO!** Quer ver tudo que foi desenvolvido? [→ Ver Resumo Técnico Completo](system-admin/docs/RESUMO_TECNICO_COMPLETO.md) - Visão geral de **92% de completude do sistema**!
 
-> 🌍 **NOVO!** Desenvolva em **macOS, Windows ou Linux**! [→ Ver Guia Multiplataforma](docs/GUIA_MULTIPLATAFORMA.md) - Compatibilidade total garantida!
+> 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](system-admin/guias/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
 
-> 🐳 **NOVO!** Migramos para **Podman** (100% gratuito e open-source)! Docker ainda é suportado. [→ Ver Guia de Migração](docs/DOCKER_TO_PODMAN_MIGRATION.md)
+> 🌍 **NOVO!** Desenvolva em **macOS, Windows ou Linux**! [→ Ver Guia Multiplataforma](system-admin/guias/GUIA_MULTIPLATAFORMA.md) - Compatibilidade total garantida!
 
-> ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](docs/GITHUB_PAGES_SETUP_REQUIRED.md)
+> 🐳 **NOVO!** Migramos para **Podman** (100% gratuito e open-source)! Docker ainda é suportado. [→ Ver Guia de Migração](system-admin/infrastructure/DOCKER_TO_PODMAN_MIGRATION.md)
+
+> ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](system-admin/docs/GITHUB_PAGES_SETUP_REQUIRED.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
 
@@ -26,7 +28,7 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 | **Testes Automatizados** | 792+ |
 | **Documentos** | 49+ |
 
-[→ Ver Resumo Técnico Completo](docs/RESUMO_TECNICO_COMPLETO.md)
+[→ Ver Resumo Técnico Completo](system-admin/docs/RESUMO_TECNICO_COMPLETO.md)
 
 ## 🌍 Compatibilidade Multiplataforma
 
@@ -35,15 +37,15 @@ O PrimeCare Software é **100% cross-platform**:
 - ✅ **macOS**: Script automatizado de setup (`setup-macos.sh`)
 - ✅ **Windows**: Script PowerShell de setup (`setup-windows.ps1`)
 - ✅ **Linux**: Suporte completo (Ubuntu, Fedora, Debian, etc.)
-- 📖 **[Guia Completo](docs/GUIA_MULTIPLATAFORMA.md)**: Instruções detalhadas para cada plataforma
+- 📖 **[Guia Completo](system-admin/guias/GUIA_MULTIPLATAFORMA.md)**: Instruções detalhadas para cada plataforma
 
-> ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](docs/MIGRACAO_POSTGRESQL.md)
+> ✅ **NOVO**: Sistema migrado para PostgreSQL! Economia de 90-96% em custos de infraestrutura. [Ver detalhes →](system-admin/infrastructure/MIGRACAO_POSTGRESQL.md)
 
-> 🎯 **NOVO**: Login por Subdomínio! Acesse sua clínica via `clinic1.mwsistema.com.br` sem precisar digitar Tenant ID. [Ver guia →](docs/SUBDOMAIN_LOGIN_GUIDE.md)
+> 🎯 **NOVO**: Login por Subdomínio! Acesse sua clínica via `clinic1.mwsistema.com.br` sem precisar digitar Tenant ID. [Ver guia →](system-admin/guias/SUBDOMAIN_LOGIN_GUIDE.md)
 
-> 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](docs/MOCK_DATA_GUIDE.md)
+> 🧪 **NOVO**: Dados Mockados! Execute o frontend sem backend para desenvolvimento e testes. [Ver guia →](system-admin/guias/MOCK_DATA_GUIDE.md)
 
-> 📱 **IMPORTANTE**: Migração para PWA! Descontinuamos os apps nativos iOS/Android em favor de um PWA multiplataforma. [Ver guia de migração →](docs/MOBILE_TO_PWA_MIGRATION.md) | [Como instalar PWA →](docs/PWA_INSTALLATION_GUIDE.md)
+> 📱 **IMPORTANTE**: Migração para PWA! Descontinuamos os apps nativos iOS/Android em favor de um PWA multiplataforma. [Ver guia de migração →](system-admin/docs/MOBILE_TO_PWA_MIGRATION.md) | [Como instalar PWA →](system-admin/guias/PWA_INSTALLATION_GUIDE.md)
 
 ## 📱 Aplicativo Móvel (PWA) 🆕
 
@@ -64,8 +66,8 @@ O PrimeCare Software agora é um **Progressive Web App (PWA)** que funciona em t
 - ✅ **macOS 10.15+** (via Safari/Chrome)
 - ✅ **Linux** (via Chrome/Firefox)
 
-**📖 [Guia de Instalação do PWA →](docs/PWA_INSTALLATION_GUIDE.md)**
-**📖 [Documentação da Migração →](docs/MOBILE_TO_PWA_MIGRATION.md)**
+**📖 [Guia de Instalação do PWA →](system-admin/guias/PWA_INSTALLATION_GUIDE.md)**
+**📖 [Documentação da Migração →](system-admin/docs/MOBILE_TO_PWA_MIGRATION.md)**
 
 ### ⚠️ Apps Nativos Descontinuados
 
@@ -163,7 +165,7 @@ All frontend projects are configured with unique ports to allow running them sim
 - **patient-portal**: Port 4202
 - **mw-docs**: Port 4203
 
-📖 **[Complete Port Configuration Guide →](docs/FRONTEND_PORTS.md)**
+📖 **[Complete Port Configuration Guide →](system-admin/frontend/FRONTEND_PORTS.md)**
 
 ## 🎥 Microserviço de Telemedicina 🆕
 
@@ -187,7 +189,7 @@ All frontend projects are configured with unique ports to allow running them sim
 - ✅ HIPAA Compliant
 
 **Guias:**
-- [Análise de Serviços de Vídeo](docs/TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md)
+- [Análise de Serviços de Vídeo](system-admin/regras-negocio/TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md)
 - [Integração Frontend](telemedicine/FRONTEND_INTEGRATION.md)
 
 ## 🎫 Sistema de Chamados (Support Tickets) 🆕
@@ -195,7 +197,7 @@ All frontend projects are configured with unique ports to allow running them sim
 **Sistema de suporte técnico integrado à API principal!**
 
 - 📂 **API Endpoint**: `/api/tickets`
-- 📖 **Documentação**: [`docs/TICKET_API_DOCUMENTATION.md`](docs/TICKET_API_DOCUMENTATION.md)
+- 📖 **Documentação**: [`system-admin/docs/TICKET_API_DOCUMENTATION.md`](system-admin/docs/TICKET_API_DOCUMENTATION.md)
 - 🔧 **Migrado de**: Microserviço SystemAdmin → API Principal
 - 🎯 **Finalidade**: Bugs, suporte técnico, solicitação de recursos
 - ✅ **Migração**: Script SQL e EF Core migration incluídos
@@ -212,21 +214,21 @@ All frontend projects are configured with unique ports to allow running them sim
 - ✅ Prioridades: Low, Medium, High, Critical
 
 **Guias:**
-- [Documentação da API de Tickets](docs/TICKET_API_DOCUMENTATION.md)
+- [Documentação da API de Tickets](system-admin/docs/TICKET_API_DOCUMENTATION.md)
 - [Script de Migração](scripts/run-ticket-migration.sh)
 
 ## 📚 Documentação Completa
 
 ### 💼 Glossário de Termos Empresariais (NOVO!)
 **Não entende termos da área empresarial? Comece por aqui!**
-- 📖 **[`GLOSSARIO_TERMOS_EMPRESARIAIS.md`](docs/GLOSSARIO_TERMOS_EMPRESARIAIS.md)** - Glossário completo explicando todos os termos de negócio
+- 📖 **[`GLOSSARIO_TERMOS_EMPRESARIAIS.md`](system-admin/docs/GLOSSARIO_TERMOS_EMPRESARIAIS.md)** - Glossário completo explicando todos os termos de negócio
 - 💡 Aprenda sobre: SaaS, MRR, Churn, CAC, LTV, ROI, e muito mais
 - 🎯 Ideal para: Empreendedores, donos de negócio, estudantes
 - 📊 Exemplos práticos e aplicações reais
 
 ### 📊 Documentação Técnica Consolidada (NOVO!)
-- 📖 **[`RESUMO_TECNICO_COMPLETO.md`](docs/RESUMO_TECNICO_COMPLETO.md)** - ⭐ Visão geral completa do sistema (92% completude)
-- 📖 **[`GUIA_COMPLETO_APIs.md`](docs/GUIA_COMPLETO_APIs.md)** - ⭐ Documentação de todos os endpoints da API
+- 📖 **[`RESUMO_TECNICO_COMPLETO.md`](system-admin/guias/RESUMO_TECNICO_COMPLETO.md)** - ⭐ Visão geral completa do sistema (92% completude)
+- 📖 **[`GUIA_COMPLETO_APIs.md`](system-admin/guias/GUIA_COMPLETO_APIs.md)** - ⭐ Documentação de todos os endpoints da API
 - 📖 **[`CHANGELOG.md`](CHANGELOG.md)** - ⭐ Histórico completo de desenvolvimento
 
 ### 📱 Documentação Portátil
@@ -234,28 +236,28 @@ All frontend projects are configured with unique ports to allow running them sim
 
 **📍 Toda a documentação foi consolidada na pasta `/docs`!**
 
-- 📂 **Índice Principal**: [`docs/DOCUMENTATION_INDEX.md`](docs/DOCUMENTATION_INDEX.md) - ⭐ **Comece aqui!** Navegação completa
+- 📂 **Índice Principal**: [`system-admin/docs/DOCUMENTATION_INDEX.md`](system-admin/docs/DOCUMENTATION_INDEX.md) - ⭐ **Comece aqui!** Navegação completa
 - 🌐 **Interface Web Interativa**: [`frontend/mw-docs`](frontend/mw-docs/README.md) - Documentação navegável via Angular
-- 📋 **Plano de Desenvolvimento**: [`docs/PLANO_DESENVOLVIMENTO.md`](docs/PLANO_DESENVOLVIMENTO.md) - Roadmap 2025-2026
+- 📋 **Plano de Desenvolvimento**: [`system-admin/docs/PLANO_DESENVOLVIMENTO.md`](system-admin/docs/PLANO_DESENVOLVIMENTO.md) - Roadmap 2025-2026
 
 **📖 Principais Documentos**:
-- [`BUSINESS_RULES.md`](docs/BUSINESS_RULES.md) - ⭐ **ESSENCIAL** - Regras de negócio do sistema
-- [`PENDING_TASKS.md`](docs/PENDING_TASKS.md) - Documento centralizado com todas as pendências
-- [`GUIA_INICIO_RAPIDO_LOCAL.md`](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup rápido em 10 minutos
-- [`AUTHENTICATION_GUIDE.md`](docs/AUTHENTICATION_GUIDE.md) - Guia de autenticação JWT
-- [`SEEDER_GUIDE.md`](docs/SEEDER_GUIDE.md) - Guia completo dos seeders
-- [`SYSTEM_MAPPING.md`](docs/SYSTEM_MAPPING.md) - Mapeamento completo do sistema
+- [`BUSINESS_RULES.md`](system-admin/docs/BUSINESS_RULES.md) - ⭐ **ESSENCIAL** - Regras de negócio do sistema
+- [`PENDING_TASKS.md`](system-admin/docs/PENDING_TASKS.md) - Documento centralizado com todas as pendências
+- [`GUIA_INICIO_RAPIDO_LOCAL.md`](system-admin/guias/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup rápido em 10 minutos
+- [`AUTHENTICATION_GUIDE.md`](system-admin/infrastructure/AUTHENTICATION_GUIDE.md) - Guia de autenticação JWT
+- [`SEEDER_GUIDE.md`](system-admin/guias/SEEDER_GUIDE.md) - Guia completo dos seeders
+- [`SYSTEM_MAPPING.md`](system-admin/guias/SYSTEM_MAPPING.md) - Mapeamento completo do sistema
 
 ### 🧪 Guias de Configuração e Testes (NOVO! - Janeiro 2026)
 **Documentação completa para testar TODAS as funcionalidades do sistema!**
-- 📖 **[Índice Geral de Testes](docs/testes-configuracao/README.md)** - ⭐ **Centro de Testes** - Navegação completa
-- 🏥 **[Cadastro de Paciente](docs/testes-configuracao/01-CADASTRO-PACIENTE.md)** - 25+ cenários de teste
-- 📅 **[Atendimento e Consulta](docs/testes-configuracao/02-ATENDIMENTO-CONSULTA.md)** - 30+ cenários de teste
-- 💰 **[Módulo Financeiro](docs/testes-configuracao/03-MODULO-FINANCEIRO.md)** - 25+ cenários de teste
-- 🏥 **[TISS - Padrão ANS](docs/testes-configuracao/04-TISS-PADRAO.md)** - 20+ cenários de teste
-- 📋 **[TUSS - Tabela de Procedimentos](docs/testes-configuracao/05-TUSS-TABELA.md)** - 18+ cenários de teste
-- 🎥 **[Telemedicina](docs/testes-configuracao/06-TELEMEDICINA.md)** - 22+ cenários (CFM 1821/2018)
-- ✅ **[Cenários Completos](docs/testes-configuracao/07-CENARIOS-COMPLETOS.md)** - 200+ cenários consolidados
+- 📖 **[Índice Geral de Testes](system-admin/guias/testes-configuracao/README.md)** - ⭐ **Centro de Testes** - Navegação completa
+- 🏥 **[Cadastro de Paciente](system-admin/guias/testes-configuracao/01-CADASTRO-PACIENTE.md)** - 25+ cenários de teste
+- 📅 **[Atendimento e Consulta](system-admin/guias/testes-configuracao/02-ATENDIMENTO-CONSULTA.md)** - 30+ cenários de teste
+- 💰 **[Módulo Financeiro](system-admin/guias/testes-configuracao/03-MODULO-FINANCEIRO.md)** - 25+ cenários de teste
+- 🏥 **[TISS - Padrão ANS](system-admin/guias/testes-configuracao/04-TISS-PADRAO.md)** - 20+ cenários de teste
+- 📋 **[TUSS - Tabela de Procedimentos](system-admin/guias/testes-configuracao/05-TUSS-TABELA.md)** - 18+ cenários de teste
+- 🎥 **[Telemedicina](system-admin/guias/testes-configuracao/06-TELEMEDICINA.md)** - 22+ cenários (CFM 1821/2018)
+- ✅ **[Cenários Completos](system-admin/guias/testes-configuracao/07-CENARIOS-COMPLETOS.md)** - 200+ cenários consolidados
 
 **📊 Total**: 200+ cenários de teste com configuração passo a passo, exemplos de API, troubleshooting e checklists de validação.
 
@@ -332,7 +334,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Navegação por Teclado**: ↑↓ para navegar, Enter para selecionar
 - ✅ **Dados em PT-BR**: Base completa de medicações e exames brasileiros
 - ✅ **Integração no Atendimento**: Campos de diagnóstico, prescrição e observações
-- 📖 **Documentação**: [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](docs/RICH_TEXT_EDITOR_AUTOCOMPLETE.md)
+- 📖 **Documentação**: [RICH_TEXT_EDITOR_AUTOCOMPLETE.md](system-admin/guias/RICH_TEXT_EDITOR_AUTOCOMPLETE.md)
 
 ### 📅 Agendamentos e Atendimento
 - ✅ **CRUD de Pacientes**: Cadastro completo com validações
@@ -410,10 +412,10 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - 📊 **Compliance Geral**: 85% (↑15% em Janeiro 2026)
 
 📖 **Documentação Completa**:
-- [Especificação CFM 1.821](docs/ESPECIFICACAO_CFM_1821.md)
-- [Implementação Detalhada](docs/CFM_1821_IMPLEMENTACAO.md)
-- [Plano de Implementação Pendente](docs/IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md) - **NOVO!**
-- [Histórico de Implementação](docs/archive/README.md) - Phases 3, 4, e 5 completas (arquivado)
+- [Especificação CFM 1.821](system-admin/guias/ESPECIFICACAO_CFM_1821.md)
+- [Implementação Detalhada](system-admin/guias/CFM_1821_IMPLEMENTACAO.md)
+- [Plano de Implementação Pendente](system-admin/guias/IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md) - **NOVO!**
+- [Histórico de Implementação](system-admin/guias/archive/README.md) - Phases 3, 4, e 5 completas (arquivado)
 
 ### 💊 Receitas Médicas Digitais - CFM 1.643/2002 & ANVISA 344/1998 🆕✨
 
@@ -476,8 +478,8 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Retenção**: 20 anos de guarda obrigatória
 
 📖 **Documentação Completa**:
-- [Receitas Digitais - Guia Completo](docs/DIGITAL_PRESCRIPTIONS.md)
-- [Implementação Pendente](docs/IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md)
+- [Receitas Digitais - Guia Completo](system-admin/guias/DIGITAL_PRESCRIPTIONS.md)
+- [Implementação Pendente](system-admin/guias/IMPLEMENTACAO_PENDENTE_CFM_PRESCRICOES.md)
 
 ### 💳 Assinaturas e Cobrança
 - ✅ **Período de Teste**: 15 dias gratuitos para novas clínicas
@@ -529,8 +531,8 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
   - Filtros de Destinatários: Segmentação baseada em critérios configuráveis
   - Escopo Multi-nível: Clínica ou Sistema (admin)
   - Até 10 retentativas configuráveis
-  - [📚 Documentação Completa](docs/NOTIFICATION_ROUTINES_DOCUMENTATION.md)
-  - [💡 Exemplos de Uso](docs/NOTIFICATION_ROUTINES_EXAMPLE.md)
+  - [📚 Documentação Completa](system-admin/guias/NOTIFICATION_ROUTINES_DOCUMENTATION.md)
+  - [💡 Exemplos de Uso](system-admin/guias/NOTIFICATION_ROUTINES_EXAMPLE.md)
 
 ### 🏥 Procedimentos e Serviços
 - ✅ **Cadastro de Procedimentos**: Nome, código, categoria, preço, duração
@@ -555,7 +557,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Gestão de Permissões**: Controle granular de acesso
 - ✅ **Auditoria**: Log completo de operações
 
-> 📖 **Para detalhes completos de segurança**, consulte [SECURITY_GUIDE.md](docs/SECURITY_GUIDE.md)
+> 📖 **Para detalhes completos de segurança**, consulte [SECURITY_GUIDE.md](system-admin/guias/SECURITY_GUIDE.md)
 
 ### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
@@ -576,15 +578,15 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 
 ## 🏃‍♂️ Como Executar
 
-> 🚀 **NOVO!** [**GUIA_INICIO_RAPIDO_LOCAL.md**](docs/GUIA_INICIO_RAPIDO_LOCAL.md) - **Setup em 10 minutos para testar HOJE!**
+> 🚀 **NOVO!** [**GUIA_INICIO_RAPIDO_LOCAL.md**](system-admin/guias/GUIA_INICIO_RAPIDO_LOCAL.md) - **Setup em 10 minutos para testar HOJE!**
 
-> 🔧 **IMPORTANTE!** [**LOCALHOST_SETUP_FIX.md**](docs/LOCALHOST_SETUP_FIX.md) - **Fix aplicado para executar em localhost** - Leia se tiver problemas com autenticação ou dados vazios
+> 🔧 **IMPORTANTE!** [**LOCALHOST_SETUP_FIX.md**](system-admin/guias/LOCALHOST_SETUP_FIX.md) - **Fix aplicado para executar em localhost** - Leia se tiver problemas com autenticação ou dados vazios
 
-> 📖 **Para um guia completo e detalhado**, consulte o arquivo [GUIA_EXECUCAO.md](docs/GUIA_EXECUCAO.md)
+> 📖 **Para um guia completo e detalhado**, consulte o arquivo [GUIA_EXECUCAO.md](system-admin/guias/GUIA_EXECUCAO.md)
 
-> ✅ **NOVO!** [**CHECKLIST_TESTES_COMPLETO.md**](docs/CHECKLIST_TESTES_COMPLETO.md) - Teste todos os 80+ endpoints e funcionalidades
+> ✅ **NOVO!** [**CHECKLIST_TESTES_COMPLETO.md**](system-admin/guias/CHECKLIST_TESTES_COMPLETO.md) - Teste todos os 80+ endpoints e funcionalidades
 
-> 📊 **NOVO!** [**RESUMO_SISTEMA_COMPLETO.md**](docs/RESUMO_SISTEMA_COMPLETO.md) - Visão geral de tudo que está implementado
+> 📊 **NOVO!** [**RESUMO_SISTEMA_COMPLETO.md**](system-admin/guias/RESUMO_SISTEMA_COMPLETO.md) - Visão geral de tudo que está implementado
 
 ### 🔑 Primeiros Passos - Criando Usuários Iniciais (IMPORTANTE para MVP)
 
@@ -624,9 +626,9 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 ```
 
 > 📖 **Para mais detalhes sobre autenticação e desenvolvimento**, consulte:
-> - [GUIA_DESENVOLVIMENTO_AUTH.md](docs/GUIA_DESENVOLVIMENTO_AUTH.md) - Guia completo para desenvolvimento e testes
-> - [AUTHENTICATION_GUIDE.md](docs/AUTHENTICATION_GUIDE.md) - Documentação completa de autenticação
-> - [CARGA_INICIAL_TESTES.md](docs/CARGA_INICIAL_TESTES.md) - Detalhes sobre dados de teste
+> - [GUIA_DESENVOLVIMENTO_AUTH.md](system-admin/guias/GUIA_DESENVOLVIMENTO_AUTH.md) - Guia completo para desenvolvimento e testes
+> - [AUTHENTICATION_GUIDE.md](system-admin/infrastructure/AUTHENTICATION_GUIDE.md) - Documentação completa de autenticação
+> - [CARGA_INICIAL_TESTES.md](system-admin/guias/CARGA_INICIAL_TESTES.md) - Detalhes sobre dados de teste
 
 ### Pré-requisitos
 
@@ -719,8 +721,8 @@ dotnet ef database update --context MedicSoftDbContext \
 ```
 
 > 📖 **Guia completo de migrations**: [MIGRATIONS_GUIDE.md](MIGRATIONS_GUIDE.md) - Como aplicar todas as migrations do sistema  
-> 📖 **Guia completo de setup do PostgreSQL**: [PODMAN_POSTGRES_SETUP.md](docs/PODMAN_POSTGRES_SETUP.md)  
-> 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](docs/MIGRACAO_POSTGRESQL.md)
+> 📖 **Guia completo de setup do PostgreSQL**: [PODMAN_POSTGRES_SETUP.md](system-admin/guias/PODMAN_POSTGRES_SETUP.md)  
+> 📖 **Detalhes da migração SQL Server → PostgreSQL**: [MIGRACAO_POSTGRESQL.md](system-admin/guias/MIGRACAO_POSTGRESQL.md)
 
 #### 🌱 Popular Banco de Dados com Dados de Exemplo
 
@@ -772,7 +774,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 - **Admin**: admin / Admin@123
 - **TenantID**: demo-clinic-001
 
-> 📖 **Guia Completo da API de Seed**: [SEED_API_GUIDE.md](docs/SEED_API_GUIDE.md) - Documentação detalhada com todos os dados criados, cenários de teste e troubleshooting
+> 📖 **Guia Completo da API de Seed**: [SEED_API_GUIDE.md](system-admin/guias/SEED_API_GUIDE.md) - Documentação detalhada com todos os dados criados, cenários de teste e troubleshooting
 
 ## 📖 Documentação da API
 
@@ -786,7 +788,7 @@ Após executar a aplicação, acesse a documentação interativa do Swagger:
 Para facilitar o teste e integração, todas as APIs foram exportadas para o Postman:
 
 - 📥 **Arquivo**: [`PrimeCare-Postman-Collection.json`](PrimeCare-Postman-Collection.json)
-- 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](docs/POSTMAN_IMPORT_GUIDE.md)
+- 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](system-admin/guias/POSTMAN_IMPORT_GUIDE.md)
 - ✨ **Recursos incluídos**:
   - Todos os endpoints organizados por funcionalidade
   - Variáveis pré-configuradas (base_url, tenant_id)
@@ -798,9 +800,9 @@ Para facilitar o teste e integração, todas as APIs foram exportadas para o Pos
 2. Configure as variáveis da coleção
 3. Teste os endpoints!
 
-Para instruções detalhadas, consulte o [Guia de Importação do Postman](docs/POSTMAN_IMPORT_GUIDE.md).
+Para instruções detalhadas, consulte o [Guia de Importação do Postman](system-admin/guias/POSTMAN_IMPORT_GUIDE.md).
 
-> 📖 **Guia Completo**: Para um passo a passo detalhado de como configurar e cadastrar tudo no sistema, consulte o [Guia de Configuração do Sistema](docs/SYSTEM_SETUP_GUIDE.md).
+> 📖 **Guia Completo**: Para um passo a passo detalhado de como configurar e cadastrar tudo no sistema, consulte o [Guia de Configuração do Sistema](system-admin/guias/SYSTEM_SETUP_GUIDE.md).
 
 ### Endpoints Principais
 
@@ -808,7 +810,7 @@ Para instruções detalhadas, consulte o [Guia de Importação do Postman](docs/
   - `POST /api/auth/login` - Login de usuários (doctors, secretaries, etc.)
   - `POST /api/auth/owner-login` - Login de proprietários (clinic owners e system owners)
   - `POST /api/auth/validate` - Validar token JWT
-  - 📖 **Veja**: [`AUTHENTICATION_GUIDE.md`](docs/AUTHENTICATION_GUIDE.md) para detalhes completos
+  - 📖 **Veja**: [`AUTHENTICATION_GUIDE.md`](system-admin/infrastructure/AUTHENTICATION_GUIDE.md) para detalhes completos
 
 - **Registro e Configuração**:
   - `POST /api/registration` - Registro de nova clínica
@@ -935,13 +937,13 @@ O sistema utiliza **multitenancy** por coluna `TenantId`, garantindo isolamento 
 - Prontuários médicos são **isolados por clínica** - cada clínica vê apenas seus próprios registros
 - Sistema detecta cadastro prévio por CPF e reutiliza dados, criando novo vínculo
 
-Para mais detalhes sobre as regras de negócio, consulte [BUSINESS_RULES.md](docs/BUSINESS_RULES.md)
+Para mais detalhes sobre as regras de negócio, consulte [BUSINESS_RULES.md](system-admin/docs/BUSINESS_RULES.md)
 
 ## 📱 Interface e Telas
 
 Para visualizar todas as telas do sistema com descrições detalhadas e fluxos de navegação, consulte:
-- **[SCREENS_DOCUMENTATION.md](docs/SCREENS_DOCUMENTATION.md)** - Documentação completa de todas as interfaces com diagramas de fluxo
-- **[docs/VISUAL_FLOW_SUMMARY.md](docs/VISUAL_FLOW_SUMMARY.md)** - Resumo visual rápido com diagramas Mermaid interativos
+- **[SCREENS_DOCUMENTATION.md](system-admin/guias/SCREENS_DOCUMENTATION.md)** - Documentação completa de todas as interfaces com diagramas de fluxo
+- **[docs/VISUAL_FLOW_SUMMARY.md](system-admin/guias/VISUAL_FLOW_SUMMARY.md)** - Resumo visual rápido com diagramas Mermaid interativos
 
 Este documento inclui:
 - Mockups ASCII de todas as telas
@@ -986,8 +988,8 @@ O PrimeCare Software implementa múltiplas camadas de segurança para proteger d
 ### Documentação Completa
 
 Para detalhes completos sobre segurança, autenticação e melhores práticas:
-- 📖 **[AUTHENTICATION_GUIDE.md](docs/AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
-- 📖 **[SECURITY_GUIDE.md](docs/SECURITY_GUIDE.md)** - Guia completo de segurança
+- 📖 **[AUTHENTICATION_GUIDE.md](system-admin/infrastructure/AUTHENTICATION_GUIDE.md)** - Guia completo de autenticação JWT
+- 📖 **[SECURITY_GUIDE.md](system-admin/guias/SECURITY_GUIDE.md)** - Guia completo de segurança
 
 ## 🚀 Deploy e Infraestrutura de Produção
 
@@ -995,45 +997,45 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
 
 **Documentação completa para produção com custo mínimo ($5-20/mês) enquanto você não tem clientes grandes!**
 
-#### 📚 [INFRA_DOCS_INDEX.md](docs/INFRA_DOCS_INDEX.md) - **COMECE AQUI!**
+#### 📚 [INFRA_DOCS_INDEX.md](system-admin/guias/INFRA_DOCS_INDEX.md) - **COMECE AQUI!**
 Índice completo com todos os guias de infraestrutura. Navegação fácil para encontrar o que você precisa.
 
 #### 🚀 Guias Principais:
 
-- **[QUICK_START_PRODUCTION.md](docs/QUICK_START_PRODUCTION.md)** - ⚡ **Do Zero ao Ar em 30 Minutos**
+- **[QUICK_START_PRODUCTION.md](system-admin/guias/QUICK_START_PRODUCTION.md)** - ⚡ **Do Zero ao Ar em 30 Minutos**
   - Setup rápido com Railway ou VPS
   - Passo a passo simplificado
   - Para quem quer resultados AGORA
 
-- **[CALCULADORA_CUSTOS.md](docs/CALCULADORA_CUSTOS.md)** - 💵 **Planeje Seus Custos**
+- **[CALCULADORA_CUSTOS.md](system-admin/guias/CALCULADORA_CUSTOS.md)** - 💵 **Planeje Seus Custos**
   - Estimativas por número de clínicas (1-500+)
   - Comparação Railway vs VPS vs Cloud
   - Projeção de crescimento e ROI
 
-- **[INFRA_PRODUCAO_BAIXO_CUSTO.md](docs/INFRA_PRODUCAO_BAIXO_CUSTO.md)** - 📋 **Guia Completo**
+- **[INFRA_PRODUCAO_BAIXO_CUSTO.md](system-admin/guias/INFRA_PRODUCAO_BAIXO_CUSTO.md)** - 📋 **Guia Completo**
   - 💚 **Railway + Vercel** (Recomendado) - $5-20/mês
   - 🔧 **VPS (Hetzner/DigitalOcean)** - $5-10/mês
   - 🆓 **Free Tier** - $0/mês (apenas testes)
   - Comparativos, estratégias de escala, backups
 
-- **[DEPLOY_RAILWAY_GUIDE.md](docs/DEPLOY_RAILWAY_GUIDE.md)** - 🚂 **Deploy no Railway**
+- **[DEPLOY_RAILWAY_GUIDE.md](system-admin/guias/DEPLOY_RAILWAY_GUIDE.md)** - 🚂 **Deploy no Railway**
   - Passo a passo detalhado
   - PostgreSQL incluído
   - SSL e backups automáticos
 
-- **[DEPLOY_HOSTINGER_GUIA_COMPLETO.md](docs/DEPLOY_HOSTINGER_GUIA_COMPLETO.md)** - 🏢 **Deploy no Hostinger VPS** 🆕
+- **[DEPLOY_HOSTINGER_GUIA_COMPLETO.md](system-admin/guias/DEPLOY_HOSTINGER_GUIA_COMPLETO.md)** - 🏢 **Deploy no Hostinger VPS** 🆕
   - Guia completo para iniciantes
   - Configuração passo a passo de VPS
   - Instalação de todos os componentes
   - Domínio e SSL explicados
   - R$ 20-60/mês
 
-- **[DEPLOY_HOSTINGER_INICIO_RAPIDO.md](docs/DEPLOY_HOSTINGER_INICIO_RAPIDO.md)** - ⚡ **Hostinger em 30 min** 🆕
+- **[DEPLOY_HOSTINGER_INICIO_RAPIDO.md](system-admin/guias/DEPLOY_HOSTINGER_INICIO_RAPIDO.md)** - ⚡ **Hostinger em 30 min** 🆕
   - Comandos prontos para uso
   - Deploy rápido no Hostinger
   - Checklist de verificação
 
-- **[MIGRACAO_POSTGRESQL.md](docs/MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
+- **[MIGRACAO_POSTGRESQL.md](system-admin/guias/MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
   - Migração SQL Server → PostgreSQL
   - Guia técnico completo
   - Scripts e validação
@@ -1071,7 +1073,7 @@ podman-compose -f podman-compose.production.yml logs -f
 - [ ] Habilitar HTTPS (SSL/TLS)
 - [ ] Configurar monitoramento de logs
 
-Para detalhes completos, veja: [INFRA_PRODUCAO_BAIXO_CUSTO.md](docs/INFRA_PRODUCAO_BAIXO_CUSTO.md)
+Para detalhes completos, veja: [INFRA_PRODUCAO_BAIXO_CUSTO.md](system-admin/guias/INFRA_PRODUCAO_BAIXO_CUSTO.md)
 
 ## 🔄 CI/CD
 
@@ -1088,7 +1090,7 @@ O workflow é executado automaticamente em:
 - Pull Requests para as branches `main` e `develop`
 - Execução manual via GitHub Actions
 
-Para mais detalhes, consulte: [CI_CD_DOCUMENTATION.md](docs/CI_CD_DOCUMENTATION.md)
+Para mais detalhes, consulte: [CI_CD_DOCUMENTATION.md](system-admin/guias/CI_CD_DOCUMENTATION.md)
 
 ## 🤝 Contribuição
 
