@@ -224,7 +224,7 @@
                       </td>
                       <td class="text-center">
                         @if (getTotalBilled(billingData()) > 0) {
-                          <span class="badge bg-secondary">
+                          <span class="badge badge-default">
                             {{ formatPercentage((getTotalGlosed(billingData()) / getTotalBilled(billingData())) * 100) }}
                           </span>
                         }

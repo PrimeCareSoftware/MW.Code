@@ -24,15 +24,15 @@
     <form [formGroup]="filterForm" class="filter-form">
       <div class="form-grid">
         <div class="form-group">
-          <mat-label>Data Inicial</mat-label>
-          <input matInput [matDatepicker]="startPicker" formControlName="startDate" class="form-control">
+          <label for="startDate">Data Inicial</label>
+          <input id="startDate" matInput [matDatepicker]="startPicker" formControlName="startDate" class="form-control">
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
         </div>
 
         <div class="form-group">
-          <mat-label>Data Final</mat-label>
-          <input matInput [matDatepicker]="endPicker" formControlName="endDate" class="form-control">
+          <label for="endDate">Data Final</label>
+          <input id="endDate" matInput [matDatepicker]="endPicker" formControlName="endDate" class="form-control">
           <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
           <mat-datepicker #endPicker></mat-datepicker>
         </div>
