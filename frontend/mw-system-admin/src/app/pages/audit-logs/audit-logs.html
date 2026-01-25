@@ -1,0 +1,473 @@
+<div class="audit-logs-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        Logs de Auditoria
+      </h1>
+      <p class="subtitle">Visualize e acompanhe todas as atividades do sistema</p>
+    </div>
+    
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="logs().length === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Exportar CSV
+      </button>
+      <button class="btn btn-secondary" (click)="exportToJson()" [disabled]="logs().length === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Exportar JSON
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-card">
+    <div class="filters-header" (click)="toggleFilters()">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+        </svg>
+        Filtros de Pesquisa
+      </h2>
+      <button class="toggle-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+             [class.rotate-180]="filtersExpanded()">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    </div>
+    
+    @if (filtersExpanded()) {
+      <div class="filters-content">
+        <div class="filters-grid">
+          <!-- Date Range -->
+          <div class="filter-group">
+            <label for="startDate">Data Inicial</label>
+            <input 
+              type="date" 
+              id="startDate" 
+              [(ngModel)]="startDate"
+              class="form-input">
+          </div>
+
+          <div class="filter-group">
+            <label for="endDate">Data Final</label>
+            <input 
+              type="date" 
+              id="endDate" 
+              [(ngModel)]="endDate"
+              class="form-input">
+          </div>
+
+          <!-- User Filter -->
+          <div class="filter-group">
+            <label for="userId">ID do Usuário</label>
+            <input 
+              type="text" 
+              id="userId" 
+              [(ngModel)]="filter.userId"
+              placeholder="Filtrar por ID do usuário"
+              class="form-input">
+          </div>
+
+          <!-- Entity Type Filter -->
+          <div class="filter-group">
+            <label for="entityType">Tipo de Entidade</label>
+            <input 
+              type="text" 
+              id="entityType" 
+              [(ngModel)]="filter.entityType"
+              placeholder="Ex: Patient, User, Clinic"
+              class="form-input">
+          </div>
+
+          <!-- Entity ID Filter -->
+          <div class="filter-group">
+            <label for="entityId">ID da Entidade</label>
+            <input 
+              type="text" 
+              id="entityId" 
+              [(ngModel)]="filter.entityId"
+              placeholder="ID específico da entidade"
+              class="form-input">
+          </div>
+
+          <!-- Action Filter -->
+          <div class="filter-group">
+            <label for="action">Ação</label>
+            <select id="action" [(ngModel)]="filter.action" class="form-input">
+              <option [value]="undefined">Todas as ações</option>
+              @for (action of availableActions; track action) {
+                <option [value]="action">{{ action }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Result Filter -->
+          <div class="filter-group">
+            <label for="result">Resultado</label>
+            <select id="result" [(ngModel)]="filter.result" class="form-input">
+              <option [value]="undefined">Todos os resultados</option>
+              @for (result of availableResults; track result) {
+                <option [value]="result">{{ result }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Severity Filter -->
+          <div class="filter-group">
+            <label for="severity">Severidade</label>
+            <select id="severity" [(ngModel)]="filter.severity" class="form-input">
+              <option [value]="undefined">Todas as severidades</option>
+              @for (severity of availableSeverities; track severity) {
+                <option [value]="severity">{{ severity }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="filters-actions">
+          <button class="btn btn-secondary" (click)="clearFilters()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Limpar Filtros
+          </button>
+          <button class="btn btn-primary" (click)="applyFilters()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            Aplicar Filtros
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Results Summary -->
+  <div class="results-summary">
+    <span class="count-badge">
+      Total de registros: <strong>{{ totalCount() }}</strong>
+    </span>
+    <span class="count-badge">
+      Página {{ currentPage() }} de {{ totalPages() }}
+    </span>
+  </div>
+
+  <!-- Error Message -->
+  @if (error()) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Loading Indicator -->
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando logs de auditoria...</p>
+    </div>
+  }
+
+  <!-- Logs Table -->
+  @if (!loading() && logs().length > 0) {
+    <div class="table-container">
+      <table class="logs-table">
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Usuário</th>
+            <th>Ação</th>
+            <th>Entidade</th>
+            <th>Resultado</th>
+            <th>Severidade</th>
+            <th>IP</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (log of logs(); track log.id) {
+            <tr>
+              <td class="timestamp-cell">{{ formatTimestamp(log.timestamp) }}</td>
+              <td>
+                <div class="user-info">
+                  <span class="user-name">{{ log.userName }}</span>
+                  <span class="user-email">{{ log.userEmail }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="action-badge">
+                  <span class="action-icon">{{ getActionIcon(log.action) }}</span>
+                  {{ log.action }}
+                </span>
+              </td>
+              <td>
+                <div class="entity-info">
+                  <span class="entity-type">{{ log.entityType }}</span>
+                  @if (log.entityDisplayName) {
+                    <span class="entity-name">{{ log.entityDisplayName }}</span>
+                  }
+                </div>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getResultClass(log.result)">
+                  {{ log.result }}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getSeverityClass(log.severity)">
+                  {{ log.severity }}
+                </span>
+              </td>
+              <td class="ip-cell">{{ log.ipAddress }}</td>
+              <td>
+                <button class="btn-icon" (click)="viewDetails(log)" title="Ver detalhes">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button 
+        class="btn btn-secondary" 
+        (click)="previousPage()" 
+        [disabled]="currentPage() === 1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Anterior
+      </button>
+      
+      <div class="page-numbers">
+        @for (page of getPageNumbers(); track page) {
+          @if (page === -1) {
+            <span class="ellipsis">...</span>
+          } @else {
+            <button 
+              class="page-btn" 
+              [class.active]="page === currentPage()"
+              (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+        }
+      </div>
+      
+      <button 
+        class="btn btn-secondary" 
+        (click)="nextPage()" 
+        [disabled]="currentPage() === totalPages()">
+        Próxima
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && logs().length === 0 && !error()) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <h3>Nenhum log encontrado</h3>
+      <p>Não há logs de auditoria que correspondam aos filtros selecionados.</p>
+      <button class="btn btn-primary" (click)="clearFilters()">Limpar Filtros</button>
+    </div>
+  }
+</div>
+
+<!-- Details Modal -->
+@if (selectedLog(); as log) {
+  <div class="modal-overlay" (click)="closeDetails()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Detalhes do Log de Auditoria</h2>
+        <button class="close-btn" (click)="closeDetails()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="detail-section">
+          <h3>Informações Gerais</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Data/Hora:</span>
+              <span class="detail-value">{{ formatTimestamp(log.timestamp) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ação:</span>
+              <span class="detail-value">{{ log.action }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Descrição:</span>
+              <span class="detail-value">{{ log.actionDescription }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Resultado:</span>
+              <span class="badge" [ngClass]="getResultClass(log.result)">{{ log.result }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Severidade:</span>
+              <span class="badge" [ngClass]="getSeverityClass(log.severity)">{{ log.severity }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Usuário</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Nome:</span>
+              <span class="detail-value">{{ log.userName }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value">{{ log.userEmail }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Entidade Afetada</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Tipo:</span>
+              <span class="detail-value">{{ log.entityType }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">ID:</span>
+              <span class="detail-value">{{ log.entityId }}</span>
+            </div>
+            @if (log.entityDisplayName) {
+              <div class="detail-item">
+                <span class="detail-label">Nome:</span>
+                <span class="detail-value">{{ log.entityDisplayName }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Requisição</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">IP:</span>
+              <span class="detail-value">{{ log.ipAddress }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Método HTTP:</span>
+              <span class="detail-value">{{ log.httpMethod }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Caminho:</span>
+              <span class="detail-value">{{ log.requestPath }}</span>
+            </div>
+            @if (log.statusCode) {
+              <div class="detail-item">
+                <span class="detail-label">Status Code:</span>
+                <span class="detail-value">{{ log.statusCode }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        @if (log.oldValues || log.newValues) {
+          <div class="detail-section">
+            <h3>Alterações</h3>
+            @if (log.changedFields && log.changedFields.length > 0) {
+              <div class="changed-fields">
+                <strong>Campos Alterados:</strong>
+                <ul>
+                  @for (field of log.changedFields; track field) {
+                    <li>{{ field }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (log.oldValues) {
+              <div class="json-display">
+                <strong>Valores Antigos:</strong>
+                <pre>{{ log.oldValues }}</pre>
+              </div>
+            }
+            @if (log.newValues) {
+              <div class="json-display">
+                <strong>Valores Novos:</strong>
+                <pre>{{ log.newValues }}</pre>
+              </div>
+            }
+          </div>
+        }
+
+        @if (log.failureReason) {
+          <div class="detail-section">
+            <h3>Falha</h3>
+            <div class="failure-reason">
+              {{ log.failureReason }}
+            </div>
+          </div>
+        }
+
+        <div class="detail-section">
+          <h3>LGPD</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Categoria de Dados:</span>
+              <span class="detail-value">{{ log.dataCategory }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Finalidade:</span>
+              <span class="detail-value">{{ log.purpose }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>User Agent</h3>
+          <div class="user-agent">
+            {{ log.userAgent }}
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeDetails()">Fechar</button>
+      </div>
+    </div>
+  </div>
+}
