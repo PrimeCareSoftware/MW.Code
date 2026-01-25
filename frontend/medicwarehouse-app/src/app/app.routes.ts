@@ -268,6 +268,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/procedures/procedure-form').then(m => m.ProcedureForm),
     canActivate: [authGuard]
   },
+  { 
+    path: 'procedures/owner-management', 
+    loadComponent: () => import('./pages/procedures/owner-procedure-management').then(m => m.OwnerProcedureManagement),
+    canActivate: [authGuard, ownerGuard]
+  },
   
   { 
     path: 'tiss/dashboards/glosas', 
