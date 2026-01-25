@@ -57,6 +57,7 @@ namespace MedicSoft.Domain.Entities
                 throw new ArgumentException("Duration must be greater than zero", nameof(durationMinutes));
 
             Name = name.Trim();
+            TradeName = tradeName.Trim();
             Code = code.Trim();
             Description = description?.Trim() ?? string.Empty;
             Category = category;
@@ -65,7 +66,7 @@ namespace MedicSoft.Domain.Entities
             RequiresMaterials = requiresMaterials;
             IsActive = true;
             ClinicId = clinicId;
-            AcceptedHealthInsurances = acceptedHealthInsurances?.Trim();
+            AcceptedHealthInsurances = string.IsNullOrWhiteSpace(acceptedHealthInsurances) ? null : acceptedHealthInsurances.Trim();
             AllowInMedicalAttendance = allowInMedicalAttendance;
             AllowInExclusiveProcedureAttendance = allowInExclusiveProcedureAttendance;
         }
@@ -91,7 +92,7 @@ namespace MedicSoft.Domain.Entities
             DurationMinutes = durationMinutes;
             RequiresMaterials = requiresMaterials;
             ClinicId = clinicId;
-            AcceptedHealthInsurances = acceptedHealthInsurances?.Trim();
+            AcceptedHealthInsurances = string.IsNullOrWhiteSpace(acceptedHealthInsurances) ? null : acceptedHealthInsurances.Trim();
             AllowInMedicalAttendance = allowInMedicalAttendance;
             AllowInExclusiveProcedureAttendance = allowInExclusiveProcedureAttendance;
             UpdateTimestamp();

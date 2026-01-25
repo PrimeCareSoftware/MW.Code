@@ -115,8 +115,6 @@ export class CompanyInfo implements OnInit {
 
   getDocumentTypeLabel(): string {
     const docType = this.companyForm.get('documentType')?.value;
-    return docType !== null && docType !== undefined 
-      ? this.documentTypeLabels[docType as DocumentType] 
-      : '';
+    return this.documentTypeLabels[docType as DocumentType] ?? '';
   }
 }
