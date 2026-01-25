@@ -24,6 +24,44 @@
       </div>
     }
 
+    <!-- Clinic List Section (for owners with multiple clinics) -->
+    @if (ownerClinics().length > 0) {
+      <div class="clinics-section">
+        <div class="section-header">
+          <h2>Minhas Clínicas ({{ ownerClinics().length }})</h2>
+          <button class="btn btn-primary" (click)="openCreateClinicModal()">
+            <span>+ Nova Clínica</span>
+          </button>
+        </div>
+
+        <div class="clinics-grid">
+          @for (clinic of ownerClinics(); track clinic.id) {
+            <div class="clinic-card">
+              <div class="clinic-card-header">
+                <h3>{{ clinic.name }}</h3>
+                <span class="badge" [class.badge-active]="clinic.isActive" [class.badge-inactive]="!clinic.isActive">
+                  {{ clinic.isActive ? 'Ativa' : 'Inativa' }}
+                </span>
+              </div>
+              <div class="clinic-card-body">
+                <p><strong>Nome Fantasia:</strong> {{ clinic.tradeName }}</p>
+                <p><strong>Documento:</strong> {{ clinic.document }}</p>
+                <p><strong>Telefone:</strong> {{ clinic.phone }}</p>
+                <p><strong>Email:</strong> {{ clinic.email }}</p>
+                <p><strong>Endereço:</strong> {{ clinic.address }}</p>
+              </div>
+              <div class="clinic-card-footer">
+                <button class="btn btn-secondary btn-sm" (click)="openEditClinicModal(clinic)">
+                  Editar
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Current Clinic Info (existing functionality) -->
     @if (clinicInfo()) {
       <div class="info-card">
         <h3>Dados Básicos</h3>
@@ -110,3 +148,105 @@
     }
   }
 </div>
+
+<!-- Clinic Modal -->
+@if (showClinicModal()) {
+  <div class="modal-overlay" (click)="closeClinicModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ clinicModalMode() === 'create' ? 'Nova Clínica' : 'Editar Clínica' }}</h2>
+        <button class="btn-close" (click)="closeClinicModal()">×</button>
+      </div>
+      
+      <form [formGroup]="clinicModalForm" (ngSubmit)="saveClinic()">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Nome <span class="required">*</span></label>
+              <input type="text" id="name" formControlName="name" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="tradeName">Nome Fantasia <span class="required">*</span></label>
+              <input type="text" id="tradeName" formControlName="tradeName" class="form-control" />
+            </div>
+          </div>
+
+          @if (clinicModalMode() === 'create') {
+            <div class="form-group">
+              <label for="document">CPF/CNPJ <span class="required">*</span></label>
+              <input type="text" id="document" formControlName="document" class="form-control" />
+            </div>
+          }
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Telefone <span class="required">*</span></label>
+              <input type="tel" id="phone" formControlName="phone" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email <span class="required">*</span></label>
+              <input type="email" id="email" formControlName="email" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Endereço <span class="required">*</span></label>
+            <textarea id="address" formControlName="address" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="openingTime">Horário de Abertura <span class="required">*</span></label>
+              <input type="time" id="openingTime" formControlName="openingTime" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="closingTime">Horário de Fechamento <span class="required">*</span></label>
+              <input type="time" id="closingTime" formControlName="closingTime" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="appointmentDurationMinutes">Duração da Consulta (min) <span class="required">*</span></label>
+              <input type="number" id="appointmentDurationMinutes" formControlName="appointmentDurationMinutes" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="numberOfRooms">Número de Salas</label>
+              <input type="number" id="numberOfRooms" formControlName="numberOfRooms" class="form-control" />
+            </div>
+          </div>
+
+          @if (clinicModalMode() === 'edit') {
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="allowEmergencySlots" />
+                Permitir slots de emergência
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="notifyPrimaryDoctorOnOtherDoctorAppointment" />
+                Notificar médico principal quando paciente é atendido por outro médico
+              </label>
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeClinicModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="clinicModalForm.invalid || isSaving()">
+            @if (isSaving()) {
+              <span class="spinner"></span>
+              <span>Salvando...</span>
+            } @else {
+              <span>{{ clinicModalMode() === 'create' ? 'Criar' : 'Atualizar' }}</span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
