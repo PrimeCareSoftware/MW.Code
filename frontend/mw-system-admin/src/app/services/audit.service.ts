@@ -63,7 +63,7 @@ export interface AuditReport {
   providedIn: 'root'
 })
 export class AuditService {
-  private apiUrl = `${environment.apiUrl}/api/audit`;
+  private apiUrl = `${environment.apiUrl}/audit`;
   
   // Signal to track loading state
   loading = signal(false);
