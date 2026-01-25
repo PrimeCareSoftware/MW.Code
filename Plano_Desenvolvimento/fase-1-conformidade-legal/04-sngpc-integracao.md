@@ -2,9 +2,9 @@
 
 **Prioridade:** 🔥🔥🔥 P0 - CRÍTICA  
 **Obrigatoriedade:** Legal (ANVISA RDC 27/2007)  
-**Status Atual:** ✅ 95% completo - Backend Production Ready  
-**Esforço Restante:** 2 semanas | 1 desenvolvedor  
-**Custo Estimado:** R$ 5.000 (restante)  
+**Status Atual:** ✅ 97% completo - Backend Production Ready  
+**Esforço Restante:** 1 semana | 1 desenvolvedor  
+**Custo Estimado:** R$ 3.000 (restante)  
 **Prazo:** Q1 2026 (Janeiro-Fevereiro)  
 **Última Atualização:** 25 de Janeiro de 2026
 
@@ -57,13 +57,13 @@ O **Sistema Nacional de Gerenciamento de Produtos Controlados (SNGPC)** é obrig
 - ✅ Detecção de dispensação excessiva
 - ✅ Detecção de movimentações incomuns
 
-### ⏳ O que falta (5%)
+### ⏳ O que falta (3%)
 
-1. **Persistência de Alertas** (2% do trabalho restante)
-   - Criar entidade `SngpcAlert`
-   - Implementar repositório de alertas
-   - Adicionar migração de banco
-   - Atualizar `SngpcAlertService` para persistir
+1. **Persistência de Alertas** ~~(2% do trabalho restante)~~ ✅ **CONCLUÍDO - 25 de Janeiro de 2026**
+   - ✅ Criar entidade `SngpcAlert`
+   - ✅ Implementar repositório de alertas
+   - ✅ Adicionar migração de banco
+   - ✅ Atualizar `SngpcAlertService` para persistir
 
 2. **Componentes Frontend Adicionais** (2% do trabalho restante)
    - Navegador de registro (registry browser)
@@ -98,9 +98,10 @@ O **Sistema Nacional de Gerenciamento de Produtos Controlados (SNGPC)** é obrig
 - ✅ Detecção de anomalias e inconsistências
 - ✅ Dashboard com estatísticas
 - ✅ API REST completa (19+ endpoints)
+- ✅ **Persistência de alertas com audit trail completo** (NOVO)
 
 **Objetivos Restantes:**
-1. Adicionar persistência de alertas (para audit trail)
+1. ~~Adicionar persistência de alertas (para audit trail)~~ ✅ CONCLUÍDO
 2. Criar componentes frontend adicionais
 3. Configurar credenciais ANVISA reais
 4. Testar em ambiente de homologação ANVISA
