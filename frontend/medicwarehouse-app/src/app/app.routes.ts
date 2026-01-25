@@ -274,6 +274,13 @@ export const routes: Routes = [
     canActivate: [authGuard, ownerGuard]
   },
   
+  // Settings routes
+  { 
+    path: 'settings/company', 
+    loadComponent: () => import('./pages/settings/company-info').then(m => m.CompanyInfo),
+    canActivate: [authGuard]
+  },
+  
   { 
     path: 'tiss/dashboards/glosas', 
     loadComponent: () => import('./pages/tiss/dashboards/glosas-dashboard').then(m => m.GlosasDashboard),

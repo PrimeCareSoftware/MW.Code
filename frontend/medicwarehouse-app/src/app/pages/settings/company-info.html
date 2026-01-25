@@ -1,0 +1,148 @@
+<app-navbar></app-navbar>
+
+<div class="company-info-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Informações da Empresa</h1>
+      <p>Gerencie as informações da sua empresa</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading">Carregando...</div>
+    </div>
+  } @else {
+    <div class="form-card">
+      <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3>Informações Básicas</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name" class="required">Razão Social</label>
+              <input 
+                type="text" 
+                id="name" 
+                formControlName="name" 
+                class="form-control"
+                placeholder="Nome oficial da empresa"
+              />
+              @if (companyForm.get('name')?.invalid && companyForm.get('name')?.touched) {
+                <div class="error-message">Razão social é obrigatória (mínimo 3 caracteres)</div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="tradeName" class="required">Nome Fantasia</label>
+              <input 
+                type="text" 
+                id="tradeName" 
+                formControlName="tradeName" 
+                class="form-control"
+                placeholder="Nome comercial da empresa"
+              />
+              @if (companyForm.get('tradeName')?.invalid && companyForm.get('tradeName')?.touched) {
+                <div class="error-message">Nome fantasia é obrigatório (mínimo 3 caracteres)</div>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="document">Documento</label>
+              <input 
+                type="text" 
+                id="document" 
+                formControlName="document" 
+                class="form-control"
+                readonly
+              />
+              <small class="form-help">O documento não pode ser alterado</small>
+            </div>
+
+            <div class="form-group">
+              <label for="documentType">Tipo de Documento</label>
+              <input 
+                type="text" 
+                id="documentType" 
+                [value]="getDocumentTypeLabel()"
+                class="form-control"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Contato</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone" class="required">Telefone</label>
+              <input 
+                type="text" 
+                id="phone" 
+                formControlName="phone" 
+                class="form-control"
+                placeholder="(00) 0000-0000"
+              />
+              @if (companyForm.get('phone')?.invalid && companyForm.get('phone')?.touched) {
+                <div class="error-message">Telefone é obrigatório</div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="required">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                formControlName="email" 
+                class="form-control"
+                placeholder="contato@empresa.com.br"
+              />
+              @if (companyForm.get('email')?.invalid && companyForm.get('email')?.touched) {
+                <div class="error-message">Email válido é obrigatório</div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Configurações Adicionais</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="subdomain">Subdomínio</label>
+              <input 
+                type="text" 
+                id="subdomain" 
+                formControlName="subdomain" 
+                class="form-control"
+                placeholder="minha-empresa"
+              />
+              <small class="form-help">Subdomínio personalizado para acesso (apenas letras minúsculas, números e hífens)</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving() || companyForm.invalid">
+            {{ isSaving() ? 'Salvando...' : 'Salvar Alterações' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

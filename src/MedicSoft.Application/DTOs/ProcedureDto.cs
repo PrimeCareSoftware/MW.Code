@@ -33,6 +33,15 @@ namespace MedicSoft.Application.DTOs
         
         public bool RequiresMaterials { get; set; }
         public bool IsActive { get; set; }
+        
+        public Guid? ClinicId { get; set; }
+        
+        [StringLength(500, ErrorMessage = "Lista de convênios deve ter no máximo 500 caracteres")]
+        public string? AcceptedHealthInsurances { get; set; }
+        
+        public bool AllowInMedicalAttendance { get; set; } = true;
+        public bool AllowInExclusiveProcedureAttendance { get; set; }
+        
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
@@ -63,6 +72,14 @@ namespace MedicSoft.Application.DTOs
         public int DurationMinutes { get; set; }
         
         public bool RequiresMaterials { get; set; }
+        
+        public Guid? ClinicId { get; set; }
+        
+        [StringLength(500, ErrorMessage = "Lista de convênios deve ter no máximo 500 caracteres")]
+        public string? AcceptedHealthInsurances { get; set; }
+        
+        public bool AllowInMedicalAttendance { get; set; } = true;
+        public bool AllowInExclusiveProcedureAttendance { get; set; }
     }
 
     public class UpdateProcedureDto
@@ -91,6 +108,14 @@ namespace MedicSoft.Application.DTOs
         public int DurationMinutes { get; set; }
         
         public bool RequiresMaterials { get; set; }
+        
+        public Guid? ClinicId { get; set; }
+        
+        [StringLength(500, ErrorMessage = "Lista de convênios deve ter no máximo 500 caracteres")]
+        public string? AcceptedHealthInsurances { get; set; }
+        
+        public bool AllowInMedicalAttendance { get; set; } = true;
+        public bool AllowInExclusiveProcedureAttendance { get; set; }
     }
 
     public class AppointmentProcedureDto

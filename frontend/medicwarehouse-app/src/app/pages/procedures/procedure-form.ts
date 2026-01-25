@@ -37,7 +37,11 @@ export class ProcedureForm implements OnInit {
       category: [ProcedureCategory.Other, Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       durationMinutes: [30, [Validators.required, Validators.min(1)]],
-      requiresMaterials: [false]
+      requiresMaterials: [false],
+      clinicId: [null],
+      acceptedHealthInsurances: [''],
+      allowInMedicalAttendance: [true],
+      allowInExclusiveProcedureAttendance: [false]
     });
   }
 
@@ -61,7 +65,11 @@ export class ProcedureForm implements OnInit {
           category: procedure.category,
           price: procedure.price,
           durationMinutes: procedure.durationMinutes,
-          requiresMaterials: procedure.requiresMaterials
+          requiresMaterials: procedure.requiresMaterials,
+          clinicId: procedure.clinicId,
+          acceptedHealthInsurances: procedure.acceptedHealthInsurances,
+          allowInMedicalAttendance: procedure.allowInMedicalAttendance,
+          allowInExclusiveProcedureAttendance: procedure.allowInExclusiveProcedureAttendance
         });
         this.isLoading.set(false);
       },
@@ -93,7 +101,11 @@ export class ProcedureForm implements OnInit {
         category: formValue.category,
         price: formValue.price,
         durationMinutes: formValue.durationMinutes,
-        requiresMaterials: formValue.requiresMaterials
+        requiresMaterials: formValue.requiresMaterials,
+        clinicId: formValue.clinicId,
+        acceptedHealthInsurances: formValue.acceptedHealthInsurances,
+        allowInMedicalAttendance: formValue.allowInMedicalAttendance,
+        allowInExclusiveProcedureAttendance: formValue.allowInExclusiveProcedureAttendance
       }).subscribe({
         next: () => {
           this.successMessage.set('Procedimento atualizado com sucesso!');
@@ -118,7 +130,11 @@ export class ProcedureForm implements OnInit {
         category: formValue.category,
         price: formValue.price,
         durationMinutes: formValue.durationMinutes,
-        requiresMaterials: formValue.requiresMaterials
+        requiresMaterials: formValue.requiresMaterials,
+        clinicId: formValue.clinicId,
+        acceptedHealthInsurances: formValue.acceptedHealthInsurances,
+        allowInMedicalAttendance: formValue.allowInMedicalAttendance,
+        allowInExclusiveProcedureAttendance: formValue.allowInExclusiveProcedureAttendance
       }).subscribe({
         next: () => {
           this.successMessage.set('Procedimento criado com sucesso!');

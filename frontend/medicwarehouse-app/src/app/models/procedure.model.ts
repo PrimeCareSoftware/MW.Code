@@ -8,6 +8,10 @@ export interface Procedure {
   durationMinutes: number;
   requiresMaterials: boolean;
   isActive: boolean;
+  clinicId?: string;
+  acceptedHealthInsurances?: string;
+  allowInMedicalAttendance: boolean;
+  allowInExclusiveProcedureAttendance: boolean;
   createdAt: string;
   updatedAt?: string;
 }
@@ -35,6 +39,10 @@ export interface CreateProcedure {
   price: number;
   durationMinutes: number;
   requiresMaterials: boolean;
+  clinicId?: string;
+  acceptedHealthInsurances?: string;
+  allowInMedicalAttendance: boolean;
+  allowInExclusiveProcedureAttendance: boolean;
 }
 
 export interface UpdateProcedure {
@@ -44,6 +52,10 @@ export interface UpdateProcedure {
   price: number;
   durationMinutes: number;
   requiresMaterials: boolean;
+  clinicId?: string;
+  acceptedHealthInsurances?: string;
+  allowInMedicalAttendance: boolean;
+  allowInExclusiveProcedureAttendance: boolean;
 }
 
 export interface AppointmentProcedure {

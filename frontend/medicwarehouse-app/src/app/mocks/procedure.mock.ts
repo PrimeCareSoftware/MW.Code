@@ -11,6 +11,8 @@ export const MOCK_PROCEDURES: Procedure[] = [
     durationMinutes: 30,
     requiresMaterials: false,
     isActive: true,
+    allowInMedicalAttendance: true,
+    allowInExclusiveProcedureAttendance: false,
     createdAt: '2024-01-01T10:00:00Z'
   },
   {
@@ -23,6 +25,8 @@ export const MOCK_PROCEDURES: Procedure[] = [
     durationMinutes: 15,
     requiresMaterials: true,
     isActive: true,
+    allowInMedicalAttendance: true,
+    allowInExclusiveProcedureAttendance: true,
     createdAt: '2024-01-01T10:00:00Z'
   },
   {
@@ -35,6 +39,8 @@ export const MOCK_PROCEDURES: Procedure[] = [
     durationMinutes: 20,
     requiresMaterials: true,
     isActive: true,
+    allowInMedicalAttendance: true,
+    allowInExclusiveProcedureAttendance: true,
     createdAt: '2024-01-01T10:00:00Z'
   },
   {
@@ -47,6 +53,8 @@ export const MOCK_PROCEDURES: Procedure[] = [
     durationMinutes: 10,
     requiresMaterials: true,
     isActive: true,
+    allowInMedicalAttendance: true,
+    allowInExclusiveProcedureAttendance: false,
     createdAt: '2024-01-01T10:00:00Z'
   }
 ];
