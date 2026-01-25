@@ -14,13 +14,16 @@ namespace MedicSoft.Telemedicine.Api.Controllers;
 public class IdentityVerificationController : ControllerBase
 {
     private readonly ITelemedicineService _telemedicineService;
+    private readonly IFileStorageService _fileStorageService;
     private readonly ILogger<IdentityVerificationController> _logger;
 
     public IdentityVerificationController(
         ITelemedicineService telemedicineService,
+        IFileStorageService fileStorageService,
         ILogger<IdentityVerificationController> logger)
     {
         _telemedicineService = telemedicineService ?? throw new ArgumentNullException(nameof(telemedicineService));
+        _fileStorageService = fileStorageService ?? throw new ArgumentNullException(nameof(fileStorageService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -59,11 +62,33 @@ public class IdentityVerificationController : ControllerBase
                     return BadRequest("CRM state is required for providers");
             }
 
-            // TODO: Save files to secure storage
-            // For now, using placeholder paths
-            var documentPhotoPath = $"identity/{tenantId}/{request.UserId}/document_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg";
-            string? selfiePath = selfie != null ? $"identity/{tenantId}/{request.UserId}/selfie_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg" : null;
-            string? crmCardPhotoPath = crmCardPhoto != null ? $"identity/{tenantId}/{request.UserId}/crm_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg" : null;
+            // Save files to secure encrypted storage
+            var containerName = $"identity-documents-{tenantId}";
+            var documentPhotoPath = await _fileStorageService.SaveFileAsync(
+                documentPhoto, 
+                containerName, 
+                $"document_{request.UserId}_{DateTime.UtcNow:yyyyMMddHHmmss}{Path.GetExtension(documentPhoto.FileName)}",
+                encrypt: true);
+
+            string? selfiePath = null;
+            if (selfie != null)
+            {
+                selfiePath = await _fileStorageService.SaveFileAsync(
+                    selfie,
+                    containerName,
+                    $"selfie_{request.UserId}_{DateTime.UtcNow:yyyyMMddHHmmss}{Path.GetExtension(selfie.FileName)}",
+                    encrypt: true);
+            }
+
+            string? crmCardPhotoPath = null;
+            if (crmCardPhoto != null)
+            {
+                crmCardPhotoPath = await _fileStorageService.SaveFileAsync(
+                    crmCardPhoto,
+                    containerName,
+                    $"crm_{request.UserId}_{DateTime.UtcNow:yyyyMMddHHmmss}{Path.GetExtension(crmCardPhoto.FileName)}",
+                    encrypt: true);
+            }
 
             var result = await _telemedicineService.CreateIdentityVerificationAsync(
                 request,
