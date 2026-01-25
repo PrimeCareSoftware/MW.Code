@@ -14,15 +14,21 @@ public class TelemedicineService : ITelemedicineService
 {
     private readonly ITelemedicineSessionRepository _sessionRepository;
     private readonly ITelemedicineConsentRepository _consentRepository;
+    private readonly IIdentityVerificationRepository _verificationRepository;
+    private readonly ITelemedicineRecordingRepository _recordingRepository;
     private readonly IVideoCallService _videoCallService;
 
     public TelemedicineService(
         ITelemedicineSessionRepository sessionRepository,
         ITelemedicineConsentRepository consentRepository,
+        IIdentityVerificationRepository verificationRepository,
+        ITelemedicineRecordingRepository recordingRepository,
         IVideoCallService videoCallService)
     {
         _sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
         _consentRepository = consentRepository ?? throw new ArgumentNullException(nameof(consentRepository));
+        _verificationRepository = verificationRepository ?? throw new ArgumentNullException(nameof(verificationRepository));
+        _recordingRepository = recordingRepository ?? throw new ArgumentNullException(nameof(recordingRepository));
         _videoCallService = videoCallService ?? throw new ArgumentNullException(nameof(videoCallService));
     }
 
@@ -343,6 +349,230 @@ public class TelemedicineService : ITelemedicineService
             IsActive = consent.IsActive,
             RevokedAt = consent.RevokedAt,
             RevocationReason = consent.RevocationReason
+        };
+    }
+    
+    // ===== CFM 2.314/2022 Compliance - Identity Verification =====
+    
+    public async Task<IdentityVerificationResponse> CreateIdentityVerificationAsync(
+        CreateIdentityVerificationRequest request, 
+        string documentPhotoPath, 
+        string? selfiePath, 
+        string? crmCardPhotoPath, 
+        string tenantId)
+    {
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
+            
+        if (string.IsNullOrWhiteSpace(documentPhotoPath))
+            throw new ArgumentException("Document photo path is required", nameof(documentPhotoPath));
+            
+        if (string.IsNullOrWhiteSpace(tenantId))
+            throw new ArgumentException("TenantId is required", nameof(tenantId));
+        
+        var verification = new IdentityVerification(
+            tenantId,
+            request.UserId,
+            request.UserType,
+            request.DocumentType,
+            request.DocumentNumber,
+            documentPhotoPath,
+            selfiePath,
+            crmCardPhotoPath,
+            request.CrmNumber,
+            request.CrmState,
+            request.TelemedicineSessionId
+        );
+        
+        await _verificationRepository.AddAsync(verification);
+        
+        return MapToVerificationResponse(verification);
+    }
+    
+    public async Task<IdentityVerificationResponse> VerifyIdentityAsync(
+        Guid verificationId, 
+        VerifyIdentityRequest request, 
+        Guid verifiedByUserId, 
+        string tenantId)
+    {
+        var verification = await _verificationRepository.GetByIdAsync(verificationId, tenantId)
+            ?? throw new InvalidOperationException($"Verification {verificationId} not found");
+        
+        if (request.Approved)
+        {
+            verification.Approve(verifiedByUserId, request.Notes);
+        }
+        else
+        {
+            if (string.IsNullOrWhiteSpace(request.Notes))
+                throw new ArgumentException("Rejection reason is required", nameof(request.Notes));
+                
+            verification.Reject(request.Notes, verifiedByUserId);
+        }
+        
+        await _verificationRepository.UpdateAsync(verification);
+        
+        return MapToVerificationResponse(verification);
+    }
+    
+    public async Task<IdentityVerificationResponse?> GetIdentityVerificationByIdAsync(Guid verificationId, string tenantId)
+    {
+        var verification = await _verificationRepository.GetByIdAsync(verificationId, tenantId);
+        return verification != null ? MapToVerificationResponse(verification) : null;
+    }
+    
+    public async Task<IdentityVerificationResponse?> GetLatestIdentityVerificationAsync(Guid userId, string userType, string tenantId)
+    {
+        var verification = await _verificationRepository.GetLatestByUserIdAsync(userId, userType, tenantId);
+        return verification != null ? MapToVerificationResponse(verification) : null;
+    }
+    
+    public async Task<bool> HasValidIdentityVerificationAsync(Guid userId, string userType, string tenantId)
+    {
+        return await _verificationRepository.HasValidVerificationAsync(userId, userType, tenantId);
+    }
+    
+    public async Task<IEnumerable<IdentityVerificationResponse>> GetPendingVerificationsAsync(string tenantId, int skip = 0, int take = 50)
+    {
+        var verifications = await _verificationRepository.GetPendingVerificationsAsync(tenantId, skip, take);
+        return verifications.Select(MapToVerificationResponse);
+    }
+    
+    private static IdentityVerificationResponse MapToVerificationResponse(IdentityVerification verification)
+    {
+        return new IdentityVerificationResponse
+        {
+            Id = verification.Id,
+            UserId = verification.UserId,
+            UserType = verification.UserType,
+            DocumentType = verification.DocumentType,
+            DocumentNumber = verification.DocumentNumber,
+            CrmNumber = verification.CrmNumber,
+            CrmState = verification.CrmState,
+            Status = verification.Status.ToString(),
+            VerifiedAt = verification.VerifiedAt,
+            VerifiedByUserId = verification.VerifiedByUserId,
+            VerificationNotes = verification.VerificationNotes,
+            ValidUntil = verification.ValidUntil,
+            IsValid = verification.IsValid(),
+            HasExpired = verification.HasExpired()
+        };
+    }
+    
+    // ===== CFM 2.314/2022 Compliance - Recording Management =====
+    
+    public async Task<RecordingResponse> CreateRecordingAsync(CreateRecordingRequest request, string tenantId)
+    {
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
+            
+        if (string.IsNullOrWhiteSpace(tenantId))
+            throw new ArgumentException("TenantId is required", nameof(tenantId));
+        
+        // Verify session exists
+        var session = await _sessionRepository.GetByIdAsync(request.SessionId, tenantId)
+            ?? throw new InvalidOperationException($"Session {request.SessionId} not found");
+        
+        // Verify consent exists and allows recording
+        var consent = await _consentRepository.GetByIdAsync(request.ConsentId, tenantId)
+            ?? throw new InvalidOperationException($"Consent {request.ConsentId} not found");
+            
+        if (!consent.AcceptsRecording)
+            throw new InvalidOperationException("Patient has not consented to recording");
+        
+        var recording = new TelemedicineRecording(
+            tenantId,
+            request.SessionId,
+            request.RecordingPath,
+            request.FileFormat,
+            request.ConsentId,
+            request.IsEncrypted,
+            request.EncryptionKeyId
+        );
+        
+        await _recordingRepository.AddAsync(recording);
+        
+        return MapToRecordingResponse(recording);
+    }
+    
+    public async Task<RecordingResponse> StartRecordingAsync(Guid recordingId, string tenantId)
+    {
+        var recording = await _recordingRepository.GetByIdAsync(recordingId, tenantId)
+            ?? throw new InvalidOperationException($"Recording {recordingId} not found");
+        
+        recording.StartRecording();
+        await _recordingRepository.UpdateAsync(recording);
+        
+        return MapToRecordingResponse(recording);
+    }
+    
+    public async Task<RecordingResponse> CompleteRecordingAsync(Guid recordingId, CompleteRecordingRequest request, string tenantId)
+    {
+        var recording = await _recordingRepository.GetByIdAsync(recordingId, tenantId)
+            ?? throw new InvalidOperationException($"Recording {recordingId} not found");
+        
+        recording.CompleteRecording(request.FileSizeBytes, request.DurationSeconds);
+        await _recordingRepository.UpdateAsync(recording);
+        
+        return MapToRecordingResponse(recording);
+    }
+    
+    public async Task<RecordingResponse> FailRecordingAsync(Guid recordingId, string reason, string tenantId)
+    {
+        var recording = await _recordingRepository.GetByIdAsync(recordingId, tenantId)
+            ?? throw new InvalidOperationException($"Recording {recordingId} not found");
+        
+        recording.FailRecording(reason);
+        await _recordingRepository.UpdateAsync(recording);
+        
+        return MapToRecordingResponse(recording);
+    }
+    
+    public async Task<RecordingResponse> DeleteRecordingAsync(Guid recordingId, DeleteRecordingRequest request, Guid deletedByUserId, string tenantId)
+    {
+        var recording = await _recordingRepository.GetByIdAsync(recordingId, tenantId)
+            ?? throw new InvalidOperationException($"Recording {recordingId} not found");
+        
+        recording.Delete(deletedByUserId, request.Reason);
+        await _recordingRepository.UpdateAsync(recording);
+        
+        return MapToRecordingResponse(recording);
+    }
+    
+    public async Task<RecordingResponse?> GetRecordingByIdAsync(Guid recordingId, string tenantId)
+    {
+        var recording = await _recordingRepository.GetByIdAsync(recordingId, tenantId);
+        return recording != null ? MapToRecordingResponse(recording) : null;
+    }
+    
+    public async Task<RecordingResponse?> GetRecordingBySessionIdAsync(Guid sessionId, string tenantId)
+    {
+        var recording = await _recordingRepository.GetBySessionIdAsync(sessionId, tenantId);
+        return recording != null ? MapToRecordingResponse(recording) : null;
+    }
+    
+    public async Task<IEnumerable<RecordingResponse>> GetAvailableRecordingsAsync(string tenantId, int skip = 0, int take = 50)
+    {
+        var recordings = await _recordingRepository.GetAvailableRecordingsAsync(tenantId, skip, take);
+        return recordings.Select(MapToRecordingResponse);
+    }
+    
+    private static RecordingResponse MapToRecordingResponse(TelemedicineRecording recording)
+    {
+        return new RecordingResponse
+        {
+            Id = recording.Id,
+            SessionId = recording.SessionId,
+            Status = recording.Status.ToString(),
+            RecordingStartedAt = recording.RecordingStartedAt,
+            RecordingCompletedAt = recording.RecordingCompletedAt,
+            DurationSeconds = recording.DurationSeconds,
+            FileSizeBytes = recording.FileSizeBytes,
+            FormattedFileSize = recording.GetFormattedFileSize(),
+            FormattedDuration = recording.GetFormattedDuration(),
+            IsEncrypted = recording.IsEncrypted,
+            RetentionUntil = recording.RetentionUntil,
+            IsDeleted = recording.IsDeleted
         };
     }
 }

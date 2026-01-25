@@ -15,6 +15,8 @@ public class TelemedicineDbContext : DbContext
 
     public DbSet<TelemedicineSession> Sessions { get; set; } = null!;
     public DbSet<TelemedicineConsent> Consents { get; set; } = null!;
+    public DbSet<IdentityVerification> IdentityVerifications { get; set; } = null!;
+    public DbSet<TelemedicineRecording> TelemedicineRecordings { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,6 +108,93 @@ public class TelemedicineDbContext : DbContext
             entity.HasIndex(e => e.AppointmentId);
             entity.HasIndex(e => new { e.TenantId, e.PatientId, e.IsActive });
             entity.HasIndex(e => new { e.TenantId, e.ConsentDate });
+        });
+        
+        // Configure IdentityVerification entity
+        modelBuilder.Entity<IdentityVerification>(entity =>
+        {
+            entity.ToTable("IdentityVerifications");
+            entity.HasKey(e => e.Id);
+            
+            entity.Property(e => e.TenantId)
+                .IsRequired()
+                .HasMaxLength(100);
+                
+            entity.Property(e => e.UserType)
+                .IsRequired()
+                .HasMaxLength(50);
+                
+            entity.Property(e => e.DocumentType)
+                .IsRequired()
+                .HasMaxLength(50);
+                
+            entity.Property(e => e.DocumentNumber)
+                .IsRequired()
+                .HasMaxLength(100);
+                
+            entity.Property(e => e.DocumentPhotoPath)
+                .IsRequired()
+                .HasMaxLength(500);
+                
+            entity.Property(e => e.SelfiePath)
+                .HasMaxLength(500);
+                
+            entity.Property(e => e.CrmCardPhotoPath)
+                .HasMaxLength(500);
+                
+            entity.Property(e => e.CrmNumber)
+                .HasMaxLength(20);
+                
+            entity.Property(e => e.CrmState)
+                .HasMaxLength(2);
+                
+            entity.Property(e => e.Status)
+                .IsRequired()
+                .HasConversion<string>();
+                
+            entity.Property(e => e.VerificationNotes)
+                .HasMaxLength(2000);
+            
+            // Indexes for common queries
+            entity.HasIndex(e => new { e.TenantId, e.UserId, e.UserType });
+            entity.HasIndex(e => new { e.TenantId, e.Status });
+            entity.HasIndex(e => e.TelemedicineSessionId);
+            entity.HasIndex(e => new { e.TenantId, e.UserId, e.UserType, e.Status, e.ValidUntil });
+        });
+        
+        // Configure TelemedicineRecording entity
+        modelBuilder.Entity<TelemedicineRecording>(entity =>
+        {
+            entity.ToTable("TelemedicineRecordings");
+            entity.HasKey(e => e.Id);
+            
+            entity.Property(e => e.TenantId)
+                .IsRequired()
+                .HasMaxLength(100);
+                
+            entity.Property(e => e.RecordingPath)
+                .IsRequired()
+                .HasMaxLength(1000);
+                
+            entity.Property(e => e.FileFormat)
+                .IsRequired()
+                .HasMaxLength(20);
+                
+            entity.Property(e => e.Status)
+                .IsRequired()
+                .HasConversion<string>();
+                
+            entity.Property(e => e.EncryptionKeyId)
+                .HasMaxLength(100);
+                
+            entity.Property(e => e.DeletionReason)
+                .HasMaxLength(1000);
+            
+            // Indexes for common queries
+            entity.HasIndex(e => new { e.TenantId, e.SessionId });
+            entity.HasIndex(e => new { e.TenantId, e.Status });
+            entity.HasIndex(e => new { e.TenantId, e.RetentionUntil });
+            entity.HasIndex(e => new { e.TenantId, e.IsDeleted });
         });
     }
 }
