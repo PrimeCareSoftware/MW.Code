@@ -11,7 +11,7 @@ namespace MedicSoft.Application.Services
 {
     public interface IJwtTokenService
     {
-        string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null);
+        string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null, string? ownerId = null);
         ClaimsPrincipal? ValidateToken(string token);
     }
 
@@ -51,7 +51,7 @@ namespace MedicSoft.Application.Services
 
         private const int FutureNotBeforeToleranceMinutes = 1500; // Allow ~25h skew for nbf drift in legacy tokens (covers day-boundary offset)
 
-        public string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null)
+        public string GenerateToken(string username, string userId, string tenantId, string role, string? clinicId = null, bool isSystemOwner = false, string? sessionId = null, string? ownerId = null)
         {
             var secretKey = GetSecretKey();
             var issuer = GetIssuer();
@@ -86,6 +86,11 @@ namespace MedicSoft.Application.Services
             if (!string.IsNullOrEmpty(sessionId))
             {
                 claims.Add(new Claim("session_id", sessionId));
+            }
+
+            if (!string.IsNullOrEmpty(ownerId))
+            {
+                claims.Add(new Claim("owner_id", ownerId));
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
