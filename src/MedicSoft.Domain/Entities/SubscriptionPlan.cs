@@ -60,7 +60,6 @@ namespace MedicSoft.Domain.Entities
             MaxUsers = maxUsers;
             MaxPatients = maxPatients;
             MaxClinics = maxClinics;
-            MaxClinics = maxClinics;
             Type = type;
             HasReports = hasReports;
             HasWhatsAppIntegration = hasWhatsAppIntegration;

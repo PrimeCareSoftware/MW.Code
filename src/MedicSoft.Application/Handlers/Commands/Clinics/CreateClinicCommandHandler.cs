@@ -36,8 +36,8 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             var activeClinicsCount = ownerClinics.Count(c => c.IsActive);
 
             // Get owner's subscription plan to check clinic limit
-            // For now, we'll get the first clinic's subscription plan
-            // In a real scenario, subscription should be at the owner/company level
+            // TODO: In future, consider implementing owner/company-level subscriptions instead of clinic-level
+            // For now, we check the first clinic's subscription as a proxy for the owner's subscription
             var firstClinicLink = ownerClinics.FirstOrDefault();
             if (firstClinicLink != null)
             {

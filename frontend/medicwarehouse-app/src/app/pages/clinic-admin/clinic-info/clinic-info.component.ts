@@ -89,7 +89,10 @@ export class ClinicInfoComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading owner clinics:', error);
-        // Not critical, just log it
+        // Show user-friendly error message if clinics list is critical
+        if (this.ownerClinics().length === 0) {
+          this.errorMessage.set('Não foi possível carregar a lista de clínicas. Tente novamente.');
+        }
       }
     });
   }
