@@ -177,9 +177,41 @@ export class AuditLogListComponent implements OnInit {
   getResultColor(result: string): string {
     return this.auditService.getResultColor(result);
   }
-
+  
   getSeverityColor(severity: string): string {
     return this.auditService.getSeverityColor(severity);
+  }
+
+  getActionBadgeClass(action: string): string {
+    const actionMap: {[key: string]: string} = {
+      'CREATE': 'badge-success',
+      'UPDATE': 'badge-info',
+      'DELETE': 'badge-error',
+      'LOGIN': 'badge-info',
+      'LOGOUT': 'badge-default',
+      'EXPORT': 'badge-warning'
+    };
+    return actionMap[action] || 'badge-default';
+  }
+
+  getResultBadgeClass(result: string): string {
+    const resultMap: {[key: string]: string} = {
+      'SUCCESS': 'badge-success',
+      'FAILED': 'badge-error',
+      'UNAUTHORIZED': 'badge-warning',
+      'PARTIAL_SUCCESS': 'badge-info'
+    };
+    return resultMap[result] || 'badge-default';
+  }
+
+  getResultText(result: string): string {
+    const resultMap: {[key: string]: string} = {
+      'SUCCESS': 'Sucesso',
+      'FAILED': 'Falha',
+      'UNAUTHORIZED': 'Não Autorizado',
+      'PARTIAL_SUCCESS': 'Sucesso Parcial'
+    };
+    return resultMap[result] || result;
   }
 
   private formatDate(date: Date | null): string | undefined {
