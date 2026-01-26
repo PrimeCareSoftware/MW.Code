@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PatientPortal.Application.Configuration;
 using PatientPortal.Application.Interfaces;
 using PatientPortal.Application.Services;
 using PatientPortal.Domain.Interfaces;
 using PatientPortal.Infrastructure.Data;
 using PatientPortal.Infrastructure.Repositories;
+using PatientPortal.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -120,6 +122,12 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// Configure Options
+builder.Services.Configure<AppointmentReminderSettings>(
+    builder.Configuration.GetSection(AppointmentReminderSettings.SectionName));
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection(EmailSettings.SectionName));
+
 // Configure CORS
 builder.Services.AddCors(options =>
 {
@@ -137,7 +145,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IDoctorAvailabilityService, DoctorAvailabilityService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMainDatabaseContext, PatientPortal.Infrastructure.Services.MainDatabaseContext>();
+
+// Register Background Services
+builder.Services.AddHostedService<PatientPortal.Infrastructure.Services.AppointmentReminderService>();
 
 // Register Repositories
 builder.Services.AddScoped<IPatientUserRepository, PatientUserRepository>();
