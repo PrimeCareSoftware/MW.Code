@@ -1,0 +1,150 @@
+.install-prompt {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  background: white;
+  border-top: 1px solid var(--gray-200);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.3s ease-out;
+  padding: 1rem;
+}
+
+.install-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.install-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.install-icon {
+  flex-shrink: 0;
+  color: var(--primary-500);
+}
+
+.install-text {
+  flex: 1;
+}
+
+.install-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0 0 0.25rem 0;
+}
+
+.install-description {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.install-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.btn-dismiss,
+.btn-install {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  outline: none;
+}
+
+.btn-dismiss {
+  background: transparent;
+  color: var(--gray-700);
+  
+  &:hover {
+    background: var(--gray-100);
+  }
+}
+
+.btn-install {
+  background: var(--primary-500);
+  color: white;
+  
+  &:hover {
+    background: var(--primary-600);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(30, 64, 175, 0.2);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .install-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .install-actions {
+    width: 100%;
+    
+    button {
+      flex: 1;
+    }
+  }
+  
+  .install-title {
+    font-size: 0.9375rem;
+  }
+  
+  .install-description {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .install-prompt {
+    background: var(--gray-800);
+    border-top-color: var(--gray-700);
+  }
+  
+  .install-title {
+    color: var(--gray-100);
+  }
+  
+  .install-description {
+    color: var(--gray-400);
+  }
+  
+  .btn-dismiss {
+    color: var(--gray-300);
+    
+    &:hover {
+      background: var(--gray-700);
+    }
+  }
+}
