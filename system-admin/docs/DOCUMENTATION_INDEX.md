@@ -62,6 +62,24 @@ Este documento serve como guia de navegação para toda a documentação do sist
 | [SEEDER_QUICK_REFERENCE.md](./SEEDER_QUICK_REFERENCE.md) | Referência rápida dos seeders | 2 min |
 | [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md) | Como autenticar e usar JWT | 5 min |
 
+### 🤖 Inteligência Artificial e GitHub Copilot
+
+| Documento | Descrição | Tempo de Leitura |
+|-----------|-----------|------------------|
+| [INTEGRACAO_COPILOT_IA.md](./INTEGRACAO_COPILOT_IA.md) | 🆕 **NOVO!** Guia completo de integração com GitHub Copilot e serviços de IA | 45 min |
+| [SUGESTOES_USO_IA_CLIENTES.md](./SUGESTOES_USO_IA_CLIENTES.md) | 🆕 **NOVO!** Sugestões práticas de uso de IA para clientes (clínicas e médicos) | 60 min |
+| [GUIA_RAPIDO_IA.md](./GUIA_RAPIDO_IA.md) | 🆕 **NOVO!** Referência rápida de recursos de IA no sistema | 5 min |
+| [PROMPTS_COPILOT_DESENVOLVIMENTO.md](./PROMPTS_COPILOT_DESENVOLVIMENTO.md) | Prompts estruturados para desenvolvimento com Copilot | 30 min |
+
+**Recursos de IA Disponíveis:**
+- ✨ GitHub Copilot Business para desenvolvimento (40% mais produtividade)
+- 🤖 Azure OpenAI Service para funcionalidades (chatbot, transcrição, sugestões clínicas)
+- 💬 Chatbot 24/7 para atendimento ao paciente
+- 📝 Transcrição automática de consultas médicas
+- 💡 Sugestões clínicas baseadas em IA
+- 🔍 Análise inteligente de exames e imagens
+- 📊 Analytics e previsões com Machine Learning
+
 ### 🏗️ Arquitetura e Estrutura
 
 | Documento | Descrição | Tempo de Leitura |
