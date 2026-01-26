@@ -150,7 +150,7 @@ export class HelpService {
             },
             {
               field: 'Data',
-              validExample: '20/01/2026',
+              validExample: 'DD/MM/AAAA (data futura)',
               description: 'Data futura válida'
             },
             {
@@ -373,7 +373,7 @@ export class HelpService {
             },
             {
               field: 'Vencimento',
-              validExample: '30/01/2026',
+              validExample: 'DD/MM/AAAA (data futura)',
               description: 'Data de vencimento futura'
             },
             {

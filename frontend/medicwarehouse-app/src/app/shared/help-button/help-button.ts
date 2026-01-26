@@ -8,7 +8,7 @@ import { HelpDialogComponent } from '../../pages/help/help-dialog';
   standalone: true,
   imports: [CommonModule, HelpDialogComponent],
   templateUrl: './help-button.html',
-  styleUrls: ['./help-button.scss']
+  styleUrl: './help-button.scss'
 })
 export class HelpButtonComponent {
   @Input() module: string = '';

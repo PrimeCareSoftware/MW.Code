@@ -7,7 +7,7 @@ import { HelpContent } from '../../services/help.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './help-dialog.html',
-  styleUrls: ['./help-dialog.scss']
+  styleUrl: './help-dialog.scss'
 })
 export class HelpDialogComponent {
   @Input() content: HelpContent | null = null;
