@@ -51,6 +51,8 @@ builder.Services.AddControllers()
     {
         // Add custom TimeSpan converter to serialize as "HH:mm" format for calendar compatibility
         options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter());
+        // Add custom ProcedureCategory converter to accept both string names and numeric values
+        options.JsonSerializerOptions.Converters.Add(new ProcedureCategoryJsonConverter());
     });
 builder.Services.AddEndpointsApiExplorer();
 

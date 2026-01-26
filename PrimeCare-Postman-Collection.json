@@ -849,7 +849,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Consulta Clínica\",\n  \"description\": \"Consulta médica geral\",\n  \"price\": 150.00,\n  \"duration\": 30,\n  \"isActive\": true\n}"
+              "raw": "{\n  \"name\": \"Preenchimento Labial\",\n  \"code\": \"PROC-001\",\n  \"description\": \"Procedimento estético de preenchimento labial com ácido hialurônico\",\n  \"category\": \"Aesthetic\",\n  \"price\": 1500.00,\n  \"durationMinutes\": 60,\n  \"requiresMaterials\": true,\n  \"acceptedHealthInsurances\": \"Unimed, Amil\",\n  \"allowInMedicalAttendance\": true,\n  \"allowInExclusiveProcedureAttendance\": true\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/procedures",
@@ -861,7 +861,7 @@
                 "procedures"
               ]
             },
-            "description": "Cria um novo procedimento"
+            "description": "Cria um novo procedimento. A categoria pode ser enviada como string (ex: 'Aesthetic') ou número (ex: 9)."
           },
           "response": []
         },
