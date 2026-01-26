@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AppointmentService } from '../../../services/appointment.service';
 import { Appointment, TimeSlot } from '../../../models/appointment.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-reschedule-dialog',
@@ -38,6 +39,7 @@ export class RescheduleDialogComponent implements OnInit {
   loadingSlots = false;
   minDate: Date;
   maxDate: Date;
+  private readonly clinicId: string;
 
   constructor(
     public dialogRef: MatDialogRef<RescheduleDialogComponent>,
@@ -48,6 +50,7 @@ export class RescheduleDialogComponent implements OnInit {
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
+    this.clinicId = environment.defaultClinicId;
 
     this.rescheduleForm = this.formBuilder.group({
       newDate: ['', Validators.required],
@@ -79,7 +82,7 @@ export class RescheduleDialogComponent implements OnInit {
       return;
     }
 
-    this.appointmentService.getAvailableSlots(doctorId, dateStr).subscribe({
+    this.appointmentService.getAvailableSlots(this.clinicId, doctorId, dateStr).subscribe({
       next: (response) => {
         this.availableSlots = response.slots.filter(slot => slot.isAvailable);
         this.loadingSlots = false;

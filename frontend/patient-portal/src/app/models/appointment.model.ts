@@ -53,10 +53,13 @@ export interface AvailableSlotsResponse {
 
 export interface BookAppointmentRequest {
   doctorId: string;
+  clinicId: string;
   scheduledDate: string;
   startTime: string;
-  reason: string;
-  appointmentType?: string;
+  durationMinutes?: number;
+  reason?: string;
+  appointmentType?: number;
+  appointmentMode?: number;
   isTelehealth?: boolean;
 }
 

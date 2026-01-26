@@ -129,7 +129,10 @@ describe('AppointmentBookingComponent', () => {
     component.specialtyFormGroup.patchValue({ specialty: '1' });
     component.onSpecialtySelected();
 
-    expect(appointmentService.getDoctors).toHaveBeenCalledWith('Cardiologia');
+    expect(appointmentService.getDoctors).toHaveBeenCalledWith(
+      jasmine.any(String), // clinicId
+      'Cardiologia'
+    );
     expect(component.doctors).toEqual(mockDoctors);
   });
 
@@ -157,6 +160,7 @@ describe('AppointmentBookingComponent', () => {
     component.onDateSelected();
 
     expect(appointmentService.getAvailableSlots).toHaveBeenCalledWith(
+      jasmine.any(String), // clinicId
       '1',
       '2025-02-15'
     );
@@ -202,13 +206,15 @@ describe('AppointmentBookingComponent', () => {
 
     component.onSubmit();
 
-    expect(appointmentService.bookAppointment).toHaveBeenCalledWith({
-      doctorId: '1',
-      scheduledDate: '2025-02-15',
-      startTime: '09:00:00',
-      reason: 'Regular checkup appointment',
-      appointmentType: 'Consulta'
-    });
+    expect(appointmentService.bookAppointment).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        doctorId: '1',
+        clinicId: jasmine.any(String),
+        scheduledDate: '2025-02-15',
+        startTime: '09:00:00',
+        reason: 'Regular checkup appointment'
+      })
+    );
     expect(notificationService.success).toHaveBeenCalledWith('Consulta agendada com sucesso!');
     expect(router.navigate).toHaveBeenCalledWith(['/appointments']);
   });

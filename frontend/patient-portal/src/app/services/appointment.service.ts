@@ -49,20 +49,22 @@ export class AppointmentService {
   }
 
   // Booking-related methods
-  getSpecialties(): Observable<Specialty[]> {
-    return this.http.get<Specialty[]>(`${this.apiUrl}/specialties`);
+  getSpecialties(clinicId: string): Observable<Specialty[]> {
+    const params = new HttpParams().set('clinicId', clinicId);
+    return this.http.get<Specialty[]>(`${this.apiUrl}/specialties`, { params });
   }
 
-  getDoctors(specialty?: string): Observable<Doctor[]> {
-    let params = new HttpParams();
+  getDoctors(clinicId: string, specialty?: string): Observable<Doctor[]> {
+    let params = new HttpParams().set('clinicId', clinicId);
     if (specialty) {
       params = params.set('specialty', specialty);
     }
     return this.http.get<Doctor[]>(`${this.apiUrl}/doctors`, { params });
   }
 
-  getAvailableSlots(doctorId: string, date: string): Observable<AvailableSlotsResponse> {
+  getAvailableSlots(clinicId: string, doctorId: string, date: string): Observable<AvailableSlotsResponse> {
     const params = new HttpParams()
+      .set('clinicId', clinicId)
       .set('doctorId', doctorId)
       .set('date', date);
     return this.http.get<AvailableSlotsResponse>(`${this.apiUrl}/available-slots`, { params });

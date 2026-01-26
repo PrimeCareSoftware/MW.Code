@@ -19,6 +19,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { AppointmentService } from '../../../services/appointment.service';
 import { NotificationService } from '../../../services/notification.service';
 import { Specialty, Doctor, TimeSlot, BookAppointmentRequest } from '../../../models/appointment.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-appointment-booking',
@@ -78,6 +79,9 @@ export class AppointmentBookingComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
 
+  // Clinic ID from environment config
+  private readonly clinicId: string;
+
   constructor(
     private formBuilder: FormBuilder,
     private appointmentService: AppointmentService,
@@ -87,6 +91,7 @@ export class AppointmentBookingComponent implements OnInit {
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
+    this.clinicId = environment.defaultClinicId;
   }
 
   ngOnInit(): void {
@@ -118,7 +123,7 @@ export class AppointmentBookingComponent implements OnInit {
     this.loadingSpecialties = true;
     this.specialtiesError = false;
 
-    this.appointmentService.getSpecialties().subscribe({
+    this.appointmentService.getSpecialties(this.clinicId).subscribe({
       next: (specialties) => {
         this.specialties = specialties;
         this.loadingSpecialties = false;
@@ -147,7 +152,7 @@ export class AppointmentBookingComponent implements OnInit {
     this.doctors = [];
     this.doctorFormGroup.reset();
 
-    this.appointmentService.getDoctors(specialty).subscribe({
+    this.appointmentService.getDoctors(this.clinicId, specialty).subscribe({
       next: (doctors) => {
         this.doctors = doctors.filter(d => d.availableForOnlineBooking);
         this.loadingDoctors = false;
@@ -194,7 +199,7 @@ export class AppointmentBookingComponent implements OnInit {
 
     const dateStr = this.formatDate(this.selectedDate);
 
-    this.appointmentService.getAvailableSlots(this.selectedDoctor.id, dateStr).subscribe({
+    this.appointmentService.getAvailableSlots(this.clinicId, this.selectedDoctor.id, dateStr).subscribe({
       next: (response) => {
         this.availableSlots = response.slots.filter(slot => slot.isAvailable);
         this.loadingSlots = false;
@@ -254,10 +259,13 @@ export class AppointmentBookingComponent implements OnInit {
 
     const request: BookAppointmentRequest = {
       doctorId: this.selectedDoctor!.id,
+      clinicId: this.clinicId,
       scheduledDate: this.formatDate(this.selectedDate!),
       startTime: this.selectedSlot!.startTime,
+      durationMinutes: 30,
       reason: this.detailsFormGroup.get('reason')?.value,
-      appointmentType: this.detailsFormGroup.get('appointmentType')?.value
+      appointmentType: 1, // Regular consultation
+      appointmentMode: 1  // In-person
     };
 
     this.appointmentService.bookAppointment(request).subscribe({

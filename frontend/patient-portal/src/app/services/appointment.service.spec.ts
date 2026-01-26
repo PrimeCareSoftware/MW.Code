@@ -212,18 +212,20 @@ describe('AppointmentService', () => {
   });
 
   describe('Booking endpoints', () => {
+    const clinicId = 'clinic-123';
+
     it('should get specialties', (done) => {
       const mockSpecialties = [
         { id: '1', name: 'Cardiology' },
         { id: '2', name: 'Dermatology' }
       ];
 
-      service.getSpecialties().subscribe(specialties => {
+      service.getSpecialties(clinicId).subscribe(specialties => {
         expect(specialties).toEqual(mockSpecialties);
         done();
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/appointments/specialties');
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/specialties?clinicId=${clinicId}`);
       expect(req.request.method).toBe('GET');
       req.flush(mockSpecialties);
     });
@@ -233,12 +235,12 @@ describe('AppointmentService', () => {
         { id: '1', name: 'Dr. Smith', specialty: 'Cardiology', crm: '12345', availableForOnlineBooking: true }
       ];
 
-      service.getDoctors('Cardiology').subscribe(doctors => {
+      service.getDoctors(clinicId, 'Cardiology').subscribe(doctors => {
         expect(doctors).toEqual(mockDoctors);
         done();
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/appointments/doctors?specialty=Cardiology');
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/doctors?clinicId=${clinicId}&specialty=Cardiology`);
       expect(req.request.method).toBe('GET');
       req.flush(mockDoctors);
     });
@@ -248,12 +250,12 @@ describe('AppointmentService', () => {
         { id: '1', name: 'Dr. Smith', specialty: 'Cardiology', crm: '12345', availableForOnlineBooking: true }
       ];
 
-      service.getDoctors().subscribe(doctors => {
+      service.getDoctors(clinicId).subscribe(doctors => {
         expect(doctors).toEqual(mockDoctors);
         done();
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/appointments/doctors');
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/doctors?clinicId=${clinicId}`);
       expect(req.request.method).toBe('GET');
       req.flush(mockDoctors);
     });
@@ -266,12 +268,12 @@ describe('AppointmentService', () => {
         ]
       };
 
-      service.getAvailableSlots('doctor-1', '2025-02-15').subscribe(response => {
+      service.getAvailableSlots(clinicId, 'doctor-1', '2025-02-15').subscribe(response => {
         expect(response).toEqual(mockSlots);
         done();
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/appointments/available-slots?doctorId=doctor-1&date=2025-02-15');
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/available-slots?clinicId=${clinicId}&doctorId=doctor-1&date=2025-02-15`);
       expect(req.request.method).toBe('GET');
       req.flush(mockSlots);
     });
@@ -279,6 +281,7 @@ describe('AppointmentService', () => {
     it('should book appointment', (done) => {
       const bookingRequest = {
         doctorId: 'doctor-1',
+        clinicId: 'clinic-123',
         scheduledDate: '2025-02-15',
         startTime: '09:00:00',
         reason: 'Regular checkup'
