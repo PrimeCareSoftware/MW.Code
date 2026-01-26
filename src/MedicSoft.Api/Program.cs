@@ -483,6 +483,9 @@ app.UseTenantResolution();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// LGPD Audit Middleware - Logs all sensitive data operations (LGPD Art. 37)
+app.UseMiddleware<LgpdAuditMiddleware>();
+
 // CFM 1.638/2002 - Add medical record audit middleware (after authentication)
 app.UseMiddleware<MedicalRecordAuditMiddleware>();
 
