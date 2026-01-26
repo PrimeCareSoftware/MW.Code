@@ -387,6 +387,12 @@ builder.Services.AddScoped<ITissAnalyticsService, TissAnalyticsService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<IDataProcessingConsentRepository, DataProcessingConsentRepository>();
+builder.Services.AddScoped<IDataAccessLogRepository, DataAccessLogRepository>();
+builder.Services.AddScoped<IDataConsentLogRepository, DataConsentLogRepository>();
+builder.Services.AddScoped<IDataDeletionRequestRepository, DataDeletionRequestRepository>();
+builder.Services.AddScoped<IConsentManagementService, ConsentManagementService>();
+builder.Services.AddScoped<IDataDeletionService, DataDeletionService>();
+builder.Services.AddScoped<IDataPortabilityService, DataPortabilityService>();
 
 // Anamnesis System
 builder.Services.AddScoped<IAnamnesisTemplateRepository, AnamnesisTemplateRepository>();
