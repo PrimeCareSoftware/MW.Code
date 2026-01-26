@@ -22,6 +22,7 @@ public class AppointmentReminderServiceTests
     private readonly Mock<IMainDatabaseContext> _mockDatabase;
     private readonly Mock<INotificationService> _mockNotificationService;
     private readonly AppointmentReminderSettings _settings;
+    private readonly PortalSettings _portalSettings;
 
     public AppointmentReminderServiceTests()
     {
@@ -37,6 +38,11 @@ public class AppointmentReminderServiceTests
             Enabled = true,
             CheckIntervalMinutes = 1,
             AdvanceNoticeHours = 24
+        };
+
+        _portalSettings = new PortalSettings
+        {
+            BaseUrl = "https://portal.test.com"
         };
 
         // Setup service provider chain
@@ -62,7 +68,8 @@ public class AppointmentReminderServiceTests
         var service = new AppointmentReminderService(
             _mockServiceProvider.Object,
             _mockLogger.Object,
-            Options.Create(_settings)
+            Options.Create(_settings),
+            Options.Create(_portalSettings)
         );
 
         // Assert
@@ -77,7 +84,8 @@ public class AppointmentReminderServiceTests
         var service = new AppointmentReminderService(
             _mockServiceProvider.Object,
             _mockLogger.Object,
-            Options.Create(_settings)
+            Options.Create(_settings),
+            Options.Create(_portalSettings)
         );
 
         var cancellationTokenSource = new CancellationTokenSource();

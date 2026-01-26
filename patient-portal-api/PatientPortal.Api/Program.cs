@@ -127,6 +127,8 @@ builder.Services.Configure<AppointmentReminderSettings>(
     builder.Configuration.GetSection(AppointmentReminderSettings.SectionName));
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection(EmailSettings.SectionName));
+builder.Services.Configure<PortalSettings>(
+    builder.Configuration.GetSection(PortalSettings.SectionName));
 
 // Configure CORS
 builder.Services.AddCors(options =>

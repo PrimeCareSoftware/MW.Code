@@ -18,15 +18,18 @@ public class AppointmentReminderService : BackgroundService
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<AppointmentReminderService> _logger;
     private readonly AppointmentReminderSettings _settings;
+    private readonly PortalSettings _portalSettings;
 
     public AppointmentReminderService(
         IServiceProvider serviceProvider,
         ILogger<AppointmentReminderService> logger,
-        IOptions<AppointmentReminderSettings> settings)
+        IOptions<AppointmentReminderSettings> settings,
+        IOptions<PortalSettings> portalSettings)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
         _settings = settings.Value;
+        _portalSettings = portalSettings.Value;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -170,8 +173,7 @@ public class AppointmentReminderService : BackgroundService
             };
 
             // Generate email content
-            var portalBaseUrl = "https://portal.primecare.com"; // TODO: Get from configuration
-            var emailBody = EmailTemplateHelper.GenerateAppointmentReminderEmail(reminderDto, portalBaseUrl);
+            var emailBody = EmailTemplateHelper.GenerateAppointmentReminderEmail(reminderDto, _portalSettings.BaseUrl);
             var subject = $"Lembrete: Consulta Médica Amanhã - {appointment.DoctorName}";
 
             // Send email
@@ -185,7 +187,7 @@ public class AppointmentReminderService : BackgroundService
             // Send SMS/WhatsApp if phone number is available
             if (!string.IsNullOrEmpty(reminderDto.PatientPhone))
             {
-                var textMessage = EmailTemplateHelper.GenerateAppointmentReminderText(reminderDto, portalBaseUrl);
+                var textMessage = EmailTemplateHelper.GenerateAppointmentReminderText(reminderDto, _portalSettings.BaseUrl);
                 
                 // Try WhatsApp first, then SMS as fallback
                 try
