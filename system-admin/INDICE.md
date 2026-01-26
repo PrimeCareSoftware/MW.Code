@@ -61,9 +61,11 @@ Documentação técnica, guias de desenvolvimento e materiais de referência ger
 - [GitHub Pages Setup Required](docs/GITHUB_PAGES_SETUP_REQUIRED.md)
 - [Glossário Termos Empresariais](docs/GLOSSARIO_TERMOS_EMPRESARIAIS.md)
 - [Granting Owner Permissions](docs/GRANTING_OWNER_PERMISSIONS.md)
+- [Guia Rápido IA](docs/GUIA_RAPIDO_IA.md) 🆕 **NOVO!** 🤖
 - [Implementação Fechamento Consulta](docs/IMPLEMENTACAO_FECHAMENTO_CONSULTA.md)
 - [Implementação Resumo Final](docs/IMPLEMENTACAO_RESUMO_FINAL.md)
 - [Índice Análise Competitiva](docs/INDICE_ANALISE_COMPETITIVA.md)
+- [Integração Copilot IA](docs/INTEGRACAO_COPILOT_IA.md) 🆕 **NOVO!** 🤖
 - [Integrated Payment Flow](docs/INTEGRATED_PAYMENT_FLOW.md)
 - [Microservices Discontinued](docs/MICROSERVICES_DISCONTINUED.md)
 - [Migrations Quick Reference](docs/MIGRATIONS_QUICK_REFERENCE.md)
@@ -82,6 +84,7 @@ Documentação técnica, guias de desenvolvimento e materiais de referência ger
 - [Plano de Desenvolvimento](docs/PLANO_DESENVOLVIMENTO.md)
 - [Prompts Copilot Desenvolvimento](docs/PROMPTS_COPILOT_DESENVOLVIMENTO.md)
 - [Quick Reference Permissions](docs/QUICK_REFERENCE_PERMISSIONS.md)
+- [README IA](docs/README_IA.md) 🆕 **NOVO!** 🤖 **ÍNDICE CENTRAL DE IA**
 - [README Monitoring](docs/README_MONITORING.md)
 - [Resumo Análise de Melhorias](docs/RESUMO_ANALISE_MELHORIAS.md)
 - [Resumo Correções Login](docs/RESUMO_CORRECOES_LOGIN.md)
@@ -95,6 +98,7 @@ Documentação técnica, guias de desenvolvimento e materiais de referência ger
 - [Seeder Quick Reference](docs/SEEDER_QUICK_REFERENCE.md)
 - [Subscription Plans Management](docs/SUBSCRIPTION_PLANS_MANAGEMENT.md)
 - [Sugestões Melhorias Segurança](docs/SUGESTOES_MELHORIAS_SEGURANCA.md)
+- [Sugestões Uso IA Clientes](docs/SUGESTOES_USO_IA_CLIENTES.md) 🆕 **NOVO!** 🤖
 - [System Mapping](docs/SYSTEM_MAPPING.md)
 - [System Owner Access](docs/SYSTEM_OWNER_ACCESS.md)
 - [Telas com Fluxo](docs/TELAS_COM_FLUXO.md)
