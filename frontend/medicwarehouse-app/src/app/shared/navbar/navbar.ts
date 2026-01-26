@@ -141,11 +141,6 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
     return user ? (user.role === 'Owner' || user.role === 'ClinicOwner' || !!user.isSystemOwner) : false;
   }
 
-  isSystemAdmin(): boolean {
-    const user = this.authService.currentUser();
-    return !!user?.isSystemOwner;
-  }
-
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (typeof document !== 'undefined' && event?.target) {
