@@ -52,7 +52,7 @@
   .stat-value {
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--primary-600);
     margin-bottom: 0.25rem;
   }
 
@@ -70,9 +70,9 @@
   margin-bottom: 1.5rem;
 
   &.alert-error {
-    background-color: var(--danger-light);
-    color: var(--danger-color);
-    border: 1px solid var(--danger-color);
+    background-color: var(--error-50);
+    color: var(--error-700);
+    border: 1px solid var(--error-200);
   }
 }
 
@@ -158,7 +158,7 @@
     cursor: pointer;
 
     &:focus {
-      border-color: var(--primary-color);
+      border-color: var(--primary-600);
     }
   }
 }
@@ -228,11 +228,11 @@
 .procedure-code {
   font-family: 'Courier New', monospace;
   font-weight: 600;
-  background: var(--bg-tertiary);
+  background: var(--gray-100);
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   font-size: 0.875rem;
-  color: var(--primary-color);
+  color: var(--primary-600);
 }
 
 .badge {
@@ -245,13 +245,13 @@
   letter-spacing: 0.5px;
 
   &.badge-success {
-    background-color: var(--success-light);
-    color: var(--success-color);
+    background-color: var(--success-100);
+    color: var(--success-700);
   }
 
   &.badge-secondary {
-    background-color: var(--bg-tertiary);
-    color: var(--text-secondary);
+    background-color: var(--gray-200);
+    color: var(--gray-700);
   }
 }
 
@@ -278,26 +278,26 @@
   }
 
   &.btn-view {
-    color: var(--primary-color);
+    color: var(--primary-600);
 
     &:hover {
-      background: var(--primary-light);
+      background: var(--primary-100);
     }
   }
 
   &.btn-edit {
-    color: var(--warning-color);
+    color: var(--warning-600);
 
     &:hover {
-      background: var(--warning-light);
+      background: var(--warning-100);
     }
   }
 
   &.btn-delete {
-    color: var(--danger-color);
+    color: var(--error-600);
 
     &:hover {
-      background: var(--danger-light);
+      background: var(--error-50);
     }
   }
 }
@@ -317,15 +317,6 @@
   svg {
     width: 1.125rem;
     height: 1.125rem;
-  }
-
-  &.btn-primary {
-    background: var(--primary-color);
-    color: white;
-
-    &:hover {
-      background: var(--primary-hover);
-    }
   }
 }
 
