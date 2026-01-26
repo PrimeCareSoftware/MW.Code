@@ -135,7 +135,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IDoctorAvailabilityService, DoctorAvailabilityService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IMainDatabaseContext, PatientPortal.Infrastructure.Services.MainDatabaseContext>();
 
 // Register Repositories
 builder.Services.AddScoped<IPatientUserRepository, PatientUserRepository>();
