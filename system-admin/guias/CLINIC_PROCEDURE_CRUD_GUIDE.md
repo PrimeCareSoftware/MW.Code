@@ -263,7 +263,7 @@ Cria um novo procedimento.
   "name": "Preenchimento Labial",
   "code": "PROC-001",
   "description": "Procedimento estético de preenchimento labial com ácido hialurônico",
-  "category": 9,
+  "category": "Aesthetic",
   "price": 1500.00,
   "durationMinutes": 60,
   "requiresMaterials": true,
@@ -273,6 +273,12 @@ Cria um novo procedimento.
   "allowInExclusiveProcedureAttendance": true
 }
 ```
+
+**Nota sobre Category**: O campo `category` aceita tanto valores numéricos quanto strings (case-insensitive):
+- Numeric: `"category": 9` 
+- String: `"category": "Aesthetic"` (recomendado para melhor legibilidade)
+
+Ambos os formatos são equivalentes e produzem o mesmo resultado.
 
 #### PUT /api/procedures/{id}
 Atualiza um procedimento existente.
