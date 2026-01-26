@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Sistema de Ajuda - MedicWarehouse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #2c5282;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4299e1;
+            padding-left: 1rem;
+        }
+
+        .help-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            background: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .help-fab:hover {
+            background: #3182ce;
+            box-shadow: 0 6px 16px rgba(66, 153, 225, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .help-fab svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .screenshot {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f7fafc;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: #48bb78;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .modal-demo {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0;
+            text-align: center;
+            color: white;
+        }
+
+        .button-demo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #4299e1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .button-demo:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .module-card {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .module-card h3 {
+            color: #2c5282;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-card p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 Sistema de Ajuda - MedicWarehouse App</h1>
+
+        <div class="demo-section">
+            <h2>📋 Visão Geral</h2>
+            <p>Sistema completo de ajuda integrado ao MedicWarehouse, fornecendo instruções detalhadas e exemplos de dados válidos para cada módulo do sistema.</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>✨ Características Principais</h2>
+            <ul class="feature-list">
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Botão de Ajuda Flutuante (FAB)</strong>
+                        <p>Botão sempre visível no canto da tela para acesso rápido à ajuda</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Modal Interativo</strong>
+                        <p>Exibe ajuda em um modal elegante sem sair da página atual</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Abrir em Nova Janela</strong>
+                        <p>Opção para abrir ajuda em uma janela separada para consulta paralela</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Exemplos de Dados Válidos</strong>
+                        <p>Cada módulo inclui exemplos de dados que passam nas validações</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Design Responsivo</strong>
+                        <p>Adapta-se perfeitamente a desktop e mobile</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h2>📱 Demonstração do Botão</h2>
+            <p style="margin-bottom: 1rem;">Assim é como o botão de ajuda aparece na aplicação:</p>
+            <div style="text-align: center; padding: 2rem;">
+                <button class="button-demo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Ajuda
+                </button>
+            </div>
+            <p style="color: #718096; text-align: center;">Clique para ver a ajuda do módulo atual</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎯 Módulos com Ajuda Integrada</h2>
+            <div class="modules-grid">
+                <div class="module-card">
+                    <h3>👥 Pacientes</h3>
+                    <p>Cadastro e gerenciamento de pacientes</p>
+                </div>
+                <div class="module-card">
+                    <h3>📅 Agendamentos</h3>
+                    <p>Calendário e gestão de consultas</p>
+                </div>
+                <div class="module-card">
+                    <h3>🏥 Atendimento</h3>
+                    <p>Fluxo de atendimento clínico</p>
+                </div>
+                <div class="module-card">
+                    <h3>💊 Prescrições</h3>
+                    <p>Receitas e medicamentos</p>
+                </div>
+                <div class="module-card">
+                    <h3>💰 Financeiro</h3>
+                    <p>Contas e fluxo de caixa</p>
+                </div>
+                <div class="module-card">
+                    <h3>📋 TISS/TUSS</h3>
+                    <p>Guias e convênios</p>
+                </div>
+                <div class="module-card">
+                    <h3>🎥 Telemedicina</h3>
+                    <p>Consultas por vídeo</p>
+                </div>
+                <div class="module-card">
+                    <h3>📝 SOAP</h3>
+                    <p>Registros clínicos estruturados</p>
+                </div>
+                <div class="module-card">
+                    <h3>📊 Anamnese</h3>
+                    <p>Histórico do paciente</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>💻 Como Usar (Desenvolvedores)</h2>
+            <p style="margin-bottom: 1rem;">Para adicionar o botão de ajuda em uma nova página:</p>
+            
+            <div class="code-block">
+                <code>
+// 1. Importe o componente no TypeScript<br>
+import { HelpButtonComponent } from '../../shared/help-button/help-button';<br>
+<br>
+@Component({<br>
+  imports: [CommonModule, HelpButtonComponent],<br>
+  // ...<br>
+})<br>
+<br>
+// 2. Adicione no HTML<br>
+&lt;app-help-button module="nome-do-modulo"&gt;&lt;/app-help-button&gt;
+                </code>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>📖 Exemplo de Conteúdo de Ajuda</h2>
+            <div class="screenshot">
+                <h3 style="color: #2c5282; margin-bottom: 1rem;">Ajuda - Módulo de Pacientes</h3>
+                
+                <h4 style="color: #2d3748; margin-top: 1.5rem; margin-bottom: 0.5rem;">Como Cadastrar um Novo Paciente</h4>
+                <ol style="margin-left: 1.5rem; color: #4a5568;">
+                    <li style="margin-bottom: 0.5rem;">Clique no botão "Novo Paciente"</li>
+                    <li style="margin-bottom: 0.5rem;">Preencha os campos obrigatórios</li>
+                    <li style="margin-bottom: 0.5rem;">Verifique os dados</li>
+                    <li style="margin-bottom: 0.5rem;">Clique em "Salvar"</li>
+                </ol>
+
+                <h4 style="color: #2c5282; margin-top: 1.5rem; margin-bottom: 0.5rem; background: #f7fafc; padding: 0.5rem; border-radius: 4px;">
+                    📝 Exemplos de Dados Válidos para Testes
+                </h4>
+
+                <div style="background: white; border-left: 3px solid #48bb78; padding: 1rem; margin: 0.75rem 0; border-radius: 4px;">
+                    <div style="font-weight: 600; color: #2d3748; margin-bottom: 0.5rem;">Nome Completo</div>
+                    <div style="color: #48bb78; font-family: monospace; margin-bottom: 0.5rem;">Exemplo: João da Silva Santos</div>
+                    <div style="color: #718096; font-size: 0.9rem;">Nome completo do paciente (mínimo 3 caracteres)</div>
+                </div>
+
+                <div style="background: white; border-left: 3px solid #48bb78; padding: 1rem; margin: 0.75rem 0; border-radius: 4px;">
+                    <div style="font-weight: 600; color: #2d3748; margin-bottom: 0.5rem;">CPF</div>
+                    <div style="color: #48bb78; font-family: monospace; margin-bottom: 0.5rem;">Exemplo: 123.456.789-00</div>
+                    <div style="color: #718096; font-size: 0.9rem;">CPF válido no formato XXX.XXX.XXX-XX</div>
+                </div>
+
+                <div style="background: white; border-left: 3px solid #48bb78; padding: 1rem; margin: 0.75rem 0; border-radius: 4px;">
+                    <div style="font-weight: 600; color: #2d3748; margin-bottom: 0.5rem;">Email</div>
+                    <div style="color: #48bb78; font-family: monospace; margin-bottom: 0.5rem;">Exemplo: joao.silva@email.com</div>
+                    <div style="color: #718096; font-size: 0.9rem;">Email válido para contato</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🚀 Tecnologias Utilizadas</h2>
+            <ul class="feature-list">
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div><strong>Angular 20</strong> - Framework principal</div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div><strong>TypeScript</strong> - Linguagem de programação</div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div><strong>SCSS</strong> - Pré-processador CSS</div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div><strong>Standalone Components</strong> - Arquitetura moderna do Angular</div>
+                </li>
+                <li>
+                    <span class="check-icon">✓</span>
+                    <div><strong>Signals</strong> - API reativa do Angular</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Botão de demonstração fixo -->
+    <button class="help-fab" onclick="alert('Esta é uma demonstração do botão de ajuda!\n\nNa aplicação real, este botão abre um modal com ajuda contextual do módulo atual.')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <span>Ajuda</span>
+    </button>
+</body>
+</html>

@@ -2,12 +2,13 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
+import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { FinancialService } from '../../../services/financial.service';
 import { AccountsReceivable, ReceivableStatus } from '../../../models/financial.model';
 
 @Component({
   selector: 'app-receivables-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [HelpButtonComponent, CommonModule, RouterLink, Navbar],
   templateUrl: './receivables-list.component.html',
   styleUrl: './receivables-list.component.scss'
 })

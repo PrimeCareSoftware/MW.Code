@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { interval, Subscription, forkJoin } from 'rxjs';
 import { Navbar } from '../../shared/navbar/navbar';
+import { HelpButtonComponent } from '../../shared/help-button/help-button';
 import { RichTextEditor } from '../../shared/rich-text-editor/rich-text-editor';
 import { InformedConsentFormComponent } from './components/informed-consent-form.component';
 import { NotificationModalComponent } from '../../shared/notification-modal/notification-modal';
@@ -33,7 +34,7 @@ const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent, NotificationModalComponent],
+  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent, NotificationModalComponent],
   templateUrl: './attendance.html',
   styleUrl: './attendance.scss'
 })

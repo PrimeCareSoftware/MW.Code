@@ -2,13 +2,14 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
+import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { TelemedicineService } from '../../../services/telemedicine.service';
 import { TelemedicineSession, SessionStatus } from '../../../models/telemedicine.model';
 import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-session-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [HelpButtonComponent, CommonModule, RouterLink, Navbar],
   templateUrl: './session-list.html',
   styleUrl: './session-list.scss'
 })

@@ -5,6 +5,7 @@ import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { Appointment } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
+import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 
 interface TimeSlot {
   time: string;
@@ -30,7 +31,7 @@ interface CalendarSlot {
 @Component({
   selector: 'app-appointment-calendar',
   standalone: true,
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink, Navbar, HelpButtonComponent],
   templateUrl: './appointment-calendar.html',
   styleUrl: './appointment-calendar.scss'
 })
