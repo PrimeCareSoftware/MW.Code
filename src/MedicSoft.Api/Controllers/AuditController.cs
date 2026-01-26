@@ -29,7 +29,7 @@ namespace MedicSoft.Api.Controllers
         /// Obtém atividades de um usuário específico
         /// </summary>
         [HttpGet("user/{userId}")]
-        [Authorize(Roles = "Admin,SystemAdmin,ClinicOwner")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
         public async Task<IActionResult> GetUserActivity(
             string userId,
             [FromQuery] DateTime? startDate,
@@ -44,7 +44,7 @@ namespace MedicSoft.Api.Controllers
         /// Obtém histórico de uma entidade específica
         /// </summary>
         [HttpGet("entity/{entityType}/{entityId}")]
-        [Authorize(Roles = "Admin,SystemAdmin,ClinicOwner")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
         public async Task<IActionResult> GetEntityHistory(
             string entityType,
             string entityId)
@@ -76,7 +76,7 @@ namespace MedicSoft.Api.Controllers
         public async Task<IActionResult> GetLgpdReport(string userId)
         {
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var isAdmin = User.IsInRole("Admin") || User.IsInRole("SystemAdmin") || User.IsInRole("ClinicOwner");
+            var isAdmin = User.IsInRole("SystemAdmin") || User.IsInRole("ClinicOwner");
 
             // Usuário pode ver seu próprio relatório ou admin pode ver qualquer relatório
             if (currentUserId != userId && !isAdmin)
@@ -93,7 +93,7 @@ namespace MedicSoft.Api.Controllers
         /// Consulta logs de auditoria com filtros avançados
         /// </summary>
         [HttpPost("query")]
-        [Authorize(Roles = "Admin,SystemAdmin,ClinicOwner")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
         public async Task<IActionResult> QueryAuditLogs([FromBody] AuditFilter filter)
         {
             // Ensure tenantId is set from authenticated context
@@ -114,7 +114,7 @@ namespace MedicSoft.Api.Controllers
         /// Log manual de auditoria (para casos especiais)
         /// </summary>
         [HttpPost("log")]
-        [Authorize(Roles = "Admin,SystemAdmin,ClinicOwner")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
         public async Task<IActionResult> LogManual([FromBody] CreateAuditLogDto dto)
         {
             // Override tenant from authenticated context
