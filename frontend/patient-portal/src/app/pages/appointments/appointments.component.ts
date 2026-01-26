@@ -9,9 +9,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AppointmentService } from '../../services/appointment.service';
 import { NotificationService } from '../../services/notification.service';
 import { Appointment } from '../../models/appointment.model';
+import { CancelDialogComponent } from './cancel-dialog/cancel-dialog.component';
+import { RescheduleDialogComponent } from './reschedule-dialog/reschedule-dialog.component';
 
 enum TabFilter {
   All = 0,
@@ -33,7 +36,8 @@ enum TabFilter {
     MatTabsModule,
     MatChipsModule,
     MatTooltipModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule
   ],
   templateUrl: './appointments.component.html',
   styleUrls: ['./appointments.component.scss']
@@ -47,7 +51,8 @@ export class AppointmentsComponent implements OnInit {
 
   constructor(
     private appointmentService: AppointmentService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -127,5 +132,74 @@ export class AppointmentsComponent implements OnInit {
 
   retry(): void {
     this.loadAppointments();
+  }
+
+  confirmAppointment(appointment: Appointment): void {
+    if (confirm('Deseja confirmar esta consulta?')) {
+      this.appointmentService.confirmAppointment(appointment.id).subscribe({
+        next: () => {
+          this.notificationService.success('Consulta confirmada com sucesso!');
+          this.loadAppointments();
+        },
+        error: (error) => {
+          console.error('Error confirming appointment:', error);
+          this.notificationService.error('Erro ao confirmar consulta');
+        }
+      });
+    }
+  }
+
+  cancelAppointment(appointment: Appointment): void {
+    const dialogRef = this.dialog.open(CancelDialogComponent, {
+      width: '500px',
+      maxWidth: '95vw',
+      data: { appointment }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.confirmed) {
+        this.appointmentService.cancelAppointment(appointment.id, { reason: result.reason }).subscribe({
+          next: () => {
+            this.notificationService.success('Consulta cancelada com sucesso!');
+            this.loadAppointments();
+          },
+          error: (error) => {
+            console.error('Error cancelling appointment:', error);
+            this.notificationService.error('Erro ao cancelar consulta');
+          }
+        });
+      }
+    });
+  }
+
+  rescheduleAppointment(appointment: Appointment): void {
+    const dialogRef = this.dialog.open(RescheduleDialogComponent, {
+      width: '600px',
+      maxWidth: '95vw',
+      data: { appointment }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.confirmed) {
+        this.appointmentService.rescheduleAppointment(appointment.id, {
+          newDate: result.newDate,
+          newTime: result.newTime,
+          reason: result.reason
+        }).subscribe({
+          next: () => {
+            this.notificationService.success('Consulta reagendada com sucesso!');
+            this.loadAppointments();
+          },
+          error: (error) => {
+            console.error('Error rescheduling appointment:', error);
+            this.notificationService.error('Erro ao reagendar consulta');
+          }
+        });
+      }
+    });
+  }
+
+  canConfirm(appointment: Appointment): boolean {
+    return appointment.status === 'Scheduled' || appointment.status === 'Agendado';
   }
 }

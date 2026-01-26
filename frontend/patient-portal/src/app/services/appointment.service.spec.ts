@@ -210,4 +210,141 @@ describe('AppointmentService', () => {
       req.flush({ message: 'Internal server error' }, { status: 500, statusText: 'Internal Server Error' });
     });
   });
+
+  describe('Booking endpoints', () => {
+    const clinicId = 'clinic-123';
+
+    it('should get specialties', (done) => {
+      const mockSpecialties = [
+        { id: '1', name: 'Cardiology' },
+        { id: '2', name: 'Dermatology' }
+      ];
+
+      service.getSpecialties(clinicId).subscribe(specialties => {
+        expect(specialties).toEqual(mockSpecialties);
+        done();
+      });
+
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/specialties?clinicId=${clinicId}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockSpecialties);
+    });
+
+    it('should get doctors with specialty filter', (done) => {
+      const mockDoctors = [
+        { id: '1', name: 'Dr. Smith', specialty: 'Cardiology', crm: '12345', availableForOnlineBooking: true }
+      ];
+
+      service.getDoctors(clinicId, 'Cardiology').subscribe(doctors => {
+        expect(doctors).toEqual(mockDoctors);
+        done();
+      });
+
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/doctors?clinicId=${clinicId}&specialty=Cardiology`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockDoctors);
+    });
+
+    it('should get doctors without specialty filter', (done) => {
+      const mockDoctors = [
+        { id: '1', name: 'Dr. Smith', specialty: 'Cardiology', crm: '12345', availableForOnlineBooking: true }
+      ];
+
+      service.getDoctors(clinicId).subscribe(doctors => {
+        expect(doctors).toEqual(mockDoctors);
+        done();
+      });
+
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/doctors?clinicId=${clinicId}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockDoctors);
+    });
+
+    it('should get available slots', (done) => {
+      const mockSlots = {
+        date: '2025-02-15',
+        slots: [
+          { startTime: '09:00:00', endTime: '09:30:00', isAvailable: true }
+        ]
+      };
+
+      service.getAvailableSlots(clinicId, 'doctor-1', '2025-02-15').subscribe(response => {
+        expect(response).toEqual(mockSlots);
+        done();
+      });
+
+      const req = httpMock.expectOne(`http://localhost:5000/api/appointments/available-slots?clinicId=${clinicId}&doctorId=doctor-1&date=2025-02-15`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockSlots);
+    });
+
+    it('should book appointment', (done) => {
+      const bookingRequest = {
+        doctorId: 'doctor-1',
+        clinicId: 'clinic-123',
+        scheduledDate: '2025-02-15',
+        startTime: '09:00:00',
+        reason: 'Regular checkup'
+      };
+
+      const mockResponse = {
+        id: 'appointment-123',
+        doctorName: 'Dr. Smith',
+        scheduledDate: '2025-02-15',
+        startTime: '09:00:00',
+        status: 'Scheduled',
+        message: 'Success'
+      };
+
+      service.bookAppointment(bookingRequest).subscribe(response => {
+        expect(response).toEqual(mockResponse);
+        done();
+      });
+
+      const req = httpMock.expectOne('http://localhost:5000/api/appointments/book');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(bookingRequest);
+      req.flush(mockResponse);
+    });
+
+    it('should confirm appointment', (done) => {
+      service.confirmAppointment('appointment-1').subscribe(() => {
+        done();
+      });
+
+      const req = httpMock.expectOne('http://localhost:5000/api/appointments/appointment-1/confirm');
+      expect(req.request.method).toBe('POST');
+      req.flush(null);
+    });
+
+    it('should cancel appointment', (done) => {
+      const cancelRequest = { reason: 'Personal reasons' };
+
+      service.cancelAppointment('appointment-1', cancelRequest).subscribe(() => {
+        done();
+      });
+
+      const req = httpMock.expectOne('http://localhost:5000/api/appointments/appointment-1/cancel');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(cancelRequest);
+      req.flush(null);
+    });
+
+    it('should reschedule appointment', (done) => {
+      const rescheduleRequest = {
+        newDate: '2025-02-20',
+        newTime: '10:00:00',
+        reason: 'Schedule conflict'
+      };
+
+      service.rescheduleAppointment('appointment-1', rescheduleRequest).subscribe(() => {
+        done();
+      });
+
+      const req = httpMock.expectOne('http://localhost:5000/api/appointments/appointment-1/reschedule');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(rescheduleRequest);
+      req.flush(null);
+    });
+  });
 });

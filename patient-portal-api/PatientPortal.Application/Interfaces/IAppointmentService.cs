@@ -13,4 +13,10 @@ public interface IAppointmentService
     Task<List<AppointmentDto>> GetUpcomingAppointmentsAsync(Guid patientUserId, int take = 10);
     Task<List<AppointmentDto>> GetByStatusAsync(Guid patientUserId, AppointmentStatus status, int skip = 0, int take = 50);
     Task<int> GetCountAsync(Guid patientUserId);
+    
+    // New booking methods
+    Task<AppointmentDto> BookAppointmentAsync(Guid patientUserId, BookAppointmentRequestDto request);
+    Task<AppointmentDto> ConfirmAppointmentAsync(Guid appointmentId, Guid patientUserId);
+    Task<AppointmentDto> CancelAppointmentAsync(Guid appointmentId, Guid patientUserId, CancelAppointmentRequestDto request);
+    Task<AppointmentDto> RescheduleAppointmentAsync(Guid appointmentId, Guid patientUserId, RescheduleAppointmentRequestDto request);
 }
