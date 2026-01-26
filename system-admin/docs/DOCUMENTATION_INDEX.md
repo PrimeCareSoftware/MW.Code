@@ -64,8 +64,11 @@ Este documento serve como guia de navegação para toda a documentação do sist
 
 ### 🤖 Inteligência Artificial e GitHub Copilot
 
+**📖 [Central de Documentação de IA →](./README_IA.md)** - Índice completo de toda documentação de IA
+
 | Documento | Descrição | Tempo de Leitura |
 |-----------|-----------|------------------|
+| [README_IA.md](./README_IA.md) | 🆕 **ÍNDICE** Central de toda documentação de IA - Comece aqui! | 10 min |
 | [INTEGRACAO_COPILOT_IA.md](./INTEGRACAO_COPILOT_IA.md) | 🆕 **NOVO!** Guia completo de integração com GitHub Copilot e serviços de IA | 45 min |
 | [SUGESTOES_USO_IA_CLIENTES.md](./SUGESTOES_USO_IA_CLIENTES.md) | 🆕 **NOVO!** Sugestões práticas de uso de IA para clientes (clínicas e médicos) | 60 min |
 | [GUIA_RAPIDO_IA.md](./GUIA_RAPIDO_IA.md) | 🆕 **NOVO!** Referência rápida de recursos de IA no sistema | 5 min |

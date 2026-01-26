@@ -84,6 +84,7 @@ Documentação técnica, guias de desenvolvimento e materiais de referência ger
 - [Plano de Desenvolvimento](docs/PLANO_DESENVOLVIMENTO.md)
 - [Prompts Copilot Desenvolvimento](docs/PROMPTS_COPILOT_DESENVOLVIMENTO.md)
 - [Quick Reference Permissions](docs/QUICK_REFERENCE_PERMISSIONS.md)
+- [README IA](docs/README_IA.md) 🆕 **NOVO!** 🤖 **ÍNDICE CENTRAL DE IA**
 - [README Monitoring](docs/README_MONITORING.md)
 - [Resumo Análise de Melhorias](docs/RESUMO_ANALISE_MELHORIAS.md)
 - [Resumo Correções Login](docs/RESUMO_CORRECOES_LOGIN.md)
