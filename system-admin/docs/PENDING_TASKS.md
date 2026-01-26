@@ -71,7 +71,16 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - [x] Frontend: 5 componentes Angular completos
   - [x] Integração: Daily.co SDK para videochamadas
   - [x] Compliance: CFM 1821/2007 e CFM 2.314/2022
-- [x] **Portal do Paciente** - ✅ **100% completo - Janeiro 2026**
+- [x] **Portal do Paciente** - 🟢 **70% completo - MVP Pronto - Janeiro 2026**
+  - [x] Backend API: 100% completo (Clean Architecture + DDD, 5 controllers, 50+ endpoints)
+  - [x] Frontend Core: 90% completo (Auth, Dashboard, Pages, Services, Guards, Interceptors)
+  - [x] Autenticação: 100% (JWT + Refresh Tokens, Account Lockout, LGPD)
+  - [x] Visualização: 100% (Consultas, Documentos, Perfil)
+  - [x] Testes: 100% (58 unit tests 98.66% coverage + 30+ E2E)
+  - [ ] Agendamento Online: 0% (booking, reschedule, cancel)
+  - [ ] Notificações: 0% (WhatsApp/Email reminders)
+  - [ ] PWA: 0% (Service Worker, offline, push notifications)
+  - 📄 Status completo: [PORTAL_PACIENTE_STATUS_JAN2026.md](../../PORTAL_PACIENTE_STATUS_JAN2026.md)
 - [x] **Integração TISS / Convênios Fase 1 + Fase 2** - ✅ **100% completo - Janeiro 2026** 🎉
   - [x] Backend: 8 entidades + 7 repositórios + 7 serviços + 5 controllers (100%)
   - [x] Frontend: 13 componentes Angular completos (100%)
@@ -355,7 +364,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 | 🔥🔥🔥 | Conformidade CFM (Prontuários) | ✅ 95% Completo (Jan 2026) | 1-2 dias, 1 dev (melhorias opcionais) | Q1/2026 |
 | 🔥🔥🔥 | Emissão NF-e/NFS-e | ✅ 100% Completo (Jan 2026) | COMPLETO ✨ | ENTREGUE |
 | 🔥🔥🔥 | Telemedicina Completa | ✅ 100% Completo (Jan 2026) | COMPLETO ✨ | ENTREGUE |
-| 🔥🔥🔥 | Portal do Paciente Frontend | ✅ Backend 100%, Frontend 70% (Jan 2026) | 3-4 semanas, 1 dev (UI components) | Q1/2026 |
+| 🔥🔥🔥 | Portal do Paciente - Agendamento Online | ✅ Backend 100%, Frontend Core 90%, Booking 0% (Jan 2026) | 3 semanas, 1 dev (booking UI + integration) | Q1/2026 |
 | 🔥🔥🔥 | Integração TISS Fase 1 | ✅ 100% Completo (Jan 2026) | COMPLETO ✨ | ENTREGUE |
 | 🔥🔥🔥 | Integração TISS Fase 2 | ✅ 100% Completo (Jan 2026) | COMPLETO ✨ | ENTREGUE |
 | 🔥🔥 | Receitas Médicas Digitais (CFM+ANVISA) | ✅ 100% Completo (Jan 2026) | COMPLETO ✨ | ENTREGUE |
@@ -1204,7 +1213,7 @@ Esta seção consolida todas as melhorias necessárias para garantir conformidad
 - [x] Emissão de NF-e/NFS-e ✅ **COMPLETO - Janeiro 2026**
 - [x] Integração SNGPC (ANVISA) ✅ **90% completo - Janeiro 2026**
 - [x] Receitas médicas digitais completas (CFM + ANVISA) ✅ **90% completo - Janeiro 2026**
-- [x] Portal do Paciente ✅ **COMPLETO - Janeiro 2026**
+- [x] Portal do Paciente 🟢 **70% COMPLETO - MVP Pronto - Janeiro 2026** (Backend 100%, Frontend Core 90%, falta booking)
 
 **Esforço:** 3 devs full-time (3 meses)  
 **Novo custo Q2:** R$ 135k (antes R$ 90k)
@@ -1438,63 +1447,97 @@ Sistema de teleconsulta integrado permitindo videochamadas seguras entre médico
 
 ### 2. Portal do Paciente
 
-**Status:** ✅ COMPLETO (Backend 100%, Frontend 100%) ✨ Janeiro 2026  
+**Status:** 🟢 70% COMPLETO - MVP Pronto (Backend 100%, Frontend Core 90%, Booking 0%) ✨ Janeiro 2026  
 **Prioridade:** CRÍTICA  
 **Impacto:** Alto - Redução de custos operacionais  
-**Esforço Total:** 3-4 meses (CONCLUÍDO)  
+**Esforço Total:** 3-4 meses (70% concluído, +3 semanas para booking)  
 **Prazo Original:** Q2/2025  
-**Prazo Final:** Q1/2026 (✅ ENTREGUE)
+**Prazo Atual:** MVP entregue Q1/2026, Booking completo Q2/2026
 
 #### Descrição
-Interface web e mobile para pacientes gerenciarem suas consultas e dados.
+Interface web dedicada para pacientes gerenciarem suas consultas, documentos e agendamentos online.
 
-#### ✅ Progresso Atual (Janeiro 2026)
+#### ✅ Progresso Atual - 70% Completo (Janeiro 2026)
 
 **Backend API - 100% COMPLETO ✅**
-- API REST completa em .NET 8 com Clean Architecture
+- API REST completa em .NET 8 com Clean Architecture + DDD
 - 4 camadas implementadas (Domain, Application, Infrastructure, API)
-- Autenticação JWT + Refresh Token com rotação
+- Autenticação JWT + Refresh Token com rotação (15min + 7 dias)
 - Password hashing PBKDF2 (100k iterações)
 - Account lockout (5 tentativas, 15min bloqueio)
-- 8 controllers REST implementados:
+- 5 controllers REST implementados (50+ endpoints):
   - AuthController (login, register, refresh, logout, change-password)
-  - AppointmentsController (listagem, filtros, detalhes)
-  - DocumentsController (listagem, download, compartilhamento)
-  - ProfileController (perfil, atualização, histórico médico)
-  - NotificationsController (preferências, listagem)
-  - MedicationsController (prescrições ativas, histórico)
-  - PaymentsController (faturas, pagamento online)
-  - MessagesController (comunicação com clínica)
-- Database views para leitura otimizada (vw_PatientAppointments, vw_PatientDocuments)
-- Migrations completas
-- Documentação completa em IMPLEMENTATION_SUMMARY.md
+  - AppointmentsController (listagem, filtros por status, upcoming, count)
+  - DocumentsController (listagem, download, recent, por tipo, count)
+  - ProfileController (perfil do paciente, atualização)
+- Database: PostgreSQL com Entity Framework Core
+- LGPD Compliant: Sistema completo de auditoria
+- 30+ testes de integração
+- 15+ testes de segurança
+- Documentação completa
 
-**Frontend Angular - 100% COMPLETO ✅** ✨ Janeiro 2026
-- Aplicação Angular 20 totalmente funcional
-- Todos os componentes implementados e testados (58 testes passando)
-- Integração completa com backend API
-- Build de produção otimizado
-- Interface profissional com Material Design
+**Frontend Angular - 90% COMPLETO ✅**
+- Angular 20 com Material Design
+- 5 páginas implementadas:
+  - ✅ Login/Register com validações avançadas
+  - ✅ Dashboard com estatísticas e previews
+  - ✅ Appointments (listagem com filtros por status)
+  - ✅ Documents (listagem e download)
+  - ✅ Profile (visualização e alteração de senha)
+- 4 serviços implementados:
+  - ✅ AuthService (login, register, logout, refresh)
+  - ✅ AppointmentService (listagem, filtros)
+  - ✅ DocumentService (listagem, download)
+  - ✅ ProfileService (perfil, atualização)
+- Infraestrutura completa:
+  - ✅ Auth Guard para proteção de rotas
+  - ✅ HTTP Interceptor para injeção de tokens
+  - ✅ Lazy loading de rotas
+  - ✅ Material Design components
+  - ✅ Responsive (mobile-first)
+- Testes: 58 unit tests (98.66% coverage) + 30+ E2E (5 browsers)
+- Build: 394 KB (108 KB gzipped)
 
-**Componentes Implementados:**
-1. ✅ **LoginComponent** - Autenticação completa com JWT
-2. ✅ **RegisterComponent** - Cadastro de pacientes com validação avançada
-3. ✅ **DashboardComponent** - Painel principal com estatísticas e ações rápidas
-4. ✅ **AppointmentsComponent** - Listagem e gerenciamento de consultas
-5. ✅ **DocumentsComponent** - Visualização e download de documentos médicos
-6. ✅ **ProfileComponent** - Gestão de perfil e configurações
+#### ❌ Funcionalidades Pendentes - 30% Restante
 
-**Funcionalidades:**
-- ✅ Autenticação JWT com refresh tokens
-- ✅ Validação avançada de formulários (CPF, idade, senhas)
-- ✅ Estados de loading e tratamento de erros
-- ✅ Notificações toast para feedback do usuário
-- ✅ Design responsivo para mobile/tablet/desktop
-- ✅ Lazy loading de componentes
-- ✅ Guards de autenticação
-- ✅ HTTP interceptors para tokens
-- ✅ 58 testes unitários passando (100% success)
-- ✅ Build de produção otimizado (394 KB inicial)
+**3. Agendamento Online - ❌ 0% IMPLEMENTADO**
+- [ ] Backend: DoctorAvailabilityService para consultar horários disponíveis
+- [ ] Backend: POST /api/appointments/book para criar agendamento
+- [ ] Backend: PUT /api/appointments/{id}/reschedule para reagendar
+- [ ] Backend: POST /api/appointments/{id}/cancel para cancelar
+- [ ] Frontend: AppointmentBookingComponent com formulário completo
+- [ ] Frontend: Seleção de especialidade e médico
+- [ ] Frontend: Date picker e time slots disponíveis
+- [ ] Frontend: Fluxo de confirmação de booking
+- **Esforço:** 3 semanas (conforme prompt original)
+
+**4. Notificações Automáticas - ❌ 0% IMPLEMENTADO**
+- [ ] Backend: AppointmentReminderService (background service)
+- [ ] Integração: WhatsApp API (Twilio ou similar)
+- [ ] Integração: Email (SendGrid ou similar)
+- [ ] Envio automático 24h antes das consultas
+- [ ] Link de confirmação rápida
+- **Esforço:** 1 semana (conforme prompt original)
+
+**5. PWA (Progressive Web App) - ❌ 0% IMPLEMENTADO**
+- [ ] Service Worker configurado
+- [ ] manifest.json com ícones
+- [ ] Offline support
+- [ ] Push notifications (opcional)
+- [ ] Add to Home Screen
+- **Esforço:** 2 semanas (conforme prompt original)
+
+**6. Histórico Médico Completo - ❌ 0% IMPLEMENTADO**
+- [ ] Backend: GET /api/profile/me/medical-history
+- [ ] Frontend: Timeline de eventos médicos
+- [ ] Frontend: Gráficos de evolução (peso, pressão, etc.)
+- **Esforço:** 1-2 semanas
+
+**7. Performance e Otimizações - ⏳ Parcial**
+- [ ] Lighthouse score > 90 (não testado)
+- [ ] Lazy loading de images
+- [ ] Virtual scrolling
+- **Esforço:** 1 semana
 
 #### Justificativa
 - 90% dos concorrentes têm portal do paciente
@@ -1502,73 +1545,70 @@ Interface web e mobile para pacientes gerenciarem suas consultas e dados.
 - Alta taxa de no-show
 - Custos operacionais elevados
 
-#### Funcionalidades Essenciais
+#### Funcionalidades Implementadas (70%)
 
 **1. Autenticação - ✅ 100% COMPLETO**
 - ✅ Cadastro self-service (implementado)
 - ✅ Login (CPF + senha) (implementado)
-- ✅ Recuperação de senha (implementado)
-- ✅ 2FA opcional (implementado)
-- [ ] Biometria (mobile) - futuro
+- ✅ Recuperação de senha (estrutura pronta)
+- ✅ Alteração de senha (implementado)
 
 **2. Dashboard - ✅ 100% COMPLETO**
-- ✅ Próximas consultas
-- ✅ Histórico de atendimentos
-- ✅ Prescrições ativas
-- ✅ Documentos disponíveis
+- ✅ Próximas consultas (preview)
+- ✅ Documentos disponíveis (preview)
+- ✅ Estatísticas e contadores
+- ✅ Botões de ação rápida
 
-**3. Agendamento Online - ✅ 100% COMPLETO**
-- ✅ API para ver agenda do médico (implementado)
-- ✅ API para agendar consulta (implementado)
-- ✅ Interface frontend para agendamento
-- ✅ Reagendar via interface
-- ✅ Cancelar (com regras) via interface
+**3. Visualização de Consultas - ✅ 100% COMPLETO**
+- ✅ API para listar agendamentos (implementado)
+- ✅ Frontend: listagem com filtros por status
+- ✅ Frontend: tabs (Todas, Próximas, Passadas, Canceladas)
+- ✅ Cards informativos com detalhes completos
 
-**4. Confirmação de Consultas - ✅ 100% COMPLETO**
-- ✅ API de listagem de agendamentos (implementado)
-- ✅ API de atualização de status (implementado)
-- ✅ Notificação 24h antes via interface
-- ✅ Confirmar ou Cancelar via interface
-- ✅ Reduz no-show
-
-**5. Documentos - ✅ 100% COMPLETO**
+**4. Documentos - ✅ 100% COMPLETO**
 - ✅ API para listar documentos (implementado)
-- ✅ API para download de receitas (PDF) (implementado)
-- ✅ API para download de atestados (implementado)
-- ✅ Interface de visualização
-- ✅ Compartilhar via WhatsApp
+- ✅ API para download (PDF) (implementado)
+- ✅ Frontend: listagem e busca
+- ✅ Frontend: download com progress indicator
+- ✅ Suporte: Receitas, Exames, Atestados, Encaminhamentos
 
-**6. Telemedicina - ✅ COMPLETO** ✨ Janeiro 2026 🎉
-- [x] Entrar na consulta (VideoRoomComponent)
-- [x] Interface de sessões (TelemedicineSessionListComponent)
-- [x] Agendamento (TelemedicineSessionFormComponent)
-- [x] Consentimento CFM (ConsentFormComponent)
-- [x] Detalhes e histórico (TelemedicineSessionDetailsComponent)
-- [x] Integração Daily.co SDK para videochamadas
+**5. Perfil - ✅ 100% COMPLETO**
+- ✅ API para visualizar perfil (implementado)
+- ✅ API para atualizar dados (implementado)
+- ✅ Frontend: visualização de dados pessoais
+- ✅ Frontend: alteração de senha
 
-**7. Pagamentos - ✅ Backend 100%, Frontend Planejado** (futuro)
-- ✅ API para ver faturas (implementado)
-- ✅ API para pagar online (implementado)
-- [ ] Interface de pagamento (planejado)
-- [ ] Histórico de pagamentos (planejado)
+**6. Telemedicina - ✅ INTEGRAÇÃO FUTURA** (Sistema separado já existe)
+- ✅ Sistema de telemedicina completo implementado separadamente
+- [ ] Integração com Portal do Paciente (planejado)
 
 #### Tecnologias
-- **Backend:** .NET 8, Clean Architecture, EF Core, JWT ✅ IMPLEMENTADO
-- **Frontend:** Angular 20 (PWA) ✅ IMPLEMENTADO
-- **Testes:** 58 testes unitários frontend + testes backend ✅ PASSANDO
-- **API REST:** Completa e documentada ✅ COMPLETA
+- **Backend:** .NET 8, Clean Architecture + DDD, EF Core, JWT, PostgreSQL ✅ IMPLEMENTADO (100%)
+- **Frontend:** Angular 20 com Material Design ✅ IMPLEMENTADO (90%)
+- **Testes:** 58 testes unitários frontend (98.66% coverage) + 30+ E2E + 45+ backend ✅ PASSANDO
+- **API REST:** 5 controllers, 50+ endpoints completos e documentados ✅ COMPLETA
 
 #### Retorno Esperado
+**Atual (70% implementado):**
+- Redução de ~20-30% em ligações (acesso a informações)
+- Satisfação do paciente aumentada
+- Compliance LGPD 100%
+- Tempo de retorno: ~9-12 meses
+
+**Projetado (100% implementado com booking):**
 - Redução de 40-50% em ligações
 - Redução de 30-40% no no-show
-- Melhoria significativa em NPS
-- Diferencial competitivo
+- Custo operacional: R$ 15k/mês → R$ 9k/mês (-40%)
+- NPS: 7.5 → 9.0 (+20%)
+- Tempo de retorno: < 6 meses
 
 #### Documentação de Referência
-- [ANALISE_MELHORIAS_SISTEMA.md](ANALISE_MELHORIAS_SISTEMA.md) - Seção "Portal do Paciente"
-- [patient-portal-api/IMPLEMENTATION_SUMMARY.md](../patient-portal-api/IMPLEMENTATION_SUMMARY.md) - ✨ **Documentação completa do backend implementado**
-- [patient-portal-api/README.md](../patient-portal-api/README.md) - ✨ **Guia de uso da API**
-- [patient-portal-api/INTEGRATION_GUIDE.md](../patient-portal-api/INTEGRATION_GUIDE.md) - ✨ **Guia de integração frontend**
+- **📊 [PORTAL_PACIENTE_STATUS_JAN2026.md](../../PORTAL_PACIENTE_STATUS_JAN2026.md)** - ✨ **Status detalhado atualizado (Janeiro 2026)**
+- [PATIENT_PORTAL_COMPLETION_SUMMARY.md](../../system-admin/implementacoes/PATIENT_PORTAL_COMPLETION_SUMMARY.md) - Resumo de implementação
+- [patient-portal-api/README.md](../../patient-portal-api/README.md) - Documentação do backend
+- [frontend/patient-portal/README.md](../../frontend/patient-portal/README.md) - Documentação do frontend
+- [frontend/patient-portal/IMPLEMENTATION_SUMMARY.md](../../frontend/patient-portal/IMPLEMENTATION_SUMMARY.md) - Detalhes técnicos
+- [Plano_Desenvolvimento/fase-2-seguranca-lgpd/10-portal-paciente.md](../../Plano_Desenvolvimento/fase-2-seguranca-lgpd/10-portal-paciente.md) - Requisitos completos
 
 ---
 
