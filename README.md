@@ -134,7 +134,7 @@ Portal dedicado para acesso de pacientes (separado da aplicação principal):
 - 👤 **Perfil**: Gerenciamento de dados pessoais e alteração de senha
 - 🔐 **Autenticação**: JWT + Refresh Tokens (15min + 7 dias)
 - 🔒 **Segurança**: Account lockout, password hashing PBKDF2, LGPD compliant
-- 🔍 **Sistema de Auditoria LGPD Completo**: Rastreabilidade de todas operações ([ver documentação](./LGPD_AUDIT_SYSTEM.md))
+- 🔍 **Sistema de Auditoria LGPD Completo**: Rastreabilidade de todas operações ([ver documentação](system-admin/docs/lgpd/))
   - ✅ Registro automático de todas ações (AuditLog)
   - ✅ Rastreamento de acesso a dados sensíveis (DataAccessLog)
   - ✅ Gestão de consentimentos (DataConsentLog)
@@ -150,7 +150,7 @@ Portal dedicado para acesso de pacientes (separado da aplicação principal):
 - ⏳ **PWA**: Service Worker, offline, notificações push (0%)
 - ⏳ **Histórico Médico Completo**: Timeline de eventos e diagnósticos (0%)
 
-**Status Detalhado:** 📊 [PORTAL_PACIENTE_STATUS_JAN2026.md](./PORTAL_PACIENTE_STATUS_JAN2026.md)
+**Status Detalhado:** 📊 [Ver documentação do portal do paciente](system-admin/docs/portal-paciente/)
 
 **Infraestrutura:**
 - **URL desenvolvimento**: `http://localhost:4202` (quando executado separadamente)
@@ -634,7 +634,7 @@ Sistema completo de auditoria e compliance com a LGPD (Lei 13.709/2018):
 - ✅ Art. 18, IX - Revogação de consentimento
 - ✅ Art. 37 - Registro de operações
 
-> 📖 **Documentação completa**: [LGPD_AUDIT_SYSTEM.md](./LGPD_AUDIT_SYSTEM.md)
+> 📖 **Documentação completa**: [Sistema de Auditoria LGPD](system-admin/docs/lgpd/)
 
 ### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
