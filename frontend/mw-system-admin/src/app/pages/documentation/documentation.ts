@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
+import { environment } from '../../../environments/environment';
 
 interface DocCategory {
   name: string;
@@ -28,6 +29,7 @@ export class Documentation implements OnInit {
   categories = signal<DocCategory[]>([]);
   searchQuery = signal('');
   filteredCategories = signal<DocCategory[]>([]);
+  private readonly repositoryUrl = environment.documentation.repositoryUrl;
 
   ngOnInit(): void {
     this.loadDocumentation();
@@ -208,9 +210,33 @@ export class Documentation implements OnInit {
   }
 
   openDocumentation(path: string): void {
-    // Open in new tab - GitHub raw content
-    const repoUrl = 'https://github.com/PrimeCareSoftware/MW.Code/blob/main';
-    window.open(`${repoUrl}${path}`, '_blank');
+    // Validate path to prevent XSS attacks
+    const sanitizedPath = this.sanitizePath(path);
+    if (!sanitizedPath) {
+      console.error('Invalid documentation path');
+      return;
+    }
+    
+    // Open in new tab - GitHub content
+    const url = `${this.repositoryUrl}${sanitizedPath}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  private sanitizePath(path: string): string | null {
+    // Ensure path starts with /system-admin/
+    if (!path.startsWith('/system-admin/')) {
+      return null;
+    }
+    
+    // Remove any potentially dangerous characters
+    const sanitized = path.replace(/[<>'"]/g, '');
+    
+    // Prevent path traversal attacks
+    if (sanitized.includes('..')) {
+      return null;
+    }
+    
+    return sanitized;
   }
 
   getTotalDocs(): number {

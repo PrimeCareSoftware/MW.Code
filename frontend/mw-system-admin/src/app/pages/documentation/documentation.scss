@@ -184,13 +184,19 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background: var(--bg-secondary);
+    outline: none;
     
     .doc-arrow {
       transform: translateX(4px);
       opacity: 1;
     }
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--primary-color);
   }
 
   .doc-icon {

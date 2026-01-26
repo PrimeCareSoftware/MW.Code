@@ -64,7 +64,14 @@
 
           <div class="docs-list">
             @for (doc of category.docs; track doc.id) {
-              <div class="doc-item" (click)="openDocumentation(doc.path)">
+              <div 
+                class="doc-item" 
+                (click)="openDocumentation(doc.path)"
+                (keydown.enter)="openDocumentation(doc.path)"
+                (keydown.space)="openDocumentation(doc.path)"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="'Abrir ' + doc.title">
                 <div class="doc-icon">{{ doc.icon }}</div>
                 <div class="doc-content">
                   <div class="doc-title">{{ doc.title }}</div>

@@ -29,5 +29,10 @@ export const environment = {
     // Domain suffix for subdomain display (can be changed to any domain)
     // Examples: 'primecare.com', 'primecare.com.br', 'yourdomain.com'
     domainSuffix: 'primecare.com'
+  },
+  
+  // Documentation repository
+  documentation: {
+    repositoryUrl: 'https://github.com/PrimeCareSoftware/MW.Code/blob/main'
   }
 };
