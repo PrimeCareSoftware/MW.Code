@@ -119,10 +119,8 @@ export class OwnerProcedureManagement implements OnInit, OnDestroy {
 
     this.procedureService.delete(procedure.id).subscribe({
       next: () => {
-        // Remove from local list
-        const updated = this.procedures().filter(p => p.id !== procedure.id);
-        this.procedures.set(updated);
-        this.filterProcedures();
+        // Reload procedures to ensure data consistency
+        this.loadProcedures();
       },
       error: (error) => {
         console.error('Error deleting procedure:', error);
