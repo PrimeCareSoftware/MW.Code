@@ -25,6 +25,14 @@ O menu da aplicação principal (`medicwarehouse-app`) continha **itens que não
 - **Status anterior**: ❌ Rota existia mas não havia link no menu
 - **Status atual**: ✅ Acessível via menu lateral para todos os usuários
 
+#### 3. **Procedimentos (Proprietário)** (`/procedures/owner-management`) ⭐
+- **Localização**: Seção "Configurações" (visível apenas para proprietários)
+- **Rota**: `/procedures/owner-management`
+- **Proteção**: ownerGuard
+- **Funcionalidade**: Visualiza procedimentos de TODAS as clínicas do proprietário
+- **Status anterior**: ❌ Rota existia com ownerGuard mas não havia link no menu
+- **Status atual**: ✅ Acessível via menu lateral apenas para proprietários
+
 ### ❌ Itens Removidos do Menu
 
 #### Seção "Administração do Sistema" - Completa
@@ -120,7 +128,8 @@ Esta correção reforça a **clara separação** entre duas aplicações:
 
 ⚙️ Configurações (apenas proprietários)
   ├─ Empresa
-  └─ Clínicas
+  ├─ Clínicas
+  └─ Procedimentos (Proprietário)          ⭐ NOVO
 
 🔧 Administração (apenas proprietários)
   ├─ Usuários
@@ -140,6 +149,7 @@ Todas as rotas no menu agora correspondem a rotas **definidas em `app.routes.ts`
 |-----------|------|-------|--------|
 | Anamnese | `/anamnesis/templates` | authGuard | ✅ Válida |
 | Tickets de Suporte | `/tickets` | authGuard | ✅ Válida |
+| Procedimentos (Proprietário) | `/procedures/owner-management` | authGuard + ownerGuard | ✅ Válida |
 | ~~System Admin~~ | `/system-admin/*` | ❌ Não existe | ❌ Removido |
 
 ## Componentes NÃO Adicionados ao Menu
@@ -196,6 +206,7 @@ Output location: dist/primecare-frontend
 |------|------|-----------|----------|
 | 2026-01-26 | Feature | Adicionada Anamnese ao menu | navbar.html |
 | 2026-01-26 | Feature | Adicionados Tickets de Suporte ao menu | navbar.html |
+| 2026-01-26 | Feature | Adicionado Procedimentos (Proprietário) ao menu | navbar.html |
 | 2026-01-26 | Correção | Removida seção System Admin (rotas inexistentes) | navbar.html |
 | 2026-01-26 | Limpeza | Removido método isSystemAdmin() | navbar.ts |
 | 2026-01-26 | Documentação | Criado MENU_UPDATES.md | MENU_UPDATES.md |
