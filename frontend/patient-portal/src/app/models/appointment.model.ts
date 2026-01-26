@@ -23,3 +23,58 @@ export interface Appointment {
   canReschedule: boolean;
   canCancel: boolean;
 }
+
+export interface Specialty {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface Doctor {
+  id: string;
+  name: string;
+  specialty: string;
+  crm: string;
+  photoUrl?: string;
+  rating?: number;
+  availableForOnlineBooking: boolean;
+}
+
+export interface TimeSlot {
+  startTime: string;
+  endTime: string;
+  isAvailable: boolean;
+}
+
+export interface AvailableSlotsResponse {
+  date: string;
+  slots: TimeSlot[];
+}
+
+export interface BookAppointmentRequest {
+  doctorId: string;
+  scheduledDate: string;
+  startTime: string;
+  reason: string;
+  appointmentType?: string;
+  isTelehealth?: boolean;
+}
+
+export interface BookAppointmentResponse {
+  id: string;
+  doctorName: string;
+  scheduledDate: string;
+  startTime: string;
+  status: string;
+  message: string;
+}
+
+export interface CancelAppointmentRequest {
+  reason: string;
+}
+
+export interface RescheduleAppointmentRequest {
+  newDate: string;
+  newTime: string;
+  reason?: string;
+}

@@ -1,0 +1,295 @@
+<div class="booking-container">
+  <header class="page-header">
+    <button mat-icon-button (click)="goBack()" [matTooltip]="'Voltar'">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Agendar Nova Consulta</h1>
+  </header>
+
+  <div class="booking-content">
+    <mat-stepper #stepper [linear]="true" class="booking-stepper">
+      <!-- Step 1: Select Specialty -->
+      <mat-step [stepControl]="specialtyFormGroup" label="Especialidade">
+        <form [formGroup]="specialtyFormGroup">
+          <div class="step-content">
+            <h2>Selecione a Especialidade</h2>
+            <p class="step-description">Escolha a especialidade médica desejada</p>
+
+            <div *ngIf="loadingSpecialties" class="loading-state">
+              <mat-spinner diameter="48"></mat-spinner>
+              <p>Carregando especialidades...</p>
+            </div>
+
+            <div *ngIf="specialtiesError" class="error-state">
+              <mat-icon>error_outline</mat-icon>
+              <p>Erro ao carregar especialidades</p>
+              <button mat-button color="primary" (click)="retryLoadSpecialties()">
+                <mat-icon>refresh</mat-icon>
+                Tentar novamente
+              </button>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width" *ngIf="!loadingSpecialties && !specialtiesError">
+              <mat-label>Especialidade</mat-label>
+              <mat-select formControlName="specialty" (selectionChange)="onSpecialtySelected()">
+                <mat-option *ngFor="let specialty of specialties" [value]="specialty.id">
+                  {{ specialty.name }}
+                  <span class="specialty-description" *ngIf="specialty.description">
+                    - {{ specialty.description }}
+                  </span>
+                </mat-option>
+              </mat-select>
+              <mat-icon matPrefix>medical_services</mat-icon>
+              <mat-error *ngIf="specialtyFormGroup.get('specialty')?.hasError('required')">
+                Por favor, selecione uma especialidade
+              </mat-error>
+            </mat-form-field>
+
+            <div class="step-actions">
+              <button mat-button routerLink="/appointments">Cancelar</button>
+              <button mat-raised-button color="primary" matStepperNext 
+                      [disabled]="!specialtyFormGroup.valid">
+                Próximo
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 2: Select Doctor -->
+      <mat-step [stepControl]="doctorFormGroup" label="Médico">
+        <form [formGroup]="doctorFormGroup">
+          <div class="step-content">
+            <h2>Selecione o Médico</h2>
+            <p class="step-description">Escolha um médico da especialidade selecionada</p>
+
+            <div *ngIf="loadingDoctors" class="loading-state">
+              <mat-spinner diameter="48"></mat-spinner>
+              <p>Carregando médicos...</p>
+            </div>
+
+            <div *ngIf="doctorsError" class="error-state">
+              <mat-icon>error_outline</mat-icon>
+              <p>Erro ao carregar médicos</p>
+              <button mat-button color="primary" (click)="retryLoadDoctors()">
+                <mat-icon>refresh</mat-icon>
+                Tentar novamente
+              </button>
+            </div>
+
+            <div class="doctors-grid" *ngIf="!loadingDoctors && !doctorsError && doctors.length > 0">
+              <mat-card 
+                *ngFor="let doctor of doctors" 
+                class="doctor-card"
+                [class.selected]="doctorFormGroup.get('doctor')?.value === doctor.id"
+                (click)="doctorFormGroup.patchValue({doctor: doctor.id}); onDoctorSelected()">
+                <mat-card-content>
+                  <div class="doctor-avatar">
+                    <mat-icon>person</mat-icon>
+                  </div>
+                  <div class="doctor-info">
+                    <h3>{{ doctor.name }}</h3>
+                    <p class="doctor-crm">CRM: {{ doctor.crm }}</p>
+                    <p class="doctor-specialty">{{ doctor.specialty }}</p>
+                    <div class="doctor-rating" *ngIf="doctor.rating">
+                      <mat-icon class="star">star</mat-icon>
+                      <span>{{ doctor.rating }}</span>
+                    </div>
+                  </div>
+                  <mat-icon class="check-icon" *ngIf="doctorFormGroup.get('doctor')?.value === doctor.id">
+                    check_circle
+                  </mat-icon>
+                </mat-card-content>
+              </mat-card>
+            </div>
+
+            <div class="empty-state" *ngIf="!loadingDoctors && !doctorsError && doctors.length === 0">
+              <mat-icon>person_off</mat-icon>
+              <p>Nenhum médico disponível para esta especialidade</p>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                Voltar
+              </button>
+              <button mat-raised-button color="primary" matStepperNext 
+                      [disabled]="!doctorFormGroup.valid">
+                Próximo
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 3: Select Date and Time -->
+      <mat-step [stepControl]="dateTimeFormGroup" label="Data e Horário">
+        <form [formGroup]="dateTimeFormGroup">
+          <div class="step-content">
+            <h2>Escolha Data e Horário</h2>
+            <p class="step-description">Selecione a melhor data e horário para sua consulta</p>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Data da Consulta</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date"
+                     [min]="minDate" [max]="maxDate" [matDatepickerFilter]="dateFilter"
+                     (dateChange)="onDateSelected()" readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-icon matPrefix>event</mat-icon>
+              <mat-error *ngIf="dateTimeFormGroup.get('date')?.hasError('required')">
+                Por favor, selecione uma data
+              </mat-error>
+              <mat-hint>Selecione uma data entre hoje e 3 meses (dias úteis)</mat-hint>
+            </mat-form-field>
+
+            <div *ngIf="selectedDate" class="selected-date-display">
+              <mat-icon>event</mat-icon>
+              <span>{{ formatDisplayDate(selectedDate) }}</span>
+            </div>
+
+            <div *ngIf="loadingSlots" class="loading-state">
+              <mat-spinner diameter="48"></mat-spinner>
+              <p>Carregando horários disponíveis...</p>
+            </div>
+
+            <div *ngIf="slotsError" class="error-state">
+              <mat-icon>error_outline</mat-icon>
+              <p>Erro ao carregar horários</p>
+              <button mat-button color="primary" (click)="retryLoadSlots()">
+                <mat-icon>refresh</mat-icon>
+                Tentar novamente
+              </button>
+            </div>
+
+            <div class="time-slots" *ngIf="selectedDate && !loadingSlots && !slotsError && availableSlots.length > 0">
+              <h3>Horários Disponíveis</h3>
+              <div class="slots-grid">
+                <button 
+                  mat-stroked-button 
+                  *ngFor="let slot of availableSlots"
+                  [class.selected]="dateTimeFormGroup.get('timeSlot')?.value === slot.startTime"
+                  (click)="dateTimeFormGroup.patchValue({timeSlot: slot.startTime}); onTimeSlotSelected()">
+                  <mat-icon>access_time</mat-icon>
+                  {{ formatTime(slot.startTime) }}
+                </button>
+              </div>
+            </div>
+
+            <div class="empty-state" *ngIf="selectedDate && !loadingSlots && !slotsError && availableSlots.length === 0">
+              <mat-icon>event_busy</mat-icon>
+              <p>Nenhum horário disponível para esta data</p>
+              <p class="hint">Tente selecionar outra data</p>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                Voltar
+              </button>
+              <button mat-raised-button color="primary" matStepperNext 
+                      [disabled]="!dateTimeFormGroup.valid">
+                Próximo
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 4: Details and Confirmation -->
+      <mat-step [stepControl]="detailsFormGroup" label="Confirmação">
+        <form [formGroup]="detailsFormGroup">
+          <div class="step-content">
+            <h2>Confirme os Dados</h2>
+            <p class="step-description">Revise e complete as informações da consulta</p>
+
+            <!-- Summary Card -->
+            <mat-card class="summary-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar>summarize</mat-icon>
+                <mat-card-title>Resumo da Consulta</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="summary-item">
+                  <mat-icon>medical_services</mat-icon>
+                  <div>
+                    <span class="label">Especialidade:</span>
+                    <span class="value">{{ selectedSpecialty?.name }}</span>
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="summary-item">
+                  <mat-icon>person</mat-icon>
+                  <div>
+                    <span class="label">Médico:</span>
+                    <span class="value">{{ selectedDoctor?.name }}</span>
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="summary-item">
+                  <mat-icon>event</mat-icon>
+                  <div>
+                    <span class="label">Data:</span>
+                    <span class="value">{{ selectedDate ? formatDisplayDate(selectedDate) : '' }}</span>
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="summary-item">
+                  <mat-icon>access_time</mat-icon>
+                  <div>
+                    <span class="label">Horário:</span>
+                    <span class="value">{{ selectedSlot ? formatTime(selectedSlot.startTime) : '' }}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Additional Details Form -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Tipo de Consulta</mat-label>
+              <mat-select formControlName="appointmentType">
+                <mat-option value="Consulta">Consulta</mat-option>
+                <mat-option value="Retorno">Retorno</mat-option>
+                <mat-option value="Exame">Exame</mat-option>
+              </mat-select>
+              <mat-icon matPrefix>category</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Motivo da Consulta</mat-label>
+              <textarea matInput formControlName="reason" rows="4" 
+                        placeholder="Descreva o motivo da sua consulta..."
+                        maxlength="500"></textarea>
+              <mat-icon matPrefix>note</mat-icon>
+              <mat-hint align="end">
+                {{ detailsFormGroup.get('reason')?.value?.length || 0 }}/500
+              </mat-hint>
+              <mat-error *ngIf="detailsFormGroup.get('reason')?.hasError('required')">
+                Por favor, descreva o motivo da consulta
+              </mat-error>
+              <mat-error *ngIf="detailsFormGroup.get('reason')?.hasError('minlength')">
+                Mínimo de 10 caracteres
+              </mat-error>
+            </mat-form-field>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious [disabled]="submitting">
+                <mat-icon>arrow_back</mat-icon>
+                Voltar
+              </button>
+              <button mat-raised-button color="primary" (click)="onSubmit()" 
+                      [disabled]="!isFormValid() || submitting">
+                <mat-spinner diameter="20" *ngIf="submitting"></mat-spinner>
+                <mat-icon *ngIf="!submitting">check</mat-icon>
+                {{ submitting ? 'Agendando...' : 'Confirmar Agendamento' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

@@ -79,12 +79,19 @@
                 <mat-chip [class]="'status-' + getStatusColor(appointment.status)">
                   {{ appointment.status }}
                 </mat-chip>
-                <div class="actions" *ngIf="appointment.canCancel || appointment.canReschedule">
-                  <button mat-stroked-button color="primary" *ngIf="appointment.canReschedule">
+                <div class="actions" *ngIf="appointment.canCancel || appointment.canReschedule || canConfirm(appointment)">
+                  <button mat-stroked-button color="accent" *ngIf="canConfirm(appointment)"
+                          (click)="confirmAppointment(appointment)">
+                    <mat-icon>check_circle</mat-icon>
+                    Confirmar
+                  </button>
+                  <button mat-stroked-button color="primary" *ngIf="appointment.canReschedule"
+                          (click)="rescheduleAppointment(appointment)">
                     <mat-icon>event</mat-icon>
                     Reagendar
                   </button>
-                  <button mat-stroked-button color="warn" *ngIf="appointment.canCancel">
+                  <button mat-stroked-button color="warn" *ngIf="appointment.canCancel"
+                          (click)="cancelAppointment(appointment)">
                     <mat-icon>cancel</mat-icon>
                     Cancelar
                   </button>

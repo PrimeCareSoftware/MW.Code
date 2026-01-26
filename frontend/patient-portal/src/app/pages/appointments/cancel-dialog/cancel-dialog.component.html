@@ -1,0 +1,48 @@
+<div class="cancel-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>cancel</mat-icon>
+    Cancelar Consulta
+  </h2>
+
+  <mat-dialog-content>
+    <div class="warning-message">
+      <mat-icon>warning</mat-icon>
+      <p>Você está prestes a cancelar a seguinte consulta:</p>
+    </div>
+
+    <div class="appointment-info">
+      <p><strong>Médico:</strong> {{ data.appointment.doctorName }}</p>
+      <p><strong>Especialidade:</strong> {{ data.appointment.doctorSpecialty }}</p>
+      <p><strong>Data:</strong> {{ data.appointment.appointmentDate | date: 'dd/MM/yyyy' }}</p>
+      <p><strong>Horário:</strong> {{ data.appointment.startTime.substring(0, 5) }}</p>
+    </div>
+
+    <form [formGroup]="cancelForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Motivo do Cancelamento</mat-label>
+        <textarea matInput formControlName="reason" rows="4"
+                  placeholder="Por favor, informe o motivo do cancelamento..."
+                  maxlength="500"></textarea>
+        <mat-icon matPrefix>note</mat-icon>
+        <mat-hint align="end">
+          {{ cancelForm.get('reason')?.value?.length || 0 }}/500
+        </mat-hint>
+        <mat-error *ngIf="cancelForm.get('reason')?.hasError('required')">
+          O motivo é obrigatório
+        </mat-error>
+        <mat-error *ngIf="cancelForm.get('reason')?.hasError('minlength')">
+          Mínimo de 10 caracteres
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Voltar</button>
+    <button mat-raised-button color="warn" (click)="onConfirm()" 
+            [disabled]="!cancelForm.valid">
+      <mat-icon>cancel</mat-icon>
+      Confirmar Cancelamento
+    </button>
+  </mat-dialog-actions>
+</div>

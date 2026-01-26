@@ -1,0 +1,85 @@
+<div class="reschedule-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>event</mat-icon>
+    Reagendar Consulta
+  </h2>
+
+  <mat-dialog-content>
+    <div class="info-message">
+      <mat-icon>info</mat-icon>
+      <p>Selecione uma nova data e horário para sua consulta:</p>
+    </div>
+
+    <div class="appointment-info">
+      <h3>Consulta Atual</h3>
+      <p><strong>Médico:</strong> {{ data.appointment.doctorName }}</p>
+      <p><strong>Especialidade:</strong> {{ data.appointment.doctorSpecialty }}</p>
+      <p><strong>Data:</strong> {{ data.appointment.appointmentDate | date: 'dd/MM/yyyy' }}</p>
+      <p><strong>Horário:</strong> {{ data.appointment.startTime.substring(0, 5) }}</p>
+    </div>
+
+    <form [formGroup]="rescheduleForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nova Data</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="newDate"
+               [min]="minDate" [max]="maxDate" [matDatepickerFilter]="dateFilter"
+               readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-icon matPrefix>event</mat-icon>
+        <mat-error *ngIf="rescheduleForm.get('newDate')?.hasError('required')">
+          Por favor, selecione uma data
+        </mat-error>
+        <mat-hint>Selecione uma data entre hoje e 3 meses (dias úteis)</mat-hint>
+      </mat-form-field>
+
+      <div *ngIf="loadingSlots" class="loading-slots">
+        <mat-spinner diameter="32"></mat-spinner>
+        <span>Carregando horários...</span>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width" 
+                      *ngIf="!loadingSlots && availableSlots.length > 0">
+        <mat-label>Novo Horário</mat-label>
+        <mat-select formControlName="newTime">
+          <mat-option *ngFor="let slot of availableSlots" [value]="slot.startTime">
+            {{ formatTime(slot.startTime) }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matPrefix>access_time</mat-icon>
+        <mat-error *ngIf="rescheduleForm.get('newTime')?.hasError('required')">
+          Por favor, selecione um horário
+        </mat-error>
+      </mat-form-field>
+
+      <div *ngIf="!loadingSlots && rescheduleForm.get('newDate')?.value && availableSlots.length === 0" 
+           class="no-slots-message">
+        <mat-icon>event_busy</mat-icon>
+        <p>Nenhum horário disponível para esta data</p>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Motivo (opcional)</mat-label>
+        <textarea matInput formControlName="reason" rows="3"
+                  placeholder="Informe o motivo do reagendamento (opcional)..."
+                  maxlength="500"></textarea>
+        <mat-icon matPrefix>note</mat-icon>
+        <mat-hint align="end">
+          {{ rescheduleForm.get('reason')?.value?.length || 0 }}/500
+        </mat-hint>
+        <mat-error *ngIf="rescheduleForm.get('reason')?.hasError('minlength')">
+          Mínimo de 10 caracteres
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onConfirm()" 
+            [disabled]="!rescheduleForm.valid">
+      <mat-icon>check</mat-icon>
+      Confirmar Reagendamento
+    </button>
+  </mat-dialog-actions>
+</div>
