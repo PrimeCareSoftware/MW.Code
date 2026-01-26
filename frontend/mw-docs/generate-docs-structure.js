@@ -11,6 +11,9 @@ const path = require('path');
 const SYSTEM_ADMIN_PATH = path.join(__dirname, '../../system-admin');
 const OUTPUT_PATH = path.join(__dirname, 'src/app/services/generated-docs.ts');
 
+// Configuration
+const MAX_DESCRIPTION_LENGTH = 200;
+
 // Category mapping with icons
 const CATEGORY_MAP = {
   'backend': { name: '🔧 Backend', icon: '🔧' },
@@ -89,7 +92,7 @@ function extractDescription(filePath) {
       }
       
       if (foundTitle && line.trim() && !line.startsWith('#') && !line.startsWith('[')) {
-        return line.trim().substring(0, 200);
+        return line.trim().substring(0, MAX_DESCRIPTION_LENGTH);
       }
     }
   } catch (error) {

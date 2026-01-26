@@ -43,8 +43,8 @@ Documentação sobre deploy, Docker, Podman, CI/CD e infraestrutura.
 Acesse: **https://medicwarehouse.github.io/MW.Code/**
 
 - ✅ Interface moderna e intuitiva
-- ✅ Busca em tempo real entre 367 documentos
-- ✅ Organização por categorias
+- ✅ Busca em tempo real entre todos os documentos
+- ✅ Organização por categorias (323 docs do system-admin + docs customizados)
 - ✅ Renderização completa de Markdown
 - ✅ Sem necessidade de clonar repositório
 
@@ -66,7 +66,7 @@ Ver [INDICE.md](./INDICE.md) para uma lista completa e categorizada de todos os 
 
 Toda a documentação do system-admin foi convertida para **páginas HTML navegáveis**:
 
-- **367 documentos** disponíveis via interface web
+- **323 documentos** do system-admin (+ docs customizados)
 - **26 categorias** organizadas
 - **Busca inteligente** em tempo real
 - **Acesso direto** sem precisar do GitHub
