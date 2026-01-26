@@ -484,16 +484,4 @@ public class AppointmentsController : BaseController
             return StatusCode(500, new { message = "An error occurred while retrieving doctors" });
         }
     }
-
-    private string? GetTenantId()
-    {
-        // Extract tenant ID from JWT claims
-        var tenantClaim = User.FindFirst("TenantId")?.Value;
-        if (!string.IsNullOrEmpty(tenantClaim))
-            return tenantClaim;
-
-        // Fallback: Get from patient user if claim not present
-        // This is a temporary approach - ideally tenant should always be in JWT
-        return "default-tenant"; // TODO: Implement proper tenant resolution strategy
-    }
 }

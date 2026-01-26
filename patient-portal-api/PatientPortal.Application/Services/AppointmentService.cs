@@ -123,7 +123,7 @@ public class AppointmentService : IAppointmentService
                 request.AppointmentMode,
                 request.PaymentType,
                 request.HealthInsurancePlanId.HasValue ? (object)request.HealthInsurancePlanId.Value : DBNull.Value,
-                1, // Status = Scheduled
+                (int)AppointmentStatus.Scheduled, // Status = Scheduled
                 request.Notes ?? (object)DBNull.Value,
                 patientInfo.TenantId,
                 now,
@@ -165,7 +165,7 @@ public class AppointmentService : IAppointmentService
                 @"UPDATE ""Appointments"" 
                   SET ""Status"" = {0}, ""UpdatedAt"" = {1}
                   WHERE ""Id"" = {2} AND ""PatientId"" = {3}",
-                2, // Status = Confirmed
+                (int)AppointmentStatus.Confirmed, // Status = Confirmed
                 DateTime.UtcNow,
                 appointmentId,
                 patientUser.PatientId
@@ -205,7 +205,7 @@ public class AppointmentService : IAppointmentService
                 @"UPDATE ""Appointments"" 
                   SET ""Status"" = {0}, ""CancellationReason"" = {1}, ""UpdatedAt"" = {2}
                   WHERE ""Id"" = {3} AND ""PatientId"" = {4}",
-                5, // Status = Cancelled
+                (int)AppointmentStatus.Cancelled, // Status = Cancelled
                 request.Reason,
                 DateTime.UtcNow,
                 appointmentId,
@@ -248,7 +248,7 @@ public class AppointmentService : IAppointmentService
                   WHERE ""Id"" = {4} AND ""PatientId"" = {5}",
                 request.NewDate,
                 request.NewTime,
-                1, // Status = Scheduled (reset to scheduled after rescheduling)
+                (int)AppointmentStatus.Scheduled, // Status = Scheduled (reset to scheduled after rescheduling)
                 DateTime.UtcNow,
                 appointmentId,
                 patientUser.PatientId

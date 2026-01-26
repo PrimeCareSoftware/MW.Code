@@ -18,4 +18,20 @@ public abstract class BaseController : ControllerBase
             return null;
         return userId;
     }
+
+    /// <summary>
+    /// Extracts the tenant ID from the authenticated user's claims
+    /// </summary>
+    /// <returns>Tenant ID as string, or default tenant if not found</returns>
+    protected string GetTenantId()
+    {
+        // Extract tenant ID from JWT claims
+        var tenantClaim = User.FindFirst("TenantId")?.Value;
+        if (!string.IsNullOrEmpty(tenantClaim))
+            return tenantClaim;
+
+        // Fallback to default tenant
+        // TODO: Implement proper tenant resolution strategy
+        return "default-tenant";
+    }
 }
