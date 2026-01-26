@@ -236,6 +236,7 @@ namespace MedicSoft.Core.Services.Audit
             string entityId, object oldValues = null, object newValues = null);
         Task LogDataAccessAsync(string userId, string entityType, string entityId, 
             List<string> fieldsAccessed, string reason);
+        Task<PagedResult<AuditLog>> GetAuditLogsAsync(AuditLogFilterDto filter);
         Task<List<AuditLog>> GetUserActivityAsync(string userId, DateTime? from = null, DateTime? to = null);
         Task<List<AuditLog>> GetEntityHistoryAsync(string entityType, string entityId);
         Task<List<DataAccessLog>> GetPatientDataAccessHistoryAsync(Guid patientId);
@@ -399,6 +400,96 @@ namespace MedicSoft.Core.Services.Audit
                     .ToDictionary(g => g.Key, g => g.Count())
             };
         }
+        
+        public async Task<PagedResult<AuditLog>> GetAuditLogsAsync(AuditLogFilterDto filter)
+        {
+            var query = _auditLogRepository.GetAll();
+            
+            // Aplicar filtros
+            if (!string.IsNullOrEmpty(filter.UserId))
+                query = query.Where(a => a.UserId == filter.UserId);
+            
+            if (filter.Action.HasValue)
+                query = query.Where(a => a.Action == filter.Action.Value);
+            
+            if (!string.IsNullOrEmpty(filter.EntityType))
+                query = query.Where(a => a.EntityType == filter.EntityType);
+            
+            if (filter.Result.HasValue)
+                query = query.Where(a => a.Result == filter.Result.Value);
+            
+            if (filter.DateFrom.HasValue)
+                query = query.Where(a => a.Timestamp >= filter.DateFrom.Value);
+            
+            if (filter.DateTo.HasValue)
+                query = query.Where(a => a.Timestamp <= filter.DateTo.Value);
+            
+            if (filter.IsSensitiveOnly)
+                query = query.Where(a => a.IsSensitiveData);
+            
+            if (!string.IsNullOrEmpty(filter.SearchTerm))
+            {
+                query = query.Where(a => 
+                    a.UserName.Contains(filter.SearchTerm) ||
+                    a.EntityType.Contains(filter.SearchTerm) ||
+                    a.EntityDescription.Contains(filter.SearchTerm)
+                );
+            }
+            
+            // Contar total antes da paginação
+            var totalCount = await query.CountAsync();
+            
+            // Ordenar e paginar
+            var logs = await query
+                .OrderByDescending(a => a.Timestamp)
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
+            
+            return new PagedResult<AuditLog>
+            {
+                Items = logs,
+                TotalCount = totalCount,
+                Page = filter.Page,
+                PageSize = filter.PageSize,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)filter.PageSize)
+            };
+        }
+    }
+    
+    // DTOs
+    public class AuditLogFilterDto
+    {
+        public string UserId { get; set; }
+        public AuditActionType? Action { get; set; }
+        public string EntityType { get; set; }
+        public AuditResultType? Result { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+        public bool IsSensitiveOnly { get; set; }
+        public string SearchTerm { get; set; }
+        public int Page { get; set; } = 1;
+        public int PageSize { get; set; } = 30;
+    }
+    
+    public class PagedResult<T>
+    {
+        public List<T> Items { get; set; }
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int TotalPages { get; set; }
+    }
+    
+    public class AuditStatistics
+    {
+        public int TotalEvents { get; set; }
+        public int SuccessfulEvents { get; set; }
+        public int FailedEvents { get; set; }
+        public int UnauthorizedAttempts { get; set; }
+        public int SensitiveDataAccesses { get; set; }
+        public int UniqueUsers { get; set; }
+        public Dictionary<string, int> MostAccessedEntities { get; set; }
     }
 }
 ```
@@ -533,7 +624,6 @@ namespace MedicSoft.Api.Controllers
         public async Task<ActionResult<PagedResult<AuditLog>>> GetAuditLogs(
             [FromQuery] AuditLogFilterDto filter)
         {
-            // Implementar paginação e filtros
             var logs = await _auditService.GetAuditLogsAsync(filter);
             return Ok(logs);
         }
@@ -576,14 +666,37 @@ namespace MedicSoft.Api.Controllers
         [HttpPost("export")]
         public async Task<IActionResult> ExportAuditLogs([FromBody] AuditLogFilterDto filter)
         {
-            var logs = await _auditService.GetAuditLogsAsync(filter);
-            var csv = GenerateCsv(logs);
+            var result = await _auditService.GetAuditLogsAsync(filter);
+            var csv = GenerateCsv(result.Items);
             
             return File(
                 Encoding.UTF8.GetBytes(csv),
                 "text/csv",
                 $"audit-logs-{DateTime.UtcNow:yyyyMMdd}.csv"
             );
+        }
+        
+        private string GenerateCsv(List<AuditLog> logs)
+        {
+            var sb = new StringBuilder();
+            
+            // Header
+            sb.AppendLine("Timestamp,User,Action,Entity Type,Entity ID,Result,IP Address,User Agent");
+            
+            // Rows
+            foreach (var log in logs)
+            {
+                sb.AppendLine($"\"{log.Timestamp:yyyy-MM-dd HH:mm:ss}\"," +
+                    $"\"{log.UserName}\"," +
+                    $"\"{log.Action}\"," +
+                    $"\"{log.EntityType}\"," +
+                    $"\"{log.EntityId}\"," +
+                    $"\"{log.Result}\"," +
+                    $"\"{log.IpAddress}\"," +
+                    $"\"{log.UserAgent}\"");
+            }
+            
+            return sb.ToString();
         }
     }
 }
@@ -649,6 +762,10 @@ export class AuditLogListComponent implements OnInit {
   
   viewDetails(log: AuditLog) {
     // Abrir modal com detalhes completos
+    const dialogRef = this.dialog.open(AuditLogDetailsDialog, {
+      width: '800px',
+      data: log
+    });
   }
   
   exportToCSV() {
@@ -662,6 +779,412 @@ export class AuditLogListComponent implements OnInit {
       }
     );
   }
+}
+```
+
+#### 4.2 Template HTML
+```html
+<!-- frontend/src/app/admin/audit-logs/audit-log-list.component.html -->
+<div class="audit-logs-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>security</mat-icon>
+        Logs de Auditoria LGPD
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filters-section">
+        <h3>Filtros</h3>
+        <div class="filters-grid">
+          <mat-form-field>
+            <mat-label>Usuário</mat-label>
+            <input matInput [(ngModel)]="filters.userId" placeholder="ID do usuário">
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Ação</mat-label>
+            <mat-select [(ngModel)]="filters.action">
+              <mat-option value="">Todas</mat-option>
+              <mat-option value="Create">Criação</mat-option>
+              <mat-option value="Read">Leitura</mat-option>
+              <mat-option value="Update">Atualização</mat-option>
+              <mat-option value="Delete">Exclusão</mat-option>
+              <mat-option value="Login">Login</mat-option>
+              <mat-option value="Export">Exportação</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Tipo de Entidade</mat-label>
+            <input matInput [(ngModel)]="filters.entityType" placeholder="Patient, MedicalRecord, etc.">
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Resultado</mat-label>
+            <mat-select [(ngModel)]="filters.result">
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Success">Sucesso</mat-option>
+              <mat-option value="Failed">Falha</mat-option>
+              <mat-option value="Unauthorized">Não Autorizado</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Data Início</mat-label>
+            <input matInput [matDatepicker]="pickerFrom" [(ngModel)]="filters.dateFrom">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Data Fim</mat-label>
+            <input matInput [matDatepicker]="pickerTo" [(ngModel)]="filters.dateTo">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+          
+          <mat-checkbox [(ngModel)]="filters.isSensitiveOnly">
+            Apenas Dados Sensíveis
+          </mat-checkbox>
+        </div>
+        
+        <div class="filter-actions">
+          <button mat-raised-button color="primary" (click)="applyFilters()">
+            <mat-icon>search</mat-icon>
+            Aplicar Filtros
+          </button>
+          <button mat-button (click)="clearFilters()">
+            <mat-icon>clear</mat-icon>
+            Limpar
+          </button>
+          <button mat-raised-button color="accent" (click)="exportToCSV()">
+            <mat-icon>download</mat-icon>
+            Exportar CSV
+          </button>
+        </div>
+      </div>
+      
+      <!-- Tabela de Logs -->
+      <div class="table-container">
+        <table mat-table [dataSource]="auditLogs" class="audit-logs-table">
+          
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef>Data/Hora</th>
+            <td mat-cell *matCellDef="let log">
+              {{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}
+            </td>
+          </ng-container>
+          
+          <!-- User Column -->
+          <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef>Usuário</th>
+            <td mat-cell *matCellDef="let log">
+              <div class="user-info">
+                <strong>{{ log.userName }}</strong>
+                <small>{{ log.userEmail }}</small>
+              </div>
+            </td>
+          </ng-container>
+          
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Ação</th>
+            <td mat-cell *matCellDef="let log">
+              <mat-chip [color]="getActionColor(log.action)" selected>
+                {{ log.action }}
+              </mat-chip>
+            </td>
+          </ng-container>
+          
+          <!-- Entity Column -->
+          <ng-container matColumnDef="entity">
+            <th mat-header-cell *matHeaderCellDef>Entidade</th>
+            <td mat-cell *matCellDef="let log">
+              <div class="entity-info">
+                <strong>{{ log.entityType }}</strong>
+                <small>{{ log.entityId }}</small>
+              </div>
+            </td>
+          </ng-container>
+          
+          <!-- Result Column -->
+          <ng-container matColumnDef="result">
+            <th mat-header-cell *matHeaderCellDef>Resultado</th>
+            <td mat-cell *matCellDef="let log">
+              <mat-icon [class]="'result-icon ' + log.result.toLowerCase()">
+                {{ getResultIcon(log.result) }}
+              </mat-icon>
+              {{ log.result }}
+            </td>
+          </ng-container>
+          
+          <!-- IP Address Column -->
+          <ng-container matColumnDef="ipAddress">
+            <th mat-header-cell *matHeaderCellDef>IP</th>
+            <td mat-cell *matCellDef="let log">{{ log.ipAddress }}</td>
+          </ng-container>
+          
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <td mat-cell *matCellDef="let log">
+              <button mat-icon-button (click)="viewDetails(log)" matTooltip="Ver Detalhes">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      
+      <!-- Paginação -->
+      <mat-paginator 
+        [length]="totalCount"
+        [pageSize]="filters.pageSize"
+        [pageSizeOptions]="[10, 30, 50, 100]"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>
+```
+
+#### 4.3 Estilos CSS
+```scss
+// frontend/src/app/admin/audit-logs/audit-log-list.component.scss
+.audit-logs-container {
+  padding: 20px;
+}
+
+.filters-section {
+  margin-bottom: 30px;
+  
+  h3 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .filter-actions {
+    display: flex;
+    gap: 10px;
+    
+    button {
+      mat-icon {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.audit-logs-table {
+  width: 100%;
+  
+  .user-info,
+  .entity-info {
+    display: flex;
+    flex-direction: column;
+    
+    small {
+      color: #666;
+      font-size: 0.85em;
+    }
+  }
+  
+  mat-chip {
+    font-size: 0.85em;
+  }
+  
+  .result-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+    
+    &.success {
+      color: #4caf50;
+    }
+    
+    &.failed {
+      color: #f44336;
+    }
+    
+    &.unauthorized {
+      color: #ff9800;
+    }
+  }
+}
+
+mat-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-header {
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5em;
+    
+    mat-icon {
+      color: #1976d2;
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+```
+
+#### 4.4 TypeScript Helper Methods
+```typescript
+// Adicionar ao audit-log-list.component.ts
+
+  getActionColor(action: string): string {
+    const colorMap = {
+      'Create': 'primary',
+      'Read': 'accent',
+      'Update': 'warn',
+      'Delete': 'warn',
+      'Login': 'primary',
+      'Export': 'accent'
+    };
+    return colorMap[action] || '';
+  }
+  
+  getResultIcon(result: string): string {
+    const iconMap = {
+      'Success': 'check_circle',
+      'Failed': 'error',
+      'Unauthorized': 'warning'
+    };
+    return iconMap[result] || 'info';
+  }
+  
+  onPageChange(event: any) {
+    this.filters.page = event.pageIndex + 1;
+    this.filters.pageSize = event.pageSize;
+    this.loadAuditLogs();
+  }
+}
+
+// Componente de Diálogo para Detalhes
+@Component({
+  selector: 'audit-log-details-dialog',
+  template: `
+    <h2 mat-dialog-title>Detalhes do Log de Auditoria</h2>
+    <mat-dialog-content>
+      <div class="detail-section">
+        <h3>Informações Básicas</h3>
+        <div class="detail-row">
+          <strong>Timestamp:</strong>
+          <span>{{ data.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>Usuário:</strong>
+          <span>{{ data.userName }} ({{ data.userEmail }})</span>
+        </div>
+        <div class="detail-row">
+          <strong>Ação:</strong>
+          <span>{{ data.action }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>Resultado:</strong>
+          <span>{{ data.result }}</span>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <h3>Contexto</h3>
+        <div class="detail-row">
+          <strong>IP:</strong>
+          <span>{{ data.ipAddress }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>User Agent:</strong>
+          <span>{{ data.userAgent }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>URL:</strong>
+          <span>{{ data.requestUrl }}</span>
+        </div>
+      </div>
+      
+      <div class="detail-section" *ngIf="data.oldValues || data.newValues">
+        <h3>Dados Alterados</h3>
+        <div class="detail-row" *ngIf="data.oldValues">
+          <strong>Valores Antigos:</strong>
+          <pre>{{ data.oldValues }}</pre>
+        </div>
+        <div class="detail-row" *ngIf="data.newValues">
+          <strong>Valores Novos:</strong>
+          <pre>{{ data.newValues }}</pre>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Fechar</button>
+    </mat-dialog-actions>
+  `,
+  styles: [`
+    .detail-section {
+      margin-bottom: 20px;
+      
+      h3 {
+        color: #1976d2;
+        margin-bottom: 10px;
+      }
+      
+      .detail-row {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+        
+        strong {
+          color: #666;
+        }
+        
+        pre {
+          background: #f5f5f5;
+          padding: 10px;
+          border-radius: 4px;
+          overflow-x: auto;
+        }
+      }
+    }
+  `]
+})
+export class AuditLogDetailsDialog {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: AuditLog) {}
 }
 ```
 
@@ -750,50 +1273,229 @@ namespace MedicSoft.Core.Services.LGPD
     
     public class DataDeletionService : IDataDeletionService
     {
+        private readonly IRepository<DataDeletionRequest> _requestRepository;
+        private readonly IRepository<Patient> _patientRepository;
+        private readonly IRepository<Appointment> _appointmentRepository;
+        private readonly IAuditService _auditService;
+        private readonly ILogger<DataDeletionService> _logger;
+        
+        public DataDeletionService(
+            IRepository<DataDeletionRequest> requestRepository,
+            IRepository<Patient> patientRepository,
+            IRepository<Appointment> appointmentRepository,
+            IAuditService auditService,
+            ILogger<DataDeletionService> logger)
+        {
+            _requestRepository = requestRepository;
+            _patientRepository = patientRepository;
+            _appointmentRepository = appointmentRepository;
+            _auditService = auditService;
+            _logger = logger;
+        }
+        
         // LGPD Art. 18 - Direito ao esquecimento
         
         public async Task<DataDeletionRequest> RequestDataDeletionAsync(
             Guid patientId, 
             string reason)
         {
-            // Verificar se pode deletar (não pode ter pendências)
-            var canDelete = await CanDeletePatientDataAsync(patientId);
-            
-            var request = new DataDeletionRequest
+            try
             {
-                PatientId = patientId,
-                RequestDate = DateTime.UtcNow,
-                Reason = reason,
-                Status = canDelete ? DeletionStatus.Pending : DeletionStatus.Blocked
-            };
+                // Verificar se pode deletar (não pode ter pendências)
+                var canDelete = await CanDeletePatientDataAsync(patientId);
+                
+                var request = new DataDeletionRequest
+                {
+                    PatientId = patientId,
+                    RequestDate = DateTime.UtcNow,
+                    Reason = reason,
+                    Status = canDelete ? DeletionStatus.Pending : DeletionStatus.Blocked,
+                    BlockingReasons = canDelete ? null : await GetBlockingReasonsAsync(patientId)
+                };
+                
+                await _requestRepository.AddAsync(request);
+                
+                // Auditar solicitação
+                await _auditService.LogActionAsync(
+                    patientId.ToString(),
+                    AuditActionType.DataDeletionRequest,
+                    nameof(DataDeletionRequest),
+                    request.Id.ToString()
+                );
+                
+                _logger.LogInformation("Data deletion requested for patient {PatientId}, Status: {Status}", 
+                    patientId, request.Status);
+                
+                return request;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to request data deletion for patient {PatientId}", patientId);
+                throw;
+            }
+        }
+        
+        public async Task<bool> CanDeletePatientDataAsync(Guid patientId)
+        {
+            // Verificar se há consultas futuras agendadas
+            var futureAppointments = await _appointmentRepository.GetAll()
+                .Where(a => a.PatientId == patientId && a.StartTime > DateTime.UtcNow)
+                .AnyAsync();
             
-            await _requestRepository.AddAsync(request);
+            if (futureAppointments)
+                return false;
             
-            return request;
+            // Verificar se há consultas recentes (últimos 30 dias)
+            var recentAppointments = await _appointmentRepository.GetAll()
+                .Where(a => a.PatientId == patientId && a.StartTime > DateTime.UtcNow.AddDays(-30))
+                .AnyAsync();
+            
+            if (recentAppointments)
+                return false;
+            
+            // Verificar se há obrigações legais de retenção
+            var patient = await _patientRepository.GetByIdAsync(patientId);
+            if (patient == null)
+                return false;
+            
+            // Dados de saúde devem ser mantidos por 20 anos (CFM Resolução 1.821/2007)
+            var creationDate = patient.CreatedAt;
+            var retentionPeriod = TimeSpan.FromDays(365 * 20);
+            var canDeleteAfter = creationDate.Add(retentionPeriod);
+            
+            if (DateTime.UtcNow < canDeleteAfter)
+                return false;
+            
+            return true;
+        }
+        
+        private async Task<string> GetBlockingReasonsAsync(Guid patientId)
+        {
+            var reasons = new List<string>();
+            
+            var futureAppointments = await _appointmentRepository.GetAll()
+                .Where(a => a.PatientId == patientId && a.StartTime > DateTime.UtcNow)
+                .CountAsync();
+            
+            if (futureAppointments > 0)
+                reasons.Add($"{futureAppointments} consultas futuras agendadas");
+            
+            var recentAppointments = await _appointmentRepository.GetAll()
+                .Where(a => a.PatientId == patientId && a.StartTime > DateTime.UtcNow.AddDays(-30))
+                .CountAsync();
+            
+            if (recentAppointments > 0)
+                reasons.Add($"{recentAppointments} consultas nos últimos 30 dias");
+            
+            var patient = await _patientRepository.GetByIdAsync(patientId);
+            if (patient != null)
+            {
+                var creationDate = patient.CreatedAt;
+                var retentionPeriod = TimeSpan.FromDays(365 * 20);
+                var canDeleteAfter = creationDate.Add(retentionPeriod);
+                
+                if (DateTime.UtcNow < canDeleteAfter)
+                {
+                    var yearsRemaining = (canDeleteAfter - DateTime.UtcNow).TotalDays / 365;
+                    reasons.Add($"Retenção legal obrigatória por mais {yearsRemaining:F1} anos (CFM 1.821/2007)");
+                }
+            }
+            
+            return string.Join("; ", reasons);
         }
         
         public async Task ProcessDataDeletionAsync(Guid requestId)
         {
-            // Anonimizar ao invés de deletar completamente
-            // LGPD permite manter dados anonimizados para fins estatísticos
-            
-            var request = await _requestRepository.GetByIdAsync(requestId);
-            var patient = await _patientRepository.GetByIdAsync(request.PatientId);
-            
-            // Anonimizar dados pessoais
-            patient.Name = "ANONIMIZADO";
-            patient.CPF = null;
-            patient.Email = null;
-            patient.Phone = null;
-            patient.Address = null;
-            patient.IsAnonymized = true;
-            
-            await _patientRepository.UpdateAsync(patient);
-            
-            request.Status = DeletionStatus.Completed;
-            request.CompletedDate = DateTime.UtcNow;
-            await _requestRepository.UpdateAsync(request);
+            try
+            {
+                // Anonimizar ao invés de deletar completamente
+                // LGPD permite manter dados anonimizados para fins estatísticos
+                
+                var request = await _requestRepository.GetByIdAsync(requestId);
+                if (request == null)
+                    throw new InvalidOperationException($"Deletion request {requestId} not found");
+                
+                if (request.Status != DeletionStatus.Pending)
+                    throw new InvalidOperationException($"Cannot process request with status {request.Status}");
+                
+                var patient = await _patientRepository.GetByIdAsync(request.PatientId);
+                if (patient == null)
+                    throw new InvalidOperationException($"Patient {request.PatientId} not found");
+                
+                // Anonimizar dados pessoais
+                var anonymousId = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+                patient.Name = $"ANONIMIZADO_{anonymousId}";
+                patient.CPF = null;
+                patient.RG = null;
+                patient.Email = null;
+                patient.Phone = null;
+                patient.MobilePhone = null;
+                patient.Address = null;
+                patient.City = null;
+                patient.State = null;
+                patient.PostalCode = null;
+                patient.IsAnonymized = true;
+                patient.AnonymizedAt = DateTime.UtcNow;
+                
+                await _patientRepository.UpdateAsync(patient);
+                
+                // Atualizar status da solicitação
+                request.Status = DeletionStatus.Completed;
+                request.CompletedDate = DateTime.UtcNow;
+                request.ProcessedBy = "System"; // Ou ID do usuário que aprovou
+                await _requestRepository.UpdateAsync(request);
+                
+                // Auditar conclusão
+                await _auditService.LogActionAsync(
+                    request.PatientId.ToString(),
+                    AuditActionType.DataDeletionRequest,
+                    nameof(Patient),
+                    patient.Id.ToString(),
+                    null,
+                    new { Status = "Anonymized", AnonymousId = anonymousId }
+                );
+                
+                _logger.LogInformation("Data deletion completed for patient {PatientId}, anonymized as {AnonymousId}", 
+                    request.PatientId, anonymousId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to process data deletion for request {RequestId}", requestId);
+                
+                // Atualizar status para erro
+                var request = await _requestRepository.GetByIdAsync(requestId);
+                if (request != null)
+                {
+                    request.Status = DeletionStatus.Failed;
+                    request.FailureReason = ex.Message;
+                    await _requestRepository.UpdateAsync(request);
+                }
+                
+                throw;
+            }
         }
+    }
+    
+    // Supporting entities
+    public class DataDeletionRequest : BaseEntity
+    {
+        public Guid Id { get; set; }
+        public Guid PatientId { get; set; }
+        public DateTime RequestDate { get; set; }
+        public string Reason { get; set; }
+        public DeletionStatus Status { get; set; }
+        public string BlockingReasons { get; set; }
+        public DateTime? CompletedDate { get; set; }
+        public string ProcessedBy { get; set; }
+        public string FailureReason { get; set; }
+    }
+    
+    public enum DeletionStatus
+    {
+        Pending,
+        Blocked,
+        Completed,
+        Failed
     }
 }
 ```
@@ -810,46 +1512,261 @@ namespace MedicSoft.Core.Services.LGPD
     
     public class DataPortabilityService : IDataPortabilityService
     {
+        private readonly IRepository<Patient> _patientRepository;
+        private readonly IRepository<MedicalRecord> _medicalRecordRepository;
+        private readonly IRepository<Prescription> _prescriptionRepository;
+        private readonly IRepository<Appointment> _appointmentRepository;
+        private readonly IAuditService _auditService;
+        private readonly ILogger<DataPortabilityService> _logger;
+        
+        public DataPortabilityService(
+            IRepository<Patient> patientRepository,
+            IRepository<MedicalRecord> medicalRecordRepository,
+            IRepository<Prescription> prescriptionRepository,
+            IRepository<Appointment> appointmentRepository,
+            IAuditService auditService,
+            ILogger<DataPortabilityService> logger)
+        {
+            _patientRepository = patientRepository;
+            _medicalRecordRepository = medicalRecordRepository;
+            _prescriptionRepository = prescriptionRepository;
+            _appointmentRepository = appointmentRepository;
+            _auditService = auditService;
+            _logger = logger;
+        }
+        
         // LGPD Art. 18 - Portabilidade de dados
         
         public async Task<string> ExportPatientDataAsync(
             Guid patientId, 
             ExportFormat format)
         {
-            // Coletar todos os dados do paciente
-            var patient = await _patientRepository.GetByIdAsync(patientId);
-            var medicalRecords = await _medicalRecordRepository.GetByPatientIdAsync(patientId);
-            var prescriptions = await _prescriptionRepository.GetByPatientIdAsync(patientId);
-            var appointments = await _appointmentRepository.GetByPatientIdAsync(patientId);
-            
-            var exportData = new PatientDataExport
+            try
             {
-                PersonalData = patient,
-                MedicalRecords = medicalRecords,
-                Prescriptions = prescriptions,
-                Appointments = appointments,
-                ExportDate = DateTime.UtcNow
-            };
-            
-            // Auditar exportação
-            await _auditService.LogActionAsync(
-                patientId.ToString(),
-                AuditActionType.DataPortabilityRequest,
-                "PatientDataExport",
-                patientId.ToString()
-            );
-            
-            return format switch
+                _logger.LogInformation("Starting data export for patient {PatientId} in format {Format}", 
+                    patientId, format);
+                
+                // Coletar todos os dados do paciente
+                var patient = await _patientRepository.GetByIdAsync(patientId);
+                if (patient == null)
+                    throw new InvalidOperationException($"Patient {patientId} not found");
+                
+                var medicalRecords = await _medicalRecordRepository.GetAll()
+                    .Where(m => m.PatientId == patientId)
+                    .OrderByDescending(m => m.Date)
+                    .ToListAsync();
+                    
+                var prescriptions = await _prescriptionRepository.GetAll()
+                    .Where(p => p.PatientId == patientId)
+                    .OrderByDescending(p => p.Date)
+                    .ToListAsync();
+                    
+                var appointments = await _appointmentRepository.GetAll()
+                    .Where(a => a.PatientId == patientId)
+                    .OrderByDescending(a => a.StartTime)
+                    .ToListAsync();
+                
+                var exportData = new PatientDataExport
+                {
+                    PersonalData = patient,
+                    MedicalRecords = medicalRecords,
+                    Prescriptions = prescriptions,
+                    Appointments = appointments,
+                    ExportDate = DateTime.UtcNow,
+                    ExportFormat = format.ToString(),
+                    TotalRecords = medicalRecords.Count + prescriptions.Count + appointments.Count
+                };
+                
+                // Auditar exportação
+                await _auditService.LogActionAsync(
+                    patientId.ToString(),
+                    AuditActionType.DataPortabilityRequest,
+                    "PatientDataExport",
+                    patientId.ToString(),
+                    null,
+                    new { Format = format, RecordCount = exportData.TotalRecords }
+                );
+                
+                _logger.LogInformation("Data export completed for patient {PatientId}, {RecordCount} records exported", 
+                    patientId, exportData.TotalRecords);
+                
+                return format switch
+                {
+                    ExportFormat.JSON => SerializeToJson(exportData),
+                    ExportFormat.XML => SerializeToXml(exportData),
+                    ExportFormat.PDF => GeneratePdf(exportData),
+                    _ => throw new NotSupportedException($"Export format {format} is not supported")
+                };
+            }
+            catch (Exception ex)
             {
-                ExportFormat.JSON => JsonSerializer.Serialize(exportData, new JsonSerializerOptions 
-                { 
-                    WriteIndented = true 
-                }),
-                ExportFormat.XML => SerializeToXml(exportData),
-                ExportFormat.PDF => GeneratePdf(exportData),
-                _ => throw new NotSupportedException()
-            };
+                _logger.LogError(ex, "Failed to export data for patient {PatientId}", patientId);
+                throw;
+            }
         }
+        
+        private string SerializeToJson(PatientDataExport exportData)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            
+            return JsonSerializer.Serialize(exportData, options);
+        }
+        
+        private string SerializeToXml(PatientDataExport exportData)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(PatientDataExport));
+            using var stringWriter = new StringWriter();
+            using var xmlWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "  ",
+                NewLineChars = "\n",
+                Encoding = Encoding.UTF8
+            });
+            
+            xmlSerializer.Serialize(xmlWriter, exportData);
+            return stringWriter.ToString();
+        }
+        
+        private string GeneratePdf(PatientDataExport exportData)
+        {
+            // Utilizando biblioteca iTextSharp ou similar para gerar PDF
+            // Esta é uma implementação simplificada
+            
+            var htmlContent = GenerateHtmlReport(exportData);
+            
+            // Converter HTML para PDF usando biblioteca como SelectPdf, IronPdf, etc.
+            // Por simplicidade, retornamos o HTML aqui - em produção, converter para PDF
+            
+            // Exemplo com IronPdf (requer pacote IronPdf):
+            // var renderer = new ChromePdfRenderer();
+            // var pdf = renderer.RenderHtmlAsPdf(htmlContent);
+            // return Convert.ToBase64String(pdf.BinaryData);
+            
+            return htmlContent; // Retorna HTML por simplicidade
+        }
+        
+        private string GenerateHtmlReport(PatientDataExport exportData)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("<!DOCTYPE html>");
+            sb.AppendLine("<html>");
+            sb.AppendLine("<head>");
+            sb.AppendLine("  <meta charset='UTF-8'>");
+            sb.AppendLine("  <title>Exportação de Dados do Paciente</title>");
+            sb.AppendLine("  <style>");
+            sb.AppendLine("    body { font-family: Arial, sans-serif; margin: 20px; }");
+            sb.AppendLine("    h1 { color: #1976d2; }");
+            sb.AppendLine("    h2 { color: #424242; border-bottom: 2px solid #1976d2; padding-bottom: 5px; }");
+            sb.AppendLine("    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }");
+            sb.AppendLine("    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }");
+            sb.AppendLine("    th { background-color: #1976d2; color: white; }");
+            sb.AppendLine("    .info-row { margin: 10px 0; }");
+            sb.AppendLine("    .info-label { font-weight: bold; display: inline-block; width: 150px; }");
+            sb.AppendLine("  </style>");
+            sb.AppendLine("</head>");
+            sb.AppendLine("<body>");
+            
+            // Cabeçalho
+            sb.AppendLine($"  <h1>Exportação de Dados do Paciente</h1>");
+            sb.AppendLine($"  <p><strong>Data da Exportação:</strong> {exportData.ExportDate:dd/MM/yyyy HH:mm:ss}</p>");
+            sb.AppendLine($"  <p><strong>Total de Registros:</strong> {exportData.TotalRecords}</p>");
+            sb.AppendLine("  <hr>");
+            
+            // Dados Pessoais
+            sb.AppendLine("  <h2>Dados Pessoais</h2>");
+            sb.AppendLine($"  <div class='info-row'><span class='info-label'>Nome:</span> {exportData.PersonalData.Name}</div>");
+            sb.AppendLine($"  <div class='info-row'><span class='info-label'>CPF:</span> {exportData.PersonalData.CPF}</div>");
+            sb.AppendLine($"  <div class='info-row'><span class='info-label'>Data de Nascimento:</span> {exportData.PersonalData.BirthDate:dd/MM/yyyy}</div>");
+            sb.AppendLine($"  <div class='info-row'><span class='info-label'>Email:</span> {exportData.PersonalData.Email}</div>");
+            sb.AppendLine($"  <div class='info-row'><span class='info-label'>Telefone:</span> {exportData.PersonalData.Phone}</div>");
+            
+            // Prontuários Médicos
+            if (exportData.MedicalRecords.Any())
+            {
+                sb.AppendLine("  <h2>Prontuários Médicos</h2>");
+                sb.AppendLine("  <table>");
+                sb.AppendLine("    <tr><th>Data</th><th>Profissional</th><th>Diagnóstico</th><th>Observações</th></tr>");
+                foreach (var record in exportData.MedicalRecords.Take(50)) // Limitar para PDF
+                {
+                    sb.AppendLine($"    <tr>");
+                    sb.AppendLine($"      <td>{record.Date:dd/MM/yyyy}</td>");
+                    sb.AppendLine($"      <td>{record.DoctorName}</td>");
+                    sb.AppendLine($"      <td>{record.Diagnosis}</td>");
+                    sb.AppendLine($"      <td>{record.Notes?.Substring(0, Math.Min(100, record.Notes.Length ?? 0))}</td>");
+                    sb.AppendLine($"    </tr>");
+                }
+                sb.AppendLine("  </table>");
+            }
+            
+            // Prescrições
+            if (exportData.Prescriptions.Any())
+            {
+                sb.AppendLine("  <h2>Prescrições</h2>");
+                sb.AppendLine("  <table>");
+                sb.AppendLine("    <tr><th>Data</th><th>Medicamento</th><th>Dosagem</th><th>Duração</th></tr>");
+                foreach (var prescription in exportData.Prescriptions.Take(50))
+                {
+                    sb.AppendLine($"    <tr>");
+                    sb.AppendLine($"      <td>{prescription.Date:dd/MM/yyyy}</td>");
+                    sb.AppendLine($"      <td>{prescription.Medication}</td>");
+                    sb.AppendLine($"      <td>{prescription.Dosage}</td>");
+                    sb.AppendLine($"      <td>{prescription.Duration}</td>");
+                    sb.AppendLine($"    </tr>");
+                }
+                sb.AppendLine("  </table>");
+            }
+            
+            // Consultas
+            if (exportData.Appointments.Any())
+            {
+                sb.AppendLine("  <h2>Histórico de Consultas</h2>");
+                sb.AppendLine("  <table>");
+                sb.AppendLine("    <tr><th>Data</th><th>Profissional</th><th>Especialidade</th><th>Status</th></tr>");
+                foreach (var appointment in exportData.Appointments.Take(50))
+                {
+                    sb.AppendLine($"    <tr>");
+                    sb.AppendLine($"      <td>{appointment.StartTime:dd/MM/yyyy HH:mm}</td>");
+                    sb.AppendLine($"      <td>{appointment.DoctorName}</td>");
+                    sb.AppendLine($"      <td>{appointment.Specialty}</td>");
+                    sb.AppendLine($"      <td>{appointment.Status}</td>");
+                    sb.AppendLine($"    </tr>");
+                }
+                sb.AppendLine("  </table>");
+            }
+            
+            // Rodapé
+            sb.AppendLine("  <hr>");
+            sb.AppendLine("  <p><small>Este documento foi gerado automaticamente em conformidade com a LGPD (Lei 13.709/2018), Art. 18, inciso IV - Direito à portabilidade de dados.</small></p>");
+            sb.AppendLine("</body>");
+            sb.AppendLine("</html>");
+            
+            return sb.ToString();
+        }
+    }
+    
+    // Supporting classes
+    public class PatientDataExport
+    {
+        public Patient PersonalData { get; set; }
+        public List<MedicalRecord> MedicalRecords { get; set; }
+        public List<Prescription> Prescriptions { get; set; }
+        public List<Appointment> Appointments { get; set; }
+        public DateTime ExportDate { get; set; }
+        public string ExportFormat { get; set; }
+        public int TotalRecords { get; set; }
+    }
+    
+    public enum ExportFormat
+    {
+        JSON,
+        XML,
+        PDF
     }
 }
 ```
