@@ -1818,11 +1818,355 @@ public class AuditServiceTests
         var logs = await service.GetPatientDataAccessHistoryAsync(patientId);
         Assert.Single(logs);
     }
+    
+    [Fact]
+    public async Task GetAuditLogsAsync_Should_ApplyFilters()
+    {
+        // Arrange
+        var service = CreateAuditService();
+        await SeedTestData(service);
+        
+        var filter = new AuditLogFilterDto
+        {
+            Action = AuditActionType.Create,
+            IsSensitiveOnly = true,
+            DateFrom = DateTime.UtcNow.AddDays(-7),
+            Page = 1,
+            PageSize = 10
+        };
+        
+        // Act
+        var result = await service.GetAuditLogsAsync(filter);
+        
+        // Assert
+        Assert.NotEmpty(result.Items);
+        Assert.All(result.Items, log => Assert.Equal(AuditActionType.Create, log.Action));
+        Assert.All(result.Items, log => Assert.True(log.IsSensitiveData));
+    }
+    
+    [Fact]
+    public async Task GetAuditLogsAsync_Should_Paginate()
+    {
+        // Arrange
+        var service = CreateAuditService();
+        await SeedTestData(service, recordCount: 100);
+        
+        var filter = new AuditLogFilterDto { Page = 2, PageSize = 30 };
+        
+        // Act
+        var result = await service.GetAuditLogsAsync(filter);
+        
+        // Assert
+        Assert.Equal(30, result.Items.Count);
+        Assert.Equal(100, result.TotalCount);
+        Assert.Equal(2, result.Page);
+        Assert.Equal(4, result.TotalPages); // 100 / 30 = 3.33 -> 4 pages
+    }
+}
+```
+
+#### 6.2 Testes de LGPD Services
+```csharp
+// tests/MedicSoft.Tests/Services/DataDeletionServiceTests.cs
+public class DataDeletionServiceTests
+{
+    [Fact]
+    public async Task RequestDataDeletion_Should_BlockIfFutureAppointments()
+    {
+        // Arrange
+        var service = CreateDataDeletionService();
+        var patientId = Guid.NewGuid();
+        await SeedFutureAppointment(patientId);
+        
+        // Act
+        var request = await service.RequestDataDeletionAsync(patientId, "Patient request");
+        
+        // Assert
+        Assert.Equal(DeletionStatus.Blocked, request.Status);
+        Assert.Contains("consultas futuras", request.BlockingReasons);
+    }
+    
+    [Fact]
+    public async Task RequestDataDeletion_Should_AllowIfNoPendencies()
+    {
+        // Arrange
+        var service = CreateDataDeletionService();
+        var patientId = Guid.NewGuid();
+        await SeedOldPatientData(patientId, yearsOld: 21); // Além do período de retenção
+        
+        // Act
+        var request = await service.RequestDataDeletionAsync(patientId, "Patient request");
+        
+        // Assert
+        Assert.Equal(DeletionStatus.Pending, request.Status);
+        Assert.Null(request.BlockingReasons);
+    }
+    
+    [Fact]
+    public async Task ProcessDataDeletion_Should_AnonymizePatientData()
+    {
+        // Arrange
+        var service = CreateDataDeletionService();
+        var patientId = Guid.NewGuid();
+        var patient = await SeedPatient(patientId);
+        var requestId = await CreateDeletionRequest(patientId, DeletionStatus.Pending);
+        
+        var originalCpf = patient.CPF;
+        var originalEmail = patient.Email;
+        
+        // Act
+        await service.ProcessDataDeletionAsync(requestId);
+        
+        // Assert
+        var anonymized = await GetPatient(patientId);
+        Assert.True(anonymized.IsAnonymized);
+        Assert.StartsWith("ANONIMIZADO_", anonymized.Name);
+        Assert.Null(anonymized.CPF);
+        Assert.Null(anonymized.Email);
+        Assert.NotEqual(originalCpf, anonymized.CPF);
+        Assert.NotEqual(originalEmail, anonymized.Email);
+    }
+    
+    [Fact]
+    public async Task CanDeletePatientData_Should_RespectRetentionPeriod()
+    {
+        // Arrange
+        var service = CreateDataDeletionService();
+        var recentPatientId = Guid.NewGuid();
+        var oldPatientId = Guid.NewGuid();
+        
+        await SeedOldPatientData(recentPatientId, yearsOld: 5);  // < 20 anos
+        await SeedOldPatientData(oldPatientId, yearsOld: 21);    // > 20 anos
+        
+        // Act
+        var canDeleteRecent = await service.CanDeletePatientDataAsync(recentPatientId);
+        var canDeleteOld = await service.CanDeletePatientDataAsync(oldPatientId);
+        
+        // Assert
+        Assert.False(canDeleteRecent); // Deve respeitar CFM 1.821/2007 (20 anos)
+        Assert.True(canDeleteOld);
+    }
+}
+```
+
+```csharp
+// tests/MedicSoft.Tests/Services/DataPortabilityServiceTests.cs
+public class DataPortabilityServiceTests
+{
+    [Fact]
+    public async Task ExportPatientData_Should_GenerateJSON()
+    {
+        // Arrange
+        var service = CreateDataPortabilityService();
+        var patientId = Guid.NewGuid();
+        await SeedCompletePatientData(patientId);
+        
+        // Act
+        var result = await service.ExportPatientDataAsync(patientId, ExportFormat.JSON);
+        
+        // Assert
+        Assert.NotNull(result);
+        var json = JsonDocument.Parse(result);
+        Assert.True(json.RootElement.TryGetProperty("personalData", out _));
+        Assert.True(json.RootElement.TryGetProperty("medicalRecords", out _));
+        Assert.True(json.RootElement.TryGetProperty("prescriptions", out _));
+    }
+    
+    [Fact]
+    public async Task ExportPatientData_Should_GenerateXML()
+    {
+        // Arrange
+        var service = CreateDataPortabilityService();
+        var patientId = Guid.NewGuid();
+        await SeedCompletePatientData(patientId);
+        
+        // Act
+        var result = await service.ExportPatientDataAsync(patientId, ExportFormat.XML);
+        
+        // Assert
+        Assert.NotNull(result);
+        Assert.Contains("<?xml", result);
+        Assert.Contains("<PatientDataExport>", result);
+        Assert.Contains("<PersonalData>", result);
+    }
+    
+    [Fact]
+    public async Task ExportPatientData_Should_GeneratePDF()
+    {
+        // Arrange
+        var service = CreateDataPortabilityService();
+        var patientId = Guid.NewGuid();
+        await SeedCompletePatientData(patientId);
+        
+        // Act
+        var result = await service.ExportPatientDataAsync(patientId, ExportFormat.PDF);
+        
+        // Assert
+        Assert.NotNull(result);
+        Assert.Contains("<!DOCTYPE html>", result);
+        Assert.Contains("Exportação de Dados do Paciente", result);
+    }
+    
+    [Fact]
+    public async Task ExportPatientData_Should_AuditExport()
+    {
+        // Arrange
+        var service = CreateDataPortabilityService();
+        var auditService = GetMockAuditService();
+        var patientId = Guid.NewGuid();
+        await SeedCompletePatientData(patientId);
+        
+        // Act
+        await service.ExportPatientDataAsync(patientId, ExportFormat.JSON);
+        
+        // Assert
+        var auditLogs = await auditService.GetUserActivityAsync(patientId.ToString());
+        Assert.Contains(auditLogs, log => 
+            log.Action == AuditActionType.DataPortabilityRequest &&
+            log.EntityType == "PatientDataExport"
+        );
+    }
+    
+    [Fact]
+    public async Task ExportPatientData_Should_IncludeAllData()
+    {
+        // Arrange
+        var service = CreateDataPortabilityService();
+        var patientId = Guid.NewGuid();
+        
+        await SeedPatient(patientId);
+        await SeedMedicalRecords(patientId, count: 5);
+        await SeedPrescriptions(patientId, count: 3);
+        await SeedAppointments(patientId, count: 10);
+        
+        // Act
+        var result = await service.ExportPatientDataAsync(patientId, ExportFormat.JSON);
+        var data = JsonSerializer.Deserialize<PatientDataExport>(result);
+        
+        // Assert
+        Assert.Equal(5, data.MedicalRecords.Count);
+        Assert.Equal(3, data.Prescriptions.Count);
+        Assert.Equal(10, data.Appointments.Count);
+        Assert.Equal(18, data.TotalRecords);
+    }
+}
+```
+
+#### 6.3 Testes de Integração
+```csharp
+// tests/MedicSoft.Integration.Tests/AuditMiddlewareTests.cs
+public class AuditMiddlewareIntegrationTests : IClassFixture<WebApplicationFactory<Startup>>
+{
+    private readonly WebApplicationFactory<Startup> _factory;
+    
+    public AuditMiddlewareIntegrationTests(WebApplicationFactory<Startup> factory)
+    {
+        _factory = factory;
+    }
+    
+    [Fact]
+    public async Task SensitiveEndpoint_Should_CreateAuditLog()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var token = await GetAuthToken(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        // Act
+        var response = await client.GetAsync("/api/patients/123");
+        
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        
+        var auditLogs = await GetAuditLogs(client);
+        Assert.Contains(auditLogs, log => 
+            log.RequestUrl.Contains("/api/patients/123") &&
+            log.Action == AuditActionType.Read
+        );
+    }
+    
+    [Fact]
+    public async Task UnauthorizedAccess_Should_LogFailure()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        // Sem token de autenticação
+        
+        // Act
+        var response = await client.GetAsync("/api/patients/123");
+        
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        
+        var auditLogs = await GetAuditLogs(client);
+        Assert.Contains(auditLogs, log => 
+            log.Result == AuditResultType.Unauthorized
+        );
+    }
+}
+```
+
+#### 6.4 Testes de Performance
+```csharp
+// tests/MedicSoft.Performance.Tests/AuditPerformanceTests.cs
+public class AuditPerformanceTests
+{
+    [Fact]
+    public async Task AuditLogging_Should_HaveLowOverhead()
+    {
+        // Arrange
+        var service = CreateAuditService();
+        var stopwatch = Stopwatch.StartNew();
+        
+        // Act - Executar 1000 operações
+        var tasks = Enumerable.Range(0, 1000)
+            .Select(i => service.LogActionAsync(
+                $"user{i}",
+                AuditActionType.Read,
+                "Patient",
+                $"patient{i}"
+            ));
+        
+        await Task.WhenAll(tasks);
+        stopwatch.Stop();
+        
+        // Assert - Deve completar em menos de 2 segundos (< 2ms por log)
+        Assert.True(stopwatch.ElapsedMilliseconds < 2000, 
+            $"Audit logging took {stopwatch.ElapsedMilliseconds}ms for 1000 operations");
+    }
+    
+    [Fact]
+    public async Task GetAuditLogs_WithLargeDataset_Should_BeFast()
+    {
+        // Arrange
+        var service = CreateAuditService();
+        await SeedTestData(service, recordCount: 10000);
+        
+        var filter = new AuditLogFilterDto 
+        { 
+            Page = 1, 
+            PageSize = 30,
+            DateFrom = DateTime.UtcNow.AddDays(-7)
+        };
+        
+        var stopwatch = Stopwatch.StartNew();
+        
+        // Act
+        var result = await service.GetAuditLogsAsync(filter);
+        
+        stopwatch.Stop();
+        
+        // Assert - Deve completar em menos de 500ms
+        Assert.True(stopwatch.ElapsedMilliseconds < 500, 
+            $"Query took {stopwatch.ElapsedMilliseconds}ms");
+        Assert.Equal(30, result.Items.Count);
+    }
 }
 ```
 
 ### 7. Migração de Banco de Dados
 
+#### 7.1 Script de Migration
 ```bash
 # Criar migration
 dotnet ef migrations add AddAuditingSystem -p src/MedicSoft.Infrastructure -s src/MedicSoft.Api
@@ -1831,28 +2175,557 @@ dotnet ef migrations add AddAuditingSystem -p src/MedicSoft.Infrastructure -s sr
 dotnet ef database update -p src/MedicSoft.Infrastructure -s src/MedicSoft.Api
 ```
 
-### 8. Configuração e Deploy (1 semana)
+#### 7.2 Índices de Performance
+```sql
+-- Criar índices para otimizar consultas de auditoria
+CREATE INDEX IX_AuditLogs_UserId_Timestamp ON AuditLogs(UserId, Timestamp DESC);
+CREATE INDEX IX_AuditLogs_EntityType_EntityId ON AuditLogs(EntityType, EntityId);
+CREATE INDEX IX_AuditLogs_Timestamp ON AuditLogs(Timestamp DESC);
+CREATE INDEX IX_AuditLogs_IsSensitiveData ON AuditLogs(IsSensitiveData) WHERE IsSensitiveData = 1;
+CREATE INDEX IX_AuditLogs_Action_Result ON AuditLogs(Action, Result);
 
-#### 8.1 Startup Configuration
+CREATE INDEX IX_DataAccessLogs_PatientId_Timestamp ON DataAccessLogs(PatientId, Timestamp DESC);
+CREATE INDEX IX_DataAccessLogs_UserId ON DataAccessLogs(UserId);
+
+CREATE INDEX IX_DataConsentLogs_PatientId_Status ON DataConsentLogs(PatientId, Status);
+```
+
+#### 7.3 Estratégia de Migração de Dados Existentes
 ```csharp
-// src/MedicSoft.Api/Startup.cs
-public void ConfigureServices(IServiceCollection services)
+// Migração de dados históricos (executar uma única vez após deploy)
+// src/MedicSoft.Api/Migrations/Scripts/BackfillAuditLogs.cs
+public class BackfillAuditLogsScript
 {
-    // Auditoria
-    services.AddScoped<IAuditService, AuditService>();
-    services.AddScoped<IConsentManagementService, ConsentManagementService>();
-    services.AddScoped<IDataDeletionService, DataDeletionService>();
-    services.AddScoped<IDataPortabilityService, DataPortabilityService>();
+    public async Task ExecuteAsync(IServiceProvider services)
+    {
+        var logger = services.GetRequiredService<ILogger<BackfillAuditLogsScript>>();
+        var auditService = services.GetRequiredService<IAuditService>();
+        
+        logger.LogInformation("Starting audit logs backfill...");
+        
+        // Criar logs de auditoria para dados históricos críticos
+        // (se necessário para compliance)
+        
+        // Exemplo: Registrar criação de pacientes existentes
+        var patients = await GetAllPatients(services);
+        foreach (var patient in patients)
+        {
+            await auditService.LogActionAsync(
+                "SYSTEM",
+                AuditActionType.Create,
+                "Patient",
+                patient.Id.ToString(),
+                null,
+                new { BackfillDate = DateTime.UtcNow, OriginalDate = patient.CreatedAt }
+            );
+        }
+        
+        logger.LogInformation("Audit logs backfill completed. {Count} records processed.", patients.Count);
+    }
 }
+```
 
-public void Configure(IApplicationBuilder app)
+### 8. Otimização de Performance
+
+#### 8.1 Async Logging
+```csharp
+// src/MedicSoft.Core/Services/Audit/AsyncAuditService.cs
+public class AsyncAuditService : IAuditService
 {
-    // Middleware de auditoria (antes de MVC)
-    app.UseMiddleware<AuditMiddleware>();
+    private readonly BlockingCollection<AuditLog> _auditQueue;
+    private readonly Task _processingTask;
+    private readonly IAuditService _auditService;
     
-    app.UseAuthentication();
-    app.UseAuthorization();
+    public AsyncAuditService(IAuditService auditService)
+    {
+        _auditService = auditService;
+        _auditQueue = new BlockingCollection<AuditLog>(boundedCapacity: 10000);
+        _processingTask = Task.Run(ProcessQueueAsync);
+    }
+    
+    public Task LogAsync(AuditLog auditLog)
+    {
+        // Adicionar na fila sem bloquear
+        if (!_auditQueue.TryAdd(auditLog, TimeSpan.FromMilliseconds(100)))
+        {
+            // Fila cheia - log de warning mas não falha
+            _logger.LogWarning("Audit queue is full, dropping audit log");
+        }
+        
+        return Task.CompletedTask; // Retorna imediatamente
+    }
+    
+    private async Task ProcessQueueAsync()
+    {
+        foreach (var auditLog in _auditQueue.GetConsumingEnumerable())
+        {
+            try
+            {
+                await _auditService.LogAsync(auditLog);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to process audit log from queue");
+            }
+        }
+    }
 }
+```
+
+#### 8.2 Particionamento de Tabelas
+```sql
+-- Particionar tabela de AuditLogs por mês para melhor performance
+-- SQL Server example
+CREATE PARTITION FUNCTION PF_AuditLogs_ByMonth (DATETIME2)
+AS RANGE RIGHT FOR VALUES (
+    '2026-01-01', '2026-02-01', '2026-03-01', '2026-04-01',
+    '2026-05-01', '2026-06-01', '2026-07-01', '2026-08-01',
+    '2026-09-01', '2026-10-01', '2026-11-01', '2026-12-01'
+);
+
+CREATE PARTITION SCHEME PS_AuditLogs_ByMonth
+AS PARTITION PF_AuditLogs_ByMonth
+ALL TO ([PRIMARY]);
+
+-- Recriar tabela com particionamento
+CREATE TABLE AuditLogs_Partitioned (
+    -- Colunas...
+) ON PS_AuditLogs_ByMonth(Timestamp);
+```
+
+#### 8.3 Arquivamento Automático
+```csharp
+// src/MedicSoft.Core/Services/Audit/AuditArchiveService.cs
+public class AuditArchiveService : BackgroundService
+{
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<AuditArchiveService> _logger;
+    
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            try
+            {
+                await ArchiveOldLogsAsync();
+                
+                // Executar diariamente
+                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in audit archive service");
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+            }
+        }
+    }
+    
+    private async Task ArchiveOldLogsAsync()
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        
+        // Arquivar logs com mais de 1 ano para blob storage
+        var cutoffDate = DateTime.UtcNow.AddYears(-1);
+        
+        var oldLogs = await context.AuditLogs
+            .Where(l => l.Timestamp < cutoffDate && !l.IsArchived)
+            .Take(10000)
+            .ToListAsync();
+        
+        if (oldLogs.Any())
+        {
+            // Exportar para blob storage (Azure Storage ou AWS S3)
+            await ExportToBlobStorageAsync(oldLogs);
+            
+            // Marcar como arquivados (não deletar)
+            foreach (var log in oldLogs)
+            {
+                log.IsArchived = true;
+                log.ArchiveDate = DateTime.UtcNow;
+            }
+            
+            await context.SaveChangesAsync();
+            
+            _logger.LogInformation("Archived {Count} audit logs", oldLogs.Count);
+        }
+    }
+}
+```
+
+### 9. Configuração Completa (appsettings.json)
+
+```json
+{
+  "AuditSettings": {
+    "Enabled": true,
+    "AsyncLogging": true,
+    "QueueCapacity": 10000,
+    "RetentionPeriodDays": 2555,  // 7 anos (LGPD requirement)
+    "ArchiveAfterDays": 365,      // Arquivar após 1 ano
+    "SensitiveDataOnly": false,   // Log all operations, not just sensitive
+    "ExcludedPaths": [
+      "/api/health",
+      "/api/metrics",
+      "/swagger"
+    ],
+    "PerformanceThresholdMs": 100  // Log slow operations
+  },
+  
+  "LGPDSettings": {
+    "DataRetentionYears": 20,  // CFM Resolution 1.821/2007
+    "ConsentExpirationDays": 365,
+    "DeletionRequestReviewDays": 30,
+    "AllowImmediateDeletion": false,
+    "ExportFormats": ["JSON", "XML", "PDF"],
+    "MaxExportSizeMB": 100
+  },
+  
+  "AuditStorage": {
+    "Provider": "AzureBlobStorage",  // ou "AWSS3", "FileSystem"
+    "ConnectionString": "DefaultEndpointsProtocol=https;AccountName=...",
+    "ContainerName": "audit-logs-archive",
+    "ArchiveCompression": true,
+    "CompressionLevel": "Optimal"
+  },
+  
+  "Logging": {
+    "LogLevel": {
+      "MedicSoft.Core.Services.Audit": "Information",
+      "MedicSoft.Api.Middleware.AuditMiddleware": "Information"
+    }
+  }
+}
+```
+
+### 10. Deployment e Infraestrutura
+
+#### 10.1 Docker Compose
+```yaml
+# docker-compose.audit.yml
+version: '3.8'
+
+services:
+  medicsoft-api:
+    environment:
+      - AuditSettings__Enabled=true
+      - AuditSettings__AsyncLogging=true
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+    volumes:
+      - audit-logs:/app/logs/audit
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: medicsoft_audit
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_audit_data:/var/lib/postgresql/data
+      - ./scripts/audit-indexes.sql:/docker-entrypoint-initdb.d/01-indexes.sql
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  audit-archiver:
+    image: medicsoft-audit-archiver:latest
+    environment:
+      - SCHEDULE="0 2 * * *"  # Executar às 2AM diariamente
+      - ARCHIVE_THRESHOLD_DAYS=365
+      - BLOB_STORAGE_CONNECTION=${BLOB_CONNECTION_STRING}
+    depends_on:
+      - postgres
+
+volumes:
+  audit-logs:
+  postgres_audit_data:
+  redis_data:
+```
+
+#### 10.2 Kubernetes Deployment
+```yaml
+# k8s/audit-system.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medicsoft-api-audit
+  labels:
+    app: medicsoft-api
+    component: audit
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: medicsoft-api
+  template:
+    metadata:
+      labels:
+        app: medicsoft-api
+    spec:
+      containers:
+      - name: api
+        image: medicsoft-api:latest
+        env:
+        - name: AuditSettings__Enabled
+          value: "true"
+        - name: AuditSettings__AsyncLogging
+          value: "true"
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: connection-string
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: audit-archiver
+spec:
+  schedule: "0 2 * * *"  # Diariamente às 2AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: archiver
+            image: medicsoft-audit-archiver:latest
+            env:
+            - name: DB_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: connection-string
+            - name: BLOB_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: storage-credentials
+                  key: connection-string
+          restartPolicy: OnFailure
+```
+
+#### 10.3 Monitoramento e Alertas
+```yaml
+# prometheus/audit-alerts.yml
+groups:
+  - name: audit_alerts
+    interval: 30s
+    rules:
+      - alert: HighAuditLogFailureRate
+        expr: rate(audit_log_failures_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High audit log failure rate"
+          description: "Audit logging is failing at {{ $value }} per second"
+      
+      - alert: AuditQueueFull
+        expr: audit_queue_size > 9000
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Audit queue is nearly full"
+          description: "Audit queue size is {{ $value }}, max is 10000"
+      
+      - alert: SlowAuditQueries
+        expr: histogram_quantile(0.95, rate(audit_query_duration_seconds_bucket[5m])) > 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow audit queries detected"
+          description: "95th percentile query time is {{ $value }} seconds"
+
+      - alert: AuditStorageSpacelow
+        expr: audit_storage_free_bytes < 10737418240  # 10GB
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Audit storage space is low"
+          description: "Only {{ $value | humanize }} bytes remaining"
+```
+
+#### 10.4 Backup e Disaster Recovery
+```bash
+#!/bin/bash
+# scripts/backup-audit-logs.sh
+
+# Backup diário de logs de auditoria
+DATE=$(date +%Y%m%d)
+BACKUP_DIR="/backups/audit-logs/$DATE"
+DB_NAME="medicsoft_audit"
+
+mkdir -p "$BACKUP_DIR"
+
+# Backup do banco de dados
+pg_dump -h localhost -U postgres -d $DB_NAME \
+  -t audit_logs -t data_access_logs -t data_consent_logs \
+  -F c -f "$BACKUP_DIR/audit-logs-$DATE.backup"
+
+# Comprimir
+gzip "$BACKUP_DIR/audit-logs-$DATE.backup"
+
+# Upload para cloud storage
+aws s3 cp "$BACKUP_DIR/audit-logs-$DATE.backup.gz" \
+  s3://medicsoft-backups/audit-logs/$DATE/
+
+# Manter apenas últimos 90 dias localmente
+find /backups/audit-logs/* -type d -mtime +90 -exec rm -rf {} \;
+
+echo "Audit logs backup completed: $DATE"
+```
+
+#### 10.5 Política de Retenção e Arquivamento
+```csharp
+// src/MedicSoft.Core/Services/Audit/RetentionPolicyService.cs
+public class RetentionPolicyService : BackgroundService
+{
+    private readonly ILogger<RetentionPolicyService> _logger;
+    private readonly IConfiguration _configuration;
+    
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        var retentionDays = _configuration.GetValue<int>("AuditSettings:RetentionPeriodDays");
+        
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            try
+            {
+                await ApplyRetentionPolicyAsync(retentionDays);
+                
+                // Executar semanalmente
+                await Task.Delay(TimeSpan.FromDays(7), stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error applying retention policy");
+            }
+        }
+    }
+    
+    private async Task ApplyRetentionPolicyAsync(int retentionDays)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        
+        var cutoffDate = DateTime.UtcNow.AddDays(-retentionDays);
+        
+        // IMPORTANTE: Nunca deletar logs de auditoria para compliance LGPD
+        // Apenas mover para archive storage
+        
+        _logger.LogInformation("Retention policy: All logs are maintained for {RetentionDays} days", retentionDays);
+        _logger.LogInformation("Logs older than {CutoffDate} should be in archive storage", cutoffDate);
+        
+        // Validar que logs antigos estão arquivados
+        var unarchivedOldLogs = await context.AuditLogs
+            .Where(l => l.Timestamp < cutoffDate && !l.IsArchived)
+            .CountAsync();
+        
+        if (unarchivedOldLogs > 0)
+        {
+            _logger.LogWarning("{Count} old logs are not archived yet", unarchivedOldLogs);
+        }
+    }
+}
+```
+
+### 11. Documentação de Compliance
+```markdown
+# Guia de Compliance LGPD - Sistema de Auditoria
+
+## Artigos LGPD Atendidos
+
+### Art. 37 - Registro de Operações
+✅ **Implementado**: Sistema registra todas operações de tratamento de dados pessoais
+- Tabela: `AuditLogs`
+- Campos: Timestamp, UserId, Action, EntityType, EntityId, etc.
+- Retenção: 7+ anos
+
+### Art. 18, II - Direito ao Esquecimento
+✅ **Implementado**: Processo de anonimização de dados
+- Serviço: `DataDeletionService`
+- Método: `ProcessDataDeletionAsync()`
+- Conformidade: CFM 1.821/2007 (20 anos de retenção)
+
+### Art. 18, IV - Portabilidade de Dados
+✅ **Implementado**: Exportação estruturada de dados
+- Serviço: `DataPortabilityService`
+- Formatos: JSON, XML, PDF
+- Tempo: < 30 segundos
+
+### Art. 8 - Consentimento
+✅ **Implementado**: Gestão completa de consentimentos
+- Tabela: `DataConsentLogs`
+- Rastreabilidade: Versão, data, IP, texto apresentado
+
+## Checklist de Auditoria
+
+- [ ] Todos os acessos a dados sensíveis são registrados
+- [ ] Logs são imutáveis (append-only)
+- [ ] Sistema de backup automático ativo
+- [ ] Política de retenção configurada (7+ anos)
+- [ ] Processo de portabilidade testado
+- [ ] Processo de esquecimento testado
+- [ ] Alertas de segurança configurados
+- [ ] Documentação atualizada
+
+## Evidências para ANPD
+
+### Relatório de Acessos
+```sql
+-- Gerar relatório de acessos para ANPD
+SELECT 
+    DATE(Timestamp) as Data,
+    COUNT(*) as TotalAcessos,
+    COUNT(DISTINCT UserId) as UsuariosUnicos,
+    COUNT(CASE WHEN IsSensitiveData = 1 THEN 1 END) as AcessosDadosSensiveis
+FROM AuditLogs
+WHERE Timestamp >= DATEADD(month, -6, GETDATE())
+GROUP BY DATE(Timestamp)
+ORDER BY Data DESC;
+```
+
+### Relatório de Incidentes
+```sql
+-- Acessos não autorizados nos últimos 30 dias
+SELECT *
+FROM AuditLogs
+WHERE Result = 'Unauthorized'
+  AND Timestamp >= DATEADD(day, -30, GETDATE())
+ORDER BY Timestamp DESC;
+```
 ```
 
 ## ✅ Critérios de Sucesso
