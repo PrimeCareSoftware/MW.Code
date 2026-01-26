@@ -123,16 +123,17 @@ Aplicativo unificado acessando diferentes seções por rotas:
 - 🎨 **UX Consistente**: Design system unificado
 - 📦 **Menor footprint**: Dependências compartilhadas
 
-### 🏥 **Portal do Paciente** (`frontend/patient-portal`) ✅ COMPLETO
+### 🏥 **Portal do Paciente** (`frontend/patient-portal`) 🟢 70% COMPLETO - MVP PRONTO
 Portal dedicado para acesso de pacientes (separado da aplicação principal):
 
+**Funcionalidades Implementadas (Prontas para Uso):**
 - 👤 **Usuários**: Pacientes (acesso externo)
-- ✅ **Login e Cadastro**: Sistema completo de autenticação
-- 📋 **Ver Agendamentos**: Consulta de agendamentos confirmados
-- 📄 **Documentos Médicos**: Download de receitas, exames, atestados
-- 👤 **Perfil**: Gerenciamento de dados pessoais
-- 🔐 **Autenticação**: JWT + Refresh Tokens
-- 🔒 **Segurança**: Account lockout, password hashing, LGPD compliant
+- ✅ **Login e Cadastro**: Sistema completo de autenticação JWT
+- 📋 **Ver Agendamentos**: Consulta e visualização de agendamentos
+- 📄 **Documentos Médicos**: Download de receitas, exames, atestados, encaminhamentos
+- 👤 **Perfil**: Gerenciamento de dados pessoais e alteração de senha
+- 🔐 **Autenticação**: JWT + Refresh Tokens (15min + 7 dias)
+- 🔒 **Segurança**: Account lockout, password hashing PBKDF2, LGPD compliant
 - 🔍 **Sistema de Auditoria LGPD Completo**: Rastreabilidade de todas operações ([ver documentação](./LGPD_AUDIT_SYSTEM.md))
   - ✅ Registro automático de todas ações (AuditLog)
   - ✅ Rastreamento de acesso a dados sensíveis (DataAccessLog)
@@ -140,16 +141,29 @@ Portal dedicado para acesso de pacientes (separado da aplicação principal):
   - ✅ Direito ao esquecimento - anonimização (DataDeletionRequest)
   - ✅ Portabilidade de dados - exportação JSON/XML/PDF (DataPortability)
   - ✅ Conformidade Art. 8, 18 e 37 da LGPD
-- ✅ **58 Testes**: Cobertura completa de unit tests
-- ✅ **Build**: Produção otimizado (394 KB)
+- ✅ **58 Testes Unitários**: 98.66% coverage + 30+ testes E2E
+- ✅ **Build Otimizado**: 394 KB (108 KB gzipped)
+
+**Funcionalidades Pendentes (Próximas Fases):**
+- ⏳ **Agendamento Online**: Booking, reagendamento, cancelamento (30%)
+- ⏳ **Notificações**: Lembretes automáticos WhatsApp/Email (0%)
+- ⏳ **PWA**: Service Worker, offline, notificações push (0%)
+- ⏳ **Histórico Médico Completo**: Timeline de eventos e diagnósticos (0%)
+
+**Status Detalhado:** 📊 [PORTAL_PACIENTE_STATUS_JAN2026.md](./PORTAL_PACIENTE_STATUS_JAN2026.md)
+
+**Infraestrutura:**
 - **URL desenvolvimento**: `http://localhost:4202` (quando executado separadamente)
-- **API Backend**: `patient-portal-api/` (API dedicada - 100% completa)
+- **API Backend**: `patient-portal-api/` (Clean Architecture + DDD - 100% completa)
+- **Banco de Dados**: PostgreSQL dedicado
+- **CI/CD**: GitHub Actions com deploy automático
 
 **Por que separado?**
 - 🔒 Isolamento de segurança (dados de pacientes)
 - 🎯 Interface simplificada para usuários finais
 - 📱 Autenticação independente
 - ⚖️ Conformidade LGPD/CFM
+- 🚀 Deploy e escalabilidade independentes
 
 ### 📚 **Portal de Documentação** (`frontend/mw-docs`)
 Portal de documentação técnica (GitHub Pages):
