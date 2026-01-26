@@ -104,7 +104,30 @@ export class OwnerProcedureManagement implements OnInit, OnDestroy {
     return this.procedureCategoryLabels[category];
   }
 
-  navigateToView(id: string): void {
+  navigateToCreate(): void {
+    this.router.navigate(['/procedures/new']);
+  }
+
+  navigateToEdit(id: string): void {
     this.router.navigate(['/procedures/edit', id]);
+  }
+
+  deleteProcedure(procedure: Procedure): void {
+    if (!confirm(`Tem certeza que deseja excluir o procedimento "${procedure.name}"?`)) {
+      return;
+    }
+
+    this.procedureService.delete(procedure.id).subscribe({
+      next: () => {
+        // Remove from local list
+        const updated = this.procedures().filter(p => p.id !== procedure.id);
+        this.procedures.set(updated);
+        this.filterProcedures();
+      },
+      error: (error) => {
+        console.error('Error deleting procedure:', error);
+        this.errorMessage.set('Erro ao excluir procedimento');
+      }
+    });
   }
 }
