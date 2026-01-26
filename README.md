@@ -133,6 +133,13 @@ Portal dedicado para acesso de pacientes (separado da aplicação principal):
 - 👤 **Perfil**: Gerenciamento de dados pessoais
 - 🔐 **Autenticação**: JWT + Refresh Tokens
 - 🔒 **Segurança**: Account lockout, password hashing, LGPD compliant
+- 🔍 **Sistema de Auditoria LGPD Completo**: Rastreabilidade de todas operações ([ver documentação](./LGPD_AUDIT_SYSTEM.md))
+  - ✅ Registro automático de todas ações (AuditLog)
+  - ✅ Rastreamento de acesso a dados sensíveis (DataAccessLog)
+  - ✅ Gestão de consentimentos (DataConsentLog)
+  - ✅ Direito ao esquecimento - anonimização (DataDeletionRequest)
+  - ✅ Portabilidade de dados - exportação JSON/XML/PDF (DataPortability)
+  - ✅ Conformidade Art. 8, 18 e 37 da LGPD
 - ✅ **58 Testes**: Cobertura completa de unit tests
 - ✅ **Build**: Produção otimizado (394 KB)
 - **URL desenvolvimento**: `http://localhost:4202` (quando executado separadamente)
@@ -558,6 +565,62 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Auditoria**: Log completo de operações
 
 > 📖 **Para detalhes completos de segurança**, consulte [SECURITY_GUIDE.md](system-admin/guias/SECURITY_GUIDE.md)
+
+### 🔍 Sistema de Auditoria e Compliance LGPD (NOVO! ✨)
+
+Sistema completo de auditoria e compliance com a LGPD (Lei 13.709/2018):
+
+#### **Rastreabilidade Completa**
+- ✅ **AuditLog**: Registro automático de TODAS as operações
+  - CRUD (Create, Read, Update, Delete)
+  - Autenticação (Login, Logout, falhas)
+  - Mudanças de senha, MFA
+  - Exportações e compartilhamentos
+  - Tentativas não autorizadas
+- ✅ **DataAccessLog**: Rastreamento específico de acesso a dados sensíveis
+  - Quem acessou, quando e por quê
+  - Campos específicos acessados
+  - Autorização (aprovado/negado)
+
+#### **Gestão de Consentimentos (Art. 8)**
+- ✅ **DataConsentLog**: Registro completo de consentimentos
+  - Tipos: Tratamento, Compartilhamento, Marketing, Pesquisa, Telemedicina
+  - Texto exato apresentado ao titular
+  - Versão do termo + método (WEB/MOBILE/PAPEL)
+  - Revogação de consentimento
+  - Status: Ativo/Revogado/Expirado
+
+#### **Direito ao Esquecimento (Art. 18, VI)**
+- ✅ **DataDeletionRequest**: Gerenciamento de exclusões
+  - Solicitação de exclusão/anonimização
+  - Workflow: Pendente → Processando → Completo/Rejeitado
+  - Aprovação legal quando necessário
+  - Anonimização preservando dados estatísticos
+
+#### **Portabilidade de Dados (Art. 18, V)**
+- ✅ **DataPortabilityService**: Exportação completa
+  - Formatos: JSON, XML, PDF, Pacote ZIP
+  - Dados incluídos: Pessoais, médicos, consultas, exames, prescrições
+  - Download imediato
+
+#### **APIs LGPD**
+```
+/api/consent/*           - Gestão de consentimentos
+/api/datadeletion/*      - Direito ao esquecimento
+/api/dataportability/*   - Exportação de dados
+/api/audit/*             - Consulta de logs
+```
+
+#### **Conformidade**
+- ✅ Art. 8 - Consentimento do titular
+- ✅ Art. 18, I - Confirmação de tratamento
+- ✅ Art. 18, II - Acesso aos dados
+- ✅ Art. 18, V - Portabilidade
+- ✅ Art. 18, VI - Eliminação (esquecimento)
+- ✅ Art. 18, IX - Revogação de consentimento
+- ✅ Art. 37 - Registro de operações
+
+> 📖 **Documentação completa**: [LGPD_AUDIT_SYSTEM.md](./LGPD_AUDIT_SYSTEM.md)
 
 ### 📊 Relatórios e Integrações
 - ✅ **Swagger**: Documentação interativa da API
