@@ -13,7 +13,7 @@ Esta fase contém 5 prompts abrangentes para implementação de funcionalidades 
 
 ### 08. Auditoria Completa e Compliance LGPD
 - **Arquivo:** `08-auditoria-lgpd.md`
-- **Tamanho:** 1,067 linhas (~34KB)
+- **Tamanho:** 2,857 linhas (~90KB)
 - **Esforço:** 2 meses | 1 desenvolvedor
 - **Custo:** R$ 30.000
 - **Objetivo:** Sistema completo de auditoria com foco em compliance LGPD
@@ -24,6 +24,10 @@ Esta fase contém 5 prompts abrangentes para implementação de funcionalidades 
 - DataAccessLog (acesso a dados sensíveis)
 - Direito ao esquecimento (anonimização)
 - Portabilidade de dados (JSON/XML/PDF)
+- Testes completos (unitários, integração, performance)
+- Configuração e deployment (Docker, Kubernetes)
+- Monitoramento e alertas (Prometheus)
+- Arquivamento automático e políticas de retenção
 
 ### 09. Criptografia de Dados Médicos
 - **Arquivo:** `09-criptografia-dados.md`
@@ -123,8 +127,8 @@ Esta fase contém 5 prompts abrangentes para implementação de funcionalidades 
 | Métrica | Valor |
 |---------|-------|
 | **Total de Prompts** | 5 |
-| **Total de Linhas** | 4,697 |
-| **Tamanho Total** | ~146KB |
+| **Total de Linhas** | 6,722 |
+| **Tamanho Total** | ~210KB |
 | **Custo de Implementação** | R$ 210.000 |
 | **Custo Mensal Recorrente** | R$ 300 (WAF + infra SIEM) |
 | **Tempo Estimado** | 10-13 meses |
