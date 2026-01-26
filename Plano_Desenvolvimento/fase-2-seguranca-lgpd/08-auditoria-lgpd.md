@@ -1698,7 +1698,7 @@ namespace MedicSoft.Core.Services.LGPD
                     sb.AppendLine($"      <td>{record.Date:dd/MM/yyyy}</td>");
                     sb.AppendLine($"      <td>{record.DoctorName}</td>");
                     sb.AppendLine($"      <td>{record.Diagnosis}</td>");
-                    sb.AppendLine($"      <td>{record.Notes?.Substring(0, Math.Min(100, record.Notes.Length ?? 0))}</td>");
+                    sb.AppendLine($"      <td>{(record.Notes != null ? record.Notes.Substring(0, Math.Min(100, record.Notes.Length)) : "")}</td>");
                     sb.AppendLine($"    </tr>");
                 }
                 sb.AppendLine("  </table>");
@@ -2249,7 +2249,8 @@ public class AsyncAuditService : IAuditService
         if (!_auditQueue.TryAdd(auditLog, TimeSpan.FromMilliseconds(100)))
         {
             // Fila cheia - log de warning mas não falha
-            _logger.LogWarning("Audit queue is full, dropping audit log");
+            _logger.LogWarning("Audit queue is full, dropping audit log for {Action} on {EntityType} by {UserId}", 
+                auditLog.Action, auditLog.EntityType, auditLog.UserId);
         }
         
         return Task.CompletedTask; // Retorna imediatamente
