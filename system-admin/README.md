@@ -36,6 +36,22 @@ Documentação sobre deploy, Docker, Podman, CI/CD e infraestrutura.
 
 ## 🔍 Como Usar
 
+### 🌐 Acesso via Web (Recomendado)
+
+**Toda a documentação está disponível como páginas HTML navegáveis!**
+
+Acesse: **https://medicwarehouse.github.io/MW.Code/**
+
+- ✅ Interface moderna e intuitiva
+- ✅ Busca em tempo real entre todos os documentos
+- ✅ Organização por categorias (323 docs do system-admin + docs customizados)
+- ✅ Renderização completa de Markdown
+- ✅ Sem necessidade de clonar repositório
+
+📖 **Guia completo**: [DOCUMENTATION_HTML_GUIDE.md](./DOCUMENTATION_HTML_GUIDE.md)
+
+### 📁 Acesso via Arquivos
+
 1. **Consultar Regras de Negócio**: Acesse `/regras-negocio`
 2. **Ver Implementações**: Acesse `/implementacoes`
 3. **Guias de Uso**: Acesse `/guias`
@@ -45,6 +61,21 @@ Documentação sobre deploy, Docker, Podman, CI/CD e infraestrutura.
 ## 📋 Índice de Documentos
 
 Ver [INDICE.md](./INDICE.md) para uma lista completa e categorizada de todos os documentos disponíveis.
+
+## 🌐 Documentação HTML
+
+Toda a documentação do system-admin foi convertida para **páginas HTML navegáveis**:
+
+- **323 documentos** do system-admin (+ docs customizados)
+- **26 categorias** organizadas
+- **Busca inteligente** em tempo real
+- **Acesso direto** sem precisar do GitHub
+
+**Acesse**: https://medicwarehouse.github.io/MW.Code/
+
+Para mais informações sobre a documentação HTML, veja:
+- [DOCUMENTATION_HTML_GUIDE.md](./DOCUMENTATION_HTML_GUIDE.md) - Guia completo
+- [frontend/mw-docs/README.md](../frontend/mw-docs/README.md) - Documentação técnica
 
 ## 🔄 Migração
 

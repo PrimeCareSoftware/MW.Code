@@ -1,6 +1,7 @@
 export interface DocItem {
   id: string;
   title: string;
+  fullTitle?: string;  // Full title extracted from markdown
   category: string;
   path: string;
   description: string;

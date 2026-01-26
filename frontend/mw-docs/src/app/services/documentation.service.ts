@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DocItem, DocCategory } from '../models/doc-item.model';
+import { SYSTEM_ADMIN_DOCS } from './generated-docs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentationService {
-  private readonly docsBasePath = 'assets/docs/';
+  private readonly docsBasePath = 'assets/';
 
-  private readonly documentStructure: DocCategory[] = [
+  private readonly originalDocs: DocCategory[] = [
     {
       name: '📱 Interface e Experiência do Usuário',
       icon: '📱',
@@ -479,6 +480,12 @@ export class DocumentationService {
     }
   ];
 
+  // Combine original docs and system-admin docs
+  private readonly documentStructure: DocCategory[] = [
+    ...this.originalDocs,
+    ...SYSTEM_ADMIN_DOCS
+  ];
+
   constructor(private http: HttpClient) {}
 
   getCategories(): DocCategory[] {
@@ -500,5 +507,19 @@ export class DocumentationService {
       doc.description.toLowerCase().includes(lowerQuery) ||
       doc.category.toLowerCase().includes(lowerQuery)
     );
+  }
+
+  /**
+   * Get total count of documents
+   */
+  getTotalDocCount(): number {
+    return this.getAllDocs().length;
+  }
+
+  /**
+   * Get total count of categories
+   */
+  getCategoryCount(): number {
+    return this.documentStructure.length;
   }
 }

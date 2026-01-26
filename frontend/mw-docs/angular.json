@@ -35,7 +35,20 @@
               {
                 "glob": "**/*",
                 "input": "src/assets",
-                "output": "/assets/"
+                "output": "/assets/",
+                "ignore": ["**/docs", "**/system-admin"]
+              },
+              {
+                "glob": "**/*.md",
+                "input": "../../docs",
+                "output": "/assets/docs",
+                "followSymlinks": true
+              },
+              {
+                "glob": "**/*.md",
+                "input": "../../system-admin",
+                "output": "/assets/system-admin",
+                "followSymlinks": true
               }
             ],
             "styles": [
