@@ -21,6 +21,10 @@ export class AnamnesisService {
   constructor(private http: HttpClient) { }
 
   // Template endpoints
+  getAllTemplates(): Observable<AnamnesisTemplate[]> {
+    return this.http.get<AnamnesisTemplate[]>(`${this.apiUrl}/templates/all`);
+  }
+
   getTemplatesBySpecialty(specialty: MedicalSpecialty): Observable<AnamnesisTemplate[]> {
     const params = new HttpParams().set('specialty', specialty.toString());
     return this.http.get<AnamnesisTemplate[]>(`${this.apiUrl}/templates`, { params });
@@ -36,6 +40,10 @@ export class AnamnesisService {
 
   updateTemplate(templateId: string, request: UpdateAnamnesisTemplateRequest): Observable<AnamnesisTemplate> {
     return this.http.put<AnamnesisTemplate>(`${this.apiUrl}/templates/${templateId}`, request);
+  }
+
+  deleteTemplate(templateId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/templates/${templateId}`);
   }
 
   // Response endpoints

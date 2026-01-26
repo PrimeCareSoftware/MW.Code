@@ -464,6 +464,21 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'anamnesis/templates/manage', 
+    loadComponent: () => import('./pages/anamnesis/template-management/template-management').then(m => m.TemplateManagementComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'anamnesis/templates/new', 
+    loadComponent: () => import('./pages/anamnesis/template-form/template-form').then(m => m.TemplateFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'anamnesis/templates/edit/:id', 
+    loadComponent: () => import('./pages/anamnesis/template-form/template-form').then(m => m.TemplateFormComponent),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'anamnesis/questionnaire/:appointmentId', 
     loadComponent: () => import('./pages/anamnesis/questionnaire/questionnaire').then(m => m.QuestionnaireComponent),
     canActivate: [authGuard]

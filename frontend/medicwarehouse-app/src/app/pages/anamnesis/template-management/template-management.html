@@ -1,0 +1,125 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">Templates de Anamnese</h1>
+      <p class="page-subtitle">Gerencie os templates de anamnese da clínica</p>
+    </div>
+    <button class="btn btn-primary" (click)="navigateToNew()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Novo Template
+    </button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <div class="card">
+    <div class="card-header">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearch()" 
+          placeholder="Buscar por nome, especialidade ou descrição..."
+          class="search-input"
+        />
+      </div>
+    </div>
+
+    <div class="card-body">
+      @if (isLoading()) {
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Carregando templates...</p>
+        </div>
+      } @else if (filteredTemplates().length === 0) {
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <circle cx="12" cy="13" r="2"/>
+            <path d="M12 15v2"/>
+            <path d="M12 9v2"/>
+          </svg>
+          <h3>Nenhum template encontrado</h3>
+          <p>{{ searchTerm ? 'Tente ajustar sua busca' : 'Crie seu primeiro template de anamnese' }}</p>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Especialidade</th>
+                <th>Descrição</th>
+                <th>Seções</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (template of filteredTemplates(); track template.id) {
+                <tr>
+                  <td>
+                    <div class="template-name">
+                      {{ template.name }}
+                      @if (template.isDefault) {
+                        <span class="badge badge-primary">Padrão</span>
+                      }
+                    </div>
+                  </td>
+                  <td>{{ specialtyNames[template.specialty] }}</td>
+                  <td>{{ template.description || '-' }}</td>
+                  <td>{{ template.sections?.length || 0 }}</td>
+                  <td>
+                    <span [class]="template.isActive ? 'badge badge-success' : 'badge badge-secondary'">
+                      {{ template.isActive ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="action-buttons">
+                      <button 
+                        class="btn btn-sm btn-secondary" 
+                        (click)="navigateToEdit(template.id)"
+                        title="Editar"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                      <button 
+                        class="btn btn-sm btn-danger" 
+                        (click)="deleteTemplate(template.id)"
+                        title="Excluir"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                          <line x1="10" y1="11" x2="10" y2="17"/>
+                          <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</div>

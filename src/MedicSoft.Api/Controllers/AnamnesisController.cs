@@ -30,6 +30,25 @@ namespace MedicSoft.Api.Controllers
         #region Templates
 
         /// <summary>
+        /// Get all templates (without filter)
+        /// </summary>
+        [HttpGet("templates/all")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsView)]
+        public async Task<ActionResult<List<AnamnesisTemplateDto>>> GetAllTemplates()
+        {
+            try
+            {
+                var query = new GetAllTemplatesQuery(GetTenantId());
+                var templates = await _mediator.Send(query);
+                return Ok(templates);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get templates by medical specialty
         /// </summary>
         [HttpGet("templates")]
@@ -108,6 +127,25 @@ namespace MedicSoft.Api.Controllers
                 var command = new UpdateAnamnesisTemplateCommand(id, updateDto, GetTenantId());
                 var template = await _mediator.Send(command);
                 return Ok(template);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Delete an anamnesis template
+        /// </summary>
+        [HttpDelete("templates/{id}")]
+        [RequirePermissionKey(PermissionKeys.MedicalRecordsDelete)]
+        public async Task<ActionResult> DeleteTemplate(Guid id)
+        {
+            try
+            {
+                var command = new DeleteAnamnesisTemplateCommand(id, GetTenantId());
+                await _mediator.Send(command);
+                return NoContent();
             }
             catch (InvalidOperationException ex)
             {
