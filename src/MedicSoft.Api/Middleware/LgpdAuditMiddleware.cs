@@ -150,7 +150,7 @@ namespace MedicSoft.Api.Middleware
             return false;
         }
 
-        private async Task<RequestDetails> CaptureRequestDetailsAsync(HttpContext context)
+        private Task<RequestDetails> CaptureRequestDetailsAsync(HttpContext context)
         {
             var details = new RequestDetails
             {
@@ -164,7 +164,7 @@ namespace MedicSoft.Api.Middleware
                 UserEmail = GetUserEmailFromContext(context)
             };
 
-            return details;
+            return Task.FromResult(details);
         }
 
         private async Task LogAuditAsync(
@@ -184,9 +184,32 @@ namespace MedicSoft.Api.Middleware
                 var severity = DetermineSeverity(action, result);
 
                 // Only log if we have valid user context
-                if (string.IsNullOrEmpty(requestDetails.UserId))
+                if (string.IsNullOrEmpty(requestDetails.UserId) || requestDetails.UserId == "UNAUTHENTICATED")
                 {
-                    _logger.LogWarning("Skipping audit log - no user context for path {Path}", requestDetails.Path);
+                    _logger.LogWarning("Unauthenticated access attempt to sensitive endpoint: {Path}", requestDetails.Path);
+                    
+                    // Still log unauthenticated attempts for security monitoring
+                    var unauthDto = new CreateAuditLogDto(
+                        UserId: "UNAUTHENTICATED",
+                        UserName: "Unauthenticated User",
+                        UserEmail: "unauthenticated@system",
+                        Action: action,
+                        ActionDescription: $"Unauthenticated {action} attempt on {entityType}",
+                        EntityType: entityType,
+                        EntityId: entityId ?? "unknown",
+                        EntityDisplayName: null,
+                        IpAddress: requestDetails.IpAddress,
+                        UserAgent: requestDetails.UserAgent,
+                        RequestPath: requestDetails.Path,
+                        HttpMethod: requestDetails.Method,
+                        Result: OperationResult.UNAUTHORIZED,
+                        DataCategory: dataCategory,
+                        Purpose: purpose,
+                        Severity: AuditSeverity.WARNING,
+                        TenantId: tenantId
+                    );
+                    
+                    await auditService.LogAsync(unauthDto);
                     return;
                 }
 
@@ -230,7 +253,7 @@ namespace MedicSoft.Api.Middleware
                             ?? context.User?.FindFirst("userId")?.Value
                             ?? context.User?.FindFirst("id")?.Value;
 
-            return userIdClaim ?? "anonymous";
+            return userIdClaim ?? "UNAUTHENTICATED";
         }
 
         private string GetUserNameFromContext(HttpContext context)

@@ -90,7 +90,10 @@ namespace MedicSoft.Application.Services
 
             try
             {
-                // Configure QuestPDF license for commercial use
+                // Configure QuestPDF license
+                // NOTE: Using Community license - ensure this complies with your usage terms
+                // For commercial applications, consider purchasing appropriate license
+                // https://www.questpdf.com/pricing.html
                 QuestPDF.Settings.License = LicenseType.Community;
 
                 // Gather all patient data

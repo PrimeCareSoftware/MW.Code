@@ -231,13 +231,13 @@ namespace MedicSoft.Application.Services
         private string GenerateAnonymizedCpf()
         {
             // Generate a random but valid-format CPF for anonymization
-            var random = new Random();
+            // Using Random.Shared for better randomness in .NET 6+
             var cpf = new List<int>();
             
             // Generate 9 random digits
             for (int i = 0; i < 9; i++)
             {
-                cpf.Add(random.Next(0, 10));
+                cpf.Add(Random.Shared.Next(0, 10));
             }
             
             // Calculate first verification digit
