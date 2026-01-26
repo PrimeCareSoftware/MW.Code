@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MedicSoft.Domain.Entities;
@@ -36,7 +37,8 @@ namespace MedicSoft.Api.JsonConverters
                         return (ProcedureCategory)numericValue;
                     }
 
-                    throw new JsonException($"Invalid ProcedureCategory numeric value: {numericValue}. Valid values are 0-{Enum.GetValues(typeof(ProcedureCategory)).Length - 1}");
+                    var validValues = string.Join(", ", Enum.GetValues(typeof(ProcedureCategory)).Cast<int>());
+                    throw new JsonException($"Invalid ProcedureCategory numeric value: {numericValue}. Valid values are: {validValues}");
 
                 default:
                     throw new JsonException($"Unexpected token type for ProcedureCategory: {reader.TokenType}");
