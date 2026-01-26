@@ -487,8 +487,13 @@ public class AppointmentsController : BaseController
 
     private string? GetTenantId()
     {
-        // In a multi-tenant system, this would extract tenant from JWT or context
-        // For now, we'll need to get it from the patient user
-        return "default-tenant"; // This should be replaced with actual tenant resolution
+        // Extract tenant ID from JWT claims
+        var tenantClaim = User.FindFirst("TenantId")?.Value;
+        if (!string.IsNullOrEmpty(tenantClaim))
+            return tenantClaim;
+
+        // Fallback: Get from patient user if claim not present
+        // This is a temporary approach - ideally tenant should always be in JWT
+        return "default-tenant"; // TODO: Implement proper tenant resolution strategy
     }
 }
