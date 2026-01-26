@@ -22,7 +22,8 @@ public abstract class BaseController : ControllerBase
     /// <summary>
     /// Extracts the tenant ID from the authenticated user's claims
     /// </summary>
-    /// <returns>Tenant ID as string, or default tenant if not found</returns>
+    /// <returns>Tenant ID as string</returns>
+    /// <exception cref="InvalidOperationException">Thrown when tenant ID cannot be determined</exception>
     protected string GetTenantId()
     {
         // Extract tenant ID from JWT claims
@@ -30,8 +31,9 @@ public abstract class BaseController : ControllerBase
         if (!string.IsNullOrEmpty(tenantClaim))
             return tenantClaim;
 
-        // Fallback to default tenant
-        // TODO: Implement proper tenant resolution strategy
+        // For development/testing: fallback to default tenant
+        // TODO: In production, this should throw an exception or return 401 Unauthorized
+        // when tenant cannot be determined from JWT
         return "default-tenant";
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using PatientPortal.Application.DTOs.Appointments;
 using PatientPortal.Application.Interfaces;
+using PatientPortal.Domain.Enums;
 
 namespace PatientPortal.Application.Services;
 
@@ -109,7 +110,7 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
                 WHERE a.""ProfessionalId"" = {0}
                 AND a.""ScheduledDate"" = {1}
                 AND a.""TenantId"" = {2}
-                AND a.""Status"" NOT IN (4, 5)
+                AND a.""Status"" NOT IN ({5}, {6})
                 AND (
                     (a.""ScheduledTime"" < {4} AND (a.""ScheduledTime"" + (a.""DurationMinutes"" || ' minutes')::interval) > {3})
                     OR (a.""ScheduledTime"" >= {3} AND a.""ScheduledTime"" < {4})
@@ -121,7 +122,9 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
                 date,
                 tenantId,
                 time,
-                endTime
+                endTime,
+                (int)AppointmentStatus.Cancelled,
+                (int)AppointmentStatus.NoShow
             );
 
             var count = result.FirstOrDefault()?.Count ?? 0;
@@ -227,13 +230,15 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
             WHERE a.""ProfessionalId"" = {0}
             AND a.""ScheduledDate"" = {1}
             AND a.""TenantId"" = {2}
-            AND a.""Status"" NOT IN (4, 5)";  // Exclude Cancelled and NoShow
+            AND a.""Status"" NOT IN ({3}, {4})";  // Exclude Cancelled and NoShow
 
         var appointments = await _mainDatabase.ExecuteQueryAsync<AppointmentInfo>(
             appointmentsQuery,
             doctorId,
             date,
-            tenantId
+            tenantId,
+            (int)AppointmentStatus.Cancelled,
+            (int)AppointmentStatus.NoShow
         );
 
         // Generate time slots for the day
