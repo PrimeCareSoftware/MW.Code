@@ -14,6 +14,7 @@ import { SoapSummaryComponent } from './components/soap-summary/soap-summary.com
 import { SoapRecordService } from './services/soap-record.service';
 import { SoapRecord } from './models/soap-record.model';
 import { Navbar } from '../../shared/navbar/navbar';
+import { HelpButtonComponent } from '../../shared/help-button/help-button';
 
 @Component({
   selector: 'app-soap-record',
@@ -25,6 +26,7 @@ import { Navbar } from '../../shared/navbar/navbar';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
+    HelpButtonComponent,
     SubjectiveFormComponent,
     ObjectiveFormComponent,
     AssessmentFormComponent,
@@ -229,6 +231,8 @@ import { Navbar } from '../../shared/navbar/navbar';
         </div>
       }
     </div>
+    
+    <app-help-button module="soap-records"></app-help-button>
   `
 })
 export class SoapRecordComponent implements OnInit {

@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
+import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { TissGuideService } from '../../../services/tiss-guide.service';
 import { TissGuide, GuideStatus, TissGuideType } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-tiss-guide-list',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [HelpButtonComponent, CommonModule, RouterLink, FormsModule, Navbar],
   templateUrl: './tiss-guide-list.html',
   styleUrl: './tiss-guide-list.scss'
 })

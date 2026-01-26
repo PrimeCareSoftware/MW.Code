@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
+import { HelpButtonComponent } from '../../shared/help-button/help-button';
 import { DigitalPrescriptionService } from '../../services/prescriptions/digital-prescription.service';
 import { 
   CreateDigitalPrescription, 
@@ -15,7 +16,7 @@ import { PrescriptionTypeSelectorComponent } from './prescription-type-selector.
 @Component({
   selector: 'app-digital-prescription-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PrescriptionTypeSelectorComponent],
+  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, PrescriptionTypeSelectorComponent],
   templateUrl: './digital-prescription-form.component.html',
   styleUrl: './digital-prescription-form.component.scss'})
 export class DigitalPrescriptionFormComponent implements OnInit {

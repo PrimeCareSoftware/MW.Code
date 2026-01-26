@@ -4,10 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
+import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 
 @Component({
   selector: 'app-patient-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink, Navbar, HelpButtonComponent],
   templateUrl: './patient-list.html',
   styleUrl: './patient-list.scss'
 })
