@@ -41,6 +41,7 @@ namespace MedicSoft.Domain.Common
         public const string MedicalRecordsView = "medical-records.view";
         public const string MedicalRecordsCreate = "medical-records.create";
         public const string MedicalRecordsEdit = "medical-records.edit";
+        public const string MedicalRecordsDelete = "medical-records.delete";
 
         // Attendance
         public const string AttendanceView = "attendance.view";
@@ -192,7 +193,8 @@ namespace MedicSoft.Domain.Common
                     {
                         new(MedicalRecordsView, "Visualizar prontuários"),
                         new(MedicalRecordsCreate, "Criar prontuários"),
-                        new(MedicalRecordsEdit, "Editar prontuários")
+                        new(MedicalRecordsEdit, "Editar prontuários"),
+                        new(MedicalRecordsDelete, "Excluir prontuários")
                     }
                 },
                 {

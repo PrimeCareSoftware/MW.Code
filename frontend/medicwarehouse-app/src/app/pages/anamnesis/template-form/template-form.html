@@ -1,0 +1,217 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">{{ templateId() ? 'Editar' : 'Novo' }} Template de Anamnese</h1>
+      <p class="page-subtitle">{{ templateId() ? 'Edite as informações do template' : 'Crie um novo template de anamnese' }}</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Carregando template...</p>
+    </div>
+  } @else {
+    <form [formGroup]="templateForm" (ngSubmit)="onSubmit()">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Informações Básicas</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Nome do Template *</label>
+              <input 
+                id="name" 
+                type="text" 
+                formControlName="name" 
+                class="form-control"
+                placeholder="Ex: Anamnese Cardiológica Completa"
+              />
+              @if (templateForm.get('name')?.invalid && templateForm.get('name')?.touched) {
+                <div class="error-message">Nome é obrigatório (mínimo 3 caracteres)</div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="specialty">Especialidade *</label>
+              <select id="specialty" formControlName="specialty" class="form-control">
+                @for (specialty of specialties; track specialty.value) {
+                  <option [value]="specialty.value">{{ specialty.label }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="description">Descrição</label>
+              <textarea 
+                id="description" 
+                formControlName="description" 
+                class="form-control"
+                rows="3"
+                placeholder="Descreva o objetivo e uso deste template"
+              ></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="isDefault" />
+                <span>Definir como template padrão para esta especialidade</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Seções e Perguntas</h2>
+          <button type="button" class="btn btn-secondary" (click)="addSection()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar Seção
+          </button>
+        </div>
+        <div class="card-body">
+          @if (sections.length === 0) {
+            <div class="empty-state">
+              <p>Nenhuma seção adicionada. Clique em "Adicionar Seção" para começar.</p>
+            </div>
+          } @else {
+            <div formArrayName="sections" class="sections-container">
+              @for (section of sections.controls; track $index; let i = $index) {
+                <div [formGroupName]="i" class="section-card">
+                  <div class="section-header">
+                    <h3>Seção {{ i + 1 }}</h3>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="removeSection(i)">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                      Remover
+                    </button>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Nome da Seção *</label>
+                    <input 
+                      type="text" 
+                      formControlName="sectionName" 
+                      class="form-control"
+                      placeholder="Ex: Histórico Médico"
+                    />
+                  </div>
+
+                  <div class="questions-header">
+                    <h4>Perguntas</h4>
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="addQuestion(i)">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                      Adicionar Pergunta
+                    </button>
+                  </div>
+
+                  <div formArrayName="questions" class="questions-container">
+                    @for (question of getQuestions(i).controls; track $index; let j = $index) {
+                      <div [formGroupName]="j" class="question-card">
+                        <div class="question-header">
+                          <span class="question-number">Pergunta {{ j + 1 }}</span>
+                          <button type="button" class="btn btn-sm btn-danger" (click)="removeQuestion(i, j)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <line x1="18" y1="6" x2="6" y2="18"/>
+                              <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                          </button>
+                        </div>
+
+                        <div class="form-grid">
+                          <div class="form-group full-width">
+                            <label>Pergunta *</label>
+                            <input 
+                              type="text" 
+                              formControlName="questionText" 
+                              class="form-control"
+                              placeholder="Digite a pergunta"
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <label>Tipo *</label>
+                            <select formControlName="type" class="form-control">
+                              @for (type of questionTypes; track type.value) {
+                                <option [value]="type.value">{{ type.label }}</option>
+                              }
+                            </select>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="checkbox-label">
+                              <input type="checkbox" formControlName="isRequired" />
+                              <span>Obrigatória</span>
+                            </label>
+                          </div>
+
+                          <div class="form-group full-width">
+                            <label>Opções (separadas por vírgula - para SingleChoice e MultipleChoice)</label>
+                            <input 
+                              type="text" 
+                              formControlName="options" 
+                              class="form-control"
+                              placeholder="Ex: Sim, Não, Não sei"
+                            />
+                          </div>
+
+                          <div class="form-group full-width">
+                            <label>Texto de Ajuda</label>
+                            <input 
+                              type="text" 
+                              formControlName="helpText" 
+                              class="form-control"
+                              placeholder="Informação adicional para ajudar no preenchimento"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="isSaving()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+          @if (isSaving()) {
+            <span class="spinner-sm"></span>
+            Salvando...
+          } @else {
+            {{ templateId() ? 'Atualizar' : 'Criar' }} Template
+          }
+        </button>
+      </div>
+    </form>
+  }
+</div>
