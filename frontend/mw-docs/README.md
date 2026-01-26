@@ -1,30 +1,41 @@
 # 📚 PrimeCare Software Docs - Central de Documentação
 
-Aplicação Angular standalone criada para centralizar e facilitar a consulta de toda a documentação do projeto PrimeCare Software.
+Aplicação Angular standalone criada para centralizar e facilitar a consulta de toda a documentação do projeto PrimeCare Software, incluindo **todos os 323 documentos do system-admin**.
 
 ## 🎯 Objetivo
 
-Este projeto foi criado para resolver o problema de ter vários arquivos de documentação soltos no repositório. Agora toda a documentação está organizada e acessível através de uma interface web moderna e intuitiva.
+Este projeto foi criado para resolver o problema de ter vários arquivos de documentação soltos no repositório. Agora toda a documentação está organizada e acessível através de uma interface web moderna e intuitiva, **incluindo toda a documentação do system-admin em páginas HTML navegáveis**.
 
 ## ✨ Características
 
 - **📱 Interface Moderna**: Design responsivo e amigável
-- **🔍 Busca Inteligente**: Encontre documentos rapidamente
-- **📊 Categorização**: Documentos organizados por categorias
+- **🔍 Busca Inteligente**: Encontre documentos rapidamente entre 370+ documentos
+- **📊 Categorização**: Documentos organizados por categorias (20+ categorias)
 - **📝 Renderização Markdown**: Suporte completo a Markdown com syntax highlighting
 - **📐 Diagramas Mermaid**: Visualização de fluxos e diagramas
 - **🎨 Design System Consistente**: Visual padronizado e profissional
 - **⚡ Performance**: Carregamento rápido e otimizado
+- **🔄 Geração Automática**: System-admin docs gerados automaticamente
 
 ## 📦 Documentos Incluídos
 
-Este projeto agora referencia **todos os documentos** centralizados na pasta `/docs` do repositório principal através de um symlink.
+Este projeto inclui:
 
-**Localização dos documentos**: `src/assets/docs/` → symlink para `/docs`
+- **323 documentos** do `/system-admin` organizados em 10 categorias (gerados automaticamente)
+- **50+ documentos** customizados e tutoriais (configurados manualmente)
+- **Total: 370+ documentos** acessíveis via interface web
 
-Todos os documentos markdown do projeto estão organizados por categoria na pasta `/docs`. Para ver a lista completa de categorias e documentos, consulte:
-- [DOCUMENTATION_INDEX.md](../../docs/DOCUMENTATION_INDEX.md) - Índice principal com navegação completa
-- [README.md](../../README.md) - Visão geral do projeto
+**Categorias do System-Admin:**
+- 🔧 Backend (7 docs)
+- ⚕️ CFM Compliance (15 docs)
+- 📚 Documentação Geral (70+ docs)
+- 🎨 Frontend (12 docs)
+- 📖 Guias (50+ docs)
+- 🔧 Implementações (40+ docs)
+- 🏗️ Infraestrutura (15+ docs)
+- 📋 Regras de Negócio (20+ docs)
+- 🔒 Segurança (6 docs)
+- E mais...
 
 ## 🚀 Como Executar
 
@@ -168,11 +179,30 @@ server {
 
 ## 📝 Atualizando a Documentação
 
-Para adicionar novos documentos:
+### Adicionando Documentos no system-admin
+
+Os documentos do `system-admin` são **automaticamente incluídos** na interface web através de um script de geração:
+
+1. **Adicione o arquivo .md** na pasta `/system-admin` do repositório principal
+2. **Execute o script de geração**:
+   ```bash
+   cd frontend/mw-docs
+   npm run generate-docs
+   ```
+3. **Rebuild** a aplicação:
+   ```bash
+   npm run build
+   ```
+
+O script `generate-docs` escaneia todos os arquivos markdown em `/system-admin` e atualiza automaticamente `src/app/services/generated-docs.ts`.
+
+### Adicionando Documentos Customizados
+
+Para adicionar documentos com configuração manual (fora do system-admin):
 
 1. **Adicione o arquivo .md** na pasta `/docs` do repositório principal
-2. **Atualize o serviço** `documentation.service.ts` se quiser que apareça na interface web:
-   - Adicione o documento na categoria apropriada
+2. **Atualize o serviço** `documentation.service.ts`:
+   - Adicione o documento na categoria apropriada em `originalDocs`
    - Configure: id, title, category, path, description
 
 ```typescript
@@ -180,7 +210,7 @@ Para adicionar novos documentos:
   id: 'novo-doc',
   title: 'NOVO_DOC.md',
   category: 'Categoria',
-  path: 'NOVO_DOC.md',
+  path: 'docs/NOVO_DOC.md',
   description: 'Descrição do documento',
   idealFor: 'Público alvo'
 }
@@ -188,7 +218,12 @@ Para adicionar novos documentos:
 
 3. **Rebuild** a aplicação
 
-**Nota**: Os documentos são automaticamente acessíveis via symlink em `src/assets/docs/` que aponta para `/docs`.
+### Estrutura de Documentação
+
+- **Documentos do `/system-admin`**: Gerados automaticamente via `npm run generate-docs` (323 documentos)
+- **Documentos customizados**: Configurados manualmente em `documentation.service.ts`
+- **Assets**: Os arquivos markdown são copiados durante o build via configuração em `angular.json`
+
 
 ## 🔧 Customização
 
