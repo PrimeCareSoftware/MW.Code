@@ -1,15 +1,55 @@
 # Portal do Paciente (Patient Portal) - PrimeCare Software
 
-> **📚 Documentação Completa**: Para documentação detalhada, consulte:
-> - [PATIENT_PORTAL_ARCHITECTURE.md](../docs/PATIENT_PORTAL_ARCHITECTURE.md) - Arquitetura detalhada
-> - [PATIENT_PORTAL_SECURITY_GUIDE.md](../docs/PATIENT_PORTAL_SECURITY_GUIDE.md) - Guia de segurança
-> - [PATIENT_PORTAL_USER_MANUAL.md](../docs/PATIENT_PORTAL_USER_MANUAL.md) - Manual do usuário
-> - [PATIENT_PORTAL_CI_CD_GUIDE.md](../docs/PATIENT_PORTAL_CI_CD_GUIDE.md) - CI/CD
-> - [PATIENT_PORTAL_DEPLOYMENT_GUIDE.md](../docs/PATIENT_PORTAL_DEPLOYMENT_GUIDE.md) - Deploy
+> **🚀 NOVO DESENVOLVEDOR?** Comece aqui: [DEVELOPER_QUICKSTART.md](./DEVELOPER_QUICKSTART.md) - Setup em < 30 minutos!
+
+> **📊 STATUS ATUAL:** 70% Completo - MVP Pronto | [Ver Status Detalhado →](../PORTAL_PACIENTE_STATUS_JAN2026.md)
+
+---
+
+## 📚 Documentação Completa
+
+### 🎯 Início Rápido
+- **[DEVELOPER_QUICKSTART.md](./DEVELOPER_QUICKSTART.md)** ⚡ - Setup e primeiros passos (< 30 min)
+- **[TROUBLESHOOTING_FAQ.md](./TROUBLESHOOTING_FAQ.md)** 🔧 - Resolução de problemas comuns
+
+### 📖 Documentação Principal
+- **[PATIENT_PORTAL_ARCHITECTURE.md](../system-admin/regras-negocio/PATIENT_PORTAL_ARCHITECTURE.md)** - Arquitetura DDD/Clean Architecture
+- **[PATIENT_PORTAL_SECURITY_GUIDE.md](../system-admin/guias/PATIENT_PORTAL_SECURITY_GUIDE.md)** - Segurança e LGPD
+- **[PATIENT_PORTAL_USER_MANUAL.md](../system-admin/regras-negocio/PATIENT_PORTAL_USER_MANUAL.md)** - Manual do usuário final
+- **[PATIENT_PORTAL_CI_CD_GUIDE.md](../system-admin/guias/PATIENT_PORTAL_CI_CD_GUIDE.md)** - Pipeline CI/CD
+- **[PATIENT_PORTAL_DEPLOYMENT_GUIDE.md](../system-admin/guias/PATIENT_PORTAL_DEPLOYMENT_GUIDE.md)** - Deploy e infraestrutura
+- **[PATIENT_PORTAL_GUIDE.md](../system-admin/guias/PATIENT_PORTAL_GUIDE.md)** - Guia de implementação completo
+
+### 🔮 Funcionalidades Pendentes (30%)
+- **[BOOKING_IMPLEMENTATION_GUIDE.md](./BOOKING_IMPLEMENTATION_GUIDE.md)** 📅 - Agendamento online (3 semanas)
+- **[NOTIFICATION_SERVICE_GUIDE.md](./NOTIFICATION_SERVICE_GUIDE.md)** 🔔 - Sistema de lembretes (1 semana)
+
+### 📈 Status e Planejamento
+- **[PORTAL_PACIENTE_STATUS_JAN2026.md](../PORTAL_PACIENTE_STATUS_JAN2026.md)** - Status técnico detalhado
+- **[10-portal-paciente.md](../Plano_Desenvolvimento/fase-2-seguranca-lgpd/10-portal-paciente.md)** - Requisitos originais
+- **[PORTAL_PACIENTE_IMPLEMENTACAO_STATUS.md](../Plano_Desenvolvimento/fase-2-seguranca-lgpd/PORTAL_PACIENTE_IMPLEMENTACAO_STATUS.md)** - Status de implementação
+
+---
 
 ## 📋 Visão Geral
 
 O Portal do Paciente é uma aplicação web dedicada que permite aos pacientes acessar suas informações médicas, gerenciar agendamentos e interagir com documentos de forma segura e independente.
+
+### ✅ Funcionalidades Implementadas (70%)
+
+- 🔐 **Autenticação segura** (JWT + Refresh Tokens)
+- 📊 **Dashboard do paciente** (estatísticas e ações rápidas)
+- 📅 **Visualização de agendamentos** (listar, filtrar, detalhes)
+- 📄 **Gerenciamento de documentos** (listar, visualizar, download)
+- 👤 **Perfil do paciente** (editar dados, alterar senha)
+- 🔒 **Compliance LGPD/CFM** (auditoria, segurança)
+- 🧪 **Testes automatizados** (35+ backend, 58+ frontend)
+
+### ❌ Pendentes (30%)
+
+- 📅 **Agendamento online** (0%) - [Ver guia →](./BOOKING_IMPLEMENTATION_GUIDE.md)
+- 🔔 **Notificações automáticas** (0%) - [Ver guia →](./NOTIFICATION_SERVICE_GUIDE.md)
+- 📱 **PWA completo** (30%) - Service workers e offline
 
 ## 🏗️ Arquitetura
 
