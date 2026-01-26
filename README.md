@@ -2,7 +2,7 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
-> 📚 **NOVO!** Toda a documentação foi reorganizada! [→ Ver Central de Documentação](system-admin/README.md) | [→ Ver Índice Completo](system-admin/INDICE.md)
+> 📚 **NOVO!** Toda a documentação foi reorganizada! [→ Ver Mapa de Documentação](DOCUMENTATION_MAP.md) | [→ Ver Central de Documentação](system-admin/README.md) | [→ Ver Índice Completo](system-admin/INDICE.md)
 
 > 📊 **NOVO!** Quer ver tudo que foi desenvolvido? [→ Ver Resumo Técnico Completo](system-admin/docs/RESUMO_TECNICO_COMPLETO.md) - Visão geral de **92% de completude do sistema**!
 
