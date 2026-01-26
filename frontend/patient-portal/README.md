@@ -22,6 +22,7 @@ Este é o frontend do Portal do Paciente, construído com Angular 20.
 - **HTTP Interceptor** - Injeção automática de tokens JWT
 - **Lazy Loading** - Carregamento otimizado de rotas
 - **Material Design** - Interface moderna e responsiva
+- **PWA Support** - Progressive Web App com offline support ⭐ **NOVO**
 
 ## 🚀 Como Executar
 
@@ -53,6 +54,35 @@ npm run build
 
 # Os arquivos estarão em dist/patient-portal/
 ```
+
+### PWA - Progressive Web App ⭐ **NOVO**
+
+O Portal do Paciente agora é uma Progressive Web App completa!
+
+**Funcionalidades PWA:**
+- 📱 **Instalável** - Instale como app nativo no dispositivo
+- 🔄 **Offline** - Funciona sem conexão com internet
+- 🚀 **Rápido** - Cache inteligente para carregamento instantâneo
+- 🔔 **Atualizações** - Notificação automática de novas versões
+- 🎨 **App-like** - Interface standalone sem navegador
+
+**Como Testar:**
+```bash
+# Build de produção (PWA só funciona em produção)
+npm run build
+
+# Servir com service worker
+npx http-server dist/patient-portal/browser -p 4202 -c-1
+
+# Abrir: http://localhost:4202
+```
+
+**Instalação:**
+- **Desktop**: Clique no ícone de instalação na barra de endereços
+- **Android**: Banner "Adicionar à tela inicial" ou menu do Chrome
+- **iOS**: Compartilhar → "Adicionar à Tela de Início"
+
+📖 **Documentação Completa**: [PWA_SUMMARY.md](./PWA_SUMMARY.md)
 
 ### Testes
 
@@ -203,7 +233,11 @@ Veja [CI_CD_GUIDE.md](../../patient-portal-api/CI_CD_GUIDE.md) para mais detalhe
 ## 📚 Documentação Adicional
 
 Para mais informações sobre o projeto completo:
-- **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** - ✨ **NOVO: Guia completo de testes**
+- **[PWA_SUMMARY.md](./PWA_SUMMARY.md)** - ⭐ **NOVO: Visão geral do PWA**
+- **[PWA_IMPLEMENTATION.md](./PWA_IMPLEMENTATION.md)** - ⭐ **NOVO: Detalhes técnicos do PWA**
+- **[PWA_TESTING_GUIDE.md](./PWA_TESTING_GUIDE.md)** - ⭐ **NOVO: Guia de testes PWA**
+- **[PWA_QUICK_REFERENCE.md](./PWA_QUICK_REFERENCE.md)** - ⭐ **NOVO: Referência rápida PWA**
+- **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** - ✨ Guia completo de testes
 - [PATIENT_PORTAL_GUIDE.md](../../docs/PATIENT_PORTAL_GUIDE.md) - Guia geral
 - [README.md](../../patient-portal-api/README.md) - Documentação do backend
 - [ARCHITECTURE.md](../../patient-portal-api/ARCHITECTURE.md) - Arquitetura técnica
