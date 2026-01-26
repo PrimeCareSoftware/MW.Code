@@ -54,6 +54,14 @@ namespace MedicSoft.Api.Controllers
             return Guid.Empty;
         }
 
+        protected string GetUserName()
+        {
+            return User?.FindFirst(ClaimTypes.Name)?.Value
+                ?? User?.FindFirst("name")?.Value
+                ?? User?.FindFirst(ClaimTypes.Email)?.Value
+                ?? "Unknown User";
+        }
+
         protected Guid? GetClinicId()
         {
             // Extract clinicId from JWT claims

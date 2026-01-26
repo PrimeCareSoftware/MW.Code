@@ -127,6 +127,9 @@ namespace MedicSoft.Repository.Context
         // LGPD Audit System
         public DbSet<AuditLog> AuditLogs { get; set; } = null!;
         public DbSet<DataProcessingConsent> DataProcessingConsents { get; set; } = null!;
+        public DbSet<DataAccessLog> DataAccessLogs { get; set; } = null!;
+        public DbSet<DataConsentLog> DataConsentLogs { get; set; } = null!;
+        public DbSet<DataDeletionRequest> DataDeletionRequests { get; set; } = null!;
         
         // Anamnesis System
         public DbSet<AnamnesisTemplate> AnamnesisTemplates { get; set; } = null!;
