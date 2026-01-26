@@ -8,6 +8,7 @@ import { NotificationService } from '../../services/notification.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { format } from 'date-fns';
+import { MOCK_DASHBOARD_QUEUE_DATA } from '../../mocks/dashboard.mock';
 
 interface DashboardStats {
   totalPatients: number;
@@ -92,9 +93,15 @@ export class Dashboard implements OnInit {
         status: apt.status
       }));
 
-      // Load waiting queue (mock for now since we don't have an endpoint)
-      this.stats.waitingQueue = 2;
-      this.stats.patientsGrowth = 12;
+      // Load waiting queue and patients growth (mock data only if enabled)
+      if (environment.useMockData) {
+        this.stats.waitingQueue = MOCK_DASHBOARD_QUEUE_DATA.waitingQueue;
+        this.stats.patientsGrowth = MOCK_DASHBOARD_QUEUE_DATA.patientsGrowth;
+      } else {
+        // TODO: Load from actual API when backend endpoints are ready
+        this.stats.waitingQueue = 0;
+        this.stats.patientsGrowth = 0;
+      }
 
     } catch (error) {
       console.error('Error loading dashboard stats:', error);

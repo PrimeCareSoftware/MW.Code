@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
+import { environment } from '../../../../environments/environment';
 
 interface TissConfigDto {
   tissEnabled: boolean;
@@ -51,13 +52,26 @@ export class TissConfigComponent implements OnInit {
     this.errorMessage.set('');
 
     // TODO: Replace with actual service call when backend is ready
-    // For now, use mock data from localStorage
-    const savedConfig = this.getStoredConfig();
-    if (savedConfig) {
-      this.config.set(savedConfig);
-      this.configForm.patchValue(savedConfig);
+    // For now, use mock data from localStorage only if mock mode is enabled
+    if (environment.useMockData) {
+      const savedConfig = this.getStoredConfig();
+      if (savedConfig) {
+        this.config.set(savedConfig);
+        this.configForm.patchValue(savedConfig);
+      } else {
+        // Default configuration
+        const defaultConfig: TissConfigDto = {
+          tissEnabled: false,
+          tissProviderCode: '',
+          tissProviderName: '',
+          tussEnabled: false,
+          autoGenerateBatches: false,
+          batchCompetenceDay: this.MIN_COMPETENCE_DAY
+        };
+        this.config.set(defaultConfig);
+      }
     } else {
-      // Default configuration
+      // When mock is disabled, show default empty configuration
       const defaultConfig: TissConfigDto = {
         tissEnabled: false,
         tissProviderCode: '',
@@ -67,6 +81,7 @@ export class TissConfigComponent implements OnInit {
         batchCompetenceDay: this.MIN_COMPETENCE_DAY
       };
       this.config.set(defaultConfig);
+      this.configForm.patchValue(defaultConfig);
     }
     this.isLoading.set(false);
   }
@@ -78,13 +93,20 @@ export class TissConfigComponent implements OnInit {
       this.successMessage.set('');
 
       // TODO: Replace with actual service call when backend is ready
-      // For now, save to localStorage
+      // For now, save to localStorage only if mock mode is enabled
       const configData = this.configForm.value;
-      this.saveConfig(configData);
-      this.config.set(configData);
-      this.successMessage.set('Configurações TISS/TUSS atualizadas com sucesso!');
+      if (environment.useMockData) {
+        this.saveConfig(configData);
+        this.config.set(configData);
+        this.successMessage.set('Configurações TISS/TUSS atualizadas com sucesso!');
+      } else {
+        this.errorMessage.set('Funcionalidade em desenvolvimento. Por favor, habilite o modo de dados mock ou aguarde a implementação do backend.');
+      }
       this.isSaving.set(false);
-      setTimeout(() => this.successMessage.set(''), this.SUCCESS_MESSAGE_TIMEOUT);
+      setTimeout(() => {
+        this.successMessage.set('');
+        this.errorMessage.set('');
+      }, this.SUCCESS_MESSAGE_TIMEOUT);
     }
   }
 

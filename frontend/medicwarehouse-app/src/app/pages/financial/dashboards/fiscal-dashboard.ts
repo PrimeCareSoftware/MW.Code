@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { Auth } from '../../../services/auth';
+import { environment } from '../../../../environments/environment';
+import { MOCK_FISCAL_DASHBOARD_DATA } from '../../../mocks/fiscal-dashboard.mock';
 
 // TODO: Create ElectronicInvoiceService similar to TissAnalyticsService
 // TODO: Backend analytics endpoints need to be created similar to TissAnalyticsController pattern
@@ -117,7 +119,10 @@ export class FiscalDashboard implements OnInit {
 
   ngOnInit(): void {
     this.loadClinicId();
-    this.loadMockData(); // TODO: Replace with actual API calls
+    if (environment.useMockData) {
+      this.loadMockData();
+    }
+    // TODO: Replace with actual API calls when backend is ready
   }
 
   private loadClinicId(): void {
@@ -146,76 +151,30 @@ export class FiscalDashboard implements OnInit {
     // this.loadMonthlyTrend();
     // this.loadAlerts();
     
-    // For now, use mock data
-    setTimeout(() => {
-      this.loadMockData();
+    // For now, use mock data only if enabled
+    if (environment.useMockData) {
+      setTimeout(() => {
+        this.loadMockData();
+        this.isLoading.set(false);
+      }, 500);
+    } else {
       this.isLoading.set(false);
-    }, 500);
+      this.errorMessage.set('Funcionalidade em desenvolvimento. Por favor, habilite o modo de dados mock ou aguarde a implementação do backend.');
+    }
   }
 
   private loadMockData(): void {
-    // Mock data for demonstration
-    this.totalIssuedMonth.set(287450.75);
-    this.totalTaxesPaid.set(35789.25);
-
-    this.invoicesByType.set([
-      { type: 'NFS-e', quantity: 145, totalValue: 198750.50 },
-      { type: 'NF-e', quantity: 78, totalValue: 75320.25 },
-      { type: 'NFC-e', quantity: 32, totalValue: 13380.00 }
-    ]);
-
-    this.taxBreakdown.set([
-      { taxType: 'ISS', amount: 14372.54, percentage: 5.0 },
-      { taxType: 'PIS', amount: 1873.43, percentage: 0.65 },
-      { taxType: 'COFINS', amount: 8623.52, percentage: 3.0 },
-      { taxType: 'CSLL', amount: 2587.05, percentage: 0.9 },
-      { taxType: 'INSS', amount: 5748.01, percentage: 2.0 },
-      { taxType: 'IR', amount: 2584.70, percentage: 0.9 }
-    ]);
-
-    this.invoiceStatus.set({
-      authorized: 238,
-      cancelled: 12,
-      error: 5,
-      pending: 0
-    });
-
-    this.topClients.set([
-      { clientId: '1', clientName: 'Hospital Santa Casa', totalBilled: 45780.90, invoiceCount: 23 },
-      { clientId: '2', clientName: 'Clínica Médica Centro', totalBilled: 38940.50, invoiceCount: 19 },
-      { clientId: '3', clientName: 'Laboratório Analisa', totalBilled: 32150.00, invoiceCount: 15 },
-      { clientId: '4', clientName: 'Unimed Regional', totalBilled: 28470.35, invoiceCount: 12 },
-      { clientId: '5', clientName: 'Prefeitura Municipal', totalBilled: 24890.75, invoiceCount: 10 }
-    ]);
-
-    this.monthlyTrend.set([
-      { month: 'Jan', year: 2024, totalIssued: 245870.50, invoiceCount: 231 },
-      { month: 'Fev', year: 2024, totalIssued: 268940.75, invoiceCount: 248 },
-      { month: 'Mar', year: 2024, totalIssued: 297850.25, invoiceCount: 267 },
-      { month: 'Abr', year: 2024, totalIssued: 283470.80, invoiceCount: 255 },
-      { month: 'Mai', year: 2024, totalIssued: 287450.75, invoiceCount: 255 }
-    ]);
-
-    this.alerts.set([
-      {
-        id: '1',
-        type: 'warning',
-        message: 'Certificado digital vence em 45 dias (30/07/2024)',
-        date: new Date()
-      },
-      {
-        id: '2',
-        type: 'error',
-        message: '5 notas fiscais com erro de transmissão - requer atenção',
-        date: new Date()
-      },
-      {
-        id: '3',
-        type: 'info',
-        message: 'Limite mensal de emissões: 75% utilizado',
-        date: new Date()
-      }
-    ]);
+    // Use centralized mock data
+    const mockData = MOCK_FISCAL_DASHBOARD_DATA;
+    
+    this.totalIssuedMonth.set(mockData.totalIssuedMonth);
+    this.totalTaxesPaid.set(mockData.totalTaxesPaid);
+    this.invoicesByType.set(mockData.invoicesByType);
+    this.taxBreakdown.set(mockData.taxBreakdown);
+    this.invoiceStatus.set(mockData.invoiceStatus);
+    this.topClients.set(mockData.topClients);
+    this.monthlyTrend.set(mockData.monthlyTrend);
+    this.alerts.set(mockData.alerts);
   }
 
   onFilterChange(): void {
