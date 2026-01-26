@@ -128,7 +128,7 @@ Localizados em: `src/MedicSoft.Application/Services/`
   - Anonimiza dados pessoais (nome, email, telefone, CPF, endereço)
   - Usa Value Objects com validação automática
   - Mantém dados clínicos conforme CFM Resolução 1.821/2007 (20 anos)
-  - Gera CPF válido mas aleatório
+  - Gera CPF sintaticamente válido mas não-real (para fins de anonimização)
   - Logging completo do processo
 - ✅ `GetPendingRequestsAsync()` - Lista requisições pendentes
 - ✅ `GetPatientRequestsAsync()` - Lista requisições do paciente
@@ -244,7 +244,7 @@ Implementa LGPD Art. 37 - Registro automático de operações de tratamento de d
 
 **Melhorias de Segurança:**
 - ✅ Loga tentativas de acesso não autenticado (não ignora)
-- ✅ Severidade WARNING para acessos não autorizados
+- ✅ Severidade apropriada ao contexto (WARNING para acessos não autorizados, CRITICAL para dados sensíveis de saúde)
 - ✅ Classificação automática de categoria de dados
 - ✅ Identificação automática de finalidade LGPD
 
@@ -361,8 +361,8 @@ Localizados em: `src/MedicSoft.Application/DTOs/`
 ### 🔧 Arquivos Criados/Modificados na Fase 2
 
 #### Arquivos Criados (2)
-1. `src/MedicSoft.Api/Middleware/LgpdAuditMiddleware.cs` (362 linhas)
-2. `LGPD_COMPLIANCE_GUIDE.md` (11.820 caracteres)
+1. `src/MedicSoft.Api/Middleware/LgpdAuditMiddleware.cs` (~360 linhas)
+2. `LGPD_COMPLIANCE_GUIDE.md` (~12 KB)
 
 #### Arquivos Modificados (4)
 1. `src/MedicSoft.Application/Services/DataPortabilityService.cs`
