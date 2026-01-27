@@ -21,7 +21,7 @@
           <input matInput formControlName="numeroSenha" 
                  placeholder="Ex: A001, P042" 
                  autocomplete="off"
-                 (input)="form.patchValue({numeroSenha: $any($event.target).value.toUpperCase()})">
+                 (input)="onSenhaInput($event)">
         </mat-form-field>
 
         <div class="button-group">

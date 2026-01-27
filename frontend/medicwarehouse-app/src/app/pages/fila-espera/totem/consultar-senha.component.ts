@@ -148,4 +148,10 @@ export class ConsultarSenhaComponent implements OnInit {
     this.resultado.set(null);
     this.form.reset();
   }
+
+  onSenhaInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toUpperCase();
+    this.form.patchValue({ numeroSenha: value });
+  }
 }

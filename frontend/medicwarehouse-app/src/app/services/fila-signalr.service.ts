@@ -11,6 +11,10 @@ export class FilaSignalRService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 5000;
+  
+  // Constants for retry configuration
+  private readonly RETRY_DELAY_THRESHOLD_MS = 60000; // 60 seconds
+  private readonly MAX_RETRY_DELAY_MS = 10000; // 10 seconds
 
   // Signals for state management
   public isConnected = signal<boolean>(false);
@@ -52,8 +56,8 @@ export class FilaSignalRService {
         })
         .withAutomaticReconnect({
           nextRetryDelayInMilliseconds: (retryContext) => {
-            if (retryContext.elapsedMilliseconds < 60000) {
-              return Math.random() * 10000;
+            if (retryContext.elapsedMilliseconds < this.RETRY_DELAY_THRESHOLD_MS) {
+              return Math.random() * this.MAX_RETRY_DELAY_MS;
             } else {
               return null;
             }
@@ -214,53 +218,5 @@ export class FilaSignalRService {
    */
   getConnectionState(): signalR.HubConnectionState {
     return this.hubConnection?.state || signalR.HubConnectionState.Disconnected;
-  }
-
-  /**
-   * Subscribe to nova senha events
-   */
-  onNovaSenha(callback: (event: NovaSenhaEvent) => void): void {
-    effect(() => {
-      const event = this.novaSenhaEvent();
-      if (event) {
-        callback(event);
-      }
-    });
-  }
-
-  /**
-   * Subscribe to chamar senha events
-   */
-  onChamarSenha(callback: (event: ChamarSenhaEvent) => void): void {
-    effect(() => {
-      const event = this.chamarSenhaEvent();
-      if (event) {
-        callback(event);
-      }
-    });
-  }
-
-  /**
-   * Subscribe to senha em atendimento events
-   */
-  onSenhaEmAtendimento(callback: (senhaId: string) => void): void {
-    effect(() => {
-      const senhaId = this.senhaEmAtendimentoEvent();
-      if (senhaId) {
-        callback(senhaId);
-      }
-    });
-  }
-
-  /**
-   * Subscribe to senha finalizada events
-   */
-  onSenhaFinalizada(callback: (senhaId: string) => void): void {
-    effect(() => {
-      const senhaId = this.senhaFinalizadaEvent();
-      if (senhaId) {
-        callback(senhaId);
-      }
-    });
   }
 }

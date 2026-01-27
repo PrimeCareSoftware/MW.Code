@@ -137,16 +137,18 @@ export class GerarSenhaComponent implements OnInit, OnDestroy {
     }
   }
 
-  formatCpf(event: any): void {
-    let value = event.target.value.replace(/\D/g, '');
+  formatCpf(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
     if (value.length > 11) {
       value = value.substring(0, 11);
     }
     this.form.patchValue({ cpf: value });
   }
 
-  formatTelefone(event: any): void {
-    let value = event.target.value.replace(/\D/g, '');
+  formatTelefone(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
     if (value.length > 11) {
       value = value.substring(0, 11);
     }

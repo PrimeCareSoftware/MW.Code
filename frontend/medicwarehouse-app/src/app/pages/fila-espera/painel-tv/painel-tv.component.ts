@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { firstValueFrom } from 'rxjs';
 import { FilaEsperaService } from '../../../services/fila-espera.service';
 import { FilaSignalRService } from '../../../services/fila-signalr.service';
 import { SenhaFila, ChamarSenhaEvent, PrioridadeAtendimento } from '../../../models/fila-espera.model';
@@ -111,7 +112,7 @@ export class PainelTvComponent implements OnInit, OnDestroy {
 
   async loadFilaStatus(): Promise<void> {
     try {
-      const senhas = await this.filaService.getSenhasAguardando(this.filaId()).toPromise();
+      const senhas = await firstValueFrom(this.filaService.getSenhasAguardando(this.filaId()));
       this.senhasAguardando.set(senhas || []);
     } catch (error) {
       console.error('Error loading fila status', error);
@@ -120,7 +121,7 @@ export class PainelTvComponent implements OnInit, OnDestroy {
 
   async loadUltimasChamadas(): Promise<void> {
     try {
-      const chamadas = await this.filaService.getUltimasChamadas(this.filaId(), 5).toPromise();
+      const chamadas = await firstValueFrom(this.filaService.getUltimasChamadas(this.filaId(), 5));
       const events: ChamarSenhaEvent[] = (chamadas || []).map(senha => ({
         senha: senha.numeroSenha,
         paciente: senha.nomePaciente,
@@ -135,7 +136,7 @@ export class PainelTvComponent implements OnInit, OnDestroy {
 
   async loadTempoMedio(): Promise<void> {
     try {
-      const tempo = await this.filaService.getTempoMedioEspera(this.filaId()).toPromise();
+      const tempo = await firstValueFrom(this.filaService.getTempoMedioEspera(this.filaId()));
       this.tempoMedioEspera.set(tempo || 0);
     } catch (error) {
       console.error('Error loading tempo medio', error);
@@ -205,7 +206,8 @@ export class PainelTvComponent implements OnInit, OnDestroy {
   reproduzirSom(): void {
     try {
       // Use Web Audio API to generate a beep sound
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextConstructor = window.AudioContext || (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const audioContext = new AudioContextConstructor();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 
