@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using MedicSoft.CrossCutting.Security;
+using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Configurations;
 using MedicSoft.Repository.Extensions;

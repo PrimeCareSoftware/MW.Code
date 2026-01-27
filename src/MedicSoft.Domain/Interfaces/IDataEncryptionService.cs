@@ -1,4 +1,4 @@
-namespace MedicSoft.CrossCutting.Security
+namespace MedicSoft.Domain.Interfaces
 {
     /// <summary>
     /// Interface for encrypting and decrypting sensitive medical data.
