@@ -1,5 +1,7 @@
 using System.Text;
 using System.Threading.RateLimiting;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -425,6 +427,22 @@ builder.Services.AddScoped<ISubscriptionService>(provider =>
 builder.Services.AddScoped<MedicSoft.Analytics.Services.IConsolidacaoDadosService, MedicSoft.Analytics.Services.ConsolidacaoDadosService>();
 builder.Services.AddScoped<MedicSoft.Analytics.Services.IDashboardClinicoService, MedicSoft.Analytics.Services.DashboardClinicoService>();
 builder.Services.AddScoped<MedicSoft.Analytics.Services.IDashboardFinanceiroService, MedicSoft.Analytics.Services.DashboardFinanceiroService>();
+builder.Services.AddScoped<MedicSoft.Analytics.Jobs.ConsolidacaoDiariaJob>();
+
+// Configure Hangfire for background jobs
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(options => 
+        options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+// Add Hangfire server
+builder.Services.AddHangfireServer(options =>
+{
+    options.WorkerCount = 2; // Number of concurrent job processing workers
+    options.SchedulePollingInterval = TimeSpan.FromMinutes(1);
+});
 
 // Register cross-cutting services (includes security services)
 builder.Services.AddMedicSoftCrossCutting();
@@ -500,6 +518,16 @@ app.UseTenantResolution();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Hangfire Dashboard (only in Development or with proper authentication)
+if (app.Environment.IsDevelopment())
+{
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[] { new HangfireAuthorizationFilter() },
+        DashboardTitle = "PrimeCare - Background Jobs"
+    });
+}
+
 // LGPD Audit Middleware - Logs all sensitive data operations (LGPD Art. 37)
 app.UseMiddleware<LgpdAuditMiddleware>();
 
@@ -546,6 +574,28 @@ using (var scope = app.Services.CreateScope())
         Log.Fatal(ex, "Falha ao aplicar migrações do banco de dados: {Message}", ex.Message);
         Console.WriteLine($"Database migration failed: {ex.Message}");
     }
+}
+
+// Configure Hangfire recurring jobs
+try
+{
+    Log.Information("Configurando jobs recorrentes do Hangfire...");
+    
+    // Schedule daily data consolidation job at 00:00 UTC
+    RecurringJob.AddOrUpdate<MedicSoft.Analytics.Jobs.ConsolidacaoDiariaJob>(
+        "consolidacao-diaria",
+        job => job.ExecutarConsolidacaoDiariaAsync(),
+        Cron.Daily(0, 0), // Every day at 00:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    Log.Information("Jobs recorrentes do Hangfire configurados com sucesso");
+}
+catch (Exception ex)
+{
+    Log.Error(ex, "Erro ao configurar jobs recorrentes do Hangfire: {Message}", ex.Message);
 }
 
     Log.Information("PrimeCare Software API iniciada com sucesso");
