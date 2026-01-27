@@ -1362,10 +1362,10 @@ public class SOAPMedicalRecord
 3. Documentação
 
 #### Entregáveis
-- [x] Prontuário estruturado SOAP (100% completo)
-- [x] Templates por especialidade (implementado)
-- [x] Validações e campos obrigatórios (implementado)
-- [ ] Migração de prontuários antigos (não implementado - mantém coexistência)
+- [x] Prontuário estruturado SOAP (✅ 100% completo)
+- [x] Templates por especialidade (✅ implementado)
+- [x] Validações e campos obrigatórios (✅ implementado)
+- [ ] Migração de prontuários antigos (pendente - mantém coexistência)
 
 #### Critérios de Sucesso
 - 100% dos novos prontuários em formato SOAP
@@ -1422,7 +1422,7 @@ public class SOAPMedicalRecord
 **13.5 - Refresh Token Pattern** 🚧 PENDENTE
 - Esforço: 2 semanas
 - Access token curto (15 min)
-- Refresh token longo (7-30 dias)
+- Refresh token longo (7 dias)
 - Rotação de tokens
 - Revogação granular
 - **Status:** Próxima implementação
