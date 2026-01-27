@@ -385,6 +385,12 @@ builder.Services.AddScoped<ITissXmlValidatorService, TissXmlValidatorService>();
 builder.Services.AddScoped<ITussImportService, TussImportService>();
 builder.Services.AddScoped<ITissAnalyticsService, TissAnalyticsService>();
 
+// TISS Phase 2 Services - Glosas, Recursos and Notifications
+builder.Services.AddScoped<ITissOperadoraConfigService, TissOperadoraConfigService>();
+builder.Services.AddScoped<ITissGlosaService, TissGlosaService>();
+builder.Services.AddScoped<ITissRecursoGlosaService, TissRecursoGlosaService>();
+builder.Services.AddScoped<ITissNotificationService, TissNotificationService>();
+
 // LGPD Audit System
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
