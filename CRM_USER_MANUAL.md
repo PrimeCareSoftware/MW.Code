@@ -1,526 +1,359 @@
-# 📖 Manual do Usuário - CRM Avançado PrimeCare
+# 📚 Manual do Usuário - Sistema CRM Avançado
 
-## Bem-vindo ao CRM Avançado
-
-O CRM Avançado do PrimeCare é uma solução completa para gerenciamento do relacionamento com pacientes, permitindo:
-- Acompanhar a jornada completa do paciente
-- Automatizar comunicações personalizadas
-- Coletar feedback através de pesquisas NPS/CSAT
-- Gerenciar reclamações via ouvidoria
-- Prever riscos de perda de pacientes (churn)
-- Analisar sentimentos em feedbacks
+**Versão:** 2.0  
+**Data:** 27 de Janeiro de 2026  
+**Sistema:** MedicSoft CRM - Customer Relationship Management
 
 ---
 
-## 📊 Patient Journey - Jornada do Paciente
+## 📋 Índice
+
+1. [Introdução](#introdução)
+2. [Jornada do Paciente](#jornada-do-paciente)
+3. [Automações de Marketing](#automações-de-marketing)
+4. [Pesquisas NPS/CSAT](#pesquisas-npscsat)
+5. [Ouvidoria](#ouvidoria)
+6. [Análise de Sentimento](#análise-de-sentimento)
+7. [Predição de Churn](#predição-de-churn)
+8. [APIs Disponíveis](#apis-disponíveis)
+9. [Background Jobs](#background-jobs)
+10. [Melhores Práticas](#melhores-práticas)
+
+---
+
+## 🎯 Introdução
+
+O Sistema CRM Avançado do MedicSoft é uma plataforma completa para gerenciamento do relacionamento com pacientes, oferecendo:
+
+- **Mapeamento da Jornada do Paciente**: Rastreamento de todas as interações
+- **Automação de Marketing**: Campanhas personalizadas e automatizadas
+- **Pesquisas de Satisfação**: NPS e CSAT automáticos
+- **Ouvidoria**: Gestão de reclamações e SLA
+- **Análise de Sentimento**: IA para identificar insatisfação
+- **Predição de Churn**: Identificação de pacientes em risco
+
+### Status de Implementação
+
+✅ **Backend Completo**: Todos os serviços, APIs e jobs implementados  
+✅ **Background Jobs**: 4 jobs Hangfire rodando automaticamente  
+✅ **Testes**: 23 testes unitários criados  
+🔄 **Frontend**: Pendente de implementação  
+
+Para detalhes técnicos, consulte: [CRM_IMPLEMENTATION_STATUS.md](/CRM_IMPLEMENTATION_STATUS.md)
+
+---
+
+## 🗺️ Jornada do Paciente
 
 ### O que é?
-O sistema mapeia automaticamente a jornada de cada paciente através de 7 estágios:
 
-1. **🔍 Descoberta** - Paciente conhece sua clínica (marketing, indicação)
-2. **🤔 Consideração** - Paciente avalia opções e compara
-3. **👨‍⚕️ Primeira Consulta** - Primeiro atendimento
-4. **💊 Tratamento** - Durante o tratamento
-5. **🔄 Retorno** - Consultas de acompanhamento
-6. **❤️ Fidelização** - Paciente recorrente, satisfeito
-7. **🏆 Advocacia** - Paciente promotor, recomenda a clínica
+A jornada do paciente mapeia todos os estágios pelos quais um paciente passa, desde o primeiro contato até se tornar um promotor da marca.
 
-### Como visualizar a jornada?
+### Estágios da Jornada
 
-1. Acesse o menu **CRM** > **Jornada do Paciente**
-2. Busque ou selecione um paciente
-3. Visualize a linha do tempo com:
-   - Estágios percorridos
-   - Tempo em cada estágio
-   - Pontos de contato (touchpoints)
-   - Métricas importantes
+1. **Descoberta**: Primeiro contato com a clínica
+2. **Consideração**: Avaliando opções de tratamento
+3. **Primeira Consulta**: Primeiro atendimento médico
+4. **Tratamento**: Durante procedimentos/tratamentos
+5. **Retorno**: Consultas de acompanhamento
+6. **Fidelização**: Cliente recorrente
+7. **Advocacia**: Promotor ativo da marca
 
-### Métricas da Jornada
+### Como Usar
 
-**Total de Touchpoints**: Número total de interações registradas
+#### Buscar Jornada do Paciente
+```http
+GET /api/crm/journey/{patientId}
+```
 
-**Lifetime Value (LTV)**: Valor total gerado pelo paciente
+#### Avançar para Próximo Estágio
+```http
+POST /api/crm/journey/{patientId}/advance
+Content-Type: application/json
 
-**NPS Score**: Net Promoter Score (0-10)
+{
+  "newStage": "PrimeiraConsulta",
+  "trigger": "Agendamento de consulta realizado"
+}
+```
 
-**Risco de Churn**: 
-- 🟢 Low (Baixo)
-- 🟡 Medium (Médio)
-- 🟠 High (Alto)
-- 🔴 Critical (Crítico)
+#### Registrar Interação (Touchpoint)
+```http
+POST /api/crm/journey/{patientId}/touchpoint
+Content-Type: application/json
 
-### Registrar Touchpoints Manualmente
+{
+  "type": "EmailInteraction",
+  "channel": "Email",
+  "description": "Email de confirmação enviado",
+  "direction": "Outbound"
+}
+```
 
-Quando necessário, você pode registrar interações manualmente:
-
-1. Na tela da jornada, clique em **+ Novo Touchpoint**
-2. Selecione o tipo:
-   - Ligação telefônica
-   - Email
-   - SMS
-   - WhatsApp
-   - Visita ao site
-   - Interação presencial
-3. Adicione descrição
-4. Indique a direção (Iniciado por você ou pelo paciente)
-5. Salve
+Para mais detalhes, veja: [CRM_API_DOCUMENTATION.md](/CRM_API_DOCUMENTATION.md)
 
 ---
 
-## 🤖 Automação de Marketing
+## 🤖 Automações de Marketing
 
-### O que é?
-Sistema que envia automaticamente emails, SMS ou mensagens WhatsApp baseado em gatilhos específicos.
+Sistema para criar campanhas automatizadas baseadas em eventos ou estágios da jornada.
 
-### Criar uma Automação
+### Criar Automação
 
-1. Acesse **CRM** > **Automações de Marketing**
-2. Clique em **+ Nova Automação**
-3. Preencha:
-   - **Nome**: Ex: "Boas-vindas Novo Paciente"
-   - **Descrição**: Objetivo da automação
-   - **Gatilho**: O que dispara a automação
+```http
+POST /api/crm/automation
+Content-Type: application/json
 
-### Tipos de Gatilhos
+{
+  "name": "Welcome Email - Novos Pacientes",
+  "description": "Email de boas-vindas automático",
+  "triggerType": "JourneyStageChanged",
+  "triggerStage": "PrimeiraConsulta",
+  "actions": [
+    {
+      "type": "SendEmail",
+      "emailTemplateId": "...",
+      "delayMinutes": 60
+    }
+  ]
+}
+```
 
-**Mudança de Estágio**
-- Quando paciente entra em um estágio específico
-- Ex: Ao entrar em "Primeira Consulta"
+### Tipos de Ação
 
-**Evento Específico**
-- Consulta agendada
-- Consulta realizada
-- Paciente não compareceu (no-show)
-- Aniversário
+- SendEmail, SendSMS, SendWhatsApp
+- AddTag, RemoveTag
+- ChangeScore
 
-**Agendado**
-- Data/hora específica
-- Ex: Toda segunda-feira às 9h
+### Variáveis de Personalização
 
-**Comportamental**
-- Baseado em ações do paciente
-- Ex: Não retorna há 30 dias
-
-### Adicionar Ações
-
-Após configurar o gatilho, adicione ações:
-
-1. Clique em **+ Adicionar Ação**
-2. Escolha o tipo:
-   - **Enviar Email**: Use um template
-   - **Enviar SMS**: Texto curto
-   - **Enviar WhatsApp**: Mensagem personalizada
-   - **Adicionar Tag**: Para segmentação
-   - **Criar Tarefa**: Para equipe
-
-3. Configure detalhes da ação
-4. Defina ordem (se múltiplas ações)
-
-### Templates de Email
-
-Para criar templates:
-
-1. Acesse **CRM** > **Templates de Email**
-2. Clique em **+ Novo Template**
-3. Preencha:
-   - Nome do template
-   - Assunto
-   - Corpo HTML
-   - Corpo texto simples
-
-**Variáveis Disponíveis**:
-- `{{nome_paciente}}` - Nome do paciente
-- `{{data_consulta}}` - Data da próxima consulta
-- `{{nome_clinica}}` - Nome da clínica
-- `{{telefone_clinica}}` - Telefone para contato
-
-### Ativar/Desativar Automações
-
-- Use o botão toggle para ativar/desativar
-- Automações desativadas não serão executadas
-- Histórico de execuções é mantido
-
-### Métricas de Automação
-
-- **Vezes Executada**: Quantas vezes foi disparada
-- **Taxa de Sucesso**: Percentual de envios bem-sucedidos
-- **Última Execução**: Data/hora da última execução
+- `{{patientName}}`, `{{clinicName}}`, `{{doctorName}}`
+- `{{appointmentDate}}`, `{{appointmentTime}}`
 
 ---
 
-## 📋 Pesquisas NPS/CSAT
+## 📊 Pesquisas NPS/CSAT
 
-### O que são?
+### Tipos de Pesquisa
 
 **NPS (Net Promoter Score)**
-- Mede lealdade do paciente
-- Escala de 0 a 10
-- Pergunta: "Quanto você recomendaria nossa clínica?"
+- Escala 0-10
+- Fórmula: (% Promotores - % Detratores)
+- Enviado 2 dias após consulta
 
 **CSAT (Customer Satisfaction)**
-- Mede satisfação geral
-- Escala de 1 a 5 estrelas
-- Pergunta: "Quão satisfeito você está?"
+- Escala 1-5 estrelas
+- Para avaliar serviços específicos
 
-### Criar uma Pesquisa
+### Criar e Enviar
 
-1. Acesse **CRM** > **Pesquisas**
-2. Clique em **+ Nova Pesquisa**
-3. Escolha o tipo (NPS, CSAT ou Customizada)
-4. Configure:
-   - Nome da pesquisa
-   - Descrição
-   - Quando enviar (gatilho)
-   - Delay (atraso após evento)
+```http
+POST /api/crm/survey
+POST /api/crm/survey/{id}/activate
+POST /api/crm/survey/{id}/send/{patientId}
+```
 
-### Adicionar Questões
+### Analytics
 
-1. Clique em **+ Nova Questão**
-2. Tipos disponíveis:
-   - **Escala Numérica**: 0-10
-   - **Avaliação Estrelas**: 1-5
-   - **Múltipla Escolha**: Opções predefinidas
-   - **Texto Livre**: Resposta aberta
-   - **Sim/Não**: Binária
+```http
+GET /api/crm/survey/{id}/analytics
+```
 
-3. Marque se é obrigatória
-4. Defina ordem de exibição
-
-### Configurar Envio Automático
-
-1. Selecione o **Gatilho**:
-   - Após estágio específico
-   - Após evento (consulta realizada)
-   
-2. Defina **Delay**:
-   - Ex: 24 horas após consulta
-   - Ex: 1 hora após agendamento
-
-3. Ative a pesquisa
-
-### Visualizar Resultados
-
-1. Acesse a pesquisa
-2. Veja métricas:
-   - **Score Médio**: Média das respostas
-   - **Total de Respostas**: Quantidade recebida
-   - **Taxa de Resposta**: Percentual de quem respondeu
-
-3. Gráficos disponíveis:
-   - Distribuição de respostas
-   - Evolução temporal
-   - Análise de texto livre
-
-### Interpretação NPS
-
-- **Promotores (9-10)**: Clientes leais, recomendarão
-- **Neutros (7-8)**: Satisfeitos, mas não entusiasmados
-- **Detratores (0-6)**: Insatisfeitos, risco de churn
-
-**Cálculo NPS**: % Promotores - % Detratores
-
-- NPS > 50: Excelente
-- NPS 30-50: Bom
-- NPS 0-30: Razoável
-- NPS < 0: Crítico
+Retorna NPS score, distribuição de respostas, e comentários.
 
 ---
 
-## 🎯 Ouvidoria - Gestão de Reclamações
+## 📞 Ouvidoria
 
-### O que é?
-Sistema para registrar, acompanhar e resolver reclamações e feedbacks de pacientes.
+Sistema de gestão de reclamações com protocolo e SLA.
 
-### Registrar uma Reclamação
+### Criar Reclamação
 
-1. Acesse **CRM** > **Ouvidoria**
-2. Clique em **+ Nova Reclamação**
-3. Preencha:
-   - **Paciente**: Busque o paciente
-   - **Assunto**: Título resumido
-   - **Descrição**: Detalhes da reclamação
-   - **Categoria**: Tipo de reclamação
-   - **Prioridade**: Urgência
+```http
+POST /api/crm/complaint
+Content-Type: application/json
 
-### Categorias de Reclamação
+{
+  "patientId": "...",
+  "subject": "Demora no atendimento",
+  "description": "Detalhes...",
+  "category": "Atendimento",
+  "priority": "Medium"
+}
+```
 
-- **Atendimento**: Qualidade do atendimento
-- **Agendamento**: Problemas com marcação
-- **Faturamento**: Questões financeiras
-- **Instalações**: Estrutura física
-- **Profissional**: Relacionado ao médico/equipe
-- **Tempo de Espera**: Demora no atendimento
-- **Tratamento Médico**: Aspectos clínicos
-- **Outro**: Outras categorias
+### Protocolo
 
-### Status da Reclamação
+Formato: `CMP-2026-000123`
 
-- **Recebida**: Aguardando triagem
-- **Em Análise**: Sendo investigada
-- **Em Andamento**: Sendo resolvida
-- **Aguardando Resposta**: Esperando paciente
-- **Resolvida**: Problema solucionado
-- **Fechada**: Concluída
-- **Cancelada**: Desconsiderada
+Buscar por protocolo:
+```http
+GET /api/crm/complaint/protocol/{protocolNumber}
+```
 
-### Atribuir Reclamação
+### Dashboard SLA
 
-1. Abra a reclamação
-2. Clique em **Atribuir a**
-3. Selecione o responsável
-4. A pessoa será notificada
+```http
+GET /api/crm/complaint/dashboard
+```
 
-### Adicionar Interações
-
-Para registrar ações tomadas:
-
-1. Na reclamação, clique em **+ Nova Interação**
-2. Digite a mensagem
-3. Marque se é **Interna** (não visível ao paciente)
-4. Salve
-
-### SLA (Service Level Agreement)
-
-O sistema rastreia automaticamente:
-- **Tempo de Primeira Resposta**: Quanto tempo até primeira ação
-- **Tempo de Resolução**: Quanto tempo até resolver
-
-### Encerrar Reclamação
-
-1. Resolva o problema
-2. Atualize status para **Resolvida**
-3. Sistema enviará pesquisa de satisfação ao paciente
-4. Após feedback, mude para **Fechada**
-
-### Portal do Paciente
-
-Pacientes podem:
-- Abrir reclamações online
-- Acompanhar pelo número de protocolo
-- Receber atualizações por email
-- Avaliar a resolução
+Métricas:
+- Total de reclamações
+- SLA médio de resposta
+- SLA médio de resolução
+- Distribuição por categoria
 
 ---
 
-## 📊 Dashboard de Analytics
+## 🧠 Análise de Sentimento
 
-### Métricas Principais
+Análise automática de comentários para identificar insatisfação.
 
-**Visão Geral**
-- Total de pacientes ativos
-- Novos pacientes (mês)
-- Taxa de retenção
-- Taxa de churn
-- NPS médio
+### Como Funciona
 
-**Jornada**
-- Distribuição por estágio
-- Tempo médio por estágio
-- Touchpoints por estágio
-- Taxa de progressão
+1. **Análise Automática**: Jobs em background analisam comentários
+2. **Classificação**: Positivo, Neutro ou Negativo
+3. **Alertas**: Sentimentos negativos geram alertas
+4. **Tópicos**: Extração de tópicos (Atendimento, Médico, etc.)
 
-**Satisfação**
-- NPS Score
-- CSAT Score
-- Taxa de resposta
-- Evolução temporal
+### Fontes Analisadas
 
-**Ouvidoria**
-- Reclamações abertas
-- Tempo médio de resposta
-- Tempo médio de resolução
-- Taxa de resolução
-- Satisfação com resolução
-
-**Risco de Churn**
-- Pacientes por nível de risco
-- Principais fatores de risco
-- Ações recomendadas
-
-### Filtros Disponíveis
-
-- Período: Última semana, mês, trimestre, ano
-- Clínica/Unidade
-- Profissional
-- Categoria
-- Status
-
-### Exportar Relatórios
-
-1. Configure filtros desejados
-2. Clique em **Exportar**
-3. Escolha formato (PDF, Excel, CSV)
-
----
-
-## 🤖 Análise de Sentimento com IA
-
-### O que é?
-Sistema que usa Inteligência Artificial para analisar automaticamente o sentimento em textos de:
 - Comentários de pesquisas
-- Reclamações
-- Emails
-- Mensagens
+- Descrições de reclamações
+- Interações da ouvidoria
 
-### Como Funciona?
+### Background Job
 
-O sistema analisa automaticamente e classifica como:
-- **😊 Positivo**: Cliente satisfeito
-- **😐 Neutro**: Sem emoção forte
-- **😞 Negativo**: Cliente insatisfeito
-- **🤔 Misto**: Sentimentos mistos
-
-### Scores de Sentimento
-
-- **Score Positivo**: 0-100% de positividade
-- **Score Negativo**: 0-100% de negatividade
-- **Confiança**: Quão certo o sistema está
-
-### Tópicos Extraídos
-
-O sistema identifica automaticamente:
-- Temas principais mencionados
-- Aspectos específicos (atendimento, limpeza, etc)
-- Palavras-chave relevantes
-
-### Alertas Automáticos
-
-Quando detecta sentimento muito negativo:
-- Notifica gestor responsável
-- Destaca para ação imediata
-- Sugere priorização
+**SentimentAnalysisJob** roda a cada hora analisando:
+- Comentários não processados
+- Gerando alertas para negativos
+- Calculando tendências
 
 ---
 
-## 🎯 Predição de Churn
+## 📉 Predição de Churn
 
-### O que é?
-Sistema de Machine Learning que prediz quais pacientes têm risco de abandonar a clínica.
+Identificação de pacientes em risco de abandono.
 
 ### Níveis de Risco
 
-- **🟢 Baixo**: Paciente engajado, baixa probabilidade de churn
-- **🟡 Médio**: Atenção necessária
-- **🟠 Alto**: Risco significativo, ação urgente
-- **🔴 Crítico**: Altíssimo risco, intervenção imediata
+- **Low**: Paciente engajado
+- **Medium**: Requer atenção
+- **High**: Ação necessária
+- **Critical**: Intervenção urgente
 
-### Fatores de Risco
+### Fatores Analisados
 
-O sistema analisa:
-- Tempo desde última visita
-- Frequência de consultas
-- Histórico de cancelamentos
-- No-shows
-- Scores de satisfação
-- Reclamações registradas
-- Valor gasto (LTV)
-- Engajamento com comunicações
+1. Dias desde última visita
+2. Taxa de no-show
+3. NPS score
+4. Número de reclamações
+5. Histórico de pagamento
+6. Engajamento
 
-### Ações Recomendadas
+### Usar API
 
-Para cada paciente em risco, o sistema sugere:
-- Entrar em contato via telefone/WhatsApp
-- Oferecer desconto na próxima consulta
-- Agendar consulta de retorno
-- Resolver reclamação pendente
-- Enviar pesquisa de satisfação
+```http
+GET /api/crm/churn/predict/{patientId}
+GET /api/crm/churn/high-risk
+```
 
-### Como Usar?
+### Background Job
 
-1. Acesse **CRM** > **Risco de Churn**
-2. Veja lista de pacientes em risco
-3. Filtre por nível de risco
-4. Clique em paciente para ver detalhes
-5. Execute ações recomendadas
-6. Registre ações tomadas
+**ChurnPredictionJob** roda semanalmente:
+- Predição em lote para todos pacientes
+- Notificação de alto risco
+- Análise de efetividade de retenção
 
-### Monitoramento
+---
 
-- Sistema atualiza predições semanalmente
-- Notificações automáticas para novos riscos
-- Histórico de predições mantido
-- Efetividade das ações rastreada
+## 🔌 APIs Disponíveis
+
+### Resumo de Endpoints
+
+| Módulo | Endpoints |
+|--------|-----------|
+| Patient Journey | 6 endpoints |
+| Marketing Automation | 10 endpoints |
+| Survey | 12 endpoints |
+| Complaint | 13 endpoints |
+
+**Total**: 41 endpoints REST
+
+Documentação completa: [CRM_API_DOCUMENTATION.md](/CRM_API_DOCUMENTATION.md)
+
+---
+
+## ⚙️ Background Jobs
+
+### Jobs Ativos (Hangfire)
+
+| Job | Frequência | Descrição |
+|-----|------------|-----------|
+| AutomationExecutorJob | A cada hora | Executa automações ativas |
+| SurveyTriggerJob | Diário às 10:00 UTC | Dispara pesquisas |
+| ChurnPredictionJob | Semanal Domingos 03:00 | Predição de churn |
+| SentimentAnalysisJob | A cada hora | Análise de sentimento |
+
+### Dashboard
+
+Acesse: `/hangfire`
+
+Funcionalidades:
+- Ver jobs em execução
+- Histórico de execuções
+- Disparar jobs manualmente
+- Monitorar falhas
 
 ---
 
 ## 💡 Melhores Práticas
 
 ### Jornada do Paciente
-- ✅ Registre todos os touchpoints importantes
-- ✅ Mantenha dados atualizados
-- ✅ Revise jornadas de pacientes-chave regularmente
-- ✅ Use insights para melhorar processos
+
+✅ Registre todas interações  
+✅ Atualize estágios em tempo real  
+✅ Use triggers consistentes  
 
 ### Automações
-- ✅ Teste antes de ativar
-- ✅ Personalize mensagens
-- ✅ Não exagere na frequência
-- ✅ Monitore taxas de abertura/resposta
-- ✅ Ajuste com base em resultados
+
+✅ Teste antes de ativar  
+✅ Use variáveis para personalização  
+✅ Monitore métricas regularmente  
 
 ### Pesquisas
-- ✅ Mantenha pesquisas curtas (2-5 questões)
-- ✅ Envie no momento certo (não imediato)
-- ✅ Agradeça por respostas
-- ✅ Aja baseado em feedback recebido
-- ✅ Feche o loop com pacientes
+
+✅ Envie no momento certo (2 dias pós-consulta para NPS)  
+✅ Mantenha pesquisas curtas (3-5 questões)  
+✅ Aja rapidamente em feedback negativo  
 
 ### Ouvidoria
-- ✅ Responda rapidamente (< 24h)
-- ✅ Seja empático e profissional
-- ✅ Mantenha paciente informado
-- ✅ Resolva definitivamente
-- ✅ Aprenda com reclamações
 
-### Gestão de Churn
-- ✅ Aja preventivamente
-- ✅ Priorize riscos altos/críticos
-- ✅ Personalize abordagem
-- ✅ Documente ações tomadas
-- ✅ Acompanhe resultados
+✅ Meta de primeira resposta: 24h  
+✅ Documente todas interações  
+✅ Confirme resolução com paciente  
+
+### Churn
+
+✅ Ação preventiva em risco médio  
+✅ Personalize abordagem por fator de risco  
+✅ Meça efetividade das ações  
 
 ---
 
-## ❓ Perguntas Frequentes (FAQ)
+## 📞 Suporte e Recursos
 
-**Q: Como sei qual estágio atribuir a um paciente?**
-A: O sistema avança automaticamente baseado em eventos. Você pode ajustar manualmente se necessário.
+**Documentação Adicional:**
+- [CRM_IMPLEMENTATION_STATUS.md](/CRM_IMPLEMENTATION_STATUS.md) - Status técnico
+- [CRM_API_DOCUMENTATION.md](/CRM_API_DOCUMENTATION.md) - Referência de API
+- [CRM_IMPLEMENTATION_GUIDE.md](/CRM_IMPLEMENTATION_GUIDE.md) - Guia de implementação
 
-**Q: Posso editar uma automação ativa?**
-A: Sim, mas desative primeiro, faça alterações e reative.
-
-**Q: Pesquisas são anônimas?**
-A: Não, são associadas ao paciente para rastreamento, mas podem ser configuradas como anônimas.
-
-**Q: Como o NPS é calculado?**
-A: NPS = % Promotores (9-10) - % Detratores (0-6)
-
-**Q: Reclamações são visíveis para o paciente?**
-A: Pacientes veem suas próprias reclamações e respostas não-internas.
-
-**Q: A análise de sentimento funciona em português?**
-A: Sim, usando Azure Cognitive Services com suporte a português.
-
-**Q: Com que frequência o churn é recalculado?**
-A: Semanalmente, mas você pode solicitar recálculo manual.
-
-**Q: Posso exportar dados?**
-A: Sim, todos os relatórios podem ser exportados em PDF, Excel ou CSV.
+**Recursos do Sistema:**
+- Swagger UI: `/swagger`
+- Hangfire Dashboard: `/hangfire`
+- Health Check: `/health`
 
 ---
 
-## 📞 Suporte
-
-Para dúvidas ou problemas:
-- **Email**: suporte@primecare.com.br
-- **Telefone**: (11) 1234-5678
-- **Chat**: Disponível no sistema
-- **Documentação**: docs.primecare.com.br
-
----
-
-## 🔄 Atualizações
-
-Este manual é atualizado regularmente. Versão: 1.0 (Janeiro 2026)
-
-Para ver novidades e mudanças recentes, consulte o [CHANGELOG](./CHANGELOG.md).
+**Versão 2.0 - Atualizado em 27/01/2026**  
+**© 2026 MedicSoft - Todos os direitos reservados**
