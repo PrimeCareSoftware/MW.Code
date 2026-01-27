@@ -138,8 +138,9 @@ namespace MedicSoft.ML.Services
 
             var previsao = predictionEngine.Predict(dados);
             
-            // Return probability of NOT showing (1 - probability of showing)
-            return previsao.VaiComparecer ? 1 - previsao.Probability : previsao.Probability;
+            // Probability represents confidence that patient will attend (VaiComparecer)
+            // So no-show risk = 1 - probability of attending
+            return 1 - previsao.Probability;
         }
 
         /// <summary>
@@ -193,7 +194,9 @@ namespace MedicSoft.ML.Services
             foreach (var agendamento in agendamentos)
             {
                 var previsao = predictionEngine.Predict(agendamento);
-                var risco = previsao.VaiComparecer ? 1 - previsao.Probability : previsao.Probability;
+                // Probability represents confidence that patient will attend
+                // So no-show risk = 1 - probability of attending
+                var risco = 1 - previsao.Probability;
 
                 if (risco > threshold)
                 {
