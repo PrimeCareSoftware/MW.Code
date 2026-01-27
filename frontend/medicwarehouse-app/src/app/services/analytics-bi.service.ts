@@ -82,15 +82,4 @@ export class AnalyticsBIService {
       .set('fim', fim);
     return this.http.post<any>(`${this.apiUrl}/consolidar/periodo`, null, { params });
   }
-
-  /**
-   * Get list of doctors for filter dropdown
-   * This would ideally come from a doctors service, but we'll mock it here
-   * In a real implementation, this should call a doctors endpoint
-   */
-  getMedicosForFilter(): Observable<MedicoOption[]> {
-    // This is a placeholder - in production, this should call the doctors API
-    // For now, we'll return empty array and the component should handle this
-    return this.http.get<MedicoOption[]>(`${environment.apiUrl}/Medicos/simple-list`);
-  }
 }

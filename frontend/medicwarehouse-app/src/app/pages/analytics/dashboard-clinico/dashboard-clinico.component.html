@@ -56,18 +56,6 @@
           />
         </div>
       }
-
-      @if (medicos.length > 0) {
-        <div class="filter-group">
-          <label>Médico</label>
-          <select [(ngModel)]="selectedMedicoId" (change)="onFilterChange()" class="form-select">
-            <option value="">Todos os médicos</option>
-            <option *ngFor="let medico of medicos" [value]="medico.id">
-              {{ medico.nome }} - {{ medico.crm }}
-            </option>
-          </select>
-        </div>
-      }
     </div>
   </div>
 

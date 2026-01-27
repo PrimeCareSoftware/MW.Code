@@ -166,8 +166,8 @@ export class DashboardFinanceiroComponent implements OnInit {
   initFormaPagamentoChart() {
     if (!this.dashboard || !this.dashboard.receitaPorFormaPagamento.length) return;
 
-    const labels = this.dashboard.receitaPorFormaPagamento.map(r => r.formaPagamentoTexto);
-    const data = this.dashboard.receitaPorFormaPagamento.map(r => r.valor);
+    const labels = this.dashboard.receitaPorFormaPagamento.map(r => this.translatePaymentMethod(r.formaPagamento));
+    const data = this.dashboard.receitaPorFormaPagamento.map(r => r.total);
 
     this.formaPagamentoChartOptions = {
       series: data,
@@ -201,8 +201,8 @@ export class DashboardFinanceiroComponent implements OnInit {
   initConvenioChart() {
     if (!this.dashboard || !this.dashboard.receitaPorConvenio.length) return;
 
-    const categories = this.dashboard.receitaPorConvenio.map(r => r.convenioNome);
-    const data = this.dashboard.receitaPorConvenio.map(r => r.valor);
+    const categories = this.dashboard.receitaPorConvenio.map(r => r.nomeConvenio);
+    const data = this.dashboard.receitaPorConvenio.map(r => r.total);
 
     this.convenioChartOptions = {
       series: [{
@@ -305,7 +305,7 @@ export class DashboardFinanceiroComponent implements OnInit {
     if (!this.dashboard || !this.dashboard.despesaPorCategoria.length) return;
 
     const categories = this.dashboard.despesaPorCategoria.map(d => d.categoria);
-    const data = this.dashboard.despesaPorCategoria.map(d => d.valor);
+    const data = this.dashboard.despesaPorCategoria.map(d => d.total);
 
     this.despesasChartOptions = {
       series: [{
@@ -352,6 +352,23 @@ export class DashboardFinanceiroComponent implements OnInit {
 
   formatPercent(value: number): string {
     return value.toFixed(1) + '%';
+  }
+
+  translatePaymentMethod(method: string): string {
+    const translations: { [key: string]: string } = {
+      'Dinheiro': 'Dinheiro',
+      'CartaoCredito': 'Cartão Crédito',
+      'CartaoDebito': 'Cartão Débito',
+      'Pix': 'PIX',
+      'TransferenciaBancaria': 'Transferência',
+      'Cheque': 'Cheque',
+      'Cash': 'Dinheiro',
+      'CreditCard': 'Cartão Crédito',
+      'DebitCard': 'Cartão Débito',
+      'BankTransfer': 'Transferência',
+      'Check': 'Cheque'
+    };
+    return translations[method] || method;
   }
 
   exportData() {

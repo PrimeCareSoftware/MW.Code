@@ -1,22 +1,23 @@
-// BI Analytics DTOs - matching backend models
+// BI Analytics DTOs - matching backend models exactly
 
 export interface DashboardClinico {
-  periodo: PeriodoInfo;
+  periodo: PeriodoDto;
   totalConsultas: number;
   taxaOcupacao: number;
   tempoMedioConsulta: number;
   taxaNoShow: number;
-  consultasPorEspecialidade: ConsultaPorEspecialidade[];
-  consultasPorDiaSemana: ConsultaPorDiaSemana[];
-  consultasPorMedico: ConsultaPorMedico[];
-  diagnosticosMaisFrequentes: DiagnosticoFrequencia[];
+  consultasPorEspecialidade: ConsultasPorEspecialidadeDto[];
+  consultasPorDiaSemana: ConsultasPorDiaDto[];
+  consultasPorMedico: ConsultasPorMedicoDto[];
+  consultasPorHorario: ConsultasPorHorarioDto[];
+  diagnosticosMaisFrequentes: DiagnosticoFrequenciaDto[];
   pacientesNovos: number;
   pacientesRetorno: number;
-  tendenciaConsultas: TendenciaMensal[];
+  tendenciaConsultas: TendenciaMensalDto[];
 }
 
 export interface DashboardFinanceiro {
-  periodo: PeriodoInfo;
+  periodo: PeriodoDto;
   receitaTotal: number;
   receitaRecebida: number;
   receitaPendente: number;
@@ -26,81 +27,85 @@ export interface DashboardFinanceiro {
   despesaPendente: number;
   lucroBruto: number;
   margemLucro: number;
-  receitaPorConvenio: ReceitaPorConvenio[];
-  receitaPorFormaPagamento: ReceitaPorFormaPagamento[];
-  despesaPorCategoria: DespesaPorCategoria[];
+  receitaPorConvenio: ReceitaPorConvenioDto[];
+  receitaPorMedico: ReceitaPorMedicoDto[];
+  receitaPorFormaPagamento: ReceitaPorFormaPagamentoDto[];
+  despesaPorCategoria: DespesaPorCategoriaDto[];
   ticketMedio: number;
   projecaoMesAtual: number;
-  fluxoCaixaDiario: FluxoCaixaDiario[];
+  fluxoCaixaDiario: FluxoCaixaDiarioDto[];
 }
 
-export interface PeriodoInfo {
+export interface PeriodoDto {
   inicio: string;
   fim: string;
 }
 
-export interface ConsultaPorEspecialidade {
-  especialidadeId: string;
+export interface ConsultasPorEspecialidadeDto {
   especialidade: string;
   total: number;
   percentual: number;
 }
 
-export interface ConsultaPorDiaSemana {
-  diaSemana: number;
-  diaSemanaTexto: string;
+export interface ConsultasPorDiaDto {
+  diaSemana: string;
   total: number;
-  percentual: number;
+  mediaPorDia: number;
 }
 
-export interface ConsultaPorMedico {
-  medicoId: string;
-  medicoNome: string;
+export interface ConsultasPorMedicoDto {
+  nomeMedico: string;
+  crm: string;
   total: number;
-  percentual: number;
+  taxaOcupacao: number;
 }
 
-export interface DiagnosticoFrequencia {
+export interface ConsultasPorHorarioDto {
+  hora: number;
+  total: number;
+}
+
+export interface DiagnosticoFrequenciaDto {
   codigoCid: string;
   descricao: string;
   frequencia: number;
   percentual: number;
 }
 
-export interface TendenciaMensal {
+export interface TendenciaMensalDto {
   mes: string;
-  ano: number;
-  mesNumero: number;
   agendadas: number;
   realizadas: number;
   canceladas: number;
   noShow: number;
 }
 
-export interface ReceitaPorConvenio {
-  convenioId: string;
-  convenioNome: string;
-  valor: number;
-  quantidade: number;
-  percentual: number;
+export interface ReceitaPorConvenioDto {
+  nomeConvenio: string;
+  total: number;
+  quantidadeConsultas: number;
+  ticketMedio: number;
 }
 
-export interface ReceitaPorFormaPagamento {
+export interface ReceitaPorMedicoDto {
+  nomeMedico: string;
+  total: number;
+  quantidadeConsultas: number;
+}
+
+export interface ReceitaPorFormaPagamentoDto {
   formaPagamento: string;
-  formaPagamentoTexto: string;
-  valor: number;
-  quantidade: number;
+  total: number;
   percentual: number;
 }
 
-export interface DespesaPorCategoria {
+export interface DespesaPorCategoriaDto {
   categoria: string;
-  valor: number;
-  quantidade: number;
+  total: number;
   percentual: number;
 }
 
-export interface FluxoCaixaDiario {
+export interface FluxoCaixaDiarioDto {
   data: string;
   entradas: number;
   saidas: number;

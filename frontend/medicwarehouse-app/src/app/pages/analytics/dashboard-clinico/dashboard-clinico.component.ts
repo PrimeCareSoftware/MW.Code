@@ -20,7 +20,7 @@ import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { Loading } from '../../../shared/loading/loading';
 import { AnalyticsBIService } from '../../../services/analytics-bi.service';
-import { DashboardClinico, MedicoOption } from '../../../models/analytics-bi.model';
+import { DashboardClinico } from '../../../models/analytics-bi.model';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -51,10 +51,6 @@ export class DashboardClinicoComponent implements OnInit {
   customStartDate: string = '';
   customEndDate: string = '';
   
-  // Doctor filter
-  selectedMedicoId: string = '';
-  medicos: MedicoOption[] = [];
-  
   // Loading state
   loading = true;
   error: string | null = null;
@@ -72,21 +68,7 @@ export class DashboardClinicoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadMedicos();
     this.loadDashboard();
-  }
-
-  loadMedicos() {
-    // Try to load doctors, but don't fail if endpoint doesn't exist
-    this.analyticsBIService.getMedicosForFilter().subscribe({
-      next: (medicos) => {
-        this.medicos = medicos;
-      },
-      error: (err) => {
-        console.warn('Could not load doctors for filter:', err);
-        // Continue without doctor filter
-      }
-    });
   }
 
   loadDashboard() {
@@ -98,7 +80,7 @@ export class DashboardClinicoComponent implements OnInit {
     this.analyticsBIService.getDashboardClinico(
       startDate, 
       endDate, 
-      this.selectedMedicoId || undefined
+      undefined
     ).subscribe({
       next: (data) => {
         this.dashboard = data;
@@ -207,7 +189,7 @@ export class DashboardClinicoComponent implements OnInit {
   initDiaSemanaChart() {
     if (!this.dashboard || !this.dashboard.consultasPorDiaSemana.length) return;
 
-    const categories = this.dashboard.consultasPorDiaSemana.map(d => d.diaSemanaTexto);
+    const categories = this.dashboard.consultasPorDiaSemana.map(d => d.diaSemana);
     const data = this.dashboard.consultasPorDiaSemana.map(d => d.total);
 
     this.diaSemanaChartOptions = {
@@ -250,7 +232,7 @@ export class DashboardClinicoComponent implements OnInit {
   initTendenciaChart() {
     if (!this.dashboard || !this.dashboard.tendenciaConsultas.length) return;
 
-    const categories = this.dashboard.tendenciaConsultas.map(t => `${this.getMonthName(t.mesNumero)}/${t.ano}`);
+    const categories = this.dashboard.tendenciaConsultas.map(t => t.mes);
     const realizadas = this.dashboard.tendenciaConsultas.map(t => t.realizadas);
     const agendadas = this.dashboard.tendenciaConsultas.map(t => t.agendadas);
 
