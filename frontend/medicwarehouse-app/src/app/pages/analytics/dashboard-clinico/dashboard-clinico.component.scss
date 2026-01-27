@@ -377,3 +377,99 @@
     }
   }
 }
+
+// ML Predictions Section
+.ml-predictions-section {
+  margin: 2rem 0;
+
+  .section-header {
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      color: var(--text-primary);
+    }
+
+    p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+  }
+
+  .prediction-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .prediction-card {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border-radius: 8px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      color: white;
+
+      .prediction-label {
+        font-size: 0.875rem;
+        opacity: 0.9;
+      }
+
+      .prediction-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .info-message {
+    padding: 1.25rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 1rem 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    p, ul {
+      margin: 0.5rem 0;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+
+      li {
+        margin: 0.25rem 0;
+      }
+    }
+
+    &.info {
+      background: rgba(59, 130, 246, 0.1);
+      color: #1e40af;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+
+      svg {
+        color: #3b82f6;
+      }
+    }
+
+    &.warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+
+      svg {
+        color: #f59e0b;
+      }
+    }
+  }
+}
