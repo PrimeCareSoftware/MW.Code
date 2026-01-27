@@ -45,6 +45,8 @@ namespace MedicSoft.Application.Services.DigitalSignature
         private readonly ICertificadoDigitalRepository _certificadoRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<AssinaturaDigitalService> _logger;
+        
+        private const string DefaultSystemName = "Sistema PrimeCare";
 
         public AssinaturaDigitalService(
             ICertificateManager certificateManager,
@@ -152,7 +154,7 @@ namespace MedicSoft.Application.Services.DigitalSignature
                     certificadoId: certificado.Id,
                     assinaturaDigitalBytes: assinatura,
                     hashDocumento: hash,
-                    localAssinatura: "Sistema PrimeCare",
+                    localAssinatura: DefaultSystemName, // TODO: Make configurable via app settings
                     ipAssinatura: clientIp,
                     tenantId: certificado.TenantId,
                     temTimestamp: timestamp != null,

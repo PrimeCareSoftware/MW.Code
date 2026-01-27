@@ -43,6 +43,19 @@ namespace MedicSoft.Application.DTOs
     }
 
     /// <summary>
+    /// Information about an X.509 certificate.
+    /// </summary>
+    public class CertificateInfo
+    {
+        public string Subject { get; set; } = null!;
+        public string Issuer { get; set; } = null!;
+        public string Thumbprint { get; set; } = null!;
+        public DateTime ValidFrom { get; set; }
+        public DateTime ValidTo { get; set; }
+        public bool IsValid { get; set; }
+    }
+
+    /// <summary>
     /// Result of a signature operation.
     /// </summary>
     public class ResultadoAssinatura

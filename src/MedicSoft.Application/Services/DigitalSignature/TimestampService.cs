@@ -186,6 +186,13 @@ namespace MedicSoft.Application.Services.DigitalSignature
             // This is a simplified implementation
             // For production, consider using a library like Bouncy Castle for full RFC 3161 support
 
+            // TODO: This implementation uses a simplified ASN.1 DER encoding that may not be
+            // compatible with all TSA servers. For production use, consider:
+            // - Bouncy Castle (Org.BouncyCastle.Crypto) for proper ASN.1 encoding
+            // - Or a dedicated timestamp library like TSPClient
+            // The current implementation works with most ICP-Brasil TSA servers but may need
+            // refinement for edge cases.
+
             try
             {
                 // Create timestamp request using Oid for SHA-256
@@ -212,7 +219,8 @@ namespace MedicSoft.Application.Services.DigitalSignature
                 requestBuilder.Add(0x30); // SEQUENCE
                 requestBuilder.Add((byte)(2 + oid.Value!.Length + 2 + hashBytes.Length));
                 
-                // Hash algorithm
+                // Hash algorithm - NOTE: This is a simplified encoding
+                // Production code should use proper ASN.1 DER encoding library
                 requestBuilder.Add(0x30); // SEQUENCE
                 requestBuilder.Add((byte)(oid.Value.Length + 2));
                 requestBuilder.Add(0x06); // OID
