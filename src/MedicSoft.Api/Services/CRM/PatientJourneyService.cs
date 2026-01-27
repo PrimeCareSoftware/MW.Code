@@ -78,7 +78,7 @@ namespace MedicSoft.Api.Services.CRM
                 pacienteId, dto.NewStage, dto.Trigger);
 
             // Trigger any automations for this stage
-            await _automationEngine.TriggerStageAutomationsAsync(pacienteId, dto.NewStage, tenantId);
+            await _automationEngine.CheckAndTriggerAutomationsAsync(dto.NewStage, null, tenantId);
 
             return await MapToDtoAsync(journey);
         }
@@ -259,7 +259,7 @@ namespace MedicSoft.Api.Services.CRM
                 EngagementScore = journey.EngagementScore,
                 Stages = journey.Stages.Select(MapStageToDto).ToList(),
                 CreatedAt = journey.CreatedAt,
-                UpdatedAt = journey.UpdatedAt
+                UpdatedAt = journey.UpdatedAt ?? journey.CreatedAt
             };
         }
 

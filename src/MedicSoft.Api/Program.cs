@@ -452,6 +452,18 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IWhatsAppService, 
 // CRM Advanced - Complaint/Ouvidoria System
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IComplaintService, MedicSoft.Api.Services.CRM.ComplaintService>();
 
+// CRM Advanced - Patient Journey
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IPatientJourneyService, MedicSoft.Api.Services.CRM.PatientJourneyService>();
+
+// CRM Advanced - Survey System
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISurveyService, MedicSoft.Api.Services.CRM.SurveyService>();
+
+// CRM Advanced - Sentiment Analysis
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISentimentAnalysisService, MedicSoft.Api.Services.CRM.SentimentAnalysisService>();
+
+// CRM Advanced - Churn Prediction
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IChurnPredictionService, MedicSoft.Api.Services.CRM.ChurnPredictionService>();
+
 // Configure Hangfire for background jobs
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
