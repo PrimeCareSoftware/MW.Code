@@ -11,7 +11,8 @@ namespace MedicSoft.Application.Services
         Task<bool> IsAccountLockedAsync(string username, string tenantId);
         Task<bool> CanAttemptLoginAsync(string username, string ipAddress, string tenantId);
         Task RecordFailedAttemptAsync(string username, string ipAddress, string tenantId, string? failureReason = null);
-        Task RecordSuccessfulLoginAsync(string username, string tenantId);
+        Task RecordSuccessfulLoginAsync(string username, string tenantId); // Deprecated - use overload with ipAddress
+        Task RecordSuccessfulLoginAsync(string username, string ipAddress, string tenantId);
         Task<TimeSpan?> GetRemainingLockoutTimeAsync(string username, string tenantId);
     }
 
@@ -76,10 +77,18 @@ namespace MedicSoft.Application.Services
 
         public async Task RecordSuccessfulLoginAsync(string username, string tenantId)
         {
-            // Record successful login - IP address would be obtained from HttpContext
+            // Note: IP address should be provided by the caller for accurate audit trails
+            // This method is kept for backwards compatibility but should not be used
+            // Use RecordSuccessfulLoginAsync(username, ipAddress, tenantId) instead
+            await RecordSuccessfulLoginAsync(username, "unknown", tenantId);
+        }
+
+        public async Task RecordSuccessfulLoginAsync(string username, string ipAddress, string tenantId)
+        {
+            // Record successful login
             var loginAttempt = new LoginAttempt(
                 username,
-                "unknown", // IP should be passed from controller
+                ipAddress,
                 wasSuccessful: true,
                 tenantId);
 

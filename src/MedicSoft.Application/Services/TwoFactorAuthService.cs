@@ -169,7 +169,7 @@ namespace MedicSoft.Application.Services
         {
             // Format as XXXX-1234 (mask first 4 digits)
             if (code.Length >= 8)
-                return $"XXXX-{code.Substring(4)}";
+                return $"XXXX-{code[4..]}";
             return code;
         }
 
