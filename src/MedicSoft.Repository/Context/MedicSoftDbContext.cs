@@ -106,6 +106,11 @@ namespace MedicSoft.Repository.Context
         public DbSet<TissGuideProcedure> TissGuideProcedures { get; set; } = null!;
         public DbSet<TussProcedure> TussProcedures { get; set; } = null!;
         
+        // TISS Phase 2 - Webservices and Glosas Management
+        public DbSet<TissOperadoraConfig> TissOperadoraConfigs { get; set; } = null!;
+        public DbSet<TissGlosa> TissGlosas { get; set; } = null!;
+        public DbSet<TissRecursoGlosa> TissRecursosGlosa { get; set; } = null!;
+        
         // Financial Module
         public DbSet<AccountsReceivable> AccountsReceivable { get; set; } = null!;
         public DbSet<ReceivablePayment> ReceivablePayments { get; set; } = null!;
@@ -217,6 +222,11 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new TissGuideConfiguration());
             modelBuilder.ApplyConfiguration(new TissGuideProcedureConfiguration());
             modelBuilder.ApplyConfiguration(new TussProcedureConfiguration());
+            
+            // TISS Phase 2 - Webservices and Glosas Management
+            modelBuilder.ApplyConfiguration(new TissOperadoraConfigConfiguration());
+            modelBuilder.ApplyConfiguration(new TissGlosaConfiguration());
+            modelBuilder.ApplyConfiguration(new TissRecursoGlosaConfiguration());
             
             // Financial Module
             modelBuilder.ApplyConfiguration(new AccountsReceivableConfiguration());
