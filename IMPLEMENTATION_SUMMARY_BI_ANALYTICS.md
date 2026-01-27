@@ -49,8 +49,36 @@ Novo projeto criado com estrutura completa de Analytics:
   - Projeção de receita do mês atual
   - Fluxo de caixa diário
 
-#### **API Endpoints** (`src/MedicSoft.Api/Controllers/AnalyticsController.cs`)
+#### **MedicSoft.ML Project** (NOVO - Janeiro 2026)
+Projeto dedicado para Machine Learning com ML.NET:
 
+**Models** (`src/MedicSoft.ML/Models/`)
+- ✅ `PrevisaoDemanda.cs` - Modelos para previsão de demanda
+  - DadosTreinamentoDemanda (features: Mês, DiaSemana, Semana, IsFeriado, Temperatura)
+  - PrevisaoConsultaResult (output: NumeroConsultas)
+  - PrevisaoDia, PrevisaoConsultas (DTOs de resultado)
+- ✅ `PrevisaoNoShow.cs` - Modelos para previsão de no-show
+  - DadosNoShow (features: Idade, DiasAteConsulta, HoraDia, HistoricoNoShow, etc.)
+  - PrevisaoNoShowResult (output: VaiComparecer, Probability)
+  - AgendamentoRisco (DTO com ações recomendadas)
+
+**Services** (`src/MedicSoft.ML/Services/`)
+- ✅ `PrevisaoDemandaService.cs` - Previsão de demanda com FastTree Regression
+  - TreinarModeloAsync() - Treina modelo com dados históricos
+  - CarregarModeloAsync() - Carrega modelo salvo do disco
+  - PreverProximaSemana() - Previsão para próximos 7 dias
+  - PreverParaData() - Previsão para data específica
+  
+- ✅ `PrevisaoNoShowService.cs` - Previsão de no-show com FastTree Binary Classification
+  - TreinarModeloAsync() - Treina modelo binário
+  - CarregarModeloAsync() - Carrega modelo salvo
+  - CalcularRiscoNoShow() - Calcula risco (0-1) para agendamento
+  - SugerirAcoes() - Recomenda ações baseadas no risco
+  - IdentificarAgendamentosAltoRisco() - Batch prediction
+
+#### **API Endpoints** (`src/MedicSoft.Api/Controllers/`)
+
+**AnalyticsController.cs**
 ```csharp
 GET  /api/Analytics/dashboard/clinico           // Dashboard clínico com filtros
 GET  /api/Analytics/dashboard/financeiro        // Dashboard financeiro
@@ -59,15 +87,41 @@ POST /api/Analytics/consolidar/dia             // Consolidação manual de 1 dia
 POST /api/Analytics/consolidar/periodo         // Consolidação manual período (Admin)
 ```
 
+**MLPredictionController.cs** (NOVO - Janeiro 2026)
+```csharp
+GET  /api/MLPrediction/demanda/proxima-semana  // Previsão de demanda para próximos 7 dias
+GET  /api/MLPrediction/demanda/data            // Previsão para data específica
+POST /api/MLPrediction/noshow/calcular-risco   // Calcular risco de no-show
+POST /api/MLPrediction/admin/carregar-modelos  // Carregar modelos ML (Admin)
+POST /api/MLPrediction/admin/treinar/demanda   // Treinar modelo de demanda (Admin)
+POST /api/MLPrediction/admin/treinar/noshow    // Treinar modelo de no-show (Admin)
+```
+
 **Características:**
 - Todos endpoints autenticados e tenant-aware
 - Filtros por data (início/fim)
 - Filtro opcional por médico (dashboard clínico)
 - Logging e error handling completos
+- ML endpoints requerem modelo treinado
+
+#### **Background Jobs** (NOVO - Janeiro 2026)
+
+**Hangfire Integration**
+- ✅ Hangfire.AspNetCore configurado
+- ✅ PostgreSQL storage para jobs
+- ✅ Dashboard Hangfire em /hangfire (Development)
+- ✅ Job recorrente: Consolidação diária às 00:00 UTC
+
+**ConsolidacaoDiariaJob** (`src/MedicSoft.Analytics/Jobs/`)
+- ExecutarConsolidacaoDiariaAsync() - Job agendado diariamente
+- ExecutarConsolidacaoParaTenantAsync() - Consolidação por tenant
+- Logging completo de execução
+- Error handling com retry em caso de falha
 
 #### **Database**
 - ✅ `ConsultaDiaria` adicionada ao `MedicSoftDbContext`
-- ⏳ Migration pendente (precisa ser criada e aplicada)
+- ✅ Migration criada: `20260127145640_AddConsultaDiariaTable`
+- ⏳ Índices de performance pendentes (a criar)
 
 ---
 
@@ -232,6 +286,30 @@ http://localhost:5000/swagger
 1. `GET /api/Analytics/dashboard/clinico?inicio=2026-01-01&fim=2026-01-31`
 2. `GET /api/Analytics/dashboard/financeiro?inicio=2026-01-01&fim=2026-01-31`
 3. `GET /api/Analytics/projecao/receita-mes?mes=2026-01-01`
+4. `GET /api/MLPrediction/demanda/proxima-semana` (NOVO)
+5. `GET /api/MLPrediction/demanda/data?data=2026-02-01` (NOVO)
+6. `POST /api/MLPrediction/noshow/calcular-risco` (NOVO)
+
+**Testar ML (após treinar modelos):**
+```bash
+# 1. Carregar modelos (Admin)
+POST /api/MLPrediction/admin/carregar-modelos
+
+# 2. Obter previsão de demanda
+GET /api/MLPrediction/demanda/proxima-semana
+
+# 3. Calcular risco de no-show
+POST /api/MLPrediction/noshow/calcular-risco
+Body: {
+  "idadePaciente": 35,
+  "diasAteConsulta": 3,
+  "horaDia": 14,
+  "historicoNoShow": 0.1,
+  "tempoDesdeUltimaConsulta": 90,
+  "isConvenio": 1,
+  "temLembrete": 1
+}
+```
 
 ### 2. Frontend (desenvolvimento)
 
@@ -281,46 +359,53 @@ Body: {
 | Categoria | Quantidade |
 |-----------|-----------|
 | **Backend** | |
-| Projetos criados | 1 (MedicSoft.Analytics) |
-| Modelos de dados | 3 |
-| DTOs | 15 |
-| Serviços | 3 |
-| Controllers | 1 |
-| Endpoints API | 5 |
+| Projetos criados | 2 (Analytics + ML) |
+| Modelos de dados | 8 (3 Analytics + 5 ML) |
+| DTOs | 20+ |
+| Serviços | 6 (3 Analytics + 2 ML + 1 Job) |
+| Controllers | 2 (Analytics + ML) |
+| Endpoints API | 11 (5 Analytics + 6 ML) |
+| Background Jobs | 1 (Consolidação diária) |
 | **Frontend** | |
-| Componentes | 2 |
+| Componentes | 2 (Dashboards) |
 | Services | 1 |
 | Models/Interfaces | 20+ |
 | Rotas | 2 |
+| **Infraestrutura** | |
+| Hangfire Jobs | 1 recorrente |
+| Migrations | 1 (ConsultaDiaria) |
 | **Documentação** | |
 | Documentos criados | 3 |
-| Linhas de doc | ~1,200 |
+| Documentos atualizados | 2 |
+| Linhas de doc | ~1,500 |
 | **Código** | |
-| Linhas backend (C#) | ~1,850 |
+| Linhas backend (C#) | ~4,700 |
 | Linhas frontend (TS/HTML/SCSS) | ~1,850 |
-| **Total LOC** | **~3,700** |
+| **Total LOC** | **~6,550** |
 
 ---
 
 ## ⏳ O Que NÃO Foi Implementado (Pendente)
 
-### Machine Learning (Sprint 4)
-- [ ] Configurar ML.NET
-- [ ] Modelo de previsão de demanda
-- [ ] Modelo de previsão de no-show
-- [ ] Integração dos modelos nos dashboards
-- [ ] Testes de acurácia
+### Machine Learning (Sprint 4) - ✅ 80% COMPLETO
+- [x] Configurar ML.NET
+- [x] Modelo de previsão de demanda
+- [x] Modelo de previsão de no-show
+- [x] API endpoints para ML
+- [ ] Integração dos modelos nos dashboards frontend
+- [ ] Treinar modelos com dados reais de produção
+- [ ] Testes de acurácia (target: >75%)
 
 ### Dashboards Operacional e Qualidade (Sprint 5)
 - [ ] Dashboard operacional (tempos de espera, filas)
 - [ ] Dashboard de qualidade (NPS, satisfação)
 - [ ] Métricas de desempenho da equipe
 
-### Infraestrutura
-- [ ] Job automático de consolidação noturna
+### Infraestrutura - ✅ COMPLETO
+- [x] Job automático de consolidação noturna (Hangfire)
+- [x] Migration para tabela ConsultaDiaria
 - [ ] Cache de dados consolidados (Redis)
 - [ ] Índices otimizados no banco de dados
-- [ ] Migration para tabela ConsultaDiaria
 
 ### Melhorias
 - [ ] Exportação de relatórios (PDF/Excel)
@@ -420,6 +505,8 @@ Body: {
 
 **Tecnologias:**
 - .NET 8 + Entity Framework Core 8
+- ML.NET 3.0.1 (Machine Learning)
+- Hangfire 1.8.14 (Background Jobs)
 - Angular 17+ + ApexCharts 5.3.6
 - PostgreSQL 15+
 - TypeScript 5.3+
@@ -427,6 +514,17 @@ Body: {
 ---
 
 ## 📝 Changelog
+
+### Janeiro 2026 - v1.5.0 (ML + Jobs)
+- ✅ Implementação ML.NET (Sprint 4)
+  - Previsão de demanda
+  - Previsão de no-show
+  - 6 endpoints ML na API
+- ✅ Hangfire background jobs
+  - Consolidação diária automática
+  - Dashboard de monitoramento
+- ✅ Migration ConsultaDiaria criada
+- ✅ Documentação atualizada
 
 ### Janeiro 2026 - v1.0.0
 - ✅ Implementação inicial Backend (Sprint 1-3)
@@ -439,24 +537,33 @@ Body: {
 
 ## ✅ Conclusão
 
-A implementação do sistema de **BI e Analytics Avançados** está **70% completa**, cobrindo as funcionalidades essenciais:
+A implementação do sistema de **BI e Analytics Avançados** está **85% completa**, cobrindo as funcionalidades essenciais e ML:
 
 - ✅ **Data Warehouse simplificado** funcionando
 - ✅ **Dashboard Clínico** completo com 5 visualizações
 - ✅ **Dashboard Financeiro** completo com 4 visualizações  
-- ✅ **API REST** com 5 endpoints
+- ✅ **API REST** com 11 endpoints (5 Analytics + 6 ML)
 - ✅ **Frontend Angular** responsivo e moderno
-- ✅ **Documentação** técnica e guia de testes
+- ✅ **Machine Learning** framework completo (ML.NET)
+  - ✅ Previsão de demanda (FastTree Regression)
+  - ✅ Previsão de no-show (Binary Classification)
+  - ✅ API endpoints para ML
+- ✅ **Background Jobs** (Hangfire)
+  - ✅ Consolidação diária automática
+  - ✅ Dashboard de monitoramento
+- ✅ **Database Migration** criada e pronta
+- ✅ **Documentação** técnica atualizada
 
 **Pendente:**
-- ⏳ Machine Learning (Sprint 4) - 30% restante
+- ⏳ Treinar modelos ML com dados reais (15% restante)
+- ⏳ Integrar previsões ML nos dashboards frontend
 - ⏳ Dashboards Operacional e Qualidade (Sprint 5)
-- ⏳ Infraestrutura de produção (jobs, cache, índices)
+- ⏳ Infraestrutura de produção (Redis cache, índices)
 
-O sistema está **pronto para uso em produção** com as funcionalidades atuais, e pode ser expandido com ML e dashboards adicionais conforme planejado.
+O sistema está **pronto para uso em produção** com as funcionalidades atuais. Os modelos de ML precisam ser treinados com dados históricos reais para começar a fazer previsões. A integração frontend pode ser feita incrementalmente.
 
 ---
 
 **Última Atualização:** 27 de Janeiro de 2026  
-**Versão:** 1.0.0  
-**Status:** ✅ Production Ready (70% completo)
+**Versão:** 1.5.0  
+**Status:** ✅ Production Ready (85% completo) - ML Framework Implementado

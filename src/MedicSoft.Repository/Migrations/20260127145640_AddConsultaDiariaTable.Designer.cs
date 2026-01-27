@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using MedicSoft.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MedicSoft.Repository.Migrations.PostgreSQL
+namespace MedicSoft.Repository.Migrations
 {
     [DbContext(typeof(MedicSoftDbContext))]
-    partial class MedicSoftDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260127145640_AddConsultaDiariaTable")]
+    partial class AddConsultaDiariaTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1448,36 +1451,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.Property<Guid?>("ProfileId")
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("RequireChiefComplaint")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireClinicalExamination")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireCurrentMedications")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireDiagnosticHypothesis")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireFamilyHistory")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireHistoryOfPresentIllness")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireInformedConsent")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireLifestyleHabits")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequirePastMedicalHistory")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireTherapeuticPlan")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("ShowChiefComplaint")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -1567,36 +1540,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
-
-                    b.Property<bool>("RequireChiefComplaint")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireClinicalExamination")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireCurrentMedications")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireDiagnosticHypothesis")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireFamilyHistory")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireHistoryOfPresentIllness")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireInformedConsent")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireLifestyleHabits")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequirePastMedicalHistory")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireTherapeuticPlan")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowChiefComplaint")
                         .ValueGeneratedOnAdd()

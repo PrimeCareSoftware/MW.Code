@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.14" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.20.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
@@ -30,6 +33,7 @@
     <ProjectReference Include="..\MedicSoft.Repository\MedicSoft.Repository.csproj" />
     <ProjectReference Include="..\MedicSoft.CrossCutting\MedicSoft.CrossCutting.csproj" />
     <ProjectReference Include="..\MedicSoft.Analytics\MedicSoft.Analytics.csproj" />
+    <ProjectReference Include="..\MedicSoft.ML\MedicSoft.ML.csproj" />
   </ItemGroup>
 
 </Project>
