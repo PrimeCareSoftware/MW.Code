@@ -151,6 +151,10 @@ namespace MedicSoft.Repository.Context
 
         // Analytics - Consolidated Data
         public DbSet<ConsultaDiaria> ConsultasDiarias { get; set; } = null!;
+        
+        // Digital Signature (ICP-Brasil) - CFM 1.821/2007
+        public DbSet<CertificadoDigital> CertificadosDigitais { get; set; } = null!;
+        public DbSet<AssinaturaDigital> AssinaturasDigitais { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -267,6 +271,10 @@ namespace MedicSoft.Repository.Context
             
             // Two-Factor Authentication
             modelBuilder.ApplyConfiguration(new TwoFactorAuthConfiguration());
+            
+            // Digital Signature (ICP-Brasil) - CFM 1.821/2007
+            modelBuilder.ApplyConfiguration(new CertificadoDigitalConfiguration());
+            modelBuilder.ApplyConfiguration(new AssinaturaDigitalConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
