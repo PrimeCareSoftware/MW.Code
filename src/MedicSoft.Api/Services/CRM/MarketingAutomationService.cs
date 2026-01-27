@@ -25,37 +25,40 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<MarketingAutomationDto> CreateAsync(CreateMarketingAutomationDto dto, string tenantId)
         {
-            var automation = new MarketingAutomation
+            var automation = new MarketingAutomation(
+                dto.Name,
+                dto.Description ?? "",
+                dto.TriggerType,
+                tenantId);
+
+            // Configure trigger
+            automation.ConfigureTrigger(dto.TriggerStage, dto.TriggerEvent, dto.DelayMinutes);
+
+            // Set segment filter if provided
+            if (!string.IsNullOrEmpty(dto.SegmentFilter))
+                automation.SetSegmentFilter(dto.SegmentFilter);
+
+            // Add tags
+            if (dto.Tags != null)
             {
-                Id = Guid.NewGuid(),
-                TenantId = tenantId,
-                Name = dto.Name,
-                Description = dto.Description,
-                IsActive = false, // Start inactive by default
-                TriggerType = dto.TriggerType,
-                TriggerStage = dto.TriggerStage,
-                TriggerEvent = dto.TriggerEvent,
-                DelayMinutes = dto.DelayMinutes,
-                SegmentFilter = dto.SegmentFilter,
-                Tags = dto.Tags ?? new List<string>(),
-                Actions = dto.Actions.Select(a => new AutomationAction
-                {
-                    Id = Guid.NewGuid(),
-                    Order = a.Order,
-                    Type = a.Type,
-                    EmailTemplateId = a.EmailTemplateId,
-                    MessageTemplate = a.MessageTemplate,
-                    Channel = a.Channel,
-                    TagToAdd = a.TagToAdd,
-                    TagToRemove = a.TagToRemove,
-                    ScoreChange = a.ScoreChange,
-                    Condition = a.Condition
-                }).ToList(),
-                TimesExecuted = 0,
-                SuccessRate = 1.0,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
+                foreach (var tag in dto.Tags)
+                    automation.AddTag(tag);
+            }
+
+            // Add actions
+            foreach (var actionDto in dto.Actions)
+            {
+                var action = new AutomationAction(
+                    automation.Id,
+                    actionDto.Order,
+                    actionDto.Type,
+                    tenantId);
+
+                // Configure action based on type
+                ConfigureActionFromCreate(action, actionDto);
+
+                automation.AddAction(action);
+            }
 
             _context.MarketingAutomations.Add(automation);
             await _context.SaveChangesAsync();
@@ -75,40 +78,59 @@ namespace MedicSoft.Api.Services.CRM
             if (automation == null)
                 throw new KeyNotFoundException($"Marketing automation {id} not found");
 
-            // Update basic properties
-            if (dto.Name != null) automation.Name = dto.Name;
-            if (dto.Description != null) automation.Description = dto.Description;
-            if (dto.TriggerType.HasValue) automation.TriggerType = dto.TriggerType.Value;
-            if (dto.TriggerStage.HasValue) automation.TriggerStage = dto.TriggerStage;
-            if (dto.TriggerEvent != null) automation.TriggerEvent = dto.TriggerEvent;
-            if (dto.DelayMinutes.HasValue) automation.DelayMinutes = dto.DelayMinutes;
-            if (dto.SegmentFilter != null) automation.SegmentFilter = dto.SegmentFilter;
-            if (dto.Tags != null) automation.Tags = dto.Tags;
+            // Note: Name, Description, and TriggerType cannot be updated after creation
+            // Only trigger configuration, segmentation and actions can be updated
+
+            // Update trigger configuration
+            if (dto.TriggerStage.HasValue || dto.TriggerEvent != null || dto.DelayMinutes.HasValue)
+            {
+                automation.ConfigureTrigger(
+                    dto.TriggerStage ?? automation.TriggerStage,
+                    dto.TriggerEvent ?? automation.TriggerEvent,
+                    dto.DelayMinutes ?? automation.DelayMinutes);
+            }
+
+            // Update segment filter
+            if (dto.SegmentFilter != null)
+                automation.SetSegmentFilter(dto.SegmentFilter);
+
+            // Update tags if provided
+            if (dto.Tags != null)
+            {
+                // Remove all existing tags and add new ones
+                var currentTags = automation.Tags.ToList();
+                foreach (var tag in currentTags)
+                    automation.RemoveTag(tag);
+                
+                foreach (var tag in dto.Tags)
+                    automation.AddTag(tag);
+            }
 
             // Update actions if provided
             if (dto.Actions != null)
             {
                 // Remove old actions
-                _context.AutomationActions.RemoveRange(automation.Actions);
+                var actionsToRemove = automation.Actions.ToList();
+                foreach (var action in actionsToRemove)
+                {
+                    automation.RemoveAction(action.Id);
+                    _context.AutomationActions.Remove(action);
+                }
                 
                 // Add new actions
-                automation.Actions = dto.Actions.Select(a => new AutomationAction
+                foreach (var actionDto in dto.Actions)
                 {
-                    Id = Guid.NewGuid(),
-                    MarketingAutomationId = automation.Id,
-                    Order = a.Order,
-                    Type = a.Type,
-                    EmailTemplateId = a.EmailTemplateId,
-                    MessageTemplate = a.MessageTemplate,
-                    Channel = a.Channel,
-                    TagToAdd = a.TagToAdd,
-                    TagToRemove = a.TagToRemove,
-                    ScoreChange = a.ScoreChange,
-                    Condition = a.Condition
-                }).ToList();
+                    var action = new AutomationAction(
+                        automation.Id,
+                        actionDto.Order,
+                        actionDto.Type,
+                        tenantId);
+
+                    ConfigureActionFromCreate(action, actionDto);
+                    automation.AddAction(action);
+                }
             }
 
-            automation.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Updated marketing automation {AutomationId}", id);
@@ -124,9 +146,8 @@ namespace MedicSoft.Api.Services.CRM
             if (automation == null)
                 return false;
 
-            // Soft delete
-            automation.IsDeleted = true;
-            automation.DeletedAt = DateTime.UtcNow;
+            // Hard delete for now since BaseEntity doesn't have IsDeleted
+            _context.MarketingAutomations.Remove(automation);
             
             await _context.SaveChangesAsync();
 
@@ -140,7 +161,7 @@ namespace MedicSoft.Api.Services.CRM
             var automation = await _context.MarketingAutomations
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
-                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId && !a.IsDeleted);
+                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
 
             return automation == null ? null : MapToDto(automation);
         }
@@ -150,7 +171,7 @@ namespace MedicSoft.Api.Services.CRM
             var automations = await _context.MarketingAutomations
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
-                .Where(a => a.TenantId == tenantId && !a.IsDeleted)
+                .Where(a => a.TenantId == tenantId)
                 .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
 
@@ -162,7 +183,7 @@ namespace MedicSoft.Api.Services.CRM
             var automations = await _context.MarketingAutomations
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
-                .Where(a => a.TenantId == tenantId && a.IsActive && !a.IsDeleted)
+                .Where(a => a.TenantId == tenantId && a.IsActive)
                 .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
 
@@ -172,13 +193,12 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<bool> ActivateAsync(Guid id, string tenantId)
         {
             var automation = await _context.MarketingAutomations
-                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId && !a.IsDeleted);
+                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
 
             if (automation == null)
                 return false;
 
-            automation.IsActive = true;
-            automation.UpdatedAt = DateTime.UtcNow;
+            automation.Activate();
             
             await _context.SaveChangesAsync();
 
@@ -190,13 +210,12 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<bool> DeactivateAsync(Guid id, string tenantId)
         {
             var automation = await _context.MarketingAutomations
-                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId && !a.IsDeleted);
+                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
 
             if (automation == null)
                 return false;
 
-            automation.IsActive = false;
-            automation.UpdatedAt = DateTime.UtcNow;
+            automation.Deactivate();
             
             await _context.SaveChangesAsync();
 
@@ -208,7 +227,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<MarketingAutomationMetricsDto?> GetMetricsAsync(Guid id, string tenantId)
         {
             var automation = await _context.MarketingAutomations
-                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId && !a.IsDeleted);
+                .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
 
             if (automation == null)
                 return null;
@@ -234,7 +253,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<MarketingAutomationMetricsDto>> GetAllMetricsAsync(string tenantId)
         {
             var automations = await _context.MarketingAutomations
-                .Where(a => a.TenantId == tenantId && !a.IsDeleted)
+                .Where(a => a.TenantId == tenantId)
                 .ToListAsync();
 
             return automations.Select(a =>
@@ -262,7 +281,7 @@ namespace MedicSoft.Api.Services.CRM
             var automation = await _context.MarketingAutomations
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
-                .FirstOrDefaultAsync(a => a.Id == automationId && a.TenantId == tenantId && a.IsActive && !a.IsDeleted);
+                .FirstOrDefaultAsync(a => a.Id == automationId && a.TenantId == tenantId && a.IsActive);
 
             if (automation == null)
             {
@@ -286,7 +305,7 @@ namespace MedicSoft.Api.Services.CRM
                 TriggerEvent = automation.TriggerEvent,
                 DelayMinutes = automation.DelayMinutes,
                 SegmentFilter = automation.SegmentFilter,
-                Tags = automation.Tags ?? new List<string>(),
+                Tags = automation.Tags.ToList(),
                 Actions = automation.Actions?.Select(a => new AutomationActionDto
                 {
                     Id = a.Id,
@@ -297,7 +316,6 @@ namespace MedicSoft.Api.Services.CRM
                     MessageTemplate = a.MessageTemplate,
                     Channel = a.Channel,
                     TagToAdd = a.TagToAdd,
-                    TagToRemove = a.TagToRemove,
                     ScoreChange = a.ScoreChange,
                     Condition = a.Condition
                 }).ToList() ?? new List<AutomationActionDto>(),
@@ -305,8 +323,39 @@ namespace MedicSoft.Api.Services.CRM
                 LastExecutedAt = automation.LastExecutedAt,
                 SuccessRate = automation.SuccessRate,
                 CreatedAt = automation.CreatedAt,
-                UpdatedAt = automation.UpdatedAt
+                UpdatedAt = automation.UpdatedAt ?? automation.CreatedAt
             };
+        }
+
+        private void ConfigureActionFromCreate(AutomationAction action, CreateAutomationActionDto dto)
+        {
+            switch (dto.Type)
+            {
+                case ActionType.SendEmail:
+                    if (dto.EmailTemplateId.HasValue)
+                        action.ConfigureEmailAction(dto.EmailTemplateId.Value);
+                    break;
+
+                case ActionType.SendSMS:
+                case ActionType.SendWhatsApp:
+                    if (!string.IsNullOrEmpty(dto.MessageTemplate) && !string.IsNullOrEmpty(dto.Channel))
+                        action.ConfigureMessageAction(dto.MessageTemplate, dto.Channel);
+                    break;
+
+                case ActionType.AddTag:
+                case ActionType.RemoveTag:
+                    if (!string.IsNullOrEmpty(dto.TagToAdd))
+                        action.ConfigureTagAction(dto.TagToAdd);
+                    break;
+
+                case ActionType.ChangeScore:
+                    if (dto.ScoreChange.HasValue)
+                        action.ConfigureScoreAction(dto.ScoreChange.Value);
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(dto.Condition))
+                action.SetCondition(dto.Condition);
         }
     }
 }

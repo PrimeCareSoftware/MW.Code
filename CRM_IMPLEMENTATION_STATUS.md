@@ -7,7 +7,7 @@
 
 ## ✅ Implementado
 
-### 1. Estrutura de Dados (Completo)
+### 1. Estrutura de Dados (Completo) ✅
 
 #### Entidades do Domínio
 Todas as 26 entidades CRM foram criadas em `src/MedicSoft.Domain/Entities/CRM/`:
@@ -75,28 +75,86 @@ Criadas 14 configurações em `src/MedicSoft.Repository/Configurations/CRM/`:
 - 14 novas tabelas no schema "crm"
 - Relacionamentos e índices configurados
 - Suporte a JSONB para coleções complexas
+- Migration `20260127211405_AddPatientJourneyTagsAndEngagement` criada
+- Campos Tags (jsonb) e EngagementScore adicionados ao PatientJourney
+
+---
+
+### 2. Marketing Automation (Completo) ✅
+
+#### Services Implementados
+Todos os serviços em `src/MedicSoft.Api/Services/CRM/` e `src/MedicSoft.Application/Services/CRM/`:
+
+- ✅ **IMarketingAutomationService** - Interface do serviço
+- ✅ **MarketingAutomationService** - Implementação completa
+  - CRUD de automações
+  - Ativação/desativação
+  - Configuração de triggers e segmentação
+  - Cálculo de métricas (success rate com EMA)
+  
+- ✅ **IAutomationEngine** - Interface do motor
+- ✅ **AutomationEngine** - Motor de execução
+  - Processamento de triggers
+  - Execução de 9 tipos de ações
+  - Tracking de execuções e success rate
+  - Template rendering com variáveis dinâmicas
+  
+- ✅ **IEmailService** / **StubEmailService** - Envio de emails
+- ✅ **ISmsService** / **StubSmsService** - Envio de SMS
+- ✅ **IWhatsAppService** / **StubWhatsAppService** - Envio de WhatsApp
+
+#### DTOs Criados
+Em `src/MedicSoft.Application/DTOs/CRM/`:
+
+- ✅ `MarketingAutomationDto` - Automação completa
+- ✅ `AutomationActionDto` - Ação individual
+- ✅ `CreateMarketingAutomationDto` - Criação
+- ✅ `CreateAutomationActionDto` - Criação de ação
+- ✅ `UpdateMarketingAutomationDto` - Atualização
+- ✅ `MarketingAutomationMetricsDto` - Métricas
+- ✅ `EmailTemplateDto` - Template de email
+- ✅ `CreateEmailTemplateDto` - Criação de template
+- ✅ `UpdateEmailTemplateDto` - Atualização de template
+
+#### API Controller
+Em `src/MedicSoft.Api/Controllers/CRM/`:
+
+- ✅ **MarketingAutomationController** - 10 endpoints REST
+  - GET /api/crm/automation (listar todas)
+  - GET /api/crm/automation/active (listar ativas)
+  - GET /api/crm/automation/{id} (buscar por ID)
+  - POST /api/crm/automation (criar)
+  - PUT /api/crm/automation/{id} (atualizar)
+  - DELETE /api/crm/automation/{id} (deletar)
+  - POST /api/crm/automation/{id}/activate (ativar)
+  - POST /api/crm/automation/{id}/deactivate (desativar)
+  - GET /api/crm/automation/{id}/metrics (métricas)
+  - GET /api/crm/automation/metrics (todas métricas)
+  - POST /api/crm/automation/{id}/trigger/{patientId} (trigger manual)
+
+#### Dependency Injection
+- ✅ Todos os serviços registrados em `Program.cs`
+- ✅ Scoped lifetime apropriado
+- ✅ Multi-tenant support
+
+#### Compilação
+- ✅ Build 100% limpo (0 erros)
+- ✅ Warnings pre-existentes (não relacionados)
 
 ---
 
 ## 🔄 Pendente de Implementação
 
-### 2. Camada de Aplicação
+### 3. Patient Journey Service
 
 #### Services (Próxima Prioridade)
 - [ ] **PatientJourneyService** - Gerenciamento da jornada
   - Métodos: GetOrCreateJourneyAsync, AdvanceStageAsync, AddTouchpointAsync, UpdateMetricsAsync
   - Cálculo automático de métricas (LTV, NPS, Satisfaction Score)
-  
-- [ ] **MarketingAutomationService** - Gerenciamento de automações
-  - CRUD de automações
-  - Ativação/desativação
-  - Configuração de triggers e segmentação
 
-- [ ] **AutomationEngine** - Motor de execução
-  - Processamento de triggers
-  - Execução de ações (email, SMS, WhatsApp)
-  - Tracking de execuções e success rate
+### 4. Surveys (NPS/CSAT)
 
+#### Services
 - [ ] **SurveyService** - Gerenciamento de pesquisas
   - CRUD de surveys e questões
   - Envio automático baseado em triggers

@@ -66,12 +66,7 @@ namespace MedicSoft.Api.Services.CRM
                 }
 
                 // Update execution metrics
-                automation.TimesExecuted++;
-                automation.LastExecutedAt = DateTime.UtcNow;
-                
-                // Update success rate using Exponential Moving Average
-                var alpha = 0.1; // Weight for new observation
-                automation.SuccessRate = (1 - alpha) * automation.SuccessRate + alpha * 1.0;
+                automation.RecordExecution(true);
 
                 await _context.SaveChangesAsync();
 
@@ -84,8 +79,7 @@ namespace MedicSoft.Api.Services.CRM
                     automation.Id, patientId);
 
                 // Update success rate
-                var alpha = 0.1;
-                automation.SuccessRate = (1 - alpha) * automation.SuccessRate + alpha * 0.0;
+                automation.RecordExecution(false);
                 await _context.SaveChangesAsync();
 
                 throw;
@@ -99,7 +93,7 @@ namespace MedicSoft.Api.Services.CRM
                 var query = _context.MarketingAutomations
                     .Include(a => a.Actions)
                     .ThenInclude(a => a.EmailTemplate)
-                    .Where(a => a.TenantId == tenantId && a.IsActive && !a.IsDeleted);
+                    .Where(a => a.TenantId == tenantId && a.IsActive);
 
                 // Filter by stage if provided
                 if (stage.HasValue)
@@ -118,7 +112,7 @@ namespace MedicSoft.Api.Services.CRM
                 var automations = await query.ToListAsync();
 
                 _logger.LogInformation("Found {Count} automations to trigger for stage {Stage} event {Event}", 
-                    automations.Count, stage, eventName);
+                    automations.Count, stage?.ToString() ?? "null", eventName ?? "null");
 
                 // Note: In a real implementation, you would get the list of patients
                 // that match the criteria and trigger the automation for each
@@ -224,7 +218,7 @@ namespace MedicSoft.Api.Services.CRM
             }
 
             var message = RenderTemplate(action.MessageTemplate, patient);
-            await _smsService.SendSmsAsync(patient.Phone?.Value ?? "", message);
+            await _smsService.SendSmsAsync(patient.Phone?.ToString() ?? "", message);
 
             _logger.LogInformation("Sent SMS to patient {PatientId}", patient.Id);
         }
@@ -238,7 +232,7 @@ namespace MedicSoft.Api.Services.CRM
             }
 
             var message = RenderTemplate(action.MessageTemplate, patient);
-            await _whatsAppService.SendWhatsAppAsync(patient.Phone?.Value ?? "", message);
+            await _whatsAppService.SendWhatsAppAsync(patient.Phone?.ToString() ?? "", message);
 
             _logger.LogInformation("Sent WhatsApp to patient {PatientId}", patient.Id);
         }
@@ -270,7 +264,7 @@ namespace MedicSoft.Api.Services.CRM
 
         private async Task ExecuteRemoveTagAsync(AutomationAction action, Patient patient, PatientJourney? journey)
         {
-            if (string.IsNullOrEmpty(action.TagToRemove))
+            if (string.IsNullOrEmpty(action.TagToAdd))
             {
                 _logger.LogWarning("RemoveTag action has no tag specified");
                 return;
@@ -282,11 +276,11 @@ namespace MedicSoft.Api.Services.CRM
                 return;
             }
 
-            if (journey.Tags != null && journey.Tags.Contains(action.TagToRemove))
+            if (journey.Tags != null && journey.Tags.Contains(action.TagToAdd))
             {
-                journey.Tags.Remove(action.TagToRemove);
+                journey.Tags.Remove(action.TagToAdd);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation("Removed tag {Tag} from patient {PatientId}", action.TagToRemove, patient.Id);
+                _logger.LogInformation("Removed tag {Tag} from patient {PatientId}", action.TagToAdd, patient.Id);
             }
         }
 
@@ -334,8 +328,8 @@ namespace MedicSoft.Api.Services.CRM
             rendered = rendered.Replace("{{nome_paciente}}", patient.Name ?? "");
             rendered = rendered.Replace("{{primeiro_nome}}", patient.Name?.Split(' ').FirstOrDefault() ?? "");
             rendered = rendered.Replace("{{email}}", patient.Email?.Value ?? "");
-            rendered = rendered.Replace("{{telefone}}", patient.Phone?.Value ?? "");
-            rendered = rendered.Replace("{{celular}}", patient.Phone?.Value ?? "");
+            rendered = rendered.Replace("{{telefone}}", patient.Phone?.ToString() ?? "");
+            rendered = rendered.Replace("{{celular}}", patient.Phone?.ToString() ?? "");
             rendered = rendered.Replace("{{data_nascimento}}", patient.DateOfBirth.ToString("dd/MM/yyyy"));
             
             // Add more variables as needed
