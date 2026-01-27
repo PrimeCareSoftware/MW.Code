@@ -49,5 +49,37 @@ namespace MedicSoft.Application.Services
         /// Gets glosa alerts (items above average)
         /// </summary>
         Task<IEnumerable<GlosaAlertDto>> GetGlosaAlertsAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId);
+
+        // ====== TISS PHASE 2 - New Analytics Methods ======
+
+        /// <summary>
+        /// Gets comprehensive dashboard data with glosas and recursos
+        /// </summary>
+        Task<DashboardTissDto> GetDashboardDataAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId);
+
+        /// <summary>
+        /// Gets detailed glosa analytics including recurso tracking
+        /// </summary>
+        Task<GlosaDetailedAnalyticsDto> GetGlosaDetailedAnalyticsAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId);
+
+        /// <summary>
+        /// Gets operator performance with glosa and recurso details
+        /// </summary>
+        Task<IEnumerable<OperadoraPerformanceDto>> GetOperadoraPerformanceAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId);
+
+        /// <summary>
+        /// Gets glosa trends over time including recurso success rate
+        /// </summary>
+        Task<IEnumerable<GlosaTendenciaDto>> GetGlosaTendenciasAsync(Guid clinicId, int months, string tenantId);
+
+        /// <summary>
+        /// Gets most frequent glosa codes
+        /// </summary>
+        Task<IEnumerable<GlosaCodigoFrequenteDto>> GetGlosaCodigosFrequentesAsync(Guid clinicId, DateTime startDate, DateTime endDate, int top, string tenantId);
+
+        /// <summary>
+        /// Gets procedures most commonly rejected
+        /// </summary>
+        Task<IEnumerable<ProcedimentoMaisGlosadoDto>> GetProcedimentosMaisGlosadosAsync(Guid clinicId, DateTime startDate, DateTime endDate, int top, string tenantId);
     }
 }

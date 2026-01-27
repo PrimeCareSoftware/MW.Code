@@ -113,4 +113,106 @@ namespace MedicSoft.Application.DTOs
         public decimal Value { get; set; }
         public decimal Threshold { get; set; }
     }
+
+    // ====== TISS PHASE 2 - New Analytics DTOs ======
+
+    /// <summary>
+    /// DTO for detailed glosa analysis with recurso tracking
+    /// </summary>
+    public class GlosaDetailedAnalyticsDto
+    {
+        public int TotalGlosas { get; set; }
+        public decimal ValorTotalGlosado { get; set; }
+        public int GlosasAdministrativas { get; set; }
+        public int GlosasTecnicas { get; set; }
+        public int GlosasFinanceiras { get; set; }
+        public int RecursosEnviados { get; set; }
+        public int RecursosDeferidos { get; set; }
+        public int RecursosIndeferidos { get; set; }
+        public decimal TaxaSucessoRecursos { get; set; }
+        public decimal ValorRecuperado { get; set; }
+    }
+
+    /// <summary>
+    /// DTO for operator performance with glosa details
+    /// </summary>
+    public class OperadoraPerformanceDto
+    {
+        public Guid OperatorId { get; set; }
+        public string NomeOperadora { get; set; } = string.Empty;
+        public int GuiasEnviadas { get; set; }
+        public int GuiasAprovadas { get; set; }
+        public decimal TaxaAprovacao { get; set; }
+        public decimal ValorFaturado { get; set; }
+        public decimal ValorGlosado { get; set; }
+        public decimal ValorRecebido { get; set; }
+        public decimal TaxaGlosa { get; set; }
+        public double TempoMedioRetornoDias { get; set; }
+        public DateTime? UltimoEnvio { get; set; }
+        public int TotalGlosas { get; set; }
+        public int RecursosDeferidos { get; set; }
+        public decimal TaxaSucessoRecursos { get; set; }
+    }
+
+    /// <summary>
+    /// DTO for glosa trends with recurso data
+    /// </summary>
+    public class GlosaTendenciaDto
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public string MonthName { get; set; } = string.Empty;
+        public decimal TaxaGlosa { get; set; }
+        public decimal ValorGlosado { get; set; }
+        public int TotalGlosas { get; set; }
+        public int RecursosEnviados { get; set; }
+        public decimal TaxaSucessoRecursos { get; set; }
+    }
+
+    /// <summary>
+    /// DTO for most common glosa codes
+    /// </summary>
+    public class GlosaCodigoFrequenteDto
+    {
+        public string CodigoGlosa { get; set; } = string.Empty;
+        public string DescricaoGlosa { get; set; } = string.Empty;
+        public string Tipo { get; set; } = string.Empty;
+        public int Ocorrencias { get; set; }
+        public decimal ValorTotal { get; set; }
+        public int RecursosDeferidos { get; set; }
+        public decimal TaxaSucessoRecursos { get; set; }
+    }
+
+    /// <summary>
+    /// DTO for procedures most commonly rejected
+    /// </summary>
+    public class ProcedimentoMaisGlosadoDto
+    {
+        public string CodigoProcedimento { get; set; } = string.Empty;
+        public string NomeProcedimento { get; set; } = string.Empty;
+        public int TotalGlosas { get; set; }
+        public decimal ValorTotalGlosado { get; set; }
+        public List<string> MotivosFrequentes { get; set; } = new();
+    }
+
+    /// <summary>
+    /// DTO for dashboard main data
+    /// </summary>
+    public class DashboardTissDto
+    {
+        public DateTime PeriodoInicio { get; set; }
+        public DateTime PeriodoFim { get; set; }
+        public int TotalGuiasEnviadas { get; set; }
+        public int TotalGuiasAprovadas { get; set; }
+        public int TotalGuiasGlosadas { get; set; }
+        public decimal TaxaGlosa { get; set; }
+        public decimal ValorTotalFaturado { get; set; }
+        public decimal ValorTotalGlosado { get; set; }
+        public decimal ValorTotalRecebido { get; set; }
+        public List<OperadoraPerformanceDto> PerformancePorOperadora { get; set; } = new();
+        public List<GlosaCodigoFrequenteDto> GlosasMaisFrequentes { get; set; } = new();
+        public List<ProcedimentoMaisGlosadoDto> ProcedimentosMaisGlosados { get; set; } = new();
+        public GlosaDetailedAnalyticsDto AnaliseGlosas { get; set; } = new();
+        public List<GlosaTendenciaDto> TendenciaGlosas { get; set; } = new();
+    }
 }

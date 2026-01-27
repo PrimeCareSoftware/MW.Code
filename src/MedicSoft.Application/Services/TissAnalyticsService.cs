@@ -18,17 +18,23 @@ namespace MedicSoft.Application.Services
         private readonly ITissGuideRepository _tissGuideRepository;
         private readonly IAuthorizationRequestRepository _authorizationRequestRepository;
         private readonly IHealthInsuranceOperatorRepository _operatorRepository;
+        private readonly ITissGlosaRepository _glosaRepository;
+        private readonly ITissRecursoGlosaRepository _recursoRepository;
 
         public TissAnalyticsService(
             ITissBatchRepository tissBatchRepository,
             ITissGuideRepository tissGuideRepository,
             IAuthorizationRequestRepository authorizationRequestRepository,
-            IHealthInsuranceOperatorRepository operatorRepository)
+            IHealthInsuranceOperatorRepository operatorRepository,
+            ITissGlosaRepository glosaRepository,
+            ITissRecursoGlosaRepository recursoRepository)
         {
             _tissBatchRepository = tissBatchRepository;
             _tissGuideRepository = tissGuideRepository;
             _authorizationRequestRepository = authorizationRequestRepository;
             _operatorRepository = operatorRepository;
+            _glosaRepository = glosaRepository;
+            _recursoRepository = recursoRepository;
         }
 
         public async Task<GlosasSummaryDto> GetGlosasSummaryAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId)
@@ -414,6 +420,246 @@ namespace MedicSoft.Application.Services
 
             return alerts.OrderByDescending(a => a.Severity == "high" ? 3 : a.Severity == "medium" ? 2 : 1)
                         .ThenByDescending(a => a.Value);
+        }
+
+        // ====== TISS PHASE 2 - New Analytics Methods Implementation ======
+
+        public async Task<DashboardTissDto> GetDashboardDataAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId)
+        {
+            var dashboard = new DashboardTissDto
+            {
+                PeriodoInicio = startDate,
+                PeriodoFim = endDate
+            };
+
+            // Get guides data
+            var batches = await _tissBatchRepository.GetByClinicIdAsync(clinicId, tenantId);
+            var filteredBatches = batches.Where(b => 
+                b.SubmittedDate.HasValue && 
+                b.SubmittedDate.Value >= startDate && 
+                b.SubmittedDate.Value <= endDate).ToList();
+
+            var guides = new List<TissGuide>();
+            foreach (var batch in filteredBatches)
+            {
+                var batchGuides = await _tissGuideRepository.GetByBatchIdAsync(batch.Id, tenantId);
+                guides.AddRange(batchGuides);
+            }
+
+            dashboard.TotalGuiasEnviadas = guides.Count;
+            dashboard.TotalGuiasAprovadas = guides.Count(g => g.Status == GuideStatus.Approved || g.Status == GuideStatus.PartiallyApproved);
+            dashboard.TotalGuiasGlosadas = guides.Count(g => g.GlosedAmount.HasValue && g.GlosedAmount.Value > 0);
+            dashboard.ValorTotalFaturado = guides.Sum(g => g.TotalAmount);
+            dashboard.ValorTotalGlosado = guides.Sum(g => g.GlosedAmount ?? 0);
+            dashboard.ValorTotalRecebido = guides.Sum(g => g.ApprovedAmount ?? 0);
+            dashboard.TaxaGlosa = dashboard.ValorTotalFaturado > 0 
+                ? (dashboard.ValorTotalGlosado / dashboard.ValorTotalFaturado) * 100 
+                : 0;
+
+            // Get detailed analytics
+            dashboard.AnaliseGlosas = await GetGlosaDetailedAnalyticsAsync(clinicId, startDate, endDate, tenantId);
+            dashboard.PerformancePorOperadora = (await GetOperadoraPerformanceAsync(clinicId, startDate, endDate, tenantId)).ToList();
+            dashboard.GlosasMaisFrequentes = (await GetGlosaCodigosFrequentesAsync(clinicId, startDate, endDate, 10, tenantId)).ToList();
+            dashboard.ProcedimentosMaisGlosados = (await GetProcedimentosMaisGlosadosAsync(clinicId, startDate, endDate, 10, tenantId)).ToList();
+            dashboard.TendenciaGlosas = (await GetGlosaTendenciasAsync(clinicId, 12, tenantId)).ToList();
+
+            return dashboard;
+        }
+
+        public async Task<GlosaDetailedAnalyticsDto> GetGlosaDetailedAnalyticsAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId)
+        {
+            var glosas = (await _glosaRepository.GetByDateRangeAsync(startDate, endDate, tenantId)).ToList();
+
+            var analytics = new GlosaDetailedAnalyticsDto
+            {
+                TotalGlosas = glosas.Count,
+                ValorTotalGlosado = glosas.Sum(g => g.ValorGlosado),
+                GlosasAdministrativas = glosas.Count(g => g.Tipo == TipoGlosa.Administrativa),
+                GlosasTecnicas = glosas.Count(g => g.Tipo == TipoGlosa.Tecnica),
+                GlosasFinanceiras = glosas.Count(g => g.Tipo == TipoGlosa.Financeira)
+            };
+
+            // Get recursos data
+            var recursos = (await _recursoRepository.GetByDateRangeAsync(startDate, endDate, tenantId)).ToList();
+            analytics.RecursosEnviados = recursos.Count;
+            analytics.RecursosDeferidos = recursos.Count(r => r.Resultado == ResultadoRecurso.Deferido || r.Resultado == ResultadoRecurso.Parcial);
+            analytics.RecursosIndeferidos = recursos.Count(r => r.Resultado == ResultadoRecurso.Indeferido);
+            analytics.TaxaSucessoRecursos = analytics.RecursosEnviados > 0 
+                ? ((decimal)analytics.RecursosDeferidos / analytics.RecursosEnviados) * 100 
+                : 0;
+            analytics.ValorRecuperado = recursos.Where(r => r.ValorDeferido.HasValue).Sum(r => r.ValorDeferido!.Value);
+
+            return analytics;
+        }
+
+        public async Task<IEnumerable<OperadoraPerformanceDto>> GetOperadoraPerformanceAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId)
+        {
+            var batches = await _tissBatchRepository.GetByClinicIdAsync(clinicId, tenantId);
+            var filteredBatches = batches.Where(b => 
+                b.SubmittedDate.HasValue && 
+                b.SubmittedDate.Value >= startDate && 
+                b.SubmittedDate.Value <= endDate).ToList();
+
+            var operatorGroups = filteredBatches.GroupBy(b => b.OperatorId);
+            var results = new List<OperadoraPerformanceDto>();
+
+            foreach (var operatorGroup in operatorGroups)
+            {
+                var operatorId = operatorGroup.Key;
+                var operatorBatches = operatorGroup.ToList();
+                
+                var guides = new List<TissGuide>();
+                foreach (var batch in operatorBatches)
+                {
+                    var batchGuides = await _tissGuideRepository.GetByBatchIdAsync(batch.Id, tenantId);
+                    guides.AddRange(batchGuides);
+                }
+
+                var valorFaturado = guides.Sum(g => g.TotalAmount);
+                var valorGlosado = guides.Sum(g => g.GlosedAmount ?? 0);
+                var valorRecebido = guides.Sum(g => g.ApprovedAmount ?? 0);
+
+                // Get glosas for this operator
+                var guideIds = guides.Select(g => g.Id).ToHashSet();
+                var allGlosas = await _glosaRepository.GetByDateRangeAsync(startDate, endDate, tenantId);
+                var operatorGlosas = allGlosas.Where(g => guideIds.Contains(g.GuideId)).ToList();
+
+                // Get recursos success rate
+                var recursos = new List<TissRecursoGlosa>();
+                foreach (var glosa in operatorGlosas)
+                {
+                    var glosaRecursos = await _recursoRepository.GetByGlosaIdAsync(glosa.Id, tenantId);
+                    recursos.AddRange(glosaRecursos);
+                }
+
+                var recursosDeferidos = recursos.Count(r => r.Resultado == ResultadoRecurso.Deferido || r.Resultado == ResultadoRecurso.Parcial);
+
+                var operatorEntity = await _operatorRepository.GetByIdAsync(operatorId, tenantId);
+                var operatorName = operatorEntity?.TradeName ?? "Desconhecida";
+
+                // Calculate average return time
+                var processedBatches = operatorBatches.Where(b => b.SubmittedDate.HasValue && b.ProcessedDate.HasValue).ToList();
+                var avgReturnTime = processedBatches.Any() 
+                    ? processedBatches.Average(b => (b.ProcessedDate!.Value - b.SubmittedDate!.Value).TotalDays) 
+                    : 0;
+
+                results.Add(new OperadoraPerformanceDto
+                {
+                    OperatorId = operatorId,
+                    NomeOperadora = operatorName,
+                    GuiasEnviadas = guides.Count,
+                    GuiasAprovadas = guides.Count(g => g.Status == GuideStatus.Approved || g.Status == GuideStatus.PartiallyApproved),
+                    TaxaAprovacao = guides.Count > 0 
+                        ? ((decimal)guides.Count(g => g.Status == GuideStatus.Approved || g.Status == GuideStatus.PartiallyApproved) / guides.Count) * 100 
+                        : 0,
+                    ValorFaturado = valorFaturado,
+                    ValorGlosado = valorGlosado,
+                    ValorRecebido = valorRecebido,
+                    TaxaGlosa = valorFaturado > 0 ? (valorGlosado / valorFaturado) * 100 : 0,
+                    TempoMedioRetornoDias = avgReturnTime,
+                    UltimoEnvio = operatorBatches.Max(b => b.SubmittedDate),
+                    TotalGlosas = operatorGlosas.Count,
+                    RecursosDeferidos = recursosDeferidos,
+                    TaxaSucessoRecursos = recursos.Count > 0 ? ((decimal)recursosDeferidos / recursos.Count) * 100 : 0
+                });
+            }
+
+            return results.OrderByDescending(r => r.ValorFaturado);
+        }
+
+        public async Task<IEnumerable<GlosaTendenciaDto>> GetGlosaTendenciasAsync(Guid clinicId, int months, string tenantId)
+        {
+            var results = new List<GlosaTendenciaDto>();
+            var today = DateTime.UtcNow;
+
+            for (int i = months - 1; i >= 0; i--)
+            {
+                var targetDate = today.AddMonths(-i);
+                var startDate = new DateTime(targetDate.Year, targetDate.Month, 1);
+                var endDate = startDate.AddMonths(1).AddDays(-1);
+
+                var glosas = (await _glosaRepository.GetByDateRangeAsync(startDate, endDate, tenantId)).ToList();
+                var recursos = (await _recursoRepository.GetByDateRangeAsync(startDate, endDate, tenantId)).ToList();
+
+                var valorGlosado = glosas.Sum(g => g.ValorGlosado);
+                var recursosDeferidos = recursos.Count(r => r.Resultado == ResultadoRecurso.Deferido || r.Resultado == ResultadoRecurso.Parcial);
+
+                results.Add(new GlosaTendenciaDto
+                {
+                    Year = targetDate.Year,
+                    Month = targetDate.Month,
+                    MonthName = CultureInfo.GetCultureInfo("pt-BR").DateTimeFormat.GetMonthName(targetDate.Month),
+                    TaxaGlosa = valorGlosado,
+                    ValorGlosado = valorGlosado,
+                    TotalGlosas = glosas.Count,
+                    RecursosEnviados = recursos.Count,
+                    TaxaSucessoRecursos = recursos.Count > 0 ? ((decimal)recursosDeferidos / recursos.Count) * 100 : 0
+                });
+            }
+
+            return results;
+        }
+
+        public async Task<IEnumerable<GlosaCodigoFrequenteDto>> GetGlosaCodigosFrequentesAsync(Guid clinicId, DateTime startDate, DateTime endDate, int top, string tenantId)
+        {
+            var glosas = (await _glosaRepository.GetByDateRangeAsync(startDate, endDate, tenantId)).ToList();
+            
+            var codigoGroups = glosas.GroupBy(g => new { g.CodigoGlosa, g.DescricaoGlosa, g.Tipo });
+            var results = new List<GlosaCodigoFrequenteDto>();
+
+            foreach (var group in codigoGroups)
+            {
+                var groupGlosas = group.ToList();
+                var recursos = new List<TissRecursoGlosa>();
+                
+                foreach (var glosa in groupGlosas)
+                {
+                    var glosaRecursos = await _recursoRepository.GetByGlosaIdAsync(glosa.Id, tenantId);
+                    recursos.AddRange(glosaRecursos);
+                }
+
+                var recursosDeferidos = recursos.Count(r => r.Resultado == ResultadoRecurso.Deferido || r.Resultado == ResultadoRecurso.Parcial);
+
+                results.Add(new GlosaCodigoFrequenteDto
+                {
+                    CodigoGlosa = group.Key.CodigoGlosa,
+                    DescricaoGlosa = group.Key.DescricaoGlosa,
+                    Tipo = group.Key.Tipo.ToString(),
+                    Ocorrencias = groupGlosas.Count,
+                    ValorTotal = groupGlosas.Sum(g => g.ValorGlosado),
+                    RecursosDeferidos = recursosDeferidos,
+                    TaxaSucessoRecursos = recursos.Count > 0 ? ((decimal)recursosDeferidos / recursos.Count) * 100 : 0
+                });
+            }
+
+            return results.OrderByDescending(r => r.Ocorrencias).Take(top);
+        }
+
+        public async Task<IEnumerable<ProcedimentoMaisGlosadoDto>> GetProcedimentosMaisGlosadosAsync(Guid clinicId, DateTime startDate, DateTime endDate, int top, string tenantId)
+        {
+            var glosas = (await _glosaRepository.GetByDateRangeAsync(startDate, endDate, tenantId))
+                .Where(g => !string.IsNullOrEmpty(g.CodigoProcedimento))
+                .ToList();
+            
+            var procedureGroups = glosas.GroupBy(g => new { g.CodigoProcedimento, g.NomeProcedimento });
+            var results = new List<ProcedimentoMaisGlosadoDto>();
+
+            foreach (var group in procedureGroups)
+            {
+                var groupGlosas = group.ToList();
+                var motivos = groupGlosas.Select(g => g.DescricaoGlosa).Distinct().Take(5).ToList();
+
+                results.Add(new ProcedimentoMaisGlosadoDto
+                {
+                    CodigoProcedimento = group.Key.CodigoProcedimento ?? string.Empty,
+                    NomeProcedimento = group.Key.NomeProcedimento ?? string.Empty,
+                    TotalGlosas = groupGlosas.Count,
+                    ValorTotalGlosado = groupGlosas.Sum(g => g.ValorGlosado),
+                    MotivosFrequentes = motivos
+                });
+            }
+
+            return results.OrderByDescending(r => r.TotalGlosas).Take(top);
         }
     }
 }
