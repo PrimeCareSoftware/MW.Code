@@ -117,11 +117,18 @@ namespace MedicSoft.ML.Services
                     return false;
                 }
 
-                ITransformer loadedModel = null!;
+                ITransformer? loadedModel = null;
                 await Task.Run(() =>
                 {
                     loadedModel = _mlContext.Model.Load(_modelPath, out var modelSchema);
                 });
+
+                // Verify model was loaded successfully
+                if (loadedModel == null)
+                {
+                    _logger.LogError("Falha ao carregar modelo de: {ModelPath}", _modelPath);
+                    return false;
+                }
 
                 // Update model with thread-safety
                 lock (_modelLock)
