@@ -226,6 +226,7 @@ Documentos sobre implementações específicas, resumos técnicos e completions.
 - [SNGPC Resumo Final PT](implementacoes/SNGPC_RESUMO_FINAL_PT.md)
 - [SNGPC Task Completion Summary](implementacoes/SNGPC_TASK_COMPLETION_SUMMARY.md)
 - [SOAP Implementation Summary](implementacoes/SOAP_IMPLEMENTATION_SUMMARY.md)
+- [SOAP Technical Summary](implementacoes/SOAP_TECHNICAL_SUMMARY.md)
 - [Theme Implementation](implementacoes/THEME_IMPLEMENTATION.md)
 - [UX UI Refactoring Summary](implementacoes/UX_UI_REFACTORING_SUMMARY.md)
 

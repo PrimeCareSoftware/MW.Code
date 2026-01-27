@@ -47,7 +47,7 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
 - Auditoria LGPD completa
 - Criptografia de dados
 - Portal do paciente
-- Prontuário SOAP
+- **Prontuário SOAP** ✅ (100% implementado - [11-prontuario-soap.md](./Plano_Desenvolvimento/fase-2-seguranca-lgpd/11-prontuario-soap.md))
 - Melhorias de segurança
 
 #### 🟢 Fase 4 - Analytics e Otimização (P2 - Média)
@@ -120,6 +120,7 @@ Central de documentação técnica detalhada do sistema.
 - Login por subdomínio
 - PWA - Instalação e uso
 - Mock data para desenvolvimento
+- **[SOAP_USER_GUIDE.md](./system-admin/guias/SOAP_USER_GUIDE.md)** - Guia completo do usuário SOAP (407 linhas)
 
 ### 🏗️ Backend
 **[backend/](./system-admin/backend/)**
@@ -148,7 +149,9 @@ Central de documentação técnica detalhada do sistema.
 - Telemedicina
 - Portal do paciente
 - TISS e prescrições
-- Documentação SOAP
+- **Documentação SOAP:**
+  - [SOAP_API_DOCUMENTATION.md](./system-admin/regras-negocio/SOAP_API_DOCUMENTATION.md) - API completa SOAP
+  - [MEDICAL_CONSULTATION_FLOW.md](./system-admin/regras-negocio/MEDICAL_CONSULTATION_FLOW.md) - Fluxo de consulta incluindo SOAP
 
 **Subdiretórios:**
 - **[telemedicine/](./system-admin/regras-negocio/telemedicine/)** - CFM 2.314 e segurança
@@ -237,6 +240,101 @@ Central de documentação técnica detalhada do sistema.
 **[mobile/](./mobile/)**
 - **⚠️ Descontinuado:** Apps nativos iOS e Android foram substituídos por PWA
 - Código mantido apenas para referência histórica
+
+---
+
+## 📋 SOAP - Sistema de Prontuário Estruturado
+
+> **Status:** ✅ Totalmente implementado (Janeiro 2026)  
+> **Prioridade:** P1 - Alta  
+> **Localização:** Fase 2 - Segurança e LGPD
+
+### Documentação SOAP Completa
+
+#### Especificação e Planejamento
+- **[Plano_Desenvolvimento/fase-2-seguranca-lgpd/11-prontuario-soap.md](./Plano_Desenvolvimento/fase-2-seguranca-lgpd/11-prontuario-soap.md)**
+  - Especificação completa do sistema SOAP
+  - Arquitetura detalhada
+  - Status: ✅ 100% implementado
+  - 1.001 linhas de documentação técnica
+
+#### Guias do Usuário
+- **[system-admin/guias/SOAP_USER_GUIDE.md](./system-admin/guias/SOAP_USER_GUIDE.md)**
+  - Guia completo para médicos e enfermeiros
+  - Tutorial passo-a-passo
+  - FAQ e melhores práticas
+  - 407 linhas
+
+#### Documentação Técnica
+- **[system-admin/implementacoes/SOAP_IMPLEMENTATION_SUMMARY.md](./system-admin/implementacoes/SOAP_IMPLEMENTATION_SUMMARY.md)**
+  - Resumo da implementação frontend
+  - 13 arquivos, 3.360 linhas de código
+  - Estatísticas de implementação
+  - 299 linhas de documentação
+
+- **[system-admin/implementacoes/SOAP_TECHNICAL_SUMMARY.md](./system-admin/implementacoes/SOAP_TECHNICAL_SUMMARY.md)**
+  - Detalhes técnicos backend e frontend
+  - Estrutura de dados completa
+  - Fluxos de trabalho
+
+- **[system-admin/regras-negocio/SOAP_API_DOCUMENTATION.md](./system-admin/regras-negocio/SOAP_API_DOCUMENTATION.md)**
+  - Documentação completa da API RESTful
+  - Exemplos de requisições e respostas
+  - Códigos de erro e validações
+
+- **[system-admin/docs/prompts-copilot/alta/06-prontuario-soap.md](./system-admin/docs/prompts-copilot/alta/06-prontuario-soap.md)**
+  - Prompt original de implementação
+  - Referência histórica
+  - 661 linhas
+
+#### Código Fonte
+
+**Backend:**
+- `src/MedicSoft.Domain/Entities/SoapRecord.cs` - Entidade principal
+- `src/MedicSoft.Domain/ValueObjects/` - SubjectiveData, ObjectiveData, AssessmentData, PlanData
+- `src/MedicSoft.Application/Services/SoapRecordService.cs` - Serviço de aplicação
+- `src/MedicSoft.Api/Controllers/SoapRecordsController.cs` - Controlador REST
+- `src/MedicSoft.Repository/Repositories/SoapRecordRepository.cs` - Repositório
+- `src/MedicSoft.Repository/Configurations/SoapRecordConfiguration.cs` - Configuração EF Core
+- `src/MedicSoft.Repository/Migrations/PostgreSQL/20260122165531_AddSoapRecords.cs` - Migration
+
+**Frontend (Angular):**
+- `frontend/medicwarehouse-app/src/app/pages/soap-records/` - Módulo completo (13 arquivos)
+  - Componente principal com Material Stepper
+  - 7 componentes especializados
+  - Service de integração
+  - Models TypeScript completos
+
+### Funcionalidades Implementadas
+
+#### 4 Seções SOAP Completas
+- **S - Subjetivo:** 12 campos incluindo queixa principal, história da doença, alergias
+- **O - Objetivo:** Sinais vitais (10 medidas), exame físico (14 sistemas), resultados de exames
+- **A - Avaliação:** Diagnóstico principal (CID-10), diagnósticos diferenciais, raciocínio clínico
+- **P - Plano:** Prescrições, exames solicitados, procedimentos, encaminhamentos, orientações
+
+#### Características Técnicas
+- ✅ Formulários reativos com validação
+- ✅ Navegação step-by-step (Material Stepper)
+- ✅ Cálculo automático de IMC
+- ✅ Validação de completude
+- ✅ Bloqueio após conclusão
+- ✅ Dados 100% estruturados
+- ✅ API RESTful completa (9 endpoints)
+- ✅ Persistência PostgreSQL
+- ✅ Tratamento de erros robusto
+
+### Métricas de Implementação
+
+| Métrica | Valor |
+|---------|-------|
+| **Linhas de Código** | 5.000+ |
+| **Arquivos Backend** | 10+ arquivos |
+| **Arquivos Frontend** | 13 arquivos |
+| **Componentes Angular** | 7 componentes |
+| **Endpoints API** | 9 endpoints |
+| **Documentação** | 4 documentos principais |
+| **Status** | ✅ 100% completo |
 
 ---
 
