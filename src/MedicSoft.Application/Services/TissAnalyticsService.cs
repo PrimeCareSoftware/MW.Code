@@ -571,6 +571,7 @@ namespace MedicSoft.Application.Services
         {
             var results = new List<GlosaTendenciaDto>();
             var today = DateTime.UtcNow;
+            var culture = CultureInfo.GetCultureInfo("pt-BR");
 
             for (int i = months - 1; i >= 0; i--)
             {
@@ -588,7 +589,7 @@ namespace MedicSoft.Application.Services
                 {
                     Year = targetDate.Year,
                     Month = targetDate.Month,
-                    MonthName = CultureInfo.GetCultureInfo("pt-BR").DateTimeFormat.GetMonthName(targetDate.Month),
+                    MonthName = culture.DateTimeFormat.GetMonthName(targetDate.Month),
                     TaxaGlosa = valorGlosado,
                     ValorGlosado = valorGlosado,
                     TotalGlosas = glosas.Count,
