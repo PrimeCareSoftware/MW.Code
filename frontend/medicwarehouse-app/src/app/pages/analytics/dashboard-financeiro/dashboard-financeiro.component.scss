@@ -1,0 +1,50 @@
+// Reuse most styles from dashboard-clinico
+@import '../dashboard-clinico/dashboard-clinico.component.scss';
+
+// Additional styles specific to financial dashboard
+.projection-banner {
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  svg {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .projection-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .projection-label {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .projection-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.kpi-value.negative {
+  color: var(--danger-color);
+}
+
+.kpi-icon.negative {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.kpi-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
