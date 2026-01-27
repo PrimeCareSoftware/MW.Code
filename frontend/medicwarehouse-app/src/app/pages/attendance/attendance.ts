@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -18,6 +18,7 @@ import { ClinicalExaminationService } from '../../services/clinical-examination.
 import { DiagnosticHypothesisService } from '../../services/diagnostic-hypothesis.service';
 import { TherapeuticPlanService } from '../../services/therapeutic-plan.service';
 import { InformedConsentService } from '../../services/informed-consent.service';
+import { ConsultationFormConfigurationService } from '../../services/consultation-form-configuration.service';
 import { Appointment } from '../../models/appointment.model';
 import { MedicalRecord, ClinicalExamination, DiagnosticHypothesis, TherapeuticPlan, InformedConsent, DiagnosisType, DiagnosisTypeLabels } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
@@ -27,6 +28,7 @@ import { MedicationAutocomplete } from '../../models/medication.model';
 import { ExamAutocomplete } from '../../models/exam-catalog.model';
 import type { CallNextPatientNotification } from '../../models/notification.model';
 import { NotificationType } from '../../models/notification.model';
+import { ConsultationFormConfigurationDto } from '../../models/consultation-form-configuration.model';
 
 // Constants
 const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
@@ -47,6 +49,7 @@ export class Attendance implements OnInit, OnDestroy {
   medicalRecord = signal<MedicalRecord | null>(null);
   patientHistory = signal<MedicalRecord[]>([]);
   nextPatient = signal<Appointment | null>(null);
+  formConfig = signal<ConsultationFormConfigurationDto | null>(null);
   
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
@@ -110,6 +113,9 @@ export class Attendance implements OnInit, OnDestroy {
   examTypeLabels = ExamTypeLabels;
   examUrgencies = Object.values(ExamUrgency).filter(v => typeof v === 'number') as ExamUrgency[];
   examUrgencyLabels = ExamUrgencyLabels;
+
+  // Services
+  private consultationFormConfigService = inject(ConsultationFormConfigurationService);
 
   constructor(
     private fb: FormBuilder,
@@ -221,6 +227,7 @@ export class Attendance implements OnInit, OnDestroy {
         this.appointment.set(appointment);
         this.loadPatient(appointment.patientId);
         this.loadOrCreateMedicalRecord(appointment.id, appointment.patientId);
+        this.loadFormConfiguration(appointment.clinicId);
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -229,6 +236,86 @@ export class Attendance implements OnInit, OnDestroy {
         this.isLoading.set(false);
       }
     });
+  }
+
+  loadFormConfiguration(clinicId: string): void {
+    this.consultationFormConfigService.getActiveConfigurationByClinicId(clinicId).subscribe({
+      next: (config) => {
+        this.formConfig.set(config);
+        this.applyFormValidators(config);
+      },
+      error: (error) => {
+        // Configuration not found (404) or other error - use default behavior (all fields required)
+        if (error.status === 404) {
+          console.log('No custom form configuration found for clinic, using default validators');
+        } else {
+          console.error('Error loading form configuration:', error);
+        }
+        this.formConfig.set(null);
+      }
+    });
+  }
+
+  private applyFormValidators(config: ConsultationFormConfigurationDto): void {
+    // Update chiefComplaint validators
+    const chiefComplaintControl = this.attendanceForm.get('chiefComplaint');
+    if (chiefComplaintControl) {
+      const validators = config.requireChiefComplaint 
+        ? [Validators.required, Validators.minLength(10)] 
+        : [Validators.minLength(10)];
+      chiefComplaintControl.setValidators(validators);
+      chiefComplaintControl.updateValueAndValidity();
+    }
+
+    // Update historyOfPresentIllness validators
+    const hpiControl = this.attendanceForm.get('historyOfPresentIllness');
+    if (hpiControl) {
+      const validators = config.requireHistoryOfPresentIllness 
+        ? [Validators.required, Validators.minLength(50)] 
+        : [Validators.minLength(50)];
+      hpiControl.setValidators(validators);
+      hpiControl.updateValueAndValidity();
+    }
+
+    // Update pastMedicalHistory validators
+    const pmhControl = this.attendanceForm.get('pastMedicalHistory');
+    if (pmhControl) {
+      const validators = config.requirePastMedicalHistory 
+        ? [Validators.required] 
+        : [];
+      pmhControl.setValidators(validators);
+      pmhControl.updateValueAndValidity();
+    }
+
+    // Update familyHistory validators
+    const familyControl = this.attendanceForm.get('familyHistory');
+    if (familyControl) {
+      const validators = config.requireFamilyHistory 
+        ? [Validators.required] 
+        : [];
+      familyControl.setValidators(validators);
+      familyControl.updateValueAndValidity();
+    }
+
+    // Update lifestyleHabits validators
+    const lifestyleControl = this.attendanceForm.get('lifestyleHabits');
+    if (lifestyleControl) {
+      const validators = config.requireLifestyleHabits 
+        ? [Validators.required] 
+        : [];
+      lifestyleControl.setValidators(validators);
+      lifestyleControl.updateValueAndValidity();
+    }
+
+    // Update currentMedications validators
+    const medicationsControl = this.attendanceForm.get('currentMedications');
+    if (medicationsControl) {
+      const validators = config.requireCurrentMedications 
+        ? [Validators.required] 
+        : [];
+      medicationsControl.setValidators(validators);
+      medicationsControl.updateValueAndValidity();
+    }
   }
 
   loadPatient(patientId: string): void {
@@ -338,6 +425,9 @@ export class Attendance implements OnInit, OnDestroy {
     if (this.timerSubscription) {
       return; // Cronômetro já está em execução
     }
+
+    // Reset timer to 00:00
+    this.elapsedSeconds.set(0);
 
     this.timerSubscription = interval(1000).subscribe(() => {
       if (this.startTime) {
