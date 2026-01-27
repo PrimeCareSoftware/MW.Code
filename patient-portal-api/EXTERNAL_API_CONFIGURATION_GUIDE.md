@@ -101,8 +101,13 @@ TwilioSettings__Enabled=true
 3. Nome: `Patient Portal Production` (ou similar)
 4. Permissões: **Full Access** (ou apenas "Mail Send" para segurança)
 5. Clique em **Create & View**
-6. **⚠️ IMPORTANTE:** Copie a API Key IMEDIATAMENTE (só aparece uma vez)
-   - Exemplo: `SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+6. **⚠️ ATENÇÃO CRÍTICA:** 
+   - A API Key só será exibida UMA VEZ e nunca mais
+   - Copie a chave IMEDIATAMENTE para um local seguro
+   - Use um gerenciador de senhas (1Password, LastPass, etc.) ou variáveis de ambiente
+   - NUNCA commite a chave no código ou repositório
+   - Se perder a chave, terá que criar uma nova
+   - Exemplo de formato: `SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 
 ### Passo 4: Configurar Remetente
 

@@ -58,12 +58,14 @@ O **Portal do Paciente** descrito no [prompt original (10-portal-paciente.md)](.
 ### ROI Atual (95% implementado)
 
 **Benefícios Já Alcançáveis:**
-- ✅ **Redução de 40-50% em ligações telefônicas** (agendamento online FUNCIONAL!)
-- ✅ **Redução potencial de 30-40% em no-show** (sistema pronto, precisa config API)
+- ✅ **Redução de 40-50% em ligações telefônicas*** (agendamento online FUNCIONAL!)
+- ✅ **Redução potencial de 30-40% em no-show*** (sistema pronto, precisa config API)
 - ✅ Satisfação do paciente melhorada (acesso 24/7 + self-service)
 - ✅ Compliance LGPD 100%
 - ✅ Imagem moderna e profissional
 - ✅ Escalabilidade operacional
+
+_* Projeções baseadas no plano original [`10-portal-paciente.md`](./10-portal-paciente.md) linhas 33-40 e benchmarks de mercado. Valores reais devem ser medidos após deploy._
 
 **Única Limitação:**
 - ⚠️ Lembretes automáticos precisam configuração de APIs externas (1-2 dias)

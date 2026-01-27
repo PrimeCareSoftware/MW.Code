@@ -234,12 +234,14 @@
 ### ROI Atual (95% implementado)
 
 **Benefícios Já Alcançáveis:**
-- ✅ **Redução de 40-50% em ligações telefônicas** (agendamento online funcional)
-- ✅ **Redução de 30-40% em no-show** (sistema de lembretes pronto, precisa configuração API)
+- ✅ **Redução de 40-50% em ligações telefônicas*** (agendamento online funcional)
+- ✅ **Redução de 30-40% em no-show*** (sistema pronto, precisa config API)
 - ✅ Acesso 24/7 para pacientes (consulta e agendamento)
 - ✅ Compliance LGPD 100% (evita multas)
 - ✅ Imagem moderna e profissional
 - ✅ Escalabilidade (libera equipe para tarefas críticas)
+
+_* Projeções baseadas no estudo original do prompt [`10-portal-paciente.md`](./Plano_Desenvolvimento/fase-2-seguranca-lgpd/10-portal-paciente.md) linhas 33-40 e práticas de mercado. Métricas reais devem ser coletadas após deploy._
 
 **Limitações Atuais:**
 - ⚠️ Lembretes automáticos precisam configuração de Twilio/SendGrid (2 dias)
@@ -254,11 +256,13 @@
 
 | Métrica | Antes | Agora (95%) | Completo (100%) | Status |
 |---------|-------|-------------|-----------------|--------|
-| **Ligações/dia** | 80-100 | 45-55 | 40-50 | ✅ **Meta Atingível** |
-| **No-show rate** | 15-20% | 15-18% | 8-12% | ⚠️ **Precisa Config API** |
-| **Tempo recepção/paciente** | 5 min | 2-3 min | 2 min | ✅ **Meta Atingida** |
-| **Satisfação paciente** | 7.5/10 | 8.5/10 | 9.0/10 | ✅ **Melhorado** |
-| **Custo operacional** | R$ 15k/mês | R$ 10k/mês | R$ 9k/mês | ✅ **Economia Visível** |
+| **Ligações/dia** | 80-100 | 45-55 | 40-50 | ✅ **Meta Atingível*** |
+| **No-show rate** | 15-20% | 15-18% | 8-12% | ⚠️ **Precisa Config API*** |
+| **Tempo recepção/paciente** | 5 min | 2-3 min | 2 min | ✅ **Meta Atingida*** |
+| **Satisfação paciente** | 7.5/10 | 8.5/10 | 9.0/10 | ✅ **Melhorado*** |
+| **Custo operacional** | R$ 15k/mês | R$ 10k/mês | R$ 9k/mês | ✅ **Economia Visível*** |
+
+_* Projeções baseadas nos objetivos do [`10-portal-paciente.md`](./Plano_Desenvolvimento/fase-2-seguranca-lgpd/10-portal-paciente.md) (linhas 33-40). Valores "Antes" são estimativas de linha de base. Valores reais devem ser medidos após implementação._
 
 **Tempo de Retorno (Feature Complete):** < 6 meses  
 **Economia Anual Projetada:** R$ 72.000
