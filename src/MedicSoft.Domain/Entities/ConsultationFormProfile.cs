@@ -28,6 +28,18 @@ namespace MedicSoft.Domain.Entities
         public bool ShowLifestyleHabits { get; private set; }
         public bool ShowCurrentMedications { get; private set; }
         
+        // Field required controls
+        public bool RequireChiefComplaint { get; private set; }
+        public bool RequireHistoryOfPresentIllness { get; private set; }
+        public bool RequirePastMedicalHistory { get; private set; }
+        public bool RequireFamilyHistory { get; private set; }
+        public bool RequireLifestyleHabits { get; private set; }
+        public bool RequireCurrentMedications { get; private set; }
+        public bool RequireClinicalExamination { get; private set; }
+        public bool RequireDiagnosticHypothesis { get; private set; }
+        public bool RequireInformedConsent { get; private set; }
+        public bool RequireTherapeuticPlan { get; private set; }
+        
         // Custom fields serialized as JSON
         private string _customFieldsJson = "[]";
         public string CustomFieldsJson 
@@ -58,6 +70,16 @@ namespace MedicSoft.Domain.Entities
             bool showFamilyHistory = true,
             bool showLifestyleHabits = true,
             bool showCurrentMedications = true,
+            bool requireChiefComplaint = true,
+            bool requireHistoryOfPresentIllness = true,
+            bool requirePastMedicalHistory = false,
+            bool requireFamilyHistory = false,
+            bool requireLifestyleHabits = false,
+            bool requireCurrentMedications = false,
+            bool requireClinicalExamination = true,
+            bool requireDiagnosticHypothesis = true,
+            bool requireInformedConsent = true,
+            bool requireTherapeuticPlan = true,
             List<CustomField>? customFields = null,
             bool isSystemDefault = false) : base(tenantId)
         {
@@ -77,6 +99,17 @@ namespace MedicSoft.Domain.Entities
             ShowLifestyleHabits = showLifestyleHabits;
             ShowCurrentMedications = showCurrentMedications;
             
+            RequireChiefComplaint = requireChiefComplaint;
+            RequireHistoryOfPresentIllness = requireHistoryOfPresentIllness;
+            RequirePastMedicalHistory = requirePastMedicalHistory;
+            RequireFamilyHistory = requireFamilyHistory;
+            RequireLifestyleHabits = requireLifestyleHabits;
+            RequireCurrentMedications = requireCurrentMedications;
+            RequireClinicalExamination = requireClinicalExamination;
+            RequireDiagnosticHypothesis = requireDiagnosticHypothesis;
+            RequireInformedConsent = requireInformedConsent;
+            RequireTherapeuticPlan = requireTherapeuticPlan;
+            
             if (customFields != null && customFields.Any())
             {
                 CustomFieldsJson = JsonSerializer.Serialize(customFields);
@@ -92,6 +125,16 @@ namespace MedicSoft.Domain.Entities
             bool showFamilyHistory,
             bool showLifestyleHabits,
             bool showCurrentMedications,
+            bool requireChiefComplaint,
+            bool requireHistoryOfPresentIllness,
+            bool requirePastMedicalHistory,
+            bool requireFamilyHistory,
+            bool requireLifestyleHabits,
+            bool requireCurrentMedications,
+            bool requireClinicalExamination,
+            bool requireDiagnosticHypothesis,
+            bool requireInformedConsent,
+            bool requireTherapeuticPlan,
             List<CustomField>? customFields = null)
         {
             if (IsSystemDefault)
@@ -109,6 +152,17 @@ namespace MedicSoft.Domain.Entities
             ShowFamilyHistory = showFamilyHistory;
             ShowLifestyleHabits = showLifestyleHabits;
             ShowCurrentMedications = showCurrentMedications;
+            
+            RequireChiefComplaint = requireChiefComplaint;
+            RequireHistoryOfPresentIllness = requireHistoryOfPresentIllness;
+            RequirePastMedicalHistory = requirePastMedicalHistory;
+            RequireFamilyHistory = requireFamilyHistory;
+            RequireLifestyleHabits = requireLifestyleHabits;
+            RequireCurrentMedications = requireCurrentMedications;
+            RequireClinicalExamination = requireClinicalExamination;
+            RequireDiagnosticHypothesis = requireDiagnosticHypothesis;
+            RequireInformedConsent = requireInformedConsent;
+            RequireTherapeuticPlan = requireTherapeuticPlan;
             
             if (customFields != null)
             {
