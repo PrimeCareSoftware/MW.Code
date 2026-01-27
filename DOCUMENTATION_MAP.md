@@ -59,13 +59,16 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
 #### 🟢 Fase 4 - Analytics e Otimização (P2 - Média)
 **[fase-4-analytics-otimizacao/](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/)**
 - TISS Fase 2 - Análise de glosas
-- **Fila de espera avançada** ✅ (Backend implementado - [14-fila-espera-avancada.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/14-fila-espera-avancada.md))
+- **Fila de espera avançada** ✅ (Backend 100% + Notificações + Analytics - [14-fila-espera-avancada.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/14-fila-espera-avancada.md))
   - ✅ Entidades FilaEspera e SenhaFila
   - ✅ Sistema de priorização automática
   - ✅ SignalR Hub para tempo real
-  - ✅ API REST completa
-  - 📋 Totem de autoatendimento (Em desenvolvimento)
-  - 📋 Painel de TV (Em desenvolvimento)
+  - ✅ API REST completa (14 endpoints)
+  - ✅ FilaNotificationService (notificações in-app + preparado para SMS)
+  - ✅ FilaAnalyticsService (métricas completas)
+  - ✅ FilaAnalyticsController (6 endpoints de analytics)
+  - 📋 Totem de autoatendimento (Pendente)
+  - 📋 Painel de TV (Pendente)
 - **TISS Fase 2 - Webservices + Gestão de Glosas** ✅ (90% implementado - Backend completo - [13-tiss-fase2.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/13-tiss-fase2.md))
 - Fila de espera avançada
 - BI e Analytics
