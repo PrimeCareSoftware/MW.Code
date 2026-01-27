@@ -151,13 +151,7 @@ namespace MedicSoft.Api.Services.CRM
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
 
-            var dtos = new List<SurveyDto>();
-            foreach (var survey in surveys)
-            {
-                dtos.Add(MapToDto(survey));
-            }
-
-            return dtos;
+            return surveys.Select(MapToDto).ToList();
         }
 
         public async Task<IEnumerable<SurveyDto>> GetActiveAsync(string tenantId)
@@ -168,13 +162,7 @@ namespace MedicSoft.Api.Services.CRM
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
 
-            var dtos = new List<SurveyDto>();
-            foreach (var survey in surveys)
-            {
-                dtos.Add(MapToDto(survey));
-            }
-
-            return dtos;
+            return surveys.Select(MapToDto).ToList();
         }
 
         public async Task<bool> ActivateAsync(Guid id, string tenantId)
@@ -302,13 +290,7 @@ namespace MedicSoft.Api.Services.CRM
                 .OrderByDescending(r => r.CompletedAt ?? r.StartedAt)
                 .ToListAsync();
 
-            var dtos = new List<SurveyResponseDto>();
-            foreach (var response in responses)
-            {
-                dtos.Add(await MapResponseToDtoAsync(response));
-            }
-
-            return dtos;
+            return await Task.WhenAll(responses.Select(MapResponseToDtoAsync));
         }
 
         public async Task<IEnumerable<SurveyResponseDto>> GetSurveyResponsesAsync(Guid surveyId, string tenantId)
@@ -322,13 +304,7 @@ namespace MedicSoft.Api.Services.CRM
                 .OrderByDescending(r => r.CompletedAt ?? r.StartedAt)
                 .ToListAsync();
 
-            var dtos = new List<SurveyResponseDto>();
-            foreach (var response in responses)
-            {
-                dtos.Add(await MapResponseToDtoAsync(response));
-            }
-
-            return dtos;
+            return await Task.WhenAll(responses.Select(MapResponseToDtoAsync));
         }
 
         public async Task<SurveyAnalyticsDto?> GetAnalyticsAsync(Guid surveyId, string tenantId)
@@ -398,10 +374,7 @@ namespace MedicSoft.Api.Services.CRM
                 .Take(10)
                 .ToList();
 
-            foreach (var response in recentResponses)
-            {
-                analytics.RecentResponses.Add(await MapResponseToDtoAsync(response));
-            }
+            analytics.RecentResponses = (await Task.WhenAll(recentResponses.Select(MapResponseToDtoAsync))).ToList();
 
             return analytics;
         }
@@ -442,7 +415,9 @@ namespace MedicSoft.Api.Services.CRM
                 return;
             }
 
-            var patient = await _context.Patients.FindAsync(patientId);
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.Id == patientId && p.TenantId == tenantId);
+            
             if (patient == null)
             {
                 _logger.LogWarning("Patient {PatientId} not found", patientId);
@@ -505,8 +480,11 @@ namespace MedicSoft.Api.Services.CRM
 
         private async Task<SurveyResponseDto> MapResponseToDtoAsync(SurveyResponse response)
         {
-            var patient = response.Patient ?? await _context.Patients.FindAsync(response.PatientId);
-            var survey = response.Survey ?? await _context.Surveys.FindAsync(response.SurveyId);
+            var patient = response.Patient ?? await _context.Patients
+                .FirstOrDefaultAsync(p => p.Id == response.PatientId && p.TenantId == response.TenantId);
+            
+            var survey = response.Survey ?? await _context.Surveys
+                .FirstOrDefaultAsync(s => s.Id == response.SurveyId && s.TenantId == response.TenantId);
 
             var questionResponses = response.QuestionResponses
                 .OrderBy(qr => qr.AnsweredAt)
