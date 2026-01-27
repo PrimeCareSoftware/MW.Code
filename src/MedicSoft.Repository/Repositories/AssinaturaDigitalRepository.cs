@@ -50,5 +50,13 @@ namespace MedicSoft.Repository.Repositories
                 .OrderByDescending(a => a.DataHoraAssinatura)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<AssinaturaDigital?> GetAssinaturaComRelacoesAsync(Guid assinaturaId)
+        {
+            return await _dbSet
+                .Include(a => a.Medico)
+                .Include(a => a.Certificado)
+                .FirstOrDefaultAsync(a => a.Id == assinaturaId);
+        }
     }
 }

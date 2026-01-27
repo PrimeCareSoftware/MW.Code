@@ -28,5 +28,10 @@ namespace MedicSoft.Domain.Interfaces
         Task<AssinaturaDigital?> GetUltimaAssinaturaPorDocumentoAsync(
             Guid documentoId, 
             TipoDocumento tipoDocumento);
+        
+        /// <summary>
+        /// Gets a signature by ID with related entities loaded.
+        /// </summary>
+        Task<AssinaturaDigital?> GetAssinaturaComRelacoesAsync(Guid assinaturaId);
     }
 }

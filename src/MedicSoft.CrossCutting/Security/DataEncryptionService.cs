@@ -145,6 +145,83 @@ namespace MedicSoft.CrossCutting.Security
         }
 
         /// <summary>
+        /// Encrypts binary data using AES-256-GCM (for certificates and keys).
+        /// </summary>
+        /// <param name="plainBytes">Data to encrypt</param>
+        /// <returns>Encrypted data with nonce and tag</returns>
+        public byte[] EncryptBytes(byte[] plainBytes)
+        {
+            if (plainBytes == null || plainBytes.Length == 0)
+                throw new ArgumentException("Data to encrypt cannot be null or empty", nameof(plainBytes));
+
+            try
+            {
+                using var aesGcm = new AesGcm(_encryptionKey, TagSize);
+                
+                // Generate a random nonce
+                var nonce = new byte[NonceSize];
+                RandomNumberGenerator.Fill(nonce);
+
+                // Prepare buffers
+                var cipherBytes = new byte[plainBytes.Length];
+                var tag = new byte[TagSize];
+
+                // Encrypt
+                aesGcm.Encrypt(nonce, plainBytes, cipherBytes, tag);
+
+                // Combine nonce + tag + ciphertext for storage
+                var result = new byte[NonceSize + TagSize + cipherBytes.Length];
+                Buffer.BlockCopy(nonce, 0, result, 0, NonceSize);
+                Buffer.BlockCopy(tag, 0, result, NonceSize, TagSize);
+                Buffer.BlockCopy(cipherBytes, 0, result, NonceSize + TagSize, cipherBytes.Length);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new CryptographicException("Failed to encrypt binary data", ex);
+            }
+        }
+
+        /// <summary>
+        /// Decrypts binary data that was encrypted using AES-256-GCM (for certificates and keys).
+        /// </summary>
+        /// <param name="cipherBytes">Encrypted data with nonce and tag</param>
+        /// <returns>Decrypted data</returns>
+        public byte[] DecryptBytes(byte[] cipherBytes)
+        {
+            if (cipherBytes == null || cipherBytes.Length == 0)
+                throw new ArgumentException("Data to decrypt cannot be null or empty", nameof(cipherBytes));
+
+            if (cipherBytes.Length < NonceSize + TagSize)
+                throw new ArgumentException("Encrypted data is too short to be valid", nameof(cipherBytes));
+
+            try
+            {
+                using var aesGcm = new AesGcm(_encryptionKey, TagSize);
+
+                // Extract nonce, tag, and ciphertext
+                var nonce = new byte[NonceSize];
+                var tag = new byte[TagSize];
+                var encrypted = new byte[cipherBytes.Length - NonceSize - TagSize];
+
+                Buffer.BlockCopy(cipherBytes, 0, nonce, 0, NonceSize);
+                Buffer.BlockCopy(cipherBytes, NonceSize, tag, 0, TagSize);
+                Buffer.BlockCopy(cipherBytes, NonceSize + TagSize, encrypted, 0, encrypted.Length);
+
+                // Decrypt
+                var plainBytes = new byte[encrypted.Length];
+                aesGcm.Decrypt(nonce, encrypted, tag, plainBytes);
+
+                return plainBytes;
+            }
+            catch (Exception ex)
+            {
+                throw new CryptographicException("Failed to decrypt binary data", ex);
+            }
+        }
+
+        /// <summary>
         /// Checks if a string is valid Base64.
         /// </summary>
         private bool IsBase64String(string value)
