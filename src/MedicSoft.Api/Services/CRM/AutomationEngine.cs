@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
 using System.Text.RegularExpressions;
 
-namespace MedicSoft.Application.Services.CRM
+namespace MedicSoft.Api.Services.CRM
 {
     public class AutomationEngine : IAutomationEngine
     {
@@ -37,7 +38,7 @@ namespace MedicSoft.Application.Services.CRM
                     automation.Id, patientId);
 
                 // Get patient
-                var patient = await _context.Pacientes
+                var patient = await _context.Patients
                     .FirstOrDefaultAsync(p => p.Id == patientId && p.TenantId == tenantId);
 
                 if (patient == null)
@@ -132,7 +133,7 @@ namespace MedicSoft.Application.Services.CRM
 
         private async Task ExecuteActionAsync(
             AutomationAction action, 
-            Paciente patient, 
+            Patient patient, 
             PatientJourney? journey,
             string tenantId)
         {
@@ -189,7 +190,7 @@ namespace MedicSoft.Application.Services.CRM
             }
         }
 
-        private async Task ExecuteSendEmailAsync(AutomationAction action, Paciente patient)
+        private async Task ExecuteSendEmailAsync(AutomationAction action, Patient patient)
         {
             if (action.EmailTemplateId == null)
             {
@@ -209,12 +210,12 @@ namespace MedicSoft.Application.Services.CRM
             var subject = RenderTemplate(template.Subject, patient);
             var body = RenderTemplate(template.HtmlBody, patient);
 
-            await _emailService.SendEmailAsync(patient.Email, subject, body);
+            await _emailService.SendEmailAsync(patient.Email?.Value ?? "", subject, body);
 
             _logger.LogInformation("Sent email to patient {PatientId}", patient.Id);
         }
 
-        private async Task ExecuteSendSmsAsync(AutomationAction action, Paciente patient)
+        private async Task ExecuteSendSmsAsync(AutomationAction action, Patient patient)
         {
             if (string.IsNullOrEmpty(action.MessageTemplate))
             {
@@ -223,12 +224,12 @@ namespace MedicSoft.Application.Services.CRM
             }
 
             var message = RenderTemplate(action.MessageTemplate, patient);
-            await _smsService.SendSmsAsync(patient.Telefone, message);
+            await _smsService.SendSmsAsync(patient.Phone?.Value ?? "", message);
 
             _logger.LogInformation("Sent SMS to patient {PatientId}", patient.Id);
         }
 
-        private async Task ExecuteSendWhatsAppAsync(AutomationAction action, Paciente patient)
+        private async Task ExecuteSendWhatsAppAsync(AutomationAction action, Patient patient)
         {
             if (string.IsNullOrEmpty(action.MessageTemplate))
             {
@@ -237,12 +238,12 @@ namespace MedicSoft.Application.Services.CRM
             }
 
             var message = RenderTemplate(action.MessageTemplate, patient);
-            await _whatsAppService.SendWhatsAppAsync(patient.Celular, message);
+            await _whatsAppService.SendWhatsAppAsync(patient.Phone?.Value ?? "", message);
 
             _logger.LogInformation("Sent WhatsApp to patient {PatientId}", patient.Id);
         }
 
-        private async Task ExecuteAddTagAsync(AutomationAction action, Paciente patient, PatientJourney? journey)
+        private async Task ExecuteAddTagAsync(AutomationAction action, Patient patient, PatientJourney? journey)
         {
             if (string.IsNullOrEmpty(action.TagToAdd))
             {
@@ -267,7 +268,7 @@ namespace MedicSoft.Application.Services.CRM
             }
         }
 
-        private async Task ExecuteRemoveTagAsync(AutomationAction action, Paciente patient, PatientJourney? journey)
+        private async Task ExecuteRemoveTagAsync(AutomationAction action, Patient patient, PatientJourney? journey)
         {
             if (string.IsNullOrEmpty(action.TagToRemove))
             {
@@ -289,7 +290,7 @@ namespace MedicSoft.Application.Services.CRM
             }
         }
 
-        private async Task ExecuteChangeScoreAsync(AutomationAction action, Paciente patient, PatientJourney? journey)
+        private async Task ExecuteChangeScoreAsync(AutomationAction action, Patient patient, PatientJourney? journey)
         {
             if (!action.ScoreChange.HasValue)
             {
@@ -310,7 +311,7 @@ namespace MedicSoft.Application.Services.CRM
                 action.ScoreChange.Value, patient.Id);
         }
 
-        private async Task<bool> IsPatientInSegmentAsync(Paciente patient, string? segmentFilter)
+        private async Task<bool> IsPatientInSegmentAsync(Patient patient, string? segmentFilter)
         {
             // If no filter, include all patients
             if (string.IsNullOrEmpty(segmentFilter))
@@ -322,20 +323,20 @@ namespace MedicSoft.Application.Services.CRM
             return true;
         }
 
-        private string RenderTemplate(string template, Paciente patient)
+        private string RenderTemplate(string template, Patient patient)
         {
             if (string.IsNullOrEmpty(template))
                 return template;
 
             var rendered = template;
 
-            // Replace common variables
-            rendered = rendered.Replace("{{nome_paciente}}", patient.Nome ?? "");
-            rendered = rendered.Replace("{{primeiro_nome}}", patient.Nome?.Split(' ').FirstOrDefault() ?? "");
-            rendered = rendered.Replace("{{email}}", patient.Email ?? "");
-            rendered = rendered.Replace("{{telefone}}", patient.Telefone ?? "");
-            rendered = rendered.Replace("{{celular}}", patient.Celular ?? "");
-            rendered = rendered.Replace("{{data_nascimento}}", patient.DataNascimento?.ToString("dd/MM/yyyy") ?? "");
+            // Replace common variables (Patient entity uses English properties)
+            rendered = rendered.Replace("{{nome_paciente}}", patient.Name ?? "");
+            rendered = rendered.Replace("{{primeiro_nome}}", patient.Name?.Split(' ').FirstOrDefault() ?? "");
+            rendered = rendered.Replace("{{email}}", patient.Email?.Value ?? "");
+            rendered = rendered.Replace("{{telefone}}", patient.Phone?.Value ?? "");
+            rendered = rendered.Replace("{{celular}}", patient.Phone?.Value ?? "");
+            rendered = rendered.Replace("{{data_nascimento}}", patient.DateOfBirth.ToString("dd/MM/yyyy"));
             
             // Add more variables as needed
             rendered = rendered.Replace("{{data_atual}}", DateTime.Now.ToString("dd/MM/yyyy"));

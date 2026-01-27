@@ -442,6 +442,13 @@ builder.Services.AddScoped<MedicSoft.Analytics.Jobs.ConsolidacaoDiariaJob>();
 builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoDemandaService, MedicSoft.ML.Services.PrevisaoDemandaService>();
 builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoNoShowService, MedicSoft.ML.Services.PrevisaoNoShowService>();
 
+// CRM Advanced - Phase 2: Marketing Automation
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IMarketingAutomationService, MedicSoft.Api.Services.CRM.MarketingAutomationService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IAutomationEngine, MedicSoft.Api.Services.CRM.AutomationEngine>();
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Api.Services.CRM.StubEmailService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISmsService, MedicSoft.Api.Services.CRM.StubSmsService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IWhatsAppService, MedicSoft.Api.Services.CRM.StubWhatsAppService>();
+
 // Configure Hangfire for background jobs
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)

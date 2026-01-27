@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
+using MedicSoft.Application.Services.CRM;
 
-namespace MedicSoft.Application.Services.CRM
+namespace MedicSoft.Api.Services.CRM
 {
     /// <summary>
     /// Stub implementation of IEmailService for development.

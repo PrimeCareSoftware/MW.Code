@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
 
-namespace MedicSoft.Application.Services.CRM
+namespace MedicSoft.Api.Services.CRM
 {
     public class MarketingAutomationService : IMarketingAutomationService
     {
