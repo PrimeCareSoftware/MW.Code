@@ -18,6 +18,12 @@ namespace MedicSoft.Analytics.Services
         private readonly MedicSoftDbContext _context;
         private readonly ILogger<DashboardQualidadeService> _logger;
 
+        // Constants for satisfaction estimates based on NPS
+        private const decimal HIGH_NPS_SATISFACTION = 90m;
+        private const decimal MEDIUM_NPS_SATISFACTION = 70m;
+        private const decimal LOW_NPS_SATISFACTION = 50m;
+        private const decimal VERY_LOW_NPS_SATISFACTION = 30m;
+
         public DashboardQualidadeService(
             MedicSoftDbContext context,
             ILogger<DashboardQualidadeService> logger)
@@ -40,13 +46,16 @@ namespace MedicSoft.Analytics.Services
 
                 // Buscar dados consolidados (que contém NPS agregado)
                 var dadosConsolidados = await _context.Set<ConsultaDiaria>()
+                    .AsNoTracking()
                     .Where(c => c.TenantId == tenantId 
                         && c.Data >= inicio.Date 
                         && c.Data <= fim.Date)
                     .ToListAsync();
 
-                // TODO: Quando tabela PatientFeedback for implementada, buscar avaliações detalhadas
+                // TODO: GitHub Issue #XXX - Implementar tabela PatientFeedback
+                // Quando tabela PatientFeedback for implementada, buscar avaliações detalhadas
                 // var avaliacoes = await _context.Set<PatientFeedback>()
+                //     .AsNoTracking()
                 //     .Where(f => f.TenantId == tenantId && f.CreatedAt >= inicio && f.CreatedAt <= fim)
                 //     .Include(f => f.Professional)
                 //     .Include(f => f.Patient)
@@ -130,13 +139,13 @@ namespace MedicSoft.Analytics.Services
             var npsMedio = CalcularNpsMedio(dadosConsolidados);
             
             if (npsMedio >= 9)
-                return 90m; // Estimativa: 90% satisfeitos
+                return HIGH_NPS_SATISFACTION; // Estimativa: 90% satisfeitos
             else if (npsMedio >= 7)
-                return 70m; // Estimativa: 70% satisfeitos
+                return MEDIUM_NPS_SATISFACTION; // Estimativa: 70% satisfeitos
             else if (npsMedio >= 5)
-                return 50m; // Estimativa: 50% satisfeitos
+                return LOW_NPS_SATISFACTION; // Estimativa: 50% satisfeitos
             else
-                return 30m; // Estimativa: 30% satisfeitos
+                return VERY_LOW_NPS_SATISFACTION; // Estimativa: 30% satisfeitos
         }
 
         /// <summary>

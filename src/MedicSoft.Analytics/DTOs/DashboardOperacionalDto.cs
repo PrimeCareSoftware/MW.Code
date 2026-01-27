@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace MedicSoft.Analytics.DTOs
 {
     // Dashboard Operacional DTOs

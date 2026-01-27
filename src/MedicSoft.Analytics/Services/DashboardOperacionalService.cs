@@ -41,6 +41,7 @@ namespace MedicSoft.Analytics.Services
 
                 // Buscar agendamentos do período
                 var agendamentos = await _context.Appointments
+                    .AsNoTracking()
                     .Where(a => a.TenantId == tenantId 
                         && a.ScheduledDate >= inicio.Date 
                         && a.ScheduledDate <= fim.Date)
@@ -50,6 +51,7 @@ namespace MedicSoft.Analytics.Services
 
                 // Buscar dados da fila de espera (SenhaFila) para cálculos mais precisos
                 var senhasFila = await _context.Set<SenhaFila>()
+                    .AsNoTracking()
                     .Where(s => s.TenantId == tenantId 
                         && s.DataHoraEntrada >= inicio 
                         && s.DataHoraEntrada <= fim)
