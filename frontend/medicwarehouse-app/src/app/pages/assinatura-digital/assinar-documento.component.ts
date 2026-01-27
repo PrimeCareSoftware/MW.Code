@@ -117,7 +117,7 @@ export class AssinarDocumentoComponent implements OnInit {
       documentoId: this.data.documentoId,
       tipoDocumento: this.data.tipoDocumento,
       documentoBytes: this.data.documentoBytes,
-      senhaCertificado: this.senha || undefined
+      senhaCertificado: this.senha && this.senha.trim() ? this.senha : undefined
     };
 
     this.assinaturaService.assinarDocumento(request).subscribe({
