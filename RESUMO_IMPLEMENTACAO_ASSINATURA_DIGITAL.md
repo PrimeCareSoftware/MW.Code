@@ -1,6 +1,6 @@
 # 🔏 Resumo da Implementação - Assinatura Digital ICP-Brasil
 
-## 📊 Status Geral: 70% Completo
+## 📊 Status Geral: 85% Completo
 
 **Data:** Janeiro 2026  
 **Prompt:** 16 - Assinatura Digital (Fase 4 - Analytics e Otimização)  
@@ -9,9 +9,9 @@
 
 ---
 
-## ✅ O Que Foi Implementado (Backend Completo)
+## ✅ O Que Foi Implementado (Backend Completo + APIs)
 
-### 1. Domínio e Infraestrutura de Dados
+### 1. Domínio e Infraestrutura de Dados ✅
 
 #### Entidades
 - ✅ **CertificadoDigital** - Gerenciamento de certificados ICP-Brasil A1/A3
@@ -28,7 +28,7 @@
 #### Repositórios
 - ✅ ICertificadoDigitalRepository / CertificadoDigitalRepository
 - ✅ IAssinaturaDigitalRepository / AssinaturaDigitalRepository
-- ✅ Métodos especializados (GetCertificadoAtivoAsync, etc.)
+- ✅ Métodos especializados (GetCertificadoAtivoAsync, GetCertificadoComMedicoAsync, etc.)
 
 #### Configurações EF Core
 - ✅ CertificadoDigitalConfiguration
@@ -36,7 +36,23 @@
 - ✅ DbSets no MedicSoftDbContext
 - ✅ Indexes e relacionamentos
 
-### 2. Camada de Aplicação
+### 2. Migrations ✅
+
+#### Migration AddDigitalSignatureTables
+- ✅ Criação da tabela `CertificadosDigitais`
+  - Suporta certificados A1 (armazenamento criptografado)
+  - Suporta certificados A3 (apenas metadados)
+  - Índices para performance (MedicoId, Thumbprint, TenantId)
+  
+- ✅ Criação da tabela `AssinaturasDigitais`
+  - Armazena assinatura PKCS#7
+  - Hash SHA-256 do documento
+  - Suporte para timestamp RFC 3161
+  - Índices otimizados para busca
+
+**Arquivo:** `20260127182135_AddDigitalSignatureTables.cs`
+
+### 3. Camada de Aplicação ✅
 
 #### Serviços Principais
 
@@ -55,6 +71,9 @@ Task<List<CertificateInfo>> ListarCertificadosA3Disponiveis()
 Task<CertificadoDigital> RegistrarCertificadoA3Async(...)
 Task<X509Certificate2> CarregarCertificadoAsync(...)
 bool IsICPBrasil(X509Certificate2 cert)
+Task<List<CertificadoDigitalDto>> ListarCertificadosMedicoAsync(...)
+Task<CertificadoDigitalDto?> ObterCertificadoPorIdAsync(...)
+Task InvalidarCertificadoAsync(...)
 ```
 
 ##### TimestampService ✅
@@ -97,7 +116,40 @@ Task<List<AssinaturaDigitalDto>> ObterAssinaturasPorDocumentoAsync(...)
 - ✅ TimestampResponse
 - ✅ CertificateInfo
 
-### 3. Segurança e Criptografia
+### 4. API REST Controllers ✅
+
+#### CertificadoDigitalController
+**Endpoint Base:** `/api/certificadodigital`
+
+**Endpoints Implementados:**
+- ✅ **GET** `/api/certificadodigital` - Lista certificados do médico autenticado
+- ✅ **GET** `/api/certificadodigital/{id}` - Obtém detalhes de um certificado
+- ✅ **POST** `/api/certificadodigital/a1/importar` - Importa certificado A1 (arquivo PFX)
+- ✅ **POST** `/api/certificadodigital/a3/registrar` - Registra certificado A3 (token/smartcard)
+- ✅ **GET** `/api/certificadodigital/a3/disponiveis` - Lista certificados A3 disponíveis no Windows Store
+- ✅ **DELETE** `/api/certificadodigital/{id}` - Invalida um certificado
+
+**Recursos:**
+- Autorização via JWT
+- Validação de propriedade do certificado
+- Upload de arquivo PFX com multipart/form-data
+- Retorna DTOs formatados
+
+#### AssinaturaDigitalController
+**Endpoint Base:** `/api/assinaturadigital`
+
+**Endpoints Implementados:**
+- ✅ **POST** `/api/assinaturadigital/assinar` - Assina um documento digitalmente
+- ✅ **GET** `/api/assinaturadigital/{id}/validar` - Valida uma assinatura digital
+- ✅ **GET** `/api/assinaturadigital/documento/{documentoId}` - Lista assinaturas de um documento
+
+**Recursos:**
+- Suporte para todos os tipos de documento (Prontuário, Receita, Atestado, Laudo, Prescrição, Encaminhamento)
+- Validação completa de assinaturas PKCS#7
+- Verificação de integridade via hash SHA-256
+- Validação de timestamps
+
+### 5. Segurança e Criptografia ✅
 
 #### DataEncryptionService (Estendido) ✅
 - ✅ Novos métodos: `EncryptBytes()` e `DecryptBytes()`
@@ -239,17 +291,19 @@ byte[] pfxBytes = _encryptionService.DecryptBytes(certCriptografado);
 
 ## 🔧 Tecnologias e Bibliotecas
 
-### Backend (.NET)
+### Backend (.NET) ✅
 - ✅ System.Security.Cryptography.X509Certificates (certificados)
 - ✅ System.Security.Cryptography.Pkcs (PKCS#7/SignedCms)
 - ✅ System.Security.Cryptography (SHA-256, AES-GCM)
 - ✅ Entity Framework Core (PostgreSQL)
 - ✅ Microsoft.Extensions.Logging (logging)
+- ✅ ASP.NET Core Web API (controllers)
 
-### Banco de Dados
+### Banco de Dados ✅
 - ✅ PostgreSQL 14+
 - ✅ Tabelas: CertificadosDigitais, AssinaturasDigitais
 - ✅ Indexes otimizados
+- ✅ Migrations aplicadas
 
 ### Criptografia
 - ✅ AES-256-GCM para certificados A1
@@ -362,11 +416,11 @@ else
 - ✅ src/MedicSoft.Domain/Entities/AssinaturaDigital.cs
 
 ### Interfaces de Repositório
-- ✅ src/MedicSoft.Domain/Interfaces/ICertificadoDigitalRepository.cs
+- ✅ src/MedicSoft.Domain/Interfaces/ICertificadoDigitalRepository.cs (modificado)
 - ✅ src/MedicSoft.Domain/Interfaces/IAssinaturaDigitalRepository.cs
 
 ### Repositórios
-- ✅ src/MedicSoft.Repository/Repositories/CertificadoDigitalRepository.cs
+- ✅ src/MedicSoft.Repository/Repositories/CertificadoDigitalRepository.cs (modificado)
 - ✅ src/MedicSoft.Repository/Repositories/AssinaturaDigitalRepository.cs
 
 ### Configurações EF Core
@@ -374,10 +428,21 @@ else
 - ✅ src/MedicSoft.Repository/Configurations/AssinaturaDigitalConfiguration.cs
 - ✅ src/MedicSoft.Repository/Context/MedicSoftDbContext.cs (modificado)
 
+### Migrations
+- ✅ src/MedicSoft.Repository/Migrations/20260127182135_AddDigitalSignatureTables.cs (novo)
+- ✅ src/MedicSoft.Repository/Migrations/20260127182135_AddDigitalSignatureTables.Designer.cs (novo)
+
 ### Serviços
-- ✅ src/MedicSoft.Application/Services/DigitalSignature/CertificateManager.cs
+- ✅ src/MedicSoft.Application/Services/DigitalSignature/CertificateManager.cs (modificado)
 - ✅ src/MedicSoft.Application/Services/DigitalSignature/TimestampService.cs
 - ✅ src/MedicSoft.Application/Services/DigitalSignature/AssinaturaDigitalService.cs
+
+### Controllers
+- ✅ src/MedicSoft.Api/Controllers/CertificadoDigitalController.cs (novo)
+- ✅ src/MedicSoft.Api/Controllers/AssinaturaDigitalController.cs (novo)
+
+### Registro de Serviços
+- ✅ src/MedicSoft.Api/Program.cs (modificado)
 
 ### DTOs
 - ✅ src/MedicSoft.Application/DTOs/AssinaturaDigitalDtos.cs
@@ -391,17 +456,17 @@ else
 - ✅ ASSINATURA_DIGITAL_GUIA_USUARIO.md (8KB)
 - ✅ DOCUMENTATION_MAP.md (atualizado)
 
-**Total:** 19 arquivos (9 novos, 10 modificados)
+**Total:** 23 arquivos (12 novos, 11 modificados)
 
 ---
 
 ## 🎓 Próximos Passos
 
-### Curto Prazo (1-2 semanas)
-1. Criar migrations EF Core
-2. Implementar controllers REST
-3. Desenvolver frontend Angular básico
-4. Testes de integração com certificados de homologação
+### Curto Prazo (1 semana)
+1. ✅ Criar migrations EF Core  
+2. ✅ Implementar controllers REST  
+3. Desenvolver frontend Angular básico  
+4. Testes de integração com certificados de homologação  
 
 ### Médio Prazo (1 mês)
 1. Implementar validação de integridade de documentos
@@ -433,7 +498,7 @@ else
 
 ---
 
-**Versão:** 1.0  
-**Status:** 70% Completo (Backend)  
-**Última Atualização:** Janeiro 2026  
+**Versão:** 1.1  
+**Status:** 85% Completo (Backend + APIs)  
+**Última Atualização:** 27 de Janeiro 2026  
 **Desenvolvido por:** PrimeCare Software Team

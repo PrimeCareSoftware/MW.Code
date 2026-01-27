@@ -23,5 +23,10 @@ namespace MedicSoft.Domain.Interfaces
         /// Gets a certificate by thumbprint.
         /// </summary>
         Task<CertificadoDigital?> GetByThumbprintAsync(string thumbprint);
+        
+        /// <summary>
+        /// Gets a certificate by ID with medico navigation property loaded.
+        /// </summary>
+        Task<CertificadoDigital?> GetCertificadoComMedicoAsync(Guid certificadoId);
     }
 }
