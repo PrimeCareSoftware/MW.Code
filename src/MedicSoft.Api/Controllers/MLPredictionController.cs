@@ -78,6 +78,17 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
+                // Validate input
+                if (dados == null)
+                {
+                    return BadRequest(new { message = "Dados de entrada não podem ser nulos" });
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var risco = _noShowService.CalcularRiscoNoShow(dados);
                 var acoes = _noShowService.SugerirAcoes(risco);
 

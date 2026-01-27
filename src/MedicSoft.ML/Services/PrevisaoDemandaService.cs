@@ -15,6 +15,7 @@ namespace MedicSoft.ML.Services
     /// <summary>
     /// Service for demand forecasting using ML.NET
     /// Predicts number of consultations based on historical data
+    /// Thread-safe implementation with proper locking
     /// </summary>
     public class PrevisaoDemandaService : IPrevisaoDemandaService
     {
@@ -22,6 +23,7 @@ namespace MedicSoft.ML.Services
         private readonly ILogger<PrevisaoDemandaService> _logger;
         private ITransformer? _model;
         private readonly string _modelPath;
+        private readonly object _modelLock = new object();
 
         public PrevisaoDemandaService(ILogger<PrevisaoDemandaService> logger)
         {
@@ -32,6 +34,7 @@ namespace MedicSoft.ML.Services
 
         /// <summary>
         /// Trains the demand forecasting model with historical data
+        /// Thread-safe implementation with locking
         /// </summary>
         public async Task TreinarModeloAsync(IEnumerable<DadosTreinamentoDemanda> dadosTreinamento)
         {
@@ -59,10 +62,10 @@ namespace MedicSoft.ML.Services
                         numberOfTrees: 100));
 
                 // Train model
-                _model = pipeline.Fit(trainTestData.TrainSet);
+                var trainedModel = pipeline.Fit(trainTestData.TrainSet);
 
                 // Evaluate model
-                var predictions = _model.Transform(trainTestData.TestSet);
+                var predictions = trainedModel.Transform(trainTestData.TestSet);
                 var metrics = _mlContext.Regression.Evaluate(predictions, labelColumnName: "Label");
 
                 _logger.LogInformation(
@@ -78,7 +81,13 @@ namespace MedicSoft.ML.Services
                     Directory.CreateDirectory(directory);
                 }
 
-                await Task.Run(() => _mlContext.Model.Save(_model, dataView.Schema, _modelPath));
+                await Task.Run(() => _mlContext.Model.Save(trainedModel, dataView.Schema, _modelPath));
+                
+                // Update model with thread-safety
+                lock (_modelLock)
+                {
+                    _model = trainedModel;
+                }
                 
                 _logger.LogInformation("Modelo salvo em: {ModelPath}", _modelPath);
             }
@@ -91,6 +100,7 @@ namespace MedicSoft.ML.Services
 
         /// <summary>
         /// Loads the trained model from disk
+        /// Thread-safe implementation with locking
         /// </summary>
         public async Task<bool> CarregarModeloAsync()
         {
@@ -102,10 +112,24 @@ namespace MedicSoft.ML.Services
                     return false;
                 }
 
+                ITransformer? loadedModel = null;
                 await Task.Run(() =>
                 {
-                    _model = _mlContext.Model.Load(_modelPath, out var modelSchema);
+                    loadedModel = _mlContext.Model.Load(_modelPath, out var modelSchema);
                 });
+
+                // Verify model was loaded successfully
+                if (loadedModel == null)
+                {
+                    _logger.LogError("Falha ao carregar modelo de: {ModelPath}", _modelPath);
+                    return false;
+                }
+
+                // Update model with thread-safety
+                lock (_modelLock)
+                {
+                    _model = loadedModel;
+                }
 
                 _logger.LogInformation("Modelo carregado com sucesso de: {ModelPath}", _modelPath);
                 return true;
@@ -119,73 +143,83 @@ namespace MedicSoft.ML.Services
 
         /// <summary>
         /// Predicts the number of consultations for the next 7 days
+        /// Thread-safe implementation with locking
+        /// NOTE: PredictionEngine creation per call is inefficient but thread-safe
+        /// For high-frequency predictions, consider using PredictionEnginePool
         /// </summary>
         public PrevisaoConsultas PreverProximaSemana()
         {
-            if (_model == null)
+            lock (_modelLock)
             {
-                throw new InvalidOperationException("Modelo não treinado ou carregado");
+                if (_model == null)
+                {
+                    throw new InvalidOperationException("Modelo não treinado ou carregado");
+                }
+
+                var predictionEngine = _mlContext.Model
+                    .CreatePredictionEngine<DadosTreinamentoDemanda, PrevisaoConsultaResult>(_model);
+
+                var proximaSemana = new List<PrevisaoDia>();
+
+                for (int i = 1; i <= 7; i++)
+                {
+                    var data = DateTime.Now.Date.AddDays(i);
+                    var input = new DadosTreinamentoDemanda
+                    {
+                        Mes = data.Month,
+                        DiaSemana = (int)data.DayOfWeek,
+                        Semana = GetNumeroSemana(data),
+                        IsFeriado = IsFeriado(data) ? 1 : 0,
+                        TemperaturaMedia = 25 // Default or integrate with weather API
+                    };
+
+                    var previsao = predictionEngine.Predict(input);
+
+                    proximaSemana.Add(new PrevisaoDia
+                    {
+                        Data = data,
+                        ConsultasPrevistas = (int)Math.Round(Math.Max(0, previsao.NumeroConsultas)),
+                        ConfiancaPrevisao = 0.8f // Placeholder, calculate based on model metrics
+                    });
+                }
+
+                return new PrevisaoConsultas
+                {
+                    Periodo = "Próxima Semana",
+                    Previsoes = proximaSemana,
+                    TotalPrevisto = proximaSemana.Sum(p => p.ConsultasPrevistas)
+                };
             }
+        }
 
-            var predictionEngine = _mlContext.Model
-                .CreatePredictionEngine<DadosTreinamentoDemanda, PrevisaoConsultaResult>(_model);
-
-            var proximaSemana = new List<PrevisaoDia>();
-
-            for (int i = 1; i <= 7; i++)
+        /// <summary>
+        /// Predicts consultations for a specific date
+        /// Thread-safe implementation with locking
+        /// </summary>
+        public int PreverParaData(DateTime data)
+        {
+            lock (_modelLock)
             {
-                var data = DateTime.Now.Date.AddDays(i);
+                if (_model == null)
+                {
+                    throw new InvalidOperationException("Modelo não treinado ou carregado");
+                }
+
+                var predictionEngine = _mlContext.Model
+                    .CreatePredictionEngine<DadosTreinamentoDemanda, PrevisaoConsultaResult>(_model);
+
                 var input = new DadosTreinamentoDemanda
                 {
                     Mes = data.Month,
                     DiaSemana = (int)data.DayOfWeek,
                     Semana = GetNumeroSemana(data),
                     IsFeriado = IsFeriado(data) ? 1 : 0,
-                    TemperaturaMedia = 25 // Default or integrate with weather API
+                    TemperaturaMedia = 25
                 };
 
                 var previsao = predictionEngine.Predict(input);
-
-                proximaSemana.Add(new PrevisaoDia
-                {
-                    Data = data,
-                    ConsultasPrevistas = (int)Math.Round(Math.Max(0, previsao.NumeroConsultas)),
-                    ConfiancaPrevisao = 0.8f // Placeholder, calculate based on model metrics
-                });
+                return (int)Math.Round(Math.Max(0, previsao.NumeroConsultas));
             }
-
-            return new PrevisaoConsultas
-            {
-                Periodo = "Próxima Semana",
-                Previsoes = proximaSemana,
-                TotalPrevisto = proximaSemana.Sum(p => p.ConsultasPrevistas)
-            };
-        }
-
-        /// <summary>
-        /// Predicts consultations for a specific date
-        /// </summary>
-        public int PreverParaData(DateTime data)
-        {
-            if (_model == null)
-            {
-                throw new InvalidOperationException("Modelo não treinado ou carregado");
-            }
-
-            var predictionEngine = _mlContext.Model
-                .CreatePredictionEngine<DadosTreinamentoDemanda, PrevisaoConsultaResult>(_model);
-
-            var input = new DadosTreinamentoDemanda
-            {
-                Mes = data.Month,
-                DiaSemana = (int)data.DayOfWeek,
-                Semana = GetNumeroSemana(data),
-                IsFeriado = IsFeriado(data) ? 1 : 0,
-                TemperaturaMedia = 25
-            };
-
-            var previsao = predictionEngine.Predict(input);
-            return (int)Math.Round(Math.Max(0, previsao.NumeroConsultas));
         }
 
         private int GetNumeroSemana(DateTime data)

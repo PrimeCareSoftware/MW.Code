@@ -1,23 +1,27 @@
 using Hangfire.Dashboard;
+using Microsoft.AspNetCore.Http;
 
 namespace MedicSoft.Api.Filters
 {
     /// <summary>
     /// Authorization filter for Hangfire Dashboard
-    /// In development: allows all access
-    /// In production: should be configured with proper authentication
+    /// Requires authenticated user with Admin or Owner role
     /// </summary>
     public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
     {
         public bool Authorize(DashboardContext context)
         {
-            // In development, allow all access
-            // In production, implement proper authentication
-            // Example: Check if user is Admin role
+            var httpContext = context.GetHttpContext();
             
-            // For now, allow access only in development
-            // TODO: Implement proper authentication for production
-            return true; // Allow access (development only)
+            // Check if user is authenticated
+            if (httpContext.User.Identity?.IsAuthenticated != true)
+            {
+                return false;
+            }
+            
+            // Check if user has Admin or Owner role
+            return httpContext.User.IsInRole("Admin") || 
+                   httpContext.User.IsInRole("Owner");
         }
     }
 }

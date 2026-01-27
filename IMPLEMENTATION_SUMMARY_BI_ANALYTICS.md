@@ -515,6 +515,20 @@ Body: {
 
 ## 📝 Changelog
 
+### Janeiro 2026 - v1.5.1 (Correções Críticas)
+- ✅ **Correções de Segurança e Performance (PR #425 Review)**
+  - Thread-safety adicionada aos ML services (lock mechanism)
+  - Validação de entrada com Data Annotations
+  - Autenticação real do Hangfire Dashboard (Admin/Owner)
+  - Documentação de opções de consolidação multi-tenant
+  - Notas sobre otimização com PredictionEnginePool
+- ✅ **Documentação**
+  - Documento CORREÇOES_PR425.md criado
+  - Build validado e bem-sucedido
+- 📝 **Pendente Revisão**
+  - Migration de timestamp (requer análise de impacto)
+  - Implementação de iteração multi-tenant
+
 ### Janeiro 2026 - v1.5.0 (ML + Jobs)
 - ✅ Implementação ML.NET (Sprint 4)
   - Previsão de demanda
@@ -565,5 +579,10 @@ O sistema está **pronto para uso em produção** com as funcionalidades atuais.
 ---
 
 **Última Atualização:** 27 de Janeiro de 2026  
-**Versão:** 1.5.0  
-**Status:** ✅ Production Ready (85% completo) - ML Framework Implementado
+**Versão:** 1.5.1 (com correções críticas de segurança)  
+**Status:** ✅ Production Ready (85% completo) - ML Framework Implementado com Correções de Segurança
+
+**Documentos Relacionados:**
+- `CORREÇOES_PR425.md` - Detalhes das correções implementadas
+- `ML_DOCUMENTATION.md` - Documentação técnica de Machine Learning
+- `RELATORIO_IMPLEMENTACAO_BI_ANALYTICS_ML_JOBS.md` - Relatório da implementação original
