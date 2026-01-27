@@ -37,6 +37,13 @@ namespace MedicSoft.Repository.Configurations.CRM
             builder.Property(pj => pj.ChurnRisk)
                 .IsRequired();
 
+            builder.Property(pj => pj.Tags)
+                .HasColumnType("jsonb");
+
+            builder.Property(pj => pj.EngagementScore)
+                .IsRequired()
+                .HasDefaultValue(0);
+
             builder.Property(pj => pj.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);
