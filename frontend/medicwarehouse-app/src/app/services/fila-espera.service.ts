@@ -32,20 +32,20 @@ export class FilaEsperaService {
 
   // Senha Generation
   gerarSenha(filaId: string, request: GerarSenhaRequest, tenantId?: string): Observable<SenhaFila> {
-    const headers = tenantId ? { 'X-Tenant-Id': tenantId } : {};
+    const options = tenantId ? { headers: { 'X-Tenant-Id': tenantId } } : {};
     return this.http.post<SenhaFila>(
       `${this.apiUrl}/${filaId}/senha`,
       request,
-      { headers }
+      options
     );
   }
 
   // Senha Consultation
   consultarSenha(filaId: string, numeroSenha: string, tenantId?: string): Observable<ConsultarSenhaResponse> {
-    const headers = tenantId ? { 'X-Tenant-Id': tenantId } : {};
+    const options = tenantId ? { headers: { 'X-Tenant-Id': tenantId } } : {};
     return this.http.get<ConsultarSenhaResponse>(
       `${this.apiUrl}/${filaId}/senha/${numeroSenha}`,
-      { headers }
+      options
     );
   }
 
