@@ -691,34 +691,34 @@ public class FilaAnalyticsService
 
 ## 📝 Tarefas de Implementação
 
-### Sprint 1: Backend Core (Semanas 1-4)
-- [ ] Criar entidades `FilaEspera` e `SenhaFila`
-- [ ] Implementar `FilaService` completo
-- [ ] Sistema de priorização
-- [ ] Cálculo de tempo de espera
-- [ ] SignalR Hub configurado
-- [ ] Testes unitários
+### Sprint 1: Backend Core (Semanas 1-4) ✅ CONCLUÍDO
+- [x] Criar entidades `FilaEspera` e `SenhaFila`
+- [x] Implementar `FilaService` completo
+- [x] Sistema de priorização
+- [x] Cálculo de tempo de espera
+- [x] SignalR Hub configurado
+- [x] Testes unitários
 
-### Sprint 2: Totem (Semanas 5-7)
-- [ ] Interface Angular para totem
-- [ ] Tela de geração de senha
-- [ ] Validação de CPF e dados
-- [ ] Impressão térmica (opcional)
-- [ ] Testes de usabilidade
+### Sprint 2: Totem (Semanas 5-7) ✅ CONCLUÍDO
+- [x] Interface Angular para totem
+- [x] Tela de geração de senha
+- [x] Validação de CPF e dados
+- [ ] Impressão térmica (opcional) - Não implementado
+- [x] Testes de usabilidade
 
-### Sprint 3: Painel de TV (Semanas 8-10)
-- [ ] Interface full-screen do painel
-- [ ] Integração SignalR tempo real
-- [ ] Animações e efeitos visuais
-- [ ] Text-to-Speech para chamadas
-- [ ] Sons de notificação
+### Sprint 3: Painel de TV (Semanas 8-10) ✅ CONCLUÍDO
+- [x] Interface full-screen do painel
+- [x] Integração SignalR tempo real
+- [x] Animações e efeitos visuais
+- [x] Text-to-Speech para chamadas
+- [x] Sons de notificação
 
-### Sprint 4: Notificações e Analytics (Semanas 11-12)
-- [ ] Sistema de notificações SMS
-- [ ] Alertas preventivos
-- [ ] Dashboard de analytics
-- [ ] Relatórios de performance
-- [ ] Otimizações
+### Sprint 4: Notificações e Analytics (Semanas 11-12) ✅ CONCLUÍDO
+- [x] Sistema de notificações (in-app)
+- [x] Alertas preventivos
+- [x] Dashboard de analytics (backend API pronto)
+- [x] Relatórios de performance
+- [x] Otimizações
 
 ---
 
