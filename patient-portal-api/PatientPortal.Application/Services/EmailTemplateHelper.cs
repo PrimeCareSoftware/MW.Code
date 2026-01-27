@@ -185,6 +185,10 @@ public static class EmailTemplateHelper
     /// <summary>
     /// Generates common email footer
     /// </summary>
+    /// <remarks>
+    /// Note: Uses DateTime.Now which may have timezone implications in production.
+    /// Consider injecting a time service if precise timezone control is needed.
+    /// </remarks>
     private static string GetEmailFooter()
     {
         var sb = new StringBuilder();

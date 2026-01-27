@@ -281,7 +281,7 @@ public class AuthService : IAuthService
         if (user == null)
         {
             // Don't reveal that the user doesn't exist for security reasons
-            _logger.LogWarning("Password reset requested for non-existent email: {Email}", email);
+            _logger.LogWarning("Password reset requested for unknown email address");
             return;
         }
 
@@ -382,6 +382,17 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Generates a cryptographically secure token for email verification or password reset
+    /// </summary>
+    /// <returns>URL-safe Base64 encoded token with 256 bits of entropy</returns>
+    /// <remarks>
+    /// - Generates 32 random bytes (256 bits of entropy)
+    /// - Encodes as Base64 for compact representation
+    /// - Replaces + with - and / with _ for URL safety
+    /// - Removes = padding for cleaner URLs
+    /// - Result is approximately 43 characters long
+    /// </remarks>
     private static string GenerateSecureToken()
     {
         var randomBytes = RandomNumberGenerator.GetBytes(32);

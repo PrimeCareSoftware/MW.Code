@@ -314,7 +314,7 @@ public class AppointmentService : IAppointmentService
                 PatientName = patientUser.FullName,
                 PatientEmail = patientUser.Email,
                 PatientPhone = patientUser.PhoneNumber,
-                DoctorId = Guid.Empty, // Not available in view
+                DoctorId = null, // Not available in view - only used for emails, not needed here
                 DoctorName = appointment.DoctorName,
                 DoctorSpecialty = appointment.DoctorSpecialty,
                 ClinicName = appointment.ClinicName,

@@ -121,6 +121,12 @@ public class PatientPortalDbContext : DbContext
 
             entity.Property(e => e.UsedAt);
 
+            // Add foreign key relationship with cascade delete
+            entity.HasOne<PatientUser>()
+                .WithMany()
+                .HasForeignKey(e => e.PatientUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Indexes for performance
             entity.HasIndex(e => e.Token)
                 .IsUnique();
@@ -148,6 +154,12 @@ public class PatientPortalDbContext : DbContext
 
             entity.Property(e => e.CreatedByIp)
                 .HasMaxLength(50);
+
+            // Add foreign key relationship with cascade delete
+            entity.HasOne<PatientUser>()
+                .WithMany()
+                .HasForeignKey(e => e.PatientUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes for performance
             entity.HasIndex(e => e.Token)
