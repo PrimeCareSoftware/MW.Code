@@ -1,0 +1,131 @@
+<h2 mat-dialog-title>
+  <mat-icon>verified_user</mat-icon>
+  Importar Certificado Digital
+</h2>
+
+<mat-dialog-content>
+  <mat-tab-group (selectedTabChange)="onTabChange($event)">
+    <!-- Tab A1 -->
+    <mat-tab label="Certificado A1">
+      <div class="tab-content">
+        <div class="info-box">
+          <mat-icon>info</mat-icon>
+          <div>
+            <p><strong>Certificado A1</strong> é armazenado em software (validade de 1 ano).</p>
+            <p>Você precisa de um arquivo .pfx ou .p12 e sua senha.</p>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="file-upload-label">
+            <input
+              type="file"
+              accept=".pfx,.p12"
+              (change)="onFileSelected($event)"
+              style="display: none"
+              #fileInput>
+            <button mat-raised-button color="primary" (click)="fileInput.click()" type="button">
+              <mat-icon>upload_file</mat-icon>
+              Selecionar Arquivo
+            </button>
+          </label>
+          @if (arquivoPfx) {
+            <div class="file-selected">
+              <mat-icon>description</mat-icon>
+              <span>{{ arquivoPfx.name }}</span>
+            </div>
+          }
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha do Certificado</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="senhaA1"
+            placeholder="Digite a senha do arquivo .pfx"
+            [disabled]="isImportando()">
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="full-width"
+          [disabled]="!arquivoPfx || !senhaA1 || isImportando()"
+          (click)="importarA1()">
+          @if (isImportando()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            Importando...
+          } @else {
+            <mat-icon>save</mat-icon>
+            Importar Certificado A1
+          }
+        </button>
+      </div>
+    </mat-tab>
+
+    <!-- Tab A3 -->
+    <mat-tab label="Certificado A3">
+      <div class="tab-content">
+        <div class="info-box">
+          <mat-icon>info</mat-icon>
+          <div>
+            <p><strong>Certificado A3</strong> é armazenado em token/smartcard (validade de 3-5 anos).</p>
+            <p>Conecte seu token USB antes de continuar.</p>
+          </div>
+        </div>
+
+        @if (isCarregandoA3()) {
+          <div class="loading-container">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Buscando certificados no token...</p>
+          </div>
+        } @else if (certificadosA3Disponiveis().length === 0) {
+          <div class="empty-state">
+            <mat-icon>usb_off</mat-icon>
+            <p>Nenhum certificado encontrado.</p>
+            <p>Certifique-se de que o token está conectado.</p>
+            <button mat-raised-button color="primary" (click)="carregarCertificadosA3()">
+              <mat-icon>refresh</mat-icon>
+              Tentar Novamente
+            </button>
+          </div>
+        } @else {
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Selecione o Certificado</mat-label>
+            <mat-select [(ngModel)]="certificadoA3Selecionado" [disabled]="isImportando()">
+              @for (cert of certificadosA3Disponiveis(); track cert.thumbprint) {
+                <mat-option [value]="cert.thumbprint">
+                  {{ formatarCertificadoA3(cert) }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-icon matSuffix>usb</mat-icon>
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="full-width"
+            [disabled]="!certificadoA3Selecionado || isImportando()"
+            (click)="registrarA3()">
+            @if (isImportando()) {
+              <mat-spinner diameter="20"></mat-spinner>
+              Registrando...
+            } @else {
+              <mat-icon>save</mat-icon>
+              Registrar Certificado A3
+            }
+          </button>
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="isImportando()">
+    Cancelar
+  </button>
+</mat-dialog-actions>
