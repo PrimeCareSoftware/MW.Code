@@ -80,12 +80,32 @@ namespace MedicSoft.Application.DTOs
 
     public class FilaMetricsDto
     {
-        public DateTime Data { get; set; }
+        public DateTime DataInicio { get; set; }
+        public DateTime DataFim { get; set; }
+        public Guid? FilaId { get; set; }
+        public int TotalSenhas { get; set; }
         public int TotalAtendimentos { get; set; }
-        public double TempoMedioEspera { get; set; }
-        public double TempoMedioAtendimento { get; set; }
+        public int TotalNaoCompareceu { get; set; }
+        public int TotalCancelados { get; set; }
+        public int TotalAguardando { get; set; }
+        public double TempoMedioEsperaMinutos { get; set; }
+        public double TempoMedioAtendimentoMinutos { get; set; }
         public double TaxaNaoComparecimento { get; set; }
-        public TimeSpan? HorarioPico { get; set; }
-        public Dictionary<string, int> AtendimentosPorPrioridade { get; set; } = new Dictionary<string, int>();
+        public HorarioPicoDto? HorarioPico { get; set; }
+        public List<AtendimentoPrioridadeDto> AtendimentosPorPrioridade { get; set; } = new List<AtendimentoPrioridadeDto>();
+    }
+
+    public class HorarioPicoDto
+    {
+        public int Hora { get; set; }
+        public int Quantidade { get; set; }
+        public string Descricao { get; set; } = string.Empty;
+    }
+
+    public class AtendimentoPrioridadeDto
+    {
+        public string Prioridade { get; set; } = string.Empty;
+        public int Total { get; set; }
+        public double Percentual { get; set; }
     }
 }

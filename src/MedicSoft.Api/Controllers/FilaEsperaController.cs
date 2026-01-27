@@ -228,6 +228,25 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Marcar senha como não comparecida após múltiplas tentativas
+        /// </summary>
+        [HttpPut("senha/{senhaId}/nao-compareceu")]
+        public async Task<ActionResult> MarcarNaoCompareceu(Guid senhaId)
+        {
+            try
+            {
+                // TODO: Implement this endpoint when integrated with notification service
+                // This endpoint would be called by the notification service
+                // after 3 failed call attempts to mark the ticket as no-show
+                return StatusCode(501, new { message = "Endpoint not yet implemented. Will be completed with notification service integration." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     // Request DTOs
