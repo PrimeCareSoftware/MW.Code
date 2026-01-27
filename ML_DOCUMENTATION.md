@@ -376,16 +376,57 @@ foreach (var agendamento in agendamentosHoje)
 
 ## 🔐 Segurança e Privacidade
 
+### Thread-Safety
+- ✅ **Serviços ML são Singleton mas thread-safe**
+  - Lock mechanism implementado em operações de modelo
+  - Proteção contra race conditions durante treinamento/predição
+  - Garantia de consistência em ambiente multi-thread
+  - Ver `CORREÇOES_PR425.md` para detalhes
+
 ### LGPD Compliance
 - ✅ Dados anonimizados para treinamento
 - ✅ Apenas features agregadas, sem PII
 - ✅ Modelos não armazenam dados individuais
 - ✅ Previsões logadas para auditoria
 
+### Validação de Entrada
+- ✅ **Data Annotations em todos os modelos**
+  - Validação de ranges (idade 0-120, horas 0-23)
+  - Proteção contra valores maliciosos
+  - Mensagens de erro descritivas
+  - ModelState validation no controller
+
 ### Controle de Acesso
 - **Treinamento**: Apenas Admin/Owner
 - **Carregamento**: Apenas Admin/Owner
 - **Previsões**: Usuários autenticados do tenant
+- **Hangfire Dashboard**: Admin/Owner apenas (autenticação implementada)
+
+---
+
+## ⚡ Performance
+
+### Implementação Atual
+- ✅ Thread-safe com locking
+- ⚠️ PredictionEngine criado por request (overhead aceitável para baixa frequência)
+
+### Otimização Futura (PredictionEnginePool)
+Para alta frequência de previsões, considere:
+```csharp
+// Usar Microsoft.Extensions.ML
+builder.Services.AddPredictionEnginePool<DadosNoShow, PrevisaoNoShowResult>()
+    .FromFile("MLModels/modelo_noshow.zip");
+
+// No serviço: Pool gerencia instances automaticamente
+var previsao = _predictionEnginePool.Predict(dados);
+```
+
+**Benefícios:**
+- Reuso de PredictionEngine instances
+- Thread-safe nativo
+- Melhor performance em alta escala
+
+**Referência:** [Serve Model Web API ML.NET](https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/serve-model-web-api-ml-net)
 
 ---
 
@@ -395,9 +436,14 @@ foreach (var agendamento in agendamentosHoje)
 - [FastTree Algorithm](https://docs.microsoft.com/en-us/dotnet/api/microsoft.ml.trainers.fasttree)
 - [Binary Classification Guide](https://docs.microsoft.com/en-us/dotnet/machine-learning/tutorials/sentiment-analysis)
 - [Regression Guide](https://docs.microsoft.com/en-us/dotnet/machine-learning/tutorials/predict-prices)
+- [PredictionEnginePool Best Practices](https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/serve-model-web-api-ml-net)
 
 ---
 
 **Última Atualização:** 27 de Janeiro de 2026  
-**Versão:** 1.0.0  
-**Status:** ✅ Framework Completo - Pronto para Treinamento
+**Versão:** 1.1.0 (com correções de segurança e thread-safety)  
+**Status:** ✅ Framework Completo com Correções Críticas - Pronto para Treinamento
+
+**Documentos Relacionados:**
+- `CORREÇOES_PR425.md` - Detalhes das correções de segurança implementadas
+- `IMPLEMENTATION_SUMMARY_BI_ANALYTICS.md` - Status geral do projeto BI Analytics

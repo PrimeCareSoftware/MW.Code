@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
+using MedicSoft.Api.Filters;
 using MedicSoft.Api.JsonConverters;
 using MedicSoft.Api.Middleware;
 using MedicSoft.Application.Mappings;

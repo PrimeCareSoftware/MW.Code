@@ -86,8 +86,14 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ MLPredictionController (6 endpoints ML)
   - ✅ Dashboard Clínico Angular (KPIs, gráficos ApexCharts)
   - ✅ Dashboard Financeiro Angular (KPIs, fluxo de caixa, projeções)
+  - ✅ **Correções Críticas de Segurança (PR #425 Review)**
+    - ✅ Thread-safety em ML services
+    - ✅ Validação de entrada com Data Annotations
+    - ✅ Autenticação Hangfire Dashboard (Admin/Owner)
+    - ✅ Documentação multi-tenant consolidation
   - ✅ Documentação completa ([IMPLEMENTATION_SUMMARY_BI_ANALYTICS.md](./IMPLEMENTATION_SUMMARY_BI_ANALYTICS.md))
   - ✅ Documentação ML ([ML_DOCUMENTATION.md](./ML_DOCUMENTATION.md))
+  - ✅ **Correções de segurança** ([CORREÇOES_PR425.md](./CORREÇOES_PR425.md))
   - ✅ Frontend docs ([IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md](./frontend/medicwarehouse-app/IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md))
   - ✅ Guia de testes ([TESTING_GUIDE_BI_ANALYTICS.md](./frontend/medicwarehouse-app/TESTING_GUIDE_BI_ANALYTICS.md))
   - ⏳ Treinar modelos ML com dados reais - Pendente
