@@ -21,6 +21,8 @@ import { Navbar } from '../../../shared/navbar/navbar';
 import { Loading } from '../../../shared/loading/loading';
 import { AnalyticsBIService } from '../../../services/analytics-bi.service';
 import { DashboardClinico } from '../../../models/analytics-bi.model';
+import { MLPredictionService } from '../../../services/ml-prediction.service';
+import { PrevisaoConsultas } from '../../../models/ml-prediction.model';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -58,17 +60,25 @@ export class DashboardClinicoComponent implements OnInit {
   // Dashboard data
   dashboard?: DashboardClinico;
   
+  // ML Predictions
+  previsaoDemanda?: PrevisaoConsultas;
+  loadingPrevisao = false;
+  previsaoError: string | null = null;
+  
   // Chart options
   especialidadeChartOptions?: Partial<ChartOptions>;
   diaSemanaChartOptions?: Partial<ChartOptions>;
   tendenciaChartOptions?: Partial<ChartOptions>;
+  previsaoDemandaChartOptions?: Partial<ChartOptions>;
 
   constructor(
-    private analyticsBIService: AnalyticsBIService
+    private analyticsBIService: AnalyticsBIService,
+    private mlPredictionService: MLPredictionService
   ) {}
 
   ngOnInit() {
     this.loadDashboard();
+    this.loadPrevisaoDemanda();
   }
 
   loadDashboard() {
@@ -143,12 +153,84 @@ export class DashboardClinicoComponent implements OnInit {
     this.loadDashboard();
   }
 
+  loadPrevisaoDemanda() {
+    this.loadingPrevisao = true;
+    this.previsaoError = null;
+    
+    this.mlPredictionService.getPrevisaoProximaSemana().subscribe({
+      next: (data) => {
+        this.previsaoDemanda = data;
+        this.initPrevisaoDemandaChart();
+        this.loadingPrevisao = false;
+      },
+      error: (err) => {
+        console.error('Error loading demand forecast:', err);
+        this.previsaoError = 'Erro ao carregar previsão de demanda. Modelo ML pode não estar treinado.';
+        this.loadingPrevisao = false;
+      }
+    });
+  }
+
   initializeCharts() {
     if (!this.dashboard) return;
     
     this.initEspecialidadeChart();
     this.initDiaSemanaChart();
     this.initTendenciaChart();
+  }
+
+  initPrevisaoDemandaChart() {
+    if (!this.previsaoDemanda || !this.previsaoDemanda.previsoes.length) return;
+
+    const categories = this.previsaoDemanda.previsoes.map(p => {
+      const date = new Date(p.data);
+      return format(date, 'dd/MM');
+    });
+    const data = this.previsaoDemanda.previsoes.map(p => p.consultasPrevistas);
+
+    this.previsaoDemandaChartOptions = {
+      series: [{
+        name: 'Previsão de Consultas',
+        data: data
+      }],
+      chart: {
+        type: 'area',
+        height: 300,
+        toolbar: {
+          show: false
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.3,
+          stops: [0, 90, 100]
+        }
+      },
+      xaxis: {
+        categories: categories
+      },
+      yaxis: {
+        labels: {
+          formatter: (value) => Math.round(value).toString()
+        }
+      },
+      colors: ['#10b981'],
+      dataLabels: {
+        enabled: false
+      },
+      tooltip: {
+        y: {
+          formatter: (value) => Math.round(value) + ' consultas'
+        }
+      }
+    };
   }
 
   initEspecialidadeChart() {

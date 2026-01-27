@@ -137,6 +137,86 @@
       </div>
     </div>
 
+    <!-- ML Predictions Section -->
+    <div class="ml-predictions-section">
+      <div class="section-header">
+        <h2>🤖 Previsões com Machine Learning</h2>
+        <p>Análise preditiva para otimização de recursos</p>
+      </div>
+
+      <!-- Demand Forecast -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>📈 Previsão de Demanda - Próxima Semana</h3>
+          <p>Previsão de consultas para os próximos 7 dias baseada em dados históricos</p>
+        </div>
+        <div class="chart-body">
+          @if (loadingPrevisao) {
+            <app-loading message="Carregando previsões..." size="small"></app-loading>
+          }
+          @if (previsaoError && !loadingPrevisao) {
+            <div class="info-message warning">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <p>{{ previsaoError }}</p>
+            </div>
+          }
+          @if (!loadingPrevisao && previsaoDemanda && previsaoDemandaChartOptions) {
+            <div class="prediction-summary">
+              <div class="prediction-card">
+                <span class="prediction-label">Total Previsto (7 dias)</span>
+                <span class="prediction-value">{{ previsaoDemanda.totalPrevisto }} consultas</span>
+              </div>
+              <div class="prediction-card">
+                <span class="prediction-label">Média Diária</span>
+                <span class="prediction-value">{{ (previsaoDemanda.totalPrevisto / 7).toFixed(1) }} consultas</span>
+              </div>
+            </div>
+            <apx-chart
+              [series]="previsaoDemandaChartOptions.series!"
+              [chart]="previsaoDemandaChartOptions.chart!"
+              [stroke]="previsaoDemandaChartOptions.stroke!"
+              [fill]="previsaoDemandaChartOptions.fill!"
+              [xaxis]="previsaoDemandaChartOptions.xaxis!"
+              [yaxis]="previsaoDemandaChartOptions.yaxis!"
+              [colors]="previsaoDemandaChartOptions.colors!"
+              [dataLabels]="previsaoDemandaChartOptions.dataLabels!"
+              [tooltip]="previsaoDemandaChartOptions.tooltip!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- No-Show Risk Info -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>⚠️ Previsão de No-Show</h3>
+          <p>Sistema de predição de faltas disponível na tela de agendamentos</p>
+        </div>
+        <div class="chart-body">
+          <div class="info-message info">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <div>
+              <p><strong>Como funciona:</strong></p>
+              <ul>
+                <li>O sistema analisa o histórico do paciente e fatores de risco</li>
+                <li>Calcula a probabilidade de falta (no-show) para cada agendamento</li>
+                <li>Sugere ações preventivas para agendamentos de alto risco</li>
+                <li>Acesse a tela de agendamentos para ver o risco de cada consulta</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Charts Grid -->
     <div class="charts-grid">
       <!-- Consultas por Especialidade -->
