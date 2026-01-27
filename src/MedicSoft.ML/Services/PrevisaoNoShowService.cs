@@ -18,6 +18,7 @@ namespace MedicSoft.ML.Services
     /// <summary>
     /// Service for no-show prediction using ML.NET
     /// Predicts probability of patient not showing up for appointment
+    /// Thread-safe implementation with proper locking
     /// </summary>
     public class PrevisaoNoShowService : IPrevisaoNoShowService
     {
@@ -25,6 +26,7 @@ namespace MedicSoft.ML.Services
         private readonly ILogger<PrevisaoNoShowService> _logger;
         private ITransformer? _model;
         private readonly string _modelPath;
+        private readonly object _modelLock = new object();
 
         public PrevisaoNoShowService(ILogger<PrevisaoNoShowService> logger)
         {
@@ -35,6 +37,7 @@ namespace MedicSoft.ML.Services
 
         /// <summary>
         /// Trains the no-show prediction model
+        /// Thread-safe implementation with locking
         /// </summary>
         public async Task TreinarModeloAsync(IEnumerable<DadosNoShow> dadosTreinamento)
         {
@@ -64,10 +67,10 @@ namespace MedicSoft.ML.Services
                         numberOfTrees: 100));
 
                 // Train model
-                _model = pipeline.Fit(trainTestData.TrainSet);
+                var trainedModel = pipeline.Fit(trainTestData.TrainSet);
 
                 // Evaluate model
-                var predictions = _model.Transform(trainTestData.TestSet);
+                var predictions = trainedModel.Transform(trainTestData.TestSet);
                 var metrics = _mlContext.BinaryClassification.Evaluate(predictions, labelColumnName: "Label");
 
                 _logger.LogInformation(
@@ -83,7 +86,13 @@ namespace MedicSoft.ML.Services
                     Directory.CreateDirectory(directory);
                 }
 
-                await Task.Run(() => _mlContext.Model.Save(_model, dataView.Schema, _modelPath));
+                await Task.Run(() => _mlContext.Model.Save(trainedModel, dataView.Schema, _modelPath));
+                
+                // Update model with thread-safety
+                lock (_modelLock)
+                {
+                    _model = trainedModel;
+                }
                 
                 _logger.LogInformation("Modelo salvo em: {ModelPath}", _modelPath);
             }
@@ -96,6 +105,7 @@ namespace MedicSoft.ML.Services
 
         /// <summary>
         /// Loads the trained model from disk
+        /// Thread-safe implementation with locking
         /// </summary>
         public async Task<bool> CarregarModeloAsync()
         {
@@ -107,10 +117,17 @@ namespace MedicSoft.ML.Services
                     return false;
                 }
 
+                ITransformer loadedModel = null!;
                 await Task.Run(() =>
                 {
-                    _model = _mlContext.Model.Load(_modelPath, out var modelSchema);
+                    loadedModel = _mlContext.Model.Load(_modelPath, out var modelSchema);
                 });
+
+                // Update model with thread-safety
+                lock (_modelLock)
+                {
+                    _model = loadedModel;
+                }
 
                 _logger.LogInformation("Modelo carregado com sucesso de: {ModelPath}", _modelPath);
                 return true;
@@ -125,22 +142,28 @@ namespace MedicSoft.ML.Services
         /// <summary>
         /// Calculates no-show risk for a specific appointment
         /// Returns probability between 0 (will attend) and 1 (will not attend)
+        /// Thread-safe implementation with locking
+        /// NOTE: PredictionEngine creation per call is inefficient but thread-safe
+        /// For high-frequency predictions, consider using PredictionEnginePool
         /// </summary>
         public double CalcularRiscoNoShow(DadosNoShow dados)
         {
-            if (_model == null)
+            lock (_modelLock)
             {
-                throw new InvalidOperationException("Modelo não treinado ou carregado");
+                if (_model == null)
+                {
+                    throw new InvalidOperationException("Modelo não treinado ou carregado");
+                }
+
+                var predictionEngine = _mlContext.Model
+                    .CreatePredictionEngine<DadosNoShow, PrevisaoNoShowResult>(_model);
+
+                var previsao = predictionEngine.Predict(dados);
+                
+                // Probability represents confidence that patient will attend (VaiComparecer)
+                // So no-show risk = 1 - probability of attending
+                return 1 - previsao.Probability;
             }
-
-            var predictionEngine = _mlContext.Model
-                .CreatePredictionEngine<DadosNoShow, PrevisaoNoShowResult>(_model);
-
-            var previsao = predictionEngine.Predict(dados);
-            
-            // Probability represents confidence that patient will attend (VaiComparecer)
-            // So no-show risk = 1 - probability of attending
-            return 1 - previsao.Probability;
         }
 
         /// <summary>
@@ -176,35 +199,39 @@ namespace MedicSoft.ML.Services
         /// <summary>
         /// Batch prediction for multiple appointments
         /// Returns only high-risk appointments (risk > threshold)
+        /// Thread-safe implementation with locking
         /// </summary>
         public List<(DadosNoShow dados, double risco)> IdentificarAgendamentosAltoRisco(
             IEnumerable<DadosNoShow> agendamentos,
             double threshold = 0.5)
         {
-            if (_model == null)
+            lock (_modelLock)
             {
-                throw new InvalidOperationException("Modelo não treinado ou carregado");
-            }
-
-            var predictionEngine = _mlContext.Model
-                .CreatePredictionEngine<DadosNoShow, PrevisaoNoShowResult>(_model);
-
-            var altosRiscos = new List<(DadosNoShow, double)>();
-
-            foreach (var agendamento in agendamentos)
-            {
-                var previsao = predictionEngine.Predict(agendamento);
-                // Probability represents confidence that patient will attend
-                // So no-show risk = 1 - probability of attending
-                var risco = 1 - previsao.Probability;
-
-                if (risco > threshold)
+                if (_model == null)
                 {
-                    altosRiscos.Add((agendamento, risco));
+                    throw new InvalidOperationException("Modelo não treinado ou carregado");
                 }
-            }
 
-            return altosRiscos.OrderByDescending(x => x.Item2).ToList();
+                var predictionEngine = _mlContext.Model
+                    .CreatePredictionEngine<DadosNoShow, PrevisaoNoShowResult>(_model);
+
+                var altosRiscos = new List<(DadosNoShow, double)>();
+
+                foreach (var agendamento in agendamentos)
+                {
+                    var previsao = predictionEngine.Predict(agendamento);
+                    // Probability represents confidence that patient will attend
+                    // So no-show risk = 1 - probability of attending
+                    var risco = 1 - previsao.Probability;
+
+                    if (risco > threshold)
+                    {
+                        altosRiscos.Add((agendamento, risco));
+                    }
+                }
+
+                return altosRiscos.OrderByDescending(x => x.Item2).ToList();
+            }
         }
     }
 }

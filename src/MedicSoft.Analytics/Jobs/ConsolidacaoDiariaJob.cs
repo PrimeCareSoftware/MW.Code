@@ -33,14 +33,40 @@ namespace MedicSoft.Analytics.Jobs
                 var dataAnterior = DateTime.UtcNow.Date.AddDays(-1);
                 _logger.LogInformation("Iniciando consolidação diária para data: {Data}", dataAnterior);
 
-                // Note: In a multi-tenant scenario, you would need to iterate through all tenants
-                // For now, the consolidation service should handle this internally or be called per tenant
-                // This is a placeholder implementation
+                // Note: Multi-tenant consolidation requires a tenant enumeration service
+                // Implementation options:
+                // 1. Query distinct TenantIds from Clinic or Company table
+                // 2. Use a dedicated TenantService/TenantRepository
+                // 3. Queue individual tenant jobs via ExecutarConsolidacaoParaTenantAsync
                 
-                // TODO: Get all active tenants and consolidate for each
-                // For now, consolidation will be triggered per tenant via the API or tenant-aware service
+                // For production, implement one of the following approaches:
+                /*
+                // Option 1: Query all tenants from database
+                var tenants = await _context.Clinics
+                    .Select(c => c.TenantId)
+                    .Distinct()
+                    .ToListAsync();
+                
+                foreach (var tenantId in tenants)
+                {
+                    await ExecutarConsolidacaoParaTenantAsync(tenantId, dataAnterior);
+                }
+                */
+                
+                // Option 2: Use Hangfire to schedule per-tenant jobs
+                // This approach provides better isolation and retry handling
+                /*
+                var tenants = await _tenantService.GetAllActiveTenants();
+                foreach (var tenant in tenants)
+                {
+                    BackgroundJob.Enqueue<ConsolidacaoDiariaJob>(
+                        job => job.ExecutarConsolidacaoParaTenantAsync(tenant.Id, dataAnterior));
+                }
+                */
                 
                 _logger.LogInformation("Job de consolidação diária executado com sucesso");
+                _logger.LogWarning(
+                    "Tenant iteration not implemented. Use ExecutarConsolidacaoParaTenantAsync for specific tenants.");
             }
             catch (Exception ex)
             {
