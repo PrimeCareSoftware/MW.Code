@@ -23,6 +23,9 @@ namespace MedicSoft.Application.Services.DigitalSignature
         Task<CertificadoDigital> RegistrarCertificadoA3Async(Guid medicoId, string tenantId, string thumbprint);
         Task<X509Certificate2> CarregarCertificadoAsync(CertificadoDigital certificado, string? senha = null);
         bool IsICPBrasil(X509Certificate2 cert);
+        Task<List<CertificadoDigitalDto>> ListarCertificadosMedicoAsync(Guid medicoId);
+        Task<CertificadoDigitalDto?> ObterCertificadoPorIdAsync(Guid certificadoId);
+        Task InvalidarCertificadoAsync(Guid certificadoId, Guid medicoId);
     }
 
     /// <summary>
@@ -289,6 +292,75 @@ namespace MedicSoft.Application.Services.DigitalSignature
 
             return icpIssuers.Any(issuer =>
                 cert.Issuer.Contains(issuer, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public async Task<List<CertificadoDigitalDto>> ListarCertificadosMedicoAsync(Guid medicoId)
+        {
+            _logger.LogInformation("Listing certificates for medico {MedicoId}", medicoId);
+
+            // We need to get the tenantId - for now, we'll use a workaround
+            // In a real scenario, this should be passed as a parameter or retrieved from context
+            var certificados = await _certificadoRepository.GetCertificadosPorMedicoAsync(medicoId);
+
+            return certificados.Select(c => new CertificadoDigitalDto
+            {
+                Id = c.Id,
+                MedicoId = c.MedicoId,
+                MedicoNome = c.Medico?.FullName ?? "",
+                Tipo = c.Tipo.ToString(),
+                NumeroCertificado = c.NumeroCertificado,
+                SubjectName = c.SubjectName,
+                IssuerName = c.IssuerName,
+                DataEmissao = c.DataEmissao,
+                DataExpiracao = c.DataExpiracao,
+                Valido = c.Valido,
+                TotalAssinaturas = c.TotalAssinaturas,
+                DiasParaExpiracao = c.DiasParaExpiracao()
+            }).ToList();
+        }
+
+        public async Task<CertificadoDigitalDto?> ObterCertificadoPorIdAsync(Guid certificadoId)
+        {
+            _logger.LogInformation("Getting certificate {CertificadoId}", certificadoId);
+
+            // Use the repository method that includes navigation properties
+            var certificado = await _certificadoRepository.GetCertificadoComMedicoAsync(certificadoId);
+            if (certificado == null)
+                return null;
+
+            return new CertificadoDigitalDto
+            {
+                Id = certificado.Id,
+                MedicoId = certificado.MedicoId,
+                MedicoNome = certificado.Medico?.FullName ?? "",
+                Tipo = certificado.Tipo.ToString(),
+                NumeroCertificado = certificado.NumeroCertificado,
+                SubjectName = certificado.SubjectName,
+                IssuerName = certificado.IssuerName,
+                DataEmissao = certificado.DataEmissao,
+                DataExpiracao = certificado.DataExpiracao,
+                Valido = certificado.Valido,
+                TotalAssinaturas = certificado.TotalAssinaturas,
+                DiasParaExpiracao = certificado.DiasParaExpiracao()
+            };
+        }
+
+        public async Task InvalidarCertificadoAsync(Guid certificadoId, Guid medicoId)
+        {
+            _logger.LogInformation("Invalidating certificate {CertificadoId} for medico {MedicoId}", 
+                certificadoId, medicoId);
+
+            var certificado = await _certificadoRepository.GetCertificadoComMedicoAsync(certificadoId);
+            if (certificado == null)
+                throw new InvalidOperationException("Certificado não encontrado");
+
+            if (certificado.MedicoId != medicoId)
+                throw new UnauthorizedAccessException("Certificado não pertence ao médico");
+
+            certificado.Invalidar();
+            await _certificadoRepository.UpdateAsync(certificado);
+
+            _logger.LogInformation("Certificate {CertificadoId} invalidated successfully", certificadoId);
         }
     }
 }

@@ -14,6 +14,7 @@ using MedicSoft.Api.JsonConverters;
 using MedicSoft.Api.Middleware;
 using MedicSoft.Application.Mappings;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.Services.DigitalSignature;
 using MedicSoft.CrossCutting.Extensions;
 using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Interfaces;
@@ -410,6 +411,13 @@ builder.Services.AddScoped<IDataDeletionRequestRepository, DataDeletionRequestRe
 builder.Services.AddScoped<IConsentManagementService, ConsentManagementService>();
 builder.Services.AddScoped<IDataDeletionService, DataDeletionService>();
 builder.Services.AddScoped<IDataPortabilityService, DataPortabilityService>();
+
+// Digital Signature System (ICP-Brasil)
+builder.Services.AddScoped<ICertificateManager, CertificateManager>();
+builder.Services.AddScoped<ITimestampService, TimestampService>();
+builder.Services.AddScoped<IAssinaturaDigitalService, AssinaturaDigitalService>();
+builder.Services.AddScoped<ICertificadoDigitalRepository, CertificadoDigitalRepository>();
+builder.Services.AddScoped<IAssinaturaDigitalRepository, AssinaturaDigitalRepository>();
 
 // Anamnesis System
 builder.Services.AddScoped<IAnamnesisTemplateRepository, AnamnesisTemplateRepository>();

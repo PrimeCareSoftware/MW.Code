@@ -42,5 +42,12 @@ namespace MedicSoft.Repository.Repositories
                 .Include(c => c.Medico)
                 .FirstOrDefaultAsync(c => c.Thumbprint == thumbprint);
         }
+
+        public async Task<CertificadoDigital?> GetCertificadoComMedicoAsync(Guid certificadoId)
+        {
+            return await _dbSet
+                .Include(c => c.Medico)
+                .FirstOrDefaultAsync(c => c.Id == certificadoId);
+        }
     }
 }
