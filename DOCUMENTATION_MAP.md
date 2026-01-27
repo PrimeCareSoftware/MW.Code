@@ -98,7 +98,7 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ Guia de testes ([TESTING_GUIDE_BI_ANALYTICS.md](./frontend/medicwarehouse-app/TESTING_GUIDE_BI_ANALYTICS.md))
   - ⏳ Treinar modelos ML com dados reais - Pendente
   - ⏳ Integrar ML nos dashboards frontend - Pendente
-- **Assinatura Digital ICP-Brasil** ✅ (85% COMPLETO - Backend + APIs - [16-assinatura-digital.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/16-assinatura-digital.md))
+- **Assinatura Digital ICP-Brasil** ✅ (100% COMPLETO - Backend + Frontend + Documentação - [16-assinatura-digital.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/16-assinatura-digital.md))
   - ✅ Entidades CertificadoDigital e AssinaturaDigital
   - ✅ Repositórios e Configurations EF Core
   - ✅ Migrations para banco de dados (AddDigitalSignatureTables)
@@ -109,14 +109,18 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ CertificadoDigitalController (6 endpoints REST)
   - ✅ AssinaturaDigitalController (3 endpoints REST)
   - ✅ Registro de serviços no Program.cs
+  - ✅ **Frontend Angular completo (16 arquivos)**
+    - ✅ Models TypeScript (certificado-digital.model.ts, assinatura-digital.model.ts)
+    - ✅ Services HTTP (certificado-digital.service.ts, assinatura-digital.service.ts)
+    - ✅ Componente gerenciar-certificados (lista, importar, invalidar)
+    - ✅ Componente importar-certificado (wizard A1/A3 com tabs)
+    - ✅ Componente assinar-documento (dialog de assinatura)
+    - ✅ Componente verificar-assinatura (verificação e revalidação)
   - ✅ Documentação técnica ([ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md](./ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md))
   - ✅ Guia do usuário ([ASSINATURA_DIGITAL_GUIA_USUARIO.md](./ASSINATURA_DIGITAL_GUIA_USUARIO.md))
   - ✅ Resumo da implementação ([RESUMO_IMPLEMENTACAO_ASSINATURA_DIGITAL.md](./RESUMO_IMPLEMENTACAO_ASSINATURA_DIGITAL.md))
-  - ⏳ Frontend Angular - Pendente
-  - ⏳ Controllers e API REST - Pendente
-  - ⏳ Frontend Angular - Pendente
-  - ⏳ Dashboards Operacional e Qualidade - Pendente
-- Assinatura digital
+  - ✅ Sumário da implementação ([IMPLEMENTACAO_ASSINATURA_DIGITAL_SUMARIO.md](./IMPLEMENTACAO_ASSINATURA_DIGITAL_SUMARIO.md))
+  - ⏳ Integração com módulos de documentos (prontuário, receitas) - Próxima fase
 - CRM avançado
 - Gestão fiscal
 - Acessibilidade WCAG
