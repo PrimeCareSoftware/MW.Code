@@ -1,0 +1,146 @@
+<div class="gerar-senha-container">
+  <div class="header">
+    <button mat-icon-button class="back-button" (click)="voltarAoMenu()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Retirar Senha</h1>
+  </div>
+
+  <!-- Form Section -->
+  <div class="content" *ngIf="!senhaGerada()">
+    <div class="form-container">
+      <form [formGroup]="form" (ngSubmit)="gerarSenha()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome Completo</mat-label>
+          <input matInput formControlName="nomePaciente" autocomplete="off">
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="form.get('nomePaciente')?.hasError('required')">
+            Nome é obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>CPF</mat-label>
+          <input matInput formControlName="cpf" (input)="formatCpf($event)" 
+                 maxlength="11" autocomplete="off">
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-error *ngIf="form.get('cpf')?.hasError('required')">
+            CPF é obrigatório
+          </mat-error>
+          <mat-error *ngIf="form.get('cpf')?.hasError('pattern')">
+            CPF deve ter 11 dígitos
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Telefone</mat-label>
+          <input matInput formControlName="telefone" (input)="formatTelefone($event)" 
+                 maxlength="11" autocomplete="off">
+          <mat-icon matPrefix>phone</mat-icon>
+          <mat-error *ngIf="form.get('telefone')?.hasError('required')">
+            Telefone é obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Data de Nascimento</mat-label>
+          <input matInput type="date" formControlName="dataNascimento">
+          <mat-icon matPrefix>cake</mat-icon>
+          <mat-error *ngIf="form.get('dataNascimento')?.hasError('required')">
+            Data de nascimento é obrigatória
+          </mat-error>
+        </mat-form-field>
+
+        <div class="checkbox-group">
+          <mat-checkbox formControlName="isGestante" class="large-checkbox">
+            <span class="checkbox-label">Gestante</span>
+          </mat-checkbox>
+
+          <mat-checkbox formControlName="isDeficiente" class="large-checkbox">
+            <span class="checkbox-label">Pessoa com Deficiência</span>
+          </mat-checkbox>
+        </div>
+
+        <div class="button-group">
+          <button mat-raised-button type="button" class="cancel-button" 
+                  (click)="voltarAoMenu()" [disabled]="loading()">
+            <mat-icon>close</mat-icon>
+            Cancelar
+          </button>
+
+          <button mat-raised-button type="submit" class="submit-button" 
+                  [disabled]="!form.valid || loading()">
+            <mat-spinner *ngIf="loading()" diameter="24" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading()">confirmation_number</mat-icon>
+            {{ loading() ? 'Gerando...' : 'Gerar Senha' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Section -->
+  <div class="content success-content" *ngIf="senhaGerada()">
+    <div class="success-card">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h2>Senha Gerada com Sucesso!</h2>
+      
+      <div class="senha-display">
+        <div class="senha-number">{{ senhaGerada()?.numeroSenha }}</div>
+        <div class="priority-badge" *ngIf="senhaGerada()?.prioridade! > 0">
+          <mat-icon>star</mat-icon>
+          Atendimento Preferencial
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <mat-icon>person</mat-icon>
+          <div>
+            <div class="info-label">Paciente</div>
+            <div class="info-value">{{ senhaGerada()?.nomePaciente }}</div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>format_list_numbered</mat-icon>
+          <div>
+            <div class="info-label">Posição na Fila</div>
+            <div class="info-value">{{ posicaoNaFila() }}º</div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>schedule</mat-icon>
+          <div>
+            <div class="info-label">Tempo Estimado</div>
+            <div class="info-value">{{ tempoEstimado() }} minutos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <p>
+          <mat-icon>info</mat-icon>
+          Aguarde ser chamado no painel. Você receberá uma notificação por SMS quando estiver próximo.
+        </p>
+      </div>
+
+      <div class="button-group">
+        <button mat-raised-button class="secondary-button" (click)="gerarNovaSenha()">
+          <mat-icon>add</mat-icon>
+          Gerar Nova Senha
+        </button>
+
+        <button mat-raised-button class="primary-button" (click)="voltarAoMenu()">
+          <mat-icon>home</mat-icon>
+          Voltar ao Menu
+        </button>
+      </div>
+
+      <div class="auto-return-message">
+        Retornando ao menu automaticamente em alguns segundos...
+      </div>
+    </div>
+  </div>
+</div>

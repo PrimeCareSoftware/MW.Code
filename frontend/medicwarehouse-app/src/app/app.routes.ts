@@ -496,6 +496,24 @@ export const routes: Routes = [
     canActivate: [authGuard, ownerGuard]
   },
   
+  // Fila de Espera (Queue System) routes - Public access for totem and TV panel
+  {
+    path: 'fila-espera/totem/:clinicId/:filaId',
+    loadComponent: () => import('./pages/fila-espera/totem/totem.component').then(m => m.TotemComponent)
+  },
+  {
+    path: 'fila-espera/gerar-senha/:clinicId/:filaId',
+    loadComponent: () => import('./pages/fila-espera/totem/gerar-senha.component').then(m => m.GerarSenhaComponent)
+  },
+  {
+    path: 'fila-espera/consultar/:clinicId/:filaId',
+    loadComponent: () => import('./pages/fila-espera/totem/consultar-senha.component').then(m => m.ConsultarSenhaComponent)
+  },
+  {
+    path: 'fila-espera/painel-tv/:clinicId/:filaId',
+    loadComponent: () => import('./pages/fila-espera/painel-tv/painel-tv.component').then(m => m.PainelTvComponent)
+  },
+  
   ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes

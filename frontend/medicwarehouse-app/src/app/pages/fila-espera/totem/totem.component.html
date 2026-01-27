@@ -1,0 +1,42 @@
+<div class="totem-container">
+  <div class="header">
+    <div class="logo-section">
+      <mat-icon class="logo-icon">local_hospital</mat-icon>
+      <h1>Bem-vindo(a)</h1>
+    </div>
+    <div class="clock">{{ currentTime() | date:'HH:mm:ss' }}</div>
+  </div>
+
+  <div class="main-content">
+    <div class="clinic-name" *ngIf="fila()">
+      <h2>{{ fila()?.nome }}</h2>
+    </div>
+
+    <div class="main-menu">
+      <button mat-raised-button class="menu-button check-in" (click)="checkIn()">
+        <mat-icon>person_add</mat-icon>
+        <span class="button-title">Fazer Check-in</span>
+        <small>Tenho consulta agendada</small>
+      </button>
+
+      <button mat-raised-button class="menu-button generate" (click)="gerarSenha()">
+        <mat-icon>confirmation_number</mat-icon>
+        <span class="button-title">Retirar Senha</span>
+        <small>Atendimento por ordem de chegada</small>
+      </button>
+
+      <button mat-raised-button class="menu-button consult" (click)="consultarSenha()">
+        <mat-icon>search</mat-icon>
+        <span class="button-title">Consultar Minha Senha</span>
+        <small>Ver posição na fila</small>
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p class="instruction-text">
+      <mat-icon>touch_app</mat-icon>
+      Toque na tela para começar
+    </p>
+  </div>
+</div>
