@@ -8,10 +8,10 @@ namespace MedicSoft.Analytics.Models
     public class DimensaoMedico
     {
         public Guid MedicoId { get; set; }
-        public string Nome { get; set; }
-        public string CRM { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string CRM { get; set; } = string.Empty;
         public Guid? EspecialidadeId { get; set; }
-        public string EspecialidadeNome { get; set; }
+        public string EspecialidadeNome { get; set; } = string.Empty;
         public bool Ativo { get; set; }
         public DateTime DataCadastro { get; set; }
     }

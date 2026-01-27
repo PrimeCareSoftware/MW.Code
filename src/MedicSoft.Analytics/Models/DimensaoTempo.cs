@@ -16,8 +16,8 @@ namespace MedicSoft.Analytics.Models
         public int Trimestre { get; set; }
         public bool IsFeriado { get; set; }
         public bool IsFimDeSemana { get; set; }
-        public string NomeMes { get; set; }
-        public string NomeDiaSemana { get; set; }
-        public string AnoMes { get; set; } // Format: "2026-01"
+        public string NomeMes { get; set; } = string.Empty;
+        public string NomeDiaSemana { get; set; } = string.Empty;
+        public string AnoMes { get; set; } = string.Empty; // Format: "2026-01"
     }
 }

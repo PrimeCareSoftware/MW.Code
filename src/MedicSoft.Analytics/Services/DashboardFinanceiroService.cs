@@ -54,7 +54,7 @@ namespace MedicSoft.Analytics.Services
                 var receitaRecebida = receitas.Where(r => r.Status == PaymentStatus.Paid).Sum(r => r.Amount);
                 var receitaPendente = receitas.Where(r => r.Status == PaymentStatus.Pending).Sum(r => r.Amount);
                 var receitaAtrasada = receitas
-                    .Where(r => r.PaymentDate < DateTime.Now && r.Status == PaymentStatus.Pending)
+                    .Where(r => r.PaymentDate < DateTime.UtcNow && r.Status == PaymentStatus.Pending)
                     .Sum(r => r.Amount);
 
                 var despesaTotal = despesas.Sum(d => d.Amount);
@@ -106,16 +106,16 @@ namespace MedicSoft.Analytics.Services
         {
             try
             {
-                var diaAtual = DateTime.Now.Day;
+                var agora = DateTime.UtcNow;
+                var diaAtual = agora.Day;
                 var diasNoMes = DateTime.DaysInMonth(mes.Year, mes.Month);
                 
                 var inicioMes = new DateTime(mes.Year, mes.Month, 1);
-                var hoje = DateTime.Now;
 
                 var receitaAteAgora = await _context.Payments
                     .Where(p => p.TenantId == tenantId
                         && p.PaymentDate >= inicioMes
-                        && p.PaymentDate <= hoje
+                        && p.PaymentDate <= agora
                         && p.Status == PaymentStatus.Paid)
                     .SumAsync(p => p.Amount);
 

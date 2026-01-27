@@ -100,13 +100,14 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                var projecao = await _dashboardFinanceiroService.ProjetarReceitaMesAsync(DateTime.Now, tenantId);
+                var agora = DateTime.UtcNow;
+                var projecao = await _dashboardFinanceiroService.ProjetarReceitaMesAsync(agora, tenantId);
                 
                 return Ok(new 
                 { 
-                    mes = DateTime.Now.ToString("MMMM yyyy"),
+                    mes = agora.ToString("MMMM yyyy"),
                     projecao = projecao,
-                    dataCalculo = DateTime.Now
+                    dataCalculo = agora
                 });
             }
             catch (Exception ex)

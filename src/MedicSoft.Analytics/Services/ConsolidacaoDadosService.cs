@@ -178,44 +178,31 @@ namespace MedicSoft.Analytics.Services
         private async Task<int> ContarPacientesNovos(System.Collections.Generic.List<Appointment> consultas, DateTime data)
         {
             var pacienteIds = consultas.Select(c => c.PatientId).Distinct().ToList();
-            var count = 0;
+            
+            // Buscar primeiras consultas de todos os pacientes de uma vez (otimizado)
+            var primeirasConsultas = await _context.Appointments
+                .Where(a => pacienteIds.Contains(a.PatientId) && a.Status == AppointmentStatus.Completed)
+                .GroupBy(a => a.PatientId)
+                .Select(g => new { PatientId = g.Key, PrimeiraData = g.Min(a => a.ScheduledDate) })
+                .ToListAsync();
 
-            foreach (var pacienteId in pacienteIds)
-            {
-                var primeiraConsulta = await _context.Appointments
-                    .Where(a => a.PatientId == pacienteId && a.Status == AppointmentStatus.Completed)
-                    .OrderBy(a => a.ScheduledDate)
-                    .FirstOrDefaultAsync();
-
-                if (primeiraConsulta != null && primeiraConsulta.ScheduledDate.Date == data.Date)
-                {
-                    count++;
-                }
-            }
-
-            return count;
+            return primeirasConsultas.Count(pc => pc.PrimeiraData.Date == data.Date);
         }
 
         private async Task<int> ContarPacientesRetorno(System.Collections.Generic.List<Appointment> consultas, DateTime data)
         {
             var pacienteIds = consultas.Select(c => c.PatientId).Distinct().ToList();
-            var count = 0;
+            
+            // Buscar pacientes com consultas anteriores de uma vez (otimizado)
+            var pacientesComConsultasAnteriores = await _context.Appointments
+                .Where(a => pacienteIds.Contains(a.PatientId)
+                    && a.Status == AppointmentStatus.Completed
+                    && a.ScheduledDate < data.Date)
+                .Select(a => a.PatientId)
+                .Distinct()
+                .ToListAsync();
 
-            foreach (var pacienteId in pacienteIds)
-            {
-                var consultasAnteriores = await _context.Appointments
-                    .Where(a => a.PatientId == pacienteId 
-                        && a.Status == AppointmentStatus.Completed
-                        && a.ScheduledDate < data.Date)
-                    .AnyAsync();
-
-                if (consultasAnteriores)
-                {
-                    count++;
-                }
-            }
-
-            return count;
+            return pacientesComConsultasAnteriores.Count;
         }
     }
 }
