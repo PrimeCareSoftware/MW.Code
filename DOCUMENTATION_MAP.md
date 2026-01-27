@@ -71,18 +71,27 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ Painel de TV (Angular + SignalR tempo real)
   - ✅ Models e Services TypeScript (17 arquivos criados)
 - **TISS Fase 2 - Webservices + Gestão de Glosas** ✅ (90% implementado - Backend completo - [13-tiss-fase2.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/13-tiss-fase2.md))
-- **BI e Analytics Avançados** ✅ (70% COMPLETO - Backend + Frontend - [15-bi-analytics.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/15-bi-analytics.md))
+- **BI e Analytics Avançados** ✅ (85% COMPLETO - Backend + Frontend + ML - [15-bi-analytics.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/15-bi-analytics.md))
   - ✅ MedicSoft.Analytics project (modelos e serviços)
+  - ✅ MedicSoft.ML project (Machine Learning com ML.NET)
   - ✅ Data Warehouse simplificado (ConsultaDiaria, DimensaoTempo, DimensaoMedico)
   - ✅ ConsolidacaoDadosService (consolidação noturna)
+  - ✅ Hangfire background jobs (consolidação diária automática)
+  - ✅ Database migration criada (ConsultaDiaria)
   - ✅ DashboardClinicoService (métricas clínicas, top diagnósticos CID-10)
   - ✅ DashboardFinanceiroService (métricas financeiras, projeções)
+  - ✅ PrevisaoDemandaService (ML.NET - previsão de consultas)
+  - ✅ PrevisaoNoShowService (ML.NET - risco de falta)
   - ✅ AnalyticsController (5 endpoints REST)
+  - ✅ MLPredictionController (6 endpoints ML)
   - ✅ Dashboard Clínico Angular (KPIs, gráficos ApexCharts)
   - ✅ Dashboard Financeiro Angular (KPIs, fluxo de caixa, projeções)
-  - ✅ Documentação completa ([IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md](./frontend/medicwarehouse-app/IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md))
+  - ✅ Documentação completa ([IMPLEMENTATION_SUMMARY_BI_ANALYTICS.md](./IMPLEMENTATION_SUMMARY_BI_ANALYTICS.md))
+  - ✅ Documentação ML ([ML_DOCUMENTATION.md](./ML_DOCUMENTATION.md))
+  - ✅ Frontend docs ([IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md](./frontend/medicwarehouse-app/IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md))
   - ✅ Guia de testes ([TESTING_GUIDE_BI_ANALYTICS.md](./frontend/medicwarehouse-app/TESTING_GUIDE_BI_ANALYTICS.md))
-  - ⏳ Machine Learning (ML.NET) - Pendente
+  - ⏳ Treinar modelos ML com dados reais - Pendente
+  - ⏳ Integrar ML nos dashboards frontend - Pendente
   - ⏳ Dashboards Operacional e Qualidade - Pendente
 - Assinatura digital
 - CRM avançado
