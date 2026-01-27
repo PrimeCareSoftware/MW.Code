@@ -464,6 +464,12 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISentimentAnalysis
 // CRM Advanced - Churn Prediction
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IChurnPredictionService, MedicSoft.Api.Services.CRM.ChurnPredictionService>();
 
+// Register CRM Background Jobs
+builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.AutomationExecutorJob>();
+builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.SurveyTriggerJob>();
+builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>();
+builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>();
+
 // Configure Hangfire for background jobs
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
@@ -621,6 +627,127 @@ try
         "consolidacao-diaria",
         job => job.ExecutarConsolidacaoDiariaAsync(),
         Cron.Daily(0, 0), // Every day at 00:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // CRM Jobs - Marketing Automation
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.AutomationExecutorJob>(
+        "crm-automation-executor",
+        job => job.ExecuteAsync(),
+        Cron.Hourly(), // Every hour
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.AutomationExecutorJob>(
+        "crm-automation-metrics",
+        job => job.UpdateMetricsAsync(),
+        Cron.Daily(1, 0), // Daily at 01:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // CRM Jobs - Survey Triggers
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SurveyTriggerJob>(
+        "crm-survey-trigger",
+        job => job.TriggerSurveysAsync(),
+        Cron.Daily(10, 0), // Daily at 10:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SurveyTriggerJob>(
+        "crm-survey-process-responses",
+        job => job.ProcessSurveyResponsesAsync(),
+        Cron.Daily(2, 0), // Daily at 02:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // CRM Jobs - Churn Prediction
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
+        "crm-churn-prediction",
+        job => job.PredictChurnAsync(),
+        Cron.Weekly(DayOfWeek.Sunday, 3, 0), // Weekly on Sunday at 03:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
+        "crm-churn-high-risk-notification",
+        job => job.NotifyHighRiskPatientsAsync(),
+        Cron.Daily(8, 0), // Daily at 08:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
+        "crm-churn-recalculate-old",
+        job => job.RecalculateOldPredictionsAsync(),
+        Cron.Weekly(DayOfWeek.Wednesday, 4, 0), // Weekly on Wednesday at 04:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
+        "crm-churn-retention-analysis",
+        job => job.AnalyzeRetentionEffectivenessAsync(),
+        Cron.Monthly(1, 5, 0), // Monthly on 1st day at 05:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // CRM Jobs - Sentiment Analysis
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
+        "crm-sentiment-survey-comments",
+        job => job.AnalyzeSurveyCommentsAsync(),
+        Cron.Hourly(), // Every hour
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
+        "crm-sentiment-complaints",
+        job => job.AnalyzeComplaintsAsync(),
+        Cron.Hourly(), // Every hour
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
+        "crm-sentiment-interactions",
+        job => job.AnalyzeComplaintInteractionsAsync(),
+        Cron.Daily(11, 0), // Daily at 11:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
+        "crm-sentiment-alerts",
+        job => job.GenerateNegativeSentimentAlertsAsync(),
+        "*/30 * * * *", // Every 30 minutes
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
+        "crm-sentiment-trends",
+        job => job.AnalyzeSentimentTrendsAsync(),
+        Cron.Daily(12, 0), // Daily at 12:00 UTC
         new RecurringJobOptions
         {
             TimeZone = TimeZoneInfo.Utc
