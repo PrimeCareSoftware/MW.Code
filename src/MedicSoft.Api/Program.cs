@@ -46,6 +46,7 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddHttpClient(); // Add HttpClient factory for microservice proxying
+builder.Services.AddSignalR(); // Add SignalR for real-time communication
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -264,6 +265,8 @@ builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<IExamRequestRepository, ExamRequestRepository>();
 builder.Services.AddScoped<IWaitingQueueRepository, WaitingQueueRepository>();
 builder.Services.AddScoped<IWaitingQueueConfigurationRepository, WaitingQueueConfigurationRepository>();
+builder.Services.AddScoped<IFilaEsperaRepository, FilaEsperaRepository>();
+builder.Services.AddScoped<ISenhaFilaRepository, SenhaFilaRepository>();
 builder.Services.AddScoped<IOwnerClinicLinkRepository, OwnerClinicLinkRepository>();
 builder.Services.AddScoped<IExamCatalogRepository, ExamCatalogRepository>();
 builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
@@ -336,6 +339,7 @@ builder.Services.AddScoped<IClinicSelectionService, ClinicSelectionService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IExamRequestService, ExamRequestService>();
 builder.Services.AddScoped<IWaitingQueueService, WaitingQueueService>();
+builder.Services.AddScoped<IFilaService, FilaService>();
 builder.Services.AddScoped<IOwnerClinicLinkService, OwnerClinicLinkService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAccessProfileService, AccessProfileService>();
@@ -502,6 +506,7 @@ if (rateLimitEnabled)
 }
 
 app.MapControllers();
+app.MapHub<MedicSoft.Api.Hubs.FilaHub>("/hubs/fila");
 
 // Initialize MediatR License
 using (var scope = app.Services.CreateScope())

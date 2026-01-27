@@ -369,6 +369,49 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Prescrição Médica**: Área de texto com impressão otimizada
 - ✅ **Encaixes**: Permite agendamentos de emergência
 
+### 🎫 Sistema de Fila de Espera Avançado 🆕
+
+**Sistema completo de gestão de filas com totem de autoatendimento e painel de TV em tempo real! (Janeiro 2026)**
+
+#### Backend - Gestão de Fila
+- ✅ **Entidades de Domínio**: FilaEspera e SenhaFila
+- ✅ **Tipos de Fila**: Geral, Por Especialidade, Por Médico, Triagem
+- ✅ **Geração Automática de Senhas**: Com prefixos por prioridade (N001, I001, G001, etc.)
+- ✅ **Sistema de Priorização Automática**:
+  - Idosos (+60 anos)
+  - Gestantes
+  - Pessoas com Deficiência (PCD)
+  - Crianças (< 2 anos)
+  - Urgências
+- ✅ **Cálculo Inteligente de Tempo de Espera**: Baseado em posição na fila e tempo médio de atendimento
+- ✅ **SignalR Hub**: Comunicação em tempo real para painéis e totems
+- ✅ **API RESTful**: Endpoints completos para gestão da fila
+- ✅ **Métricas e Analytics**: Tempo médio de espera, taxa de não comparecimento, etc.
+
+#### Totem de Autoatendimento (Em Desenvolvimento)
+- 📋 **Check-in Automático**: Pacientes com agendamento podem fazer check-in
+- 📋 **Geração de Senhas**: Retirada de senha por ordem de chegada
+- 📋 **Validação de CPF**: Identificação automática do paciente
+- 📋 **Detecção de Prioridades**: Sistema identifica automaticamente prioridades por idade
+- 📋 **Impressão de Comprovante**: Senha com número, posição e tempo estimado
+- 📋 **Interface Touchscreen**: Design otimizado para telas grandes
+
+#### Painel de TV (Em Desenvolvimento)
+- 📋 **Exibição em Tempo Real**: Atualização via SignalR
+- 📋 **Chamada de Senhas**: Destaque visual e sonoro
+- 📋 **Text-to-Speech**: Anúncio por voz da senha chamada
+- 📋 **Fila de Espera**: Lista de senhas aguardando
+- 📋 **Últimas Chamadas**: Histórico das últimas 5 chamadas
+- 📋 **Informações Úteis**: Tempo médio de espera, hora atual
+
+#### Funcionalidades do Sistema
+- ✅ **Notificações SMS**: Alerta quando estiver próximo da vez (3 senhas antes)
+- ✅ **Controle de Tentativas**: Após 3 chamadas, marca como não compareceu
+- ✅ **Vinculação com Agendamento**: Integração com sistema de agendamentos
+- ✅ **Múltiplos Consultórios**: Suporte para clínicas com várias salas
+- ✅ **Métricas Detalhadas**: Analytics por especialidade, horário de pico, etc.
+
+
 ### 🏥 Conformidade CFM 1.821/2007 - Prontuário Eletrônico 🆕✨
 
 **Sistema 85% conforme a Resolução CFM 1.821/2007 sobre prontuários eletrônicos! (Janeiro 2026)**
