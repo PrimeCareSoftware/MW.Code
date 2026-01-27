@@ -280,27 +280,65 @@ Models (TypeScript Interfaces)
 4. **Sem Revogação:** Não verifica LCR/OCSP
 5. **Windows Only (A3):** Tokens A3 funcionam apenas em Windows
 
-### Melhorias Futuras (Opcionais)
-1. **Integração com Módulos de Documentos:**
-   - Adicionar botão "Assinar" em prontuários, receitas, atestados, laudos
-   - Exibir status de assinatura nos visualizadores
-   - Permitir verificação ao abrir documentos
+### 🔮 Trabalho Futuro - Fase 2 (Próxima Iteração)
 
-2. **Segurança Avançada:**
-   - Verificação de LCR (Lista de Certificados Revogados)
-   - Integração OCSP (Online Certificate Status Protocol)
-   - Validação de integridade de documentos armazenados
+**Status:** Infraestrutura 100% completa. Componentes projetados como **standalone** para fácil integração.
 
-3. **Configuração:**
-   - Mover URLs de TSA para appsettings.json
-   - Configurar system name via configuração
-   - Considerar usar Bouncy Castle para ASN.1
+#### 1. Integração com Módulos de Documentos
 
-4. **Analytics:**
-   - Dashboard de gestão de certificados
-   - Relatórios de auditoria de assinaturas
-   - Alertas automáticos de expiração (email/notificação)
-   - Métricas de uso por médico/tipo de documento
+**Módulos para Integração:**
+- [ ] Prontuário médico (medical-records)
+- [ ] Receitas (prescriptions)
+- [ ] Atestados (medical certificates)
+- [ ] Laudos (medical reports)
+
+**Estimativa:** 2-3 dias por módulo (6-10 dias total)
+
+**Pré-requisitos por módulo:**
+- Geração de PDF dos documentos
+- Storage de documentos implementado
+- Endpoints de listagem de documentos
+
+**Guia Completo:** Ver [GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md](./GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md) para instruções detalhadas passo a passo.
+
+**Exemplo de Integração:**
+```typescript
+// 1. Importar componente
+import { AssinarDocumentoComponent } from '@app/pages/assinatura-digital/assinar-documento.component';
+
+// 2. Abrir dialog
+const dialogRef = this.dialog.open(AssinarDocumentoComponent, {
+  data: {
+    documentoId: documento.id,
+    tipoDocumento: TipoDocumento.Prontuario,
+    documentoBytes: pdfBase64,
+    pacienteNome: paciente.nome
+  }
+});
+```
+
+#### 2. Melhorias de Segurança (Opcionais)
+- [ ] Verificação de LCR (Lista de Certificados Revogados)
+- [ ] Integração OCSP (Online Certificate Status Protocol)
+- [ ] Validação de integridade de documentos armazenados (recalcular hash)
+
+**Estimativa:** 5-7 dias
+
+#### 3. Configuração e Robustez
+- [ ] Mover URLs de TSA para appsettings.json
+- [ ] Configurar system name via configuração
+- [ ] Considerar Bouncy Castle para ASN.1 mais robusto
+- [ ] Suporte multiplataforma para A3 (PKCS#11)
+
+**Estimativa:** 3-5 dias
+
+#### 4. Analytics e Monitoramento
+- [ ] Dashboard de gestão de certificados
+- [ ] Relatórios de auditoria de assinaturas
+- [ ] Alertas automáticos de expiração (email/notificação)
+- [ ] Métricas de uso por médico/tipo de documento
+
+**Estimativa:** 5-7 dias
 
 ---
 

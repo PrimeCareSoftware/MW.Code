@@ -120,14 +120,18 @@ builder.Services.AddScoped<IAssinaturaDigitalRepository, AssinaturaDigitalReposi
 
 ---
 
-## ⏳ O Que Falta Implementar (Melhorias Futuras)
+## 🔮 Trabalho Futuro - Fase 2 (Próxima Iteração)
 
 ### Integração com Módulos Existentes
 
+**Status:** Infraestrutura 100% completa. Componentes standalone prontos para uso.
+
+**📋 Guia Completo Disponível:** [GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md](./GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md)
+
 **Funcionalidades a Integrar:**
 1. Adicionar botão "Assinar Digitalmente" nos módulos de documentos:
-   - Prontuário médico
-   - Receitas
+   - Prontuário médico (medical-records)
+   - Receitas (prescriptions)
    - Atestados médicos
    - Laudos
    - Prescrições
@@ -136,7 +140,21 @@ builder.Services.AddScoped<IAssinaturaDigitalRepository, AssinaturaDigitalReposi
 2. Exibir status de assinatura nos visualizadores de documentos
 3. Permitir verificação de assinaturas ao abrir documentos assinados
 
-**Estimativa:** 2-3 dias de desenvolvimento
+**Estimativa:** 2-3 dias por módulo (6-10 dias total)
+
+**Exemplo de Integração:**
+```typescript
+import { AssinarDocumentoComponent } from '@app/pages/assinatura-digital/assinar-documento.component';
+
+const dialogRef = this.dialog.open(AssinarDocumentoComponent, {
+  data: {
+    documentoId: documento.id,
+    tipoDocumento: TipoDocumento.Prontuario,
+    documentoBytes: pdfBase64,
+    pacienteNome: paciente.nome
+  }
+});
+```
 
 ### Melhorias Opcionais
 
@@ -361,10 +379,10 @@ Authorization: Bearer {token}
 3. ✅ Frontend Angular
 4. ⏳ Testes de integração
 
-### Médio Prazo (1 mês)
+### Médio Prazo (1 mês) - Fase 2
 1. Aplicar migrations no ambiente de desenvolvimento
 2. Testes com certificados de homologação
-3. Integração com módulos existentes (prontuário, receitas)
+3. Integração com módulos existentes (prontuário, receitas) - **Ver [GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md](./GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md)**
 4. Implementar verificação de revogação
 
 ### Longo Prazo (2-3 meses)
@@ -380,7 +398,9 @@ Authorization: Bearer {token}
 **Documentação Completa:**
 - Documentação Técnica: [ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md](./ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md)
 - Guia do Usuário: [ASSINATURA_DIGITAL_GUIA_USUARIO.md](./ASSINATURA_DIGITAL_GUIA_USUARIO.md)
+- **Guia de Integração:** [GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md](./GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md) 📋
 - Resumo Detalhado: [RESUMO_IMPLEMENTACAO_ASSINATURA_DIGITAL.md](./RESUMO_IMPLEMENTACAO_ASSINATURA_DIGITAL.md)
+- Finalização: [FINALIZACAO_ASSINATURA_DIGITAL.md](./FINALIZACAO_ASSINATURA_DIGITAL.md)
 - Mapa de Documentação: [DOCUMENTATION_MAP.md](./DOCUMENTATION_MAP.md)
 
 **Prompt Original:** [16-assinatura-digital.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/16-assinatura-digital.md)

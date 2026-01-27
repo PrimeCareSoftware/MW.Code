@@ -460,8 +460,11 @@ else
 3. ✅ Desenvolver frontend Angular completo  
 4. ⏳ Testes de integração com certificados de homologação  
 
-### Médio Prazo (1 mês)
+### Médio Prazo (1 mês) - Fase 2
 1. Integração completa com módulos de documentos existentes (prontuário, receitas, atestados)
+   - **Guia completo disponível:** [GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md](./GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md)
+   - Componentes standalone prontos para importação
+   - Estimativa: 2-3 dias por módulo
 2. Implementar validação de integridade de documentos armazenados
 3. Implementar verificação de revogação (LCR/OCSP)
 4. Testes com certificados de produção
@@ -485,6 +488,9 @@ else
 ### Links Internos
 - Documentação Técnica: ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md
 - Guia do Usuário: ASSINATURA_DIGITAL_GUIA_USUARIO.md
+- **Guia de Integração:** GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md 📋
+- Sumário da Implementação: IMPLEMENTACAO_ASSINATURA_DIGITAL_SUMARIO.md
+- Finalização: FINALIZACAO_ASSINATURA_DIGITAL.md
 - Mapa de Documentação: DOCUMENTATION_MAP.md
 - Prompt Original: Plano_Desenvolvimento/fase-4-analytics-otimizacao/16-assinatura-digital.md
 
