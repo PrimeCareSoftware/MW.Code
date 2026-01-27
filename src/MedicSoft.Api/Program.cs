@@ -340,6 +340,8 @@ builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IExamRequestService, ExamRequestService>();
 builder.Services.AddScoped<IWaitingQueueService, WaitingQueueService>();
 builder.Services.AddScoped<IFilaService, FilaService>();
+builder.Services.AddScoped<IFilaNotificationService, FilaNotificationService>();
+builder.Services.AddScoped<IFilaAnalyticsService, FilaAnalyticsService>();
 builder.Services.AddScoped<IOwnerClinicLinkService, OwnerClinicLinkService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAccessProfileService, AccessProfileService>();

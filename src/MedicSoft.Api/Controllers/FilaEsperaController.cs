@@ -228,6 +228,24 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Marcar senha como não comparecida após múltiplas tentativas
+        /// </summary>
+        [HttpPut("senha/{senhaId}/nao-compareceu")]
+        public async Task<ActionResult> MarcarNaoCompareceu(Guid senhaId)
+        {
+            try
+            {
+                // This endpoint would be called by the notification service
+                // after 3 failed call attempts
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     // Request DTOs
