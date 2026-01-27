@@ -1383,7 +1383,7 @@ public class SOAPMedicalRecord
 **Prazo:** Q1-Q2/2025  
 **Esforço Real:** 2 meses | 1 desenvolvedor  
 **Custo Realizado:** R$ 30.000  
-**Custo Restante:** R$ 7.500-22.500
+**Custo Restante:** R$ 7.500-37.500 (Tokens + Pentest opcional)
 
 #### Conjunto de Melhorias
 

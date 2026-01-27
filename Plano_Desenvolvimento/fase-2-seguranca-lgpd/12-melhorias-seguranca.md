@@ -6,7 +6,7 @@
 **Data de Última Atualização:** 27 de Janeiro de 2026  
 **Esforço Real:** 2 meses | 1 desenvolvedor  
 **Custo Realizado:** R$ 30.000  
-**Custo Estimado Restante:** R$ 15.000  
+**Custo Estimado Restante:** R$ 7.500-37.500 (Tokens + Pentest opcional)  
 **Prazo:** Q1 2026 (Janeiro-Março)
 
 ## 📋 Contexto
@@ -743,7 +743,7 @@ curl /api/auth/enable-2fa
 | Pentest | ✅ Guia Criado | R$ 15.000-30.000 | R$ 5.000 (guia) | R$ 0 |
 | **TOTAL** | **67%** | **R$ 61.500-76.500** | **R$ 30.000** | **R$ 300/mês** |
 
-**Custo Restante Estimado:** R$ 7.500-22.500 (Refresh Tokens + Pentest opcional)
+**Custo Restante Estimado:** R$ 7.500-37.500 (Refresh Tokens: R$ 7.500 + Pentest opcional: R$ 15k-30k)
 
 ## 📚 Referências
 
