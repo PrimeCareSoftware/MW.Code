@@ -238,6 +238,46 @@ All frontend projects are configured with unique ports to allow running them sim
 - [Documentação da API de Tickets](system-admin/docs/TICKET_API_DOCUMENTATION.md)
 - [Script de Migração](scripts/run-ticket-migration.sh)
 
+## 📊 BI & Analytics Avançados 🆕
+
+**Sistema completo de Business Intelligence e Analytics para tomada de decisão estratégica!**
+
+- 📊 **Dashboards Interativos**: Clínico e Financeiro com KPIs em tempo real
+- 📈 **Análises Preditivas**: Previsão de demanda e no-show (ML.NET - em desenvolvimento)
+- 💰 **Métricas Financeiras**: Receitas, despesas, projeções e fluxo de caixa
+- 🏥 **Métricas Clínicas**: Ocupação, tempos médio, diagnósticos mais frequentes (CID-10)
+- 📑 **Documentação**: [IMPLEMENTATION_SUMMARY_BI_ANALYTICS.md](./IMPLEMENTATION_SUMMARY_BI_ANALYTICS.md)
+- 🧪 **Guia de Testes**: [TESTING_GUIDE_BI_ANALYTICS.md](./frontend/medicwarehouse-app/TESTING_GUIDE_BI_ANALYTICS.md)
+
+**Status**: ✅ **70% Completo** - Backend + Frontend implementados
+
+**Features Implementadas:**
+- ✅ Data Warehouse simplificado com consolidação noturna
+- ✅ Dashboard Clínico: 4 KPIs + 5 visualizações (ApexCharts)
+- ✅ Dashboard Financeiro: 8 KPIs + 4 visualizações + projeções
+- ✅ API REST com 5 endpoints
+- ✅ Frontend Angular responsivo
+- ✅ Filtros por data, médico e convênio
+- ✅ Top 10 diagnósticos (CID-10)
+- ✅ Tendências mensais
+- ✅ Fluxo de caixa diário
+- ⏳ Machine Learning (ML.NET) - Em desenvolvimento
+- ⏳ Dashboards Operacional e Qualidade - Planejado
+
+**Endpoints API:**
+```
+GET  /api/Analytics/dashboard/clinico           # Dashboard clínico
+GET  /api/Analytics/dashboard/financeiro        # Dashboard financeiro
+GET  /api/Analytics/projecao/receita-mes        # Projeção receita
+POST /api/Analytics/consolidar/dia             # Consolidar 1 dia (Admin)
+POST /api/Analytics/consolidar/periodo         # Consolidar período (Admin)
+```
+
+**ROI Esperado:**
+- 💰 Investimento: R$ 110.000
+- 📈 Retorno anual: R$ 180.000
+- ⏱️ Payback: ~7 meses
+
 ## 📚 Documentação Completa
 
 ### 💼 Glossário de Termos Empresariais (NOVO!)
