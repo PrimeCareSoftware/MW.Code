@@ -12,4 +12,8 @@ public interface IAuthService
     Task<LoginResponseDto> RefreshTokenAsync(string refreshToken, string ipAddress);
     Task RevokeTokenAsync(string refreshToken, string ipAddress);
     Task<bool> ChangePasswordAsync(Guid patientUserId, string currentPassword, string newPassword);
+    Task<bool> VerifyEmailAsync(string token);
+    Task ResendVerificationEmailAsync(string email);
+    Task RequestPasswordResetAsync(string email, string ipAddress);
+    Task<bool> ResetPasswordAsync(string token, string newPassword);
 }

@@ -282,10 +282,220 @@ public class AuthController : ControllerBase
             return StatusCode(500, new { message = "An error occurred during password change" });
         }
     }
+
+    /// <summary>
+    /// Verifies a user's email address using the verification token
+    /// </summary>
+    /// <param name="token">Email verification token received via email</param>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">Email verified successfully</response>
+    /// <response code="400">Invalid or expired verification token</response>
+    /// <response code="500">Internal server error occurred during verification</response>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /api/auth/verify-email?token={verification-token}
+    /// 
+    /// **Notes:**
+    /// - Token is sent to user's email upon registration
+    /// - Token is valid for 24 hours
+    /// - Token can only be used once
+    /// - Email verification may be required before using certain features
+    /// </remarks>
+    [HttpPost("verify-email")]
+    [AllowAnonymous]
+    public async Task<IActionResult> VerifyEmail([FromQuery] string token)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest(new { message = "Token is required" });
+            }
+
+            var result = await _authService.VerifyEmailAsync(token);
+            
+            if (!result)
+            {
+                return BadRequest(new { message = "Invalid or expired verification token" });
+            }
+
+            return Ok(new { message = "Email verified successfully" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during email verification");
+            return StatusCode(500, new { message = "An error occurred during email verification" });
+        }
+    }
+
+    /// <summary>
+    /// Resends email verification link to the user
+    /// </summary>
+    /// <param name="request">Email address to resend verification to</param>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">Verification email sent successfully</response>
+    /// <response code="400">Email already verified or user not found</response>
+    /// <response code="500">Internal server error occurred</response>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /api/auth/resend-verification
+    ///     {
+    ///         "email": "patient@example.com"
+    ///     }
+    /// 
+    /// **Notes:**
+    /// - New token is generated and sent to the email
+    /// - Previous tokens remain valid until expiry
+    /// - Rate limiting may apply to prevent abuse
+    /// </remarks>
+    [HttpPost("resend-verification")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResendVerificationEmail([FromBody] ResendVerificationDto request)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest(new { message = "Email is required" });
+            }
+
+            await _authService.ResendVerificationEmailAsync(request.Email);
+            return Ok(new { message = "Verification email sent successfully" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error resending verification email to {Email}", request.Email);
+            return StatusCode(500, new { message = "An error occurred while sending verification email" });
+        }
+    }
+
+    /// <summary>
+    /// Requests a password reset link to be sent to the user's email
+    /// </summary>
+    /// <param name="request">Email address for password reset</param>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">Password reset email sent (or user not found - no disclosure for security)</response>
+    /// <response code="400">Invalid email format</response>
+    /// <response code="500">Internal server error occurred</response>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /api/auth/forgot-password
+    ///     {
+    ///         "email": "patient@example.com"
+    ///     }
+    /// 
+    /// **Security Notes:**
+    /// - Always returns success even if email doesn't exist (prevents user enumeration)
+    /// - Reset token is valid for 1 hour
+    /// - Token can only be used once
+    /// - All active reset tokens are revoked when password is changed
+    /// </remarks>
+    [HttpPost("forgot-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest(new { message = "Email is required" });
+            }
+
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+            await _authService.RequestPasswordResetAsync(request.Email, ipAddress);
+            
+            // Always return success for security (don't reveal if email exists)
+            return Ok(new { message = "If the email exists, a password reset link has been sent" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during password reset request");
+            return StatusCode(500, new { message = "An error occurred while processing your request" });
+        }
+    }
+
+    /// <summary>
+    /// Resets the user's password using the reset token
+    /// </summary>
+    /// <param name="request">Reset token and new password</param>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">Password reset successfully</response>
+    /// <response code="400">Invalid or expired reset token</response>
+    /// <response code="500">Internal server error occurred</response>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /api/auth/reset-password
+    ///     {
+    ///         "token": "reset-token-from-email",
+    ///         "newPassword": "NewPassword123!"
+    ///     }
+    /// 
+    /// **Password Requirements:**
+    /// - Minimum 8 characters
+    /// - Should contain uppercase and lowercase letters
+    /// - Should contain numbers
+    /// - Should contain special characters
+    /// 
+    /// **Security:**
+    /// - Token is valid for 1 hour
+    /// - Token can only be used once
+    /// - All active reset tokens are revoked after successful reset
+    /// - New password is hashed with PBKDF2 (100,000 iterations)
+    /// </remarks>
+    [HttpPost("reset-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(request.Token) || string.IsNullOrEmpty(request.NewPassword))
+            {
+                return BadRequest(new { message = "Token and new password are required" });
+            }
+
+            var result = await _authService.ResetPasswordAsync(request.Token, request.NewPassword);
+            
+            if (!result)
+            {
+                return BadRequest(new { message = "Invalid or expired reset token" });
+            }
+
+            return Ok(new { message = "Password reset successfully" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during password reset");
+            return StatusCode(500, new { message = "An error occurred during password reset" });
+        }
+    }
 }
 
 public class ChangePasswordDto
 {
     public string CurrentPassword { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+}
+
+public class ResendVerificationDto
+{
+    public string Email { get; set; } = string.Empty;
+}
+
+public class ForgotPasswordDto
+{
+    public string Email { get; set; } = string.Empty;
+}
+
+public class ResetPasswordDto
+{
+    public string Token { get; set; } = string.Empty;
     public string NewPassword { get; set; } = string.Empty;
 }
