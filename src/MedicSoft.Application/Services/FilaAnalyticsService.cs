@@ -87,15 +87,17 @@ namespace MedicSoft.Application.Services
 
             var horarioPico = await GetHorarioPicoAsync(dataInicio, filaId, tenantId);
 
-            var atendimentosPorPrioridade = senhasList
-                .GroupBy(s => s.Prioridade)
-                .Select(g => new AtendimentoPrioridadeDto
-                {
-                    Prioridade = g.Key.ToString(),
-                    Total = g.Count(),
-                    Percentual = (double)g.Count() / senhasList.Count * 100
-                })
-                .ToList();
+            var atendimentosPorPrioridade = senhasList.Count > 0
+                ? senhasList
+                    .GroupBy(s => s.Prioridade)
+                    .Select(g => new AtendimentoPrioridadeDto
+                    {
+                        Prioridade = g.Key.ToString(),
+                        Total = g.Count(),
+                        Percentual = (double)g.Count() / senhasList.Count * 100
+                    })
+                    .ToList()
+                : new List<AtendimentoPrioridadeDto>();
 
             return new FilaMetricsDto
             {

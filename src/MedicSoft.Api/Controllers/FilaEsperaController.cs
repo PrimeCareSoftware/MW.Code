@@ -237,9 +237,10 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
+                // TODO: Implement this endpoint when integrated with notification service
                 // This endpoint would be called by the notification service
-                // after 3 failed call attempts
-                return Ok();
+                // after 3 failed call attempts to mark the ticket as no-show
+                return StatusCode(501, new { message = "Endpoint not yet implemented. Will be completed with notification service integration." });
             }
             catch (InvalidOperationException ex)
             {
