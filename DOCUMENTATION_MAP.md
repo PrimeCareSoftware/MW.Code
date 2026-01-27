@@ -18,6 +18,12 @@ Este documento fornece uma visão geral de toda a documentação disponível no 
 - **[CRM_USER_MANUAL.md](./CRM_USER_MANUAL.md)** - 🚧 Manual do usuário do CRM
 - **[CRM_API_DOCUMENTATION.md](./CRM_API_DOCUMENTATION.md)** - 🚧 Documentação da API do CRM
 
+### 📊 Análise de Dados e Marketing
+- **[ANALISE_DADOS_CADASTRO_INDICE.md](./ANALISE_DADOS_CADASTRO_INDICE.md)** - ✅ **NOVO** Índice completo da documentação de análise de dados de cadastro
+- **[ANALISE_DADOS_CADASTRO_ESTRATEGIAS.md](./ANALISE_DADOS_CADASTRO_ESTRATEGIAS.md)** - ✅ **NOVO** Estratégias para captação de clientes desistentes e otimização do funil
+- **[ANALISE_DADOS_CADASTRO_GUIA_TECNICO.md](./ANALISE_DADOS_CADASTRO_GUIA_TECNICO.md)** - ✅ **NOVO** Guia técnico de implementação (código, queries, integrações)
+- **[ANALISE_DADOS_CADASTRO_GUIA_PRATICO.md](./ANALISE_DADOS_CADASTRO_GUIA_PRATICO.md)** - ✅ **NOVO** Plano de ação prático em 12 semanas com ROI estimado
+
 ### 🗂️ Documentação Arquivada
 - **[docs_archive/](./docs_archive/)** - Documentação antiga e arquivada (11 arquivos)
   - Resumos de implementação supersedidos
