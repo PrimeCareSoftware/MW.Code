@@ -429,6 +429,10 @@ builder.Services.AddScoped<MedicSoft.Analytics.Services.IDashboardClinicoService
 builder.Services.AddScoped<MedicSoft.Analytics.Services.IDashboardFinanceiroService, MedicSoft.Analytics.Services.DashboardFinanceiroService>();
 builder.Services.AddScoped<MedicSoft.Analytics.Jobs.ConsolidacaoDiariaJob>();
 
+// Register ML services
+builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoDemandaService, MedicSoft.ML.Services.PrevisaoDemandaService>();
+builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoNoShowService, MedicSoft.ML.Services.PrevisaoNoShowService>();
+
 // Configure Hangfire for background jobs
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
