@@ -426,7 +426,8 @@ export class Attendance implements OnInit, OnDestroy {
       return; // Cronômetro já está em execução
     }
 
-    // Reset timer to 00:00
+    // Reset timer to 00:00 at the start of each consultation
+    // This ensures the timer always starts from zero regardless of previous state
     this.elapsedSeconds.set(0);
 
     this.timerSubscription = interval(1000).subscribe(() => {
