@@ -10,8 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CertificadoDigitalService } from '../../../services/certificado-digital.service';
-import { CertificateInfo } from '../../../models/certificado-digital.model';
+import { CertificadoDigitalService } from '../../services/certificado-digital.service';
+import { CertificateInfo, CertificadoDigital } from '../../models/certificado-digital.model';
 
 @Component({
   selector: 'app-importar-certificado',
@@ -72,7 +72,7 @@ export class ImportarCertificadoComponent {
   carregarCertificadosA3(): void {
     this.isCarregandoA3.set(true);
     this.certificadoService.listarCertificadosA3Disponiveis().subscribe({
-      next: (data) => {
+      next: (data: CertificateInfo[]) => {
         this.certificadosA3Disponiveis.set(data);
         this.isCarregandoA3.set(false);
         
@@ -84,7 +84,7 @@ export class ImportarCertificadoComponent {
           );
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open('Erro ao listar certificados A3', 'Fechar', { duration: 5000 });
         this.isCarregandoA3.set(false);
         console.error('Erro ao listar certificados A3:', error);
@@ -105,12 +105,12 @@ export class ImportarCertificadoComponent {
 
     this.isImportando.set(true);
     this.certificadoService.importarCertificadoA1(this.arquivoPfx, this.senhaA1).subscribe({
-      next: (certificado) => {
+      next: (certificado: CertificadoDigital) => {
         this.snackBar.open('Certificado A1 importado com sucesso!', 'Fechar', { duration: 3000 });
         this.isImportando.set(false);
         this.dialogRef.close(true);
       },
-      error: (error) => {
+      error: (error: any) => {
         const mensagem = error.error?.message || error.error || 'Erro ao importar certificado A1';
         this.snackBar.open(mensagem, 'Fechar', { duration: 5000 });
         this.isImportando.set(false);
@@ -127,12 +127,12 @@ export class ImportarCertificadoComponent {
 
     this.isImportando.set(true);
     this.certificadoService.registrarCertificadoA3(this.certificadoA3Selecionado).subscribe({
-      next: (certificado) => {
+      next: (certificado: CertificadoDigital) => {
         this.snackBar.open('Certificado A3 registrado com sucesso!', 'Fechar', { duration: 3000 });
         this.isImportando.set(false);
         this.dialogRef.close(true);
       },
-      error: (error) => {
+      error: (error: any) => {
         const mensagem = error.error?.message || error.error || 'Erro ao registrar certificado A3';
         this.snackBar.open(mensagem, 'Fechar', { duration: 5000 });
         this.isImportando.set(false);
