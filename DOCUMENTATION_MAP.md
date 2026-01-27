@@ -15,6 +15,12 @@ Este documento fornece uma visão geral de toda a documentação disponível no 
 - **[TISS_FASE2_IMPLEMENTACAO.md](./TISS_FASE2_IMPLEMENTACAO.md)** - ✅ Status da implementação TISS Fase 2 (90% completo - Janeiro 2026)
 - **[RESUMO_TISS_FASE2.md](./RESUMO_TISS_FASE2.md)** - ✅ Resumo executivo TISS Fase 2 (90% completo - Janeiro 2026)
 
+### 📊 Análise de Dados e Marketing
+- **[ANALISE_DADOS_CADASTRO_INDICE.md](./ANALISE_DADOS_CADASTRO_INDICE.md)** - ✅ **NOVO** Índice completo da documentação de análise de dados de cadastro
+- **[ANALISE_DADOS_CADASTRO_ESTRATEGIAS.md](./ANALISE_DADOS_CADASTRO_ESTRATEGIAS.md)** - ✅ **NOVO** Estratégias para captação de clientes desistentes e otimização do funil
+- **[ANALISE_DADOS_CADASTRO_GUIA_TECNICO.md](./ANALISE_DADOS_CADASTRO_GUIA_TECNICO.md)** - ✅ **NOVO** Guia técnico de implementação (código, queries, integrações)
+- **[ANALISE_DADOS_CADASTRO_GUIA_PRATICO.md](./ANALISE_DADOS_CADASTRO_GUIA_PRATICO.md)** - ✅ **NOVO** Plano de ação prático em 12 semanas com ROI estimado
+
 ### 🗂️ Documentação Arquivada
 - **[docs_archive/](./docs_archive/)** - Documentação antiga e arquivada (11 arquivos)
   - Resumos de implementação supersedidos
