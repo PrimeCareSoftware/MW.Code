@@ -1,0 +1,127 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>verified_user</mat-icon>
+        Gerenciar Certificados Digitais
+      </mat-card-title>
+      <div class="spacer"></div>
+      <button mat-raised-button color="primary" (click)="abrirDialogImportar()">
+        <mat-icon>add</mat-icon>
+        Importar Certificado
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (isLoading()) {
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+          <p>Carregando certificados...</p>
+        </div>
+      } @else if (certificados().length === 0) {
+        <div class="empty-state">
+          <mat-icon>verified_user</mat-icon>
+          <h3>Nenhum certificado cadastrado</h3>
+          <p>Importe um certificado A1 ou registre um certificado A3 para começar a assinar documentos digitalmente.</p>
+          <button mat-raised-button color="primary" (click)="abrirDialogImportar()">
+            <mat-icon>add</mat-icon>
+            Importar Primeiro Certificado
+          </button>
+        </div>
+      } @else {
+        <table mat-table [dataSource]="certificados()" class="certificados-table">
+          <!-- Tipo Column -->
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let certificado">
+              <mat-icon 
+                [matTooltip]="getTipoCertificadoTooltip(certificado.tipo)"
+                class="tipo-icon">
+                {{ getTipoCertificadoIcon(certificado.tipo) }}
+              </mat-icon>
+              {{ certificado.tipo }}
+            </td>
+          </ng-container>
+
+          <!-- Subject Name Column -->
+          <ng-container matColumnDef="subjectName">
+            <th mat-header-cell *matHeaderCellDef>Certificado</th>
+            <td mat-cell *matCellDef="let certificado">
+              <div class="certificado-info">
+                <strong>{{ certificado.subjectName }}</strong>
+                <small>{{ certificado.numeroCertificado }}</small>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Issuer Column -->
+          <ng-container matColumnDef="issuerName">
+            <th mat-header-cell *matHeaderCellDef>Emissor</th>
+            <td mat-cell *matCellDef="let certificado">{{ certificado.issuerName }}</td>
+          </ng-container>
+
+          <!-- Expiration Column -->
+          <ng-container matColumnDef="dataExpiracao">
+            <th mat-header-cell *matHeaderCellDef>Validade</th>
+            <td mat-cell *matCellDef="let certificado">
+              {{ certificado.dataExpiracao | date:'dd/MM/yyyy' }}
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let certificado">
+              <mat-chip [color]="getStatusChipColor(certificado)" selected>
+                {{ getStatusText(certificado) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Total Assinaturas Column -->
+          <ng-container matColumnDef="totalAssinaturas">
+            <th mat-header-cell *matHeaderCellDef>Assinaturas</th>
+            <td mat-cell *matCellDef="let certificado">
+              <mat-icon matTooltip="Total de documentos assinados">description</mat-icon>
+              {{ certificado.totalAssinaturas }}
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="acoes">
+            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <td mat-cell *matCellDef="let certificado">
+              <button 
+                mat-icon-button 
+                color="warn"
+                matTooltip="Invalidar certificado"
+                (click)="invalidarCertificado(certificado)"
+                [disabled]="!certificado.valido">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      }
+
+      <div class="info-box">
+        <mat-icon>info</mat-icon>
+        <div>
+          <h4>Sobre Certificados Digitais ICP-Brasil</h4>
+          <p>
+            <strong>A1:</strong> Certificado armazenado em software (validade de 1 ano). Mais prático para uso diário.<br>
+            <strong>A3:</strong> Certificado em token/smartcard (validade de 3-5 anos). Maior segurança, requer dispositivo físico.
+          </p>
+          <p>
+            Os certificados digitais garantem validade jurídica aos documentos eletrônicos conforme CFM 1.821/2007 e MP 2.200-2/2001.
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

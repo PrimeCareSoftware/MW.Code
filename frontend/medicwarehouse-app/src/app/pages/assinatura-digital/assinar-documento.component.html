@@ -1,0 +1,105 @@
+<h2 mat-dialog-title>
+  <mat-icon>edit_note</mat-icon>
+  Assinar Documento Digitalmente
+</h2>
+
+<mat-dialog-content>
+  <div class="documento-preview">
+    <mat-icon>description</mat-icon>
+    <div class="documento-info">
+      <h3>{{ data.tipoDocumentoNome }}</h3>
+      @if (data.pacienteNome) {
+        <p><strong>Paciente:</strong> {{ data.pacienteNome }}</p>
+      }
+      @if (data.dataDocumento) {
+        <p><strong>Data:</strong> {{ data.dataDocumento | date:'dd/MM/yyyy HH:mm' }}</p>
+      }
+    </div>
+  </div>
+
+  @if (isCarregando()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Carregando certificados...</p>
+    </div>
+  } @else if (certificados().length === 0) {
+    <div class="empty-state">
+      <mat-icon>warning</mat-icon>
+      <p>Você não possui certificados válidos cadastrados.</p>
+      <p>Por favor, importe um certificado antes de assinar documentos.</p>
+    </div>
+  } @else {
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Certificado Digital</mat-label>
+      <mat-select [(ngModel)]="certificadoSelecionado" [disabled]="isAssinando()">
+        @for (cert of certificados(); track cert.id) {
+          <mat-option [value]="cert.id">
+            <div class="certificado-option">
+              <mat-icon class="tipo-icon">
+                {{ cert.tipo === TipoCertificado.A1 ? 'computer' : 'usb' }}
+              </mat-icon>
+              <span>{{ cert.subjectName }} ({{ cert.tipo }})</span>
+              <small>Válido até: {{ formatarDataExpiracao(cert.dataExpiracao) }}</small>
+            </div>
+          </mat-option>
+        }
+      </mat-select>
+      <mat-icon matSuffix>verified_user</mat-icon>
+    </mat-form-field>
+
+    @if (certificadoSelecionado) {
+      @if (getCertificadoSelecionadoDetalhes()?.tipo === TipoCertificado.A3) {
+        <div class="info-box a3-info">
+          <mat-icon>usb</mat-icon>
+          <p>Conecte seu token A3 para continuar com a assinatura.</p>
+        </div>
+      }
+
+      @if (precisaSenha()) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha do Certificado</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="senha"
+            placeholder="Digite a senha do certificado A1"
+            [disabled]="isAssinando()">
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+      }
+    }
+
+    <div class="checkbox-container">
+      <mat-checkbox [(ngModel)]="incluirTimestamp" [disabled]="isAssinando()">
+        Incluir carimbo de tempo (recomendado)
+      </mat-checkbox>
+    </div>
+
+    <div class="info-box">
+      <mat-icon>info</mat-icon>
+      <p>
+        A assinatura digital garante autenticidade e integridade do documento,
+        com validade jurídica conforme ICP-Brasil e CFM 1.821/2007.
+      </p>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="isAssinando()">
+    Cancelar
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="!certificadoSelecionado || isAssinando() || certificados().length === 0"
+    (click)="assinar()">
+    @if (isAssinando()) {
+      <mat-spinner diameter="20"></mat-spinner>
+      Assinando...
+    } @else {
+      <mat-icon>draw</mat-icon>
+      Assinar
+    }
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,87 @@
+<div class="assinatura-card">
+  <div class="status-badge" [class.valida]="assinatura?.valida" [class.invalida]="!assinatura?.valida">
+    <mat-icon>{{ getStatusIcon() }}</mat-icon>
+    <span>{{ getStatusText() }}</span>
+  </div>
+
+  <mat-list class="info-list">
+    <!-- Assinado por -->
+    <mat-list-item>
+      <mat-icon matListItemIcon>person</mat-icon>
+      <div matListItemTitle>Assinado por</div>
+      <div matListItemLine>
+        {{ assinatura?.medicoNome || 'N/A' }}
+        @if (assinatura?.medicoCRM) {
+          <span class="crm-badge">{{ assinatura.medicoCRM }}</span>
+        }
+      </div>
+    </mat-list-item>
+
+    <!-- Data/Hora da Assinatura -->
+    <mat-list-item>
+      <mat-icon matListItemIcon>calendar_today</mat-icon>
+      <div matListItemTitle>Data/Hora da Assinatura</div>
+      <div matListItemLine>{{ assinatura?.dataHoraAssinatura | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+    </mat-list-item>
+
+    <!-- Certificado -->
+    <mat-list-item>
+      <mat-icon matListItemIcon>verified_user</mat-icon>
+      <div matListItemTitle>Certificado Digital</div>
+      <div matListItemLine class="certificado-details">
+        <div>{{ assinatura?.certificadoSubject || 'N/A' }}</div>
+        @if (assinatura?.certificadoExpiracao) {
+          <small>Válido até: {{ assinatura.certificadoExpiracao | date:'dd/MM/yyyy' }}</small>
+        }
+      </div>
+    </mat-list-item>
+
+    <!-- Carimbo de Tempo -->
+    @if (assinatura?.temTimestamp) {
+      <mat-list-item>
+        <mat-icon matListItemIcon>schedule</mat-icon>
+        <div matListItemTitle>Carimbo de Tempo</div>
+        <div matListItemLine>
+          {{ assinatura.dataTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}
+          <mat-chip class="timestamp-chip" selected>RFC 3161</mat-chip>
+        </div>
+      </mat-list-item>
+    }
+
+    <!-- Hash do Documento -->
+    <mat-list-item>
+      <mat-icon matListItemIcon>fingerprint</mat-icon>
+      <div matListItemTitle>Hash SHA-256</div>
+      <div matListItemLine class="hash-container">
+        <code [title]="assinatura?.hashDocumento">
+          {{ truncateHash(assinatura?.hashDocumento || '') }}
+        </code>
+      </div>
+    </mat-list-item>
+
+    <!-- Última Validação -->
+    @if (assinatura?.dataUltimaValidacao) {
+      <mat-list-item>
+        <mat-icon matListItemIcon>update</mat-icon>
+        <div matListItemTitle>Última Validação</div>
+        <div matListItemLine>{{ assinatura.dataUltimaValidacao | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+      </mat-list-item>
+    }
+  </mat-list>
+
+  <div class="actions">
+    <button 
+      mat-raised-button 
+      color="primary"
+      [disabled]="isRevalidando()"
+      (click)="revalidar()">
+      @if (isRevalidando()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        Validando...
+      } @else {
+        <mat-icon>refresh</mat-icon>
+        Revalidar Assinatura
+      }
+    </button>
+  </div>
+</div>
