@@ -197,6 +197,23 @@ public class EmailTemplateHelperTests
     }
 
     [Fact]
+    public void GenerateAppointmentConfirmationEmail_WhenDoctorIdIsNull_ShouldStillGenerate()
+    {
+        // Arrange
+        _sampleAppointment.DoctorId = null; // DoctorId may not be available in some views
+
+        // Act
+        var result = EmailTemplateHelper.GenerateAppointmentConfirmationEmail(_sampleAppointment, PortalBaseUrl);
+
+        // Assert
+        result.Should().Contain(_sampleAppointment.PatientName);
+        result.Should().Contain(_sampleAppointment.DoctorName);
+        result.Should().Contain(_sampleAppointment.ClinicName);
+        result.Should().Contain("<!DOCTYPE html>");
+        result.Should().Contain("</html>");
+    }
+
+    [Fact]
     public void GenerateAppointmentReminderEmail_ShouldContainPatientName()
     {
         // Act

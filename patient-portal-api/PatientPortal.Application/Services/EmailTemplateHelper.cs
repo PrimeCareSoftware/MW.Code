@@ -186,15 +186,15 @@ public static class EmailTemplateHelper
     /// Generates common email footer
     /// </summary>
     /// <remarks>
-    /// Note: Uses DateTime.Now which may have timezone implications in production.
-    /// Consider injecting a time service if precise timezone control is needed.
+    /// Uses UTC year to avoid timezone issues across different server environments.
+    /// All date handling in email templates should consider timezone implications.
     /// </remarks>
     private static string GetEmailFooter()
     {
         var sb = new StringBuilder();
         sb.AppendLine("        <div class=\"footer\">");
         sb.AppendLine("            <p>Este é um e-mail automático. Por favor, não responda.</p>");
-        sb.AppendLine($"            <p>© {DateTime.Now.Year} PrimeCare Software. Todos os direitos reservados.</p>");
+        sb.AppendLine($"            <p>© {DateTime.UtcNow.Year} PrimeCare Software. Todos os direitos reservados.</p>");
         sb.AppendLine("        </div>");
         return sb.ToString();
     }
