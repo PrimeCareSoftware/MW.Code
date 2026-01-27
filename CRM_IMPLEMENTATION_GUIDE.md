@@ -521,7 +521,7 @@ prediction.AddRecommendedAction("Oferecer desconto na próxima consulta");
 
 - [Manual do Usuário](./CRM_USER_MANUAL.md)
 - [Documentação da API](./CRM_API_DOCUMENTATION.md)
-- [Prompt Original](../Plano_Desenvolvimento/fase-4-analytics-otimizacao/17-crm-avancado.md)
+- [Prompt Original](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/17-crm-avancado.md)
 
 ## 🤝 Contribuindo
 

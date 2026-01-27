@@ -97,6 +97,7 @@ namespace MedicSoft.Domain.Entities.CRM
             if (TotalResponses == 0)
             {
                 AverageScore = 0;
+                UpdateTimestamp();
                 return;
             }
             
@@ -120,6 +121,10 @@ namespace MedicSoft.Domain.Entities.CRM
             if (scoredResponses > 0)
             {
                 AverageScore = totalScore / scoredResponses;
+            }
+            else
+            {
+                AverageScore = 0;
             }
             
             UpdateTimestamp();

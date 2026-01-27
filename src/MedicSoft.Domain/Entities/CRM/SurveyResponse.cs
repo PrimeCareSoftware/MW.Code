@@ -54,6 +54,13 @@ namespace MedicSoft.Domain.Entities.CRM
         
         public void Complete(int? npsScore = null, int? csatScore = null)
         {
+            // Validate score ranges
+            if (npsScore.HasValue && (npsScore.Value < 0 || npsScore.Value > 10))
+                throw new ArgumentOutOfRangeException(nameof(npsScore), "NPS score must be between 0 and 10");
+                
+            if (csatScore.HasValue && (csatScore.Value < 1 || csatScore.Value > 5))
+                throw new ArgumentOutOfRangeException(nameof(csatScore), "CSAT score must be between 1 and 5");
+            
             IsCompleted = true;
             CompletedAt = DateTime.UtcNow;
             NpsScore = npsScore;

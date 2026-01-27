@@ -126,14 +126,16 @@ namespace MedicSoft.Domain.Entities.CRM
             TimesExecuted++;
             LastExecutedAt = DateTime.UtcNow;
             
-            // Update success rate (exponential moving average)
+            // Update success rate (exponential moving average for trend tracking)
+            // Note: This EMA gives more weight to recent executions (alpha=0.2)
+            // to track current performance trends rather than overall historical average
             if (TimesExecuted == 1)
             {
                 SuccessRate = success ? 1.0 : 0.0;
             }
             else
             {
-                double alpha = 0.2; // Smoothing factor
+                const double alpha = 0.2; // Smoothing factor (20% weight on current, 80% on history)
                 SuccessRate = alpha * (success ? 1.0 : 0.0) + (1 - alpha) * SuccessRate;
             }
             
