@@ -293,7 +293,7 @@ namespace MedicSoft.Application.Services
                 UsaPrioridade = fila.UsaPrioridade,
                 UsaAgendamento = fila.UsaAgendamento,
                 CreatedAt = fila.CreatedAt,
-                UpdatedAt = fila.UpdatedAt
+                UpdatedAt = fila.UpdatedAt ?? fila.CreatedAt
             };
         }
 
@@ -317,7 +317,7 @@ namespace MedicSoft.Application.Services
                 Status = senha.Status.ToString(),
                 TentativasChamada = senha.TentativasChamada,
                 MedicoId = senha.MedicoId,
-                NomeMedico = senha.Medico?.Name,
+                NomeMedico = senha.Medico?.FullName,
                 EspecialidadeId = senha.EspecialidadeId,
                 NumeroConsultorio = senha.NumeroConsultorio,
                 AgendamentoId = senha.AgendamentoId,
@@ -326,7 +326,7 @@ namespace MedicSoft.Application.Services
                 PosicaoNaFila = posicao,
                 TempoEstimadoEspera = tempoEstimado,
                 CreatedAt = senha.CreatedAt,
-                UpdatedAt = senha.UpdatedAt
+                UpdatedAt = senha.UpdatedAt ?? senha.CreatedAt
             };
         }
     }
