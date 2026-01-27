@@ -421,6 +421,11 @@ builder.Services.AddScoped<ISubscriptionService>(provider =>
     return new SubscriptionService(notificationService, environment);
 });
 
+// Register Analytics services
+builder.Services.AddScoped<MedicSoft.Analytics.Services.IConsolidacaoDadosService, MedicSoft.Analytics.Services.ConsolidacaoDadosService>();
+builder.Services.AddScoped<MedicSoft.Analytics.Services.IDashboardClinicoService, MedicSoft.Analytics.Services.DashboardClinicoService>();
+builder.Services.AddScoped<MedicSoft.Analytics.Services.IDashboardFinanceiroService, MedicSoft.Analytics.Services.DashboardFinanceiroService>();
+
 // Register cross-cutting services (includes security services)
 builder.Services.AddMedicSoftCrossCutting();
 

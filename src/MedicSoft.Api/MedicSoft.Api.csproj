@@ -29,6 +29,7 @@
     <ProjectReference Include="..\MedicSoft.Application\MedicSoft.Application.csproj" />
     <ProjectReference Include="..\MedicSoft.Repository\MedicSoft.Repository.csproj" />
     <ProjectReference Include="..\MedicSoft.CrossCutting\MedicSoft.CrossCutting.csproj" />
+    <ProjectReference Include="..\MedicSoft.Analytics\MedicSoft.Analytics.csproj" />
   </ItemGroup>
 
 </Project>
