@@ -216,7 +216,8 @@ namespace MedicSoft.Test.Services.CRM
             Assert.NotNull(results);
             var resultList = results.ToList();
             Assert.Equal(2, resultList.Count);
-            Assert.All(resultList, a => Assert.Equal(_testTenantId, a.Name.Contains("Campaign") ? _testTenantId : null));
+            // Verify all results belong to the test tenant (not other-tenant)
+            Assert.DoesNotContain(resultList, a => a.Name == "Campaign 3");
         }
 
         [Fact]
@@ -287,6 +288,32 @@ namespace MedicSoft.Test.Services.CRM
             var updated = await _context.MarketingAutomations.FirstOrDefaultAsync(a => a.Id == automation.Id);
             Assert.NotNull(updated);
             Assert.False(updated.IsActive);
+        }
+
+        [Fact]
+        public async Task ActivateAsync_ShouldReturnFalse_WhenAutomationNotFound()
+        {
+            // Arrange
+            var nonExistentId = Guid.NewGuid();
+
+            // Act
+            var result = await _service.ActivateAsync(nonExistentId, _testTenantId);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task DeactivateAsync_ShouldReturnFalse_WhenAutomationNotFound()
+        {
+            // Arrange
+            var nonExistentId = Guid.NewGuid();
+
+            // Act
+            var result = await _service.DeactivateAsync(nonExistentId, _testTenantId);
+
+            // Assert
+            Assert.False(result);
         }
 
         [Fact]

@@ -482,13 +482,13 @@ namespace MedicSoft.Test.Services.CRM
         }
 
         [Fact]
-        public async Task PredictChurnAsync_ShouldIncludeRecommendedActions()
+        public async Task PredictChurnAsync_ShouldGenerateRecommendedActions_ForHighRiskPatient()
         {
             // Arrange
             var patient = CreateTestPatient();
             _context.Patients.Add(patient);
 
-            // Create high-risk scenario
+            // Create high-risk scenario with complaints
             var complaint = new Complaint(
                 "CMP-TEST-001",
                 patient.Id,
@@ -506,7 +506,8 @@ namespace MedicSoft.Test.Services.CRM
             // Assert
             Assert.NotNull(result);
             Assert.NotEmpty(result.RecommendedActions);
-            Assert.True(result.RecommendedActions.Any(a => a.Contains("contato") || a.Contains("Contato") || a.Contains("feedback")));
+            // For a patient with complaints, should recommend actions like "Revisar e resolver reclamações pendentes"
+            Assert.Contains(result.RecommendedActions, a => a.Contains("reclamação") || a.Contains("Reclamação") || a.Contains("contato"));
         }
 
         // Helper methods
@@ -525,8 +526,9 @@ namespace MedicSoft.Test.Services.CRM
             return patient;
         }
 
-        private Appointment CreateTestAppointment(Guid patientId, AppointmentStatus status, int daysFromNow = 1)
+        private Appointment CreateTestAppointment(Guid patientId, AppointmentStatus status, int daysFromNow = 1, string tenantId = null)
         {
+            tenantId ??= _testTenantId;
             var appointment = new Appointment(
                 patientId,
                 Guid.NewGuid(), // clinicId
@@ -534,7 +536,7 @@ namespace MedicSoft.Test.Services.CRM
                 TimeSpan.FromHours(10),
                 60,
                 AppointmentType.Consultation,
-                _testTenantId,
+                tenantId,
                 allowHistoricalData: true);
             
             // Set status by calling appropriate methods
