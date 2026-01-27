@@ -12,6 +12,8 @@ Este documento fornece uma visão geral de toda a documentação disponível no 
 - **[CHANGELOG.md](./CHANGELOG.md)** - Histórico de versões e mudanças
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Guia de contribuição para desenvolvedores
 - **[TISS_FASE1_IMPLEMENTACAO_COMPLETA.md](./TISS_FASE1_IMPLEMENTACAO_COMPLETA.md)** - Status da implementação TISS Fase 1
+- **[TISS_FASE2_IMPLEMENTACAO.md](./TISS_FASE2_IMPLEMENTACAO.md)** - ✅ Status da implementação TISS Fase 2 (90% completo - Janeiro 2026)
+- **[RESUMO_TISS_FASE2.md](./RESUMO_TISS_FASE2.md)** - ✅ Resumo executivo TISS Fase 2 (90% completo - Janeiro 2026)
 
 ### 🗂️ Documentação Arquivada
 - **[docs_archive/](./docs_archive/)** - Documentação antiga e arquivada (11 arquivos)
@@ -56,7 +58,7 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
 
 #### 🟢 Fase 4 - Analytics e Otimização (P2 - Média)
 **[fase-4-analytics-otimizacao/](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/)**
-- TISS Fase 2 - Análise de glosas
+- **TISS Fase 2 - Webservices + Gestão de Glosas** ✅ (90% implementado - Backend completo - [13-tiss-fase2.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/13-tiss-fase2.md))
 - Fila de espera avançada
 - BI e Analytics
 - Assinatura digital
