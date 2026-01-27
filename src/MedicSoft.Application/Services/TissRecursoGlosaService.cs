@@ -67,6 +67,8 @@ namespace MedicSoft.Application.Services
 
         public async Task<IEnumerable<TissRecursoGlosaDto>> GetByGlosaIdAsync(Guid glosaId, string tenantId)
         {
+            // TODO: Optimize - add a specific repository method to filter by GlosaId at database level
+            // Current implementation loads all recursos and filters in memory
             var recursos = await _recursoRepository.GetAllAsync(tenantId);
             var filtered = recursos.Where(r => r.GlosaId == glosaId);
             return filtered.Select(MapToDto);

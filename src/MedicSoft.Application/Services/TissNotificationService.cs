@@ -174,8 +174,9 @@ namespace MedicSoft.Application.Services
         {
             try
             {
-                // Calculate glosa rate for operator
-                // This is a simplified version - in production, you'd want more sophisticated calculation
+                // TODO: Optimize - use database aggregation instead of loading all glosas
+                // Current implementation loads all glosas which is inefficient for large datasets
+                // Consider implementing: SELECT COUNT(*) FROM Glosas WHERE ... / SELECT COUNT(*) FROM Guides WHERE ...
                 var glosas = await _glosaRepository.GetAllAsync(tenantId);
                 var glosasList = glosas.ToList();
 

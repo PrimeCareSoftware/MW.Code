@@ -198,7 +198,9 @@ namespace MedicSoft.Application.Services
 
         private string EncryptPassword(string password)
         {
-            // Simple encryption using SHA256 (for production, use more secure method)
+            // TODO: In production, use a proper password hashing algorithm like bcrypt, scrypt, or Argon2
+            // This is a simplified implementation using SHA256 for demonstration
+            // SHA256 is not suitable for password storage as it's vulnerable to rainbow table attacks
             using var sha256 = SHA256.Create();
             var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(bytes);
