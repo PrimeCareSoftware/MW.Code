@@ -48,7 +48,11 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
 - Criptografia de dados
 - Portal do paciente
 - **Prontuário SOAP** ✅ (100% implementado - [11-prontuario-soap.md](./Plano_Desenvolvimento/fase-2-seguranca-lgpd/11-prontuario-soap.md))
-- Melhorias de segurança
+- **Melhorias de Segurança** ✅ (67% implementado - [12-melhorias-seguranca.md](./Plano_Desenvolvimento/fase-2-seguranca-lgpd/12-melhorias-seguranca.md))
+  - ✅ Account Lockout / Brute Force Protection
+  - ✅ Two-Factor Authentication (MFA)
+  - ✅ WAF Configuration Guide (Cloudflare)
+  - ✅ SIEM/ELK Stack Setup
 
 #### 🟢 Fase 4 - Analytics e Otimização (P2 - Média)
 **[fase-4-analytics-otimizacao/](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/)**
@@ -165,6 +169,11 @@ Central de documentação técnica detalhada do sistema.
 - Gestão de sessões
 - Validações de segurança
 - Análise de qualidade de código
+- **Melhorias de Segurança (Fase 2):**
+  - [CLOUDFLARE_WAF_SETUP.md](./system-admin/seguranca/CLOUDFLARE_WAF_SETUP.md) - Web Application Firewall
+  - [SIEM_ELK_SETUP.md](./system-admin/seguranca/SIEM_ELK_SETUP.md) - Log Management (Elasticsearch + Logstash + Kibana)
+  - [PENETRATION_TESTING_GUIDE.md](./system-admin/seguranca/PENETRATION_TESTING_GUIDE.md) - Pentest guide
+  - Backend implementado: Account Lockout, Two-Factor Authentication
 
 ### ⚕️ Conformidade CFM
 **[cfm-compliance/](./system-admin/cfm-compliance/)**
