@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MedicSoft.CrossCutting.Security;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Repository.Converters
 {

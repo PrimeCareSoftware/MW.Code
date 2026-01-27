@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MedicSoft.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MedicSoft.Repository.Migrations.PostgreSQL
 {
     [DbContext(typeof(MedicSoftDbContext))]
-    partial class MedicSoftDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260127021609_AddBruteForceProtectionTables")]
+    partial class AddBruteForceProtectionTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6298,59 +6301,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.ToTable("TussProcedures", (string)null);
                 });
 
-            modelBuilder.Entity("MedicSoft.Domain.Entities.TwoFactorAuth", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("EnabledAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("EnabledByIp")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Method")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("SecretKey")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId", "IsEnabled");
-
-                    b.HasIndex("UserId", "TenantId");
-
-                    b.ToTable("TwoFactorAuth", (string)null);
-                });
-
             modelBuilder.Entity("MedicSoft.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -8186,48 +8136,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .IsRequired();
 
                     b.Navigation("TissGuide");
-                });
-
-            modelBuilder.Entity("MedicSoft.Domain.Entities.TwoFactorAuth", b =>
-                {
-                    b.OwnsMany("MedicSoft.Domain.Entities.BackupCode", "BackupCodes", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<string>("Code")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("character varying(50)");
-
-                            b1.Property<string>("HashedCode")
-                                .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)");
-
-                            b1.Property<bool>("IsUsed")
-                                .HasColumnType("boolean");
-
-                            b1.Property<Guid>("TwoFactorAuthId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<DateTime?>("UsedAt")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("TwoFactorAuthId");
-
-                            b1.ToTable("TwoFactorBackupCodes", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("TwoFactorAuthId");
-                        });
-
-                    b.Navigation("BackupCodes");
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.User", b =>

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MedicSoft.CrossCutting.Security;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Repository.Extensions
 {
