@@ -27,6 +27,10 @@ namespace MedicSoft.Domain.Entities.CRM
         public double SatisfactionScore { get; private set; }
         public ChurnRiskLevel ChurnRisk { get; private set; }
         
+        // Segmentação e Engagement
+        public List<string> Tags { get; set; } = new();
+        public int EngagementScore { get; set; }
+        
         private PatientJourney() { }
         
         public PatientJourney(Guid pacienteId, string tenantId) : base(tenantId)
