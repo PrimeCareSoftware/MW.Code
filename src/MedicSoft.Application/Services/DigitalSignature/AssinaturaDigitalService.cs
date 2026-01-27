@@ -229,8 +229,20 @@ namespace MedicSoft.Application.Services.DigitalSignature
                     };
                 }
 
-                // Note: In a real implementation, we would need to retrieve the original document
-                // For now, we validate the signature structure and certificate
+                // TODO: Document Integrity Validation
+                // In production, this method should:
+                // 1. Retrieve the original document bytes from storage
+                // 2. Recalculate SHA-256 hash
+                // 3. Compare with stored assinatura.HashDocumento
+                // 4. Return error if hashes don't match
+                //
+                // Current implementation validates:
+                // - PKCS#7 signature structure
+                // - Certificate validity
+                // - Timestamp (if present)
+                //
+                // Document hash validation requires integration with document storage system.
+                // See ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md for implementation details.
 
                 // Validate PKCS#7 signature structure
                 try

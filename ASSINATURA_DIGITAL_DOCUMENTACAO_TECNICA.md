@@ -474,6 +474,51 @@ else
 - Implementar verificação de LCR (Lista de Certificados Revogados)
 - Integrar com OCSP (Online Certificate Status Protocol)
 
+### 6. Validação de Integridade de Documentos
+
+⚠️ **IMPORTANTE:** A validação atual verifica a estrutura PKCS#7, certificado e timestamp, mas **não valida a integridade do documento** recalculando o hash.
+
+**Implementação necessária para produção:**
+
+```csharp
+public async Task<ResultadoValidacao> ValidarAssinaturaCompletoAsync(Guid assinaturaId)
+{
+    var assinatura = await _assinaturaRepository.GetAssinaturaComRelacoesAsync(assinaturaId);
+    
+    // 1. Recuperar documento original do storage
+    byte[] documentoBytes = await _documentStorageService
+        .GetDocumentoBytesAsync(assinatura.DocumentoId, assinatura.TipoDocumento);
+    
+    // 2. Recalcular hash SHA-256
+    string hashAtual = CalcularHashSHA256(documentoBytes);
+    
+    // 3. Comparar com hash armazenado
+    if (hashAtual != assinatura.HashDocumento)
+    {
+        return new ResultadoValidacao
+        {
+            Valida = false,
+            Motivo = "Documento foi modificado após assinatura. Violação de integridade."
+        };
+    }
+    
+    // 4. Continuar com validação PKCS#7, certificado e timestamp...
+}
+```
+
+**Requisitos:**
+- Serviço de armazenamento de documentos (IDocumentStorageService)
+- Recuperação de bytes originais do documento
+- Integração com módulos de prontuário, receitas, atestados, etc.
+
+**Por que não está implementado:**
+- Requer integração com sistema de armazenamento de documentos
+- Cada tipo de documento (Prontuário, Receita, Atestado) tem estrutura diferente
+- Precisa de geração de PDF consistente e reproduzível
+- Fora do escopo da implementação inicial do serviço de assinatura
+
+**Recomendação:** Implementar esta validação antes de usar em produção.
+
 ## 📚 Referências
 
 - [CFM 1.821/2007](http://www.portalmedico.org.br/resolucoes/cfm/2007/1821_2007.htm) - Prontuários eletrônicos
