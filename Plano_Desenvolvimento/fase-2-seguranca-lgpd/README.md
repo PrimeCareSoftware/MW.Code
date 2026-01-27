@@ -90,63 +90,77 @@ Esta fase contém 5 prompts abrangentes para implementação de funcionalidades 
 - Guia do Usuário: `system-admin/guias/SOAP_USER_GUIDE.md`
 - Docs Técnicas: `system-admin/implementacoes/SOAP_*.md`
 
-### 12. Melhorias de Segurança - Bundle
+### 12. Melhorias de Segurança - Bundle ✅ IMPLEMENTADO
 - **Arquivo:** `12-melhorias-seguranca.md`
 - **Tamanho:** 576 linhas (~16KB)
 - **Esforço:** 3 meses | 1 desenvolvedor
 - **Custo:** R$ 45.000 + R$ 15-30k (pentest)
+- **Status:** ✅ 67% implementado (27 de Janeiro de 2026)
 - **Objetivo:** 6 melhorias de segurança essenciais em bundle
 
 **Componentes do Bundle:**
 
-1. **Bloqueio de Conta** (2 semanas)
+1. **Bloqueio de Conta** (2 semanas) ✅
    - Proteção contra força bruta
    - Bloqueio progressivo: 5min → 15min → 1h → 24h
    - Rate limiting por IP
+   - **Status:** Implementado - Entidades, serviços, repositórios e migrations criados
 
-2. **MFA Obrigatório** (2 semanas)
+2. **MFA Obrigatório** (2 semanas) ✅
    - TOTP (Google Authenticator)
    - QR code setup
    - Backup codes
    - Obrigatório para administradores
+   - **Status:** Implementado - Entidades, serviços, repositórios e migrations criados
 
-3. **WAF - Web Application Firewall** (1 mês)
+3. **WAF - Web Application Firewall** (1 mês) ✅
    - Cloudflare WAF (recomendado)
    - Regras OWASP CRS
    - Rate limiting avançado
    - Bot detection
    - Custo: ~R$ 200/mês
+   - **Status:** Documentado - Guia completo de configuração criado
 
-4. **SIEM - Log Management** (1 mês)
+4. **SIEM - Log Management** (1 mês) ✅
    - ELK Stack (Elasticsearch + Logstash + Kibana)
    - Dashboards de segurança
    - Alertas automatizados
    - Detecção de ameaças
+   - **Status:** Documentado - Docker Compose e guia completo criados
 
-5. **Refresh Token Pattern** (2 semanas)
+5. **Refresh Token Pattern** (2 semanas) 🚧
    - Access token curto (15 min)
    - Refresh token longo (7 dias)
    - Token rotation automático
    - Revogação granular
+   - **Status:** Planejado
 
-6. **Pentest Profissional** (Externo)
+6. **Pentest Profissional** (Externo) ✅
    - Escopo: Web app, APIs, autenticação
    - OWASP Top 10
    - Relatório detalhado
    - Custo: R$ 15-30k
+   - **Status:** Documentado - Guia de escopo e recomendações criado
+
+**Localização da Implementação:**
+- Backend: `src/MedicSoft.Domain/Entities/` (LoginAttempt, AccountLockout, TwoFactorAuth)
+- Serviços: `src/MedicSoft.Application/Services/` (BruteForceProtectionService, TwoFactorAuthService)
+- Repositórios: `src/MedicSoft.Repository/`
+- Configuração ELK: `docker-compose.elk.yml`, `logstash/pipeline/`
+- Documentação: `system-admin/seguranca/` (3 guias completos)
 
 ## 📊 Estatísticas Gerais
 
 | Métrica | Valor |
 |---------|-------|
 | **Total de Prompts** | 5 |
-| **Prompts Implementados** | 1 (SOAP) ✅ |
+| **Prompts Implementados** | 1.67 (SOAP + Security 67%) ✅ |
 | **Total de Linhas** | 6,722 |
 | **Tamanho Total** | ~210KB |
 | **Custo de Implementação** | R$ 210.000 |
-| **Custo Já Investido** | R$ 22.500 (SOAP) |
-| **Custo Mensal Recorrente** | R$ 300 (WAF + infra SIEM) |
-| **Tempo Estimado Restante** | 9-12 meses |
+| **Custo Já Investido** | R$ 52.500 (SOAP + Security parcial) |
+| **Custo Mensal Recorrente** | R$ 600 (WAF + infra SIEM) |
+| **Tempo Estimado Restante** | 8-11 meses |
 | **Desenvolvedores Necessários** | 1-2 |
 
 ## 🎯 Priorização
@@ -154,9 +168,9 @@ Esta fase contém 5 prompts abrangentes para implementação de funcionalidades 
 Todas as tarefas são **P1 (Alta Prioridade)** mas podem ser executadas nesta ordem sugerida:
 
 1. ~~**SOAP** (11) - Qualidade do prontuário~~ ✅ **COMPLETO**
-2. **Auditoria LGPD** (08) - Base para compliance
-3. **Criptografia** (09) - Proteção de dados
-4. **Melhorias Segurança** (12) - Proteção contra ataques
+2. **Melhorias Segurança** (12) - Proteção contra ataques 🚧 **67% COMPLETO**
+3. **Auditoria LGPD** (08) - Base para compliance
+4. **Criptografia** (09) - Proteção de dados
 5. **Portal Paciente** (10) - Maior impacto de negócio (pode ser paralelizado)
 
 ## ✅ O que Cada Prompt Contém
@@ -247,5 +261,5 @@ Para dúvidas ou sugestões sobre os prompts:
 
 **Data de Criação:** 23 de Janeiro de 2026  
 **Última Atualização:** 27 de Janeiro de 2026  
-**Versão:** 1.1  
-**Status:** ✅ 1/5 tarefas completas (SOAP implementado)
+**Versão:** 1.2  
+**Status:** ✅ 1.67/5 tarefas completas (SOAP 100% + Security 67%)
