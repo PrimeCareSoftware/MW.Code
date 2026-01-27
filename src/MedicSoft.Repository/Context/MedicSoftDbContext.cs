@@ -60,6 +60,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<ExamRequest> ExamRequests { get; set; } = null!;
         public DbSet<WaitingQueueEntry> WaitingQueueEntries { get; set; } = null!;
         public DbSet<WaitingQueueConfiguration> WaitingQueueConfigurations { get; set; } = null!;
+        public DbSet<FilaEspera> FilasEspera { get; set; } = null!;
+        public DbSet<SenhaFila> SenhasFila { get; set; } = null!;
         public DbSet<ExamCatalog> ExamCatalogs { get; set; } = null!;
         public DbSet<Notification> Notifications { get; set; } = null!;
         public DbSet<UserSession> UserSessions { get; set; } = null!;
@@ -182,6 +184,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ExamRequestConfiguration());
             modelBuilder.ApplyConfiguration(new WaitingQueueEntryConfiguration());
             modelBuilder.ApplyConfiguration(new WaitingQueueConfigurationConfiguration());
+            modelBuilder.ApplyConfiguration(new FilaEsperaConfiguration());
+            modelBuilder.ApplyConfiguration(new SenhaFilaConfiguration());
             modelBuilder.ApplyConfiguration(new ExamCatalogConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new UserSessionConfiguration());
