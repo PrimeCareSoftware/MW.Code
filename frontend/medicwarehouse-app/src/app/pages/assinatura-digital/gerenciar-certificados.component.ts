@@ -9,9 +9,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Navbar } from '../../../shared/navbar/navbar';
-import { CertificadoDigitalService } from '../../../services/certificado-digital.service';
-import { CertificadoDigital, TipoCertificado } from '../../../models/certificado-digital.model';
+import { Navbar } from '../../shared/navbar/navbar';
+import { CertificadoDigitalService } from '../../services/certificado-digital.service';
+import { CertificadoDigital, TipoCertificado } from '../../models/certificado-digital.model';
 import { ImportarCertificadoComponent } from './importar-certificado.component';
 
 @Component({
@@ -51,11 +51,11 @@ export class GerenciarCertificadosComponent implements OnInit {
   carregarCertificados(): void {
     this.isLoading.set(true);
     this.certificadoService.listarCertificados().subscribe({
-      next: (data) => {
+      next: (data: CertificadoDigital[]) => {
         this.certificados.set(data);
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open('Erro ao carregar certificados', 'Fechar', { duration: 5000 });
         this.isLoading.set(false);
         console.error('Erro ao carregar certificados:', error);
@@ -83,7 +83,7 @@ export class GerenciarCertificadosComponent implements OnInit {
           this.snackBar.open('Certificado invalidado com sucesso', 'Fechar', { duration: 3000 });
           this.carregarCertificados();
         },
-        error: (error) => {
+        error: (error: any) => {
           this.snackBar.open('Erro ao invalidar certificado', 'Fechar', { duration: 5000 });
           console.error('Erro ao invalidar certificado:', error);
         }

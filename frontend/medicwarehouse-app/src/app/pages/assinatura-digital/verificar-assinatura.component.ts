@@ -7,8 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AssinaturaDigitalService } from '../../../services/assinatura-digital.service';
-import { AssinaturaDigital } from '../../../models/assinatura-digital.model';
+import { AssinaturaDigitalService } from '../../services/assinatura-digital.service';
+import { AssinaturaDigital, ResultadoValidacao } from '../../models/assinatura-digital.model';
 
 @Component({
   selector: 'app-verificar-assinatura',
@@ -42,7 +42,7 @@ export class VerificarAssinaturaComponent {
 
     this.isRevalidando.set(true);
     this.assinaturaService.validarAssinatura(this.assinatura.id).subscribe({
-      next: (resultado) => {
+      next: (resultado: ResultadoValidacao) => {
         this.assinatura.valida = resultado.valida;
         this.assinatura.dataUltimaValidacao = new Date();
         
@@ -57,7 +57,7 @@ export class VerificarAssinaturaComponent {
         
         this.isRevalidando.set(false);
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open('Erro ao validar assinatura', 'Fechar', { duration: 5000 });
         this.isRevalidando.set(false);
         console.error('Erro ao validar assinatura:', error);

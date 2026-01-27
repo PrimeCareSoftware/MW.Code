@@ -55,7 +55,7 @@ export class FilaSignalRService {
           transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.ServerSentEvents
         })
         .withAutomaticReconnect({
-          nextRetryDelayInMilliseconds: (retryContext) => {
+          nextRetryDelayInMilliseconds: (retryContext: signalR.RetryContext) => {
             if (retryContext.elapsedMilliseconds < this.RETRY_DELAY_THRESHOLD_MS) {
               return Math.random() * this.MAX_RETRY_DELAY_MS;
             } else {
@@ -122,13 +122,13 @@ export class FilaSignalRService {
   private setupConnectionHandlers(): void {
     if (!this.hubConnection) return;
 
-    this.hubConnection.onreconnecting((error) => {
+    this.hubConnection.onreconnecting((error?: Error) => {
       console.warn('SignalR: Reconnecting...', error);
       this.isConnected.set(false);
       this.connectionError.set('Reconectando...');
     });
 
-    this.hubConnection.onreconnected((connectionId) => {
+    this.hubConnection.onreconnected((connectionId?: string) => {
       console.log('SignalR: Reconnected', connectionId);
       this.isConnected.set(true);
       this.connectionError.set(null);
@@ -141,7 +141,7 @@ export class FilaSignalRService {
       }
     });
 
-    this.hubConnection.onclose((error) => {
+    this.hubConnection.onclose((error?: Error) => {
       console.error('SignalR: Connection closed', error);
       this.isConnected.set(false);
       this.connectionError.set(error?.message || 'Connection closed');
