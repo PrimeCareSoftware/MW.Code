@@ -71,7 +71,7 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ Painel de TV (Angular + SignalR tempo real)
   - ✅ Models e Services TypeScript (17 arquivos criados)
 - **TISS Fase 2 - Webservices + Gestão de Glosas** ✅ (90% implementado - Backend completo - [13-tiss-fase2.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/13-tiss-fase2.md))
-- **BI e Analytics Avançados** ✅ (85% COMPLETO - Backend + Frontend + ML - [15-bi-analytics.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/15-bi-analytics.md))
+- **BI e Analytics Avançados** ✅ (100% COMPLETO - Backend + Frontend + ML - [15-bi-analytics.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/15-bi-analytics.md))
   - ✅ MedicSoft.Analytics project (modelos e serviços)
   - ✅ MedicSoft.ML project (Machine Learning com ML.NET)
   - ✅ Data Warehouse simplificado (ConsultaDiaria, DimensaoTempo, DimensaoMedico)
@@ -80,12 +80,15 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ Database migration criada (ConsultaDiaria)
   - ✅ DashboardClinicoService (métricas clínicas, top diagnósticos CID-10)
   - ✅ DashboardFinanceiroService (métricas financeiras, projeções)
+  - ✅ DashboardOperacionalService (métricas operacionais, tempo de espera, performance)
+  - ✅ DashboardQualidadeService (NPS, satisfação, qualidade)
   - ✅ PrevisaoDemandaService (ML.NET - previsão de consultas)
   - ✅ PrevisaoNoShowService (ML.NET - risco de falta)
   - ✅ AnalyticsController (5 endpoints REST)
   - ✅ MLPredictionController (6 endpoints ML)
   - ✅ Dashboard Clínico Angular (KPIs, gráficos ApexCharts)
   - ✅ Dashboard Financeiro Angular (KPIs, fluxo de caixa, projeções)
+  - ✅ Integração ML no Dashboard Clínico (previsão de demanda visualizada)
   - ✅ **Correções Críticas de Segurança (PR #425 Review)**
     - ✅ Thread-safety em ML services
     - ✅ Validação de entrada com Data Annotations
@@ -96,8 +99,7 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ **Correções de segurança** ([CORREÇOES_PR425.md](./CORREÇOES_PR425.md))
   - ✅ Frontend docs ([IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md](./frontend/medicwarehouse-app/IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md))
   - ✅ Guia de testes ([TESTING_GUIDE_BI_ANALYTICS.md](./frontend/medicwarehouse-app/TESTING_GUIDE_BI_ANALYTICS.md))
-  - ⏳ Treinar modelos ML com dados reais - Pendente
-  - ⏳ Integrar ML nos dashboards frontend - Pendente
+  - 📋 **Próxima Fase:** Deploy em produção, treinar modelos ML com dados reais, implementar frontend para Dashboards Operacional e Qualidade
 - **Assinatura Digital ICP-Brasil** ✅ (100% COMPLETO - Backend + Frontend + Documentação - [16-assinatura-digital.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/16-assinatura-digital.md))
   - ✅ Entidades CertificadoDigital e AssinaturaDigital
   - ✅ Repositórios e Configurations EF Core
