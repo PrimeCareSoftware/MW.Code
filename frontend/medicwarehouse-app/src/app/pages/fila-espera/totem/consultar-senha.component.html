@@ -1,0 +1,138 @@
+<div class="consultar-senha-container">
+  <div class="header">
+    <button mat-icon-button class="back-button" (click)="voltarAoMenu()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Consultar Senha</h1>
+  </div>
+
+  <!-- Search Section -->
+  <div class="content" *ngIf="!resultado()">
+    <div class="search-container">
+      <div class="search-icon">
+        <mat-icon>search</mat-icon>
+      </div>
+      
+      <h2>Digite o número da sua senha</h2>
+      
+      <form [formGroup]="form" (ngSubmit)="consultar()">
+        <mat-form-field appearance="outline" class="senha-input">
+          <mat-label>Número da Senha</mat-label>
+          <input matInput formControlName="numeroSenha" 
+                 placeholder="Ex: A001, P042" 
+                 autocomplete="off"
+                 (input)="form.patchValue({numeroSenha: $any($event.target).value.toUpperCase()})">
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button type="button" class="cancel-button" 
+                  (click)="voltarAoMenu()" [disabled]="loading()">
+            <mat-icon>close</mat-icon>
+            Cancelar
+          </button>
+
+          <button mat-raised-button type="submit" class="submit-button" 
+                  [disabled]="!form.valid || loading()">
+            <mat-spinner *ngIf="loading()" diameter="24" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading()">search</mat-icon>
+            {{ loading() ? 'Consultando...' : 'Consultar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Result Section -->
+  <div class="content result-content" *ngIf="resultado()">
+    <div class="result-card">
+      <div class="senha-header">
+        <div class="senha-number">{{ resultado()?.senha.numeroSenha }}</div>
+        <div class="status-badge" [style.background-color]="getStatusColor(resultado()!.senha.status)">
+          <mat-icon>{{ getStatusIcon(resultado()!.senha.status) }}</mat-icon>
+          {{ getStatusText(resultado()!.senha.status) }}
+        </div>
+      </div>
+
+      <div class="patient-info">
+        <mat-icon>person</mat-icon>
+        <div class="patient-name">{{ resultado()?.senha.nomePaciente }}</div>
+      </div>
+
+      <!-- Only show queue info if still waiting -->
+      <div class="info-grid" *ngIf="resultado()?.senha.status === StatusSenha.Aguardando">
+        <div class="info-item">
+          <mat-icon>format_list_numbered</mat-icon>
+          <div>
+            <div class="info-label">Posição na Fila</div>
+            <div class="info-value">{{ resultado()?.posicaoNaFila }}º</div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>people</mat-icon>
+          <div>
+            <div class="info-label">Pessoas à Frente</div>
+            <div class="info-value">{{ resultado()?.senhasAFrente }}</div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>schedule</mat-icon>
+          <div>
+            <div class="info-label">Tempo Estimado</div>
+            <div class="info-value">{{ resultado()?.tempoEstimadoMinutos }} min</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Being called alert -->
+      <div class="alert-box calling" *ngIf="resultado()?.senha.status === StatusSenha.Chamando">
+        <mat-icon>notifications_active</mat-icon>
+        <div>
+          <div class="alert-title">Sua senha está sendo chamada!</div>
+          <div class="alert-text" *ngIf="resultado()?.senha.numeroConsultorio">
+            Dirija-se ao consultório {{ resultado()?.senha.numeroConsultorio }}
+          </div>
+        </div>
+      </div>
+
+      <!-- In service alert -->
+      <div class="alert-box service" *ngIf="resultado()?.senha.status === StatusSenha.EmAtendimento">
+        <mat-icon>medical_services</mat-icon>
+        <div>
+          <div class="alert-title">Você está em atendimento</div>
+        </div>
+      </div>
+
+      <!-- Completed alert -->
+      <div class="alert-box completed" *ngIf="resultado()?.senha.status === StatusSenha.Atendido">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <div class="alert-title">Atendimento finalizado</div>
+          <div class="alert-text">Obrigado pela sua visita!</div>
+        </div>
+      </div>
+
+      <!-- Priority badge -->
+      <div class="priority-badge" *ngIf="resultado()?.senha.prioridade! > 0">
+        <mat-icon>star</mat-icon>
+        Atendimento Preferencial
+        <span class="priority-reason" *ngIf="resultado()?.senha.motivoPrioridade">
+          ({{ resultado()?.senha.motivoPrioridade }})
+        </span>
+      </div>
+
+      <div class="button-group">
+        <button mat-raised-button class="secondary-button" (click)="novaConsulta()">
+          <mat-icon>refresh</mat-icon>
+          Nova Consulta
+        </button>
+
+        <button mat-raised-button class="primary-button" (click)="voltarAoMenu()">
+          <mat-icon>home</mat-icon>
+          Voltar ao Menu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

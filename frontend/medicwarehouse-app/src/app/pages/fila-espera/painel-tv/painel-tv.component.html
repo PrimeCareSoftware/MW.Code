@@ -1,0 +1,100 @@
+<div class="painel-container" [class.disconnected]="!isConnected()">
+  <!-- Header -->
+  <div class="header-bar">
+    <div class="header-left">
+      <mat-icon class="clinic-icon">local_hospital</mat-icon>
+      <span class="header-title">Painel de Atendimento</span>
+    </div>
+    <div class="header-right">
+      <div class="connection-status" [class.connected]="isConnected()">
+        <mat-icon>{{ isConnected() ? 'wifi' : 'wifi_off' }}</mat-icon>
+      </div>
+      <div class="clock">{{ currentTime() | date:'HH:mm:ss' }}</div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Current Call - Large Display -->
+    <div class="chamada-atual-section" *ngIf="chamadaAtual(); else nenhumaChamada">
+      <div class="chamada-atual">
+        <div class="chamada-label">
+          <mat-icon>notifications_active</mat-icon>
+          SENHA CHAMADA
+        </div>
+        <div class="senha-grande">{{ chamadaAtual()?.senha }}</div>
+        <div class="paciente-nome">{{ chamadaAtual()?.paciente }}</div>
+        <div class="consultorio-info">
+          <mat-icon>room</mat-icon>
+          <span>Consultório {{ chamadaAtual()?.consultorio }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #nenhumaChamada>
+      <div class="chamada-atual-section placeholder">
+        <div class="placeholder-content">
+          <mat-icon>schedule</mat-icon>
+          <p>Aguardando próxima chamada...</p>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Bottom Section: History and Queue -->
+    <div class="bottom-section">
+      <!-- Last Calls -->
+      <div class="ultimas-chamadas-section">
+        <h3 class="section-title">
+          <mat-icon>history</mat-icon>
+          Últimas Chamadas
+        </h3>
+        <div class="chamadas-list">
+          <div class="chamada-item" *ngFor="let chamada of ultimasChamadas()">
+            <div class="chamada-senha">{{ chamada.senha }}</div>
+            <div class="chamada-consultorio">
+              <mat-icon>room</mat-icon>
+              Cons. {{ chamada.consultorio }}
+            </div>
+          </div>
+          <div class="empty-message" *ngIf="ultimasChamadas().length === 0">
+            <mat-icon>info</mat-icon>
+            Nenhuma chamada recente
+          </div>
+        </div>
+      </div>
+
+      <!-- Queue Status -->
+      <div class="fila-espera-section">
+        <h3 class="section-title">
+          <mat-icon>people</mat-icon>
+          Aguardando Atendimento ({{ senhasAguardando().length }})
+        </h3>
+        <div class="senhas-grid" *ngIf="senhasAguardando().length > 0; else filaVazia">
+          <div class="senha-chip" 
+               *ngFor="let senha of senhasAguardando()" 
+               [class.prioritaria]="isPrioritaria(senha)">
+            <span class="senha-numero">{{ senha.numeroSenha }}</span>
+            <mat-icon *ngIf="isPrioritaria(senha)" class="priority-icon">star</mat-icon>
+          </div>
+        </div>
+        <ng-template #filaVazia>
+          <div class="empty-message">
+            <mat-icon>check_circle</mat-icon>
+            Nenhuma senha aguardando
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-bar">
+    <div class="footer-info">
+      <mat-icon>schedule</mat-icon>
+      <span>Tempo médio de espera: {{ tempoMedioEspera() }} minutos</span>
+    </div>
+    <div class="footer-date">
+      {{ currentTime() | date:'dd/MM/yyyy' }}
+    </div>
+  </div>
+</div>

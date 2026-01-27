@@ -1,0 +1,400 @@
+.painel-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+
+  &.disconnected {
+    .header-bar {
+      background: rgba(244, 67, 54, 0.3);
+    }
+  }
+}
+
+// Header
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.3s ease;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .clinic-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #667eea;
+    }
+
+    .header-title {
+      font-size: 32px;
+      font-weight: 300;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .connection-status {
+      mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: #F44336;
+      }
+
+      &.connected mat-icon {
+        color: #4CAF50;
+      }
+    }
+
+    .clock {
+      font-size: 36px;
+      font-weight: 300;
+      font-family: 'Courier New', monospace;
+      min-width: 150px;
+      text-align: right;
+    }
+  }
+}
+
+// Main Content
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+// Current Call Section
+.chamada-atual-section {
+  flex: 0 0 55%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+
+  &.placeholder {
+    .placeholder-content {
+      text-align: center;
+      opacity: 0.5;
+
+      mat-icon {
+        font-size: 120px;
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 36px;
+        margin: 0;
+      }
+    }
+  }
+}
+
+.chamada-atual {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 30px;
+  padding: 60px;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: pulse 2s infinite;
+
+  .chamada-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+
+    mat-icon {
+      font-size: 42px;
+      width: 42px;
+      height: 42px;
+      animation: ring 1s infinite;
+    }
+  }
+
+  .senha-grande {
+    font-size: 200px;
+    font-weight: bold;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+    margin: 20px 0;
+  }
+
+  .paciente-nome {
+    font-size: 48px;
+    font-weight: 300;
+    margin: 30px 0;
+    opacity: 0.95;
+  }
+
+  .consultorio-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: 56px;
+    font-weight: 600;
+    margin-top: 30px;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes ring {
+  0%, 100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+// Bottom Section
+.bottom-section {
+  flex: 0 0 45%;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  padding: 0 40px 30px 40px;
+  overflow: hidden;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+
+  mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: #667eea;
+  }
+}
+
+// Last Calls Section
+.ultimas-chamadas-section {
+  .chamadas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .chamada-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+
+      .chamada-senha {
+        font-size: 36px;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .chamada-consultorio {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 22px;
+        opacity: 0.9;
+
+        mat-icon {
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+      }
+    }
+  }
+}
+
+// Queue Section
+.fila-espera-section {
+  .senhas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+
+    .senha-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+
+      .senha-numero {
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .priority-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        color: #FFA726;
+      }
+
+      &.prioritaria {
+        background: rgba(255, 167, 38, 0.2);
+        border-color: #FFA726;
+        animation: glow 2s infinite;
+      }
+    }
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 167, 38, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 167, 38, 0.6);
+  }
+}
+
+.empty-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 40px;
+  font-size: 24px;
+  opacity: 0.6;
+  text-align: center;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+// Footer
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+
+  .footer-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 24px;
+
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: #667eea;
+    }
+  }
+
+  .footer-date {
+    font-size: 24px;
+    font-weight: 300;
+  }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1600px) {
+  .senha-grande {
+    font-size: 150px !important;
+  }
+
+  .paciente-nome {
+    font-size: 36px !important;
+  }
+
+  .consultorio-info {
+    font-size: 42px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .bottom-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .senha-grande {
+    font-size: 120px !important;
+  }
+}

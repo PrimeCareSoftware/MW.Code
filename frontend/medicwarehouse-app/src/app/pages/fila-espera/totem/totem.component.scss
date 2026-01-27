@@ -1,0 +1,182 @@
+.totem-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  overflow: hidden;
+  user-select: none;
+}
+
+.header {
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  
+  .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    
+    .logo-icon {
+      font-size: 60px;
+      width: 60px;
+      height: 60px;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 48px;
+      font-weight: 300;
+    }
+  }
+  
+  .clock {
+    font-size: 42px;
+    font-weight: 300;
+    font-family: 'Courier New', monospace;
+  }
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  
+  .clinic-name {
+    margin-bottom: 60px;
+    text-align: center;
+    
+    h2 {
+      margin: 0;
+      font-size: 56px;
+      font-weight: 400;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  .main-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    max-width: 700px;
+    
+    .menu-button {
+      width: 100%;
+      height: 180px;
+      font-size: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      border: none;
+      border-radius: 20px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      
+      mat-icon {
+        font-size: 72px;
+        width: 72px;
+        height: 72px;
+      }
+      
+      .button-title {
+        font-size: 36px;
+        font-weight: 600;
+        display: block;
+      }
+      
+      small {
+        font-size: 20px;
+        opacity: 0.7;
+        font-weight: 400;
+      }
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      }
+      
+      &:active {
+        transform: scale(0.98);
+      }
+      
+      &.check-in {
+        color: #2196F3;
+        
+        mat-icon {
+          color: #2196F3;
+        }
+      }
+      
+      &.generate {
+        color: #4CAF50;
+        
+        mat-icon {
+          color: #4CAF50;
+        }
+      }
+      
+      &.consult {
+        color: #FF9800;
+        
+        mat-icon {
+          color: #FF9800;
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  padding: 30px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  
+  .instruction-text {
+    margin: 0;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    animation: pulse 2s infinite;
+    
+    mat-icon {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// Touch-friendly overrides
+@media (hover: none) and (pointer: coarse) {
+  .menu-button {
+    &:hover {
+      transform: none;
+    }
+    
+    &:active {
+      transform: scale(0.95) !important;
+    }
+  }
+}
