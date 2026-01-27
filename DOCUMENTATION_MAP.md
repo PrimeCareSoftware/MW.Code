@@ -14,6 +14,9 @@ Este documento fornece uma visão geral de toda a documentação disponível no 
 - **[TISS_FASE1_IMPLEMENTACAO_COMPLETA.md](./TISS_FASE1_IMPLEMENTACAO_COMPLETA.md)** - Status da implementação TISS Fase 1
 - **[TISS_FASE2_IMPLEMENTACAO.md](./TISS_FASE2_IMPLEMENTACAO.md)** - ✅ Status da implementação TISS Fase 2 (90% completo - Janeiro 2026)
 - **[RESUMO_TISS_FASE2.md](./RESUMO_TISS_FASE2.md)** - ✅ Resumo executivo TISS Fase 2 (90% completo - Janeiro 2026)
+- **[CRM_IMPLEMENTATION_GUIDE.md](./CRM_IMPLEMENTATION_GUIDE.md)** - 🚧 Guia de implementação do CRM Avançado
+- **[CRM_USER_MANUAL.md](./CRM_USER_MANUAL.md)** - 🚧 Manual do usuário do CRM
+- **[CRM_API_DOCUMENTATION.md](./CRM_API_DOCUMENTATION.md)** - 🚧 Documentação da API do CRM
 
 ### 🗂️ Documentação Arquivada
 - **[docs_archive/](./docs_archive/)** - Documentação antiga e arquivada (11 arquivos)
@@ -126,7 +129,19 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
     - ✅ Guia de integração ([GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md](./GUIA_INTEGRACAO_ASSINATURA_DIGITAL.md))
   - ✅ Finalização ([FINALIZACAO_ASSINATURA_DIGITAL.md](./FINALIZACAO_ASSINATURA_DIGITAL.md))
   - 📋 **Próxima Fase:** Integração com módulos de documentos (prontuário, receitas, atestados) - Componentes prontos para uso standalone
-- CRM avançado
+- **CRM Avançado e Customer Experience** 🚧 (Em Implementação - [17-crm-avancado.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/17-crm-avancado.md))
+  - ✅ **Entidades de domínio completas (26 arquivos)**
+    - ✅ Patient Journey (PatientJourney, JourneyStage, PatientTouchpoint)
+    - ✅ Marketing Automation (MarketingAutomation, AutomationAction, EmailTemplate)
+    - ✅ Surveys NPS/CSAT (Survey, SurveyQuestion, SurveyResponse, SurveyQuestionResponse)
+    - ✅ Ouvidoria (Complaint, ComplaintInteraction)
+    - ✅ Sentiment Analysis (SentimentAnalysis)
+    - ✅ Churn Prediction (ChurnPrediction)
+  - ✅ **Documentação completa (3 documentos)**
+    - ✅ Guia de implementação ([CRM_IMPLEMENTATION_GUIDE.md](./CRM_IMPLEMENTATION_GUIDE.md))
+    - ✅ Manual do usuário ([CRM_USER_MANUAL.md](./CRM_USER_MANUAL.md))
+    - ✅ Documentação da API ([CRM_API_DOCUMENTATION.md](./CRM_API_DOCUMENTATION.md))
+  - 📋 **Próxima Fase:** Migrations, Services, API Controllers, Frontend Components
 - Gestão fiscal
 - Acessibilidade WCAG
 
