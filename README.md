@@ -278,6 +278,78 @@ POST /api/Analytics/consolidar/periodo         # Consolidar período (Admin)
 - 📈 Retorno anual: R$ 180.000
 - ⏱️ Payback: ~7 meses
 
+## 🎯 CRM Avançado e Customer Experience 🆕
+
+**Sistema completo de Customer Relationship Management para melhorar retenção e experiência do paciente!**
+
+- 🗺️ **Patient Journey Mapping**: Acompanhamento completo da jornada do paciente em 7 estágios
+- 🤖 **Automação de Marketing**: Campanhas automáticas segmentadas e personalizadas
+- 📊 **Pesquisas NPS/CSAT**: Sistema automatizado de satisfação
+- 🎯 **Ouvidoria**: Gestão completa de reclamações e feedback
+- 🧠 **Análise de Sentimento IA**: Azure Cognitive Services para análise de feedback
+- 📉 **Predição de Churn**: Machine Learning para identificar riscos de perda
+- 📑 **Documentação**: 
+  - [Guia de Implementação](./CRM_IMPLEMENTATION_GUIDE.md)
+  - [Manual do Usuário](./CRM_USER_MANUAL.md)
+  - [API Documentation](./CRM_API_DOCUMENTATION.md)
+
+**Status**: 🚧 **30% Completo** - Entidades de domínio implementadas
+
+**Features Implementadas:**
+- ✅ 26 Entidades de domínio completas (Patient Journey, Automations, Surveys, Complaints, AI/ML)
+- ✅ 12 Enumerações para tipos de dados
+- ✅ Documentação técnica completa (3 documentos)
+- ⏳ Migrations e configurações EF Core - Planejado
+- ⏳ Services e API Controllers - Planejado
+- ⏳ Frontend Components (React/Angular) - Planejado
+
+**Módulos:**
+
+### 1. Patient Journey (Jornada do Paciente)
+- Descoberta → Consideração → Primeira Consulta → Tratamento → Retorno → Fidelização → Advocacia
+- Touchpoints (Email, SMS, WhatsApp, Phone, In-Person)
+- Métricas: LTV, NPS, Satisfaction Score, Churn Risk
+
+### 2. Marketing Automation
+- Gatilhos: Mudança de estágio, Eventos, Agendados, Comportamentais
+- Ações: Email, SMS, WhatsApp, Tags, Scores, Tarefas
+- Templates personalizáveis com variáveis dinâmicas
+
+### 3. NPS/CSAT Surveys
+- Tipos: NPS (0-10), CSAT (1-5), CES, Custom
+- Envio automático baseado em gatilhos
+- Análise de resultados e tendências
+
+### 4. Ouvidoria
+- Sistema de protocolos único
+- SLA tracking (tempo de resposta e resolução)
+- Categorização: Atendimento, Agendamento, Faturamento, etc.
+- Portal do paciente
+
+### 5. Sentiment Analysis (IA)
+- Integração Azure Cognitive Services
+- Análise: Positivo, Neutro, Negativo, Misto
+- Extração de tópicos e palavras-chave
+- Alertas para sentimentos negativos
+
+### 6. Churn Prediction (ML)
+- Modelo ML.NET para predição de risco
+- Features: Dias desde última visita, frequência, LTV, satisfação, reclamações
+- Níveis de risco: Low, Medium, High, Critical
+- Ações recomendadas automáticas
+
+**ROI Esperado (Ano 1):**
+- 💰 Investimento: R$ 137.600
+- 📈 Retorno total: R$ 1.499.500
+- 🎯 ROI: 989%
+- ⏱️ Payback: 1,1 meses
+
+**Ganhos Projetados:**
+- 💚 Redução de Churn 30%: R$ 337.500
+- 📈 Aumento de Retenção 10%: R$ 750.000
+- ⚡ Eficiência Operacional: R$ 52.000
+- 🎯 Marketing Mais Efetivo: R$ 360.000
+
 ## 📚 Documentação Completa
 
 ### 💼 Glossário de Termos Empresariais (NOVO!)
