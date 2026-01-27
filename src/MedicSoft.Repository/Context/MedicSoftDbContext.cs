@@ -149,6 +149,9 @@ namespace MedicSoft.Repository.Context
         // Two-Factor Authentication
         public DbSet<TwoFactorAuth> TwoFactorAuths { get; set; } = null!;
 
+        // Analytics - Consolidated Data
+        public DbSet<ConsultaDiaria> ConsultasDiarias { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

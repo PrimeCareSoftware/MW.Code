@@ -71,8 +71,19 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ Painel de TV (Angular + SignalR tempo real)
   - ✅ Models e Services TypeScript (17 arquivos criados)
 - **TISS Fase 2 - Webservices + Gestão de Glosas** ✅ (90% implementado - Backend completo - [13-tiss-fase2.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/13-tiss-fase2.md))
-- **Fila de espera avançada** ✅ (100% COMPLETO - [14-fila-espera-avancada.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/14-fila-espera-avancada.md))
-- BI e Analytics
+- **BI e Analytics Avançados** ✅ (70% COMPLETO - Backend + Frontend - [15-bi-analytics.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/15-bi-analytics.md))
+  - ✅ MedicSoft.Analytics project (modelos e serviços)
+  - ✅ Data Warehouse simplificado (ConsultaDiaria, DimensaoTempo, DimensaoMedico)
+  - ✅ ConsolidacaoDadosService (consolidação noturna)
+  - ✅ DashboardClinicoService (métricas clínicas, top diagnósticos CID-10)
+  - ✅ DashboardFinanceiroService (métricas financeiras, projeções)
+  - ✅ AnalyticsController (5 endpoints REST)
+  - ✅ Dashboard Clínico Angular (KPIs, gráficos ApexCharts)
+  - ✅ Dashboard Financeiro Angular (KPIs, fluxo de caixa, projeções)
+  - ✅ Documentação completa ([IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md](./frontend/medicwarehouse-app/IMPLEMENTATION_SUMMARY_BI_ANALYTICS_FRONTEND.md))
+  - ✅ Guia de testes ([TESTING_GUIDE_BI_ANALYTICS.md](./frontend/medicwarehouse-app/TESTING_GUIDE_BI_ANALYTICS.md))
+  - ⏳ Machine Learning (ML.NET) - Pendente
+  - ⏳ Dashboards Operacional e Qualidade - Pendente
 - Assinatura digital
 - CRM avançado
 - Gestão fiscal

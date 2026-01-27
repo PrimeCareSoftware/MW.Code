@@ -254,6 +254,17 @@ body.theme-high-contrast .sidebar {
         border-radius: 0 var(--radius-full) var(--radius-full) 0;
       }
     }
+
+    // Sub-menu item styling
+    &.nav-item-sub {
+      padding-left: calc(var(--spacing-4) + 32px);
+      font-size: 0.875rem;
+      
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
   }
 
 // Dark theme styles for nav-item

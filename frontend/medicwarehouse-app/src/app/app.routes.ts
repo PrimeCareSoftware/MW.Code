@@ -160,6 +160,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'analytics/dashboard-clinico', 
+    loadComponent: () => import('./pages/analytics/dashboard-clinico/dashboard-clinico.component').then(m => m.DashboardClinicoComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'analytics/dashboard-financeiro', 
+    loadComponent: () => import('./pages/analytics/dashboard-financeiro/dashboard-financeiro.component').then(m => m.DashboardFinanceiroComponent),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'prescriptions/new/:medicalRecordId', 
     loadComponent: () => import('./pages/prescriptions/digital-prescription-form.component').then(m => m.DigitalPrescriptionFormComponent),
     canActivate: [authGuard]

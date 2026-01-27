@@ -1,0 +1,262 @@
+<app-navbar></app-navbar>
+
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1>🏥 Dashboard Clínico</h1>
+      <p>Análise de indicadores clínicos e operacionais</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" (click)="exportData()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Exportar
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-section">
+    <div class="filter-card">
+      <div class="filter-group">
+        <label>Período</label>
+        <select [(ngModel)]="dateRange" (change)="onFilterChange()" class="form-select">
+          <option value="today">Hoje</option>
+          <option value="last7days">Últimos 7 dias</option>
+          <option value="last30days">Últimos 30 dias</option>
+          <option value="thisMonth">Este mês</option>
+          <option value="lastMonth">Mês passado</option>
+          <option value="last3months">Últimos 3 meses</option>
+          <option value="last6months">Últimos 6 meses</option>
+          <option value="custom">Personalizado</option>
+        </select>
+      </div>
+
+      @if (dateRange === 'custom') {
+        <div class="filter-group">
+          <label>Data inicial</label>
+          <input 
+            type="date" 
+            [(ngModel)]="customStartDate" 
+            (change)="onFilterChange()"
+            class="form-input"
+          />
+        </div>
+        <div class="filter-group">
+          <label>Data final</label>
+          <input 
+            type="date" 
+            [(ngModel)]="customEndDate" 
+            (change)="onFilterChange()"
+            class="form-input"
+          />
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <app-loading message="Carregando dashboard clínico..." size="large"></app-loading>
+  }
+
+  <!-- Error State -->
+  @if (error && !loading) {
+    <div class="error-message">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p>{{ error }}</p>
+      <button class="btn btn-primary" (click)="loadDashboard()">Tentar novamente</button>
+    </div>
+  }
+
+  <!-- Dashboard Content -->
+  @if (!loading && dashboard) {
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon blue">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Total de Consultas</span>
+          <span class="kpi-value">{{ dashboard.totalConsultas }}</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon green">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Taxa de Ocupação</span>
+          <span class="kpi-value">{{ formatPercent(dashboard.taxaOcupacao) }}</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon purple">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Tempo Médio</span>
+          <span class="kpi-value">{{ dashboard.tempoMedioConsulta }} min</span>
+        </div>
+      </div>
+
+      <div class="kpi-card" [class.alert]="dashboard.taxaNoShow > 15">
+        <div class="kpi-icon" [class.red]="dashboard.taxaNoShow > 15" [class.orange]="dashboard.taxaNoShow <= 15">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="17" y1="8" x2="22" y2="13"/>
+            <line x1="22" y1="8" x2="17" y2="13"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-label">Taxa de No-Show</span>
+          <span class="kpi-value">{{ formatPercent(dashboard.taxaNoShow) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="charts-grid">
+      <!-- Consultas por Especialidade -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Consultas por Especialidade</h3>
+          <p>Distribuição por área médica</p>
+        </div>
+        <div class="chart-body">
+          @if (especialidadeChartOptions) {
+            <apx-chart
+              [series]="especialidadeChartOptions.series!"
+              [chart]="especialidadeChartOptions.chart!"
+              [labels]="especialidadeChartOptions.labels!"
+              [colors]="especialidadeChartOptions.colors!"
+              [dataLabels]="especialidadeChartOptions.dataLabels!"
+              [legend]="especialidadeChartOptions.legend!"
+              [responsive]="especialidadeChartOptions.responsive!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- Consultas por Dia da Semana -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Distribuição Semanal</h3>
+          <p>Consultas por dia da semana</p>
+        </div>
+        <div class="chart-body">
+          @if (diaSemanaChartOptions) {
+            <apx-chart
+              [series]="diaSemanaChartOptions.series!"
+              [chart]="diaSemanaChartOptions.chart!"
+              [plotOptions]="diaSemanaChartOptions.plotOptions!"
+              [dataLabels]="diaSemanaChartOptions.dataLabels!"
+              [xaxis]="diaSemanaChartOptions.xaxis!"
+              [yaxis]="diaSemanaChartOptions.yaxis!"
+              [fill]="diaSemanaChartOptions.fill!"
+              [colors]="diaSemanaChartOptions.colors!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <!-- Top Diagnósticos (CID-10) -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Diagnósticos Mais Frequentes (CID-10)</h3>
+          <p>Top 10 diagnósticos no período</p>
+        </div>
+        <div class="chart-body">
+          <div class="diagnosticos-list">
+            @if (dashboard.diagnosticosMaisFrequentes.length > 0) {
+              @for (diagnostico of dashboard.diagnosticosMaisFrequentes; track diagnostico.codigoCid) {
+                <div class="diagnostico-item">
+                  <div class="diagnostico-header">
+                    <span class="cid-code">{{ diagnostico.codigoCid }}</span>
+                    <span class="frequencia">{{ diagnostico.frequencia }}</span>
+                  </div>
+                  <span class="descricao">{{ diagnostico.descricao }}</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="diagnostico.percentual"></div>
+                  </div>
+                  <span class="percentual">{{ formatPercent(diagnostico.percentual) }}</span>
+                </div>
+              }
+            } @else {
+              <p class="no-data">Nenhum diagnóstico registrado no período</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Pacientes Novos vs Retorno -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Pacientes Novos vs Retorno</h3>
+          <p>Distribuição de pacientes</p>
+        </div>
+        <div class="chart-body">
+          <div class="stats-comparison">
+            <div class="stat-item">
+              <span class="stat-label">Pacientes Novos</span>
+              <span class="stat-value blue">{{ dashboard.pacientesNovos }}</span>
+              <span class="stat-percent">
+                {{ formatPercent(dashboard.pacientesNovos / (dashboard.pacientesNovos + dashboard.pacientesRetorno) * 100) }}
+              </span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Retorno</span>
+              <span class="stat-value green">{{ dashboard.pacientesRetorno }}</span>
+              <span class="stat-percent">
+                {{ formatPercent(dashboard.pacientesRetorno / (dashboard.pacientesNovos + dashboard.pacientesRetorno) * 100) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tendência de Consultas -->
+      <div class="chart-card full-width">
+        <div class="chart-header">
+          <h3>Tendência Mensal de Consultas</h3>
+          <p>Evolução das consultas ao longo do tempo</p>
+        </div>
+        <div class="chart-body">
+          @if (tendenciaChartOptions) {
+            <apx-chart
+              [series]="tendenciaChartOptions.series!"
+              [chart]="tendenciaChartOptions.chart!"
+              [stroke]="tendenciaChartOptions.stroke!"
+              [xaxis]="tendenciaChartOptions.xaxis!"
+              [yaxis]="tendenciaChartOptions.yaxis!"
+              [colors]="tendenciaChartOptions.colors!"
+              [legend]="tendenciaChartOptions.legend!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
