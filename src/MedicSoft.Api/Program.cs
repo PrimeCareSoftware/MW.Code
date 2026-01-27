@@ -449,6 +449,9 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, Med
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISmsService, MedicSoft.Api.Services.CRM.StubSmsService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IWhatsAppService, MedicSoft.Api.Services.CRM.StubWhatsAppService>();
 
+// CRM Advanced - Complaint/Ouvidoria System
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IComplaintService, MedicSoft.Api.Services.CRM.ComplaintService>();
+
 // Configure Hangfire for background jobs
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
