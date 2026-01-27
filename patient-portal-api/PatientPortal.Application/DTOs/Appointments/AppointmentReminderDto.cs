@@ -10,7 +10,7 @@ public class AppointmentReminderDto
     public string PatientName { get; set; } = string.Empty;
     public string PatientEmail { get; set; } = string.Empty;
     public string? PatientPhone { get; set; }
-    public Guid DoctorId { get; set; }
+    public Guid? DoctorId { get; set; }  // Optional - may not be available in all views
     public string DoctorName { get; set; } = string.Empty;
     public string DoctorSpecialty { get; set; } = string.Empty;
     public string ClinicName { get; set; } = string.Empty;

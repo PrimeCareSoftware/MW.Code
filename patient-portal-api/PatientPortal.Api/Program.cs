@@ -156,6 +156,8 @@ builder.Services.AddHostedService<PatientPortal.Infrastructure.Services.Appointm
 // Register Repositories
 builder.Services.AddScoped<IPatientUserRepository, PatientUserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
+builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 builder.Services.AddScoped<IAppointmentViewRepository, AppointmentViewRepository>();
 builder.Services.AddScoped<IDocumentViewRepository, DocumentViewRepository>();
 

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using PatientPortal.Application.DTOs.Appointments;
 using PatientPortal.Application.Interfaces;
@@ -15,6 +16,8 @@ public class AppointmentServiceTests
     private readonly Mock<IAppointmentViewRepository> _mockAppointmentViewRepository;
     private readonly Mock<IPatientUserRepository> _mockPatientUserRepository;
     private readonly Mock<IMainDatabaseContext> _mockDatabase;
+    private readonly Mock<INotificationService> _mockNotificationService;
+    private readonly Mock<IConfiguration> _mockConfiguration;
     private readonly Mock<ILogger<AppointmentService>> _mockLogger;
     private readonly AppointmentService _service;
 
@@ -23,12 +26,19 @@ public class AppointmentServiceTests
         _mockAppointmentViewRepository = new Mock<IAppointmentViewRepository>();
         _mockPatientUserRepository = new Mock<IPatientUserRepository>();
         _mockDatabase = new Mock<IMainDatabaseContext>();
+        _mockNotificationService = new Mock<INotificationService>();
+        _mockConfiguration = new Mock<IConfiguration>();
         _mockLogger = new Mock<ILogger<AppointmentService>>();
+        
+        // Setup configuration mock
+        _mockConfiguration.Setup(x => x["PortalBaseUrl"]).Returns("https://portal.test.com");
         
         _service = new AppointmentService(
             _mockAppointmentViewRepository.Object,
             _mockPatientUserRepository.Object,
             _mockDatabase.Object,
+            _mockNotificationService.Object,
+            _mockConfiguration.Object,
             _mockLogger.Object);
     }
 

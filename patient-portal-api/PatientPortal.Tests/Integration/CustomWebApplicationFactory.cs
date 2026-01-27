@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using PatientPortal.Infrastructure.Data;
+using PatientPortal.Application.Interfaces;
+using Moq;
 
 namespace PatientPortal.Tests.Integration;
 
@@ -30,6 +33,21 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
             {
                 options.UseInMemoryDatabase("InMemoryTestDb");
             });
+            
+            // Replace the notification service with a mock that doesn't actually send emails
+            var notificationDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(INotificationService));
+            if (notificationDescriptor != null)
+            {
+                services.Remove(notificationDescriptor);
+            }
+            
+            // Add a mock notification service that doesn't throw
+            var mockNotificationService = new Mock<INotificationService>();
+            mockNotificationService
+                .Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            services.AddSingleton(mockNotificationService.Object);
 
             // Build the service provider and create the database
             var sp = services.BuildServiceProvider();
@@ -42,5 +60,18 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
         });
 
         builder.UseEnvironment("Testing");
+        
+        // Add configuration for testing
+        builder.ConfigureAppConfiguration((context, config) =>
+        {
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["PortalBaseUrl"] = "https://portal.test.com",
+                ["JwtSettings:SecretKey"] = "ThisIsATestSecretKeyThatIsAtLeast32CharactersLongForTesting",
+                ["JwtSettings:Issuer"] = "TestIssuer",
+                ["JwtSettings:Audience"] = "TestAudience",
+                ["JwtSettings:ExpirationMinutes"] = "15"
+            });
+        });
     }
 }

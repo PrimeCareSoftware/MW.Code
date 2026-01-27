@@ -3,6 +3,8 @@ using PatientPortal.Application.DTOs.Appointments;
 using PatientPortal.Application.Interfaces;
 using PatientPortal.Domain.Enums;
 using PatientPortal.Domain.Interfaces;
+using PatientPortal.Domain.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace PatientPortal.Application.Services;
 
@@ -11,17 +13,23 @@ public class AppointmentService : IAppointmentService
     private readonly IAppointmentViewRepository _appointmentViewRepository;
     private readonly IPatientUserRepository _patientUserRepository;
     private readonly IMainDatabaseContext _mainDatabase;
+    private readonly INotificationService _notificationService;
+    private readonly IConfiguration _configuration;
     private readonly ILogger<AppointmentService> _logger;
 
     public AppointmentService(
         IAppointmentViewRepository appointmentViewRepository,
         IPatientUserRepository patientUserRepository,
         IMainDatabaseContext mainDatabase,
+        INotificationService notificationService,
+        IConfiguration configuration,
         ILogger<AppointmentService> logger)
     {
         _appointmentViewRepository = appointmentViewRepository;
         _patientUserRepository = patientUserRepository;
         _mainDatabase = mainDatabase;
+        _notificationService = notificationService;
+        _configuration = configuration;
         _logger = logger;
     }
 
@@ -137,6 +145,9 @@ public class AppointmentService : IAppointmentService
             var appointment = await _appointmentViewRepository.GetByIdAsync(appointmentId, patientUser.PatientId);
             if (appointment == null)
                 throw new InvalidOperationException("Failed to retrieve created appointment");
+
+            // Send confirmation email
+            await SendAppointmentConfirmationEmailAsync(patientUser, appointment);
 
             return MapToDto(appointment);
         }
@@ -290,6 +301,45 @@ public class AppointmentService : IAppointmentService
             CanReschedule = appointment.CanReschedule,
             CanCancel = appointment.CanCancel
         };
+    }
+
+    private async Task SendAppointmentConfirmationEmailAsync(PatientUser patientUser, Domain.Entities.AppointmentView appointment)
+    {
+        try
+        {
+            var appointmentDto = new AppointmentReminderDto
+            {
+                AppointmentId = appointment.Id,
+                PatientId = patientUser.PatientId,
+                PatientName = patientUser.FullName,
+                PatientEmail = patientUser.Email,
+                PatientPhone = patientUser.PhoneNumber,
+                DoctorId = null, // Not available in view - only used for emails, not needed here
+                DoctorName = appointment.DoctorName,
+                DoctorSpecialty = appointment.DoctorSpecialty,
+                ClinicName = appointment.ClinicName,
+                AppointmentDate = appointment.AppointmentDate,
+                AppointmentTime = appointment.StartTime,
+                AppointmentType = appointment.AppointmentType,
+                IsTelehealth = appointment.IsTelehealth
+            };
+
+            var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.primecare.com";
+            var emailBody = EmailTemplateHelper.GenerateAppointmentConfirmationEmail(appointmentDto, portalBaseUrl);
+            
+            await _notificationService.SendEmailAsync(
+                patientUser.Email, 
+                "Confirmação de Agendamento - Portal do Paciente", 
+                emailBody);
+            
+            _logger.LogInformation("Appointment confirmation email sent to {Email} for appointment {AppointmentId}", 
+                patientUser.Email, appointment.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send appointment confirmation email to {Email}", patientUser.Email);
+            // Don't throw - allow appointment booking to succeed even if email fails
+        }
     }
 
     // Helper class for patient info

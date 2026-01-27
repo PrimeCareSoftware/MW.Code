@@ -17,6 +17,8 @@ public class PatientPortalDbContext : DbContext
     // Patient Portal specific tables
     public DbSet<PatientUser> PatientUsers { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+    public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; } = null!;
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
 
     // Read-only views from main application
     public DbSet<AppointmentView> AppointmentViews { get; set; } = null!;
@@ -93,6 +95,71 @@ public class PatientPortalDbContext : DbContext
 
             entity.Property(e => e.ReplacedByToken)
                 .HasMaxLength(512);
+
+            // Indexes for performance
+            entity.HasIndex(e => e.Token)
+                .IsUnique();
+
+            entity.HasIndex(e => new { e.PatientUserId, e.ExpiresAt });
+        });
+
+        // Configure EmailVerificationToken entity
+        modelBuilder.Entity<EmailVerificationToken>(entity =>
+        {
+            entity.ToTable("EmailVerificationTokens");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(512);
+
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            entity.Property(e => e.ExpiresAt)
+                .IsRequired();
+
+            entity.Property(e => e.UsedAt);
+
+            // Add foreign key relationship with cascade delete
+            entity.HasOne<PatientUser>()
+                .WithMany()
+                .HasForeignKey(e => e.PatientUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Indexes for performance
+            entity.HasIndex(e => e.Token)
+                .IsUnique();
+
+            entity.HasIndex(e => new { e.PatientUserId, e.ExpiresAt });
+        });
+
+        // Configure PasswordResetToken entity
+        modelBuilder.Entity<PasswordResetToken>(entity =>
+        {
+            entity.ToTable("PasswordResetTokens");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(512);
+
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            entity.Property(e => e.ExpiresAt)
+                .IsRequired();
+
+            entity.Property(e => e.UsedAt);
+
+            entity.Property(e => e.CreatedByIp)
+                .HasMaxLength(50);
+
+            // Add foreign key relationship with cascade delete
+            entity.HasOne<PatientUser>()
+                .WithMany()
+                .HasForeignKey(e => e.PatientUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes for performance
             entity.HasIndex(e => e.Token)

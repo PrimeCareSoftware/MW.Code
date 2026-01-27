@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PatientPortal.Infrastructure.Data;
@@ -11,9 +12,11 @@ using PatientPortal.Infrastructure.Data;
 namespace PatientPortal.Infrastructure.Migrations
 {
     [DbContext(typeof(PatientPortalDbContext))]
-    partial class PatientPortalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260127021907_AddEmailVerificationAndPasswordReset")]
+    partial class AddEmailVerificationAndPasswordReset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -346,24 +349,6 @@ namespace PatientPortal.Infrastructure.Migrations
                     b.HasIndex("PatientUserId", "ExpiresAt");
 
                     b.ToTable("RefreshTokens", (string)null);
-                });
-
-            modelBuilder.Entity("PatientPortal.Domain.Entities.EmailVerificationToken", b =>
-                {
-                    b.HasOne("PatientPortal.Domain.Entities.PatientUser", null)
-                        .WithMany()
-                        .HasForeignKey("PatientUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PatientPortal.Domain.Entities.PasswordResetToken", b =>
-                {
-                    b.HasOne("PatientPortal.Domain.Entities.PatientUser", null)
-                        .WithMany()
-                        .HasForeignKey("PatientUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PatientPortal.Domain.Entities.RefreshToken", b =>
