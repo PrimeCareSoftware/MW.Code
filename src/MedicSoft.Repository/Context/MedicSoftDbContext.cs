@@ -138,6 +138,9 @@ namespace MedicSoft.Repository.Context
         // Brute Force Protection
         public DbSet<LoginAttempt> LoginAttempts { get; set; } = null!;
         public DbSet<AccountLockout> AccountLockouts { get; set; } = null!;
+        
+        // Two-Factor Authentication
+        public DbSet<TwoFactorAuth> TwoFactorAuths { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -244,6 +247,9 @@ namespace MedicSoft.Repository.Context
             // Brute Force Protection
             modelBuilder.ApplyConfiguration(new LoginAttemptConfiguration());
             modelBuilder.ApplyConfiguration(new AccountLockoutConfiguration());
+            
+            // Two-Factor Authentication
+            modelBuilder.ApplyConfiguration(new TwoFactorAuthConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
