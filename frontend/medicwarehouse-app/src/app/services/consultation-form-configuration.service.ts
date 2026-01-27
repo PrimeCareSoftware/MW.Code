@@ -2,15 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConsultationFormConfigurationDto } from '../models/consultation-form-configuration.model';
-import { ApiConfigService } from './api-config.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConsultationFormConfigurationService {
   private readonly http = inject(HttpClient);
-  private readonly apiConfig = inject(ApiConfigService);
-  private readonly baseUrl = `${this.apiConfig.getApiUrl()}/api/consultation-form-configurations`;
+  private readonly baseUrl = `${environment.apiUrl}/api/consultation-form-configurations`;
 
   /**
    * Get active consultation form configuration for a clinic
