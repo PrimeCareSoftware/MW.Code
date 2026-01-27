@@ -62,8 +62,8 @@ namespace MedicSoft.Analytics.Services
                     
                     // KPIs principais
                     TempoMedioEsperaMinutos = CalcularTempoMedioEspera(senhasFila, agendamentos),
-                    TamanhoFilaAtual = CalcularTamanhoFilaAtual(tenantId),
-                    PacientesEmAtendimento = CalcularPacientesEmAtendimento(tenantId),
+                    TamanhoFilaAtual = await CalcularTamanhoFilaAtualAsync(tenantId),
+                    PacientesEmAtendimento = await CalcularPacientesEmAtendimentoAsync(tenantId),
                     TaxaAtendimentoNoPrazo = CalcularTaxaAtendimentoNoPrazo(senhasFila, agendamentos),
                     
                     // Análises detalhadas
@@ -113,13 +113,13 @@ namespace MedicSoft.Analytics.Services
         /// <summary>
         /// Calcula o tamanho atual da fila (agendamentos agendados/confirmados para hoje)
         /// </summary>
-        private int CalcularTamanhoFilaAtual(string tenantId)
+        private async Task<int> CalcularTamanhoFilaAtualAsync(string tenantId)
         {
             var hoje = DateTime.Today;
             
             // Buscar na fila de senhas
-            var filaAtual = _context.Set<SenhaFila>()
-                .Count(s => s.TenantId == tenantId 
+            var filaAtual = await _context.Set<SenhaFila>()
+                .CountAsync(s => s.TenantId == tenantId 
                     && s.DataHoraEntrada.Date == hoje
                     && (s.Status == StatusSenha.Aguardando || s.Status == StatusSenha.Chamando));
 
@@ -127,8 +127,8 @@ namespace MedicSoft.Analytics.Services
                 return filaAtual;
 
             // Fallback: agendamentos do dia
-            return _context.Appointments
-                .Count(a => a.TenantId == tenantId 
+            return await _context.Appointments
+                .CountAsync(a => a.TenantId == tenantId 
                     && a.ScheduledDate.Date == hoje
                     && (a.Status == AppointmentStatus.Scheduled || a.Status == AppointmentStatus.Confirmed));
         }
@@ -136,14 +136,14 @@ namespace MedicSoft.Analytics.Services
         /// <summary>
         /// Calcula quantos pacientes estão em atendimento no momento
         /// </summary>
-        private int CalcularPacientesEmAtendimento(string tenantId)
+        private async Task<int> CalcularPacientesEmAtendimentoAsync(string tenantId)
         {
             var agora = DateTime.Now;
             var hoje = agora.Date;
             
             // Buscar na fila de senhas
-            var emAtendimento = _context.Set<SenhaFila>()
-                .Count(s => s.TenantId == tenantId 
+            var emAtendimento = await _context.Set<SenhaFila>()
+                .CountAsync(s => s.TenantId == tenantId 
                     && s.DataHoraEntrada.Date == hoje
                     && s.Status == StatusSenha.EmAtendimento);
 
@@ -151,8 +151,8 @@ namespace MedicSoft.Analytics.Services
                 return emAtendimento;
 
             // Fallback: agendamentos em progresso
-            return _context.Appointments
-                .Count(a => a.TenantId == tenantId 
+            return await _context.Appointments
+                .CountAsync(a => a.TenantId == tenantId 
                     && a.ScheduledDate.Date == hoje
                     && a.Status == AppointmentStatus.InProgress);
         }

@@ -66,10 +66,10 @@ namespace MedicSoft.Analytics.Services
                     DistribuicaoNps = GetDistribuicaoNps(dadosConsolidados),
                     
                     // Avaliações por médico
-                    AvaliacoesMedicos = GetAvaliacoesMedicos(dadosConsolidados),
+                    AvaliacoesMedicos = await GetAvaliacoesMedicosAsync(dadosConsolidados),
                     
                     // Avaliações por especialidade
-                    AvaliacoesEspecialidades = GetAvaliacoesEspecialidades(dadosConsolidados),
+                    AvaliacoesEspecialidades = await GetAvaliacoesEspecialidadesAsync(dadosConsolidados),
                     
                     // Comentários recentes (mock data - TODO: implementar quando tabela de feedback existir)
                     ComentariosPositivos = GetComentariosPositivos(),
@@ -223,7 +223,7 @@ namespace MedicSoft.Analytics.Services
         /// <summary>
         /// Obtém avaliações por médico
         /// </summary>
-        private List<AvaliacaoMedicoDto> GetAvaliacoesMedicos(List<ConsultaDiaria> dadosConsolidados)
+        private async Task<List<AvaliacaoMedicoDto>> GetAvaliacoesMedicosAsync(List<ConsultaDiaria> dadosConsolidados)
         {
             // Buscar médicos relacionados aos dados consolidados
             var medicosIds = dadosConsolidados
@@ -235,9 +235,9 @@ namespace MedicSoft.Analytics.Services
             if (!medicosIds.Any())
                 return new List<AvaliacaoMedicoDto>();
 
-            var medicos = _context.Users
+            var medicos = await _context.Users
                 .Where(u => medicosIds.Contains(u.Id))
-                .ToDictionary(u => u.Id, u => u);
+                .ToDictionaryAsync(u => u.Id, u => u);
 
             var dadosPorMedico = dadosConsolidados
                 .Where(d => d.MedicoId.HasValue && d.TotalAvaliacoes > 0)
@@ -271,7 +271,7 @@ namespace MedicSoft.Analytics.Services
         /// <summary>
         /// Obtém avaliações por especialidade
         /// </summary>
-        private List<AvaliacaoEspecialidadeDto> GetAvaliacoesEspecialidades(List<ConsultaDiaria> dadosConsolidados)
+        private async Task<List<AvaliacaoEspecialidadeDto>> GetAvaliacoesEspecialidadesAsync(List<ConsultaDiaria> dadosConsolidados)
         {
             // Buscar médicos relacionados aos dados consolidados
             var medicosIds = dadosConsolidados
@@ -283,9 +283,9 @@ namespace MedicSoft.Analytics.Services
             if (!medicosIds.Any())
                 return new List<AvaliacaoEspecialidadeDto>();
 
-            var medicos = _context.Users
+            var medicos = await _context.Users
                 .Where(u => medicosIds.Contains(u.Id) && !string.IsNullOrEmpty(u.Specialty))
-                .ToDictionary(u => u.Id, u => u);
+                .ToDictionaryAsync(u => u.Id, u => u);
 
             var dadosPorEspecialidade = dadosConsolidados
                 .Where(d => d.MedicoId.HasValue && d.TotalAvaliacoes > 0 && medicos.ContainsKey(d.MedicoId.Value))
