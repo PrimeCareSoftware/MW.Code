@@ -19,5 +19,19 @@ namespace MedicSoft.Domain.Interfaces
         /// <param name="cipherText">Encrypted data</param>
         /// <returns>Decrypted plaintext, or null if input is null/empty</returns>
         string? Decrypt(string? cipherText);
+
+        /// <summary>
+        /// Encrypts binary data (for certificates and keys).
+        /// </summary>
+        /// <param name="plainBytes">Data to encrypt</param>
+        /// <returns>Encrypted data</returns>
+        byte[] EncryptBytes(byte[] plainBytes);
+
+        /// <summary>
+        /// Decrypts binary data (for certificates and keys).
+        /// </summary>
+        /// <param name="cipherBytes">Encrypted data</param>
+        /// <returns>Decrypted data</returns>
+        byte[] DecryptBytes(byte[] cipherBytes);
     }
 }

@@ -98,6 +98,18 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
   - ✅ Guia de testes ([TESTING_GUIDE_BI_ANALYTICS.md](./frontend/medicwarehouse-app/TESTING_GUIDE_BI_ANALYTICS.md))
   - ⏳ Treinar modelos ML com dados reais - Pendente
   - ⏳ Integrar ML nos dashboards frontend - Pendente
+- **Assinatura Digital ICP-Brasil** ✅ (70% COMPLETO - Backend completo - [16-assinatura-digital.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/16-assinatura-digital.md))
+  - ✅ Entidades CertificadoDigital e AssinaturaDigital
+  - ✅ Repositórios e Configurations EF Core
+  - ✅ CertificateManager (importação A1/A3, validação ICP-Brasil)
+  - ✅ TimestampService (RFC 3161, TSAs ICP-Brasil)
+  - ✅ AssinaturaDigitalService (PKCS#7, validação completa)
+  - ✅ Criptografia AES-256-GCM para certificados A1
+  - ✅ Documentação técnica ([ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md](./ASSINATURA_DIGITAL_DOCUMENTACAO_TECNICA.md))
+  - ✅ Guia do usuário ([ASSINATURA_DIGITAL_GUIA_USUARIO.md](./ASSINATURA_DIGITAL_GUIA_USUARIO.md))
+  - ⏳ Migration para banco de dados - Pendente
+  - ⏳ Controllers e API REST - Pendente
+  - ⏳ Frontend Angular - Pendente
   - ⏳ Dashboards Operacional e Qualidade - Pendente
 - Assinatura digital
 - CRM avançado
