@@ -120,10 +120,10 @@
         <form [formGroup]="attendanceForm" class="medical-record-form">
           <!-- CFM 1.821 - Anamnese (Required Fields) -->
           <div class="card">
-            <h3>Anamnese - CFM 1.821 <span class="required-badge">Obrigatório</span></h3>
+            <h3>Anamnese - CFM 1.821 @if (formConfig()?.requireChiefComplaint || formConfig()?.requireHistoryOfPresentIllness) { <span class="required-badge">Obrigatório</span> }</h3>
             
             <div class="form-group">
-              <label for="chiefComplaint">Queixa Principal <span class="required">*</span></label>
+              <label for="chiefComplaint">Queixa Principal @if (formConfig()?.requireChiefComplaint) { <span class="required">*</span> }</label>
               <textarea 
                 id="chiefComplaint" 
                 formControlName="chiefComplaint" 
@@ -137,7 +137,7 @@
             </div>
 
             <div class="form-group">
-              <label for="historyOfPresentIllness">História da Doença Atual (HDA) <span class="required">*</span></label>
+              <label for="historyOfPresentIllness">História da Doença Atual (HDA) @if (formConfig()?.requireHistoryOfPresentIllness) { <span class="required">*</span> }</label>
               <textarea 
                 id="historyOfPresentIllness" 
                 formControlName="historyOfPresentIllness" 
@@ -198,7 +198,7 @@
           <!-- CFM 1.821 - Clinical Examination -->
           <div class="card">
             <div class="card-header-flex">
-              <h3>Exame Clínico - CFM 1.821 <span class="required-badge">Obrigatório</span></h3>
+              <h3>Exame Clínico - CFM 1.821 @if (formConfig()?.requireClinicalExamination) { <span class="required-badge">Obrigatório</span> }</h3>
               <button type="button" class="btn btn-outline" (click)="toggleAddClinicalExamination()">
                 {{ showAddClinicalExamination() ? 'Cancelar' : '+ Adicionar Exame Clínico' }}
               </button>
@@ -207,7 +207,7 @@
             @if (showAddClinicalExamination()) {
               <form [formGroup]="clinicalExaminationForm" class="add-form">
                 <div class="form-group">
-                  <label for="systematicExamination">Exame Físico Sistemático <span class="required">*</span></label>
+                  <label for="systematicExamination">Exame Físico Sistemático @if (formConfig()?.requireClinicalExamination) { <span class="required">*</span> }</label>
                   <textarea 
                     id="systematicExamination" 
                     formControlName="systematicExamination" 
@@ -350,7 +350,7 @@
           <!-- CFM 1.821 - Diagnostic Hypotheses -->
           <div class="card">
             <div class="card-header-flex">
-              <h3>Hipóteses Diagnósticas - CFM 1.821 <span class="required-badge">Obrigatório</span></h3>
+              <h3>Hipóteses Diagnósticas - CFM 1.821 @if (formConfig()?.requireDiagnosticHypothesis) { <span class="required-badge">Obrigatório</span> }</h3>
               <button type="button" class="btn btn-outline" (click)="toggleAddDiagnosis()">
                 {{ showAddDiagnosis() ? 'Cancelar' : '+ Adicionar Diagnóstico' }}
               </button>
@@ -359,7 +359,7 @@
             @if (showAddDiagnosis()) {
               <form [formGroup]="diagnosticForm" class="add-form">
                 <div class="form-group">
-                  <label for="description">Descrição do Diagnóstico <span class="required">*</span></label>
+                  <label for="description">Descrição do Diagnóstico @if (formConfig()?.requireDiagnosticHypothesis) { <span class="required">*</span> }</label>
                   <input 
                     type="text" 
                     id="description" 
@@ -371,7 +371,7 @@
 
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="icd10Code">Código CID-10 <span class="required">*</span></label>
+                    <label for="icd10Code">Código CID-10 @if (formConfig()?.requireDiagnosticHypothesis) { <span class="required">*</span> }</label>
                     <input 
                       type="text" 
                       id="icd10Code" 
@@ -424,7 +424,7 @@
           <!-- CFM 1.821 - Informed Consent -->
           <div class="card">
             <div class="card-header-flex">
-              <h3>Consentimento Informado - CFM 1.821 <span class="required-badge">Obrigatório</span></h3>
+              <h3>Consentimento Informado - CFM 1.821 @if (formConfig()?.requireInformedConsent) { <span class="required-badge">Obrigatório</span> }</h3>
             </div>
             
             @if (medicalRecord()?.id && patient()?.id) {
@@ -443,7 +443,7 @@
           <!-- CFM 1.821 - Therapeutic Plan -->
           <div class="card">
             <div class="card-header-flex">
-              <h3>Plano Terapêutico - CFM 1.821 <span class="required-badge">Obrigatório</span></h3>
+              <h3>Plano Terapêutico - CFM 1.821 @if (formConfig()?.requireTherapeuticPlan) { <span class="required-badge">Obrigatório</span> }</h3>
               <button type="button" class="btn btn-outline" (click)="toggleAddTherapeuticPlan()">
                 {{ showAddTherapeuticPlan() ? 'Cancelar' : '+ Adicionar Plano Terapêutico' }}
               </button>
@@ -452,7 +452,7 @@
             @if (showAddTherapeuticPlan()) {
               <form [formGroup]="therapeuticPlanForm" class="add-form">
                 <div class="form-group">
-                  <label for="treatment">Tratamento/Conduta <span class="required">*</span></label>
+                  <label for="treatment">Tratamento/Conduta @if (formConfig()?.requireTherapeuticPlan) { <span class="required">*</span> }</label>
                   <textarea 
                     id="treatment" 
                     formControlName="treatment" 

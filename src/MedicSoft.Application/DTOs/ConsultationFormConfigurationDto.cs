@@ -34,6 +34,18 @@ namespace MedicSoft.Application.DTOs
         public bool ShowLifestyleHabits { get; set; }
         public bool ShowCurrentMedications { get; set; }
         
+        // Field required controls
+        public bool RequireChiefComplaint { get; set; }
+        public bool RequireHistoryOfPresentIllness { get; set; }
+        public bool RequirePastMedicalHistory { get; set; }
+        public bool RequireFamilyHistory { get; set; }
+        public bool RequireLifestyleHabits { get; set; }
+        public bool RequireCurrentMedications { get; set; }
+        public bool RequireClinicalExamination { get; set; }
+        public bool RequireDiagnosticHypothesis { get; set; }
+        public bool RequireInformedConsent { get; set; }
+        public bool RequireTherapeuticPlan { get; set; }
+        
         public List<CustomFieldDto> CustomFields { get; set; } = new();
         
         public DateTime CreatedAt { get; set; }
@@ -54,6 +66,18 @@ namespace MedicSoft.Application.DTOs
         public bool ShowLifestyleHabits { get; set; } = true;
         public bool ShowCurrentMedications { get; set; } = true;
         
+        // Field required controls
+        public bool RequireChiefComplaint { get; set; } = true;
+        public bool RequireHistoryOfPresentIllness { get; set; } = true;
+        public bool RequirePastMedicalHistory { get; set; } = false;
+        public bool RequireFamilyHistory { get; set; } = false;
+        public bool RequireLifestyleHabits { get; set; } = false;
+        public bool RequireCurrentMedications { get; set; } = false;
+        public bool RequireClinicalExamination { get; set; } = true;
+        public bool RequireDiagnosticHypothesis { get; set; } = true;
+        public bool RequireInformedConsent { get; set; } = true;
+        public bool RequireTherapeuticPlan { get; set; } = true;
+        
         public List<CustomFieldDto>? CustomFields { get; set; }
     }
 
@@ -69,6 +93,18 @@ namespace MedicSoft.Application.DTOs
         public bool ShowFamilyHistory { get; set; }
         public bool ShowLifestyleHabits { get; set; }
         public bool ShowCurrentMedications { get; set; }
+        
+        // Field required controls
+        public bool RequireChiefComplaint { get; set; }
+        public bool RequireHistoryOfPresentIllness { get; set; }
+        public bool RequirePastMedicalHistory { get; set; }
+        public bool RequireFamilyHistory { get; set; }
+        public bool RequireLifestyleHabits { get; set; }
+        public bool RequireCurrentMedications { get; set; }
+        public bool RequireClinicalExamination { get; set; }
+        public bool RequireDiagnosticHypothesis { get; set; }
+        public bool RequireInformedConsent { get; set; }
+        public bool RequireTherapeuticPlan { get; set; }
         
         public List<CustomFieldDto>? CustomFields { get; set; }
     }
@@ -88,6 +124,18 @@ namespace MedicSoft.Application.DTOs
         public bool ShowFamilyHistory { get; set; }
         public bool ShowLifestyleHabits { get; set; }
         public bool ShowCurrentMedications { get; set; }
+        
+        // Field required controls
+        public bool RequireChiefComplaint { get; set; }
+        public bool RequireHistoryOfPresentIllness { get; set; }
+        public bool RequirePastMedicalHistory { get; set; }
+        public bool RequireFamilyHistory { get; set; }
+        public bool RequireLifestyleHabits { get; set; }
+        public bool RequireCurrentMedications { get; set; }
+        public bool RequireClinicalExamination { get; set; }
+        public bool RequireDiagnosticHypothesis { get; set; }
+        public bool RequireInformedConsent { get; set; }
+        public bool RequireTherapeuticPlan { get; set; }
         
         public List<CustomFieldDto> CustomFields { get; set; } = new();
         
@@ -112,6 +160,18 @@ namespace MedicSoft.Application.DTOs
         public bool ShowLifestyleHabits { get; set; } = true;
         public bool ShowCurrentMedications { get; set; } = true;
         
+        // Field required controls
+        public bool RequireChiefComplaint { get; set; } = true;
+        public bool RequireHistoryOfPresentIllness { get; set; } = true;
+        public bool RequirePastMedicalHistory { get; set; } = false;
+        public bool RequireFamilyHistory { get; set; } = false;
+        public bool RequireLifestyleHabits { get; set; } = false;
+        public bool RequireCurrentMedications { get; set; } = false;
+        public bool RequireClinicalExamination { get; set; } = true;
+        public bool RequireDiagnosticHypothesis { get; set; } = true;
+        public bool RequireInformedConsent { get; set; } = true;
+        public bool RequireTherapeuticPlan { get; set; } = true;
+        
         public List<CustomFieldDto>? CustomFields { get; set; }
     }
 
@@ -126,6 +186,18 @@ namespace MedicSoft.Application.DTOs
         public bool ShowFamilyHistory { get; set; }
         public bool ShowLifestyleHabits { get; set; }
         public bool ShowCurrentMedications { get; set; }
+        
+        // Field required controls
+        public bool RequireChiefComplaint { get; set; }
+        public bool RequireHistoryOfPresentIllness { get; set; }
+        public bool RequirePastMedicalHistory { get; set; }
+        public bool RequireFamilyHistory { get; set; }
+        public bool RequireLifestyleHabits { get; set; }
+        public bool RequireCurrentMedications { get; set; }
+        public bool RequireClinicalExamination { get; set; }
+        public bool RequireDiagnosticHypothesis { get; set; }
+        public bool RequireInformedConsent { get; set; }
+        public bool RequireTherapeuticPlan { get; set; }
         
         public List<CustomFieldDto>? CustomFields { get; set; }
     }

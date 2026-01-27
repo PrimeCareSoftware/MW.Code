@@ -71,6 +71,16 @@ namespace MedicSoft.Application.Services
                 createDto.ShowFamilyHistory,
                 createDto.ShowLifestyleHabits,
                 createDto.ShowCurrentMedications,
+                createDto.RequireChiefComplaint,
+                createDto.RequireHistoryOfPresentIllness,
+                createDto.RequirePastMedicalHistory,
+                createDto.RequireFamilyHistory,
+                createDto.RequireLifestyleHabits,
+                createDto.RequireCurrentMedications,
+                createDto.RequireClinicalExamination,
+                createDto.RequireDiagnosticHypothesis,
+                createDto.RequireInformedConsent,
+                createDto.RequireTherapeuticPlan,
                 customFields
             );
 
@@ -105,6 +115,16 @@ namespace MedicSoft.Application.Services
                 updateDto.ShowFamilyHistory,
                 updateDto.ShowLifestyleHabits,
                 updateDto.ShowCurrentMedications,
+                updateDto.RequireChiefComplaint,
+                updateDto.RequireHistoryOfPresentIllness,
+                updateDto.RequirePastMedicalHistory,
+                updateDto.RequireFamilyHistory,
+                updateDto.RequireLifestyleHabits,
+                updateDto.RequireCurrentMedications,
+                updateDto.RequireClinicalExamination,
+                updateDto.RequireDiagnosticHypothesis,
+                updateDto.RequireInformedConsent,
+                updateDto.RequireTherapeuticPlan,
                 customFields
             );
 
@@ -168,6 +188,16 @@ namespace MedicSoft.Application.Services
                 createDto.ShowFamilyHistory,
                 createDto.ShowLifestyleHabits,
                 createDto.ShowCurrentMedications,
+                createDto.RequireChiefComplaint,
+                createDto.RequireHistoryOfPresentIllness,
+                createDto.RequirePastMedicalHistory,
+                createDto.RequireFamilyHistory,
+                createDto.RequireLifestyleHabits,
+                createDto.RequireCurrentMedications,
+                createDto.RequireClinicalExamination,
+                createDto.RequireDiagnosticHypothesis,
+                createDto.RequireInformedConsent,
+                createDto.RequireTherapeuticPlan,
                 customFields
             );
 
@@ -209,6 +239,16 @@ namespace MedicSoft.Application.Services
                 updateDto.ShowFamilyHistory,
                 updateDto.ShowLifestyleHabits,
                 updateDto.ShowCurrentMedications,
+                updateDto.RequireChiefComplaint,
+                updateDto.RequireHistoryOfPresentIllness,
+                updateDto.RequirePastMedicalHistory,
+                updateDto.RequireFamilyHistory,
+                updateDto.RequireLifestyleHabits,
+                updateDto.RequireCurrentMedications,
+                updateDto.RequireClinicalExamination,
+                updateDto.RequireDiagnosticHypothesis,
+                updateDto.RequireInformedConsent,
+                updateDto.RequireTherapeuticPlan,
                 customFields
             );
 
@@ -278,6 +318,16 @@ namespace MedicSoft.Application.Services
                 profile.ShowFamilyHistory,
                 profile.ShowLifestyleHabits,
                 profile.ShowCurrentMedications,
+                profile.RequireChiefComplaint,
+                profile.RequireHistoryOfPresentIllness,
+                profile.RequirePastMedicalHistory,
+                profile.RequireFamilyHistory,
+                profile.RequireLifestyleHabits,
+                profile.RequireCurrentMedications,
+                profile.RequireClinicalExamination,
+                profile.RequireDiagnosticHypothesis,
+                profile.RequireInformedConsent,
+                profile.RequireTherapeuticPlan,
                 profile.GetCustomFields()
             );
 
@@ -302,6 +352,16 @@ namespace MedicSoft.Application.Services
                 ShowFamilyHistory = profile.ShowFamilyHistory,
                 ShowLifestyleHabits = profile.ShowLifestyleHabits,
                 ShowCurrentMedications = profile.ShowCurrentMedications,
+                RequireChiefComplaint = profile.RequireChiefComplaint,
+                RequireHistoryOfPresentIllness = profile.RequireHistoryOfPresentIllness,
+                RequirePastMedicalHistory = profile.RequirePastMedicalHistory,
+                RequireFamilyHistory = profile.RequireFamilyHistory,
+                RequireLifestyleHabits = profile.RequireLifestyleHabits,
+                RequireCurrentMedications = profile.RequireCurrentMedications,
+                RequireClinicalExamination = profile.RequireClinicalExamination,
+                RequireDiagnosticHypothesis = profile.RequireDiagnosticHypothesis,
+                RequireInformedConsent = profile.RequireInformedConsent,
+                RequireTherapeuticPlan = profile.RequireTherapeuticPlan,
                 CustomFields = profile.GetCustomFields().Select(cf => new CustomFieldDto
                 {
                     FieldKey = cf.FieldKey,
@@ -334,6 +394,16 @@ namespace MedicSoft.Application.Services
                 ShowFamilyHistory = configuration.ShowFamilyHistory,
                 ShowLifestyleHabits = configuration.ShowLifestyleHabits,
                 ShowCurrentMedications = configuration.ShowCurrentMedications,
+                RequireChiefComplaint = configuration.RequireChiefComplaint,
+                RequireHistoryOfPresentIllness = configuration.RequireHistoryOfPresentIllness,
+                RequirePastMedicalHistory = configuration.RequirePastMedicalHistory,
+                RequireFamilyHistory = configuration.RequireFamilyHistory,
+                RequireLifestyleHabits = configuration.RequireLifestyleHabits,
+                RequireCurrentMedications = configuration.RequireCurrentMedications,
+                RequireClinicalExamination = configuration.RequireClinicalExamination,
+                RequireDiagnosticHypothesis = configuration.RequireDiagnosticHypothesis,
+                RequireInformedConsent = configuration.RequireInformedConsent,
+                RequireTherapeuticPlan = configuration.RequireTherapeuticPlan,
                 CustomFields = configuration.GetCustomFields().Select(cf => new CustomFieldDto
                 {
                     FieldKey = cf.FieldKey,
