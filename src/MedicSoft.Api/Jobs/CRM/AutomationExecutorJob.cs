@@ -47,8 +47,6 @@ public class AutomationExecutorJob
             _logger.LogInformation($"Encontradas {activeAutomations.Count} automações ativas");
 
             var executionCount = 0;
-            var successCount = 0;
-            var errorCount = 0;
 
             foreach (var automation in activeAutomations)
             {
@@ -73,13 +71,13 @@ public class AutomationExecutorJob
                 }
                 catch (Exception ex)
                 {
-                    errorCount++;
                     _logger.LogError(ex, $"Erro ao executar automação {automation.Name} (ID: {automation.Id})");
                 }
             }
 
             _logger.LogInformation(
-                $"Execução de automações concluída. Total: {executionCount}, Sucesso: {successCount}, Erro: {errorCount}");
+                $"Execução de automações concluída. Total agendadas: {executionCount}. " +
+                $"NOTA: Execução real pendente de implementação completa.");
         }
         catch (Exception ex)
         {
@@ -89,7 +87,9 @@ public class AutomationExecutorJob
     }
 
     /// <summary>
-    /// Busca pacientes elegíveis para uma automação baseado em seus critérios
+    /// Busca pacientes elegíveis para uma automação baseado em seus critérios.
+    /// NOTE: Atualmente limitado a 100 pacientes por execução para evitar sobrecarga.
+    /// Implementar paginação se necessário processar mais pacientes.
     /// </summary>
     private async Task<List<Guid>> GetEligiblePatientsAsync(MedicSoftDbContext context, MarketingAutomation automation)
     {

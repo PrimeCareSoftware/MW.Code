@@ -48,6 +48,7 @@ public class SurveyTriggerJob
             // - NPS após consultas
             // - CSAT após tratamentos
             // - Surveys periódicos
+            _logger.LogWarning("Lógica de trigger de surveys não implementada. Job executando como placeholder.");
         }
         catch (Exception ex)
         {
@@ -82,11 +83,10 @@ public class SurveyTriggerJob
 
                 if (responses.Any())
                 {
+                    // TODO: Implementar recálculo de métricas através de domain methods
                     _logger.LogDebug($"Survey '{survey.Name}': {responses.Count} respostas processadas");
                 }
             }
-
-            await context.SaveChangesAsync();
 
             _logger.LogInformation("Respostas de pesquisas processadas com sucesso");
         }

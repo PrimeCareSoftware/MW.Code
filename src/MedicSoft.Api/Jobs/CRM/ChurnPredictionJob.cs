@@ -45,15 +45,16 @@ public class ChurnPredictionJob
 
             _logger.LogInformation($"Processando predição de churn para {activePacientes.Count} pacientes");
 
+            // TODO: Implementar processamento em lotes
+            // Requer integração com ChurnPredictionService e tenantId
+            _logger.LogWarning("Predição de churn não implementada. Job executando como placeholder.");
+
             var processedCount = 0;
             var highRiskCount = 0;
             var criticalRiskCount = 0;
 
-            // TODO: Implementar processamento em lotes
-            // Requer integração com ChurnPredictionService
-
             _logger.LogInformation(
-                $"Predição de churn concluída. Total: {processedCount}, " +
+                $"Predição de churn concluída (placeholder). Total: {processedCount}, " +
                 $"Alto Risco: {highRiskCount}, Risco Crítico: {criticalRiskCount}");
         }
         catch (Exception ex)
@@ -83,6 +84,7 @@ public class ChurnPredictionJob
             _logger.LogInformation($"Encontrados {highRiskPatients.Count} pacientes de alto risco");
 
             // TODO: Implementar notificações
+            _logger.LogWarning("Notificações de alto risco não implementadas. Job executando como placeholder.");
         }
         catch (Exception ex)
         {
@@ -116,6 +118,7 @@ public class ChurnPredictionJob
             _logger.LogInformation($"Recalculando {oldPredictions.Count} predições antigas");
 
             // TODO: Implementar recálculo
+            _logger.LogWarning("Recálculo de predições não implementado. Job executando como placeholder.");
 
         }
         catch (Exception ex)
