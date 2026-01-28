@@ -39,6 +39,9 @@
   --info-500: #3b82f6;
   --info-600: #2563eb;
   
+  /* Primary Color - Default value (can be overridden dynamically) */
+  --primary-color: #1e3a8a;  /* default to primary-600 */
+  
   /* Border Radius */
   --radius: 0.5rem;
   --radius-sm: 0.25rem;
