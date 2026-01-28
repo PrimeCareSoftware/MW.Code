@@ -47,6 +47,14 @@ export const routes: Routes = [
       { 
         path: 'terms', 
         loadComponent: () => import('./pages/site/terms/terms').then(m => m.TermsComponent)
+      },
+      { 
+        path: 'blog', 
+        loadComponent: () => import('./pages/site/blog/blog.component').then(m => m.BlogComponent)
+      },
+      { 
+        path: 'blog/:slug', 
+        loadComponent: () => import('./pages/site/blog/blog-article.component').then(m => m.BlogArticleComponent)
       }
     ]
   },
