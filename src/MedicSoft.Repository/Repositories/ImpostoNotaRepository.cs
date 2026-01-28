@@ -33,15 +33,17 @@ namespace MedicSoft.Repository.Repositories
             if (clinic == null)
                 return new List<ImpostoNota>();
 
-            return await _dbSet
-                .Include(i => i.NotaFiscal)
-                .Where(i => i.TenantId == tenantId
-                         && i.NotaFiscal != null
-                         && i.NotaFiscal.ProviderCnpj == clinic.Document
-                         && i.DataCalculo >= dataInicio
-                         && i.DataCalculo <= dataFim)
-                .OrderBy(i => i.DataCalculo)
-                .ToListAsync();
+            // Use Join to filter at database level before loading entities
+            return await (from imposto in _dbSet
+                          join nota in _context.ElectronicInvoices on imposto.NotaFiscalId equals nota.Id
+                          where imposto.TenantId == tenantId
+                             && nota.ProviderCnpj == clinic.Document
+                             && imposto.DataCalculo >= dataInicio
+                             && imposto.DataCalculo <= dataFim
+                          orderby imposto.DataCalculo
+                          select imposto)
+                          .Include(i => i.NotaFiscal)
+                          .ToListAsync();
         }
 
         public async Task<decimal> GetTotalImpostosPeriodoAsync(
@@ -55,16 +57,25 @@ namespace MedicSoft.Repository.Repositories
             if (clinic == null)
                 return 0;
 
-            var impostos = await _dbSet
-                .Include(i => i.NotaFiscal)
-                .Where(i => i.TenantId == tenantId
-                         && i.NotaFiscal != null
-                         && i.NotaFiscal.ProviderCnpj == clinic.Document
-                         && i.DataCalculo >= dataInicio
-                         && i.DataCalculo <= dataFim)
-                .ToListAsync();
+            // Use Join and database-side aggregation
+            var result = await (from imposto in _dbSet
+                               join nota in _context.ElectronicInvoices on imposto.NotaFiscalId equals nota.Id
+                               where imposto.TenantId == tenantId
+                                  && nota.ProviderCnpj == clinic.Document
+                                  && imposto.DataCalculo >= dataInicio
+                                  && imposto.DataCalculo <= dataFim
+                               select new
+                               {
+                                   imposto.ValorPIS,
+                                   imposto.ValorCOFINS,
+                                   imposto.ValorIR,
+                                   imposto.ValorCSLL,
+                                   imposto.ValorISS,
+                                   imposto.ValorINSS
+                               })
+                               .ToListAsync();
 
-            return impostos.Sum(i => i.TotalImpostos);
+            return result.Sum(i => i.ValorPIS + i.ValorCOFINS + i.ValorIR + i.ValorCSLL + i.ValorISS + i.ValorINSS);
         }
     }
 }

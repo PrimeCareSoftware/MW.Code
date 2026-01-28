@@ -84,20 +84,27 @@ namespace MedicSoft.Repository.Repositories
             DateTime dataFim, 
             string tenantId)
         {
-            var lancamentos = await _dbSet
+            // Use database-side aggregation for better performance
+            var saldos = await _dbSet
                 .Where(l => l.PlanoContasId == planoContasId 
                          && l.DataLancamento >= dataInicio 
                          && l.DataLancamento <= dataFim 
                          && l.TenantId == tenantId)
+                .GroupBy(l => l.Tipo)
+                .Select(g => new
+                {
+                    Tipo = g.Key,
+                    Total = g.Sum(l => l.Valor)
+                })
                 .ToListAsync();
 
-            var totalDebitos = lancamentos
-                .Where(l => l.Tipo == TipoLancamentoContabil.Debito)
-                .Sum(l => l.Valor);
+            var totalDebitos = saldos
+                .Where(s => s.Tipo == TipoLancamentoContabil.Debito)
+                .Sum(s => s.Total);
 
-            var totalCreditos = lancamentos
-                .Where(l => l.Tipo == TipoLancamentoContabil.Credito)
-                .Sum(l => l.Valor);
+            var totalCreditos = saldos
+                .Where(s => s.Tipo == TipoLancamentoContabil.Credito)
+                .Sum(s => s.Total);
 
             // O saldo depende da natureza da conta, mas aqui retornamos a diferença
             // A lógica de saldo será tratada na camada de serviço
