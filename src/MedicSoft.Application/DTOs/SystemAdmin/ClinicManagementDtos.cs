@@ -224,4 +224,36 @@ namespace MedicSoft.Application.DTOs.SystemAdmin
     {
         public string NewPassword { get; set; } = string.Empty;
     }
+
+    /// <summary>
+    /// Transfer ownership request
+    /// </summary>
+    public class TransferOwnershipDto
+    {
+        public Guid CurrentOwnerId { get; set; }
+        public Guid NewOwnerId { get; set; }
+    }
+
+    /// <summary>
+    /// Export clinics request
+    /// </summary>
+    public class ExportClinicsDto
+    {
+        public List<Guid> ClinicIds { get; set; } = new();
+        public ExportFormat Format { get; set; } = ExportFormat.Csv;
+        public bool IncludeHealthScore { get; set; } = true;
+        public bool IncludeTags { get; set; } = true;
+        public bool IncludeUsageMetrics { get; set; } = false;
+    }
+
+    /// <summary>
+    /// Bulk action result
+    /// </summary>
+    public class BulkActionResultDto
+    {
+        public int SuccessCount { get; set; }
+        public int FailureCount { get; set; }
+        public List<string> Errors { get; set; } = new();
+        public string Message { get; set; } = string.Empty;
+    }
 }

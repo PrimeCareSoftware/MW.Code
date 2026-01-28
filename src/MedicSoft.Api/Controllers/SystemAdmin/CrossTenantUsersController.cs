@@ -96,5 +96,26 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
             return Ok(new { message = "User activation toggled successfully" });
         }
+
+        /// <summary>
+        /// Transfer ownership from one user to another within the same clinic
+        /// </summary>
+        [HttpPost("transfer-ownership")]
+        public async Task<ActionResult> TransferOwnership([FromBody] TransferOwnershipDto dto)
+        {
+            try
+            {
+                var success = await _userService.TransferOwnership(dto.CurrentOwnerId, dto.NewOwnerId);
+                
+                if (!success)
+                    return NotFound(new { message = "One or both users not found" });
+
+                return Ok(new { message = "Ownership transferred successfully" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

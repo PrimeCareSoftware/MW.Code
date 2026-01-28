@@ -15,6 +15,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
         Task<CrossTenantUserDto?> GetUserById(Guid userId);
         Task<bool> ResetPassword(Guid userId, string newPassword);
         Task<bool> ToggleUserActivation(Guid userId);
+        Task<bool> TransferOwnership(Guid currentOwnerId, Guid newOwnerId);
     }
 
     public class CrossTenantUserService : ICrossTenantUserService
@@ -228,6 +229,64 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     var activateMethod = user.GetType().GetMethod("Activate");
                     activateMethod?.Invoke(user, null);
                 }
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> TransferOwnership(Guid currentOwnerId, Guid newOwnerId)
+        {
+            // Get both users
+            var currentOwner = await _context.Users
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(u => u.Id == currentOwnerId);
+
+            var newOwner = await _context.Users
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(u => u.Id == newOwnerId);
+
+            if (currentOwner == null || newOwner == null)
+                return false;
+
+            // Ensure both users are from the same clinic
+            if (currentOwner.ClinicId != newOwner.ClinicId)
+                throw new ArgumentException("Users must be from the same clinic to transfer ownership");
+
+            // Ensure current owner has owner role
+            if (currentOwner.Role != "Owner" && currentOwner.Role != "ClinicOwner")
+                throw new ArgumentException("Current user is not an owner");
+
+            // Ensure new owner is active
+            if (!newOwner.IsActive)
+                throw new ArgumentException("New owner must be active");
+
+            // Transfer ownership
+            var previousRole = newOwner.Role;
+            newOwner.Role = "Owner";
+            currentOwner.Role = "Admin"; // Downgrade current owner to admin
+
+            // Create audit log entry if available
+            try
+            {
+                var auditEntry = new Domain.Entities.AuditLog
+                {
+                    Id = Guid.NewGuid(),
+                    TenantId = currentOwner.ClinicId?.ToString(),
+                    UserId = currentOwnerId.ToString(),
+                    Action = "OwnershipTransfer",
+                    EntityType = "User",
+                    EntityId = newOwnerId.ToString(),
+                    Changes = $"Transferred ownership from {currentOwner.Email} to {newOwner.Email}",
+                    Timestamp = DateTime.UtcNow,
+                    IpAddress = "system-admin"
+                };
+
+                _context.Set<Domain.Entities.AuditLog>().Add(auditEntry);
+            }
+            catch
+            {
+                // Audit log is optional, continue if it fails
             }
 
             await _context.SaveChangesAsync();

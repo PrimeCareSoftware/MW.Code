@@ -126,6 +126,70 @@
         </button>
       </div>
 
+      <!-- View Switcher and Bulk Actions -->
+      <div class="view-controls">
+        <div class="view-switcher">
+          <button 
+            class="view-btn" 
+            [class.active]="viewMode() === 'list'"
+            (click)="setViewMode('list')"
+            title="Vista de Lista"
+          >
+            📋 Lista
+          </button>
+          <button 
+            class="view-btn" 
+            [class.active]="viewMode() === 'cards'"
+            (click)="setViewMode('cards')"
+            title="Vista de Cards"
+          >
+            🎴 Cards
+          </button>
+          <button 
+            class="view-btn" 
+            [class.active]="viewMode() === 'map'"
+            (click)="setViewMode('map')"
+            title="Vista de Mapa"
+          >
+            🗺️ Mapa
+          </button>
+          <button 
+            class="view-btn" 
+            [class.active]="viewMode() === 'kanban'"
+            (click)="setViewMode('kanban')"
+            title="Vista Kanban"
+          >
+            📊 Kanban
+          </button>
+        </div>
+
+        @if (showBulkActions()) {
+          <div class="bulk-actions">
+            <span class="selection-count">{{ selectedClinicIds().length }} selecionado(s)</span>
+            <button class="btn-sm btn-success" (click)="bulkActivate()">✅ Ativar</button>
+            <button class="btn-sm btn-danger" (click)="bulkDeactivate()">🚫 Desativar</button>
+            <button class="btn-sm btn-secondary" (click)="bulkAddTag()">🏷️ Adicionar Tag</button>
+            <div class="export-dropdown">
+              <button class="btn-sm btn-primary" [disabled]="exportInProgress()">
+                @if (exportInProgress()) {
+                  ⏳ Exportando...
+                } @else {
+                  💾 Exportar
+                }
+              </button>
+              @if (!exportInProgress()) {
+                <div class="dropdown-menu">
+                  <button (click)="exportClinics('csv')">📄 CSV</button>
+                  <button (click)="exportClinics('excel')">📊 Excel</button>
+                  <button (click)="exportClinics('pdf')">📑 PDF</button>
+                </div>
+              }
+            </div>
+            <button class="btn-sm btn-secondary" (click)="clearSelection()">✕ Limpar</button>
+          </div>
+        }
+      </div>
+
       @if (loading()) {
         <div class="loading">Carregando clínicas...</div>
       } @else if (error()) {
@@ -134,70 +198,107 @@
           <button (click)="loadClinics()" class="btn-retry">Tentar novamente</button>
         </div>
       } @else {
-        <div class="table-container">
-          <table class="clinics-table">
-            <thead>
-              <tr>
-                <th>Clínica</th>
-                <th>CNPJ</th>
-                <th>Email</th>
-                <th>Telefone</th>
-                <th>Plano</th>
-                <th>Status Assinatura</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (clinic of paginatedClinics()?.clinics; track clinic.id) {
+        <!-- List View -->
+        @if (viewMode() === 'list') {
+          <div class="table-container">
+            <table class="clinics-table">
+              <thead>
                 <tr>
-                  <td>
-                    <div class="clinic-info">
-                      <div class="clinic-name">{{ clinic.name }}</div>
-                      <div class="clinic-date">Criada em {{ formatDate(clinic.createdAt) }}</div>
-                    </div>
-                  </td>
-                  <td>{{ clinic.document }}</td>
-                  <td>{{ clinic.email }}</td>
-                  <td>{{ clinic.phone }}</td>
-                  <td>
-                    <span class="badge badge-plan">{{ clinic.planName }}</span>
-                  </td>
-                  <td>
-                    <span class="badge" [class]="getStatusClass(clinic.subscriptionStatus)">
-                      {{ getStatusLabel(clinic.subscriptionStatus) }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="status-badge" [class.active]="clinic.isActive" [class.inactive]="!clinic.isActive">
-                      {{ clinic.isActive ? '✅ Ativa' : '🚫 Inativa' }}
-                    </span>
-                  </td>
-                  <td>
-                    <div class="actions">
-                      <button class="btn-icon" (click)="viewDetails(clinic.id)" title="Ver detalhes">
-                        👁️
-                      </button>
-                      <button 
-                        class="btn-icon" 
-                        [class.btn-danger]="clinic.isActive"
-                        [class.btn-success]="!clinic.isActive"
-                        (click)="toggleStatus(clinic.id, clinic.isActive)" 
-                        [title]="clinic.isActive ? 'Desativar' : 'Ativar'"
-                      >
-                        {{ clinic.isActive ? '🚫' : '✅' }}
-                      </button>
-                    </div>
-                  </td>
+                  <th>
+                    <input 
+                      type="checkbox" 
+                      [checked]="selectAllChecked()"
+                      (change)="toggleSelectAll()"
+                    />
+                  </th>
+                  <th>Clínica</th>
+                  <th>CNPJ</th>
+                  <th>Email</th>
+                  <th>Telefone</th>
+                  <th>Plano</th>
+                  <th>Status Assinatura</th>
+                  <th>Status</th>
+                  <th>Ações</th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (clinic of paginatedClinics()?.clinics; track clinic.id) {
+                  <tr>
+                    <td>
+                      <input 
+                        type="checkbox" 
+                        [checked]="isClinicSelected(clinic.id)"
+                        (change)="toggleClinicSelection(clinic.id)"
+                      />
+                    </td>
+                    <td>
+                      <div class="clinic-info">
+                        <div class="clinic-name">{{ clinic.name }}</div>
+                        <div class="clinic-date">Criada em {{ formatDate(clinic.createdAt) }}</div>
+                      </div>
+                    </td>
+                    <td>{{ clinic.document }}</td>
+                    <td>{{ clinic.email }}</td>
+                    <td>{{ clinic.phone }}</td>
+                    <td>
+                      <span class="badge badge-plan">{{ clinic.planName }}</span>
+                    </td>
+                    <td>
+                      <span class="badge" [class]="getStatusClass(clinic.subscriptionStatus)">
+                        {{ getStatusLabel(clinic.subscriptionStatus) }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="status-badge" [class.active]="clinic.isActive" [class.inactive]="!clinic.isActive">
+                        {{ clinic.isActive ? '✅ Ativa' : '🚫 Inativa' }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="actions">
+                        <button class="btn-icon" (click)="viewDetails(clinic.id)" title="Ver detalhes">
+                          👁️
+                        </button>
+                        <button 
+                          class="btn-icon" 
+                          [class.btn-danger]="clinic.isActive"
+                          [class.btn-success]="!clinic.isActive"
+                          (click)="toggleStatus(clinic.id, clinic.isActive)" 
+                          [title]="clinic.isActive ? 'Desativar' : 'Ativar'"
+                        >
+                          {{ clinic.isActive ? '🚫' : '✅' }}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
 
-          @if (paginatedClinics() && paginatedClinics()!.clinics.length === 0) {
-            <div class="empty-state">
-              <p>Nenhuma clínica encontrada</p>
-            </div>
+            @if (paginatedClinics() && paginatedClinics()!.clinics.length === 0) {
+              <div class="empty-state">
+                <p>Nenhuma clínica encontrada</p>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Cards View -->
+        @if (viewMode() === 'cards') {
+          <app-clinics-cards [clinics]="paginatedClinics()?.clinics || []"></app-clinics-cards>
+        }
+
+        <!-- Map View -->
+        @if (viewMode() === 'map') {
+          <app-clinics-map [clinics]="paginatedClinics()?.clinics || []"></app-clinics-map>
+        }
+
+        <!-- Kanban View -->
+        @if (viewMode() === 'kanban') {
+          <app-clinics-kanban [clinics]="paginatedClinics()?.clinics || []"></app-clinics-kanban>
+        }
+
+        <!-- Pagination -->
+        @if (paginatedClinics() && paginatedClinics()!.totalPages > 1) {
           }
         </div>
 

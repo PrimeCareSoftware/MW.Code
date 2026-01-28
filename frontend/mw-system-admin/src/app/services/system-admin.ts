@@ -416,4 +416,36 @@ export class SystemAdminService {
       {}
     );
   }
+
+  /**
+   * Transfer ownership between users
+   */
+  transferOwnership(currentOwnerId: string, newOwnerId: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/users/transfer-ownership`,
+      { currentOwnerId, newOwnerId }
+    );
+  }
+
+  /**
+   * Execute bulk action on multiple clinics
+   */
+  bulkAction(request: BulkActionRequest): Observable<{ successCount: number; failureCount: number; errors: string[]; message: string }> {
+    return this.http.post<{ successCount: number; failureCount: number; errors: string[]; message: string }>(
+      `${this.apiUrl}/clinic-management/bulk-action`,
+      request
+    );
+  }
+
+  /**
+   * Export clinics to CSV, Excel, or PDF
+   */
+  exportClinics(request: { clinicIds: string[]; format: string; includeHealthScore: boolean; includeTags: boolean; includeUsageMetrics: boolean }): Observable<Blob> {
+    return this.http.post(
+      `${this.apiUrl}/clinic-management/export`,
+      request,
+      { responseType: 'blob' }
+    );
+  }
 }
+
