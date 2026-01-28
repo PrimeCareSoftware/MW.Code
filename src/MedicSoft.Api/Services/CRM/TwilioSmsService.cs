@@ -37,6 +37,12 @@ namespace MedicSoft.Api.Services.CRM
                 return;
             }
 
+            // Validate input parameters
+            if (string.IsNullOrWhiteSpace(to))
+                throw new ArgumentException("Phone number (to) cannot be null or empty", nameof(to));
+            if (string.IsNullOrWhiteSpace(message))
+                throw new ArgumentException("SMS message cannot be null or empty", nameof(message));
+
             if (string.IsNullOrEmpty(_config.AccountSid) || string.IsNullOrEmpty(_config.AuthToken))
             {
                 _logger.LogWarning("Twilio credentials not configured. Cannot send SMS to {To}", to);
@@ -76,19 +82,26 @@ namespace MedicSoft.Api.Services.CRM
             // Remove common formatting characters
             var cleaned = new string(phoneNumber.Where(char.IsDigit).ToArray());
 
-            // If the number doesn't start with +, add Brazil country code (+55) as default
-            if (!phoneNumber.StartsWith("+"))
+            // If the original number starts with +, return it cleaned with + prefix
+            if (phoneNumber.StartsWith("+"))
             {
-                // If it's a Brazilian number (10 or 11 digits), add +55
-                if (cleaned.Length == 10 || cleaned.Length == 11)
-                {
-                    return $"+55{cleaned}";
-                }
-                // Otherwise, assume it needs + prefix
                 return $"+{cleaned}";
             }
 
-            return phoneNumber;
+            // If cleaned number already has country code (starts with 55 and has 12-13 digits)
+            if (cleaned.StartsWith("55") && (cleaned.Length == 12 || cleaned.Length == 13))
+            {
+                return $"+{cleaned}";
+            }
+
+            // If it's a Brazilian number (10 or 11 digits), add +55
+            if (cleaned.Length == 10 || cleaned.Length == 11)
+            {
+                return $"+55{cleaned}";
+            }
+
+            // For other cases, assume it needs + prefix
+            return $"+{cleaned}";
         }
     }
 }

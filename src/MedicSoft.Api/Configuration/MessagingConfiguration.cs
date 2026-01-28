@@ -48,7 +48,7 @@ namespace MedicSoft.Api.Configuration
         /// <summary>
         /// Enable/disable email sending (useful for development)
         /// </summary>
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
     }
 
     public class SmsConfiguration
@@ -71,7 +71,7 @@ namespace MedicSoft.Api.Configuration
         /// <summary>
         /// Enable/disable SMS sending (useful for development)
         /// </summary>
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
     }
 
     public class WhatsAppConfiguration
@@ -94,6 +94,6 @@ namespace MedicSoft.Api.Configuration
         /// <summary>
         /// Enable/disable WhatsApp sending (useful for development)
         /// </summary>
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
     }
 }

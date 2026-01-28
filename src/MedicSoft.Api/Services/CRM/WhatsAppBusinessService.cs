@@ -40,6 +40,12 @@ namespace MedicSoft.Api.Services.CRM
                 return;
             }
 
+            // Validate input parameters
+            if (string.IsNullOrWhiteSpace(to))
+                throw new ArgumentException("Phone number (to) cannot be null or empty", nameof(to));
+            if (string.IsNullOrWhiteSpace(message))
+                throw new ArgumentException("WhatsApp message cannot be null or empty", nameof(message));
+
             if (string.IsNullOrEmpty(_config.ApiUrl) || string.IsNullOrEmpty(_config.AccessToken) || string.IsNullOrEmpty(_config.PhoneNumberId))
             {
                 _logger.LogWarning("WhatsApp Business API not configured. Cannot send message to {To}", to);

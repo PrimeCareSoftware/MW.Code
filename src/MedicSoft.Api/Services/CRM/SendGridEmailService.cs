@@ -33,6 +33,14 @@ namespace MedicSoft.Api.Services.CRM
                 return;
             }
 
+            // Validate input parameters
+            if (string.IsNullOrWhiteSpace(to))
+                throw new ArgumentException("Email recipient (to) cannot be null or empty", nameof(to));
+            if (string.IsNullOrWhiteSpace(subject))
+                throw new ArgumentException("Email subject cannot be null or empty", nameof(subject));
+            if (string.IsNullOrWhiteSpace(body))
+                throw new ArgumentException("Email body cannot be null or empty", nameof(body));
+
             try
             {
                 var from = new EmailAddress(_config.FromEmail, _config.FromName);
@@ -137,7 +145,10 @@ namespace MedicSoft.Api.Services.CRM
                 content += "<ul>";
                 foreach (var kvp in variables)
                 {
-                    content += $"<li><strong>{kvp.Key}:</strong> {kvp.Value}</li>";
+                    // HTML encode values to prevent XSS
+                    var encodedKey = System.Net.WebUtility.HtmlEncode(kvp.Key);
+                    var encodedValue = System.Net.WebUtility.HtmlEncode(kvp.Value);
+                    content += $"<li><strong>{encodedKey}:</strong> {encodedValue}</li>";
                 }
                 content += "</ul>";
             }
