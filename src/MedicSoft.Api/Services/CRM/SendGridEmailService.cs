@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using MedicSoft.Api.Configuration;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Interfaces;
+using Polly;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Text.RegularExpressions;
@@ -11,6 +12,7 @@ namespace MedicSoft.Api.Services.CRM
 {
     /// <summary>
     /// SendGrid implementation of IEmailService for production use
+    /// Includes retry logic with exponential backoff for resilience
     /// </summary>
     public class SendGridEmailService : IEmailService
     {
@@ -18,6 +20,7 @@ namespace MedicSoft.Api.Services.CRM
         private readonly EmailConfiguration _config;
         private readonly ISendGridClient _sendGridClient;
         private readonly IEmailTemplateRepository _templateRepository;
+        private readonly ResiliencePipeline _retryPolicy;
 
         public SendGridEmailService(
             ILogger<SendGridEmailService> logger,
@@ -28,6 +31,7 @@ namespace MedicSoft.Api.Services.CRM
             _config = messagingConfig.Value.Email;
             _sendGridClient = new SendGridClient(_config.ApiKey);
             _templateRepository = templateRepository;
+            _retryPolicy = ResiliencePolicies.CreateGenericRetryPolicy();
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
@@ -46,39 +50,55 @@ namespace MedicSoft.Api.Services.CRM
             if (string.IsNullOrWhiteSpace(body))
                 throw new ArgumentException("Email body cannot be null or empty", nameof(body));
 
-            try
+            await _retryPolicy.ExecuteAsync(async cancellationToken =>
             {
-                var from = new EmailAddress(_config.FromEmail, _config.FromName);
-                var toAddress = new EmailAddress(to);
-                var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, body, body);
-
-                if (_config.UseSandbox)
+                try
                 {
-                    msg.MailSettings = new MailSettings
+                    var from = new EmailAddress(_config.FromEmail, _config.FromName);
+                    var toAddress = new EmailAddress(to);
+                    var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, body, body);
+
+                    if (_config.UseSandbox)
                     {
-                        SandboxMode = new SandboxMode { Enable = true }
-                    };
-                }
+                        msg.MailSettings = new MailSettings
+                        {
+                            SandboxMode = new SandboxMode { Enable = true }
+                        };
+                    }
 
-                var response = await _sendGridClient.SendEmailAsync(msg);
+                    var response = await _sendGridClient.SendEmailAsync(msg);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    _logger.LogInformation("Email sent successfully to {To} with subject: {Subject}", to, subject);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        _logger.LogInformation("Email sent successfully to {To} with subject: {Subject}", to, subject);
+                    }
+                    else
+                    {
+                        var errorBody = await response.Body.ReadAsStringAsync();
+                        _logger.LogError("Failed to send email to {To}. Status: {StatusCode}, Error: {Error}", 
+                            to, response.StatusCode, errorBody);
+                        
+                        // Throw exception for retry if it's a transient error (5xx or rate limit)
+                        var statusCode = (int)response.StatusCode;
+                        if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                        {
+                            throw new Exception($"Transient error sending email. Status: {response.StatusCode}. Will retry.");
+                        }
+                        
+                        throw new Exception($"Failed to send email. Status: {response.StatusCode}");
+                    }
                 }
-                else
+                catch (Exception ex) when (ex.Message.Contains("Will retry"))
                 {
-                    var errorBody = await response.Body.ReadAsStringAsync();
-                    _logger.LogError("Failed to send email to {To}. Status: {StatusCode}, Error: {Error}", 
-                        to, response.StatusCode, errorBody);
-                    throw new Exception($"Failed to send email. Status: {response.StatusCode}");
+                    _logger.LogWarning("Transient error sending email to {To}. Retrying... Error: {Error}", to, ex.Message);
+                    throw; // Let Polly retry
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error sending email to {To} with subject: {Subject}", to, subject);
-                throw;
-            }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error sending email to {To} with subject: {Subject}", to, subject);
+                    throw;
+                }
+            }, CancellationToken.None);
         }
 
         public async Task SendEmailWithTemplateAsync(string to, Guid templateId, Dictionary<string, string> variables, string? tenantId = null)
@@ -89,52 +109,68 @@ namespace MedicSoft.Api.Services.CRM
                 return;
             }
 
-            try
+            await _retryPolicy.ExecuteAsync(async cancellationToken =>
             {
-                var from = new EmailAddress(_config.FromEmail, _config.FromName);
-                var toAddress = new EmailAddress(to);
-
-                // Build template content with variables (loads from database if tenantId provided)
-                var (subject, templateContent) = await BuildTemplateContent(templateId, variables, tenantId);
-
-                // For now, use a simple template approach
-                // In production, this should integrate with SendGrid Dynamic Templates
-                var msg = new SendGridMessage
+                try
                 {
-                    From = from,
-                    Subject = subject
-                };
-                
-                msg.AddTo(toAddress);
-                msg.AddContent(MimeType.Html, templateContent);
+                    var from = new EmailAddress(_config.FromEmail, _config.FromName);
+                    var toAddress = new EmailAddress(to);
 
-                if (_config.UseSandbox)
-                {
-                    msg.MailSettings = new MailSettings
+                    // Build template content with variables (loads from database if tenantId provided)
+                    var (subject, templateContent) = await BuildTemplateContent(templateId, variables, tenantId);
+
+                    // For now, use a simple template approach
+                    // In production, this should integrate with SendGrid Dynamic Templates
+                    var msg = new SendGridMessage
                     {
-                        SandboxMode = new SandboxMode { Enable = true }
+                        From = from,
+                        Subject = subject
                     };
-                }
+                    
+                    msg.AddTo(toAddress);
+                    msg.AddContent(MimeType.Html, templateContent);
 
-                var response = await _sendGridClient.SendEmailAsync(msg);
+                    if (_config.UseSandbox)
+                    {
+                        msg.MailSettings = new MailSettings
+                        {
+                            SandboxMode = new SandboxMode { Enable = true }
+                        };
+                    }
 
-                if (response.IsSuccessStatusCode)
-                {
-                    _logger.LogInformation("Template email {TemplateId} sent successfully to {To}", templateId, to);
+                    var response = await _sendGridClient.SendEmailAsync(msg);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        _logger.LogInformation("Template email {TemplateId} sent successfully to {To}", templateId, to);
+                    }
+                    else
+                    {
+                        var errorBody = await response.Body.ReadAsStringAsync();
+                        _logger.LogError("Failed to send template email {TemplateId} to {To}. Status: {StatusCode}, Error: {Error}", 
+                            templateId, to, response.StatusCode, errorBody);
+                        
+                        // Throw exception for retry if it's a transient error
+                        var statusCode = (int)response.StatusCode;
+                        if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                        {
+                            throw new Exception($"Transient error sending template email. Status: {response.StatusCode}. Will retry.");
+                        }
+                        
+                        throw new Exception($"Failed to send template email. Status: {response.StatusCode}");
+                    }
                 }
-                else
+                catch (Exception ex) when (ex.Message.Contains("Will retry"))
                 {
-                    var errorBody = await response.Body.ReadAsStringAsync();
-                    _logger.LogError("Failed to send template email {TemplateId} to {To}. Status: {StatusCode}, Error: {Error}", 
-                        templateId, to, response.StatusCode, errorBody);
-                    throw new Exception($"Failed to send template email. Status: {response.StatusCode}");
+                    _logger.LogWarning("Transient error sending template email {TemplateId} to {To}. Retrying... Error: {Error}", templateId, to, ex.Message);
+                    throw; // Let Polly retry
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error sending template email {TemplateId} to {To}", templateId, to);
-                throw;
-            }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error sending template email {TemplateId} to {To}", templateId, to);
+                    throw;
+                }
+            }, CancellationToken.None);
         }
 
         private async Task<(string subject, string content)> BuildTemplateContent(Guid templateId, Dictionary<string, string> variables, string? tenantId)

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MedicSoft.Api.Configuration;
 using MedicSoft.Application.Services.CRM;
+using Polly;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -10,12 +11,14 @@ namespace MedicSoft.Api.Services.CRM
 {
     /// <summary>
     /// WhatsApp Business API implementation of IWhatsAppService for production use
+    /// Includes retry logic with exponential backoff for resilience
     /// </summary>
     public class WhatsAppBusinessService : IWhatsAppService
     {
         private readonly ILogger<WhatsAppBusinessService> _logger;
         private readonly WhatsAppConfiguration _config;
         private readonly HttpClient _httpClient;
+        private readonly ResiliencePipeline _retryPolicy;
 
         public WhatsAppBusinessService(
             ILogger<WhatsAppBusinessService> logger,
@@ -25,6 +28,7 @@ namespace MedicSoft.Api.Services.CRM
             _logger = logger;
             _config = messagingConfig.Value.WhatsApp;
             _httpClient = httpClientFactory.CreateClient();
+            _retryPolicy = ResiliencePolicies.CreateGenericRetryPolicy();
 
             if (_config.Enabled && !string.IsNullOrEmpty(_config.AccessToken))
             {
@@ -52,46 +56,62 @@ namespace MedicSoft.Api.Services.CRM
                 throw new InvalidOperationException("WhatsApp Business API not configured");
             }
 
-            try
+            await _retryPolicy.ExecuteAsync(async cancellationToken =>
             {
-                // Format phone number (remove non-digits and ensure it has country code)
-                var formattedTo = FormatPhoneNumber(to);
-
-                // Build WhatsApp API request
-                var requestUrl = $"{_config.ApiUrl}/{_config.PhoneNumberId}/messages";
-                var requestBody = new
+                try
                 {
-                    messaging_product = "whatsapp",
-                    to = formattedTo,
-                    type = "text",
-                    text = new
+                    // Format phone number (remove non-digits and ensure it has country code)
+                    var formattedTo = FormatPhoneNumber(to);
+
+                    // Build WhatsApp API request
+                    var requestUrl = $"{_config.ApiUrl}/{_config.PhoneNumberId}/messages";
+                    var requestBody = new
                     {
-                        body = message
+                        messaging_product = "whatsapp",
+                        to = formattedTo,
+                        type = "text",
+                        text = new
+                        {
+                            body = message
+                        }
+                    };
+
+                    var jsonContent = JsonSerializer.Serialize(requestBody);
+                    var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                    var response = await _httpClient.PostAsync(requestUrl, httpContent);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        _logger.LogInformation("WhatsApp message sent successfully to {To}", to);
                     }
-                };
-
-                var jsonContent = JsonSerializer.Serialize(requestBody);
-                var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync(requestUrl, httpContent);
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    _logger.LogInformation("WhatsApp message sent successfully to {To}", to);
+                    else
+                    {
+                        _logger.LogError("Failed to send WhatsApp message to {To}. Status: {StatusCode}, Response: {Response}", 
+                            to, response.StatusCode, responseContent);
+                        
+                        // Retry on transient errors (5xx, rate limit)
+                        var statusCode = (int)response.StatusCode;
+                        if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                        {
+                            throw new Exception($"Transient error sending WhatsApp message. Status: {response.StatusCode}. Will retry.");
+                        }
+                        
+                        throw new Exception($"Failed to send WhatsApp message. Status: {response.StatusCode}");
+                    }
                 }
-                else
+                catch (Exception ex) when (ex.Message.Contains("Will retry"))
                 {
-                    _logger.LogError("Failed to send WhatsApp message to {To}. Status: {StatusCode}, Response: {Response}", 
-                        to, response.StatusCode, responseContent);
-                    throw new Exception($"Failed to send WhatsApp message. Status: {response.StatusCode}");
+                    _logger.LogWarning("Transient error sending WhatsApp message to {To}. Retrying... Error: {Error}", to, ex.Message);
+                    throw; // Let Polly retry
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error sending WhatsApp message to {To}", to);
-                throw;
-            }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error sending WhatsApp message to {To}", to);
+                    throw;
+                }
+            }, CancellationToken.None);
         }
 
         private string FormatPhoneNumber(string phoneNumber)
