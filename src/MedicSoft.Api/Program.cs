@@ -400,6 +400,10 @@ builder.Services.AddScoped<IApuracaoImpostosService, MedicSoft.Application.Servi
 builder.Services.AddScoped<IDREService, MedicSoft.Application.Services.Fiscal.DREService>();
 builder.Services.AddScoped<IBalancoPatrimonialService, MedicSoft.Application.Services.Fiscal.BalancoPatrimonialService>();
 
+// Fiscal Management Services - Phase 6 (SPED)
+builder.Services.AddScoped<ISPEDFiscalService, MedicSoft.Application.Services.Fiscal.SPEDFiscalService>();
+builder.Services.AddScoped<ISPEDContabilService, MedicSoft.Application.Services.Fiscal.SPEDContabilService>();
+
 // Payment Flow Orchestration Service
 builder.Services.AddScoped<IPaymentFlowService, PaymentFlowService>();
 
