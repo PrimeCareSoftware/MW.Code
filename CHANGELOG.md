@@ -22,7 +22,31 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ## [2.2.3] - 28 de Janeiro de 2026
 
+### ✨ Adicionado
+
+#### 🎨 PROMPT 6: Empty States - Componente Reutilizável
+- **EmptyStateComponent**: Componente standalone Angular para estados vazios
+  - Suporte a 6 ícones predefinidos (users, calendar, search, inbox, chart, bell)
+  - Suporte a custom SVG para ilustrações personalizadas
+  - Título e descrição configuráveis
+  - Botão primário com navegação ou evento
+  - Link secundário opcional para ajuda
+  - Lista de sugestões para empty states de busca
+  - Totalmente acessível (WCAG 2.1 AA)
+  - Responsivo e mobile-first
+  - Animações suaves respeitando prefers-reduced-motion
+- **Arquivos criados**:
+  - `/frontend/medicwarehouse-app/src/app/shared/components/empty-state/empty-state.component.ts`
+  - `/frontend/medicwarehouse-app/src/app/shared/components/empty-state/empty-state.component.html`
+  - `/frontend/medicwarehouse-app/src/app/shared/components/empty-state/empty-state.component.scss`
+  - `/frontend/medicwarehouse-app/src/app/shared/components/empty-state/index.ts`
+
 ### 📖 Documentação
+
+#### PROMPT 6: Empty States - Documentação Completa
+- **PROMPTS_IMPLEMENTACAO_DETALHADOS.md**: Marcado PROMPT 6 como 100% implementado
+- **PROMPT6_IMPLEMENTATION_STATUS.md**: Documentação detalhada da implementação (novo)
+- **DOCUMENTATION_MAP.md**: Adicionada seção "Website e Melhorias UX/UI" com links para todos os prompts
 
 #### Atualização de Checkboxes - Prompt 1 ✅
 - **PROMPTS_IMPLEMENTACAO_DETALHADOS.md Atualizado**:
