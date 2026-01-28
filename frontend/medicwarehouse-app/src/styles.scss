@@ -984,6 +984,18 @@ img {
   h3 { font-size: var(--font-size-xl); }
 }
 
+/* Respect user's motion preferences (WCAG 2.1 - Accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Layout adjustments for sidebar - Only apply to authenticated/dashboard pages */
 body.has-navbar {
   padding-top: var(--navbar-height);
@@ -1005,30 +1017,37 @@ body.has-navbar {
  * ============================================ */
 
 /* Card Hover Elevation */
-.card, .mat-card {
-  &:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-  }
+.card:not(.no-hover):hover, 
+.mat-card:not(.no-hover):hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 /* Input Focus & Validation Feedback */
-input, textarea, select, .mat-form-field {
+input:not([type="checkbox"]):not([type="radio"]), 
+textarea, 
+select, 
+.mat-form-field {
   transition: all var(--transition-base);
   
   &:focus, &.mat-focused {
     transform: scale(1.01);
     box-shadow: 0 0 0 3px var(--primary-color-alpha);
   }
-  
-  &.ng-invalid.ng-touched, &.error {
-    animation: shake 0.3s ease-in-out;
-    border-color: var(--error-500) !important;
-  }
-  
-  &.ng-valid.ng-touched, &.success {
-    border-color: var(--success-500) !important;
-  }
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+.mat-form-field.mat-form-field-invalid.mat-form-field-touched {
+  animation: shake 0.3s ease-in-out;
+  border-color: var(--error-500);
+}
+
+input.ng-valid.ng-touched:not([type="checkbox"]):not([type="radio"]),
+textarea.ng-valid.ng-touched,
+select.ng-valid.ng-touched {
+  border-color: var(--success-500);
 }
 
 @keyframes shake {
@@ -1076,7 +1095,7 @@ input, textarea, select, .mat-form-field {
   }
   to {
     opacity: 1;
-    max-height: 500px;
+    max-height: 2000px; /* Large enough for most content */
     transform: translateY(0);
   }
 }
@@ -1154,6 +1173,9 @@ input, textarea, select, .mat-form-field {
  * LOADING STATES - SKELETON VARIANTS
  * ============================================ */
 
+/* Note: Base .skeleton class with shimmer animation is defined at line 486 
+   These variants use that base class plus additional structure */
+
 /* Patient List Skeleton */
 .skeleton-patient-list {
   .skeleton-patient-item {
@@ -1223,8 +1245,16 @@ input, textarea, select, .mat-form-field {
     gap: var(--spacing-2);
     
     .skeleton-day {
-      aspect-ratio: 1;
+      /* Fallback for older browsers */
+      padding-top: 100%;
+      position: relative;
       border-radius: var(--radius-md);
+      
+      /* Modern browsers */
+      @supports (aspect-ratio: 1) {
+        padding-top: 0;
+        aspect-ratio: 1;
+      }
     }
   }
 }
@@ -1424,6 +1454,9 @@ input, textarea, select, .mat-form-field {
   margin-top: var(--spacing-1);
   animation: slideIn 0.2s ease-out;
   
+  /* Note: Using emoji for quick implementation. 
+     For production, prefer Material Icons:
+     <mat-icon class="error-icon">error</mat-icon> */
   &::before {
     content: '⚠️';
     font-size: var(--font-size-sm);

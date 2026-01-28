@@ -265,8 +265,8 @@ export class PatientListComponent implements OnInit {
 
   deletePatient(patient: Patient) {
     // Confirm and delete
-    if (confirm(\`Deseja realmente excluir \${patient.name}?\`)) {
-      this.showSuccess(\`\${patient.name} foi removido\`);
+    if (confirm(`Deseja realmente excluir ${patient.name}?`)) {
+      this.showSuccess(`${patient.name} foi removido`);
       // Actually delete from array/API
     }
   }
