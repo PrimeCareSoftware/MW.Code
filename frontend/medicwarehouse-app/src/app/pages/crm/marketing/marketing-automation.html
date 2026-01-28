@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">Automação de Marketing</h1>
+      <p class="page-description">Gerencie campanhas de marketing e automações</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Nova Campanha
+      </button>
+    </div>
+  </div>
+
+  <div class="page-content">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando campanhas...</p>
+      </div>
+    } @else if (campaigns().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <h3>Nenhuma campanha encontrada</h3>
+        <p>As campanhas de marketing aparecerão aqui.</p>
+        <p class="text-muted">Sistema CRM implementado e pronto para uso.</p>
+      </div>
+    } @else {
+      <div class="campaign-list">
+        <!-- Campaign items will be displayed here -->
+      </div>
+    }
+  </div>
+</div>

@@ -138,6 +138,31 @@ namespace MedicSoft.Domain.Common
         public const string CompanyView = "company.view";
         public const string CompanyEdit = "company.edit";
 
+        // CRM - Complaints
+        public const string ComplaintsView = "complaints.view";
+        public const string ComplaintsCreate = "complaints.create";
+        public const string ComplaintsEdit = "complaints.edit";
+        public const string ComplaintsDelete = "complaints.delete";
+        public const string ComplaintsManage = "complaints.manage";
+
+        // CRM - Surveys
+        public const string SurveysView = "surveys.view";
+        public const string SurveysCreate = "surveys.create";
+        public const string SurveysEdit = "surveys.edit";
+        public const string SurveysDelete = "surveys.delete";
+        public const string SurveysManage = "surveys.manage";
+
+        // CRM - Patient Journey
+        public const string PatientJourneyView = "patient-journey.view";
+        public const string PatientJourneyManage = "patient-journey.manage";
+
+        // CRM - Marketing Automation
+        public const string MarketingAutomationView = "marketing-automation.view";
+        public const string MarketingAutomationCreate = "marketing-automation.create";
+        public const string MarketingAutomationEdit = "marketing-automation.edit";
+        public const string MarketingAutomationDelete = "marketing-automation.delete";
+        public const string MarketingAutomationManage = "marketing-automation.manage";
+
         /// <summary>
         /// Gets all available permissions grouped by category
         /// </summary>
@@ -355,6 +380,43 @@ namespace MedicSoft.Domain.Common
                     {
                         new(CompanyView, "Visualizar informações da empresa"),
                         new(CompanyEdit, "Editar informações da empresa")
+                    }
+                },
+                {
+                    "CRM - Reclamações", new List<PermissionInfo>
+                    {
+                        new(ComplaintsView, "Visualizar reclamações"),
+                        new(ComplaintsCreate, "Criar reclamações"),
+                        new(ComplaintsEdit, "Editar reclamações"),
+                        new(ComplaintsDelete, "Excluir reclamações"),
+                        new(ComplaintsManage, "Gerenciar reclamações")
+                    }
+                },
+                {
+                    "CRM - Pesquisas de Satisfação", new List<PermissionInfo>
+                    {
+                        new(SurveysView, "Visualizar pesquisas"),
+                        new(SurveysCreate, "Criar pesquisas"),
+                        new(SurveysEdit, "Editar pesquisas"),
+                        new(SurveysDelete, "Excluir pesquisas"),
+                        new(SurveysManage, "Gerenciar pesquisas")
+                    }
+                },
+                {
+                    "CRM - Jornada do Paciente", new List<PermissionInfo>
+                    {
+                        new(PatientJourneyView, "Visualizar jornada do paciente"),
+                        new(PatientJourneyManage, "Gerenciar jornada do paciente")
+                    }
+                },
+                {
+                    "CRM - Automação de Marketing", new List<PermissionInfo>
+                    {
+                        new(MarketingAutomationView, "Visualizar campanhas de marketing"),
+                        new(MarketingAutomationCreate, "Criar campanhas de marketing"),
+                        new(MarketingAutomationEdit, "Editar campanhas de marketing"),
+                        new(MarketingAutomationDelete, "Excluir campanhas de marketing"),
+                        new(MarketingAutomationManage, "Gerenciar automação de marketing")
                     }
                 }
             };
