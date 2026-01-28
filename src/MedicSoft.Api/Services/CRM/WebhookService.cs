@@ -422,11 +422,11 @@ namespace MedicSoft.Api.Services.CRM
                 TotalDeliveries = subscription.TotalDeliveries,
                 SuccessfulDeliveries = subscription.SuccessfulDeliveries,
                 FailedDeliveries = subscription.FailedDeliveries,
-                LastDeliveryAt = subscription.LastDeliveryAt,
+        LastDeliveryAt = subscription.LastDeliveryAt,
                 LastSuccessAt = subscription.LastSuccessAt,
                 LastFailureAt = subscription.LastFailureAt,
                 CreatedAt = subscription.CreatedAt,
-                UpdatedAt = subscription.UpdatedAt
+                UpdatedAt = subscription.UpdatedAt ?? subscription.CreatedAt
             };
         }
 

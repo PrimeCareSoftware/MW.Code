@@ -70,7 +70,7 @@ namespace MedicSoft.Api.Controllers.CRM
         {
             try
             {
-                var subscription = await _webhookService.CreateSubscriptionAsync(dto, TenantId);
+                var subscription = await _webhookService.CreateSubscriptionAsync(dto, GetTenantId());
                 _logger.LogInformation("Created webhook subscription {Id}", subscription.Id);
                 return CreatedAtAction(nameof(GetSubscription), new { id = subscription.Id }, subscription);
             }
@@ -89,7 +89,7 @@ namespace MedicSoft.Api.Controllers.CRM
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSubscription(Guid id)
         {
-            var subscription = await _webhookService.GetSubscriptionAsync(id, TenantId);
+            var subscription = await _webhookService.GetSubscriptionAsync(id, GetTenantId());
             if (subscription == null)
                 return NotFound();
 
@@ -103,7 +103,7 @@ namespace MedicSoft.Api.Controllers.CRM
         [ProducesResponseType(typeof(List<WebhookSubscriptionDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSubscriptions()
         {
-            var subscriptions = await _webhookService.GetAllSubscriptionsAsync(TenantId);
+            var subscriptions = await _webhookService.GetAllSubscriptionsAsync(GetTenantId());
             return Ok(subscriptions);
         }
 
@@ -121,7 +121,7 @@ namespace MedicSoft.Api.Controllers.CRM
         {
             try
             {
-                var subscription = await _webhookService.UpdateSubscriptionAsync(id, dto, TenantId);
+                var subscription = await _webhookService.UpdateSubscriptionAsync(id, dto, GetTenantId());
                 _logger.LogInformation("Updated webhook subscription {Id}", id);
                 return Ok(subscription);
             }
@@ -146,7 +146,7 @@ namespace MedicSoft.Api.Controllers.CRM
         {
             try
             {
-                await _webhookService.DeleteSubscriptionAsync(id, TenantId);
+                await _webhookService.DeleteSubscriptionAsync(id, GetTenantId());
                 _logger.LogInformation("Deleted webhook subscription {Id}", id);
                 return NoContent();
             }
@@ -169,7 +169,7 @@ namespace MedicSoft.Api.Controllers.CRM
         {
             try
             {
-                var subscription = await _webhookService.ActivateSubscriptionAsync(id, TenantId);
+                var subscription = await _webhookService.ActivateSubscriptionAsync(id, GetTenantId());
                 _logger.LogInformation("Activated webhook subscription {Id}", id);
                 return Ok(subscription);
             }
@@ -192,7 +192,7 @@ namespace MedicSoft.Api.Controllers.CRM
         {
             try
             {
-                var subscription = await _webhookService.DeactivateSubscriptionAsync(id, TenantId);
+                var subscription = await _webhookService.DeactivateSubscriptionAsync(id, GetTenantId());
                 _logger.LogInformation("Deactivated webhook subscription {Id}", id);
                 return Ok(subscription);
             }
@@ -216,7 +216,7 @@ namespace MedicSoft.Api.Controllers.CRM
         {
             try
             {
-                var subscription = await _webhookService.RegenerateSecretAsync(id, TenantId);
+                var subscription = await _webhookService.RegenerateSecretAsync(id, GetTenantId());
                 _logger.LogInformation("Regenerated secret for webhook subscription {Id}", id);
                 return Ok(subscription);
             }
@@ -236,7 +236,7 @@ namespace MedicSoft.Api.Controllers.CRM
         [ProducesResponseType(typeof(List<WebhookDeliveryDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDeliveries(Guid subscriptionId, [FromQuery] int limit = 50)
         {
-            var deliveries = await _webhookService.GetDeliveriesAsync(subscriptionId, TenantId, limit);
+            var deliveries = await _webhookService.GetDeliveriesAsync(subscriptionId, GetTenantId(), limit);
             return Ok(deliveries);
         }
 
@@ -248,7 +248,7 @@ namespace MedicSoft.Api.Controllers.CRM
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDelivery(Guid id)
         {
-            var delivery = await _webhookService.GetDeliveryAsync(id, TenantId);
+            var delivery = await _webhookService.GetDeliveryAsync(id, GetTenantId());
             if (delivery == null)
                 return NotFound();
 
@@ -269,7 +269,7 @@ namespace MedicSoft.Api.Controllers.CRM
         {
             try
             {
-                await _webhookService.RetryFailedDeliveryAsync(id, TenantId);
+                await _webhookService.RetryFailedDeliveryAsync(id, GetTenantId());
                 _logger.LogInformation("Retried webhook delivery {Id}", id);
                 return Ok(new { message = "Delivery retry initiated" });
             }
