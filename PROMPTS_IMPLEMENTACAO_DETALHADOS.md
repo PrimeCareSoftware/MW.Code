@@ -1,8 +1,8 @@
 # Prompts Detalhados para Implementação - MedicWarehouse Website
 
 > **Data de Criação:** 28 de Janeiro de 2026  
-> **Última Atualização:** 28 de Janeiro de 2026 (PROMPT 3 implementado - Design System completo)  
-> **Versão:** 1.2  
+> **Última Atualização:** 28 de Janeiro de 2026 (PROMPTs 4, 7, 8 implementados - Estrutura base)  
+> **Versão:** 1.3  
 > **Uso:** Copiar e colar cada prompt no GitHub Copilot ou agente de IA
 
 ## 📋 Índice de Prompts
@@ -10,13 +10,13 @@
 1. [PROMPT 1: Redesign da Homepage](#prompt-1) ✅ **IMPLEMENTADO - 100%**
 2. [PROMPT 2: Vídeo Demonstrativo](#prompt-2) 🚧 **EM IMPLEMENTAÇÃO - 80%**
 3. [PROMPT 3: Design System Atualização](#prompt-3) ✅ **IMPLEMENTADO - 100%**
-4. [PROMPT 4: Tour Guiado/Onboarding](#prompt-4)
-5. [PROMPT 5: Blog Técnico e SEO](#prompt-5)
+4. [PROMPT 4: Tour Guiado/Onboarding](#prompt-4) 🚧 **EM IMPLEMENTAÇÃO - 50%**
+5. [PROMPT 5: Blog Técnico e SEO](#prompt-5) ⏳ **PENDENTE**
 6. [PROMPT 6: Empty States](#prompt-6) ✅ **IMPLEMENTADO - 100%**
-7. [PROMPT 7: Micro-interações](#prompt-7)
-8. [PROMPT 8: Cases de Sucesso](#prompt-8)
-9. [PROMPT 9: Programa de Indicação](#prompt-9)
-10. [PROMPT 10: Analytics e Tracking](#prompt-10)
+7. [PROMPT 7: Micro-interações](#prompt-7) ✅ **IMPLEMENTADO - 100%**
+8. [PROMPT 8: Cases de Sucesso](#prompt-8) ✅ **IMPLEMENTADO - 100%**
+9. [PROMPT 9: Programa de Indicação](#prompt-9) ⏳ **PENDENTE**
+10. [PROMPT 10: Analytics e Tracking](#prompt-10) ⏳ **PENDENTE**
 
 ---
 
@@ -1406,3 +1406,209 @@ import { EmptyStateComponent } from '@app/shared/components/empty-state';
 
 > **Nota:** Os demais prompts (7-10) seguem estrutura similar e estão disponíveis 
 > no documento PLANO_MELHORIAS_WEBSITE_UXUI.md para referência.
+
+---
+
+## PROMPT 7: Micro-interações ✅ **IMPLEMENTADO - 100% COMPLETO**
+
+> **Status:** ✅ IMPLEMENTADO  
+> **Data de Implementação:** 28 de Janeiro de 2026  
+> **Código:** `/frontend/medicwarehouse-app/src/styles.scss`
+
+### Implementação Completa
+
+As micro-interações já foram implementadas como parte do PROMPT 3 (Design System). Todos os elementos visuais possuem:
+
+#### Animações e Transições Implementadas
+- ✅ **Botões:** Hover states com transições suaves (--transition-base)
+- ✅ **Cards:** Elevação no hover com transform translateY
+- ✅ **Inputs:** Estados de foco com bordas coloridas e animações
+- ✅ **Tabs/Accordions:** Animações slideDown para conteúdo
+- ✅ **Modals:** FadeIn animation com backdrop
+- ✅ **Toast Notifications:** SlideIn from top com timing adequado
+- ✅ **Loading States:** Skeleton screens com shimmer animation
+- ✅ **Error States:** Shake animation para validação
+
+#### Sistema de Transições
+```scss
+--transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+--transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+--transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+--transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+--transition-spring: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+```
+
+#### Acessibilidade
+- ✅ Respeita `prefers-reduced-motion` para usuários sensíveis a movimento
+- ✅ Todas as animações têm fallback estático
+
+**Localização:** `/frontend/medicwarehouse-app/src/styles.scss` (linhas 145-1200+)  
+**Status:** Totalmente implementado e funcional
+
+---
+
+## PROMPT 8: Cases de Sucesso ✅ **IMPLEMENTADO - 100% COMPLETO**
+
+> **Status:** ✅ IMPLEMENTADO  
+> **Data de Implementação:** 28 de Janeiro de 2026  
+> **Código:** `/frontend/medicwarehouse-app/src/app/pages/site/cases/`
+
+### Implementação Completa
+
+Foi criada uma página completa de Cases de Sucesso com:
+
+#### Funcionalidades Implementadas
+- ✅ **Página de Cases** (`/cases`)
+  - Hero section moderna com gradiente
+  - Sistema de filtros por especialidade
+  - Grid responsivo de cases
+  - Cards com informações completas
+
+- ✅ **Case Cards** com:
+  - Informações da clínica (nome, especialidade, localização)
+  - Citação do cliente (quote)
+  - Métricas de sucesso (4 métricas por case)
+  - Ícones SVG inline (sem dependências externas)
+  - Botão "Ver detalhes completos"
+
+- ✅ **Filtros:**
+  - Todas as especialidades
+  - Odontologia
+  - Cardiologia
+  - Clínica Médica
+  - Dermatologia
+  - Ortopedia
+
+- ✅ **3 Cases de Exemplo:**
+  1. **Clínica Sorriso** (Odontologia, São Paulo)
+     - 70% redução no tempo de agendamento
+     - 45% aumento na satisfação
+     - R$ 3.500 economia mensal
+     - ROI em 2 meses
+  
+  2. **Consultório Dr. Santos** (Cardiologia, Rio de Janeiro)
+     - 30% aumento na capacidade
+     - 60% redução em faltas
+     - 2h economizadas por dia
+     - +45 pacientes/mês
+  
+  3. **Clínica Vida Saudável** (Clínica Médica, Belo Horizonte)
+     - 40% consultas online
+     - 55% crescimento de receita
+     - Alcance em 5 cidades
+     - NPS 92
+
+- ✅ **CTA Section:**
+  - Call-to-action forte para conversão
+  - Botões "Começar Gratuitamente" e "Falar com Especialista"
+  - Trust badges (15 dias grátis, sem cartão, cancele quando quiser)
+
+- ✅ **Responsividade:**
+  - Desktop: Grid de 3 colunas
+  - Tablet: Grid de 2 colunas
+  - Mobile: Grid de 1 coluna
+
+#### Arquivos Criados
+1. `cases.ts` - Componente Angular com lógica de filtros e dados
+2. `cases.html` - Template com estrutura moderna e semântica
+3. `cases.scss` - Estilos responsivos com design system
+
+**Localização:** `/frontend/medicwarehouse-app/src/app/pages/site/cases/`  
+**Status:** Totalmente implementado e pronto para uso
+
+**Próximos Passos (Opcional):**
+- Adicionar imagens reais dos clientes
+- Integrar com backend para cases dinâmicos
+- Adicionar página de detalhes de cada case
+
+---
+
+## PROMPT 4: Tour Guiado/Onboarding 🚧 **EM IMPLEMENTAÇÃO - 50% COMPLETO**
+
+> **Status:** 🚧 EM IMPLEMENTAÇÃO  
+> **Data de Início:** 28 de Janeiro de 2026  
+> **Código:** `/frontend/medicwarehouse-app/src/app/services/onboarding/` e `/frontend/medicwarehouse-app/src/app/shared/components/onboarding-progress/`
+
+### Implementação Parcial
+
+Foi criada a infraestrutura base para o sistema de onboarding:
+
+#### ✅ Concluído (50%)
+
+- [x] **OnboardingService** - Serviço completo de gerenciamento
+  - Gestão de progresso em localStorage
+  - 5 steps configurados (horários, paciente, consulta, atendimento, prescrição)
+  - Observable para reatividade (progress$)
+  - Métodos: completeStep, resetStep, resetOnboarding, skipOnboarding
+  - Detecção automática de conclusão
+
+- [x] **OnboardingProgressComponent** - Widget de progresso
+  - Componente standalone Angular
+  - Exibição de progresso (X/5 completo, %)
+  - Barra de progresso animada
+  - Lista de steps com ícones SVG
+  - Botão de pular onboarding
+  - Integração com RouterLink para navegação
+  - Totalmente responsivo
+
+#### ⏳ Pendente (50%)
+
+- [ ] **Tour Interativo** (Intro.js ou Shepherd.js)
+  - Instalar biblioteca de tours
+  - Criar TourService
+  - Implementar 3 tours:
+    - Tour 1: Primeiro Login (Dashboard → Agenda → Pacientes → Configurações)
+    - Tour 2: Primeira Consulta (contextual)
+    - Tour 3: Primeiro Atendimento (prontuário SOAP)
+
+- [ ] **Setup Wizard**
+  - Modal de setup em 5 etapas
+  - Step 1: Bem-vindo + nome da clínica
+  - Step 2: Configurar horários
+  - Step 3: Adicionar profissionais (opcional)
+  - Step 4: Escolher especialidade
+  - Step 5: Carregar dados demo
+
+- [ ] **Tooltips Contextuais**
+  - Implementar com Angular Material Tooltips
+  - Adicionar em botões principais
+  - Posicionamento inteligente
+
+- [ ] **Templates por Especialidade**
+  - Criar templates para 7 especialidades
+  - Carregar ao escolher especialidade no setup
+
+- [ ] **Dados Demo**
+  - Script SQL para popular banco
+  - 15 pacientes fictícios
+  - 30 consultas (passadas e futuras)
+  - 10 prontuários preenchidos
+  - 5 prescrições
+
+- [ ] **Integração no Dashboard**
+  - Adicionar OnboardingProgressComponent no dashboard
+  - Condicional para exibir apenas se não concluído
+
+#### Arquivos Criados
+1. `onboarding.service.ts` - Serviço de gerenciamento completo
+2. `onboarding-progress.component.ts` - Componente do widget
+3. `onboarding-progress.component.html` - Template do widget
+4. `onboarding-progress.component.scss` - Estilos do widget
+
+**Localização:**  
+- Service: `/frontend/medicwarehouse-app/src/app/services/onboarding/`
+- Component: `/frontend/medicwarehouse-app/src/app/shared/components/onboarding-progress/`
+
+**Status:** Infraestrutura base implementada (50%). Tours interativos e setup wizard pendentes.
+
+**Próximos Passos:**
+1. Instalar Shepherd.js ou Intro.js
+2. Criar TourService
+3. Implementar os 3 tours principais
+4. Criar Setup Wizard modal
+5. Integrar widget no dashboard
+
+---
+
+**Nota:** PROMPT 5 (Blog), PROMPT 9 (Programa de Indicação) e PROMPT 10 (Analytics) permanecem pendentes e requerem implementação futura.
+
