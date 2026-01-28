@@ -183,6 +183,10 @@ namespace MedicSoft.Repository.Context
         public DbSet<MedicSoft.Domain.Entities.Fiscal.DRE> DREs { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.Fiscal.BalancoPatrimonial> BalancosPatrimoniais { get; set; } = null!;
 
+        // System Admin - Notifications
+        public DbSet<SystemNotification> SystemNotifications { get; set; } = null!;
+        public DbSet<NotificationRule> NotificationRules { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
