@@ -19,7 +19,6 @@ namespace MedicSoft.Repository.Seeders
                 // Financial Reports
                 new ReportTemplate
                 {
-                    Id = 1,
                     Name = "Financial Summary Report",
                     Description = "Comprehensive financial performance report including MRR, revenue, and growth metrics",
                     Category = "financial",
@@ -34,7 +33,7 @@ namespace MedicSoft.Repository.Seeders
                             new { name = "startDate", type = "date", required = true, label = "Start Date" },
                             new { name = "endDate", type = "date", required = true, label = "End Date" }
                         },
-                        sections = new[]
+                        sections = new object[]
                         {
                             new { title = "Revenue Overview", type = "summary" },
                             new { title = "MRR Trend", type = "chart", chartType = "line" },
@@ -58,7 +57,6 @@ ORDER BY month"
 
                 new ReportTemplate
                 {
-                    Id = 2,
                     Name = "Revenue Breakdown Report",
                     Description = "Detailed breakdown of revenue by plans, clinics, and payment methods",
                     Category = "financial",
@@ -90,7 +88,6 @@ ORDER BY total_mrr DESC"
                 // Customer Reports
                 new ReportTemplate
                 {
-                    Id = 3,
                     Name = "Customer Acquisition Report",
                     Description = "Analysis of new customer acquisition trends and conversion metrics",
                     Category = "customer",
@@ -122,7 +119,6 @@ ORDER BY month"
 
                 new ReportTemplate
                 {
-                    Id = 4,
                     Name = "Customer Churn Report",
                     Description = "Comprehensive churn analysis with reasons and trends",
                     Category = "customer",
@@ -157,7 +153,6 @@ ORDER BY month DESC"
                 // Operational Reports
                 new ReportTemplate
                 {
-                    Id = 5,
                     Name = "Appointment Analytics Report",
                     Description = "Detailed analysis of appointment scheduling, cancellations, and no-shows",
                     Category = "operational",
@@ -189,7 +184,6 @@ ORDER BY total_appointments DESC"
 
                 new ReportTemplate
                 {
-                    Id = 6,
                     Name = "User Activity Report",
                     Description = "Overview of user activity, logins, and engagement metrics",
                     Category = "operational",
@@ -224,7 +218,6 @@ ORDER BY login_count DESC"
                 // Clinical Reports
                 new ReportTemplate
                 {
-                    Id = 7,
                     Name = "Patient Demographics Report",
                     Description = "Statistical analysis of patient demographics and distribution",
                     Category = "clinical",
@@ -256,7 +249,6 @@ ORDER BY total_patients DESC"
                 // Compliance Reports
                 new ReportTemplate
                 {
-                    Id = 8,
                     Name = "System Health Report",
                     Description = "Overview of system health, errors, and performance metrics",
                     Category = "operational",
@@ -291,7 +283,6 @@ ORDER BY active_subscriptions DESC"
 
                 new ReportTemplate
                 {
-                    Id = 9,
                     Name = "Subscription Lifecycle Report",
                     Description = "Analysis of subscription lifecycle from acquisition to churn",
                     Category = "financial",
@@ -325,7 +316,6 @@ ORDER BY cs.""StartDate"" DESC"
 
                 new ReportTemplate
                 {
-                    Id = 10,
                     Name = "Executive Dashboard Report",
                     Description = "High-level executive summary with key metrics and trends",
                     Category = "financial",
@@ -339,7 +329,7 @@ ORDER BY cs.""StartDate"" DESC"
                         {
                             new { name = "month", type = "month", required = true, label = "Report Month" }
                         },
-                        sections = new[]
+                        sections = new object[]
                         {
                             new { title = "Financial KPIs", type = "metrics" },
                             new { title = "Customer Metrics", type = "metrics" },

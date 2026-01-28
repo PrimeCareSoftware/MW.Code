@@ -11,7 +11,7 @@ using MedicSoft.Application.Services.Email;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Context;
 
-namespace MedicSoft.Application.Services.Workflows
+namespace MedicSoft.Api.Services.Workflows
 {
     public class WorkflowEngine : IWorkflowEngine
     {
