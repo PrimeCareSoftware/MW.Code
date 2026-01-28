@@ -148,7 +148,16 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
     - ✅ Manual do usuário ([CRM_USER_MANUAL.md](./CRM_USER_MANUAL.md))
     - ✅ Documentação da API ([CRM_API_DOCUMENTATION.md](./CRM_API_DOCUMENTATION.md))
   - 📋 **Próxima Fase:** Migrations, Services, API Controllers, Frontend Components
-- Gestão fiscal
+- **Gestão Fiscal e Contábil** 🔄 (Fase 1 Completa - Domínio - [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md))
+  - ✅ **Entidades fiscais (5 arquivos)**
+    - ✅ ConfiguracaoFiscal (Regime tributário, Simples Nacional, Alíquotas)
+    - ✅ ImpostoNota (Cálculo detalhado ISS, PIS, COFINS, IR, CSLL, INSS)
+    - ✅ ApuracaoImpostos (Consolidação mensal, DAS)
+    - ✅ PlanoContas (Estrutura contábil hierárquica)
+    - ✅ LancamentoContabil (Débitos e créditos com rastreabilidade)
+  - ✅ **Documentação técnica**
+    - ✅ Implementação completa ([GESTAO_FISCAL_IMPLEMENTACAO.md](./GESTAO_FISCAL_IMPLEMENTACAO.md))
+  - 📋 **Próxima Fase:** Repositórios, Migrations, Serviços de Cálculo, Integração Contábil (Domínio, ContaAzul, Omie), SPED
 - Acessibilidade WCAG
 
 #### 🔵 Fase 5 - Enterprise (P3 - Baixa)
