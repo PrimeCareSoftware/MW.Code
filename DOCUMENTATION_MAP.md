@@ -148,16 +148,24 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
     - ✅ Manual do usuário ([CRM_USER_MANUAL.md](./CRM_USER_MANUAL.md))
     - ✅ Documentação da API ([CRM_API_DOCUMENTATION.md](./CRM_API_DOCUMENTATION.md))
   - 📋 **Próxima Fase:** Migrations, Services, API Controllers, Frontend Components
-- **Gestão Fiscal e Contábil** 🔄 (Fase 1 Completa - Domínio - [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md))
-  - ✅ **Entidades fiscais (5 arquivos)**
+- **Gestão Fiscal e Contábil** ✅ (Fase 1-2 Completas - [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md))
+  - ✅ **Fase 1: Entidades fiscais (5 arquivos)**
     - ✅ ConfiguracaoFiscal (Regime tributário, Simples Nacional, Alíquotas)
     - ✅ ImpostoNota (Cálculo detalhado ISS, PIS, COFINS, IR, CSLL, INSS)
     - ✅ ApuracaoImpostos (Consolidação mensal, DAS)
     - ✅ PlanoContas (Estrutura contábil hierárquica)
     - ✅ LancamentoContabil (Débitos e créditos com rastreabilidade)
+  - ✅ **Fase 2: Infraestrutura (17 arquivos)**
+    - ✅ Interfaces de repositórios (5 arquivos)
+    - ✅ Repositórios concretos (5 arquivos)
+    - ✅ Configurações EF Core (5 arquivos)
+    - ✅ Migration para criação de tabelas
+    - ✅ Registro no DbContext e DI container
   - ✅ **Documentação técnica**
     - ✅ Implementação completa ([GESTAO_FISCAL_IMPLEMENTACAO.md](./GESTAO_FISCAL_IMPLEMENTACAO.md))
-  - 📋 **Próxima Fase:** Repositórios, Migrations, Serviços de Cálculo, Integração Contábil (Domínio, ContaAzul, Omie), SPED
+    - ✅ Resumo Fase 1 ([GESTAO_FISCAL_RESUMO_FASE1.md](./GESTAO_FISCAL_RESUMO_FASE1.md))
+    - ✅ Resumo Fase 2 ([GESTAO_FISCAL_RESUMO_FASE2.md](./GESTAO_FISCAL_RESUMO_FASE2.md))
+  - 📋 **Próximas Fases:** Serviços de Cálculo, DRE/Balanço, Integração Contábil (Domínio, ContaAzul, Omie), SPED, API, Frontend
 - Acessibilidade WCAG
 
 #### 🔵 Fase 5 - Enterprise (P3 - Baixa)
