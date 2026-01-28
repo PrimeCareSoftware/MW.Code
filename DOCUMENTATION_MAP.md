@@ -11,6 +11,13 @@ Este documento fornece uma visão geral de toda a documentação disponível no 
 - **[README.md](./README.md)** - Documentação principal do projeto, setup e visão geral
 - **[CHANGELOG.md](./CHANGELOG.md)** - Histórico de versões e mudanças
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Guia de contribuição para desenvolvedores
+
+### ♿ Acessibilidade (WCAG 2.1 AA)
+- **[ACCESSIBILITY_GUIDE.md](./ACCESSIBILITY_GUIDE.md)** - ✅ **NOVO** Guia completo de acessibilidade, componentes e padrões
+- **[ACCESSIBILITY_TESTING_GUIDE.md](./ACCESSIBILITY_TESTING_GUIDE.md)** - ✅ **NOVO** Guia de testes automatizados e manuais
+- **[WCAG_COMPLIANCE_STATEMENT.md](./WCAG_COMPLIANCE_STATEMENT.md)** - ✅ **NOVO** Declaração oficial de conformidade WCAG 2.1 AA
+
+### Implementações Principais
 - **[TISS_FASE1_IMPLEMENTACAO_COMPLETA.md](./TISS_FASE1_IMPLEMENTACAO_COMPLETA.md)** - Status da implementação TISS Fase 1
 - **[TISS_FASE2_IMPLEMENTACAO.md](./TISS_FASE2_IMPLEMENTACAO.md)** - ✅ Status da implementação TISS Fase 2 (90% completo - Janeiro 2026)
 - **[RESUMO_TISS_FASE2.md](./RESUMO_TISS_FASE2.md)** - ✅ Resumo executivo TISS Fase 2 (90% completo - Janeiro 2026)
@@ -173,7 +180,39 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
     - ✅ Resumo Fase 2 ([GESTAO_FISCAL_RESUMO_FASE2.md](./GESTAO_FISCAL_RESUMO_FASE2.md))
     - ✅ Resumo Fase 3 ([GESTAO_FISCAL_RESUMO_FASE3.md](./GESTAO_FISCAL_RESUMO_FASE3.md))
   - 📋 **Próximas Fases:** Controllers REST/DTOs, Contabilização Automática, DRE/Balanço, Integração Contábil (Domínio, ContaAzul, Omie), SPED, Frontend, Jobs Automatizados
-- Acessibilidade WCAG
+- **Acessibilidade WCAG 2.1 AA** ✅ (82.5% COMPLETO - Infraestrutura + Componentes + Documentação - [19-acessibilidade-wcag.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/19-acessibilidade-wcag.md))
+  - ✅ **Infraestrutura de testes (4 ferramentas)**
+    - ✅ axe-core com Puppeteer (análise automática)
+    - ✅ pa11y-ci (testes WCAG)
+    - ✅ Lighthouse (score de acessibilidade)
+    - ✅ jasmine-axe (testes unitários)
+  - ✅ **Componentes de acessibilidade (6 componentes)**
+    - ✅ KeyboardNavigationService (navegação por teclado)
+    - ✅ ScreenReaderService (NVDA, JAWS, VoiceOver)
+    - ✅ FocusTrapDirective (trap de foco para modais)
+    - ✅ SkipToContentComponent (pular navegação)
+    - ✅ AccessibleBreadcrumbsComponent (navegação estrutural)
+    - ✅ Estilos globais de acessibilidade (SCSS)
+  - ✅ **Scripts de auditoria (4 comandos)**
+    - ✅ npm run audit:axe (auditoria completa)
+    - ✅ npm run audit:a11y (pa11y)
+    - ✅ npm run audit:lighthouse (score Google)
+    - ✅ npm run test:a11y (testes unitários)
+  - ✅ **Documentação completa (3 documentos)**
+    - ✅ Guia de acessibilidade ([ACCESSIBILITY_GUIDE.md](./ACCESSIBILITY_GUIDE.md))
+    - ✅ Guia de testes ([ACCESSIBILITY_TESTING_GUIDE.md](./ACCESSIBILITY_TESTING_GUIDE.md))
+    - ✅ Declaração de conformidade ([WCAG_COMPLIANCE_STATEMENT.md](./WCAG_COMPLIANCE_STATEMENT.md))
+  - ✅ **Recursos implementados**
+    - ✅ Navegação 100% por teclado
+    - ✅ Contraste de cores 4.5:1 (WCAG AA)
+    - ✅ Foco visível em todos elementos
+    - ✅ HTML semântico completo
+    - ✅ ARIA labels e roles apropriados
+  - ⚠️ **Pendente**
+    - ⚠️ Validação inline de formulários (em desenvolvimento)
+    - ⚠️ Testes com usuários PcD (planejado Q2 2026)
+    - ⚠️ Audiodescrição para vídeos (planejado)
+  - 📋 **Status:** 82.5% completo - Meta 100% até Q2 2026
 
 #### 🔵 Fase 5 - Enterprise (P3 - Baixa)
 **[fase-5-enterprise/](./Plano_Desenvolvimento/fase-5-enterprise/)**

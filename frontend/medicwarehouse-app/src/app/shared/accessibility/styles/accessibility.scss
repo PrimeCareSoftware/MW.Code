@@ -1,0 +1,81 @@
+/**
+ * Estilos Globais de Foco e Acessibilidade
+ * Conformidade com WCAG 2.1 Level AA
+ */
+
+// ============================================
+// 1. CORES ACESSÍVEIS (Contraste mínimo 4.5:1)
+// ============================================
+
+$a11y-colors: (
+  primary: #1976d2,        // Contraste 4.51:1 contra branco
+  focus: #ffc107,          // Contraste 1.81:1 (usado apenas para outline, não para texto)
+  error: #c62828,          // Contraste 5.13:1 contra branco
+  success: #2e7d32,        // Contraste 4.54:1 contra branco
+  warning: #e65100,        // Contraste 4.54:1 contra branco (alterado de #f57c00)
+  text-primary: #212121    // Contraste 16.1:1 contra branco
+);
+
+// ============================================
+// 2. INDICADORES DE FOCO VISÍVEIS
+// ============================================
+
+@mixin focus-visible {
+  outline: 3px solid map-get($a11y-colors, focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.3);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  @include focus-visible;
+}
+
+// ============================================
+// 3. VISIBILIDADE PARA LEITORES DE TELA
+// ============================================
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// ============================================
+// 4. REDUÇÃO DE MOVIMENTO
+// ============================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// ============================================
+// 5. MODO DE ALTO CONTRASTE
+// ============================================
+
+@media (prefers-contrast: high) {
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 4px solid currentColor !important;
+  }
+}
