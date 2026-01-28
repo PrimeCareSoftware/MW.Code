@@ -1,6 +1,6 @@
 # 📊 Fase 2: Gestão de Clientes - System Admin
 
-**Prioridade:** 🔥🔥 P1 - ALTA  
+**Prioridade:** 🔥🔥🔥 P0 - CRÍTICA  
 **Status:** Planejamento  
 **Esforço:** 2 meses | 2-3 desenvolvedores  
 **Custo Estimado:** R$ 78.000  

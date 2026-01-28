@@ -1,6 +1,6 @@
 # 📊 Fase 3: Analytics e BI - System Admin
 
-**Prioridade:** 🔥 P2 - MÉDIA-ALTA  
+**Prioridade:** 🔥🔥 P1 - ALTA  
 **Status:** Planejamento  
 **Esforço:** 2 meses | 2 desenvolvedores  
 **Custo Estimado:** R$ 78.000  
