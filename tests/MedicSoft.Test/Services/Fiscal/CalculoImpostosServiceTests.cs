@@ -257,16 +257,16 @@ namespace MedicSoft.Test.Services.Fiscal
 
         #region Métodos Auxiliares
 
-        private NotaFiscal CriarNotaFiscalTeste(Guid clinicaId, decimal valor)
+        private ElectronicInvoice CriarNotaFiscalTeste(Guid clinicaId, decimal valor)
         {
-            return new NotaFiscal
+            return new ElectronicInvoice
             {
                 Id = Guid.NewGuid(),
                 ClinicaId = clinicaId,
-                Numero = "NF-001",
-                DataEmissao = DateTime.Now,
-                ValorTotal = valor,
-                Status = StatusNotaFiscal.Emitida,
+                Number = "NF-001",
+                IssueDate = DateTime.Now,
+                TotalAmount = valor,
+                Status = ElectronicInvoiceStatus.Issued,
                 TenantId = TenantId
             };
         }
