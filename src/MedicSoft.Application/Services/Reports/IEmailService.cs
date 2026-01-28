@@ -16,9 +16,9 @@ namespace MedicSoft.Application.Services.Reports
             string[] recipients,
             string subject,
             string body,
-            byte[] attachment = null,
-            string attachmentFileName = null,
-            string attachmentContentType = null
+            byte[]? attachment = null,
+            string? attachmentFileName = null,
+            string? attachmentContentType = null
         );
     }
 }

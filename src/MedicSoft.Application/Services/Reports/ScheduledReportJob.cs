@@ -44,7 +44,7 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Schedule a recurring report job
         /// </summary>
-        public static void ScheduleRecurring(int scheduledReportId, string cronExpression, string jobName = null)
+        public static void ScheduleRecurring(int scheduledReportId, string cronExpression, string? jobName = null)
         {
             var jobId = jobName ?? $"scheduled-report-{scheduledReportId}";
             
@@ -59,7 +59,7 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Remove a scheduled report job
         /// </summary>
-        public static void RemoveSchedule(int scheduledReportId, string jobName = null)
+        public static void RemoveSchedule(int scheduledReportId, string? jobName = null)
         {
             var jobId = jobName ?? $"scheduled-report-{scheduledReportId}";
             RecurringJob.RemoveIfExists(jobId);

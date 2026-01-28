@@ -151,7 +151,7 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Export report data to Excel with multiple tabs if needed
         /// </summary>
-        public async Task<byte[]> ExportToExcelAsync(string reportTitle, List<Dictionary<string, object>> data, Dictionary<string, List<Dictionary<string, object>>> additionalSheets = null)
+        public async Task<byte[]> ExportToExcelAsync(string reportTitle, List<Dictionary<string, object>> data, Dictionary<string, List<Dictionary<string, object>>>? additionalSheets = null)
         {
             _logger.LogInformation("Exporting report to Excel: {ReportTitle}", reportTitle);
 
@@ -263,6 +263,6 @@ namespace MedicSoft.Application.Services.Reports
     public interface IReportExportService
     {
         Task<byte[]> ExportToPdfAsync(string reportTitle, string description, List<Dictionary<string, object>> data, string brandName = "MedicWarehouse");
-        Task<byte[]> ExportToExcelAsync(string reportTitle, List<Dictionary<string, object>> data, Dictionary<string, List<Dictionary<string, object>>> additionalSheets = null);
+        Task<byte[]> ExportToExcelAsync(string reportTitle, List<Dictionary<string, object>> data, Dictionary<string, List<Dictionary<string, object>>>? additionalSheets = null);
     }
 }
