@@ -24,8 +24,8 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ### ✨ Adicionado
 
-#### Gestão Fiscal e Contábil 🆕 (Fase 1 Completa)
-- **Entidades de Domínio Fiscal**: Sistema completo de gestão tributária e contábil
+#### Gestão Fiscal e Contábil 🆕 (Fases 1-3 Completas)
+- **Entidades de Domínio Fiscal (Fase 1)**: Sistema completo de gestão tributária e contábil
   - `ConfiguracaoFiscal` - Configuração de regime tributário por clínica
     - Suporte a Simples Nacional (Anexo III/V com Fator R)
     - Suporte a Lucro Presumido, Lucro Real e MEI
@@ -48,11 +48,36 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
     - Origem rastreável: Manual, Nota Fiscal, Pagamento, Recebimento, Fechamento, Ajuste
     - Vínculo ao documento de origem
     - Agrupamento por lote
+- **Infraestrutura e Repositórios (Fase 2)**: Camada de persistência completa
+  - 5 interfaces de repositórios + 5 implementações concretas
+  - Configurações EF Core com mapeamento completo
+  - Migrations para PostgreSQL
+  - Dependency Injection configurado
+- **Serviços de Negócio (Fase 3)**: Cálculo automático de impostos
+  - `CalculoImpostosService` - Cálculo automático por nota fiscal
+    - Simples Nacional: Anexo III e V com cálculo de DAS baseado em receita de 12 meses
+    - Lucro Presumido: PIS (0,65%), COFINS (3%), ISS (2-5%), IR (4,8%), CSLL (2,88%)
+    - Lucro Real: PIS (1,65%), COFINS (7,6%), ISS (2-5%), IR (15%), CSLL (9%)
+    - MEI: Registro de regime MEI
+  - `ApuracaoImpostosService` - Consolidação mensal
+    - Geração automática de apuração mensal
+    - Cálculo de DAS para Simples Nacional
+    - Gestão de status (Em Aberto → Apurado → Pago)
+    - Registro de pagamentos com comprovantes
+  - `SimplesNacionalHelper` - Tabelas oficiais do Simples Nacional
+    - Anexo III: 6 faixas de receita (6% a 33%)
+    - Anexo V: 6 faixas de receita (15,5% a 30,5%)
+    - Cálculo de alíquota efetiva usando fórmula oficial: `((RBT12 × Aliq) - PD) / RBT12 × 100`
+    - Distribuição proporcional de impostos por anexo
 - **Documentação Completa**:
   - [GESTAO_FISCAL_IMPLEMENTACAO.md](./GESTAO_FISCAL_IMPLEMENTACAO.md) - Implementação técnica
+  - [GESTAO_FISCAL_RESUMO_FASE1.md](./GESTAO_FISCAL_RESUMO_FASE1.md) - Resumo Fase 1
+  - [GESTAO_FISCAL_RESUMO_FASE2.md](./GESTAO_FISCAL_RESUMO_FASE2.md) - Resumo Fase 2
+  - [GESTAO_FISCAL_RESUMO_FASE3.md](./GESTAO_FISCAL_RESUMO_FASE3.md) - Resumo Fase 3
   - Atualização em [DOCUMENTATION_MAP.md](./DOCUMENTATION_MAP.md)
   - Seção completa no [README.md](./README.md)
-- **Próximas Fases**: Repositórios, Migrations, Serviços de Cálculo, DRE/Balanço, Integração Contábil, SPED
+- **Próximas Fases**: Controllers REST, DTOs, Contabilização Automática, DRE/Balanço, Integração Contábil, SPED, Frontend
+- **Conformidade Legal**: LC 123/2006 (Simples Nacional), LC 116/2003 (ISS), Res. CGSN 140/2018
 - **Referência**: [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md)
 
 #### BI e Analytics Avançados ✅ (100% Completo)

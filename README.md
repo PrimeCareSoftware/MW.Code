@@ -723,7 +723,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Análise por Categoria**: Distribuição de despesas por categoria
 - ✅ **API RESTful**: Endpoints completos para geração de relatórios
 
-### 💼 Gestão Fiscal e Contábil 🆕✨ (Fases 1-2 - Janeiro 2026)
+### 💼 Gestão Fiscal e Contábil 🆕✨ (Fases 1-3 - Janeiro 2026)
 
 **Sistema completo de gestão fiscal com cálculo automático de impostos e controle contábil!**
 
@@ -766,13 +766,31 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Dependency Injection**: Repositórios registrados no container DI
 - ✅ **Build Validation**: Compilação sem erros, pronto para próxima fase
 
+#### Serviços de Negócio Implementados (Fase 3 ✅)
+- ✅ **CalculoImpostosService**: Cálculo automático de impostos por nota fiscal
+  - Simples Nacional: Anexo III e V com cálculo de DAS
+  - Lucro Presumido: Alíquotas padrão (PIS, COFINS, IR, CSLL, ISS)
+  - Lucro Real: Alíquotas sobre lucro real
+  - MEI: Registro de regime MEI
+- ✅ **ApuracaoImpostosService**: Consolidação mensal de impostos
+  - Geração automática de apuração mensal
+  - Cálculo de DAS para Simples Nacional
+  - Gestão de status (Em Aberto → Apurado → Pago)
+  - Registro de pagamentos com comprovantes
+- ✅ **SimplesNacionalHelper**: Tabelas oficiais do Simples Nacional
+  - Anexo III: 6 faixas (6% a 33%)
+  - Anexo V: 6 faixas (15,5% a 30,5%)
+  - Cálculo de alíquota efetiva com fórmula oficial
+  - Distribuição proporcional de impostos
+
 #### Próximas Fases (Roadmap)
-- 📋 **Fase 3**: Serviços de cálculo automático de impostos
-- 📋 **Fase 4**: DRE (Demonstração de Resultados) e Balanço Patrimonial
-- 📋 **Fase 5**: Integração com sistemas contábeis (Domínio, ContaAzul, Omie)
-- 📋 **Fase 6**: Exportação SPED Fiscal e Contábil
-- 📋 **Fase 7**: API REST e DTOs
-- 📋 **Fase 8**: Dashboard fiscal e frontend
+- 📋 **Fase 4**: Controllers REST, DTOs e API endpoints
+- 📋 **Fase 5**: Contabilização automática (lançamentos contábeis)
+- 📋 **Fase 6**: DRE (Demonstração de Resultados) e Balanço Patrimonial
+- 📋 **Fase 7**: Integração com sistemas contábeis (Domínio, ContaAzul, Omie)
+- 📋 **Fase 8**: Exportação SPED Fiscal e Contábil
+- 📋 **Fase 9**: Dashboard fiscal e frontend
+- 📋 **Fase 10**: Jobs automatizados e notificações
 
 #### Benefícios
 - 💰 Cálculo automático de impostos por nota fiscal
@@ -786,6 +804,7 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 > 📖 **Documentação Técnica Completa**: [GESTAO_FISCAL_IMPLEMENTACAO.md](./GESTAO_FISCAL_IMPLEMENTACAO.md)  
 > 📋 **Resumo Fase 1**: [GESTAO_FISCAL_RESUMO_FASE1.md](./GESTAO_FISCAL_RESUMO_FASE1.md)  
 > 📋 **Resumo Fase 2**: [GESTAO_FISCAL_RESUMO_FASE2.md](./GESTAO_FISCAL_RESUMO_FASE2.md)  
+> 📋 **Resumo Fase 3**: [GESTAO_FISCAL_RESUMO_FASE3.md](./GESTAO_FISCAL_RESUMO_FASE3.md)  
 > 📋 **Especificação Original**: [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md)
 
 ### 📲 Notificações
