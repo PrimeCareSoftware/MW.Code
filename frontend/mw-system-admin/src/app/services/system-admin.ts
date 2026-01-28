@@ -20,7 +20,15 @@ import {
   ResetPasswordRequest,
   Subdomain,
   CreateSubdomainRequest,
-  EnableManualOverrideRequest
+  EnableManualOverrideRequest,
+  ClinicHealthScore,
+  ClinicTimelineEvent,
+  ClinicUsageMetrics,
+  Tag,
+  ClinicFilter,
+  CrossTenantUser,
+  CrossTenantUserFilter,
+  BulkActionRequest
 } from '../models/system-admin.model';
 
 @Injectable({
@@ -285,6 +293,127 @@ export class SystemAdminService {
   disableManualOverrideExtended(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(
       `${this.apiUrl}/clinics/${id}/subscription/manual-override`
+    );
+  }
+
+  // Phase 2: Advanced Clinic Management
+  
+  /**
+   * Get clinic health score
+   */
+  getClinicHealthScore(id: string): Observable<ClinicHealthScore> {
+    return this.http.get<ClinicHealthScore>(
+      `${this.apiUrl}/clinic-management/${id}/health-score`
+    );
+  }
+
+  /**
+   * Get clinic timeline events
+   */
+  getClinicTimeline(id: string, limit: number = 50): Observable<ClinicTimelineEvent[]> {
+    return this.http.get<ClinicTimelineEvent[]>(
+      `${this.apiUrl}/clinic-management/${id}/timeline`,
+      { params: { limit: limit.toString() } }
+    );
+  }
+
+  /**
+   * Get clinic usage metrics
+   */
+  getClinicUsageMetrics(id: string, periodStart?: string, periodEnd?: string): Observable<ClinicUsageMetrics> {
+    const params: any = {};
+    if (periodStart) params.periodStart = periodStart;
+    if (periodEnd) params.periodEnd = periodEnd;
+    
+    return this.http.get<ClinicUsageMetrics>(
+      `${this.apiUrl}/clinic-management/${id}/usage-metrics`,
+      { params }
+    );
+  }
+
+  /**
+   * Filter clinics with advanced criteria
+   */
+  filterClinics(filters: ClinicFilter): Observable<{ data: ClinicSummary[]; totalCount: number; page: number; pageSize: number; totalPages: number }> {
+    return this.http.post<{ data: ClinicSummary[]; totalCount: number; page: number; pageSize: number; totalPages: number }>(
+      `${this.apiUrl}/clinic-management/filter`,
+      filters
+    );
+  }
+
+  /**
+   * Get clinics by segment
+   */
+  getClinicsBySegment(segment: string): Observable<{ segment: string; data: ClinicSummary[]; totalCount: number }> {
+    return this.http.get<{ segment: string; data: ClinicSummary[]; totalCount: number }>(
+      `${this.apiUrl}/clinic-management/segment/${segment}`
+    );
+  }
+
+  // Tags Management
+  
+  /**
+   * Get all tags
+   */
+  getTags(): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.apiUrl}/tags`);
+  }
+
+  /**
+   * Get tags by category
+   */
+  getTagsByCategory(category: string): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.apiUrl}/tags/category/${category}`);
+  }
+
+  /**
+   * Assign tag to clinic
+   */
+  assignTagToClinic(clinicId: string, tagId: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/tags/${tagId}/assign/${clinicId}`,
+      {}
+    );
+  }
+
+  /**
+   * Remove tag from clinic
+   */
+  removeTagFromClinic(clinicId: string, tagId: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.apiUrl}/tags/${tagId}/remove/${clinicId}`
+    );
+  }
+
+  // Cross-Tenant User Management
+  
+  /**
+   * Get cross-tenant users with filters
+   */
+  getCrossTenantUsers(filters: CrossTenantUserFilter): Observable<{ users: CrossTenantUser[]; totalCount: number }> {
+    return this.http.post<{ users: CrossTenantUser[]; totalCount: number }>(
+      `${this.apiUrl}/cross-tenant-users/filter`,
+      filters
+    );
+  }
+
+  /**
+   * Reset password for cross-tenant user
+   */
+  resetCrossTenantUserPassword(userId: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/cross-tenant-users/${userId}/reset-password`,
+      { newPassword }
+    );
+  }
+
+  /**
+   * Toggle cross-tenant user status
+   */
+  toggleCrossTenantUserStatus(userId: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/cross-tenant-users/${userId}/toggle-status`,
+      {}
     );
   }
 }
