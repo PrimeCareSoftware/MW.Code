@@ -198,6 +198,13 @@ namespace MedicSoft.Repository.Context
         public DbSet<ReportTemplate> ReportTemplates { get; set; } = null!;
         public DbSet<ScheduledReport> ScheduledReports { get; set; } = null!;
 
+        // System Admin - Workflow Automation (Phase 4)
+        public DbSet<Workflow> Workflows { get; set; } = null!;
+        public DbSet<WorkflowAction> WorkflowActions { get; set; } = null!;
+        public DbSet<WorkflowExecution> WorkflowExecutions { get; set; } = null!;
+        public DbSet<WorkflowActionExecution> WorkflowActionExecutions { get; set; } = null!;
+        public DbSet<SubscriptionCredit> SubscriptionCredits { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -351,6 +358,10 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new WidgetTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ReportTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ScheduledReportConfiguration());
+
+            // System Admin - Workflow Automation (Phase 4)
+            modelBuilder.ApplyConfiguration(new WorkflowConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkflowActionConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
