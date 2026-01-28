@@ -6,6 +6,8 @@
 
 > 🎉 **NOVO!** System Admin Phase 1 Completa! Dashboard avançado com métricas SaaS, busca global (Ctrl+K) e notificações em tempo real. [→ Ver Implementação](SYSTEM_ADMIN_PHASE1_IMPLEMENTATION_COMPLETE.md)
 
+> 🤖 **NOVÍSSIMO!** System Admin Phase 4 - Automação e Workflows! Engine de workflows completo, 7 smart actions, sistema de eventos e background jobs para automação total. [→ Ver Implementação](FASE4_RESUMO_IMPLEMENTACAO.md)
+
 > 📊 **NOVO!** Quer ver tudo que foi desenvolvido? [→ Ver Resumo Técnico Completo](system-admin/docs/RESUMO_TECNICO_COMPLETO.md) - Visão geral de **92% de completude do sistema**!
 
 > 🚀 **NOVO!** Quer rodar o sistema localmente AGORA? [→ Ver Guia de Início Rápido](system-admin/guias/GUIA_INICIO_RAPIDO_LOCAL.md) - Setup em menos de 10 minutos!
