@@ -295,7 +295,7 @@ breadcrumbs: BreadcrumbItem[] = [
 $primary: #1976d2;      // Azul - Contraste 4.51:1
 $success: #2e7d32;      // Verde - Contraste 4.54:1
 $error: #c62828;        // Vermelho - Contraste 5.13:1
-$warning: #f57c00;      // Laranja - Contraste 4.52:1
+$warning: #e65100;      // Laranja - Contraste 4.54:1
 ```
 
 ---

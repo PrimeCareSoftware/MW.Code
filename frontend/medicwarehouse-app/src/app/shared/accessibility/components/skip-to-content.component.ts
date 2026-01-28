@@ -58,7 +58,13 @@ export class SkipToContentComponent {
       }
       
       mainContent.focus();
-      mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // Respeitar prefers-reduced-motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      mainContent.scrollIntoView({ 
+        behavior: prefersReducedMotion ? 'auto' : 'smooth', 
+        block: 'start' 
+      });
     }
   }
 }

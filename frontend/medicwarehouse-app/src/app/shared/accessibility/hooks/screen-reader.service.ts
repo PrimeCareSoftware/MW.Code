@@ -134,14 +134,4 @@ export class ScreenReaderService {
       this.liveRegionElement.textContent = '';
     }
   }
-
-  /**
-   * Destroy - limpa recursos
-   */
-  ngOnDestroy(): void {
-    if (this.liveRegionElement) {
-      this.renderer.removeChild(document.body, this.liveRegionElement);
-      this.liveRegionElement = null;
-    }
-  }
 }

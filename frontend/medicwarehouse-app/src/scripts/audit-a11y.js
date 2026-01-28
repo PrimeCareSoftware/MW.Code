@@ -110,8 +110,9 @@ async function auditAccessibility() {
   console.log(`   🔴 Críticas: ${totalCritical}`);
   console.log(`   🟠 Sérias: ${totalSerious}`);
   
-  // Exit com código de erro se houver violações críticas
-  if (totalCritical > 0) {
+  // Exit com código de erro se houver violações críticas ou sérias
+  if (totalCritical > 0 || totalSerious > 0) {
+    console.log('\n❌ Build failed: Critical or serious accessibility violations found');
     process.exit(1);
   }
 }

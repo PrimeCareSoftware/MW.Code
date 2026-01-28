@@ -84,8 +84,12 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
     const focusableElements = Array.from(
       this.elementRef.nativeElement.querySelectorAll<HTMLElement>(focusableSelectors)
     ).filter(element => {
-      // Filtrar elementos invisíveis
-      return element.offsetParent !== null;
+      // Check if element is visible using getComputedStyle
+      const style = window.getComputedStyle(element);
+      return style.display !== 'none' && 
+             style.visibility !== 'hidden' && 
+             element.offsetWidth > 0 && 
+             element.offsetHeight > 0;
     });
 
     if (focusableElements.length > 0) {

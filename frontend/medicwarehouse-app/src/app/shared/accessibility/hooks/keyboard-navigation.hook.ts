@@ -1,5 +1,5 @@
 /**
- * Hook de Navegação por Teclado
+ * Serviço de Navegação por Teclado
  * Fornece suporte completo para navegação via teclado conforme WCAG 2.1
  */
 
@@ -17,10 +17,12 @@ export interface KeyboardNavigationOptions {
   onSpace?: () => void;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class KeyboardNavigationService implements OnDestroy {
   private destroy$ = new Subject<void>();
-  private handlers: Map<string, (event: KeyboardEvent) => void> = new Map();
+  private handlers: Map<HTMLElement, (event: KeyboardEvent) => void> = new Map();
 
   /**
    * Registra handlers de teclado
@@ -82,7 +84,7 @@ export class KeyboardNavigationService implements OnDestroy {
     };
 
     element.addEventListener('keydown', handleKeyDown);
-    this.handlers.set(element.id || element.tagName, handleKeyDown);
+    this.handlers.set(element, handleKeyDown);
   }
 
   /**
@@ -90,12 +92,11 @@ export class KeyboardNavigationService implements OnDestroy {
    * @param element Elemento HTML
    */
   unregisterHandlers(element: HTMLElement): void {
-    const key = element.id || element.tagName;
-    const handler = this.handlers.get(key);
+    const handler = this.handlers.get(element);
     
     if (handler) {
       element.removeEventListener('keydown', handler);
-      this.handlers.delete(key);
+      this.handlers.delete(element);
     }
   }
 
@@ -104,7 +105,7 @@ export class KeyboardNavigationService implements OnDestroy {
    * @param container Container HTML
    */
   focusFirstElement(container: HTMLElement): void {
-    const focusableElements = this.getFocusableElements(container);
+    const focusableElements = this.getFocusableElements(container, false);
     if (focusableElements.length > 0) {
       (focusableElements[0] as HTMLElement).focus();
     }
@@ -115,7 +116,7 @@ export class KeyboardNavigationService implements OnDestroy {
    * @param container Container HTML
    */
   focusLastElement(container: HTMLElement): void {
-    const focusableElements = this.getFocusableElements(container);
+    const focusableElements = this.getFocusableElements(container, false);
     if (focusableElements.length > 0) {
       (focusableElements[focusableElements.length - 1] as HTMLElement).focus();
     }
@@ -124,15 +125,16 @@ export class KeyboardNavigationService implements OnDestroy {
   /**
    * Obtém todos os elementos focáveis dentro de um container
    * @param container Container HTML
+   * @param includeNegativeTabindex Se true, inclui elementos com tabindex="-1"
    */
-  getFocusableElements(container: HTMLElement): Element[] {
+  getFocusableElements(container: HTMLElement, includeNegativeTabindex: boolean = false): Element[] {
     const focusableSelectors = [
       'a[href]',
       'button:not([disabled])',
       'textarea:not([disabled])',
       'input:not([disabled])',
       'select:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])'
+      includeNegativeTabindex ? '[tabindex]' : '[tabindex]:not([tabindex="-1"])'
     ].join(', ');
 
     return Array.from(container.querySelectorAll(focusableSelectors));
@@ -143,6 +145,9 @@ export class KeyboardNavigationService implements OnDestroy {
     this.destroy$.complete();
     
     // Limpar todos os handlers
+    this.handlers.forEach((handler, element) => {
+      element.removeEventListener('keydown', handler);
+    });
     this.handlers.clear();
   }
 }

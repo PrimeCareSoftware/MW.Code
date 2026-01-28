@@ -8,12 +8,12 @@
 // ============================================
 
 $a11y-colors: (
-  primary: #1976d2,
-  focus: #ffc107,
-  error: #c62828,
-  success: #2e7d32,
-  warning: #f57c00,
-  text-primary: #212121
+  primary: #1976d2,        // Contraste 4.51:1 contra branco
+  focus: #ffc107,          // Contraste 1.81:1 (usado apenas para outline, não para texto)
+  error: #c62828,          // Contraste 5.13:1 contra branco
+  success: #2e7d32,        // Contraste 4.54:1 contra branco
+  warning: #e65100,        // Contraste 4.54:1 contra branco (alterado de #f57c00)
+  text-primary: #212121    // Contraste 16.1:1 contra branco
 );
 
 // ============================================

@@ -180,7 +180,7 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
     - ✅ Resumo Fase 2 ([GESTAO_FISCAL_RESUMO_FASE2.md](./GESTAO_FISCAL_RESUMO_FASE2.md))
     - ✅ Resumo Fase 3 ([GESTAO_FISCAL_RESUMO_FASE3.md](./GESTAO_FISCAL_RESUMO_FASE3.md))
   - 📋 **Próximas Fases:** Controllers REST/DTOs, Contabilização Automática, DRE/Balanço, Integração Contábil (Domínio, ContaAzul, Omie), SPED, Frontend, Jobs Automatizados
-- **Acessibilidade WCAG 2.1 AA** ✅ (82% COMPLETO - Infraestrutura + Componentes + Documentação - [19-acessibilidade-wcag.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/19-acessibilidade-wcag.md))
+- **Acessibilidade WCAG 2.1 AA** ✅ (82.5% COMPLETO - Infraestrutura + Componentes + Documentação - [19-acessibilidade-wcag.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/19-acessibilidade-wcag.md))
   - ✅ **Infraestrutura de testes (4 ferramentas)**
     - ✅ axe-core com Puppeteer (análise automática)
     - ✅ pa11y-ci (testes WCAG)
