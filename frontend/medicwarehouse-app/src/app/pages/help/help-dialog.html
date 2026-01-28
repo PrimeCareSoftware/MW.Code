@@ -1,5 +1,5 @@
-<div class="help-overlay" *ngIf="isVisible()" (click)="close()" role="dialog" aria-modal="true" aria-labelledby="help-dialog-title">
-  <div class="help-dialog" (click)="$event.stopPropagation()" appFocusTrap>
+<div class="help-overlay" *ngIf="isVisible()" (click)="close()">
+  <div class="help-dialog" (click)="$event.stopPropagation()" appFocusTrap role="dialog" aria-modal="true" aria-labelledby="help-dialog-title">
     <div class="help-header">
       <h2 id="help-dialog-title">{{ content?.title }}</h2>
       <div class="help-actions">

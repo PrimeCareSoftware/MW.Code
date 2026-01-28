@@ -226,7 +226,18 @@ $warning: #e65100;   // 4.54:1
 
 ## 📊 Métricas de Conformidade
 
-### Status Atual: 90%
+### Status de Implementação Geral: 90%
+
+Este percentual refere-se ao **progresso geral de implementação** incluindo:
+- Infraestrutura (100%)
+- Componentes criados e integrados (100%)
+- Testes unitários (100%)
+- Documentação (100%)
+- Auditoria e validação manual (70%)
+
+### Conformidade WCAG 2.1: 94%
+
+Este percentual refere-se especificamente aos **critérios WCAG 2.1**:
 
 | Categoria | Status | Conformidade |
 |-----------|--------|--------------|
@@ -247,7 +258,7 @@ $warning: #e65100;   // 4.54:1
 
 - ✅ **Level A:** 25/25 (100%)
 - 🟡 **Level AA:** 22/25 (88%)
-- **Total:** 47/50 (94%)
+- **Total WCAG:** 47/50 (94%)
 
 ---
 
