@@ -390,6 +390,10 @@ builder.Services.AddScoped<ISngpcAlertService, SngpcAlertService>();
 // Electronic Invoice Services
 builder.Services.AddScoped<IElectronicInvoiceService, ElectronicInvoiceService>();
 
+// Fiscal Management Services - Phase 3
+builder.Services.AddScoped<ICalculoImpostosService, MedicSoft.Application.Services.Fiscal.CalculoImpostosService>();
+builder.Services.AddScoped<IApuracaoImpostosService, MedicSoft.Application.Services.Fiscal.ApuracaoImpostosService>();
+
 // Payment Flow Orchestration Service
 builder.Services.AddScoped<IPaymentFlowService, PaymentFlowService>();
 
