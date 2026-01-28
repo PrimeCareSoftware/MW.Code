@@ -723,6 +723,63 @@ O projeto segue os princípios do Domain-Driven Design (DDD) com arquitetura em 
 - ✅ **Análise por Categoria**: Distribuição de despesas por categoria
 - ✅ **API RESTful**: Endpoints completos para geração de relatórios
 
+### 💼 Gestão Fiscal e Contábil 🆕✨ (Fase 1 - Janeiro 2026)
+
+**Sistema completo de gestão fiscal com cálculo automático de impostos e controle contábil!**
+
+#### Entidades de Domínio Criadas (Fase 1 ✅)
+- ✅ **ConfiguracaoFiscal**: Gerenciamento de regime tributário por clínica
+  - Regimes suportados: Simples Nacional, Lucro Presumido, Lucro Real, MEI
+  - Simples Nacional: Anexo III/V com Fator R
+  - Alíquotas: ISS, PIS, COFINS, IR, CSLL, INSS
+  - Códigos fiscais: CNAE, Código de Serviço (LC 116/2003), Inscrição Municipal
+  
+- ✅ **ImpostoNota**: Cálculo detalhado de tributos por nota fiscal
+  - Tributos federais: PIS, COFINS, IR, CSLL
+  - Tributo municipal: ISS (com indicação de retenção)
+  - INSS quando aplicável
+  - Totalizadores automáticos: carga tributária (%), valor líquido de tributos
+  
+- ✅ **ApuracaoImpostos**: Consolidação mensal de impostos
+  - Faturamento bruto/líquido do período
+  - Totais por tipo de imposto
+  - Cálculo de DAS (Simples Nacional)
+  - Status: Em Aberto, Apurado, Pago, Parcelado, Atrasado
+  - Rastreabilidade de comprovantes de pagamento
+  
+- ✅ **PlanoContas**: Estrutura contábil hierárquica
+  - Tipos: Ativo, Passivo, Patrimônio Líquido, Receita, Despesa, Custos
+  - Natureza: Devedora ou Credora
+  - Contas sintéticas (agrupadores) e analíticas (lançamentos)
+  - Estrutura de árvore com múltiplos níveis
+  
+- ✅ **LancamentoContabil**: Débitos e créditos com rastreabilidade completa
+  - Origem rastreável: Manual, Nota Fiscal, Pagamento, Recebimento, Fechamento, Ajuste
+  - Vínculo ao documento de origem (nota, pagamento, etc)
+  - Agrupamento por lote para operações compostas
+  - Histórico detalhado de cada lançamento
+
+#### Próximas Fases (Roadmap)
+- 📋 **Fase 2**: Repositórios, Migrations, Entity Framework Configurations
+- 📋 **Fase 3**: Serviços de cálculo automático de impostos
+- 📋 **Fase 4**: DRE (Demonstração de Resultados) e Balanço Patrimonial
+- 📋 **Fase 5**: Integração com sistemas contábeis (Domínio, ContaAzul, Omie)
+- 📋 **Fase 6**: Exportação SPED Fiscal e Contábil
+- 📋 **Fase 7**: API REST e DTOs
+- 📋 **Fase 8**: Dashboard fiscal e frontend
+
+#### Benefícios
+- 💰 Cálculo automático de impostos por nota fiscal
+- 📊 Apuração mensal simplificada
+- 🧮 Suporte completo ao Simples Nacional (Anexo III/V)
+- 📈 DRE e Balanço Patrimonial automatizados
+- 🔗 Integração com principais softwares contábeis
+- 📄 Exportação SPED para conformidade fiscal
+- ⚖️ Conformidade com legislação tributária brasileira
+
+> 📖 **Documentação Técnica Completa**: [GESTAO_FISCAL_IMPLEMENTACAO.md](./GESTAO_FISCAL_IMPLEMENTACAO.md)  
+> 📋 **Especificação Original**: [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md)
+
 ### 📲 Notificações
 - ✅ **SMS**: Integração preparada para envio de SMS
 - ✅ **WhatsApp**: Interface para WhatsApp Business API

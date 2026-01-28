@@ -24,6 +24,37 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ### ✨ Adicionado
 
+#### Gestão Fiscal e Contábil 🆕 (Fase 1 Completa)
+- **Entidades de Domínio Fiscal**: Sistema completo de gestão tributária e contábil
+  - `ConfiguracaoFiscal` - Configuração de regime tributário por clínica
+    - Suporte a Simples Nacional (Anexo III/V com Fator R)
+    - Suporte a Lucro Presumido, Lucro Real e MEI
+    - Alíquotas configuráveis: ISS, PIS, COFINS, IR, CSLL, INSS
+    - Códigos fiscais: CNAE, Código de Serviço (LC 116/2003), Inscrição Municipal
+  - `ImpostoNota` - Cálculo detalhado de impostos por nota fiscal
+    - Cálculo automático de tributos federais e municipais
+    - Totalizadores: carga tributária (%), valor líquido de tributos
+    - Rastreabilidade completa do cálculo
+  - `ApuracaoImpostos` - Consolidação mensal de impostos
+    - Apuração mensal de faturamento e impostos
+    - Cálculo de DAS para Simples Nacional
+    - Status: Em Aberto, Apurado, Pago, Parcelado, Atrasado
+    - Comprovantes de pagamento
+  - `PlanoContas` - Estrutura contábil hierárquica
+    - Tipos de conta: Ativo, Passivo, Patrimônio Líquido, Receita, Despesa, Custos
+    - Natureza do saldo: Devedora ou Credora
+    - Contas sintéticas (agrupadores) e analíticas (lançamentos)
+  - `LancamentoContabil` - Lançamentos de débito/crédito
+    - Origem rastreável: Manual, Nota Fiscal, Pagamento, Recebimento, Fechamento, Ajuste
+    - Vínculo ao documento de origem
+    - Agrupamento por lote
+- **Documentação Completa**:
+  - [GESTAO_FISCAL_IMPLEMENTACAO.md](./GESTAO_FISCAL_IMPLEMENTACAO.md) - Implementação técnica
+  - Atualização em [DOCUMENTATION_MAP.md](./DOCUMENTATION_MAP.md)
+  - Seção completa no [README.md](./README.md)
+- **Próximas Fases**: Repositórios, Migrations, Serviços de Cálculo, DRE/Balanço, Integração Contábil, SPED
+- **Referência**: [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md)
+
 #### BI e Analytics Avançados ✅ (100% Completo)
 - **Sistema completo de Business Intelligence** implementado com Machine Learning
   - Data Warehouse simplificado com consolidação automática (Hangfire jobs)
