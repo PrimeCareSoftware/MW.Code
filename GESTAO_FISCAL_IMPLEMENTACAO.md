@@ -183,11 +183,14 @@ PlanoContas (1) ←→ (N) LancamentoContabil
 - [ ] `BalancoPatrimonialService` - Balanço
 - [ ] `FluxoCaixaService` - Fluxo de caixa contábil
 
-### Fase 5: Integrações Externas
-- [ ] Interface `IIntegracaoContabil`
-- [ ] Adaptador Domínio Sistemas
-- [ ] Adaptador ContaAzul
-- [ ] Adaptador Omie
+### Fase 5: Integrações Externas ✅ COMPLETO
+- [x] Interface `IIntegracaoContabil`
+- [x] Adaptador Domínio Sistemas
+- [x] Adaptador ContaAzul
+- [x] Adaptador Omie
+- [x] Serviço de orquestração
+- [x] Repositório de configurações
+- Ver: [GESTAO_FISCAL_RESUMO_FASE5.md](./GESTAO_FISCAL_RESUMO_FASE5.md)
 
 ### Fase 6: SPED
 - [ ] Gerador SPED Fiscal (EFD ICMS/IPI)
@@ -318,8 +321,8 @@ PlanoContas (1) ←→ (N) LancamentoContabil
 | 1 | Domínio e Entidades | ✅ Completo | Jan 2026 |
 | 2 | Repositórios e Migrations | ✅ Completo | Jan 2026 |
 | 3 | Serviços de Cálculo | ✅ Completo | Jan 2026 |
-| 4 | Relatórios Contábeis | ⏳ Pendente | - |
-| 5 | Integrações Externas | ⏳ Pendente | - |
+| 4 | Relatórios Contábeis | ✅ Completo | Jan 2026 |
+| 5 | Integrações Externas | ✅ Completo | Jan 2026 |
 | 6 | SPED | ⏳ Pendente | - |
 | 7 | API REST | ⏳ Pendente | - |
 | 8 | Frontend | ⏳ Pendente | - |
