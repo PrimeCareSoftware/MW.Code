@@ -842,6 +842,154 @@ All endpoints return standard error responses:
 
 ---
 
+## 🪝 Webhooks API
+
+### Create Webhook Subscription
+Create a new webhook subscription to receive CRM event notifications.
+
+```http
+POST /webhooks
+```
+
+**Request Body:**
+```json
+{
+  "name": "Patient Journey Webhook",
+  "description": "Receive notifications for patient journey events",
+  "targetUrl": "https://example.com/webhooks/crm",
+  "subscribedEvents": [1, 2, 10, 20],
+  "maxRetries": 3,
+  "retryDelaySeconds": 60
+}
+```
+
+**Response:** `201 Created`
+```json
+{
+  "id": "uuid",
+  "name": "Patient Journey Webhook",
+  "description": "Receive notifications for patient journey events",
+  "targetUrl": "https://example.com/webhooks/crm",
+  "isActive": false,
+  "secret": "generated-secret-key",
+  "subscribedEvents": [1, 2, 10, 20],
+  "maxRetries": 3,
+  "retryDelaySeconds": 60,
+  "totalDeliveries": 0,
+  "successfulDeliveries": 0,
+  "failedDeliveries": 0,
+  "createdAt": "2026-01-28T02:00:00Z",
+  "updatedAt": "2026-01-28T02:00:00Z"
+}
+```
+
+### List All Webhooks
+```http
+GET /webhooks
+```
+
+### Update Webhook Subscription
+```http
+PUT /webhooks/{id}
+```
+
+### Activate/Deactivate Webhook
+```http
+POST /webhooks/{id}/activate
+POST /webhooks/{id}/deactivate
+```
+
+### Regenerate Secret
+```http
+POST /webhooks/{id}/regenerate-secret
+```
+
+### Get Webhook Deliveries
+```http
+GET /webhooks/{subscriptionId}/deliveries?limit=50
+```
+
+**Response:** `200 OK`
+```json
+[
+  {
+    "id": "uuid",
+    "subscriptionId": "uuid",
+    "event": "JourneyStageChanged",
+    "status": "Delivered",
+    "targetUrl": "https://example.com/webhooks/crm",
+    "attemptCount": 1,
+    "responseStatusCode": 200,
+    "deliveredAt": "2026-01-28T02:30:00Z"
+  }
+]
+```
+
+### Retry Failed Delivery
+```http
+POST /webhooks/deliveries/{id}/retry
+```
+
+### Webhook Event Types
+```http
+GET /webhooks/events
+```
+
+**Available Events:**
+- `1` JourneyStageChanged
+- `2` TouchpointCreated
+- `10` AutomationExecuted
+- `11` CampaignSent
+- `20` SurveyCreated
+- `21` SurveyCompleted
+- `22` NpsScoreCalculated
+- `30` ComplaintCreated
+- `31` ComplaintStatusChanged
+- `32` ComplaintResolved
+- `40` SentimentAnalyzed
+- `41` NegativeSentimentDetected
+- `50` ChurnRiskCalculated
+- `51` HighChurnRiskDetected
+
+### Webhook Payload Structure
+```json
+{
+  "id": "uuid",
+  "event": "JourneyStageChanged",
+  "timestamp": "2026-01-28T02:30:00Z",
+  "tenantId": "your-tenant-id",
+  "data": {
+    "patientId": "uuid",
+    "previousStage": "Descoberta",
+    "newStage": "Consideracao"
+  }
+}
+```
+
+### Webhook Security
+All webhooks include HMAC-SHA256 signature:
+
+**Headers:**
+```http
+X-Webhook-Signature: base64-encoded-signature
+X-Webhook-Event: JourneyStageChanged
+X-Webhook-Delivery-Id: uuid
+```
+
+**Verification Example (C#):**
+```csharp
+using System.Security.Cryptography;
+
+public bool VerifySignature(string payload, string signature, string secret)
+{
+    using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
+    var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
+    return signature == Convert.ToBase64String(hash);
+}
+```
+
+---
+
 ## 📊 Rate Limiting
 
 API requests are rate-limited:
