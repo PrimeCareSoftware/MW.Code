@@ -1,6 +1,6 @@
-# System Admin User Guide - Phase 1 Features
+# System Admin User Guide - Complete Features
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Target Audience:** System Administrators  
 **Last Updated:** January 28, 2026
 
@@ -8,13 +8,22 @@
 
 ## 📖 Table of Contents
 
+### Phase 1 Features
 1. [Introduction](#introduction)
 2. [Global Search](#global-search)
 3. [Notification Center](#notification-center)
 4. [SaaS Metrics Dashboard](#saas-metrics-dashboard)
-5. [Tips and Best Practices](#tips-and-best-practices)
-6. [FAQ](#faq)
-7. [Troubleshooting](#troubleshooting)
+
+### Phase 2 Features (NEW)
+5. [Advanced Clinic Management](#advanced-clinic-management)
+6. [Health Score System](#health-score-system)
+7. [Tag Management](#tag-management)
+8. [Cross-Tenant User Management](#cross-tenant-user-management)
+
+### General
+9. [Tips and Best Practices](#tips-and-best-practices)
+10. [FAQ](#faq)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -428,12 +437,406 @@ Need help? Contact our support team:
 
 ## 📚 Additional Resources
 
-- [API Documentation](./SYSTEM_ADMIN_API_DOCUMENTATION.md)
-- [Technical Implementation Guide](./SYSTEM_ADMIN_PHASE1_IMPLEMENTATION_COMPLETE.md)
+- [Phase 1 API Documentation](./SYSTEM_ADMIN_API_DOCUMENTATION.md)
+- [Phase 2 API Documentation](./SYSTEM_ADMIN_FASE2_API_DOCUMENTATION.md)
+- [Phase 1 Implementation Guide](./SYSTEM_ADMIN_PHASE1_IMPLEMENTATION_COMPLETE.md)
+- [Phase 2 Implementation Guide](./SYSTEM_ADMIN_FASE2_IMPLEMENTACAO.md)
 - [System Admin Area Guide](./system-admin/guias/SYSTEM_ADMIN_AREA_GUIDE.md)
 
 ---
 
-**Version:** 1.0  
+## 🎯 Phase 2: Advanced Clinic Management (NEW)
+
+### Overview
+
+Phase 2 transforms the basic clinic listing into a powerful CRM system with:
+- **Multiple View Modes**: List, Cards, Map, and Kanban views
+- **Health Score**: Automated clinic health assessment (0-100 points)
+- **Smart Tagging**: Categorize and segment clinics
+- **Cross-Tenant User Management**: Manage users across all clinics
+- **Advanced Analytics**: Deep insights into clinic performance
+
+---
+
+## 📊 Advanced Clinic Management
+
+### Multiple View Modes
+
+Switch between different views to analyze your clinics:
+
+#### 1. List View (Default)
+- Traditional table layout with sortable columns
+- Advanced filtering options
+- Bulk actions support
+- Best for: Detailed data analysis
+
+#### 2. Cards View
+- Visual card-based layout
+- Quick overview of key metrics
+- Color-coded health status
+- Best for: Quick scanning of multiple clinics
+
+#### 3. Map View
+- Geographic visualization
+- Filter by region
+- Cluster markers for density
+- Best for: Geographic analysis and planning
+
+#### 4. Kanban View
+- Drag-and-drop by status
+- Columns: Trial → Active → At-Risk → Churned
+- Visual pipeline management
+- Best for: Workflow management and tracking
+
+### Advanced Filtering
+
+Filter clinics by multiple criteria simultaneously:
+
+**Available Filters:**
+- 🔍 **Search**: Name, email, document, subdomain
+- ✅ **Status**: Active / Inactive
+- 🏷️ **Tags**: Filter by assigned tags
+- 💚 **Health Status**: Healthy / Needs Attention / At Risk
+- 📋 **Subscription**: Trial / Active / Expired / Suspended
+- 📅 **Date Range**: Created after/before specific dates
+
+**How to Use:**
+1. Click "Filters" button in the toolbar
+2. Select your criteria
+3. Click "Apply Filters"
+4. Results update automatically
+5. Clear filters anytime with "Reset"
+
+### Segment Quick Access
+
+Pre-defined segments for quick access:
+
+- 🆕 **New**: Clinics created in last 30 days
+- 🧪 **Trial**: Currently on trial period
+- 🔴 **At Risk**: Health score < 50 points
+- 🟡 **Needs Attention**: Health score 50-79 points
+- 🟢 **Healthy**: Health score ≥ 80 points
+- ⏸️ **Inactive**: Deactivated clinics
+- 💎 **VIP**: High-value customers (tagged)
+
+**How to Use:**
+1. Look for segment chips at the top of the page
+2. Click any segment chip
+3. View is automatically filtered
+4. Number badge shows count for each segment
+
+---
+
+## 💚 Health Score System
+
+### What is Health Score?
+
+Health Score is an automated 0-100 point assessment of clinic engagement and satisfaction. It helps identify:
+- Clinics that need attention
+- Churn risk indicators
+- Success stories
+- Upsell opportunities
+
+### How Health Score is Calculated
+
+The score is based on 4 components:
+
+#### 1. Usage Score (0-30 points)
+Based on days since last activity:
+- ✅ Active today (≤1 day): **30 points**
+- ✅ Active this week (≤7 days): **25 points**
+- ⚠️ Active this month (≤14 days): **20 points**
+- ⚠️ Rarely active (≤30 days): **10 points**
+- 🔴 Inactive (>30 days): **0 points**
+
+#### 2. User Engagement Score (0-25 points)
+Percentage of users active in last 30 days:
+- Formula: `25 × (active_users / total_users)`
+- 100% active = 25 points
+- 50% active = 12.5 points
+- 0% active = 0 points
+
+#### 3. Support Score (0-20 points)
+Based on open support tickets:
+- 0 tickets: **20 points** ✅
+- 1 ticket: **15 points** ✅
+- 2 tickets: **10 points** ⚠️
+- 3 tickets: **5 points** 🔴
+- 4+ tickets: **0 points** 🔴
+
+#### 4. Payment Score (0-25 points)
+Payment status:
+- All payments current: **25 points** ✅
+- Overdue or failed payments: **0 points** 🔴
+
+### Health Status Classification
+
+| Status | Score Range | Color | Action Required |
+|--------|-------------|-------|-----------------|
+| 🟢 **Healthy** | 80-100 | Green | Maintain relationship |
+| 🟡 **Needs Attention** | 50-79 | Yellow | Check in, offer support |
+| 🔴 **At Risk** | 0-49 | Red | Urgent intervention |
+
+### Viewing Health Score
+
+**In Clinic List:**
+- Health score badge shown next to clinic name
+- Color indicates status
+- Click badge for detailed breakdown
+
+**In Clinic Profile:**
+- Dedicated "Health Score" tab
+- Detailed component breakdown
+- Historical trends (coming soon)
+- Recommendations for improvement
+
+### Best Practices
+
+1. **Daily Review**: Check "At Risk" segment daily
+2. **Weekly Outreach**: Contact "Needs Attention" clinics weekly
+3. **Proactive Support**: Reach out before score drops
+4. **Success Stories**: Learn from "Healthy" clinics
+5. **Automation**: Set up alerts for score changes (coming soon)
+
+---
+
+## 🏷️ Tag Management
+
+### What are Tags?
+
+Tags are labels you can assign to clinics for organization, segmentation, and automation. Think of them as flexible categories that help you:
+- Organize clinics by any criteria
+- Create targeted marketing campaigns
+- Track special situations
+- Automate workflows
+
+### Tag Categories
+
+Tags are organized into 5 categories:
+
+1. **Type** (🏥): Business type
+   - Examples: Dental, Medical, Veterinary, Psychology
+   
+2. **Region** (📍): Geographic location
+   - Examples: Southeast, South, North, Northeast
+   
+3. **Value** (💎): Revenue segmentation
+   - Examples: High Value, Standard, Entry
+   
+4. **Status** (🎯): Lifecycle stage
+   - Examples: New, At Risk, Churned, Recovering
+   
+5. **Custom** (✨): Your own categories
+   - Examples: Partner, Referral, Beta Tester
+
+### Creating Tags
+
+1. Navigate to Settings → Tags Management
+2. Click "Create New Tag"
+3. Fill in the form:
+   - **Name**: Short, descriptive name (e.g., "High Value")
+   - **Category**: Select from dropdown
+   - **Color**: Choose a color for visual identification
+   - **Description**: Optional details about when to use
+   - **Automatic**: Check if this tag should be applied automatically
+4. Click "Save"
+
+### Assigning Tags
+
+**Manual Assignment:**
+1. Open clinic profile
+2. Click "Add Tag" button
+3. Select tags from dropdown
+4. Tags are applied immediately
+
+**Bulk Assignment:**
+1. Select multiple clinics (checkboxes)
+2. Click "Bulk Actions" → "Add Tag"
+3. Select tag to apply
+4. Confirm action
+
+**Automatic Assignment:**
+Some tags are applied automatically based on rules:
+- "At Risk" → No activity in 30 days
+- "High Value" → MRR ≥ R$ 1,000
+- "New" → Created in last 30 days
+
+### Filtering by Tags
+
+**In Clinic List:**
+1. Open "Filters" panel
+2. Section "Tags"
+3. Select one or more tags
+4. Click "Apply"
+5. Only clinics with selected tags are shown
+
+**Quick Tag Filter:**
+- Click any tag badge directly
+- Instant filter applied
+- Click again to remove filter
+
+### Tag Best Practices
+
+✅ **Do:**
+- Use consistent naming conventions
+- Choose distinct colors for easy identification
+- Document tag usage in descriptions
+- Review and clean up unused tags periodically
+- Use automatic tags for objective criteria
+
+❌ **Don't:**
+- Create too many similar tags
+- Use vague or unclear names
+- Change tag meanings over time
+- Forget to remove outdated tags
+
+---
+
+## 👥 Cross-Tenant User Management
+
+### Overview
+
+Manage all users across all clinics from a single interface. Perfect for:
+- Password resets
+- Account activation/deactivation
+- User auditing
+- Cross-clinic analysis
+
+### Searching Users
+
+**Basic Search:**
+1. Navigate to "All Users" section
+2. Enter search term (name, email, phone)
+3. Results show users from all clinics
+4. Click user to view details
+
+**Advanced Filtering:**
+- **Role**: Filter by Doctor, Secretary, Admin, etc.
+- **Status**: Active or inactive users
+- **Clinic**: Users from specific clinic
+- **Combination**: Use multiple filters together
+
+### User Details
+
+Click any user to see:
+- Full name and contact info
+- Role and permissions
+- Account status (active/inactive)
+- Creation date
+- Associated clinic information
+- Recent activity (if available)
+
+### User Operations
+
+#### Reset Password
+1. Open user profile
+2. Click "Reset Password"
+3. Enter new temporary password
+4. Click "Confirm"
+5. User receives notification (optional)
+6. User must change password on next login
+
+**Security Note:** New password must be at least 6 characters.
+
+#### Toggle Activation
+1. Open user profile
+2. Click "Activate" or "Deactivate" button
+3. Confirm action
+4. Status changes immediately
+5. User is logged out if deactivated
+
+**Use Cases:**
+- Deactivate: Employee left, security concern, inactive account
+- Activate: Re-enable access, restore account
+
+### Bulk Operations
+
+Select multiple users to:
+- Send email announcements
+- Export user list
+- Generate reports
+
+---
+
+## 📈 Clinic Profile (Enhanced)
+
+### Profile Tabs
+
+The new clinic profile has 5 tabs:
+
+#### 1. Overview Tab
+- Basic information (name, contact, address)
+- Current subscription details
+- Health score summary
+- Quick actions (edit, deactivate, impersonate)
+
+#### 2. Timeline Tab
+- Chronological history of all events
+- Subscription changes
+- Ticket creation/resolution
+- User additions
+- Significant activities
+- Filterable by event type
+
+#### 3. Metrics Tab
+- Usage statistics
+- Login frequency (7 days, 30 days)
+- Appointments created
+- Patients registered
+- Documents generated
+- Customizable date range
+
+#### 4. Health Score Tab
+- Detailed score breakdown
+- Each component explained
+- Historical trends (coming soon)
+- Recommendations for improvement
+- Export report option
+
+#### 5. Tags Tab
+- All assigned tags
+- Add/remove tags
+- Tag history
+- Automatic vs manual tags
+
+---
+
+## 💡 Tips and Best Practices (Updated)
+
+### For Clinic Management
+
+1. **Daily Routine:**
+   - Review "At Risk" segment first thing
+   - Check health scores for alerts
+   - Respond to new support tickets
+
+2. **Weekly Tasks:**
+   - Analyze "Needs Attention" clinics
+   - Review new clinic onboarding
+   - Update tags as needed
+   - Check usage metrics
+
+3. **Monthly Review:**
+   - Overall health score trends
+   - Segment distribution changes
+   - Tag effectiveness
+   - User engagement patterns
+
+### For User Management
+
+1. **Security:**
+   - Regularly review inactive users
+   - Deactivate accounts promptly when employees leave
+   - Use strong temporary passwords for resets
+   - Monitor cross-tenant access patterns
+
+2. **Organization:**
+   - Keep user roles up to date
+   - Document special permissions
+   - Regular user audits
+
+---
+
+**Version:** 2.0  
 **Last Updated:** January 28, 2026  
 **Next Review:** February 2026
