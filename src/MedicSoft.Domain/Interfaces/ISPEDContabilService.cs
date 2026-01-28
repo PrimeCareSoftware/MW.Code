@@ -14,8 +14,9 @@ namespace MedicSoft.Domain.Interfaces
         /// <param name="clinicaId">ID da clínica</param>
         /// <param name="inicio">Data inicial do período</param>
         /// <param name="fim">Data final do período</param>
+        /// <param name="tenantId">ID do tenant</param>
         /// <returns>Conteúdo do arquivo SPED Contábil</returns>
-        Task<string> GerarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim);
+        Task<string> GerarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim, string tenantId);
 
         /// <summary>
         /// Valida estrutura de arquivo SPED Contábil
@@ -31,7 +32,8 @@ namespace MedicSoft.Domain.Interfaces
         /// <param name="inicio">Data inicial do período</param>
         /// <param name="fim">Data final do período</param>
         /// <param name="caminhoArquivo">Caminho onde salvar o arquivo</param>
+        /// <param name="tenantId">ID do tenant</param>
         /// <returns>Caminho do arquivo gerado</returns>
-        Task<string> ExportarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim, string caminhoArquivo);
+        Task<string> ExportarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim, string caminhoArquivo, string tenantId);
     }
 }

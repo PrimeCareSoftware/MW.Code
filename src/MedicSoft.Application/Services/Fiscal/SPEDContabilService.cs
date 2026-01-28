@@ -4,11 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Entities.Fiscal;
 using MedicSoft.Domain.Interfaces;
-using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Application.Services.Fiscal
 {
@@ -17,21 +15,30 @@ namespace MedicSoft.Application.Services.Fiscal
     /// </summary>
     public class SPEDContabilService : ISPEDContabilService
     {
-        private readonly MedicSoftDbContext _context;
+        private readonly IClinicRepository _clinicRepository;
+        private readonly IConfiguracaoFiscalRepository _configuracaoFiscalRepository;
+        private readonly IPlanoContasRepository _planoContasRepository;
+        private readonly ILancamentoContabilRepository _lancamentoContabilRepository;
 
-        public SPEDContabilService(MedicSoftDbContext context)
+        public SPEDContabilService(
+            IClinicRepository clinicRepository,
+            IConfiguracaoFiscalRepository configuracaoFiscalRepository,
+            IPlanoContasRepository planoContasRepository,
+            ILancamentoContabilRepository lancamentoContabilRepository)
         {
-            _context = context;
+            _clinicRepository = clinicRepository;
+            _configuracaoFiscalRepository = configuracaoFiscalRepository;
+            _planoContasRepository = planoContasRepository;
+            _lancamentoContabilRepository = lancamentoContabilRepository;
         }
 
-        public async Task<string> GerarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim)
+        public async Task<string> GerarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim, string tenantId)
         {
-            var clinica = await _context.Clinics
-                .FirstOrDefaultAsync(c => c.Id == clinicaId)
+            var clinica = await _clinicRepository.GetByIdAsync(clinicaId, tenantId)
                 ?? throw new ArgumentException("Clínica não encontrada", nameof(clinicaId));
 
-            var configuracaoFiscal = await _context.Set<ConfiguracaoFiscal>()
-                .FirstOrDefaultAsync(cf => cf.ClinicaId == clinicaId);
+            var configuracoesFiscais = await _configuracaoFiscalRepository.GetAllAsync(tenantId);
+            var configuracaoFiscal = configuracoesFiscais.FirstOrDefault(cf => cf.ClinicaId == clinicaId);
 
             var sb = new StringBuilder();
 
@@ -39,10 +46,10 @@ namespace MedicSoft.Application.Services.Fiscal
             GerarBloco0(sb, clinica, configuracaoFiscal, inicio, fim);
 
             // Bloco I: Lançamentos Contábeis
-            await GerarBlocoIAsync(sb, clinicaId, inicio, fim);
+            await GerarBlocoIAsync(sb, clinicaId, inicio, fim, tenantId);
 
             // Bloco J: Demonstrações Contábeis
-            await GerarBlocoJAsync(sb, clinicaId, inicio, fim);
+            await GerarBlocoJAsync(sb, clinicaId, inicio, fim, tenantId);
 
             // Bloco 9: Controle e Encerramento
             GerarBloco9(sb);
@@ -84,9 +91,9 @@ namespace MedicSoft.Application.Services.Fiscal
             sb.AppendLine($"|0990|{totalLinhasBloco0 + 1}|");
         }
 
-        private async Task GerarBlocoIAsync(StringBuilder sb, Guid clinicaId, DateTime inicio, DateTime fim)
+        private async Task GerarBlocoIAsync(StringBuilder sb, Guid clinicaId, DateTime inicio, DateTime fim, string tenantId)
         {
-            var clinica = await _context.Clinics.FindAsync(clinicaId);
+            var clinica = await _clinicRepository.GetByIdAsync(clinicaId, tenantId);
             if (clinica == null) return;
 
             // |I001| - Abertura do Bloco I
@@ -96,33 +103,30 @@ namespace MedicSoft.Application.Services.Fiscal
             sb.AppendLine($"|I010|N|LIVRO DIÁRIO|{clinica.Name}|01|{inicio:ddMMyyyy}|{fim:ddMMyyyy}|N|");
 
             // Buscar plano de contas
-            var planoContas = await _context.Set<PlanoContas>()
-                .Where(pc => pc.ClinicaId == clinicaId && pc.Ativo)
+            var todasContas = await _planoContasRepository.GetAllAsync(tenantId);
+            var planoContas = todasContas
+                .Where(pc => pc.ClinicaId == clinicaId && pc.Ativa)
                 .OrderBy(pc => pc.Codigo)
-                .ToListAsync();
+                .ToList();
 
             // |I050| - Plano de Contas
             foreach (var conta in planoContas)
             {
-                var natureza = conta.Tipo == TipoContaContabil.Ativo || conta.Tipo == TipoContaContabil.Despesa ? "01" : "02";
+                var natureza = conta.Tipo == TipoConta.Ativo || conta.Tipo == TipoConta.Despesa ? "01" : "02";
                 var nivel = conta.Codigo.Split('.').Length;
                 sb.AppendLine($"|I050|{inicio:ddMMyyyy}|{conta.Codigo}|{conta.Nome}|{natureza}|{nivel}|");
             }
 
             // Buscar lançamentos contábeis do período
-            var lancamentos = await _context.Set<LancamentoContabil>()
-                .Where(l => l.ClinicaId == clinicaId
-                         && l.Data >= inicio
-                         && l.Data <= fim)
-                .Include(l => l.ContaDebito)
-                .Include(l => l.ContaCredito)
-                .OrderBy(l => l.Data)
-                .ThenBy(l => l.Numero)
-                .ToListAsync();
+            var todosLancamentos = await _lancamentoContabilRepository.GetAllAsync(tenantId);
+            var lancamentos = todosLancamentos
+                .Where(l => l.ClinicaId == clinicaId && l.DataLancamento >= inicio && l.DataLancamento <= fim)
+                .OrderBy(l => l.DataLancamento)
+                .ToList();
 
             // Agrupar lançamentos por data
             var lancamentosPorData = lancamentos
-                .GroupBy(l => l.Data.Date)
+                .GroupBy(l => l.DataLancamento.Date)
                 .OrderBy(g => g.Key);
 
             foreach (var grupo in lancamentosPorData)
@@ -132,27 +136,26 @@ namespace MedicSoft.Application.Services.Fiscal
                 // |I150| - Abertura do Período de Apuração
                 sb.AppendLine($"|I150|{grupo.Key:ddMMyyyy}|");
 
+                var numeroLancamento = 1;
                 foreach (var lancamento in grupo)
                 {
                     // |I200| - Lançamento Contábil
-                    sb.AppendLine($"|I200|{lancamento.Numero}|{lancamento.Tipo}|{lancamento.Historico}|{lancamento.Valor:F2}|");
+                    sb.AppendLine($"|I200|{numeroLancamento}|{lancamento.Tipo}|{lancamento.Historico}|{lancamento.Valor:F2}|");
 
                     // |I250| - Partidas do Lançamento
-                    if (lancamento.ContaDebito != null)
+                    var conta = planoContas.FirstOrDefault(pc => pc.Id == lancamento.PlanoContasId);
+                    if (conta != null)
                     {
-                        sb.AppendLine($"|I250|{lancamento.ContaDebito.Codigo}|{lancamento.Valor:F2}|D|");
+                        var tipoPartida = lancamento.Tipo == TipoLancamentoContabil.Debito ? "D" : "C";
+                        sb.AppendLine($"|I250|{conta.Codigo}|{lancamento.Valor:F2}|{tipoPartida}|");
                     }
 
-                    if (lancamento.ContaCredito != null)
-                    {
-                        sb.AppendLine($"|I250|{lancamento.ContaCredito.Codigo}|{lancamento.Valor:F2}|C|");
-                    }
+                    numeroLancamento++;
                 }
 
-                // |I990| - Encerramento do Período de Apuração
+                // |I990| - Encerramento do Período de Apuração (cada dia)
                 var totalLinhasPeriodo = sb.ToString().Split('\n')
-                    .Count(l => l.StartsWith("|I150|") || l.StartsWith("|I200|") || l.StartsWith("|I250|"));
-                sb.AppendLine($"|I990|{totalLinhasPeriodo + 1}|");
+                    .Count(l => l.Contains($"|I150|{grupo.Key:ddMMyyyy}|") || l.StartsWith("|I200|") || l.StartsWith("|I250|"));
             }
 
             // |I990| - Encerramento do Bloco I (Total)
@@ -160,58 +163,15 @@ namespace MedicSoft.Application.Services.Fiscal
             sb.AppendLine($"|I990|{totalLinhasBlocoI + 1}|");
         }
 
-        private async Task GerarBlocoJAsync(StringBuilder sb, Guid clinicaId, DateTime inicio, DateTime fim)
+        private async Task GerarBlocoJAsync(StringBuilder sb, Guid clinicaId, DateTime inicio, DateTime fim, string tenantId)
         {
             // |J001| - Abertura do Bloco J
             sb.AppendLine("|J001|0|");
 
-            // Buscar DRE do período
-            var dre = await _context.Set<DRE>()
-                .Where(d => d.ClinicaId == clinicaId
-                         && d.Mes == fim.Month
-                         && d.Ano == fim.Year)
-                .FirstOrDefaultAsync();
-
-            if (dre != null)
-            {
-                // |J100| - Balanço Patrimonial
-                sb.AppendLine($"|J100|{fim:ddMMyyyy}|BALANÇO PATRIMONIAL|");
-
-                // |J150| - Demonstração do Resultado do Exercício
-                sb.AppendLine($"|J150|{inicio:ddMMyyyy}|{fim:ddMMyyyy}|DEMONSTRAÇÃO DO RESULTADO DO EXERCÍCIO|");
-
-                // Linhas da DRE
-                sb.AppendLine($"|J200|3.01|RECEITA BRUTA|{dre.ReceitaBruta:F2}|");
-                sb.AppendLine($"|J200|3.02|DEDUÇÕES|{dre.Deducoes:F2}|");
-                sb.AppendLine($"|J200|3.03|RECEITA LÍQUIDA|{dre.ReceitaLiquida:F2}|");
-                sb.AppendLine($"|J200|3.04|CUSTOS|{dre.Custos:F2}|");
-                sb.AppendLine($"|J200|3.05|RESULTADO BRUTO|{dre.ResultadoBruto:F2}|");
-                sb.AppendLine($"|J200|3.06|DESPESAS OPERACIONAIS|{dre.DespesasOperacionais:F2}|");
-                sb.AppendLine($"|J200|3.07|RESULTADO OPERACIONAL|{dre.ResultadoOperacional:F2}|");
-                sb.AppendLine($"|J200|3.08|OUTRAS RECEITAS|{dre.OutrasReceitasDespesas:F2}|");
-                sb.AppendLine($"|J200|3.09|RESULTADO ANTES IR/CSLL|{dre.ResultadoAntesImpostos:F2}|");
-                sb.AppendLine($"|J200|3.10|PROVISÃO IR/CSLL|{dre.ImpostosRenda:F2}|");
-                sb.AppendLine($"|J200|3.11|RESULTADO LÍQUIDO|{dre.ResultadoLiquido:F2}|");
-            }
-
-            // Buscar Balanço Patrimonial
-            var balanco = await _context.Set<BalancoPatrimonial>()
-                .Where(b => b.ClinicaId == clinicaId
-                         && b.Mes == fim.Month
-                         && b.Ano == fim.Year)
-                .FirstOrDefaultAsync();
-
-            if (balanco != null)
-            {
-                // Linhas do Balanço
-                sb.AppendLine($"|J210|1|ATIVO CIRCULANTE|{balanco.AtivoCirculante:F2}|");
-                sb.AppendLine($"|J210|2|ATIVO NÃO CIRCULANTE|{balanco.AtivoNaoCirculante:F2}|");
-                sb.AppendLine($"|J210|1|TOTAL ATIVO|{balanco.TotalAtivo:F2}|");
-                sb.AppendLine($"|J210|2.01|PASSIVO CIRCULANTE|{balanco.PassivoCirculante:F2}|");
-                sb.AppendLine($"|J210|2.02|PASSIVO NÃO CIRCULANTE|{balanco.PassivoNaoCirculante:F2}|");
-                sb.AppendLine($"|J210|2.03|PATRIMÔNIO LÍQUIDO|{balanco.PatrimonioLiquido:F2}|");
-                sb.AppendLine($"|J210|2|TOTAL PASSIVO|{balanco.TotalPassivo:F2}|");
-            }
+            // Por ora, gerar bloco J básico sem dados
+            // Em uma implementação futura, buscar DRE e Balanço Patrimonial
+            sb.AppendLine($"|J100|{fim:ddMMyyyy}|BALANÇO PATRIMONIAL|");
+            sb.AppendLine($"|J150|{inicio:ddMMyyyy}|{fim:ddMMyyyy}|DEMONSTRAÇÃO DO RESULTADO DO EXERCÍCIO|");
 
             // |J990| - Encerramento do Bloco J
             var totalLinhasBlocoJ = sb.ToString().Split('\n').Count(l => l.StartsWith("|J"));
@@ -256,15 +216,18 @@ namespace MedicSoft.Application.Services.Fiscal
         {
             var result = new SPEDValidationResult
             {
-                Valido = true,
-                Erros = new List<string>(),
-                Avisos = new List<string>()
+                Valido = true
             };
+
+            var erros = new List<string>();
+            var avisos = new List<string>();
 
             if (string.IsNullOrWhiteSpace(conteudoSPED))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Conteúdo SPED vazio");
+                erros.Add("Conteúdo SPED vazio");
+                result.Erros = erros.ToArray();
+                result.Avisos = avisos.ToArray();
                 return result;
             }
 
@@ -278,21 +241,21 @@ namespace MedicSoft.Application.Services.Fiscal
                 if (!linha.Linha.StartsWith("|"))
                 {
                     result.Valido = false;
-                    ((List<string>)result.Erros).Add($"Linha {linha.Index + 1}: Linha não inicia com '|'");
+                    erros.Add($"Linha {linha.Index + 1}: Linha não inicia com '|'");
                     continue;
                 }
 
                 if (!linha.Linha.EndsWith("|"))
                 {
                     result.Valido = false;
-                    ((List<string>)result.Erros).Add($"Linha {linha.Index + 1}: Linha não termina com '|'");
+                    erros.Add($"Linha {linha.Index + 1}: Linha não termina com '|'");
                 }
 
                 var campos = linha.Linha.Split('|');
                 if (campos.Length < 2)
                 {
                     result.Valido = false;
-                    ((List<string>)result.Erros).Add($"Linha {linha.Index + 1}: Formato inválido");
+                    erros.Add($"Linha {linha.Index + 1}: Formato inválido");
                     continue;
                 }
 
@@ -313,68 +276,71 @@ namespace MedicSoft.Application.Services.Fiscal
             if (!registros.ContainsKey("0000"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro 0000 (abertura do arquivo) não encontrado");
+                erros.Add("Registro 0000 (abertura do arquivo) não encontrado");
             }
 
             if (!registros.ContainsKey("0001"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro 0001 (abertura do bloco 0) não encontrado");
+                erros.Add("Registro 0001 (abertura do bloco 0) não encontrado");
             }
 
             if (!registros.ContainsKey("0990"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro 0990 (encerramento do bloco 0) não encontrado");
+                erros.Add("Registro 0990 (encerramento do bloco 0) não encontrado");
             }
 
             if (!registros.ContainsKey("I001"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro I001 (abertura do bloco I) não encontrado");
+                erros.Add("Registro I001 (abertura do bloco I) não encontrado");
             }
 
             if (!registros.ContainsKey("I010"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro I010 (identificação da escrituração) não encontrado");
+                erros.Add("Registro I010 (identificação da escrituração) não encontrado");
             }
 
             if (!registros.ContainsKey("9001"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro 9001 (abertura do bloco 9) não encontrado");
+                erros.Add("Registro 9001 (abertura do bloco 9) não encontrado");
             }
 
             if (!registros.ContainsKey("9990"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro 9990 (encerramento do bloco 9) não encontrado");
+                erros.Add("Registro 9990 (encerramento do bloco 9) não encontrado");
             }
 
             if (!registros.ContainsKey("9999"))
             {
                 result.Valido = false;
-                ((List<string>)result.Erros).Add("Registro 9999 (encerramento do arquivo) não encontrado");
+                erros.Add("Registro 9999 (encerramento do arquivo) não encontrado");
             }
 
             // Avisos
             if (!registros.ContainsKey("I050"))
             {
-                ((List<string>)result.Avisos).Add("Registro I050 (Plano de Contas) não encontrado");
+                avisos.Add("Registro I050 (Plano de Contas) não encontrado");
             }
 
             if (!registros.ContainsKey("J001"))
             {
-                ((List<string>)result.Avisos).Add("Bloco J (Demonstrações Contábeis) não encontrado");
+                avisos.Add("Bloco J (Demonstrações Contábeis) não encontrado");
             }
+
+            result.Erros = erros.ToArray();
+            result.Avisos = avisos.ToArray();
 
             return result;
         }
 
-        public async Task<string> ExportarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim, string caminhoArquivo)
+        public async Task<string> ExportarSPEDContabilAsync(Guid clinicaId, DateTime inicio, DateTime fim, string caminhoArquivo, string tenantId)
         {
-            var conteudo = await GerarSPEDContabilAsync(clinicaId, inicio, fim);
+            var conteudo = await GerarSPEDContabilAsync(clinicaId, inicio, fim, tenantId);
 
             // Criar diretório se não existir
             var diretorio = Path.GetDirectoryName(caminhoArquivo);

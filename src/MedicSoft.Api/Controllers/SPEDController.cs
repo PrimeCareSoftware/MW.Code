@@ -46,7 +46,8 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                var conteudo = await _spedFiscalService.GerarSPEDFiscalAsync(clinicaId, inicio, fim);
+                var tenantId = GetTenantId();
+                var conteudo = await _spedFiscalService.GerarSPEDFiscalAsync(clinicaId, inicio, fim, tenantId);
                 return Ok(new { conteudo, tipo = "SPED Fiscal" });
             }
             catch (ArgumentException ex)
@@ -77,7 +78,8 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                var conteudo = await _spedFiscalService.GerarSPEDFiscalAsync(clinicaId, inicio, fim);
+                var tenantId = GetTenantId();
+                var conteudo = await _spedFiscalService.GerarSPEDFiscalAsync(clinicaId, inicio, fim, tenantId);
                 var nomeArquivo = $"SPED_Fiscal_{clinicaId}_{inicio:yyyyMMdd}_{fim:yyyyMMdd}.txt";
                 
                 var bytes = System.Text.Encoding.UTF8.GetBytes(conteudo);
@@ -133,7 +135,8 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                var conteudo = await _spedContabilService.GerarSPEDContabilAsync(clinicaId, inicio, fim);
+                var tenantId = GetTenantId();
+                var conteudo = await _spedContabilService.GerarSPEDContabilAsync(clinicaId, inicio, fim, tenantId);
                 return Ok(new { conteudo, tipo = "SPED Contábil (ECD)" });
             }
             catch (ArgumentException ex)
@@ -164,7 +167,8 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                var conteudo = await _spedContabilService.GerarSPEDContabilAsync(clinicaId, inicio, fim);
+                var tenantId = GetTenantId();
+                var conteudo = await _spedContabilService.GerarSPEDContabilAsync(clinicaId, inicio, fim, tenantId);
                 var nomeArquivo = $"SPED_Contabil_{clinicaId}_{inicio:yyyyMMdd}_{fim:yyyyMMdd}.txt";
                 
                 var bytes = System.Text.Encoding.UTF8.GetBytes(conteudo);
