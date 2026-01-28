@@ -14,6 +14,53 @@
           <button (click)="loadAnalytics()" class="btn-retry">Tentar novamente</button>
         </div>
       } @else if (analytics()) {
+        <!-- Phase 1: SaaS Metrics KPIs -->
+        @if (saasDashboard()) {
+          <div class="saas-metrics-section">
+            <h2 class="section-title">Métricas SaaS</h2>
+            <div class="kpi-grid">
+              <app-kpi-card
+                title="MRR (Receita Recorrente Mensal)"
+                [value]="formatCurrency(saasDashboard()!.mrr)"
+                [change]="saasDashboard()!.mrrGrowthMoM"
+                [trend]="saasDashboard()!.mrrTrend"
+                icon="💰"
+                [clickable]="true"
+              />
+              <app-kpi-card
+                title="ARR (Receita Anual Recorrente)"
+                [value]="formatCurrency(saasDashboard()!.arr)"
+                [subtitle]="'MRR × 12'"
+                icon="📊"
+              />
+              <app-kpi-card
+                title="Clientes Ativos"
+                [value]="saasDashboard()!.activeCustomers.toString()"
+                [subtitle]="saasDashboard()!.newCustomers + ' novos este mês'"
+                icon="👥"
+                [clickable]="true"
+              />
+              <app-kpi-card
+                title="Taxa de Churn"
+                [value]="saasDashboard()!.churnRate.toFixed(2) + '%'"
+                [subtitle]="saasDashboard()!.churnedCustomers + ' cancelamentos este mês'"
+                icon="📉"
+              />
+              <app-kpi-card
+                title="ARPU (Receita Média por Usuário)"
+                [value]="formatCurrency(saasDashboard()!.arpu)"
+                icon="💵"
+              />
+              <app-kpi-card
+                title="LTV / CAC"
+                [value]="saasDashboard()!.ltvCacRatio.toFixed(2)"
+                [subtitle]="'LTV: ' + formatCurrency(saasDashboard()!.ltv) + ' | CAC: ' + formatCurrency(saasDashboard()!.cac)"
+                icon="📈"
+              />
+            </div>
+          </div>
+        }
+
         <div class="analytics-grid">
           <!-- Clinics Card -->
           <div class="card">
