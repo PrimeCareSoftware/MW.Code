@@ -1,28 +1,45 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { SystemAdminService } from '../../services/system-admin';
-import { SystemAnalytics } from '../../models/system-admin.model';
+import { SaasMetricsService } from '../../services/saas-metrics.service';
+import { SystemAnalytics, SaasDashboard } from '../../models/system-admin.model';
 import { Navbar } from '../../shared/navbar/navbar';
+import { KpiCardComponent } from '../../components/kpi-card/kpi-card.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, Navbar],
+  imports: [CommonModule, RouterModule, Navbar, KpiCardComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'})
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
   analytics = signal<SystemAnalytics | null>(null);
+  saasDashboard = signal<SaasDashboard | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
+  private refreshInterval?: number;
 
   constructor(
     private systemAdminService: SystemAdminService,
+    private saasMetricsService: SaasMetricsService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadAnalytics();
+    this.loadSaasMetrics();
+    
+    // Auto-refresh every 60 seconds
+    this.refreshInterval = window.setInterval(() => {
+      this.loadSaasMetrics();
+    }, 60000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
   }
 
   loadAnalytics(): void {
@@ -37,6 +54,17 @@ export class Dashboard implements OnInit {
       error: (err) => {
         this.error.set(err.error?.message || 'Erro ao carregar dados');
         this.loading.set(false);
+      }
+    });
+  }
+
+  loadSaasMetrics(): void {
+    this.saasMetricsService.getDashboard().subscribe({
+      next: (data) => {
+        this.saasDashboard.set(data);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar métricas SaaS:', err);
       }
     });
   }

@@ -285,6 +285,10 @@ builder.Services.AddScoped<IClinicCustomizationRepository, ClinicCustomizationRe
 builder.Services.AddScoped<ISalesFunnelMetricRepository, SalesFunnelMetricRepository>();
 builder.Services.AddScoped<IModuleConfigurationRepository, ModuleConfigurationRepository>();
 
+// System Admin - Notification repositories
+builder.Services.AddScoped<ISystemNotificationRepository, SystemNotificationRepository>();
+builder.Services.AddScoped<INotificationRuleRepository, NotificationRuleRepository>();
+
 // CFM 1.821 - Register new repositories
 builder.Services.AddScoped<IClinicalExaminationRepository, ClinicalExaminationRepository>();
 builder.Services.AddScoped<IDiagnosticHypothesisRepository, DiagnosticHypothesisRepository>();
@@ -365,6 +369,14 @@ builder.Services.AddScoped<IAccessProfileService, AccessProfileService>();
 builder.Services.AddSingleton<IInAppNotificationService, InAppNotificationService>();
 builder.Services.AddScoped<DataSeederService>();
 builder.Services.AddScoped<ISalesFunnelService, SalesFunnelService>();
+
+// System Admin - Phase 1 Services
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISaasMetricsService, MedicSoft.Application.Services.SystemAdmin.SaasMetricsService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IGlobalSearchService, MedicSoft.Application.Services.SystemAdmin.GlobalSearchService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISystemNotificationService, MedicSoft.Application.Services.SystemAdmin.SystemNotificationService>();
+
+// System Admin - Background Jobs
+builder.Services.AddScoped<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>();
 
 // CFM 1.821 - Register new services
 builder.Services.AddScoped<IClinicalExaminationService, ClinicalExaminationService>();
@@ -652,6 +664,7 @@ if (rateLimitEnabled)
 
 app.MapControllers();
 app.MapHub<MedicSoft.Api.Hubs.FilaHub>("/hubs/fila");
+app.MapHub<MedicSoft.Api.Hubs.SystemNotificationHub>("/hubs/system-notifications");
 
 // Initialize MediatR License
 using (var scope = app.Services.CreateScope())
@@ -817,6 +830,43 @@ try
         "crm-sentiment-trends",
         job => job.AnalyzeSentimentTrendsAsync(),
         Cron.Daily(12, 0), // Daily at 12:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // System Admin Jobs - Notification monitoring
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
+        "sysadmin-check-subscription-expirations",
+        job => job.CheckSubscriptionExpirationsAsync(),
+        Cron.Hourly(), // Every hour
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
+        "sysadmin-check-trial-expiring",
+        job => job.CheckTrialExpiringAsync(),
+        Cron.Daily(9, 0), // Daily at 09:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
+        "sysadmin-check-inactive-clinics",
+        job => job.CheckInactiveClinicsAsync(),
+        Cron.Daily(10, 0), // Daily at 10:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
+        "sysadmin-check-unresponded-tickets",
+        job => job.CheckUnrespondedTicketsAsync(),
+        "0 */6 * * *", // Every 6 hours
         new RecurringJobOptions
         {
             TimeZone = TimeZoneInfo.Utc

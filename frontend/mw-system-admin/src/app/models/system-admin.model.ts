@@ -151,3 +151,164 @@ export interface EnableManualOverrideRequest {
   reason: string;
   extendUntil?: string;
 }
+
+// Phase 1: SaaS Metrics
+export interface SaasDashboard {
+  mrr: number;
+  arr: number;
+  activeCustomers: number;
+  newCustomers: number;
+  churnedCustomers: number;
+  churnRate: number;
+  arpu: number;
+  ltv: number;
+  cac: number;
+  ltvCacRatio: number;
+  mrrGrowthMoM: number;
+  growthRateYoY: number;
+  quickRatio: number;
+  mrrTrend: 'up' | 'down' | 'stable';
+  trialCustomers: number;
+  atRiskCustomers: number;
+}
+
+export interface MrrBreakdown {
+  totalMrr: number;
+  newMrr: number;
+  expansionMrr: number;
+  contractionMrr: number;
+  churnedMrr: number;
+  netNewMrr: number;
+}
+
+export interface ChurnAnalysis {
+  revenueChurnRate: number;
+  customerChurnRate: number;
+  monthlyRevenueChurn: number;
+  monthlyCustomerChurn: number;
+  annualRevenueChurn: number;
+  annualCustomerChurn: number;
+  churnHistory: ChurnDataPoint[];
+}
+
+export interface ChurnDataPoint {
+  month: string;
+  revenueChurn: number;
+  customerChurn: number;
+  churnedCount: number;
+}
+
+export interface GrowthMetrics {
+  moMGrowthRate: number;
+  yoYGrowthRate: number;
+  quickRatio: number;
+  trialConversionRate: number;
+  growthHistory: GrowthDataPoint[];
+}
+
+export interface GrowthDataPoint {
+  month: string;
+  growthRate: number;
+  mrr: number;
+}
+
+export interface RevenueTimeline {
+  month: string;
+  date: string;
+  totalMrr: number;
+  newMrr: number;
+  expansionMrr: number;
+  contractionMrr: number;
+  churnedMrr: number;
+  activeCustomers: number;
+}
+
+export interface CustomerBreakdown {
+  byPlan: { [key: string]: number };
+  byStatus: { [key: string]: number };
+}
+
+// Phase 1: Global Search
+export interface GlobalSearchResult {
+  clinics: ClinicSearchResult[];
+  users: UserSearchResult[];
+  tickets: TicketSearchResult[];
+  plans: PlanSearchResult[];
+  auditLogs: AuditLogSearchResult[];
+  totalResults: number;
+  searchDurationMs: number;
+}
+
+export interface ClinicSearchResult {
+  id: string;
+  name: string;
+  document: string;
+  email: string;
+  tenantId: string;
+  planName: string;
+  status: string;
+  isActive: boolean;
+}
+
+export interface UserSearchResult {
+  id: string;
+  username: string;
+  fullName: string;
+  email: string;
+  role: string;
+  clinicName: string;
+  isActive: boolean;
+}
+
+export interface TicketSearchResult {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+  clinicName: string;
+  createdAt: string;
+}
+
+export interface PlanSearchResult {
+  id: string;
+  name: string;
+  description: string;
+  monthlyPrice: number;
+  activeSubscriptions: number;
+  isActive: boolean;
+}
+
+export interface AuditLogSearchResult {
+  id: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  userName: string;
+  timestamp: string;
+}
+
+// Phase 1: System Notifications
+export interface SystemNotification {
+  id: number;
+  type: 'critical' | 'warning' | 'info' | 'success';
+  category: 'subscription' | 'customer' | 'system' | 'ticket';
+  title: string;
+  message: string;
+  actionUrl?: string;
+  actionLabel?: string;
+  isRead: boolean;
+  createdAt: string;
+  readAt?: string;
+  data?: string;
+}
+
+export interface CreateSystemNotification {
+  type: string;
+  category: string;
+  title: string;
+  message: string;
+  actionUrl?: string;
+  actionLabel?: string;
+  data?: string;
+}

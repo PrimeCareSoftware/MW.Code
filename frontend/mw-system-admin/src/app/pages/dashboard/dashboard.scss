@@ -47,6 +47,25 @@
       background: #5568d3;
     }
 
+    // Phase 1: SaaS Metrics Section
+    .saas-metrics-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a202c;
+      margin: 0 0 20px 0;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
     .analytics-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
