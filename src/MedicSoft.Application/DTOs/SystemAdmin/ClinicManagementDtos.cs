@@ -202,7 +202,7 @@ namespace MedicSoft.Application.DTOs.SystemAdmin
         public DateTime CreatedAt { get; set; }
         
         // Clinic info
-        public Guid ClinicId { get; set; }
+        public Guid? ClinicId { get; set; }
         public string ClinicName { get; set; } = string.Empty;
         public string? ClinicSubdomain { get; set; }
     }
@@ -215,5 +215,13 @@ namespace MedicSoft.Application.DTOs.SystemAdmin
         public Guid? ClinicId { get; set; }
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 20;
+    }
+
+    /// <summary>
+    /// Reset password request
+    /// </summary>
+    public class ResetPasswordDto
+    {
+        public string NewPassword { get; set; } = string.Empty;
     }
 }

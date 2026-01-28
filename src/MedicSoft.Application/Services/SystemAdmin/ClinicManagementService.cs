@@ -309,6 +309,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     p.CreatedAt >= periodStart.Value && p.CreatedAt <= periodEnd.Value);
 
             // Documents generated (if document system exists)
+            // Note: Document entity may not exist in all deployments
             try
             {
                 metrics.DocumentsGenerated = await _context.Set<Domain.Entities.Document>()
@@ -316,8 +317,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     .CountAsync(d => d.TenantId == tenantId && 
                         d.CreatedAt >= periodStart.Value && d.CreatedAt <= periodEnd.Value);
             }
-            catch
+            catch (InvalidOperationException)
             {
+                // Document entity doesn't exist in this deployment, set to 0
                 metrics.DocumentsGenerated = 0;
             }
 

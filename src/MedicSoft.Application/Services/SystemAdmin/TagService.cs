@@ -217,20 +217,23 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             foreach (var tag in automaticTags)
             {
-                // Parse automation rules and apply
-                // This is a simplified version - in production, use a proper rules engine
-                if (tag.Name.Contains("At Risk", StringComparison.OrdinalIgnoreCase))
+                // Parse automation rules and apply based on tag name
+                // Use exact string comparison for tag names
+                var tagNameLower = tag.Name.ToLower().Trim();
+                
+                if (tagNameLower == "at risk" || tagNameLower == "atrisk")
                 {
                     await ApplyAtRiskTag(tag);
                 }
-                else if (tag.Name.Contains("High Value", StringComparison.OrdinalIgnoreCase))
+                else if (tagNameLower == "high value" || tagNameLower == "highvalue")
                 {
                     await ApplyHighValueTag(tag);
                 }
-                else if (tag.Name.Contains("New", StringComparison.OrdinalIgnoreCase))
+                else if (tagNameLower == "new")
                 {
                     await ApplyNewTag(tag);
                 }
+                // Add more tag types as needed based on exact matches
             }
         }
 

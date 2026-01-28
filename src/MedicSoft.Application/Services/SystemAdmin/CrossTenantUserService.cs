@@ -106,7 +106,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     Role = item.User.Role,
                     IsActive = item.User.IsActive,
                     CreatedAt = item.User.CreatedAt,
-                    ClinicId = clinicId ?? Guid.Empty,
+                    ClinicId = clinicId,
                     ClinicName = clinicName,
                     ClinicSubdomain = clinicSubdomain
                 });
@@ -171,7 +171,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             var hashedPassword = _passwordHasher.HashPassword(newPassword);
             
-            // Use reflection to update password since User entity might not have a public setter
+            // NOTE: Using reflection here as the User entity may not expose a public password setter
+            // TODO: Consider adding a dedicated UpdatePassword method to the User domain entity
+            // that properly handles password updates with validation and audit logging
             var passwordProperty = user.GetType().GetProperty("PasswordHash");
             if (passwordProperty != null && passwordProperty.CanWrite)
             {
@@ -204,7 +206,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
             if (user == null)
                 return false;
 
-            // Use reflection to toggle IsActive
+            // NOTE: Using reflection here as the User entity may not expose public activation methods
+            // TODO: Consider adding Activate/Deactivate methods to the User domain entity
+            // that properly handle state transitions with validation and side effects
             var isActiveProperty = user.GetType().GetProperty("IsActive");
             if (isActiveProperty != null && isActiveProperty.CanWrite)
             {

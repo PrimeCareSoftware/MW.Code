@@ -56,10 +56,10 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpPost]
         public async Task<ActionResult<TagDto>> CreateTag([FromBody] CreateTagDto createDto)
         {
-            // Use a system tenant ID or get from context
-            var tenantId = "system"; // In production, this should come from configuration
+            // Use a constant for system tenant ID
+            const string SystemTenantId = "system";
             
-            var tag = await _tagService.CreateTag(createDto, tenantId);
+            var tag = await _tagService.CreateTag(createDto, SystemTenantId);
             return CreatedAtAction(nameof(GetTagById), new { id = tag.Id }, tag);
         }
 
@@ -132,7 +132,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
                 removeDto.ClinicIds);
             
             if (!success)
-                return false;
+                return NotFound(new { message = $"Tag with ID {removeDto.TagId} not found" });
 
             return Ok(new { message = $"Tag removed from {removeDto.ClinicIds.Count} clinic(s)" });
         }

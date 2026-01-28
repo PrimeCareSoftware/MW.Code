@@ -64,9 +64,15 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpPost("{id:guid}/reset-password")]
         public async Task<ActionResult> ResetPassword(Guid id, [FromBody] ResetPasswordDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.NewPassword) || dto.NewPassword.Length < 6)
+            // Improved password validation
+            if (string.IsNullOrWhiteSpace(dto.NewPassword))
             {
-                return BadRequest(new { message = "Password must be at least 6 characters long" });
+                return BadRequest(new { message = "Password is required" });
+            }
+
+            if (dto.NewPassword.Length < 8)
+            {
+                return BadRequest(new { message = "Password must be at least 8 characters long" });
             }
 
             var success = await _userService.ResetPassword(id, dto.NewPassword);
@@ -90,10 +96,5 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
             return Ok(new { message = "User activation toggled successfully" });
         }
-    }
-
-    public class ResetPasswordDto
-    {
-        public string NewPassword { get; set; } = string.Empty;
     }
 }
