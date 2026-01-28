@@ -144,6 +144,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 name: "IX_WorkflowActionExecutions_WorkflowActionId",
                 table: "WorkflowActionExecutions",
                 column: "WorkflowActionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkflowExecutions_Status",
+                table: "WorkflowExecutions",
+                column: "Status");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkflowActionExecutions_Status",
+                table: "WorkflowActionExecutions",
+                column: "Status");
         }
 
         /// <inheritdoc />

@@ -21,6 +21,11 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(e => e.Result)
                 .HasColumnType("text");
             
+            // Indexes
+            builder.HasIndex(e => e.WorkflowExecutionId);
+            builder.HasIndex(e => e.WorkflowActionId);
+            builder.HasIndex(e => e.Status);
+            
             builder.HasOne(e => e.WorkflowExecution)
                 .WithMany(we => we.ActionExecutions)
                 .HasForeignKey(e => e.WorkflowExecutionId)
