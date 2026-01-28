@@ -1,4 +1,7 @@
-<router-outlet />
+<app-skip-to-content />
+<main id="main-content">
+  <router-outlet />
+</main>
 @if (isAuthenticated) {
   <app-ticket-fab></app-ticket-fab>
 }
