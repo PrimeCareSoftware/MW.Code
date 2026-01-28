@@ -13,8 +13,6 @@ export class SurveyList implements OnInit {
   surveys = signal<any[]>([]);
   isLoading = signal<boolean>(false);
 
-  constructor() {}
-
   ngOnInit(): void {
     this.loadSurveys();
   }

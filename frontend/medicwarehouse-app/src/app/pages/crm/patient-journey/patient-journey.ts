@@ -13,8 +13,6 @@ export class PatientJourney implements OnInit {
   journeys = signal<any[]>([]);
   isLoading = signal<boolean>(false);
 
-  constructor() {}
-
   ngOnInit(): void {
     this.loadJourneys();
   }

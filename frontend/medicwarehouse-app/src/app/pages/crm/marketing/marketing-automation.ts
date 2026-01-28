@@ -13,8 +13,6 @@ export class MarketingAutomation implements OnInit {
   campaigns = signal<any[]>([]);
   isLoading = signal<boolean>(false);
 
-  constructor() {}
-
   ngOnInit(): void {
     this.loadCampaigns();
   }

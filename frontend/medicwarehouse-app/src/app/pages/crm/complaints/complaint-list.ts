@@ -13,8 +13,6 @@ export class ComplaintList implements OnInit {
   complaints = signal<any[]>([]);
   isLoading = signal<boolean>(false);
 
-  constructor() {}
-
   ngOnInit(): void {
     this.loadComplaints();
   }
