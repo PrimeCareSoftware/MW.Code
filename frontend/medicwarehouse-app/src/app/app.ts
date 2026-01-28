@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { TicketFab } from './shared/ticket-fab/ticket-fab';
 import { Auth } from './services/auth';
 import { ThemeService } from './services/theme.service';
+import { SkipToContentComponent } from './shared/accessibility/components/skip-to-content.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TicketFab],
+  imports: [RouterOutlet, TicketFab, SkipToContentComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

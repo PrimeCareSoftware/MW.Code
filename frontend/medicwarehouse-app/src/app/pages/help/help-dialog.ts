@@ -1,11 +1,12 @@
 import { Component, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HelpContent } from '../../services/help.service';
+import { FocusTrapDirective } from '../../shared/accessibility/directives/focus-trap.directive';
 
 @Component({
   selector: 'app-help-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FocusTrapDirective],
   templateUrl: './help-dialog.html',
   styleUrl: './help-dialog.scss'
 })

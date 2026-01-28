@@ -979,3 +979,8 @@ body.has-navbar {
     padding-left: var(--sidebar-width);
   }
 }
+
+/* ============================================
+ * ACCESSIBILITY STYLES (WCAG 2.1 Level AA)
+ * ============================================ */
+@import 'app/shared/accessibility/styles/accessibility.scss';
