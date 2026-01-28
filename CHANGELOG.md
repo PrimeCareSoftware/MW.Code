@@ -20,6 +20,85 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ---
 
+## [2.3.0] - 28 de Janeiro de 2026
+
+### ✨ Adicionado
+
+#### System Admin - Phase 3: Analytics and BI (Backend Foundation) 🆕
+
+**Dashboard Customization System:**
+- **Custom Dashboard Entities**: Criadas 3 novas entidades (CustomDashboard, DashboardWidget, WidgetTemplate)
+  - Suporte para dashboards personalizados com drag-and-drop
+  - Widgets configuráveis com queries SQL ou endpoints API
+  - Sistema de grid (GridStack) com posicionamento X, Y, largura e altura
+  - Dashboards públicos/privados com controle de proprietário
+  
+- **Dashboard Service**: Implementação completa com 12 métodos
+  - CRUD completo de dashboards e widgets
+  - Motor de execução de queries com validação de segurança
+  - Suporte para múltiplos tipos de widget: line, bar, pie, metric, table, map, markdown
+  - Auto-refresh configurável por widget (0 = manual, ou intervalo em segundos)
+  
+- **Security Features**: 6 camadas de validação de segurança
+  - ✅ Apenas queries SELECT permitidas
+  - ✅ Bloqueio de keywords perigosas (INSERT, UPDATE, DELETE, DROP, CREATE, ALTER, EXEC, etc.)
+  - ✅ Detecção de múltiplas statements (bloqueio de semicolons)
+  - ✅ Bloqueio de comentários SQL (-- e /* */)
+  - ✅ Timeout de 30 segundos nas queries
+  - ✅ Limite de 10.000 linhas retornadas
+  
+- **Widget Template Library**: 11 templates pré-construídos
+  - **Financial (3)**: MRR Over Time, Revenue Breakdown, Total MRR
+  - **Customer (3)**: Active Customers, Customer Growth, Churn Rate
+  - **Operational (3)**: Total Appointments, Appointments by Status, Active Users
+  - **Clinical (2)**: Total Patients, Patients by Clinic
+  
+- **API Endpoints**: 12 endpoints REST no DashboardsController
+  - GET/POST/PUT/DELETE para dashboards
+  - POST/PUT/DELETE para widgets
+  - GET para execução de queries e templates
+  - POST para exportação (JSON, PDF, Excel)
+  - Requer role SystemAdmin
+
+### 📖 Documentação
+
+#### Phase 3 Analytics Documentation Package 📚
+- **IMPLEMENTATION_SUMMARY_ANALYTICS_DASHBOARDS.md**: Resumo completo da implementação
+  - Arquitetura detalhada
+  - Componentes implementados
+  - Tarefas pendentes
+  - Métricas do projeto (10 arquivos, ~2.500 linhas)
+  
+- **DASHBOARD_CREATION_GUIDE.md**: Guia completo para usuários
+  - Tutorial passo-a-passo de criação de dashboards
+  - Documentação de 4 tipos de widgets (metric, line, bar, pie)
+  - Exemplos de layouts e design patterns
+  - Troubleshooting e suporte
+  
+- **SQL_QUERY_SECURITY_GUIDELINES.md**: Diretrizes de segurança
+  - 6 camadas de validação explicadas
+  - Exemplos de queries permitidas e proibidas
+  - Best practices de performance
+  - Prevenção de SQL injection
+  - Exemplos de queries para métricas SaaS
+
+### 🔐 Segurança
+
+#### Query Execution Security 🛡️
+- **SQL Injection Prevention**: Sistema robusto de validação
+  - Regex-based keyword detection
+  - Query sanitization antes da execução
+  - Read-only connection context
+  - Mensagens de erro sanitizadas (sem leak de informações)
+  
+- **Performance Protection**:
+  - Timeout enforcement para prevenir DoS
+  - Row limit para prevenir memory exhaustion
+  - Connection pooling via EF Core
+  - Proper resource disposal
+
+---
+
 ## [2.2.3] - 28 de Janeiro de 2026
 
 ### 📖 Documentação
