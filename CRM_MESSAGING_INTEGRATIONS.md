@@ -320,9 +320,22 @@ dotnet test --filter "FullyQualifiedName~SendGridEmailServiceTests|FullyQualifie
 
 - [ ] Implement webhooks for message status tracking
 - [ ] Add end-to-end integration tests
-- [ ] Implement email template loading from database
-- [ ] Add rate limiting and retry logic
-- [ ] Implement message queue for high-volume scenarios
+- [ ] Add message queue for high-volume scenarios
+
+### ✅ Recently Completed (PR #442 Pending Items - January 2026)
+
+- [x] **Email template loading from database** - Complete
+  - Created IEmailTemplateRepository and implementation
+  - SendGridEmailService now loads templates from EmailTemplate entity
+  - Template variables replaced using {{variableName}} format with HTML encoding
+  - Falls back to simple template if database template not found
+  - Updated interface to support optional tenantId parameter
+- [x] **Rate limiting and retry logic** - Complete
+  - Integrated Polly 8.5.0 for resilience patterns
+  - All messaging services (Email, SMS, WhatsApp) now include automatic retry with exponential backoff
+  - Handles transient errors (5xx, rate limit 429) with intelligent retry
+  - 3 retry attempts with jitter to prevent thundering herd
+  - Service-specific error detection (Twilio error codes, HTTP status codes)
 
 ### Optional Enhancements
 
@@ -368,4 +381,15 @@ For questions or issues:
 
 ---
 
-**Implementation completed as part of PR #440 - Sprint 7 Integrations**
+**Implementation completed as part of PR #442 - Sprint 7 Integrations**
+
+**Updates - PR #442 Pending Items (January 2026):**
+
+✅ **Completed:**
+1. **Email Template Loading from Database** - Email templates are now loaded from the EmailTemplate entity with variable replacement
+2. **Rate Limiting and Retry Logic** - All messaging services include automatic retry with exponential backoff for transient errors
+
+📝 **Remaining (Lower Priority):**
+- Webhooks for message status tracking (requires webhook endpoint infrastructure)
+- End-to-end integration tests (requires test credentials and environments)
+- Message queue for high-volume scenarios (requires queue infrastructure like RabbitMQ)
