@@ -434,6 +434,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'financial/tax-dashboard', 
+    loadComponent: () => import('./pages/financial/tax-dashboard/tax-dashboard').then(m => m.TaxDashboard),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'financial/closures/:id', 
     loadComponent: () => import('./pages/financial/financial-closures/closure-form.component').then(m => m.ClosureFormComponent),
     canActivate: [authGuard]

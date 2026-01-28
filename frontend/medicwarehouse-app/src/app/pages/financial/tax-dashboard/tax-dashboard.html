@@ -1,0 +1,319 @@
+<div class="tax-dashboard-container">
+  <app-navbar></app-navbar>
+  
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Dashboard de Impostos</h1>
+      <p>Gestão Fiscal e Controle Tributário</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="exportToExcel()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        Excel
+      </button>
+      <button class="btn btn-primary" (click)="exportToPDF()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="form-section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+      </div>
+      <div>
+        <h3>Período de Apuração</h3>
+        <p>Selecione o mês e ano para visualizar</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="selectedMonth">Mês</label>
+        <select 
+          id="selectedMonth"
+          class="form-control" 
+          [(ngModel)]="month"
+          (change)="onMonthChange()"
+        >
+          <option [value]="1">Janeiro</option>
+          <option [value]="2">Fevereiro</option>
+          <option [value]="3">Março</option>
+          <option [value]="4">Abril</option>
+          <option [value]="5">Maio</option>
+          <option [value]="6">Junho</option>
+          <option [value]="7">Julho</option>
+          <option [value]="8">Agosto</option>
+          <option [value]="9">Setembro</option>
+          <option [value]="10">Outubro</option>
+          <option [value]="11">Novembro</option>
+          <option [value]="12">Dezembro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="selectedYear">Ano</label>
+        <select 
+          id="selectedYear"
+          class="form-control" 
+          [(ngModel)]="year"
+          (change)="onYearChange()"
+        >
+          @for (yr of generateYears(); track yr) {
+            <option [value]="yr">{{ yr }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="trendMonths">Período de Evolução</label>
+        <select 
+          id="trendMonths"
+          class="form-control" 
+          [(ngModel)]="months"
+          (change)="onTrendMonthsChange()"
+        >
+          <option [value]="6">6 meses</option>
+          <option [value]="12">12 meses</option>
+          <option [value]="18">18 meses</option>
+          <option [value]="24">24 meses</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando dados fiscais...</p>
+    </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Dashboard Content -->
+  @if (!isLoading() && hasData()) {
+    
+    <!-- Summary Cards -->
+    <div class="summary-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <div>
+          <h3>Resumo Mensal</h3>
+          <p>{{ getMonthName(selectedMonth()) }}/{{ selectedYear() }}</p>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <h6>Faturamento Bruto</h6>
+          <h3 class="text-primary">{{ formatCurrency(apuracao()?.faturamentoBruto || 0) }}</h3>
+          <small>Receita total do período</small>
+        </div>
+        <div class="summary-card">
+          <h6>Total de Impostos</h6>
+          <h3 class="text-danger">{{ formatCurrency(totalImpostos()) }}</h3>
+          <small>Todos os tributos apurados</small>
+        </div>
+        <div class="summary-card">
+          <h6>Carga Tributária</h6>
+          <h3 class="text-warning">{{ formatPercentage(cargaTributaria()) }}</h3>
+          <small>Percentual sobre faturamento</small>
+        </div>
+        <div class="summary-card">
+          <h6>Status</h6>
+          <div class="status-badge" [ngClass]="getStatusClass(apuracao()?.status || 1)">
+            {{ apuracao()?.status === 3 ? 'Pago' : apuracao()?.status === 2 ? 'Apurado' : 'Em Aberto' }}
+          </div>
+          <small>Situação da apuração</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tax Breakdown -->
+    <div class="charts-section">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Distribuição de Impostos</h3>
+          <p>Valores apurados por tipo de tributo</p>
+        </div>
+        <div class="chart-body">
+          @if (chartOptions()) {
+            <apx-chart
+              [series]="chartOptions()!.series!"
+              [chart]="chartOptions()!.chart!"
+              [xaxis]="chartOptions()!.xaxis!"
+              [dataLabels]="chartOptions()!.dataLabels!"
+              [plotOptions]="chartOptions()!.plotOptions!"
+              [yaxis]="chartOptions()!.yaxis!"
+              [colors]="chartOptions()!.colors!"
+              [tooltip]="chartOptions()!.tooltip!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Evolução Mensal</h3>
+          <p>Faturamento e impostos ao longo do tempo</p>
+        </div>
+        <div class="chart-body">
+          @if (evolutionChartOptions()) {
+            <apx-chart
+              [series]="evolutionChartOptions()!.series!"
+              [chart]="evolutionChartOptions()!.chart!"
+              [xaxis]="evolutionChartOptions()!.xaxis!"
+              [dataLabels]="evolutionChartOptions()!.dataLabels!"
+              [yaxis]="evolutionChartOptions()!.yaxis!"
+              [colors]="evolutionChartOptions()!.colors!"
+              [tooltip]="evolutionChartOptions()!.tooltip!"
+            ></apx-chart>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Tax Details Table -->
+    <div class="details-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div>
+          <h3>Detalhamento de Impostos</h3>
+          <p>Valores individuais por tipo de tributo</p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Imposto</th>
+              <th class="text-end">Valor</th>
+              <th class="text-end">% Faturamento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ISS</strong> - Imposto Sobre Serviços</td>
+              <td class="text-end">{{ formatCurrency(apuracao()?.totalISS || 0) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalISS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
+            </tr>
+            <tr>
+              <td><strong>PIS</strong> - Programa de Integração Social</td>
+              <td class="text-end">{{ formatCurrency(apuracao()?.totalPIS || 0) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalPIS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
+            </tr>
+            <tr>
+              <td><strong>COFINS</strong> - Contribuição para Financiamento da Seguridade Social</td>
+              <td class="text-end">{{ formatCurrency(apuracao()?.totalCOFINS || 0) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalCOFINS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
+            </tr>
+            <tr>
+              <td><strong>IR</strong> - Imposto de Renda</td>
+              <td class="text-end">{{ formatCurrency(apuracao()?.totalIR || 0) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalIR || 0, apuracao()?.faturamentoBruto || 0) }}</td>
+            </tr>
+            <tr>
+              <td><strong>CSLL</strong> - Contribuição Social sobre o Lucro Líquido</td>
+              <td class="text-end">{{ formatCurrency(apuracao()?.totalCSLL || 0) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalCSLL || 0, apuracao()?.faturamentoBruto || 0) }}</td>
+            </tr>
+            <tr>
+              <td><strong>INSS</strong> - Instituto Nacional do Seguro Social</td>
+              <td class="text-end">{{ formatCurrency(apuracao()?.totalINSS || 0) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalINSS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td><strong>TOTAL</strong></td>
+              <td class="text-end"><strong>{{ formatCurrency(totalImpostos()) }}</strong></td>
+              <td class="text-end"><strong>{{ formatPercentage(cargaTributaria()) }}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Simples Nacional Section -->
+    @if (optanteSimplesNacional() && apuracao()?.receitaBruta12Meses) {
+      <div class="simples-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <h3>Simples Nacional</h3>
+            <p>Informações sobre o regime simplificado</p>
+          </div>
+        </div>
+
+        <div class="simples-grid">
+          <div class="simples-card">
+            <h6>Receita Bruta 12 Meses</h6>
+            <h3>{{ formatCurrency(apuracao()?.receitaBruta12Meses || 0) }}</h3>
+          </div>
+          <div class="simples-card">
+            <h6>Alíquota Efetiva</h6>
+            <h3>{{ formatPercentage(apuracao()?.aliquotaEfetiva || 0) }}</h3>
+          </div>
+          <div class="simples-card">
+            <h6>Valor DAS</h6>
+            <h3>{{ formatCurrency(apuracao()?.valorDAS || 0) }}</h3>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <p>Limite do Anexo: R$ 4.800.000,00</p>
+          <div class="progress-bar">
+            <div 
+              class="progress-fill" 
+              [style.width]="((apuracao()?.receitaBruta12Meses || 0) / 4800000 * 100) + '%'"
+              [ngClass]="{'progress-danger': (apuracao()?.receitaBruta12Meses || 0) > 4800000}"
+            ></div>
+          </div>
+          <small>{{ formatPercentage((apuracao()?.receitaBruta12Meses || 0) / 4800000 * 100) }} do limite</small>
+        </div>
+      </div>
+    }
+
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && !hasData()) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <h3>Nenhum dado disponível</h3>
+      <p>Não há apuração de impostos para o período selecionado.</p>
+    </div>
+  }
+</div>
