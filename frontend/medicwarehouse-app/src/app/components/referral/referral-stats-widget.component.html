@@ -1,0 +1,56 @@
+<mat-card class="referral-widget">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>card_giftcard</mat-icon>
+      Programa de Indicação
+    </mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    @if (loading) {
+      <div class="loading">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+    } @else if (stats) {
+      <div class="stats-summary">
+        <div class="stat-item">
+          <span class="label">Conversões</span>
+          <span class="value">{{ stats.totalConversions }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Total Ganho</span>
+          <span class="value success">{{ formatCurrency(stats.totalEarned) }}</span>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="label">Progresso para saque</span>
+          <span class="value">{{ formatCurrency(stats.availableForPayout) }} / {{ formatCurrency(program?.minimumPayout || 200) }}</span>
+        </div>
+        <mat-progress-bar 
+          mode="determinate" 
+          [value]="getProgressPercentage()"
+          color="accent"
+        ></mat-progress-bar>
+      </div>
+
+      @if (stats.pendingReferrals > 0) {
+        <div class="pending-info">
+          <mat-icon>hourglass_empty</mat-icon>
+          <span>{{ stats.pendingReferrals }} indicações pendentes</span>
+        </div>
+      }
+    }
+  </mat-card-content>
+
+  <mat-card-actions>
+    <a 
+      mat-raised-button 
+      color="primary" 
+      routerLink="/referral"
+    >
+      Ver Detalhes
+    </a>
+  </mat-card-actions>
+</mat-card>

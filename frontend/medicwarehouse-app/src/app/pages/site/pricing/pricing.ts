@@ -7,6 +7,7 @@ import { SubscriptionPlan } from '../../../models/subscription-plan.model';
 import { environment } from '../../../../environments/environment';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
+import { WebsiteAnalyticsService } from '../../../services/analytics/website-analytics.service';
 
 @Component({
   selector: 'app-pricing',
@@ -17,6 +18,7 @@ import { FooterComponent } from '../../../components/site/footer/footer';
 export class PricingComponent {
   private router = inject(Router);
   private subscriptionService = inject(SubscriptionService);
+  private analytics = inject(WebsiteAnalyticsService);
   protected cartService = inject(CartService);
   
   plans: SubscriptionPlan[] = [];
@@ -24,6 +26,9 @@ export class PricingComponent {
   loading = true;
 
   ngOnInit(): void {
+    // Track page view
+    this.analytics.trackPageView('/site/pricing', 'Planos e Preços - PrimeCare');
+
     this.subscriptionService.getPlans().subscribe({
       next: (plans) => {
         this.plans = plans;
@@ -37,15 +42,20 @@ export class PricingComponent {
   }
 
   selectPlan(plan: SubscriptionPlan): void {
+    // Track pricing plan view
+    this.analytics.trackPricingPlanView(plan.name, plan.price);
+
     if (plan.type === 4) { // Enterprise/Custom
       this.contactForCustomPlan();
     } else {
       this.cartService.addToCart(plan);
+      this.analytics.trackConversion('trial_signup', plan.price, { planName: plan.name });
       this.router.navigate(['/site/register'], { queryParams: { plan: plan.id } });
     }
   }
 
   contactForCustomPlan(): void {
+    this.analytics.trackCTAClick('Contato Plano Personalizado', 'Pricing Page');
     window.open(`https://wa.me/${this.whatsappNumber}?text=Olá, gostaria de saber mais sobre o plano personalizado.`, '_blank');
   }
 }

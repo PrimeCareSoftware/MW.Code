@@ -47,6 +47,14 @@ export const routes: Routes = [
       { 
         path: 'terms', 
         loadComponent: () => import('./pages/site/terms/terms').then(m => m.TermsComponent)
+      },
+      { 
+        path: 'blog', 
+        loadComponent: () => import('./pages/site/blog/blog.component').then(m => m.BlogComponent)
+      },
+      { 
+        path: 'blog/:slug', 
+        loadComponent: () => import('./pages/site/blog/blog-article.component').then(m => m.BlogArticleComponent)
       }
     ]
   },
@@ -82,6 +90,11 @@ export const routes: Routes = [
   { 
     path: 'dashboard', 
     loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'referral', 
+    loadComponent: () => import('./pages/referral/referral-dashboard.component').then(m => m.ReferralDashboardComponent),
     canActivate: [authGuard]
   },
   { 
