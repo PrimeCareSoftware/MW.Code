@@ -18,7 +18,6 @@ namespace MedicSoft.Repository.Seeders
                 // Financial Templates
                 new WidgetTemplate
                 {
-                    Id = 1,
                     Name = "MRR Over Time",
                     Description = "Monthly Recurring Revenue trend over the last 12 months",
                     Category = "financial",
@@ -46,7 +45,6 @@ ORDER BY month",
                 
                 new WidgetTemplate
                 {
-                    Id = 2,
                     Name = "Revenue Breakdown",
                     Description = "MRR distribution by plan type",
                     Category = "financial",
@@ -71,7 +69,6 @@ GROUP BY p.""Name""",
 
                 new WidgetTemplate
                 {
-                    Id = 3,
                     Name = "Total MRR",
                     Description = "Current Monthly Recurring Revenue",
                     Category = "financial",
@@ -94,7 +91,6 @@ WHERE cs.""Status"" = 'Active'",
                 // Customer Templates
                 new WidgetTemplate
                 {
-                    Id = 4,
                     Name = "Active Customers",
                     Description = "Total number of active clinic customers",
                     Category = "customer",
@@ -115,7 +111,6 @@ WHERE ""Status"" = 'Active'",
                 
                 new WidgetTemplate
                 {
-                    Id = 5,
                     Name = "Customer Growth",
                     Description = "New customers acquired each month",
                     Category = "customer",
@@ -140,7 +135,6 @@ ORDER BY month",
 
                 new WidgetTemplate
                 {
-                    Id = 6,
                     Name = "Churn Rate",
                     Description = "Monthly customer churn percentage",
                     Category = "customer",
@@ -167,7 +161,6 @@ FROM ""ClinicSubscriptions""",
                 // Operational Templates
                 new WidgetTemplate
                 {
-                    Id = 7,
                     Name = "Total Appointments",
                     Description = "Total appointments scheduled",
                     Category = "operational",
@@ -188,7 +181,6 @@ WHERE ""AppointmentDate"" >= CURRENT_DATE - INTERVAL '30 days'",
 
                 new WidgetTemplate
                 {
-                    Id = 8,
                     Name = "Appointments by Status",
                     Description = "Distribution of appointments by status",
                     Category = "operational",
@@ -211,7 +203,6 @@ GROUP BY ""Status""",
 
                 new WidgetTemplate
                 {
-                    Id = 9,
                     Name = "Active Users",
                     Description = "Number of active users in the system",
                     Category = "operational",
@@ -233,7 +224,6 @@ WHERE ""IsActive"" = true",
                 // Clinical Templates
                 new WidgetTemplate
                 {
-                    Id = 10,
                     Name = "Total Patients",
                     Description = "Total number of registered patients",
                     Category = "clinical",
@@ -253,7 +243,6 @@ FROM ""Patients""",
 
                 new WidgetTemplate
                 {
-                    Id = 11,
                     Name = "Patients by Clinic",
                     Description = "Patient distribution across clinics",
                     Category = "clinical",

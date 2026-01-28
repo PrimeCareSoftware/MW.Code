@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs.SystemAdmin;
 using MedicSoft.Repository.Context;
-using MedicSoft.CrossCutting.Security;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Services.SystemAdmin
 {

@@ -373,7 +373,8 @@ builder.Services.AddScoped<ISalesFunnelService, SalesFunnelService>();
 // System Admin - Phase 1 Services
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISaasMetricsService, MedicSoft.Application.Services.SystemAdmin.SaasMetricsService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IGlobalSearchService, MedicSoft.Application.Services.SystemAdmin.GlobalSearchService>();
-builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISystemNotificationService, MedicSoft.Application.Services.SystemAdmin.SystemNotificationService>();
+// TODO: Fix SystemNotificationService - needs to resolve SignalR Hub dependency from Api layer
+// builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISystemNotificationService, MedicSoft.Application.Services.SystemAdmin.SystemNotificationService>();
 
 // System Admin - Phase 2: Clinic Management
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IClinicManagementService, MedicSoft.Application.Services.SystemAdmin.ClinicManagementService>();
@@ -554,9 +555,10 @@ builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>();
 builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>();
 
 // System Admin - Workflow Automation (Phase 4)
-builder.Services.AddScoped<MedicSoft.Application.Services.Workflows.IWorkflowEngine, MedicSoft.Application.Services.Workflows.WorkflowEngine>();
+builder.Services.AddScoped<MedicSoft.Application.Services.Workflows.IWorkflowEngine, MedicSoft.Api.Services.Workflows.WorkflowEngine>();
 builder.Services.AddScoped<MedicSoft.Application.Services.Workflows.IEventPublisher, MedicSoft.Application.Services.Workflows.EventPublisher>();
-builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISmartActionService, MedicSoft.Application.Services.SystemAdmin.SmartActionService>();
+// TODO: Fix SmartActionService - needs to resolve IAuditService and IEmailService dependencies properly
+// builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISmartActionService, MedicSoft.Application.Services.SystemAdmin.SmartActionService>();
 builder.Services.AddScoped<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>();
 builder.Services.AddScoped<MedicSoft.Api.Data.Seeders.WorkflowTemplateSeeder>();
 

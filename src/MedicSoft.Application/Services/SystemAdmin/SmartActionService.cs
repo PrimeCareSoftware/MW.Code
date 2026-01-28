@@ -9,9 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MedicSoft.Application.DTOs.Audit;
-using MedicSoft.Application.Services.Audit;
-using MedicSoft.Application.Services.Email;
+using MedicSoft.Application.Services;
+using MedicSoft.Application.Services.Reports;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Context;
 
