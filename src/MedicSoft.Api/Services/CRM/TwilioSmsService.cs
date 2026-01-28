@@ -55,45 +55,35 @@ namespace MedicSoft.Api.Services.CRM
 
             await _retryPolicy.ExecuteAsync(async cancellationToken =>
             {
-                try
+                // Format phone number to E.164 format if needed
+                var formattedTo = FormatPhoneNumber(to);
+                var formattedFrom = FormatPhoneNumber(_config.FromPhoneNumber);
+
+                var messageResource = await MessageResource.CreateAsync(
+                    body: message,
+                    from: new PhoneNumber(formattedFrom),
+                    to: new PhoneNumber(formattedTo)
+                );
+
+                if (messageResource.ErrorCode.HasValue)
                 {
-                    // Format phone number to E.164 format if needed
-                    var formattedTo = FormatPhoneNumber(to);
-                    var formattedFrom = FormatPhoneNumber(_config.FromPhoneNumber);
-
-                    var messageResource = await MessageResource.CreateAsync(
-                        body: message,
-                        from: new PhoneNumber(formattedFrom),
-                        to: new PhoneNumber(formattedTo)
-                    );
-
-                    if (messageResource.ErrorCode.HasValue)
+                    var errorCode = messageResource.ErrorCode.Value;
+                    _logger.LogError("Failed to send SMS to {To}. Error Code: {ErrorCode}, Message: {ErrorMessage}", 
+                        to, errorCode, messageResource.ErrorMessage);
+                    
+                    // Retry only on specific transient errors
+                    // 20429 = Rate limit exceeded
+                    // 30001 = Queue overflow  
+                    // 30005 = Unknown destination handset
+                    if (errorCode == 20429 || errorCode == 30001 || errorCode == 30005)
                     {
-                        var errorCode = messageResource.ErrorCode.Value;
-                        _logger.LogError("Failed to send SMS to {To}. Error Code: {ErrorCode}, Message: {ErrorMessage}", 
-                            to, errorCode, messageResource.ErrorMessage);
-                        
-                        // Retry on transient errors (rate limit, service unavailable)
-                        if (errorCode == 20429 || errorCode >= 30000) // 20429 = rate limit, 30xxx = service issues
-                        {
-                            throw new Exception($"Transient error sending SMS. Error: {messageResource.ErrorMessage}. Will retry.");
-                        }
-                        
-                        throw new Exception($"Failed to send SMS. Error: {messageResource.ErrorMessage}");
+                        throw new TransientMessagingException($"Transient SMS error. Code: {errorCode}");
                     }
+                    
+                    throw new Exception($"Failed to send SMS. Error: {messageResource.ErrorMessage}");
+                }
 
-                    _logger.LogInformation("SMS sent successfully to {To}. Message SID: {MessageSid}", to, messageResource.Sid);
-                }
-                catch (Exception ex) when (ex.Message.Contains("Will retry"))
-                {
-                    _logger.LogWarning("Transient error sending SMS to {To}. Retrying... Error: {Error}", to, ex.Message);
-                    throw; // Let Polly retry
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error sending SMS to {To}", to);
-                    throw;
-                }
+                _logger.LogInformation("SMS sent successfully to {To}. Message SID: {MessageSid}", to, messageResource.Sid);
             }, CancellationToken.None);
         }
 

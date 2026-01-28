@@ -58,58 +58,45 @@ namespace MedicSoft.Api.Services.CRM
 
             await _retryPolicy.ExecuteAsync(async cancellationToken =>
             {
-                try
+                // Format phone number (remove non-digits and ensure it has country code)
+                var formattedTo = FormatPhoneNumber(to);
+
+                // Build WhatsApp API request
+                var requestUrl = $"{_config.ApiUrl}/{_config.PhoneNumberId}/messages";
+                var requestBody = new
                 {
-                    // Format phone number (remove non-digits and ensure it has country code)
-                    var formattedTo = FormatPhoneNumber(to);
-
-                    // Build WhatsApp API request
-                    var requestUrl = $"{_config.ApiUrl}/{_config.PhoneNumberId}/messages";
-                    var requestBody = new
+                    messaging_product = "whatsapp",
+                    to = formattedTo,
+                    type = "text",
+                    text = new
                     {
-                        messaging_product = "whatsapp",
-                        to = formattedTo,
-                        type = "text",
-                        text = new
-                        {
-                            body = message
-                        }
-                    };
-
-                    var jsonContent = JsonSerializer.Serialize(requestBody);
-                    var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                    var response = await _httpClient.PostAsync(requestUrl, httpContent);
-                    var responseContent = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        _logger.LogInformation("WhatsApp message sent successfully to {To}", to);
+                        body = message
                     }
-                    else
+                };
+
+                var jsonContent = JsonSerializer.Serialize(requestBody);
+                var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync(requestUrl, httpContent);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("WhatsApp message sent successfully to {To}", to);
+                }
+                else
+                {
+                    _logger.LogError("Failed to send WhatsApp message to {To}. Status: {StatusCode}, Response: {Response}", 
+                        to, response.StatusCode, responseContent);
+                    
+                    // Retry on transient errors (5xx, rate limit)
+                    var statusCode = (int)response.StatusCode;
+                    if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
                     {
-                        _logger.LogError("Failed to send WhatsApp message to {To}. Status: {StatusCode}, Response: {Response}", 
-                            to, response.StatusCode, responseContent);
-                        
-                        // Retry on transient errors (5xx, rate limit)
-                        var statusCode = (int)response.StatusCode;
-                        if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                        {
-                            throw new Exception($"Transient error sending WhatsApp message. Status: {response.StatusCode}. Will retry.");
-                        }
-                        
-                        throw new Exception($"Failed to send WhatsApp message. Status: {response.StatusCode}");
+                        throw new TransientMessagingException($"Transient WhatsApp error. Status: {response.StatusCode}");
                     }
-                }
-                catch (Exception ex) when (ex.Message.Contains("Will retry"))
-                {
-                    _logger.LogWarning("Transient error sending WhatsApp message to {To}. Retrying... Error: {Error}", to, ex.Message);
-                    throw; // Let Polly retry
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error sending WhatsApp message to {To}", to);
-                    throw;
+                    
+                    throw new Exception($"Failed to send WhatsApp message. Status: {response.StatusCode}");
                 }
             }, CancellationToken.None);
         }

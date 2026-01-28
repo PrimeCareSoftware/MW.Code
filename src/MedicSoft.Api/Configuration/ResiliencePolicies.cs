@@ -5,72 +5,13 @@ namespace MedicSoft.Api.Configuration
 {
     /// <summary>
     /// Resilience policies for external service integrations
-    /// Implements retry logic with exponential backoff and rate limiting
+    /// Implements retry logic with exponential backoff
     /// </summary>
     public static class ResiliencePolicies
     {
         /// <summary>
-        /// Creates a retry policy with exponential backoff for email services
-        /// </summary>
-        public static ResiliencePipeline<HttpResponseMessage> CreateEmailRetryPolicy()
-        {
-            return new ResiliencePipelineBuilder<HttpResponseMessage>()
-                .AddRetry(new RetryStrategyOptions<HttpResponseMessage>
-                {
-                    MaxRetryAttempts = 3,
-                    Delay = TimeSpan.FromSeconds(2),
-                    BackoffType = DelayBackoffType.Exponential,
-                    UseJitter = true,
-                    ShouldHandle = new PredicateBuilder<HttpResponseMessage>()
-                        .HandleResult(response => 
-                            (int)response.StatusCode >= 500 || // Server errors
-                            response.StatusCode == System.Net.HttpStatusCode.TooManyRequests) // Rate limiting
-                })
-                .Build();
-        }
-
-        /// <summary>
-        /// Creates a retry policy with exponential backoff for SMS services
-        /// </summary>
-        public static ResiliencePipeline<HttpResponseMessage> CreateSmsRetryPolicy()
-        {
-            return new ResiliencePipelineBuilder<HttpResponseMessage>()
-                .AddRetry(new RetryStrategyOptions<HttpResponseMessage>
-                {
-                    MaxRetryAttempts = 3,
-                    Delay = TimeSpan.FromSeconds(1),
-                    BackoffType = DelayBackoffType.Exponential,
-                    UseJitter = true,
-                    ShouldHandle = new PredicateBuilder<HttpResponseMessage>()
-                        .HandleResult(response => 
-                            (int)response.StatusCode >= 500 || 
-                            response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                })
-                .Build();
-        }
-
-        /// <summary>
-        /// Creates a retry policy with exponential backoff for WhatsApp services
-        /// </summary>
-        public static ResiliencePipeline<HttpResponseMessage> CreateWhatsAppRetryPolicy()
-        {
-            return new ResiliencePipelineBuilder<HttpResponseMessage>()
-                .AddRetry(new RetryStrategyOptions<HttpResponseMessage>
-                {
-                    MaxRetryAttempts = 3,
-                    Delay = TimeSpan.FromSeconds(2),
-                    BackoffType = DelayBackoffType.Exponential,
-                    UseJitter = true,
-                    ShouldHandle = new PredicateBuilder<HttpResponseMessage>()
-                        .HandleResult(response => 
-                            (int)response.StatusCode >= 500 || 
-                            response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                })
-                .Build();
-        }
-
-        /// <summary>
-        /// Creates a generic async retry policy for exceptions
+        /// Creates a generic async retry policy for transient errors
+        /// Retries on common transient exceptions with exponential backoff
         /// </summary>
         public static ResiliencePipeline CreateGenericRetryPolicy()
         {
@@ -80,9 +21,23 @@ namespace MedicSoft.Api.Configuration
                     MaxRetryAttempts = 3,
                     Delay = TimeSpan.FromSeconds(1),
                     BackoffType = DelayBackoffType.Exponential,
-                    UseJitter = true
+                    UseJitter = true,
+                    ShouldHandle = new PredicateBuilder()
+                        .Handle<HttpRequestException>() // Network failures
+                        .Handle<TaskCanceledException>() // Timeouts
+                        .Handle<TimeoutException>() // Explicit timeouts
+                        .Handle<TransientMessagingException>() // Custom transient errors
                 })
                 .Build();
         }
+    }
+
+    /// <summary>
+    /// Custom exception for transient messaging errors that should be retried
+    /// </summary>
+    public class TransientMessagingException : Exception
+    {
+        public TransientMessagingException(string message) : base(message) { }
+        public TransientMessagingException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

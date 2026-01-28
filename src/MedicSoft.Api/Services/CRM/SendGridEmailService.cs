@@ -52,51 +52,38 @@ namespace MedicSoft.Api.Services.CRM
 
             await _retryPolicy.ExecuteAsync(async cancellationToken =>
             {
-                try
+                var from = new EmailAddress(_config.FromEmail, _config.FromName);
+                var toAddress = new EmailAddress(to);
+                var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, body, body);
+
+                if (_config.UseSandbox)
                 {
-                    var from = new EmailAddress(_config.FromEmail, _config.FromName);
-                    var toAddress = new EmailAddress(to);
-                    var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, body, body);
-
-                    if (_config.UseSandbox)
+                    msg.MailSettings = new MailSettings
                     {
-                        msg.MailSettings = new MailSettings
-                        {
-                            SandboxMode = new SandboxMode { Enable = true }
-                        };
-                    }
-
-                    var response = await _sendGridClient.SendEmailAsync(msg);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        _logger.LogInformation("Email sent successfully to {To} with subject: {Subject}", to, subject);
-                    }
-                    else
-                    {
-                        var errorBody = await response.Body.ReadAsStringAsync();
-                        _logger.LogError("Failed to send email to {To}. Status: {StatusCode}, Error: {Error}", 
-                            to, response.StatusCode, errorBody);
-                        
-                        // Throw exception for retry if it's a transient error (5xx or rate limit)
-                        var statusCode = (int)response.StatusCode;
-                        if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                        {
-                            throw new Exception($"Transient error sending email. Status: {response.StatusCode}. Will retry.");
-                        }
-                        
-                        throw new Exception($"Failed to send email. Status: {response.StatusCode}");
-                    }
+                        SandboxMode = new SandboxMode { Enable = true }
+                    };
                 }
-                catch (Exception ex) when (ex.Message.Contains("Will retry"))
+
+                var response = await _sendGridClient.SendEmailAsync(msg);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogWarning("Transient error sending email to {To}. Retrying... Error: {Error}", to, ex.Message);
-                    throw; // Let Polly retry
+                    _logger.LogInformation("Email sent successfully to {To} with subject: {Subject}", to, subject);
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError(ex, "Error sending email to {To} with subject: {Subject}", to, subject);
-                    throw;
+                    var errorBody = await response.Body.ReadAsStringAsync();
+                    _logger.LogError("Failed to send email to {To}. Status: {StatusCode}, Error: {Error}", 
+                        to, response.StatusCode, errorBody);
+                    
+                    // Throw exception for retry if it's a transient error (5xx or rate limit)
+                    var statusCode = (int)response.StatusCode;
+                    if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                    {
+                        throw new TransientMessagingException($"Transient error sending email. Status: {response.StatusCode}");
+                    }
+                    
+                    throw new Exception($"Failed to send email. Status: {response.StatusCode}");
                 }
             }, CancellationToken.None);
         }
@@ -111,64 +98,51 @@ namespace MedicSoft.Api.Services.CRM
 
             await _retryPolicy.ExecuteAsync(async cancellationToken =>
             {
-                try
+                var from = new EmailAddress(_config.FromEmail, _config.FromName);
+                var toAddress = new EmailAddress(to);
+
+                // Build template content with variables (loads from database if tenantId provided)
+                var (subject, templateContent) = await BuildTemplateContent(templateId, variables, tenantId);
+
+                // For now, use a simple template approach
+                // In production, this should integrate with SendGrid Dynamic Templates
+                var msg = new SendGridMessage
                 {
-                    var from = new EmailAddress(_config.FromEmail, _config.FromName);
-                    var toAddress = new EmailAddress(to);
+                    From = from,
+                    Subject = subject
+                };
+                
+                msg.AddTo(toAddress);
+                msg.AddContent(MimeType.Html, templateContent);
 
-                    // Build template content with variables (loads from database if tenantId provided)
-                    var (subject, templateContent) = await BuildTemplateContent(templateId, variables, tenantId);
-
-                    // For now, use a simple template approach
-                    // In production, this should integrate with SendGrid Dynamic Templates
-                    var msg = new SendGridMessage
+                if (_config.UseSandbox)
+                {
+                    msg.MailSettings = new MailSettings
                     {
-                        From = from,
-                        Subject = subject
+                        SandboxMode = new SandboxMode { Enable = true }
                     };
+                }
+
+                var response = await _sendGridClient.SendEmailAsync(msg);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Template email {TemplateId} sent successfully to {To}", templateId, to);
+                }
+                else
+                {
+                    var errorBody = await response.Body.ReadAsStringAsync();
+                    _logger.LogError("Failed to send template email {TemplateId} to {To}. Status: {StatusCode}, Error: {Error}", 
+                        templateId, to, response.StatusCode, errorBody);
                     
-                    msg.AddTo(toAddress);
-                    msg.AddContent(MimeType.Html, templateContent);
-
-                    if (_config.UseSandbox)
+                    // Throw exception for retry if it's a transient error
+                    var statusCode = (int)response.StatusCode;
+                    if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
                     {
-                        msg.MailSettings = new MailSettings
-                        {
-                            SandboxMode = new SandboxMode { Enable = true }
-                        };
+                        throw new TransientMessagingException($"Transient error sending template email. Status: {response.StatusCode}");
                     }
-
-                    var response = await _sendGridClient.SendEmailAsync(msg);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        _logger.LogInformation("Template email {TemplateId} sent successfully to {To}", templateId, to);
-                    }
-                    else
-                    {
-                        var errorBody = await response.Body.ReadAsStringAsync();
-                        _logger.LogError("Failed to send template email {TemplateId} to {To}. Status: {StatusCode}, Error: {Error}", 
-                            templateId, to, response.StatusCode, errorBody);
-                        
-                        // Throw exception for retry if it's a transient error
-                        var statusCode = (int)response.StatusCode;
-                        if (statusCode >= 500 || response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                        {
-                            throw new Exception($"Transient error sending template email. Status: {response.StatusCode}. Will retry.");
-                        }
-                        
-                        throw new Exception($"Failed to send template email. Status: {response.StatusCode}");
-                    }
-                }
-                catch (Exception ex) when (ex.Message.Contains("Will retry"))
-                {
-                    _logger.LogWarning("Transient error sending template email {TemplateId} to {To}. Retrying... Error: {Error}", templateId, to, ex.Message);
-                    throw; // Let Polly retry
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error sending template email {TemplateId} to {To}", templateId, to);
-                    throw;
+                    
+                    throw new Exception($"Failed to send template email. Status: {response.StatusCode}");
                 }
             }, CancellationToken.None);
         }

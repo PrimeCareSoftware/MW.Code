@@ -13,9 +13,9 @@ namespace MedicSoft.Domain.Interfaces
         Task<EmailTemplate?> GetByNameAsync(string name, string tenantId);
 
         /// <summary>
-        /// Gets all active email templates.
+        /// Gets all email templates for the tenant.
         /// </summary>
-        Task<IEnumerable<EmailTemplate>> GetAllActiveAsync(string tenantId);
+        Task<IEnumerable<EmailTemplate>> GetAllForTenantAsync(string tenantId);
 
         /// <summary>
         /// Checks if a template with the given name exists.

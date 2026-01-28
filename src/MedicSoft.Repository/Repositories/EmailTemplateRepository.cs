@@ -17,7 +17,7 @@ namespace MedicSoft.Repository.Repositories
                 .FirstOrDefaultAsync(et => et.Name == name && et.TenantId == tenantId);
         }
 
-        public async Task<IEnumerable<EmailTemplate>> GetAllActiveAsync(string tenantId)
+        public async Task<IEnumerable<EmailTemplate>> GetAllForTenantAsync(string tenantId)
         {
             return await _dbSet
                 .Where(et => et.TenantId == tenantId)
