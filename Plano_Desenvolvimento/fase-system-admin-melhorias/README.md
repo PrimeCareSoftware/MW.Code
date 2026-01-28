@@ -81,9 +81,9 @@ Esta fase transforma o **system-admin** do PrimeCare em uma ferramenta de admini
 - **ROI:** +100% produtividade, satisfação do usuário
 - **Inspiração:** Vercel, Linear, Notion
 
-### 06. Fase 6: Segurança e Compliance (1 mês) 💡
+### 06. Fase 6: Segurança e Compliance (1 mês) 🔥
 - **Arquivo:** [06-fase6-seguranca-compliance.md](./06-fase6-seguranca-compliance.md)
-- **Prioridade:** 🔥 P2 - MÉDIA
+- **Prioridade:** 🔥🔥🔥 P0 - CRÍTICA
 - **Prazo:** 1 mês | 1-2 desenvolvedores + 1 QA
 - **Custo:** R$ 39.000
 - **Pré-requisitos:** Todas as fases anteriores
