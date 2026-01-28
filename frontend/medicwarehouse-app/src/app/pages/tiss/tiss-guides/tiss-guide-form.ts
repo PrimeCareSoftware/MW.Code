@@ -12,7 +12,7 @@ import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-
 
 @Component({
   selector: 'app-tiss-guide-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, AccessibleBreadcrumbsComponent],
   templateUrl: './tiss-guide-form.html',
   styleUrl: './tiss-guide-form.scss'
 })
@@ -23,6 +23,7 @@ export class TissGuideFormComponent implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
+  breadcrumbs: BreadcrumbItem[] = [];
   
   patientInsurances = signal<PatientHealthInsurance[]>([]);
   authorizationRequests = signal<AuthorizationRequest[]>([]);
@@ -59,6 +60,21 @@ export class TissGuideFormComponent implements OnInit {
       this.isEditMode.set(true);
       this.guideId.set(id);
       this.loadGuide(id);
+      // Set breadcrumbs for edit mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'TISS', url: '/tiss' },
+        { label: 'Guias', url: '/tiss/guides' },
+        { label: 'Editar Guia' }
+      ];
+    } else {
+      // Set breadcrumbs for create mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'TISS', url: '/tiss' },
+        { label: 'Guias', url: '/tiss/guides' },
+        { label: 'Nova Guia' }
+      ];
     }
 
     // Add first procedure row by default

@@ -6,10 +6,11 @@ import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
 import { Procedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
 import { ScreenReaderService } from '../../shared/accessibility/hooks/screen-reader.service';
+import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../shared/accessibility/components/accessible-breadcrumbs.component';
 
 @Component({
   selector: 'app-procedure-form',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, Navbar, AccessibleBreadcrumbsComponent],
   templateUrl: './procedure-form.html',
   styleUrl: './procedure-form.scss'
 })
@@ -21,6 +22,7 @@ export class ProcedureForm implements OnInit {
   isSaving = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
+  breadcrumbs: BreadcrumbItem[] = [];
   
   procedureCategories = Object.values(ProcedureCategory).filter(v => typeof v === 'number') as ProcedureCategory[];
   procedureCategoryLabels = ProcedureCategoryLabels;
@@ -52,6 +54,19 @@ export class ProcedureForm implements OnInit {
     if (id) {
       this.procedureId.set(id);
       this.loadProcedure(id);
+      // Set breadcrumbs for edit mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Procedimentos', url: '/procedures' },
+        { label: 'Editar Procedimento' }
+      ];
+    } else {
+      // Set breadcrumbs for create mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Procedimentos', url: '/procedures' },
+        { label: 'Novo Procedimento' }
+      ];
     }
   }
 

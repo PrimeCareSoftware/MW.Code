@@ -8,10 +8,11 @@ import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
 import { Auth } from '../../../services/auth';
 import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-reader.service';
+import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/accessibility/components/accessible-breadcrumbs.component';
 
 @Component({
   selector: 'app-appointment-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, AccessibleBreadcrumbsComponent],
   templateUrl: './appointment-form.html',
   styleUrl: './appointment-form.scss'
 })
@@ -23,6 +24,7 @@ export class AppointmentForm implements OnInit {
   successMessage = signal<string>('');
   isEditMode = signal<boolean>(false);
   appointmentId: string | null = null;
+  breadcrumbs: BreadcrumbItem[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +52,19 @@ export class AppointmentForm implements OnInit {
     if (this.appointmentId) {
       this.isEditMode.set(true);
       this.loadAppointmentData(this.appointmentId);
+      // Set breadcrumbs for edit mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Agendamentos', url: '/appointments' },
+        { label: 'Editar Agendamento' }
+      ];
+    } else {
+      // Set breadcrumbs for create mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Agendamentos', url: '/appointments' },
+        { label: 'Novo Agendamento' }
+      ];
     }
 
     // Get clinicId from authenticated user

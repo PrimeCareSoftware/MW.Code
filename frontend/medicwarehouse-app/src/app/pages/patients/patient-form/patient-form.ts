@@ -13,10 +13,11 @@ import { CpfMaskDirective } from '../../../directives/cpf-mask.directive';
 import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
 import { CepMaskDirective } from '../../../directives/cep-mask.directive';
 import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-reader.service';
+import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/accessibility/components/accessible-breadcrumbs.component';
 
 @Component({
   selector: 'app-patient-form',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, Navbar, CpfMaskDirective, PhoneMaskDirective, CepMaskDirective],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, Navbar, CpfMaskDirective, PhoneMaskDirective, CepMaskDirective, AccessibleBreadcrumbsComponent],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.scss'
 })
@@ -34,6 +35,9 @@ export class PatientForm implements OnInit {
   guardianSearchResults = signal<Patient[]>([]);
   selectedGuardian = signal<Patient | null>(null);
   private searchSubject = new Subject<string>();
+
+  // Breadcrumbs
+  breadcrumbs: BreadcrumbItem[] = [];
 
   // Tab management
   activeTab = signal<'basic' | 'appointments' | 'procedures'>('basic');
@@ -102,6 +106,19 @@ export class PatientForm implements OnInit {
       this.loadPatient(id);
       // Load history data for existing patient
       this.loadPatientHistory(id);
+      // Set breadcrumbs for edit mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Pacientes', url: '/patients' },
+        { label: 'Editar Paciente' }
+      ];
+    } else {
+      // Set breadcrumbs for create mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Pacientes', url: '/patients' },
+        { label: 'Novo Paciente' }
+      ];
     }
 
     // TODO: Check user permissions for medical records
