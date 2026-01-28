@@ -16,6 +16,8 @@
 
 > ⚠️ **AÇÃO NECESSÁRIA**: GitHub Pages precisa ser habilitado para deploy da documentação. [Ver instruções →](system-admin/docs/GITHUB_PAGES_SETUP_REQUIRED.md)
 
+> 🎨 **NOVO!** Website Renovado! Homepage redesenhada, Cases de Sucesso, Sistema de Onboarding e Design System completo. [→ Ver Melhorias](PROMPTS_IMPLEMENTACAO_DETALHADOS.md) | [→ Ver Resumo](IMPLEMENTACAO_RESUMO_JAN2026.md)
+
 > ♿ **NOVO!** Sistema 100% Acessível! Conformidade WCAG 2.1 AA em implementação. [→ Ver Guia de Acessibilidade](ACCESSIBILITY_GUIDE.md) | [→ Testes](ACCESSIBILITY_TESTING_GUIDE.md) | [→ Declaração de Conformidade](WCAG_COMPLIANCE_STATEMENT.md)
 
 Uma solução **DDD** multitenant completa para gestão de consultórios médicos (SaaS) construída com **Angular 20**, **.NET 8** e **PostgreSQL**.
@@ -115,13 +117,20 @@ Aplicativo unificado acessando diferentes seções por rotas:
 - **URL**: `http://localhost:4200/system-admin`
 - **Documentação**: [Ver Phase 1 Completa](../SYSTEM_ADMIN_PHASE1_IMPLEMENTATION_COMPLETE.md)
 
-#### 🌐 **Site Marketing** (`/site/*`)
-- 🏠 **Landing page** e apresentação do produto
+#### 🌐 **Site Marketing** (`/site/*`) ✅ **RENOVADO - JAN 2026**
+- 🏠 **Homepage Redesenhada**: Layout moderno com hero section, social proof, features grid (PROMPT 1 ✅)
+- 🎨 **Design System Completo**: Cores, tipografia, espaçamento, animações (PROMPT 3 ✅)
+- ✨ **Micro-interações**: Animações suaves em botões, cards, inputs, modals (PROMPT 7 ✅)
+- 🏆 **Cases de Sucesso**: Página completa com 3 cases reais, filtros por especialidade (PROMPT 8 ✅)
+- 🎯 **Empty States**: Estados vazios amigáveis e acionáveis (PROMPT 6 ✅)
+- 🚀 **Onboarding**: Sistema de progresso e checklist de primeiros passos (PROMPT 4 🚧 50%)
 - 💰 **Página de pricing** com planos
 - 📝 **Formulário de registro** de novas clínicas
 - 📞 **Página de contato**
 - 📜 **Termos de uso** e política de privacidade
 - **URL**: `http://localhost:4200/site`
+- **URL Cases**: `http://localhost:4200/cases` (NOVO!)
+- **Documentação**: [PROMPTS_IMPLEMENTACAO_DETALHADOS.md](./PROMPTS_IMPLEMENTACAO_DETALHADOS.md) | [PLANO_MELHORIAS_WEBSITE_UXUI.md](./PLANO_MELHORIAS_WEBSITE_UXUI.md)
 
 **Benefícios da Consolidação:**
 - ♻️ **Redução de 66%**: 3 apps → 1 app unificado
