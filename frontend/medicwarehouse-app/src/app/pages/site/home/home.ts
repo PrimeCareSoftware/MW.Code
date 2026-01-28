@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Subject } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
@@ -18,6 +20,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private observer?: IntersectionObserver;
   private pageStartTime = Date.now();
   private scrollDepthTracked = { 25: false, 50: false, 75: false, 100: false };
+  private scrollSubject = new Subject<void>();
+  private destroy$ = new Subject<void>();
   
   // Video configuration
   // TODO: Replace with actual video URL when video is produced
@@ -38,6 +42,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     
     // Track page view
     this.analytics.trackPageView('/home', 'PrimeCare Software - Home');
+    
+    // Setup throttled scroll tracking
+    this.scrollSubject
+      .pipe(throttleTime(500)) // Throttle to once every 500ms
+      .subscribe(() => this.trackScrollDepth());
   }
 
   ngAfterViewInit(): void {
@@ -50,22 +59,43 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.observer.disconnect();
     }
     
+    // Complete subjects
+    this.scrollSubject.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
+    
     // Track engagement time when leaving the page
     const timeOnPage = (Date.now() - this.pageStartTime) / 1000;
     this.analytics.trackEngagementTime('home', timeOnPage);
   }
   
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onScroll(): void {
-    // Track scroll depth at key milestones
-    const scrollPercent = Math.round(
-      (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
-    );
+    // Emit scroll event to throttled subject
+    this.scrollSubject.next();
+  }
+  
+  /**
+   * Track scroll depth at key milestones (throttled)
+   */
+  private trackScrollDepth(): void {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = window.innerHeight;
+    const scrollTop = window.scrollY;
+    
+    // Prevent division by zero
+    const scrollableHeight = scrollHeight - clientHeight;
+    if (scrollableHeight <= 0) {
+      return; // Page is not scrollable
+    }
+    
+    const scrollPercent = Math.round((scrollTop / scrollableHeight) * 100);
     
     // Track at 25%, 50%, 75%, and 100%
-    [25, 50, 75, 100].forEach(milestone => {
-      if (scrollPercent >= milestone && !this.scrollDepthTracked[milestone as keyof typeof this.scrollDepthTracked]) {
-        this.scrollDepthTracked[milestone as keyof typeof this.scrollDepthTracked] = true;
+    const milestones = [25, 50, 75, 100] as const;
+    milestones.forEach(milestone => {
+      if (scrollPercent >= milestone && !this.scrollDepthTracked[milestone]) {
+        this.scrollDepthTracked[milestone] = true;
         this.analytics.trackScrollDepth(milestone, 'home');
       }
     });

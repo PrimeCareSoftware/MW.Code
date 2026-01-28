@@ -62,6 +62,11 @@ export class ReferralService {
   /**
    * Generate a unique referral code for a user
    * Format: PRIME-XXXX (e.g., PRIME-A7B9)
+   * 
+   * NOTE: This is a simple implementation for frontend development.
+   * In production, referral codes MUST be generated server-side using
+   * cryptographically secure random number generation to prevent
+   * code guessing and ensure uniqueness across all users.
    */
   private generateReferralCode(): string {
     const stored = localStorage.getItem(this.REFERRAL_CODE_KEY);
@@ -69,6 +74,8 @@ export class ReferralService {
       return stored;
     }
     
+    // Simple client-side generation for development
+    // TODO: Replace with server-side generation in production
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = 'PRIME-';
     for (let i = 0; i < 4; i++) {
@@ -142,29 +149,63 @@ export class ReferralService {
   /**
    * Share referral link via social media
    */
-  shareVia(platform: 'whatsapp' | 'email' | 'linkedin' | 'twitter' | 'copy'): void {
+  shareVia(platform: 'whatsapp' | 'email' | 'linkedin' | 'twitter' | 'copy'): Observable<{ success: boolean; message: string }> {
     const link = this.getShareableLink();
     const message = encodeURIComponent(
       `Conheça o PrimeCare Software - o melhor sistema de gestão para clínicas! Use meu código e ganhe desconto: ${link}`
     );
     
-    switch (platform) {
-      case 'whatsapp':
-        window.open(`https://wa.me/?text=${message}`, '_blank');
-        break;
-      case 'email':
-        window.open(`mailto:?subject=Conheça o PrimeCare&body=${message}`, '_blank');
-        break;
-      case 'linkedin':
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`, '_blank');
-        break;
-      case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?text=${message}`, '_blank');
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(link);
-        alert('Link copiado para a área de transferência!');
-        break;
+    try {
+      switch (platform) {
+        case 'whatsapp':
+          window.open(`https://wa.me/?text=${message}`, '_blank');
+          break;
+        case 'email':
+          window.open(`mailto:?subject=Conheça o PrimeCare&body=${message}`, '_blank');
+          break;
+        case 'linkedin':
+          window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`, '_blank');
+          break;
+        case 'twitter':
+          window.open(`https://twitter.com/intent/tweet?text=${message}`, '_blank');
+          break;
+        case 'copy':
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(link).then(
+              () => {
+                // Return success observable instead of blocking alert
+                return of({ success: true, message: 'Link copiado!' });
+              },
+              () => {
+                return of({ success: false, message: 'Erro ao copiar link' });
+              }
+            );
+          } else {
+            // Fallback for older browsers
+            const textarea = document.createElement('textarea');
+            textarea.value = link;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              document.execCommand('copy');
+              document.body.removeChild(textarea);
+            } catch (err) {
+              document.body.removeChild(textarea);
+              return of({ success: false, message: 'Erro ao copiar link' });
+            }
+          }
+          break;
+      }
+      
+      return of({ success: true, message: 'Link compartilhado!' });
+    } catch (error) {
+      console.error('Error sharing referral link:', error);
+      return of({ 
+        success: false, 
+        message: 'Erro ao compartilhar. Por favor, verifique se pop-ups estão habilitados.' 
+      });
     }
   }
 

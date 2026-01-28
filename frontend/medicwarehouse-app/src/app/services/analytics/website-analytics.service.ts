@@ -21,8 +21,23 @@ export class WebsiteAnalyticsService {
 
   constructor() {
     // Initialize GA4 if available
-    if (this.GA_ENABLED && typeof window !== 'undefined' && (window as any).gtag) {
-      console.log('WebsiteAnalyticsService initialized with Google Analytics');
+    if (this.GA_ENABLED && typeof window !== 'undefined') {
+      if ((window as any).gtag) {
+        console.log('WebsiteAnalyticsService initialized with Google Analytics');
+      } else {
+        console.warn('Google Analytics (gtag) not loaded. Check if GA4 script is present in index.html');
+      }
+      
+      // Warn if placeholder ID is still in use
+      if (typeof document !== 'undefined') {
+        const gaScript = document.querySelector('script[src*="googletagmanager.com/gtag/js"]');
+        if (gaScript && gaScript.getAttribute('src')?.includes('GA_MEASUREMENT_ID')) {
+          console.error(
+            '⚠️ PRODUCTION WARNING: GA4 Measurement ID placeholder detected! ' +
+            'Replace "GA_MEASUREMENT_ID" in index.html with your actual GA4 ID (e.g., G-XXXXXXXXXX)'
+          );
+        }
+      }
     }
   }
 

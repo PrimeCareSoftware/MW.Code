@@ -126,8 +126,22 @@ export class SeoService {
 
   /**
    * Update canonical URL
+   * Validates URL format and ensures HTTPS for production
    */
   updateCanonicalUrl(url: string): void {
+    // Validate URL format
+    try {
+      const urlObj = new URL(url);
+      
+      // Warn if not HTTPS in production
+      if (urlObj.protocol !== 'https:' && window.location.protocol === 'https:') {
+        console.warn('Canonical URL should use HTTPS:', url);
+      }
+    } catch (error) {
+      console.error('Invalid canonical URL format:', url);
+      return;
+    }
+    
     let link: HTMLLinkElement | null = document.querySelector('link[rel="canonical"]');
     
     if (!link) {
