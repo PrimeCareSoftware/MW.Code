@@ -174,6 +174,13 @@ namespace MedicSoft.Repository.Context
         public DbSet<MedicSoft.Domain.Entities.CRM.WebhookSubscription> WebhookSubscriptions { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.CRM.WebhookDelivery> WebhookDeliveries { get; set; } = null!;
 
+        // Fiscal Management - Tax and Accounting
+        public DbSet<MedicSoft.Domain.Entities.Fiscal.ConfiguracaoFiscal> ConfiguracoesFiscais { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.Fiscal.ImpostoNota> ImpostosNotas { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.Fiscal.ApuracaoImpostos> ApuracoesImpostos { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.Fiscal.PlanoContas> PlanoContas { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.Fiscal.LancamentoContabil> LancamentosContabeis { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -311,6 +318,13 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new Configurations.CRM.EmailTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.CRM.WebhookSubscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.CRM.WebhookDeliveryConfiguration());
+
+            // Fiscal Management - Tax and Accounting
+            modelBuilder.ApplyConfiguration(new ConfiguracaoFiscalConfiguration());
+            modelBuilder.ApplyConfiguration(new ImpostoNotaConfiguration());
+            modelBuilder.ApplyConfiguration(new ApuracaoImpostosConfiguration());
+            modelBuilder.ApplyConfiguration(new PlanoContasConfiguration());
+            modelBuilder.ApplyConfiguration(new LancamentoContabilConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

@@ -329,6 +329,13 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ICashFlowEntryRepository, CashFlowEntryRepository>();
 builder.Services.AddScoped<IFinancialClosureRepository, FinancialClosureRepository>();
 
+// Fiscal Management - Tax and Accounting Repositories
+builder.Services.AddScoped<IConfiguracaoFiscalRepository, ConfiguracaoFiscalRepository>();
+builder.Services.AddScoped<IImpostoNotaRepository, ImpostoNotaRepository>();
+builder.Services.AddScoped<IApuracaoImpostosRepository, ApuracaoImpostosRepository>();
+builder.Services.AddScoped<IPlanoContasRepository, PlanoContasRepository>();
+builder.Services.AddScoped<ILancamentoContabilRepository, LancamentoContabilRepository>();
+
 // Consultation Form Configuration - Repositories
 builder.Services.AddScoped<IConsultationFormProfileRepository, ConsultationFormProfileRepository>();
 builder.Services.AddScoped<IConsultationFormConfigurationRepository, ConsultationFormConfigurationRepository>();

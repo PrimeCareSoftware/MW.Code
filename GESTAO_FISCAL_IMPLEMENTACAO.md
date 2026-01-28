@@ -166,10 +166,11 @@ PlanoContas (1) ←→ (N) LancamentoContabil
 
 ## 📋 Próximos Passos
 
-### Fase 2: Repositórios e Configurações EF Core
-- [ ] Criar interfaces de repositórios
-- [ ] Implementar Entity Framework configurations
-- [ ] Criar migrations para novas tabelas
+### Fase 2: Repositórios e Configurações EF Core ✅ COMPLETO
+- [x] Criar interfaces de repositórios
+- [x] Implementar Entity Framework configurations
+- [x] Criar migrations para novas tabelas
+- [x] Registrar repositórios no DI container
 
 ### Fase 3: Serviços de Negócio
 - [ ] `CalculoImpostosService` - Cálculo automático de tributos
@@ -315,7 +316,7 @@ PlanoContas (1) ←→ (N) LancamentoContabil
 | Fase | Descrição | Status | Data |
 |------|-----------|--------|------|
 | 1 | Domínio e Entidades | ✅ Completo | Jan 2026 |
-| 2 | Repositórios e Migrations | 🔄 Próximo | - |
+| 2 | Repositórios e Migrations | ✅ Completo | Jan 2026 |
 | 3 | Serviços de Cálculo | ⏳ Pendente | - |
 | 4 | Relatórios Contábeis | ⏳ Pendente | - |
 | 5 | Integrações Externas | ⏳ Pendente | - |
