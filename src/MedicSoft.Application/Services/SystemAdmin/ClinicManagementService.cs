@@ -83,7 +83,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             clinic.ActiveUsers = userCounts?.Active ?? 0;
 
             // Get ticket counts (if ticket system exists)
-            var ticketCounts = await _context.Set<Domain.Entities.SupportTicket>()
+            var ticketCounts = await _context.Set<Domain.Entities.Ticket>()
                 .IgnoreQueryFilters()
                 .Where(t => t.ClinicId == clinicId)
                 .GroupBy(t => 1)
@@ -165,7 +165,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 : 0;
 
             // 3. Tickets Abertos (0-20 pontos)
-            var openTicketsCount = await _context.Set<Domain.Entities.SupportTicket>()
+            var openTicketsCount = await _context.Set<Domain.Entities.Ticket>()
                 .IgnoreQueryFilters()
                 .CountAsync(t => t.ClinicId == clinicId && 
                     (t.Status == Domain.Entities.TicketStatus.Open || t.Status == Domain.Entities.TicketStatus.InProgress));
@@ -222,7 +222,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             events.AddRange(subscriptionEvents);
 
             // Eventos de tickets
-            var ticketEvents = await _context.Set<Domain.Entities.SupportTicket>()
+            var ticketEvents = await _context.Set<Domain.Entities.Ticket>()
                 .IgnoreQueryFilters()
                 .Where(t => t.ClinicId == clinicId)
                 .OrderByDescending(t => t.CreatedAt)
@@ -231,7 +231,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 {
                     Type = "ticket",
                     Title = $"Ticket #{t.Id}",
-                    Description = t.Subject,
+                    Description = t.Title,
                     Date = t.CreatedAt,
                     Icon = "support"
                 })
