@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -31,6 +32,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
             try
             {
                 var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                if (adminUserId == 0)
+                {
+                    return Unauthorized(new { error = "User ID not found in claims" });
+                }
+                
                 var token = await _smartActionService.ImpersonateClinicAsync(request.ClinicId, adminUserId);
 
                 return Ok(new ImpersonationResult
@@ -172,6 +178,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     // DTOs
     public class ImpersonateRequest
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
         public int ClinicId { get; set; }
     }
 
@@ -183,41 +190,69 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
     public class GrantCreditRequest
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
         public int ClinicId { get; set; }
+        
+        [Range(1, 365, ErrorMessage = "Days must be between 1 and 365")]
         public int Days { get; set; }
+        
+        [Required(ErrorMessage = "Reason is required")]
+        [MaxLength(500, ErrorMessage = "Reason cannot exceed 500 characters")]
         public string Reason { get; set; }
     }
 
     public class ApplyDiscountRequest
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
         public int ClinicId { get; set; }
+        
+        [Range(0, 100, ErrorMessage = "Percentage must be between 0 and 100")]
         public decimal Percentage { get; set; }
+        
+        [Range(1, 24, ErrorMessage = "Months must be between 1 and 24")]
         public int Months { get; set; }
     }
 
     public class SuspendRequest
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
         public int ClinicId { get; set; }
+        
         public DateTime? ReactivationDate { get; set; }
+        
+        [Required(ErrorMessage = "Reason is required")]
+        [MaxLength(500, ErrorMessage = "Reason cannot exceed 500 characters")]
         public string Reason { get; set; }
     }
 
     public class ExportDataRequest
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
         public int ClinicId { get; set; }
     }
 
     public class MigratePlanRequest
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
         public int ClinicId { get; set; }
+        
+        [Range(1, int.MaxValue, ErrorMessage = "NewPlanId must be greater than 0")]
         public int NewPlanId { get; set; }
+        
         public bool ProRata { get; set; }
     }
 
     public class SendCustomEmailRequest
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
         public int ClinicId { get; set; }
+        
+        [Required(ErrorMessage = "Subject is required")]
+        [MaxLength(200, ErrorMessage = "Subject cannot exceed 200 characters")]
         public string Subject { get; set; }
+        
+        [Required(ErrorMessage = "Body is required")]
+        [MaxLength(5000, ErrorMessage = "Body cannot exceed 5000 characters")]
         public string Body { get; set; }
     }
 }

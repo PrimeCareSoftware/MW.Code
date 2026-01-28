@@ -5,6 +5,11 @@ namespace MedicSoft.Domain.Entities
 {
     public class WebhookSubscription
     {
+        public WebhookSubscription()
+        {
+            Deliveries = new List<WebhookDelivery>();
+        }
+        
         public int Id { get; set; }
         public string Url { get; set; }
         public string Events { get; set; } // JSON array of event names

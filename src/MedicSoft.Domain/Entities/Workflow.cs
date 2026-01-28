@@ -5,6 +5,12 @@ namespace MedicSoft.Domain.Entities
 {
     public class Workflow
     {
+        public Workflow()
+        {
+            Actions = new List<WorkflowAction>();
+            Executions = new List<WorkflowExecution>();
+        }
+        
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

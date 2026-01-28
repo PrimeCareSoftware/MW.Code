@@ -828,8 +828,6 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-            TimeZone = TimeZoneInfo.Utc
-        });
     
     // CRM Jobs - Sentiment Analysis
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(

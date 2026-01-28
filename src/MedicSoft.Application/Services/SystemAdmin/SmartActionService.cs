@@ -158,7 +158,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Notificar cliente
             await _emailService.SendEmailAsync(
                 to: clinic.Email,
-                subject = "Desconto especial aplicado!",
+                subject: "Desconto especial aplicado!",
                 body: $"Olá {clinic.Name},\n\n" +
                       $"Aplicamos um desconto de {percentage}% em sua assinatura por {months} meses.\n" +
                       $"Código: {discountCode}\n\n" +
