@@ -5,10 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
 import { Procedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
+import { ScreenReaderService } from '../../shared/accessibility/hooks/screen-reader.service';
+import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../shared/accessibility/components/accessible-breadcrumbs.component';
 
 @Component({
   selector: 'app-procedure-form',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, Navbar, AccessibleBreadcrumbsComponent],
   templateUrl: './procedure-form.html',
   styleUrl: './procedure-form.scss'
 })
@@ -20,6 +22,7 @@ export class ProcedureForm implements OnInit {
   isSaving = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
+  breadcrumbs: BreadcrumbItem[] = [];
   
   procedureCategories = Object.values(ProcedureCategory).filter(v => typeof v === 'number') as ProcedureCategory[];
   procedureCategoryLabels = ProcedureCategoryLabels;
@@ -28,7 +31,8 @@ export class ProcedureForm implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private procedureService: ProcedureService
+    private procedureService: ProcedureService,
+    private screenReader: ScreenReaderService
   ) {
     this.procedureForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -50,6 +54,19 @@ export class ProcedureForm implements OnInit {
     if (id) {
       this.procedureId.set(id);
       this.loadProcedure(id);
+      // Set breadcrumbs for edit mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Procedimentos', url: '/procedures' },
+        { label: 'Editar Procedimento' }
+      ];
+    } else {
+      // Set breadcrumbs for create mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Procedimentos', url: '/procedures' },
+        { label: 'Novo Procedimento' }
+      ];
     }
   }
 
@@ -84,12 +101,14 @@ export class ProcedureForm implements OnInit {
   onSubmit(): void {
     if (this.procedureForm.invalid) {
       this.errorMessage.set('Por favor, preencha todos os campos obrigatórios corretamente.');
+      this.screenReader.announceError('Por favor, preencha todos os campos obrigatórios corretamente.');
       return;
     }
 
     this.isSaving.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
+    this.screenReader.announceLoading(this.procedureId() ? 'atualização do procedimento' : 'criação do procedimento');
 
     const formValue = this.procedureForm.value;
     
@@ -109,6 +128,7 @@ export class ProcedureForm implements OnInit {
       }).subscribe({
         next: () => {
           this.successMessage.set('Procedimento atualizado com sucesso!');
+          this.screenReader.announceSuccess('Procedimento atualizado com sucesso!');
           this.isSaving.set(false);
           // Navigate after a short delay to show success message
           setTimeout(() => {
@@ -118,6 +138,7 @@ export class ProcedureForm implements OnInit {
         error: (error) => {
           console.error('Error updating procedure:', error);
           this.errorMessage.set('Erro ao atualizar procedimento');
+          this.screenReader.announceError('Erro ao atualizar procedimento');
           this.isSaving.set(false);
         }
       });
@@ -138,6 +159,7 @@ export class ProcedureForm implements OnInit {
       }).subscribe({
         next: () => {
           this.successMessage.set('Procedimento criado com sucesso!');
+          this.screenReader.announceSuccess('Procedimento criado com sucesso!');
           this.isSaving.set(false);
           // Navigate after a short delay to show success message
           setTimeout(() => {
@@ -147,6 +169,7 @@ export class ProcedureForm implements OnInit {
         error: (error) => {
           console.error('Error creating procedure:', error);
           this.errorMessage.set('Erro ao criar procedimento');
+          this.screenReader.announceError('Erro ao criar procedimento');
           this.isSaving.set(false);
         }
       });

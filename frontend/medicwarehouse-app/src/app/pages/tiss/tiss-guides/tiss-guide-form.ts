@@ -8,10 +8,12 @@ import { PatientHealthInsuranceService } from '../../../services/patient-health-
 import { AuthorizationRequestService } from '../../../services/authorization-request.service';
 import { TussProcedureService } from '../../../services/tuss-procedure.service';
 import { TissGuideType, PatientHealthInsurance, AuthorizationRequest, TussProcedure, CreateTissGuideProcedure } from '../../../models/tiss.model';
+import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-reader.service';
+import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/accessibility/components/accessible-breadcrumbs.component';
 
 @Component({
   selector: 'app-tiss-guide-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, AccessibleBreadcrumbsComponent],
   templateUrl: './tiss-guide-form.html',
   styleUrl: './tiss-guide-form.scss'
 })
@@ -22,6 +24,7 @@ export class TissGuideFormComponent implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
+  breadcrumbs: BreadcrumbItem[] = [];
   
   patientInsurances = signal<PatientHealthInsurance[]>([]);
   authorizationRequests = signal<AuthorizationRequest[]>([]);
@@ -38,7 +41,8 @@ export class TissGuideFormComponent implements OnInit {
     private authorizationService: AuthorizationRequestService,
     private tussService: TussProcedureService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private screenReader: ScreenReaderService
   ) {
     this.guideForm = this.fb.group({
       guideType: ['', [Validators.required]],
@@ -57,6 +61,21 @@ export class TissGuideFormComponent implements OnInit {
       this.isEditMode.set(true);
       this.guideId.set(id);
       this.loadGuide(id);
+      // Set breadcrumbs for edit mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'TISS', url: '/tiss' },
+        { label: 'Guias', url: '/tiss/guides' },
+        { label: 'Editar Guia' }
+      ];
+    } else {
+      // Set breadcrumbs for create mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'TISS', url: '/tiss' },
+        { label: 'Guias', url: '/tiss/guides' },
+        { label: 'Nova Guia' }
+      ];
     }
 
     // Add first procedure row by default
@@ -205,17 +224,20 @@ export class TissGuideFormComponent implements OnInit {
   onSubmit(): void {
     if (this.guideForm.invalid) {
       this.guideForm.markAllAsTouched();
+      this.screenReader.announceError('Por favor, preencha todos os campos obrigatórios');
       return;
     }
 
     if (this.procedures.length === 0) {
       this.errorMessage.set('Adicione pelo menos um procedimento');
+      this.screenReader.announceError('Adicione pelo menos um procedimento');
       return;
     }
 
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
+    this.screenReader.announceLoading('criação da guia TISS');
 
     const formValue = this.guideForm.value;
     const procedures: CreateTissGuideProcedure[] = formValue.procedures.map((proc: any) => ({
@@ -236,10 +258,12 @@ export class TissGuideFormComponent implements OnInit {
       next: () => {
         this.isLoading.set(false);
         this.successMessage.set('Guia criada com sucesso');
+        this.screenReader.announceSuccess('Guia criada com sucesso');
         setTimeout(() => this.router.navigate(['/tiss/guides']), 1500);
       },
       error: (error) => {
         this.errorMessage.set('Erro ao criar guia');
+        this.screenReader.announceError('Erro ao criar guia');
         this.isLoading.set(false);
         console.error('Error creating guide:', error);
       }

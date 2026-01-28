@@ -7,10 +7,12 @@ import { AppointmentService } from '../../../services/appointment';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
 import { Auth } from '../../../services/auth';
+import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-reader.service';
+import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/accessibility/components/accessible-breadcrumbs.component';
 
 @Component({
   selector: 'app-appointment-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, AccessibleBreadcrumbsComponent],
   templateUrl: './appointment-form.html',
   styleUrl: './appointment-form.scss'
 })
@@ -22,6 +24,7 @@ export class AppointmentForm implements OnInit {
   successMessage = signal<string>('');
   isEditMode = signal<boolean>(false);
   appointmentId: string | null = null;
+  breadcrumbs: BreadcrumbItem[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -29,7 +32,8 @@ export class AppointmentForm implements OnInit {
     private patientService: PatientService,
     private router: Router,
     private route: ActivatedRoute,
-    private auth: Auth
+    private auth: Auth,
+    private screenReader: ScreenReaderService
   ) {
     this.appointmentForm = this.fb.group({
       patientId: ['', [Validators.required]],
@@ -48,6 +52,19 @@ export class AppointmentForm implements OnInit {
     if (this.appointmentId) {
       this.isEditMode.set(true);
       this.loadAppointmentData(this.appointmentId);
+      // Set breadcrumbs for edit mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Agendamentos', url: '/appointments' },
+        { label: 'Editar Agendamento' }
+      ];
+    } else {
+      // Set breadcrumbs for create mode
+      this.breadcrumbs = [
+        { label: 'Início', url: '/' },
+        { label: 'Agendamentos', url: '/appointments' },
+        { label: 'Novo Agendamento' }
+      ];
     }
 
     // Get clinicId from authenticated user
@@ -117,6 +134,7 @@ export class AppointmentForm implements OnInit {
       this.isLoading.set(true);
       this.errorMessage.set('');
       this.successMessage.set('');
+      this.screenReader.announceLoading(this.isEditMode() ? 'atualização do agendamento' : 'criação do agendamento');
 
       if (this.isEditMode() && this.appointmentId) {
         // Update existing appointment - only send editable fields
@@ -131,11 +149,13 @@ export class AppointmentForm implements OnInit {
         this.appointmentService.update(this.appointmentId, updateData).subscribe({
           next: () => {
             this.successMessage.set('Agendamento atualizado com sucesso!');
+            this.screenReader.announceSuccess('Agendamento atualizado com sucesso!');
             this.isLoading.set(false);
             setTimeout(() => this.router.navigate(['/appointments']), 1500);
           },
           error: (error) => {
             this.errorMessage.set('Erro ao atualizar agendamento');
+            this.screenReader.announceError('Erro ao atualizar agendamento');
             this.isLoading.set(false);
             console.error('Error updating appointment:', error);
           }
@@ -145,11 +165,13 @@ export class AppointmentForm implements OnInit {
         this.appointmentService.create(this.appointmentForm.value).subscribe({
           next: () => {
             this.successMessage.set('Agendamento criado com sucesso!');
+            this.screenReader.announceSuccess('Agendamento criado com sucesso!');
             this.isLoading.set(false);
             setTimeout(() => this.router.navigate(['/appointments']), 1500);
           },
           error: (error) => {
             this.errorMessage.set('Erro ao criar agendamento');
+            this.screenReader.announceError('Erro ao criar agendamento');
             this.isLoading.set(false);
             console.error('Error creating appointment:', error);
           }

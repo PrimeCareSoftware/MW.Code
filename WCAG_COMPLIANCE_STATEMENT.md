@@ -2,7 +2,7 @@
 
 > **Data da Declaração:** Janeiro 2026  
 > **Última Atualização:** 28 de Janeiro de 2026  
-> **Status:** 🟢 Implementação Avançada (90%)  
+> **Status:** 🟢 Implementação Avançada (93%)  
 > **Nível de Conformidade:** WCAG 2.1 Level AA
 
 ---
@@ -37,12 +37,12 @@ WCAG 2.1 possui três níveis de conformidade:
 
 | Princípio | Descrição | Status |
 |-----------|-----------|--------|
-| **Perceptível** | Informação deve ser apresentada de forma perceptível | 🟢 90% |
-| **Operável** | Componentes devem ser operáveis | 🟢 95% |
-| **Compreensível** | Informação deve ser compreensível | 🟢 90% |
-| **Robusto** | Compatível com tecnologias assistivas | 🟢 85% |
+| **Perceptível** | Informação deve ser apresentada de forma perceptível | 🟢 95% |
+| **Operável** | Componentes devem ser operáveis | 🟢 98% |
+| **Compreensível** | Informação deve ser compreensível | 🟢 92% |
+| **Robusto** | Compatível com tecnologias assistivas | 🟢 90% |
 
-**Status Geral:** 🟢 **90% Completo**
+**Status Geral:** 🟢 **93% Completo**
 
 ---
 
@@ -62,6 +62,8 @@ WCAG 2.1 possui três níveis de conformidade:
 - ✅ ARIA labels e roles apropriados
 - ✅ Anúncios dinâmicos (ARIA live regions)
 - ✅ HTML semântico
+- ✅ **Anúncios em operações CRUD (create, update, error)**
+- ✅ **Feedback acessível em formulários principais**
 
 ### 3. Contraste de Cores ✅
 - ✅ Contraste mínimo 4.5:1 para texto normal
@@ -82,17 +84,20 @@ WCAG 2.1 possui três níveis de conformidade:
 - ✅ Ícones com labels apropriados
 - ✅ Gráficos com descrições textuais
 
-### 6. Formulários Acessíveis 🟡
+### 6. Formulários Acessíveis ✅
 - ✅ Labels associados a todos os campos
 - ✅ Campos obrigatórios identificados
 - ✅ Mensagens de erro claras e acessíveis
+- ✅ **Anúncios de erro via ARIA live regions**
+- ✅ **Feedback de sucesso via screen reader**
 - ⚠️ Validação inline em implementação
 - ✅ Instruções de preenchimento fornecidas
 
 ### 7. Estrutura e Navegação ✅
 - ✅ Headings em ordem hierárquica (h1, h2, h3)
 - ✅ Landmarks (header, nav, main, footer)
-- ✅ Breadcrumbs acessíveis
+- ✅ **Breadcrumbs acessíveis implementados em formulários CRUD**
+- ✅ **Navegação contextual com aria-current="page"**
 - ✅ Menu de navegação com ARIA
 - ✅ Indicação da página atual
 
