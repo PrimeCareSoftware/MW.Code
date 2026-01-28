@@ -10,6 +10,7 @@
   padding: var(--spacing-20, 5rem) var(--spacing-6, 1.5rem);
   min-height: 400px;
   animation: fadeInUp 500ms ease-out;
+  will-change: transform, opacity;
   
   .empty-state-icon {
     width: 120px;
@@ -30,14 +31,14 @@
   }
   
   h3 {
-    font-size: 24px;
+    font-size: var(--font-size-2xl, 24px);
     font-weight: 600;
     color: var(--gray-900, #171717);
     margin-bottom: var(--spacing-3, 0.75rem);
   }
   
   p {
-    font-size: 16px;
+    font-size: var(--font-size-base, 16px);
     color: var(--gray-600, #525252);
     max-width: 480px;
     margin: 0 auto var(--spacing-6, 1.5rem);
@@ -54,7 +55,7 @@
     li {
       padding: var(--spacing-2, 0.5rem) 0;
       color: var(--gray-600, #525252);
-      font-size: 14px;
+      font-size: var(--font-size-sm, 14px);
       
       &::before {
         content: "→";
@@ -72,7 +73,7 @@
     align-items: center;
     gap: var(--spacing-4, 1rem);
     
-    .btn {
+    .btn, a[role="button"] {
       min-width: 200px;
     }
   }
@@ -80,7 +81,7 @@
   .link-secondary {
     color: var(--primary-600, #1e3a8a);
     text-decoration: none;
-    font-size: 14px;
+    font-size: var(--font-size-sm, 14px);
     transition: all var(--transition-base, 200ms ease);
     
     &:hover {
@@ -94,17 +95,25 @@
       border-radius: var(--radius-sm, 0.5rem);
     }
   }
+  
+  .link-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+  }
 }
 
-// Animation
+// Animation with GPU acceleration
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate3d(0, 20px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -124,11 +133,11 @@
     }
     
     h3 {
-      font-size: 20px;
+      font-size: var(--font-size-xl, 20px);
     }
     
     p {
-      font-size: 14px;
+      font-size: var(--font-size-sm, 14px);
     }
   }
 }
@@ -137,5 +146,6 @@
 @media (prefers-reduced-motion: reduce) {
   .empty-state {
     animation: none;
+    will-change: auto;
   }
 }

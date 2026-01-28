@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 /**
  * EmptyState Component
@@ -24,28 +25,28 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './empty-state.component.html',
-  styleUrls: ['./empty-state.component.scss']
+  styleUrl: './empty-state.component.scss'
 })
-export class EmptyStateComponent {
+export class EmptyStateComponent implements OnInit {
   /**
    * Icon to display (uses Material Icons or inline SVG)
    */
   @Input() icon?: string;
   
   /**
-   * Custom SVG to display instead of icon
+   * Custom SVG to display instead of icon (will be sanitized)
    */
   @Input() customSvg?: string;
   
   /**
-   * Main title (h3)
+   * Main title (h3) - defaults to generic message
    */
-  @Input() title!: string;
+  @Input() title: string = 'Nenhum item encontrado';
   
   /**
-   * Description text
+   * Description text - defaults to generic message
    */
-  @Input() description!: string;
+  @Input() description: string = 'Não há itens para exibir no momento.';
   
   /**
    * Primary button text
@@ -86,6 +87,20 @@ export class EmptyStateComponent {
    * Emitted when secondary link is clicked
    */
   @Output() secondaryLinkClick = new EventEmitter<void>();
+  
+  /**
+   * Sanitized SVG content
+   */
+  sanitizedSvg?: SafeHtml;
+  
+  constructor(private sanitizer: DomSanitizer) {}
+  
+  ngOnInit(): void {
+    // Sanitize custom SVG to prevent XSS
+    if (this.customSvg) {
+      this.sanitizedSvg = this.sanitizer.sanitize(SecurityContext.HTML, this.customSvg);
+    }
+  }
   
   onPrimaryButtonClick(): void {
     this.primaryButtonClick.emit();

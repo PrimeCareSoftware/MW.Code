@@ -1,7 +1,7 @@
 <div class="empty-state" [ngClass]="cssClass" role="status" aria-live="polite">
   <!-- Icon or Custom SVG -->
-  @if (customSvg) {
-    <div class="empty-state-icon" [innerHTML]="customSvg" aria-hidden="true"></div>
+  @if (sanitizedSvg) {
+    <div class="empty-state-icon" [innerHTML]="sanitizedSvg" aria-hidden="true"></div>
   } @else if (icon) {
     <div class="empty-state-icon" aria-hidden="true">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -65,12 +65,12 @@
     <!-- Primary Button -->
     @if (primaryButtonText) {
       @if (primaryButtonRoute) {
-        <button 
+        <a 
           class="btn btn-primary" 
           [routerLink]="primaryButtonRoute"
-          type="button">
+          role="button">
           {{ primaryButtonText }}
-        </button>
+        </a>
       } @else {
         <button 
           class="btn btn-primary" 
@@ -90,12 +90,12 @@
           {{ secondaryLinkText }}
         </a>
       } @else {
-        <a 
-          href="#" 
-          class="link-secondary" 
+        <button 
+          type="button"
+          class="link-secondary link-button" 
           (click)="onSecondaryLinkClick($event)">
           {{ secondaryLinkText }}
-        </a>
+        </button>
       }
     }
   </div>
