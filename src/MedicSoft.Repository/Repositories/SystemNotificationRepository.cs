@@ -43,12 +43,12 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task MarkAllAsReadAsync()
         {
-            var unreadNotifications = await _dbSet.Where(n => !n.IsRead).ToListAsync();
-            foreach (var notification in unreadNotifications)
-            {
-                notification.MarkAsRead();
-            }
-            await _context.SaveChangesAsync();
+            var now = DateTime.UtcNow;
+            await _context.Database.ExecuteSqlRawAsync(
+                @"UPDATE ""SystemNotifications"" 
+                  SET ""IsRead"" = true, ""ReadAt"" = {0}, ""UpdatedAt"" = {0}
+                  WHERE ""IsRead"" = false", 
+                now);
         }
 
         public async Task<int> GetUnreadCountAsync()

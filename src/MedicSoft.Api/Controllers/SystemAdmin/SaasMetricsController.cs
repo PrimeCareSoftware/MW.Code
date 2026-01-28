@@ -13,7 +13,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     /// </summary>
     [ApiController]
     [Route("api/system-admin/saas-metrics")]
-    [Authorize] // Add role authorization in production: [Authorize(Roles = "SystemAdmin")]
+    [Authorize(Roles = "SystemAdmin")]
     public class SaasMetricsController : BaseController
     {
         private readonly ISaasMetricsService _metricsService;
@@ -72,6 +72,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         public async Task<ActionResult<List<RevenueTimelineDto>>> GetRevenueTimeline(
             [FromQuery] int months = 12)
         {
+            if (months < 1 || months > 36)
+            {
+                return BadRequest(new { message = "Months must be between 1 and 36" });
+            }
+            
             var timeline = await _metricsService.GetRevenueTimelineAsync(months);
             return Ok(timeline);
         }

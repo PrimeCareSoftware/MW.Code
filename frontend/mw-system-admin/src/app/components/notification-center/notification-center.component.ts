@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SystemNotificationService } from '../../services/system-notification.service';
 import { SystemNotification } from '../../models/system-admin.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-notification-center',
@@ -167,6 +168,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   isOpen = false;
   notifications: SystemNotification[] = [];
   unreadCount = 0;
+  private notificationSubscription?: Subscription;
 
   constructor(private notificationService: SystemNotificationService) {}
 
@@ -175,7 +177,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
     this.notificationService.startConnection();
 
     // Subscribe to real-time notifications
-    this.notificationService.notification$.subscribe(notification => {
+    this.notificationSubscription = this.notificationService.notification$.subscribe(notification => {
       this.notifications.unshift(notification);
       if (!notification.isRead) {
         this.unreadCount++;
@@ -185,6 +187,9 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.notificationService.stopConnection();
+    if (this.notificationSubscription) {
+      this.notificationSubscription.unsubscribe();
+    }
   }
 
   loadNotifications(): void {

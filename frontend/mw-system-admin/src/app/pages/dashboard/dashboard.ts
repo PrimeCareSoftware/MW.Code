@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { SystemAdminService } from '../../services/system-admin';
@@ -13,11 +13,12 @@ import { KpiCardComponent } from '../../components/kpi-card/kpi-card.component';
   imports: [CommonModule, RouterModule, Navbar, KpiCardComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'})
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
   analytics = signal<SystemAnalytics | null>(null);
   saasDashboard = signal<SaasDashboard | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
+  private refreshInterval?: number;
 
   constructor(
     private systemAdminService: SystemAdminService,
@@ -29,10 +30,16 @@ export class Dashboard implements OnInit {
     this.loadAnalytics();
     this.loadSaasMetrics();
     
-    // Auto-refresh every 30 seconds
-    setInterval(() => {
+    // Auto-refresh every 60 seconds
+    this.refreshInterval = window.setInterval(() => {
       this.loadSaasMetrics();
-    }, 30000);
+    }, 60000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
   }
 
   loadAnalytics(): void {

@@ -76,8 +76,8 @@ namespace MedicSoft.Application.Services.SystemAdmin
             var monthlyChurnRate = churnRate / 100;
             var ltv = monthlyChurnRate > 0 ? arpu / monthlyChurnRate : arpu * 12;
 
-            // CAC (simplified estimate)
-            var cac = 500m; // Placeholder - would need marketing cost data
+            // TODO: CAC requires marketing cost tracking - implement when marketing data is available
+            var cac = 500m; // Placeholder - needs marketing cost data
 
             // LTV/CAC Ratio
             var ltvCacRatio = cac > 0 ? ltv / cac : 0;
@@ -85,8 +85,8 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // MRR Growth MoM
             var mrrGrowthMoM = lastMonthMrr > 0 ? (mrr - lastMonthMrr) / lastMonthMrr * 100 : 0;
 
-            // Growth Rate YoY (simplified)
-            var lastYearMrr = mrr * 0.8m; // Placeholder
+            // TODO: Growth Rate YoY requires historical data tracking - improve accuracy
+            var lastYearMrr = mrr * 0.8m; // Placeholder - needs historical MRR data
             var growthRateYoY = lastYearMrr > 0 ? (mrr - lastYearMrr) / lastYearMrr * 100 : 0;
 
             // Quick Ratio

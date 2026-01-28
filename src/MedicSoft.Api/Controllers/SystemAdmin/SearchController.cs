@@ -12,7 +12,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     /// </summary>
     [ApiController]
     [Route("api/system-admin/search")]
-    [Authorize] // Add role authorization in production: [Authorize(Roles = "SystemAdmin")]
+    [Authorize(Roles = "SystemAdmin")]
     public class SearchController : BaseController
     {
         private readonly IGlobalSearchService _searchService;
@@ -37,6 +37,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
             if (string.IsNullOrWhiteSpace(q) || q.Length < 2)
             {
                 return BadRequest(new { message = "Query must be at least 2 characters long" });
+            }
+            
+            if (maxResults < 1 || maxResults > 100)
+            {
+                return BadRequest(new { message = "maxResults must be between 1 and 100" });
             }
 
             var results = await _searchService.SearchAsync(q, maxResults);

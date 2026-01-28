@@ -13,7 +13,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     /// </summary>
     [ApiController]
     [Route("api/system-admin/notifications")]
-    [Authorize] // Add role authorization in production: [Authorize(Roles = "SystemAdmin")]
+    [Authorize(Roles = "SystemAdmin")]
     public class SystemNotificationsController : BaseController
     {
         private readonly ISystemNotificationService _notificationService;
@@ -43,6 +43,16 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
+            if (page < 1)
+            {
+                return BadRequest(new { message = "page must be >= 1" });
+            }
+            
+            if (pageSize < 1 || pageSize > 100)
+            {
+                return BadRequest(new { message = "pageSize must be between 1 and 100" });
+            }
+            
             var notifications = await _notificationService.GetAllNotificationsAsync(page, pageSize);
             return Ok(notifications);
         }
@@ -78,9 +88,10 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         }
 
         /// <summary>
-        /// Create a new notification (for testing or manual creation)
+        /// Create a new notification (for system use only - automated jobs)
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "SystemAdmin,BackgroundJob")]
         public async Task<ActionResult<SystemNotificationDto>> CreateNotification(
             [FromBody] CreateSystemNotificationDto dto)
         {
