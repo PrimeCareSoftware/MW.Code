@@ -261,6 +261,10 @@ builder.Services.AddScoped<IProcedureRepository, ProcedureRepository>();
 builder.Services.AddScoped<IAppointmentProcedureRepository, AppointmentProcedureRepository>();
 builder.Services.AddScoped<IClinicSubscriptionRepository, ClinicSubscriptionRepository>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+// Register TISS repositories
+builder.Services.AddScoped<ITissGlosaRepository, TissGlosaRepository>();
+builder.Services.AddScoped<ITissOperadoraConfigRepository, TissOperadoraConfigRepository>();
+builder.Services.AddScoped<ITissRecursoGlosaRepository, TissRecursoGlosaRepository>();
 builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IPrescriptionItemRepository, PrescriptionItemRepository>();
 builder.Services.AddScoped<IPrescriptionTemplateRepository, PrescriptionTemplateRepository>();
@@ -418,6 +422,9 @@ builder.Services.AddScoped<ITimestampService, TimestampService>();
 builder.Services.AddScoped<IAssinaturaDigitalService, AssinaturaDigitalService>();
 builder.Services.AddScoped<ICertificadoDigitalRepository, CertificadoDigitalRepository>();
 builder.Services.AddScoped<IAssinaturaDigitalRepository, AssinaturaDigitalRepository>();
+
+// Register IHttpContextAccessor for Digital Signature Service
+builder.Services.AddHttpContextAccessor();
 
 // Anamnesis System
 builder.Services.AddScoped<IAnamnesisTemplateRepository, AnamnesisTemplateRepository>();
