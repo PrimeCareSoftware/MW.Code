@@ -43,6 +43,8 @@ namespace MedicSoft.Application.Services.Reports
 
         /// <summary>
         /// Schedule a recurring report job
+        /// Note: Static method for Hangfire job configuration utility.
+        /// For testing, mock the IReportService dependency instead.
         /// </summary>
         public static void ScheduleRecurring(int scheduledReportId, string cronExpression, string? jobName = null)
         {
@@ -58,6 +60,7 @@ namespace MedicSoft.Application.Services.Reports
 
         /// <summary>
         /// Remove a scheduled report job
+        /// Note: Static method for Hangfire job configuration utility.
         /// </summary>
         public static void RemoveSchedule(int scheduledReportId, string? jobName = null)
         {

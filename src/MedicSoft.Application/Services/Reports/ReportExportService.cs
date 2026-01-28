@@ -27,7 +27,7 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Export report data to PDF with branding
         /// </summary>
-        public async Task<byte[]> ExportToPdfAsync(string reportTitle, string description, List<Dictionary<string, object>> data, string brandName = "MedicWarehouse")
+        public async Task<byte[]> ExportToPdfAsync(string reportTitle, string description, List<Dictionary<string, object>> data, string brandName = "MedicSoft")
         {
             _logger.LogInformation("Exporting report to PDF: {ReportTitle}", reportTitle);
 
@@ -83,14 +83,14 @@ namespace MedicSoft.Application.Services.Reports
 
                                     column.Item().Table(table =>
                                     {
-                                        // Define columns
-                                        foreach (var _ in headers)
+                                        // Define columns - call once for all columns
+                                        table.ColumnsDefinition(columns =>
                                         {
-                                            table.ColumnsDefinition(columns =>
+                                            foreach (var _ in headers)
                                             {
                                                 columns.RelativeColumn();
-                                            });
-                                        }
+                                            }
+                                        });
 
                                         // Header row
                                         table.Header(header =>
@@ -262,7 +262,7 @@ namespace MedicSoft.Application.Services.Reports
     /// </summary>
     public interface IReportExportService
     {
-        Task<byte[]> ExportToPdfAsync(string reportTitle, string description, List<Dictionary<string, object>> data, string brandName = "MedicWarehouse");
+        Task<byte[]> ExportToPdfAsync(string reportTitle, string description, List<Dictionary<string, object>> data, string brandName = "MedicSoft");
         Task<byte[]> ExportToExcelAsync(string reportTitle, List<Dictionary<string, object>> data, Dictionary<string, List<Dictionary<string, object>>>? additionalSheets = null);
     }
 }

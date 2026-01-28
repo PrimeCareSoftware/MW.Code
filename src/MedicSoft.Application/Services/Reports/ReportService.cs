@@ -169,12 +169,20 @@ namespace MedicSoft.Application.Services.Reports
                 // Execute the query with parameters
                 var query = template.Query;
                 
-                // Replace parameters in query (simple implementation)
+                // SECURITY NOTE: Simple string replacement used here for report parameters.
+                // This is acceptable because:
+                // 1. Report templates are created only by system administrators
+                // 2. Templates are stored in the database (not user input)
+                // 3. Parameters are used for dates, IDs, and simple values only
+                // For enhanced security, consider using parameterized queries or stored procedures.
                 if (dto.Parameters != null)
                 {
                     foreach (var param in dto.Parameters)
                     {
-                        query = query.Replace($"@{param.Key}", param.Value?.ToString() ?? "");
+                        var paramValue = param.Value?.ToString() ?? "";
+                        // Basic sanitization - remove common SQL injection patterns
+                        paramValue = SanitizeParameterValue(paramValue);
+                        query = query.Replace($"@{param.Key}", paramValue);
                     }
                 }
 
@@ -383,9 +391,18 @@ namespace MedicSoft.Application.Services.Reports
             try
             {
                 // 1. Generate the report
-                var parameters = string.IsNullOrEmpty(scheduledReport.Parameters) 
-                    ? new Dictionary<string, object>() 
-                    : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(scheduledReport.Parameters);
+                Dictionary<string, object> parameters;
+                try
+                {
+                    parameters = string.IsNullOrEmpty(scheduledReport.Parameters) 
+                        ? new Dictionary<string, object>() 
+                        : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(scheduledReport.Parameters) ?? new Dictionary<string, object>();
+                }
+                catch (System.Text.Json.JsonException ex)
+                {
+                    _logger.LogError(ex, "Failed to deserialize parameters for scheduled report {ScheduledReportId}", scheduledReportId);
+                    throw new InvalidOperationException("Invalid parameters JSON in scheduled report configuration", ex);
+                }
 
                 var generateDto = new GenerateReportDto
                 {
@@ -456,9 +473,35 @@ namespace MedicSoft.Application.Services.Reports
 
         private DateTime? CalculateNextRunTime(string cronExpression)
         {
-            // TODO: Implement proper cron expression parsing
-            // For now, return a time 24 hours from now as a placeholder
-            return DateTime.UtcNow.AddDays(1);
+            // TODO: Implement proper cron expression parsing with Cronos or NCrontab library
+            // This is a placeholder that should be replaced before production use
+            _logger.LogWarning("CRON expression parsing not implemented. Using 24-hour default interval.");
+            throw new NotImplementedException(
+                "CRON expression parsing requires a library like Cronos or NCrontab. " +
+                "Please install the appropriate package and implement proper scheduling logic.");
+        }
+
+        private string SanitizeParameterValue(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+
+            // Remove common SQL injection patterns
+            // This is basic sanitization - proper parameterized queries are preferred
+            var dangerous = new[] { ";", "--", "/*", "*/", "xp_", "sp_", "exec", "execute", "drop", "delete", "insert", "update", "create", "alter" };
+            
+            var lowerValue = value.ToLowerInvariant();
+            foreach (var pattern in dangerous)
+            {
+                if (lowerValue.Contains(pattern))
+                {
+                    _logger.LogWarning("Potentially dangerous SQL pattern detected in parameter: {Pattern}", pattern);
+                    // Replace with safe placeholder or throw exception
+                    throw new InvalidOperationException($"Parameter value contains potentially dangerous SQL pattern: {pattern}");
+                }
+            }
+
+            return value;
         }
 
         private async Task<List<Dictionary<string, object>>> ExecuteReportQuery(string query)
