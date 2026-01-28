@@ -3,7 +3,17 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../services/system-admin';
-import { ClinicDetail as ClinicDetailModel, UpdateClinicRequest, EnableManualOverrideRequest, SubscriptionPlan, UpdateSubscriptionRequest } from '../../models/system-admin.model';
+import { 
+  ClinicDetail as ClinicDetailModel, 
+  UpdateClinicRequest, 
+  EnableManualOverrideRequest, 
+  SubscriptionPlan, 
+  UpdateSubscriptionRequest,
+  ClinicHealthScore,
+  ClinicTimelineEvent,
+  ClinicUsageMetrics,
+  Tag
+} from '../../models/system-admin.model';
 import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
@@ -14,11 +24,18 @@ import { Navbar } from '../../shared/navbar/navbar';
   styleUrl: './clinic-detail.scss'})
 export class ClinicDetail implements OnInit {
   clinic = signal<ClinicDetailModel | null>(null);
+  healthScore = signal<ClinicHealthScore | null>(null);
+  timeline = signal<ClinicTimelineEvent[]>([]);
+  usageMetrics = signal<ClinicUsageMetrics | null>(null);
+  availableTags = signal<Tag[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   editMode = signal(false);
   saving = signal(false);
   saveError = signal<string | null>(null);
+  
+  // Tab management
+  activeTab = signal<'info' | 'health' | 'timeline' | 'metrics' | 'tags'>('info');
 
   editData: UpdateClinicRequest = {
     name: '',
@@ -53,6 +70,10 @@ export class ClinicDetail implements OnInit {
     if (id) {
       this.loadClinic(id);
       this.loadPlans();
+      this.loadHealthScore(id);
+      this.loadTimeline(id);
+      this.loadUsageMetrics(id);
+      this.loadAvailableTags();
     }
   }
 
@@ -68,6 +89,50 @@ export class ClinicDetail implements OnInit {
       error: (err) => {
         this.error.set(err.error?.message || 'Erro ao carregar clínica');
         this.loading.set(false);
+      }
+    });
+  }
+
+  loadHealthScore(id: string): void {
+    this.systemAdminService.getClinicHealthScore(id).subscribe({
+      next: (data) => {
+        this.healthScore.set(data);
+      },
+      error: (err) => {
+        console.error('Error loading health score:', err);
+      }
+    });
+  }
+
+  loadTimeline(id: string): void {
+    this.systemAdminService.getClinicTimeline(id, 50).subscribe({
+      next: (data) => {
+        this.timeline.set(data);
+      },
+      error: (err) => {
+        console.error('Error loading timeline:', err);
+      }
+    });
+  }
+
+  loadUsageMetrics(id: string): void {
+    this.systemAdminService.getClinicUsageMetrics(id).subscribe({
+      next: (data) => {
+        this.usageMetrics.set(data);
+      },
+      error: (err) => {
+        console.error('Error loading usage metrics:', err);
+      }
+    });
+  }
+
+  loadAvailableTags(): void {
+    this.systemAdminService.getTags().subscribe({
+      next: (data) => {
+        this.availableTags.set(data);
+      },
+      error: (err) => {
+        console.error('Error loading tags:', err);
       }
     });
   }
@@ -221,5 +286,74 @@ export class ClinicDetail implements OnInit {
       'Cancelled': 'badge-cancelled'
     };
     return classes[status] || '';
+  }
+
+  // Tab management
+  setActiveTab(tab: 'info' | 'health' | 'timeline' | 'metrics' | 'tags'): void {
+    this.activeTab.set(tab);
+  }
+
+  // Health score helpers
+  getHealthScoreClass(): string {
+    const score = this.healthScore();
+    if (!score) return '';
+    
+    return score.healthStatus === 'Healthy' ? 'health-good' :
+           score.healthStatus === 'NeedsAttention' ? 'health-warning' :
+           'health-danger';
+  }
+
+  getHealthScoreIcon(): string {
+    const score = this.healthScore();
+    if (!score) return '❓';
+    
+    return score.healthStatus === 'Healthy' ? '✅' :
+           score.healthStatus === 'NeedsAttention' ? '⚠️' :
+           '🚨';
+  }
+
+  // Timeline helpers
+  getTimelineIcon(type: string): string {
+    const icons: { [key: string]: string } = {
+      'subscription': '📋',
+      'ticket': '🎫',
+      'audit': '📝',
+      'payment': '💳',
+      'user': '👤'
+    };
+    return icons[type] || '📌';
+  }
+
+  // Tag management
+  assignTag(tagId: string): void {
+    const c = this.clinic();
+    if (!c) return;
+
+    this.systemAdminService.assignTagToClinic(c.id, tagId).subscribe({
+      next: () => {
+        this.loadClinic(c.id);
+        alert('Tag atribuída com sucesso!');
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao atribuir tag');
+      }
+    });
+  }
+
+  removeTag(tagId: string): void {
+    const c = this.clinic();
+    if (!c) return;
+
+    if (!confirm('Tem certeza que deseja remover esta tag?')) return;
+
+    this.systemAdminService.removeTagFromClinic(c.id, tagId).subscribe({
+      next: () => {
+        this.loadClinic(c.id);
+        alert('Tag removida com sucesso!');
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao remover tag');
+      }
+    });
   }
 }

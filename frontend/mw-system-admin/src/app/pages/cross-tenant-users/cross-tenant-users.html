@@ -1,0 +1,201 @@
+<app-navbar></app-navbar>
+
+<div class="users-container">
+  <div class="header">
+    <div>
+      <h1>Gestão de Usuários Cross-Tenant</h1>
+      <p class="subtitle">Visualize e gerencie usuários de todas as clínicas</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-panel">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>Buscar</label>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          placeholder="Nome, email, username..."
+          (keyup.enter)="applyFilters()"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Função</label>
+        <select [(ngModel)]="selectedRole" (change)="applyFilters()">
+          <option [ngValue]="undefined">Todas</option>
+          <option value="Owner">Proprietário</option>
+          <option value="Admin">Administrador</option>
+          <option value="Doctor">Médico</option>
+          <option value="Receptionist">Recepcionista</option>
+          <option value="Nurse">Enfermeiro</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status</label>
+        <select [(ngModel)]="selectedStatus" (change)="applyFilters()">
+          <option [ngValue]="undefined">Todos</option>
+          <option [ngValue]="true">Ativos</option>
+          <option [ngValue]="false">Inativos</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn-secondary" (click)="clearFilters()">Limpar</button>
+      <button class="btn-primary" (click)="applyFilters()">Buscar</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Carregando usuários...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Erro: {{ error() }}</p>
+      <button (click)="loadUsers()" class="btn-retry">Tentar novamente</button>
+    </div>
+  } @else {
+    <div class="users-stats">
+      <span>Total de usuários encontrados: <strong>{{ totalCount() }}</strong></span>
+    </div>
+
+    <div class="table-container">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Usuário</th>
+            <th>Função</th>
+            <th>Clínica</th>
+            <th>Email</th>
+            <th>Último Login</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users(); track user.id) {
+            <tr>
+              <td>
+                <div class="user-info">
+                  <div class="user-name">{{ user.fullName }}</div>
+                  <div class="user-username">@{{ user.username }}</div>
+                </div>
+              </td>
+              <td>
+                <span class="badge" [class]="getRoleBadgeClass(user.role)">
+                  {{ getRoleLabel(user.role) }}
+                </span>
+              </td>
+              <td>
+                <button class="clinic-link" (click)="viewClinic(user.tenantId)">
+                  {{ user.clinicName }}
+                </button>
+              </td>
+              <td>{{ user.email }}</td>
+              <td>{{ formatDate(user.lastLoginAt) }}</td>
+              <td>
+                <span class="status-badge" [class.active]="user.isActive" [class.inactive]="!user.isActive">
+                  {{ user.isActive ? '✅ Ativo' : '🚫 Inativo' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button 
+                    class="btn-icon" 
+                    (click)="openPasswordResetModal(user.id)" 
+                    title="Resetar senha"
+                  >
+                    🔑
+                  </button>
+                  <button 
+                    class="btn-icon" 
+                    [class.btn-danger]="user.isActive"
+                    [class.btn-success]="!user.isActive"
+                    (click)="toggleUserStatus(user.id, user.isActive)" 
+                    [title]="user.isActive ? 'Desativar' : 'Ativar'"
+                  >
+                    {{ user.isActive ? '🚫' : '✅' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (users().length === 0) {
+        <div class="empty-state">
+          <p>Nenhum usuário encontrado</p>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (getTotalPages() > 1) {
+      <div class="pagination">
+        <button 
+          class="btn-page" 
+          (click)="changePage(currentPage() - 1)"
+          [disabled]="currentPage() === 1"
+        >
+          ‹ Anterior
+        </button>
+        <span class="page-info">
+          Página {{ currentPage() }} de {{ getTotalPages() }}
+        </span>
+        <button 
+          class="btn-page" 
+          (click)="changePage(currentPage() + 1)"
+          [disabled]="currentPage() === getTotalPages()"
+        >
+          Próxima ›
+        </button>
+      </div>
+    }
+  }
+
+  <!-- Password Reset Modal -->
+  @if (showPasswordResetModal) {
+    <div class="modal-overlay" (click)="closePasswordResetModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Resetar Senha</h2>
+          <button class="btn-close" (click)="closePasswordResetModal()">✕</button>
+        </div>
+        
+        <div class="modal-body">
+          <p>Digite a nova senha para o usuário:</p>
+          
+          <div class="form-group">
+            <label>Nova Senha *</label>
+            <input
+              type="password"
+              [(ngModel)]="newPassword"
+              placeholder="Mínimo 8 caracteres"
+              (keyup.enter)="resetPassword()"
+            />
+          </div>
+
+          @if (resetError()) {
+            <div class="error-message">{{ resetError() }}</div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closePasswordResetModal()">
+            Cancelar
+          </button>
+          <button class="btn-primary" (click)="resetPassword()" [disabled]="!newPassword || resetProcessing()">
+            @if (resetProcessing()) {
+              <span>Resetando...</span>
+            } @else {
+              <span>Resetar Senha</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

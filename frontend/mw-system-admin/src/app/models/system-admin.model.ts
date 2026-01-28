@@ -18,6 +18,7 @@ export interface ClinicDetail extends ClinicSummary {
   trialEndsAt?: string;
   totalUsers: number;
   activeUsers: number;
+  tags?: Tag[];
 }
 
 export interface PaginatedClinics {
@@ -311,4 +312,96 @@ export interface CreateSystemNotification {
   actionUrl?: string;
   actionLabel?: string;
   data?: string;
+}
+
+// Phase 2: Advanced Clinic Management
+export interface ClinicHealthScore {
+  clinicId: string;
+  totalScore: number;
+  healthStatus: 'Healthy' | 'NeedsAttention' | 'AtRisk';
+  usageScore: number;
+  userEngagementScore: number;
+  supportScore: number;
+  paymentScore: number;
+  lastActivity?: string;
+  daysSinceActivity?: number;
+  activeUsersPercentage?: number;
+  openTicketsCount?: number;
+  hasPaymentIssues: boolean;
+  calculatedAt: string;
+}
+
+export interface ClinicTimelineEvent {
+  type: string;
+  title: string;
+  description: string;
+  date: string;
+  icon: string;
+  metadata?: any;
+}
+
+export interface ClinicUsageMetrics {
+  clinicId: string;
+  periodStart: string;
+  periodEnd: string;
+  totalLogins: number;
+  uniqueActiveUsers: number;
+  totalAppointments: number;
+  totalPatientRecords: number;
+  totalDocuments: number;
+  averageSessionDuration: number;
+  peakUsageHours: number[];
+  featureUsage: { [key: string]: number };
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  description?: string;
+  category: string;
+  color: string;
+  isAutomatic: boolean;
+  order: number;
+  createdAt: string;
+}
+
+export interface ClinicFilter {
+  searchTerm?: string;
+  isActive?: boolean;
+  subscriptionStatus?: string;
+  healthStatus?: string;
+  tagIds?: string[];
+  planIds?: string[];
+  createdAfter?: string;
+  createdBefore?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface CrossTenantUser {
+  id: string;
+  username: string;
+  email: string;
+  fullName: string;
+  role: string;
+  tenantId: string;
+  clinicName: string;
+  isActive: boolean;
+  lastLoginAt?: string;
+  createdAt: string;
+}
+
+export interface CrossTenantUserFilter {
+  searchTerm?: string;
+  clinicId?: string;
+  role?: string;
+  isActive?: boolean;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface BulkActionRequest {
+  clinicIds: string[];
+  action: 'send-email' | 'change-plan' | 'assign-tags' | 'remove-tags';
+  actionData?: any;
 }

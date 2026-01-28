@@ -13,7 +13,48 @@
       } @else if (error()) {
         <div class="error-message">{{ error() }}</div>
       } @else if (clinic()) {
+        <!-- Tab Navigation -->
+        <div class="tabs">
+          <button 
+            class="tab" 
+            [class.active]="activeTab() === 'info'"
+            (click)="setActiveTab('info')"
+          >
+            📋 Informações
+          </button>
+          <button 
+            class="tab" 
+            [class.active]="activeTab() === 'health'"
+            (click)="setActiveTab('health')"
+          >
+            {{ getHealthScoreIcon() }} Health Score
+          </button>
+          <button 
+            class="tab" 
+            [class.active]="activeTab() === 'timeline'"
+            (click)="setActiveTab('timeline')"
+          >
+            📅 Timeline
+          </button>
+          <button 
+            class="tab" 
+            [class.active]="activeTab() === 'metrics'"
+            (click)="setActiveTab('metrics')"
+          >
+            📊 Métricas
+          </button>
+          <button 
+            class="tab" 
+            [class.active]="activeTab() === 'tags'"
+            (click)="setActiveTab('tags')"
+          >
+            🏷️ Tags
+          </button>
+        </div>
+
         <div class="content">
+          <!-- Info Tab (Original Content) -->
+          @if (activeTab() === 'info') {
           <!-- Clinic Info Card -->
           <div class="card">
             <div class="card-header">
@@ -175,6 +216,232 @@
               </button>
             </div>
           </div>
+          }
+
+          <!-- Health Score Tab -->
+          @if (activeTab() === 'health' && healthScore()) {
+            <div class="card">
+              <div class="card-header">
+                <h2>{{ getHealthScoreIcon() }} Health Score da Clínica</h2>
+              </div>
+
+              <div class="health-score-container">
+                <div class="health-score-main">
+                  <div class="score-circle" [class]="getHealthScoreClass()">
+                    <span class="score-value">{{ healthScore()!.totalScore }}</span>
+                    <span class="score-label">/100</span>
+                  </div>
+                  <div class="score-status">
+                    <span class="status-badge" [class]="getHealthScoreClass()">
+                      {{ healthScore()!.healthStatus === 'Healthy' ? 'Saudável' :
+                         healthScore()!.healthStatus === 'NeedsAttention' ? 'Precisa Atenção' :
+                         'Em Risco' }}
+                    </span>
+                    <small>Calculado em {{ formatDate(healthScore()!.calculatedAt) }}</small>
+                  </div>
+                </div>
+
+                <div class="health-score-breakdown">
+                  <h3>Detalhamento da Pontuação</h3>
+                  
+                  <div class="score-item">
+                    <div class="score-item-header">
+                      <span class="score-item-label">💻 Frequência de Uso</span>
+                      <span class="score-item-value">{{ healthScore()!.usageScore }}/30</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(healthScore()!.usageScore / 30) * 100"></div>
+                    </div>
+                    @if (healthScore()!.daysSinceActivity !== undefined) {
+                      <small>Última atividade há {{ healthScore()!.daysSinceActivity }} dias</small>
+                    }
+                  </div>
+
+                  <div class="score-item">
+                    <div class="score-item-header">
+                      <span class="score-item-label">👥 Engajamento de Usuários</span>
+                      <span class="score-item-value">{{ healthScore()!.userEngagementScore }}/25</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(healthScore()!.userEngagementScore / 25) * 100"></div>
+                    </div>
+                    @if (healthScore()!.activeUsersPercentage !== undefined) {
+                      <small>{{ healthScore()!.activeUsersPercentage }}% de usuários ativos</small>
+                    }
+                  </div>
+
+                  <div class="score-item">
+                    <div class="score-item-header">
+                      <span class="score-item-label">🎫 Suporte</span>
+                      <span class="score-item-value">{{ healthScore()!.supportScore }}/20</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(healthScore()!.supportScore / 20) * 100"></div>
+                    </div>
+                    @if (healthScore()!.openTicketsCount !== undefined) {
+                      <small>{{ healthScore()!.openTicketsCount }} tickets abertos</small>
+                    }
+                  </div>
+
+                  <div class="score-item">
+                    <div class="score-item-header">
+                      <span class="score-item-label">💳 Pagamentos</span>
+                      <span class="score-item-value">{{ healthScore()!.paymentScore }}/25</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(healthScore()!.paymentScore / 25) * 100"></div>
+                    </div>
+                    <small>{{ healthScore()!.hasPaymentIssues ? 'Problemas detectados' : 'Pagamentos em dia' }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Timeline Tab -->
+          @if (activeTab() === 'timeline') {
+            <div class="card">
+              <div class="card-header">
+                <h2>📅 Timeline de Eventos</h2>
+              </div>
+
+              @if (timeline().length > 0) {
+                <div class="timeline">
+                  @for (event of timeline(); track event.date) {
+                    <div class="timeline-item">
+                      <div class="timeline-icon">{{ getTimelineIcon(event.type) }}</div>
+                      <div class="timeline-content">
+                        <div class="timeline-header">
+                          <strong>{{ event.title }}</strong>
+                          <span class="timeline-date">{{ formatDate(event.date) }}</span>
+                        </div>
+                        <div class="timeline-description">{{ event.description }}</div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <div class="empty-state">
+                  <p>Nenhum evento registrado ainda</p>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Metrics Tab -->
+          @if (activeTab() === 'metrics' && usageMetrics()) {
+            <div class="card">
+              <div class="card-header">
+                <h2>📊 Métricas de Uso</h2>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-item">
+                  <span class="metric-icon">🔐</span>
+                  <div class="metric-content">
+                    <span class="metric-label">Total de Logins</span>
+                    <span class="metric-value">{{ usageMetrics()!.totalLogins }}</span>
+                  </div>
+                </div>
+
+                <div class="metric-item">
+                  <span class="metric-icon">👤</span>
+                  <div class="metric-content">
+                    <span class="metric-label">Usuários Únicos Ativos</span>
+                    <span class="metric-value">{{ usageMetrics()!.uniqueActiveUsers }}</span>
+                  </div>
+                </div>
+
+                <div class="metric-item">
+                  <span class="metric-icon">📅</span>
+                  <div class="metric-content">
+                    <span class="metric-label">Total de Agendamentos</span>
+                    <span class="metric-value">{{ usageMetrics()!.totalAppointments }}</span>
+                  </div>
+                </div>
+
+                <div class="metric-item">
+                  <span class="metric-icon">📋</span>
+                  <div class="metric-content">
+                    <span class="metric-label">Registros de Pacientes</span>
+                    <span class="metric-value">{{ usageMetrics()!.totalPatientRecords }}</span>
+                  </div>
+                </div>
+
+                <div class="metric-item">
+                  <span class="metric-icon">📄</span>
+                  <div class="metric-content">
+                    <span class="metric-label">Documentos Gerados</span>
+                    <span class="metric-value">{{ usageMetrics()!.totalDocuments }}</span>
+                  </div>
+                </div>
+
+                <div class="metric-item">
+                  <span class="metric-icon">⏱️</span>
+                  <div class="metric-content">
+                    <span class="metric-label">Duração Média de Sessão</span>
+                    <span class="metric-value">{{ usageMetrics()!.averageSessionDuration }} min</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-period">
+                <small>Período: {{ formatDate(usageMetrics()!.periodStart) }} - {{ formatDate(usageMetrics()!.periodEnd) }}</small>
+              </div>
+            </div>
+          }
+
+          <!-- Tags Tab -->
+          @if (activeTab() === 'tags') {
+            <div class="card">
+              <div class="card-header">
+                <h2>🏷️ Gestão de Tags</h2>
+              </div>
+
+              <!-- Assigned Tags -->
+              @if (clinic() && clinic()!.tags && clinic()!.tags.length > 0) {
+                <div class="tags-section">
+                  <h3>Tags Atribuídas</h3>
+                  <div class="tags-container">
+                    @for (tag of clinic()!.tags; track tag.id) {
+                      <div class="tag-badge" [style.background-color]="tag.color">
+                        <span>{{ tag.name }}</span>
+                        @if (tag.isAutomatic) {
+                          <span class="tag-auto-indicator" title="Tag automática">🤖</span>
+                        }
+                        @if (!tag.isAutomatic) {
+                          <button class="tag-remove" (click)="removeTag(tag.id)" title="Remover tag">✕</button>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              } @else {
+                <div class="empty-state">
+                  <p>Nenhuma tag atribuída ainda</p>
+                </div>
+              }
+
+              <!-- Available Tags -->
+              @if (availableTags().length > 0) {
+                <div class="tags-section">
+                  <h3>Tags Disponíveis</h3>
+                  <div class="tags-container">
+                    @for (tag of availableTags(); track tag.id) {
+                      @if (!clinic()!.tags || !clinic()!.tags.find(t => t.id === tag.id)) {
+                        <div class="tag-badge clickable" [style.background-color]="tag.color" (click)="assignTag(tag.id)">
+                          <span>{{ tag.name }}</span>
+                          @if (tag.description) {
+                            <span class="tag-description" [title]="tag.description">ℹ️</span>
+                          }
+                        </div>
+                      }
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
         </div>
 
         <!-- Manual Override Modal -->
