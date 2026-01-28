@@ -191,6 +191,13 @@ namespace MedicSoft.Repository.Context
         public DbSet<Tag> Tags { get; set; } = null!;
         public DbSet<ClinicTag> ClinicTags { get; set; } = null!;
 
+        // System Admin - Analytics & BI (Phase 3)
+        public DbSet<CustomDashboard> CustomDashboards { get; set; } = null!;
+        public DbSet<DashboardWidget> DashboardWidgets { get; set; } = null!;
+        public DbSet<WidgetTemplate> WidgetTemplates { get; set; } = null!;
+        public DbSet<ReportTemplate> ReportTemplates { get; set; } = null!;
+        public DbSet<ScheduledReport> ScheduledReports { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -337,6 +344,13 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new LancamentoContabilConfiguration());
             modelBuilder.ApplyConfiguration(new DREConfiguration());
             modelBuilder.ApplyConfiguration(new BalancoPatrimonialConfiguration());
+
+            // System Admin - Analytics & BI (Phase 3)
+            modelBuilder.ApplyConfiguration(new CustomDashboardConfiguration());
+            modelBuilder.ApplyConfiguration(new DashboardWidgetConfiguration());
+            modelBuilder.ApplyConfiguration(new WidgetTemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportTemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new ScheduledReportConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
