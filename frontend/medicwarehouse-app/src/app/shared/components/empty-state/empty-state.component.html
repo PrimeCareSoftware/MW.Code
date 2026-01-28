@@ -1,0 +1,102 @@
+<div class="empty-state" [ngClass]="cssClass" role="status" aria-live="polite">
+  <!-- Icon or Custom SVG -->
+  @if (customSvg) {
+    <div class="empty-state-icon" [innerHTML]="customSvg" aria-hidden="true"></div>
+  } @else if (icon) {
+    <div class="empty-state-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        @switch (icon) {
+          @case ('users') {
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          }
+          @case ('calendar') {
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          }
+          @case ('search') {
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          }
+          @case ('inbox') {
+            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+          }
+          @case ('chart') {
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          }
+          @case ('bell') {
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          }
+          @default {
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          }
+        }
+      </svg>
+    </div>
+  }
+  
+  <!-- Title -->
+  <h3>{{ title }}</h3>
+  
+  <!-- Description -->
+  <p>{{ description }}</p>
+  
+  <!-- Suggestions List (for search empty states) -->
+  @if (suggestions && suggestions.length > 0) {
+    <ul class="suggestions">
+      @for (suggestion of suggestions; track $index) {
+        <li>{{ suggestion }}</li>
+      }
+    </ul>
+  }
+  
+  <!-- Actions -->
+  <div class="empty-action">
+    <!-- Primary Button -->
+    @if (primaryButtonText) {
+      @if (primaryButtonRoute) {
+        <button 
+          class="btn btn-primary" 
+          [routerLink]="primaryButtonRoute"
+          type="button">
+          {{ primaryButtonText }}
+        </button>
+      } @else {
+        <button 
+          class="btn btn-primary" 
+          (click)="onPrimaryButtonClick()"
+          type="button">
+          {{ primaryButtonText }}
+        </button>
+      }
+    }
+    
+    <!-- Secondary Link -->
+    @if (secondaryLinkText) {
+      @if (secondaryLinkHref) {
+        <a 
+          [routerLink]="secondaryLinkHref" 
+          class="link-secondary">
+          {{ secondaryLinkText }}
+        </a>
+      } @else {
+        <a 
+          href="#" 
+          class="link-secondary" 
+          (click)="onSecondaryLinkClick($event)">
+          {{ secondaryLinkText }}
+        </a>
+      }
+    }
+  </div>
+</div>

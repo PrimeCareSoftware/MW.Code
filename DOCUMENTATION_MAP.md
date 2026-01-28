@@ -31,6 +31,23 @@ Este documento fornece uma visão geral de toda a documentação disponível no 
 - **[ANALISE_DADOS_CADASTRO_GUIA_TECNICO.md](./ANALISE_DADOS_CADASTRO_GUIA_TECNICO.md)** - ✅ **NOVO** Guia técnico de implementação (código, queries, integrações)
 - **[ANALISE_DADOS_CADASTRO_GUIA_PRATICO.md](./ANALISE_DADOS_CADASTRO_GUIA_PRATICO.md)** - ✅ **NOVO** Plano de ação prático em 12 semanas com ROI estimado
 
+### 🎨 Website e Melhorias UX/UI
+- **[PROMPTS_IMPLEMENTACAO_DETALHADOS.md](./PROMPTS_IMPLEMENTACAO_DETALHADOS.md)** - ✅ **PRINCIPAL** Índice de 10 prompts de melhorias (3 completos, 1 em andamento)
+- **[PLANO_MELHORIAS_WEBSITE_UXUI.md](./PLANO_MELHORIAS_WEBSITE_UXUI.md)** - ✅ Plano estratégico completo (4 fases, R$ 180-240k)
+- **[ANALISE_COMPETITIVA_MEDICWAREHOUSE.md](./ANALISE_COMPETITIVA_MEDICWAREHOUSE.md)** - ✅ Análise competitiva (iClinic, Amplimed, etc)
+
+#### Implementações Completas
+- **[PROMPT_1_IMPLEMENTATION_STATUS.md](./PROMPT_1_IMPLEMENTATION_STATUS.md)** - ✅ Homepage Redesign (100% completo)
+- **[PROMPT_1_HOMEPAGE_REDESIGN_COMPLETO.md](./PROMPT_1_HOMEPAGE_REDESIGN_COMPLETO.md)** - ✅ Documentação detalhada do redesign
+- **[PROMPT3_IMPLEMENTATION_STATUS.md](./PROMPT3_IMPLEMENTATION_STATUS.md)** - ✅ Design System (100% completo)
+- **[PROMPT6_IMPLEMENTATION_STATUS.md](./PROMPT6_IMPLEMENTATION_STATUS.md)** - ✅ **NOVO** Empty States (100% completo - 28/01/2026)
+
+#### Implementações em Andamento
+- **[PROMPT2_IMPLEMENTATION_STATUS.md](./PROMPT2_IMPLEMENTATION_STATUS.md)** - 🚧 Vídeo Demonstrativo (80% - produção pendente)
+- **[PROMPT2_RESUMO_EXECUTIVO.md](./PROMPT2_RESUMO_EXECUTIVO.md)** - 🚧 Resumo executivo do vídeo
+- **[VIDEO_DEMONSTRATIVO_SCRIPT.md](./VIDEO_DEMONSTRATIVO_SCRIPT.md)** - ✅ Script completo do vídeo
+- **[VIDEO_PRODUCTION_GUIDE.md](./VIDEO_PRODUCTION_GUIDE.md)** - ✅ Guia técnico de produção
+
 ### 🗂️ Documentação Arquivada
 - **[docs_archive/](./docs_archive/)** - Documentação antiga e arquivada (11 arquivos)
   - Resumos de implementação supersedidos
