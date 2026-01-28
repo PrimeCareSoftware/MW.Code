@@ -721,6 +721,258 @@ builder.Services.AddScoped<ISentimentAnalysisService, AzureSentimentAnalysisServ
 
 ---
 
+## 🪝 Configuração de Webhooks
+
+### Visão Geral
+O sistema de webhooks permite que aplicações externas recebam notificações em tempo real sobre eventos do CRM.
+
+### Características
+- ✅ **Entrega Garantida**: Sistema de retry com exponential backoff
+- ✅ **Segurança**: Assinatura HMAC-SHA256 em todos os payloads
+- ✅ **11 Tipos de Eventos**: Journey, Survey, Complaint, Sentiment, Churn
+- ✅ **Background Processing**: Processamento assíncrono via Hangfire
+- ✅ **Métricas**: Tracking de entregas bem-sucedidas e falhas
+
+### Passo 1: Criar Subscrição
+
+```bash
+curl -X POST https://api.primecare.com.br/api/crm/webhooks \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Production Webhook",
+    "description": "Webhook for production events",
+    "targetUrl": "https://your-app.com/webhooks/crm",
+    "subscribedEvents": [1, 2, 20, 21],
+    "maxRetries": 3,
+    "retryDelaySeconds": 60
+  }'
+```
+
+**Resposta:**
+```json
+{
+  "id": "webhook-uuid",
+  "secret": "your-generated-secret",
+  "isActive": false
+}
+```
+
+⚠️ **Importante**: Guarde o `secret` em local seguro - ele é usado para validar a autenticidade dos webhooks.
+
+### Passo 2: Ativar Subscrição
+
+```bash
+curl -X POST https://api.primecare.com.br/api/crm/webhooks/{id}/activate \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Passo 3: Implementar Endpoint Receptor
+
+**Exemplo em C# (.NET):**
+
+```csharp
+[HttpPost]
+[Route("webhooks/crm")]
+public async Task<IActionResult> ReceiveWebhook()
+{
+    // 1. Ler payload
+    using var reader = new StreamReader(Request.Body);
+    var payload = await reader.ReadToEndAsync();
+    
+    // 2. Validar signature
+    var signature = Request.Headers["X-Webhook-Signature"];
+    var webhookEvent = Request.Headers["X-Webhook-Event"];
+    
+    if (!VerifySignature(payload, signature, _webhookSecret))
+    {
+        return Unauthorized("Invalid signature");
+    }
+    
+    // 3. Processar evento
+    var data = JsonSerializer.Deserialize<WebhookPayload>(payload);
+    
+    switch (data.Event)
+    {
+        case "JourneyStageChanged":
+            await HandleJourneyStageChanged(data);
+            break;
+        case "SurveyCompleted":
+            await HandleSurveyCompleted(data);
+            break;
+        // ... outros eventos
+    }
+    
+    return Ok();
+}
+
+private bool VerifySignature(string payload, string signature, string secret)
+{
+    using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
+    var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
+    var expectedSignature = Convert.ToBase64String(hash);
+    return signature == expectedSignature;
+}
+```
+
+**Exemplo em Node.js:**
+
+```javascript
+const crypto = require('crypto');
+const express = require('express');
+
+app.post('/webhooks/crm', express.raw({ type: 'application/json' }), (req, res) => {
+  // 1. Ler payload e signature
+  const payload = req.body.toString('utf8');
+  const signature = req.headers['x-webhook-signature'];
+  const event = req.headers['x-webhook-event'];
+  
+  // 2. Validar signature
+  const hmac = crypto.createHmac('sha256', process.env.WEBHOOK_SECRET);
+  hmac.update(payload);
+  const expectedSignature = hmac.digest('base64');
+  
+  if (signature !== expectedSignature) {
+    return res.status(401).send('Invalid signature');
+  }
+  
+  // 3. Processar evento
+  const data = JSON.parse(payload);
+  
+  switch (data.event) {
+    case 'JourneyStageChanged':
+      handleJourneyStageChanged(data);
+      break;
+    case 'SurveyCompleted':
+      handleSurveyCompleted(data);
+      break;
+  }
+  
+  res.status(200).send('OK');
+});
+```
+
+### Eventos Disponíveis
+
+| ID | Evento | Descrição |
+|----|--------|-----------|
+| 1 | JourneyStageChanged | Mudança de estágio na jornada |
+| 2 | TouchpointCreated | Novo touchpoint registrado |
+| 10 | AutomationExecuted | Automação executada |
+| 11 | CampaignSent | Campanha enviada |
+| 20 | SurveyCreated | Survey criada |
+| 21 | SurveyCompleted | Survey completada |
+| 22 | NpsScoreCalculated | Score NPS calculado |
+| 30 | ComplaintCreated | Reclamação criada |
+| 31 | ComplaintStatusChanged | Status alterado |
+| 32 | ComplaintResolved | Reclamação resolvida |
+| 40 | SentimentAnalyzed | Sentimento analisado |
+| 41 | NegativeSentimentDetected | Sentimento negativo detectado |
+| 50 | ChurnRiskCalculated | Risco de churn calculado |
+| 51 | HighChurnRiskDetected | Alto risco de churn detectado |
+
+### Estrutura do Payload
+
+Todos os webhooks seguem esta estrutura:
+
+```json
+{
+  "id": "event-uuid",
+  "event": "JourneyStageChanged",
+  "timestamp": "2026-01-28T10:30:00Z",
+  "tenantId": "your-tenant-id",
+  "data": {
+    // Dados específicos do evento
+  }
+}
+```
+
+**Exemplo - JourneyStageChanged:**
+```json
+{
+  "id": "abc123",
+  "event": "JourneyStageChanged",
+  "timestamp": "2026-01-28T10:30:00Z",
+  "tenantId": "clinic-001",
+  "data": {
+    "patientId": "patient-uuid",
+    "previousStage": "Descoberta",
+    "newStage": "Consideracao",
+    "trigger": "Lead submitted contact form"
+  }
+}
+```
+
+### Sistema de Retry
+
+O sistema tenta reenviar webhooks falhos automaticamente:
+
+1. **Primeira tentativa**: Imediata
+2. **Segunda tentativa**: Após 60 segundos (configurável)
+3. **Terceira tentativa**: Após 120 segundos (exponential backoff)
+4. **Quarta tentativa**: Após 240 segundos
+
+Configurável via `maxRetries` e `retryDelaySeconds`.
+
+### Monitoramento
+
+Verifique o status das entregas:
+
+```bash
+# Listar últimas 50 entregas
+curl -X GET "https://api.primecare.com.br/api/crm/webhooks/{subscriptionId}/deliveries?limit=50" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Métricas disponíveis:**
+- `totalDeliveries`: Total de tentativas
+- `successfulDeliveries`: Entregas bem-sucedidas
+- `failedDeliveries`: Entregas falhadas
+- `lastDeliveryAt`: Última tentativa
+- `lastSuccessAt`: Último sucesso
+
+### Boas Práticas
+
+✅ **Responda rapidamente**: Retorne 200 OK assim que receber o webhook
+✅ **Processe assíncronamente**: Enfileire o processamento para não bloquear
+✅ **Valide a assinatura**: Sempre verifique o HMAC-SHA256
+✅ **Seja idempotente**: O mesmo evento pode ser enviado múltiplas vezes
+✅ **Log de eventos**: Registre todos os webhooks recebidos para debug
+✅ **Trate timeouts**: Endpoint deve responder em < 30 segundos
+
+### Troubleshooting
+
+#### Webhook não está sendo entregue
+
+1. Verifique se a subscrição está ativa:
+```bash
+GET /api/crm/webhooks/{id}
+```
+
+2. Verifique o histórico de entregas:
+```bash
+GET /api/crm/webhooks/{subscriptionId}/deliveries
+```
+
+3. Tente reenviar manualmente:
+```bash
+POST /api/crm/webhooks/deliveries/{deliveryId}/retry
+```
+
+#### "Invalid Signature" no endpoint
+
+- Verifique se está usando o secret correto
+- Confirme que está usando HMAC-SHA256
+- Use o payload RAW (não parseado) para calcular a assinatura
+
+#### Entregas estão falhando sempre
+
+- Endpoint deve retornar status 2xx (200-299)
+- Endpoint deve responder em < 30 segundos
+- Certificado SSL deve ser válido (não self-signed)
+
+---
+
 ## 🔐 Variáveis de Ambiente
 
 ### Arquivo .env Completo

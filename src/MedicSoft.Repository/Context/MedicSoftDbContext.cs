@@ -171,6 +171,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<MedicSoft.Domain.Entities.CRM.SentimentAnalysis> SentimentAnalyses { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.CRM.ChurnPrediction> ChurnPredictions { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.CRM.EmailTemplate> EmailTemplates { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.CRM.WebhookSubscription> WebhookSubscriptions { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.CRM.WebhookDelivery> WebhookDeliveries { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -307,6 +309,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new Configurations.CRM.SentimentAnalysisConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.CRM.ChurnPredictionConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.CRM.EmailTemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.CRM.WebhookSubscriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.CRM.WebhookDeliveryConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
