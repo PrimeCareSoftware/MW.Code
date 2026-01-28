@@ -150,7 +150,7 @@ namespace MedicSoft.Test.Services.Fiscal.Integracoes
         public void NomeProvedor_DeveRetornarContaAzul()
         {
             // Arrange
-            var httpClient = new HttpClient();
+            using var httpClient = new HttpClient();
             var integration = new ContaAzulIntegration(httpClient, _loggerMock.Object, _configuracao);
 
             // Act
