@@ -553,6 +553,13 @@ builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.SurveyTriggerJob>();
 builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>();
 builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>();
 
+// System Admin - Workflow Automation (Phase 4)
+builder.Services.AddScoped<MedicSoft.Application.Services.Workflows.IWorkflowEngine, MedicSoft.Application.Services.Workflows.WorkflowEngine>();
+builder.Services.AddScoped<MedicSoft.Application.Services.Workflows.IEventPublisher, MedicSoft.Application.Services.Workflows.EventPublisher>();
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISmartActionService, MedicSoft.Application.Services.SystemAdmin.SmartActionService>();
+builder.Services.AddScoped<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>();
+builder.Services.AddScoped<MedicSoft.Api.Data.Seeders.WorkflowTemplateSeeder>();
+
 // Configure Hangfire for background jobs
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
@@ -789,6 +796,34 @@ try
         "crm-churn-retention-analysis",
         job => job.AnalyzeRetentionEffectivenessAsync(),
         Cron.Monthly(1, 5, 0), // Monthly on 1st day at 05:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // Workflow Automation Jobs (Phase 4)
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>(
+        "workflow-check-subscriptions",
+        job => job.CheckSubscriptionExpirationsAsync(),
+        Cron.Hourly(), // Every hour
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>(
+        "workflow-check-trials",
+        job => job.CheckTrialExpiringAsync(),
+        Cron.Daily(9, 0), // Daily at 09:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>(
+        "workflow-check-inactive",
+        job => job.CheckInactiveClientsAsync(),
+        Cron.Daily(10, 0), // Daily at 10:00 UTC
         new RecurringJobOptions
         {
             TimeZone = TimeZoneInfo.Utc
