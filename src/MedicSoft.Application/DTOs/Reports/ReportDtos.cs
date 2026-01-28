@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicSoft.Application.DTOs.Reports
 {
@@ -26,12 +27,26 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class CreateReportTemplateDto
     {
+        [Required]
+        [MaxLength(200)]
         public string Name { get; set; }
+
+        [MaxLength(1000)]
         public string Description { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public string Category { get; set; }
+
         public string Configuration { get; set; }
+
+        [Required]
         public string Query { get; set; }
+
+        [MaxLength(50)]
         public string Icon { get; set; }
+
+        [MaxLength(100)]
         public string SupportedFormats { get; set; }
     }
 
@@ -40,12 +55,26 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class UpdateReportTemplateDto
     {
+        [Required]
+        [MaxLength(200)]
         public string Name { get; set; }
+
+        [MaxLength(1000)]
         public string Description { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public string Category { get; set; }
+
         public string Configuration { get; set; }
+
+        [Required]
         public string Query { get; set; }
+
+        [MaxLength(50)]
         public string Icon { get; set; }
+
+        [MaxLength(100)]
         public string SupportedFormats { get; set; }
     }
 
@@ -78,12 +107,29 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class CreateScheduledReportDto
     {
+        [Required]
         public int ReportTemplateId { get; set; }
+
+        [Required]
+        [MaxLength(200)]
         public string Name { get; set; }
+
+        [MaxLength(1000)]
         public string Description { get; set; }
+
+        [Required]
+        [MaxLength(100)]
         public string CronExpression { get; set; }
+
+        [Required]
+        [MaxLength(20)]
         public string OutputFormat { get; set; }
+
+        [Required]
+        [MaxLength(1000)]
+        [EmailAddress]
         public string Recipients { get; set; }
+
         public string Parameters { get; set; }
         public bool IsActive { get; set; } = true;
     }
@@ -93,11 +139,26 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class UpdateScheduledReportDto
     {
+        [Required]
+        [MaxLength(200)]
         public string Name { get; set; }
+
+        [MaxLength(1000)]
         public string Description { get; set; }
+
+        [Required]
+        [MaxLength(100)]
         public string CronExpression { get; set; }
+
+        [Required]
+        [MaxLength(20)]
         public string OutputFormat { get; set; }
+
+        [Required]
+        [MaxLength(1000)]
+        [EmailAddress]
         public string Recipients { get; set; }
+
         public string Parameters { get; set; }
         public bool IsActive { get; set; }
     }

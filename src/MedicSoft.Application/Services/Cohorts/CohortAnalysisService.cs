@@ -129,7 +129,7 @@ namespace MedicSoft.Application.Services.Cohorts
 
             // Get all clinic subscriptions with plan information
             var subscriptions = await _context.ClinicSubscriptions
-                .Include(cs => cs.Plan)
+                .Include(cs => cs.SubscriptionPlan)
                 .Where(cs => cs.StartDate >= startDate)
                 .OrderBy(cs => cs.StartDate)
                 .ToListAsync();
@@ -171,7 +171,7 @@ namespace MedicSoft.Application.Services.Cohorts
                             var endDate = cs.EndDate ?? DateTime.MaxValue;
                             return cs.StartDate <= checkMonth && endDate >= checkMonth;
                         })
-                        .Sum(cs => cs.Plan?.Price ?? 0);
+                        .Sum(cs => cs.SubscriptionPlan?.MonthlyPrice ?? cs.CurrentPrice);
 
                     mrrByMonth.Add(monthMrr);
                     totalRevenue += monthMrr;

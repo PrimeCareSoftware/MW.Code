@@ -55,11 +55,15 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpGet("templates/{id}")]
         public async Task<ActionResult<ReportTemplateDto>> GetTemplate(int id)
         {
-            var template = await _reportService.GetReportTemplateAsync(id);
-            if (template == null)
+            try
+            {
+                var template = await _reportService.GetReportTemplateAsync(id);
+                return Ok(template);
+            }
+            catch (InvalidOperationException)
+            {
                 return NotFound();
-
-            return Ok(template);
+            }
         }
 
         /// <summary>
@@ -78,11 +82,15 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpPut("templates/{id}")]
         public async Task<ActionResult<ReportTemplateDto>> UpdateTemplate(int id, [FromBody] UpdateReportTemplateDto dto)
         {
-            var template = await _reportService.UpdateReportTemplateAsync(id, dto);
-            if (template == null)
+            try
+            {
+                var template = await _reportService.UpdateReportTemplateAsync(id, dto);
+                return Ok(template);
+            }
+            catch (InvalidOperationException)
+            {
                 return NotFound();
-
-            return Ok(template);
+            }
         }
 
         /// <summary>
@@ -103,13 +111,18 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Generate a report on-demand
         /// </summary>
         [HttpPost("generate")]
-        public async Task<ActionResult<ReportResultDto>> GenerateReport([FromBody] GenerateReportDto dto)
+        public async Task<ActionResult> GenerateReport([FromBody] GenerateReportDto dto)
         {
             var result = await _reportService.GenerateReportAsync(dto);
             
             if (!string.IsNullOrEmpty(result.Error))
             {
-                return BadRequest(result);
+                return BadRequest(new { error = result.Error });
+            }
+
+            if (result.Data == null)
+            {
+                return StatusCode(500, new { error = "Report generation failed - no data returned" });
             }
 
             return File(result.Data, result.ContentType, result.FileName);
@@ -135,11 +148,15 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpGet("scheduled/{id}")]
         public async Task<ActionResult<ScheduledReportDto>> GetScheduledReport(int id)
         {
-            var scheduledReport = await _reportService.GetScheduledReportAsync(id);
-            if (scheduledReport == null)
+            try
+            {
+                var scheduledReport = await _reportService.GetScheduledReportAsync(id);
+                return Ok(scheduledReport);
+            }
+            catch (InvalidOperationException)
+            {
                 return NotFound();
-
-            return Ok(scheduledReport);
+            }
         }
 
         /// <summary>
@@ -159,11 +176,15 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpPut("scheduled/{id}")]
         public async Task<ActionResult<ScheduledReportDto>> UpdateScheduledReport(int id, [FromBody] UpdateScheduledReportDto dto)
         {
-            var scheduledReport = await _reportService.UpdateScheduledReportAsync(id, dto);
-            if (scheduledReport == null)
+            try
+            {
+                var scheduledReport = await _reportService.UpdateScheduledReportAsync(id, dto);
+                return Ok(scheduledReport);
+            }
+            catch (InvalidOperationException)
+            {
                 return NotFound();
-
-            return Ok(scheduledReport);
+            }
         }
 
         /// <summary>

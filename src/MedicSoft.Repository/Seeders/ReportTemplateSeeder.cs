@@ -49,7 +49,7 @@ SELECT
     SUM(p.""MonthlyPrice"") as mrr,
     SUM(p.""MonthlyPrice"" * 12) as arr
 FROM ""ClinicSubscriptions"" cs
-INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
 WHERE cs.""CreatedAt"" >= @startDate AND cs.""CreatedAt"" <= @endDate
     AND cs.""Status"" = 'Active'
 GROUP BY DATE_TRUNC('month', cs.""CreatedAt"")
@@ -80,7 +80,7 @@ SELECT
     SUM(p.""MonthlyPrice"") as total_mrr,
     AVG(p.""MonthlyPrice"") as avg_price
 FROM ""ClinicSubscriptions"" cs
-INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
 WHERE DATE_TRUNC('month', cs.""CreatedAt"") = DATE_TRUNC('month', @month::date)
     AND cs.""Status"" = 'Active'
 GROUP BY p.""Name""
@@ -146,7 +146,7 @@ SELECT
     c.""Name"" as clinic_name,
     cs.""Status"" as status
 FROM ""ClinicSubscriptions"" cs
-INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
 INNER JOIN ""Clinics"" c ON cs.""ClinicId"" = c.""Id""
 WHERE cs.""EndDate"" >= @startDate AND cs.""EndDate"" <= @endDate
     AND cs.""Status"" = 'Cancelled'
@@ -318,7 +318,7 @@ SELECT
     EXTRACT(MONTH FROM AGE(COALESCE(cs.""EndDate"", CURRENT_DATE), cs.""StartDate"")) as months_active
 FROM ""ClinicSubscriptions"" cs
 INNER JOIN ""Clinics"" c ON cs.""ClinicId"" = c.""Id""
-INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
 WHERE cs.""StartDate"" >= @startDate AND cs.""StartDate"" <= @endDate
 ORDER BY cs.""StartDate"" DESC"
                 },
@@ -354,7 +354,7 @@ WITH monthly_stats AS (
         SUM(p.""MonthlyPrice"") as total_mrr,
         COUNT(CASE WHEN cs.""Status"" = 'Cancelled' THEN 1 END) as churned_customers
     FROM ""ClinicSubscriptions"" cs
-    INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+    INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
     WHERE DATE_TRUNC('month', cs.""CreatedAt"") <= DATE_TRUNC('month', @month::date)
 )
 SELECT * FROM monthly_stats"
