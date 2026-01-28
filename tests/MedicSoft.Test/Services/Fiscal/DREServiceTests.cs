@@ -359,7 +359,7 @@ namespace MedicSoft.Test.Services.Fiscal
         #region Análise Horizontal e Vertical
 
         [Fact]
-        public async Task CalcularAnaliseHorizontalAsync_DeveCalcularVariacaoPercentual()
+        public void CalcularAnaliseHorizontal_DeveCalcularVariacaoPercentual()
         {
             // Arrange
             var clinicaId = Guid.NewGuid();
@@ -381,7 +381,7 @@ namespace MedicSoft.Test.Services.Fiscal
         }
 
         [Fact]
-        public async Task CalcularAnaliseVerticalAsync_DeveCalcularPercentualSobreReceitaBruta()
+        public void CalcularAnaliseVertical_DeveCalcularPercentualSobreReceitaBruta()
         {
             // Arrange
             var clinicaId = Guid.NewGuid();
