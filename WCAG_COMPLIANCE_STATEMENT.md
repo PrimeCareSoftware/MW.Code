@@ -325,4 +325,6 @@ Equipe de Desenvolvimento PrimeCare Software
 
 ---
 
-**Nota:** O sistema atingiu 90% de conformidade WCAG 2.1 AA. A infraestrutura está completa, componentes integrados e testados. Os próximos passos incluem testes com usuários reais e refinamentos baseados em feedback. Meta: 100% de conformidade até Q2 2026.
+**Nota:** O sistema atingiu 90% de conformidade WCAG 2.1 AA (94% dos critérios WCAG atendidos). A infraestrutura está completa, componentes integrados e testados. Os próximos passos incluem testes com usuários reais e refinamentos baseados em feedback. Meta: 100% de conformidade até Q2 2026.
+
+**Segurança:** ✅ 0 vulnerabilidades encontradas (CodeQL - Janeiro 2026)

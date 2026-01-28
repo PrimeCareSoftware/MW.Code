@@ -357,10 +357,12 @@ Este percentual refere-se especificamente aos **critérios WCAG 2.1**:
 ### Técnicos
 
 ✅ **Reutilizabilidade**: Componentes standalone e serviços singleton  
-✅ **Testabilidade**: Infraestrutura completa de testes  
-✅ **Manutenibilidade**: Documentação abrangente  
-✅ **Qualidade**: 0 vulnerabilidades de segurança  
-✅ **Padrões**: Conformidade com W3C e WCAG 2.1
+✅ **Testabilidade**: Infraestrutura completa de testes (43 testes unitários)  
+✅ **Manutenibilidade**: Documentação abrangente e atualizada  
+✅ **Qualidade**: 0 vulnerabilidades de segurança (CodeQL)  
+✅ **Padrões**: Conformidade com W3C e WCAG 2.1 (94%)  
+✅ **HTML Semântico**: Uso de elementos HTML5 nativos  
+✅ **ARIA**: Roles e labels corretamente implementados
 
 ### Legais
 
