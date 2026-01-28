@@ -396,6 +396,10 @@ namespace MedicSoft.Repository.Context
             {
                 modelBuilder.ApplyMedicalDataEncryption(_encryptionService);
             }
+
+            // Seed initial data for Analytics & BI (Phase 3)
+            Seeders.WidgetTemplateSeeder.Seed(modelBuilder);
+            Seeders.ReportTemplateSeeder.Seed(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
