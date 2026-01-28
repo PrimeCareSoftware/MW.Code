@@ -442,12 +442,47 @@ builder.Services.AddScoped<MedicSoft.Analytics.Jobs.ConsolidacaoDiariaJob>();
 builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoDemandaService, MedicSoft.ML.Services.PrevisaoDemandaService>();
 builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoNoShowService, MedicSoft.ML.Services.PrevisaoNoShowService>();
 
+// Configure messaging services (Email, SMS, WhatsApp)
+builder.Services.Configure<MedicSoft.Api.Configuration.MessagingConfiguration>(
+    builder.Configuration.GetSection(MedicSoft.Api.Configuration.MessagingConfiguration.SectionName));
+
 // CRM Advanced - Phase 2: Marketing Automation
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IMarketingAutomationService, MedicSoft.Api.Services.CRM.MarketingAutomationService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IAutomationEngine, MedicSoft.Api.Services.CRM.AutomationEngine>();
-builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Api.Services.CRM.StubEmailService>();
-builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISmsService, MedicSoft.Api.Services.CRM.StubSmsService>();
-builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IWhatsAppService, MedicSoft.Api.Services.CRM.StubWhatsAppService>();
+
+// CRM Advanced - Messaging Services (Real implementations replacing stubs)
+// Email Service - Uses SendGrid for production, stub for development
+var useRealEmailService = builder.Configuration.GetValue<bool>("Messaging:Email:Enabled");
+if (useRealEmailService)
+{
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Api.Services.CRM.SendGridEmailService>();
+}
+else
+{
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Api.Services.CRM.StubEmailService>();
+}
+
+// SMS Service - Uses Twilio for production, stub for development
+var useRealSmsService = builder.Configuration.GetValue<bool>("Messaging:Sms:Enabled");
+if (useRealSmsService)
+{
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISmsService, MedicSoft.Api.Services.CRM.TwilioSmsService>();
+}
+else
+{
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISmsService, MedicSoft.Api.Services.CRM.StubSmsService>();
+}
+
+// WhatsApp Service - Uses WhatsApp Business API for production, stub for development
+var useRealWhatsAppService = builder.Configuration.GetValue<bool>("Messaging:WhatsApp:Enabled");
+if (useRealWhatsAppService)
+{
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IWhatsAppService, MedicSoft.Api.Services.CRM.WhatsAppBusinessService>();
+}
+else
+{
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IWhatsAppService, MedicSoft.Api.Services.CRM.StubWhatsAppService>();
+}
 
 // CRM Advanced - Complaint/Ouvidoria System
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IComplaintService, MedicSoft.Api.Services.CRM.ComplaintService>();
