@@ -142,5 +142,45 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
                 totalCount
             });
         }
+
+        /// <summary>
+        /// Perform bulk actions on multiple clinics
+        /// </summary>
+        [HttpPost("bulk-action")]
+        public async Task<ActionResult> BulkAction([FromBody] BulkActionDto actionDto)
+        {
+            if (actionDto.ClinicIds == null || actionDto.ClinicIds.Count == 0)
+                return BadRequest(new { message = "At least one clinic must be selected" });
+
+            try
+            {
+                var result = await _clinicService.ExecuteBulkAction(actionDto);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Export clinics data to various formats (CSV, Excel, PDF)
+        /// </summary>
+        [HttpPost("export")]
+        public async Task<ActionResult> ExportClinics([FromBody] ExportClinicsDto exportDto)
+        {
+            if (exportDto.ClinicIds == null || exportDto.ClinicIds.Count == 0)
+                return BadRequest(new { message = "At least one clinic must be selected for export" });
+
+            try
+            {
+                var (fileBytes, fileName, contentType) = await _clinicService.ExportClinics(exportDto);
+                return File(fileBytes, contentType, fileName);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
