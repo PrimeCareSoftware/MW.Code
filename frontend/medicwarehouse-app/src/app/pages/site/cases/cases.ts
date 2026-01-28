@@ -10,19 +10,15 @@ interface CaseMetric {
   icon: string;
 }
 
-interface SuccessCase {
+export interface SuccessCase {
   id: string;
   clinicName: string;
   specialty: string;
   location: string;
-  image: string;
   quote: string;
   authorName: string;
   authorRole: string;
   metrics: CaseMetric[];
-  challenges: string[];
-  solutions: string[];
-  results: string[];
 }
 
 @Component({
@@ -38,7 +34,6 @@ export class CasesComponent {
       clinicName: 'Clínica Sorriso',
       specialty: 'Odontologia',
       location: 'São Paulo, SP',
-      image: '/assets/images/cases/clinica-sorriso.jpg',
       quote: 'O PrimeCare reduziu nosso tempo de agendamento em 70% e eliminou completamente os erros de prontuário.',
       authorName: 'Dra. Maria Silva',
       authorRole: 'Diretora Clínica',
@@ -47,24 +42,6 @@ export class CasesComponent {
         { label: 'Aumento na satisfação dos pacientes', value: '45%', icon: 'sentiment_very_satisfied' },
         { label: 'Economia mensal', value: 'R$ 3.500', icon: 'attach_money' },
         { label: 'ROI em', value: '2 meses', icon: 'trending_up' }
-      ],
-      challenges: [
-        'Agendamento manual via telefone e WhatsApp',
-        'Prontuários em papel desorganizados',
-        'Dificuldade em localizar histórico de pacientes',
-        'Falta de controle financeiro'
-      ],
-      solutions: [
-        'Agenda online integrada com lembretes automáticos',
-        'Prontuário eletrônico com busca rápida',
-        'Histórico completo do paciente em um clique',
-        'Dashboard financeiro com relatórios detalhados'
-      ],
-      results: [
-        '70% menos tempo gasto em agendamentos',
-        '45% aumento na satisfação dos pacientes',
-        'Zero erros de prontuário',
-        'R$ 3.500 economia mensal em papel e arquivamento'
       ]
     },
     {
@@ -72,7 +49,6 @@ export class CasesComponent {
       clinicName: 'Consultório Dr. Santos',
       specialty: 'Cardiologia',
       location: 'Rio de Janeiro, RJ',
-      image: '/assets/images/cases/consultorio-santos.jpg',
       quote: 'Consegui atender 30% mais pacientes por mês sem contratar mais funcionários. O sistema é intuitivo e rápido.',
       authorName: 'Dr. João Santos',
       authorRole: 'Cardiologista',
@@ -81,24 +57,6 @@ export class CasesComponent {
         { label: 'Redução em faltas', value: '60%', icon: 'event_available' },
         { label: 'Tempo economizado por dia', value: '2h', icon: 'timer' },
         { label: 'Pacientes atendidos/mês', value: '+45', icon: 'show_chart' }
-      ],
-      challenges: [
-        'Alta taxa de faltas (40%)',
-        'Tempo excessivo em tarefas administrativas',
-        'Dificuldade em acompanhar pacientes crônicos',
-        'Falta de dados para tomar decisões'
-      ],
-      solutions: [
-        'Lembretes automáticos via WhatsApp e SMS',
-        'Automação de tarefas administrativas',
-        'Alertas e lembretes para consultas de retorno',
-        'Dashboard com métricas em tempo real'
-      ],
-      results: [
-        '60% redução em faltas de consulta',
-        '2 horas economizadas por dia',
-        '30% aumento na capacidade de atendimento',
-        '45 pacientes a mais atendidos por mês'
       ]
     },
     {
@@ -106,7 +64,6 @@ export class CasesComponent {
       clinicName: 'Clínica Vida Saudável',
       specialty: 'Clínica Médica',
       location: 'Belo Horizonte, MG',
-      image: '/assets/images/cases/vida-saudavel.jpg',
       quote: 'A telemedicina integrada foi um diferencial durante a pandemia. Hoje, 40% das nossas consultas são online.',
       authorName: 'Dr. Pedro Costa',
       authorRole: 'Diretor Médico',
@@ -115,24 +72,6 @@ export class CasesComponent {
         { label: 'Crescimento de receita', value: '55%', icon: 'attach_money' },
         { label: 'Alcance regional', value: '5 cidades', icon: 'location_on' },
         { label: 'NPS', value: '92', icon: 'star' }
-      ],
-      challenges: [
-        'Limitação geográfica (apenas presencial)',
-        'Perda de pacientes na pandemia',
-        'Sistema antigo sem telemedicina',
-        'Falta de integração com laboratórios'
-      ],
-      solutions: [
-        'Telemedicina integrada e segura',
-        'Agendamento híbrido (online e presencial)',
-        'Prescrição digital com assinatura eletrônica',
-        'Integração com laboratórios parceiros'
-      ],
-      results: [
-        '40% das consultas agora são online',
-        '55% de crescimento na receita',
-        'Atende pacientes em 5 cidades diferentes',
-        'NPS de 92 (excelente)'
       ]
     }
   ];
@@ -144,9 +83,7 @@ export class CasesComponent {
     { value: 'all', label: 'Todas as Especialidades' },
     { value: 'Odontologia', label: 'Odontologia' },
     { value: 'Cardiologia', label: 'Cardiologia' },
-    { value: 'Clínica Médica', label: 'Clínica Médica' },
-    { value: 'Dermatologia', label: 'Dermatologia' },
-    { value: 'Ortopedia', label: 'Ortopedia' }
+    { value: 'Clínica Médica', label: 'Clínica Médica' }
   ];
 
   filterBySpecialty(specialty: string): void {
@@ -159,7 +96,30 @@ export class CasesComponent {
   }
 
   scrollToContact(): void {
-    // Scroll to contact section or navigate to contact page
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    // Navigate to contact page or scroll to contact section if available
+    const contactSection = document.querySelector('#contact-section');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      // Fallback: scroll to bottom if no specific contact section exists
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  }
+
+  getIconLabel(icon: string): string {
+    const labels: { [key: string]: string } = {
+      'schedule': 'Ícone de relógio',
+      'sentiment_very_satisfied': 'Ícone de satisfação',
+      'attach_money': 'Ícone de dinheiro',
+      'trending_up': 'Ícone de crescimento',
+      'people': 'Ícone de pessoas',
+      'event_available': 'Ícone de evento',
+      'timer': 'Ícone de temporizador',
+      'show_chart': 'Ícone de gráfico',
+      'videocam': 'Ícone de videocâmera',
+      'location_on': 'Ícone de localização',
+      'star': 'Ícone de estrela'
+    };
+    return labels[icon] || 'Ícone';
   }
 }

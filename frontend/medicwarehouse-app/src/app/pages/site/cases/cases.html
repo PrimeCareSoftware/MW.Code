@@ -14,10 +14,13 @@
   <!-- Filter Section -->
   <section class="filter-section">
     <div class="container">
-      <div class="filter-tabs">
+      <div class="filter-tabs" role="tablist" aria-label="Filtrar cases por especialidade">
         @for (specialty of specialties; track specialty.value) {
           <button 
             class="filter-tab"
+            role="tab"
+            [attr.aria-selected]="selectedSpecialty === specialty.value"
+            [attr.aria-label]="'Filtrar por ' + specialty.label"
             [class.active]="selectedSpecialty === specialty.value"
             (click)="filterBySpecialty(specialty.value)">
             {{ specialty.label }}

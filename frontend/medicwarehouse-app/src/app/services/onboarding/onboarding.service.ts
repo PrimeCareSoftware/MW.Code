@@ -77,7 +77,9 @@ export class OnboardingService {
         const steps = JSON.parse(stored) as OnboardingStep[];
         return this.calculateProgress(steps);
       } catch (error) {
-        console.error('Error loading onboarding progress:', error);
+        console.error('Error loading onboarding progress, clearing corrupted data:', error);
+        // Clear corrupted data to prevent repeated errors
+        localStorage.removeItem(this.STORAGE_KEY);
       }
     }
     return this.calculateProgress(this.defaultSteps);
@@ -166,6 +168,9 @@ export class OnboardingService {
    */
   skipOnboarding(): void {
     this.markOnboardingAsCompleted();
+    // Notify subscribers that onboarding is complete
+    const currentProgress = this.progressSubject.value;
+    this.progressSubject.next({ ...currentProgress, percentage: 100 });
   }
 
   /**

@@ -46,8 +46,6 @@ export class OnboardingProgressComponent implements OnInit, OnDestroy {
   }
 
   skipOnboarding(): void {
-    if (confirm('Tem certeza que deseja pular o onboarding? Você pode acessá-lo novamente nas configurações.')) {
-      this.onboardingService.skipOnboarding();
-    }
+    this.onboardingService.skipOnboarding();
   }
 }
