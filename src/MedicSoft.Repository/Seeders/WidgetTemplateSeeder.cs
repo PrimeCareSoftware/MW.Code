@@ -30,7 +30,7 @@ SELECT
     DATE_TRUNC('month', cs.""CreatedAt"") as month,
     SUM(p.""MonthlyPrice"") as total_mrr
 FROM ""ClinicSubscriptions"" cs
-INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
 WHERE cs.""CreatedAt"" >= CURRENT_DATE - INTERVAL '12 months'
     AND cs.""Status"" = 'Active'
 GROUP BY DATE_TRUNC('month', cs.""CreatedAt"")
@@ -58,7 +58,7 @@ SELECT
     p.""Name"" as plan,
     SUM(p.""MonthlyPrice"") as revenue
 FROM ""ClinicSubscriptions"" cs
-INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
 WHERE cs.""Status"" = 'Active'
 GROUP BY p.""Name""",
                     DefaultConfig = JsonSerializer.Serialize(new
@@ -81,7 +81,7 @@ GROUP BY p.""Name""",
                     DefaultQuery = @"
 SELECT SUM(p.""MonthlyPrice"") as value
 FROM ""ClinicSubscriptions"" cs
-INNER JOIN ""Plans"" p ON cs.""PlanId"" = p.""Id""
+INNER JOIN ""SubscriptionPlans"" p ON cs.""SubscriptionPlanId"" = p.""Id""
 WHERE cs.""Status"" = 'Active'",
                     DefaultConfig = JsonSerializer.Serialize(new
                     {
