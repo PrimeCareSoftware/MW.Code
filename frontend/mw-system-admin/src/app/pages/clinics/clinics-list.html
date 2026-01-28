@@ -12,27 +12,117 @@
       </div>
 
       <!-- Filters -->
-      <div class="filters">
-        <button 
-          class="filter-btn" 
-          [class.active]="selectedFilter() === ''"
-          (click)="applyFilter('')"
-        >
-          Todas ({{ paginatedClinics()?.totalCount || 0 }})
+      <div class="filters-container">
+        <div class="filters">
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedFilter() === ''"
+            (click)="applyFilter('')"
+          >
+            Todas ({{ paginatedClinics()?.totalCount || 0 }})
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedFilter() === 'active'"
+            (click)="applyFilter('active')"
+          >
+            Ativas
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedFilter() === 'inactive'"
+            (click)="applyFilter('inactive')"
+          >
+            Inativas
+          </button>
+        </div>
+
+        <button class="btn-filters" (click)="toggleAdvancedFilters()">
+          <span>🔍 Filtros Avançados</span>
+          @if (getActiveFiltersCount() > 0) {
+            <span class="filter-count">{{ getActiveFiltersCount() }}</span>
+          }
         </button>
-        <button 
-          class="filter-btn" 
-          [class.active]="selectedFilter() === 'active'"
-          (click)="applyFilter('active')"
-        >
-          Ativas
+      </div>
+
+      <!-- Advanced Filters Panel -->
+      @if (showAdvancedFilters()) {
+        <div class="advanced-filters">
+          <div class="filter-row">
+            <div class="filter-group">
+              <label>Buscar</label>
+              <input 
+                type="text" 
+                [(ngModel)]="searchTerm" 
+                placeholder="Nome, CNPJ, email..."
+                (keyup.enter)="applyAdvancedFilters()"
+              />
+            </div>
+
+            <div class="filter-group">
+              <label>Health Status</label>
+              <select [(ngModel)]="selectedHealthStatus" (change)="applyAdvancedFilters()">
+                <option [ngValue]="undefined">Todos</option>
+                <option value="Healthy">Saudável</option>
+                <option value="NeedsAttention">Precisa Atenção</option>
+                <option value="AtRisk">Em Risco</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Status Assinatura</label>
+              <select [(ngModel)]="selectedSubscriptionStatus" (change)="applyAdvancedFilters()">
+                <option [ngValue]="undefined">Todos</option>
+                <option value="Active">Ativo</option>
+                <option value="Trial">Trial</option>
+                <option value="Expired">Expirado</option>
+                <option value="Suspended">Suspenso</option>
+              </select>
+            </div>
+          </div>
+
+          @if (availableTags().length > 0) {
+            <div class="filter-group">
+              <label>Tags</label>
+              <div class="tags-filter">
+                @for (tag of availableTags(); track tag.id) {
+                  <button 
+                    class="tag-chip" 
+                    [class.selected]="isTagSelected(tag.id)"
+                    [style.background-color]="isTagSelected(tag.id) ? tag.color : '#e2e8f0'"
+                    [style.color]="isTagSelected(tag.id) ? 'white' : '#4a5568'"
+                    (click)="toggleTagSelection(tag.id)"
+                  >
+                    {{ tag.name }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          <div class="filter-actions">
+            <button class="btn-secondary" (click)="clearAdvancedFilters()">Limpar</button>
+            <button class="btn-primary" (click)="applyAdvancedFilters()">Aplicar Filtros</button>
+          </div>
+        </div>
+      }
+
+      <!-- Segment Quick Filters -->
+      <div class="segment-chips">
+        <button class="segment-chip" (click)="applySegmentFilter('new')">
+          🆕 Novos <span class="chip-count">({{ segmentCounts().new }})</span>
         </button>
-        <button 
-          class="filter-btn" 
-          [class.active]="selectedFilter() === 'inactive'"
-          (click)="applyFilter('inactive')"
-        >
-          Inativas
+        <button class="segment-chip" (click)="applySegmentFilter('trial')">
+          🔄 Trial <span class="chip-count">({{ segmentCounts().trial }})</span>
+        </button>
+        <button class="segment-chip warning" (click)="applySegmentFilter('at-risk')">
+          ⚠️ Em Risco <span class="chip-count">({{ segmentCounts().atRisk }})</span>
+        </button>
+        <button class="segment-chip success" (click)="applySegmentFilter('healthy')">
+          ✅ Saudáveis <span class="chip-count">({{ segmentCounts().healthy }})</span>
+        </button>
+        <button class="segment-chip info" (click)="applySegmentFilter('needs-attention')">
+          👀 Precisa Atenção <span class="chip-count">({{ segmentCounts().needsAttention }})</span>
         </button>
       </div>
 

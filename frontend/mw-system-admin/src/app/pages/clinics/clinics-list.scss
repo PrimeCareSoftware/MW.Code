@@ -293,4 +293,214 @@
       .clinics-table {
         min-width: 800px;
       }
+
+      .pagination {
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+
+    // Phase 2: Advanced Filters
+    .filters-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn-filters {
+      padding: 10px 20px;
+      border: 2px solid #667eea;
+      background: white;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #667eea;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-filters:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .filter-count {
+      background: #667eea;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .btn-filters:hover .filter-count {
+      background: white;
+      color: #667eea;
+    }
+
+    .advanced-filters {
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a5568;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 10px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1a202c;
+      background: white;
+      transition: border-color 0.2s;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .tags-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-chip {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .filter-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .btn-secondary {
+      padding: 10px 20px;
+      border: 2px solid #e2e8f0;
+      background: white;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #4a5568;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: #cbd5e0;
+      background: #f7fafc;
+    }
+
+    .segment-chips {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .segment-chip {
+      padding: 10px 16px;
+      border: 2px solid #e2e8f0;
+      background: white;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #4a5568;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .segment-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .segment-chip.warning {
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+
+    .segment-chip.warning:hover {
+      background: #fef3c7;
+    }
+
+    .segment-chip.success {
+      border-color: #10b981;
+      color: #065f46;
+    }
+
+    .segment-chip.success:hover {
+      background: #d1fae5;
+    }
+
+    .segment-chip.info {
+      border-color: #3b82f6;
+      color: #1e40af;
+    }
+
+    .segment-chip.info:hover {
+      background: #dbeafe;
+    }
+
+    .chip-count {
+      font-weight: 700;
     }
