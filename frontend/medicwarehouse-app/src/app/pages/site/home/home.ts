@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
+import { WebsiteAnalyticsService } from '../../../services/analytics/website-analytics.service';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   whatsappNumber = environment.whatsappNumber;
   stars = [1, 2, 3, 4, 5]; // Array for star rating (avoid creating new array on each change detection)
   private observer?: IntersectionObserver;
+  private pageStartTime = Date.now();
+  private scrollDepthTracked = { 25: false, 50: false, 75: false, 100: false };
   
   // Video configuration
   // TODO: Replace with actual video URL when video is produced
@@ -24,12 +27,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   // - Vimeo: https://player.vimeo.com/video/VIDEO_ID
   demoVideoUrl: string = ''; // Empty = show placeholder
   
+  constructor(private analytics: WebsiteAnalyticsService) {}
+  
   get hasVideo(): boolean {
     return this.demoVideoUrl.trim().length > 0;
   }
 
   ngOnInit(): void {
     this.setupIntersectionObserver();
+    
+    // Track page view
+    this.analytics.trackPageView('/home', 'PrimeCare Software - Home');
   }
 
   ngAfterViewInit(): void {
@@ -41,9 +49,61 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.observer) {
       this.observer.disconnect();
     }
+    
+    // Track engagement time when leaving the page
+    const timeOnPage = (Date.now() - this.pageStartTime) / 1000;
+    this.analytics.trackEngagementTime('home', timeOnPage);
+  }
+  
+  @HostListener('window:scroll', ['$event'])
+  onScroll(): void {
+    // Track scroll depth at key milestones
+    const scrollPercent = Math.round(
+      (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+    );
+    
+    // Track at 25%, 50%, 75%, and 100%
+    [25, 50, 75, 100].forEach(milestone => {
+      if (scrollPercent >= milestone && !this.scrollDepthTracked[milestone as keyof typeof this.scrollDepthTracked]) {
+        this.scrollDepthTracked[milestone as keyof typeof this.scrollDepthTracked] = true;
+        this.analytics.trackScrollDepth(milestone, 'home');
+      }
+    });
+  }
+  
+  /**
+   * Track CTA clicks
+   */
+  trackCTA(ctaName: string, ctaLocation: string = 'hero'): void {
+    this.analytics.trackCTAClick(ctaName, ctaLocation);
+    this.analytics.trackConversion('trial_signup');
+  }
+  
+  /**
+   * Track navigation clicks
+   */
+  trackNavigation(destination: string): void {
+    this.analytics.trackNavigation(destination, 'home');
+  }
+  
+  /**
+   * Track video engagement
+   */
+  onVideoPlay(): void {
+    this.analytics.trackVideoEngagement('home-demo-video', 'play');
+  }
+  
+  onVideoPause(): void {
+    this.analytics.trackVideoEngagement('home-demo-video', 'pause');
+  }
+  
+  onVideoComplete(): void {
+    this.analytics.trackVideoEngagement('home-demo-video', 'complete');
   }
 
   openWhatsApp(): void {
+    this.analytics.trackCTAClick('WhatsApp', 'floating-button');
+    this.analytics.trackConversion('contact');
     window.open(`https://wa.me/${this.whatsappNumber}`, '_blank');
   }
 
