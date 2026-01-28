@@ -375,6 +375,11 @@ builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISaasMetri
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IGlobalSearchService, MedicSoft.Application.Services.SystemAdmin.GlobalSearchService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISystemNotificationService, MedicSoft.Application.Services.SystemAdmin.SystemNotificationService>();
 
+// System Admin - Phase 2: Clinic Management
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IClinicManagementService, MedicSoft.Application.Services.SystemAdmin.ClinicManagementService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ICrossTenantUserService, MedicSoft.Application.Services.SystemAdmin.CrossTenantUserService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ITagService, MedicSoft.Application.Services.SystemAdmin.TagService>();
+
 // System Admin - Background Jobs
 builder.Services.AddScoped<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>();
 

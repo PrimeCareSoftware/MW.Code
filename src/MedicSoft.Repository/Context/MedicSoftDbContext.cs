@@ -187,6 +187,10 @@ namespace MedicSoft.Repository.Context
         public DbSet<SystemNotification> SystemNotifications { get; set; } = null!;
         public DbSet<NotificationRule> NotificationRules { get; set; } = null!;
 
+        // System Admin - Tags (Phase 2)
+        public DbSet<Tag> Tags { get; set; } = null!;
+        public DbSet<ClinicTag> ClinicTags { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
