@@ -1305,33 +1305,33 @@ export class CohortAnalysisComponent implements OnInit {
 ## ✅ Critérios de Sucesso
 
 ### Dashboards
-- [ ] Editor drag-and-drop funcional
-- [ ] 5+ widgets pré-construídos
-- [ ] Queries SQL customizadas (validadas)
-- [ ] Auto-refresh configurável
-- [ ] Exportação de dashboards (JSON)
-- [ ] Compartilhamento de dashboards
+- [ ] Editor drag-and-drop funcional (Frontend pendente)
+- [x] 11 widgets pré-construídos (Backend completo)
+- [x] Queries SQL customizadas (validadas) (Backend completo)
+- [x] Auto-refresh configurável (Backend completo)
+- [ ] Exportação de dashboards (JSON) (Placeholder)
+- [x] Compartilhamento de dashboards (Backend API pronto)
 
 ### Relatórios
-- [ ] 10+ templates de relatórios
-- [ ] Wizard intuitivo de geração
-- [ ] Exportação PDF com branding
-- [ ] Exportação Excel com múltiplas abas
-- [ ] Agendamento funcionando
-- [ ] Envio por email automático
+- [x] 10+ templates de relatórios (Backend completo)
+- [ ] Wizard intuitivo de geração (Frontend pendente)
+- [ ] Exportação PDF com branding (Pendente)
+- [ ] Exportação Excel com múltiplas abas (Pendente)
+- [x] Agendamento funcionando (Backend API pronto, job pendente)
+- [ ] Envio por email automático (Pendente)
 
 ### Cohort Analysis
-- [ ] Visualização de heatmap de retenção
-- [ ] Análise de receita por cohort
-- [ ] Cálculo correto de LTV
-- [ ] Identificação de padrões de churn
-- [ ] Comparação entre cohorts
+- [ ] Visualização de heatmap de retenção (Frontend pendente)
+- [x] Análise de receita por cohort (Backend completo)
+- [x] Cálculo correto de LTV (Backend completo)
+- [x] Identificação de padrões de churn (Backend completo)
+- [x] Comparação entre cohorts (Backend completo)
 
 ### Performance
-- [ ] Dashboards carregam em < 3s
-- [ ] Widgets atualizam em < 2s
-- [ ] Queries SQL com timeout de 30s
-- [ ] Exportação PDF em < 10s
+- [ ] Dashboards carregam em < 3s (Frontend pendente)
+- [ ] Widgets atualizam em < 2s (Frontend pendente)
+- [x] Queries SQL com timeout de 30s (Backend completo)
+- [ ] Exportação PDF em < 10s (Pendente)
 
 ---
 
