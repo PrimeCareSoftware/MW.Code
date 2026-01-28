@@ -362,6 +362,8 @@ namespace MedicSoft.Repository.Context
             // System Admin - Workflow Automation (Phase 4)
             modelBuilder.ApplyConfiguration(new WorkflowConfiguration());
             modelBuilder.ApplyConfiguration(new WorkflowActionConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkflowExecutionConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkflowActionExecutionConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
