@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MedicSoft.Api.Configuration;
 using MedicSoft.Api.Services.CRM;
+using MedicSoft.Domain.Interfaces;
 using Moq;
 using Xunit;
 
@@ -15,11 +16,13 @@ namespace MedicSoft.Test.Services.CRM
     public class SendGridEmailServiceTests
     {
         private readonly Mock<ILogger<SendGridEmailService>> _loggerMock;
+        private readonly Mock<IEmailTemplateRepository> _templateRepositoryMock;
         private readonly MessagingConfiguration _messagingConfig;
 
         public SendGridEmailServiceTests()
         {
             _loggerMock = new Mock<ILogger<SendGridEmailService>>();
+            _templateRepositoryMock = new Mock<IEmailTemplateRepository>();
             _messagingConfig = new MessagingConfiguration
             {
                 Email = new EmailConfiguration
@@ -183,7 +186,7 @@ namespace MedicSoft.Test.Services.CRM
             var optionsMock = new Mock<IOptions<MessagingConfiguration>>();
             optionsMock.Setup(o => o.Value).Returns(_messagingConfig);
 
-            return new SendGridEmailService(_loggerMock.Object, optionsMock.Object);
+            return new SendGridEmailService(_loggerMock.Object, optionsMock.Object, _templateRepositoryMock.Object);
         }
     }
 }

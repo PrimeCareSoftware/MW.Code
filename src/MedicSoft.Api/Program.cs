@@ -446,6 +446,9 @@ builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoNoShowService, Medi
 builder.Services.Configure<MedicSoft.Api.Configuration.MessagingConfiguration>(
     builder.Configuration.GetSection(MedicSoft.Api.Configuration.MessagingConfiguration.SectionName));
 
+// CRM Advanced - Email Template Repository
+builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
+
 // CRM Advanced - Phase 2: Marketing Automation
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IMarketingAutomationService, MedicSoft.Api.Services.CRM.MarketingAutomationService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IAutomationEngine, MedicSoft.Api.Services.CRM.AutomationEngine>();

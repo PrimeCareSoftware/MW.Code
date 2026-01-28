@@ -25,9 +25,9 @@ namespace MedicSoft.Api.Services.CRM
             return Task.CompletedTask;
         }
 
-        public Task SendEmailWithTemplateAsync(string to, Guid templateId, Dictionary<string, string> variables)
+        public Task SendEmailWithTemplateAsync(string to, Guid templateId, Dictionary<string, string> variables, string? tenantId = null)
         {
-            _logger.LogInformation("STUB: Sending template email {TemplateId} to {To}", templateId, to);
+            _logger.LogInformation("STUB: Sending template email {TemplateId} to {To} (TenantId: {TenantId})", templateId, to, tenantId ?? "N/A");
             
             // In production, load template and render with variables
             return Task.CompletedTask;

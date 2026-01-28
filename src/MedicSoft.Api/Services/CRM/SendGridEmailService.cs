@@ -2,8 +2,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MedicSoft.Api.Configuration;
 using MedicSoft.Application.Services.CRM;
+using MedicSoft.Domain.Interfaces;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Text.RegularExpressions;
 
 namespace MedicSoft.Api.Services.CRM
 {
@@ -15,14 +17,17 @@ namespace MedicSoft.Api.Services.CRM
         private readonly ILogger<SendGridEmailService> _logger;
         private readonly EmailConfiguration _config;
         private readonly ISendGridClient _sendGridClient;
+        private readonly IEmailTemplateRepository _templateRepository;
 
         public SendGridEmailService(
             ILogger<SendGridEmailService> logger,
-            IOptions<MessagingConfiguration> messagingConfig)
+            IOptions<MessagingConfiguration> messagingConfig,
+            IEmailTemplateRepository templateRepository)
         {
             _logger = logger;
             _config = messagingConfig.Value.Email;
             _sendGridClient = new SendGridClient(_config.ApiKey);
+            _templateRepository = templateRepository;
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
@@ -76,7 +81,7 @@ namespace MedicSoft.Api.Services.CRM
             }
         }
 
-        public async Task SendEmailWithTemplateAsync(string to, Guid templateId, Dictionary<string, string> variables)
+        public async Task SendEmailWithTemplateAsync(string to, Guid templateId, Dictionary<string, string> variables, string? tenantId = null)
         {
             if (!_config.Enabled)
             {
@@ -89,18 +94,18 @@ namespace MedicSoft.Api.Services.CRM
                 var from = new EmailAddress(_config.FromEmail, _config.FromName);
                 var toAddress = new EmailAddress(to);
 
+                // Build template content with variables (loads from database if tenantId provided)
+                var (subject, templateContent) = await BuildTemplateContent(templateId, variables, tenantId);
+
                 // For now, use a simple template approach
                 // In production, this should integrate with SendGrid Dynamic Templates
                 var msg = new SendGridMessage
                 {
                     From = from,
-                    Subject = "Notification from MedicSoft"
+                    Subject = subject
                 };
                 
                 msg.AddTo(toAddress);
-
-                // Build template content with variables
-                var templateContent = await BuildTemplateContent(templateId, variables);
                 msg.AddContent(MimeType.Html, templateContent);
 
                 if (_config.UseSandbox)
@@ -132,11 +137,44 @@ namespace MedicSoft.Api.Services.CRM
             }
         }
 
-        private async Task<string> BuildTemplateContent(Guid templateId, Dictionary<string, string> variables)
+        private async Task<(string subject, string content)> BuildTemplateContent(Guid templateId, Dictionary<string, string> variables, string? tenantId)
         {
-            // TODO: Load template from database (EmailTemplate entity)
-            // For now, return a simple template structure
-            var content = "<html><body>";
+            string subject = "Notification from MedicSoft";
+            string content;
+
+            // Load template from database if tenantId is provided
+            if (!string.IsNullOrEmpty(tenantId))
+            {
+                var template = await _templateRepository.GetByIdAsync(templateId, tenantId);
+                
+                if (template != null)
+                {
+                    subject = template.Subject;
+                    content = template.HtmlBody;
+
+                    // Replace template variables
+                    if (variables != null && variables.Any())
+                    {
+                        foreach (var kvp in variables)
+                        {
+                            // Replace {{variable}} format with actual values
+                            // HTML encode values to prevent XSS
+                            var encodedValue = System.Net.WebUtility.HtmlEncode(kvp.Value);
+                            var pattern = $@"{{\{{\s*{Regex.Escape(kvp.Key)}\s*\}}}}";
+                            content = Regex.Replace(content, pattern, encodedValue, RegexOptions.IgnoreCase);
+                            subject = Regex.Replace(subject, pattern, encodedValue, RegexOptions.IgnoreCase);
+                        }
+                    }
+
+                    _logger.LogInformation("Template {TemplateId} loaded from database for tenant {TenantId}", templateId, tenantId);
+                    return (subject, content);
+                }
+
+                _logger.LogWarning("Template {TemplateId} not found in database for tenant {TenantId}. Using fallback template.", templateId, tenantId);
+            }
+
+            // Fallback: return a simple template structure
+            content = "<html><body>";
             content += "<h1>MedicSoft Notification</h1>";
             content += "<p>This is an automated notification.</p>";
             
@@ -155,7 +193,7 @@ namespace MedicSoft.Api.Services.CRM
             
             content += "</body></html>";
             
-            return await Task.FromResult(content);
+            return (subject, content);
         }
     }
 }
