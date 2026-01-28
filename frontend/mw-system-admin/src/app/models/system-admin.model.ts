@@ -405,3 +405,186 @@ export interface BulkActionRequest {
   action: 'send-email' | 'change-plan' | 'assign-tags' | 'remove-tags';
   actionData?: any;
 }
+
+// Phase 3: Analytics & BI - Custom Dashboards
+export interface CustomDashboard {
+  id: number;
+  name: string;
+  description: string;
+  layout: string;
+  isDefault: boolean;
+  isPublic: boolean;
+  createdBy: string;
+  createdAt: string;
+  widgets: DashboardWidget[];
+}
+
+export interface DashboardWidget {
+  id: number;
+  dashboardId: number;
+  type: 'line' | 'bar' | 'pie' | 'metric' | 'table' | 'map' | 'markdown';
+  title: string;
+  config: string;
+  query: string;
+  refreshInterval: number;
+  gridX: number;
+  gridY: number;
+  gridWidth: number;
+  gridHeight: number;
+}
+
+export interface WidgetConfig {
+  xAxis?: string;
+  yAxis?: string;
+  labelField?: string;
+  valueField?: string;
+  color?: string;
+  format?: string;
+  icon?: string;
+  threshold?: {
+    warning?: number;
+    critical?: number;
+  };
+  endpoint?: string;
+  parameters?: any;
+}
+
+export interface WidgetTemplate {
+  id: number;
+  name: string;
+  description: string;
+  category: 'financial' | 'customer' | 'operational';
+  type: string;
+  defaultConfig: string;
+  defaultQuery: string;
+  isSystem: boolean;
+}
+
+export interface CreateDashboardDto {
+  name: string;
+  description: string;
+  layout?: string;
+  isDefault?: boolean;
+  isPublic?: boolean;
+}
+
+export interface UpdateDashboardDto {
+  name?: string;
+  description?: string;
+  layout?: string;
+  isDefault?: boolean;
+  isPublic?: boolean;
+}
+
+export interface CreateWidgetDto {
+  type: string;
+  title: string;
+  config: string;
+  query?: string;
+  refreshInterval?: number;
+  gridX: number;
+  gridY: number;
+  gridWidth: number;
+  gridHeight: number;
+}
+
+export interface WidgetPositionDto {
+  gridX: number;
+  gridY: number;
+  gridWidth: number;
+  gridHeight: number;
+}
+
+// Phase 3: Analytics & BI - Reports
+export interface ReportTemplate {
+  id: number;
+  name: string;
+  description: string;
+  category: 'financial' | 'customer' | 'operational';
+  parameters: ReportParameter[];
+  isSystem: boolean;
+}
+
+export interface ReportParameter {
+  name: string;
+  label: string;
+  type: 'string' | 'number' | 'date' | 'select';
+  required: boolean;
+  defaultValue?: any;
+  options?: { label: string; value: any }[];
+}
+
+export interface ReportParameters {
+  startDate: string;
+  endDate: string;
+  [key: string]: any;
+}
+
+export interface ReportResult {
+  id: string;
+  title: string;
+  generatedAt: string;
+  data: any[];
+  charts: ReportChart[];
+}
+
+export interface ReportChart {
+  type: string;
+  title: string;
+  series: any[];
+  data?: any[];
+}
+
+export interface ScheduledReport {
+  id: number;
+  templateId: number;
+  templateName: string;
+  frequency: 'daily' | 'weekly' | 'monthly';
+  recipients: string[];
+  parameters: ReportParameters;
+  isActive: boolean;
+  lastRunAt?: string;
+  nextRunAt: string;
+}
+
+export interface ScheduleReportDto {
+  templateId: number;
+  frequency: 'daily' | 'weekly' | 'monthly';
+  recipients: string[];
+  parameters: ReportParameters;
+  isActive?: boolean;
+}
+
+// Phase 3: Analytics & BI - Cohort Analysis
+export interface CohortRetention {
+  cohorts: RetentionCohort[];
+}
+
+export interface RetentionCohort {
+  month: string;
+  size: number;
+  retentionRates: number[];
+}
+
+export interface CohortRevenue {
+  cohorts: RevenueCohort[];
+}
+
+export interface RevenueCohort {
+  month: string;
+  size: number;
+  mrrByMonth: number[];
+  expansionMrr: number[];
+  contractionMrr: number[];
+  ltv: number;
+}
+
+export interface CohortBehavior {
+  cohorts: BehaviorCohort[];
+}
+
+export interface BehaviorCohort {
+  month: string;
+  size: number;
+  features: { [key: string]: number[] };
+}

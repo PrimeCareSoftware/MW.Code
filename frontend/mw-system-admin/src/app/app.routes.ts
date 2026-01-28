@@ -108,6 +108,37 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Phase 3: Analytics & BI - Custom Dashboards
+  {
+    path: 'custom-dashboards',
+    loadComponent: () => import('./pages/custom-dashboards/custom-dashboards.component').then(m => m.CustomDashboardsComponent),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'custom-dashboards/:id/edit',
+    loadComponent: () => import('./pages/custom-dashboards/dashboard-editor.component').then(m => m.DashboardEditorComponent),
+    canActivate: [systemAdminGuard]
+  },
+  
+  // Phase 3: Analytics & BI - Reports
+  {
+    path: 'reports',
+    loadComponent: () => import('./pages/reports/reports.component').then(m => m.ReportsComponent),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'reports/wizard',
+    loadComponent: () => import('./pages/reports/report-wizard.component').then(m => m.ReportWizardComponent),
+    canActivate: [systemAdminGuard]
+  },
+  
+  // Phase 3: Analytics & BI - Cohort Analysis
+  {
+    path: 'cohort-analysis',
+    loadComponent: () => import('./pages/cohort-analysis/cohort-analysis.component').then(m => m.CohortAnalysisComponent),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];
