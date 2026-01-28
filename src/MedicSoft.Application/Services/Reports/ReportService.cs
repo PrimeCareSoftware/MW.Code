@@ -14,11 +14,19 @@ namespace MedicSoft.Application.Services.Reports
     {
         private readonly MedicSoftDbContext _context;
         private readonly ILogger<ReportService> _logger;
+        private readonly IReportExportService _exportService;
+        private readonly IEmailService _emailService;
 
-        public ReportService(MedicSoftDbContext context, ILogger<ReportService> logger)
+        public ReportService(
+            MedicSoftDbContext context, 
+            ILogger<ReportService> logger,
+            IReportExportService exportService = null,
+            IEmailService emailService = null)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _exportService = exportService; // Optional dependency for backwards compatibility
+            _emailService = emailService; // Optional dependency for backwards compatibility
         }
 
         public async Task<List<ReportTemplateDto>> GetAllReportTemplatesAsync()
@@ -158,17 +166,85 @@ namespace MedicSoft.Application.Services.Reports
 
             try
             {
-                // TODO: Implement actual report generation logic
-                // This would involve:
-                // 1. Execute the query with parameters
-                // 2. Format the data according to template configuration
-                // 3. Generate PDF/Excel/CSV based on OutputFormat
+                // Execute the query with parameters
+                var query = template.Query;
                 
-                _logger.LogWarning("Report generation is not yet fully implemented");
-                
+                // Replace parameters in query (simple implementation)
+                if (dto.Parameters != null)
+                {
+                    foreach (var param in dto.Parameters)
+                    {
+                        query = query.Replace($"@{param.Key}", param.Value?.ToString() ?? "");
+                    }
+                }
+
+                // Execute query and get data
+                var data = await ExecuteReportQuery(query);
+
+                if (data == null || !data.Any())
+                {
+                    return new ReportResultDto
+                    {
+                        FileName = $"{template.Name}_{DateTime.Now:yyyyMMdd}.txt",
+                        Data = System.Text.Encoding.UTF8.GetBytes("No data found for the specified parameters"),
+                        ContentType = "text/plain"
+                    };
+                }
+
+                // Generate output based on format
+                byte[] outputData;
+                string contentType;
+                string extension;
+
+                switch (dto.OutputFormat?.ToLowerInvariant())
+                {
+                    case "pdf":
+                        if (_exportService == null)
+                        {
+                            throw new InvalidOperationException("Report export service is not configured");
+                        }
+                        outputData = await _exportService.ExportToPdfAsync(
+                            template.Name,
+                            template.Description,
+                            data
+                        );
+                        contentType = "application/pdf";
+                        extension = "pdf";
+                        break;
+
+                    case "excel":
+                    case "xlsx":
+                        if (_exportService == null)
+                        {
+                            throw new InvalidOperationException("Report export service is not configured");
+                        }
+                        outputData = await _exportService.ExportToExcelAsync(
+                            template.Name,
+                            data
+                        );
+                        contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        extension = "xlsx";
+                        break;
+
+                    case "csv":
+                        outputData = ExportToCsv(data);
+                        contentType = "text/csv";
+                        extension = "csv";
+                        break;
+
+                    default:
+                        // Default to CSV if format not specified
+                        outputData = ExportToCsv(data);
+                        contentType = "text/csv";
+                        extension = "csv";
+                        break;
+                }
+
                 return new ReportResultDto
                 {
-                    Error = "Report generation functionality is not yet implemented. This is a placeholder for future implementation."
+                    FileName = $"{template.Name}_{DateTime.Now:yyyyMMdd}.{extension}",
+                    Data = outputData,
+                    ContentType = contentType
                 };
             }
             catch (Exception ex)
@@ -306,12 +382,56 @@ namespace MedicSoft.Application.Services.Reports
 
             try
             {
-                // TODO: Implement scheduled report execution
-                // This would involve:
-                // 1. Generate the report using GenerateReportAsync
+                // 1. Generate the report
+                var parameters = string.IsNullOrEmpty(scheduledReport.Parameters) 
+                    ? new Dictionary<string, object>() 
+                    : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(scheduledReport.Parameters);
+
+                var generateDto = new GenerateReportDto
+                {
+                    ReportTemplateId = scheduledReport.ReportTemplateId,
+                    OutputFormat = scheduledReport.OutputFormat,
+                    Parameters = parameters
+                };
+
+                var reportResult = await GenerateReportAsync(generateDto);
+
+                if (!string.IsNullOrEmpty(reportResult.Error))
+                {
+                    throw new InvalidOperationException($"Report generation failed: {reportResult.Error}");
+                }
+
                 // 2. Send email with attachment to recipients
-                // 3. Update LastRunAt and NextRunAt
-                
+                if (_emailService != null && !string.IsNullOrEmpty(scheduledReport.Recipients))
+                {
+                    var recipients = scheduledReport.Recipients.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(r => r.Trim())
+                        .ToArray();
+
+                    var emailBody = $@"
+                        <h2>{scheduledReport.Name}</h2>
+                        <p>{scheduledReport.Description}</p>
+                        <p>This is your scheduled report generated on {DateTime.Now:yyyy-MM-dd HH:mm}.</p>
+                        <p>Please see the attached file for the full report.</p>
+                    ";
+
+                    await _emailService.SendEmailAsync(
+                        recipients,
+                        $"Scheduled Report: {scheduledReport.Name}",
+                        emailBody,
+                        reportResult.Data,
+                        reportResult.FileName,
+                        reportResult.ContentType
+                    );
+
+                    _logger.LogInformation("Report email sent to {RecipientCount} recipients", recipients.Length);
+                }
+                else
+                {
+                    _logger.LogWarning("Email service not configured or no recipients specified for scheduled report");
+                }
+
+                // 3. Update status
                 scheduledReport.LastRunAt = DateTime.UtcNow;
                 scheduledReport.NextRunAt = CalculateNextRunTime(scheduledReport.CronExpression);
                 scheduledReport.LastRunStatus = "success";
@@ -339,6 +459,88 @@ namespace MedicSoft.Application.Services.Reports
             // TODO: Implement proper cron expression parsing
             // For now, return a time 24 hours from now as a placeholder
             return DateTime.UtcNow.AddDays(1);
+        }
+
+        private async Task<List<Dictionary<string, object>>> ExecuteReportQuery(string query)
+        {
+            var result = new List<Dictionary<string, object>>();
+
+            try
+            {
+                using var command = _context.Database.GetDbConnection().CreateCommand();
+                command.CommandText = query;
+                command.CommandTimeout = 30; // 30 seconds timeout
+
+                await _context.Database.OpenConnectionAsync();
+
+                using var reader = await command.ExecuteReaderAsync();
+                
+                while (await reader.ReadAsync())
+                {
+                    var row = new Dictionary<string, object>();
+                    
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        var columnName = reader.GetName(i);
+                        var value = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                        row[columnName] = value;
+                    }
+                    
+                    result.Add(row);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error executing report query");
+                throw;
+            }
+            finally
+            {
+                await _context.Database.CloseConnectionAsync();
+            }
+
+            return result;
+        }
+
+        private byte[] ExportToCsv(List<Dictionary<string, object>> data)
+        {
+            if (data == null || !data.Any())
+            {
+                return System.Text.Encoding.UTF8.GetBytes("No data available");
+            }
+
+            var csv = new System.Text.StringBuilder();
+            
+            // Headers
+            var headers = data.First().Keys.ToList();
+            csv.AppendLine(string.Join(",", headers.Select(h => EscapeCsvValue(h))));
+            
+            // Data rows
+            foreach (var row in data)
+            {
+                var values = headers.Select(h => 
+                {
+                    var value = row.ContainsKey(h) ? row[h] : null;
+                    return EscapeCsvValue(value?.ToString() ?? "");
+                });
+                csv.AppendLine(string.Join(",", values));
+            }
+
+            return System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        }
+
+        private string EscapeCsvValue(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "";
+
+            // Escape quotes and wrap in quotes if necessary
+            if (value.Contains(",") || value.Contains("\"") || value.Contains("\n"))
+            {
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+            }
+
+            return value;
         }
 
         private ReportTemplateDto MapTemplateToDto(ReportTemplate template)

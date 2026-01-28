@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -261,8 +263,55 @@ namespace MedicSoft.Application.Services.Dashboards
 
             var dashboard = await GetDashboardAsync(id);
 
-            _logger.LogWarning("Dashboard export feature is not yet implemented. Returning empty result.");
-            throw new NotImplementedException($"Dashboard export to {format} format is not yet implemented");
+            switch (format)
+            {
+                case ExportFormat.Json:
+                    return ExportToJson(dashboard);
+                
+                case ExportFormat.Pdf:
+                case ExportFormat.Excel:
+                    _logger.LogWarning("Dashboard export to {Format} format is not yet implemented", format);
+                    throw new NotImplementedException($"Dashboard export to {format} format is not yet implemented");
+                
+                default:
+                    throw new ArgumentException($"Unsupported export format: {format}");
+            }
+        }
+
+        private byte[] ExportToJson(CustomDashboardDto dashboard)
+        {
+            var exportData = new
+            {
+                dashboard.Id,
+                dashboard.Name,
+                dashboard.Description,
+                dashboard.Layout,
+                dashboard.IsDefault,
+                dashboard.IsPublic,
+                dashboard.CreatedBy,
+                dashboard.CreatedAt,
+                dashboard.UpdatedAt,
+                Widgets = dashboard.Widgets.Select(w => new
+                {
+                    w.Id,
+                    w.Type,
+                    w.Title,
+                    w.Config,
+                    w.Query,
+                    w.RefreshInterval,
+                    w.GridX,
+                    w.GridY,
+                    w.GridWidth,
+                    w.GridHeight
+                }).ToList()
+            };
+
+            var json = JsonSerializer.Serialize(exportData, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            return Encoding.UTF8.GetBytes(json);
         }
 
         public async Task<List<WidgetTemplateDto>> GetWidgetTemplatesAsync()
