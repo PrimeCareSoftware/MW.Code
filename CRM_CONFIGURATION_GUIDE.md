@@ -33,7 +33,7 @@ Este guia detalha a configuração de todas as integrações externas necessári
 | WhatsApp Business API | Mensagens WhatsApp | ~R$ 800/mês | ⚠️ Recomendado |
 | Azure Cognitive Services | IA e Análise de Sentimento | ~R$ 500/mês | ⚠️ Recomendado |
 
-> **📝 Nota:** Atualmente o sistema utiliza serviços "stub" (simulados) para desenvolvimento. Este guia orienta a substituição por integrações reais em produção.
+> **✅ Atualização (28/01/2026):** As integrações de Email (SendGrid), SMS (Twilio) e WhatsApp Business API estão **totalmente implementadas** e prontas para uso em produção. Configure as credenciais no `appsettings.json` e ative com `"Enabled": true`. Veja o guia completo em [`/CRM_MESSAGING_INTEGRATIONS.md`](/CRM_MESSAGING_INTEGRATIONS.md).
 
 ---
 
