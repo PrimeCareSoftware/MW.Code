@@ -36,6 +36,17 @@ export class ClinicsList implements OnInit {
     needsAttention: 0
   });
 
+  // View mode (list, cards, map, kanban)
+  viewMode = signal<'list' | 'cards' | 'map' | 'kanban'>('list');
+  
+  // Bulk selection
+  selectedClinicIds = signal<string[]>([]);
+  selectAllChecked = signal(false);
+  showBulkActions = signal(false);
+  
+  // Export
+  exportInProgress = signal(false);
+
   constructor(
     private systemAdminService: SystemAdminService,
     private router: Router,
@@ -287,4 +298,149 @@ export class ClinicsList implements OnInit {
     };
     return classes[status] || '';
   }
+
+  // View mode methods
+  setViewMode(mode: 'list' | 'cards' | 'map' | 'kanban'): void {
+    this.viewMode.set(mode);
+  }
+
+  // Bulk selection methods
+  toggleSelectAll(): void {
+    const newValue = !this.selectAllChecked();
+    this.selectAllChecked.set(newValue);
+    
+    if (newValue) {
+      const allIds = this.paginatedClinics()?.clinics.map(c => c.id) || [];
+      this.selectedClinicIds.set(allIds);
+    } else {
+      this.selectedClinicIds.set([]);
+    }
+    
+    this.showBulkActions.set(this.selectedClinicIds().length > 0);
+  }
+
+  toggleClinicSelection(clinicId: string): void {
+    const currentSelected = this.selectedClinicIds();
+    const index = currentSelected.indexOf(clinicId);
+    
+    if (index > -1) {
+      this.selectedClinicIds.set(currentSelected.filter(id => id !== clinicId));
+    } else {
+      this.selectedClinicIds.set([...currentSelected, clinicId]);
+    }
+    
+    const allSelected = this.paginatedClinics()?.clinics.length === this.selectedClinicIds().length;
+    this.selectAllChecked.set(allSelected);
+    this.showBulkActions.set(this.selectedClinicIds().length > 0);
+  }
+
+  isClinicSelected(clinicId: string): boolean {
+    return this.selectedClinicIds().includes(clinicId);
+  }
+
+  clearSelection(): void {
+    this.selectedClinicIds.set([]);
+    this.selectAllChecked.set(false);
+    this.showBulkActions.set(false);
+  }
+
+  // Bulk actions
+  bulkActivate(): void {
+    if (!confirm(`Ativar ${this.selectedClinicIds().length} clínica(s) selecionada(s)?`)) {
+      return;
+    }
+
+    this.systemAdminService.bulkAction({
+      action: 'activate',
+      clinicIds: this.selectedClinicIds(),
+      parameters: {}
+    }).subscribe({
+      next: (result) => {
+        alert(`Ação concluída: ${result.successCount} sucesso(s), ${result.failureCount} falha(s)`);
+        this.loadClinics();
+        this.clearSelection();
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao executar ação em lote');
+      }
+    });
+  }
+
+  bulkDeactivate(): void {
+    if (!confirm(`Desativar ${this.selectedClinicIds().length} clínica(s) selecionada(s)?`)) {
+      return;
+    }
+
+    this.systemAdminService.bulkAction({
+      action: 'deactivate',
+      clinicIds: this.selectedClinicIds(),
+      parameters: {}
+    }).subscribe({
+      next: (result) => {
+        alert(`Ação concluída: ${result.successCount} sucesso(s), ${result.failureCount} falha(s)`);
+        this.loadClinics();
+        this.clearSelection();
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao executar ação em lote');
+      }
+    });
+  }
+
+  bulkAddTag(): void {
+    const tagId = prompt('Digite o ID da tag para adicionar:');
+    if (!tagId) return;
+
+    this.systemAdminService.bulkAction({
+      action: 'addTag',
+      clinicIds: this.selectedClinicIds(),
+      parameters: { tagId }
+    }).subscribe({
+      next: (result) => {
+        alert(`Ação concluída: ${result.successCount} sucesso(s), ${result.failureCount} falha(s)`);
+        this.loadClinics();
+        this.clearSelection();
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao adicionar tags');
+      }
+    });
+  }
+
+  // Export methods
+  exportClinics(format: 'csv' | 'excel' | 'pdf'): void {
+    if (this.selectedClinicIds().length === 0) {
+      alert('Selecione pelo menos uma clínica para exportar');
+      return;
+    }
+
+    this.exportInProgress.set(true);
+
+    this.systemAdminService.exportClinics({
+      clinicIds: this.selectedClinicIds(),
+      format: format === 'csv' ? 'Csv' : format === 'excel' ? 'Excel' : 'Pdf',
+      includeHealthScore: true,
+      includeTags: true,
+      includeUsageMetrics: false
+    }).subscribe({
+      next: (blob) => {
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `clinics_export_${new Date().getTime()}.${format === 'excel' ? 'xlsx' : format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        this.exportInProgress.set(false);
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao exportar clínicas');
+        this.exportInProgress.set(false);
+      }
+    });
+  }
 }
+
