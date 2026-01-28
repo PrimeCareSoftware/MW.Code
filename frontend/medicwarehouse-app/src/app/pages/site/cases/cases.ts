@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
+import { WebsiteAnalyticsService } from '../../../services/analytics/website-analytics.service';
 
 interface CaseMetric {
   label: string;
@@ -28,6 +29,21 @@ export interface SuccessCase {
   styleUrl: './cases.scss'
 })
 export class CasesComponent {
+  constructor(private analytics: WebsiteAnalyticsService) {}
+
+  ngOnInit(): void {
+    // Track page view
+    this.analytics.trackPageView('/site/cases', 'Cases de Sucesso - PrimeCare');
+  }
+
+  onCaseView(caseItem: SuccessCase): void {
+    this.analytics.trackCaseStudyView(caseItem.id, caseItem.clinicName, caseItem.specialty);
+  }
+
+  onContactClick(): void {
+    this.analytics.trackCTAClick('Fale Conosco', 'Cases Page');
+  }
+
   cases: SuccessCase[] = [
     {
       id: 'clinica-sorriso',
