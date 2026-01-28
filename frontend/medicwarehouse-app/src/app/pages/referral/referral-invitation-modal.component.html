@@ -1,0 +1,99 @@
+<h2 mat-dialog-title>Convidar Amigos</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="invitationForm">
+    <div class="form-section">
+      <h3>E-mails dos Amigos</h3>
+      <p class="hint">Adicione até 10 e-mails para enviar convites</p>
+      
+      <div formArrayName="emails" class="emails-list">
+        @for (emailControl of emails.controls; track $index) {
+          <div [formGroupName]="$index" class="email-input-row">
+            <mat-form-field class="email-field" appearance="outline">
+              <mat-label>E-mail {{ $index + 1 }}</mat-label>
+              <input 
+                matInput 
+                formControlName="email" 
+                type="email"
+                placeholder="amigo@exemplo.com"
+              />
+              <mat-error *ngIf="emailControl.get('email')?.hasError('required')">
+                E-mail é obrigatório
+              </mat-error>
+              <mat-error *ngIf="emailControl.get('email')?.hasError('email')">
+                E-mail inválido
+              </mat-error>
+            </mat-form-field>
+            
+            @if (emails.length > 1) {
+              <button 
+                mat-icon-button 
+                type="button" 
+                (click)="removeEmail($index)"
+                color="warn"
+                matTooltip="Remover"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      @if (emails.length < 10) {
+        <button 
+          mat-stroked-button 
+          type="button" 
+          (click)="addEmail()"
+          class="add-email-btn"
+        >
+          <mat-icon>add</mat-icon>
+          Adicionar outro e-mail
+        </button>
+      }
+    </div>
+
+    <div class="form-section">
+      <h3>Mensagem Personalizada (Opcional)</h3>
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Sua mensagem</mat-label>
+        <textarea 
+          matInput 
+          formControlName="personalMessage"
+          rows="4"
+          placeholder="Escreva uma mensagem personalizada para seus amigos..."
+        ></textarea>
+        <mat-hint>Esta mensagem será incluída no e-mail de convite</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="form-section preview-section">
+      <h3>Preview do E-mail</h3>
+      <div class="email-preview">
+        <pre>{{ getEmailPreview() }}</pre>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button 
+    mat-button 
+    (click)="onCancel()" 
+    [disabled]="submitting"
+  >
+    Cancelar
+  </button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="onSubmit()"
+    [disabled]="invitationForm.invalid || submitting"
+  >
+    @if (submitting) {
+      Enviando...
+    } @else {
+      Enviar Convites
+    }
+  </button>
+</mat-dialog-actions>

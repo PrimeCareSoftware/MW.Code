@@ -93,6 +93,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
+    path: 'referral', 
+    loadComponent: () => import('./pages/referral/referral-dashboard.component').then(m => m.ReferralDashboardComponent),
+    canActivate: [authGuard]
+  },
+  { 
     path: 'patients', 
     loadComponent: () => import('./pages/patients/patient-list/patient-list').then(m => m.PatientList),
     canActivate: [authGuard]
