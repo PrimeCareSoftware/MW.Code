@@ -51,10 +51,20 @@ export class TaxDashboard implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   
-  // Filter signals
+  // Filter signals (writable)
   selectedMonth = signal<number>(new Date().getMonth() + 1);
   selectedYear = signal<number>(new Date().getFullYear());
   trendMonths = signal<number>(12);
+  
+  // For template binding
+  get month() { return this.selectedMonth(); }
+  set month(value: number) { this.selectedMonth.set(value); }
+  
+  get year() { return this.selectedYear(); }
+  set year(value: number) { this.selectedYear.set(value); }
+  
+  get months() { return this.trendMonths(); }
+  set months(value: number) { this.trendMonths.set(value); }
   
   // Chart options
   chartOptions = signal<Partial<ChartOptions> | null>(null);
@@ -66,8 +76,8 @@ export class TaxDashboard implements OnInit {
   totalImpostos = computed(() => {
     const ap = this.apuracao();
     if (!ap) return 0;
-    return ap.totalPIS + ap.totalCOFINS + ap.totalIR + 
-           ap.totalCSLL + ap.totalISS + ap.totalINSS;
+    return (ap.totalPIS || 0) + (ap.totalCOFINS || 0) + (ap.totalIR || 0) + 
+           (ap.totalCSLL || 0) + (ap.totalISS || 0) + (ap.totalINSS || 0);
   });
 
   cargaTributaria = computed(() => {
@@ -128,6 +138,7 @@ export class TaxDashboard implements OnInit {
           this.apuracao.set(data || null);
         } catch (genError) {
           console.warn('Não foi possível gerar apuração automática');
+          this.errorMessage.set('Não há dados fiscais para este período.');
           this.apuracao.set(null);
         }
       } else {
@@ -154,6 +165,11 @@ export class TaxDashboard implements OnInit {
       console.error('Erro ao carregar evolução mensal:', error);
       this.evolucaoMensal.set([]);
     }
+  }
+  
+  calculateTaxPercentage(taxValue: number, faturamento: number): string {
+    if (faturamento === 0 || taxValue === 0) return '0.00%';
+    return this.formatPercentage((taxValue / faturamento) * 100);
   }
 
   private updateCharts(): void {
@@ -320,10 +336,12 @@ export class TaxDashboard implements OnInit {
   }
 
   exportToPDF(): void {
-    alert('Funcionalidade de exportação em PDF será implementada em breve.');
+    // TODO: Implement PDF export functionality
+    console.warn('Funcionalidade de exportação em PDF será implementada em breve.');
   }
 
   exportToExcel(): void {
-    alert('Funcionalidade de exportação em Excel será implementada em breve.');
+    // TODO: Implement Excel export functionality
+    console.warn('Funcionalidade de exportação em Excel será implementada em breve.');
   }
 }

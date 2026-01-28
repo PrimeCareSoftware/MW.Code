@@ -42,7 +42,7 @@
         <select 
           id="selectedMonth"
           class="form-control" 
-          [(ngModel)]="selectedMonth"
+          [(ngModel)]="month"
           (change)="onMonthChange()"
         >
           <option [value]="1">Janeiro</option>
@@ -64,11 +64,11 @@
         <select 
           id="selectedYear"
           class="form-control" 
-          [(ngModel)]="selectedYear"
+          [(ngModel)]="year"
           (change)="onYearChange()"
         >
-          @for (year of generateYears(); track year) {
-            <option [value]="year">{{ year }}</option>
+          @for (yr of generateYears(); track yr) {
+            <option [value]="yr">{{ yr }}</option>
           }
         </select>
       </div>
@@ -77,7 +77,7 @@
         <select 
           id="trendMonths"
           class="form-control" 
-          [(ngModel)]="trendMonths"
+          [(ngModel)]="months"
           (change)="onTrendMonthsChange()"
         >
           <option [value]="6">6 meses</option>
@@ -221,32 +221,32 @@
             <tr>
               <td><strong>ISS</strong> - Imposto Sobre Serviços</td>
               <td class="text-end">{{ formatCurrency(apuracao()?.totalISS || 0) }}</td>
-              <td class="text-end">{{ formatPercentage((apuracao()?.totalISS || 0) / (apuracao()?.faturamentoBruto || 1) * 100) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalISS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
             </tr>
             <tr>
               <td><strong>PIS</strong> - Programa de Integração Social</td>
               <td class="text-end">{{ formatCurrency(apuracao()?.totalPIS || 0) }}</td>
-              <td class="text-end">{{ formatPercentage((apuracao()?.totalPIS || 0) / (apuracao()?.faturamentoBruto || 1) * 100) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalPIS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
             </tr>
             <tr>
               <td><strong>COFINS</strong> - Contribuição para Financiamento da Seguridade Social</td>
               <td class="text-end">{{ formatCurrency(apuracao()?.totalCOFINS || 0) }}</td>
-              <td class="text-end">{{ formatPercentage((apuracao()?.totalCOFINS || 0) / (apuracao()?.faturamentoBruto || 1) * 100) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalCOFINS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
             </tr>
             <tr>
               <td><strong>IR</strong> - Imposto de Renda</td>
               <td class="text-end">{{ formatCurrency(apuracao()?.totalIR || 0) }}</td>
-              <td class="text-end">{{ formatPercentage((apuracao()?.totalIR || 0) / (apuracao()?.faturamentoBruto || 1) * 100) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalIR || 0, apuracao()?.faturamentoBruto || 0) }}</td>
             </tr>
             <tr>
               <td><strong>CSLL</strong> - Contribuição Social sobre o Lucro Líquido</td>
               <td class="text-end">{{ formatCurrency(apuracao()?.totalCSLL || 0) }}</td>
-              <td class="text-end">{{ formatPercentage((apuracao()?.totalCSLL || 0) / (apuracao()?.faturamentoBruto || 1) * 100) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalCSLL || 0, apuracao()?.faturamentoBruto || 0) }}</td>
             </tr>
             <tr>
               <td><strong>INSS</strong> - Instituto Nacional do Seguro Social</td>
               <td class="text-end">{{ formatCurrency(apuracao()?.totalINSS || 0) }}</td>
-              <td class="text-end">{{ formatPercentage((apuracao()?.totalINSS || 0) / (apuracao()?.faturamentoBruto || 1) * 100) }}</td>
+              <td class="text-end">{{ calculateTaxPercentage(apuracao()?.totalINSS || 0, apuracao()?.faturamentoBruto || 0) }}</td>
             </tr>
           </tbody>
           <tfoot>

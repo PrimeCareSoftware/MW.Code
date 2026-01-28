@@ -84,6 +84,29 @@ export interface ConfiguracaoFiscal {
 }
 
 /**
+ * DRE (Demonstração do Resultado do Exercício)
+ */
+export interface DRE {
+  id: string;
+  clinicaId: string;
+  dataInicio: Date;
+  dataFim: Date;
+  receitaBruta: number;
+  deducoesReceita: number;
+  receitaLiquida: number;
+  custoPrestacaoServico: number;
+  lucroOperacionalBruto: number;
+  despesasOperacionais: number;
+  lucroOperacionalLiquido: number;
+  receitasNaoOperacionais: number;
+  despesasNaoOperacionais: number;
+  lucroAntesIRCS: number;
+  provisaoIR: number;
+  provisaoCS: number;
+  lucroLiquido: number;
+}
+
+/**
  * Request para registrar pagamento
  */
 export interface PagamentoRequest {
@@ -134,8 +157,8 @@ export class FiscalService {
   /**
    * Obtém DRE do período
    */
-  getDRE(mes: number, ano: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/dre/${mes}/${ano}`);
+  getDRE(mes: number, ano: number): Observable<DRE> {
+    return this.http.get<DRE>(`${this.apiUrl}/dre/${mes}/${ano}`);
   }
 
   /**
