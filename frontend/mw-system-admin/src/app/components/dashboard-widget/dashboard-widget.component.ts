@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -87,7 +88,7 @@ import { ApexOptions } from 'apexcharts';
               </div>
             }
             @case ('markdown') {
-              <div class="markdown-content" [innerHTML]="data()"></div>
+              <div class="markdown-content" [innerHTML]="sanitizedMarkdown()"></div>
             }
             @default {
               <div class="unsupported-type">
@@ -167,10 +168,14 @@ export class DashboardWidgetComponent implements OnInit, OnDestroy {
   data = signal<any>(null);
   config = signal<WidgetConfig>({});
   chartOptions = signal<Partial<ApexOptions>>({});
+  sanitizedMarkdown = signal<SafeHtml>('');
   
   private refreshInterval?: number;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     this.parseConfig();
@@ -209,6 +214,9 @@ export class DashboardWidgetComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.data.set(response);
         this.prepareChartData(response);
+        if (this.widget.type === 'markdown') {
+          this.sanitizedMarkdown.set(this.sanitizer.sanitize(1, response) || '');
+        }
         this.loading.set(false);
       },
       error: (err) => {

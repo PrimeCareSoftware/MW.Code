@@ -1,10 +1,10 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgApexchartsModule, ApexAxisChartSeries } from 'ng-apexcharts';
 import { CohortAnalysisService } from '../../services/cohort-analysis.service';
 import { CohortRetention, CohortRevenue, RetentionCohort, RevenueCohort } from '../../models/system-admin.model';
 import { Navbar } from '../../shared/navbar/navbar';
@@ -124,7 +124,7 @@ import { Navbar } from '../../shared/navbar/navbar';
                   [chart]="{ type: 'line', height: 400, toolbar: { show: true } }"
                   [stroke]="{ width: 2, curve: 'smooth' }"
                   [xaxis]="{ title: { text: 'Mês' } }"
-                  [yaxis]="{ title: { text: 'MRR' }, labels: { formatter: formatCurrency } }"
+                  [yaxis]="{ title: { text: 'MRR' }, labels: { formatter: currencyFormatter } }"
                   [legend]="{ position: 'top' }"
                 ></apx-chart>
               </div>
@@ -135,7 +135,7 @@ import { Navbar } from '../../shared/navbar/navbar';
                   [series]="ltvSeries()"
                   [chart]="{ type: 'bar', height: 350 }"
                   [plotOptions]="{ bar: { horizontal: true } }"
-                  [xaxis]="{ labels: { formatter: formatCurrency } }"
+                  [xaxis]="{ labels: { formatter: currencyFormatter } }"
                   [colors]="['#3b82f6']"
                 ></apx-chart>
               </div>
@@ -327,6 +327,56 @@ export class CohortAnalysisComponent implements OnInit {
 
   monthHeaders = Array.from({ length: 12 }, (_, i) => i);
 
+  averageRetentionSeries = computed(() => {
+    const cohorts = this.retentionData()?.cohorts || [];
+    if (cohorts.length === 0) return [];
+
+    const averages = this.monthHeaders.map(month => {
+      const rates = cohorts
+        .filter(c => c.retentionRates.length > month)
+        .map(c => c.retentionRates[month]);
+      return rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
+    });
+
+    return [{
+      name: 'Retenção Média',
+      data: averages
+    }];
+  });
+
+  mrrCohortSeries = computed(() => {
+    const cohorts = this.revenueData()?.cohorts || [];
+    return cohorts.map(cohort => ({
+      name: new Date(cohort.month).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
+      data: cohort.mrrByMonth
+    }));
+  });
+
+  ltvSeries = computed(() => {
+    const cohorts = this.revenueData()?.cohorts || [];
+    return [{
+      name: 'LTV',
+      data: cohorts.map(c => c.ltv)
+    }];
+  });
+
+  cohortComparisonSeries = computed(() => {
+    const cohorts = this.revenueData()?.cohorts || [];
+    return cohorts.map(cohort => ({
+      name: new Date(cohort.month).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
+      data: cohort.mrrByMonth
+    }));
+  });
+
+  currencyFormatter = (value: number): string => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+
   constructor(private cohortAnalysisService: CohortAnalysisService) {}
 
   ngOnInit(): void {
@@ -365,55 +415,5 @@ export class CohortAnalysisComponent implements OnInit {
     if (rate >= 60) return '#fbbf24';
     if (rate >= 40) return '#f59e0b';
     return '#ef4444';
-  }
-
-  averageRetentionSeries() {
-    const cohorts = this.retentionData()?.cohorts || [];
-    if (cohorts.length === 0) return [];
-
-    const averages = this.monthHeaders.map(month => {
-      const rates = cohorts
-        .filter(c => c.retentionRates.length > month)
-        .map(c => c.retentionRates[month]);
-      return rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
-    });
-
-    return [{
-      name: 'Retenção Média',
-      data: averages
-    }];
-  }
-
-  mrrCohortSeries() {
-    const cohorts = this.revenueData()?.cohorts || [];
-    return cohorts.map(cohort => ({
-      name: new Date(cohort.month).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
-      data: cohort.mrrByMonth
-    }));
-  }
-
-  ltvSeries() {
-    const cohorts = this.revenueData()?.cohorts || [];
-    return [{
-      name: 'LTV',
-      data: cohorts.map(c => c.ltv)
-    }];
-  }
-
-  cohortComparisonSeries() {
-    const cohorts = this.revenueData()?.cohorts || [];
-    return cohorts.map(cohort => ({
-      name: new Date(cohort.month).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
-      data: cohort.mrrByMonth
-    }));
-  }
-
-  formatCurrency(value: number): string {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
   }
 }

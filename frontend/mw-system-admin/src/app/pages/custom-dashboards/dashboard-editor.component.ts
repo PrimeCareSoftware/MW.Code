@@ -191,6 +191,9 @@ export class DashboardEditorComponent implements OnInit {
   }
 
   addWidget(): void {
+    // TODO: Implement widget library dialog with widget templates
+    // Should open a dialog showing available widget templates from dashboardService.getTemplates()
+    // User selects a template and configures it, then creates a new widget
     console.log('Add widget functionality to be implemented');
   }
 
