@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 /**
  * EmptyState Component
@@ -29,7 +29,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class EmptyStateComponent implements OnInit {
   /**
-   * Icon to display (uses Material Icons or inline SVG)
+   * Icon to display (predefined inline SVG icons)
+   * Available icons: users, calendar, search, inbox, chart, bell
    */
   @Input() icon?: string;
   
@@ -91,7 +92,7 @@ export class EmptyStateComponent implements OnInit {
   /**
    * Sanitized SVG content
    */
-  sanitizedSvg?: SafeHtml;
+  sanitizedSvg?: string | null;
   
   constructor(private sanitizer: DomSanitizer) {}
   

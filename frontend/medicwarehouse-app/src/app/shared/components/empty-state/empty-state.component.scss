@@ -10,7 +10,6 @@
   padding: var(--spacing-20, 5rem) var(--spacing-6, 1.5rem);
   min-height: 400px;
   animation: fadeInUp 500ms ease-out;
-  will-change: transform, opacity;
   
   .empty-state-icon {
     width: 120px;
@@ -146,6 +145,12 @@
 @media (prefers-reduced-motion: reduce) {
   .empty-state {
     animation: none;
-    will-change: auto;
+  }
+  
+  @keyframes fadeInUp {
+    from, to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
 }
