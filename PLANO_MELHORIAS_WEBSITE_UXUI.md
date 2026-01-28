@@ -54,6 +54,11 @@ Este documento detalha o plano completo de melhorias para tornar o PrimeCare Sof
 - Final CTA com background impactante
 
 #### 1.2 Vídeo Demonstrativo
+
+> **Status:** 🚧 EM IMPLEMENTAÇÃO - 80% COMPLETO  
+> **Última Atualização:** 28 de Janeiro de 2026  
+> **Documentação Detalhada:** [VIDEO_DEMONSTRATIVO_SCRIPT.md](./VIDEO_DEMONSTRATIVO_SCRIPT.md), [VIDEO_PRODUCTION_GUIDE.md](./VIDEO_PRODUCTION_GUIDE.md)
+
 **Duração:** 2-3 minutos  
 **Formato:** MP4, 1080p, legendas PT-BR
 
@@ -61,6 +66,14 @@ Este documento detalha o plano completo de melhorias para tornar o PrimeCare Sof
 - 0-15s: Abertura + problema
 - 15s-2min: Features principais (5-6)
 - 2-3min: CTA final
+
+**Progresso:**
+- ✅ Script completo e storyboard detalhado
+- ✅ Guia de produção técnico
+- ✅ Infraestrutura de código (player condicional)
+- ✅ Dados demo preparados
+- ⏳ Produção do vídeo (gravação + edição)
+- ⏳ Publicação e integração
 
 #### 1.3 Cases de Sucesso
 **Página:** `/site/cases` ou seção na homepage

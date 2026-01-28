@@ -1,13 +1,14 @@
 # Prompts Detalhados para Implementação - MedicWarehouse Website
 
-> **Data:** 28 de Janeiro de 2026  
-> **Versão:** 1.0  
+> **Data de Criação:** 28 de Janeiro de 2026  
+> **Última Atualização:** 28 de Janeiro de 2026 (PROMPT 2 implementado)  
+> **Versão:** 1.1  
 > **Uso:** Copiar e colar cada prompt no GitHub Copilot ou agente de IA
 
 ## 📋 Índice de Prompts
 
-1. [PROMPT 1: Redesign da Homepage](#prompt-1)
-2. [PROMPT 2: Vídeo Demonstrativo](#prompt-2)
+1. [PROMPT 1: Redesign da Homepage](#prompt-1) ✅ **IMPLEMENTADO - 100%**
+2. [PROMPT 2: Vídeo Demonstrativo](#prompt-2) 🚧 **EM IMPLEMENTAÇÃO - 80%**
 3. [PROMPT 3: Design System Atualização](#prompt-3)
 4. [PROMPT 4: Tour Guiado/Onboarding](#prompt-4)
 5. [PROMPT 5: Blog Técnico e SEO](#prompt-5)
@@ -700,9 +701,148 @@ não apenas "ficar bonito".
 ---
 
 <a name="prompt-2"></a>
-## PROMPT 2: Vídeo Demonstrativo
+<a name="prompt-2"></a>
+## PROMPT 2: Vídeo Demonstrativo 🚧 **EM IMPLEMENTAÇÃO - 80% COMPLETO**
 
-(Conteúdo completo do prompt já foi incluído no documento PLANO_MELHORIAS_WEBSITE_UXUI.md)
+> **Status:** 🚧 EM IMPLEMENTAÇÃO  
+> **Data de Início:** 28 de Janeiro de 2026  
+> **Última Atualização:** 28 de Janeiro de 2026  
+> **Documentação Detalhada:**  
+> - [VIDEO_DEMONSTRATIVO_SCRIPT.md](./VIDEO_DEMONSTRATIVO_SCRIPT.md) - Script completo e storyboard  
+> - [VIDEO_PRODUCTION_GUIDE.md](./VIDEO_PRODUCTION_GUIDE.md) - Guia técnico de produção  
+> **Ver também:** PLANO_MELHORIAS_WEBSITE_UXUI.md, seção "PROMPT 2"
+
+### 📋 Status de Implementação
+
+#### ✅ Concluído (80%)
+
+- [x] **Script e Storyboard Completo**
+  - [x] Estrutura detalhada do vídeo (0-15s, 15s-2min, 2-3min)
+  - [x] Narração escrita para todas as cenas
+  - [x] 6 features principais identificadas e documentadas
+  - [x] Timing e duração definidos
+  
+- [x] **Guia de Produção Técnico**
+  - [x] Especificações técnicas (1080p, MP4, H.264)
+  - [x] Diretrizes de screen recording
+  - [x] Configurações de edição e pós-produção
+  - [x] Checklist de qualidade e entrega
+  
+- [x] **Infraestrutura de Vídeo na Homepage**
+  - [x] Seção de vídeo atualizada com player condicional
+  - [x] Placeholder elegante para estado "em produção"
+  - [x] Configuração para integração futura (YouTube/Vimeo/self-hosted)
+  - [x] Estilos responsivos e acessíveis
+  
+- [x] **Dados Demo Preparados**
+  - [x] Pacientes fictícios documentados
+  - [x] Consultas de exemplo definidas
+  - [x] Dados financeiros para demonstração
+  - [x] Scripts SQL para popular ambiente
+
+#### ⏳ Pendente (20%)
+
+- [ ] **Produção do Vídeo**
+  - [ ] Gravar screen recordings das 6 features
+  - [ ] Gravar narração profissional em PT-BR
+  - [ ] Edição e montagem do vídeo
+  - [ ] Motion graphics e overlays
+  - [ ] Color grading
+  
+- [ ] **Pós-Produção**
+  - [ ] Adicionar música de fundo (royalty-free)
+  - [ ] Sincronizar áudio e vídeo
+  - [ ] Criar legendas SRT/VTT (PT-BR)
+  - [ ] Export final em múltiplos formatos (1080p, 720p)
+  - [ ] Criar thumbnail atrativo
+  
+- [ ] **Publicação**
+  - [ ] Upload para plataforma (YouTube/Vimeo/AWS S3)
+  - [ ] Atualizar `demoVideoUrl` no componente home.ts
+  - [ ] Testar embedding e responsividade
+  - [ ] Validar acessibilidade (legendas, controles)
+  - [ ] Configurar analytics de vídeo
+
+### 🎯 Objetivo Principal
+
+Criar um vídeo demonstrativo profissional de 2-3 minutos que:
+- Apresente o problema e a solução (0-15s)
+- Demonstre as 6 principais funcionalidades do PrimeCare (15s-2min)
+- Converta espectadores em trial users com CTA claro (2-3min)
+
+### 📊 Features Demonstradas
+
+1. **Agenda Inteligente** (20s) - Agendamento em 3 cliques, lembretes automáticos
+2. **Prontuário Eletrônico** (20s) - Histórico completo, anexos, prescrições digitais
+3. **Gestão Financeira** (20s) - Recibos, controle de pagamentos, relatórios
+4. **Comunicação com Pacientes** (15s) - Lembretes via WhatsApp/SMS
+5. **Relatórios e Analytics** (15s) - Dashboard gerencial, métricas
+6. **Telemedicina** (10s) - Consultas online (bonus)
+
+### 🔧 Integração Técnica
+
+**Localização:** `/frontend/medicwarehouse-app/src/app/pages/site/home/`
+
+**Arquivos Atualizados:**
+- ✅ `home.ts` - Adicionado configuração de vídeo e getter `hasVideo`
+- ✅ `home.html` - Player condicional com @if directive
+- ✅ `home.scss` - Estilos para `.video-player-container`
+
+**Quando o vídeo estiver pronto:**
+```typescript
+// Em home.ts, linha ~21-25
+demoVideoUrl: string = 'https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1&cc_load_policy=1&cc_lang_pref=pt';
+```
+
+### 💰 Orçamento
+
+**Investimento Alocado:** R$ 10.000  
+**Distribuição:**
+- Produção interna (freelancers): R$ 5.000
+- Narrador profissional: R$ 1.000
+- Motion designer: R$ 2.500
+- Música e assets: R$ 500
+- Contingência: R$ 1.000
+
+### 📅 Cronograma
+
+**Tempo Estimado:** 15 dias úteis  
+- Preparação: 2 dias ✅ (Concluído)
+- Gravação: 3 dias ⏳ (Pendente)
+- Edição: 5 dias ⏳ (Pendente)
+- Revisão: 2 dias ⏳ (Pendente)
+- Publicação: 1 dia ⏳ (Pendente)
+
+### 📈 Métricas de Sucesso
+
+**KPIs (3 meses após lançamento):**
+- 1000+ visualizações
+- 50%+ taxa de conclusão (assistem até o fim)
+- 5%+ CTR no botão "Começar Gratuitamente"
+- 20%+ aumento na conversão homepage→trial
+
+### 🎬 Próximos Passos
+
+1. **Imediato:** Contratar/agendar equipe de produção
+2. **Semana 1-2:** Preparar ambiente demo e gravar screen recordings
+3. **Semana 2-3:** Edição, narração e pós-produção
+4. **Semana 3:** Revisão, ajustes e publicação
+5. **Semana 4:** Integração final no site e monitoramento de métricas
+
+### 📝 Notas Importantes
+
+- **Conformidade LGPD:** Usar apenas dados fictícios no vídeo
+- **Acessibilidade:** Legendas PT-BR obrigatórias (WCAG 2.1 AA)
+- **Licenciamento:** Música royalty-free (Epidemic Sound, AudioJungle)
+- **Hosting:** Iniciar com YouTube (gratuito), migrar para Vimeo Pro se necessário
+
+---
+
+**Referências Completas:**  
+Ver [VIDEO_DEMONSTRATIVO_SCRIPT.md](./VIDEO_DEMONSTRATIVO_SCRIPT.md) para script detalhado e storyboard  
+Ver [VIDEO_PRODUCTION_GUIDE.md](./VIDEO_PRODUCTION_GUIDE.md) para guia técnico completo
+
+(Conteúdo original do prompt está documentado em PLANO_MELHORIAS_WEBSITE_UXUI.md)
 
 **Ver:** PLANO_MELHORIAS_WEBSITE_UXUI.md, seção "PROMPT 2"
 

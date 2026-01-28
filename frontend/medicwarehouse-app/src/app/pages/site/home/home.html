@@ -203,35 +203,40 @@
       
       <div class="video-container">
         <div class="video-wrapper">
-          <!-- Placeholder for future video -->
-          <div class="video-placeholder">
-            <div class="video-placeholder-content">
-              <div class="play-button-large">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="24" cy="24" r="23" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/>
-                  <path d="M18 14L34 24L18 34V14Z" fill="white"/>
-                </svg>
+          <!-- Video Player (shown when hasVideo is true) -->
+          @if (hasVideo) {
+            <div class="video-player-container">
+              <iframe 
+                [src]="demoVideoUrl" 
+                title="PrimeCare Software - Vídeo Demonstrativo"
+                loading="eager"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen
+                aria-label="Vídeo demonstrativo do sistema PrimeCare">
+              </iframe>
+            </div>
+          } @else {
+            <!-- Placeholder shown when no video is available -->
+            <div class="video-placeholder">
+              <div class="video-placeholder-content">
+                <div class="play-button-large">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="23" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/>
+                    <path d="M18 14L34 24L18 34V14Z" fill="white"/>
+                  </svg>
+                </div>
+                <p class="video-placeholder-text">Vídeo de demonstração em breve</p>
+                <p class="video-placeholder-subtext">Estamos preparando um conteúdo exclusivo para você</p>
               </div>
-              <p class="video-placeholder-text">Vídeo de demonstração em breve</p>
-              <p class="video-placeholder-subtext">Estamos preparando um conteúdo exclusivo para você</p>
+              <!-- Decorative elements -->
+              <div class="video-bg-pattern">
+                <div class="pattern-circle pattern-circle-1"></div>
+                <div class="pattern-circle pattern-circle-2"></div>
+                <div class="pattern-circle pattern-circle-3"></div>
+              </div>
             </div>
-            <!-- Decorative elements -->
-            <div class="video-bg-pattern">
-              <div class="pattern-circle pattern-circle-1"></div>
-              <div class="pattern-circle pattern-circle-2"></div>
-              <div class="pattern-circle pattern-circle-3"></div>
-            </div>
-          </div>
-          <!-- 
-            Future implementation: Replace placeholder with:
-            <iframe 
-              src="YOUR_VIDEO_URL" 
-              title="PrimeCare System Demo"
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-            </iframe>
-          -->
+          }
         </div>
         
         <div class="video-features">

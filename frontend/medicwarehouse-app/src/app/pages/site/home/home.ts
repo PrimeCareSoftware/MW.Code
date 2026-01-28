@@ -15,6 +15,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   whatsappNumber = environment.whatsappNumber;
   stars = [1, 2, 3, 4, 5]; // Array for star rating (avoid creating new array on each change detection)
   private observer?: IntersectionObserver;
+  
+  // Video configuration
+  // TODO: Replace with actual video URL when video is produced
+  // IMPORTANT: Only use trusted video hosting services (YouTube, Vimeo) to prevent XSS
+  // Accepted URL patterns:
+  // - YouTube: https://www.youtube.com/embed/VIDEO_ID
+  // - Vimeo: https://player.vimeo.com/video/VIDEO_ID
+  demoVideoUrl: string = ''; // Empty = show placeholder
+  
+  get hasVideo(): boolean {
+    return this.demoVideoUrl.trim().length > 0;
+  }
 
   ngOnInit(): void {
     this.setupIntersectionObserver();
