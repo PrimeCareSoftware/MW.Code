@@ -180,6 +180,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<MedicSoft.Domain.Entities.Fiscal.ApuracaoImpostos> ApuracoesImpostos { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.Fiscal.PlanoContas> PlanoContas { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.Fiscal.LancamentoContabil> LancamentosContabeis { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.Fiscal.DRE> DREs { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.Fiscal.BalancoPatrimonial> BalancosPatrimoniais { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -325,6 +327,8 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ApuracaoImpostosConfiguration());
             modelBuilder.ApplyConfiguration(new PlanoContasConfiguration());
             modelBuilder.ApplyConfiguration(new LancamentoContabilConfiguration());
+            modelBuilder.ApplyConfiguration(new DREConfiguration());
+            modelBuilder.ApplyConfiguration(new BalancoPatrimonialConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

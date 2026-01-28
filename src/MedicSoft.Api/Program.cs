@@ -335,6 +335,8 @@ builder.Services.AddScoped<IImpostoNotaRepository, ImpostoNotaRepository>();
 builder.Services.AddScoped<IApuracaoImpostosRepository, ApuracaoImpostosRepository>();
 builder.Services.AddScoped<IPlanoContasRepository, PlanoContasRepository>();
 builder.Services.AddScoped<ILancamentoContabilRepository, LancamentoContabilRepository>();
+builder.Services.AddScoped<IDRERepository, DRERepository>();
+builder.Services.AddScoped<IBalancoPatrimonialRepository, BalancoPatrimonialRepository>();
 
 // Consultation Form Configuration - Repositories
 builder.Services.AddScoped<IConsultationFormProfileRepository, ConsultationFormProfileRepository>();
@@ -393,6 +395,10 @@ builder.Services.AddScoped<IElectronicInvoiceService, ElectronicInvoiceService>(
 // Fiscal Management Services - Phase 3
 builder.Services.AddScoped<ICalculoImpostosService, MedicSoft.Application.Services.Fiscal.CalculoImpostosService>();
 builder.Services.AddScoped<IApuracaoImpostosService, MedicSoft.Application.Services.Fiscal.ApuracaoImpostosService>();
+
+// Fiscal Management Services - Phase 4
+builder.Services.AddScoped<IDREService, MedicSoft.Application.Services.Fiscal.DREService>();
+builder.Services.AddScoped<IBalancoPatrimonialService, MedicSoft.Application.Services.Fiscal.BalancoPatrimonialService>();
 
 // Payment Flow Orchestration Service
 builder.Services.AddScoped<IPaymentFlowService, PaymentFlowService>();
