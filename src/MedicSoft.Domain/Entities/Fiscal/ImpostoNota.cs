@@ -50,5 +50,10 @@ namespace MedicSoft.Domain.Entities.Fiscal
 
         // Navigation
         public virtual ElectronicInvoice? NotaFiscal { get; set; }
+        
+        // Constructors
+        protected ImpostoNota() : base() { }
+        
+        public ImpostoNota(string tenantId) : base(tenantId) { }
     }
 }

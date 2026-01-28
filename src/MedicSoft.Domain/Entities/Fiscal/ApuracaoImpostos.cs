@@ -52,5 +52,10 @@ namespace MedicSoft.Domain.Entities.Fiscal
         // Navigation
         public virtual Clinic? Clinica { get; set; }
         public virtual ICollection<ElectronicInvoice> NotasIncluidas { get; set; } = new List<ElectronicInvoice>();
+        
+        // Constructors
+        protected ApuracaoImpostos() : base() { }
+        
+        public ApuracaoImpostos(string tenantId) : base(tenantId) { }
     }
 }

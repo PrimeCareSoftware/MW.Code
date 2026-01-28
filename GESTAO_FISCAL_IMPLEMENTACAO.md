@@ -1,7 +1,7 @@
 # 📋 Implementação do Módulo de Gestão Fiscal e Contábil
 
-> **Status:** ✅ Fase 1 Completa - Domínio e Entidades  
-> **Data:** Janeiro 2026  
+> **Status:** ✅ Fase 3 Completa - Serviços de Negócio  
+> **Data:** 28 de Janeiro de 2026  
 > **Prompt Base:** [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md)
 
 ---
@@ -172,11 +172,11 @@ PlanoContas (1) ←→ (N) LancamentoContabil
 - [x] Criar migrations para novas tabelas
 - [x] Registrar repositórios no DI container
 
-### Fase 3: Serviços de Negócio
-- [ ] `CalculoImpostosService` - Cálculo automático de tributos
-- [ ] `ApuracaoMensalService` - Consolidação mensal
-- [ ] `SimulaçãoDASService` - Cálculo DAS Simples Nacional
-- [ ] `ContabilizacaoService` - Lançamentos automáticos
+### Fase 3: Serviços de Negócio ✅ COMPLETO
+- [x] `CalculoImpostosService` - Cálculo automático de tributos
+- [x] `ApuracaoImpostosService` - Consolidação mensal e DAS
+- [x] `SimplesNacionalHelper` - Tabelas e cálculos do Simples Nacional
+- [ ] `ContabilizacaoService` - Lançamentos automáticos (Fase 5)
 
 ### Fase 4: Relatórios Contábeis
 - [ ] `DREService` - Demonstração de Resultados
@@ -317,7 +317,7 @@ PlanoContas (1) ←→ (N) LancamentoContabil
 |------|-----------|--------|------|
 | 1 | Domínio e Entidades | ✅ Completo | Jan 2026 |
 | 2 | Repositórios e Migrations | ✅ Completo | Jan 2026 |
-| 3 | Serviços de Cálculo | ⏳ Pendente | - |
+| 3 | Serviços de Cálculo | ✅ Completo | Jan 2026 |
 | 4 | Relatórios Contábeis | ⏳ Pendente | - |
 | 5 | Integrações Externas | ⏳ Pendente | - |
 | 6 | SPED | ⏳ Pendente | - |

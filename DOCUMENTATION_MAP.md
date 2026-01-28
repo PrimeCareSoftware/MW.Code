@@ -148,7 +148,7 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
     - ✅ Manual do usuário ([CRM_USER_MANUAL.md](./CRM_USER_MANUAL.md))
     - ✅ Documentação da API ([CRM_API_DOCUMENTATION.md](./CRM_API_DOCUMENTATION.md))
   - 📋 **Próxima Fase:** Migrations, Services, API Controllers, Frontend Components
-- **Gestão Fiscal e Contábil** ✅ (Fase 1-2 Completas - [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md))
+- **Gestão Fiscal e Contábil** ✅ (Fase 1-3 Completas - [18-gestao-fiscal.md](./Plano_Desenvolvimento/fase-4-analytics-otimizacao/18-gestao-fiscal.md))
   - ✅ **Fase 1: Entidades fiscais (5 arquivos)**
     - ✅ ConfiguracaoFiscal (Regime tributário, Simples Nacional, Alíquotas)
     - ✅ ImpostoNota (Cálculo detalhado ISS, PIS, COFINS, IR, CSLL, INSS)
@@ -161,11 +161,18 @@ Contém o roadmap completo do projeto organizado em fases de prioridade.
     - ✅ Configurações EF Core (5 arquivos)
     - ✅ Migration para criação de tabelas
     - ✅ Registro no DbContext e DI container
+  - ✅ **Fase 3: Serviços de Negócio (5 arquivos)**
+    - ✅ ICalculoImpostosService (Interface)
+    - ✅ IApuracaoImpostosService (Interface)
+    - ✅ CalculoImpostosService (Implementação com suporte a 4 regimes)
+    - ✅ ApuracaoImpostosService (Implementação com gestão de status)
+    - ✅ SimplesNacionalHelper (Tabelas oficiais Anexo III e V)
   - ✅ **Documentação técnica**
     - ✅ Implementação completa ([GESTAO_FISCAL_IMPLEMENTACAO.md](./GESTAO_FISCAL_IMPLEMENTACAO.md))
     - ✅ Resumo Fase 1 ([GESTAO_FISCAL_RESUMO_FASE1.md](./GESTAO_FISCAL_RESUMO_FASE1.md))
     - ✅ Resumo Fase 2 ([GESTAO_FISCAL_RESUMO_FASE2.md](./GESTAO_FISCAL_RESUMO_FASE2.md))
-  - 📋 **Próximas Fases:** Serviços de Cálculo, DRE/Balanço, Integração Contábil (Domínio, ContaAzul, Omie), SPED, API, Frontend
+    - ✅ Resumo Fase 3 ([GESTAO_FISCAL_RESUMO_FASE3.md](./GESTAO_FISCAL_RESUMO_FASE3.md))
+  - 📋 **Próximas Fases:** Controllers REST/DTOs, Contabilização Automática, DRE/Balanço, Integração Contábil (Domínio, ContaAzul, Omie), SPED, Frontend, Jobs Automatizados
 - Acessibilidade WCAG
 
 #### 🔵 Fase 5 - Enterprise (P3 - Baixa)
