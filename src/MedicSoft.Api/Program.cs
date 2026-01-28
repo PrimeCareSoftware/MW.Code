@@ -594,6 +594,9 @@ if (requireHttps)
     app.UseHttpsRedirection();
 }
 
+// Enable routing (required before CORS for proper endpoint matching)
+app.UseRouting();
+
 // Use secure CORS policy
 app.UseCors("SecurePolicy");
 
