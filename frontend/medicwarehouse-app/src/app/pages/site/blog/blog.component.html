@@ -1,0 +1,176 @@
+<app-header></app-header>
+
+<main class="blog-page">
+  <!-- Hero Section -->
+  <section class="blog-hero">
+    <div class="container">
+      <h1 class="hero-title">Blog PrimeCare</h1>
+      <p class="hero-subtitle">
+        Conteúdo exclusivo sobre gestão clínica, tecnologia em saúde e muito mais
+      </p>
+      
+      <!-- Search -->
+      <div class="search-bar">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (keyup.enter)="onSearch()"
+          placeholder="Buscar artigos..."
+          class="search-input"
+          aria-label="Buscar artigos"
+        />
+        <button 
+          type="button" 
+          (click)="onSearch()" 
+          class="search-button"
+          aria-label="Buscar"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="8" cy="8" r="6" />
+            <path d="M14 14l4 4" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Main Content -->
+  <section class="blog-content">
+    <div class="container">
+      <div class="blog-layout">
+        <!-- Sidebar -->
+        <aside class="blog-sidebar">
+          <!-- Categories -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Categorias</h3>
+            <ul class="category-list">
+              <li>
+                <button 
+                  type="button"
+                  (click)="onCategorySelect(null)"
+                  [class.active]="selectedCategory === null"
+                  class="category-item"
+                >
+                  Todas
+                </button>
+              </li>
+              <li *ngFor="let category of categories">
+                <button 
+                  type="button"
+                  (click)="onCategorySelect(category.slug)"
+                  [class.active]="selectedCategory === category.slug"
+                  class="category-item"
+                >
+                  {{ category.name }}
+                  <span class="count">({{ category.articleCount }})</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Popular Articles -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Artigos Populares</h3>
+            <ul class="popular-list">
+              <li *ngFor="let article of popularArticles">
+                <a 
+                  [routerLink]="['/blog', article.slug]"
+                  class="popular-item"
+                  (click)="trackArticleClick(article)"
+                >
+                  <h4>{{ article.title }}</h4>
+                  <div class="meta">
+                    <span class="views">{{ article.views }} visualizações</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </aside>
+        
+        <!-- Articles Grid -->
+        <div class="blog-main">
+          <!-- Loading State -->
+          <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Carregando artigos...</p>
+          </div>
+          
+          <!-- Empty State -->
+          <div *ngIf="!isLoading && articles.length === 0" class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M32 4L52 16V48L32 60L12 48V16L32 4Z" />
+              <path d="M32 20V32M32 40V40.01" stroke-linecap="round" />
+            </svg>
+            <h3>Nenhum artigo encontrado</h3>
+            <p>Tente ajustar seus filtros ou busca</p>
+          </div>
+          
+          <!-- Articles Grid -->
+          <div *ngIf="!isLoading && articles.length > 0" class="articles-grid">
+            <article *ngFor="let article of articles" class="article-card">
+              <a 
+                [routerLink]="['/blog', article.slug]"
+                class="article-link"
+                (click)="trackArticleClick(article)"
+              >
+                <div *ngIf="article.featuredImage" class="article-image">
+                  <img [src]="article.featuredImage" [alt]="article.title" />
+                </div>
+                <div class="article-content">
+                  <div class="article-meta">
+                    <span class="category">{{ article.category }}</span>
+                    <span class="read-time">{{ article.readTime }} min</span>
+                  </div>
+                  <h2 class="article-title">{{ article.title }}</h2>
+                  <p class="article-excerpt">{{ article.excerpt }}</p>
+                  <div class="article-footer">
+                    <div class="author">
+                      <img 
+                        *ngIf="article.author.avatar" 
+                        [src]="article.author.avatar" 
+                        [alt]="article.author.name"
+                        class="author-avatar"
+                      />
+                      <span class="author-name">{{ article.author.name }}</span>
+                    </div>
+                    <time [attr.datetime]="article.publishedAt">
+                      {{ article.publishedAt | date: 'dd/MM/yyyy' }}
+                    </time>
+                  </div>
+                </div>
+              </a>
+            </article>
+          </div>
+          
+          <!-- Pagination -->
+          <div *ngIf="!isLoading && articles.length > 0 && totalPages > 1" class="pagination">
+            <button 
+              type="button"
+              (click)="onPageChange(currentPage - 1)"
+              [disabled]="currentPage === 1"
+              class="pagination-button"
+              aria-label="Página anterior"
+            >
+              Anterior
+            </button>
+            <span class="pagination-info">
+              Página {{ currentPage }} de {{ totalPages }}
+            </span>
+            <button 
+              type="button"
+              (click)="onPageChange(currentPage + 1)"
+              [disabled]="currentPage === totalPages"
+              class="pagination-button"
+              aria-label="Próxima página"
+            >
+              Próxima
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
