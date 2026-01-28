@@ -515,6 +515,8 @@ Authorization: Bearer {jwt_token}
 
 ### cURL Examples
 
+**Note:** Replace `https://api.primecare.com` with your actual API base URL.
+
 **Get Dashboard Metrics:**
 ```bash
 curl -X GET "https://api.primecare.com/api/system-admin/saas-metrics/dashboard" \
@@ -567,6 +569,8 @@ await fetch(`${API_URL}/system-admin/notifications/${notificationId}/read`, {
 ---
 
 ## 📞 Support
+
+**Note:** The contact information below may be placeholders. Please verify with your organization's actual support contacts.
 
 For API support, contact: dev@primecare.com.br
 

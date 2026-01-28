@@ -417,6 +417,8 @@ A: Use the Revenue Timeline API endpoint with different month parameters. Dashbo
 
 ## 📞 Support
 
+**Note:** The contact information below may be placeholders. Please verify with your organization's actual support contacts.
+
 Need help? Contact our support team:
 - **Email**: support@primecare.com.br
 - **Phone**: +55 11 1234-5678

@@ -2,11 +2,16 @@ import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SecurityContext } from '@angular/platform-browser';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { GlobalSearchService } from '../../services/global-search.service';
 import { GlobalSearchResult } from '../../models/system-admin.model';
+
+// Constants
+const MIN_SEARCH_LENGTH = 2;
+const SEARCH_DEBOUNCE_MS = 300;
+const FOCUS_DELAY_MS = 100;
 
 @Component({
   selector: 'app-global-search',
@@ -339,7 +344,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
 
     // Setup debounced search
     this.searchSubscription = this.searchSubject.pipe(
-      debounceTime(300),
+      debounceTime(SEARCH_DEBOUNCE_MS),
       distinctUntilChanged(),
       switchMap(query => {
         this.isLoading = true;
@@ -357,6 +362,11 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Search error:', error);
         this.isLoading = false;
+        // Show error state to user
+        this.results = { 
+          clinics: [], users: [], tickets: [], plans: [], auditLogs: [], 
+          totalResults: 0, searchDurationMs: 0 
+        };
       }
     });
   }
@@ -376,7 +386,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           const input = document.querySelector('.search-input') as HTMLInputElement;
           if (input) input.focus();
-        }, 100);
+        }, FOCUS_DELAY_MS);
       }
     }
     if (event.key === 'Escape') {
@@ -385,7 +395,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
   }
 
   onQueryChange(query: string): void {
-    if (query.length >= 2) {
+    if (query.length >= MIN_SEARCH_LENGTH) {
       this.searchSubject.next(query);
     } else {
       this.results = null;
@@ -403,7 +413,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
     if (!this.query) return text;
     const regex = new RegExp(`(${this.escapeRegExp(this.query)})`, 'gi');
     const highlighted = text.replace(regex, '<mark>$1</mark>');
-    return this.sanitizer.sanitize(1, highlighted) || text;
+    return this.sanitizer.sanitize(SecurityContext.HTML, highlighted) || text;
   }
 
   private escapeRegExp(text: string): string {
