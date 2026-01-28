@@ -397,7 +397,6 @@ ou ligue: 0800 123 4567
   <iframe 
     src="https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1&cc_load_policy=1&cc_lang_pref=pt"
     title="PrimeCare Software - Vídeo Demonstrativo"
-    frameborder="0" 
     loading="lazy"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
     allowfullscreen>
