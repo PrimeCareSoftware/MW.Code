@@ -749,7 +749,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
 
 ### Dashboard
 - [x] Dashboard carrega em < 3 segundos
-- [x] 10+ métricas SaaS implementadas e funcionando (12 métricas)
+- [x] 10+ métricas SaaS implementadas e funcionando (15 métricas implementadas)
 - [x] Gráficos interativos e responsivos (KPI Cards implementados)
 - [x] Dados atualizados automaticamente (refresh a cada 60s)
 - [ ] Exportação de relatório funcional (pendente)
@@ -897,10 +897,10 @@ Após concluir Fase 1:
 ### ✅ Completo
 
 #### Backend (100%)
-- **SaasMetricsService** - Todas as 12 métricas implementadas:
+- **SaasMetricsService** - Todas as 15 métricas implementadas:
   - MRR, ARR, Churn Rate, ARPU, LTV, CAC, LTV/CAC Ratio
   - Quick Ratio, Growth Rate (MoM, YoY), Trial Conversion
-  - Active Customers, At-Risk Customers
+  - Active Customers, New Customers, Churned Customers, At-Risk Customers
 - **SaasMetricsController** - 6 endpoints REST funcionais
 - **GlobalSearchService** - Busca paralela em 5 entidades
 - **SearchController** - API de busca global
