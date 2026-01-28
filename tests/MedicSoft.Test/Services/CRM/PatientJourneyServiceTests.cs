@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using MedicSoft.Api.Services.CRM;
+using MedicSoft.Application.DTOs.CRM;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
@@ -139,14 +140,16 @@ namespace MedicSoft.Test.Services.CRM
             var pacienteId = Guid.NewGuid();
             var journey = await _service.GetOrCreateJourneyAsync(pacienteId, _testTenantId);
 
+            var updateDto = new UpdatePatientJourneyMetricsDto
+            {
+                LifetimeValue = 1500.00m,
+                NpsScore = 9,
+                SatisfactionScore = 4.5,
+                ChurnRisk = ChurnRiskLevel.Low
+            };
+
             // Act
-            await _service.UpdateMetricsAsync(
-                pacienteId,
-                lifetimeValue: 1500.00m,
-                npsScore: 9,
-                satisfactionScore: 4.5,
-                churnRisk: ChurnRiskLevel.Low,
-                _testTenantId);
+            await _service.UpdateMetricsAsync(pacienteId, updateDto, _testTenantId);
 
             // Assert
             var updated = await _service.GetOrCreateJourneyAsync(pacienteId, _testTenantId);
@@ -163,8 +166,15 @@ namespace MedicSoft.Test.Services.CRM
             var pacienteId = Guid.NewGuid();
             var journey = await _service.GetOrCreateJourneyAsync(pacienteId, _testTenantId);
             
-            await _service.UpdateMetricsAsync(
-                pacienteId, 2000.00m, 10, 5.0, ChurnRiskLevel.Low, _testTenantId);
+            var updateDto = new UpdatePatientJourneyMetricsDto
+            {
+                LifetimeValue = 2000.00m,
+                NpsScore = 10,
+                SatisfactionScore = 5.0,
+                ChurnRisk = ChurnRiskLevel.Low
+            };
+            
+            await _service.UpdateMetricsAsync(pacienteId, updateDto, _testTenantId);
 
             // Act
             var metrics = await _service.GetMetricsAsync(pacienteId, _testTenantId);

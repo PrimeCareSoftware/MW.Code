@@ -6,10 +6,29 @@ using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers.CRM
 {
+    /// <summary>
+    /// Survey Controller
+    /// 
+    /// Manages patient satisfaction surveys and feedback collection. Provides comprehensive endpoints
+    /// for creating survey templates, distributing surveys to patients, collecting responses, and
+    /// analyzing survey data for insights into patient satisfaction and experience.
+    /// </summary>
+    /// <remarks>
+    /// This controller enables:
+    /// - Survey template creation and management
+    /// - Survey distribution to specific patients or groups
+    /// - Response collection and validation
+    /// - Analytics and reporting on survey results
+    /// - Survey lifecycle management (activation, deactivation, archival)
+    /// 
+    /// Surveys are valuable tools for understanding patient satisfaction, gathering feedback on
+    /// specific services or encounters, and driving continuous improvement initiatives.
+    /// </remarks>
     [Authorize]
     [ApiController]
     [Route("api/crm/survey")]
     [Produces("application/json")]
+    [ApiExplorerSettings(GroupName = "CRM - Survey Management")]
     public class SurveyController : BaseController
     {
         private readonly ISurveyService _surveyService;
@@ -28,8 +47,17 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Get all surveys
         /// </summary>
+        /// <remarks>
+        /// Retrieves a complete list of all survey templates in the system regardless of their
+        /// active status. Results include archived, active, and draft surveys filtered by the
+        /// current tenant context.
+        /// </remarks>
+        /// <returns>A collection of all survey templates and configurations.</returns>
+        /// <response code="200">Successfully retrieved all surveys</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SurveyDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<SurveyDto>>> GetAll()
         {
             try
@@ -48,8 +76,16 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Get active surveys
         /// </summary>
+        /// <remarks>
+        /// Retrieves only the currently active survey templates that are available for distribution
+        /// to patients. Excluded surveys that are draft, paused, or archived.
+        /// </remarks>
+        /// <returns>A collection of active survey templates.</returns>
+        /// <response code="200">Successfully retrieved active surveys</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpGet("active")]
         [ProducesResponseType(typeof(IEnumerable<SurveyDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<SurveyDto>>> GetActive()
         {
             try
@@ -68,9 +104,20 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Get a specific survey by ID
         /// </summary>
+        /// <remarks>
+        /// Retrieves detailed information about a single survey template including questions, answer options,
+        /// scoring rules, and distribution settings. Includes metadata about creation, activation dates,
+        /// and current response counts.
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey to retrieve.</param>
+        /// <returns>The detailed survey configuration and metadata.</returns>
+        /// <response code="200">Successfully retrieved the survey</response>
+        /// <response code="404">Survey not found or does not belong to the current tenant</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(SurveyDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SurveyDto>> GetById(Guid id)
         {
             try
@@ -93,9 +140,26 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Create a new survey
         /// </summary>
+        /// <remarks>
+        /// Creates a new survey template with specified questions, answer options, and distribution rules.
+        /// Surveys are created in draft state and must be activated before they can be sent to patients.
+        /// 
+        /// Business Logic:
+        /// - Validates survey structure (minimum required questions, valid answer options)
+        /// - Ensures unique survey names within the tenant
+        /// - Initializes survey with default scoring and analysis settings
+        /// - Records creation metadata and user information
+        /// - Returns created survey with assigned ID for subsequent operations
+        /// </remarks>
+        /// <param name="dto">The survey creation request containing template configuration and questions.</param>
+        /// <returns>The newly created survey template with assigned ID and default settings.</returns>
+        /// <response code="201">Successfully created the survey; Location header contains resource URL</response>
+        /// <response code="400">Invalid request data or survey structure validation error</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpPost]
         [ProducesResponseType(typeof(SurveyDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SurveyDto>> Create([FromBody] CreateSurveyDto dto)
         {
             if (!ModelState.IsValid)
@@ -121,10 +185,29 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Update an existing survey
         /// </summary>
+        /// <remarks>
+        /// Updates the configuration of an existing survey template. Changes can include question modifications,
+        /// answer options, scoring rules, and distribution settings. Active surveys must be deactivated
+        /// before major structural changes are allowed.
+        /// 
+        /// Business Logic:
+        /// - Prevents changes to questions if responses have been collected (to maintain data integrity)
+        /// - Allows metadata and distribution setting updates on active surveys
+        /// - Validates all configuration changes before persistence
+        /// - Maintains version history for audit trail
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey to update.</param>
+        /// <param name="dto">The survey update request with modified configuration.</param>
+        /// <returns>The updated survey template.</returns>
+        /// <response code="200">Successfully updated the survey</response>
+        /// <response code="404">Survey not found or does not belong to the current tenant</response>
+        /// <response code="400">Invalid request data or configuration validation error</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(SurveyDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SurveyDto>> Update(
             Guid id, 
             [FromBody] UpdateSurveyDto dto)
@@ -152,9 +235,26 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Delete a survey
         /// </summary>
+        /// <remarks>
+        /// Permanently deletes a survey template from the system. Deleted surveys cannot be recovered.
+        /// Response data for deleted surveys is retained for historical and compliance purposes.
+        /// Active surveys must be deactivated before deletion.
+        /// 
+        /// Business Logic:
+        /// - Prevents deletion of currently active surveys
+        /// - Archives all response data before deletion
+        /// - Removes survey from active distribution queues
+        /// - Returns 404 if survey not found or already deleted
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey to delete.</param>
+        /// <returns>No content on successful deletion.</returns>
+        /// <response code="204">Successfully deleted the survey</response>
+        /// <response code="404">Survey not found or does not belong to the current tenant</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -177,9 +277,26 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Activate a survey
         /// </summary>
+        /// <remarks>
+        /// Activates a survey template, making it available for distribution to patients. Only active
+        /// surveys can be sent out. A survey can be deactivated and reactivated multiple times without
+        /// losing collected response data.
+        /// 
+        /// Business Logic:
+        /// - Validates survey configuration before activation
+        /// - Records activation timestamp and user information
+        /// - Updates survey status in distribution system
+        /// - Enables automated distribution workflows if configured
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey to activate.</param>
+        /// <returns>Success message confirming activation.</returns>
+        /// <response code="200">Successfully activated the survey</response>
+        /// <response code="404">Survey not found or does not belong to the current tenant</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpPost("{id}/activate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Activate(Guid id)
         {
             try
@@ -202,9 +319,26 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Deactivate a survey
         /// </summary>
+        /// <remarks>
+        /// Deactivates a survey template, preventing further distribution to patients. Existing
+        /// distributed surveys may still be completed by patients. Deactivated surveys can be
+        /// reactivated without losing any response data.
+        /// 
+        /// Business Logic:
+        /// - Removes survey from active distribution queues
+        /// - Stops automated distribution workflows
+        /// - Preserves all collected response data
+        /// - Records deactivation timestamp and user information
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey to deactivate.</param>
+        /// <returns>Success message confirming deactivation.</returns>
+        /// <response code="200">Successfully deactivated the survey</response>
+        /// <response code="404">Survey not found or does not belong to the current tenant</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpPost("{id}/deactivate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Deactivate(Guid id)
         {
             try
@@ -227,9 +361,27 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Submit survey response
         /// </summary>
+        /// <remarks>
+        /// Submits a patient's survey responses for a specific survey. Responses are validated against
+        /// survey configuration (answer options, required fields, etc.) before acceptance. Once submitted,
+        /// responses are immediately available for analytics and are reflected in survey metrics.
+        /// 
+        /// Business Logic:
+        /// - Validates response data against survey structure
+        /// - Ensures all required questions are answered
+        /// - Calculates scoring based on survey rules
+        /// - Records submission timestamp and patient identifier
+        /// - Triggers any post-submission automations or notifications
+        /// </remarks>
+        /// <param name="dto">The survey response submission containing answers to survey questions.</param>
+        /// <returns>The recorded survey response with confirmation and timestamps.</returns>
+        /// <response code="201">Successfully submitted the survey response</response>
+        /// <response code="400">Invalid response data or validation error (incomplete answers, invalid options, etc.)</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpPost("response")]
         [ProducesResponseType(typeof(SurveyResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SurveyResponseDto>> SubmitResponse([FromBody] SubmitSurveyResponseDto dto)
         {
             if (!ModelState.IsValid)
@@ -255,9 +407,20 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Get survey responses
         /// </summary>
+        /// <remarks>
+        /// Retrieves all responses submitted for a specific survey. Results include detailed response
+        /// data, submission timestamps, and calculated scores. Useful for analyzing individual responses
+        /// or exporting data for external analysis.
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey whose responses will be retrieved.</param>
+        /// <returns>A collection of survey responses with details and scores.</returns>
+        /// <response code="200">Successfully retrieved survey responses</response>
+        /// <response code="404">Survey not found or does not belong to the current tenant</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpGet("{id}/responses")]
         [ProducesResponseType(typeof(IEnumerable<SurveyResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<SurveyResponseDto>>> GetResponses(Guid id)
         {
             try
@@ -276,9 +439,27 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Get survey analytics
         /// </summary>
+        /// <remarks>
+        /// Retrieves comprehensive analytics and insights for a specific survey. Analytics include
+        /// response rate statistics, score distributions, answer frequency breakdowns, and identified
+        /// trends or patterns in the data.
+        /// 
+        /// Analytics Include:
+        /// - Total responses and response rate percentage
+        /// - Average scores and score distribution
+        /// - Per-question answer frequency and percentages
+        /// - Response timeline and completion patterns
+        /// - Key insights and identified trends
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey whose analytics will be retrieved.</param>
+        /// <returns>The analytics object containing comprehensive survey insights and statistics.</returns>
+        /// <response code="200">Successfully retrieved survey analytics</response>
+        /// <response code="404">Survey not found or does not belong to the current tenant</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpGet("{id}/analytics")]
         [ProducesResponseType(typeof(SurveyAnalyticsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SurveyAnalyticsDto>> GetAnalytics(Guid id)
         {
             try
@@ -301,9 +482,28 @@ namespace MedicSoft.Api.Controllers.CRM
         /// <summary>
         /// Send survey to patient
         /// </summary>
+        /// <remarks>
+        /// Sends an active survey to a specific patient via their preferred communication channel
+        /// (email, SMS, in-portal notification, etc.). The survey is recorded as sent and a completion
+        /// reminder can be automatically scheduled.
+        /// 
+        /// Business Logic:
+        /// - Validates survey is active and patient exists
+        /// - Records survey distribution timestamp
+        /// - Determines and uses patient's preferred communication channel
+        /// - Generates unique survey link for patient
+        /// - Schedules reminder notifications if configured
+        /// </remarks>
+        /// <param name="id">The unique identifier (GUID) of the survey to send.</param>
+        /// <param name="patientId">The unique identifier (GUID) of the patient to receive the survey.</param>
+        /// <returns>Success message confirming survey distribution.</returns>
+        /// <response code="200">Successfully sent survey to patient</response>
+        /// <response code="404">Survey or patient not found or does not belong to the current tenant</response>
+        /// <response code="500">An unexpected error occurred while processing the request</response>
         [HttpPost("{id}/send/{patientId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SendToPatient(Guid id, Guid patientId)
         {
             try
