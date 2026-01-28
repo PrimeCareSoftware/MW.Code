@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -28,24 +29,33 @@ namespace MedicSoft.Application.Services.Fiscal.Integracoes
     /// </summary>
     public class IntegracaoContabilService : IIntegracaoContabilService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguracaoIntegracaoRepository _configuracaoRepository;
+        private readonly IPlanoContasRepository _planoContasRepository;
+        private readonly ILancamentoContabilRepository _lancamentoRepository;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<IntegracaoContabilService> _logger;
 
         public IntegracaoContabilService(
-            IUnitOfWork unitOfWork,
+            IConfiguracaoIntegracaoRepository configuracaoRepository,
+            IPlanoContasRepository planoContasRepository,
+            ILancamentoContabilRepository lancamentoRepository,
             IHttpClientFactory httpClientFactory,
+            ILoggerFactory loggerFactory,
             ILogger<IntegracaoContabilService> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _configuracaoRepository = configuracaoRepository ?? throw new ArgumentNullException(nameof(configuracaoRepository));
+            _planoContasRepository = planoContasRepository ?? throw new ArgumentNullException(nameof(planoContasRepository));
+            _lancamentoRepository = lancamentoRepository ?? throw new ArgumentNullException(nameof(lancamentoRepository));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IContabilIntegration?> ObterIntegracaoAsync(Guid clinicaId)
         {
             // Buscar configuração de integração
-            var configuracao = await BuscarConfiguracaoAsync(clinicaId);
+            var configuracao = await _configuracaoRepository.ObterConfiguracaoAtivaAsync(clinicaId);
             
             if (configuracao == null || !configuracao.Ativa)
             {
@@ -84,13 +94,14 @@ namespace MedicSoft.Application.Services.Fiscal.Integracoes
             try
             {
                 var resultado = await integracao.EnviarLancamentoAsync(lancamento);
-                await AtualizarUltimaSincronizacaoAsync(clinicaId);
+                await _configuracaoRepository.AtualizarUltimaSincronizacaoAsync(clinicaId, DateTime.UtcNow);
+                await _configuracaoRepository.LimparErrosAsync(clinicaId);
                 return resultado;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao enviar lançamento {LancamentoId}", lancamento.Id);
-                await RegistrarErroIntegracaoAsync(clinicaId, ex.Message);
+                await _configuracaoRepository.RegistrarErroAsync(clinicaId, ex.Message);
                 throw;
             }
         }
@@ -108,12 +119,13 @@ namespace MedicSoft.Application.Services.Fiscal.Integracoes
                 
                 if (resultado.Sucesso)
                 {
-                    await AtualizarUltimaSincronizacaoAsync(clinicaId);
+                    await _configuracaoRepository.AtualizarUltimaSincronizacaoAsync(clinicaId, DateTime.UtcNow);
+                    await _configuracaoRepository.LimparErrosAsync(clinicaId);
                 }
                 else
                 {
                     var mensagemErro = $"{resultado.TotalErros} erro(s) no envio do lote";
-                    await RegistrarErroIntegracaoAsync(clinicaId, mensagemErro);
+                    await _configuracaoRepository.RegistrarErroAsync(clinicaId, mensagemErro);
                 }
                 
                 return resultado;
@@ -121,7 +133,7 @@ namespace MedicSoft.Application.Services.Fiscal.Integracoes
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao enviar lote de lançamentos para clínica {ClinicaId}", clinicaId);
-                await RegistrarErroIntegracaoAsync(clinicaId, ex.Message);
+                await _configuracaoRepository.RegistrarErroAsync(clinicaId, ex.Message);
                 throw;
             }
         }
@@ -136,13 +148,14 @@ namespace MedicSoft.Application.Services.Fiscal.Integracoes
             try
             {
                 var resultado = await integracao.EnviarPlanoContasAsync(contas);
-                await AtualizarUltimaSincronizacaoAsync(clinicaId);
+                await _configuracaoRepository.AtualizarUltimaSincronizacaoAsync(clinicaId, DateTime.UtcNow);
+                await _configuracaoRepository.LimparErrosAsync(clinicaId);
                 return resultado;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao enviar plano de contas para clínica {ClinicaId}", clinicaId);
-                await RegistrarErroIntegracaoAsync(clinicaId, ex.Message);
+                await _configuracaoRepository.RegistrarErroAsync(clinicaId, ex.Message);
                 throw;
             }
         }
@@ -202,14 +215,15 @@ namespace MedicSoft.Application.Services.Fiscal.Integracoes
                     }
                 }
 
-                await AtualizarUltimaSincronizacaoAsync(clinicaId);
+                await _configuracaoRepository.AtualizarUltimaSincronizacaoAsync(clinicaId, DateTime.UtcNow);
+                await _configuracaoRepository.LimparErrosAsync(clinicaId);
                 _logger.LogInformation("Sincronização concluída com sucesso");
                 return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro na sincronização da clínica {ClinicaId}", clinicaId);
-                await RegistrarErroIntegracaoAsync(clinicaId, ex.Message);
+                await _configuracaoRepository.RegistrarErroAsync(clinicaId, ex.Message);
                 return false;
             }
         }
@@ -222,56 +236,45 @@ namespace MedicSoft.Application.Services.Fiscal.Integracoes
             {
                 ProvedorIntegracao.Dominio => new DominioIntegration(
                     httpClient, 
-                    _logger as ILogger<DominioIntegration> ?? throw new InvalidOperationException(), 
+                    _loggerFactory.CreateLogger<DominioIntegration>(), 
                     configuracao),
                     
                 ProvedorIntegracao.ContaAzul => new ContaAzulIntegration(
                     httpClient, 
-                    _logger as ILogger<ContaAzulIntegration> ?? throw new InvalidOperationException(), 
+                    _loggerFactory.CreateLogger<ContaAzulIntegration>(), 
                     configuracao),
                     
                 ProvedorIntegracao.Omie => new OmieIntegration(
                     httpClient, 
-                    _logger as ILogger<OmieIntegration> ?? throw new InvalidOperationException(), 
+                    _loggerFactory.CreateLogger<OmieIntegration>(), 
                     configuracao),
                     
                 _ => throw new NotSupportedException($"Provedor {configuracao.Provedor} não suportado")
             };
         }
 
-        private async Task<ConfiguracaoIntegracao?> BuscarConfiguracaoAsync(Guid clinicaId)
-        {
-            // Placeholder - deve ser implementado com repositório real
-            await Task.CompletedTask;
-            return null;
-        }
-
         private async Task<List<PlanoContas>> BuscarPlanoContasAsync(Guid clinicaId)
         {
-            // Placeholder - deve ser implementado com repositório real
-            await Task.CompletedTask;
-            return new List<PlanoContas>();
+            // Buscar todas as contas ativas da clínica usando a clínica como tenant
+            var clinicaIdStr = clinicaId.ToString();
+            var todasContas = await _planoContasRepository.GetAllAsync(clinicaIdStr);
+            return todasContas
+                .Where(p => p.ClinicaId == clinicaId && p.Ativa)
+                .OrderBy(p => p.Codigo)
+                .ToList();
         }
 
         private async Task<List<LancamentoContabil>> BuscarLancamentosAsync(Guid clinicaId, DateTime inicio, DateTime fim)
         {
-            // Placeholder - deve ser implementado com repositório real
-            await Task.CompletedTask;
-            return new List<LancamentoContabil>();
-        }
-
-        private async Task AtualizarUltimaSincronizacaoAsync(Guid clinicaId)
-        {
-            // Placeholder - deve atualizar a data de última sincronização
-            await Task.CompletedTask;
-            _logger.LogDebug("Última sincronização atualizada para clínica {ClinicaId}", clinicaId);
-        }
-
-        private async Task RegistrarErroIntegracaoAsync(Guid clinicaId, string mensagem)
-        {
-            // Placeholder - deve registrar erro no banco
-            await Task.CompletedTask;
-            _logger.LogWarning("Erro registrado para clínica {ClinicaId}: {Mensagem}", clinicaId, mensagem);
+            // Buscar lançamentos do período usando a clínica como tenant
+            var clinicaIdStr = clinicaId.ToString();
+            var todosLancamentos = await _lancamentoRepository.GetAllAsync(clinicaIdStr);
+            return todosLancamentos
+                .Where(l => l.ClinicaId == clinicaId 
+                         && l.DataLancamento >= inicio 
+                         && l.DataLancamento <= fim)
+                .OrderBy(l => l.DataLancamento)
+                .ToList();
         }
     }
 }
