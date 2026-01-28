@@ -104,18 +104,22 @@ export class ClinicsList implements OnInit {
   }
 
   loadSegmentCounts(): void {
-    // Load counts for each segment (simplified - in production, use dedicated endpoint)
+    // Load counts for each segment
     const segments = ['new', 'trial', 'at-risk', 'healthy', 'needs-attention'];
     segments.forEach(segment => {
       this.systemAdminService.getClinicsBySegment(segment).subscribe({
         next: (response) => {
-          const counts = this.segmentCounts();
-          if (segment === 'new') counts.new = response.totalCount;
-          else if (segment === 'trial') counts.trial = response.totalCount;
-          else if (segment === 'at-risk') counts.atRisk = response.totalCount;
-          else if (segment === 'healthy') counts.healthy = response.totalCount;
-          else if (segment === 'needs-attention') counts.needsAttention = response.totalCount;
-          this.segmentCounts.set(counts);
+          // Create a new object to maintain immutability
+          const currentCounts = this.segmentCounts();
+          const updatedCounts = { ...currentCounts };
+          
+          if (segment === 'new') updatedCounts.new = response.totalCount;
+          else if (segment === 'trial') updatedCounts.trial = response.totalCount;
+          else if (segment === 'at-risk') updatedCounts.atRisk = response.totalCount;
+          else if (segment === 'healthy') updatedCounts.healthy = response.totalCount;
+          else if (segment === 'needs-attention') updatedCounts.needsAttention = response.totalCount;
+          
+          this.segmentCounts.set(updatedCounts);
         },
         error: (err) => {
           console.error(`Error loading segment ${segment}:`, err);
@@ -208,14 +212,11 @@ export class ClinicsList implements OnInit {
   }
 
   toggleTagSelection(tagId: string): void {
-    const tags = this.selectedTags();
-    const index = tags.indexOf(tagId);
-    if (index > -1) {
-      tags.splice(index, 1);
-    } else {
-      tags.push(tagId);
-    }
-    this.selectedTags.set([...tags]);
+    const currentTags = this.selectedTags();
+    const updatedTags = currentTags.includes(tagId)
+      ? currentTags.filter(id => id !== tagId)
+      : [...currentTags, tagId];
+    this.selectedTags.set(updatedTags);
   }
 
   isTagSelected(tagId: string): boolean {

@@ -19,6 +19,9 @@ export class CrossTenantUsers implements OnInit {
   loading = signal(true);
   error = signal<string | null>(null);
   
+  // Constants
+  private readonly MIN_PASSWORD_LENGTH = 8;
+  
   // Filters
   searchTerm = signal('');
   selectedRole = signal<string | undefined>(undefined);
@@ -104,8 +107,8 @@ export class CrossTenantUsers implements OnInit {
   }
 
   resetPassword(): void {
-    if (!this.newPassword || this.newPassword.length < 8) {
-      this.resetError.set('A senha deve ter no mínimo 8 caracteres');
+    if (!this.newPassword || this.newPassword.length < this.MIN_PASSWORD_LENGTH) {
+      this.resetError.set(`A senha deve ter no mínimo ${this.MIN_PASSWORD_LENGTH} caracteres`);
       return;
     }
 
