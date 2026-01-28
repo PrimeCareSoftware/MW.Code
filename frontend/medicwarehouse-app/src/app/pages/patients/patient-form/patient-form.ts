@@ -12,6 +12,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { CpfMaskDirective } from '../../../directives/cpf-mask.directive';
 import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
 import { CepMaskDirective } from '../../../directives/cep-mask.directive';
+import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-reader.service';
 
 @Component({
   selector: 'app-patient-form',
@@ -50,7 +51,8 @@ export class PatientForm implements OnInit {
     private cepService: CepService,
     private auth: Auth,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private screenReader: ScreenReaderService
   ) {
     this.patientForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -313,12 +315,14 @@ export class PatientForm implements OnInit {
       // Validate guardian for children
       if (this.isChildPatient() && !this.selectedGuardian() && !this.isEditMode()) {
         this.errorMessage.set('Crianças menores de 18 anos devem ter um responsável');
+        this.screenReader.announceError('Crianças menores de 18 anos devem ter um responsável');
         return;
       }
 
       this.isLoading.set(true);
       this.errorMessage.set('');
       this.successMessage.set('');
+      this.screenReader.announceLoading(this.isEditMode() ? 'atualização do paciente' : 'cadastro do paciente');
 
       const formValue = this.patientForm.value;
 
@@ -336,11 +340,13 @@ export class PatientForm implements OnInit {
         this.patientService.update(this.patientId()!, updateData).subscribe({
           next: () => {
             this.successMessage.set('Paciente atualizado com sucesso!');
+            this.screenReader.announceSuccess('Paciente atualizado com sucesso!');
             this.isLoading.set(false);
             setTimeout(() => this.router.navigate(['/patients']), 1500);
           },
           error: (error) => {
             this.errorMessage.set('Erro ao atualizar paciente');
+            this.screenReader.announceError('Erro ao atualizar paciente');
             this.isLoading.set(false);
             console.error('Error updating patient:', error);
           }
@@ -354,11 +360,13 @@ export class PatientForm implements OnInit {
         this.patientService.create(createData).subscribe({
           next: () => {
             this.successMessage.set('Paciente cadastrado com sucesso!');
+            this.screenReader.announceSuccess('Paciente cadastrado com sucesso!');
             this.isLoading.set(false);
             setTimeout(() => this.router.navigate(['/patients']), 1500);
           },
           error: (error) => {
             this.errorMessage.set('Erro ao cadastrar paciente');
+            this.screenReader.announceError('Erro ao cadastrar paciente');
             this.isLoading.set(false);
             console.error('Error creating patient:', error);
           }
