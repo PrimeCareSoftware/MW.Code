@@ -9,6 +9,7 @@ import { AuthorizationRequestService } from '../../../services/authorization-req
 import { TussProcedureService } from '../../../services/tuss-procedure.service';
 import { TissGuideType, PatientHealthInsurance, AuthorizationRequest, TussProcedure, CreateTissGuideProcedure } from '../../../models/tiss.model';
 import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-reader.service';
+import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/accessibility/components/accessible-breadcrumbs.component';
 
 @Component({
   selector: 'app-tiss-guide-form',

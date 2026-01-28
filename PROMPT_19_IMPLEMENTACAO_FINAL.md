@@ -528,8 +528,6 @@ Os componentes de acessibilidade estão **integrados, testados e documentados**,
 
 O sistema PrimeCare agora oferece uma experiência **verdadeiramente inclusiva**, atendendo aos requisitos legais (LBI) e garantindo acesso a **todos os usuários**, independentemente de suas capacidades.
 
-O sistema PrimeCare agora oferece uma experiência **verdadeiramente inclusiva**, atendendo aos requisitos legais (LBI) e garantindo acesso a **todos os usuários**, independentemente de suas capacidades.
-
 ---
 
 **Documento preparado em:** 28 de Janeiro de 2026  
