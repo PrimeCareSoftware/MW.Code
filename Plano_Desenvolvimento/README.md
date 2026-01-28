@@ -1,15 +1,30 @@
 # 📋 Plano de Desenvolvimento - Prompts Otimizados
 
 > **Data de Criação:** 23 de Janeiro de 2026  
-> **Última Atualização:** 23 de Janeiro de 2026  
+> **Última Atualização:** 28 de Janeiro de 2026  
 > **Baseado em:** [PLANO_DESENVOLVIMENTO.md](../docs/PLANO_DESENVOLVIMENTO.md) (1814 linhas)  
 > **Status:** 24/24 prompts completos (100%) ✅  
-> **Investimento Total:** R$ 1.455.000  
+> **Investimento Total:** R$ 1.455.000 + R$ 442.000 (System Admin)  
 > **Tempo Total:** ~58-76 meses/dev (se executado sequencialmente)
+
+## 🆕 NOVO: Plano de Melhorias System Admin 2026
+
+**📊 [Ver Resumo Executivo](./RESUMO_EXECUTIVO_SYSTEM_ADMIN.md)** (15 min)  
+**📖 [Ver Plano Completo](./PLANO_MELHORIAS_SYSTEM_ADMIN_2026.md)** (60 min)
+
+Análise completa e plano de desenvolvimento para transformar o system-admin em uma ferramenta de administração SaaS de classe mundial, baseado nas melhores práticas de:
+- Retool, Forest Admin, Stripe Dashboard, Zendesk, AWS Console, Vercel
+
+**Investimento:** R$ 442k (11 meses) ou R$ 156k para MVP (6 meses)  
+**ROI:** 87-120% no primeiro ano | Payback: 12-14 meses
+
+---
 
 ## 🎯 Visão Geral
 
 Esta pasta contém **prompts otimizados** para todas as tarefas pendentes do PrimeCare Software, organizados por fase de prioridade. Cada prompt foi desenhado para ser executado diretamente pelo GitHub Copilot ou outro agente de IA, com especificações técnicas completas e critérios de sucesso claros.
+
+**NOVO:** Inclui agora o **Plano de Melhorias do System Admin** baseado em análise de mercado de ferramentas modernas de administração.
 
 ## 📁 Estrutura de Pastas
 
