@@ -5,11 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../services/system-admin';
 import { ClinicSummary, PaginatedClinics, ClinicFilter, Tag } from '../../models/system-admin.model';
 import { Navbar } from '../../shared/navbar/navbar';
+import { ClinicsCardsComponent } from './clinics-cards';
+import { ClinicsKanbanComponent } from './clinics-kanban';
+import { ClinicsMapComponent } from './clinics-map';
 
 @Component({
   selector: 'app-clinics-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, Navbar],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar, ClinicsCardsComponent, ClinicsKanbanComponent, ClinicsMapComponent],
   templateUrl: './clinics-list.html',
   styleUrl: './clinics-list.scss'})
 export class ClinicsList implements OnInit {
