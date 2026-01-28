@@ -76,6 +76,25 @@
     }
   }
   </script>
+  
+  <!-- Google Analytics 4 -->
+  <!-- TODO: Replace GA_MEASUREMENT_ID with your actual GA4 Measurement ID (e.g., G-XXXXXXXXXX) -->
+  <!-- Configuration instructions:
+       1. Go to https://analytics.google.com/
+       2. Create a new GA4 property for primecare.com.br
+       3. Get your Measurement ID (starts with G-)
+       4. Replace 'GA_MEASUREMENT_ID' below with your actual ID
+       5. Configure custom events in GA4 admin panel
+  -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID', {
+      'send_page_view': false  // We'll track page views manually via WebsiteAnalyticsService
+    });
+  </script>
 </head>
 <body>
   <app-root></app-root>
