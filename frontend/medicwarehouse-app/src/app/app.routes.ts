@@ -139,6 +139,29 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/tickets/tickets').then(m => m.Tickets),
     canActivate: [authGuard]
   },
+  
+  // CRM routes
+  { 
+    path: 'crm/complaints', 
+    loadComponent: () => import('./pages/crm/complaints/complaint-list').then(m => m.ComplaintList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'crm/surveys', 
+    loadComponent: () => import('./pages/crm/surveys/survey-list').then(m => m.SurveyList),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'crm/patient-journey', 
+    loadComponent: () => import('./pages/crm/patient-journey/patient-journey').then(m => m.PatientJourney),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'crm/marketing', 
+    loadComponent: () => import('./pages/crm/marketing/marketing-automation').then(m => m.MarketingAutomation),
+    canActivate: [authGuard]
+  },
+  
   { 
     path: 'admin/profiles', 
     loadComponent: () => import('./pages/admin/profiles/profile-list.component').then(m => m.ProfileListComponent),

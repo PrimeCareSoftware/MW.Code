@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">Reclamações e Denúncias</h1>
+      <p class="page-description">Gerencie as reclamações e denúncias dos pacientes</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Nova Reclamação
+      </button>
+    </div>
+  </div>
+
+  <div class="page-content">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando reclamações...</p>
+      </div>
+    } @else if (complaints().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <h3>Nenhuma reclamação encontrada</h3>
+        <p>As reclamações registradas aparecerão aqui.</p>
+        <p class="text-muted">Sistema CRM implementado e pronto para uso.</p>
+      </div>
+    } @else {
+      <div class="complaint-list">
+        <!-- Complaint items will be displayed here -->
+      </div>
+    }
+  </div>
+</div>
