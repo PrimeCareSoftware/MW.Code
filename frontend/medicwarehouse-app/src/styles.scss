@@ -1562,3 +1562,91 @@ select.ng-valid.ng-touched {
  * ACCESSIBILITY STYLES (WCAG 2.1 Level AA)
  * ============================================ */
 @import 'app/shared/accessibility/styles/accessibility.scss';
+
+/* ============================================
+ * SHEPHERD.JS TOUR STYLES
+ * ============================================ */
+@import 'shepherd.js/dist/css/shepherd.css';
+
+/* Custom Shepherd theme for PrimeCare */
+.shepherd-theme-primecare {
+  .shepherd-element {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+  }
+
+  .shepherd-header {
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .shepherd-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 0;
+  }
+
+  .shepherd-text {
+    padding: var(--spacing-4);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--gray-700);
+  }
+
+  .shepherd-footer {
+    padding: var(--spacing-3) var(--spacing-4);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .shepherd-button {
+    background-color: var(--primary-500);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+
+    &:hover {
+      background-color: var(--primary-600);
+    }
+
+    &.shepherd-button-secondary {
+      background-color: transparent;
+      color: var(--gray-600);
+      border: 1px solid var(--gray-300);
+
+      &:hover {
+        background-color: var(--gray-100);
+        color: var(--gray-900);
+      }
+    }
+  }
+
+  .shepherd-cancel-icon {
+    color: var(--gray-400);
+    transition: color var(--transition-base);
+
+    &:hover {
+      color: var(--gray-600);
+    }
+  }
+
+  .shepherd-arrow {
+    &:before {
+      background-color: white;
+    }
+  }
+}
+
+/* Modal overlay for tours */
+.shepherd-modal-overlay-container {
+  background-color: rgba(0, 0, 0, 0.5);
+}
