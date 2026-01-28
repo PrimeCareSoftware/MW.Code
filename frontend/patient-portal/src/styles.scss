@@ -41,6 +41,10 @@
   
   /* Primary Color - Default value (can be overridden dynamically) */
   --primary-color: #1e3a8a;  /* default to primary-600 */
+  --primary-color-hover: #1a3170;  /* default to primary-700 */
+  --primary-color-light: #e0e9ff;  /* default to primary-100 */
+  --primary-color-dark: #1a3170;  /* default to primary-700 */
+  --primary-color-alpha: rgba(30, 58, 138, 0.2);  /* primary-600 with alpha */
   
   /* Border Radius */
   --radius: 0.5rem;
