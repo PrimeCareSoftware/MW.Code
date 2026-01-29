@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { Navbar } from '../../../shared/navbar/navbar';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 interface IdentityVerificationResponse {
   id: string;

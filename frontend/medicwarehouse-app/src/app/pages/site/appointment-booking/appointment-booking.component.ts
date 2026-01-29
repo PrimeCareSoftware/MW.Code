@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { PublicClinicService, PublicClinicDto, AvailableSlotDto, PublicAppointmentRequest, PublicAppointmentResponse } from '../../../services/public-clinic.service';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
@@ -70,7 +70,7 @@ export class AppointmentBookingComponent implements OnInit {
       patientCpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
       patientBirthDate: ['', [
         Validators.required,
-        (control) => {
+        (control: AbstractControl) => {
           if (!control.value) return null;
           const birthDate = new Date(control.value);
           if (birthDate > maxBirthDate) {
