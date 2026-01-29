@@ -15,6 +15,20 @@ namespace MedicSoft.Application.Services.SystemAdmin
         Task<List<PagePerformanceDto>> GetTopSlowPagesAsync(int limit = 10);
     }
 
+    /// <summary>
+    /// Monitoring service for collecting RUM metrics and errors.
+    /// 
+    /// IMPORTANT: This implementation uses in-memory storage for simplicity.
+    /// Limitations:
+    /// - Data is lost on application restart
+    /// - Each instance in multi-instance deployments has separate metrics
+    /// - Limited to last 10,000 RUM metrics and 5,000 errors
+    /// 
+    /// For production, consider:
+    /// - Persisting to database (e.g., TimescaleDB, InfluxDB)
+    /// - Using external APM services (Application Insights, Datadog, New Relic)
+    /// - Implementing distributed tracing (OpenTelemetry)
+    /// </summary>
     public class MonitoringService : IMonitoringService
     {
         private readonly ILogger<MonitoringService> _logger;

@@ -26,6 +26,9 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
         /// <summary>
         /// Track Real User Monitoring (RUM) metrics from frontend
+        /// Note: AllowAnonymous to enable tracking from all users.
+        /// Rate limiting should be configured at the API Gateway or infrastructure level.
+        /// Consider implementing additional validation or API keys for production.
         /// </summary>
         [HttpPost("rum/metrics")]
         [AllowAnonymous] // Allow tracking from unauthenticated users too
@@ -42,6 +45,9 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
         /// <summary>
         /// Track frontend errors
+        /// Note: AllowAnonymous to enable error tracking from all users.
+        /// Rate limiting should be configured at the API Gateway or infrastructure level.
+        /// Consider implementing additional validation or API keys for production.
         /// </summary>
         [HttpPost("errors")]
         [AllowAnonymous] // Allow error tracking from unauthenticated users too
