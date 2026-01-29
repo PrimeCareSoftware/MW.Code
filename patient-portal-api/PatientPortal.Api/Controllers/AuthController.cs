@@ -476,6 +476,184 @@ public class AuthController : ControllerBase
             return StatusCode(500, new { message = "An error occurred during password reset" });
         }
     }
+
+    /// <summary>
+    /// Enables two-factor authentication for the authenticated user
+    /// </summary>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">2FA enabled successfully</response>
+    /// <response code="401">User is not authenticated</response>
+    /// <response code="500">Internal server error occurred</response>
+    [HttpPost("enable-2fa")]
+    [Authorize]
+    public async Task<IActionResult> EnableTwoFactor([FromServices] ITwoFactorService twoFactorService)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var result = await twoFactorService.EnableTwoFactorAsync(userId);
+            
+            if (!result)
+            {
+                return BadRequest(new { message = "Falha ao habilitar autenticação de dois fatores" });
+            }
+
+            return Ok(new { message = "Autenticação de dois fatores habilitada com sucesso" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error enabling 2FA");
+            return StatusCode(500, new { message = "Ocorreu um erro ao habilitar a autenticação de dois fatores" });
+        }
+    }
+
+    /// <summary>
+    /// Disables two-factor authentication for the authenticated user
+    /// </summary>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">2FA disabled successfully</response>
+    /// <response code="401">User is not authenticated</response>
+    /// <response code="500">Internal server error occurred</response>
+    [HttpPost("disable-2fa")]
+    [Authorize]
+    public async Task<IActionResult> DisableTwoFactor([FromServices] ITwoFactorService twoFactorService)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var result = await twoFactorService.DisableTwoFactorAsync(userId);
+            
+            if (!result)
+            {
+                return BadRequest(new { message = "Falha ao desabilitar autenticação de dois fatores" });
+            }
+
+            return Ok(new { message = "Autenticação de dois fatores desabilitada com sucesso" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error disabling 2FA");
+            return StatusCode(500, new { message = "Ocorreu um erro ao desabilitar a autenticação de dois fatores" });
+        }
+    }
+
+    /// <summary>
+    /// Gets the two-factor authentication status for the authenticated user
+    /// </summary>
+    /// <returns>2FA status</returns>
+    /// <response code="200">Returns 2FA status</response>
+    /// <response code="401">User is not authenticated</response>
+    /// <response code="500">Internal server error occurred</response>
+    [HttpGet("2fa-status")]
+    [Authorize]
+    public async Task<IActionResult> GetTwoFactorStatus([FromServices] ITwoFactorService twoFactorService)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var isEnabled = await twoFactorService.IsTwoFactorEnabledAsync(userId);
+            
+            return Ok(new { isEnabled });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting 2FA status");
+            return StatusCode(500, new { message = "Ocorreu um erro ao obter o status da autenticação de dois fatores" });
+        }
+    }
+
+    /// <summary>
+    /// Verifies the 2FA code during login
+    /// </summary>
+    /// <param name="request">Temporary token and verification code</param>
+    /// <returns>JWT tokens if verification succeeds</returns>
+    /// <response code="200">2FA verification successful - returns tokens</response>
+    /// <response code="400">Invalid or expired code</response>
+    /// <response code="500">Internal server error occurred</response>
+    [HttpPost("verify-2fa")]
+    [AllowAnonymous]
+    public async Task<ActionResult<LoginResponseDto>> VerifyTwoFactor(
+        [FromBody] VerifyTwoFactorDto request,
+        [FromServices] ITwoFactorService twoFactorService)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(request.TempToken) || string.IsNullOrEmpty(request.Code))
+            {
+                return BadRequest(new { message = "Token temporário e código são obrigatórios" });
+            }
+
+            // Decode the temp token to get patient user ID
+            // For now, this is a simplified implementation
+            // In production, you would decode the temp token to extract the user ID
+            
+            // TODO: Complete implementation after refactoring temp token structure
+            return BadRequest(new { message = "Implementação em progresso" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error verifying 2FA code");
+            return StatusCode(500, new { message = "Ocorreu um erro ao verificar o código" });
+        }
+    }
+
+    /// <summary>
+    /// Resends the 2FA code to the user's email
+    /// </summary>
+    /// <param name="request">Temporary token</param>
+    /// <returns>Confirmation message</returns>
+    /// <response code="200">Code resent successfully</response>
+    /// <response code="400">Invalid request</response>
+    /// <response code="429">Rate limit exceeded</response>
+    /// <response code="500">Internal server error occurred</response>
+    [HttpPost("resend-2fa-code")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResendTwoFactorCode(
+        [FromBody] ResendTwoFactorCodeDto request,
+        [FromServices] ITwoFactorService twoFactorService)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(request.TempToken))
+            {
+                return BadRequest(new { message = "Token temporário é obrigatório" });
+            }
+
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+            var result = await twoFactorService.ResendCodeAsync(request.TempToken, ipAddress);
+            
+            if (!result)
+            {
+                return BadRequest(new { message = "Falha ao reenviar código" });
+            }
+
+            return Ok(new { message = "Código reenviado com sucesso" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return StatusCode(429, new { message = ex.Message }); // Rate limit exceeded
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error resending 2FA code");
+            return StatusCode(500, new { message = "Ocorreu um erro ao reenviar o código" });
+        }
+    }
 }
 
 public class ChangePasswordDto
