@@ -73,7 +73,7 @@ namespace MedicSoft.Application.Services
             // Get all subscriptions with plans
             var subscriptions = await _context.ClinicSubscriptions
                 .Include(s => s.SubscriptionPlan)
-                .Where(s => s.IsActive)
+                .Where(s => s.IsActive())
                 .ToListAsync();
 
             var subscriptionsByPlan = subscriptions.GroupBy(s => s.SubscriptionPlan?.Name ?? "Unknown");

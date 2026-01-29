@@ -57,12 +57,16 @@ namespace MedicSoft.Application.Services
             var config = await _context.ModuleConfigurations
                 .FirstOrDefaultAsync(mc => mc.ClinicId == clinicId && mc.ModuleName == moduleName);
 
-            var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId);
+            // Get tenant ID from clinic
+            var clinic = await _context.Clinics.FindAsync(clinicId);
+            var tenantId = clinic?.TenantId ?? string.Empty;
+
+            var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
             var isAvailableInPlan = false;
 
             if (subscription != null)
             {
-                var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId);
+                var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
                 isAvailableInPlan = plan != null && SystemModules.IsModuleAvailableInPlan(moduleName, plan);
             }
 
@@ -140,6 +144,8 @@ namespace MedicSoft.Application.Services
                 "Enabled",
                 userId,
                 clinic.TenantId,
+                previousConfig: null,
+                newConfig: null,
                 reason: reason
             );
             await _context.ModuleConfigurationHistories.AddAsync(history);
@@ -183,7 +189,8 @@ namespace MedicSoft.Application.Services
                 "Disabled",
                 userId,
                 clinic.TenantId,
-                previousConfiguration: previousConfig,
+                previousConfig: previousConfig,
+                newConfig: null,
                 reason: reason
             );
             await _context.ModuleConfigurationHistories.AddAsync(history);
@@ -230,8 +237,9 @@ namespace MedicSoft.Application.Services
                 "ConfigUpdated",
                 userId,
                 clinic.TenantId,
-                previousConfiguration: previousConfig,
-                newConfiguration: configuration
+                previousConfig: previousConfig,
+                newConfig: configuration,
+                reason: null
             );
             await _context.ModuleConfigurationHistories.AddAsync(history);
             await _context.SaveChangesAsync();
@@ -376,11 +384,14 @@ namespace MedicSoft.Application.Services
             var moduleInfo = SystemModules.GetModuleInfo(moduleName);
 
             // 3. Get clinic subscription
-            var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId);
+            var clinic = await _context.Clinics.FindAsync(clinicId);
+            var tenantId = clinic?.TenantId ?? string.Empty;
+
+            var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
             if (subscription == null)
                 return new ModuleValidationResult(false, "Clinic has no active subscription");
 
-            var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId);
+            var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
             if (plan == null)
                 return new ModuleValidationResult(false, "Invalid subscription plan");
 
