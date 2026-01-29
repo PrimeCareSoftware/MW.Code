@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.Entities
@@ -75,22 +77,166 @@ namespace MedicSoft.Domain.Entities
         public const string WaitingQueue = "WaitingQueue";
         public const string DoctorFieldsConfig = "DoctorFieldsConfig";
 
-        public static string[] GetAllModules() => new[]
+        /// <summary>
+        /// Get detailed information about all available modules
+        /// </summary>
+        public static Dictionary<string, ModuleInfo> GetModulesInfo() => new()
         {
-            PatientManagement,
-            AppointmentScheduling,
-            MedicalRecords,
-            Prescriptions,
-            FinancialManagement,
-            Reports,
-            WhatsAppIntegration,
-            SMSNotifications,
-            TissExport,
-            InventoryManagement,
-            UserManagement,
-            WaitingQueue,
-            DoctorFieldsConfig
+            [PatientManagement] = new ModuleInfo
+            {
+                Name = PatientManagement,
+                DisplayName = "Gestão de Pacientes",
+                Description = "Cadastro, edição e consulta de pacientes",
+                Category = "Core",
+                Icon = "people",
+                IsCore = true,
+                RequiredModules = new[] { UserManagement },
+                MinimumPlan = SubscriptionPlanType.Basic
+            },
+            [AppointmentScheduling] = new ModuleInfo
+            {
+                Name = AppointmentScheduling,
+                DisplayName = "Agendamento de Consultas",
+                Description = "Sistema de agendamento e controle de horários",
+                Category = "Core",
+                Icon = "calendar_today",
+                IsCore = true,
+                RequiredModules = new[] { PatientManagement },
+                MinimumPlan = SubscriptionPlanType.Basic
+            },
+            [MedicalRecords] = new ModuleInfo
+            {
+                Name = MedicalRecords,
+                DisplayName = "Prontuário Eletrônico",
+                Description = "Gerenciamento de prontuários médicos eletrônicos",
+                Category = "Core",
+                Icon = "description",
+                IsCore = true,
+                RequiredModules = new[] { PatientManagement },
+                MinimumPlan = SubscriptionPlanType.Basic
+            },
+            [Prescriptions] = new ModuleInfo
+            {
+                Name = Prescriptions,
+                DisplayName = "Prescrições Médicas",
+                Description = "Geração e gerenciamento de prescrições médicas",
+                Category = "Core",
+                Icon = "local_pharmacy",
+                IsCore = true,
+                RequiredModules = new[] { MedicalRecords },
+                MinimumPlan = SubscriptionPlanType.Basic
+            },
+            [FinancialManagement] = new ModuleInfo
+            {
+                Name = FinancialManagement,
+                DisplayName = "Gestão Financeira",
+                Description = "Controle financeiro, faturamento e pagamentos",
+                Category = "Core",
+                Icon = "attach_money",
+                IsCore = true,
+                RequiredModules = Array.Empty<string>(),
+                MinimumPlan = SubscriptionPlanType.Basic
+            },
+            [UserManagement] = new ModuleInfo
+            {
+                Name = UserManagement,
+                DisplayName = "Gestão de Usuários",
+                Description = "Gerenciamento de usuários e permissões",
+                Category = "Core",
+                Icon = "group",
+                IsCore = true,
+                RequiredModules = Array.Empty<string>(),
+                MinimumPlan = SubscriptionPlanType.Basic
+            },
+            [Reports] = new ModuleInfo
+            {
+                Name = Reports,
+                DisplayName = "Relatórios Avançados",
+                Description = "Geração de relatórios e dashboards avançados",
+                Category = "Analytics",
+                Icon = "assessment",
+                IsCore = false,
+                RequiredModules = Array.Empty<string>(),
+                MinimumPlan = SubscriptionPlanType.Standard
+            },
+            [WhatsAppIntegration] = new ModuleInfo
+            {
+                Name = WhatsAppIntegration,
+                DisplayName = "Integração WhatsApp",
+                Description = "Integração com WhatsApp para comunicação com pacientes",
+                Category = "Advanced",
+                Icon = "chat",
+                IsCore = false,
+                RequiredModules = new[] { PatientManagement },
+                MinimumPlan = SubscriptionPlanType.Standard
+            },
+            [SMSNotifications] = new ModuleInfo
+            {
+                Name = SMSNotifications,
+                DisplayName = "Notificações SMS",
+                Description = "Envio de notificações via SMS",
+                Category = "Advanced",
+                Icon = "sms",
+                IsCore = false,
+                RequiredModules = new[] { PatientManagement },
+                MinimumPlan = SubscriptionPlanType.Standard
+            },
+            [TissExport] = new ModuleInfo
+            {
+                Name = TissExport,
+                DisplayName = "Exportação TISS",
+                Description = "Exportação de guias no padrão TISS",
+                Category = "Premium",
+                Icon = "upload_file",
+                IsCore = false,
+                RequiredModules = new[] { FinancialManagement },
+                MinimumPlan = SubscriptionPlanType.Premium
+            },
+            [InventoryManagement] = new ModuleInfo
+            {
+                Name = InventoryManagement,
+                DisplayName = "Gestão de Estoque",
+                Description = "Controle de estoque de medicamentos e materiais",
+                Category = "Advanced",
+                Icon = "inventory",
+                IsCore = false,
+                RequiredModules = Array.Empty<string>(),
+                MinimumPlan = SubscriptionPlanType.Standard
+            },
+            [WaitingQueue] = new ModuleInfo
+            {
+                Name = WaitingQueue,
+                DisplayName = "Fila de Espera",
+                Description = "Gerenciamento de fila de espera de pacientes",
+                Category = "Advanced",
+                Icon = "queue",
+                IsCore = false,
+                RequiredModules = new[] { AppointmentScheduling },
+                MinimumPlan = SubscriptionPlanType.Standard
+            },
+            [DoctorFieldsConfig] = new ModuleInfo
+            {
+                Name = DoctorFieldsConfig,
+                DisplayName = "Configuração de Campos",
+                Description = "Configuração personalizada de campos do prontuário",
+                Category = "Premium",
+                Icon = "settings",
+                IsCore = false,
+                RequiredModules = new[] { MedicalRecords },
+                MinimumPlan = SubscriptionPlanType.Premium
+            }
         };
+
+        public static string[] GetAllModules() => 
+            GetModulesInfo().Keys.ToArray();
+
+        public static ModuleInfo GetModuleInfo(string moduleName)
+        {
+            if (!GetModulesInfo().TryGetValue(moduleName, out var info))
+                throw new ArgumentException($"Module {moduleName} not found", nameof(moduleName));
+            
+            return info;
+        }
 
         public static bool IsModuleAvailableInPlan(string moduleName, SubscriptionPlan plan)
         {
@@ -103,5 +249,20 @@ namespace MedicSoft.Domain.Entities
                 _ => true // Basic modules available in all plans
             };
         }
+    }
+
+    /// <summary>
+    /// Detailed information about a module
+    /// </summary>
+    public class ModuleInfo
+    {
+        public string Name { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty; // "Core", "Advanced", "Premium", "Analytics"
+        public string Icon { get; set; } = string.Empty; // Material icon name
+        public bool IsCore { get; set; } // If true, cannot be disabled
+        public string[] RequiredModules { get; set; } = Array.Empty<string>();
+        public SubscriptionPlanType MinimumPlan { get; set; }
     }
 }

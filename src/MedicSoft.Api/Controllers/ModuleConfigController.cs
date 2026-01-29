@@ -1,5 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
@@ -17,16 +24,19 @@ namespace MedicSoft.Api.Controllers
         private readonly MedicSoftDbContext _context;
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
+        private readonly IModuleConfigurationService _moduleConfigService;
 
         public ModuleConfigController(
             ITenantContext tenantContext,
             MedicSoftDbContext context,
             IClinicSubscriptionRepository subscriptionRepository,
-            ISubscriptionPlanRepository planRepository) : base(tenantContext)
+            ISubscriptionPlanRepository planRepository,
+            IModuleConfigurationService moduleConfigService) : base(tenantContext)
         {
             _context = context;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
+            _moduleConfigService = moduleConfigService;
         }
 
         /// <summary>
@@ -179,6 +189,75 @@ namespace MedicSoft.Api.Controllers
             return Ok(SystemModules.GetAllModules());
         }
 
+        /// <summary>
+        /// Get detailed information about all modules
+        /// </summary>
+        [HttpGet("info")]
+        [ProducesResponseType(typeof(IEnumerable<ModuleInfoDto>), StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<ModuleInfoDto>> GetModulesInfo()
+        {
+            var modules = SystemModules.GetModulesInfo();
+            var result = modules.Values.Select(m => new ModuleInfoDto
+            {
+                Name = m.Name,
+                DisplayName = m.DisplayName,
+                Description = m.Description,
+                Category = m.Category,
+                Icon = m.Icon,
+                IsCore = m.IsCore,
+                RequiredModules = m.RequiredModules,
+                MinimumPlan = m.MinimumPlan.ToString()
+            });
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Validate if a module can be enabled for a clinic
+        /// </summary>
+        [HttpPost("validate")]
+        [ProducesResponseType(typeof(ValidationResponseDto), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ValidationResponseDto>> ValidateModuleConfig(
+            [FromBody] ValidateModuleRequest request)
+        {
+            var clinicId = GetClinicIdFromToken();
+            var validation = await _moduleConfigService.ValidateModuleConfigAsync(clinicId, request.ModuleName);
+
+            return Ok(new ValidationResponseDto
+            {
+                IsValid = validation.IsValid,
+                ErrorMessage = validation.ErrorMessage
+            });
+        }
+
+        /// <summary>
+        /// Get module configuration history
+        /// </summary>
+        [HttpGet("{moduleName}/history")]
+        [ProducesResponseType(typeof(IEnumerable<ModuleConfigHistoryDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<ModuleConfigHistoryDto>>> GetModuleHistory(string moduleName)
+        {
+            var clinicId = GetClinicIdFromToken();
+            var history = await _moduleConfigService.GetModuleHistoryAsync(clinicId, moduleName);
+            return Ok(history);
+        }
+
+        /// <summary>
+        /// Enable module with reason (for audit)
+        /// </summary>
+        [HttpPost("{moduleName}/enable-with-reason")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> EnableModuleWithReason(
+            string moduleName,
+            [FromBody] EnableModuleRequest request)
+        {
+            var clinicId = GetClinicIdFromToken();
+            var userId = User.FindFirst("sub")?.Value ?? "Unknown";
+
+            await _moduleConfigService.EnableModuleAsync(clinicId, moduleName, userId, request.Reason);
+            return Ok(new { message = $"Module {moduleName} enabled successfully" });
+        }
+
         private Guid GetClinicIdFromToken()
         {
             var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
@@ -197,5 +276,21 @@ namespace MedicSoft.Api.Controllers
     public class UpdateConfigRequest
     {
         public string? Configuration { get; set; }
+    }
+
+    public class ValidateModuleRequest
+    {
+        public string ModuleName { get; set; } = string.Empty;
+    }
+
+    public class EnableModuleRequest
+    {
+        public string? Reason { get; set; }
+    }
+
+    public class ValidationResponseDto
+    {
+        public bool IsValid { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
     }
 }

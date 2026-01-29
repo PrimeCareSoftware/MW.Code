@@ -51,6 +51,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<Owner> Owners { get; set; } = null!;
         public DbSet<OwnerClinicLink> OwnerClinicLinks { get; set; } = null!;
         public DbSet<ModuleConfiguration> ModuleConfigurations { get; set; } = null!;
+        public DbSet<ModuleConfigurationHistory> ModuleConfigurationHistories { get; set; } = null!;
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Procedure> Procedures { get; set; } = null!;
         public DbSet<AppointmentProcedure> AppointmentProcedures { get; set; } = null!;
@@ -231,6 +232,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new OwnerConfiguration());
             modelBuilder.ApplyConfiguration(new OwnerClinicLinkConfiguration());
             modelBuilder.ApplyConfiguration(new ModuleConfigurationConfiguration());
+            modelBuilder.ApplyConfiguration(new ModuleConfigurationHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
             modelBuilder.ApplyConfiguration(new ProcedureConfiguration());
             modelBuilder.ApplyConfiguration(new AppointmentProcedureConfiguration());
