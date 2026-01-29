@@ -27,9 +27,9 @@ A **Fase 7** da implementação de conformidade com a Resolução CFM 2.314/2022
 **Localização:** `frontend/medicwarehouse-app/src/app/pages/telemedicine/identity-verification-upload/`
 
 **Arquivos Criados:**
-- `identity-verification-upload.ts` (287 linhas)
-- `identity-verification-upload.html` (296 linhas)
-- `identity-verification-upload.scss` (183 linhas)
+- `identity-verification-upload.ts` (272 linhas)
+- `identity-verification-upload.html` (275 linhas)
+- `identity-verification-upload.scss` (332 linhas)
 
 **Funcionalidades:**
 - ✅ Upload de documentos via multipart/form-data
@@ -68,9 +68,9 @@ this.router.navigate(['/telemedicine/identity-verification'], {
 **Localização:** `frontend/medicwarehouse-app/src/app/pages/telemedicine/session-compliance-checker/`
 
 **Arquivos Criados:**
-- `session-compliance-checker.ts` (196 linhas)
-- `session-compliance-checker.html` (157 linhas)
-- `session-compliance-checker.scss` (223 linhas)
+- `session-compliance-checker.ts` (191 linhas)
+- `session-compliance-checker.html` (135 linhas)
+- `session-compliance-checker.scss` (409 linhas)
 
 **Funcionalidades:**
 - ✅ Verificação pré-flight de conformidade CFM 2.314
@@ -237,7 +237,7 @@ interface SessionComplianceValidation {
 ## 📊 Métricas de Qualidade
 
 ### Código
-- **Linhas de Código (Frontend):** ~766 linhas (novos componentes)
+- **Linhas de Código (Frontend):** ~1.614 linhas (novos componentes)
 - **Linhas de Código (Backend):** ~5.000 linhas (já implementado)
 - **Cobertura de Testes:** 85%+
 - **Documentação:** 100% coberta

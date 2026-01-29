@@ -1,8 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { environment } from '../../../environments/environment';
 
@@ -23,7 +24,7 @@ interface IdentityVerificationResponse {
   templateUrl: './identity-verification-upload.html',
   styleUrl: './identity-verification-upload.scss'
 })
-export class IdentityVerificationUpload implements OnInit {
+export class IdentityVerificationUpload implements OnInit, OnDestroy {
   uploadForm: FormGroup;
   isUploading = signal<boolean>(false);
   errorMessage = signal<string>('');
@@ -45,6 +46,7 @@ export class IdentityVerificationUpload implements OnInit {
   
   private baseUrl = environment.apiUrl || 'http://localhost:5000/api';
   private telemedicineUrl = `${this.baseUrl}/telemedicine`;
+  private destroy$ = new Subject<void>();
 
   // File validation constants
   readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -68,18 +70,25 @@ export class IdentityVerificationUpload implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.userId = params['userId'];
-      this.userType = params['userType'] || 'Patient';
-      
-      // Update form validators based on user type
-      if (this.userType === 'Provider') {
-        this.uploadForm.get('crmNumber')?.setValidators([Validators.required]);
-        this.uploadForm.get('crmState')?.setValidators([Validators.required]);
-        this.uploadForm.get('crmCardPhoto')?.setValidators([Validators.required]);
-      }
-      this.uploadForm.updateValueAndValidity();
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.userId = params['userId'];
+        this.userType = params['userType'] || 'Patient';
+        
+        // Update form validators based on user type
+        if (this.userType === 'Provider') {
+          this.uploadForm.get('crmNumber')?.setValidators([Validators.required]);
+          this.uploadForm.get('crmState')?.setValidators([Validators.required]);
+          this.uploadForm.get('crmCardPhoto')?.setValidators([Validators.required]);
+        }
+        this.uploadForm.updateValueAndValidity();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onDocumentPhotoSelected(event: Event): void {
@@ -144,12 +153,14 @@ export class IdentityVerificationUpload implements OnInit {
     return true;
   }
 
-  createPreview(file: File, previewSignal: any): void {
+  createPreview(file: File, previewSignal: { set: (value: string | null) => void }): void {
     // Only create preview for images
     if (file.type.startsWith('image/')) {
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        previewSignal.set(e.target.result);
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result && typeof e.target.result === 'string') {
+          previewSignal.set(e.target.result);
+        }
       };
       reader.readAsDataURL(file);
     } else {
@@ -229,7 +240,9 @@ export class IdentityVerificationUpload implements OnInit {
       `${this.telemedicineUrl}/identityverification`,
       formData,
       { headers }
-    ).subscribe({
+    )
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (response) => {
         this.successMessage.set('Documentos enviados com sucesso! Aguarde a verificação.');
         this.isUploading.set(false);

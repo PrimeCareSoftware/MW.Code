@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { TelemedicineComplianceService, SessionComplianceValidation } from '../../../services/telemedicine-compliance.service';
 
 interface ComplianceCheckItem {
@@ -18,7 +19,7 @@ interface ComplianceCheckItem {
   templateUrl: './session-compliance-checker.html',
   styleUrl: './session-compliance-checker.scss'
 })
-export class SessionComplianceChecker implements OnInit {
+export class SessionComplianceChecker implements OnInit, OnDestroy {
   @Input() sessionId!: string;
   @Input() tenantId: string = 'default-tenant';
   @Input() autoCheck: boolean = true;
@@ -29,6 +30,8 @@ export class SessionComplianceChecker implements OnInit {
   errorMessage = signal<string>('');
   
   checks = signal<ComplianceCheckItem[]>([]);
+  
+  private destroy$ = new Subject<void>();
 
   constructor(
     private complianceService: TelemedicineComplianceService,
@@ -44,6 +47,11 @@ export class SessionComplianceChecker implements OnInit {
     if (this.autoCheck) {
       this.performComplianceCheck();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   performComplianceCheck(): void {
@@ -72,29 +80,31 @@ export class SessionComplianceChecker implements OnInit {
       }
     ]);
 
-    this.complianceService.validateSessionCompliance(this.sessionId, this.tenantId).subscribe({
-      next: (validation) => {
-        this.processValidationResult(validation);
-        this.isChecking.set(false);
-      },
-      error: (error) => {
-        console.error('Error validating compliance:', error);
-        this.errorMessage.set(
-          error.error?.message || 
-          'Erro ao validar conformidade. Por favor, tente novamente.'
-        );
-        this.isChecking.set(false);
-        
-        // Set all checks to invalid on error
-        this.checks.update(checks => 
-          checks.map(check => ({
-            ...check,
-            status: 'invalid' as const,
-            message: 'Falha na verificação'
-          }))
-        );
-      }
-    });
+    this.complianceService.validateSessionCompliance(this.sessionId, this.tenantId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (validation) => {
+          this.processValidationResult(validation);
+          this.isChecking.set(false);
+        },
+        error: (error) => {
+          console.error('Error validating compliance:', error);
+          this.errorMessage.set(
+            error.error?.message || 
+            'Erro ao validar conformidade. Por favor, tente novamente.'
+          );
+          this.isChecking.set(false);
+          
+          // Set all checks to invalid on error
+          this.checks.update(checks => 
+            checks.map(check => ({
+              ...check,
+              status: 'invalid' as const,
+              message: 'Falha na verificação'
+            }))
+          );
+        }
+      });
   }
 
   private processValidationResult(validation: SessionComplianceValidation): void {
@@ -132,7 +142,7 @@ export class SessionComplianceChecker implements OnInit {
   }
 
   navigateToAction(actionLink: string | undefined): void {
-    if (actionLink) {
+    if (actionLink && this.sessionId) {
       this.router.navigate([actionLink], {
         queryParams: { sessionId: this.sessionId }
       });
