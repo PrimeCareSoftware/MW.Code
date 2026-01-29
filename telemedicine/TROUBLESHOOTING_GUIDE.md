@@ -332,13 +332,13 @@ console.log('Connection stats:', {
 
 **Solution:**
 ```bash
-# Maximum file size: 10MB
+# Maximum file size: 10 MiB (10 * 1024 * 1024 bytes = 10,485,760 bytes)
 # Check file size before upload
 FILE_SIZE=$(wc -c < document.pdf)
-MAX_SIZE=$((10 * 1024 * 1024))  # 10MB in bytes
+MAX_SIZE=$((10 * 1024 * 1024))  # 10 MiB in bytes
 
 if [ $FILE_SIZE -gt $MAX_SIZE ]; then
-  echo "File too large: $FILE_SIZE bytes (max: $MAX_SIZE)"
+  echo "File too large: $FILE_SIZE bytes (max: $MAX_SIZE bytes = 10 MiB)"
   # Compress file or split into parts
 else
   # Upload file

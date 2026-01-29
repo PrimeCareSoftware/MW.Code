@@ -428,9 +428,8 @@ Use Visual Studio ou VS Code com a configuração de launch incluída.
 
 - [ ] Implementar testes E2E automatizados para CI/CD
 - [ ] Integrar reconhecimento facial para verificação automática
-- [ ] Adicionar campo de modalidade no prontuário principal
+- [ ] Adicionar campo de modalidade no prontuário principal (integração pendente)
 - [ ] Configurar monitoramento em tempo real (Application Insights)
-   - Campo de modalidade (presencial/tele) precisa ser adicionado (integração pendente)
 
 ## 🤝 Contribuindo
 
