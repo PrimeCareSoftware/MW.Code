@@ -68,13 +68,31 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "PrimeCare Software API",
         Version = "v1",
-        Description = "PrimeCare Software - Sistema de Gestão para Consultórios Médicos",
+        Description = "PrimeCare Software - Sistema de Gestão para Consultórios Médicos. " +
+                      "Esta API fornece endpoints para gestão completa de clínicas, incluindo: " +
+                      "módulos configuráveis, gestão de pacientes, agendamentos, prontuários, e muito mais.",
         Contact = new OpenApiContact
         {
             Name = "PrimeCare Software",
             Email = "contato@medicwarehouse.com"
         }
     });
+
+    // Include XML comments
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
+    else
+    {
+        // Log warning if XML documentation file is not found
+        // This helps diagnose build configuration issues
+        Console.WriteLine($"Warning: XML documentation file not found at {xmlPath}. " +
+                         "API documentation will not include XML comments. " +
+                         "Ensure GenerateDocumentationFile is set to true in the project file.");
+    }
 
     // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

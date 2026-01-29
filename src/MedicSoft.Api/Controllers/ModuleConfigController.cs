@@ -40,9 +40,16 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all available modules and their status for the clinic
+        /// Get all available modules and their status for the authenticated clinic
         /// </summary>
+        /// <returns>List of modules with their enabled status and availability in current plan</returns>
+        /// <response code="200">Modules retrieved successfully</response>
+        /// <response code="400">Invalid subscription or plan</response>
+        /// <response code="401">Unauthorized - Invalid or missing JWT token</response>
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<ModuleDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<ModuleDto>>> GetModules()
         {
             var tenantId = GetTenantId();
@@ -81,9 +88,25 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Enable a module for the clinic
+        /// Enable a specific module for the authenticated clinic
         /// </summary>
+        /// <param name="moduleName">Name of the module to enable (e.g., "PatientManagement", "WhatsAppIntegration")</param>
+        /// <returns>Success message if module was enabled</returns>
+        /// <response code="200">Module enabled successfully</response>
+        /// <response code="400">Module not available in plan or invalid module name</response>
+        /// <response code="401">Unauthorized</response>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST /api/ModuleConfig/WhatsAppIntegration/enable
+        ///     
+        /// The module must be available in the clinic's subscription plan.
+        /// Core modules are always available and cannot be disabled.
+        /// </remarks>
         [HttpPost("{moduleName}/enable")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> EnableModule(string moduleName)
         {
             var tenantId = GetTenantId();
@@ -125,9 +148,23 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Disable a module for the clinic
+        /// Disable a specific module for the authenticated clinic
         /// </summary>
+        /// <param name="moduleName">Name of the module to disable</param>
+        /// <returns>Success message if module was disabled</returns>
+        /// <response code="200">Module disabled successfully</response>
+        /// <response code="400">Invalid module name</response>
+        /// <response code="404">Module configuration not found</response>
+        /// <response code="401">Unauthorized</response>
+        /// <remarks>
+        /// Core modules cannot be disabled as they are essential for system operation.
+        /// Disabling a module only affects visibility and access, data is preserved.
+        /// </remarks>
         [HttpPost("{moduleName}/disable")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> DisableModule(string moduleName)
         {
             var tenantId = GetTenantId();
@@ -150,9 +187,28 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Update module configuration
+        /// Update module-specific configuration settings
         /// </summary>
+        /// <param name="moduleName">Name of the module to configure</param>
+        /// <param name="request">Configuration data in JSON format</param>
+        /// <returns>Success message if configuration was updated</returns>
+        /// <response code="200">Configuration updated successfully</response>
+        /// <response code="400">Invalid module name or configuration format</response>
+        /// <response code="401">Unauthorized</response>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     PUT /api/ModuleConfig/WhatsAppIntegration/config
+        ///     {
+        ///       "configuration": "{\"sendReminders\": true, \"hoursBeforeAppointment\": 24}"
+        ///     }
+        ///     
+        /// Configuration format varies by module. See module documentation for specific parameters.
+        /// </remarks>
         [HttpPut("{moduleName}/config")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> UpdateModuleConfig(string moduleName, [FromBody] UpdateConfigRequest request)
         {
             var tenantId = GetTenantId();
@@ -181,17 +237,33 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get all available modules (system-wide)
+        /// Get list of all module names available in the system
         /// </summary>
+        /// <returns>Array of module names</returns>
+        /// <response code="200">Module list retrieved successfully</response>
+        /// <remarks>
+        /// Returns simple list of module identifiers. Use /api/ModuleConfig/info for detailed information.
+        /// </remarks>
         [HttpGet("available")]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<string>> GetAvailableModules()
         {
             return Ok(SystemModules.GetAllModules());
         }
 
         /// <summary>
-        /// Get detailed information about all modules
+        /// Get detailed information about all available modules
         /// </summary>
+        /// <returns>List of modules with complete metadata</returns>
+        /// <response code="200">Module information retrieved successfully</response>
+        /// <remarks>
+        /// Returns comprehensive information including:
+        /// - Display name and description
+        /// - Category (Core, Advanced, Premium, Analytics)
+        /// - Dependencies and requirements
+        /// - Minimum subscription plan required
+        /// - Icon for UI display
+        /// </remarks>
         [HttpGet("info")]
         [ProducesResponseType(typeof(IEnumerable<ModuleInfoDto>), StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<ModuleInfoDto>> GetModulesInfo()
@@ -213,8 +285,25 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Validate if a module can be enabled for a clinic
+        /// Validate if a module can be enabled for the authenticated clinic
         /// </summary>
+        /// <param name="request">Validation request containing module name</param>
+        /// <returns>Validation result with error message if invalid</returns>
+        /// <response code="200">Validation completed (check IsValid property)</response>
+        /// <remarks>
+        /// Performs validation checks including:
+        /// - Module exists in system
+        /// - Module available in clinic's subscription plan
+        /// - All required dependencies are satisfied
+        /// - Subscription plan limits not exceeded
+        /// 
+        /// Sample request:
+        /// 
+        ///     POST /api/ModuleConfig/validate
+        ///     {
+        ///       "moduleName": "WhatsAppIntegration"
+        ///     }
+        /// </remarks>
         [HttpPost("validate")]
         [ProducesResponseType(typeof(ValidationResponseDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<ValidationResponseDto>> ValidateModuleConfig(
@@ -231,10 +320,24 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get module configuration history
+        /// Get change history for a specific module
         /// </summary>
+        /// <param name="moduleName">Name of the module</param>
+        /// <returns>List of historical changes with timestamps and users</returns>
+        /// <response code="200">History retrieved successfully</response>
+        /// <response code="401">Unauthorized</response>
+        /// <remarks>
+        /// Returns audit trail including:
+        /// - When module was enabled/disabled
+        /// - Configuration changes
+        /// - User who made the change
+        /// - Previous and new values
+        /// 
+        /// Useful for compliance and troubleshooting.
+        /// </remarks>
         [HttpGet("{moduleName}/history")]
         [ProducesResponseType(typeof(IEnumerable<ModuleConfigHistoryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<ModuleConfigHistoryDto>>> GetModuleHistory(string moduleName)
         {
             var clinicId = GetClinicIdFromToken();
@@ -243,10 +346,30 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Enable module with reason (for audit)
+        /// Enable a module with audit reason
         /// </summary>
+        /// <param name="moduleName">Name of the module to enable</param>
+        /// <param name="request">Request containing optional reason for audit</param>
+        /// <returns>Success message</returns>
+        /// <response code="200">Module enabled successfully</response>
+        /// <response code="400">Module not available or invalid</response>
+        /// <response code="401">Unauthorized</response>
+        /// <remarks>
+        /// Similar to /enable but includes audit reason for compliance.
+        /// 
+        /// Sample request:
+        /// 
+        ///     POST /api/ModuleConfig/WhatsAppIntegration/enable-with-reason
+        ///     {
+        ///       "reason": "Cliente solicitou envio de lembretes via WhatsApp"
+        ///     }
+        /// 
+        /// Use this endpoint when you need detailed audit trail.
+        /// </remarks>
         [HttpPost("{moduleName}/enable-with-reason")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> EnableModuleWithReason(
             string moduleName,
             [FromBody] EnableModuleRequest request)
@@ -265,32 +388,78 @@ namespace MedicSoft.Api.Controllers
         }
     }
 
+    /// <summary>
+    /// Data transfer object for module information
+    /// </summary>
     public class ModuleDto
     {
+        /// <summary>
+        /// Technical name of the module
+        /// </summary>
         public string ModuleName { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// Whether the module is currently enabled for this clinic
+        /// </summary>
         public bool IsEnabled { get; set; }
+        
+        /// <summary>
+        /// Whether the module is available in the clinic's subscription plan
+        /// </summary>
         public bool IsAvailableInPlan { get; set; }
+        
+        /// <summary>
+        /// JSON configuration string for module-specific settings
+        /// </summary>
         public string? Configuration { get; set; }
     }
 
+    /// <summary>
+    /// Request object for updating module configuration
+    /// </summary>
     public class UpdateConfigRequest
     {
+        /// <summary>
+        /// JSON string containing module configuration parameters
+        /// </summary>
         public string? Configuration { get; set; }
     }
 
+    /// <summary>
+    /// Request object for validating module availability
+    /// </summary>
     public class ValidateModuleRequest
     {
+        /// <summary>
+        /// Name of the module to validate
+        /// </summary>
         public string ModuleName { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// Request object for enabling module with audit reason
+    /// </summary>
     public class EnableModuleRequest
     {
+        /// <summary>
+        /// Optional reason for enabling the module (for audit trail)
+        /// </summary>
         public string? Reason { get; set; }
     }
 
+    /// <summary>
+    /// Response object for module validation
+    /// </summary>
     public class ValidationResponseDto
     {
+        /// <summary>
+        /// Whether the module can be enabled
+        /// </summary>
         public bool IsValid { get; set; }
+        
+        /// <summary>
+        /// Error message if validation failed
+        /// </summary>
         public string ErrorMessage { get; set; } = string.Empty;
     }
 }
