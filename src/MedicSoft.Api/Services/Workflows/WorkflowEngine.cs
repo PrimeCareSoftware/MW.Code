@@ -247,29 +247,50 @@ namespace MedicSoft.Api.Services.Workflows
 
         private async Task ExecuteCreateTicketActionAsync(Dictionary<string, JsonElement> config, object triggerData)
         {
-            var subject = ReplaceVariables(config["subject"].GetString(), triggerData);
-            var priority = config.ContainsKey("priority") ? config["priority"].GetString() : "normal";
-            var category = config.ContainsKey("category") ? config["category"].GetString() : "general";
-            var clinicId = GetFieldValue("clinicId", triggerData);
-
-            var ticket = new Ticket
+            var title = ReplaceVariables(config["subject"].GetString(), triggerData);
+            var description = $"Auto-generated from workflow. Context: {JsonSerializer.Serialize(triggerData)}";
+            var priorityStr = config.ContainsKey("priority") ? config["priority"].GetString() : "medium";
+            var clinicIdValue = GetFieldValue("clinicId", triggerData);
+            
+            // Parse priority
+            var priority = priorityStr?.ToLower() switch
             {
-                Subject = subject,
-                Description = $"Auto-generated from workflow. Context: {JsonSerializer.Serialize(triggerData)}",
-                Status = "open",
-                Priority = priority,
-                Category = category,
-                CreatedAt = DateTime.UtcNow
+                "low" => TicketPriority.Low,
+                "high" => TicketPriority.High,
+                "critical" => TicketPriority.Critical,
+                _ => TicketPriority.Medium
             };
-
-            if (clinicId != null)
+            
+            // Get clinic info
+            Guid? clinicId = null;
+            string? clinicName = null;
+            if (clinicIdValue != null && Guid.TryParse(clinicIdValue.ToString(), out var parsedClinicId))
             {
-                ticket.ClinicId = int.Parse(clinicId.ToString());
+                clinicId = parsedClinicId;
+                var clinic = await _context.Clinics.FindAsync(parsedClinicId);
+                clinicName = clinic?.Name;
             }
+            
+            // Use system user for auto-generated tickets
+            var systemUserId = Guid.Empty; // Or get from config
+            var tenantId = clinicName ?? "system"; // Get proper tenant ID
+
+            var ticket = new Ticket(
+                title ?? "Auto-generated ticket",
+                description,
+                TicketType.TechnicalSupport,
+                priority,
+                systemUserId,
+                "System Workflow",
+                "system@medicsoft.com",
+                clinicId,
+                clinicName,
+                tenantId
+            );
 
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
-            _logger.LogInformation($"Ticket created: {subject}");
+            _logger.LogInformation($"Ticket created: {title}");
         }
 
         private async Task ExecuteWebhookActionAsync(Dictionary<string, JsonElement> config, object triggerData)

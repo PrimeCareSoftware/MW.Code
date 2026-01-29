@@ -4,8 +4,8 @@ namespace MedicSoft.Domain.Events
 {
     public class TrialExpiringEvent : DomainEvent
     {
-        public int ClinicId { get; set; }
-        public int SubscriptionId { get; set; }
+        public Guid ClinicId { get; set; }
+        public Guid SubscriptionId { get; set; }
         public int DaysRemaining { get; set; }
         public DateTime TrialEndsAt { get; set; }
         public string ClinicName { get; set; }

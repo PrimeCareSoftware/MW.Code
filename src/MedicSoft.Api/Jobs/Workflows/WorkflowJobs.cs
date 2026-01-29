@@ -5,6 +5,7 @@ using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services.Workflows;
+using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Events;
 using MedicSoft.Repository.Context;
 
@@ -42,7 +43,7 @@ namespace MedicSoft.Api.Jobs.Workflows
                     s.NextPaymentDate > oneHourAgo)
                 .ToListAsync();
 
-            _logger.LogInformation("Found {Count} expired subscriptions", expiredSubscriptions.Count);
+            _logger.LogInformation($"Found {expiredSubscriptions.Count} expired subscriptions");
 
             foreach (var subscription in expiredSubscriptions)
             {
@@ -87,7 +88,7 @@ namespace MedicSoft.Api.Jobs.Workflows
                     s.TrialEndDate > twoDaysFromNow)
                 .ToListAsync();
 
-            _logger.LogInformation("Found {Count} expiring trials", expiringTrials.Count);
+            _logger.LogInformation($"Found {expiringTrials.Count} expiring trials");
 
             foreach (var trial in expiringTrials)
             {
@@ -132,8 +133,9 @@ namespace MedicSoft.Api.Jobs.Workflows
             var inactiveClinics = await _context.Clinics
                 .Where(c =>
                     c.IsActive &&
-                    c.LastActivityAt < thirtyDaysAgo &&
-                    c.LastActivityAt >= thirtyOneDaysAgo)
+                    c.UpdatedAt.HasValue &&
+                    c.UpdatedAt.Value < thirtyDaysAgo &&
+                    c.UpdatedAt.Value >= thirtyOneDaysAgo)
                 .ToListAsync();
 
             _logger.LogInformation($"Found {inactiveClinics.Count} inactive clinics");
@@ -142,13 +144,14 @@ namespace MedicSoft.Api.Jobs.Workflows
             {
                 try
                 {
-                    var daysSinceLastActivity = (now - clinic.LastActivityAt).Days;
+                    var lastActivity = clinic.UpdatedAt ?? clinic.CreatedAt;
+                    var daysSinceLastActivity = (now - lastActivity).Days;
 
                     await _eventPublisher.PublishAsync(new InactivityDetectedEvent
                     {
                         ClinicId = clinic.Id,
                         DaysSinceLastActivity = daysSinceLastActivity,
-                        LastActivityAt = clinic.LastActivityAt,
+                        LastActivityAt = lastActivity,
                         ClinicName = clinic.Name,
                         Email = clinic.Email
                     });
