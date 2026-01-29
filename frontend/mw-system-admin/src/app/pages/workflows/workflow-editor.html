@@ -68,9 +68,9 @@
             <textarea [(ngModel)]="formData.triggerConfig" name="triggerConfig" rows="4" class="form-control code" placeholder='{"event": "clinic.created"}'></textarea>
             <small class="form-help">
               @if (formData.triggerType === 'event') {
-                Example: {"event": "clinic.created"}
+                Example: {{ '{' }}"event": "clinic.created"{{ '}' }}
               } @else if (formData.triggerType === 'time') {
-                Example: {"cron": "0 9 * * *"}
+                Example: {{ '{' }}"cron": "0 9 * * *"{{ '}' }}
               }
             </small>
           </div>
@@ -146,3 +146,4 @@
     </form>
   }
 </div>
+

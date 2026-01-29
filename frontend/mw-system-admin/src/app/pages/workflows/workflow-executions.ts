@@ -113,6 +113,16 @@ ${execution.actionExecutions?.map(ae =>
     return `${minutes}m ${seconds % 60}s`;
   }
 
+  getCompletedCount(execution: WorkflowExecution): number {
+    if (!execution.actionExecutions) return 0;
+    return execution.actionExecutions.filter(a => a.status === 'completed').length;
+  }
+
+  getFailedCount(execution: WorkflowExecution): number {
+    if (!execution.actionExecutions) return 0;
+    return execution.actionExecutions.filter(a => a.status === 'failed').length;
+  }
+
   backToWorkflows(): void {
     this.router.navigate(['/workflows']);
   }

@@ -51,11 +51,11 @@
                 <div class="action-stats">
                   @if (execution.actionExecutions) {
                     <span class="stat">
-                      ✅ {{ execution.actionExecutions.filter(a => a.status === 'completed').length }}
+                      ✅ {{ getCompletedCount(execution) }}
                     </span>
-                    @if (execution.actionExecutions.filter(a => a.status === 'failed').length > 0) {
+                    @if (getFailedCount(execution) > 0) {
                       <span class="stat failed">
-                        ❌ {{ execution.actionExecutions.filter(a => a.status === 'failed').length }}
+                        ❌ {{ getFailedCount(execution) }}
                       </span>
                     }
                   }
