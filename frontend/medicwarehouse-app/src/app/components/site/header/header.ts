@@ -13,8 +13,17 @@ import { ThemeToggleComponent } from '../../../shared/theme-toggle/theme-toggle.
 export class HeaderComponent {
   protected cartService = inject(CartService);
   protected isMenuOpen = false;
+  protected isLoginDropdownOpen = false;
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  toggleLoginDropdown(): void {
+    this.isLoginDropdownOpen = !this.isLoginDropdownOpen;
+  }
+
+  closeLoginDropdown(): void {
+    this.isLoginDropdownOpen = false;
   }
 }

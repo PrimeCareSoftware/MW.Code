@@ -346,3 +346,239 @@ body.theme-high-contrast .nav {
     font-size: 1.25rem;
   }
 }
+
+// Login Dropdown Styles
+.login-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.login-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &.active {
+    background: var(--primary-50);
+  }
+
+  .dropdown-arrow {
+    transition: transform var(--transition-fast);
+  }
+
+  &.active .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+}
+
+.login-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 220px;
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all var(--transition-base);
+  z-index: 1000;
+  overflow: hidden;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    color: var(--gray-700);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+
+    svg {
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    &:hover {
+      background: var(--gray-50);
+      color: var(--gray-900);
+
+      svg {
+        opacity: 1;
+      }
+    }
+
+    &.dropdown-item-primary {
+      color: var(--primary-600);
+      font-weight: 600;
+
+      &:hover {
+        background: var(--primary-50);
+        color: var(--primary-700);
+      }
+    }
+  }
+
+  .dropdown-divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 0.5rem 0;
+  }
+}
+
+// Dark theme styles for login dropdown
+body.theme-dark {
+  .login-dropdown-trigger {
+    &.active {
+      background: var(--gray-800);
+    }
+  }
+
+  .login-dropdown-menu {
+    background: var(--bg-secondary);
+    border-color: var(--gray-700);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+
+    .dropdown-item {
+      color: var(--text-secondary);
+
+      &:hover {
+        background: var(--gray-800);
+        color: var(--text-primary);
+      }
+
+      &.dropdown-item-primary {
+        color: var(--primary-500);
+
+        &:hover {
+          background: var(--gray-800);
+          color: var(--primary-400);
+        }
+      }
+    }
+
+    .dropdown-divider {
+      background: var(--gray-700);
+    }
+  }
+}
+
+// High contrast theme styles for login dropdown
+body.theme-high-contrast {
+  .login-dropdown-trigger {
+    border: 2px solid var(--primary-500);
+
+    &.active {
+      background: var(--primary-500);
+      color: var(--bg-primary);
+    }
+  }
+
+  .login-dropdown-menu {
+    background: var(--bg-primary);
+    border: 3px solid var(--border-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+
+    .dropdown-item {
+      color: var(--text-primary);
+      border: 2px solid transparent;
+
+      &:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--border-color);
+      }
+
+      &.dropdown-item-primary {
+        color: var(--primary-500);
+        border-color: var(--primary-500);
+
+        &:hover {
+          background: var(--primary-500);
+          color: var(--bg-primary);
+        }
+      }
+    }
+
+    .dropdown-divider {
+      background: var(--border-color);
+      height: 2px;
+    }
+  }
+}
+
+// Mobile styles for login dropdown
+@media (max-width: 968px) {
+  .login-dropdown-wrapper {
+    width: 100%;
+  }
+
+  .login-dropdown-trigger {
+    width: 100%;
+    justify-content: center;
+    font-size: 1.125rem;
+    padding: 0.75rem 1.5rem;
+    opacity: 0;
+    transform: translateX(30px);
+    animation: slideIn 0.4s ease forwards;
+    animation-delay: 0.48s;
+  }
+
+  .login-dropdown-menu {
+    position: static;
+    width: 100%;
+    margin-top: 0.5rem;
+    box-shadow: none;
+    border: none;
+    background: var(--gray-50);
+
+    .dropdown-item {
+      font-size: 1rem;
+      padding: 1rem 1.5rem;
+      opacity: 0;
+      transform: translateX(30px);
+      animation: slideIn 0.4s ease forwards;
+
+      &:nth-child(1) {
+        animation-delay: 0.56s;
+      }
+      &:nth-child(2) {
+        animation-delay: 0.64s;
+      }
+      &:nth-child(3) {
+        animation-delay: 0.72s;
+      }
+      &:nth-child(4) {
+        animation-delay: 0.8s;
+      }
+    }
+
+    .dropdown-divider {
+      margin: 0.5rem 1.5rem;
+    }
+  }
+
+  body.theme-dark .login-dropdown-menu {
+    background: var(--gray-800);
+  }
+
+  body.theme-high-contrast .login-dropdown-menu {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+  }
+}
