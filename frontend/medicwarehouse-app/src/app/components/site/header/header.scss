@@ -220,7 +220,7 @@ body.theme-dark .nav {
       border: 1px solid var(--primary-600);
 
       &:hover {
-        background: rgba(59, 130, 246, 0.1);
+        background: var(--primary-50);
       }
     }
   }
