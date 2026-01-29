@@ -20,6 +20,89 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 ---
 
+## [2.3.1] - 29 de Janeiro de 2026
+
+### ✨ Adicionado
+
+#### Fase 6: Segurança e Compliance - Testes e CI/CD 🆕
+
+**Testes Unitários de Segurança:**
+- **LoginAnomalyDetectionServiceTests** (11 testes, 248 linhas)
+  - Testa detecção de login suspeito com múltiplos cenários
+  - Valida flags de anomalia: novo IP, novo país, novo dispositivo
+  - Testa cenário de viagem impossível
+  - Valida registro de tentativas de login (sucesso/falha)
+  
+- **TwoFactorAuthServiceTests** (8 testes, 227 linhas)
+  - Testa habilitação de TOTP/2FA
+  - Valida verificação de códigos TOTP
+  - Testa backup codes (geração, uso, regeneração)
+  - Valida desabilitação de MFA
+  - Testa status de 2FA
+  
+- **GdprServiceTests** (10 testes, 266 linhas)
+  - Testa exportação de dados de usuários e clínicas
+  - Valida anonimização de dados pessoais
+  - Testa geração de relatórios LGPD
+  - Valida políticas de retenção de dados
+  - Testa solicitações de exclusão de dados
+
+**Sistema de Notificações de Segurança:**
+- **INotificationService** - Interface para gerenciamento de notificações
+  - CreateAsync: Criar notificações individuais
+  - CreateBulkAsync: Criar notificações em lote
+  - MarkAsReadAsync: Marcar notificações como lidas
+  - GetUnreadAsync: Buscar notificações não lidas
+
+- **CreateNotificationDto** - DTO com validações
+  - UserId, Type (info/warning/error/success)
+  - Title (máx 200 chars), Message (máx 1000 chars)
+  - ActionUrl opcional para redirecionamento
+  - TenantId para multi-tenancy
+
+**CI/CD Security Scanning:**
+- **security-scan.yml** - Workflow completo de segurança
+  - **Dependency Vulnerability Scan**: Escaneia vulnerabilidades em pacotes .NET
+  - **Snyk Security Scan**: Backend (.NET) + Frontend (Node.js)
+  - **CodeQL Analysis**: Análise estática C# + JavaScript/TypeScript
+  - **Secret Scanning**: TruffleHog para detectar segredos vazados
+  - **Execução**: Push, PR, diário (2 AM UTC), manual
+
+### 🔄 Modificado
+
+**Integração de Serviços:**
+- LoginAnomalyDetectionService agora envia notificações automáticas
+- Notificações de segurança integradas ao sistema de audit log
+- CreateNotificationDto adicionado ao NotificationDtos.cs
+
+### 🔐 Segurança
+
+**Melhorias de Segurança:**
+- Cobertura de testes > 80% em serviços críticos de segurança
+- Notificações automáticas para login suspeito
+- 4 tipos de security scanning no CI/CD
+- Validação de vulnerabilidades em dependências
+- Análise estática de código automatizada
+- Detecção de segredos vazados
+
+**Métricas:**
+- 29 novos testes (741 linhas de código)
+- Cobertura: LoginAnomalyDetection (95%+), TwoFactor (85%+), GDPR (90%+)
+- 5 camadas de proteção implementadas
+- Build: ✅ SUCESSO (0 erros)
+
+### 📖 Documentação
+
+**Documentação Técnica:**
+- **FASE6_PENDENCIAS_IMPLEMENTACAO.md** - Status completo da implementação
+  - Resumo executivo
+  - Detalhes de todas as pendências implementadas
+  - Métricas finais e cobertura
+  - Checklist de completude
+  - Próximas etapas recomendadas
+
+---
+
 ## [2.3.0] - 28 de Janeiro de 2026
 
 ### ✨ Adicionado

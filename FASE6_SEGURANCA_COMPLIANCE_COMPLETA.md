@@ -505,9 +505,12 @@ Task<AuditReport> GenerateLgpdReportAsync(string userId, string tenantId);
 - [x] Frontend components (manual)
 
 ### Testes
-- [ ] Unit tests (próxima fase)
-- [ ] Integration tests (próxima fase)
-- [ ] E2E tests (próxima fase)
+- [x] Unit tests para LoginAnomalyDetectionService
+- [x] Unit tests para TwoFactorAuthService
+- [x] Unit tests para GdprService
+- [x] Integration tests (AuditServiceTests já existente)
+- [x] CI/CD com security scanning automatizado
+- [ ] E2E tests (próxima fase - opcional)
 
 ---
 
