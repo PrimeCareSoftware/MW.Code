@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using MedicSoft.Api.Hubs;
 using MedicSoft.Application.DTOs.SystemAdmin;
 using MedicSoft.Application.Services.SystemAdmin;
@@ -11,17 +12,24 @@ using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Api.Services.SystemAdmin
 {
+    /// <summary>
+    /// Service for managing system-wide admin notifications.
+    /// NOTE: SystemNotifications are global (not tenant-specific) and are meant for system administrators only.
+    /// </summary>
     public class SystemNotificationService : ISystemNotificationService
     {
         private readonly ISystemNotificationRepository _repository;
         private readonly IHubContext<SystemNotificationHub> _hubContext;
+        private readonly ILogger<SystemNotificationService> _logger;
 
         public SystemNotificationService(
             ISystemNotificationRepository repository,
-            IHubContext<SystemNotificationHub> hubContext)
+            IHubContext<SystemNotificationHub> hubContext,
+            ILogger<SystemNotificationService> logger)
         {
             _repository = repository;
             _hubContext = hubContext;
+            _logger = logger;
         }
 
         public async Task<SystemNotificationDto> CreateNotificationAsync(CreateSystemNotificationDto dto)
@@ -71,11 +79,17 @@ namespace MedicSoft.Api.Services.SystemAdmin
 
         public async Task SendRealTimeNotificationAsync(Guid notificationId)
         {
+            // Note: Using empty tenantId because SystemNotifications are global, not tenant-specific
             var notification = await _repository.GetByIdAsync(notificationId, string.Empty);
             if (notification != null)
             {
                 var dto = MapToDto(notification);
                 await _hubContext.Clients.All.SendAsync("ReceiveNotification", dto);
+                _logger.LogInformation("Sent real-time notification {NotificationId} via SignalR", notificationId);
+            }
+            else
+            {
+                _logger.LogWarning("Could not send real-time notification {NotificationId} - notification not found", notificationId);
             }
         }
 

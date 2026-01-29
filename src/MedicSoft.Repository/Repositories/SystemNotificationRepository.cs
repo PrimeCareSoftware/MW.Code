@@ -9,6 +9,11 @@ using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Repository.Repositories
 {
+    /// <summary>
+    /// Repository for system-wide admin notifications.
+    /// NOTE: SystemNotifications are intentionally global (not tenant-specific) and are meant 
+    /// for system administrators to monitor all tenants. Queries do not filter by tenant.
+    /// </summary>
     public class SystemNotificationRepository : BaseRepository<SystemNotification>, ISystemNotificationRepository
     {
         public SystemNotificationRepository(MedicSoftDbContext context) : base(context)
