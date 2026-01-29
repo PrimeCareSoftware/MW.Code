@@ -120,6 +120,15 @@ namespace MedicSoft.Domain.Entities
         /// </summary>
         public void SetEnabledModules(string[] modules)
         {
+            // Validate module names (optional - could be moved to service layer)
+            var validModules = SystemModules.GetAllModules();
+            var invalidModules = modules.Where(m => !validModules.Contains(m)).ToArray();
+            
+            if (invalidModules.Length > 0)
+            {
+                throw new ArgumentException($"Invalid module names: {string.Join(", ", invalidModules)}");
+            }
+
             EnabledModules = JsonSerializer.Serialize(modules);
             UpdateTimestamp();
         }
@@ -132,7 +141,15 @@ namespace MedicSoft.Domain.Entities
             if (string.IsNullOrEmpty(EnabledModules))
                 return Array.Empty<string>();
 
-            return JsonSerializer.Deserialize<string[]>(EnabledModules) ?? Array.Empty<string>();
+            try
+            {
+                return JsonSerializer.Deserialize<string[]>(EnabledModules) ?? Array.Empty<string>();
+            }
+            catch (JsonException)
+            {
+                // Log error and return empty array if JSON is corrupted
+                return Array.Empty<string>();
+            }
         }
 
         /// <summary>

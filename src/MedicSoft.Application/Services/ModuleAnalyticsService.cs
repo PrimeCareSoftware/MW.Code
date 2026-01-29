@@ -46,19 +46,29 @@ namespace MedicSoft.Application.Services
         public async Task<IEnumerable<ModuleAdoptionDto>> GetModuleAdoptionRatesAsync()
         {
             var modules = SystemModules.GetAllModules();
-            var result = new List<ModuleAdoptionDto>();
+            var totalClinics = await _context.Clinics.CountAsync();
 
+            // Fetch all module usage in a single query
+            var moduleUsage = await _context.ModuleConfigurations
+                .Where(mc => mc.IsEnabled)
+                .GroupBy(mc => mc.ModuleName)
+                .Select(g => new { ModuleName = g.Key, Count = g.Select(x => x.ClinicId).Distinct().Count() })
+                .ToListAsync();
+
+            var usageMap = moduleUsage.ToDictionary(x => x.ModuleName, x => x.Count);
+
+            var result = new List<ModuleAdoptionDto>();
             foreach (var module in modules)
             {
-                var stats = await GetModuleUsageStatsAsync(module);
                 var moduleInfo = SystemModules.GetModuleInfo(module);
+                var enabledCount = usageMap.GetValueOrDefault(module, 0);
 
                 result.Add(new ModuleAdoptionDto
                 {
                     ModuleName = module,
                     DisplayName = moduleInfo.DisplayName,
-                    AdoptionRate = stats.AdoptionRate,
-                    EnabledCount = stats.ClinicsWithModuleEnabled
+                    AdoptionRate = totalClinics > 0 ? (decimal)enabledCount / totalClinics * 100 : 0,
+                    EnabledCount = enabledCount
                 });
             }
 
@@ -108,14 +118,18 @@ namespace MedicSoft.Application.Services
         public async Task<Dictionary<string, int>> GetModuleCountsAsync()
         {
             var modules = SystemModules.GetAllModules();
-            var result = new Dictionary<string, int>();
 
+            // Fetch all module counts in a single query
+            var moduleCounts = await _context.ModuleConfigurations
+                .Where(mc => mc.IsEnabled)
+                .GroupBy(mc => mc.ModuleName)
+                .Select(g => new { ModuleName = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var result = new Dictionary<string, int>();
             foreach (var module in modules)
             {
-                var count = await _context.ModuleConfigurations
-                    .Where(mc => mc.ModuleName == module && mc.IsEnabled)
-                    .CountAsync();
-
+                var count = moduleCounts.FirstOrDefault(mc => mc.ModuleName == module)?.Count ?? 0;
                 result[module] = count;
             }
 

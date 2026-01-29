@@ -89,12 +89,45 @@ namespace MedicSoft.Application.Services
         public async Task<IEnumerable<ModuleConfigDto>> GetAllModuleConfigsAsync(Guid clinicId)
         {
             var modules = SystemModules.GetAllModules();
-            var result = new List<ModuleConfigDto>();
+            
+            // Get clinic and subscription info
+            var clinic = await _context.Clinics.FindAsync(clinicId);
+            var tenantId = clinic?.TenantId ?? string.Empty;
+            
+            var subscription = await _subscriptionRepository.GetByClinicIdAsync(clinicId, tenantId);
+            SubscriptionPlan? plan = null;
+            if (subscription != null)
+            {
+                plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+            }
 
+            // Fetch all module configurations for this clinic in one query
+            var configurations = await _context.ModuleConfigurations
+                .Where(mc => mc.ClinicId == clinicId)
+                .ToListAsync();
+
+            // Build result combining module info with configurations
+            var result = new List<ModuleConfigDto>();
             foreach (var moduleName in modules)
             {
-                var config = await GetModuleConfigAsync(clinicId, moduleName);
-                result.Add(config);
+                var moduleInfo = SystemModules.GetModuleInfo(moduleName);
+                var config = configurations.FirstOrDefault(c => c.ModuleName == moduleName);
+                var isAvailableInPlan = plan != null && SystemModules.IsModuleAvailableInPlan(moduleName, plan);
+
+                result.Add(new ModuleConfigDto
+                {
+                    ModuleName = moduleInfo.Name,
+                    DisplayName = moduleInfo.DisplayName,
+                    Description = moduleInfo.Description,
+                    Category = moduleInfo.Category,
+                    Icon = moduleInfo.Icon,
+                    IsEnabled = config?.IsEnabled ?? false,
+                    IsAvailableInPlan = isAvailableInPlan,
+                    IsCore = moduleInfo.IsCore,
+                    RequiredModules = moduleInfo.RequiredModules,
+                    Configuration = config?.Configuration,
+                    UpdatedAt = config?.UpdatedAt
+                });
             }
 
             return result;
@@ -149,6 +182,8 @@ namespace MedicSoft.Application.Services
                 reason: reason
             );
             await _context.ModuleConfigurationHistories.AddAsync(history);
+            
+            // Save both changes in a single transaction
             await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Module {moduleName} enabled for clinic {clinicId} by user {userId}");
@@ -179,7 +214,6 @@ namespace MedicSoft.Application.Services
 
             var previousConfig = config.Configuration;
             config.Disable();
-            await _context.SaveChangesAsync();
 
             // 5. Register history
             var history = new ModuleConfigurationHistory(
@@ -194,6 +228,8 @@ namespace MedicSoft.Application.Services
                 reason: reason
             );
             await _context.ModuleConfigurationHistories.AddAsync(history);
+            
+            // Save both changes in a single transaction
             await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Module {moduleName} disabled for clinic {clinicId} by user {userId}");
@@ -227,8 +263,6 @@ namespace MedicSoft.Application.Services
                 config.UpdateConfiguration(configuration);
             }
 
-            await _context.SaveChangesAsync();
-
             // 4. Register history
             var history = new ModuleConfigurationHistory(
                 config.Id,
@@ -242,6 +276,8 @@ namespace MedicSoft.Application.Services
                 reason: null
             );
             await _context.ModuleConfigurationHistories.AddAsync(history);
+            
+            // Save both changes in a single transaction
             await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Module {moduleName} configuration updated for clinic {clinicId} by user {userId}");
@@ -250,17 +286,22 @@ namespace MedicSoft.Application.Services
         public async Task<IEnumerable<ModuleUsageDto>> GetGlobalModuleUsageAsync()
         {
             var modules = SystemModules.GetAllModules();
-            var result = new List<ModuleUsageDto>();
             var totalClinics = await _context.Clinics.CountAsync();
 
+            // Fetch all module usage in a single query
+            var moduleUsage = await _context.ModuleConfigurations
+                .Where(mc => mc.IsEnabled)
+                .GroupBy(mc => mc.ModuleName)
+                .Select(g => new { ModuleName = g.Key, Count = g.Select(x => x.ClinicId).Distinct().Count() })
+                .ToListAsync();
+
+            var usageMap = moduleUsage.ToDictionary(x => x.ModuleName, x => x.Count);
+
+            var result = new List<ModuleUsageDto>();
             foreach (var moduleName in modules)
             {
                 var moduleInfo = SystemModules.GetModuleInfo(moduleName);
-                var clinicsWithModule = await _context.ModuleConfigurations
-                    .Where(mc => mc.ModuleName == moduleName && mc.IsEnabled)
-                    .Select(mc => mc.ClinicId)
-                    .Distinct()
-                    .CountAsync();
+                var clinicsWithModule = usageMap.GetValueOrDefault(moduleName, 0);
 
                 result.Add(new ModuleUsageDto
                 {
