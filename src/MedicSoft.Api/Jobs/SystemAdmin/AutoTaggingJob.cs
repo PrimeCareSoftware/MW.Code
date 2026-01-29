@@ -230,8 +230,8 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
 
             var supportHeavyClinics = await _context.Tickets
                 .IgnoreQueryFilters()
-                .Where(t => t.CreatedAt >= thirtyDaysAgo)
-                .GroupBy(t => t.ClinicId)
+                .Where(t => t.CreatedAt >= thirtyDaysAgo && t.ClinicId.HasValue)
+                .GroupBy(t => t.ClinicId!.Value)
                 .Where(g => g.Count() >= ticketThreshold)
                 .Select(g => g.Key)
                 .ToListAsync();
@@ -245,8 +245,8 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
             // Remove tag from clinics with few tickets
             var lowSupportClinics = await _context.Tickets
                 .IgnoreQueryFilters()
-                .Where(t => t.CreatedAt >= thirtyDaysAgo)
-                .GroupBy(t => t.ClinicId)
+                .Where(t => t.CreatedAt >= thirtyDaysAgo && t.ClinicId.HasValue)
+                .GroupBy(t => t.ClinicId!.Value)
                 .Where(g => g.Count() < ticketThreshold)
                 .Select(g => g.Key)
                 .ToListAsync();

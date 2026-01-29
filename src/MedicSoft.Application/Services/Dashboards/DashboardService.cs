@@ -64,7 +64,6 @@ namespace MedicSoft.Application.Services.Dashboards
                 IsDefault = dto.IsDefault,
                 IsPublic = dto.IsPublic,
                 CreatedBy = userId,
-                CreatedAt = DateTime.UtcNow,
                 Layout = "{}"
             };
 
@@ -94,7 +93,7 @@ namespace MedicSoft.Application.Services.Dashboards
             dashboard.Layout = dto.Layout ?? dashboard.Layout;
             dashboard.IsDefault = dto.IsDefault;
             dashboard.IsPublic = dto.IsPublic;
-            dashboard.UpdatedAt = DateTime.UtcNow;
+            dashboard.UpdateTimestamp();
 
             await _context.SaveChangesAsync();
 

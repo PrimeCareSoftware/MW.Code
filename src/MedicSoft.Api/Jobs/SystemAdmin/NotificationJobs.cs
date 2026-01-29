@@ -131,7 +131,7 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
 
                 foreach (var clinic in inactiveClinics)
                 {
-                    var daysSinceActivity = (DateTime.UtcNow - clinic.UpdatedAt).Days;
+                    var daysSinceActivity = (DateTime.UtcNow - (clinic.UpdatedAt ?? clinic.CreatedAt)).Days;
                     await _notificationService.CreateNotificationAsync(new CreateSystemNotificationDto
                     {
                         Type = "warning",
@@ -169,7 +169,6 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
                     .Where(t => t.Status == Domain.Entities.TicketStatus.Open && 
                                t.Priority == Domain.Entities.TicketPriority.High &&
                                t.CreatedAt < twentyFourHoursAgo)
-                    .Include(t => t.Clinic)
                     .ToListAsync();
 
                 foreach (var ticket in unrespondedTickets)
