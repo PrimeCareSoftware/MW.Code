@@ -25,13 +25,23 @@ namespace MedicSoft.Application.Services
         public async Task<byte[]> ExportClinicDataAsync(Guid clinicId, string tenantId)
         {
             var clinic = await _context.Clinics
-                .Include(c => c.Users)
-                .Include(c => c.Patients)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == clinicId && c.TenantId == tenantId);
 
             if (clinic == null)
                 throw new InvalidOperationException("Clinic not found");
+
+            // Query users separately since Clinic doesn't have Users navigation property
+            var users = await _context.Users
+                .Where(u => u.ClinicId == clinicId && u.TenantId == tenantId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            // Query patients separately since Clinic doesn't have Patients navigation property  
+            var patients = await _context.Patients
+                .Where(p => p.ClinicId == clinicId && p.TenantId == tenantId)
+                .AsNoTracking()
+                .ToListAsync();
 
             var data = new
             {
@@ -42,7 +52,7 @@ namespace MedicSoft.Application.Services
                 clinic.Address,
                 clinic.Cnpj,
                 clinic.CreatedAt,
-                Users = clinic.Users.Select(u => new
+                Users = users.Select(u => new
                 {
                     u.Id,
                     u.Username,
@@ -51,7 +61,7 @@ namespace MedicSoft.Application.Services
                     u.Phone,
                     u.Role
                 }),
-                Patients = clinic.Patients.Select(p => new
+                Patients = patients.Select(p => new
                 {
                     p.Id,
                     p.Name,
@@ -70,12 +80,20 @@ namespace MedicSoft.Application.Services
         public async Task AnonymizeClinicAsync(Guid clinicId, string tenantId, string userId)
         {
             var clinic = await _context.Clinics
-                .Include(c => c.Users)
-                .Include(c => c.Patients)
                 .FirstOrDefaultAsync(c => c.Id == clinicId && c.TenantId == tenantId);
 
             if (clinic == null)
                 throw new InvalidOperationException("Clinic not found");
+
+            // Query users separately since Clinic doesn't have Users navigation property
+            var users = await _context.Users
+                .Where(u => u.ClinicId == clinicId && u.TenantId == tenantId)
+                .ToListAsync();
+
+            // Query patients separately since Clinic doesn't have Patients navigation property
+            var patients = await _context.Patients
+                .Where(p => p.ClinicId == clinicId && p.TenantId == tenantId)
+                .ToListAsync();
 
             // Store old data for audit
             var oldData = new
@@ -103,7 +121,7 @@ namespace MedicSoft.Application.Services
             );
 
             // Anonymize users associated with clinic
-            foreach (var user in clinic.Users)
+            foreach (var user in users)
             {
                 user.UpdateProfile(
                     $"anonymized-{Guid.NewGuid()}@example.com",
@@ -113,7 +131,7 @@ namespace MedicSoft.Application.Services
             }
 
             // Anonymize patients
-            foreach (var patient in clinic.Patients)
+            foreach (var patient in patients)
             {
                 patient.UpdatePersonalInfo(
                     $"Patient-{Guid.NewGuid()}",
@@ -142,7 +160,7 @@ namespace MedicSoft.Application.Services
                 HttpMethod: "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
                 DataCategory: DataCategory.PERSONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.LEGAL_OBLIGATION,
+                Purpose: Domain.Enums.LgpdPurpose.LEGAL_OBLIGATION,
                 Severity: AuditSeverity.CRITICAL,
                 TenantId: tenantId,
                 OldValues: JsonSerializer.Serialize(oldData),
@@ -233,7 +251,7 @@ namespace MedicSoft.Application.Services
                 HttpMethod: "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
                 DataCategory: DataCategory.PERSONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.LEGAL_OBLIGATION,
+                Purpose: Domain.Enums.LgpdPurpose.LEGAL_OBLIGATION,
                 Severity: AuditSeverity.CRITICAL,
                 TenantId: tenantId,
                 OldValues: JsonSerializer.Serialize(oldData),

@@ -100,9 +100,9 @@ namespace MedicSoft.Application.Services
                     UserAgent: attempt.UserAgent,
                     RequestPath: "/api/auth/login",
                     HttpMethod: "POST",
-                    Result: Domain.Enums.OperationResult.WARNING,
+                    Result: Domain.Enums.OperationResult.PARTIAL_SUCCESS,
                     DataCategory: Domain.Enums.DataCategory.PERSONAL,
-                    Purpose: Domain.ValueObjects.LgpdPurpose.LEGAL_OBLIGATION,
+                    Purpose: Domain.Enums.LgpdPurpose.LEGAL_OBLIGATION,
                     Severity: Domain.Enums.AuditSeverity.WARNING,
                     TenantId: tenantId,
                     FailureReason: $"Flags detectados: {string.Join(", ", flags)}"
@@ -152,7 +152,7 @@ namespace MedicSoft.Application.Services
                     HttpMethod: "POST",
                     Result: Domain.Enums.OperationResult.FAILED,
                     DataCategory: Domain.Enums.DataCategory.PERSONAL,
-                    Purpose: Domain.ValueObjects.LgpdPurpose.LEGAL_OBLIGATION,
+                    Purpose: Domain.Enums.LgpdPurpose.LEGAL_OBLIGATION,
                     Severity: Domain.Enums.AuditSeverity.WARNING,
                     TenantId: tenantId
                 ));
