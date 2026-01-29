@@ -9,6 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SoapRecordService } from '../../services/soap-record.service';
 import { SoapRecord } from '../../models/soap-record.model';
+import { Navbar } from '../../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-soap-list',
@@ -20,9 +21,11 @@ import { SoapRecord } from '../../models/soap-record.model';
     MatTableModule,
     MatIconModule,
     MatChipsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    Navbar
   ],
   template: `
+    <app-navbar></app-navbar>
     <div class="soap-list-container">
       <mat-card>
         <mat-card-header>
