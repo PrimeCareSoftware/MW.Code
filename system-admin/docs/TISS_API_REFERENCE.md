@@ -681,7 +681,7 @@ GET /api/tiss/reports/glosas
 - `operatorId` (uuid, optional)
 - `startDate` (date)
 - `endDate` (date)
-- `glossaType` (string, optional): Administrativa, Técnica, Lineage
+- `glossaType` (string, optional): Administrativa, Técnica, Financeira
 
 **Response 200:**
 ```json
