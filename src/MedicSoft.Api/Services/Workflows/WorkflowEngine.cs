@@ -185,19 +185,13 @@ namespace MedicSoft.Api.Services.Workflows
             var type = config.ContainsKey("type") ? config["type"].GetString() : "info";
             var title = ReplaceVariables(config["title"].GetString(), triggerData);
             var message = ReplaceVariables(config["message"].GetString(), triggerData);
+            var category = config.ContainsKey("category") ? config["category"].GetString() : "system";
 
-            var notification = new SystemNotification
-            {
-                Type = type,
-                Title = title,
-                Message = message,
-                CreatedAt = DateTime.UtcNow,
-                IsRead = false
-            };
+            var notification = new SystemNotification(type ?? "info", category ?? "system", title ?? "", message ?? "");
 
             _context.SystemNotifications.Add(notification);
             await _context.SaveChangesAsync();
-            _logger.LogInformation($"System notification created: {title}");
+            _logger.LogInformation("System notification created: {Title}", title);
         }
 
         private async Task ExecuteAddTagActionAsync(Dictionary<string, JsonElement> config, object triggerData)
@@ -211,37 +205,44 @@ namespace MedicSoft.Api.Services.Workflows
                 return;
             }
 
+            Guid clinicGuid;
+            if (!Guid.TryParse(clinicId.ToString(), out clinicGuid))
+            {
+                _logger.LogWarning("Invalid clinicId format in trigger data for add_tag action");
+                return;
+            }
+
+            // Get tenant ID from clinic
+            var clinic = await _context.Clinics.FindAsync(clinicGuid);
+            if (clinic == null)
+            {
+                _logger.LogWarning("Clinic not found for id: {ClinicId}", clinicGuid);
+                return;
+            }
+
+            var tenantId = clinic.TenantId;
+
             // Find or create tag
-            var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == tagName);
+            var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == tagName && t.TenantId == tenantId);
             if (tag == null)
             {
-                tag = new Tag
-                {
-                    Name = tagName,
-                    Color = "#808080",
-                    CreatedAt = DateTime.UtcNow
-                };
+                tag = new Tag(tagName, "workflow", "#808080", tenantId, isAutomatic: true);
                 _context.Tags.Add(tag);
                 await _context.SaveChangesAsync();
             }
 
             // Check if clinic already has this tag
             var clinicTag = await _context.ClinicTags
-                .FirstOrDefaultAsync(ct => ct.ClinicId == int.Parse(clinicId.ToString()) && ct.TagId == tag.Id);
+                .FirstOrDefaultAsync(ct => ct.ClinicId == clinicGuid && ct.TagId == tag.Id);
 
             if (clinicTag == null)
             {
-                clinicTag = new ClinicTag
-                {
-                    ClinicId = int.Parse(clinicId.ToString()),
-                    TagId = tag.Id,
-                    AddedAt = DateTime.UtcNow
-                };
+                clinicTag = new ClinicTag(clinicGuid, tag.Id, tenantId, isAutoAssigned: true);
                 _context.ClinicTags.Add(clinicTag);
                 await _context.SaveChangesAsync();
             }
 
-            _logger.LogInformation($"Tag '{tagName}' added to clinic {clinicId}");
+            _logger.LogInformation("Tag '{TagName}' added to clinic {ClinicId}", tagName, clinicGuid);
         }
 
         private async Task ExecuteCreateTicketActionAsync(Dictionary<string, JsonElement> config, object triggerData)

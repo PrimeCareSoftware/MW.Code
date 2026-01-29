@@ -37,12 +37,12 @@ namespace MedicSoft.Api.Jobs.Workflows
             var expiredSubscriptions = await _context.ClinicSubscriptions
                 .Include(s => s.Clinic)
                 .Where(s =>
-                    s.Status == "Active" &&
-                    s.ExpiresAt <= now &&
-                    s.ExpiresAt > oneHourAgo)
+                    s.Status == SubscriptionStatus.Active &&
+                    s.NextPaymentDate <= now &&
+                    s.NextPaymentDate > oneHourAgo)
                 .ToListAsync();
 
-            _logger.LogInformation($"Found {expiredSubscriptions.Count} expired subscriptions");
+            _logger.LogInformation("Found {Count} expired subscriptions", expiredSubscriptions.Count);
 
             foreach (var subscription in expiredSubscriptions)
             {
@@ -52,14 +52,14 @@ namespace MedicSoft.Api.Jobs.Workflows
                     {
                         ClinicId = subscription.ClinicId,
                         SubscriptionId = subscription.Id,
-                        ExpiredAt = subscription.ExpiresAt,
-                        ClinicName = subscription.Clinic?.Name,
-                        Email = subscription.Clinic?.Email
+                        ExpiredAt = subscription.NextPaymentDate ?? now,
+                        ClinicName = subscription.Clinic?.Name ?? "Unknown",
+                        Email = subscription.Clinic?.Email ?? "unknown@example.com"
                     });
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Error publishing event for clinic {subscription.ClinicId}");
+                    _logger.LogError(ex, "Error publishing event for clinic {ClinicId}", subscription.ClinicId);
                 }
             }
         }
@@ -76,32 +76,34 @@ namespace MedicSoft.Api.Jobs.Workflows
             var expiringTrials = await _context.ClinicSubscriptions
                 .Include(s => s.Clinic)
                 .Where(s =>
-                    s.Status == "Trial" &&
-                    s.TrialEndsAt <= threeDaysFromNow &&
-                    s.TrialEndsAt > twoDaysFromNow)
+                    s.Status == SubscriptionStatus.Trial &&
+                    s.TrialEndDate <= threeDaysFromNow &&
+                    s.TrialEndDate > twoDaysFromNow)
                 .ToListAsync();
 
-            _logger.LogInformation($"Found {expiringTrials.Count} expiring trials");
+            _logger.LogInformation("Found {Count} expiring trials", expiringTrials.Count);
 
             foreach (var trial in expiringTrials)
             {
                 try
                 {
-                    var daysRemaining = (trial.TrialEndsAt - now).Days;
+                    var daysRemaining = trial.TrialEndDate.HasValue 
+                        ? (trial.TrialEndDate.Value - now).Days 
+                        : 0;
 
                     await _eventPublisher.PublishAsync(new TrialExpiringEvent
                     {
                         ClinicId = trial.ClinicId,
                         SubscriptionId = trial.Id,
                         DaysRemaining = daysRemaining,
-                        TrialEndsAt = trial.TrialEndsAt,
-                        ClinicName = trial.Clinic?.Name,
-                        Email = trial.Clinic?.Email
+                        TrialEndsAt = trial.TrialEndDate ?? now,
+                        ClinicName = trial.Clinic?.Name ?? "Unknown",
+                        Email = trial.Clinic?.Email ?? "unknown@example.com"
                     });
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Error publishing event for clinic {trial.ClinicId}");
+                    _logger.LogError(ex, "Error publishing event for clinic {ClinicId}", trial.ClinicId);
                 }
             }
         }
