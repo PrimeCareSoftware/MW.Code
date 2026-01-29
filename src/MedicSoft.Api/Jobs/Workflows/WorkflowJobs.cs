@@ -5,6 +5,7 @@ using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services.Workflows;
+using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Events;
 using MedicSoft.Repository.Context;
 
@@ -132,23 +133,25 @@ namespace MedicSoft.Api.Jobs.Workflows
             var inactiveClinics = await _context.Clinics
                 .Where(c =>
                     c.IsActive &&
-                    c.LastActivityAt < thirtyDaysAgo &&
-                    c.LastActivityAt >= thirtyOneDaysAgo)
+                    c.UpdatedAt.HasValue &&
+                    c.UpdatedAt.Value < thirtyDaysAgo &&
+                    c.CreatedAt < thirtyOneDaysAgo) // Exclude recently created clinics
                 .ToListAsync();
 
-            _logger.LogInformation($"Found {inactiveClinics.Count} inactive clinics");
+            _logger.LogInformation("Found {Count} inactive clinics", inactiveClinics.Count);
 
             foreach (var clinic in inactiveClinics)
             {
                 try
                 {
-                    var daysSinceLastActivity = (now - clinic.LastActivityAt).Days;
+                    var lastActivity = clinic.UpdatedAt ?? clinic.CreatedAt;
+                    var daysSinceLastActivity = (now - lastActivity).Days;
 
                     await _eventPublisher.PublishAsync(new InactivityDetectedEvent
                     {
                         ClinicId = clinic.Id,
                         DaysSinceLastActivity = daysSinceLastActivity,
-                        LastActivityAt = clinic.LastActivityAt,
+                        LastActivityAt = lastActivity,
                         ClinicName = clinic.Name,
                         Email = clinic.Email
                     });
