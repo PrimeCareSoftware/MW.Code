@@ -45,12 +45,21 @@ namespace MedicSoft.Api.Controllers
                 {
                     message = "Demo data seeded successfully",
                     tenantId = "demo-clinic-001",
+                    systemAdmin = new
+                    {
+                        note = "System Owner for accessing system-admin area (NOT the same as the clinic 'admin' user below)",
+                        endpoint = "POST /api/auth/owner-login",
+                        username = "admin",
+                        password = "Admin@123",
+                        tenantId = "system",
+                        isSystemOwner = true
+                    },
                     credentials = new
                     {
                         owner = new { username = "owner.demo", password = "Owner@123", role = "Owner" },
                         users = new[]
                         {
-                            new { username = "admin", password = "Admin@123", role = "SystemAdmin" },
+                            new { username = "admin", password = "Admin@123", role = "SystemAdmin", note = "Clinic user (different from system owner above)" },
                             new { username = "dr.silva", password = "Doctor@123", role = "Doctor" },
                             new { username = "recep.maria", password = "Recep@123", role = "Receptionist" }
                         }
@@ -58,6 +67,7 @@ namespace MedicSoft.Api.Controllers
                     summary = new
                     {
                         subscriptionPlans = 5,
+                        systemOwner = 1,
                         clinic = 1,
                         clinicSubscription = 1,
                         owner = 1,
@@ -80,7 +90,7 @@ namespace MedicSoft.Api.Controllers
                         healthInsurancePlans = 3,
                         invoices = 2
                     },
-                    note = "Use these credentials to login and test the system. Complete database seeded with realistic demo data including CFM/ANVISA compliant digital prescriptions."
+                    note = "Use these credentials to login and test the system. Complete database seeded with realistic demo data including CFM/ANVISA compliant digital prescriptions. System owner created for system-admin access."
                 });
             }
             catch (InvalidOperationException ex)
@@ -102,6 +112,15 @@ namespace MedicSoft.Api.Controllers
             return Ok(new
             {
                 tenantId = "demo-clinic-001",
+                systemAdmin = new
+                {
+                    note = "System Owner for accessing system-admin area (NOT the same as the clinic 'admin' user below)",
+                    endpoint = "POST /api/auth/owner-login",
+                    username = "admin",
+                    password = "Admin@123",
+                    tenantId = "system",
+                    isSystemOwner = true
+                },
                 clinic = new
                 {
                     name = "Clínica Demo PrimeCare Software",
@@ -117,6 +136,7 @@ namespace MedicSoft.Api.Controllers
                 dataSeeded = new
                 {
                     subscriptionPlans = 5,
+                    systemOwner = 1,
                     clinic = 1,
                     clinicSubscription = 1,
                     owner = 1,
@@ -142,6 +162,7 @@ namespace MedicSoft.Api.Controllers
                 },
                 entities = new[]
                 {
+                    "✅ 1 System Owner (admin) for system-admin access",
                     "✅ 5 Planos de assinatura (Trial, Básico, Standard, Premium, Enterprise)",
                     "✅ 1 Clínica Demo",
                     "✅ 1 Assinatura ativa (Plano Standard)",
@@ -166,7 +187,7 @@ namespace MedicSoft.Api.Controllers
                     "✅ 3 Planos de saúde ativos para pacientes",
                     "✅ 2 Notas fiscais (emitidas e pagas)"
                 },
-                note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features with full CFM/ANVISA compliance"
+                note = "Use POST /api/data-seeder/seed-demo to create comprehensive demo data for testing all system features with full CFM/ANVISA compliance. System owner created for system-admin access."
             });
         }
 

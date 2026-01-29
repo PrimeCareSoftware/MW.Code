@@ -138,166 +138,175 @@ namespace MedicSoft.Application.Services
                     await _subscriptionPlanRepository.AddWithoutSaveAsync(plan);
                 }
 
-                // 1. Create Demo Clinic
+                // 2. Create System Owner (admin user for system-admin area)
+                // Check if system owner already exists before creating
+                var existingSystemOwner = await _ownerRepository.GetByUsernameAsync("admin", "system");
+                if (existingSystemOwner == null)
+                {
+                    var systemOwner = CreateSystemOwner();
+                    await _ownerRepository.AddWithoutSaveAsync(systemOwner);
+                }
+
+                // 3. Create Demo Clinic
                 var clinic = CreateDemoClinic();
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
 
-                // 1.1. Create Clinic Subscription
+                // 4. Create Clinic Subscription
                 var clinicSubscription = CreateClinicSubscription(clinic.Id, subscriptionPlans[2].Id); // Standard plan
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(clinicSubscription);
 
-                // 1.2. Create Demo Owner for the clinic
+                // 5. Create Demo Owner for the clinic
                 var owner = CreateDemoOwner(clinic.Id);
                 await _ownerRepository.AddWithoutSaveAsync(owner);
 
-                // 2. Create Users (Admin, Doctor, Receptionist)
+                // 6. Create Users (Admin, Doctor, Receptionist)
                 var users = CreateDemoUsers(clinic.Id);
                 foreach (var user in users)
                 {
                     await _userRepository.AddWithoutSaveAsync(user);
                 }
 
-                // 3. Create Procedures/Services
+                // 7. Create Procedures/Services
                 var procedures = CreateDemoProcedures();
                 foreach (var procedure in procedures)
                 {
                     await _procedureRepository.AddWithoutSaveAsync(procedure);
                 }
 
-                // 4. Create Patients
+                // 8. Create Patients
                 var patients = CreateDemoPatients(clinic.Id);
                 foreach (var patient in patients)
                 {
                     await _patientRepository.AddWithoutSaveAsync(patient);
                 }
 
-                // 5. Link patients to clinic
+                // 9. Link patients to clinic
                 var patientLinks = CreatePatientClinicLinks(patients, clinic.Id);
                 foreach (var link in patientLinks)
                 {
                     await _patientClinicLinkRepository.AddWithoutSaveAsync(link);
                 }
 
-                // 6. Create Appointments
+                // 10. Create Appointments
                 var appointments = CreateDemoAppointments(patients, clinic.Id);
                 foreach (var appointment in appointments)
                 {
                     await _appointmentRepository.AddWithoutSaveAsync(appointment);
                 }
 
-                // 7. Create Appointment Procedures
+                // 11. Create Appointment Procedures
                 var appointmentProcedures = CreateAppointmentProcedures(appointments, procedures, patients);
                 foreach (var ap in appointmentProcedures)
                 {
                     await _appointmentProcedureRepository.AddWithoutSaveAsync(ap);
                 }
 
-                // 8. Create Payments for some appointments
+                // 12. Create Payments for some appointments
                 var payments = CreateDemoPayments(appointments);
                 foreach (var payment in payments)
                 {
                     await _paymentRepository.AddWithoutSaveAsync(payment);
                 }
 
-                // 9. Create Medications
+                // 13. Create Medications
                 var medications = CreateDemoMedications();
                 foreach (var medication in medications)
                 {
                     await _medicationRepository.AddWithoutSaveAsync(medication);
                 }
 
-                // 10. Create Medical Records for completed appointments
+                // 14. Create Medical Records for completed appointments
                 var medicalRecords = CreateDemoMedicalRecords(appointments, patients);
                 foreach (var record in medicalRecords)
                 {
                     await _medicalRecordRepository.AddWithoutSaveAsync(record);
                 }
 
-                // 11. Create Prescription Items
+                // 15. Create Prescription Items
                 var prescriptionItems = CreateDemoPrescriptionItems(medicalRecords, medications);
                 foreach (var item in prescriptionItems)
                 {
                     await _prescriptionItemRepository.AddWithoutSaveAsync(item);
                 }
 
-                // 12. Create Prescription Templates
+                // 16. Create Prescription Templates
                 var prescriptionTemplates = CreateDemoPrescriptionTemplates();
                 foreach (var template in prescriptionTemplates)
                 {
                     await _prescriptionTemplateRepository.AddWithoutSaveAsync(template);
                 }
 
-                // 13. Create Medical Record Templates
+                // 17. Create Medical Record Templates
                 var medicalRecordTemplates = CreateDemoMedicalRecordTemplates();
                 foreach (var template in medicalRecordTemplates)
                 {
                     await _medicalRecordTemplateRepository.AddWithoutSaveAsync(template);
                 }
 
-                // 14. Create Notifications for appointments
+                // 18. Create Notifications for appointments
                 var notifications = CreateDemoNotifications(appointments, patients);
                 foreach (var notification in notifications)
                 {
                     await _notificationRepository.AddWithoutSaveAsync(notification);
                 }
 
-                // 15. Create Notification Routines
+                // 19. Create Notification Routines
                 var notificationRoutines = CreateDemoNotificationRoutines(clinic.Id);
                 foreach (var routine in notificationRoutines)
                 {
                     await _notificationRoutineRepository.AddWithoutSaveAsync(routine);
                 }
 
-                // 16. Create Expenses
+                // 20. Create Expenses
                 var expenses = CreateDemoExpenses(clinic.Id);
                 foreach (var expense in expenses)
                 {
                     await _expenseRepository.AddWithoutSaveAsync(expense);
                 }
 
-                // 17. Create Exam Requests
+                // 21. Create Exam Requests
                 var examRequests = CreateDemoExamRequests(appointments, patients);
                 foreach (var examRequest in examRequests)
                 {
                     await _examRequestRepository.AddWithoutSaveAsync(examRequest);
                 }
 
-                // 18. Create Exam Catalog (comprehensive list for autocomplete)
+                // 22. Create Exam Catalog (comprehensive list for autocomplete)
                 var examCatalogs = CreateDemoExamCatalogs();
                 foreach (var examCatalog in examCatalogs)
                 {
                     await _examCatalogRepository.AddWithoutSaveAsync(examCatalog);
                 }
 
-                // 19. Create Digital Prescriptions (CFM 1.643/2002 compliance)
+                // 23. Create Digital Prescriptions (CFM 1.643/2002 compliance)
                 var digitalPrescriptions = CreateDemoDigitalPrescriptions(medicalRecords, patients, users, medications);
                 foreach (var prescription in digitalPrescriptions)
                 {
                     await _digitalPrescriptionRepository.AddWithoutSaveAsync(prescription);
                 }
 
-                // 20. Create Health Insurance Operators
+                // 24. Create Health Insurance Operators
                 var healthInsuranceOperators = CreateDemoHealthInsuranceOperators();
                 foreach (var healthOperator in healthInsuranceOperators)
                 {
                     await _healthInsuranceOperatorRepository.AddWithoutSaveAsync(healthOperator);
                 }
 
-                // 21. Create Health Insurance Plans for patients
+                // 25. Create Health Insurance Plans for patients
                 var healthInsurancePlans = CreateDemoHealthInsurancePlans(patients, healthInsuranceOperators);
                 foreach (var plan in healthInsurancePlans)
                 {
                     await _healthInsurancePlanRepository.AddWithoutSaveAsync(plan);
                 }
 
-                // 22. Create Invoices for appointments
+                // 26. Create Invoices for appointments
                 var invoices = CreateDemoInvoices(appointments, payments, clinic.Id);
                 foreach (var invoice in invoices)
                 {
                     await _invoiceRepository.AddWithoutSaveAsync(invoice);
                 }
 
-                // 23. Create Anamnesis Templates
+                // 27. Create Anamnesis Templates
                 var anamnesisTemplates = CreateDemoAnamnesisTemplates(users[1].Id); // Created by doctor
                 foreach (var template in anamnesisTemplates)
                 {
@@ -1575,6 +1584,20 @@ RETORNO: {{return_date}}",
             subscription.Activate();
             
             return subscription;
+        }
+
+        private Owner CreateSystemOwner()
+        {
+            var passwordHash = _passwordHasher.HashPassword("Admin@123");
+            return new Owner(
+                username: "admin",
+                email: "admin@medicwarehouse.com",
+                passwordHash: passwordHash,
+                fullName: "System Administrator",
+                phone: "+5511999999999",
+                tenantId: "system",
+                clinicId: null // System owners are not tied to any specific clinic
+            );
         }
 
         private Owner CreateDemoOwner(Guid clinicId)
