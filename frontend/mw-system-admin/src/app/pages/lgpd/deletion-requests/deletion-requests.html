@@ -1,0 +1,523 @@
+<div class="deletion-requests-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          <line x1="10" y1="11" x2="10" y2="17"></line>
+          <line x1="14" y1="11" x2="14" y2="17"></line>
+        </svg>
+        Solicitações de Exclusão de Dados
+      </h1>
+      <p class="subtitle">Gerencie as solicitações de exclusão e anonimização de dados pessoais</p>
+    </div>
+    
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="loadPendingRequests()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+        </svg>
+        Atualizar
+      </button>
+      <button class="btn btn-secondary" (click)="exportToJson()" [disabled]="requests().length === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Exportar JSON
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  @if (error()) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Loading Indicator -->
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando solicitações...</p>
+    </div>
+  }
+
+  <!-- Requests Table -->
+  @if (!loading() && requests().length > 0) {
+    <div class="results-summary">
+      <span class="count-badge">
+        Total de solicitações: <strong>{{ requests().length }}</strong>
+      </span>
+    </div>
+
+    <div class="table-container">
+      <table class="requests-table">
+        <thead>
+          <tr>
+            <th>Data da Solicitação</th>
+            <th>Paciente</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Aprovação Legal</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (request of requests(); track request.id) {
+            <tr>
+              <td class="date-cell">{{ formatDate(request.requestDate) }}</td>
+              <td>
+                <div class="patient-info">
+                  <span class="patient-name">{{ request.patientName }}</span>
+                  <span class="patient-email">{{ request.patientEmail }}</span>
+                  <span class="patient-id">ID: {{ request.patientId }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="type-badge">{{ getRequestTypeText(request.requestType) }}</span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getStatusBadgeClass(request.status)">
+                  {{ getStatusText(request.status) }}
+                </span>
+              </td>
+              <td>
+                @if (request.legalApprovalRequired) {
+                  @if (request.legalApprovalDate) {
+                    <span class="legal-badge legal-approved">✓ Aprovado</span>
+                  } @else {
+                    <span class="legal-badge legal-pending">⏳ Pendente</span>
+                  }
+                } @else {
+                  <span class="text-muted">Não requerida</span>
+                }
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn-icon" (click)="viewDetails(request)" title="Ver detalhes">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
+                  @if (request.status === 'Pending') {
+                    <button class="btn-icon btn-info" (click)="openProcessModal(request)" title="Processar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                      </svg>
+                    </button>
+                  }
+                  @if (request.status === 'Processing') {
+                    <button class="btn-icon btn-success" (click)="openCompleteModal(request)" title="Completar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </button>
+                  }
+                  @if (request.legalApprovalRequired && !request.legalApprovalDate) {
+                    <button class="btn-icon btn-warning" (click)="openLegalApprovalModal(request)" title="Aprovação Legal">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                      </svg>
+                    </button>
+                  }
+                  @if (request.status !== 'Completed' && request.status !== 'Rejected') {
+                    <button class="btn-icon btn-danger" (click)="openRejectModal(request)" title="Rejeitar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && requests().length === 0 && !error()) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+      </svg>
+      <h3>Nenhuma solicitação pendente</h3>
+      <p>Não há solicitações de exclusão de dados aguardando processamento no momento.</p>
+    </div>
+  }
+</div>
+
+<!-- Details Modal -->
+@if (showDetailsModal()) {
+  @if (selectedRequest(); as request) {
+    <div class="modal-overlay" (click)="closeDetailsModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Detalhes da Solicitação</h2>
+          <button class="close-btn" (click)="closeDetailsModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="detail-section">
+            <h3>Informações do Paciente</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="detail-label">Nome:</span>
+                <span class="detail-value">{{ request.patientName }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">E-mail:</span>
+                <span class="detail-value">{{ request.patientEmail }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">ID do Paciente:</span>
+                <span class="detail-value">{{ request.patientId }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Detalhes da Solicitação</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="detail-label">Tipo:</span>
+                <span class="detail-value">{{ getRequestTypeText(request.requestType) }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Status:</span>
+                <span class="badge" [ngClass]="getStatusBadgeClass(request.status)">
+                  {{ getStatusText(request.status) }}
+                </span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Data da Solicitação:</span>
+                <span class="detail-value">{{ formatDate(request.requestDate) }}</span>
+              </div>
+              @if (request.processedDate) {
+                <div class="detail-item">
+                  <span class="detail-label">Data de Processamento:</span>
+                  <span class="detail-value">{{ formatDate(request.processedDate) }}</span>
+                </div>
+              }
+              @if (request.completedDate) {
+                <div class="detail-item">
+                  <span class="detail-label">Data de Conclusão:</span>
+                  <span class="detail-value">{{ formatDate(request.completedDate) }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Motivo da Solicitação</h3>
+            <p class="description-text">{{ request.reason }}</p>
+          </div>
+
+          @if (request.legalApprovalRequired) {
+            <div class="detail-section">
+              <h3>Aprovação Legal</h3>
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <span class="detail-label">Status:</span>
+                  @if (request.legalApprovalDate) {
+                    <span class="legal-badge legal-approved">✓ Aprovado</span>
+                  } @else {
+                    <span class="legal-badge legal-pending">⏳ Pendente</span>
+                  }
+                </div>
+                @if (request.legalApprovalDate) {
+                  <div class="detail-item">
+                    <span class="detail-label">Data de Aprovação:</span>
+                    <span class="detail-value">{{ formatDate(request.legalApprovalDate) }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Aprovado por:</span>
+                    <span class="detail-value">{{ request.legalApprovedBy }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          @if (request.processingNotes) {
+            <div class="detail-section">
+              <h3>Notas de Processamento</h3>
+              <p class="description-text">{{ request.processingNotes }}</p>
+            </div>
+          }
+
+          @if (request.affectedDataTypes && request.affectedDataTypes.length > 0) {
+            <div class="detail-section">
+              <h3>Tipos de Dados Afetados</h3>
+              <div class="data-types-list">
+                @for (dataType of request.affectedDataTypes; track dataType) {
+                  <span class="data-type-badge">{{ dataType }}</span>
+                }
+              </div>
+            </div>
+          }
+
+          @if (request.status === 'Rejected') {
+            <div class="detail-section">
+              <h3>Rejeição</h3>
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <span class="detail-label">Data de Rejeição:</span>
+                  <span class="detail-value">{{ formatDate(request.rejectedDate) }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Rejeitado por:</span>
+                  <span class="detail-value">{{ request.rejectedBy }}</span>
+                </div>
+              </div>
+              <div class="rejection-box">
+                <strong>Motivo:</strong>
+                <p>{{ request.rejectionReason }}</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeDetailsModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  }
+}
+
+<!-- Process Modal -->
+@if (showProcessModal()) {
+  @if (selectedRequest(); as request) {
+    <div class="modal-overlay" (click)="closeProcessModal()">
+      <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Processar Solicitação</h2>
+          <button class="close-btn" (click)="closeProcessModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <p>Confirme que deseja iniciar o processamento da solicitação de <strong>{{ request.patientName }}</strong>.</p>
+
+          <div class="form-group">
+            <label for="processingNotes">Notas (opcional)</label>
+            <textarea 
+              id="processingNotes" 
+              [(ngModel)]="processingNotes"
+              placeholder="Adicione notas sobre o processamento..."
+              class="form-textarea"
+              rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeProcessModal()" [disabled]="actionInProgress()">
+            Cancelar
+          </button>
+          <button class="btn btn-primary" (click)="confirmProcess()" [disabled]="actionInProgress()">
+            @if (actionInProgress()) {
+              <div class="spinner-sm"></div>
+            }
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}
+
+<!-- Complete Modal -->
+@if (showCompleteModal()) {
+  @if (selectedRequest(); as request) {
+    <div class="modal-overlay" (click)="closeCompleteModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Completar Exclusão</h2>
+          <button class="close-btn" (click)="closeCompleteModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="warning-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <div>
+              <h4>Atenção!</h4>
+              <p>Esta ação irá executar a exclusão/anonimização dos dados. Esta operação é irreversível.</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tipos de Dados Afetados *</label>
+            <div class="checkbox-group">
+              @for (dataType of availableDataTypes; track dataType) {
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    [checked]="isDataTypeSelected(dataType)"
+                    (change)="toggleDataType(dataType)">
+                  <span>{{ dataType }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="completeNotes">Notas (opcional)</label>
+            <textarea 
+              id="completeNotes" 
+              [(ngModel)]="processingNotes"
+              placeholder="Adicione notas sobre a conclusão..."
+              class="form-textarea"
+              rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeCompleteModal()" [disabled]="actionInProgress()">
+            Cancelar
+          </button>
+          <button 
+            class="btn btn-success" 
+            (click)="confirmComplete()" 
+            [disabled]="selectedDataTypes.length === 0 || actionInProgress()">
+            @if (actionInProgress()) {
+              <div class="spinner-sm"></div>
+            }
+            Confirmar Conclusão
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}
+
+<!-- Reject Modal -->
+@if (showRejectModal()) {
+  @if (selectedRequest(); as request) {
+    <div class="modal-overlay" (click)="closeRejectModal()">
+      <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Rejeitar Solicitação</h2>
+          <button class="close-btn" (click)="closeRejectModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <p>Rejeitar a solicitação de <strong>{{ request.patientName }}</strong> para <strong>{{ getRequestTypeText(request.requestType) }}</strong>.</p>
+
+          <div class="form-group">
+            <label for="rejectionReason">Motivo da Rejeição *</label>
+            <textarea 
+              id="rejectionReason" 
+              [(ngModel)]="rejectionReason"
+              placeholder="Descreva o motivo da rejeição..."
+              class="form-textarea"
+              rows="4"
+              required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeRejectModal()" [disabled]="actionInProgress()">
+            Cancelar
+          </button>
+          <button 
+            class="btn btn-danger" 
+            (click)="confirmReject()" 
+            [disabled]="!rejectionReason.trim() || actionInProgress()">
+            @if (actionInProgress()) {
+              <div class="spinner-sm"></div>
+            }
+            Confirmar Rejeição
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}
+
+<!-- Legal Approval Modal -->
+@if (showLegalApprovalModal()) {
+  @if (selectedRequest(); as request) {
+    <div class="modal-overlay" (click)="closeLegalApprovalModal()">
+      <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Aprovação Legal</h2>
+          <button class="close-btn" (click)="closeLegalApprovalModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <p>Aprovar legalmente a solicitação de exclusão de dados de <strong>{{ request.patientName }}</strong>.</p>
+
+          <div class="form-group">
+            <label for="legalNotes">Notas de Aprovação (opcional)</label>
+            <textarea 
+              id="legalNotes" 
+              [(ngModel)]="legalApprovalNotes"
+              placeholder="Adicione notas sobre a aprovação legal..."
+              class="form-textarea"
+              rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeLegalApprovalModal()" [disabled]="actionInProgress()">
+            Cancelar
+          </button>
+          <button class="btn btn-success" (click)="confirmLegalApproval()" [disabled]="actionInProgress()">
+            @if (actionInProgress()) {
+              <div class="spinner-sm"></div>
+            }
+            Aprovar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}

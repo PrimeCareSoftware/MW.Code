@@ -180,6 +180,27 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // LGPD - Consent Management
+  {
+    path: 'lgpd/consents',
+    loadComponent: () => import('./pages/lgpd/consents/consent-management').then(m => m.ConsentManagement),
+    canActivate: [systemAdminGuard]
+  },
+  
+  // LGPD - Deletion Requests
+  {
+    path: 'lgpd/deletion-requests',
+    loadComponent: () => import('./pages/lgpd/deletion-requests/deletion-requests').then(m => m.DeletionRequests),
+    canActivate: [systemAdminGuard]
+  },
+  
+  // LGPD - Dashboard
+  {
+    path: 'lgpd/dashboard',
+    loadComponent: () => import('./pages/lgpd/dashboard/lgpd-dashboard').then(m => m.LgpdDashboard),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];

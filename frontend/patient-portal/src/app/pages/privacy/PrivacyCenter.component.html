@@ -1,0 +1,102 @@
+<div class="privacy-center-container">
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="header-icon">security</mat-icon>
+      <mat-card-title>Centro de Privacidade</mat-card-title>
+      <mat-card-subtitle>Gerencie seus dados pessoais conforme a LGPD</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  @if (currentUser) {
+    <mat-card class="user-card">
+      <mat-card-content>
+        <div class="user-info">
+          <mat-icon class="user-icon">person</mat-icon>
+          <div>
+            <h3>{{ currentUser.name }}</h3>
+            <p>{{ currentUser.email }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <div class="options-grid">
+    @for (option of privacyOptions; track option.route) {
+      <mat-card class="option-card" [class]="'option-' + option.color">
+        <mat-card-content>
+          <div class="option-icon">
+            <mat-icon [color]="option.color">{{ option.icon }}</mat-icon>
+          </div>
+          <h2>{{ option.title }}</h2>
+          <p>{{ option.description }}</p>
+          <button mat-raised-button [color]="option.color" [routerLink]="option.route">
+            Acessar
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>info</mat-icon>
+      <mat-card-title>Seus Direitos LGPD</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="rights-list">
+        <div class="right-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div>
+            <h4>Direito de Acesso</h4>
+            <p>Você pode visualizar todos os seus dados pessoais que mantemos</p>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        
+        <div class="right-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div>
+            <h4>Direito à Portabilidade</h4>
+            <p>Você pode exportar seus dados em formato estruturado</p>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        
+        <div class="right-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div>
+            <h4>Direito à Revogação</h4>
+            <p>Você pode revogar consentimentos a qualquer momento</p>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        
+        <div class="right-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div>
+            <h4>Direito ao Esquecimento</h4>
+            <p>Você pode solicitar a exclusão dos seus dados pessoais</p>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="contact-card">
+    <mat-card-content>
+      <div class="contact-info">
+        <mat-icon color="accent">support_agent</mat-icon>
+        <div>
+          <h3>Dúvidas sobre privacidade?</h3>
+          <p>Entre em contato com nosso Encarregado de Proteção de Dados (DPO)</p>
+          <a mat-button color="accent" href="mailto:dpo@primecare.com.br">
+            <mat-icon>email</mat-icon>
+            dpo@primecare.com.br
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

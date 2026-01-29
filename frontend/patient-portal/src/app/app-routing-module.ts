@@ -42,6 +42,31 @@ const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'privacy',
+    loadComponent: () => import('./pages/privacy/PrivacyCenter.component').then(m => m.PrivacyCenterComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'privacy/data-viewer',
+    loadComponent: () => import('./pages/privacy/DataViewer.component').then(m => m.DataViewerComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'privacy/data-portability',
+    loadComponent: () => import('./pages/privacy/DataPortability.component').then(m => m.DataPortabilityComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'privacy/consent-manager',
+    loadComponent: () => import('./pages/privacy/ConsentManager.component').then(m => m.ConsentManagerComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'privacy/deletion-request',
+    loadComponent: () => import('./pages/privacy/DeletionRequest.component').then(m => m.DeletionRequestComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     redirectTo: 'dashboard'
   }
