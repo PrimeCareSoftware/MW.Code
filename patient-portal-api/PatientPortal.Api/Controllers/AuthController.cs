@@ -51,7 +51,7 @@ public class AuthController : ControllerBase
     /// </remarks>
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequestDto request)
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
         try
         {
@@ -64,6 +64,21 @@ public class AuthController : ControllerBase
             }
 
             return Ok(response);
+        }
+        catch (PatientPortal.Application.Services.TwoFactorRequiredException ex)
+        {
+            // 2FA is required - return the temp token
+            return Ok(new TwoFactorRequiredDto
+            {
+                RequiresTwoFactor = true,
+                TempToken = ex.TempToken,
+                Message = "Código de verificação enviado para seu e-mail"
+            });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogWarning("Login failed for {EmailOrCPF}: {Message}", request.EmailOrCPF, ex.Message);
+            return Unauthorized(new { message = ex.Message });
         }
         catch (Exception ex)
         {
@@ -599,11 +614,38 @@ public class AuthController : ControllerBase
             }
 
             // Decode the temp token to get patient user ID
-            // For now, this is a simplified implementation
-            // In production, you would decode the temp token to extract the user ID
+            Guid patientUserId;
+            try
+            {
+                var tempTokenBytes = Convert.FromBase64String(request.TempToken);
+                var tempTokenData = System.Text.Encoding.UTF8.GetString(tempTokenBytes);
+                var parts = tempTokenData.Split(':');
+                
+                if (parts.Length != 2)
+                {
+                    return BadRequest(new { message = "Token temporário inválido" });
+                }
+
+                patientUserId = Guid.Parse(parts[1]);
+            }
+            catch
+            {
+                return BadRequest(new { message = "Token temporário inválido" });
+            }
+
+            // Verify the 2FA code
+            var isValid = await twoFactorService.VerifyCodeAsync(patientUserId, request.Code, request.TempToken);
             
-            // TODO: Complete implementation after refactoring temp token structure
-            return BadRequest(new { message = "Implementação em progresso" });
+            if (!isValid)
+            {
+                return BadRequest(new { message = "Código inválido ou expirado" });
+            }
+
+            // Code is valid, complete the login by generating tokens
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+            var loginResponse = await _authService.CompleteLoginAfter2FAAsync(patientUserId, ipAddress);
+            
+            return Ok(loginResponse);
         }
         catch (Exception ex)
         {

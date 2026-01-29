@@ -232,12 +232,26 @@ public class TwoFactorService : ITwoFactorService
 
     public async Task<bool> ResendCodeAsync(string tempToken, string ipAddress)
     {
-        // Decode the temporary token to get the token ID
-        Guid tokenId;
+        if (string.IsNullOrWhiteSpace(tempToken))
+        {
+            return false;
+        }
+
+        // Decode the temporary token to get patient user ID
+        Guid patientUserId;
         try
         {
-            var tokenIdBytes = Convert.FromBase64String(tempToken);
-            tokenId = new Guid(tokenIdBytes);
+            var tempTokenBytes = Convert.FromBase64String(tempToken);
+            var tempTokenData = System.Text.Encoding.UTF8.GetString(tempTokenBytes);
+            var parts = tempTokenData.Split(':');
+            
+            if (parts.Length != 2)
+            {
+                _logger.LogWarning("Invalid temporary token format for resend");
+                return false;
+            }
+
+            patientUserId = Guid.Parse(parts[1]);
         }
         catch
         {
@@ -245,11 +259,44 @@ public class TwoFactorService : ITwoFactorService
             return false;
         }
 
-        // We need to get the patient user ID from the original token
-        // For now, we'll generate a new code and return the new temp token
-        // This is a simplified implementation - in production, you might want to track the original request
-        _logger.LogWarning("ResendCodeAsync called but requires refactoring to get patientUserId from tempToken");
-        return false;
+        // Check rate limiting
+        var recentTokensCount = await _twoFactorTokenRepository.CountRecentTokensAsync(patientUserId, TimeSpan.FromMinutes(60));
+        if (recentTokensCount >= MaxTokensPerHour)
+        {
+            throw new InvalidOperationException("Limite de códigos atingido. Aguarde 1 hora.");
+        }
+
+        // Get the user
+        var user = await _patientUserRepository.GetByIdAsync(patientUserId);
+        if (user == null)
+        {
+            _logger.LogWarning("Attempted to resend 2FA code for non-existent user {PatientUserId}", patientUserId);
+            return false;
+        }
+
+        // Generate and send a new code
+        var code = GenerateSecureCode();
+        
+        var token = new Domain.Entities.TwoFactorToken
+        {
+            Id = Guid.NewGuid(),
+            PatientUserId = patientUserId,
+            Code = code,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddMinutes(CodeValidityMinutes),
+            IsUsed = false,
+            Purpose = "Login",
+            IpAddress = ipAddress,
+            VerificationAttempts = 0
+        };
+
+        await _twoFactorTokenRepository.CreateAsync(token);
+
+        // Send the code via email
+        await SendCodeByEmailAsync(user.Email, user.FullName, code);
+
+        _logger.LogInformation("2FA code resent to user {PatientUserId}", patientUserId);
+        return true;
     }
 
     /// <summary>
