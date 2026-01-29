@@ -41,7 +41,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Get specific dashboard by ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<CustomDashboardDto>> Get(int id)
+        public async Task<ActionResult<CustomDashboardDto>> Get(Guid id)
         {
             var dashboard = await _dashboardService.GetDashboardAsync(id);
             if (dashboard == null)
@@ -65,7 +65,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Update an existing dashboard
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<ActionResult<CustomDashboardDto>> Update(int id, [FromBody] UpdateDashboardDto dto)
+        public async Task<ActionResult<CustomDashboardDto>> Update(Guid id, [FromBody] UpdateDashboardDto dto)
         {
             var dashboard = await _dashboardService.UpdateDashboardAsync(id, dto);
             if (dashboard == null)
@@ -78,7 +78,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Delete a dashboard
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _dashboardService.DeleteDashboardAsync(id);
             return NoContent();
@@ -88,7 +88,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Add a widget to a dashboard
         /// </summary>
         [HttpPost("{id}/widgets")]
-        public async Task<ActionResult<DashboardWidgetDto>> AddWidget(int id, [FromBody] CreateWidgetDto dto)
+        public async Task<ActionResult<DashboardWidgetDto>> AddWidget(Guid id, [FromBody] CreateWidgetDto dto)
         {
             var widget = await _dashboardService.AddWidgetAsync(id, dto);
             return CreatedAtAction(nameof(GetWidgetData), new { widgetId = widget.Id }, widget);
@@ -98,7 +98,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Update widget position on grid
         /// </summary>
         [HttpPut("widgets/{widgetId}/position")]
-        public async Task<IActionResult> UpdateWidgetPosition(int widgetId, [FromBody] WidgetPositionDto dto)
+        public async Task<IActionResult> UpdateWidgetPosition(Guid widgetId, [FromBody] WidgetPositionDto dto)
         {
             await _dashboardService.UpdateWidgetPositionAsync(widgetId, dto);
             return NoContent();
@@ -108,7 +108,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Delete a widget from dashboard
         /// </summary>
         [HttpDelete("widgets/{widgetId}")]
-        public async Task<IActionResult> DeleteWidget(int widgetId)
+        public async Task<IActionResult> DeleteWidget(Guid widgetId)
         {
             await _dashboardService.DeleteWidgetAsync(widgetId);
             return NoContent();
@@ -118,7 +118,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Execute widget query and get data
         /// </summary>
         [HttpGet("widgets/{widgetId}/data")]
-        public async Task<ActionResult<WidgetDataDto>> GetWidgetData(int widgetId)
+        public async Task<ActionResult<WidgetDataDto>> GetWidgetData(Guid widgetId)
         {
             var data = await _dashboardService.ExecuteWidgetQueryAsync(widgetId);
             return Ok(data);
@@ -128,7 +128,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Export dashboard to specified format
         /// </summary>
         [HttpPost("{id}/export")]
-        public async Task<IActionResult> Export(int id, [FromQuery] ExportFormat format = ExportFormat.Json)
+        public async Task<IActionResult> Export(Guid id, [FromQuery] ExportFormat format = ExportFormat.Json)
         {
             var data = await _dashboardService.ExportDashboardAsync(id, format);
             

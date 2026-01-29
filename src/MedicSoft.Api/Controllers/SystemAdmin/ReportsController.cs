@@ -53,7 +53,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Get specific report template by ID
         /// </summary>
         [HttpGet("templates/{id}")]
-        public async Task<ActionResult<ReportTemplateDto>> GetTemplate(int id)
+        public async Task<ActionResult<ReportTemplateDto>> GetTemplate(Guid id)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Update an existing report template
         /// </summary>
         [HttpPut("templates/{id}")]
-        public async Task<ActionResult<ReportTemplateDto>> UpdateTemplate(int id, [FromBody] UpdateReportTemplateDto dto)
+        public async Task<ActionResult<ReportTemplateDto>> UpdateTemplate(Guid id, [FromBody] UpdateReportTemplateDto dto)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Delete a report template
         /// </summary>
         [HttpDelete("templates/{id}")]
-        public async Task<IActionResult> DeleteTemplate(int id)
+        public async Task<IActionResult> DeleteTemplate(Guid id)
         {
             await _reportService.DeleteReportTemplateAsync(id);
             return NoContent();
@@ -146,7 +146,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Get specific scheduled report by ID
         /// </summary>
         [HttpGet("scheduled/{id}")]
-        public async Task<ActionResult<ScheduledReportDto>> GetScheduledReport(int id)
+        public async Task<ActionResult<ScheduledReportDto>> GetScheduledReport(Guid id)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Update an existing scheduled report
         /// </summary>
         [HttpPut("scheduled/{id}")]
-        public async Task<ActionResult<ScheduledReportDto>> UpdateScheduledReport(int id, [FromBody] UpdateScheduledReportDto dto)
+        public async Task<ActionResult<ScheduledReportDto>> UpdateScheduledReport(Guid id, [FromBody] UpdateScheduledReportDto dto)
         {
             try
             {
@@ -191,7 +191,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Delete a scheduled report
         /// </summary>
         [HttpDelete("scheduled/{id}")]
-        public async Task<IActionResult> DeleteScheduledReport(int id)
+        public async Task<IActionResult> DeleteScheduledReport(Guid id)
         {
             await _reportService.DeleteScheduledReportAsync(id);
             return NoContent();
@@ -201,7 +201,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Execute a scheduled report immediately (admin action)
         /// </summary>
         [HttpPost("scheduled/{id}/execute")]
-        public async Task<IActionResult> ExecuteScheduledReport(int id)
+        public async Task<IActionResult> ExecuteScheduledReport(Guid id)
         {
             await _reportService.ExecuteScheduledReportAsync(id);
             return Ok(new { message = "Scheduled report execution initiated" });
