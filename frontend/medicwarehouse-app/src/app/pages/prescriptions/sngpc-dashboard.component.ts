@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { DigitalPrescriptionService } from '../../services/prescriptions/digital-prescription.service';
 import { SNGPCReport, SNGPCReportStatus } from '../../models/prescriptions/digital-prescription.model';
+import { Navbar } from '../../shared/navbar/navbar';
 
 /**
  * Dashboard for SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) reporting
@@ -24,7 +25,8 @@ import { SNGPCReport, SNGPCReportStatus } from '../../models/prescriptions/digit
     MatIconModule,
     MatCardModule,
     MatMenuModule,
-    MatChipsModule
+    MatChipsModule,
+    Navbar
   ],
   templateUrl: './sngpc-dashboard.component.html',
   styleUrl: './sngpc-dashboard.component.scss'})
