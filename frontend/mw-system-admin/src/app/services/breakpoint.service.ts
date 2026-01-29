@@ -17,64 +17,71 @@ export interface BreakpointState {
 })
 export class BreakpointService {
   
-  isMobile$ = this.breakpointObserver
-    .observe(['(max-width: 599px)'])
-    .pipe(
-      map(result => result.matches),
-      shareReplay(1)
-    );
+  isMobile$: Observable<boolean>;
+  isTablet$: Observable<boolean>;
+  isDesktop$: Observable<boolean>;
+  isHandset$: Observable<boolean>;
+  isTabletOrSmaller$: Observable<boolean>;
+  breakpointState$: Observable<BreakpointState>;
     
-  isTablet$ = this.breakpointObserver
-    .observe(['(min-width: 600px) and (max-width: 1279px)'])
-    .pipe(
-      map(result => result.matches),
-      shareReplay(1)
-    );
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.isMobile$ = this.breakpointObserver
+      .observe(['(max-width: 599px)'])
+      .pipe(
+        map(result => result.matches),
+        shareReplay(1)
+      );
+      
+    this.isTablet$ = this.breakpointObserver
+      .observe(['(min-width: 600px) and (max-width: 1279px)'])
+      .pipe(
+        map(result => result.matches),
+        shareReplay(1)
+      );
+      
+    this.isDesktop$ = this.breakpointObserver
+      .observe(['(min-width: 1280px)'])
+      .pipe(
+        map(result => result.matches),
+        shareReplay(1)
+      );
     
-  isDesktop$ = this.breakpointObserver
-    .observe(['(min-width: 1280px)'])
-    .pipe(
-      map(result => result.matches),
-      shareReplay(1)
-    );
-  
-  isHandset$ = this.breakpointObserver
-    .observe([Breakpoints.Handset])
-    .pipe(
-      map(result => result.matches),
-      shareReplay(1)
-    );
-  
-  isTabletOrSmaller$ = this.breakpointObserver
-    .observe([Breakpoints.Handset, Breakpoints.Tablet])
-    .pipe(
-      map(result => result.matches),
-      shareReplay(1)
-    );
-  
-  breakpointState$: Observable<BreakpointState> = this.breakpointObserver
-    .observe(['(max-width: 599px)', '(min-width: 600px) and (max-width: 1279px)', '(min-width: 1280px)'])
-    .pipe(
-      map(result => {
-        const isMobile = window.matchMedia('(max-width: 599px)').matches;
-        const isTablet = window.matchMedia('(min-width: 600px) and (max-width: 1279px)').matches;
-        const isDesktop = window.matchMedia('(min-width: 1280px)').matches;
-        
-        let deviceType: DeviceType = 'desktop';
-        if (isMobile) deviceType = 'mobile';
-        else if (isTablet) deviceType = 'tablet';
-        
-        return {
-          isMobile,
-          isTablet,
-          isDesktop,
-          deviceType
-        };
-      }),
-      shareReplay(1)
-    );
+    this.isHandset$ = this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .pipe(
+        map(result => result.matches),
+        shareReplay(1)
+      );
     
-  constructor(private breakpointObserver: BreakpointObserver) {}
+    this.isTabletOrSmaller$ = this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.Tablet])
+      .pipe(
+        map(result => result.matches),
+        shareReplay(1)
+      );
+    
+    this.breakpointState$ = this.breakpointObserver
+      .observe(['(max-width: 599px)', '(min-width: 600px) and (max-width: 1279px)', '(min-width: 1280px)'])
+      .pipe(
+        map(result => {
+          const isMobile = window.matchMedia('(max-width: 599px)').matches;
+          const isTablet = window.matchMedia('(min-width: 600px) and (max-width: 1279px)').matches;
+          const isDesktop = window.matchMedia('(min-width: 1280px)').matches;
+          
+          let deviceType: DeviceType = 'desktop';
+          if (isMobile) deviceType = 'mobile';
+          else if (isTablet) deviceType = 'tablet';
+          
+          return {
+            isMobile,
+            isTablet,
+            isDesktop,
+            deviceType
+          };
+        }),
+        shareReplay(1)
+      );
+  }
   
   getCurrentBreakpoint(): BreakpointState {
     const isMobile = window.matchMedia('(max-width: 599px)').matches;

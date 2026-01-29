@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import Shepherd from 'shepherd.js';
+import type { Tour } from 'shepherd.js';
 
 export interface TourStep {
   id: string;
@@ -25,7 +26,7 @@ export interface TourConfig {
   providedIn: 'root'
 })
 export class TourService {
-  private currentTour?: Shepherd.Tour;
+  private currentTour?: Tour;
   private completedTours: Set<string> = new Set();
   
   constructor() {

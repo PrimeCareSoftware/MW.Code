@@ -57,7 +57,7 @@ namespace MedicSoft.Api.Controllers
                     credentials = new
                     {
                         owner = new { username = "owner.demo", password = "Owner@123", role = "Owner" },
-                        users = new[]
+                        users = new object[]
                         {
                             new { username = "admin", password = "Admin@123", role = "SystemAdmin", note = "Clinic user (different from system owner above)" },
                             new { username = "dr.silva", password = "Doctor@123", role = "Doctor" },
