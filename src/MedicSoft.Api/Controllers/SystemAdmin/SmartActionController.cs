@@ -31,8 +31,8 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-                if (adminUserId == 0)
+                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
+                if (adminUserId == Guid.Empty)
                 {
                     return Unauthorized(new { error = "User ID not found in claims" });
                 }
@@ -57,7 +57,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
                 await _smartActionService.GrantCreditAsync(
                     request.ClinicId,
                     request.Days,
@@ -78,7 +78,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
                 await _smartActionService.ApplyDiscountAsync(
                     request.ClinicId,
                     request.Percentage,
@@ -99,7 +99,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
                 await _smartActionService.SuspendTemporarilyAsync(
                     request.ClinicId,
                     request.ReactivationDate,
@@ -120,7 +120,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
                 var data = await _smartActionService.ExportClinicDataAsync(request.ClinicId, adminUserId);
 
                 return File(data, "application/json", $"clinic-{request.ClinicId}-data.json");
@@ -137,7 +137,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
                 await _smartActionService.MigratePlanAsync(
                     request.ClinicId,
                     request.NewPlanId,
@@ -158,7 +158,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
                 await _smartActionService.SendCustomEmailAsync(
                     request.ClinicId,
                     request.Subject,
