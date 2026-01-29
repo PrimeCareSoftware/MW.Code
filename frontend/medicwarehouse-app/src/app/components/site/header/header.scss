@@ -389,10 +389,19 @@ body.theme-high-contrast .nav {
   z-index: 1000;
   overflow: hidden;
 
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+  }
+
   &.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+
+    @media (prefers-reduced-motion: reduce) {
+      transform: none;
+    }
   }
 
   .dropdown-item {

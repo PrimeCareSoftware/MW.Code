@@ -30,7 +30,10 @@
     
     &:hover {
       color: var(--primary-700);
-      transform: translateX(-4px);
+      
+      @media (prefers-reduced-motion: no-preference) {
+        transform: translateX(-4px);
+      }
     }
     
     svg {
@@ -38,7 +41,9 @@
     }
     
     &:hover svg {
-      transform: translateX(-4px);
+      @media (prefers-reduced-motion: no-preference) {
+        transform: translateX(-4px);
+      }
     }
   }
   
@@ -298,6 +303,18 @@ textarea.form-control {
   }
 }
 
+.action-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.submitting-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 // Form Actions
 .form-actions {
   display: flex;
@@ -341,8 +358,11 @@ textarea.form-control {
     
     &:hover:not(:disabled) {
       background: var(--primary-700);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      
+      @media (prefers-reduced-motion: no-preference) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
     }
   }
   

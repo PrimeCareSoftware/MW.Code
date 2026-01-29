@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { PublicClinicService, PublicClinicDto, AvailableSlotDto, PublicAppointmentRequest } from '../../../services/public-clinic.service';
+import { PublicClinicService, PublicClinicDto, AvailableSlotDto, PublicAppointmentRequest, PublicAppointmentResponse } from '../../../services/public-clinic.service';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
 
@@ -28,7 +28,7 @@ export class AppointmentBookingComponent implements OnInit {
   
   // Success state
   appointmentCreated = false;
-  appointmentDetails: any = null;
+  appointmentDetails: PublicAppointmentResponse | null = null;
   
   // Error states
   clinicError = '';
@@ -59,12 +59,29 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   initializeForm(): void {
+    const today = new Date();
+    const maxBirthDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const minBirthDate = new Date(today.getFullYear() - 150, today.getMonth(), today.getDate());
+    
     this.bookingForm = this.formBuilder.group({
       date: ['', Validators.required],
       time: ['', Validators.required],
       patientName: ['', [Validators.required, Validators.minLength(3)]],
       patientCpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
-      patientBirthDate: ['', Validators.required],
+      patientBirthDate: ['', [
+        Validators.required,
+        (control) => {
+          if (!control.value) return null;
+          const birthDate = new Date(control.value);
+          if (birthDate > maxBirthDate) {
+            return { futureDate: true };
+          }
+          if (birthDate < minBirthDate) {
+            return { tooOld: true };
+          }
+          return null;
+        }
+      ]],
       patientPhone: ['', [Validators.required, Validators.pattern(/^\d{10,11}$/)]],
       patientEmail: ['', [Validators.required, Validators.email]],
       notes: ['', Validators.maxLength(500)]
@@ -200,5 +217,8 @@ export class AppointmentBookingComponent implements OnInit {
     this.bookingForm.reset();
     this.availableSlots = [];
     this.selectedDate = null;
+    this.clinicError = '';
+    this.slotsError = '';
+    this.bookingError = '';
   }
 }

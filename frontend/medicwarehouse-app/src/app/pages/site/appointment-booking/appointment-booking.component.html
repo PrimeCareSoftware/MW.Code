@@ -66,6 +66,8 @@
         <path d="M12 8v4M12 16h.01"/>
       </svg>
       <p>{{ clinicError }}</p>
+    </div>
+    <div *ngIf="clinicError && !loadingClinic" class="action-button-wrapper">
       <button class="btn btn-primary" (click)="goBack()">Voltar</button>
     </div>
 
@@ -203,7 +205,9 @@
                 [class.invalid]="bookingForm.get('patientBirthDate')?.invalid && bookingForm.get('patientBirthDate')?.touched"
               />
               <div class="error-message" *ngIf="bookingForm.get('patientBirthDate')?.invalid && bookingForm.get('patientBirthDate')?.touched">
-                Por favor, informe sua data de nascimento
+                <span *ngIf="bookingForm.get('patientBirthDate')?.hasError('required')">Por favor, informe sua data de nascimento</span>
+                <span *ngIf="bookingForm.get('patientBirthDate')?.hasError('futureDate')">Data de nascimento não pode ser no futuro</span>
+                <span *ngIf="bookingForm.get('patientBirthDate')?.hasError('tooOld')">Data de nascimento inválida</span>
               </div>
             </div>
           </div>
@@ -272,8 +276,8 @@
           </button>
           <button type="submit" class="btn btn-primary" [disabled]="submitting || bookingForm.invalid">
             <span *ngIf="!submitting">Confirmar Agendamento</span>
-            <span *ngIf="submitting">
-              <div class="spinner-small"></div>
+            <span *ngIf="submitting" class="submitting-content">
+              <span class="spinner-small"></span>
               Agendando...
             </span>
           </button>
