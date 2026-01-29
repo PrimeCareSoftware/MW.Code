@@ -619,7 +619,7 @@ R: Apenas quando necessário para seu atendimento (laboratórios, convênios) ou
 ### Encarregado de Dados (DPO)
 
 **Email:** dpo@primecare.com  
-**Telefone:** +55 (11) XXXX-XXXX  
+**Telefone:** [A SER CONFIGURADO PELA CLÍNICA]  
 **Horário:** Segunda a Sexta, 9h às 18h  
 **Para:** Questões complexas, reclamações, incidentes de segurança
 
@@ -627,7 +627,7 @@ R: Apenas quando necessário para seu atendimento (laboratórios, convênios) ou
 
 **Portal:** https://suporte.primecare.com.br  
 **Email:** suporte@primecare.com  
-**Telefone:** +55 (11) XXXX-XXXX  
+**Telefone:** [A SER CONFIGURADO PELA CLÍNICA]  
 **Horário:** 24/7  
 **Para:** Problemas técnicos, dificuldades de acesso
 
@@ -636,7 +636,7 @@ R: Apenas quando necessário para seu atendimento (laboratórios, convênios) ou
 Se você não estiver satisfeito com nossas respostas, pode contatar a ANPD:
 
 **Site:** https://www.gov.br/anpd  
-**Email:** anpd@economia.gov.br
+**Canal de Atendimento:** Através do site oficial (formulário online)
 
 ---
 
@@ -651,9 +651,9 @@ Se você não estiver satisfeito com nossas respostas, pode contatar a ANPD:
 
 ## 📝 Histórico de Versões
 
-| Versão | Data | Descrição |
-|--------|------|-----------|
-| 1.0 | 29/01/2026 | Versão inicial do guia |
+| Versão    | Data       | Descrição                 |
+|-----------|------------|---------------------------|
+| 1.0       | 29/01/2026 | Versão inicial do guia    |
 
 ---
 

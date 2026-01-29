@@ -1221,15 +1221,15 @@ Equipe PrimeCare
 
 **Equipe LGPD:**
 - Email: lgpd@primecare.com
-- Telefone: +55 (11) XXXX-XXXX
+- Telefone: [A SER CONFIGURADO PELA CLÍNICA]
 
 **DPO (Encarregado):**
 - Email: dpo@primecare.com
-- Telefone: +55 (11) XXXX-XXXX
+- Telefone: [A SER CONFIGURADO PELA CLÍNICA]
 
 **Suporte Técnico:**
 - Email: suporte@primecare.com
-- Telefone: +55 (11) XXXX-XXXX (24/7)
+- Telefone: [A SER CONFIGURADO PELA CLÍNICA] (24/7)
 
 ### Documentação Adicional
 
