@@ -54,4 +54,31 @@ namespace MedicSoft.Application.DTOs
         [StringLength(50, ErrorMessage = "RoomNumber cannot exceed 50 characters")]
         public string? RoomNumber { get; set; }
     }
+
+    /// <summary>
+    /// DTO for creating notifications (security alerts, system notifications, etc.)
+    /// </summary>
+    public class CreateNotificationDto
+    {
+        [Required(ErrorMessage = "UserId is required")]
+        public string UserId { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Type is required")]
+        [StringLength(50, ErrorMessage = "Type cannot exceed 50 characters")]
+        public string Type { get; set; } = string.Empty; // info, warning, error, success
+
+        [Required(ErrorMessage = "Title is required")]
+        [StringLength(200, ErrorMessage = "Title cannot exceed 200 characters")]
+        public string Title { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Message is required")]
+        [StringLength(1000, ErrorMessage = "Message cannot exceed 1000 characters")]
+        public string Message { get; set; } = string.Empty;
+
+        [StringLength(500, ErrorMessage = "ActionUrl cannot exceed 500 characters")]
+        public string? ActionUrl { get; set; }
+
+        [Required(ErrorMessage = "TenantId is required")]
+        public string TenantId { get; set; } = string.Empty;
+    }
 }
