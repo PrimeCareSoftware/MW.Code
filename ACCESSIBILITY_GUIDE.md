@@ -182,6 +182,155 @@ breadcrumbs: BreadcrumbItem[] = [
 
 ---
 
+### 6. Tabelas Acessíveis
+
+#### AccessibleTableComponent
+
+Componente de tabela com ordenação acessível e navegação por teclado.
+
+```typescript
+import { AccessibleTableComponent, TableColumn } from '@shared/accessibility/components/accessible-table.component';
+
+export class MyComponent {
+  columns: TableColumn[] = [
+    { key: 'name', header: 'Nome', sortable: true },
+    { key: 'email', header: 'E-mail', sortable: true },
+    { key: 'role', header: 'Função', sortable: false }
+  ];
+
+  data = [
+    { name: 'João Silva', email: 'joao@example.com', role: 'Admin' },
+    { name: 'Maria Santos', email: 'maria@example.com', role: 'User' }
+  ];
+}
+```
+
+```html
+<app-accessible-table
+  [columns]="columns"
+  [data]="data"
+  caption="Lista de usuários do sistema"
+  [showCaption]="true"
+  summary="Tabela com 2 usuários, ordenável por nome e e-mail"
+></app-accessible-table>
+```
+
+**Recursos:**
+- Headers com atributo `scope="col"`
+- Ordenação via teclado (`Enter` ou `Space`)
+- Atributo `aria-sort` indica direção da ordenação
+- Descrição para screen readers via `summary`
+- Estado vazio acessível
+- Wrapper com `role="region"` e tabindex para scroll
+
+---
+
+### 7. Validação de Formulários Acessível
+
+#### Form Error Summary
+
+Sumário de erros no topo do formulário com links para campos problemáticos.
+
+```typescript
+import { ValidationError } from '@shared/accessibility/components/form-validation.components';
+
+export class MyFormComponent {
+  validationErrors: ValidationError[] = [];
+
+  validateForm() {
+    this.validationErrors = [
+      { field: 'email', message: 'E-mail é obrigatório' },
+      { field: 'password', message: 'Senha deve ter no mínimo 8 caracteres' }
+    ];
+  }
+
+  onErrorFocus(fieldName: string) {
+    console.log('Focusing field:', fieldName);
+  }
+}
+```
+
+```html
+<app-form-error-summary
+  [errors]="validationErrors"
+  title="Erros no formulário"
+  (errorFocused)="onErrorFocus($event)"
+></app-form-error-summary>
+```
+
+**Recursos:**
+- ARIA live region (`role="alert"`, `aria-live="assertive"`)
+- Contagem automática de erros
+- Links que focam campos com erro
+- Scroll suave até o campo
+- Evento `errorFocused` emitido ao clicar em erro
+
+---
+
+#### Accessible Field Wrapper
+
+Wrapper que associa label, campo, help text e mensagens de erro.
+
+```html
+<app-accessible-field
+  label="E-mail"
+  fieldId="email"
+  [required]="true"
+  [error]="emailError"
+  helpText="Digite seu endereço de e-mail"
+  [liveValidation]="true"
+>
+  <input
+    id="email"
+    type="email"
+    [(ngModel)]="email"
+    aria-describedby="email-help"
+    aria-errormessage="email-error"
+    [attr.aria-invalid]="!!emailError"
+  />
+</app-accessible-field>
+```
+
+**Recursos:**
+- Label associado com `for` attribute
+- Indicador de obrigatoriedade (`*`) com aria-label
+- Help text com ID para `aria-describedby`
+- Mensagem de erro com ID para `aria-errormessage`
+- Validação inline com ARIA live (opcional)
+- Classe `.has-error` quando há erro
+
+---
+
+### 8. Módulo de Acessibilidade
+
+Todos os componentes estão disponíveis no `AccessibilityModule`:
+
+```typescript
+import { AccessibilityModule } from '@shared/accessibility/accessibility.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    AccessibilityModule  // Importa todos os componentes de acessibilidade
+  ],
+  declarations: [MyComponent]
+})
+export class MyFeatureModule { }
+```
+
+**Inclui:**
+- ✅ SkipToContentComponent
+- ✅ AccessibleBreadcrumbsComponent
+- ✅ AccessibleTableComponent
+- ✅ FormErrorSummaryComponent
+- ✅ FieldErrorComponent
+- ✅ AccessibleFieldComponent
+- ✅ FocusTrapDirective
+- ✅ KeyboardNavigationService (provided in 'root')
+- ✅ ScreenReaderService (provided in 'root')
+
+---
+
 ## 📝 Padrões de Desenvolvimento
 
 ### 1. HTML Semântico
