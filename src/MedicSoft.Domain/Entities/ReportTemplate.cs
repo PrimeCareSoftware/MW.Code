@@ -56,10 +56,6 @@ namespace MedicSoft.Domain.Entities
         [MaxLength(100)]
         public string SupportedFormats { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-        
-        public DateTime? UpdatedAt { get; set; }
-
         /// <summary>
         /// Collection of scheduled reports using this template
         /// </summary>

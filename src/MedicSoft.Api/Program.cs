@@ -556,8 +556,10 @@ builder.Services.AddScoped<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>();
 // System Admin - Workflow Automation (Phase 4)
 builder.Services.AddScoped<MedicSoft.Application.Services.Workflows.IWorkflowEngine, MedicSoft.Api.Services.Workflows.WorkflowEngine>();
 builder.Services.AddScoped<MedicSoft.Application.Services.Workflows.IEventPublisher, MedicSoft.Application.Services.Workflows.EventPublisher>();
-// TODO: Fix SmartActionService - needs to resolve IAuditService and IEmailService dependencies properly
-// builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISmartActionService, MedicSoft.Application.Services.SystemAdmin.SmartActionService>();
+// Register Reports.IEmailService adapter that delegates to CRM.IEmailService
+builder.Services.AddScoped<MedicSoft.Application.Services.Reports.IEmailService, MedicSoft.Api.Services.Reports.EmailServiceAdapter>();
+// Now we can register SmartActionService with its dependencies resolved
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISmartActionService, MedicSoft.Application.Services.SystemAdmin.SmartActionService>();
 builder.Services.AddScoped<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>();
 builder.Services.AddScoped<MedicSoft.Api.Data.Seeders.WorkflowTemplateSeeder>();
 

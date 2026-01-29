@@ -7,7 +7,6 @@ namespace MedicSoft.Domain.Interfaces
 {
     public interface ISenhaFilaRepository : IRepository<SenhaFila>
     {
-        Task<SenhaFila?> GetByIdAsync(Guid id, string tenantId);
         Task<SenhaFila?> GetByNumeroSenhaAsync(string numeroSenha, Guid filaId, string tenantId);
         Task<List<SenhaFila>> GetByFilaIdAsync(Guid filaId, string tenantId);
         Task<List<SenhaFila>> GetActiveSenhasByFilaAsync(Guid filaId, string tenantId);
