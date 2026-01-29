@@ -7,6 +7,9 @@ import { Navbar } from '../../shared/navbar/navbar';
 import { HelpButtonComponent } from '../../shared/help-button/help-button';
 import { RichTextEditor } from '../../shared/rich-text-editor/rich-text-editor';
 import { InformedConsentFormComponent } from './components/informed-consent-form.component';
+import { ClinicalExaminationFormComponent } from './components/clinical-examination-form.component';
+import { DiagnosticHypothesisFormComponent } from './components/diagnostic-hypothesis-form.component';
+import { TherapeuticPlanFormComponent } from './components/therapeutic-plan-form.component';
 import { NotificationModalComponent } from '../../shared/notification-modal/notification-modal';
 import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
@@ -36,7 +39,7 @@ const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent, NotificationModalComponent],
+  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent, ClinicalExaminationFormComponent, DiagnosticHypothesisFormComponent, TherapeuticPlanFormComponent, NotificationModalComponent],
   templateUrl: './attendance.html',
   styleUrl: './attendance.scss'
 })
@@ -56,9 +59,6 @@ export class Attendance implements OnInit, OnDestroy {
   successMessage = signal<string>('');
   
   attendanceForm: FormGroup;
-  clinicalExaminationForm: FormGroup;
-  diagnosticForm: FormGroup;
-  therapeuticPlanForm: FormGroup;
   
   // CFM 1.821 Entities
   clinicalExaminations = signal<ClinicalExamination[]>([]);
@@ -71,10 +71,6 @@ export class Attendance implements OnInit, OnDestroy {
   cfm1821IsCompliant = signal<boolean>(false);
   cfm1821MissingRequirements = signal<string[]>([]);
   cfm1821CompletenessPercentage = signal<number>(0);
-  
-  showAddClinicalExamination = signal<boolean>(false);
-  showAddDiagnosis = signal<boolean>(false);
-  showAddTherapeuticPlan = signal<boolean>(false);
   
   // Enum helpers
   diagnosisTypes = Object.values(DiagnosisType).filter(v => typeof v === 'number') as DiagnosisType[];
@@ -144,35 +140,6 @@ export class Attendance implements OnInit, OnDestroy {
       diagnosis: [''],
       prescription: [''],
       notes: ['']
-    });
-
-    // Clinical Examination Form
-    this.clinicalExaminationForm = this.fb.group({
-      systematicExamination: ['', [Validators.required, Validators.minLength(20)]],
-      bloodPressureSystolic: ['', [Validators.min(50), Validators.max(300)]],
-      bloodPressureDiastolic: ['', [Validators.min(30), Validators.max(200)]],
-      heartRate: ['', [Validators.min(30), Validators.max(220)]],
-      respiratoryRate: ['', [Validators.min(8), Validators.max(60)]],
-      temperature: ['', [Validators.min(32), Validators.max(45)]],
-      oxygenSaturation: ['', [Validators.min(0), Validators.max(100)]],
-      generalState: ['']
-    });
-
-    // Diagnostic Hypothesis Form
-    this.diagnosticForm = this.fb.group({
-      description: ['', Validators.required],
-      icd10Code: ['', [Validators.required, Validators.pattern(ICD10_PATTERN)]],
-      type: [DiagnosisType.Principal, Validators.required]
-    });
-
-    // Therapeutic Plan Form
-    this.therapeuticPlanForm = this.fb.group({
-      treatment: ['', [Validators.required, Validators.minLength(20)]],
-      medicationPrescription: [''],
-      examRequests: [''],
-      referrals: [''],
-      patientGuidance: [''],
-      returnDate: ['']
     });
 
     this.procedureForm = this.fb.group({
@@ -921,127 +888,34 @@ export class Attendance implements OnInit, OnDestroy {
   }
 
   // CFM 1.821 - Clinical Examination Management
-  toggleAddClinicalExamination(): void {
-    this.showAddClinicalExamination.set(!this.showAddClinicalExamination());
-    if (!this.showAddClinicalExamination()) {
-      this.clinicalExaminationForm.reset();
-    }
-  }
-
-  onAddClinicalExamination(): void {
-    if (!this.clinicalExaminationForm.valid || !this.medicalRecord()) return;
-
-    const formValue = this.clinicalExaminationForm.value;
-    this.clinicalExaminationService.create({
-      medicalRecordId: this.medicalRecord()!.id,
-      systematicExamination: formValue.systematicExamination,
-      bloodPressureSystolic: formValue.bloodPressureSystolic || undefined,
-      bloodPressureDiastolic: formValue.bloodPressureDiastolic || undefined,
-      heartRate: formValue.heartRate || undefined,
-      respiratoryRate: formValue.respiratoryRate || undefined,
-      temperature: formValue.temperature || undefined,
-      oxygenSaturation: formValue.oxygenSaturation || undefined,
-      generalState: formValue.generalState || undefined
-    }).subscribe({
-      next: (examination) => {
-        this.clinicalExaminations.update(exams => [...exams, examination]);
-        this.successMessage.set('Exame clínico adicionado com sucesso!');
-        this.clinicalExaminationForm.reset();
-        this.showAddClinicalExamination.set(false);
-        setTimeout(() => this.successMessage.set(''), 3000);
-      },
-      error: (error) => {
-        console.error('Error adding clinical examination:', error);
-        this.errorMessage.set('Erro ao adicionar exame clínico');
-        setTimeout(() => this.errorMessage.set(''), 3000);
-      }
-    });
+  onClinicalExaminationSaved(examination: ClinicalExamination): void {
+    // Reload examinations to get the latest data
+    this.loadClinicalExaminations();
+    this.successMessage.set('Exame clínico salvo com sucesso!');
+    setTimeout(() => this.successMessage.set(''), 3000);
   }
 
   // CFM 1.821 - Diagnostic Hypothesis Management
-  toggleAddDiagnosis(): void {
-    this.showAddDiagnosis.set(!this.showAddDiagnosis());
-    if (!this.showAddDiagnosis()) {
-      this.diagnosticForm.reset({ type: DiagnosisType.Principal });
-    }
+  onDiagnosticHypothesisSaved(hypothesis: DiagnosticHypothesis): void {
+    // Reload hypotheses to get the latest data
+    this.loadDiagnosticHypotheses();
+    this.successMessage.set('Hipótese diagnóstica salva com sucesso!');
+    setTimeout(() => this.successMessage.set(''), 3000);
   }
 
-  onAddDiagnosis(): void {
-    if (!this.diagnosticForm.valid || !this.medicalRecord()) return;
-
-    const formValue = this.diagnosticForm.value;
-    this.diagnosticHypothesisService.create({
-      medicalRecordId: this.medicalRecord()!.id,
-      description: formValue.description,
-      icd10Code: formValue.icd10Code.toUpperCase(),
-      type: formValue.type
-    }).subscribe({
-      next: (hypothesis) => {
-        this.diagnosticHypotheses.update(hyps => [...hyps, hypothesis]);
-        this.successMessage.set('Hipótese diagnóstica adicionada com sucesso!');
-        this.diagnosticForm.reset({ type: DiagnosisType.Principal });
-        this.showAddDiagnosis.set(false);
-        setTimeout(() => this.successMessage.set(''), 3000);
-      },
-      error: (error) => {
-        console.error('Error adding diagnostic hypothesis:', error);
-        this.errorMessage.set('Erro ao adicionar hipótese diagnóstica');
-        setTimeout(() => this.errorMessage.set(''), 3000);
-      }
-    });
-  }
-
-  removeDiagnosis(hypothesis: DiagnosticHypothesis): void {
-    if (!confirm('Tem certeza que deseja remover esta hipótese diagnóstica?')) return;
-
-    this.diagnosticHypothesisService.delete(hypothesis.id).subscribe({
-      next: () => {
-        this.diagnosticHypotheses.update(hyps => hyps.filter(h => h.id !== hypothesis.id));
-        this.successMessage.set('Hipótese diagnóstica removida com sucesso!');
-        setTimeout(() => this.successMessage.set(''), 3000);
-      },
-      error: (error) => {
-        console.error('Error removing diagnostic hypothesis:', error);
-        this.errorMessage.set('Erro ao remover hipótese diagnóstica');
-        setTimeout(() => this.errorMessage.set(''), 3000);
-      }
-    });
+  onDiagnosticHypothesisDeleted(id: string): void {
+    // Reload hypotheses to get the latest data
+    this.loadDiagnosticHypotheses();
+    this.successMessage.set('Hipótese diagnóstica removida com sucesso!');
+    setTimeout(() => this.successMessage.set(''), 3000);
   }
 
   // CFM 1.821 - Therapeutic Plan Management
-  toggleAddTherapeuticPlan(): void {
-    this.showAddTherapeuticPlan.set(!this.showAddTherapeuticPlan());
-    if (!this.showAddTherapeuticPlan()) {
-      this.therapeuticPlanForm.reset();
-    }
-  }
-
-  onAddTherapeuticPlan(): void {
-    if (!this.therapeuticPlanForm.valid || !this.medicalRecord()) return;
-
-    const formValue = this.therapeuticPlanForm.value;
-    this.therapeuticPlanService.create({
-      medicalRecordId: this.medicalRecord()!.id,
-      treatment: formValue.treatment,
-      medicationPrescription: formValue.medicationPrescription || undefined,
-      examRequests: formValue.examRequests || undefined,
-      referrals: formValue.referrals || undefined,
-      patientGuidance: formValue.patientGuidance || undefined,
-      returnDate: formValue.returnDate || undefined
-    }).subscribe({
-      next: (plan) => {
-        this.therapeuticPlans.update(plans => [...plans, plan]);
-        this.successMessage.set('Plano terapêutico adicionado com sucesso!');
-        this.therapeuticPlanForm.reset();
-        this.showAddTherapeuticPlan.set(false);
-        setTimeout(() => this.successMessage.set(''), 3000);
-      },
-      error: (error) => {
-        console.error('Error adding therapeutic plan:', error);
-        this.errorMessage.set('Erro ao adicionar plano terapêutico');
-        setTimeout(() => this.errorMessage.set(''), 3000);
-      }
-    });
+  onTherapeuticPlanSaved(plan: TherapeuticPlan): void {
+    // Reload plans to get the latest data
+    this.loadTherapeuticPlans();
+    this.successMessage.set('Plano terapêutico salvo com sucesso!');
+    setTimeout(() => this.successMessage.set(''), 3000);
   }
 
   // CFM 1.821 - Informed Consent Management
