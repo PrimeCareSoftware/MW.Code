@@ -177,6 +177,21 @@ body.theme-high-contrast .menu-toggle {
         transform: translateY(-1px);
       }
     }
+
+    &.btn-secondary {
+      background: transparent;
+      color: var(--primary-600);
+      border: 1px solid var(--primary-600);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius-lg);
+      font-weight: 500;
+      margin-left: 0.5rem;
+
+      &:hover {
+        background: var(--primary-50);
+        transform: translateY(-1px);
+      }
+    }
   }
 }
 
@@ -196,6 +211,16 @@ body.theme-dark .nav {
 
       &:hover {
         background: var(--primary-700);
+      }
+    }
+
+    &.btn-secondary {
+      background: transparent;
+      color: var(--primary-600);
+      border: 1px solid var(--primary-600);
+
+      &:hover {
+        background: rgba(59, 130, 246, 0.1);
       }
     }
   }
@@ -221,6 +246,17 @@ body.theme-high-contrast .nav {
       &:hover {
         background: var(--bg-primary);
         color: var(--primary-500);
+      }
+    }
+
+    &.btn-secondary {
+      background: transparent;
+      color: var(--primary-500);
+      border: 2px solid var(--primary-500);
+
+      &:hover {
+        background: var(--primary-500);
+        color: var(--bg-primary);
       }
     }
   }
