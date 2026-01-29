@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
 
@@ -13,6 +14,7 @@ namespace MedicSoft.Domain.Interfaces
         Task DeleteExpiredSessionsAsync();
         Task DeleteAllUserSessionsAsync(Guid userId, string tenantId);
         Task<int> GetActiveSessionCountAsync(Guid userId, string tenantId);
+        Task<List<UserSession>> GetRecentSessionsByUserIdAsync(Guid userId, string tenantId, int count);
         Task SaveChangesAsync();
     }
 

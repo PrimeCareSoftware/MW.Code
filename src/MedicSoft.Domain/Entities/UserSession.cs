@@ -12,10 +12,12 @@ namespace MedicSoft.Domain.Entities
         public Guid UserId { get; private set; }
         public string SessionId { get; private set; }
         public new DateTime CreatedAt { get; private set; }
+        public DateTime StartedAt { get; private set; }
         public DateTime ExpiresAt { get; private set; }
         public DateTime LastActivityAt { get; private set; }
         public string? UserAgent { get; private set; }
         public string? IpAddress { get; private set; }
+        public string? Country { get; private set; }
 
         // Navigation property
         public User? User { get; private set; }
@@ -27,7 +29,7 @@ namespace MedicSoft.Domain.Entities
         }
 
         public UserSession(Guid userId, string sessionId, string tenantId, int expiryHours = 24, 
-            string? userAgent = null, string? ipAddress = null) : base(tenantId)
+            string? userAgent = null, string? ipAddress = null, string? country = null) : base(tenantId)
         {
             if (userId == Guid.Empty)
                 throw new ArgumentException("UserId cannot be empty", nameof(userId));
@@ -38,10 +40,12 @@ namespace MedicSoft.Domain.Entities
             UserId = userId;
             SessionId = sessionId;
             CreatedAt = DateTime.UtcNow;
+            StartedAt = DateTime.UtcNow;
             ExpiresAt = DateTime.UtcNow.AddHours(expiryHours);
             LastActivityAt = DateTime.UtcNow;
             UserAgent = userAgent;
             IpAddress = ipAddress;
+            Country = country;
         }
 
         /// <summary>
