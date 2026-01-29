@@ -126,7 +126,7 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
 
                 var inactiveClinics = await _context.Clinics
                     .IgnoreQueryFilters()
-                    .Where(c => c.IsActive && c.UpdatedAt < thirtyDaysAgo)
+                    .Where(c => c.IsActive && (c.UpdatedAt ?? c.CreatedAt) < thirtyDaysAgo)
                     .ToListAsync();
 
                 foreach (var clinic in inactiveClinics)

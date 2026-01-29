@@ -106,7 +106,7 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
 
             var inactiveClinics = await _context.Clinics
                 .IgnoreQueryFilters()
-                .Where(c => c.IsActive && c.UpdatedAt < thirtyDaysAgo)
+                .Where(c => c.IsActive && (c.UpdatedAt ?? c.CreatedAt) < thirtyDaysAgo)
                 .Select(c => c.Id)
                 .ToListAsync();
 
@@ -119,7 +119,7 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
             // Remove tag from active clinics
             var activeClinics = await _context.Clinics
                 .IgnoreQueryFilters()
-                .Where(c => c.IsActive && c.UpdatedAt >= thirtyDaysAgo)
+                .Where(c => c.IsActive && (c.UpdatedAt ?? c.CreatedAt) >= thirtyDaysAgo)
                 .Select(c => c.Id)
                 .ToListAsync();
 
