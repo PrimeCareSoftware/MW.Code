@@ -148,6 +148,7 @@ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IDoctorAvailabilityService, DoctorAvailabilityService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<ITwoFactorService, TwoFactorService>();
 builder.Services.AddScoped<IMainDatabaseContext, PatientPortal.Infrastructure.Services.MainDatabaseContext>();
 
 // Register Background Services
@@ -158,6 +159,7 @@ builder.Services.AddScoped<IPatientUserRepository, PatientUserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+builder.Services.AddScoped<ITwoFactorTokenRepository, TwoFactorTokenRepository>();
 builder.Services.AddScoped<IAppointmentViewRepository, AppointmentViewRepository>();
 builder.Services.AddScoped<IDocumentViewRepository, DocumentViewRepository>();
 
