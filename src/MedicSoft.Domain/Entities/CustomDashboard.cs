@@ -44,9 +44,9 @@ namespace MedicSoft.Domain.Entities
         [MaxLength(450)]
         public string CreatedBy { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public new DateTime CreatedAt { get; set; }
         
-        public DateTime? UpdatedAt { get; set; }
+        public new DateTime? UpdatedAt { get; set; }
 
         /// <summary>
         /// Collection of widgets associated with this dashboard
