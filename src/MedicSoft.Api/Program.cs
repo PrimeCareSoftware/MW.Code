@@ -85,6 +85,14 @@ builder.Services.AddSwaggerGen(c =>
     {
         c.IncludeXmlComments(xmlPath);
     }
+    else
+    {
+        // Log warning if XML documentation file is not found
+        // This helps diagnose build configuration issues
+        Console.WriteLine($"Warning: XML documentation file not found at {xmlPath}. " +
+                         "API documentation will not include XML comments. " +
+                         "Ensure GenerateDocumentationFile is set to true in the project file.");
+    }
 
     // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
