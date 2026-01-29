@@ -7451,10 +7451,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a2cec151-8b46-4f73-b23d-ec627c39bcbc"),
+                            Id = new Guid("829e9d57-4958-43be-919a-137b13e7870c"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}],\"sections\":[{\"title\":\"Revenue Overview\",\"type\":\"summary\"},{\"title\":\"MRR Trend\",\"type\":\"chart\",\"chartType\":\"line\"},{\"title\":\"Revenue by Plan\",\"type\":\"chart\",\"chartType\":\"pie\"},{\"title\":\"Top Customers\",\"type\":\"table\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7907),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9190),
                             Description = "Comprehensive financial performance report including MRR, revenue, and growth metrics",
                             Icon = "assessment",
                             IsSystem = true,
@@ -7465,10 +7465,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("6edd770a-db78-4221-903b-8ca9f765601a"),
+                            Id = new Guid("f27fc3ac-85c4-42b2-933f-b06cf4e0b08b"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"month\",\"type\":\"month\",\"required\":true,\"label\":\"Report Month\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8343),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9466),
                             Description = "Detailed breakdown of revenue by plans, clinics, and payment methods",
                             Icon = "pie_chart",
                             IsSystem = true,
@@ -7479,10 +7479,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("f5662701-4f77-423f-9629-8c1ec5c998eb"),
+                            Id = new Guid("0b910675-cd7d-40f9-8e49-1244b627ddbb"),
                             Category = "customer",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8399),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9526),
                             Description = "Analysis of new customer acquisition trends and conversion metrics",
                             Icon = "person_add",
                             IsSystem = true,
@@ -7493,10 +7493,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("35757270-8f16-4b36-a33b-bc1ab0840c8f"),
+                            Id = new Guid("18f87ada-dff3-46c9-97ec-88342562cdd3"),
                             Category = "customer",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8448),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9566),
                             Description = "Comprehensive churn analysis with reasons and trends",
                             Icon = "exit_to_app",
                             IsSystem = true,
@@ -7507,10 +7507,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("4aac8a15-ef06-4bff-89f2-fd16cb38bd68"),
+                            Id = new Guid("c31b15ff-4e6e-44ac-93ce-22b2f1e54863"),
                             Category = "operational",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8510),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9636),
                             Description = "Detailed analysis of appointment scheduling, cancellations, and no-shows",
                             Icon = "event_note",
                             IsSystem = true,
@@ -7521,10 +7521,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("ad3429a0-9516-449f-80c1-5b5dabadc768"),
+                            Id = new Guid("c3800180-4262-49da-8ef5-7332814f6dc8"),
                             Category = "operational",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8558),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9689),
                             Description = "Overview of user activity, logins, and engagement metrics",
                             Icon = "analytics",
                             IsSystem = true,
@@ -7535,10 +7535,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("98f0fc83-43b3-4b21-b1f3-8ce126d6ed31"),
+                            Id = new Guid("6278dcb2-6a97-40c3-bc28-aac9236d1235"),
                             Category = "clinical",
                             Configuration = "{\"parameters\":[{\"name\":\"clinicId\",\"type\":\"guid\",\"required\":false,\"label\":\"Clinic (Optional)\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8591),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9723),
                             Description = "Statistical analysis of patient demographics and distribution",
                             Icon = "people",
                             IsSystem = true,
@@ -7549,10 +7549,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("f8b509c1-b36f-4af2-81c9-1c4e1f0fb922"),
+                            Id = new Guid("b6141b73-7248-43ab-abb0-224c838dc34a"),
                             Category = "operational",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8619),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9754),
                             Description = "Overview of system health, errors, and performance metrics",
                             Icon = "health_and_safety",
                             IsSystem = true,
@@ -7563,10 +7563,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("622a1d95-5a15-4fd7-9972-723cb30ad70c"),
+                            Id = new Guid("2e5202a1-c4d4-44e1-b672-d34e99d77199"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8651),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9787),
                             Description = "Analysis of subscription lifecycle from acquisition to churn",
                             Icon = "loop",
                             IsSystem = true,
@@ -7577,10 +7577,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("9f0fc813-46a9-435c-843e-57c331aff218"),
+                            Id = new Guid("30b710de-a08c-4936-b8f1-30c2a5c83c90"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"month\",\"type\":\"month\",\"required\":true,\"label\":\"Report Month\"}],\"sections\":[{\"title\":\"Financial KPIs\",\"type\":\"metrics\"},{\"title\":\"Customer Metrics\",\"type\":\"metrics\"},{\"title\":\"Growth Trends\",\"type\":\"chart\"},{\"title\":\"Top Performers\",\"type\":\"table\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(8692),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9836),
                             Description = "High-level executive summary with key metrics and trends",
                             Icon = "dashboard",
                             IsSystem = true,
@@ -9773,9 +9773,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8e8eee5e-4329-46f6-9508-7a22a6569fc2"),
+                            Id = new Guid("ae63e286-d8b2-43c4-b536-7e0c20329e96"),
                             Category = "financial",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(6735),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(7871),
                             DefaultConfig = "{\"xAxis\":\"month\",\"yAxis\":\"total_mrr\",\"color\":\"#10b981\",\"format\":\"currency\"}",
                             DefaultQuery = "\nSELECT \n    DATE_TRUNC('month', cs.\"CreatedAt\") as month,\n    SUM(p.\"MonthlyPrice\") as total_mrr\nFROM \"ClinicSubscriptions\" cs\nINNER JOIN \"SubscriptionPlans\" p ON cs.\"SubscriptionPlanId\" = p.\"Id\"\nWHERE cs.\"CreatedAt\" >= CURRENT_DATE - INTERVAL '12 months'\n    AND cs.\"Status\" = 'Active'\nGROUP BY DATE_TRUNC('month', cs.\"CreatedAt\")\nORDER BY month",
                             Description = "Monthly Recurring Revenue trend over the last 12 months",
@@ -9787,9 +9787,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("82fdabd3-5890-4441-9ff3-05570051ba94"),
+                            Id = new Guid("44841731-240d-4809-a7fd-7655b07e05d7"),
                             Category = "financial",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7170),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8461),
                             DefaultConfig = "{\"labelField\":\"plan\",\"valueField\":\"revenue\",\"format\":\"currency\"}",
                             DefaultQuery = "\nSELECT \n    p.\"Name\" as plan,\n    SUM(p.\"MonthlyPrice\") as revenue\nFROM \"ClinicSubscriptions\" cs\nINNER JOIN \"SubscriptionPlans\" p ON cs.\"SubscriptionPlanId\" = p.\"Id\"\nWHERE cs.\"Status\" = 'Active'\nGROUP BY p.\"Name\"",
                             Description = "MRR distribution by plan type",
@@ -9801,9 +9801,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("6df75770-b3b4-4234-8120-c2797fdf13de"),
+                            Id = new Guid("d303c499-f95f-4686-b697-bcd74be1999c"),
                             Category = "financial",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7221),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8519),
                             DefaultConfig = "{\"format\":\"currency\",\"icon\":\"attach_money\",\"color\":\"#10b981\"}",
                             DefaultQuery = "\nSELECT SUM(p.\"MonthlyPrice\") as value\nFROM \"ClinicSubscriptions\" cs\nINNER JOIN \"SubscriptionPlans\" p ON cs.\"SubscriptionPlanId\" = p.\"Id\"\nWHERE cs.\"Status\" = 'Active'",
                             Description = "Current Monthly Recurring Revenue",
@@ -9815,9 +9815,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("6eefc5da-78ac-4ad1-8b0a-23fdbd1a847f"),
+                            Id = new Guid("fd12b02f-b7eb-475a-848d-829361677245"),
                             Category = "customer",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7276),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8576),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"people\",\"color\":\"#3b82f6\"}",
                             DefaultQuery = "\nSELECT COUNT(DISTINCT \"ClinicId\") as value\nFROM \"ClinicSubscriptions\"\nWHERE \"Status\" = 'Active'",
                             Description = "Total number of active clinic customers",
@@ -9829,9 +9829,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("e793afcc-4c88-467c-b92a-61e14d997a98"),
+                            Id = new Guid("54df762e-915a-4835-8a8c-801158594978"),
                             Category = "customer",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7305),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8606),
                             DefaultConfig = "{\"xAxis\":\"month\",\"yAxis\":\"new_customers\",\"color\":\"#3b82f6\"}",
                             DefaultQuery = "\nSELECT \n    DATE_TRUNC('month', \"CreatedAt\") as month,\n    COUNT(DISTINCT \"ClinicId\") as new_customers\nFROM \"ClinicSubscriptions\"\nWHERE \"CreatedAt\" >= CURRENT_DATE - INTERVAL '12 months'\nGROUP BY DATE_TRUNC('month', \"CreatedAt\")\nORDER BY month",
                             Description = "New customers acquired each month",
@@ -9843,9 +9843,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("f6f2126b-f55c-4e68-9334-d0f6fc3b11c7"),
+                            Id = new Guid("1c4aaead-6560-4f94-b1fb-be105710af42"),
                             Category = "customer",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7382),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8683),
                             DefaultConfig = "{\"format\":\"percent\",\"icon\":\"warning\",\"color\":\"#ef4444\",\"threshold\":{\"warning\":5,\"critical\":10}}",
                             DefaultQuery = "\nSELECT \n    ROUND(\n        CAST(COUNT(CASE WHEN \"Status\" = 'Cancelled' AND \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END) AS DECIMAL) / \n        NULLIF(COUNT(CASE WHEN \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END), 0) * 100,\n        2\n    ) as value\nFROM \"ClinicSubscriptions\"",
                             Description = "Monthly customer churn percentage",
@@ -9857,9 +9857,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("9a76dc70-bfbb-4bc0-b472-3c745a1b80de"),
+                            Id = new Guid("d18f3ff8-89a3-41c3-b56e-81d059e14172"),
                             Category = "operational",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7513),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8815),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"event\",\"color\":\"#8b5cf6\"}",
                             DefaultQuery = "\nSELECT COUNT(*) as value\nFROM \"Appointments\"\nWHERE \"AppointmentDate\" >= CURRENT_DATE - INTERVAL '30 days'",
                             Description = "Total appointments scheduled",
@@ -9871,9 +9871,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("3bbfebe2-bcb0-49b1-84a5-32c89134e72d"),
+                            Id = new Guid("1fdb0dfb-0fb6-46d7-89f5-3a6e78d9d1db"),
                             Category = "operational",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7556),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8857),
                             DefaultConfig = "{\"labelField\":\"status\",\"valueField\":\"count\"}",
                             DefaultQuery = "\nSELECT \n    \"Status\" as status,\n    COUNT(*) as count\nFROM \"Appointments\"\nWHERE \"AppointmentDate\" >= CURRENT_DATE - INTERVAL '30 days'\nGROUP BY \"Status\"",
                             Description = "Distribution of appointments by status",
@@ -9885,9 +9885,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("22358634-5f78-4517-afee-51127a216668"),
+                            Id = new Guid("eb616bce-484b-4879-bd2d-5bdd00cf2d58"),
                             Category = "operational",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7600),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8899),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"person\",\"color\":\"#06b6d4\"}",
                             DefaultQuery = "\nSELECT COUNT(*) as value\nFROM \"Users\"\nWHERE \"IsActive\" = true",
                             Description = "Number of active users in the system",
@@ -9899,9 +9899,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("2a60941f-e3aa-47bd-b34b-9536f146938c"),
+                            Id = new Guid("831df0e5-467c-4fdf-a927-4bd855adf276"),
                             Category = "clinical",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7665),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(8972),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"local_hospital\",\"color\":\"#f97316\"}",
                             DefaultQuery = "\nSELECT COUNT(*) as value\nFROM \"Patients\"",
                             Description = "Total number of registered patients",
@@ -9913,9 +9913,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("778af1b8-12b6-47f3-9a52-33a5de00e722"),
+                            Id = new Guid("48f64549-e423-42c2-8264-601b8e85f5e1"),
                             Category = "clinical",
-                            CreatedAt = new DateTime(2026, 1, 29, 3, 1, 4, 2, DateTimeKind.Utc).AddTicks(7741),
+                            CreatedAt = new DateTime(2026, 1, 29, 3, 12, 29, 563, DateTimeKind.Utc).AddTicks(9053),
                             DefaultConfig = "{\"xAxis\":\"clinic\",\"yAxis\":\"patient_count\",\"color\":\"#f97316\"}",
                             DefaultQuery = "\nSELECT \n    c.\"TradeName\" as clinic,\n    COUNT(p.\"Id\") as patient_count\nFROM \"Patients\" p\nINNER JOIN \"Clinics\" c ON p.\"ClinicId\" = c.\"Id\"\nGROUP BY c.\"TradeName\"\nORDER BY patient_count DESC\nLIMIT 10",
                             Description = "Patient distribution across clinics",
