@@ -68,13 +68,23 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "PrimeCare Software API",
         Version = "v1",
-        Description = "PrimeCare Software - Sistema de Gestão para Consultórios Médicos",
+        Description = "PrimeCare Software - Sistema de Gestão para Consultórios Médicos. " +
+                      "Esta API fornece endpoints para gestão completa de clínicas, incluindo: " +
+                      "módulos configuráveis, gestão de pacientes, agendamentos, prontuários, e muito mais.",
         Contact = new OpenApiContact
         {
             Name = "PrimeCare Software",
             Email = "contato@medicwarehouse.com"
         }
     });
+
+    // Include XML comments
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
 
     // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
