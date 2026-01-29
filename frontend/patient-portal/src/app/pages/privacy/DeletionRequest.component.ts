@@ -34,7 +34,8 @@ interface DeletionRequestData {
     MatCheckboxModule,
     MatStepperModule
   ],
-  templateUrl: './DeletionRequest.component.html'
+  templateUrl: './DeletionRequest.component.html',
+  styleUrls: ['./privacy.scss']
 })
 export class DeletionRequestComponent {
   loading = false;

@@ -48,7 +48,8 @@ interface Appointment {
     MatExpansionModule,
     MatChipsModule
   ],
-  templateUrl: './DataViewer.component.html'
+  templateUrl: './DataViewer.component.html',
+  styleUrls: ['./privacy.scss']
 })
 export class DataViewerComponent implements OnInit {
   loading = true;

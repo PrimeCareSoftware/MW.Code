@@ -21,7 +21,8 @@ import { environment } from '../../../environments/environment';
     MatProgressSpinnerModule,
     MatRadioModule
   ],
-  templateUrl: './DataPortability.component.html'
+  templateUrl: './DataPortability.component.html',
+  styleUrls: ['./privacy.scss']
 })
 export class DataPortabilityComponent {
   selectedFormat = 'json';

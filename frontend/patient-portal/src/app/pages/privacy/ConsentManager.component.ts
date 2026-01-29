@@ -33,7 +33,8 @@ interface Consent {
     MatChipsModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './ConsentManager.component.html'
+  templateUrl: './ConsentManager.component.html',
+  styleUrls: ['./privacy.scss']
 })
 export class ConsentManagerComponent implements OnInit {
   loading = true;
