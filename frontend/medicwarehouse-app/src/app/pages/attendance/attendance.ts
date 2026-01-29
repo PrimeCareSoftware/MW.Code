@@ -889,31 +889,39 @@ export class Attendance implements OnInit, OnDestroy {
 
   // CFM 1.821 - Clinical Examination Management
   onClinicalExaminationSaved(examination: ClinicalExamination): void {
-    // Reload examinations to get the latest data
-    this.loadClinicalExaminations();
+    // Reload all CFM entities to get the latest data
+    if (this.medicalRecord()?.id) {
+      this.loadCFMEntities(this.medicalRecord()!.id);
+    }
     this.successMessage.set('Exame clínico salvo com sucesso!');
     setTimeout(() => this.successMessage.set(''), 3000);
   }
 
   // CFM 1.821 - Diagnostic Hypothesis Management
   onDiagnosticHypothesisSaved(hypothesis: DiagnosticHypothesis): void {
-    // Reload hypotheses to get the latest data
-    this.loadDiagnosticHypotheses();
+    // Reload all CFM entities to get the latest data
+    if (this.medicalRecord()?.id) {
+      this.loadCFMEntities(this.medicalRecord()!.id);
+    }
     this.successMessage.set('Hipótese diagnóstica salva com sucesso!');
     setTimeout(() => this.successMessage.set(''), 3000);
   }
 
   onDiagnosticHypothesisDeleted(id: string): void {
-    // Reload hypotheses to get the latest data
-    this.loadDiagnosticHypotheses();
+    // Reload all CFM entities to get the latest data
+    if (this.medicalRecord()?.id) {
+      this.loadCFMEntities(this.medicalRecord()!.id);
+    }
     this.successMessage.set('Hipótese diagnóstica removida com sucesso!');
     setTimeout(() => this.successMessage.set(''), 3000);
   }
 
   // CFM 1.821 - Therapeutic Plan Management
   onTherapeuticPlanSaved(plan: TherapeuticPlan): void {
-    // Reload plans to get the latest data
-    this.loadTherapeuticPlans();
+    // Reload all CFM entities to get the latest data
+    if (this.medicalRecord()?.id) {
+      this.loadCFMEntities(this.medicalRecord()!.id);
+    }
     this.successMessage.set('Plano terapêutico salvo com sucesso!');
     setTimeout(() => this.successMessage.set(''), 3000);
   }
