@@ -31,8 +31,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
-                if (adminUserId == Guid.Empty)
+                if (!Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminUserId) || adminUserId == Guid.Empty)
                 {
                     return Unauthorized(new { error = "User ID not found in claims" });
                 }
@@ -57,7 +56,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
+                if (!Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminUserId))
+                {
+                    return Unauthorized(new { error = "User ID not found in claims" });
+                }
+                
                 await _smartActionService.GrantCreditAsync(
                     request.ClinicId,
                     request.Days,
@@ -78,7 +81,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
+                if (!Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminUserId))
+                {
+                    return Unauthorized(new { error = "User ID not found in claims" });
+                }
+                
                 await _smartActionService.ApplyDiscountAsync(
                     request.ClinicId,
                     request.Percentage,
@@ -99,7 +106,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
+                if (!Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminUserId))
+                {
+                    return Unauthorized(new { error = "User ID not found in claims" });
+                }
+                
                 await _smartActionService.SuspendTemporarilyAsync(
                     request.ClinicId,
                     request.ReactivationDate,
@@ -120,7 +131,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
+                if (!Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminUserId))
+                {
+                    return Unauthorized(new { error = "User ID not found in claims" });
+                }
+                
                 var data = await _smartActionService.ExportClinicDataAsync(request.ClinicId, adminUserId);
 
                 return File(data, "application/json", $"clinic-{request.ClinicId}-data.json");
@@ -137,7 +152,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
+                if (!Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminUserId))
+                {
+                    return Unauthorized(new { error = "User ID not found in claims" });
+                }
+                
                 await _smartActionService.MigratePlanAsync(
                     request.ClinicId,
                     request.NewPlanId,
@@ -158,7 +177,11 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         {
             try
             {
-                var adminUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
+                if (!Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminUserId))
+                {
+                    return Unauthorized(new { error = "User ID not found in claims" });
+                }
+                
                 await _smartActionService.SendCustomEmailAsync(
                     request.ClinicId,
                     request.Subject,
