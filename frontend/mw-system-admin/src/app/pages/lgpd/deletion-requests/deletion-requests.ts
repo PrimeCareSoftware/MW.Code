@@ -108,7 +108,7 @@ export class DeletionRequests implements OnInit {
 
     const processRequest: ProcessDeletionRequest = {
       requestId: request.id,
-      processedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
+      processedBy: this.auth.getUserInfo()?.username || 'UNKNOWN',
       notes: this.processingNotes || undefined
     };
 
@@ -168,7 +168,7 @@ export class DeletionRequests implements OnInit {
 
     const completeRequest: CompleteDeletionRequest = {
       requestId: request.id,
-      completedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
+      completedBy: this.auth.getUserInfo()?.username || 'UNKNOWN',
       affectedDataTypes: this.selectedDataTypes,
       notes: this.processingNotes || undefined
     };
@@ -214,7 +214,7 @@ export class DeletionRequests implements OnInit {
 
     const rejectRequest: RejectDeletionRequest = {
       requestId: request.id,
-      rejectedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
+      rejectedBy: this.auth.getUserInfo()?.username || 'UNKNOWN',
       reason: this.rejectionReason
     };
 
@@ -260,7 +260,7 @@ export class DeletionRequests implements OnInit {
 
     const approvalRequest: LegalApprovalRequest = {
       requestId: request.id,
-      approvedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
+      approvedBy: this.auth.getUserInfo()?.username || 'UNKNOWN',
       notes: this.legalApprovalNotes || undefined
     };
 

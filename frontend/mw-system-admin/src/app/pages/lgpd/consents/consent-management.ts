@@ -129,7 +129,7 @@ export class ConsentManagement implements OnInit {
     const currentUser = this.auth.getUserInfo();
     const request: RevokeConsentRequest = {
       consentId: consent.id,
-      revokedBy: currentUser?.email || 'UNKNOWN',
+      revokedBy: currentUser?.username || 'UNKNOWN',
       reason: this.revokeReason
     };
 
