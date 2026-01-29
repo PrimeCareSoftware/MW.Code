@@ -1,0 +1,275 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Verificação de Identidade - CFM 2.314/2022</h2>
+      <p class="subtitle">
+        @if (isProvider) {
+          Envie seus documentos profissionais para verificação
+        } @else {
+          Envie seus documentos para verificação de identidade
+        }
+      </p>
+    </div>
+
+    <div class="card-body">
+      <!-- Alert Messages -->
+      @if (errorMessage()) {
+        <div class="alert alert-danger" role="alert">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      @if (successMessage()) {
+        <div class="alert alert-success" role="alert">
+          <i class="fas fa-check-circle"></i>
+          {{ successMessage() }}
+        </div>
+      }
+
+      <!-- Upload Form -->
+      <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="upload-form">
+        
+        <!-- Document Information -->
+        <div class="form-section">
+          <h3>Informações do Documento</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="documentType">Tipo de Documento *</label>
+              <select id="documentType" formControlName="documentType" class="form-control">
+                <option value="RG">RG</option>
+                <option value="CNH">CNH</option>
+                <option value="RNE">RNE</option>
+                <option value="Passaporte">Passaporte</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="documentNumber">Número do Documento *</label>
+              <input 
+                type="text" 
+                id="documentNumber" 
+                formControlName="documentNumber" 
+                class="form-control"
+                placeholder="Ex: 12.345.678-9"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- CRM Information (Only for Providers) -->
+        @if (isProvider) {
+          <div class="form-section">
+            <h3>Informações do CRM</h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="crmNumber">Número do CRM *</label>
+                <input 
+                  type="text" 
+                  id="crmNumber" 
+                  formControlName="crmNumber" 
+                  class="form-control"
+                  placeholder="Ex: 123456"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="crmState">Estado do CRM *</label>
+                <select id="crmState" formControlName="crmState" class="form-control">
+                  <option value="">Selecione...</option>
+                  <option value="SP">SP - São Paulo</option>
+                  <option value="RJ">RJ - Rio de Janeiro</option>
+                  <option value="MG">MG - Minas Gerais</option>
+                  <option value="RS">RS - Rio Grande do Sul</option>
+                  <option value="BA">BA - Bahia</option>
+                  <option value="PR">PR - Paraná</option>
+                  <option value="SC">SC - Santa Catarina</option>
+                  <option value="GO">GO - Goiás</option>
+                  <option value="PE">PE - Pernambuco</option>
+                  <option value="CE">CE - Ceará</option>
+                  <option value="PA">PA - Pará</option>
+                  <option value="MA">MA - Maranhão</option>
+                  <option value="MS">MS - Mato Grosso do Sul</option>
+                  <option value="MT">MT - Mato Grosso</option>
+                  <option value="PB">PB - Paraíba</option>
+                  <option value="ES">ES - Espírito Santo</option>
+                  <option value="PI">PI - Piauí</option>
+                  <option value="RN">RN - Rio Grande do Norte</option>
+                  <option value="AL">AL - Alagoas</option>
+                  <option value="SE">SE - Sergipe</option>
+                  <option value="RO">RO - Rondônia</option>
+                  <option value="TO">TO - Tocantins</option>
+                  <option value="AC">AC - Acre</option>
+                  <option value="AM">AM - Amazonas</option>
+                  <option value="RR">RR - Roraima</option>
+                  <option value="AP">AP - Amapá</option>
+                  <option value="DF">DF - Distrito Federal</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- File Uploads -->
+        <div class="form-section">
+          <h3>Upload de Documentos</h3>
+          
+          <!-- Document Photo -->
+          <div class="upload-field">
+            <label class="upload-label">
+              Foto do Documento de Identidade *
+              <span class="help-text">
+                (Formato: JPG, PNG ou PDF | Máx: 10MB)
+              </span>
+            </label>
+            
+            <div class="upload-area">
+              @if (!documentPhotoPreview()) {
+                <label for="documentPhoto" class="upload-button">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  Clique para selecionar arquivo
+                  <input 
+                    type="file" 
+                    id="documentPhoto" 
+                    accept=".jpg,.jpeg,.png,.pdf" 
+                    (change)="onDocumentPhotoSelected($event)"
+                    hidden
+                  />
+                </label>
+              } @else {
+                <div class="preview-container">
+                  @if (documentPhotoPreview() !== 'PDF') {
+                    <img [src]="documentPhotoPreview()" alt="Preview do documento" class="preview-image" />
+                  } @else {
+                    <div class="pdf-preview">
+                      <i class="fas fa-file-pdf"></i>
+                      <p>Arquivo PDF selecionado</p>
+                    </div>
+                  }
+                  <button type="button" class="btn-remove" (click)="clearDocumentPhoto()">
+                    <i class="fas fa-times"></i> Remover
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- CRM Card Photo (Only for Providers) -->
+          @if (isProvider) {
+            <div class="upload-field">
+              <label class="upload-label">
+                Foto da Carteira do CRM *
+                <span class="help-text">
+                  (Formato: JPG, PNG ou PDF | Máx: 10MB)
+                </span>
+              </label>
+              
+              <div class="upload-area">
+                @if (!crmCardPhotoPreview()) {
+                  <label for="crmCardPhoto" class="upload-button">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Clique para selecionar arquivo
+                    <input 
+                      type="file" 
+                      id="crmCardPhoto" 
+                      accept=".jpg,.jpeg,.png,.pdf" 
+                      (change)="onCrmCardPhotoSelected($event)"
+                      hidden
+                    />
+                  </label>
+                } @else {
+                  <div class="preview-container">
+                    @if (crmCardPhotoPreview() !== 'PDF') {
+                      <img [src]="crmCardPhotoPreview()" alt="Preview do CRM" class="preview-image" />
+                    } @else {
+                      <div class="pdf-preview">
+                        <i class="fas fa-file-pdf"></i>
+                        <p>Arquivo PDF selecionado</p>
+                      </div>
+                    }
+                    <button type="button" class="btn-remove" (click)="clearCrmCardPhoto()">
+                      <i class="fas fa-times"></i> Remover
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Selfie (Optional) -->
+          <div class="upload-field">
+            <label class="upload-label">
+              Selfie (Opcional, mas Recomendado)
+              <span class="help-text">
+                (Formato: JPG, PNG | Máx: 10MB)
+              </span>
+            </label>
+            
+            <div class="upload-area">
+              @if (!selfiePreview()) {
+                <label for="selfie" class="upload-button">
+                  <i class="fas fa-camera"></i>
+                  Clique para selecionar selfie
+                  <input 
+                    type="file" 
+                    id="selfie" 
+                    accept=".jpg,.jpeg,.png" 
+                    (change)="onSelfieSelected($event)"
+                    hidden
+                  />
+                </label>
+              } @else {
+                <div class="preview-container">
+                  <img [src]="selfiePreview()" alt="Preview da selfie" class="preview-image" />
+                  <button type="button" class="btn-remove" (click)="clearSelfie()">
+                    <i class="fas fa-times"></i> Remover
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="security-notice">
+          <i class="fas fa-shield-alt"></i>
+          <div>
+            <strong>Seus dados estão seguros</strong>
+            <p>
+              Todos os documentos são criptografados com AES-256 e armazenados com segurança. 
+              Apenas administradores autorizados podem acessá-los para fins de verificação.
+              De acordo com a LGPD, você pode solicitar a remoção dos seus dados a qualquer momento.
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="cancel()"
+            [disabled]="isUploading()"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="uploadForm.invalid || isUploading()"
+          >
+            @if (isUploading()) {
+              <i class="fas fa-spinner fa-spin"></i> Enviando...
+            } @else {
+              <i class="fas fa-upload"></i> Enviar Documentos
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
