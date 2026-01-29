@@ -15,7 +15,7 @@ namespace MedicSoft.Repository.Repositories
         {
         }
 
-        public async Task<FilaEspera?> GetByIdAsync(Guid id, string tenantId)
+        public override async Task<FilaEspera?> GetByIdAsync(Guid id, string tenantId)
         {
             return await _dbSet
                 .Include(f => f.Clinica)

@@ -316,9 +316,12 @@ namespace MedicSoft.Application.Services
                 {
                     // Set to preferred clinic first, otherwise first active clinic
                     var preferredClinic = activeLinks.FirstOrDefault(l => l.IsPreferredClinic);
-                    var nextClinic = preferredClinic ?? activeLinks.First();
-                    user.SetCurrentClinic(nextClinic.ClinicId);
-                    await _userRepository.UpdateAsync(user);
+                    var nextClinic = preferredClinic ?? activeLinks.FirstOrDefault();
+                    if (nextClinic != null)
+                    {
+                        user.SetCurrentClinic(nextClinic.ClinicId);
+                        await _userRepository.UpdateAsync(user);
+                    }
                 }
                 // Note: If no active clinics remain, we leave CurrentClinicId as is.
                 // The user won't be able to access the system until linked to a new clinic.

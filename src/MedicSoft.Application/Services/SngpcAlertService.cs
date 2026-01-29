@@ -179,7 +179,8 @@ namespace MedicSoft.Application.Services
 
             foreach (var group in negativeBalances)
             {
-                var latestEntry = group.OrderByDescending(e => e.Date).First();
+                var latestEntry = group.OrderByDescending(e => e.Date).FirstOrDefault();
+                if (latestEntry == null) continue;
                 var alert = await CreateAndPersistAlertAsync(
                     tenantId,
                     AlertType.NegativeBalance,

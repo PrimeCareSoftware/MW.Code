@@ -550,10 +550,16 @@ namespace MedicSoft.Application.Services.Reports
                 return System.Text.Encoding.UTF8.GetBytes("No data available");
             }
 
+            var firstRow = data.FirstOrDefault();
+            if (firstRow == null)
+            {
+                return System.Text.Encoding.UTF8.GetBytes("No data available");
+            }
+
             var csv = new System.Text.StringBuilder();
             
             // Headers
-            var headers = data.First().Keys.ToList();
+            var headers = firstRow.Keys.ToList();
             csv.AppendLine(string.Join(",", headers.Select(h => EscapeCsvValue(h))));
             
             // Data rows

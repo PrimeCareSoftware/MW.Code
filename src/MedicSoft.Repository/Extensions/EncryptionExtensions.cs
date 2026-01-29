@@ -51,6 +51,7 @@ namespace MedicSoft.Repository.Extensions
             });
 
             // MedicalRecord sensitive fields
+#pragma warning disable CS8620 // Argument nullability mismatch - EF Core handles this correctly
             modelBuilder.Entity<Domain.Entities.MedicalRecord>(entity =>
             {
                 entity.Property(e => e.ChiefComplaint).HasConversion(converter);
@@ -63,6 +64,7 @@ namespace MedicSoft.Repository.Extensions
                 entity.Property(e => e.Prescription).HasConversion(converter);
                 entity.Property(e => e.Notes).HasConversion(converter);
             });
+#pragma warning restore CS8620
 
             // DigitalPrescription sensitive fields
             modelBuilder.Entity<Domain.Entities.DigitalPrescription>(entity =>
