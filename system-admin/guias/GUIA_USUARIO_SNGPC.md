@@ -222,7 +222,7 @@ O **Balanço Mensal** é um resumo de todas as movimentações do mês, mostrand
 5. **Fechar Balanço**
    - Após confirmar os dados, clique em **Fechar Balanço**
    - O balanço fica bloqueado para edição
-   - Pode ser reabertoem caso de erro (com justificativa)
+   - Pode ser reaberto em caso de erro (com justificativa)
 
 ### Prazo Legal
 
