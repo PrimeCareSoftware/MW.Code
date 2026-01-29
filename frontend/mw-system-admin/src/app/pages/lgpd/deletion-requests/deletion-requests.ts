@@ -9,6 +9,7 @@ import {
   RejectDeletionRequest,
   LegalApprovalRequest
 } from '../../../services/data-deletion.service';
+import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-deletion-requests',
@@ -44,7 +45,10 @@ export class DeletionRequests implements OnInit {
   availableStatuses: string[] = [];
   availableRequestTypes: string[] = [];
   
-  constructor(public deletionService: DataDeletionService) {}
+  constructor(
+    public deletionService: DataDeletionService,
+    private auth: Auth
+  ) {}
 
   ngOnInit(): void {
     this.availableStatuses = this.deletionService.getAvailableStatuses();
@@ -104,7 +108,7 @@ export class DeletionRequests implements OnInit {
 
     const processRequest: ProcessDeletionRequest = {
       requestId: request.id,
-      processedBy: 'ADMIN', // TODO: Get from auth service
+      processedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
       notes: this.processingNotes || undefined
     };
 
@@ -164,7 +168,7 @@ export class DeletionRequests implements OnInit {
 
     const completeRequest: CompleteDeletionRequest = {
       requestId: request.id,
-      completedBy: 'ADMIN', // TODO: Get from auth service
+      completedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
       affectedDataTypes: this.selectedDataTypes,
       notes: this.processingNotes || undefined
     };
@@ -210,7 +214,7 @@ export class DeletionRequests implements OnInit {
 
     const rejectRequest: RejectDeletionRequest = {
       requestId: request.id,
-      rejectedBy: 'ADMIN', // TODO: Get from auth service
+      rejectedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
       reason: this.rejectionReason
     };
 
@@ -256,7 +260,7 @@ export class DeletionRequests implements OnInit {
 
     const approvalRequest: LegalApprovalRequest = {
       requestId: request.id,
-      approvedBy: 'ADMIN', // TODO: Get from auth service
+      approvedBy: this.auth.getUserInfo()?.email || 'UNKNOWN',
       notes: this.legalApprovalNotes || undefined
     };
 

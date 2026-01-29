@@ -30,7 +30,7 @@ interface PrivacyOption {
     MatChipsModule
   ],
   templateUrl: './PrivacyCenter.component.html',
-  styleUrls: ['./privacy.css']
+  styleUrls: ['./privacy.scss']
 })
 export class PrivacyCenterComponent implements OnInit {
   currentUser: User | null = null;

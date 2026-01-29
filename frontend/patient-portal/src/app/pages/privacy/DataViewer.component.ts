@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 interface PersonalData {
@@ -81,31 +82,25 @@ export class DataViewerComponent implements OnInit {
       });
   }
 
-  private loadPersonalData(): Promise<void> {
-    return this.http
-      .get<PersonalData>(`${environment.apiUrl}/patient-portal/personal-data`)
-      .toPromise()
-      .then((data) => {
-        this.personalData = data || null;
-      });
+  private async loadPersonalData(): Promise<void> {
+    const data = await firstValueFrom(
+      this.http.get<PersonalData>(`${environment.apiUrl}/patient-portal/personal-data`)
+    );
+    this.personalData = data || null;
   }
 
-  private loadMedicalRecords(): Promise<void> {
-    return this.http
-      .get<MedicalRecord[]>(`${environment.apiUrl}/patient-portal/medical-records`)
-      .toPromise()
-      .then((data) => {
-        this.medicalRecords = data || [];
-      });
+  private async loadMedicalRecords(): Promise<void> {
+    const data = await firstValueFrom(
+      this.http.get<MedicalRecord[]>(`${environment.apiUrl}/patient-portal/medical-records`)
+    );
+    this.medicalRecords = data || [];
   }
 
-  private loadAppointments(): Promise<void> {
-    return this.http
-      .get<Appointment[]>(`${environment.apiUrl}/patient-portal/appointments`)
-      .toPromise()
-      .then((data) => {
-        this.appointments = data || [];
-      });
+  private async loadAppointments(): Promise<void> {
+    const data = await firstValueFrom(
+      this.http.get<Appointment[]>(`${environment.apiUrl}/patient-portal/appointments`)
+    );
+    this.appointments = data || [];
   }
 
   formatDate(date: string): string {

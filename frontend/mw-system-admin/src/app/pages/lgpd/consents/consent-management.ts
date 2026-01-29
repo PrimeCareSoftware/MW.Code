@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConsentService, ConsentLog, RevokeConsentRequest } from '../../../services/consent.service';
+import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-consent-management',
@@ -35,7 +36,10 @@ export class ConsentManagement implements OnInit {
   // Modal states
   showDetailsModal = signal(false);
   
-  constructor(public consentService: ConsentService) {}
+  constructor(
+    public consentService: ConsentService,
+    private auth: Auth
+  ) {}
 
   ngOnInit(): void {
     this.availableTypes = this.consentService.getAvailableConsentTypes();
@@ -122,9 +126,10 @@ export class ConsentManagement implements OnInit {
     this.revokeInProgress.set(true);
     this.error.set(null);
 
+    const currentUser = this.auth.getUserInfo();
     const request: RevokeConsentRequest = {
       consentId: consent.id,
-      revokedBy: 'ADMIN', // TODO: Get from auth service
+      revokedBy: currentUser?.email || 'UNKNOWN',
       reason: this.revokeReason
     };
 
