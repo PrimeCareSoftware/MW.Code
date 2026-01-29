@@ -43,7 +43,7 @@ namespace MedicSoft.Api.Jobs.Workflows
                     s.NextPaymentDate > oneHourAgo)
                 .ToListAsync();
 
-            _logger.LogInformation($"Found {expiredSubscriptions.Count} expired subscriptions");
+            _logger.LogInformation("Found {Count} expired subscriptions", expiredSubscriptions.Count);
 
             foreach (var subscription in expiredSubscriptions)
             {
@@ -88,7 +88,7 @@ namespace MedicSoft.Api.Jobs.Workflows
                     s.TrialEndDate > twoDaysFromNow)
                 .ToListAsync();
 
-            _logger.LogInformation($"Found {expiringTrials.Count} expiring trials");
+            _logger.LogInformation("Found {Count} expiring trials", expiringTrials.Count);
 
             foreach (var trial in expiringTrials)
             {
@@ -135,10 +135,10 @@ namespace MedicSoft.Api.Jobs.Workflows
                     c.IsActive &&
                     c.UpdatedAt.HasValue &&
                     c.UpdatedAt.Value < thirtyDaysAgo &&
-                    c.UpdatedAt.Value >= thirtyOneDaysAgo)
+                    c.CreatedAt < thirtyOneDaysAgo) // Exclude recently created clinics
                 .ToListAsync();
 
-            _logger.LogInformation($"Found {inactiveClinics.Count} inactive clinics");
+            _logger.LogInformation("Found {Count} inactive clinics", inactiveClinics.Count);
 
             foreach (var clinic in inactiveClinics)
             {

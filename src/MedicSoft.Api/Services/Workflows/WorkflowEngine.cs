@@ -261,19 +261,25 @@ namespace MedicSoft.Api.Services.Workflows
                 _ => TicketPriority.Medium
             };
             
-            // Get clinic info
+            // Get clinic info and tenant ID
             Guid? clinicId = null;
             string? clinicName = null;
+            string tenantId = "system"; // Default to system tenant
+            
             if (clinicIdValue != null && Guid.TryParse(clinicIdValue.ToString(), out var parsedClinicId))
             {
                 clinicId = parsedClinicId;
                 var clinic = await _context.Clinics.FindAsync(parsedClinicId);
-                clinicName = clinic?.Name;
+                if (clinic != null)
+                {
+                    clinicName = clinic.Name;
+                    tenantId = clinic.TenantId;
+                }
             }
             
-            // Use system user for auto-generated tickets
-            var systemUserId = Guid.Empty; // Or get from config
-            var tenantId = clinicName ?? "system"; // Get proper tenant ID
+            // Use a known system user ID for auto-generated tickets
+            // TODO: Consider creating a dedicated system user account or getting from configuration
+            var systemUserId = Guid.Empty;
 
             var ticket = new Ticket(
                 title ?? "Auto-generated ticket",
@@ -290,7 +296,7 @@ namespace MedicSoft.Api.Services.Workflows
 
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
-            _logger.LogInformation($"Ticket created: {title}");
+            _logger.LogInformation("Ticket created: {Title}", title);
         }
 
         private async Task ExecuteWebhookActionAsync(Dictionary<string, JsonElement> config, object triggerData)
