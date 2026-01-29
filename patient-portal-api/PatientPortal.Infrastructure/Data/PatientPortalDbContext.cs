@@ -192,6 +192,7 @@ public class PatientPortalDbContext : DbContext
                 .HasMaxLength(50);
 
             entity.Property(e => e.IpAddress)
+                .IsRequired()
                 .HasMaxLength(50);
 
             // Add foreign key relationship with cascade delete

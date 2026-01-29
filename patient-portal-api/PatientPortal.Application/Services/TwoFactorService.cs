@@ -2,7 +2,6 @@ using System.Security.Cryptography;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PatientPortal.Application.Interfaces;
-using PatientPortal.Application.Services;
 using PatientPortal.Domain.Interfaces;
 
 namespace PatientPortal.Application.Services;
@@ -137,8 +136,10 @@ public class TwoFactorService : ITwoFactorService
         _logger.LogInformation("2FA code generated and sent to user {PatientUserId} for purpose {Purpose}", 
             patientUserId, purpose);
 
-        // Return a temporary token (the token ID) that the client will use to verify
-        return Convert.ToBase64String(token.Id.ToByteArray());
+        // Return a temporary token that encodes both the token ID and user ID for security
+        var tempTokenData = $"{token.Id}:{patientUserId}";
+        var tempTokenBytes = System.Text.Encoding.UTF8.GetBytes(tempTokenData);
+        return Convert.ToBase64String(tempTokenBytes);
     }
 
     public async Task<bool> VerifyCodeAsync(Guid patientUserId, string code, string tempToken)
@@ -148,25 +149,51 @@ public class TwoFactorService : ITwoFactorService
             return false;
         }
 
-        // Decode the temporary token to get the token ID
+        // Decode and validate the temporary token
         Guid tokenId;
+        Guid tokenUserId;
         try
         {
-            var tokenIdBytes = Convert.FromBase64String(tempToken);
-            tokenId = new Guid(tokenIdBytes);
+            var tempTokenBytes = Convert.FromBase64String(tempToken);
+            var tempTokenData = System.Text.Encoding.UTF8.GetString(tempTokenBytes);
+            var parts = tempTokenData.Split(':');
+            
+            if (parts.Length != 2)
+            {
+                _logger.LogWarning("Invalid temporary token format");
+                return false;
+            }
+
+            tokenId = Guid.Parse(parts[0]);
+            tokenUserId = Guid.Parse(parts[1]);
         }
         catch
         {
-            _logger.LogWarning("Invalid temporary token format");
+            _logger.LogWarning("Failed to parse temporary token");
             return false;
         }
 
-        // Get the token
+        // Verify that the user ID matches
+        if (tokenUserId != patientUserId)
+        {
+            _logger.LogWarning("User ID mismatch in 2FA verification");
+            return false;
+        }
+
+        // Get the token by code and user ID
         var token = await _twoFactorTokenRepository.GetByCodeAsync(code, patientUserId);
 
         if (token == null || token.Id != tokenId)
         {
-            _logger.LogWarning("2FA token not found for user {PatientUserId}", patientUserId);
+            _logger.LogWarning("2FA token not found or ID mismatch for user {PatientUserId}", patientUserId);
+            return false;
+        }
+
+        // Check if token is valid BEFORE incrementing attempts
+        if (!token.IsValid)
+        {
+            _logger.LogWarning("Invalid 2FA token for user {PatientUserId}. Used: {IsUsed}, Expired: {Expired}, Attempts: {Attempts}", 
+                patientUserId, token.IsUsed, DateTime.UtcNow >= token.ExpiresAt, token.VerificationAttempts);
             return false;
         }
 
@@ -174,11 +201,10 @@ public class TwoFactorService : ITwoFactorService
         token.VerificationAttempts++;
         await _twoFactorTokenRepository.UpdateAsync(token);
 
-        // Check if token is valid
-        if (!token.IsValid)
+        // Check if attempts exceeded after incrementing
+        if (token.VerificationAttempts > MaxVerificationAttempts)
         {
-            _logger.LogWarning("Invalid 2FA token for user {PatientUserId}. Used: {IsUsed}, Expired: {Expired}, Attempts: {Attempts}", 
-                patientUserId, token.IsUsed, DateTime.UtcNow >= token.ExpiresAt, token.VerificationAttempts);
+            _logger.LogWarning("Too many verification attempts for user {PatientUserId}", patientUserId);
             return false;
         }
 
@@ -227,15 +253,27 @@ public class TwoFactorService : ITwoFactorService
     }
 
     /// <summary>
-    /// Generates a cryptographically secure 6-digit code
+    /// Generates a cryptographically secure 6-digit code using rejection sampling
+    /// for uniform distribution
     /// </summary>
     private string GenerateSecureCode()
     {
         using var rng = RandomNumberGenerator.Create();
         var bytes = new byte[4];
-        rng.GetBytes(bytes);
-        var number = BitConverter.ToUInt32(bytes, 0) % 1000000; // 0-999999
-        return number.ToString("D6"); // Format as 6 digits with leading zeros
+        
+        // Use rejection sampling to ensure uniform distribution
+        const uint maxValidValue = 1000000; // Codes from 0 to 999999
+        const uint maxRangeValue = uint.MaxValue - (uint.MaxValue % maxValidValue);
+        
+        uint number;
+        do
+        {
+            rng.GetBytes(bytes);
+            number = BitConverter.ToUInt32(bytes, 0);
+        } while (number >= maxRangeValue);
+        
+        var code = number % maxValidValue;
+        return code.ToString("D6"); // Format as 6 digits with leading zeros
     }
 
     /// <summary>
@@ -270,6 +308,10 @@ public class TwoFactorService : ITwoFactorService
     {
         var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.primecare.com";
         
+        // HTML-encode user-provided data to prevent rendering issues
+        var encodedFullName = System.Net.WebUtility.HtmlEncode(fullName);
+        var encodedAction = System.Net.WebUtility.HtmlEncode(action);
+        
         var subject = "Alteração de Segurança - Autenticação de Dois Fatores";
         var body = $@"
 <!DOCTYPE html>
@@ -290,9 +332,9 @@ public class TwoFactorService : ITwoFactorService
             <h2>Portal do Paciente</h2>
         </div>
         <div class='content'>
-            <h3>Olá {fullName},</h3>
+            <h3>Olá {encodedFullName},</h3>
             <div class='alert'>
-                <p><strong>A autenticação de dois fatores foi {action} para sua conta.</strong></p>
+                <p><strong>A autenticação de dois fatores foi {encodedAction} para sua conta.</strong></p>
             </div>
             <p>Se você não realizou esta ação, entre em contato conosco imediatamente.</p>
             <p>Data: {DateTime.UtcNow.AddHours(-3):dd/MM/yyyy HH:mm} (Horário de Brasília)</p>
