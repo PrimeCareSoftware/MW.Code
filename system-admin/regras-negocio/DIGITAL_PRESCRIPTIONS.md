@@ -109,7 +109,8 @@ This implementation provides a comprehensive digital medical prescription system
 ✅ SNGPC monthly reporting
 ✅ Deadline tracking (10th day of following month)
 ✅ Transmission protocol recording
-✅ XML generation (placeholder for ANVISA schema)
+✅ **XML generation (ANVISA schema v2.1 COMPLETE)**
+✅ **Alert persistence system for compliance monitoring**
 
 ## Usage Examples
 
@@ -207,9 +208,10 @@ dotnet test --filter "FullyQualifiedName~DigitalPrescriptionTests"
 ## Future Enhancements
 
 ### High Priority
-- [ ] Implement full ANVISA XML schema v2.1
-- [ ] PDF generation with prescription templates
-- [ ] Complete ICP-Brasil digital signature integration
+- [x] ✅ **COMPLETE:** Implement full ANVISA XML schema v2.1
+- [x] ✅ **COMPLETE:** PDF generation with prescription templates (QuestPDF)
+- [x] ✅ **COMPLETE:** Alert persistence system for SNGPC compliance
+- [ ] ⏳ **IN PROGRESS:** Complete ICP-Brasil digital signature integration (interface ready, awaiting production certificates)
 - [ ] Integration tests for XML and PDF services
 
 ### Medium Priority
@@ -223,6 +225,258 @@ dotnet test --filter "FullyQualifiedName~DigitalPrescriptionTests"
 - [ ] Voice dictation for prescription creation
 - [ ] ML-based medication interaction checking
 - [ ] Analytics and reporting dashboard
+
+## PDF Generation (✅ COMPLETE)
+
+### Professional Templates by Prescription Type
+
+The system includes **3 professional PDF templates** using QuestPDF:
+
+#### 1. Simple Prescription Template
+- Standard layout with clinic header
+- Patient information section
+- Medication list with dosage and instructions
+- QR code for verification (top right)
+- Doctor signature section (footer)
+- A4/Letter/Half-page support
+
+#### 2. Controlled Prescription Template
+- Red "RECEITA CONTROLADA" watermark
+- Notification number prominently displayed
+- Control type indicator (A/B/C1)
+- Complete prescriber identification
+- Patient identification
+- **Single medication per prescription** (ANVISA requirement)
+- Issue date and expiration date highlighted
+- Usage warnings
+
+#### 3. Antimicrobial Prescription Template
+- Yellow "USO SOB ORIENTAÇÃO MÉDICA" watermark
+- "RDC 20/2011 ANVISA" header
+- Patient information
+- Antimicrobial medication list
+- Yellow box with mandatory warnings:
+  - 10-day validity
+  - Second copy retention by pharmacy
+  - Do not share medication
+
+### PDF API Endpoints
+
+```http
+GET /api/DigitalPrescriptions/{id}/pdf?clinicName=MyClinic&clinicAddress=123 Main St&clinicPhone=(11) 1234-5678
+# Downloads PDF with clinic information
+
+GET /api/DigitalPrescriptions/{id}/pdf/preview
+# Displays PDF inline in browser
+```
+
+### PDF Features
+- ✅ QR code integration for authenticity verification
+- ✅ Watermarks for controlled/antimicrobial prescriptions
+- ✅ Optimized for print (A4, Letter, Half-page)
+- ✅ Professional medical font (Arial)
+- ✅ Proper spacing for readability
+- ✅ Clinic branding support
+- ✅ Digital signature timestamp display
+
+### Usage Example
+
+```csharp
+// Generate PDF programmatically
+var pdfBytes = await _pdfService.GeneratePdfAsync(
+    prescriptionId,
+    tenantId,
+    new PrescriptionPdfOptions
+    {
+        ClinicName = "Clínica Exemplo",
+        ClinicAddress = "Rua Exemplo, 123 - São Paulo/SP",
+        ClinicPhone = "(11) 1234-5678",
+        IncludeQRCode = true,
+        IncludeWatermark = true,
+        PaperSize = PaperSize.A4
+    }
+);
+
+// Save to file or return as HTTP response
+File.WriteAllBytes("receita.pdf", pdfBytes);
+```
+
+## XML ANVISA Schema v2.1 (✅ COMPLETE)
+
+### SNGPC XML Generation
+
+The system generates **fully compliant ANVISA XML** for controlled substance reporting:
+
+#### XML Structure
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<SNGPC xmlns="http://www.anvisa.gov.br/sngpc/v2.1" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.anvisa.gov.br/sngpc/v2.1 SNGPC_v2.1.xsd"
+       versao="2.1">
+  <Cabecalho>
+    <Versao>2.1</Versao>
+    <TipoDocumento>ESCRITURACAO</TipoDocumento>
+    <PeriodoInicio>2026-01-01</PeriodoInicio>
+    <PeriodoFim>2026-01-31</PeriodoFim>
+    <DataGeracao>2026-02-05T10:30:00</DataGeracao>
+    <MesReferencia>01</MesReferencia>
+    <AnoReferencia>2026</AnoReferencia>
+    <QuantidadeReceitas>42</QuantidadeReceitas>
+    <QuantidadeItens>42</QuantidadeItens>
+  </Cabecalho>
+  <Receitas>
+    <Receita>
+      <NumeroReceita>202601000001</NumeroReceita>
+      <TipoReceituario>CONTROLE_ESPECIAL_B</TipoReceituario>
+      <DataEmissao>2026-01-15</DataEmissao>
+      <Prescritor>
+        <Nome>Dr. João Silva</Nome>
+        <CRM>12345</CRM>
+        <UF>SP</UF>
+      </Prescritor>
+      <Paciente>
+        <Nome>Maria Santos</Nome>
+        <CPF>12345678900</CPF>
+      </Paciente>
+      <Itens>
+        <Item>
+          <Medicamento>Rivotril 2mg</Medicamento>
+          <Quantidade>60</Quantidade>
+          <Unidade>UN</Unidade>
+          <NomeGenerico>Clonazepam</NomeGenerico>
+          <PrincipioAtivo>Clonazepam</PrincipioAtivo>
+          <ListaControlada>B1</ListaControlada>
+          <Dosagem>2mg</Dosagem>
+          <FormaFarmaceutica>Comprimido</FormaFarmaceutica>
+          <Posologia>1 comprimido 2x ao dia, por 30 dias</Posologia>
+        </Item>
+      </Itens>
+    </Receita>
+  </Receitas>
+</SNGPC>
+```
+
+### XML Features
+- ✅ ANVISA namespace v2.1 compliance
+- ✅ UTF-8 encoding with XML declaration
+- ✅ Schema validation ready
+- ✅ Complete prescription header (period, totals)
+- ✅ Prescription type mapping
+- ✅ Prescriber information (Name, CRM, State)
+- ✅ Patient information (Name, CPF/RG)
+- ✅ Controlled substance classification (A1-A3, B1-B2, C1-C5)
+- ✅ Medication details (dosage, form, posology)
+- ✅ Generic name (DCB/DCI)
+- ✅ Active ingredient
+- ✅ ANVISA registration number (when available)
+- ✅ Special character sanitization
+
+### XML API Endpoints
+
+```http
+GET /api/DigitalPrescriptions/{id}/xml
+# Export single prescription as ANVISA XML
+
+POST /api/SNGPCReports/{reportId}/generate-xml
+# Generate monthly report XML for all controlled prescriptions
+
+GET /api/SNGPCReports/{reportId}/download-xml
+# Download generated monthly report XML
+```
+
+### Usage Example
+
+```csharp
+// Generate ANVISA XML for a prescription
+var xmlContent = await _xmlGenerator.GenerateXmlAsync(report, prescriptions);
+
+// Save or transmit to ANVISA
+File.WriteAllText($"SNGPC_{report.Year}_{report.Month:D2}.xml", xmlContent);
+```
+
+## Alert Persistence System (✅ COMPLETE)
+
+### SNGPC Compliance Monitoring
+
+The system includes a **complete alert persistence layer** for SNGPC compliance:
+
+#### Alert Types (11 types)
+1. **DeadlineApproaching** - Report deadline approaching (5 days before)
+2. **DeadlineOverdue** - Report deadline passed
+3. **MissingReport** - Monthly report not created
+4. **InvalidBalance** - Calculated balance doesn't match
+5. **NegativeBalance** - Stock showing negative values
+6. **MissingRegistryEntry** - Movement not registered
+7. **TransmissionFailed** - ANVISA transmission failed
+8. **UnusualMovement** - Unusual dispensing pattern detected
+9. **ExcessiveDispensing** - Excessive quantities dispensed
+10. **ComplianceViolation** - Regulatory violation detected
+11. **SystemError** - System error in SNGPC processing
+
+#### Severity Levels
+- **Info** - Informational (green)
+- **Warning** - Warning (yellow)
+- **Error** - Error (orange)
+- **Critical** - Critical action required (red)
+
+#### Alert Workflow
+```
+Created → Active → Acknowledged → Resolved
+```
+
+#### Alert Features
+- ✅ Persistent storage in database
+- ✅ Complete audit trail (who, when, why)
+- ✅ Acknowledgment tracking with notes
+- ✅ Resolution tracking with description
+- ✅ Relationships to reports, registries, balances
+- ✅ Multi-tenancy isolation
+- ✅ Optimized queries with indexes
+- ✅ Age calculation in days
+
+### Alert API Endpoints
+
+```http
+GET /api/SNGPCReports/active-alerts?severity=Critical
+# Get active alerts filtered by severity
+
+GET /api/SNGPCReports/approaching-deadlines?daysBeforeDeadline=5
+# Get reports with approaching deadlines
+
+GET /api/SNGPCReports/overdue
+# Get overdue reports that need immediate attention
+
+GET /api/SNGPCReports/validate-compliance
+# Run compliance validation and generate alerts
+
+GET /api/SNGPCReports/detect-anomalies
+# Detect unusual patterns and generate alerts
+```
+
+### Usage Example
+
+```csharp
+// Get critical alerts
+var criticalAlerts = await _alertService.GetActiveAlertsAsync(
+    tenantId, 
+    severity: AlertSeverity.Critical
+);
+
+// Acknowledge an alert
+await _alertService.AcknowledgeAlertAsync(
+    alertId, 
+    userId, 
+    notes: "Checking with pharmacy team"
+);
+
+// Resolve an alert
+await _alertService.ResolveAlertAsync(
+    alertId, 
+    userId, 
+    resolution: "Transmitted successfully to ANVISA. Protocol: 123456"
+);
+```
 
 ## Security Considerations
 
