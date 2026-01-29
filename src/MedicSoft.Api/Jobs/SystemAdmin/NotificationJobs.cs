@@ -42,7 +42,7 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
                 var now = DateTime.UtcNow;
                 var expiredSubscriptions = await _context.ClinicSubscriptions
                     .IgnoreQueryFilters()
-                    .Where(s => s.Status == "Active" && s.EndDate <= now)
+                    .Where(s => s.Status == Domain.Entities.SubscriptionStatus.Active && s.EndDate <= now)
                     .Include(s => s.Clinic)
                     .ToListAsync();
 
@@ -83,15 +83,15 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
 
                 var expiringTrials = await _context.ClinicSubscriptions
                     .IgnoreQueryFilters()
-                    .Where(s => s.Status == "Trial" && 
-                               s.TrialEndsAt > now && 
-                               s.TrialEndsAt <= threeDaysFromNow)
+                    .Where(s => s.Status == Domain.Entities.SubscriptionStatus.Trial && 
+                               s.TrialEndDate > now && 
+                               s.TrialEndDate <= threeDaysFromNow)
                     .Include(s => s.Clinic)
                     .ToListAsync();
 
                 foreach (var trial in expiringTrials)
                 {
-                    var daysRemaining = (trial.TrialEndsAt!.Value - now).Days;
+                    var daysRemaining = (trial.TrialEndDate!.Value - now).Days;
                     await _notificationService.CreateNotificationAsync(new CreateSystemNotificationDto
                     {
                         Type = "warning",

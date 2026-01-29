@@ -138,7 +138,7 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
 
             var highValueClinics = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == Domain.Entities.SubscriptionStatus.Active && s.Price >= highValueThreshold)
+                .Where(s => s.Status == Domain.Entities.SubscriptionStatus.Active && s.CurrentPrice >= highValueThreshold)
                 .Select(s => s.ClinicId)
                 .Distinct()
                 .ToListAsync();
@@ -152,7 +152,7 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
             // Remove tag from low-value clinics
             var lowValueClinics = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == Domain.Entities.SubscriptionStatus.Active && s.Price < highValueThreshold)
+                .Where(s => s.Status == Domain.Entities.SubscriptionStatus.Active && s.CurrentPrice < highValueThreshold)
                 .Select(s => s.ClinicId)
                 .Distinct()
                 .ToListAsync();
@@ -300,13 +300,24 @@ namespace MedicSoft.Api.Jobs.SystemAdmin
 
             if (!exists)
             {
-                var clinicTag = new Domain.Entities.ClinicTag
+                // Get the clinic to obtain its tenantId
+                var clinic = await _context.Clinics
+                    .IgnoreQueryFilters()
+                    .FirstOrDefaultAsync(c => c.Id == clinicId);
+
+                if (clinic == null)
                 {
-                    ClinicId = clinicId,
-                    TagId = tagId,
-                    CreatedAt = DateTime.UtcNow,
-                    CreatedBy = "auto-tagging-job"
-                };
+                    _logger.LogWarning($"Clinic {clinicId} not found when trying to add tag {tagId}");
+                    return false;
+                }
+
+                var clinicTag = new Domain.Entities.ClinicTag(
+                    clinicId,
+                    tagId,
+                    clinic.TenantId,
+                    assignedBy: "auto-tagging-job",
+                    isAutoAssigned: true
+                );
 
                 _context.Set<Domain.Entities.ClinicTag>().Add(clinicTag);
                 await _context.SaveChangesAsync();
