@@ -355,21 +355,16 @@ Este percentual refere-se especificamente aos **critérios WCAG 2.1 Level AA**:
 | **ARIA Labels** | ✅ | 100% |
 | **Focus Management** | ✅ | 100% |
 | **Error Handling** | ✅ | 100% |
-| **ARIA Labels** | ✅ | 100% |
 | **Focus Trap em Modais** | ✅ | 100% |
 | **Skip Navigation** | ✅ | 100% |
-| **Testes Unitários** | ✅ | 100% |
 | **Breadcrumbs Acessíveis** | ✅ | 100% |
 | **Anúncios ARIA Live** | ✅ | 100% |
-| **Formulários** | 🟢 | 95% |
-| **Multimídia** | 🟡 | 60% |
-| **Validação** | ⚠️ | 70% |
 
 ### Critérios WCAG 2.1
 
 - ✅ **Level A:** 25/25 (100%)
-- 🟢 **Level AA:** 23/25 (92%)
-- **Total WCAG:** 48/50 (96%)
+- ✅ **Level AA:** 25/25 (100%)
+- ✅ **Total WCAG 2.1 AA:** 50/50 (100%)
 
 ---
 

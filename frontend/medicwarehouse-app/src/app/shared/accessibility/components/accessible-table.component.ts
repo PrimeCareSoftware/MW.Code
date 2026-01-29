@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export interface TableColumn {
   key: string;
@@ -10,12 +10,21 @@ export interface TableRow {
   [key: string]: any;
 }
 
+export interface SortEvent {
+  column: string;
+  direction: 'asc' | 'desc';
+}
+
 /**
  * Accessible table component following WCAG 2.1 AA guidelines
  * - Proper table headers with scope attributes
  * - Sortable columns with ARIA labels
  * - Keyboard navigation support
  * - Screen reader friendly
+ * 
+ * **Note:** The onSort method mutates the data array by sorting it in place.
+ * If the parent component needs to maintain the original data array reference,
+ * consider handling the sort event and managing sorting externally.
  */
 @Component({
   selector: 'app-accessible-table',
@@ -33,6 +42,7 @@ export interface TableRow {
             <th
               *ngFor="let column of columns"
               scope="col"
+              [id]="'header-' + column.key"
               [attr.aria-sort]="getSortState(column.key)"
               [class.sortable]="column.sortable"
             >
@@ -57,7 +67,7 @@ export interface TableRow {
         
         <tbody>
           <tr *ngFor="let row of data; let i = index" [attr.aria-rowindex]="i + 2">
-            <td *ngFor="let column of columns" [attr.headers]="column.key">
+            <td *ngFor="let column of columns" [attr.headers]="'header-' + column.key">
               {{ row[column.key] }}
             </td>
           </tr>
@@ -159,10 +169,11 @@ export class AccessibleTableComponent {
   @Input() summary?: string;
   @Input() showCaption = false;
   @Input() emptyMessage = 'Nenhum dado disponível';
+  @Output() sorted = new EventEmitter<SortEvent>();
   
   sortColumn?: string;
   sortDirection: 'asc' | 'desc' | 'none' = 'none';
-  summaryId = `table-summary-${Math.random().toString(36).substr(2, 9)}`;
+  summaryId = `table-summary-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
   getSortState(columnKey: string): 'ascending' | 'descending' | 'none' {
     if (this.sortColumn !== columnKey) {
@@ -197,7 +208,13 @@ export class AccessibleTableComponent {
       this.sortDirection = 'asc';
     }
     
-    // Sort the data
+    // Emit sort event for parent to handle
+    this.sorted.emit({
+      column: columnKey,
+      direction: this.sortDirection
+    });
+    
+    // Sort the data locally
     this.data = [...this.data].sort((a, b) => {
       const aVal = a[columnKey];
       const bVal = b[columnKey];
