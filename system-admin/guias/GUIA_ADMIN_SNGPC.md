@@ -408,7 +408,7 @@ Erro na linha 58: CRM não cadastrado
 2. Verifique o CPF do paciente
 3. Corrija no cadastro do paciente
 4. Crie nova prescrição
-5. Regere o XML
+5. Regerar o XML
 6. Retransmita
 
 **Erro Comum 2: CRM Não Cadastrado**
@@ -425,7 +425,7 @@ Erro na linha 58: CRM não cadastrado
 1. Verifique datas das prescrições
 2. Certifique-se que estão dentro do mês reportado
 3. Remova prescrições fora do período
-4. Regere XML
+4. Regerar XML
 5. Retransmita
 
 ### Retry e Resiliência
@@ -639,15 +639,17 @@ tail -f /var/log/sngpc-jobs.log | grep "CreateMonthlyReport"
 1. Liste todas as prescrições do medicamento
 2. Identifique duplicatas ou erros
 3. Corrija registros manualmente no banco (com cuidado!)
-4. Regere balanço mensal
+4. Regerar balanço mensal
 
 ---
 
 ## 📞 Contatos Importantes
 
+> **Nota:** Os números de telefone abaixo são placeholders. Substitua pelos números reais da sua organização antes de usar este guia.
+
 **Suporte PrimeCare:**
 - Email: suporte@primecaresoftware.com
-- Telefone: (11) XXXX-XXXX
+- Telefone: (11) XXXX-XXXX _(substituir com número real)_
 - Horário: 8h-18h dias úteis
 
 **ANVISA - SNGPC:**
@@ -657,7 +659,7 @@ tail -f /var/log/sngpc-jobs.log | grep "CreateMonthlyReport"
 
 **Emergência Compliance:**
 - Para problemas críticos de compliance fora do horário
-- WhatsApp: (11) 9XXXX-XXXX
+- WhatsApp: (11) 9XXXX-XXXX _(substituir com número real)_
 
 ---
 

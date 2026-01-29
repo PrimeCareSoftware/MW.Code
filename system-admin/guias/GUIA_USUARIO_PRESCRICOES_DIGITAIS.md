@@ -445,8 +445,10 @@ Digite o nome no campo de medicamento - o autocomplete mostra ícones coloridos 
 
 ## 📞 Suporte
 
+> **Nota:** Os números de telefone abaixo são placeholders. Substitua pelos números reais da sua clínica antes de distribuir este guia.
+
 **Email:** suporte@primecaresoftware.com  
-**Telefone:** (11) XXXX-XXXX  
+**Telefone:** (11) XXXX-XXXX _(substituir com número real)_  
 **Horário:** Segunda a Sexta, 8h às 18h
 
 ---
