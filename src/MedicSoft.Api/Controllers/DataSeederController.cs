@@ -47,12 +47,11 @@ namespace MedicSoft.Api.Controllers
                     tenantId = "demo-clinic-001",
                     systemAdmin = new
                     {
-                        note = "System Owner for accessing system-admin area",
+                        note = "System Owner for accessing system-admin area (NOT the same as the clinic 'admin' user below)",
                         endpoint = "POST /api/auth/owner-login",
                         username = "admin",
                         password = "Admin@123",
                         tenantId = "system",
-                        url = "http://localhost:4200/system-admin",
                         isSystemOwner = true
                     },
                     credentials = new
@@ -60,7 +59,7 @@ namespace MedicSoft.Api.Controllers
                         owner = new { username = "owner.demo", password = "Owner@123", role = "Owner" },
                         users = new[]
                         {
-                            new { username = "admin", password = "Admin@123", role = "SystemAdmin" },
+                            new { username = "admin", password = "Admin@123", role = "SystemAdmin", note = "Clinic user (different from system owner above)" },
                             new { username = "dr.silva", password = "Doctor@123", role = "Doctor" },
                             new { username = "recep.maria", password = "Recep@123", role = "Receptionist" }
                         }
@@ -115,12 +114,11 @@ namespace MedicSoft.Api.Controllers
                 tenantId = "demo-clinic-001",
                 systemAdmin = new
                 {
-                    note = "System Owner for accessing system-admin area",
+                    note = "System Owner for accessing system-admin area (NOT the same as the clinic 'admin' user below)",
                     endpoint = "POST /api/auth/owner-login",
                     username = "admin",
                     password = "Admin@123",
                     tenantId = "system",
-                    url = "http://localhost:4200/system-admin",
                     isSystemOwner = true
                 },
                 clinic = new
