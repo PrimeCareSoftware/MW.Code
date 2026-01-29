@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
@@ -8,7 +9,7 @@ namespace MedicSoft.Domain.Interfaces
     {
         Task<IEnumerable<SystemNotification>> GetUnreadNotificationsAsync();
         Task<IEnumerable<SystemNotification>> GetAllNotificationsAsync(int skip, int take);
-        Task MarkAsReadAsync(int notificationId);
+        Task MarkAsReadAsync(Guid notificationId);
         Task MarkAllAsReadAsync();
         Task<int> GetUnreadCountAsync();
     }

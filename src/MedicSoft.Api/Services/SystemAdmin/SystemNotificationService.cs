@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace MedicSoft.Api.Services.SystemAdmin
             return notifications.Select(MapToDto).ToList();
         }
 
-        public async Task MarkAsReadAsync(int notificationId)
+        public async Task MarkAsReadAsync(Guid notificationId)
         {
             await _repository.MarkAsReadAsync(notificationId);
         }
@@ -68,9 +69,9 @@ namespace MedicSoft.Api.Services.SystemAdmin
             return await _repository.GetUnreadCountAsync();
         }
 
-        public async Task SendRealTimeNotificationAsync(int notificationId)
+        public async Task SendRealTimeNotificationAsync(Guid notificationId)
         {
-            var notification = await _repository.GetByIdAsync(notificationId);
+            var notification = await _repository.GetByIdAsync(notificationId, string.Empty);
             if (notification != null)
             {
                 var dto = MapToDto(notification);
