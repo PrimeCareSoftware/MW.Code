@@ -1,0 +1,164 @@
+// Custom Shepherd.js theme styles for mw-system-admin
+
+.shepherd-theme-custom {
+  .shepherd-element {
+    background-color: var(--card-background, #ffffff);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    max-width: 420px;
+  }
+  
+  .shepherd-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  }
+  
+  .shepherd-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary, #1f2937);
+  }
+  
+  .shepherd-text {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary, #4b5563);
+    
+    h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary, #1f2937);
+    }
+    
+    p {
+      margin: 0 0 12px 0;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      background-color: var(--kbd-background, #f3f4f6);
+      border: 1px solid var(--kbd-border, #d1d5db);
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  .shepherd-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  
+  .shepherd-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:not(.shepherd-button-secondary) {
+      background-color: var(--primary-color, #4f46e5);
+      color: white;
+      
+      &:hover {
+        background-color: var(--primary-hover, #4338ca);
+      }
+    }
+  }
+  
+  .shepherd-button-secondary {
+    background-color: transparent;
+    color: var(--text-secondary, #6b7280);
+    border: 1px solid var(--border-color, #d1d5db);
+    
+    &:hover {
+      background-color: var(--hover-background, #f9fafb);
+      border-color: var(--border-hover, #9ca3af);
+    }
+  }
+  
+  .shepherd-cancel-icon {
+    color: var(--text-tertiary, #9ca3af);
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: var(--text-secondary, #6b7280);
+    }
+  }
+  
+  // Arrow customization
+  .shepherd-arrow {
+    &:before {
+      background-color: var(--card-background, #ffffff);
+    }
+  }
+}
+
+// Modal overlay
+.shepherd-modal-overlay-container {
+  .shepherd-modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Dark mode support
+.theme-dark {
+  .shepherd-theme-custom {
+    .shepherd-element {
+      --card-background: #1e293b;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-tertiary: #94a3b8;
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --hover-background: rgba(255, 255, 255, 0.05);
+      --border-hover: rgba(255, 255, 255, 0.2);
+      --kbd-background: #334155;
+      --kbd-border: #475569;
+    }
+  }
+}
+
+// High contrast mode support
+.theme-high-contrast {
+  .shepherd-theme-custom {
+    .shepherd-element {
+      border: 2px solid var(--text-primary, #000000);
+    }
+    
+    .shepherd-button:not(.shepherd-button-secondary) {
+      background-color: #000000;
+      color: #ffffff;
+      border: 2px solid #000000;
+      
+      &:hover {
+        background-color: #333333;
+        border-color: #333333;
+      }
+    }
+    
+    .shepherd-button-secondary {
+      border: 2px solid var(--text-primary, #000000);
+      color: var(--text-primary, #000000);
+    }
+  }
+}
