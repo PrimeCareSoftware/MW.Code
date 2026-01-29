@@ -41,7 +41,7 @@
 }
 
 .position-bottom-right {
-  bottom: 2rem;
+  bottom: 7rem; /* Positioned above the ticket FAB (2rem + 60px button + gap) */
   right: 2rem;
 }
 
@@ -62,7 +62,7 @@
   }
 
   .position-bottom-right {
-    bottom: 1rem;
+    bottom: 5.5rem; /* Positioned above the ticket FAB on mobile (1rem + 56px button + gap) */
     right: 1rem;
   }
 
