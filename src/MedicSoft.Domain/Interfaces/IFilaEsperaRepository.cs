@@ -7,7 +7,6 @@ namespace MedicSoft.Domain.Interfaces
 {
     public interface IFilaEsperaRepository : IRepository<FilaEspera>
     {
-        new Task<FilaEspera?> GetByIdAsync(Guid id, string tenantId);
         Task<FilaEspera?> GetByClinicaIdAsync(Guid clinicaId, string tenantId);
         Task<List<FilaEspera>> GetActiveByClinicaAsync(Guid clinicaId, string tenantId);
         Task<List<FilaEspera>> GetAllByClinicaAsync(Guid clinicaId, string tenantId);

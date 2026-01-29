@@ -48,13 +48,19 @@ namespace MedicSoft.Api.Jobs.Workflows
             {
                 try
                 {
+                    if (subscription.Clinic == null || string.IsNullOrEmpty(subscription.Clinic.Email))
+                    {
+                        _logger.LogWarning("Skipping SubscriptionExpiredEvent for clinic {ClinicId} - missing clinic or email", subscription.ClinicId);
+                        continue;
+                    }
+
                     await _eventPublisher.PublishAsync(new SubscriptionExpiredEvent
                     {
                         ClinicId = subscription.ClinicId,
                         SubscriptionId = subscription.Id,
                         ExpiredAt = subscription.NextPaymentDate ?? now,
-                        ClinicName = subscription.Clinic?.Name ?? "Unknown",
-                        Email = subscription.Clinic?.Email ?? "unknown@example.com"
+                        ClinicName = subscription.Clinic.Name,
+                        Email = subscription.Clinic.Email
                     });
                 }
                 catch (Exception ex)
@@ -87,6 +93,12 @@ namespace MedicSoft.Api.Jobs.Workflows
             {
                 try
                 {
+                    if (trial.Clinic == null || string.IsNullOrEmpty(trial.Clinic.Email))
+                    {
+                        _logger.LogWarning("Skipping TrialExpiringEvent for clinic {ClinicId} - missing clinic or email", trial.ClinicId);
+                        continue;
+                    }
+
                     var daysRemaining = trial.TrialEndDate.HasValue 
                         ? (trial.TrialEndDate.Value - now).Days 
                         : 0;
@@ -97,8 +109,8 @@ namespace MedicSoft.Api.Jobs.Workflows
                         SubscriptionId = trial.Id,
                         DaysRemaining = daysRemaining,
                         TrialEndsAt = trial.TrialEndDate ?? now,
-                        ClinicName = trial.Clinic?.Name ?? "Unknown",
-                        Email = trial.Clinic?.Email ?? "unknown@example.com"
+                        ClinicName = trial.Clinic.Name,
+                        Email = trial.Clinic.Email
                     });
                 }
                 catch (Exception ex)
