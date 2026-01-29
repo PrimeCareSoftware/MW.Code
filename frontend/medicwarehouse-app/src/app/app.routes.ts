@@ -16,6 +16,10 @@ export const routes: Routes = [
         path: 'clinics',
         loadComponent: () => import('./pages/site/clinics/clinic-search').then(m => m.ClinicSearchComponent)
       },
+      {
+        path: 'clinics/:id/schedule',
+        loadComponent: () => import('./pages/site/appointment-booking/appointment-booking.component').then(m => m.AppointmentBookingComponent)
+      },
       { 
         path: 'pricing', 
         loadComponent: () => import('./pages/site/pricing/pricing').then(m => m.PricingComponent)
