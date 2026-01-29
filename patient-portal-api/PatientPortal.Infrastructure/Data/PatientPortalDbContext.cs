@@ -19,6 +19,7 @@ public class PatientPortalDbContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
     public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; } = null!;
     public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
+    public DbSet<TwoFactorToken> TwoFactorTokens { get; set; } = null!;
 
     // Read-only views from main application
     public DbSet<AppointmentView> AppointmentViews { get; set; } = null!;
@@ -166,6 +167,43 @@ public class PatientPortalDbContext : DbContext
                 .IsUnique();
 
             entity.HasIndex(e => new { e.PatientUserId, e.ExpiresAt });
+        });
+
+        // Configure TwoFactorToken entity
+        modelBuilder.Entity<TwoFactorToken>(entity =>
+        {
+            entity.ToTable("TwoFactorTokens");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Code)
+                .IsRequired()
+                .HasMaxLength(10);
+
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            entity.Property(e => e.ExpiresAt)
+                .IsRequired();
+
+            entity.Property(e => e.UsedAt);
+
+            entity.Property(e => e.Purpose)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.IpAddress)
+                .HasMaxLength(50);
+
+            // Add foreign key relationship with cascade delete
+            entity.HasOne<PatientUser>()
+                .WithMany()
+                .HasForeignKey(e => e.PatientUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Indexes for performance
+            entity.HasIndex(e => new { e.Code, e.PatientUserId });
+            entity.HasIndex(e => new { e.PatientUserId, e.ExpiresAt });
+            entity.HasIndex(e => e.CreatedAt);
         });
 
         // Configure AppointmentView as a view (read-only)

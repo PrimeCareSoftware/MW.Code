@@ -287,4 +287,47 @@ public static class EmailTemplateHelper
                $"Confirme sua presença: {confirmUrl}\n\n" +
                $"Equipe PrimeCare";
     }
+
+    /// <summary>
+    /// Generates an HTML email for two-factor authentication code
+    /// </summary>
+    public static string GenerateTwoFactorCodeEmail(string patientName, string code, string portalBaseUrl)
+    {
+        var sb = new StringBuilder();
+        
+        sb.AppendLine("<!DOCTYPE html>");
+        sb.AppendLine("<html lang=\"pt-BR\">");
+        sb.AppendLine("<head>");
+        sb.AppendLine("    <meta charset=\"UTF-8\">");
+        sb.AppendLine("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+        sb.AppendLine("    <title>Código de Verificação</title>");
+        sb.AppendLine(GetEmailStyles());
+        sb.AppendLine("    <style>");
+        sb.AppendLine("        .verification-code { font-size: 32px; font-weight: bold; color: #2563eb; text-align: center; padding: 20px; background-color: #f0f9ff; border-radius: 8px; margin: 20px 0; letter-spacing: 8px; }");
+        sb.AppendLine("    </style>");
+        sb.AppendLine("</head>");
+        sb.AppendLine("<body>");
+        sb.AppendLine("    <div class=\"container\">");
+        sb.AppendLine("        <div class=\"header\">");
+        sb.AppendLine("            <h1>🔐 Código de Verificação</h1>");
+        sb.AppendLine("        </div>");
+        sb.AppendLine("        <div class=\"content\">");
+        sb.AppendLine($"            <p>Olá <strong>{patientName}</strong>,</p>");
+        sb.AppendLine("            <p>Você solicitou um código de verificação para acessar o Portal do Paciente PrimeCare.</p>");
+        sb.AppendLine("            <p>Seu código de verificação é:</p>");
+        sb.AppendLine($"            <div class=\"verification-code\">{code}</div>");
+        sb.AppendLine("            <div class=\"alert\">");
+        sb.AppendLine("                <strong>⚠️ Importante:</strong> Este código expira em 5 minutos e só pode ser usado uma vez.");
+        sb.AppendLine("            </div>");
+        sb.AppendLine("            <p>Se você não solicitou este código, ignore este e-mail ou entre em contato conosco imediatamente se acredita que sua conta está comprometida.</p>");
+        sb.AppendLine("            <p>Por segurança, nunca compartilhe este código com ninguém.</p>");
+        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe PrimeCare</strong></p>");
+        sb.AppendLine("        </div>");
+        sb.AppendLine(GetEmailFooter());
+        sb.AppendLine("    </div>");
+        sb.AppendLine("</body>");
+        sb.AppendLine("</html>");
+        
+        return sb.ToString();
+    }
 }
