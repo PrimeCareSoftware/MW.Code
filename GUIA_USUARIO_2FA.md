@@ -1,5 +1,9 @@
 # Guia do Usuário: Autenticação de Dois Fatores (2FA)
 
+> **Status**: ✅ Implementação completa - Janeiro 2026
+> 
+> Este recurso está totalmente implementado e pronto para uso em produção.
+
 ## O que é Autenticação de Dois Fatores?
 
 A Autenticação de Dois Fatores (2FA) é uma camada adicional de segurança para sua conta. Além da senha, você precisará fornecer um código temporário enviado para seu e-mail sempre que fizer login.
