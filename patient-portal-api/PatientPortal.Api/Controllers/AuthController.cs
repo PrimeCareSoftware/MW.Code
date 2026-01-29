@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PatientPortal.Application.DTOs.Auth;
+using PatientPortal.Application.Exceptions;
 using PatientPortal.Application.Interfaces;
 
 namespace PatientPortal.Api.Controllers;
@@ -65,7 +66,7 @@ public class AuthController : ControllerBase
 
             return Ok(response);
         }
-        catch (PatientPortal.Application.Services.TwoFactorRequiredException ex)
+        catch (TwoFactorRequiredException ex)
         {
             // 2FA is required - return the temp token
             return Ok(new TwoFactorRequiredDto
@@ -628,7 +629,11 @@ public class AuthController : ControllerBase
 
                 patientUserId = Guid.Parse(parts[1]);
             }
-            catch
+            catch (FormatException)
+            {
+                return BadRequest(new { message = "Token temporário inválido" });
+            }
+            catch (ArgumentException)
             {
                 return BadRequest(new { message = "Token temporário inválido" });
             }
@@ -643,9 +648,17 @@ public class AuthController : ControllerBase
 
             // Code is valid, complete the login by generating tokens
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
-            var loginResponse = await _authService.CompleteLoginAfter2FAAsync(patientUserId, ipAddress);
             
-            return Ok(loginResponse);
+            try
+            {
+                var loginResponse = await _authService.CompleteLoginAfter2FAAsync(patientUserId, ipAddress);
+                return Ok(loginResponse);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning("2FA verification failed for user {UserId}: {Message}", patientUserId, ex.Message);
+                return Unauthorized(new { message = ex.Message });
+            }
         }
         catch (Exception ex)
         {

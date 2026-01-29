@@ -1,4 +1,5 @@
 using PatientPortal.Application.DTOs.Auth;
+using PatientPortal.Application.Exceptions;
 using PatientPortal.Application.Interfaces;
 using PatientPortal.Domain.Entities;
 using PatientPortal.Domain.Interfaces;
@@ -99,8 +100,8 @@ public class AuthService : IAuthService
             // Generate and send 2FA code
             var tempToken = await _twoFactorService.GenerateAndSendCodeAsync(user.Id, "Login", ipAddress);
             
-            // Return 2FA required response (note: this will be returned as a regular LoginResponseDto but the controller should handle this differently)
-            // We need to throw a special exception or return a different result type
+            // Throw exception to signal that 2FA is required
+            // This will be caught by the AuthController and return TwoFactorRequiredDto
             throw new TwoFactorRequiredException
             {
                 TempToken = tempToken
@@ -516,17 +517,5 @@ public class AuthService : IAuthService
             DateOfBirth = user.DateOfBirth,
             TwoFactorEnabled = user.TwoFactorEnabled
         };
-    }
-}
-
-/// <summary>
-/// Exception thrown when 2FA is required during login
-/// </summary>
-public class TwoFactorRequiredException : Exception
-{
-    public string TempToken { get; set; } = string.Empty;
-    
-    public TwoFactorRequiredException() : base("Two-factor authentication required")
-    {
     }
 }
