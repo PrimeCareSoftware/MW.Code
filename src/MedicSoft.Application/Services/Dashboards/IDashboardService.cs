@@ -19,7 +19,7 @@ namespace MedicSoft.Application.Services.Dashboards
         /// <summary>
         /// Get specific dashboard by ID
         /// </summary>
-        Task<CustomDashboardDto> GetDashboardAsync(int id);
+        Task<CustomDashboardDto> GetDashboardAsync(Guid id);
 
         /// <summary>
         /// Create a new dashboard
@@ -29,37 +29,37 @@ namespace MedicSoft.Application.Services.Dashboards
         /// <summary>
         /// Update an existing dashboard
         /// </summary>
-        Task<CustomDashboardDto> UpdateDashboardAsync(int id, UpdateDashboardDto dto);
+        Task<CustomDashboardDto> UpdateDashboardAsync(Guid id, UpdateDashboardDto dto);
 
         /// <summary>
         /// Delete a dashboard
         /// </summary>
-        Task DeleteDashboardAsync(int id);
+        Task DeleteDashboardAsync(Guid id);
 
         /// <summary>
         /// Add a widget to a dashboard
         /// </summary>
-        Task<DashboardWidgetDto> AddWidgetAsync(int dashboardId, CreateWidgetDto dto);
+        Task<DashboardWidgetDto> AddWidgetAsync(Guid dashboardId, CreateWidgetDto dto);
 
         /// <summary>
         /// Update widget position on grid
         /// </summary>
-        Task UpdateWidgetPositionAsync(int widgetId, WidgetPositionDto position);
+        Task UpdateWidgetPositionAsync(Guid widgetId, WidgetPositionDto position);
 
         /// <summary>
         /// Delete a widget from dashboard
         /// </summary>
-        Task DeleteWidgetAsync(int widgetId);
+        Task DeleteWidgetAsync(Guid widgetId);
 
         /// <summary>
         /// Execute widget query and return data
         /// </summary>
-        Task<WidgetDataDto> ExecuteWidgetQueryAsync(int widgetId);
+        Task<WidgetDataDto> ExecuteWidgetQueryAsync(Guid widgetId);
 
         /// <summary>
         /// Export dashboard to specified format
         /// </summary>
-        Task<byte[]> ExportDashboardAsync(int id, ExportFormat format);
+        Task<byte[]> ExportDashboardAsync(Guid id, ExportFormat format);
 
         /// <summary>
         /// Get all widget templates

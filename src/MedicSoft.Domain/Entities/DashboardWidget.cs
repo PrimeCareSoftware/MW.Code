@@ -12,7 +12,7 @@ namespace MedicSoft.Domain.Entities
     public class DashboardWidget : BaseEntity
     {
         [Required]
-        public int DashboardId { get; set; }
+        public Guid DashboardId { get; set; }
 
         [ForeignKey(nameof(DashboardId))]
         public virtual CustomDashboard Dashboard { get; set; }

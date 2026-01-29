@@ -23,7 +23,7 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Get specific report template by ID
         /// </summary>
-        Task<ReportTemplateDto> GetReportTemplateAsync(int id);
+        Task<ReportTemplateDto> GetReportTemplateAsync(Guid id);
 
         /// <summary>
         /// Create a new report template
@@ -33,12 +33,12 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Update an existing report template
         /// </summary>
-        Task<ReportTemplateDto> UpdateReportTemplateAsync(int id, UpdateReportTemplateDto dto);
+        Task<ReportTemplateDto> UpdateReportTemplateAsync(Guid id, UpdateReportTemplateDto dto);
 
         /// <summary>
         /// Delete a report template
         /// </summary>
-        Task DeleteReportTemplateAsync(int id);
+        Task DeleteReportTemplateAsync(Guid id);
 
         /// <summary>
         /// Generate a report on-demand
@@ -53,7 +53,7 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Get specific scheduled report by ID
         /// </summary>
-        Task<ScheduledReportDto> GetScheduledReportAsync(int id);
+        Task<ScheduledReportDto> GetScheduledReportAsync(Guid id);
 
         /// <summary>
         /// Create a new scheduled report
@@ -63,16 +63,16 @@ namespace MedicSoft.Application.Services.Reports
         /// <summary>
         /// Update an existing scheduled report
         /// </summary>
-        Task<ScheduledReportDto> UpdateScheduledReportAsync(int id, UpdateScheduledReportDto dto);
+        Task<ScheduledReportDto> UpdateScheduledReportAsync(Guid id, UpdateScheduledReportDto dto);
 
         /// <summary>
         /// Delete a scheduled report
         /// </summary>
-        Task DeleteScheduledReportAsync(int id);
+        Task DeleteScheduledReportAsync(Guid id);
 
         /// <summary>
         /// Execute a scheduled report (used by Hangfire job)
         /// </summary>
-        Task ExecuteScheduledReportAsync(int scheduledReportId);
+        Task ExecuteScheduledReportAsync(Guid scheduledReportId);
     }
 }

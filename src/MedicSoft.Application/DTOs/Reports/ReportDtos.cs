@@ -9,7 +9,7 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class ReportTemplateDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
@@ -83,8 +83,8 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class ScheduledReportDto
     {
-        public int Id { get; set; }
-        public int ReportTemplateId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ReportTemplateId { get; set; }
         public string ReportTemplateName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -108,7 +108,7 @@ namespace MedicSoft.Application.DTOs.Reports
     public class CreateScheduledReportDto
     {
         [Required]
-        public int ReportTemplateId { get; set; }
+        public Guid ReportTemplateId { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -168,7 +168,7 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class GenerateReportDto
     {
-        public int ReportTemplateId { get; set; }
+        public Guid ReportTemplateId { get; set; }
         public string OutputFormat { get; set; }
         public Dictionary<string, object> Parameters { get; set; } = new();
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs.SystemAdmin;
+using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Application.Services.SystemAdmin
@@ -35,19 +36,19 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Get active subscriptions
             var activeSubscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Active" && s.EndDate > now)
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Active && s.EndDate > now)
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
             var lastMonthSubscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Active" && s.EndDate > lastMonth && s.EndDate <= now.AddMonths(1))
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Active && s.EndDate > lastMonth && s.EndDate <= now.AddMonths(1))
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
             // Calculate MRR
-            var mrr = activeSubscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
-            var lastMonthMrr = lastMonthSubscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+            var mrr = activeSubscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
+            var lastMonthMrr = lastMonthSubscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
             
             var arr = mrr * 12;
 
@@ -57,12 +58,12 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // New customers this month
             var newCustomers = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .CountAsync(s => s.CreatedAt >= now.AddMonths(-1) && s.Status == "Active");
+                .CountAsync(s => s.CreatedAt >= now.AddMonths(-1) && s.Status == SubscriptionStatus.Active);
 
             // Churned customers this month
             var churnedCustomers = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .CountAsync(s => s.Status == "Cancelled" && s.EndDate >= now.AddMonths(-1) && s.EndDate < now);
+                .CountAsync(s => s.Status == SubscriptionStatus.Cancelled && s.EndDate >= now.AddMonths(-1) && s.EndDate < now);
 
             // Churn rate
             var churnRate = lastMonthSubscriptions.Count > 0 
@@ -98,7 +99,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Trial customers
             var trialCustomers = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .CountAsync(s => s.Status == "Trial" && s.TrialEndsAt > now);
+                .CountAsync(s => s.Status == SubscriptionStatus.Trial && s.TrialEndDate > now);
 
             // At-risk customers (no activity in 30 days - simplified)
             var atRiskCustomers = 0; // Would need usage/login data
@@ -132,20 +133,20 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Current MRR
             var activeSubscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Active" && s.EndDate > now)
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Active && s.EndDate > now)
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
-            var totalMrr = activeSubscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+            var totalMrr = activeSubscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
 
             // New MRR (new subscriptions this month)
             var newSubscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Active" && s.StartDate >= startOfMonth)
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Active && s.StartDate >= startOfMonth)
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
-            var newMrr = newSubscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+            var newMrr = newSubscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
 
             // Expansion MRR (upgrades - simplified, would need plan change tracking)
             var expansionMrr = 0m;
@@ -156,11 +157,11 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Churned MRR (cancelled subscriptions this month)
             var churnedSubscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Cancelled" && s.EndDate >= startOfMonth && s.EndDate < now)
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Cancelled && s.EndDate >= startOfMonth && s.EndDate < now)
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
-            var churnedMrr = churnedSubscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+            var churnedMrr = churnedSubscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
 
             var netNewMrr = newMrr + expansionMrr - contractionMrr - churnedMrr;
 
@@ -183,22 +184,22 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Get churned subscriptions this month
             var churnedSubscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Cancelled" && s.EndDate >= startOfMonth && s.EndDate < now)
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Cancelled && s.EndDate >= startOfMonth && s.EndDate < now)
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
-            var monthlyRevenueChurn = churnedSubscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+            var monthlyRevenueChurn = churnedSubscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
             var monthlyCustomerChurn = churnedSubscriptions.Count;
 
             // Get active subscriptions from last month
             var lastMonthStart = startOfMonth.AddMonths(-1);
             var lastMonthSubscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Active" && s.EndDate > lastMonthStart && s.EndDate <= startOfMonth.AddMonths(1))
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Active && s.EndDate > lastMonthStart && s.EndDate <= startOfMonth.AddMonths(1))
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
-            var lastMonthRevenue = lastMonthSubscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+            var lastMonthRevenue = lastMonthSubscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
             var lastMonthCustomers = lastMonthSubscriptions.Count;
 
             var revenueChurnRate = lastMonthRevenue > 0 ? monthlyRevenueChurn / lastMonthRevenue * 100 : 0;
@@ -218,14 +219,14 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
                 var monthChurned = await _context.ClinicSubscriptions
                     .IgnoreQueryFilters()
-                    .Where(s => s.Status == "Cancelled" && s.EndDate >= monthStart && s.EndDate < monthEnd)
-                    .Include(s => s.Plan)
+                    .Where(s => s.Status == SubscriptionStatus.Cancelled && s.EndDate >= monthStart && s.EndDate < monthEnd)
+                    .Include(s => s.SubscriptionPlan)
                     .ToListAsync();
 
                 churnHistory.Add(new ChurnDataPoint
                 {
                     Month = monthName,
-                    RevenueChurn = monthChurned.Sum(s => s.Plan?.MonthlyPrice ?? 0),
+                    RevenueChurn = monthChurned.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0),
                     CustomerChurn = monthChurned.Count,
                     ChurnedCount = monthChurned.Count
                 });
@@ -268,11 +269,11 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Trial conversion rate
             var trialConversions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .CountAsync(s => s.Status == "Active" && s.TrialEndsAt != null && s.TrialEndsAt < now && s.StartDate >= now.AddMonths(-3));
+                .CountAsync(s => s.Status == SubscriptionStatus.Active && s.TrialEndDate != null && s.TrialEndDate < now && s.StartDate >= now.AddMonths(-3));
 
             var totalTrials = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .CountAsync(s => s.TrialEndsAt != null && s.TrialEndsAt >= now.AddMonths(-3) && s.TrialEndsAt < now);
+                .CountAsync(s => s.TrialEndDate != null && s.TrialEndDate >= now.AddMonths(-3) && s.TrialEndDate < now);
 
             var trialConversionRate = totalTrials > 0 ? (decimal)trialConversions / totalTrials * 100 : 0;
 
@@ -317,29 +318,29 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 // Active subscriptions for this month
                 var subscriptions = await _context.ClinicSubscriptions
                     .IgnoreQueryFilters()
-                    .Where(s => s.Status == "Active" && s.StartDate < monthEnd && s.EndDate > monthStart)
-                    .Include(s => s.Plan)
+                    .Where(s => s.Status == SubscriptionStatus.Active && s.StartDate < monthEnd && s.EndDate > monthStart)
+                    .Include(s => s.SubscriptionPlan)
                     .ToListAsync();
 
-                var totalMrr = subscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+                var totalMrr = subscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
 
                 // New subscriptions
                 var newSubs = await _context.ClinicSubscriptions
                     .IgnoreQueryFilters()
-                    .Where(s => s.Status == "Active" && s.StartDate >= monthStart && s.StartDate < monthEnd)
-                    .Include(s => s.Plan)
+                    .Where(s => s.Status == SubscriptionStatus.Active && s.StartDate >= monthStart && s.StartDate < monthEnd)
+                    .Include(s => s.SubscriptionPlan)
                     .ToListAsync();
 
-                var newMrr = newSubs.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+                var newMrr = newSubs.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
 
                 // Churned subscriptions
                 var churnedSubs = await _context.ClinicSubscriptions
                     .IgnoreQueryFilters()
-                    .Where(s => s.Status == "Cancelled" && s.EndDate >= monthStart && s.EndDate < monthEnd)
-                    .Include(s => s.Plan)
+                    .Where(s => s.Status == SubscriptionStatus.Cancelled && s.EndDate >= monthStart && s.EndDate < monthEnd)
+                    .Include(s => s.SubscriptionPlan)
                     .ToListAsync();
 
-                var churnedMrr = churnedSubs.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+                var churnedMrr = churnedSubs.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
 
                 timeline.Add(new RevenueTimelineDto
                 {
@@ -350,7 +351,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     ExpansionMrr = 0, // Placeholder
                     ContractionMrr = 0, // Placeholder
                     ChurnedMrr = churnedMrr,
-                    ActiveCustomers = subscriptions.Count
+                    ActiveCustomers = subscriptions.Count()
                 });
             }
 
@@ -364,9 +365,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Breakdown by plan
             var byPlan = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Active" && s.EndDate > now)
-                .Include(s => s.Plan)
-                .GroupBy(s => s.Plan!.Name)
+                .Where(s => s.Status == SubscriptionStatus.Active && s.EndDate > now)
+                .Include(s => s.SubscriptionPlan)
+                .GroupBy(s => s.SubscriptionPlan!.Name)
                 .Select(g => new { PlanName = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.PlanName, x => x.Count);
 
@@ -374,7 +375,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             var byStatus = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
                 .Where(s => s.EndDate > now)
-                .GroupBy(s => s.Status)
+                .GroupBy(s => s.Status.ToString())
                 .Select(g => new { Status = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.Status, x => x.Count);
 
@@ -391,11 +392,11 @@ namespace MedicSoft.Application.Services.SystemAdmin
             
             var subscriptions = await _context.ClinicSubscriptions
                 .IgnoreQueryFilters()
-                .Where(s => s.Status == "Active" && s.StartDate < monthEnd && s.EndDate > date)
-                .Include(s => s.Plan)
+                .Where(s => s.Status == SubscriptionStatus.Active && s.StartDate < monthEnd && s.EndDate > date)
+                .Include(s => s.SubscriptionPlan)
                 .ToListAsync();
 
-            return subscriptions.Sum(s => s.Plan?.MonthlyPrice ?? 0);
+            return subscriptions.Sum(s => s.SubscriptionPlan?.MonthlyPrice ?? 0);
         }
     }
 }

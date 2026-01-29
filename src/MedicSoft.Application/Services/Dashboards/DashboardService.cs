@@ -37,7 +37,7 @@ namespace MedicSoft.Application.Services.Dashboards
             return dashboards.Select(MapToDto).ToList();
         }
 
-        public async Task<CustomDashboardDto> GetDashboardAsync(int id)
+        public async Task<CustomDashboardDto> GetDashboardAsync(Guid id)
         {
             _logger.LogInformation("Retrieving dashboard with ID: {DashboardId}", id);
 
@@ -76,7 +76,7 @@ namespace MedicSoft.Application.Services.Dashboards
             return MapToDto(dashboard);
         }
 
-        public async Task<CustomDashboardDto> UpdateDashboardAsync(int id, UpdateDashboardDto dto)
+        public async Task<CustomDashboardDto> UpdateDashboardAsync(Guid id, UpdateDashboardDto dto)
         {
             _logger.LogInformation("Updating dashboard with ID: {DashboardId}", id);
 
@@ -103,7 +103,7 @@ namespace MedicSoft.Application.Services.Dashboards
             return MapToDto(dashboard);
         }
 
-        public async Task DeleteDashboardAsync(int id)
+        public async Task DeleteDashboardAsync(Guid id)
         {
             _logger.LogInformation("Deleting dashboard with ID: {DashboardId}", id);
 
@@ -121,7 +121,7 @@ namespace MedicSoft.Application.Services.Dashboards
             _logger.LogInformation("Dashboard deleted successfully");
         }
 
-        public async Task<DashboardWidgetDto> AddWidgetAsync(int dashboardId, CreateWidgetDto dto)
+        public async Task<DashboardWidgetDto> AddWidgetAsync(Guid dashboardId, CreateWidgetDto dto)
         {
             _logger.LogInformation("Adding widget to dashboard: {DashboardId}", dashboardId);
 
@@ -160,7 +160,7 @@ namespace MedicSoft.Application.Services.Dashboards
             return MapWidgetToDto(widget);
         }
 
-        public async Task UpdateWidgetPositionAsync(int widgetId, WidgetPositionDto position)
+        public async Task UpdateWidgetPositionAsync(Guid widgetId, WidgetPositionDto position)
         {
             _logger.LogInformation("Updating position for widget: {WidgetId}", widgetId);
 
@@ -182,7 +182,7 @@ namespace MedicSoft.Application.Services.Dashboards
             _logger.LogInformation("Widget position updated successfully");
         }
 
-        public async Task DeleteWidgetAsync(int widgetId)
+        public async Task DeleteWidgetAsync(Guid widgetId)
         {
             _logger.LogInformation("Deleting widget: {WidgetId}", widgetId);
 
@@ -200,7 +200,7 @@ namespace MedicSoft.Application.Services.Dashboards
             _logger.LogInformation("Widget deleted successfully");
         }
 
-        public async Task<WidgetDataDto> ExecuteWidgetQueryAsync(int widgetId)
+        public async Task<WidgetDataDto> ExecuteWidgetQueryAsync(Guid widgetId)
         {
             _logger.LogInformation("Executing query for widget: {WidgetId}", widgetId);
 
@@ -257,7 +257,7 @@ namespace MedicSoft.Application.Services.Dashboards
             }
         }
 
-        public async Task<byte[]> ExportDashboardAsync(int id, ExportFormat format)
+        public async Task<byte[]> ExportDashboardAsync(Guid id, ExportFormat format)
         {
             _logger.LogInformation("Exporting dashboard: {DashboardId} as {Format}", id, format);
 
