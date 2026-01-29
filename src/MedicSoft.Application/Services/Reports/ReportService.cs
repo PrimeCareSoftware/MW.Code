@@ -81,8 +81,7 @@ namespace MedicSoft.Application.Services.Reports
                 Query = dto.Query,
                 Icon = dto.Icon,
                 SupportedFormats = dto.SupportedFormats,
-                IsSystem = false,
-                CreatedAt = DateTime.UtcNow
+                IsSystem = false
             };
 
             _context.Set<ReportTemplate>().Add(template);
@@ -117,7 +116,7 @@ namespace MedicSoft.Application.Services.Reports
             template.Query = dto.Query;
             template.Icon = dto.Icon;
             template.SupportedFormats = dto.SupportedFormats;
-            template.UpdatedAt = DateTime.UtcNow;
+            template.UpdateTimestamp();
 
             await _context.SaveChangesAsync();
 
@@ -308,7 +307,6 @@ namespace MedicSoft.Application.Services.Reports
                 Parameters = dto.Parameters,
                 IsActive = dto.IsActive,
                 CreatedBy = userId,
-                CreatedAt = DateTime.UtcNow,
                 NextRunAt = CalculateNextRunTime(dto.CronExpression)
             };
 
@@ -340,7 +338,7 @@ namespace MedicSoft.Application.Services.Reports
             scheduledReport.Recipients = dto.Recipients;
             scheduledReport.Parameters = dto.Parameters;
             scheduledReport.IsActive = dto.IsActive;
-            scheduledReport.UpdatedAt = DateTime.UtcNow;
+            scheduledReport.UpdateTimestamp();
             scheduledReport.NextRunAt = CalculateNextRunTime(dto.CronExpression);
 
             await _context.SaveChangesAsync();

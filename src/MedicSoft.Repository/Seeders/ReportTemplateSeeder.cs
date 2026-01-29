@@ -25,7 +25,6 @@ namespace MedicSoft.Repository.Seeders
                     IsSystem = true,
                     Icon = "assessment",
                     SupportedFormats = "pdf,excel,csv",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -63,7 +62,6 @@ ORDER BY month"
                     IsSystem = true,
                     Icon = "pie_chart",
                     SupportedFormats = "pdf,excel",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -94,7 +92,6 @@ ORDER BY total_mrr DESC"
                     IsSystem = true,
                     Icon = "person_add",
                     SupportedFormats = "pdf,excel,csv",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -125,7 +122,6 @@ ORDER BY month"
                     IsSystem = true,
                     Icon = "exit_to_app",
                     SupportedFormats = "pdf,excel",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -159,7 +155,6 @@ ORDER BY month DESC"
                     IsSystem = true,
                     Icon = "event_note",
                     SupportedFormats = "pdf,excel",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -190,7 +185,6 @@ ORDER BY total_appointments DESC"
                     IsSystem = true,
                     Icon = "analytics",
                     SupportedFormats = "pdf,excel,csv",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -224,7 +218,6 @@ ORDER BY login_count DESC"
                     IsSystem = true,
                     Icon = "people",
                     SupportedFormats = "pdf,excel",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -255,7 +248,6 @@ ORDER BY total_patients DESC"
                     IsSystem = true,
                     Icon = "health_and_safety",
                     SupportedFormats = "pdf,excel",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -289,7 +281,6 @@ ORDER BY active_subscriptions DESC"
                     IsSystem = true,
                     Icon = "loop",
                     SupportedFormats = "pdf,excel",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
@@ -322,7 +313,6 @@ ORDER BY cs.""StartDate"" DESC"
                     IsSystem = true,
                     Icon = "dashboard",
                     SupportedFormats = "pdf",
-                    CreatedAt = DateTime.UtcNow,
                     Configuration = JsonSerializer.Serialize(new
                     {
                         parameters = new[]
