@@ -379,6 +379,7 @@ builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISystemNot
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IClinicManagementService, MedicSoft.Application.Services.SystemAdmin.ClinicManagementService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ICrossTenantUserService, MedicSoft.Application.Services.SystemAdmin.CrossTenantUserService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ITagService, MedicSoft.Application.Services.SystemAdmin.TagService>();
+builder.Services.AddSingleton<MedicSoft.Application.Services.SystemAdmin.IMonitoringService, MedicSoft.Application.Services.SystemAdmin.MonitoringService>();
 
 // System Admin - Background Jobs
 builder.Services.AddScoped<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>();
