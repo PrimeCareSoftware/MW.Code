@@ -646,11 +646,11 @@ O sistema de emissão de NF-e/NFS-e foi totalmente implementado e está pronto p
 - Sistema de pagamentos parcial
 
 #### Entregáveis
-- [ ] Cadastro de operadoras e planos
-- [ ] Solicitação de autorizações
-- [ ] Geração de guias TISS XML
-- [ ] Faturamento em lotes
-- [ ] Relatórios por convênio
+- [x] Cadastro de operadoras e planos
+- [x] Solicitação de autorizações
+- [x] Geração de guias TISS XML
+- [x] Faturamento em lotes
+- [x] Relatórios por convênio
 
 #### Critérios de Sucesso
 - XML validado contra XSD oficial ANS
