@@ -199,151 +199,17 @@
           <div class="card">
             <div class="card-header-flex">
               <h3>Exame Clínico - CFM 1.821 @if (formConfig()?.requireClinicalExamination) { <span class="required-badge">Obrigatório</span> }</h3>
-              <button type="button" class="btn btn-outline" (click)="toggleAddClinicalExamination()">
-                {{ showAddClinicalExamination() ? 'Cancelar' : '+ Adicionar Exame Clínico' }}
-              </button>
             </div>
-
-            @if (showAddClinicalExamination()) {
-              <form [formGroup]="clinicalExaminationForm" class="add-form">
-                <div class="form-group">
-                  <label for="systematicExamination">Exame Físico Sistemático @if (formConfig()?.requireClinicalExamination) { <span class="required">*</span> }</label>
-                  <textarea 
-                    id="systematicExamination" 
-                    formControlName="systematicExamination" 
-                    class="form-control"
-                    rows="4"
-                    placeholder="Descreva o exame físico do paciente por sistemas (mínimo 20 caracteres)..."
-                  ></textarea>
-                  @if (clinicalExaminationForm.get('systematicExamination')?.invalid && clinicalExaminationForm.get('systematicExamination')?.touched) {
-                    <div class="error-message">Exame físico é obrigatório (mínimo 20 caracteres)</div>
-                  }
-                </div>
-
-                <div class="vital-signs-grid">
-                  <div class="form-group">
-                    <label for="bloodPressureSystolic">PA Sistólica (mmHg)</label>
-                    <input 
-                      type="number" 
-                      id="bloodPressureSystolic" 
-                      formControlName="bloodPressureSystolic" 
-                      class="form-control"
-                      placeholder="120"
-                      min="50"
-                      max="300"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="bloodPressureDiastolic">PA Diastólica (mmHg)</label>
-                    <input 
-                      type="number" 
-                      id="bloodPressureDiastolic" 
-                      formControlName="bloodPressureDiastolic" 
-                      class="form-control"
-                      placeholder="80"
-                      min="30"
-                      max="200"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="heartRate">FC (bpm)</label>
-                    <input 
-                      type="number" 
-                      id="heartRate" 
-                      formControlName="heartRate" 
-                      class="form-control"
-                      placeholder="72"
-                      min="30"
-                      max="220"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="respiratoryRate">FR (irpm)</label>
-                    <input 
-                      type="number" 
-                      id="respiratoryRate" 
-                      formControlName="respiratoryRate" 
-                      class="form-control"
-                      placeholder="16"
-                      min="8"
-                      max="60"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="temperature">Temperatura (°C)</label>
-                    <input 
-                      type="number" 
-                      id="temperature" 
-                      formControlName="temperature" 
-                      class="form-control"
-                      placeholder="36.5"
-                      step="0.1"
-                      min="32"
-                      max="45"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="oxygenSaturation">SatO2 (%)</label>
-                    <input 
-                      type="number" 
-                      id="oxygenSaturation" 
-                      formControlName="oxygenSaturation" 
-                      class="form-control"
-                      placeholder="98"
-                      min="0"
-                      max="100"
-                    />
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="generalState">Estado Geral</label>
-                  <input 
-                    type="text" 
-                    id="generalState" 
-                    formControlName="generalState" 
-                    class="form-control"
-                    placeholder="Paciente em bom estado geral, consciente, orientado..."
-                  />
-                </div>
-
-                <button type="button" class="btn btn-primary" (click)="onAddClinicalExamination()" [disabled]="!clinicalExaminationForm.valid">
-                  Adicionar Exame Clínico
-                </button>
-              </form>
-            }
-
-            @if (clinicalExaminations().length > 0) {
-              <div class="examinations-list">
-                @for (exam of clinicalExaminations(); track exam.id) {
-                  <div class="examination-item">
-                    <div class="exam-vital-signs">
-                      @if (exam.bloodPressureSystolic && exam.bloodPressureDiastolic) {
-                        <span class="vital-sign">PA: {{ exam.bloodPressureSystolic }}/{{ exam.bloodPressureDiastolic }} mmHg</span>
-                      }
-                      @if (exam.heartRate) {
-                        <span class="vital-sign">FC: {{ exam.heartRate }} bpm</span>
-                      }
-                      @if (exam.respiratoryRate) {
-                        <span class="vital-sign">FR: {{ exam.respiratoryRate }} irpm</span>
-                      }
-                      @if (exam.temperature) {
-                        <span class="vital-sign">T: {{ exam.temperature }}°C</span>
-                      }
-                      @if (exam.oxygenSaturation) {
-                        <span class="vital-sign">SatO2: {{ exam.oxygenSaturation }}%</span>
-                      }
-                    </div>
-                    @if (exam.generalState) {
-                      <div class="exam-general"><strong>Estado Geral:</strong> {{ exam.generalState }}</div>
-                    }
-                    <div class="exam-systematic"><strong>Exame Físico:</strong> {{ exam.systematicExamination }}</div>
-                    <div class="exam-date">{{ exam.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
-                  </div>
-                }
-              </div>
+            
+            @if (medicalRecord()?.id) {
+              <app-clinical-examination-form 
+                [medicalRecordId]="medicalRecord()!.id"
+                (examinationSaved)="onClinicalExaminationSaved($event)"
+              ></app-clinical-examination-form>
             } @else {
-              <p class="text-muted">Nenhum exame clínico registrado. É obrigatório adicionar pelo menos um exame clínico.</p>
+              <p class="text-muted">
+                ⚠️ Salve o prontuário primeiro para registrar o exame clínico.
+              </p>
             }
           </div>
 
@@ -351,73 +217,18 @@
           <div class="card">
             <div class="card-header-flex">
               <h3>Hipóteses Diagnósticas - CFM 1.821 @if (formConfig()?.requireDiagnosticHypothesis) { <span class="required-badge">Obrigatório</span> }</h3>
-              <button type="button" class="btn btn-outline" (click)="toggleAddDiagnosis()">
-                {{ showAddDiagnosis() ? 'Cancelar' : '+ Adicionar Diagnóstico' }}
-              </button>
             </div>
 
-            @if (showAddDiagnosis()) {
-              <form [formGroup]="diagnosticForm" class="add-form">
-                <div class="form-group">
-                  <label for="description">Descrição do Diagnóstico @if (formConfig()?.requireDiagnosticHypothesis) { <span class="required">*</span> }</label>
-                  <input 
-                    type="text" 
-                    id="description" 
-                    formControlName="description" 
-                    class="form-control"
-                    placeholder="Ex: Hipertensão Arterial Essencial"
-                  />
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="icd10Code">Código CID-10 @if (formConfig()?.requireDiagnosticHypothesis) { <span class="required">*</span> }</label>
-                    <input 
-                      type="text" 
-                      id="icd10Code" 
-                      formControlName="icd10Code" 
-                      class="form-control"
-                      placeholder="Ex: I10, J20.9, Z99.01"
-                      maxlength="10"
-                    />
-                    @if (diagnosticForm.get('icd10Code')?.invalid && diagnosticForm.get('icd10Code')?.touched) {
-                      <div class="error-message">Formato CID-10 inválido (Ex: A00, J20.9)</div>
-                    }
-                  </div>
-                  <div class="form-group">
-                    <label for="type">Tipo</label>
-                    <select id="type" formControlName="type" class="form-control">
-                      @for (type of diagnosisTypes; track type) {
-                        <option [value]="type">{{ diagnosisTypeLabels[type] }}</option>
-                      }
-                    </select>
-                  </div>
-                </div>
-
-                <button type="button" class="btn btn-primary" (click)="onAddDiagnosis()" [disabled]="!diagnosticForm.valid">
-                  Adicionar Diagnóstico
-                </button>
-              </form>
-            }
-
-            @if (diagnosticHypotheses().length > 0) {
-              <div class="diagnoses-list">
-                @for (diagnosis of diagnosticHypotheses(); track diagnosis.id) {
-                  <div class="diagnosis-item">
-                    <div class="diagnosis-header">
-                      <strong>{{ diagnosis.description }}</strong>
-                      <span class="diagnosis-code">CID-10: {{ diagnosis.icd10Code }}</span>
-                      <span class="diagnosis-type-badge type-{{ diagnosis.type }}">{{ diagnosisTypeLabels[diagnosis.type] }}</span>
-                      <button type="button" class="btn-remove" (click)="removeDiagnosis(diagnosis)" title="Remover">
-                        ✕
-                      </button>
-                    </div>
-                    <div class="diagnosis-date">{{ diagnosis.diagnosedAt | date: 'dd/MM/yyyy HH:mm' }}</div>
-                  </div>
-                }
-              </div>
+            @if (medicalRecord()?.id) {
+              <app-diagnostic-hypothesis-form 
+                [medicalRecordId]="medicalRecord()!.id"
+                (hypothesisSaved)="onDiagnosticHypothesisSaved($event)"
+                (hypothesisDeleted)="onDiagnosticHypothesisDeleted($event)"
+              ></app-diagnostic-hypothesis-form>
             } @else {
-              <p class="text-muted">Nenhuma hipótese diagnóstica registrada. É obrigatório adicionar pelo menos um diagnóstico com CID-10.</p>
+              <p class="text-muted">
+                ⚠️ Salve o prontuário primeiro para registrar hipóteses diagnósticas.
+              </p>
             }
           </div>
 
@@ -444,113 +255,17 @@
           <div class="card">
             <div class="card-header-flex">
               <h3>Plano Terapêutico - CFM 1.821 @if (formConfig()?.requireTherapeuticPlan) { <span class="required-badge">Obrigatório</span> }</h3>
-              <button type="button" class="btn btn-outline" (click)="toggleAddTherapeuticPlan()">
-                {{ showAddTherapeuticPlan() ? 'Cancelar' : '+ Adicionar Plano Terapêutico' }}
-              </button>
             </div>
 
-            @if (showAddTherapeuticPlan()) {
-              <form [formGroup]="therapeuticPlanForm" class="add-form">
-                <div class="form-group">
-                  <label for="treatment">Tratamento/Conduta @if (formConfig()?.requireTherapeuticPlan) { <span class="required">*</span> }</label>
-                  <textarea 
-                    id="treatment" 
-                    formControlName="treatment" 
-                    class="form-control"
-                    rows="3"
-                    placeholder="Descreva o tratamento e conduta para o paciente (mínimo 20 caracteres)..."
-                  ></textarea>
-                  @if (therapeuticPlanForm.get('treatment')?.invalid && therapeuticPlanForm.get('treatment')?.touched) {
-                    <div class="error-message">Tratamento é obrigatório (mínimo 20 caracteres)</div>
-                  }
-                </div>
-
-                <div class="form-group">
-                  <label for="medicationPrescription">Prescrição Medicamentosa</label>
-                  <textarea 
-                    id="medicationPrescription" 
-                    formControlName="medicationPrescription" 
-                    class="form-control"
-                    rows="3"
-                    placeholder="Medicamentos prescritos, dosagens e instruções..."
-                  ></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label for="examRequests">Solicitação de Exames</label>
-                  <textarea 
-                    id="examRequests" 
-                    formControlName="examRequests" 
-                    class="form-control"
-                    rows="2"
-                    placeholder="Exames solicitados..."
-                  ></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label for="referrals">Encaminhamentos</label>
-                  <textarea 
-                    id="referrals" 
-                    formControlName="referrals" 
-                    class="form-control"
-                    rows="2"
-                    placeholder="Encaminhamentos para especialistas..."
-                  ></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label for="patientGuidance">Orientações ao Paciente</label>
-                  <textarea 
-                    id="patientGuidance" 
-                    formControlName="patientGuidance" 
-                    class="form-control"
-                    rows="2"
-                    placeholder="Orientações e recomendações..."
-                  ></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label for="returnDate">Data de Retorno</label>
-                  <input 
-                    type="date" 
-                    id="returnDate" 
-                    formControlName="returnDate" 
-                    class="form-control"
-                  />
-                </div>
-
-                <button type="button" class="btn btn-primary" (click)="onAddTherapeuticPlan()" [disabled]="!therapeuticPlanForm.valid">
-                  Adicionar Plano Terapêutico
-                </button>
-              </form>
-            }
-
-            @if (therapeuticPlans().length > 0) {
-              <div class="plans-list">
-                @for (plan of therapeuticPlans(); track plan.id) {
-                  <div class="plan-item">
-                    <div class="plan-treatment"><strong>Tratamento:</strong> {{ plan.treatment }}</div>
-                    @if (plan.medicationPrescription) {
-                      <div class="plan-medication"><strong>Prescrição:</strong> {{ plan.medicationPrescription }}</div>
-                    }
-                    @if (plan.examRequests) {
-                      <div class="plan-exams"><strong>Exames:</strong> {{ plan.examRequests }}</div>
-                    }
-                    @if (plan.referrals) {
-                      <div class="plan-referrals"><strong>Encaminhamentos:</strong> {{ plan.referrals }}</div>
-                    }
-                    @if (plan.patientGuidance) {
-                      <div class="plan-guidance"><strong>Orientações:</strong> {{ plan.patientGuidance }}</div>
-                    }
-                    @if (plan.returnDate) {
-                      <div class="plan-return"><strong>Retorno:</strong> {{ plan.returnDate | date: 'dd/MM/yyyy' }}</div>
-                    }
-                    <div class="plan-date">{{ plan.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
-                  </div>
-                }
-              </div>
+            @if (medicalRecord()?.id) {
+              <app-therapeutic-plan-form 
+                [medicalRecordId]="medicalRecord()!.id"
+                (planSaved)="onTherapeuticPlanSaved($event)"
+              ></app-therapeutic-plan-form>
             } @else {
-              <p class="text-muted">Nenhum plano terapêutico registrado. É obrigatório adicionar pelo menos um plano terapêutico.</p>
+              <p class="text-muted">
+                ⚠️ Salve o prontuário primeiro para registrar o plano terapêutico.
+              </p>
             }
           </div>
 
