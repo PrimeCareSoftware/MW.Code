@@ -2,6 +2,7 @@ using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Application.Services
 {
@@ -16,19 +17,22 @@ namespace MedicSoft.Application.Services
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly IClinicRepository _clinicRepository;
+        private readonly ILogger<PaymentFlowService> _logger;
 
         public PaymentFlowService(
             IAppointmentRepository appointmentRepository,
             IPaymentRepository paymentRepository,
             IInvoiceRepository invoiceRepository,
             IPatientRepository patientRepository,
-            IClinicRepository clinicRepository)
+            IClinicRepository clinicRepository,
+            ILogger<PaymentFlowService> logger)
         {
             _appointmentRepository = appointmentRepository;
             _paymentRepository = paymentRepository;
             _invoiceRepository = invoiceRepository;
             _patientRepository = patientRepository;
             _clinicRepository = clinicRepository;
+            _logger = logger;
         }
 
         public async Task<PaymentFlowResultDto> RegisterAppointmentPaymentAsync(
@@ -201,8 +205,7 @@ namespace MedicSoft.Application.Services
             {
                 // Log error but don't fail the payment process
                 // Invoice is optional - payment success is what matters
-                // TODO: Add structured logging (e.g., ILogger) to track invoice creation failures
-                System.Console.WriteLine($"Failed to create invoice for payment {payment.Id}: {ex.Message}");
+                _logger.LogError(ex, "Failed to create invoice for payment {PaymentId}", payment.Id);
                 return null;
             }
         }
