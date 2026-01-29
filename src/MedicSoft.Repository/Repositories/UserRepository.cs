@@ -30,7 +30,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _context.Users
                 .Include(u => u.Clinic)
-                .Include(u => u.Profile)
+                .Include(u => u.Profile!)
                     .ThenInclude(p => p.Permissions)
                 .FirstOrDefaultAsync(u => u.Username == username.ToLowerInvariant() && u.TenantId == tenantId);
         }
@@ -39,7 +39,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _context.Users
                 .Include(u => u.Clinic)
-                .Include(u => u.Profile)
+                .Include(u => u.Profile!)
                     .ThenInclude(p => p.Permissions)
                 .FirstOrDefaultAsync(u => u.Id == id && u.TenantId == tenantId);
         }

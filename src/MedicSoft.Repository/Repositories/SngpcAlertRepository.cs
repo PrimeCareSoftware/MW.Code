@@ -15,14 +15,14 @@ namespace MedicSoft.Repository.Repositories
         {
         }
 
-        public async Task<SngpcAlert> AddAsync(SngpcAlert alert)
+        public override async Task<SngpcAlert> AddAsync(SngpcAlert alert)
         {
             await _dbSet.AddAsync(alert);
             await _context.SaveChangesAsync();
             return alert;
         }
 
-        public async Task<SngpcAlert> UpdateAsync(SngpcAlert alert)
+        public new async Task<SngpcAlert> UpdateAsync(SngpcAlert alert)
         {
             _dbSet.Update(alert);
             await _context.SaveChangesAsync();

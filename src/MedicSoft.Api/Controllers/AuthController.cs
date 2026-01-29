@@ -99,7 +99,10 @@ namespace MedicSoft.Api.Controllers
                 Guid? currentClinicId = user.CurrentClinicId;
                 if (!currentClinicId.HasValue && clinicList.Any())
                 {
-                    var preferredClinic = clinicList.FirstOrDefault(c => c.IsPreferred) ?? clinicList.First();
+                    var preferredClinic = clinicList.FirstOrDefault(c => c.IsPreferred) ?? clinicList.FirstOrDefault();
+                    if (preferredClinic == null)
+                        return BadRequest(new { message = "No available clinics for user" });
+                        
                     var switchResult = await _clinicSelectionService.SwitchClinicAsync(user.Id, preferredClinic.ClinicId, tenantId);
                     if (switchResult.Success)
                     {

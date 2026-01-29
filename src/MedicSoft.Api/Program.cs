@@ -495,7 +495,7 @@ builder.Services.AddScoped<IAnamnesisResponseRepository, AnamnesisResponseReposi
 builder.Services.AddScoped<AppointmentSchedulingService>();
 builder.Services.AddScoped<ISubscriptionService>(provider =>
 {
-    var notificationService = provider.GetRequiredService<INotificationService>();
+    var notificationService = provider.GetRequiredService<MedicSoft.Domain.Services.INotificationService>();
     var environment = builder.Environment.EnvironmentName;
     return new SubscriptionService(notificationService, environment);
 });

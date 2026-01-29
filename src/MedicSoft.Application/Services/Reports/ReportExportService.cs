@@ -79,7 +79,10 @@ namespace MedicSoft.Application.Services.Reports
                                 // Data table
                                 if (data != null && data.Any())
                                 {
-                                    var headers = data.First().Keys.ToList();
+                                    var firstRow = data.FirstOrDefault();
+                                    if (firstRow != null)
+                                    {
+                                        var headers = firstRow.Keys.ToList();
 
                                     column.Item().Table(table =>
                                     {
@@ -119,6 +122,7 @@ namespace MedicSoft.Application.Services.Reports
                                             }
                                         }
                                     });
+                                    }
                                 }
                                 else
                                 {
@@ -187,7 +191,14 @@ namespace MedicSoft.Application.Services.Reports
                 return;
             }
 
-            var headers = data.First().Keys.ToList();
+            var firstRow = data.FirstOrDefault();
+            if (firstRow == null)
+            {
+                sheet.Cell(1, 1).Value = "No data available";
+                return;
+            }
+
+            var headers = firstRow.Keys.ToList();
             
             // Add headers
             for (int i = 0; i < headers.Count; i++)

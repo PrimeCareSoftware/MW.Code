@@ -128,7 +128,9 @@ namespace MedicSoft.Domain.Services
             if (!availableSlots.Any())
                 throw new InvalidOperationException("No available emergency slots for the requested date");
 
-            var emergencySlot = availableSlots.First();
+            var emergencySlot = availableSlots.FirstOrDefault();
+            if (emergencySlot == default)
+                throw new InvalidOperationException("Failed to retrieve emergency slot");
             
             var appointment = new Appointment(
                 patientId, clinicId, scheduledDate, emergencySlot, 
