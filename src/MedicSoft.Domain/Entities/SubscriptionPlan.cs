@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Text.Json;
 using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.Entities
@@ -22,6 +24,7 @@ namespace MedicSoft.Domain.Entities
         public bool HasTissExport { get; private set; }
         public bool IsActive { get; private set; }
         public SubscriptionPlanType Type { get; private set; }
+        public string? EnabledModules { get; private set; } // JSON array of enabled modules
 
         private SubscriptionPlan()
         {
@@ -110,6 +113,47 @@ namespace MedicSoft.Domain.Entities
         {
             IsActive = false;
             UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Set enabled modules for this plan
+        /// </summary>
+        public void SetEnabledModules(string[] modules)
+        {
+            EnabledModules = JsonSerializer.Serialize(modules);
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Get enabled modules for this plan
+        /// </summary>
+        public string[] GetEnabledModules()
+        {
+            if (string.IsNullOrEmpty(EnabledModules))
+                return Array.Empty<string>();
+
+            return JsonSerializer.Deserialize<string[]>(EnabledModules) ?? Array.Empty<string>();
+        }
+
+        /// <summary>
+        /// Check if a module is available in this plan
+        /// </summary>
+        public bool HasModule(string moduleName)
+        {
+            // Check JSON-based enabled modules first
+            var enabledModules = GetEnabledModules();
+            if (enabledModules.Length > 0)
+                return enabledModules.Contains(moduleName);
+
+            // Fallback to legacy boolean properties
+            return moduleName switch
+            {
+                "Reports" => HasReports,
+                "WhatsAppIntegration" => HasWhatsAppIntegration,
+                "SMSNotifications" => HasSMSNotifications,
+                "TissExport" => HasTissExport,
+                _ => true // Core modules are available in all plans
+            };
         }
     }
 

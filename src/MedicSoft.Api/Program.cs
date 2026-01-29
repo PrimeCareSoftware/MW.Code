@@ -398,6 +398,10 @@ builder.Services.AddScoped<IMedicalRecordAuditService, MedicalRecordAuditService
 // Consultation Form Configuration - Services
 builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFormConfigurationService>();
 
+// Module Configuration Services
+builder.Services.AddScoped<IModuleConfigurationService, ModuleConfigurationService>();
+builder.Services.AddScoped<IModuleAnalyticsService, ModuleAnalyticsService>();
+
 // Digital Prescriptions and SNGPC Services
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();
 builder.Services.AddScoped<IICPBrasilDigitalSignatureService, ICPBrasilDigitalSignatureService>();
