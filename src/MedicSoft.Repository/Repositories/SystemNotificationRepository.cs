@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,11 @@ using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Repository.Repositories
 {
+    /// <summary>
+    /// Repository for system-wide admin notifications.
+    /// NOTE: SystemNotifications are intentionally global (not tenant-specific) and are meant 
+    /// for system administrators to monitor all tenants. Queries do not filter by tenant.
+    /// </summary>
     public class SystemNotificationRepository : BaseRepository<SystemNotification>, ISystemNotificationRepository
     {
         public SystemNotificationRepository(MedicSoftDbContext context) : base(context)
@@ -31,7 +37,7 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
-        public async Task MarkAsReadAsync(int notificationId)
+        public async Task MarkAsReadAsync(Guid notificationId)
         {
             var notification = await _dbSet.FindAsync(notificationId);
             if (notification != null)

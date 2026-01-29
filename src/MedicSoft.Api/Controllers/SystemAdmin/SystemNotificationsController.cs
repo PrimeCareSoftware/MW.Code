@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -71,7 +72,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Mark notification as read
         /// </summary>
         [HttpPost("{id}/read")]
-        public async Task<ActionResult> MarkAsRead(int id)
+        public async Task<ActionResult> MarkAsRead(Guid id)
         {
             await _notificationService.MarkAsReadAsync(id);
             return Ok(new { message = "Notification marked as read" });

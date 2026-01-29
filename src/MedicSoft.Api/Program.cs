@@ -373,8 +373,7 @@ builder.Services.AddScoped<ISalesFunnelService, SalesFunnelService>();
 // System Admin - Phase 1 Services
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISaasMetricsService, MedicSoft.Application.Services.SystemAdmin.SaasMetricsService>();
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IGlobalSearchService, MedicSoft.Application.Services.SystemAdmin.GlobalSearchService>();
-// TODO: Fix SystemNotificationService - needs to resolve SignalR Hub dependency from Api layer
-// builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISystemNotificationService, MedicSoft.Application.Services.SystemAdmin.SystemNotificationService>();
+builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISystemNotificationService, MedicSoft.Api.Services.SystemAdmin.SystemNotificationService>();
 
 // System Admin - Phase 2: Clinic Management
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.IClinicManagementService, MedicSoft.Application.Services.SystemAdmin.ClinicManagementService>();
