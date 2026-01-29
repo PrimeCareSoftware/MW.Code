@@ -199,6 +199,16 @@ export class SystemAdminService {
     );
   }
 
+  /**
+   * Update modules for a subscription plan
+   */
+  updatePlanModules(planId: string, enabledModules: string[]): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(
+      `${this.apiUrl}/subscription-plans/${planId}/modules`,
+      { enabledModules }
+    );
+  }
+
   // Clinic Management
   /**
    * Update clinic information

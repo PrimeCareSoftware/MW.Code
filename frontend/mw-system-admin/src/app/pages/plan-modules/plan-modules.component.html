@@ -1,0 +1,90 @@
+<div class="plan-modules-container">
+  <div class="header">
+    <h1>Configuração de Módulos por Plano</h1>
+    <p class="subtitle">Defina quais módulos estão disponíveis em cada plano de assinatura</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loadingData" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loadingData" class="content">
+    <!-- Seleção de Plano -->
+    <mat-card class="plan-selector-card">
+      <mat-card-header>
+        <mat-card-title>Selecione um Plano</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="plan-select">
+          <mat-label>Plano de Assinatura</mat-label>
+          <mat-select [(value)]="selectedPlan" (selectionChange)="onPlanSelected($event.value)">
+            <mat-option *ngFor="let plan of plans" [value]="plan">
+              {{ plan.name }} - R$ {{ plan.monthlyPrice | number:'1.2-2' }}/mês
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="selectedPlan" class="plan-info">
+          <p><strong>Descrição:</strong> {{ selectedPlan.description || 'N/A' }}</p>
+          <p *ngIf="selectedPlan.type"><strong>Tipo:</strong> {{ selectedPlan.type }}</p>
+          <p><strong>Usuários:</strong> até {{ selectedPlan.maxUsers }}</p>
+          <p><strong>Pacientes:</strong> até {{ selectedPlan.maxPatients }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Configuração de Módulos -->
+    <mat-card *ngIf="selectedPlan" class="modules-config-card">
+      <mat-card-header>
+        <mat-card-title>Módulos Disponíveis</mat-card-title>
+        <mat-card-subtitle>
+          Selecione os módulos que estarão disponíveis no plano {{ selectedPlan.name }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="moduleForm">
+          <div *ngFor="let category of getCategories()" class="category-section">
+            <h3 class="category-title">{{ category }}</h3>
+            
+            <div class="modules-grid">
+              <div *ngFor="let module of getModulesByCategory(category)" 
+                   class="module-item"
+                   [class.disabled]="module.isCore">
+                <mat-checkbox 
+                  [formControlName]="module.name"
+                  [disabled]="module.isCore">
+                  <div class="module-info">
+                    <mat-icon class="module-icon">{{ module.icon }}</mat-icon>
+                    <div class="module-text">
+                      <span class="module-name">{{ module.displayName }}</span>
+                      <span class="module-description">{{ module.description }}</span>
+                      <span *ngIf="module.isCore" class="core-badge">CORE</span>
+                      <span *ngIf="module.requiredModules.length > 0" class="required-info">
+                        Requer: {{ module.requiredModules.join(', ') }}
+                      </span>
+                    </div>
+                  </div>
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="primary" 
+                (click)="saveModules()"
+                [disabled]="loading || !moduleForm.valid">
+          <mat-icon *ngIf="!loading">save</mat-icon>
+          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+          {{ loading ? 'Salvando...' : 'Salvar Configurações' }}
+        </button>
+        <button mat-button (click)="cancelChanges()" [disabled]="loading">
+          Cancelar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

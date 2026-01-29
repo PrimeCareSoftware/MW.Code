@@ -201,6 +201,28 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Module Configuration Management
+  {
+    path: 'modules',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/modules-dashboard/modules-dashboard.component').then(m => m.ModulesDashboardComponent),
+        canActivate: [systemAdminGuard]
+      },
+      {
+        path: 'plans',
+        loadComponent: () => import('./pages/plan-modules/plan-modules.component').then(m => m.PlanModulesComponent),
+        canActivate: [systemAdminGuard]
+      },
+      {
+        path: ':moduleName',
+        loadComponent: () => import('./pages/module-details/module-details.component').then(m => m.ModuleDetailsComponent),
+        canActivate: [systemAdminGuard]
+      }
+    ]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];
