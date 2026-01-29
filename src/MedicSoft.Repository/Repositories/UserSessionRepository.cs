@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Domain.Entities;
@@ -62,6 +64,20 @@ namespace MedicSoft.Repository.Repositories
                 .CountAsync(s => s.UserId == userId &&
                                  s.TenantId == tenantId &&
                                  s.ExpiresAt > DateTime.UtcNow);
+        }
+
+        public async Task<List<UserSession>> GetRecentSessionsByUserIdAsync(Guid userId, string tenantId, int count)
+        {
+            // Include recently expired sessions (within last 30 days) for better anomaly detection
+            var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+            
+            return await _context.UserSessions
+                .Where(s => s.UserId == userId && 
+                           s.TenantId == tenantId && 
+                           s.StartedAt > thirtyDaysAgo)
+                .OrderByDescending(s => s.StartedAt)
+                .Take(count)
+                .ToListAsync();
         }
 
         public Task SaveChangesAsync()
