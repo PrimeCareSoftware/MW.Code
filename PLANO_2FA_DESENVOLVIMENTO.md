@@ -1,5 +1,65 @@
 # Plano de Desenvolvimento: Autenticação de Dois Fatores (2FA)
 
+## Status da Implementação (Janeiro 2026)
+
+### ✅ Fase 1: 2FA por Email - Portal do Paciente (CONCLUÍDA)
+
+**Data de Conclusão**: 29/01/2026
+
+#### Componentes Implementados:
+1. **Entidade TwoFactorToken** - Completa com campos necessários e índices otimizados
+2. **TwoFactorTokenRepository** - Todos os métodos implementados
+3. **TwoFactorService** - Implementação completa com:
+   - EnableTwoFactorAsync() ✅
+   - DisableTwoFactorAsync() ✅
+   - GenerateAndSendCodeAsync() ✅
+   - VerifyCodeAsync() ✅
+   - ResendCodeAsync() ✅
+   - IsTwoFactorEnabledAsync() ✅
+
+4. **Endpoints da API** - Todos funcionais:
+   - POST /api/auth/enable-2fa ✅
+   - POST /api/auth/disable-2fa ✅
+   - GET /api/auth/2fa-status ✅
+   - POST /api/auth/verify-2fa ✅
+   - POST /api/auth/resend-2fa-code ✅
+
+5. **Integração com Login** - Completa:
+   - AuthService integrado com ITwoFactorService ✅
+   - LoginAsync verifica se 2FA está habilitado ✅
+   - Retorna TwoFactorRequiredDto quando necessário ✅
+   - CompleteLoginAfter2FAAsync implementado ✅
+
+6. **Testes** - Suite completa de testes de integração:
+   - TwoFactorAuthTests.cs com 14 cenários de teste ✅
+   - Testes de habilitação/desabilitação ✅
+   - Testes de verificação de código ✅
+   - Testes de reenvio de código ✅
+   - Testes de autenticação e autorização ✅
+   - Testes de rate limiting ✅
+
+7. **Segurança**:
+   - Códigos gerados com CSPRNG e rejection sampling ✅
+   - Rate limiting: 3 códigos/hora ✅
+   - Máximo 5 tentativas de verificação ✅
+   - Códigos válidos por 5 minutos ✅
+   - TempToken codifica userId:tokenId para prevenir ataques ✅
+   - HTML encoding em templates de email ✅
+
+8. **Documentação**:
+   - API_2FA_DOCUMENTATION.md - Documentação completa de endpoints ✅
+   - GUIA_USUARIO_2FA.md - Guia do usuário ✅
+   - SECURITY_SUMMARY_2FA.md - Análise de segurança ✅
+   - PLANO_2FA_DESENVOLVIMENTO.md - Plano de desenvolvimento ✅
+
+#### Status Final:
+- **Implementação**: 100% completa
+- **Testes**: 100% completa
+- **Documentação**: 100% completa
+- **Pronto para produção**: ✅ Sim
+
+---
+
 ## Análise do Sistema Atual
 
 ### Fluxos de Autenticação Identificados

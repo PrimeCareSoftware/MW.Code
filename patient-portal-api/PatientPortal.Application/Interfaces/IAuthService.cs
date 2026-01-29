@@ -16,4 +16,5 @@ public interface IAuthService
     Task ResendVerificationEmailAsync(string email);
     Task RequestPasswordResetAsync(string email, string ipAddress);
     Task<bool> ResetPasswordAsync(string token, string newPassword);
+    Task<LoginResponseDto> CompleteLoginAfter2FAAsync(Guid patientUserId, string ipAddress);
 }

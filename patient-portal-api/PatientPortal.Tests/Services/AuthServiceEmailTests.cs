@@ -19,6 +19,7 @@ public class AuthServiceEmailTests
     private readonly Mock<IPasswordResetTokenRepository> _mockPasswordResetTokenRepository;
     private readonly Mock<ITokenService> _mockTokenService;
     private readonly Mock<INotificationService> _mockNotificationService;
+    private readonly Mock<ITwoFactorService> _mockTwoFactorService;
     private readonly Mock<IConfiguration> _mockConfiguration;
     private readonly Mock<ILogger<AuthService>> _mockLogger;
     private readonly AuthService _authService;
@@ -31,6 +32,7 @@ public class AuthServiceEmailTests
         _mockPasswordResetTokenRepository = new Mock<IPasswordResetTokenRepository>();
         _mockTokenService = new Mock<ITokenService>();
         _mockNotificationService = new Mock<INotificationService>();
+        _mockTwoFactorService = new Mock<ITwoFactorService>();
         _mockConfiguration = new Mock<IConfiguration>();
         _mockLogger = new Mock<ILogger<AuthService>>();
 
@@ -43,6 +45,7 @@ public class AuthServiceEmailTests
             _mockPasswordResetTokenRepository.Object,
             _mockTokenService.Object,
             _mockNotificationService.Object,
+            _mockTwoFactorService.Object,
             _mockConfiguration.Object,
             _mockLogger.Object
         );

@@ -1,4 +1,5 @@
 using PatientPortal.Application.DTOs.Auth;
+using PatientPortal.Application.Exceptions;
 using PatientPortal.Application.Interfaces;
 using PatientPortal.Domain.Entities;
 using PatientPortal.Domain.Interfaces;
@@ -20,6 +21,7 @@ public class AuthService : IAuthService
     private readonly IPasswordResetTokenRepository _passwordResetTokenRepository;
     private readonly ITokenService _tokenService;
     private readonly INotificationService _notificationService;
+    private readonly ITwoFactorService _twoFactorService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
 
@@ -30,6 +32,7 @@ public class AuthService : IAuthService
         IPasswordResetTokenRepository passwordResetTokenRepository,
         ITokenService tokenService,
         INotificationService notificationService,
+        ITwoFactorService twoFactorService,
         IConfiguration configuration,
         ILogger<AuthService> logger)
     {
@@ -39,6 +42,7 @@ public class AuthService : IAuthService
         _passwordResetTokenRepository = passwordResetTokenRepository;
         _tokenService = tokenService;
         _notificationService = notificationService;
+        _twoFactorService = twoFactorService;
         _configuration = configuration;
         _logger = logger;
     }
@@ -85,9 +89,26 @@ public class AuthService : IAuthService
             throw new UnauthorizedAccessException("Credenciais inválidas");
         }
 
-        // Reset failed access count on successful login
+        // Reset failed access count on successful password verification
         user.AccessFailedCount = 0;
         user.LockoutEnd = null;
+        await _patientUserRepository.UpdateAsync(user);
+
+        // Check if 2FA is enabled for the user
+        if (user.TwoFactorEnabled)
+        {
+            // Generate and send 2FA code
+            var tempToken = await _twoFactorService.GenerateAndSendCodeAsync(user.Id, "Login", ipAddress);
+            
+            // Throw exception to signal that 2FA is required
+            // This will be caught by the AuthController and return TwoFactorRequiredDto
+            throw new TwoFactorRequiredException
+            {
+                TempToken = tempToken
+            };
+        }
+
+        // 2FA not enabled, complete login
         user.LastLoginAt = DateTime.UtcNow;
         await _patientUserRepository.UpdateAsync(user);
 
@@ -457,6 +478,31 @@ public class AuthService : IAuthService
         {
             return false;
         }
+    }
+
+    public async Task<LoginResponseDto> CompleteLoginAfter2FAAsync(Guid patientUserId, string ipAddress)
+    {
+        var user = await _patientUserRepository.GetByIdAsync(patientUserId);
+        if (user == null || !user.IsActive)
+        {
+            throw new UnauthorizedAccessException("Usuário não encontrado ou inativo");
+        }
+
+        // Update last login time
+        user.LastLoginAt = DateTime.UtcNow;
+        await _patientUserRepository.UpdateAsync(user);
+
+        // Generate tokens
+        var accessToken = _tokenService.GenerateAccessToken(user.Id, user.Email, user.FullName);
+        var refreshToken = await CreateRefreshTokenAsync(user.Id, ipAddress);
+
+        return new LoginResponseDto
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken.Token,
+            ExpiresAt = refreshToken.ExpiresAt,
+            User = MapToUserDto(user)
+        };
     }
 
     private PatientUserDto MapToUserDto(PatientUser user)
