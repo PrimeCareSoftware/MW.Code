@@ -311,19 +311,8 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     p.CreatedAt >= periodStart.Value && p.CreatedAt <= periodEnd.Value);
 
             // Documents generated (if document system exists)
-            // Note: Document entity may not exist in all deployments
-            try
-            {
-                metrics.DocumentsGenerated = await _context.Set<Domain.Entities.Document>()
-                    .IgnoreQueryFilters()
-                    .CountAsync(d => d.TenantId == tenantId && 
-                        d.CreatedAt >= periodStart.Value && d.CreatedAt <= periodEnd.Value);
-            }
-            catch (InvalidOperationException)
-            {
-                // Document entity doesn't exist in this deployment, set to 0
-                metrics.DocumentsGenerated = 0;
-            }
+            // Note: Document entity doesn't exist yet, setting to 0
+            metrics.DocumentsGenerated = 0;
 
             return metrics;
         }
@@ -472,8 +461,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 return true;
 
             // Check if subscription is in a bad payment state
-            if (subscription.Status == Domain.Entities.SubscriptionStatus.PaymentPending ||
-                subscription.Status == Domain.Entities.SubscriptionStatus.PaymentFailed ||
+            if (subscription.Status == Domain.Entities.SubscriptionStatus.PaymentOverdue ||
                 subscription.Status == Domain.Entities.SubscriptionStatus.Suspended)
                 return true;
 
@@ -640,7 +628,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             if (clinic != null)
             {
-                clinic.IsActive = true;
+                clinic.Activate();
                 await _context.SaveChangesAsync();
             }
         }
@@ -653,7 +641,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             if (clinic != null)
             {
-                clinic.IsActive = false;
+                clinic.Deactivate();
                 await _context.SaveChangesAsync();
             }
         }
@@ -667,16 +655,23 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             if (!exists)
             {
-                var clinicTag = new Domain.Entities.ClinicTag
-                {
-                    ClinicId = clinicId,
-                    TagId = tagId,
-                    CreatedAt = DateTime.UtcNow,
-                    CreatedBy = "system-admin"
-                };
+                var clinic = await _context.Clinics
+                    .IgnoreQueryFilters()
+                    .FirstOrDefaultAsync(c => c.Id == clinicId);
 
-                _context.Set<Domain.Entities.ClinicTag>().Add(clinicTag);
-                await _context.SaveChangesAsync();
+                if (clinic != null)
+                {
+                    var clinicTag = new Domain.Entities.ClinicTag(
+                        clinicId,
+                        tagId,
+                        clinic.TenantId,
+                        "system-admin",
+                        false
+                    );
+
+                    _context.Set<Domain.Entities.ClinicTag>().Add(clinicTag);
+                    await _context.SaveChangesAsync();
+                }
             }
         }
 

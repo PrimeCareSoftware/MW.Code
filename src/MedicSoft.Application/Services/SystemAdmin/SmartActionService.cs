@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
 using MedicSoft.Application.Services.Reports;
 using MedicSoft.Domain.Entities;
@@ -74,7 +75,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 UserId: adminUserId.ToString(),
                 UserName: admin.FullName,
                 UserEmail: admin.Email,
-                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                Action: Domain.Enums.AuditAction.UPDATE,
                 ActionDescription: $"Admin {admin.FullName} impersonated clinic {clinic.Name}",
                 EntityType: "Clinic",
                 EntityId: clinicId.ToString(),
@@ -84,9 +85,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
                 HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
-                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
-                Severity: Domain.Enums.AuditSeverity.HIGH,
+                DataCategory: Domain.Enums.DataCategory.CONFIDENTIAL,
+                Purpose: Domain.Enums.LgpdPurpose.LEGITIMATE_INTEREST,
+                Severity: Domain.Enums.AuditSeverity.CRITICAL,
                 TenantId: clinic.TenantId
             ));
 
@@ -148,7 +149,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 UserId: adminUserId.ToString(),
                 UserName: admin?.FullName ?? "System",
                 UserEmail: admin?.Email ?? "system@system",
-                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                Action: Domain.Enums.AuditAction.UPDATE,
                 ActionDescription: $"Granted {days} days. Reason: {reason}",
                 EntityType: "Clinic",
                 EntityId: clinicId.ToString(),
@@ -158,9 +159,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
                 HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
-                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
-                Severity: Domain.Enums.AuditSeverity.MEDIUM,
+                DataCategory: Domain.Enums.DataCategory.CONFIDENTIAL,
+                Purpose: Domain.Enums.LgpdPurpose.BILLING,
+                Severity: Domain.Enums.AuditSeverity.WARNING,
                 TenantId: clinic.TenantId
             ));
 
@@ -206,7 +207,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 UserId: adminUserId.ToString(),
                 UserName: admin?.FullName ?? "System",
                 UserEmail: admin?.Email ?? "system@system",
-                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                Action: Domain.Enums.AuditAction.UPDATE,
                 ActionDescription: $"Applied {percentage}% discount for {months} months. Code: {discountCode}",
                 EntityType: "Clinic",
                 EntityId: clinicId.ToString(),
@@ -216,9 +217,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
                 HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
-                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
-                Severity: Domain.Enums.AuditSeverity.MEDIUM,
+                DataCategory: Domain.Enums.DataCategory.CONFIDENTIAL,
+                Purpose: Domain.Enums.LgpdPurpose.BILLING,
+                Severity: Domain.Enums.AuditSeverity.WARNING,
                 TenantId: clinic.TenantId
             ));
 
@@ -269,7 +270,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 UserId: adminUserId.ToString(),
                 UserName: admin?.FullName ?? "System",
                 UserEmail: admin?.Email ?? "system@system",
-                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                Action: Domain.Enums.AuditAction.UPDATE,
                 ActionDescription: $"Suspended clinic. Reason: {reason}. Reactivation: {reactivationDate?.ToString("yyyy-MM-dd") ?? "Manual"}",
                 EntityType: "Clinic",
                 EntityId: clinicId.ToString(),
@@ -279,9 +280,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
                 HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
-                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
-                Severity: Domain.Enums.AuditSeverity.HIGH,
+                DataCategory: Domain.Enums.DataCategory.CONFIDENTIAL,
+                Purpose: Domain.Enums.LgpdPurpose.LEGITIMATE_INTEREST,
+                Severity: Domain.Enums.AuditSeverity.CRITICAL,
                 TenantId: clinic.TenantId
             ));
 
@@ -357,7 +358,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 UserId: adminUserId.ToString(),
                 UserName: admin?.FullName ?? "System",
                 UserEmail: admin?.Email ?? "system@system",
-                Action: Domain.Enums.AuditAction.DATA_EXPORT,
+                Action: Domain.Enums.AuditAction.EXPORT,
                 ActionDescription: "Exported all clinic data (LGPD compliance)",
                 EntityType: "Clinic",
                 EntityId: clinicId.ToString(),
@@ -367,9 +368,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
                 HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
-                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.DATA_SUBJECT_ACCESS_REQUEST,
-                Severity: Domain.Enums.AuditSeverity.HIGH,
+                DataCategory: Domain.Enums.DataCategory.CONFIDENTIAL,
+                Purpose: Domain.Enums.LgpdPurpose.LEGAL_OBLIGATION,
+                Severity: Domain.Enums.AuditSeverity.CRITICAL,
                 TenantId: clinic.TenantId
             ));
 
@@ -434,7 +435,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 UserId: adminUserId.ToString(),
                 UserName: admin?.FullName ?? "System",
                 UserEmail: admin?.Email ?? "system@system",
-                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                Action: Domain.Enums.AuditAction.UPDATE,
                 ActionDescription: $"Migrated from plan {oldPlan?.Name} to {newPlan.Name}. Pro-rata: {proRata}",
                 EntityType: "Clinic",
                 EntityId: clinicId.ToString(),
@@ -444,9 +445,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
                 HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
-                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
-                Severity: Domain.Enums.AuditSeverity.MEDIUM,
+                DataCategory: Domain.Enums.DataCategory.CONFIDENTIAL,
+                Purpose: Domain.Enums.LgpdPurpose.BILLING,
+                Severity: Domain.Enums.AuditSeverity.WARNING,
                 TenantId: clinic.TenantId
             ));
 
@@ -460,7 +461,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             if (clinic == null)
                 throw new Exception("Clinic not found");
 
-            await _emailService.SendEmailAsync(clinic.Email, subject, body);
+            await _emailService.SendEmailAsync(new[] { clinic.Email }, subject, body);
 
             var admin = await _context.Users.FindAsync(adminUserId);
             // Audit log
@@ -468,7 +469,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 UserId: adminUserId.ToString(),
                 UserName: admin?.FullName ?? "System",
                 UserEmail: admin?.Email ?? "system@system",
-                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                Action: Domain.Enums.AuditAction.UPDATE,
                 ActionDescription: $"Sent custom email. Subject: {subject}",
                 EntityType: "Clinic",
                 EntityId: clinicId.ToString(),
@@ -478,9 +479,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
                 HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
                 Result: Domain.Enums.OperationResult.SUCCESS,
-                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
-                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
-                Severity: Domain.Enums.AuditSeverity.LOW,
+                DataCategory: Domain.Enums.DataCategory.CONFIDENTIAL,
+                Purpose: Domain.Enums.LgpdPurpose.LEGITIMATE_INTEREST,
+                Severity: Domain.Enums.AuditSeverity.INFO,
                 TenantId: clinic.TenantId
             ));
 

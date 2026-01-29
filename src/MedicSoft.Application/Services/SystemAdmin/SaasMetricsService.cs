@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs.SystemAdmin;
+using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Application.Services.SystemAdmin
@@ -350,7 +351,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     ExpansionMrr = 0, // Placeholder
                     ContractionMrr = 0, // Placeholder
                     ChurnedMrr = churnedMrr,
-                    ActiveCustomers = subscriptions.Count
+                    ActiveCustomers = subscriptions.Count()
                 });
             }
 

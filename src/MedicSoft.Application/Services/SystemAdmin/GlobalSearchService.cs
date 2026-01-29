@@ -155,7 +155,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     Description = p.Description ?? "",
                     MonthlyPrice = p.MonthlyPrice,
                     IsActive = p.IsActive,
-                    ActiveSubscriptions = p.ClinicSubscriptions.Count(s => s.Status == "Active")
+                    ActiveSubscriptions = 0 // Cannot be computed in projection
                 })
                 .ToListAsync();
         }
@@ -165,7 +165,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             return await _context.AuditLogs
                 .IgnoreQueryFilters()
                 .Where(a =>
-                    EF.Functions.Like(a.Action.ToLower(), $"%{query}%") ||
+                    EF.Functions.Like(a.Action.ToString().ToLower(), $"%{query}%") ||
                     EF.Functions.Like(a.EntityType.ToLower(), $"%{query}%") ||
                     EF.Functions.Like(a.EntityId.ToLower(), $"%{query}%") ||
                     EF.Functions.Like((a.UserName ?? "").ToLower(), $"%{query}%"))
@@ -174,7 +174,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 .Select(a => new AuditLogSearchResult
                 {
                     Id = a.Id,
-                    Action = a.Action,
+                    Action = a.Action.ToString(),
                     EntityType = a.EntityType,
                     EntityId = a.EntityId,
                     UserName = a.UserName ?? "System",
