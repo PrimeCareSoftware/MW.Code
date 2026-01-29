@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HelpService, HelpArticle, HelpCategory, HelpVideo } from '../../../services/help.service';
 import { fadeInAnimation } from '../../animations/fade-slide.animations';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-help-center',
@@ -358,12 +360,14 @@ import { fadeInAnimation } from '../../animations/fade-slide.animations';
     }
   `]
 })
-export class HelpCenterComponent implements OnInit {
+export class HelpCenterComponent implements OnInit, OnDestroy {
   categories: HelpCategory[] = [];
   popularArticles: HelpArticle[] = [];
   videos: HelpVideo[] = [];
   searchQuery = '';
   searchResults: HelpArticle[] = [];
+  
+  private searchSubject = new Subject<string>();
   
   constructor(
     private helpService: HelpService,
@@ -374,17 +378,28 @@ export class HelpCenterComponent implements OnInit {
     this.helpService.getCategories().subscribe(cats => this.categories = cats);
     this.helpService.getPopularArticles().subscribe(arts => this.popularArticles = arts);
     this.helpService.getVideos().subscribe(vids => this.videos = vids);
+    
+    // Debounce search input
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      if (query.length < 2) {
+        this.searchResults = [];
+        return;
+      }
+      this.helpService.searchArticles(query).subscribe(
+        results => this.searchResults = results
+      );
+    });
+  }
+  
+  ngOnDestroy(): void {
+    this.searchSubject.complete();
   }
   
   search(): void {
-    if (this.searchQuery.length < 2) {
-      this.searchResults = [];
-      return;
-    }
-    
-    this.helpService.searchArticles(this.searchQuery).subscribe(
-      results => this.searchResults = results
-    );
+    this.searchSubject.next(this.searchQuery);
   }
   
   selectCategory(category: HelpCategory): void {
@@ -399,7 +414,19 @@ export class HelpCenterComponent implements OnInit {
   }
   
   openVideo(video: HelpVideo): void {
-    window.open(video.url, '_blank');
+    // Validate URL is from trusted domain
+    const trustedDomains = ['youtube.com', 'youtu.be', 'vimeo.com'];
+    try {
+      const url = new URL(video.url);
+      const isTrusted = trustedDomains.some(domain => url.hostname.includes(domain));
+      if (isTrusted) {
+        window.open(video.url, '_blank', 'noopener,noreferrer');
+      } else {
+        console.warn('Attempted to open video from untrusted domain:', url.hostname);
+      }
+    } catch {
+      console.error('Invalid video URL:', video.url);
+    }
   }
   
   openTicket(): void {

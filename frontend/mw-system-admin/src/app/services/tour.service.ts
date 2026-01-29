@@ -165,8 +165,9 @@ export class TourService {
       this.saveCompletedTour('dashboard-tour');
     });
     
+    // Don't save as completed on cancel - allow users to see it again
     this.currentTour.on('cancel', () => {
-      this.saveCompletedTour('dashboard-tour');
+      console.log('Tour cancelled by user');
     });
     
     this.currentTour.start();
@@ -207,8 +208,9 @@ export class TourService {
       this.saveCompletedTour(config.id);
     });
     
+    // Don't save as completed on cancel - allow users to see it again
     this.currentTour.on('cancel', () => {
-      this.saveCompletedTour(config.id);
+      console.log(`Tour ${config.id} cancelled by user`);
     });
     
     this.currentTour.start();

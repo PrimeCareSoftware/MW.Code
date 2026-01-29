@@ -1,12 +1,17 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
+
+const DEFAULT_PLACEHOLDER = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23f0f0f0" width="400" height="300"/%3E%3C/svg%3E';
+const ERROR_PLACEHOLDER = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23fee" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle"%3EImage failed%3C/text%3E%3C/svg%3E';
 
 @Directive({
   selector: 'img[appLazyImage]',
   standalone: true
 })
-export class LazyImageDirective implements OnInit {
+export class LazyImageDirective implements OnInit, OnDestroy {
   @Input() appLazyImage!: string;
-  @Input() placeholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23f0f0f0" width="400" height="300"/%3E%3C/svg%3E';
+  @Input() placeholder = DEFAULT_PLACEHOLDER;
+  
+  private observer?: IntersectionObserver;
   
   constructor(private el: ElementRef<HTMLImageElement>) {}
   
@@ -18,12 +23,12 @@ export class LazyImageDirective implements OnInit {
     img.classList.add('lazy-loading');
     
     // Create intersection observer
-    const observer = new IntersectionObserver(
+    this.observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             this.loadImage();
-            observer.disconnect();
+            this.observer?.disconnect();
           }
         });
       },
@@ -33,7 +38,11 @@ export class LazyImageDirective implements OnInit {
       }
     );
     
-    observer.observe(img);
+    this.observer.observe(img);
+  }
+  
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
   }
   
   private loadImage(): void {
@@ -50,6 +59,8 @@ export class LazyImageDirective implements OnInit {
     
     tempImg.onerror = () => {
       console.error(`Failed to load image: ${this.appLazyImage}`);
+      img.src = ERROR_PLACEHOLDER;
+      img.alt = `Failed to load image: ${img.alt}`;
       img.classList.remove('lazy-loading');
       img.classList.add('lazy-error');
     };

@@ -19,10 +19,13 @@ export interface ErrorReport {
 export class ErrorTrackingService implements ErrorHandler {
   private errorQueue: ErrorReport[] = [];
   private readonly MAX_QUEUE_SIZE = 10;
+  private readonly MAX_RETRIES = 3;
+  private retryCount = 0;
   
   constructor(private http: HttpClient) {}
   
   handleError(error: Error | HttpErrorResponse): void {
+    // Always log to console for development visibility
     console.error('Error caught by ErrorTrackingService:', error);
     
     if (error instanceof HttpErrorResponse) {
@@ -33,6 +36,7 @@ export class ErrorTrackingService implements ErrorHandler {
   }
   
   trackError(error: Error, context?: any, severity: ErrorReport['severity'] = 'medium'): void {
+    const userContext = this.getUserContext();
     const errorReport: ErrorReport = {
       message: error.message,
       stack: error.stack,
@@ -40,7 +44,7 @@ export class ErrorTrackingService implements ErrorHandler {
       timestamp: Date.now(),
       userAgent: navigator.userAgent,
       severity,
-      context
+      context: { ...context, ...userContext }
     };
     
     this.queueError(errorReport);
@@ -48,6 +52,7 @@ export class ErrorTrackingService implements ErrorHandler {
   }
   
   trackHttpError(error: HttpErrorResponse): void {
+    const userContext = this.getUserContext();
     const errorReport: ErrorReport = {
       message: `HTTP ${error.status}: ${error.statusText}`,
       stack: error.error?.stack,
@@ -56,6 +61,7 @@ export class ErrorTrackingService implements ErrorHandler {
       userAgent: navigator.userAgent,
       severity: this.getHttpErrorSeverity(error.status),
       context: {
+        ...userContext,
         status: error.status,
         statusText: error.statusText,
         error: error.error
@@ -71,13 +77,14 @@ export class ErrorTrackingService implements ErrorHandler {
     severity: ErrorReport['severity'] = 'medium',
     context?: any
   ): void {
+    const userContext = this.getUserContext();
     const errorReport: ErrorReport = {
       message,
       url: window.location.href,
       timestamp: Date.now(),
       userAgent: navigator.userAgent,
       severity,
-      context
+      context: { ...context, ...userContext }
     };
     
     this.queueError(errorReport);
@@ -105,12 +112,31 @@ export class ErrorTrackingService implements ErrorHandler {
         .subscribe({
           error: (err) => {
             console.error('Failed to send error reports:', err);
-            // Re-queue errors if send failed
-            this.errorQueue.push(...errors);
+            // Re-queue errors if send failed, with retry limit
+            if (this.retryCount < this.MAX_RETRIES) {
+              this.errorQueue.push(...errors);
+              this.retryCount++;
+            } else {
+              console.warn('Max retries reached for error reporting. Discarding errors.');
+              this.retryCount = 0;
+            }
+          },
+          next: () => {
+            // Reset retry count on success
+            this.retryCount = 0;
           }
         });
     } else {
       console.log('Error Reports:', errors);
+    }
+  }
+  
+  private getUserContext(): any {
+    try {
+      const stored = sessionStorage.getItem('error-tracking-user');
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
     }
   }
   

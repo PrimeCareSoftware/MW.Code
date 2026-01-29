@@ -1,4 +1,4 @@
-import { Component, Input, ContentChild, TemplateRef, AfterContentInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="modern-card" [class.hover-effect]="hoverable" [class.elevated]="elevated">
-      <div class="card-header" *ngIf="title || hasHeaderSlot">
-        <h3 *ngIf="title">{{ title }}</h3>
+      <div class="card-header" *ngIf="title">
+        <h3>{{ title }}</h3>
         <div class="card-actions">
           <ng-content select="[card-actions]"></ng-content>
         </div>
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
       <div class="card-content">
         <ng-content></ng-content>
       </div>
-      <div class="card-footer" *ngIf="hasFooterSlot">
+      <div class="card-footer">
         <ng-content select="[card-footer]"></ng-content>
       </div>
     </div>
@@ -87,19 +87,8 @@ import { CommonModule } from '@angular/common';
     }
   `]
 })
-export class ModernCardComponent implements AfterContentInit {
+export class ModernCardComponent {
   @Input() title?: string;
   @Input() hoverable = false;
   @Input() elevated = false;
-  
-  @ContentChild('cardActions') cardActionsTemplate?: TemplateRef<any>;
-  @ContentChild('cardFooter') cardFooterTemplate?: TemplateRef<any>;
-  
-  hasHeaderSlot = false;
-  hasFooterSlot = false;
-  
-  ngAfterContentInit() {
-    this.hasHeaderSlot = !!this.cardActionsTemplate;
-    this.hasFooterSlot = !!this.cardFooterTemplate;
-  }
 }
