@@ -138,7 +138,16 @@ namespace MedicSoft.Application.Services
                     await _subscriptionPlanRepository.AddWithoutSaveAsync(plan);
                 }
 
-                // 1. Create Demo Clinic
+                // 1.1. Create System Owner (admin user for system-admin area)
+                // Check if system owner already exists before creating
+                var existingSystemOwner = await _ownerRepository.GetByUsernameAsync("admin", "system");
+                if (existingSystemOwner == null)
+                {
+                    var systemOwner = CreateSystemOwner();
+                    await _ownerRepository.AddWithoutSaveAsync(systemOwner);
+                }
+
+                // 2. Create Demo Clinic
                 var clinic = CreateDemoClinic();
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
 
@@ -1575,6 +1584,20 @@ RETORNO: {{return_date}}",
             subscription.Activate();
             
             return subscription;
+        }
+
+        private Owner CreateSystemOwner()
+        {
+            var passwordHash = _passwordHasher.HashPassword("Admin@123");
+            return new Owner(
+                username: "admin",
+                email: "admin@medicwarehouse.com",
+                passwordHash: passwordHash,
+                fullName: "System Administrator",
+                phone: "+5511999999999",
+                tenantId: "system",
+                clinicId: null // System owners are not tied to any specific clinic
+            );
         }
 
         private Owner CreateDemoOwner(Guid clinicId)
