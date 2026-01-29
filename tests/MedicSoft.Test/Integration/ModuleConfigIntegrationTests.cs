@@ -465,6 +465,8 @@ namespace MedicSoft.Test.Integration
             historyList[4].Action.Should().Be("Enabled"); // Oldest
         }
 
+        #endregion
+
         #region Concurrency Tests
 
         /// <summary>

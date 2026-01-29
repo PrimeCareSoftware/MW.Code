@@ -37,9 +37,14 @@ namespace MedicSoft.Application.Services
                 .AsNoTracking()
                 .ToListAsync();
 
-            // Query patients separately since Clinic doesn't have Patients navigation property  
+            // Query patients separately via PatientClinicLink since Patient doesn't have ClinicId
+            var patientIds = await _context.Set<PatientClinicLink>()
+                .Where(pcl => pcl.ClinicId == clinicId && pcl.TenantId == tenantId)
+                .Select(pcl => pcl.PatientId)
+                .ToListAsync();
+            
             var patients = await _context.Patients
-                .Where(p => p.ClinicId == clinicId && p.TenantId == tenantId)
+                .Where(p => patientIds.Contains(p.Id) && p.TenantId == tenantId)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -50,7 +55,7 @@ namespace MedicSoft.Application.Services
                 clinic.Email,
                 clinic.Phone,
                 clinic.Address,
-                clinic.Cnpj,
+                Document = clinic.Document,
                 clinic.CreatedAt,
                 Users = users.Select(u => new
                 {
@@ -65,7 +70,7 @@ namespace MedicSoft.Application.Services
                 {
                     p.Id,
                     p.Name,
-                    p.Cpf,
+                    Document = p.Document,
                     p.Phone,
                     p.Email,
                     p.CreatedAt
@@ -90,9 +95,14 @@ namespace MedicSoft.Application.Services
                 .Where(u => u.ClinicId == clinicId && u.TenantId == tenantId)
                 .ToListAsync();
 
-            // Query patients separately since Clinic doesn't have Patients navigation property
+            // Query patients separately via PatientClinicLink since Patient doesn't have ClinicId
+            var patientIds = await _context.Set<PatientClinicLink>()
+                .Where(pcl => pcl.ClinicId == clinicId && pcl.TenantId == tenantId)
+                .Select(pcl => pcl.PatientId)
+                .ToListAsync();
+            
             var patients = await _context.Patients
-                .Where(p => p.ClinicId == clinicId && p.TenantId == tenantId)
+                .Where(p => patientIds.Contains(p.Id) && p.TenantId == tenantId)
                 .ToListAsync();
 
             // Store old data for audit
@@ -101,7 +111,7 @@ namespace MedicSoft.Application.Services
                 clinic.Name,
                 clinic.Email,
                 clinic.Phone,
-                clinic.Cnpj
+                Document = clinic.Document
             };
 
             // IMPORTANT: This operation anonymizes the clinic AND all associated users and patients.
@@ -113,10 +123,11 @@ namespace MedicSoft.Application.Services
             // Ensure appropriate authorization and confirmation before proceeding.
 
             // Anonymize clinic data
-            clinic.UpdateBasicInfo(
+            clinic.UpdateInfo(
                 $"Clinic-{Guid.NewGuid()}",
-                $"anonymized-{Guid.NewGuid()}@example.com",
+                $"Trade-{Guid.NewGuid()}",
                 "***",
+                $"anonymized-{Guid.NewGuid()}@example.com",
                 "***"
             );
 
@@ -135,10 +146,9 @@ namespace MedicSoft.Application.Services
             {
                 patient.UpdatePersonalInfo(
                     $"Patient-{Guid.NewGuid()}",
-                    "***",
-                    null,
-                    "***",
-                    $"anonymized-{Guid.NewGuid()}@example.com"
+                    new Domain.ValueObjects.Email($"anonymized-{Guid.NewGuid()}@example.com"),
+                    new Domain.ValueObjects.Phone("+00", "000000000"),
+                    new Domain.ValueObjects.Address("***", "***", "***", "***", "**", "00000-000", "***")
                 );
             }
 
