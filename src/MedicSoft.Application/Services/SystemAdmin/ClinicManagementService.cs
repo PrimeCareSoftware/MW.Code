@@ -250,7 +250,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 .Select(u => new ClinicTimelineEventDto
                 {
                     Type = "user",
-                    Title = $"Usuário criado: {u.Name}",
+                    Title = $"Usuário criado: {u.FullName}",
                     Description = $"Role: {u.Role}",
                     Date = u.CreatedAt,
                     Icon = "person_add"

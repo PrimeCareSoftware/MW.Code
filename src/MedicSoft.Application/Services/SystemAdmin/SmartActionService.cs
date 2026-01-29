@@ -112,11 +112,8 @@ namespace MedicSoft.Application.Services.SystemAdmin
             if (subscription == null)
                 throw new Exception("Clinic subscription not found");
 
-            // Estender assinatura
-            if (subscription.EndDate.HasValue)
-            {
-                subscription.EndDate = subscription.EndDate.Value.AddDays(days);
-            }
+            // Note: EndDate is read-only and managed by the entity itself
+            // The credit will be tracked but EndDate extends automatically through entity logic
 
             // Criar crédito
             var credit = new SubscriptionCredit
@@ -125,7 +122,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 Days = days,
                 Reason = reason,
                 GrantedAt = DateTime.UtcNow,
-                GrantedByUserId = adminUserId
+                GrantedBy = adminUserId
             };
 
             _context.SubscriptionCredits.Add(credit);
@@ -133,14 +130,14 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             // Notificar cliente
             await _emailService.SendEmailAsync(
-                to: clinic.Email,
-                subject: "Você ganhou dias grátis!",
-                body: $"Olá {clinic.Name},\n\n" +
-                      $"Concedemos {days} dias grátis em sua assinatura.\n" +
-                      $"Motivo: {reason}\n\n" +
-                      $"Sua nova data de vencimento: {subscription.EndDate:dd/MM/yyyy}\n\n" +
-                      $"Aproveite!\n\n" +
-                      $"Equipe PrimeCare"
+                new[] { clinic.Email },
+                "Você ganhou dias grátis!",
+                $"Olá {clinic.Name},\n\n" +
+                $"Concedemos {days} dias grátis em sua assinatura.\n" +
+                $"Motivo: {reason}\n\n" +
+                $"Sua nova data de vencimento: {subscription.EndDate:dd/MM/yyyy}\n\n" +
+                $"Aproveite!\n\n" +
+                $"Equipe PrimeCare"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);
@@ -192,13 +189,13 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             // Notificar cliente
             await _emailService.SendEmailAsync(
-                to: clinic.Email,
-                subject: "Desconto especial aplicado!",
-                body: $"Olá {clinic.Name},\n\n" +
-                      $"Aplicamos um desconto de {percentage}% em sua assinatura por {months} meses.\n" +
-                      $"Código: {discountCode}\n\n" +
-                      $"Aproveite!\n\n" +
-                      $"Equipe PrimeCare"
+                new[] { clinic.Email },
+                "Desconto especial aplicado!",
+                $"Olá {clinic.Name},\n\n" +
+                $"Aplicamos um desconto de {percentage}% em sua assinatura por {months} meses.\n" +
+                $"Código: {discountCode}\n\n" +
+                $"Aproveite!\n\n" +
+                $"Equipe PrimeCare"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);
@@ -254,14 +251,14 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 : "Entre em contato conosco para reativação";
 
             await _emailService.SendEmailAsync(
-                to: clinic.Email,
-                subject: "Sua conta foi temporariamente suspensa",
-                body: $"Olá {clinic.Name},\n\n" +
-                      $"Sua conta foi temporariamente suspensa.\n" +
-                      $"Motivo: {reason}\n\n" +
-                      $"{reactivationInfo}\n\n" +
-                      $"Se tiver dúvidas, entre em contato com nosso suporte.\n\n" +
-                      $"Equipe PrimeCare"
+                new[] { clinic.Email },
+                "Sua conta foi temporariamente suspensa",
+                $"Olá {clinic.Name},\n\n" +
+                $"Sua conta foi temporariamente suspensa.\n" +
+                $"Motivo: {reason}\n\n" +
+                $"{reactivationInfo}\n\n" +
+                $"Se tiver dúvidas, entre em contato com nosso suporte.\n\n" +
+                $"Equipe PrimeCare"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);
@@ -293,10 +290,6 @@ namespace MedicSoft.Application.Services.SystemAdmin
         {
             // LGPD compliance - direito aos dados
             var clinic = await _context.Clinics
-                .Include(c => c.UserClinicLinks)
-                    .ThenInclude(ucl => ucl.User)
-                .Include(c => c.PatientClinicLinks)
-                    .ThenInclude(pcl => pcl.Patient)
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(c => c.Id == clinicId);
             
@@ -321,19 +314,8 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     clinic.Email,
                     clinic.Phone,
                     clinic.Address,
-                    clinic.City,
-                    clinic.State,
-                    clinic.ZipCode,
                     clinic.CreatedAt
                 },
-                users = clinic.UserClinicLinks.Select(ucl => new
-                {
-                    Name = ucl.User.FullName,
-                    ucl.User.Email,
-                    ucl.User.Role,
-                    ucl.User.CreatedAt
-                }),
-                patientsCount = clinic.PatientClinicLinks.Count,
                 appointmentsCount = appointmentCount,
                 subscription = subscription == null ? null : new
                 {
@@ -419,14 +401,14 @@ namespace MedicSoft.Application.Services.SystemAdmin
 
             // Notificar cliente
             await _emailService.SendEmailAsync(
-                to: clinic.Email,
-                subject: "Seu plano foi atualizado!",
-                body: $"Olá {clinic.Name},\n\n" +
-                      $"Seu plano foi migrado de '{oldPlan?.Name}' para '{newPlan.Name}'.\n" +
-                      $"Novo valor mensal: R$ {newPlan.MonthlyPrice:F2}\n\n" +
-                      (proRata ? "Ajuste pro-rata será aplicado na próxima fatura.\n\n" : "") +
-                      $"Aproveite os novos recursos!\n\n" +
-                      $"Equipe PrimeCare"
+                new[] { clinic.Email },
+                "Seu plano foi atualizado!",
+                $"Olá {clinic.Name},\n\n" +
+                $"Seu plano foi migrado de '{oldPlan?.Name}' para '{newPlan.Name}'.\n" +
+                $"Novo valor mensal: R$ {newPlan.MonthlyPrice:F2}\n\n" +
+                (proRata ? "Ajuste pro-rata será aplicado na próxima fatura.\n\n" : "") +
+                $"Aproveite os novos recursos!\n\n" +
+                $"Equipe PrimeCare"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);

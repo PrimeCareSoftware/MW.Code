@@ -168,7 +168,7 @@ namespace MedicSoft.Application.DTOs.Reports
     /// </summary>
     public class GenerateReportDto
     {
-        public int ReportTemplateId { get; set; }
+        public Guid ReportTemplateId { get; set; }
         public string OutputFormat { get; set; }
         public Dictionary<string, object> Parameters { get; set; } = new();
     }

@@ -13,7 +13,7 @@ namespace MedicSoft.Domain.Entities
     public class ScheduledReport : BaseEntity
     {
         [Required]
-        public int ReportTemplateId { get; set; }
+        public Guid ReportTemplateId { get; set; }
 
         [ForeignKey(nameof(ReportTemplateId))]
         public virtual ReportTemplate ReportTemplate { get; set; }

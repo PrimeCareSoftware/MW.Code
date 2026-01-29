@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.DTOs.SystemAdmin;
 using MedicSoft.Repository.Context;
 using MedicSoft.Domain.Interfaces;
+using MedicSoft.Domain.Entities;
 
 namespace MedicSoft.Application.Services.SystemAdmin
 {
@@ -272,18 +273,24 @@ namespace MedicSoft.Application.Services.SystemAdmin
             // Create audit log entry if available
             try
             {
-                var auditEntry = new Domain.Entities.AuditLog
-                {
-                    Id = Guid.NewGuid(),
-                    TenantId = currentOwner.ClinicId?.ToString(),
-                    UserId = currentOwnerId.ToString(),
-                    Action = "OwnershipTransfer",
-                    EntityType = "User",
-                    EntityId = newOwnerId.ToString(),
-                    Changes = $"Transferred ownership from {currentOwner.Email} to {newOwner.Email}",
-                    Timestamp = DateTime.UtcNow,
-                    IpAddress = "system-admin"
-                };
+                var auditEntry = new Domain.Entities.AuditLog(
+                    userId: currentOwnerId.ToString(),
+                    userName: currentOwner.FullName,
+                    userEmail: currentOwner.Email,
+                    action: Domain.Enums.AuditAction.UPDATE,
+                    actionDescription: $"Transferred ownership from {currentOwner.Email} to {newOwner.Email}",
+                    entityType: "User",
+                    entityId: newOwnerId.ToString(),
+                    ipAddress: "system-admin",
+                    userAgent: "System Admin Service",
+                    requestPath: "/api/admin/transfer-ownership",
+                    httpMethod: "POST",
+                    result: Domain.Enums.OperationResult.SUCCESS,
+                    dataCategory: Domain.Enums.DataCategory.PERSONAL,
+                    purpose: Domain.Enums.LgpdPurpose.LEGITIMATE_INTEREST,
+                    severity: Domain.Enums.AuditSeverity.WARNING,
+                    tenantId: currentOwner.ClinicId?.ToString() ?? string.Empty
+                );
 
                 _context.Set<Domain.Entities.AuditLog>().Add(auditEntry);
             }

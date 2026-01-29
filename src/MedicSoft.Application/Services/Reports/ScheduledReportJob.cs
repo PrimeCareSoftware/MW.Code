@@ -25,7 +25,7 @@ namespace MedicSoft.Application.Services.Reports
         /// Called by Hangfire background job
         /// </summary>
         [AutomaticRetry(Attempts = 3, DelaysInSeconds = new[] { 60, 300, 600 })]
-        public async Task ExecuteAsync(int scheduledReportId)
+        public async Task ExecuteAsync(Guid scheduledReportId)
         {
             _logger.LogInformation("Starting scheduled report job execution for report ID: {ReportId}", scheduledReportId);
 
@@ -46,7 +46,7 @@ namespace MedicSoft.Application.Services.Reports
         /// Note: Static method for Hangfire job configuration utility.
         /// For testing, mock the IReportService dependency instead.
         /// </summary>
-        public static void ScheduleRecurring(int scheduledReportId, string cronExpression, string? jobName = null)
+        public static void ScheduleRecurring(Guid scheduledReportId, string cronExpression, string? jobName = null)
         {
             var jobId = jobName ?? $"scheduled-report-{scheduledReportId}";
             
@@ -62,7 +62,7 @@ namespace MedicSoft.Application.Services.Reports
         /// Remove a scheduled report job
         /// Note: Static method for Hangfire job configuration utility.
         /// </summary>
-        public static void RemoveSchedule(int scheduledReportId, string? jobName = null)
+        public static void RemoveSchedule(Guid scheduledReportId, string? jobName = null)
         {
             var jobId = jobName ?? $"scheduled-report-{scheduledReportId}";
             RecurringJob.RemoveIfExists(jobId);
