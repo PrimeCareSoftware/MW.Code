@@ -173,6 +173,13 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Phase 5: Help Center
+  {
+    path: 'help',
+    loadComponent: () => import('./shared/components/help-center/help-center.component').then(m => m.HelpCenterComponent),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];
