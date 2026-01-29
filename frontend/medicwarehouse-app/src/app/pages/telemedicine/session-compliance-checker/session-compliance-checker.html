@@ -1,0 +1,135 @@
+<div class="compliance-checker">
+  <div class="checker-header">
+    <h3>
+      <i class="fas fa-clipboard-check"></i>
+      Verificação de Conformidade CFM 2.314/2022
+    </h3>
+    <p class="header-description">
+      Validando requisitos obrigatórios antes de iniciar a teleconsulta
+    </p>
+  </div>
+
+  <!-- Error Message -->
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <strong>Erro na Verificação</strong>
+        <p>{{ errorMessage() }}</p>
+      </div>
+      <button class="btn-retry" (click)="retryCheck()">
+        <i class="fas fa-redo"></i> Tentar Novamente
+      </button>
+    </div>
+  }
+
+  <!-- Compliance Checks List -->
+  <div class="checks-list">
+    @for (check of checks(); track check.label) {
+      <div class="check-item" [ngClass]="getStatusClass(check.status)">
+        <div class="check-icon">
+          <i class="fas" [ngClass]="getStatusIcon(check.status)"></i>
+        </div>
+        
+        <div class="check-content">
+          <div class="check-header">
+            <span class="check-label">{{ check.label }}</span>
+            @if (check.required) {
+              <span class="badge-required">Obrigatório</span>
+            }
+          </div>
+          
+          <p class="check-message">{{ check.message }}</p>
+          
+          @if (check.status === 'invalid' && check.actionLink) {
+            <button 
+              class="btn-action" 
+              (click)="navigateToAction(check.actionLink)"
+            >
+              <i class="fas fa-arrow-right"></i>
+              {{ check.actionLabel }}
+            </button>
+          }
+        </div>
+
+        <div class="check-status">
+          @switch (check.status) {
+            @case ('valid') {
+              <span class="status-badge status-valid">
+                <i class="fas fa-check"></i> Válido
+              </span>
+            }
+            @case ('invalid') {
+              <span class="status-badge status-invalid">
+                <i class="fas fa-times"></i> Pendente
+              </span>
+            }
+            @case ('checking') {
+              <span class="status-badge status-checking">
+                <i class="fas fa-spinner fa-spin"></i> Verificando...
+              </span>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Overall Status -->
+  <div class="overall-status">
+    @if (isChecking()) {
+      <div class="status-card status-checking">
+        <i class="fas fa-spinner fa-spin"></i>
+        <div>
+          <strong>Verificando Conformidade...</strong>
+          <p>Aguarde enquanto validamos os requisitos</p>
+        </div>
+      </div>
+    } @else if (allChecksValid) {
+      <div class="status-card status-success">
+        <i class="fas fa-check-circle"></i>
+        <div>
+          <strong>Todos os Requisitos Atendidos!</strong>
+          <p>A teleconsulta pode ser iniciada com segurança</p>
+        </div>
+      </div>
+    } @else if (hasInvalidChecks) {
+      <div class="status-card status-warning">
+        <i class="fas fa-exclamation-circle"></i>
+        <div>
+          <strong>Requisitos Pendentes</strong>
+          <p>Complete os itens acima antes de iniciar a teleconsulta</p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Compliance Info -->
+  <div class="compliance-info">
+    <div class="info-card">
+      <i class="fas fa-info-circle"></i>
+      <div>
+        <strong>Sobre a Conformidade CFM 2.314/2022</strong>
+        <p>
+          A Resolução CFM 2.314/2022 estabelece requisitos obrigatórios para a prática da telemedicina no Brasil.
+          Todos os requisitos acima devem ser atendidos antes de iniciar uma teleconsulta.
+        </p>
+        <ul>
+          <li><strong>Consentimento Informado:</strong> O paciente deve aceitar os termos da teleconsulta</li>
+          <li><strong>Identificação Bidirecional:</strong> Médico e paciente devem ter suas identidades verificadas</li>
+          <li><strong>Segurança dos Dados:</strong> Todos os dados são criptografados conforme LGPD</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    @if (!isChecking()) {
+      <button class="btn btn-secondary" (click)="retryCheck()">
+        <i class="fas fa-sync-alt"></i>
+        Verificar Novamente
+      </button>
+    }
+  </div>
+</div>
