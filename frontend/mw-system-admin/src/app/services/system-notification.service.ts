@@ -32,7 +32,7 @@ export class SystemNotificationService {
     this.hubConnection
       .start()
       .then(() => console.log('SignalR connection started'))
-      .catch(err => console.error('Error starting SignalR connection: ', err));
+      .catch((err: Error) => console.error('Error starting SignalR connection: ', err));
 
     this.hubConnection.on('ReceiveNotification', (notification: SystemNotification) => {
       this.notificationReceived.next(notification);

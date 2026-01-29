@@ -1,7 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { FinancialService } from '../../../services/financial.service';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
@@ -11,7 +10,7 @@ import { MyClinicDto } from '../../../models/clinic-admin.model';
 @Component({
   selector: 'app-profitability-analysis',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, Navbar],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './profitability-analysis.component.html',
   styleUrl: './profitability-analysis.component.scss'
 })

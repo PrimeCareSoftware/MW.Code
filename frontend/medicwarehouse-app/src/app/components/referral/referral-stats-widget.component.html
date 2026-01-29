@@ -15,7 +15,7 @@
       <div class="stats-summary">
         <div class="stat-item">
           <span class="label">Conversões</span>
-          <span class="value">{{ stats.totalConversions }}</span>
+          <span class="value">{{ stats.convertedReferrals }}</span>
         </div>
         <div class="stat-item">
           <span class="label">Total Ganho</span>
@@ -26,7 +26,7 @@
       <div class="progress-section">
         <div class="progress-header">
           <span class="label">Progresso para saque</span>
-          <span class="value">{{ formatCurrency(stats.availableForPayout) }} / {{ formatCurrency(program?.minimumPayout || 200) }}</span>
+          <span class="value">{{ formatCurrency(stats.pendingRewards) }} / {{ formatCurrency(program?.minimumPayoutThreshold || 200) }}</span>
         </div>
         <mat-progress-bar 
           mode="determinate" 

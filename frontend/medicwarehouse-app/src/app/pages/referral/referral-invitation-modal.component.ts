@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, Observable } from 'rxjs';
 import { ReferralService, ReferralInvitation } from '../../services/referral/referral.service';
 
 @Component({
@@ -87,13 +87,14 @@ export class ReferralInvitationModalComponent implements OnDestroy {
     const invitations = emailList.map((email: string) => {
       const invitation: ReferralInvitation = {
         email,
-        personalMessage: formValue.personalMessage
+        message: formValue.personalMessage,
+        referralCode: this.data.referralCode
       };
       return this.referralService.sendReferralInvitation(invitation);
     });
 
     // Wait for all invitations to be sent
-    Promise.all(invitations.map(obs => obs.toPromise()))
+    Promise.all(invitations.map((obs: Observable<any>) => obs.toPromise()))
       .then(() => {
         this.submitting = false;
         this.dialogRef.close(true);

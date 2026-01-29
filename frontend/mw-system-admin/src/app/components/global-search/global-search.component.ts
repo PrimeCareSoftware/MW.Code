@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DomSanitizer, SafeHtml, SecurityContext } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { GlobalSearchService } from '../../services/global-search.service';
@@ -113,7 +113,7 @@ const FOCUS_DELAY_MS = 100;
 
           <!-- Search stats -->
           <div *ngIf="results.totalResults > 0" class="search-stats">
-            {{ results.totalResults }} resultado(s) em {{ results.searchDurationMs?.toFixed(0) }}ms
+            {{ results.totalResults }} resultado(s) em {{ results.searchDurationMs.toFixed(0) }}ms
           </div>
         </div>
 
@@ -413,29 +413,29 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
     if (!this.query) return text;
     const regex = new RegExp(`(${this.escapeRegExp(this.query)})`, 'gi');
     const highlighted = text.replace(regex, '<mark>$1</mark>');
-    return this.sanitizer.sanitize(SecurityContext.HTML, highlighted) || text;
+    return this.sanitizer.bypassSecurityTrustHtml(highlighted);
   }
 
   private escapeRegExp(text: string): string {
     return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  navigateToClinic(id: number): void {
+  navigateToClinic(id: string): void {
     this.closeModal();
     this.router.navigate(['/clinics', id]);
   }
 
-  navigateToUser(id: number): void {
+  navigateToUser(id: string): void {
     this.closeModal();
     this.router.navigate(['/users', id]);
   }
 
-  navigateToTicket(id: number): void {
+  navigateToTicket(id: string): void {
     this.closeModal();
     this.router.navigate(['/tickets', id]);
   }
 
-  navigateToPlan(id: number): void {
+  navigateToPlan(id: string): void {
     this.closeModal();
     this.router.navigate(['/plans', id]);
   }

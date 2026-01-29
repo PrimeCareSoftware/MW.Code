@@ -118,7 +118,7 @@ import { Navbar } from '../../shared/navbar/navbar';
                     <h3>{{ chart.title }}</h3>
                     <apx-chart
                       [series]="chart.series"
-                      [chart]="{ type: chart.type, height: 350 }"
+                      [chart]="getChartConfig(chart)"
                     ></apx-chart>
                   </div>
                 }
@@ -322,5 +322,9 @@ export class ReportWizardComponent implements OnInit {
     const data = this.reportResult()?.data;
     if (!data || data.length === 0) return [];
     return Object.keys(data[0]);
+  }
+
+  getChartConfig(chart: any): any {
+    return { type: chart.type, height: 350 };
   }
 }

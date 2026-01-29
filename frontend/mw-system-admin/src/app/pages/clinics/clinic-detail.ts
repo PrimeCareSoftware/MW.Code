@@ -356,4 +356,10 @@ export class ClinicDetail implements OnInit {
       }
     });
   }
+
+  isTagNotAssigned(tagId: string): boolean {
+    const c = this.clinic();
+    if (!c || !c.tags) return true;
+    return !c.tags.find(t => t.id === tagId);
+  }
 }

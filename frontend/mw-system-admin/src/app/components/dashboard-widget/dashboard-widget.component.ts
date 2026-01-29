@@ -40,27 +40,27 @@ import { ApexOptions } from 'apexcharts';
           @switch (widget.type) {
             @case ('line') {
               <apx-chart
-                [series]="chartOptions().series"
-                [chart]="chartOptions().chart"
-                [xaxis]="chartOptions().xaxis"
-                [yaxis]="chartOptions().yaxis"
-                [stroke]="chartOptions().stroke"
+                [series]="chartOptions().series!"
+                [chart]="getChartConfig()"
+                [xaxis]="chartOptions().xaxis!"
+                [yaxis]="chartOptions().yaxis!"
+                [stroke]="chartOptions().stroke!"
               ></apx-chart>
             }
             @case ('bar') {
               <apx-chart
-                [series]="chartOptions().series"
-                [chart]="chartOptions().chart"
-                [xaxis]="chartOptions().xaxis"
-                [yaxis]="chartOptions().yaxis"
-                [plotOptions]="chartOptions().plotOptions"
+                [series]="chartOptions().series!"
+                [chart]="getChartConfig()"
+                [xaxis]="chartOptions().xaxis!"
+                [yaxis]="chartOptions().yaxis!"
+                [plotOptions]="chartOptions().plotOptions!"
               ></apx-chart>
             }
             @case ('pie') {
               <apx-chart
-                [series]="chartOptions().series"
-                [chart]="chartOptions().chart"
-                [labels]="chartOptions().labels"
+                [series]="chartOptions().series!"
+                [chart]="getChartConfig()"
+                [labels]="chartOptions().labels!"
               ></apx-chart>
             }
             @case ('metric') {
@@ -312,5 +312,9 @@ export class DashboardWidgetComponent implements OnInit, OnDestroy {
       return [];
     }
     return Object.keys(data[0]);
+  }
+
+  getChartConfig(): any {
+    return this.chartOptions().chart || {};
   }
 }

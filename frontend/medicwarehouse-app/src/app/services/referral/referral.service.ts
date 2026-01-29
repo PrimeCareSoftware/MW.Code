@@ -12,6 +12,10 @@ import {
   PaymentMethod
 } from '../../models/referral.model';
 
+// Re-export for convenience
+export type { Referral, ReferralStats, ReferralProgram, ReferralReward, ReferralInvitation };
+export { ReferralStatus, RewardStatus, PaymentMethod };
+
 /**
  * Referral Service
  * 

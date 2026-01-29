@@ -12,7 +12,7 @@ import { ClinicSummary } from '../../models/system-admin.model';
       <div class="clinic-card" *ngFor="let clinic of clinics" [routerLink]="['/clinics', clinic.id]">
         <div class="card-header">
           <h3>{{ clinic.name }}</h3>
-          <span class="badge" [ngClass]="getHealthStatusClass(clinic.healthStatus)">
+          <span class="badge" [ngClass]="getHealthStatusClass(clinic.healthStatus || '')">
             {{ clinic.healthStatus }}
           </span>
         </div>

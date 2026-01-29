@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject, takeUntil } from 'rxjs';
 import { ReferralService, ReferralStats, ReferralProgram } from '../../services/referral/referral.service';
 
@@ -17,7 +18,8 @@ import { ReferralService, ReferralStats, ReferralProgram } from '../../services/
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './referral-stats-widget.component.html',
   styleUrls: ['./referral-stats-widget.component.scss']
@@ -67,7 +69,7 @@ export class ReferralStatsWidgetComponent implements OnInit, OnDestroy {
 
   getProgressPercentage(): number {
     if (!this.stats || !this.program) return 0;
-    return Math.min((this.stats.availableForPayout / this.program.minimumPayout) * 100, 100);
+    return Math.min((this.stats.pendingRewards / this.program.minimumPayoutThreshold) * 100, 100);
   }
 
   formatCurrency(value: number): string {

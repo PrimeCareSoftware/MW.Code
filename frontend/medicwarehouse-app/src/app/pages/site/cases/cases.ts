@@ -37,7 +37,7 @@ export class CasesComponent {
   }
 
   onCaseView(caseItem: SuccessCase): void {
-    this.analytics.trackCaseStudyView(caseItem.id, caseItem.clinicName, caseItem.specialty);
+    this.analytics.trackCaseStudyView(caseItem.clinicName);
   }
 
   onContactClick(): void {

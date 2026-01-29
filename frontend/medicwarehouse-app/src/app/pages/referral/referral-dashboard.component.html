@@ -18,7 +18,7 @@
             <mat-icon>check_circle</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats?.totalConversions || 0 }}</h3>
+            <h3>{{ stats?.convertedReferrals || 0 }}</h3>
             <p>Conversões</p>
           </div>
         </mat-card-content>
@@ -42,7 +42,7 @@
             <mat-icon>hourglass_empty</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ formatCurrency(stats?.pendingEarnings || 0) }}</h3>
+            <h3>{{ formatCurrency(stats?.pendingRewards || 0) }}</h3>
             <p>Pendente</p>
           </div>
         </mat-card-content>
@@ -54,7 +54,7 @@
             <mat-icon>account_balance_wallet</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ formatCurrency(stats?.availableForPayout || 0) }}</h3>
+            <h3>{{ formatCurrency(stats?.pendingRewards || 0) }}</h3>
             <p>Disponível</p>
           </div>
         </mat-card-content>
@@ -143,7 +143,7 @@
             mat-raised-button 
             color="primary" 
             (click)="onRequestPayout()"
-            [disabled]="(stats?.availableForPayout || 0) < (program?.minimumPayout || 200)"
+            [disabled]="(stats?.pendingRewards || 0) < (program?.minimumPayoutThreshold || 200)"
           >
             <mat-icon>attach_money</mat-icon>
             Solicitar Pagamento
@@ -152,7 +152,7 @@
 
         <p class="info-text">
           <mat-icon>info</mat-icon>
-          Pagamento mínimo: {{ formatCurrency(program?.minimumPayout || 200) }}
+          Pagamento mínimo: {{ formatCurrency(program?.minimumPayoutThreshold || 200) }}
         </p>
       </mat-card-content>
     </mat-card>

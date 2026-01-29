@@ -26,8 +26,8 @@ import { ClinicSummary } from '../../models/system-admin.model';
         <div class="clinic-item" *ngFor="let clinic of clinics" [routerLink]="['/clinics', clinic.id]">
           <div class="clinic-header">
             <strong>{{ clinic.name }}</strong>
-            <span class="badge" [ngClass]="getHealthBadgeClass(clinic.healthStatus)">
-              {{ getHealthLabel(clinic.healthStatus) }}
+              <span class="badge" [ngClass]="getHealthBadgeClass(clinic.healthStatus || '')">
+                {{ getHealthLabel(clinic.healthStatus || '') }}
             </span>
           </div>
           <div class="clinic-details">

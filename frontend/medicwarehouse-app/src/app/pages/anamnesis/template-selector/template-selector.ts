@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AnamnesisService } from '../../../services/anamnesis.service';
@@ -8,7 +8,7 @@ import { AnamnesisTemplate, MedicalSpecialty, SPECIALTY_NAMES } from '../../../m
 
 @Component({
   selector: 'app-template-selector',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './template-selector.html',
   styleUrl: './template-selector.scss'
 })

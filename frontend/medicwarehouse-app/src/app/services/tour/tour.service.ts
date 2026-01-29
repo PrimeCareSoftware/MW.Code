@@ -27,7 +27,7 @@ export interface TourStep {
   providedIn: 'root'
 })
 export class TourService {
-  private currentTour: Shepherd.Tour | null = null;
+  private currentTour: any | null = null;
   private readonly TOUR_COMPLETED_KEY_PREFIX = 'primecare_tour_completed_';
 
   constructor(private router: Router) {}

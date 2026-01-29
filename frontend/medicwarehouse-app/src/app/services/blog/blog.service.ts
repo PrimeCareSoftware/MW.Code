@@ -306,7 +306,7 @@ export class BlogService {
       filtered = filtered.filter(a => a.category === filters.category);
     }
     if (filters?.tag) {
-      filtered = filtered.filter(a => a.tags.includes(filters.tag));
+      filtered = filtered.filter(a => a.tags.includes(filters.tag || ''));
     }
     if (filters?.search) {
       const searchLower = filters.search.toLowerCase();

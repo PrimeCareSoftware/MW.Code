@@ -43,13 +43,13 @@ export class PricingComponent {
 
   selectPlan(plan: SubscriptionPlan): void {
     // Track pricing plan view
-    this.analytics.trackPricingPlanView(plan.name, plan.price);
+    this.analytics.trackPricingPlanView(plan.name);
 
     if (plan.type === 4) { // Enterprise/Custom
       this.contactForCustomPlan();
     } else {
       this.cartService.addToCart(plan);
-      this.analytics.trackConversion('trial_signup', plan.price, { planName: plan.name });
+      this.analytics.trackConversion('trial_signup');
       this.router.navigate(['/site/register'], { queryParams: { plan: plan.id } });
     }
   }

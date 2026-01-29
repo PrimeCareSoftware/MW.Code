@@ -11,6 +11,10 @@ export interface ClinicSummary {
   subscriptionStatus: string;
   planName: string;
   nextBillingDate?: string;
+  healthStatus?: string;
+  healthScore?: number;
+  subscriptionPlan?: string;
+  tags?: Tag[];
 }
 
 export interface ClinicDetail extends ClinicSummary {
@@ -402,8 +406,9 @@ export interface CrossTenantUserFilter {
 
 export interface BulkActionRequest {
   clinicIds: string[];
-  action: 'send-email' | 'change-plan' | 'assign-tags' | 'remove-tags';
+  action: 'send-email' | 'change-plan' | 'assign-tags' | 'remove-tags' | 'activate' | 'deactivate' | 'addTag';
   actionData?: any;
+  parameters?: any;
 }
 
 // Phase 3: Analytics & BI - Custom Dashboards

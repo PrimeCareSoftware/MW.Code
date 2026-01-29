@@ -399,7 +399,7 @@
               </div>
 
               <!-- Assigned Tags -->
-              @if (clinic() && clinic()!.tags && clinic()!.tags.length > 0) {
+              @if (clinic() && clinic()!.tags && clinic()!.tags!.length > 0) {
                 <div class="tags-section">
                   <h3>Tags Atribuídas</h3>
                   <div class="tags-container">
@@ -428,7 +428,7 @@
                   <h3>Tags Disponíveis</h3>
                   <div class="tags-container">
                     @for (tag of availableTags(); track tag.id) {
-                      @if (!clinic()!.tags || !clinic()!.tags.find(t => t.id === tag.id)) {
+                      @if (isTagNotAssigned(tag.id)) {
                         <div class="tag-badge clickable" [style.background-color]="tag.color" (click)="assignTag(tag.id)">
                           <span>{{ tag.name }}</span>
                           @if (tag.description) {

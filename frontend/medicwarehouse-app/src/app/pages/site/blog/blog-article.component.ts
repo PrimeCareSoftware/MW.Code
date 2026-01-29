@@ -56,7 +56,7 @@ export class BlogArticleComponent implements OnInit, OnDestroy {
     // Track reading time
     if (this.article) {
       const readTime = Math.floor((Date.now() - this.readStartTime) / 1000);
-      this.analytics.trackBlogArticleRead(this.article.slug, readTime, this.article.category);
+      this.analytics.trackBlogArticleRead(this.article.title, this.article.category, readTime);
     }
     this.destroy$.next();
     this.destroy$.complete();
@@ -93,7 +93,7 @@ export class BlogArticleComponent implements OnInit, OnDestroy {
     this.seo.updateMetadata({
       title: article.metaTitle || article.title,
       description: article.metaDescription || article.excerpt,
-      keywords: article.metaKeywords?.join(', '),
+      keywords: article.metaKeywords,
       type: 'article',
       image: article.featuredImage,
       author: article.author.name,
@@ -120,7 +120,7 @@ export class BlogArticleComponent implements OnInit, OnDestroy {
   }
 
   private loadRelatedArticles(currentArticleId: string, category: string): void {
-    this.blogService.getRelatedArticles(currentArticleId, category)
+    this.blogService.getRelatedArticles(currentArticleId, 3)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (articles) => {
@@ -138,10 +138,7 @@ export class BlogArticleComponent implements OnInit, OnDestroy {
     this.blogService.likeArticle(this.article.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedArticle) => {
-          if (updatedArticle) {
-            this.article = updatedArticle;
-          }
+        next: () => {
           this.analytics.trackButtonClick('like_article', `/blog/${this.article?.slug}`);
         },
         error: (error) => {
@@ -176,7 +173,7 @@ export class BlogArticleComponent implements OnInit, OnDestroy {
 
     if (shareUrl) {
       window.open(shareUrl, '_blank', 'width=600,height=400');
-      this.analytics.trackSocialShare(platform, url, 'article');
+      this.analytics.trackSocialShare(platform, 'article');
     }
   }
 

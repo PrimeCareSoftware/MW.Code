@@ -6,10 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
-import { ReferralService, ReferralStats, Referral, ReferralProgram } from '../../services/referral/referral.service';
+import { ReferralService, ReferralStats, Referral, ReferralProgram, PaymentMethod } from '../../services/referral/referral.service';
 import { ReferralInvitationModalComponent } from './referral-invitation-modal.component';
 
 @Component({
@@ -23,6 +24,7 @@ import { ReferralInvitationModalComponent } from './referral-invitation-modal.co
     MatTableModule,
     MatChipsModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule
   ],
@@ -151,15 +153,15 @@ export class ReferralDashboardComponent implements OnInit, OnDestroy {
   }
 
   onRequestPayout(): void {
-    if (!this.stats || this.stats.availableForPayout < (this.program?.minimumPayout || 200)) {
-      this.snackBar.open('Você precisa ter pelo menos R$ ' + (this.program?.minimumPayout || 200) + ' disponível para solicitar pagamento', 'Fechar', {
+    if (!this.stats || this.stats.pendingRewards < (this.program?.minimumPayoutThreshold || 200)) {
+      this.snackBar.open('Você precisa ter pelo menos R$ ' + (this.program?.minimumPayoutThreshold || 200) + ' disponível para solicitar pagamento', 'Fechar', {
         duration: 5000
       });
       return;
     }
 
     // In a real app, this would open a modal to collect payment details
-    this.referralService.requestPayout('PIX', { pixKey: 'example@email.com' })
+    this.referralService.requestPayout(this.stats.pendingRewards, PaymentMethod.PIX, 'example@email.com')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {

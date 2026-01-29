@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { Navbar } from '../../../shared/navbar/navbar';
@@ -21,7 +21,7 @@ interface FormAnswer {
 
 @Component({
   selector: 'app-questionnaire',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './questionnaire.html',
   styleUrl: './questionnaire.scss'
 })
