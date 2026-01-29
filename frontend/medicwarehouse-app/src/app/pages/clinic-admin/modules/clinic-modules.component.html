@@ -1,0 +1,105 @@
+<div class="clinic-modules-container">
+  <div class="header">
+    <h1>Módulos do Sistema</h1>
+    <p class="subtitle">Gerencie os módulos disponíveis para sua clínica</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Carregando módulos...</p>
+  </div>
+
+  <div *ngIf="!loading" class="modules-content">
+    <div *ngIf="modules.length === 0" class="empty-state">
+      <mat-icon>extension</mat-icon>
+      <h3>Nenhum módulo disponível</h3>
+      <p>Não há módulos configurados para sua clínica no momento.</p>
+    </div>
+
+    <div *ngFor="let category of getCategories()" class="category-section">
+      
+      <!-- Category Header -->
+      <div class="category-header">
+        <mat-icon [style.color]="getCategoryColor(category)">
+          {{ getCategoryIcon(category) }}
+        </mat-icon>
+        <h2>{{ category }}</h2>
+      </div>
+
+      <!-- Modules Grid -->
+      <div class="modules-grid">
+        <mat-card *ngFor="let module of getCategoryModules(category)" 
+                  class="module-card"
+                  [class.disabled]="!module.isAvailableInPlan"
+                  [class.enabled]="module.isEnabled">
+          
+          <mat-card-header>
+            <div class="module-header">
+              <div class="module-title">
+                <mat-icon>{{ module.icon }}</mat-icon>
+                <h3>{{ module.displayName }}</h3>
+              </div>
+              
+              <!-- Toggle -->
+              <mat-slide-toggle 
+                *ngIf="module.isAvailableInPlan && !module.isCore"
+                [checked]="module.isEnabled"
+                (change)="toggleModule(module, $event)"
+                color="primary">
+              </mat-slide-toggle>
+
+              <!-- Core Badge -->
+              <mat-chip *ngIf="module.isCore" class="core-badge">
+                ESSENCIAL
+              </mat-chip>
+
+              <!-- Plan Upgrade Badge -->
+              <mat-chip *ngIf="!module.isAvailableInPlan" class="upgrade-badge">
+                UPGRADE NECESSÁRIO
+              </mat-chip>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="module-description">{{ module.description }}</p>
+
+            <!-- Required Modules -->
+            <div *ngIf="module.requiredModules && module.requiredModules.length > 0" class="required-modules">
+              <mat-icon class="info-icon">info</mat-icon>
+              <span>Requer: {{ module.requiredModules.join(', ') }}</span>
+            </div>
+
+            <!-- Status Indicators -->
+            <div class="status-indicators">
+              <mat-chip *ngIf="module.isEnabled" class="status-chip enabled">
+                <mat-icon>check_circle</mat-icon>
+                Habilitado
+              </mat-chip>
+              <mat-chip *ngIf="!module.isEnabled && module.isAvailableInPlan" 
+                        class="status-chip disabled">
+                <mat-icon>cancel</mat-icon>
+                Desabilitado
+              </mat-chip>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button 
+                    *ngIf="module.isEnabled && !module.isCore"
+                    (click)="openConfigDialog(module)">
+              <mat-icon>settings</mat-icon>
+              Configurar
+            </button>
+            
+            <button mat-button 
+                    *ngIf="!module.isAvailableInPlan"
+                    color="primary">
+              <mat-icon>upgrade</mat-icon>
+              Fazer Upgrade
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
