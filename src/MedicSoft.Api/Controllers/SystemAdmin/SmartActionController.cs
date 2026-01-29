@@ -178,8 +178,8 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     // DTOs
     public class ImpersonateRequest
     {
-        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
-        public int ClinicId { get; set; }
+        [Required(ErrorMessage = "ClinicId is required")]
+        public Guid ClinicId { get; set; }
     }
 
     public class ImpersonationResult
@@ -190,8 +190,8 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
     public class GrantCreditRequest
     {
-        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
-        public int ClinicId { get; set; }
+        [Required(ErrorMessage = "ClinicId is required")]
+        public Guid ClinicId { get; set; }
         
         [Range(1, 365, ErrorMessage = "Days must be between 1 and 365")]
         public int Days { get; set; }
@@ -203,8 +203,8 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
     public class ApplyDiscountRequest
     {
-        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
-        public int ClinicId { get; set; }
+        [Required(ErrorMessage = "ClinicId is required")]
+        public Guid ClinicId { get; set; }
         
         [Range(0, 100, ErrorMessage = "Percentage must be between 0 and 100")]
         public decimal Percentage { get; set; }
@@ -215,8 +215,8 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
     public class SuspendRequest
     {
-        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
-        public int ClinicId { get; set; }
+        [Required(ErrorMessage = "ClinicId is required")]
+        public Guid ClinicId { get; set; }
         
         public DateTime? ReactivationDate { get; set; }
         
@@ -227,25 +227,25 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
     public class ExportDataRequest
     {
-        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
-        public int ClinicId { get; set; }
+        [Required(ErrorMessage = "ClinicId is required")]
+        public Guid ClinicId { get; set; }
     }
 
     public class MigratePlanRequest
     {
-        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
-        public int ClinicId { get; set; }
+        [Required(ErrorMessage = "ClinicId is required")]
+        public Guid ClinicId { get; set; }
         
-        [Range(1, int.MaxValue, ErrorMessage = "NewPlanId must be greater than 0")]
-        public int NewPlanId { get; set; }
+        [Required(ErrorMessage = "NewPlanId is required")]
+        public Guid NewPlanId { get; set; }
         
         public bool ProRata { get; set; }
     }
 
     public class SendCustomEmailRequest
     {
-        [Range(1, int.MaxValue, ErrorMessage = "ClinicId must be greater than 0")]
-        public int ClinicId { get; set; }
+        [Required(ErrorMessage = "ClinicId is required")]
+        public Guid ClinicId { get; set; }
         
         [Required(ErrorMessage = "Subject is required")]
         [MaxLength(200, ErrorMessage = "Subject cannot exceed 200 characters")]
