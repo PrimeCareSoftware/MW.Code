@@ -1,0 +1,248 @@
+<div class="modal-backdrop" (click)="onClose()">
+  <div class="smart-actions-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h2>Smart Actions</h2>
+        @if (clinicName) {
+          <p class="clinic-info">{{ clinicName }} (ID: {{ clinicId }})</p>
+        }
+      </div>
+      <button class="btn-close" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="modal-content">
+      <!-- Action Selector -->
+      <div class="actions-sidebar">
+        @for (action of actions; track action.id) {
+          <button 
+            class="action-button"
+            [class.active]="selectedAction() === action.id"
+            (click)="selectAction(action.id)"
+          >
+            <span class="action-icon">{{ action.icon }}</span>
+            <div class="action-info">
+              <span class="action-label">{{ action.label }}</span>
+              <span class="action-desc">{{ action.description }}</span>
+            </div>
+          </button>
+        }
+      </div>
+
+      <!-- Action Forms -->
+      <div class="action-form-container">
+        @if (actionError()) {
+          <div class="error-message">
+            {{ actionError() }}
+          </div>
+        }
+
+        <form (ngSubmit)="onSubmit()">
+          <!-- Impersonate -->
+          @if (selectedAction() === 'impersonate') {
+            <div class="form-content">
+              <h3>👤 Impersonate Clinic</h3>
+              <p class="description">
+                This will generate a temporary access token allowing you to access the clinic's account as an administrator.
+                The session will open in a new tab.
+              </p>
+              <div class="warning-box">
+                ⚠️ <strong>Warning:</strong> All actions taken during impersonation will be logged and attributed to your admin account.
+              </div>
+            </div>
+          }
+
+          <!-- Grant Credit -->
+          @if (selectedAction() === 'grantCredit') {
+            <div class="form-content">
+              <h3>💰 Grant Credit Days</h3>
+              <p class="description">Add free days to the clinic's subscription as credit or compensation.</p>
+
+              <div class="form-group">
+                <label for="creditDays">Number of Days *</label>
+                <input 
+                  type="number" 
+                  id="creditDays" 
+                  [(ngModel)]="grantCreditForm.days"
+                  name="creditDays"
+                  min="1"
+                  max="365"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="creditReason">Reason *</label>
+                <textarea 
+                  id="creditReason" 
+                  [(ngModel)]="grantCreditForm.reason"
+                  name="creditReason"
+                  rows="3"
+                  required
+                  placeholder="e.g., Compensation for service interruption"
+                ></textarea>
+              </div>
+            </div>
+          }
+
+          <!-- Apply Discount -->
+          @if (selectedAction() === 'applyDiscount') {
+            <div class="form-content">
+              <h3>🏷️ Apply Discount</h3>
+              <p class="description">Apply a temporary discount to the clinic's subscription.</p>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="discountPercentage">Discount Percentage *</label>
+                  <input 
+                    type="number" 
+                    id="discountPercentage" 
+                    [(ngModel)]="applyDiscountForm.percentage"
+                    name="discountPercentage"
+                    min="1"
+                    max="100"
+                    required
+                  >
+                  <small>Enter a value between 1 and 100</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="discountMonths">Duration (months) *</label>
+                  <input 
+                    type="number" 
+                    id="discountMonths" 
+                    [(ngModel)]="applyDiscountForm.months"
+                    name="discountMonths"
+                    min="1"
+                    max="24"
+                    required
+                  >
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Suspend -->
+          @if (selectedAction() === 'suspend') {
+            <div class="form-content">
+              <h3>⏸️ Suspend Clinic</h3>
+              <p class="description">Temporarily suspend the clinic's access to the system.</p>
+
+              <div class="form-group">
+                <label for="suspendReason">Reason *</label>
+                <textarea 
+                  id="suspendReason" 
+                  [(ngModel)]="suspendForm.reason"
+                  name="suspendReason"
+                  rows="3"
+                  required
+                  placeholder="e.g., Non-payment, policy violation"
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="reactivationDate">Reactivation Date (Optional)</label>
+                <input 
+                  type="datetime-local" 
+                  id="reactivationDate" 
+                  [(ngModel)]="suspendForm.reactivationDate"
+                  name="reactivationDate"
+                >
+                <small>Leave empty for indefinite suspension</small>
+              </div>
+
+              <div class="warning-box">
+                ⚠️ <strong>Warning:</strong> The clinic will immediately lose access to all system features.
+              </div>
+            </div>
+          }
+
+          <!-- Export Data -->
+          @if (selectedAction() === 'exportData') {
+            <div class="form-content">
+              <h3>📥 Export Clinic Data</h3>
+              <p class="description">
+                Export all data associated with this clinic. This includes patient records, appointments, 
+                billing information, and system logs. The data will be downloaded as a ZIP file.
+              </p>
+              <div class="info-box">
+                ℹ️ This operation may take a few moments for clinics with large amounts of data.
+              </div>
+            </div>
+          }
+
+          <!-- Migrate Plan -->
+          @if (selectedAction() === 'migratePlan') {
+            <div class="form-content">
+              <h3>🔄 Migrate to New Plan</h3>
+              <p class="description">Move the clinic to a different subscription plan.</p>
+
+              <div class="form-group">
+                <label for="newPlanId">New Plan ID *</label>
+                <input 
+                  type="text" 
+                  id="newPlanId" 
+                  [(ngModel)]="migratePlanForm.newPlanId"
+                  name="newPlanId"
+                  required
+                  placeholder="e.g., basic, professional, enterprise"
+                >
+                <small>Enter the identifier of the target plan</small>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    [(ngModel)]="migratePlanForm.proRata"
+                    name="proRata"
+                  >
+                  <span>Apply pro-rata billing adjustment</span>
+                </label>
+                <small>If checked, the clinic will be credited/charged proportionally based on the current billing cycle</small>
+              </div>
+            </div>
+          }
+
+          <!-- Send Email -->
+          @if (selectedAction() === 'sendEmail') {
+            <div class="form-content">
+              <h3>📧 Send Custom Email</h3>
+              <p class="description">Send a personalized email to the clinic's primary contact.</p>
+
+              <div class="form-group">
+                <label for="emailSubject">Subject *</label>
+                <input 
+                  type="text" 
+                  id="emailSubject" 
+                  [(ngModel)]="sendEmailForm.subject"
+                  name="emailSubject"
+                  required
+                  placeholder="Email subject"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="emailBody">Message *</label>
+                <textarea 
+                  id="emailBody" 
+                  [(ngModel)]="sendEmailForm.body"
+                  name="emailBody"
+                  rows="8"
+                  required
+                  placeholder="Email message body..."
+                ></textarea>
+              </div>
+            </div>
+          }
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="onClose()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+              {{ submitting() ? 'Processing...' : 'Execute Action' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

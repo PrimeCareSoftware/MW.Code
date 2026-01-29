@@ -1,0 +1,103 @@
+<app-navbar></app-navbar>
+
+<div class="workflows-list">
+  <div class="header">
+    <div>
+      <h1>Workflow Automation</h1>
+      <p class="subtitle">Automate administrative tasks with event-driven workflows</p>
+    </div>
+    <button class="btn btn-primary" (click)="createWorkflow()">
+      <span>➕ Create Workflow</span>
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Loading workflows...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Error: {{ error() }}</p>
+      <button (click)="loadWorkflows()" class="btn-retry">Try again</button>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table class="workflows-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Trigger</th>
+            <th>Actions</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (workflow of workflows(); track workflow.id) {
+            <tr>
+              <td>
+                <div class="workflow-info">
+                  <div class="workflow-name">{{ workflow.name }}</div>
+                  @if (workflow.description) {
+                    <div class="workflow-desc">{{ workflow.description }}</div>
+                  }
+                </div>
+              </td>
+              <td>
+                <span class="trigger-badge">{{ workflow.triggerType }}</span>
+              </td>
+              <td>
+                <div class="action-summary">
+                  <span class="action-count">{{ getActionCount(workflow) }} actions</span>
+                  <span class="action-types">{{ getActionTypesDisplay(workflow) }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="workflow.isEnabled" [class.inactive]="!workflow.isEnabled">
+                  {{ workflow.isEnabled ? '✅ Enabled' : '🚫 Disabled' }}
+                </span>
+              </td>
+              <td>
+                <div class="date-info">
+                  <div>{{ workflow.createdAt | date: 'short' }}</div>
+                  <div class="created-by">by {{ workflow.createdBy }}</div>
+                </div>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-icon" (click)="editWorkflow(workflow.id)" title="Edit">
+                    ✏️
+                  </button>
+                  <button 
+                    class="btn-icon" 
+                    [class.btn-danger]="workflow.isEnabled"
+                    [class.btn-success]="!workflow.isEnabled"
+                    (click)="toggleWorkflow(workflow.id)" 
+                    [title]="workflow.isEnabled ? 'Disable' : 'Enable'"
+                  >
+                    {{ workflow.isEnabled ? '🚫' : '✅' }}
+                  </button>
+                  <button class="btn-icon" (click)="viewExecutions(workflow.id)" title="View Executions">
+                    📊
+                  </button>
+                  <button class="btn-icon" (click)="testWorkflow(workflow.id)" title="Test Workflow">
+                    🧪
+                  </button>
+                  <button class="btn-icon btn-danger" (click)="deleteWorkflow(workflow.id, workflow.name)" title="Delete">
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (workflows().length === 0) {
+        <div class="empty-state">
+          <p>No workflows created yet</p>
+          <button class="btn btn-primary" (click)="createWorkflow()">Create your first workflow</button>
+        </div>
+      }
+    </div>
+  }
+</div>

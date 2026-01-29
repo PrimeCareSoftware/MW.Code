@@ -1,0 +1,81 @@
+<app-navbar></app-navbar>
+
+<div class="workflow-executions">
+  <div class="header">
+    <div>
+      <button class="btn-back" (click)="backToWorkflows()">← Back to Workflows</button>
+      <h1>Workflow Executions</h1>
+      @if (workflow()) {
+        <p class="subtitle">{{ workflow()!.name }}</p>
+      }
+    </div>
+    <button class="btn btn-primary" (click)="loadExecutions()">
+      🔄 Refresh
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Loading executions...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Error: {{ error() }}</p>
+      <button (click)="loadExecutions()" class="btn-retry">Try again</button>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table class="executions-table">
+        <thead>
+          <tr>
+            <th>Execution ID</th>
+            <th>Status</th>
+            <th>Started At</th>
+            <th>Duration</th>
+            <th>Actions</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (execution of executions(); track execution.id) {
+            <tr>
+              <td>
+                <span class="execution-id">#{{ execution.id }}</span>
+              </td>
+              <td>
+                <span class="status-badge" [class]="getStatusClass(execution.status)">
+                  {{ getStatusIcon(execution.status) }} {{ execution.status }}
+                </span>
+              </td>
+              <td>{{ execution.startedAt | date: 'short' }}</td>
+              <td>{{ getDuration(execution) }}</td>
+              <td>
+                <div class="action-stats">
+                  @if (execution.actionExecutions) {
+                    <span class="stat">
+                      ✅ {{ execution.actionExecutions.filter(a => a.status === 'completed').length }}
+                    </span>
+                    @if (execution.actionExecutions.filter(a => a.status === 'failed').length > 0) {
+                      <span class="stat failed">
+                        ❌ {{ execution.actionExecutions.filter(a => a.status === 'failed').length }}
+                      </span>
+                    }
+                  }
+                </div>
+              </td>
+              <td>
+                <button class="btn-icon" (click)="viewExecutionDetails(execution.id)" title="View Details">
+                  👁️
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (executions().length === 0) {
+        <div class="empty-state">
+          <p>No executions recorded yet</p>
+        </div>
+      }
+    </div>
+  }
+</div>

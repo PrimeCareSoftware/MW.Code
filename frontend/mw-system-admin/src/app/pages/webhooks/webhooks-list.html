@@ -1,0 +1,213 @@
+<app-navbar></app-navbar>
+
+<div class="webhooks-list">
+  <div class="header">
+    <div>
+      <h1>Webhook Subscriptions</h1>
+      <p class="subtitle">Configure webhook endpoints to receive real-time system events</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      <span>➕ Create Webhook</span>
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Loading webhooks...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Error: {{ error() }}</p>
+      <button (click)="loadSubscriptions()" class="btn-retry">Try again</button>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table class="webhooks-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Target URL</th>
+            <th>Events</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (webhook of subscriptions(); track webhook.id) {
+            <tr>
+              <td>
+                <div class="webhook-info">
+                  <div class="webhook-name">{{ webhook.name }}</div>
+                  @if (webhook.description) {
+                    <div class="webhook-desc">{{ webhook.description }}</div>
+                  }
+                </div>
+              </td>
+              <td>
+                <div class="url-info">
+                  <code class="url">{{ webhook.targetUrl }}</code>
+                  <div class="retry-config">
+                    Retries: {{ webhook.maxRetries }} ({{ webhook.retryDelaySeconds }}s delay)
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="events-summary">
+                  <span class="event-count">{{ webhook.subscribedEvents.length }} events</span>
+                  <span class="event-types">{{ getEventLabels(webhook.subscribedEvents) }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="webhook.isActive" [class.inactive]="!webhook.isActive">
+                  {{ webhook.isActive ? '✅ Active' : '🚫 Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="date-info">
+                  {{ webhook.createdAt | date: 'short' }}
+                </div>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-icon" (click)="openEditModal(webhook)" title="Edit">
+                    ✏️
+                  </button>
+                  <button 
+                    class="btn-icon" 
+                    [class.btn-danger]="webhook.isActive"
+                    [class.btn-success]="!webhook.isActive"
+                    (click)="toggleStatus(webhook.id, webhook.isActive)" 
+                    [title]="webhook.isActive ? 'Deactivate' : 'Activate'"
+                  >
+                    {{ webhook.isActive ? '🚫' : '✅' }}
+                  </button>
+                  <button class="btn-icon" (click)="regenerateSecret(webhook.id)" title="Regenerate Secret">
+                    🔑
+                  </button>
+                  <button class="btn-icon" (click)="viewDeliveries(webhook.id)" title="View Deliveries">
+                    📊
+                  </button>
+                  <button class="btn-icon btn-danger" (click)="deleteSubscription(webhook.id, webhook.name)" title="Delete">
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (subscriptions().length === 0) {
+        <div class="empty-state">
+          <p>No webhooks configured yet</p>
+          <button class="btn btn-primary" (click)="openCreateModal()">Create your first webhook</button>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Create/Edit Modal -->
+@if (showModal) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingSubscription ? 'Edit Webhook' : 'Create Webhook' }}</h2>
+        <button class="btn-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+          @if (modalError()) {
+            <div class="error-message">{{ modalError() }}</div>
+          }
+
+          <div class="form-group">
+            <label for="name">Name *</label>
+            <input 
+              type="text" 
+              id="name" 
+              [(ngModel)]="formData.name" 
+              name="name" 
+              required 
+              placeholder="e.g., Clinic Events Webhook"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea 
+              id="description" 
+              [(ngModel)]="formData.description" 
+              name="description" 
+              rows="2"
+              placeholder="Optional description of this webhook"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="targetUrl">Target URL *</label>
+            <input 
+              type="url" 
+              id="targetUrl" 
+              [(ngModel)]="formData.targetUrl" 
+              name="targetUrl" 
+              required 
+              placeholder="https://your-domain.com/webhooks/endpoint"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Subscribed Events *</label>
+            <div class="events-grid">
+              @for (event of availableEvents; track event.value) {
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    [checked]="isEventSelected(event.value)"
+                    (change)="toggleEventSelection(event.value)"
+                  >
+                  <span>{{ event.label }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="maxRetries">Max Retries *</label>
+              <input 
+                type="number" 
+                id="maxRetries" 
+                [(ngModel)]="formData.maxRetries" 
+                name="maxRetries" 
+                required 
+                min="0" 
+                max="10"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="retryDelaySeconds">Retry Delay (seconds) *</label>
+              <input 
+                type="number" 
+                id="retryDelaySeconds" 
+                [(ngModel)]="formData.retryDelaySeconds" 
+                name="retryDelaySeconds" 
+                required 
+                min="1" 
+                max="3600"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+            {{ submitting() ? 'Saving...' : (editingSubscription ? 'Update' : 'Create') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
