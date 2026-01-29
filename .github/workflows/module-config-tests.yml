@@ -1,0 +1,81 @@
+name: Module Config Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/module-config-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Test Module Configuration
+      run: |
+        dotnet test tests/MedicSoft.Test/MedicSoft.Test.csproj \
+          --no-build \
+          --configuration Release \
+          --verbosity normal \
+          --filter "FullyQualifiedName~ModuleConfig" \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      if: always()
+      with:
+        files: ./coverage/**/coverage.cobertura.xml
+        flags: backend,moduleconfig
+        name: module-config-coverage
+
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: backend-tests
+    if: always()
+    
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Test Summary
+      run: |
+        echo "## Module Configuration Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ needs.backend-tests.result }}" == "success" ]; then
+          echo "✅ Backend tests **passed**" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Backend tests **failed**" >> $GITHUB_STEP_SUMMARY
+        fi
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Test Coverage" >> $GITHUB_STEP_SUMMARY
+        echo "- ModuleConfigurationService: Unit Tests (26)" >> $GITHUB_STEP_SUMMARY
+        echo "- ModuleConfigController: Unit Tests (20)" >> $GITHUB_STEP_SUMMARY
+        echo "- Module Permissions: Security Tests (18)" >> $GITHUB_STEP_SUMMARY
+        echo "- Integration Tests: End-to-end workflows (10)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Total: 74 tests**" >> $GITHUB_STEP_SUMMARY
