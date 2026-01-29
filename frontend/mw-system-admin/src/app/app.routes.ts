@@ -139,6 +139,40 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Phase 4: Workflow Automation - Workflows
+  {
+    path: 'workflows',
+    loadComponent: () => import('./pages/workflows/workflows-list').then(m => m.WorkflowsList),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'workflows/create',
+    loadComponent: () => import('./pages/workflows/workflow-editor').then(m => m.WorkflowEditor),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'workflows/:id/edit',
+    loadComponent: () => import('./pages/workflows/workflow-editor').then(m => m.WorkflowEditor),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'workflows/:id/executions',
+    loadComponent: () => import('./pages/workflows/workflow-executions').then(m => m.WorkflowExecutions),
+    canActivate: [systemAdminGuard]
+  },
+  
+  // Phase 4: Workflow Automation - Webhooks
+  {
+    path: 'webhooks',
+    loadComponent: () => import('./pages/webhooks/webhooks-list').then(m => m.WebhooksList),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'webhooks/:id/deliveries',
+    loadComponent: () => import('./pages/webhooks/webhook-deliveries').then(m => m.WebhookDeliveries),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];

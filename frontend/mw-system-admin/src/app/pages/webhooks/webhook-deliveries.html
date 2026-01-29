@@ -1,0 +1,170 @@
+<app-navbar></app-navbar>
+
+<div class="webhook-deliveries">
+  <div class="header">
+    <div>
+      <button class="btn-back" (click)="backToWebhooks()">← Back to Webhooks</button>
+      <h1>Webhook Deliveries</h1>
+      @if (subscription()) {
+        <p class="subtitle">{{ subscription()!.name }} - {{ subscription()!.targetUrl }}</p>
+      }
+    </div>
+    <button class="btn btn-primary" (click)="loadDeliveries()">
+      🔄 Refresh
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Loading deliveries...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Error: {{ error() }}</p>
+      <button (click)="loadDeliveries()" class="btn-retry">Try again</button>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table class="deliveries-table">
+        <thead>
+          <tr>
+            <th>Delivery ID</th>
+            <th>Event</th>
+            <th>Status</th>
+            <th>Attempts</th>
+            <th>Response</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (delivery of deliveries(); track delivery.id) {
+            <tr>
+              <td>
+                <span class="delivery-id">#{{ delivery.id }}</span>
+              </td>
+              <td>
+                <span class="event-badge">{{ delivery.event }}</span>
+              </td>
+              <td>
+                <span class="status-badge" [class]="getStatusClass(delivery.status)">
+                  {{ getStatusIcon(delivery.status) }} {{ delivery.status }}
+                </span>
+              </td>
+              <td>
+                <span class="attempt-count">{{ delivery.attemptCount }}</span>
+              </td>
+              <td>
+                @if (delivery.responseCode) {
+                  <div class="response-info">
+                    <span class="response-code">{{ delivery.responseCode }}</span>
+                    @if (delivery.deliveredAt) {
+                      <span class="delivered-time">{{ delivery.deliveredAt | date: 'short' }}</span>
+                    }
+                  </div>
+                } @else {
+                  <span class="no-response">—</span>
+                }
+              </td>
+              <td>{{ delivery.createdAt | date: 'short' }}</td>
+              <td>
+                <div class="actions">
+                  <button class="btn-icon" (click)="viewDeliveryDetails(delivery)" title="View Details">
+                    👁️
+                  </button>
+                  @if (delivery.status === 'failed') {
+                    <button class="btn-icon" (click)="retryDelivery(delivery.id)" title="Retry">
+                      🔄
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (deliveries().length === 0) {
+        <div class="empty-state">
+          <p>No deliveries recorded yet</p>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Details Modal -->
+@if (selectedDelivery()) {
+  <div class="modal-backdrop" (click)="closeDetailsModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Delivery Details</h2>
+        <button class="btn-close" (click)="closeDetailsModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="details-section">
+          <h3>Delivery Information</h3>
+          <div class="detail-row">
+            <span class="label">ID:</span>
+            <span class="value">{{ selectedDelivery()!.id }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Event:</span>
+            <span class="value">{{ selectedDelivery()!.event }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Status:</span>
+            <span class="value">
+              <span class="status-badge" [class]="getStatusClass(selectedDelivery()!.status)">
+                {{ getStatusIcon(selectedDelivery()!.status) }} {{ selectedDelivery()!.status }}
+              </span>
+            </span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Attempts:</span>
+            <span class="value">{{ selectedDelivery()!.attemptCount }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Created:</span>
+            <span class="value">{{ selectedDelivery()!.createdAt | date: 'full' }}</span>
+          </div>
+          @if (selectedDelivery()!.deliveredAt) {
+            <div class="detail-row">
+              <span class="label">Delivered:</span>
+              <span class="value">{{ selectedDelivery()!.deliveredAt | date: 'full' }}</span>
+            </div>
+          }
+        </div>
+
+        @if (selectedDelivery()!.responseCode) {
+          <div class="details-section">
+            <h3>Response</h3>
+            <div class="detail-row">
+              <span class="label">Status Code:</span>
+              <span class="value">{{ selectedDelivery()!.responseCode }}</span>
+            </div>
+            @if (selectedDelivery()!.responseBody) {
+              <div class="detail-row">
+                <span class="label">Response Body:</span>
+              </div>
+              <pre class="code-block">{{ selectedDelivery()!.responseBody }}</pre>
+            }
+          </div>
+        }
+
+        <div class="details-section">
+          <h3>Payload</h3>
+          <pre class="code-block">{{ formatPayload(selectedDelivery()!.payload) }}</pre>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        @if (selectedDelivery()!.status === 'failed') {
+          <button class="btn btn-primary" (click)="retryDelivery(selectedDelivery()!.id); closeDetailsModal()">
+            🔄 Retry Delivery
+          </button>
+        }
+        <button class="btn btn-secondary" (click)="closeDetailsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+}

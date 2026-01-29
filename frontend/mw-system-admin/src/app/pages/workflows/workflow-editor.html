@@ -1,0 +1,148 @@
+<app-navbar></app-navbar>
+
+<div class="workflow-editor">
+  <div class="header">
+    <div>
+      <h1>{{ workflowId ? 'Edit Workflow' : 'Create New Workflow' }}</h1>
+      <p class="subtitle">Configure automated workflow with triggers and actions</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+      <button class="btn btn-primary" (click)="onSubmit()" [disabled]="saving()">
+        {{ saving() ? 'Saving...' : 'Save Workflow' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Loading workflow...</div>
+  } @else {
+    <form (ngSubmit)="onSubmit()" class="editor-form">
+      @if (error()) {
+        <div class="alert alert-error">{{ error() }}</div>
+      }
+
+      <div class="section">
+        <h2>Basic Information</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Workflow Name *</label>
+            <input type="text" [(ngModel)]="formData.name" name="name" required class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label>Description</label>
+            <textarea [(ngModel)]="formData.description" name="description" rows="3" class="form-control"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="formData.isEnabled" name="isEnabled">
+              <span>Enable workflow</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="formData.stopOnError" name="stopOnError">
+              <span>Stop on error (abort workflow if any action fails)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Trigger Configuration</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Trigger Type *</label>
+            <select [(ngModel)]="formData.triggerType" name="triggerType" required class="form-control">
+              @for (type of triggerTypes; track type.value) {
+                <option [value]="type.value">{{ type.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Trigger Configuration (JSON)</label>
+            <textarea [(ngModel)]="formData.triggerConfig" name="triggerConfig" rows="4" class="form-control code" placeholder='{"event": "clinic.created"}'></textarea>
+            <small class="form-help">
+              @if (formData.triggerType === 'event') {
+                Example: {"event": "clinic.created"}
+              } @else if (formData.triggerType === 'time') {
+                Example: {"cron": "0 9 * * *"}
+              }
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>Actions ({{ actions.length }})</h2>
+          <button type="button" class="btn btn-success" (click)="addAction()">
+            ➕ Add Action
+          </button>
+        </div>
+
+        @if (actions.length === 0) {
+          <div class="empty-actions">
+            <p>No actions configured yet</p>
+            <button type="button" class="btn btn-primary" (click)="addAction()">Add First Action</button>
+          </div>
+        } @else {
+          <div class="actions-list">
+            @for (action of actions; track $index; let i = $index) {
+              <div class="action-card">
+                <div class="action-header">
+                  <div class="action-title">
+                    <span class="action-icon">{{ getActionIcon(action.actionType) }}</span>
+                    <span class="action-order">Step {{ i + 1 }}</span>
+                  </div>
+                  <div class="action-controls">
+                    <button type="button" class="btn-icon" (click)="moveActionUp(i)" [disabled]="i === 0" title="Move Up">⬆️</button>
+                    <button type="button" class="btn-icon" (click)="moveActionDown(i)" [disabled]="i === actions.length - 1" title="Move Down">⬇️</button>
+                    <button type="button" class="btn-icon btn-danger" (click)="removeAction(i)" title="Remove">🗑️</button>
+                  </div>
+                </div>
+
+                <div class="action-body">
+                  <div class="form-group">
+                    <label>Action Type</label>
+                    <select [(ngModel)]="action.actionType" [name]="'actionType_' + i" class="form-control">
+                      @for (type of actionTypes; track type.value) {
+                        <option [value]="type.value">{{ type.icon }} {{ type.label }}</option>
+                      }
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Configuration (JSON)</label>
+                    <textarea [(ngModel)]="action.config" [name]="'config_' + i" rows="4" class="form-control code" placeholder='{"to": "user@example.com", "subject": "Hello"}'></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Condition (Optional JSON)</label>
+                    <input type="text" [(ngModel)]="action.condition" [name]="'condition_' + i" class="form-control code" placeholder='{"field": "status", "operator": "equals", "value": "active"}'>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Delay (seconds)</label>
+                    <input type="number" [(ngModel)]="action.delaySeconds" [name]="'delay_' + i" min="0" class="form-control">
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          {{ saving() ? 'Saving...' : 'Save Workflow' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

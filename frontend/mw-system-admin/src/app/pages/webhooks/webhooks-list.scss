@@ -1,0 +1,380 @@
+.webhooks-list {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #1a1a1a;
+    }
+
+    .subtitle {
+      margin: 0.5rem 0 0;
+      color: #666;
+      font-size: 1rem;
+    }
+  }
+
+  .loading, .error {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .error {
+    color: #dc3545;
+
+    .btn-retry {
+      margin-top: 1rem;
+      padding: 0.5rem 1.5rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
+        background: #0056b3;
+      }
+    }
+  }
+
+  .table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .webhooks-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      background: #f8f9fa;
+      
+      th {
+        text-align: left;
+        padding: 1rem;
+        font-weight: 600;
+        color: #495057;
+        border-bottom: 2px solid #dee2e6;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #dee2e6;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background: #f8f9fa;
+        }
+      }
+
+      td {
+        padding: 1rem;
+        vertical-align: top;
+      }
+    }
+  }
+
+  .webhook-info {
+    .webhook-name {
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .webhook-desc {
+      font-size: 0.875rem;
+      color: #666;
+    }
+  }
+
+  .url-info {
+    .url {
+      display: block;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      color: #495057;
+      background: #f8f9fa;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      word-break: break-all;
+      margin-bottom: 0.25rem;
+    }
+
+    .retry-config {
+      font-size: 0.75rem;
+      color: #666;
+    }
+  }
+
+  .events-summary {
+    .event-count {
+      display: block;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .event-types {
+      display: block;
+      font-size: 0.75rem;
+      color: #666;
+      line-height: 1.4;
+    }
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    &.active {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    &.inactive {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  }
+
+  .date-info {
+    font-size: 0.875rem;
+    color: #495057;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-icon {
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+    }
+
+    &.btn-danger {
+      &:hover {
+        background: #f8d7da;
+        border-color: #dc3545;
+      }
+    }
+
+    &.btn-success {
+      &:hover {
+        background: #d4edda;
+        border-color: #28a745;
+      }
+    }
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+
+    &.btn-primary {
+      background: #007bff;
+      color: white;
+
+      &:hover {
+        background: #0056b3;
+      }
+    }
+
+    &.btn-secondary {
+      background: #6c757d;
+      color: white;
+
+      &:hover {
+        background: #5a6268;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+
+    p {
+      margin-bottom: 1.5rem;
+      font-size: 1.125rem;
+    }
+  }
+}
+
+// Modal styles
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #1a1a1a;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6c757d;
+      padding: 0;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: #1a1a1a;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #495057;
+      }
+
+      input, textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 1rem;
+
+        &:focus {
+          outline: none;
+          border-color: #007bff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
+
+      textarea {
+        resize: vertical;
+      }
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 4px;
+
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+
+        input[type="checkbox"] {
+          width: auto;
+          cursor: pointer;
+        }
+
+        span {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid #dee2e6;
+  }
+}
