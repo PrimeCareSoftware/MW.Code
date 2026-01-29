@@ -32,6 +32,10 @@ export const CLINIC_ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./public-display/public-display.component').then(m => m.PublicDisplayComponent)
       },
       {
+        path: 'modules',
+        loadComponent: () => import('./modules/clinic-modules.component').then(m => m.ClinicModulesComponent)
+      },
+      {
         path: '',
         redirectTo: 'info',
         pathMatch: 'full'
