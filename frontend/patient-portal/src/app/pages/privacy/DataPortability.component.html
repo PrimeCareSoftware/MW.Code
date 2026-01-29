@@ -1,0 +1,78 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>download</mat-icon>
+      Portabilidade de Dados
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="portability-content">
+      <div class="info-section">
+        <mat-icon color="primary">info</mat-icon>
+        <div>
+          <h3>Direito à Portabilidade</h3>
+          <p>
+            Você tem o direito de solicitar uma cópia de todos os seus dados pessoais
+            armazenados em nosso sistema. Escolha o formato desejado e faça o download.
+          </p>
+        </div>
+      </div>
+
+      <div class="format-selection">
+        <h3>Selecione o Formato de Exportação</h3>
+        
+        <mat-radio-group [(ngModel)]="selectedFormat" class="format-options">
+          <div *ngFor="let format of formats" class="format-option">
+            <mat-radio-button [value]="format.value">
+              <div class="format-details">
+                <div class="format-header">
+                  <mat-icon>{{ format.icon }}</mat-icon>
+                  <strong>{{ format.label }}</strong>
+                </div>
+                <p class="format-description">{{ format.description }}</p>
+              </div>
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Preparando exportação...</p>
+      </div>
+
+      <div *ngIf="error" class="message-container error">
+        <mat-icon>error</mat-icon>
+        <p>{{ error }}</p>
+      </div>
+
+      <div *ngIf="successMessage" class="message-container success">
+        <mat-icon>check_circle</mat-icon>
+        <p>{{ successMessage }}</p>
+      </div>
+
+      <div class="export-info">
+        <h4>O que será exportado?</h4>
+        <ul>
+          <li>Dados pessoais (nome, CPF, e-mail, telefone, endereço)</li>
+          <li>Histórico de consultas e agendamentos</li>
+          <li>Registros médicos e resultados de exames</li>
+          <li>Histórico de consentimentos</li>
+          <li>Logs de acesso aos seus dados (quando aplicável)</li>
+        </ul>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="executeExport()"
+      [disabled]="loading">
+      <mat-icon>download</mat-icon>
+      Exportar Dados
+    </button>
+  </mat-card-actions>
+</mat-card>

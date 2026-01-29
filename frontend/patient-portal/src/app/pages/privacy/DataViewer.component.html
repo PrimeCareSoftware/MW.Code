@@ -1,0 +1,135 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>visibility</mat-icon>
+      Visualizar Meus Dados
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Carregando seus dados...</p>
+    </div>
+
+    <div *ngIf="error && !loading" class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadAllData()">
+        <mat-icon>refresh</mat-icon>
+        Tentar Novamente
+      </button>
+    </div>
+
+    <div *ngIf="!loading && !error" class="data-container">
+      <!-- Personal Data Section -->
+      <mat-expansion-panel class="data-section" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>person</mat-icon>
+            Dados Pessoais
+          </mat-panel-title>
+          <mat-panel-description>
+            Informações básicas do cadastro
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div *ngIf="personalData" class="data-content">
+          <div class="data-item">
+            <strong>Nome:</strong>
+            <span>{{ personalData.nome }}</span>
+          </div>
+          <div class="data-item">
+            <strong>CPF:</strong>
+            <span>{{ personalData.cpf }}</span>
+          </div>
+          <div class="data-item">
+            <strong>Data de Nascimento:</strong>
+            <span>{{ formatDate(personalData.dataNascimento) }}</span>
+          </div>
+          <div class="data-item">
+            <strong>E-mail:</strong>
+            <span>{{ personalData.email }}</span>
+          </div>
+          <div class="data-item">
+            <strong>Telefone:</strong>
+            <span>{{ personalData.telefone }}</span>
+          </div>
+          <div class="data-item">
+            <strong>Endereço:</strong>
+            <span>{{ personalData.endereco }}</span>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- Medical Records Section -->
+      <mat-expansion-panel class="data-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>medical_services</mat-icon>
+            Registros Médicos
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ medicalRecords.length }} registro(s) encontrado(s)
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="data-content">
+          <div *ngIf="medicalRecords.length === 0" class="no-data">
+            Nenhum registro médico encontrado.
+          </div>
+          <div *ngFor="let record of medicalRecords" class="record-item">
+            <div class="record-header">
+              <mat-chip>{{ record.tipo }}</mat-chip>
+              <span class="record-date">{{ formatDate(record.data) }}</span>
+            </div>
+            <div class="record-body">
+              <p><strong>Descrição:</strong> {{ record.descricao }}</p>
+              <p><strong>Profissional:</strong> {{ record.profissional }}</p>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- Appointments Section -->
+      <mat-expansion-panel class="data-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>event</mat-icon>
+            Consultas e Agendamentos
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ appointments.length }} agendamento(s) encontrado(s)
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="data-content">
+          <div *ngIf="appointments.length === 0" class="no-data">
+            Nenhum agendamento encontrado.
+          </div>
+          <div *ngFor="let appointment of appointments" class="record-item">
+            <div class="record-header">
+              <mat-chip [color]="getStatusColor(appointment.status)">
+                {{ appointment.status }}
+              </mat-chip>
+              <span class="record-date">
+                {{ formatDate(appointment.data) }} às {{ appointment.hora }}
+              </span>
+            </div>
+            <div class="record-body">
+              <p><strong>Tipo:</strong> {{ appointment.tipo }}</p>
+              <p><strong>Profissional:</strong> {{ appointment.profissional }}</p>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="loadAllData()">
+      <mat-icon>refresh</mat-icon>
+      Atualizar Dados
+    </button>
+  </mat-card-actions>
+</mat-card>

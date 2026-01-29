@@ -1,0 +1,166 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>delete_forever</mat-icon>
+      Solicitação de Exclusão de Dados
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="!submitted" class="deletion-content">
+      <div class="warning-section">
+        <mat-icon color="warn">warning</mat-icon>
+        <div>
+          <h3>Atenção: Ação Irreversível</h3>
+          <p>
+            A exclusão de dados é uma ação permanente. Certifique-se de que compreende
+            as implicações antes de prosseguir com esta solicitação.
+          </p>
+        </div>
+      </div>
+
+      <mat-stepper linear #stepper>
+        <!-- Step 1: Select Request Type -->
+        <mat-step [completed]="isStep1Valid()">
+          <ng-template matStepLabel>Tipo de Solicitação</ng-template>
+          
+          <div class="step-content">
+            <h3>Selecione o tipo de exclusão desejada</h3>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Tipo de Exclusão</mat-label>
+              <mat-select [(ngModel)]="requestData.requestType" required>
+                <mat-option *ngFor="let type of requestTypes" [value]="type.value">
+                  <strong>{{ type.label }}</strong>
+                  <br>
+                  <small>{{ type.description }}</small>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="requestData.requestType" class="type-info">
+              <mat-icon color="primary">info</mat-icon>
+              <p>{{ getRequestTypeDescription() }}</p>
+            </div>
+
+            <div class="step-actions">
+              <button mat-raised-button color="primary" matStepperNext [disabled]="!isStep1Valid()">
+                Próximo
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 2: Provide Reason -->
+        <mat-step [completed]="isStep2Valid()">
+          <ng-template matStepLabel>Motivo</ng-template>
+          
+          <div class="step-content">
+            <h3>Por favor, informe o motivo da solicitação</h3>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Motivo da Exclusão</mat-label>
+              <textarea 
+                matInput 
+                [(ngModel)]="requestData.reason"
+                rows="6"
+                placeholder="Descreva o motivo da sua solicitação (mínimo 10 caracteres)"
+                required>
+              </textarea>
+              <mat-hint align="end">{{ requestData.reason.length }} / 10 caracteres mínimos</mat-hint>
+            </mat-form-field>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                Voltar
+              </button>
+              <button mat-raised-button color="primary" matStepperNext [disabled]="!isStep2Valid()">
+                Próximo
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 3: Confirmation -->
+        <mat-step [completed]="isStep3Valid()">
+          <ng-template matStepLabel>Confirmação</ng-template>
+          
+          <div class="step-content">
+            <h3>Confirme sua solicitação</h3>
+
+            <div class="confirmation-summary">
+              <h4>Resumo da Solicitação</h4>
+              <div class="summary-item">
+                <strong>Tipo:</strong>
+                <span>{{ requestTypes.find(t => t.value === requestData.requestType)?.label }}</span>
+              </div>
+              <div class="summary-item">
+                <strong>Motivo:</strong>
+                <span>{{ requestData.reason }}</span>
+              </div>
+            </div>
+
+            <div class="confirmation-checks">
+              <mat-checkbox [(ngModel)]="requestData.confirmation" required>
+                Confirmo que desejo prosseguir com a exclusão dos meus dados conforme especificado.
+              </mat-checkbox>
+
+              <mat-checkbox [(ngModel)]="requestData.understanding" required>
+                Entendo que esta ação é irreversível e que meus dados serão permanentemente removidos
+                ou anonimizados do sistema.
+              </mat-checkbox>
+            </div>
+
+            <div *ngIf="error" class="error-message">
+              <mat-icon>error</mat-icon>
+              <p>{{ error }}</p>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious [disabled]="loading">
+                <mat-icon>arrow_back</mat-icon>
+                Voltar
+              </button>
+              <button 
+                mat-raised-button 
+                color="warn" 
+                (click)="submitRequest()"
+                [disabled]="!isStep3Valid() || loading">
+                <mat-icon *ngIf="!loading">send</mat-icon>
+                <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+                {{ loading ? 'Enviando...' : 'Enviar Solicitação' }}
+              </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </div>
+
+    <div *ngIf="submitted" class="success-content">
+      <mat-icon color="primary" class="success-icon">check_circle</mat-icon>
+      <h2>Solicitação Enviada com Sucesso!</h2>
+      <p>
+        Sua solicitação de exclusão de dados foi recebida e será processada em até 30 dias,
+        conforme previsto na LGPD.
+      </p>
+      <p>
+        Você receberá um e-mail de confirmação com o número do protocolo e informações
+        sobre o andamento da solicitação.
+      </p>
+      <div class="info-box">
+        <mat-icon>info</mat-icon>
+        <p>
+          Durante o período de processamento, você pode cancelar esta solicitação
+          entrando em contato com nossa equipe de suporte.
+        </p>
+      </div>
+      <button mat-raised-button color="primary" (click)="resetForm()">
+        <mat-icon>refresh</mat-icon>
+        Nova Solicitação
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
