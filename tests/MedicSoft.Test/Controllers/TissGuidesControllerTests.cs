@@ -9,6 +9,7 @@ using Moq;
 using MedicSoft.Api.Controllers;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Identity;
 using Xunit;
 
 namespace MedicSoft.Test.Controllers
@@ -21,20 +22,16 @@ namespace MedicSoft.Test.Controllers
     {
         private const string TenantId = "test-tenant";
         private readonly Mock<ITissGuideService> _guideServiceMock;
+        private readonly Mock<ITenantContext> _tenantContextMock;
         private readonly TissGuidesController _controller;
 
         public TissGuidesControllerTests()
         {
             _guideServiceMock = new Mock<ITissGuideService>();
-            _controller = new TissGuidesController(_guideServiceMock.Object);
+            _tenantContextMock = new Mock<ITenantContext>();
+            _tenantContextMock.Setup(t => t.TenantId).Returns(TenantId);
             
-            // Setup HttpContext with TenantId
-            var httpContext = new DefaultHttpContext();
-            httpContext.Items["TenantId"] = TenantId;
-            _controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContext
-            };
+            _controller = new TissGuidesController(_guideServiceMock.Object, _tenantContextMock.Object);
         }
 
         #region GetAll Tests
@@ -45,8 +42,8 @@ namespace MedicSoft.Test.Controllers
             // Arrange
             var guides = new List<TissGuideDto>
             {
-                new TissGuideDto { Id = 1, GuideNumber = "G001", TotalAmount = 100.00m },
-                new TissGuideDto { Id = 2, GuideNumber = "G002", TotalAmount = 200.00m }
+                new TissGuideDto { Id = Guid.NewGuid(), GuideNumber = "G001", TotalAmount = 100.00m },
+                new TissGuideDto { Id = Guid.NewGuid(), GuideNumber = "G002", TotalAmount = 200.00m }
             };
             _guideServiceMock.Setup(s => s.GetAllAsync(TenantId)).ReturnsAsync(guides);
 
@@ -54,7 +51,7 @@ namespace MedicSoft.Test.Controllers
             var result = await _controller.GetAll();
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedGuides = okResult.Value.Should().BeAssignableTo<IEnumerable<TissGuideDto>>().Subject;
             returnedGuides.Should().HaveCount(2);
         }
@@ -69,7 +66,7 @@ namespace MedicSoft.Test.Controllers
             var result = await _controller.GetAll();
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedGuides = okResult.Value.Should().BeAssignableTo<IEnumerable<TissGuideDto>>().Subject;
             returnedGuides.Should().BeEmpty();
         }
@@ -82,14 +79,15 @@ namespace MedicSoft.Test.Controllers
         public async Task GetById_WithValidId_ReturnsOkWithGuide()
         {
             // Arrange
-            var guide = new TissGuideDto { Id = 1, GuideNumber = "G001", TotalAmount = 100.00m };
-            _guideServiceMock.Setup(s => s.GetByIdAsync(1, TenantId)).ReturnsAsync(guide);
+            var guideId = Guid.NewGuid();
+            var guide = new TissGuideDto { Id = guideId, GuideNumber = "G001", TotalAmount = 100.00m };
+            _guideServiceMock.Setup(s => s.GetByIdAsync(guideId, TenantId)).ReturnsAsync(guide);
 
             // Act
-            var result = await _controller.GetById(1);
+            var result = await _controller.GetById(guideId);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedGuide = okResult.Value.Should().BeAssignableTo<TissGuideDto>().Subject;
             returnedGuide.GuideNumber.Should().Be("G001");
         }
@@ -98,13 +96,14 @@ namespace MedicSoft.Test.Controllers
         public async Task GetById_WithInvalidId_ReturnsNotFound()
         {
             // Arrange
-            _guideServiceMock.Setup(s => s.GetByIdAsync(999, TenantId)).ReturnsAsync((TissGuideDto)null);
+            var guideId = Guid.NewGuid();
+            _guideServiceMock.Setup(s => s.GetByIdAsync(guideId, TenantId)).ReturnsAsync((TissGuideDto)null);
 
             // Act
-            var result = await _controller.GetById(999);
+            var result = await _controller.GetById(guideId);
 
             // Assert
-            result.Should().BeOfType<NotFoundResult>();
+            result.Result.Should().BeOfType<NotFoundObjectResult>();
         }
 
         #endregion
@@ -118,12 +117,12 @@ namespace MedicSoft.Test.Controllers
             var createDto = new CreateTissGuideDto 
             { 
                 GuideType = "Consultation",
-                OperatorId = 1,
-                PatientId = 1
+                AppointmentId = Guid.NewGuid(),
+                PatientHealthInsuranceId = Guid.NewGuid()
             };
             var createdGuide = new TissGuideDto 
             { 
-                Id = 1, 
+                Id = Guid.NewGuid(), 
                 GuideNumber = "G001",
                 GuideType = "Consultation"
             };
@@ -133,7 +132,7 @@ namespace MedicSoft.Test.Controllers
             var result = await _controller.Create(createDto);
 
             // Assert
-            var createdResult = result.Should().BeOfType<CreatedAtActionResult>().Subject;
+            var createdResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
             createdResult.ActionName.Should().Be(nameof(_controller.GetById));
             var returnedGuide = createdResult.Value.Should().BeAssignableTo<TissGuideDto>().Subject;
             returnedGuide.GuideNumber.Should().Be("G001");
@@ -150,72 +149,7 @@ namespace MedicSoft.Test.Controllers
             var result = await _controller.Create(createDto);
 
             // Assert
-            result.Should().BeOfType<BadRequestObjectResult>();
-        }
-
-        #endregion
-
-        #region Update Tests
-
-        [Fact]
-        public async Task Update_WithValidData_ReturnsOk()
-        {
-            // Arrange
-            var updateDto = new UpdateTissGuideDto { Id = 1, GuideNumber = "G001-UPD" };
-            var updatedGuide = new TissGuideDto { Id = 1, GuideNumber = "G001-UPD" };
-            _guideServiceMock.Setup(s => s.UpdateAsync(1, updateDto, TenantId)).ReturnsAsync(updatedGuide);
-
-            // Act
-            var result = await _controller.Update(1, updateDto);
-
-            // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var returnedGuide = okResult.Value.Should().BeAssignableTo<TissGuideDto>().Subject;
-            returnedGuide.GuideNumber.Should().Be("G001-UPD");
-        }
-
-        [Fact]
-        public async Task Update_WithNonExistentId_ReturnsNotFound()
-        {
-            // Arrange
-            var updateDto = new UpdateTissGuideDto { Id = 999 };
-            _guideServiceMock.Setup(s => s.UpdateAsync(999, updateDto, TenantId)).ReturnsAsync((TissGuideDto)null);
-
-            // Act
-            var result = await _controller.Update(999, updateDto);
-
-            // Assert
-            result.Should().BeOfType<NotFoundResult>();
-        }
-
-        #endregion
-
-        #region Delete Tests
-
-        [Fact]
-        public async Task Delete_WithValidId_ReturnsNoContent()
-        {
-            // Arrange
-            _guideServiceMock.Setup(s => s.DeleteAsync(1, TenantId)).ReturnsAsync(true);
-
-            // Act
-            var result = await _controller.Delete(1);
-
-            // Assert
-            result.Should().BeOfType<NoContentResult>();
-        }
-
-        [Fact]
-        public async Task Delete_WithNonExistentId_ReturnsNotFound()
-        {
-            // Arrange
-            _guideServiceMock.Setup(s => s.DeleteAsync(999, TenantId)).ReturnsAsync(false);
-
-            // Act
-            var result = await _controller.Delete(999);
-
-            // Assert
-            result.Should().BeOfType<NotFoundResult>();
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
         }
 
         #endregion
@@ -226,37 +160,116 @@ namespace MedicSoft.Test.Controllers
         public async Task AddProcedure_WithValidData_ReturnsOk()
         {
             // Arrange
-            var procedureDto = new TissGuideProcedureDto { ProcedureCode = "10101012", Quantity = 1 };
-            var updatedGuide = new TissGuideDto { Id = 1, GuideNumber = "G001" };
-            _guideServiceMock.Setup(s => s.AddProcedureAsync(1, procedureDto, TenantId)).ReturnsAsync(updatedGuide);
+            var guideId = Guid.NewGuid();
+            var procedureDto = new AddProcedureToGuideDto 
+            { 
+                ProcedureCode = "10101012", 
+                Quantity = 1,
+                UnitPrice = 100.00m
+            };
+            var updatedGuide = new TissGuideDto { Id = guideId, GuideNumber = "G001" };
+            _guideServiceMock.Setup(s => s.AddProcedureAsync(guideId, procedureDto, TenantId))
+                .ReturnsAsync(updatedGuide);
 
             // Act
-            var result = await _controller.AddProcedure(1, procedureDto);
+            var result = await _controller.AddProcedure(guideId, procedureDto);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             okResult.Value.Should().BeAssignableTo<TissGuideDto>();
         }
 
         #endregion
 
-        #region Authorization Tests
+        #region RemoveProcedure Tests
 
         [Fact]
-        public async Task GetByAuthorizationNumber_WithValidNumber_ReturnsOk()
+        public async Task RemoveProcedure_WithValidData_ReturnsOk()
         {
             // Arrange
-            var guide = new TissGuideDto { Id = 1, AuthorizationNumber = "AUTH-12345" };
-            _guideServiceMock.Setup(s => s.GetByAuthorizationNumberAsync("AUTH-12345", TenantId))
-                .ReturnsAsync(guide);
+            var guideId = Guid.NewGuid();
+            var procedureId = Guid.NewGuid();
+            var updatedGuide = new TissGuideDto { Id = guideId, GuideNumber = "G001" };
+            _guideServiceMock.Setup(s => s.RemoveProcedureAsync(guideId, procedureId, TenantId))
+                .ReturnsAsync(updatedGuide);
 
             // Act
-            var result = await _controller.GetByAuthorizationNumber("AUTH-12345");
+            var result = await _controller.RemoveProcedure(guideId, procedureId);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+            okResult.Value.Should().BeAssignableTo<TissGuideDto>();
+        }
+
+        #endregion
+
+        #region Finalize Tests
+
+        [Fact]
+        public async Task Finalize_WithValidId_ReturnsOk()
+        {
+            // Arrange
+            var guideId = Guid.NewGuid();
+            var finalizedGuide = new TissGuideDto { Id = guideId, Status = "Ready" };
+            _guideServiceMock.Setup(s => s.FinalizeAsync(guideId, TenantId))
+                .ReturnsAsync(finalizedGuide);
+
+            // Act
+            var result = await _controller.Finalize(guideId);
+
+            // Assert
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedGuide = okResult.Value.Should().BeAssignableTo<TissGuideDto>().Subject;
-            returnedGuide.AuthorizationNumber.Should().Be("AUTH-12345");
+            returnedGuide.Status.Should().Be("Ready");
+        }
+
+        #endregion
+
+        #region ProcessResponse Tests
+
+        [Fact]
+        public async Task ProcessResponse_WithValidData_ReturnsOk()
+        {
+            // Arrange
+            var guideId = Guid.NewGuid();
+            var responseDto = new ProcessGuideResponseDto 
+            { 
+                ApprovedAmount = 80.00m,
+                GlosedAmount = 20.00m,
+                GlossReason = "Procedimento não autorizado"
+            };
+            var processedGuide = new TissGuideDto { Id = guideId };
+            _guideServiceMock.Setup(s => s.ProcessResponseAsync(guideId, responseDto, TenantId))
+                .ReturnsAsync(processedGuide);
+
+            // Act
+            var result = await _controller.ProcessResponse(guideId, responseDto);
+
+            // Assert
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+            okResult.Value.Should().BeAssignableTo<TissGuideDto>();
+        }
+
+        #endregion
+
+        #region MarkAsPaid Tests
+
+        [Fact]
+        public async Task MarkAsPaid_WithValidId_ReturnsOk()
+        {
+            // Arrange
+            var guideId = Guid.NewGuid();
+            var paidGuide = new TissGuideDto { Id = guideId, Status = "Paid" };
+            _guideServiceMock.Setup(s => s.MarkAsPaidAsync(guideId, TenantId))
+                .ReturnsAsync(paidGuide);
+
+            // Act
+            var result = await _controller.MarkAsPaid(guideId);
+
+            // Assert
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+            var returnedGuide = okResult.Value.Should().BeAssignableTo<TissGuideDto>().Subject;
+            returnedGuide.Status.Should().Be("Paid");
         }
 
         #endregion

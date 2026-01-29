@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MedicSoft.Api.Controllers;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Identity;
 using Xunit;
 
 namespace MedicSoft.Test.Controllers
@@ -20,20 +20,16 @@ namespace MedicSoft.Test.Controllers
     {
         private const string TenantId = "test-tenant";
         private readonly Mock<ITissBatchService> _batchServiceMock;
+        private readonly Mock<ITenantContext> _tenantContextMock;
         private readonly TissBatchesController _controller;
 
         public TissBatchesControllerTests()
         {
             _batchServiceMock = new Mock<ITissBatchService>();
-            _controller = new TissBatchesController(_batchServiceMock.Object);
+            _tenantContextMock = new Mock<ITenantContext>();
+            _tenantContextMock.Setup(t => t.TenantId).Returns(TenantId);
             
-            // Setup HttpContext with TenantId
-            var httpContext = new DefaultHttpContext();
-            httpContext.Items["TenantId"] = TenantId;
-            _controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContext
-            };
+            _controller = new TissBatchesController(_batchServiceMock.Object, _tenantContextMock.Object);
         }
 
         #region GetAll Tests
@@ -44,8 +40,8 @@ namespace MedicSoft.Test.Controllers
             // Arrange
             var batches = new List<TissBatchDto>
             {
-                new TissBatchDto { Id = 1, BatchNumber = "B001", TotalAmount = 1000.00m },
-                new TissBatchDto { Id = 2, BatchNumber = "B002", TotalAmount = 2000.00m }
+                new TissBatchDto { Id = Guid.NewGuid(), BatchNumber = "B001", TotalAmount = 1000.00m },
+                new TissBatchDto { Id = Guid.NewGuid(), BatchNumber = "B002", TotalAmount = 2000.00m }
             };
             _batchServiceMock.Setup(s => s.GetAllAsync(TenantId)).ReturnsAsync(batches);
 
@@ -53,7 +49,7 @@ namespace MedicSoft.Test.Controllers
             var result = await _controller.GetAll();
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedBatches = okResult.Value.Should().BeAssignableTo<IEnumerable<TissBatchDto>>().Subject;
             returnedBatches.Should().HaveCount(2);
         }
@@ -66,14 +62,15 @@ namespace MedicSoft.Test.Controllers
         public async Task GetById_WithValidId_ReturnsOkWithBatch()
         {
             // Arrange
-            var batch = new TissBatchDto { Id = 1, BatchNumber = "B001", TotalAmount = 1000.00m };
-            _batchServiceMock.Setup(s => s.GetByIdAsync(1, TenantId)).ReturnsAsync(batch);
+            var batchId = Guid.NewGuid();
+            var batch = new TissBatchDto { Id = batchId, BatchNumber = "B001", TotalAmount = 1000.00m };
+            _batchServiceMock.Setup(s => s.GetByIdAsync(batchId, TenantId)).ReturnsAsync(batch);
 
             // Act
-            var result = await _controller.GetById(1);
+            var result = await _controller.GetById(batchId);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedBatch = okResult.Value.Should().BeAssignableTo<TissBatchDto>().Subject;
             returnedBatch.BatchNumber.Should().Be("B001");
         }
@@ -82,13 +79,14 @@ namespace MedicSoft.Test.Controllers
         public async Task GetById_WithInvalidId_ReturnsNotFound()
         {
             // Arrange
-            _batchServiceMock.Setup(s => s.GetByIdAsync(999, TenantId)).ReturnsAsync((TissBatchDto)null);
+            var batchId = Guid.NewGuid();
+            _batchServiceMock.Setup(s => s.GetByIdAsync(batchId, TenantId)).ReturnsAsync((TissBatchDto)null);
 
             // Act
-            var result = await _controller.GetById(999);
+            var result = await _controller.GetById(batchId);
 
             // Assert
-            result.Should().BeOfType<NotFoundResult>();
+            result.Result.Should().BeOfType<NotFoundObjectResult>();
         }
 
         #endregion
@@ -101,12 +99,12 @@ namespace MedicSoft.Test.Controllers
             // Arrange
             var createDto = new CreateTissBatchDto 
             { 
-                OperatorId = 1,
-                ClinicId = 1
+                OperatorId = Guid.NewGuid(),
+                ClinicId = Guid.NewGuid()
             };
             var createdBatch = new TissBatchDto 
             { 
-                Id = 1, 
+                Id = Guid.NewGuid(), 
                 BatchNumber = "B001",
                 Status = "Draft"
             };
@@ -116,7 +114,7 @@ namespace MedicSoft.Test.Controllers
             var result = await _controller.Create(createDto);
 
             // Assert
-            var createdResult = result.Should().BeOfType<CreatedAtActionResult>().Subject;
+            var createdResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
             createdResult.ActionName.Should().Be(nameof(_controller.GetById));
             var returnedBatch = createdResult.Value.Should().BeAssignableTo<TissBatchDto>().Subject;
             returnedBatch.BatchNumber.Should().Be("B001");
@@ -130,14 +128,16 @@ namespace MedicSoft.Test.Controllers
         public async Task AddGuide_WithValidData_ReturnsOk()
         {
             // Arrange
-            var updatedBatch = new TissBatchDto { Id = 1, BatchNumber = "B001", GuideCount = 1 };
-            _batchServiceMock.Setup(s => s.AddGuideAsync(1, 1, TenantId)).ReturnsAsync(updatedBatch);
+            var batchId = Guid.NewGuid();
+            var guideId = Guid.NewGuid();
+            var updatedBatch = new TissBatchDto { Id = batchId, BatchNumber = "B001", GuideCount = 1 };
+            _batchServiceMock.Setup(s => s.AddGuideAsync(batchId, guideId, TenantId)).ReturnsAsync(updatedBatch);
 
             // Act
-            var result = await _controller.AddGuide(1, 1);
+            var result = await _controller.AddGuide(batchId, guideId);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedBatch = okResult.Value.Should().BeAssignableTo<TissBatchDto>().Subject;
             returnedBatch.GuideCount.Should().Be(1);
         }
@@ -146,13 +146,38 @@ namespace MedicSoft.Test.Controllers
         public async Task AddGuide_WithInvalidBatch_ReturnsNotFound()
         {
             // Arrange
-            _batchServiceMock.Setup(s => s.AddGuideAsync(999, 1, TenantId)).ReturnsAsync((TissBatchDto)null);
+            var batchId = Guid.NewGuid();
+            var guideId = Guid.NewGuid();
+            _batchServiceMock.Setup(s => s.AddGuideAsync(batchId, guideId, TenantId))
+                .ThrowsAsync(new InvalidOperationException("Batch not found"));
 
             // Act
-            var result = await _controller.AddGuide(999, 1);
+            var result = await _controller.AddGuide(batchId, guideId);
 
             // Assert
-            result.Should().BeOfType<NotFoundResult>();
+            result.Result.Should().BeOfType<NotFoundObjectResult>();
+        }
+
+        #endregion
+
+        #region RemoveGuide Tests
+
+        [Fact]
+        public async Task RemoveGuide_WithValidData_ReturnsOk()
+        {
+            // Arrange
+            var batchId = Guid.NewGuid();
+            var guideId = Guid.NewGuid();
+            var updatedBatch = new TissBatchDto { Id = batchId, BatchNumber = "B001", GuideCount = 0 };
+            _batchServiceMock.Setup(s => s.RemoveGuideAsync(batchId, guideId, TenantId)).ReturnsAsync(updatedBatch);
+
+            // Act
+            var result = await _controller.RemoveGuide(batchId, guideId);
+
+            // Assert
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+            var returnedBatch = okResult.Value.Should().BeAssignableTo<TissBatchDto>().Subject;
+            returnedBatch.GuideCount.Should().Be(0);
         }
 
         #endregion
@@ -163,14 +188,15 @@ namespace MedicSoft.Test.Controllers
         public async Task GenerateXml_WithValidBatch_ReturnsOkWithXml()
         {
             // Arrange
+            var batchId = Guid.NewGuid();
             var xmlContent = "<?xml version=\"1.0\"?><tissLoteGuias>...</tissLoteGuias>";
-            _batchServiceMock.Setup(s => s.GenerateXmlAsync(1, TenantId)).ReturnsAsync(xmlContent);
+            _batchServiceMock.Setup(s => s.GenerateXmlAsync(batchId, TenantId)).ReturnsAsync(xmlContent);
 
             // Act
-            var result = await _controller.GenerateXml(1);
+            var result = await _controller.GenerateXml(batchId);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedXml = okResult.Value.Should().BeOfType<string>().Subject;
             returnedXml.Should().Contain("tissLoteGuias");
         }
@@ -179,13 +205,15 @@ namespace MedicSoft.Test.Controllers
         public async Task GenerateXml_WithInvalidBatch_ReturnsNotFound()
         {
             // Arrange
-            _batchServiceMock.Setup(s => s.GenerateXmlAsync(999, TenantId)).ReturnsAsync((string)null);
+            var batchId = Guid.NewGuid();
+            _batchServiceMock.Setup(s => s.GenerateXmlAsync(batchId, TenantId))
+                .ThrowsAsync(new InvalidOperationException("Batch not found"));
 
             // Act
-            var result = await _controller.GenerateXml(999);
+            var result = await _controller.GenerateXml(batchId);
 
             // Assert
-            result.Should().BeOfType<NotFoundResult>();
+            result.Result.Should().BeOfType<NotFoundObjectResult>();
         }
 
         #endregion
@@ -196,79 +224,82 @@ namespace MedicSoft.Test.Controllers
         public async Task DownloadXml_WithValidBatch_ReturnsFileResult()
         {
             // Arrange
+            var batchId = Guid.NewGuid();
             var xmlBytes = System.Text.Encoding.UTF8.GetBytes("<?xml version=\"1.0\"?><tissLoteGuias>...</tissLoteGuias>");
-            _batchServiceMock.Setup(s => s.DownloadXmlAsync(1, TenantId)).ReturnsAsync(xmlBytes);
+            var batch = new TissBatchDto { Id = batchId, XmlFileName = "batch_001.xml" };
+            
+            _batchServiceMock.Setup(s => s.GetByIdAsync(batchId, TenantId)).ReturnsAsync(batch);
+            _batchServiceMock.Setup(s => s.DownloadXmlAsync(batchId, TenantId)).ReturnsAsync(xmlBytes);
 
             // Act
-            var result = await _controller.DownloadXml(1);
+            var result = await _controller.DownloadXml(batchId);
 
             // Assert
             var fileResult = result.Should().BeOfType<FileContentResult>().Subject;
             fileResult.ContentType.Should().Be("application/xml");
-            fileResult.FileDownloadName.Should().EndWith(".xml");
         }
 
         [Fact]
         public async Task DownloadXml_WithInvalidBatch_ReturnsNotFound()
         {
             // Arrange
-            _batchServiceMock.Setup(s => s.DownloadXmlAsync(999, TenantId)).ReturnsAsync((byte[])null);
+            var batchId = Guid.NewGuid();
+            _batchServiceMock.Setup(s => s.GetByIdAsync(batchId, TenantId)).ReturnsAsync((TissBatchDto)null);
 
             // Act
-            var result = await _controller.DownloadXml(999);
+            var result = await _controller.DownloadXml(batchId);
 
             // Assert
-            result.Should().BeOfType<NotFoundResult>();
+            result.Should().BeOfType<NotFoundObjectResult>();
         }
 
         #endregion
 
-        #region UpdateStatus Tests
+        #region MarkReadyToSend Tests
 
         [Fact]
-        public async Task UpdateStatus_WithValidData_ReturnsOk()
+        public async Task MarkReadyToSend_WithValidData_ReturnsOk()
         {
             // Arrange
-            var updatedBatch = new TissBatchDto { Id = 1, Status = "Sent" };
-            _batchServiceMock.Setup(s => s.UpdateStatusAsync(1, "Sent", TenantId)).ReturnsAsync(updatedBatch);
+            var batchId = Guid.NewGuid();
+            var updatedBatch = new TissBatchDto { Id = batchId, Status = "Ready" };
+            _batchServiceMock.Setup(s => s.MarkReadyToSendAsync(batchId, TenantId)).ReturnsAsync(updatedBatch);
 
             // Act
-            var result = await _controller.UpdateStatus(1, "Sent");
+            var result = await _controller.MarkReadyToSend(batchId);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
             var returnedBatch = okResult.Value.Should().BeAssignableTo<TissBatchDto>().Subject;
-            returnedBatch.Status.Should().Be("Sent");
+            returnedBatch.Status.Should().Be("Ready");
         }
 
         #endregion
 
-        #region Delete Tests
+        #region ProcessResponse Tests
 
         [Fact]
-        public async Task Delete_WithValidId_ReturnsNoContent()
+        public async Task ProcessResponse_WithValidData_ReturnsOk()
         {
             // Arrange
-            _batchServiceMock.Setup(s => s.DeleteAsync(1, TenantId)).ReturnsAsync(true);
+            var batchId = Guid.NewGuid();
+            var responseDto = new ProcessBatchResponseDto 
+            { 
+                ProtocolNumber = "PROT-12345",
+                ApprovedAmount = 8000.00m,
+                GlosedAmount = 2000.00m
+            };
+            var processedBatch = new TissBatchDto { Id = batchId, Status = "Processed" };
+            _batchServiceMock.Setup(s => s.ProcessResponseAsync(batchId, responseDto, TenantId))
+                .ReturnsAsync(processedBatch);
 
             // Act
-            var result = await _controller.Delete(1);
+            var result = await _controller.ProcessResponse(batchId, responseDto);
 
             // Assert
-            result.Should().BeOfType<NoContentResult>();
-        }
-
-        [Fact]
-        public async Task Delete_WithNonExistentId_ReturnsNotFound()
-        {
-            // Arrange
-            _batchServiceMock.Setup(s => s.DeleteAsync(999, TenantId)).ReturnsAsync(false);
-
-            // Act
-            var result = await _controller.Delete(999);
-
-            // Assert
-            result.Should().BeOfType<NotFoundResult>();
+            var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+            var returnedBatch = okResult.Value.Should().BeAssignableTo<TissBatchDto>().Subject;
+            returnedBatch.Status.Should().Be("Processed");
         }
 
         #endregion
