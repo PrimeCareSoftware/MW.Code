@@ -1,0 +1,286 @@
+<app-header></app-header>
+
+<div class="appointment-booking-container">
+  <!-- Success Message -->
+  <div *ngIf="appointmentCreated" class="success-card card">
+    <div class="success-icon">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="30" fill="#22c55e" fill-opacity="0.1" stroke="#22c55e" stroke-width="2"/>
+        <path d="M20 32l8 8 16-16" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1>Consulta Agendada com Sucesso!</h1>
+    <p class="success-message">
+      Seu agendamento foi confirmado. Você receberá uma confirmação por e-mail em breve.
+    </p>
+    
+    <div class="appointment-summary" *ngIf="appointmentDetails">
+      <h3>Detalhes do Agendamento</h3>
+      <div class="summary-item">
+        <span class="label">Clínica:</span>
+        <span class="value">{{ appointmentDetails.clinicName }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Data:</span>
+        <span class="value">{{ appointmentDetails.scheduledDate | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Horário:</span>
+        <span class="value">{{ appointmentDetails.scheduledTime }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Status:</span>
+        <span class="value status-badge">{{ appointmentDetails.status }}</span>
+      </div>
+    </div>
+    
+    <div class="success-actions">
+      <button class="btn btn-primary" (click)="bookAnother()">Agendar Outra Consulta</button>
+      <button class="btn btn-secondary" (click)="goBack()">Voltar para Busca</button>
+    </div>
+  </div>
+
+  <!-- Booking Form -->
+  <div *ngIf="!appointmentCreated" class="booking-content">
+    <div class="page-header">
+      <button class="btn-back" (click)="goBack()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 10H5M5 10l4 4M5 10l4-4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Voltar
+      </button>
+      <h1>Agendar Consulta</h1>
+      <p class="subtitle">Preencha os dados abaixo para realizar seu agendamento</p>
+    </div>
+
+    <!-- Loading Clinic -->
+    <div *ngIf="loadingClinic" class="loading-state card">
+      <div class="spinner"></div>
+      <p>Carregando informações da clínica...</p>
+    </div>
+
+    <!-- Clinic Error -->
+    <div *ngIf="clinicError && !loadingClinic" class="alert alert-danger">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 8v4M12 16h.01"/>
+      </svg>
+      <p>{{ clinicError }}</p>
+      <button class="btn btn-primary" (click)="goBack()">Voltar</button>
+    </div>
+
+    <!-- Clinic Info & Form -->
+    <div *ngIf="clinic && !clinicError && !loadingClinic">
+      <!-- Clinic Card -->
+      <div class="clinic-info-card card">
+        <h2>{{ clinic.name }}</h2>
+        <div class="clinic-details">
+          <div class="detail-item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M8 14c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6z"/>
+              <path d="M8 4v4l2 2"/>
+            </svg>
+            <span>{{ clinic.openingTime.substring(0, 5) }} - {{ clinic.closingTime.substring(0, 5) }}</span>
+          </div>
+          <div class="detail-item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M13 13l-4-4M9 5.5A3.5 3.5 0 1 1 2 5.5a3.5 3.5 0 0 1 7 0z"/>
+            </svg>
+            <span>{{ clinic.address }}, {{ clinic.city }} - {{ clinic.state }}</span>
+          </div>
+          <div class="detail-item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3.5 5.5L5 3l1.5 2 1.5-2L9 5.5M5 14c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2H5z"/>
+            </svg>
+            <span>Duração da consulta: {{ clinic.appointmentDurationMinutes }} minutos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form card">
+        <h3>Dados do Agendamento</h3>
+        
+        <!-- Date Selection -->
+        <div class="form-section">
+          <h4>Selecione a Data</h4>
+          <div class="form-group">
+            <label for="date">Data da Consulta *</label>
+            <input 
+              type="date" 
+              id="date" 
+              formControlName="date"
+              [min]="minDate | date:'yyyy-MM-dd'"
+              [max]="maxDate | date:'yyyy-MM-dd'"
+              (change)="onDateChange($event)"
+              class="form-control"
+              [class.invalid]="bookingForm.get('date')?.invalid && bookingForm.get('date')?.touched"
+            />
+            <div class="error-message" *ngIf="bookingForm.get('date')?.invalid && bookingForm.get('date')?.touched">
+              Por favor, selecione uma data
+            </div>
+          </div>
+
+          <!-- Time Slot Selection -->
+          <div class="form-group" *ngIf="selectedDate">
+            <label for="time">Horário Disponível *</label>
+            
+            <div *ngIf="loadingSlots" class="loading-inline">
+              <div class="spinner-small"></div>
+              <span>Carregando horários...</span>
+            </div>
+
+            <div *ngIf="slotsError && !loadingSlots" class="alert alert-warning">
+              {{ slotsError }}
+            </div>
+
+            <div *ngIf="availableSlots.length > 0 && !loadingSlots" class="time-slots">
+              <label 
+                *ngFor="let slot of availableSlots" 
+                class="time-slot-option"
+                [class.selected]="bookingForm.get('time')?.value === slot.time"
+              >
+                <input 
+                  type="radio" 
+                  formControlName="time" 
+                  [value]="slot.time"
+                  class="time-slot-radio"
+                />
+                <span class="time-slot-label">{{ slot.time.substring(0, 5) }}</span>
+              </label>
+            </div>
+            
+            <div class="error-message" *ngIf="bookingForm.get('time')?.invalid && bookingForm.get('time')?.touched">
+              Por favor, selecione um horário
+            </div>
+          </div>
+        </div>
+
+        <!-- Patient Information -->
+        <div class="form-section">
+          <h4>Dados do Paciente</h4>
+          
+          <div class="form-group">
+            <label for="patientName">Nome Completo *</label>
+            <input 
+              type="text" 
+              id="patientName" 
+              formControlName="patientName"
+              placeholder="Digite seu nome completo"
+              class="form-control"
+              [class.invalid]="bookingForm.get('patientName')?.invalid && bookingForm.get('patientName')?.touched"
+            />
+            <div class="error-message" *ngIf="bookingForm.get('patientName')?.invalid && bookingForm.get('patientName')?.touched">
+              Nome deve ter pelo menos 3 caracteres
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="patientCpf">CPF *</label>
+              <input 
+                type="text" 
+                id="patientCpf" 
+                formControlName="patientCpf"
+                placeholder="00000000000"
+                maxlength="11"
+                (input)="formatCpf($event)"
+                class="form-control"
+                [class.invalid]="bookingForm.get('patientCpf')?.invalid && bookingForm.get('patientCpf')?.touched"
+              />
+              <div class="error-message" *ngIf="bookingForm.get('patientCpf')?.invalid && bookingForm.get('patientCpf')?.touched">
+                CPF deve conter 11 dígitos
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="patientBirthDate">Data de Nascimento *</label>
+              <input 
+                type="date" 
+                id="patientBirthDate" 
+                formControlName="patientBirthDate"
+                class="form-control"
+                [class.invalid]="bookingForm.get('patientBirthDate')?.invalid && bookingForm.get('patientBirthDate')?.touched"
+              />
+              <div class="error-message" *ngIf="bookingForm.get('patientBirthDate')?.invalid && bookingForm.get('patientBirthDate')?.touched">
+                Por favor, informe sua data de nascimento
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="patientPhone">Telefone/Celular *</label>
+              <input 
+                type="tel" 
+                id="patientPhone" 
+                formControlName="patientPhone"
+                placeholder="11999999999"
+                maxlength="11"
+                (input)="formatPhone($event)"
+                class="form-control"
+                [class.invalid]="bookingForm.get('patientPhone')?.invalid && bookingForm.get('patientPhone')?.touched"
+              />
+              <div class="error-message" *ngIf="bookingForm.get('patientPhone')?.invalid && bookingForm.get('patientPhone')?.touched">
+                Telefone deve conter 10 ou 11 dígitos
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="patientEmail">E-mail *</label>
+              <input 
+                type="email" 
+                id="patientEmail" 
+                formControlName="patientEmail"
+                placeholder="seuemail@exemplo.com"
+                class="form-control"
+                [class.invalid]="bookingForm.get('patientEmail')?.invalid && bookingForm.get('patientEmail')?.touched"
+              />
+              <div class="error-message" *ngIf="bookingForm.get('patientEmail')?.invalid && bookingForm.get('patientEmail')?.touched">
+                Por favor, informe um e-mail válido
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Observações (Opcional)</label>
+            <textarea 
+              id="notes" 
+              formControlName="notes"
+              placeholder="Informações adicionais sobre o agendamento..."
+              rows="4"
+              maxlength="500"
+              class="form-control"
+            ></textarea>
+            <small class="form-hint">Máximo de 500 caracteres</small>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="bookingError" class="alert alert-danger">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="10" cy="10" r="8"/>
+            <path d="M10 6v4M10 14h.01"/>
+          </svg>
+          {{ bookingError }}
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="goBack()" [disabled]="submitting">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="submitting || bookingForm.invalid">
+            <span *ngIf="!submitting">Confirmar Agendamento</span>
+            <span *ngIf="submitting">
+              <div class="spinner-small"></div>
+              Agendando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
