@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
@@ -67,7 +67,7 @@ export class ClinicModulesComponent implements OnInit {
   /**
    * Handle module toggle (enable/disable)
    */
-  toggleModule(module: ModuleConfig, event: any): void {
+  toggleModule(module: ModuleConfig, event: MatSlideToggleChange): void {
     const isEnabled = event.checked;
 
     // Validate before enabling
@@ -105,7 +105,10 @@ export class ClinicModulesComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao habilitar módulo:', error);
+        module.isEnabled = false; // Revert state on error
         this.snackBar.open('Erro ao habilitar módulo', 'Fechar', { duration: 3000 });
+        // Force refresh to sync UI with backend state
+        this.loadModules();
       }
     });
   }
@@ -122,7 +125,10 @@ export class ClinicModulesComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao desabilitar módulo:', error);
+        module.isEnabled = true; // Revert state on error
         this.snackBar.open('Erro ao desabilitar módulo', 'Fechar', { duration: 3000 });
+        // Force refresh to sync UI with backend state
+        this.loadModules();
       }
     });
   }

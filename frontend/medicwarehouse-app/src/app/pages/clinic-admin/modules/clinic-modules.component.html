@@ -10,6 +10,12 @@
   </div>
 
   <div *ngIf="!loading" class="modules-content">
+    <div *ngIf="modules.length === 0" class="empty-state">
+      <mat-icon>extension</mat-icon>
+      <h3>Nenhum módulo disponível</h3>
+      <p>Não há módulos configurados para sua clínica no momento.</p>
+    </div>
+
     <div *ngFor="let category of getCategories()" class="category-section">
       
       <!-- Category Header -->

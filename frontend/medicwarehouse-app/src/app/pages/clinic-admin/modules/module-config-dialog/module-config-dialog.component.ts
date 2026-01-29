@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -146,7 +146,7 @@ export class ModuleConfigDialogComponent {
   /**
    * Custom validator for JSON format
    */
-  jsonValidator(control: any) {
+  jsonValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return null;
     }
