@@ -130,7 +130,7 @@ namespace MedicSoft.Test.Integration
         #region Multiple Clinics Tests
 
         [Fact]
-        public async Task MultipleCllinics_ShouldHaveIsolatedConfigurations()
+        public async Task MultipleClinics_ShouldHaveIsolatedConfigurations()
         {
             // Arrange
             var clinic1Id = Guid.NewGuid();

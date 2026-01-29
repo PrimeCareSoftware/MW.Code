@@ -412,7 +412,7 @@ namespace MedicSoft.Test.Controllers
             var moduleList = modules.ToList();
             
             moduleList.Should().NotBeEmpty();
-            moduleList.Should().HaveCount(13); // All 13 modules defined in SystemModules
+            moduleList.Should().HaveCount(SystemModules.GetAllModules().Length);
             
             var patientModule = moduleList.FirstOrDefault(m => m.Name == SystemModules.PatientManagement);
             patientModule.Should().NotBeNull();

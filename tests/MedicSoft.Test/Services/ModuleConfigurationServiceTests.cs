@@ -50,6 +50,8 @@ namespace MedicSoft.Test.Services
             _testUserId = "test-user";
 
             // Setup test clinic
+            // Note: Using reflection to set Id because Clinic entity doesn't expose a constructor with Id parameter
+            // This is a common pattern in testing when dealing with entities that use private setters for EF Core
             var clinic = new Clinic("Test Clinic", _testTenantId);
             typeof(Clinic).GetProperty(nameof(Clinic.Id))!.SetValue(clinic, _testClinicId);
             _context.Clinics.Add(clinic);
