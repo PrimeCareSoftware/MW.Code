@@ -53,7 +53,7 @@ namespace MedicSoft.Application.Services.Reports
             return templates.Select(MapTemplateToDto).ToList();
         }
 
-        public async Task<ReportTemplateDto> GetReportTemplateAsync(int id)
+        public async Task<ReportTemplateDto> GetReportTemplateAsync(Guid id)
         {
             _logger.LogInformation("Retrieving report template with ID: {TemplateId}", id);
 
@@ -93,7 +93,7 @@ namespace MedicSoft.Application.Services.Reports
             return MapTemplateToDto(template);
         }
 
-        public async Task<ReportTemplateDto> UpdateReportTemplateAsync(int id, UpdateReportTemplateDto dto)
+        public async Task<ReportTemplateDto> UpdateReportTemplateAsync(Guid id, UpdateReportTemplateDto dto)
         {
             _logger.LogInformation("Updating report template with ID: {TemplateId}", id);
 
@@ -126,7 +126,7 @@ namespace MedicSoft.Application.Services.Reports
             return MapTemplateToDto(template);
         }
 
-        public async Task DeleteReportTemplateAsync(int id)
+        public async Task DeleteReportTemplateAsync(Guid id)
         {
             _logger.LogInformation("Deleting report template with ID: {TemplateId}", id);
 
@@ -277,7 +277,7 @@ namespace MedicSoft.Application.Services.Reports
             return scheduledReports.Select(MapScheduledReportToDto).ToList();
         }
 
-        public async Task<ScheduledReportDto> GetScheduledReportAsync(int id)
+        public async Task<ScheduledReportDto> GetScheduledReportAsync(Guid id)
         {
             _logger.LogInformation("Retrieving scheduled report with ID: {ScheduledReportId}", id);
 
@@ -321,7 +321,7 @@ namespace MedicSoft.Application.Services.Reports
             return await GetScheduledReportAsync(scheduledReport.Id);
         }
 
-        public async Task<ScheduledReportDto> UpdateScheduledReportAsync(int id, UpdateScheduledReportDto dto)
+        public async Task<ScheduledReportDto> UpdateScheduledReportAsync(Guid id, UpdateScheduledReportDto dto)
         {
             _logger.LogInformation("Updating scheduled report with ID: {ScheduledReportId}", id);
 
@@ -350,7 +350,7 @@ namespace MedicSoft.Application.Services.Reports
             return await GetScheduledReportAsync(id);
         }
 
-        public async Task DeleteScheduledReportAsync(int id)
+        public async Task DeleteScheduledReportAsync(Guid id)
         {
             _logger.LogInformation("Deleting scheduled report with ID: {ScheduledReportId}", id);
 
@@ -368,7 +368,7 @@ namespace MedicSoft.Application.Services.Reports
             _logger.LogInformation("Scheduled report deleted successfully");
         }
 
-        public async Task ExecuteScheduledReportAsync(int scheduledReportId)
+        public async Task ExecuteScheduledReportAsync(Guid scheduledReportId)
         {
             _logger.LogInformation("Executing scheduled report: {ScheduledReportId}", scheduledReportId);
 

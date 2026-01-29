@@ -18,13 +18,13 @@ namespace MedicSoft.Application.Services.SystemAdmin
 {
     public interface ISmartActionService
     {
-        Task<string> ImpersonateClinicAsync(int clinicId, int adminUserId);
-        Task GrantCreditAsync(int clinicId, int days, string reason, int adminUserId);
-        Task ApplyDiscountAsync(int clinicId, decimal percentage, int months, int adminUserId);
-        Task SuspendTemporarilyAsync(int clinicId, DateTime? reactivationDate, string reason, int adminUserId);
-        Task<byte[]> ExportClinicDataAsync(int clinicId, int adminUserId);
-        Task MigratePlanAsync(int clinicId, int newPlanId, bool proRata, int adminUserId);
-        Task SendCustomEmailAsync(int clinicId, string subject, string body, int adminUserId);
+        Task<string> ImpersonateClinicAsync(Guid clinicId, Guid adminUserId);
+        Task GrantCreditAsync(Guid clinicId, int days, string reason, Guid adminUserId);
+        Task ApplyDiscountAsync(Guid clinicId, decimal percentage, int months, Guid adminUserId);
+        Task SuspendTemporarilyAsync(Guid clinicId, DateTime? reactivationDate, string reason, Guid adminUserId);
+        Task<byte[]> ExportClinicDataAsync(Guid clinicId, Guid adminUserId);
+        Task MigratePlanAsync(Guid clinicId, Guid newPlanId, bool proRata, Guid adminUserId);
+        Task SendCustomEmailAsync(Guid clinicId, string subject, string body, Guid adminUserId);
     }
 
     public class SmartActionService : ISmartActionService
@@ -52,7 +52,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<string> ImpersonateClinicAsync(int clinicId, int adminUserId)
+        public async Task<string> ImpersonateClinicAsync(Guid clinicId, Guid adminUserId)
         {
             var clinic = await _context.Clinics
                 .Include(c => c.Company)
@@ -70,42 +70,61 @@ namespace MedicSoft.Application.Services.SystemAdmin
             var token = GenerateImpersonationToken(clinic, admin);
 
             // Registrar no audit log
-            await _auditService.LogAsync(new AuditLogDto
-            {
-                Action = "Impersonate",
-                EntityType = "Clinic",
-                EntityId = clinicId.ToString(),
-                UserId = adminUserId,
-                Details = $"Admin {admin.Name} impersonated clinic {clinic.Name}",
-                IpAddress = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString()
-            });
+            await _auditService.LogAsync(new CreateAuditLogDto(
+                UserId: adminUserId.ToString(),
+                UserName: admin.FullName,
+                UserEmail: admin.Email,
+                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                ActionDescription: $"Admin {admin.FullName} impersonated clinic {clinic.Name}",
+                EntityType: "Clinic",
+                EntityId: clinicId.ToString(),
+                EntityDisplayName: clinic.Name,
+                IpAddress: _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
+                UserAgent: _httpContextAccessor.HttpContext?.Request.Headers["User-Agent"].ToString() ?? "Unknown",
+                RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
+                HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
+                Result: Domain.Enums.OperationResult.SUCCESS,
+                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
+                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
+                Severity: Domain.Enums.AuditSeverity.HIGH,
+                TenantId: clinic.TenantId
+            ));
 
             _logger.LogWarning($"Admin {adminUserId} impersonating clinic {clinicId}");
 
             return token;
         }
 
-        public async Task GrantCreditAsync(int clinicId, int days, string reason, int adminUserId)
+        public async Task GrantCreditAsync(Guid clinicId, int days, string reason, Guid adminUserId)
         {
             var clinic = await _context.Clinics
-                .Include(c => c.Subscription)
                 .FirstOrDefaultAsync(c => c.Id == clinicId);
 
-            if (clinic?.Subscription == null)
-                throw new Exception("Clinic or subscription not found");
+            if (clinic == null)
+                throw new Exception("Clinic not found");
+            
+            var subscription = await _context.ClinicSubscriptions
+                .Where(s => s.ClinicId == clinicId)
+                .OrderByDescending(s => s.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (subscription == null)
+                throw new Exception("Clinic subscription not found");
 
             // Estender assinatura
-            clinic.Subscription.ExpiresAt = clinic.Subscription.ExpiresAt.AddDays(days);
-            clinic.Subscription.UpdatedAt = DateTime.UtcNow;
+            if (subscription.EndDate.HasValue)
+            {
+                subscription.EndDate = subscription.EndDate.Value.AddDays(days);
+            }
 
             // Criar crédito
             var credit = new SubscriptionCredit
             {
-                SubscriptionId = clinic.Subscription.Id,
+                SubscriptionId = subscription.Id,
                 Days = days,
                 Reason = reason,
                 GrantedAt = DateTime.UtcNow,
-                GrantedBy = adminUserId
+                GrantedByUserId = adminUserId
             };
 
             _context.SubscriptionCredits.Add(credit);
@@ -118,21 +137,32 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 body: $"Olá {clinic.Name},\n\n" +
                       $"Concedemos {days} dias grátis em sua assinatura.\n" +
                       $"Motivo: {reason}\n\n" +
-                      $"Sua nova data de vencimento: {clinic.Subscription.ExpiresAt:dd/MM/yyyy}\n\n" +
+                      $"Sua nova data de vencimento: {subscription.EndDate:dd/MM/yyyy}\n\n" +
                       $"Aproveite!\n\n" +
                       $"Equipe PrimeCare"
             );
 
+            var admin = await _context.Users.FindAsync(adminUserId);
             // Audit log
-            await _auditService.LogAsync(new AuditLogDto
-            {
-                Action = "GrantCredit",
-                EntityType = "Clinic",
-                EntityId = clinicId.ToString(),
-                UserId = adminUserId,
-                Details = $"Granted {days} days. Reason: {reason}",
-                IpAddress = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString()
-            });
+            await _auditService.LogAsync(new CreateAuditLogDto(
+                UserId: adminUserId.ToString(),
+                UserName: admin?.FullName ?? "System",
+                UserEmail: admin?.Email ?? "system@system",
+                Action: Domain.Enums.AuditAction.SYSTEM_ADMIN_ACTION,
+                ActionDescription: $"Granted {days} days. Reason: {reason}",
+                EntityType: "Clinic",
+                EntityId: clinicId.ToString(),
+                EntityDisplayName: clinic.Name,
+                IpAddress: _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
+                UserAgent: _httpContextAccessor.HttpContext?.Request.Headers["User-Agent"].ToString() ?? "Unknown",
+                RequestPath: _httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "/",
+                HttpMethod: _httpContextAccessor.HttpContext?.Request.Method ?? "POST",
+                Result: Domain.Enums.OperationResult.SUCCESS,
+                DataCategory: Domain.Enums.DataCategory.OPERATIONAL,
+                Purpose: Domain.ValueObjects.LgpdPurpose.SYSTEM_ADMINISTRATION,
+                Severity: Domain.Enums.AuditSeverity.MEDIUM,
+                TenantId: clinic.TenantId
+            ));
 
             _logger.LogInformation($"Admin {adminUserId} granted {days} days credit to clinic {clinicId}");
         }

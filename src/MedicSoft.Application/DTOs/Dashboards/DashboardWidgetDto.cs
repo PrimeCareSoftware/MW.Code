@@ -5,8 +5,8 @@ namespace MedicSoft.Application.DTOs.Dashboards
     /// </summary>
     public class DashboardWidgetDto
     {
-        public int Id { get; set; }
-        public int DashboardId { get; set; }
+        public Guid Id { get; set; }
+        public Guid DashboardId { get; set; }
         public string Type { get; set; }
         public string Title { get; set; }
         public string Config { get; set; }
@@ -50,7 +50,7 @@ namespace MedicSoft.Application.DTOs.Dashboards
     /// </summary>
     public class WidgetDataDto
     {
-        public int WidgetId { get; set; }
+        public Guid WidgetId { get; set; }
         public object Data { get; set; }
         public string Error { get; set; }
     }

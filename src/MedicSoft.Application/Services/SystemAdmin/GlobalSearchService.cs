@@ -36,22 +36,19 @@ namespace MedicSoft.Application.Services.SystemAdmin
             var result = new GlobalSearchResultDto();
 
             // Search in parallel
-            var tasks = new[]
-            {
-                SearchClinicsAsync(searchTerm, maxResults),
-                SearchUsersAsync(searchTerm, maxResults),
-                SearchTicketsAsync(searchTerm, maxResults),
-                SearchPlansAsync(searchTerm, maxResults),
-                SearchAuditLogsAsync(searchTerm, maxResults)
-            };
+            var clinicsTask = SearchClinicsAsync(searchTerm, maxResults);
+            var usersTask = SearchUsersAsync(searchTerm, maxResults);
+            var ticketsTask = SearchTicketsAsync(searchTerm, maxResults);
+            var plansTask = SearchPlansAsync(searchTerm, maxResults);
+            var auditLogsTask = SearchAuditLogsAsync(searchTerm, maxResults);
 
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(clinicsTask, usersTask, ticketsTask, plansTask, auditLogsTask);
 
-            result.Clinics = tasks[0].Result;
-            result.Users = tasks[1].Result;
-            result.Tickets = tasks[2].Result;
-            result.Plans = tasks[3].Result;
-            result.AuditLogs = tasks[4].Result;
+            result.Clinics = await clinicsTask;
+            result.Users = await usersTask;
+            result.Tickets = await ticketsTask;
+            result.Plans = await plansTask;
+            result.AuditLogs = await auditLogsTask;
 
             result.TotalResults = result.Clinics.Count + result.Users.Count + 
                                  result.Tickets.Count + result.Plans.Count + result.AuditLogs.Count;
@@ -81,9 +78,10 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     Email = c.Email,
                     TenantId = c.TenantId,
                     IsActive = c.IsActive,
-                    PlanName = c.ClinicSubscriptions
+                    PlanName = _context.ClinicSubscriptions
+                        .Where(s => s.ClinicId == c.Id)
                         .OrderByDescending(s => s.CreatedAt)
-                        .Select(s => s.Plan!.Name)
+                        .Select(s => s.SubscriptionPlan!.Name)
                         .FirstOrDefault() ?? "N/A",
                     Status = c.IsActive ? "Active" : "Inactive"
                 })
@@ -106,9 +104,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     Username = u.Username,
                     FullName = u.FullName,
                     Email = u.Email,
-                    Role = u.Role,
+                    Role = u.Role.ToString(),
                     IsActive = u.IsActive,
-                    ClinicName = u.UserClinicLinks
+                    ClinicName = u.ClinicLinks
                         .Select(l => l.Clinic!.Name)
                         .FirstOrDefault() ?? "N/A"
                 })
@@ -134,7 +132,9 @@ namespace MedicSoft.Application.Services.SystemAdmin
                     Status = t.Status.ToString(),
                     Priority = t.Priority.ToString(),
                     CreatedAt = t.CreatedAt,
-                    ClinicName = t.Clinic != null ? t.Clinic.Name : "System"
+                    ClinicName = t.ClinicId != null 
+                        ? _context.Clinics.Where(c => c.Id == t.ClinicId).Select(c => c.Name).FirstOrDefault() ?? "System"
+                        : "System"
                 })
                 .ToListAsync();
         }
