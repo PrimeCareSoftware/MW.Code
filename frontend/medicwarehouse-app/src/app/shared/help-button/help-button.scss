@@ -41,11 +41,11 @@
 }
 
 .position-bottom-right {
-  bottom: 2rem;
+  bottom: 7rem; /* Positioned above ticket FAB: 30px (ticket) + 60px (height) + ~22px (gap) = ~112px */
   right: 2rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .help-fab {
     padding: 0.65rem 1.25rem;
     font-size: 0.9rem;
@@ -62,7 +62,7 @@
   }
 
   .position-bottom-right {
-    bottom: 1rem;
+    bottom: 5.5rem; /* Positioned above ticket FAB: 20px (ticket) + 56px (height) + ~12px (gap) = ~88px */
     right: 1rem;
   }
 
