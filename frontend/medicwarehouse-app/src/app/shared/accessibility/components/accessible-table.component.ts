@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 export interface TableColumn {
   key: string;
@@ -28,6 +29,8 @@ export interface SortEvent {
  */
 @Component({
   selector: 'app-accessible-table',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div class="accessible-table-wrapper" role="region" [attr.aria-label]="caption" tabindex="0">
       <table

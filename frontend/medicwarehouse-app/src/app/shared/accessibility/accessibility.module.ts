@@ -45,7 +45,11 @@ import { ScreenReaderService } from './hooks/screen-reader.service';
  */
 @NgModule({
   declarations: [
-    // Components
+    // Empty - all components are standalone
+  ],
+  imports: [
+    CommonModule,
+    // Standalone Components
     SkipToContentComponent,
     AccessibleBreadcrumbsComponent,
     AccessibleTableComponent,
@@ -53,11 +57,8 @@ import { ScreenReaderService } from './hooks/screen-reader.service';
     FieldErrorComponent,
     AccessibleFieldComponent,
     
-    // Directives
+    // Standalone Directives
     FocusTrapDirective
-  ],
-  imports: [
-    CommonModule
   ],
   exports: [
     // Components

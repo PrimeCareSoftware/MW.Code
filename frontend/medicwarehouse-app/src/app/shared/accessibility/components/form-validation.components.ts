@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 export interface ValidationError {
   field: string;
@@ -14,6 +15,8 @@ export interface ValidationError {
  */
 @Component({
   selector: 'app-form-error-summary',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div
       *ngIf="errors.length > 0"
@@ -142,6 +145,8 @@ export class FormErrorSummaryComponent {
  */
 @Component({
   selector: 'app-field-error',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div
       *ngIf="error"
@@ -180,6 +185,8 @@ export class FieldErrorComponent {
  */
 @Component({
   selector: 'app-accessible-field',
+  standalone: true,
+  imports: [CommonModule, FieldErrorComponent],
   template: `
     <div class="form-field" [class.has-error]="error">
       <label
