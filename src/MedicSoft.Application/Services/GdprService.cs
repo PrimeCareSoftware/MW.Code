@@ -86,6 +86,14 @@ namespace MedicSoft.Application.Services
                 clinic.Cnpj
             };
 
+            // IMPORTANT: This operation anonymizes the clinic AND all associated users and patients.
+            // This is a significant operation with cascading effects.
+            // Consider the following before calling:
+            // - Users who work at multiple clinics will be anonymized
+            // - Patients who are treated at multiple clinics will be anonymized
+            // - This operation cannot be undone
+            // Ensure appropriate authorization and confirmation before proceeding.
+
             // Anonymize clinic data
             clinic.UpdateBasicInfo(
                 $"Clinic-{Guid.NewGuid()}",

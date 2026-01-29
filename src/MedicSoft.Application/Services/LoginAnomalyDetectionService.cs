@@ -29,8 +29,12 @@ namespace MedicSoft.Application.Services
             if (string.IsNullOrEmpty(userId) || attempt == null)
                 return false;
 
+            // Parse userId to Guid
+            if (!Guid.TryParse(userId, out Guid userGuid))
+                return false;
+
             // Get recent successful login sessions
-            var recentSessions = await _sessionRepository.GetRecentSessionsByUserIdAsync(userId, tenantId, 10);
+            var recentSessions = await _sessionRepository.GetRecentSessionsByUserIdAsync(userGuid, tenantId, 10);
 
             if (!recentSessions.Any())
                 return false; // First login, not suspicious
@@ -87,7 +91,7 @@ namespace MedicSoft.Application.Services
                     UserId: userId,
                     UserName: "Unknown", // Will be filled by context
                     UserEmail: "Unknown",
-                    Action: Domain.Enums.AuditAction.LOGIN_FAILED,
+                    Action: Domain.Enums.AuditAction.ACCESS_DENIED, // Using ACCESS_DENIED as proxy for suspicious login
                     ActionDescription: "Tentativa de login suspeita detectada",
                     EntityType: "User",
                     EntityId: userId,
@@ -117,9 +121,11 @@ namespace MedicSoft.Application.Services
                         TenantId = tenantId
                     });
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Notification service might not be available, continue anyway
+                    // Log but don't fail the operation if notification service is unavailable
+                    // This could happen if notification service is not configured or temporarily down
+                    System.Diagnostics.Debug.WriteLine($"Failed to send suspicious login notification: {ex.Message}");
                 }
             }
 
@@ -152,6 +158,7 @@ namespace MedicSoft.Application.Services
                 ));
             }
             // Successful login sessions are recorded by the authentication service
+            // No need to await Task.CompletedTask
         }
 
         private bool AreSimilarUserAgents(string ua1, string ua2)
@@ -174,14 +181,6 @@ namespace MedicSoft.Application.Services
                 // If parsing fails, do simple string comparison
                 return ua1.Equals(ua2, StringComparison.OrdinalIgnoreCase);
             }
-        }
-
-        private async Task<string> GetCountryFromIp(string ipAddress)
-        {
-            // TODO: Implement IP geolocation using MaxMind, IP2Location, or similar service
-            // For now, return a placeholder
-            await Task.CompletedTask;
-            return "BR";
         }
     }
 }
