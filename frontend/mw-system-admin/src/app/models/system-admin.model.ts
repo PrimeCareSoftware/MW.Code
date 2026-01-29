@@ -89,6 +89,7 @@ export interface SubscriptionPlan {
   id: string;
   name: string;
   description?: string;
+  type?: string;
   monthlyPrice: number;
   yearlyPrice: number;
   maxUsers: number;
@@ -96,6 +97,12 @@ export interface SubscriptionPlan {
   trialDays: number;
   isActive: boolean;
   createdAt: string;
+  enabledModules?: string[];
+  // Legacy properties for backward compatibility
+  hasReports?: boolean;
+  hasWhatsAppIntegration?: boolean;
+  hasSMSNotifications?: boolean;
+  hasTissExport?: boolean;
 }
 
 export interface CreateSubscriptionPlanRequest {

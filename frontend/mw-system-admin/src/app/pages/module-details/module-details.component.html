@@ -1,0 +1,129 @@
+<div class="module-details-container">
+  <!-- Header -->
+  <div class="header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-content">
+      <h1>Detalhes do Módulo: {{ moduleName }}</h1>
+      <p class="subtitle">Informações detalhadas e clínicas usando este módulo</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!loading" class="content">
+    
+    <!-- Statistics Card -->
+    <mat-card class="stats-card" *ngIf="moduleStats">
+      <mat-card-header>
+        <mat-card-title>Estatísticas</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <mat-icon>business</mat-icon>
+            <div class="stat-content">
+              <span class="stat-value">{{ moduleStats.totalClinics || 0 }}</span>
+              <span class="stat-label">Total de Clínicas</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <mat-icon>check_circle</mat-icon>
+            <div class="stat-content">
+              <span class="stat-value">{{ moduleStats.enabledClinics || 0 }}</span>
+              <span class="stat-label">Clínicas com Módulo Ativo</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <mat-icon>trending_up</mat-icon>
+            <div class="stat-content">
+              <span class="stat-value">{{ moduleStats.adoptionRate || 0 | number:'1.1-1' }}%</span>
+              <span class="stat-label">Taxa de Adoção</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Actions Card -->
+    <mat-card class="actions-card">
+      <mat-card-header>
+        <mat-card-title>Ações Globais</mat-card-title>
+        <mat-card-subtitle>Estas ações afetam todas as clínicas</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="enableGlobally()">
+            <mat-icon>check_circle_outline</mat-icon>
+            Habilitar Globalmente
+          </button>
+          <button mat-raised-button color="warn" (click)="disableGlobally()">
+            <mat-icon>block</mat-icon>
+            Desabilitar Globalmente
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Clinics Table -->
+    <mat-card class="clinics-card">
+      <mat-card-header>
+        <mat-card-title>Clínicas com Módulo Ativo</mat-card-title>
+        <mat-card-subtitle>{{ clinics.length }} clínica(s) usando este módulo</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <table mat-table [dataSource]="clinics" class="clinics-table">
+          
+          <!-- Clinic Name Column -->
+          <ng-container matColumnDef="clinicName">
+            <th mat-header-cell *matHeaderCellDef>Clínica</th>
+            <td mat-cell *matCellDef="let clinic">{{ clinic.clinicName }}</td>
+          </ng-container>
+
+          <!-- Is Enabled Column -->
+          <ng-container matColumnDef="isEnabled">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let clinic">
+              <span class="status-badge" [class.active]="clinic.isEnabled">
+                {{ clinic.isEnabled ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Updated At Column -->
+          <ng-container matColumnDef="updatedAt">
+            <th mat-header-cell *matHeaderCellDef>Última Atualização</th>
+            <td mat-cell *matCellDef="let clinic">
+              {{ clinic.updatedAt | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <td mat-cell *matCellDef="let clinic">
+              <button mat-icon-button 
+                      (click)="viewClinic(clinic.clinicId)"
+                      matTooltip="Ver clínica">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <div *ngIf="clinics.length === 0" class="no-data">
+          <mat-icon>info</mat-icon>
+          <p>Nenhuma clínica está usando este módulo atualmente.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

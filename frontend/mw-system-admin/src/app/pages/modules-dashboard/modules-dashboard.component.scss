@@ -1,0 +1,162 @@
+.dashboard-container {
+  padding: 24px;
+  
+  .header {
+    margin-bottom: 24px;
+    
+    h1 {
+      font-size: 28px;
+      font-weight: 500;
+      margin: 0 0 8px 0;
+    }
+    
+    .subtitle {
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    padding: 48px;
+  }
+
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .kpi-grid {
+    margin-bottom: 16px;
+  }
+
+  .kpi-card {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    
+    .kpi-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #1976d2;
+      margin-right: 16px;
+    }
+    
+    .kpi-content {
+      flex: 1;
+      
+      .kpi-value {
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+      
+      .kpi-label {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+  }
+
+  .modules-table-card {
+    .modules-table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      thead {
+        background-color: #f5f5f5;
+        
+        th {
+          text-align: left;
+          padding: 12px 16px;
+          font-weight: 600;
+          border-bottom: 2px solid #e0e0e0;
+        }
+      }
+      
+      tbody {
+        tr {
+          &:hover {
+            background-color: #fafafa;
+          }
+          
+          td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+          }
+        }
+      }
+      
+      .module-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+        
+        .module-name {
+          font-weight: 500;
+        }
+      }
+      
+      .category-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: white;
+      }
+      
+      .adoption-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .adoption-bar {
+          flex: 1;
+          height: 8px;
+          background-color: #e0e0e0;
+          border-radius: 4px;
+          overflow: hidden;
+          
+          .adoption-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+            
+            &.high-adoption {
+              background-color: #4CAF50;
+            }
+            
+            &.medium-adoption {
+              background-color: #FF9800;
+            }
+            
+            &.low-adoption {
+              background-color: #F44336;
+            }
+          }
+        }
+        
+        .adoption-text {
+          font-weight: 500;
+          min-width: 50px;
+        }
+      }
+    }
+  }
+
+  .chart-card {
+    min-height: 400px;
+  }
+}
