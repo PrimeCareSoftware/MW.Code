@@ -465,10 +465,16 @@ namespace MedicSoft.Test.Integration
             historyList[4].Action.Should().Be("Enabled"); // Oldest
         }
 
-        #endregion
-
         #region Concurrency Tests
 
+        /// <summary>
+        /// Tests concurrent operations on different modules.
+        /// Note: This test verifies that multiple operations can complete successfully
+        /// when executed concurrently. However, it uses an in-memory database which 
+        /// doesn't enforce transactions the same way as a real database. For true 
+        /// concurrency testing under production conditions, use integration tests 
+        /// against an actual database instance.
+        /// </summary>
         [Fact]
         public async Task ConcurrentModuleOperations_ShouldHandleCorrectly()
         {

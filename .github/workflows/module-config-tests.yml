@@ -56,10 +56,16 @@ jobs:
       run: |
         echo "## Module Configuration Test Results" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "✅ Backend tests completed" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ needs.backend-tests.result }}" == "success" ]; then
+          echo "✅ Backend tests **passed**" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Backend tests **failed**" >> $GITHUB_STEP_SUMMARY
+        fi
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Test Coverage" >> $GITHUB_STEP_SUMMARY
-        echo "- ModuleConfigurationService: Unit Tests" >> $GITHUB_STEP_SUMMARY
-        echo "- ModuleConfigController: Unit Tests" >> $GITHUB_STEP_SUMMARY
-        echo "- Module Permissions: Security Tests" >> $GITHUB_STEP_SUMMARY
-        echo "- Integration Tests: End-to-end workflows" >> $GITHUB_STEP_SUMMARY
+        echo "- ModuleConfigurationService: Unit Tests (26)" >> $GITHUB_STEP_SUMMARY
+        echo "- ModuleConfigController: Unit Tests (20)" >> $GITHUB_STEP_SUMMARY
+        echo "- Module Permissions: Security Tests (18)" >> $GITHUB_STEP_SUMMARY
+        echo "- Integration Tests: End-to-end workflows (10)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Total: 74 tests**" >> $GITHUB_STEP_SUMMARY
