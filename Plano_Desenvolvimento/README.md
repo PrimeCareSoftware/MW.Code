@@ -8,6 +8,32 @@
 > **Tempo Total:** ~58-76 meses/dev (se executado sequencialmente)  
 > **System Admin Status:** ✅ **5 de 6 fases completas** (83%)
 
+## 🆕 NOVO: Plano de Importação de Dados
+
+**📥 [Ver Índice Completo](./INDEX_IMPORTACAO_DADOS.md)** (5 min)  
+**📋 [Ver Plano de Desenvolvimento](./PLANO_IMPORTACAO_DADOS.md)** (45 min)  
+**🔧 [Ver Especificação Técnica](./ESPECIFICACAO_TECNICA_IMPORTACAO.md)** (30 min)  
+**📖 [Ver Guia do Usuário](./GUIA_USUARIO_IMPORTACAO.md)** (20 min)
+
+Sistema completo para importar dados de clientes de outros sistemas e plataformas:
+- Suporte a múltiplos formatos (CSV, Excel, JSON, XML, APIs)
+- Validação e normalização automática
+- Mapeamento flexível de campos
+- Processamento assíncrono para grandes volumes
+
+**Investimento:** R$ 253.750 - R$ 350.000  
+**Tempo:** 12-17 meses | **ROI:** 87-120% no primeiro ano
+
+**Fases do Projeto:**
+- 📋 **Fase 1: Fundação** - Importação básica CSV (2-3 meses)
+- 📊 **Fase 2: Formatos Avançados** - Excel, JSON, XML (2-3 meses)
+- ⚡ **Fase 3: Processamento Assíncrono** - Grandes volumes (2-3 meses)
+- 🔌 **Fase 4: Integrações e APIs** - Conectores de sistemas (2-3 meses)
+- 📚 **Fase 5: Dados Relacionados** - Histórico completo (2-3 meses)
+- 🔒 **Fase 6: Segurança e Compliance** - LGPD, CFM (1-2 meses)
+
+---
+
 ## 🆕 NOVO: Plano de Melhorias System Admin 2026
 
 **✅ 5 de 6 Fases Completas** - Janeiro 2026  
@@ -43,7 +69,9 @@ Análise completa e plano de desenvolvimento para transformar o system-admin em 
 
 Esta pasta contém **prompts otimizados** para todas as tarefas pendentes do PrimeCare Software, organizados por fase de prioridade. Cada prompt foi desenhado para ser executado diretamente pelo GitHub Copilot ou outro agente de IA, com especificações técnicas completas e critérios de sucesso claros.
 
-**NOVO:** Inclui agora o **Plano de Melhorias do System Admin** baseado em análise de mercado de ferramentas modernas de administração.
+**NOVO:** Inclui agora:
+- **Plano de Importação de Dados** - Sistema completo para migração de clientes de outros sistemas
+- **Plano de Melhorias do System Admin** - Baseado em análise de mercado de ferramentas modernas de administração
 
 ## 📁 Estrutura de Pastas
 
@@ -52,6 +80,12 @@ Plano_Desenvolvimento/
 ├── README.md (este arquivo)
 ├── DEPENDENCIES.md (matriz de dependências entre tarefas)
 ├── EFFORT_ESTIMATES.md (estimativas detalhadas por fase)
+│
+├── 📥 Importação de Dados (NOVO - 12-17 meses - R$ 253-350k)
+│   ├── INDEX_IMPORTACAO_DADOS.md (índice navegável)
+│   ├── PLANO_IMPORTACAO_DADOS.md (plano completo)
+│   ├── ESPECIFICACAO_TECNICA_IMPORTACAO.md (specs técnicas)
+│   └── GUIA_USUARIO_IMPORTACAO.md (manual do usuário)
 │
 ├── fase-1-conformidade-legal/     (P0 - Crítico - 12-14 meses)
 │   ├── 01-cfm-1821-finalizacao.md
