@@ -4,22 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using MedicSoft.Api.Hubs;
 using MedicSoft.Application.DTOs.SystemAdmin;
+using MedicSoft.Application.Services.SystemAdmin;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
-namespace MedicSoft.Application.Services.SystemAdmin
+namespace MedicSoft.Api.Services.SystemAdmin
 {
-    public interface ISystemNotificationService
-    {
-        Task<SystemNotificationDto> CreateNotificationAsync(CreateSystemNotificationDto dto);
-        Task<List<SystemNotificationDto>> GetUnreadNotificationsAsync();
-        Task<List<SystemNotificationDto>> GetAllNotificationsAsync(int page, int pageSize);
-        Task MarkAsReadAsync(int notificationId);
-        Task MarkAllAsReadAsync();
-        Task<int> GetUnreadCountAsync();
-        Task SendRealTimeNotificationAsync(int notificationId);
-    }
-
     public class SystemNotificationService : ISystemNotificationService
     {
         private readonly ISystemNotificationRepository _repository;

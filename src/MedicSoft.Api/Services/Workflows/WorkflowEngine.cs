@@ -7,7 +7,7 @@ using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.Workflows;
-using MedicSoft.Application.Services.Reports;
+using MedicSoft.Application.Services.CRM;
 using MedicSoft.Application.Services.Workflows;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Context;
