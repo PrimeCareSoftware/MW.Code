@@ -33,6 +33,9 @@ export class ModuleConfigService {
   }
 
   // Informações de Módulos
+  // Note: This endpoint uses /api/module-config instead of /api/system-admin/modules
+  // because it provides general module information that may be used by both
+  // system-admin and clinic-specific contexts
   getModulesInfo(): Observable<ModuleInfo[]> {
     return this.http.get<ModuleInfo[]>(`${environment.apiUrl}/api/module-config/info`);
   }

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { forkJoin } from 'rxjs';
 import { ModuleConfigService } from '../../services/module-config.service';
 import { ModuleUsage, ModuleAdoption } from '../../models/module-config.model';
 
@@ -42,19 +43,22 @@ export class ModulesDashboardComponent implements OnInit {
   loadDashboardData(): void {
     this.loading = true;
 
-    // Carregar dados em paralelo
-    Promise.all([
-      this.moduleService.getGlobalModuleUsage().toPromise(),
-      this.moduleService.getModuleAdoption().toPromise()
-    ]).then(([usage, adoption]) => {
-      this.moduleUsage = usage || [];
-      this.moduleAdoption = adoption || [];
-      this.totalModules = this.moduleUsage.length;
-      this.averageAdoption = this.calculateAverageAdoption();
-      this.loading = false;
-    }).catch(error => {
-      console.error('Erro ao carregar dados:', error);
-      this.loading = false;
+    // Carregar dados em paralelo usando forkJoin
+    forkJoin({
+      usage: this.moduleService.getGlobalModuleUsage(),
+      adoption: this.moduleService.getModuleAdoption()
+    }).subscribe({
+      next: ({ usage, adoption }) => {
+        this.moduleUsage = usage || [];
+        this.moduleAdoption = adoption || [];
+        this.totalModules = this.moduleUsage.length;
+        this.averageAdoption = this.calculateAverageAdoption();
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar dados:', error);
+        this.loading = false;
+      }
     });
   }
 

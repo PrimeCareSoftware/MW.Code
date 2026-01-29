@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { forkJoin } from 'rxjs';
 import { ModuleConfigService } from '../../services/module-config.service';
 import { ClinicModule } from '../../models/module-config.model';
 
@@ -55,17 +56,21 @@ export class ModuleDetailsComponent implements OnInit {
   loadModuleDetails(): void {
     this.loading = true;
 
-    Promise.all([
-      this.moduleService.getClinicsWithModule(this.moduleName).toPromise(),
-      this.moduleService.getModuleStats(this.moduleName).toPromise()
-    ]).then(([clinics, stats]) => {
-      this.clinics = clinics || [];
-      this.moduleStats = stats || {};
-      this.loading = false;
-    }).catch(error => {
-      console.error('Erro ao carregar detalhes:', error);
-      this.snackBar.open('Erro ao carregar detalhes do módulo', 'Fechar', { duration: 3000 });
-      this.loading = false;
+    // Carregar dados em paralelo usando forkJoin
+    forkJoin({
+      clinics: this.moduleService.getClinicsWithModule(this.moduleName),
+      stats: this.moduleService.getModuleStats(this.moduleName)
+    }).subscribe({
+      next: ({ clinics, stats }) => {
+        this.clinics = clinics || [];
+        this.moduleStats = stats || {};
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar detalhes:', error);
+        this.snackBar.open('Erro ao carregar detalhes do módulo', 'Fechar', { duration: 3000 });
+        this.loading = false;
+      }
     });
   }
 
