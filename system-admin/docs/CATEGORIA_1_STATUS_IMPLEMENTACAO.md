@@ -239,13 +239,15 @@ src/MedicSoft.Api/appsettings.json (adicionar configuração provedor)
 
 ✅ **Validação XSD 100%**
 - Arquivo de schema: `src/MedicSoft.Api/wwwroot/schemas/sngpc_v2.1.xsd` ✅
+- **IMPORTANTE:** Schema é simplificado para validação básica. Schema oficial completo da ANVISA pode ter validações adicionais.
 - Classe: `AnvisaSngpcClient.ValidateXmlAsync()`
-- Validação contra schema XSD oficial ANVISA
+- Validação contra schema XSD
 - Configuração em `appsettings.json`:
   ```json
   "XsdSchemaBasePath": "wwwroot/schemas",
   "RequireValidation": true  // ✅ HABILITADO
   ```
+- **Recomendação:** Antes de transmitir para ANVISA em produção, validar com schema oficial completo disponível em: https://www.gov.br/anvisa/pt-br/assuntos/fiscalizacao-e-monitoramento/sngpc
 
 ✅ **Assinatura Digital XML 100%**
 - Método: `SNGPCXmlGeneratorService.SignXmlAsync()` ✅ NOVO (30/01/2026)

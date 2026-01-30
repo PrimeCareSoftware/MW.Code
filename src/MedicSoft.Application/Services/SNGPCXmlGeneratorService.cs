@@ -286,6 +286,7 @@ namespace MedicSoft.Application.Services
         /// <summary>
         /// Signs XML content using X509 certificate for ANVISA compliance.
         /// Implements XML-DSig standard required for SNGPC transmission.
+        /// NOTE: This is a synchronous operation wrapped in Task for API consistency.
         /// </summary>
         /// <param name="xmlContent">XML content to sign</param>
         /// <param name="certificate">X509 certificate for signing</param>
