@@ -34,7 +34,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -58,7 +58,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -79,7 +79,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("FailedAttempts")
                         .HasColumnType("integer");
@@ -88,7 +88,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LockedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -96,17 +96,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UnlockedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UnlockedBy")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("UnlocksAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -148,7 +148,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -161,13 +161,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("InstallmentNumber")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("IssueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
@@ -180,7 +180,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("PaymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PixKey")
                         .HasMaxLength(200)
@@ -204,7 +204,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -237,7 +237,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -252,7 +252,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("FineRate")
                         .HasColumnType("decimal(5,2)");
@@ -267,7 +267,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("IssueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
@@ -283,7 +283,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("SettlementDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -303,7 +303,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -337,7 +337,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uuid");
@@ -351,7 +351,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ResponseDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("TemplateId")
                         .HasColumnType("uuid");
@@ -362,7 +362,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -399,7 +399,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -436,7 +436,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -465,16 +465,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("CheckInTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("CheckOutTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ClinicId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("DurationMinutes")
                         .HasColumnType("integer");
@@ -493,7 +493,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime?>("PaidAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("PaidByUserId")
                         .HasColumnType("uuid");
@@ -520,7 +520,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ScheduledDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<TimeSpan>("ScheduledTime")
                         .HasColumnType("interval");
@@ -537,7 +537,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -573,7 +573,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
@@ -583,7 +583,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("PerformedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("PriceCharged")
                         .HasPrecision(18, 2)
@@ -598,7 +598,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -627,16 +627,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataHoraAssinatura")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DataTimestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DataUltimaValidacao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("DocumentoId")
                         .HasColumnType("uuid");
@@ -674,7 +674,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("Valida")
                         .HasColumnType("boolean");
@@ -713,7 +713,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DataCategory")
                         .IsRequired()
@@ -783,10 +783,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()
@@ -834,7 +834,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("AuthorizationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("AuthorizationNumber")
                         .HasMaxLength(50)
@@ -845,7 +845,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DenialReason")
                         .HasMaxLength(1000)
@@ -856,7 +856,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("PatientHealthInsuranceId")
                         .HasColumnType("uuid");
@@ -878,7 +878,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("RequestDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("RequestNumber")
                         .IsRequired()
@@ -894,7 +894,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -934,7 +934,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("EmailTemplateId")
                         .HasColumnType("uuid");
@@ -969,7 +969,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1004,7 +1004,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("DaysSinceLastVisit")
                         .HasColumnType("integer");
@@ -1019,7 +1019,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("PredictedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("RiskLevel")
                         .HasColumnType("integer");
@@ -1034,7 +1034,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<List<string>>("_recommendedActions")
                         .IsRequired()
@@ -1075,10 +1075,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ClosedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1086,7 +1086,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime?>("FirstResponseAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uuid");
@@ -1100,13 +1100,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("ReceivedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("ResolutionTimeMinutes")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ResolvedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("ResponseTimeMinutes")
                         .HasColumnType("integer");
@@ -1133,7 +1133,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1165,10 +1165,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("InteractionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsInternal")
                         .HasColumnType("boolean");
@@ -1185,7 +1185,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -1214,7 +1214,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("HtmlBody")
                         .IsRequired()
@@ -1243,7 +1243,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<List<string>>("_availableVariables")
                         .IsRequired()
@@ -1265,20 +1265,20 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("DurationDays")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("EnteredAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExitTrigger")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("ExitedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("PatientJourneyId")
                         .HasColumnType("uuid");
@@ -1296,7 +1296,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1317,7 +1317,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("DelayMinutes")
                         .HasColumnType("integer");
@@ -1331,7 +1331,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastExecutedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1365,7 +1365,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<List<string>>("_tags")
                         .IsRequired()
@@ -1394,7 +1394,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("CurrentStage")
                         .HasColumnType("integer");
@@ -1430,7 +1430,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1456,7 +1456,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1481,14 +1481,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1511,13 +1511,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AnalyzedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<double>("ConfidenceScore")
                         .HasColumnType("double precision");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<double>("NegativeScore")
                         .HasColumnType("double precision");
@@ -1551,7 +1551,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<List<string>>("_topics")
                         .IsRequired()
@@ -1580,7 +1580,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("double precision");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("DelayHours")
                         .HasColumnType("integer");
@@ -1621,7 +1621,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1642,7 +1642,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsRequired")
                         .HasColumnType("boolean");
@@ -1675,7 +1675,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1694,10 +1694,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AnsweredAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("NumericAnswer")
                         .HasColumnType("integer");
@@ -1722,7 +1722,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1743,10 +1743,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("CsatScore")
                         .HasColumnType("integer");
@@ -1761,7 +1761,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("SurveyId")
                         .HasColumnType("uuid");
@@ -1776,7 +1776,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1806,10 +1806,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeliveredAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ErrorMessage")
                         .HasColumnType("text");
@@ -1818,10 +1818,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("FailedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("NextRetryAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Payload")
                         .IsRequired()
@@ -1851,7 +1851,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1874,7 +1874,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1892,13 +1892,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastDeliveryAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("LastFailureAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("LastSuccessAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("MaxRetries")
                         .ValueGeneratedOnAdd()
@@ -1946,7 +1946,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -1977,7 +1977,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -2011,13 +2011,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -2053,16 +2053,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataEmissao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataExpiracao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("IssuerName")
                         .IsRequired()
@@ -2101,7 +2101,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasDefaultValue(0);
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("Valido")
                         .HasColumnType("boolean");
@@ -2146,7 +2146,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DefaultPaymentReceiverType")
                         .IsRequired()
@@ -2211,7 +2211,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("WhatsAppNumber")
                         .HasMaxLength(30)
@@ -2249,7 +2249,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FontColor")
                         .HasMaxLength(20)
@@ -2274,7 +2274,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<DateTime?>("UpdatedAt")
                         .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -2293,7 +2293,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CancellationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CancellationReason")
                         .HasMaxLength(500)
@@ -2303,19 +2303,19 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("CurrentPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("FrozenEndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("FrozenStartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsFrozen")
                         .HasColumnType("boolean");
@@ -2324,7 +2324,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastPaymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("ManualOverrideActive")
                         .ValueGeneratedOnAdd()
@@ -2336,14 +2336,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("ManualOverrideSetAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ManualOverrideSetBy")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("NextPaymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("PendingPlanId")
                         .HasColumnType("uuid");
@@ -2352,10 +2352,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("PlanChangeDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -2369,10 +2369,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("TrialEndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -2394,41 +2394,53 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             modelBuilder.Entity("MedicSoft.Domain.Entities.ClinicTag", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AssignedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("AssignedBy")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<Guid>("ClinicId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsAutoAssigned")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<Guid>("TagId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClinicId");
+                    b.HasIndex("ClinicId")
+                        .HasDatabaseName("IX_ClinicTags_ClinicId");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("TagId")
+                        .HasDatabaseName("IX_ClinicTags_TagId");
 
-                    b.ToTable("ClinicTags");
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("IX_ClinicTags_TenantId");
+
+                    b.HasIndex("ClinicId", "TagId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_ClinicTags_ClinicId_TagId");
+
+                    b.ToTable("ClinicTags", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.ClinicalExamination", b =>
@@ -2445,7 +2457,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("numeric(5,1)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("GeneralState")
                         .HasMaxLength(1000)
@@ -2483,7 +2495,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("Weight")
                         .HasPrecision(6, 2)
@@ -2508,7 +2520,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Document")
                         .IsRequired()
@@ -2555,7 +2567,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -2593,13 +2605,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("Data")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataConsolidacao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("EspecialidadeId")
                         .HasColumnType("uuid");
@@ -2645,10 +2657,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UltimaAtualizacao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -2669,7 +2681,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CustomFieldsJson")
                         .IsRequired()
@@ -2751,7 +2763,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -2777,7 +2789,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CustomFieldsJson")
                         .IsRequired()
@@ -2874,7 +2886,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -2915,10 +2927,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DoctorCRM")
                         .HasMaxLength(20)
@@ -2929,7 +2941,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("DocumentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DocumentNumber")
                         .IsRequired()
@@ -2971,7 +2983,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("numeric(18,3)");
 
                     b.Property<DateTime>("RegisteredAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("RegisteredByUserId")
                         .HasColumnType("uuid");
@@ -2993,7 +3005,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -3029,7 +3041,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -3065,7 +3077,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -3092,7 +3104,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("DashboardId")
                         .HasColumnType("uuid");
@@ -3141,7 +3153,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -3165,7 +3177,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DenialReason")
                         .HasColumnType("text");
@@ -3202,10 +3214,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -3234,7 +3246,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ConsentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ConsentMethod")
                         .IsRequired()
@@ -3249,14 +3261,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
@@ -3276,7 +3288,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("RevokedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -3289,7 +3301,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()
@@ -3307,17 +3319,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CompletedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LegalApprovalDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LegalApprover")
                         .HasColumnType("text");
@@ -3340,7 +3352,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ProcessedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ProcessingNotes")
                         .HasColumnType("text");
@@ -3353,7 +3365,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("RequestDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("RequestType")
                         .HasColumnType("integer");
@@ -3369,7 +3381,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()
@@ -3386,7 +3398,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ConsentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ConsentMethod")
                         .IsRequired()
@@ -3398,7 +3410,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DataCategories")
                         .IsRequired()
@@ -3423,7 +3435,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("RevokedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -3431,7 +3443,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()
@@ -3460,7 +3472,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -3468,7 +3480,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("DiagnosedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ICD10Code")
                         .IsRequired()
@@ -3487,7 +3499,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -3511,7 +3523,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DigitalSignature")
                         .HasMaxLength(2000)
@@ -3536,13 +3548,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("IssuedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("MedicalRecordId")
                         .HasColumnType("uuid");
@@ -3565,7 +3577,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("ReportedToSNGPCAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("RequiresSNGPCReport")
                         .HasColumnType("boolean");
@@ -3579,7 +3591,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("SignedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -3590,7 +3602,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("VerificationCode")
                         .HasMaxLength(50)
@@ -3659,7 +3671,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("DigitalPrescriptionId")
                         .HasColumnType("uuid");
@@ -3673,7 +3685,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Frequency")
                         .IsRequired()
@@ -3692,7 +3704,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ManufactureDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("MedicationId")
                         .HasColumnType("uuid");
@@ -3716,7 +3728,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -3754,10 +3766,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("AuthorizationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("CancellationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CancellationProtocol")
                         .HasMaxLength(50)
@@ -3805,7 +3817,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("CsllAmount")
                         .HasColumnType("decimal(18,2)");
@@ -3834,7 +3846,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("IssueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ItemCode")
                         .HasMaxLength(20)
@@ -3938,7 +3950,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("VerificationCode")
                         .HasMaxLength(50)
@@ -3996,7 +4008,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -4033,7 +4045,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -4064,10 +4076,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CompletedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -4090,14 +4102,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("RequestedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Results")
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
                     b.Property<DateTime?>("ScheduledDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -4108,7 +4120,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Urgency")
                         .HasColumnType("integer");
@@ -4150,7 +4162,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -4158,14 +4170,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime?>("PaidDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("PaymentMethod")
                         .HasColumnType("integer");
@@ -4191,7 +4203,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -4221,7 +4233,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -4240,7 +4252,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("UsaAgendamento")
                         .HasColumnType("boolean");
@@ -4273,7 +4285,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("ClosureDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ClosureNumber")
                         .IsRequired()
@@ -4281,7 +4293,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("DiscountAmount")
                         .HasColumnType("decimal(18,2)");
@@ -4316,7 +4328,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("SettlementDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -4330,7 +4342,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -4365,7 +4377,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -4387,7 +4399,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -4417,13 +4429,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataApuracao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DataPagamento")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("Deducoes")
                         .HasColumnType("decimal(18,2)");
@@ -4464,7 +4476,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("ValorDAS")
                         .HasColumnType("decimal(18,2)");
@@ -4514,13 +4526,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataGeracao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataReferencia")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("DepreciacaoAcumulada")
                         .HasColumnType("decimal(18,2)");
@@ -4597,7 +4609,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -4654,7 +4666,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(20)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("FatorR")
                         .HasColumnType("decimal(5,2)");
@@ -4681,13 +4693,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("VigenciaFim")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("VigenciaInicio")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -4715,13 +4727,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("CustoServicos")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("DataGeracao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("Deducoes")
                         .HasColumnType("decimal(18,2)");
@@ -4769,10 +4781,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("PeriodoFim")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("PeriodoInicio")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("ReceitaBruta")
                         .HasColumnType("decimal(18,2)");
@@ -4792,7 +4804,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -4836,10 +4848,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(20)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataCalculo")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("INSSRetido")
                         .HasColumnType("boolean");
@@ -4861,7 +4873,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("ValorBruto")
                         .HasColumnType("decimal(18,2)");
@@ -4914,10 +4926,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataLancamento")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DocumentoOrigemId")
                         .HasColumnType("uuid");
@@ -4949,7 +4961,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
@@ -5003,7 +5015,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Natureza")
                         .HasColumnType("integer");
@@ -5029,7 +5041,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5082,7 +5094,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Document")
                         .IsRequired()
@@ -5129,7 +5141,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("WebsiteUrl")
                         .HasMaxLength(500)
@@ -5165,7 +5177,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("HolderName")
                         .HasMaxLength(200)
@@ -5222,13 +5234,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ValidUntil")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5258,7 +5270,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("AcceptedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ConsentText")
                         .IsRequired()
@@ -5266,7 +5278,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(10000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DigitalSignature")
                         .HasMaxLength(500)
@@ -5294,7 +5306,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5327,14 +5339,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("CancellationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CancellationReason")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CustomerAddress")
                         .HasMaxLength(500)
@@ -5354,7 +5366,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("InvoiceNumber")
                         .IsRequired()
@@ -5362,20 +5374,20 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("IssueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime?>("PaidDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("PaymentId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("SentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -5395,7 +5407,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5435,7 +5447,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("CertificateExpirationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CertificatePassword")
                         .HasMaxLength(200)
@@ -5464,7 +5476,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("CurrentInvoiceNumber")
                         .HasColumnType("integer");
@@ -5552,7 +5564,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ZipCode")
                         .HasMaxLength(10)
@@ -5579,10 +5591,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AttemptTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FailureReason")
                         .HasMaxLength(500)
@@ -5599,7 +5611,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -5635,7 +5647,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -5671,7 +5683,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("numeric(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5696,7 +5708,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(750)");
 
                     b.Property<DateTime?>("ClosedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("ClosedByUserId")
                         .HasColumnType("uuid");
@@ -5705,13 +5717,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ConsultationEndTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ConsultationStartTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CurrentMedications")
                         .HasMaxLength(4000)
@@ -5768,7 +5780,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ReopenedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("ReopenedByUserId")
                         .HasColumnType("uuid");
@@ -5779,7 +5791,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5814,10 +5826,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("AccessedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Details")
                         .HasColumnType("text");
@@ -5833,7 +5845,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .HasColumnType("text");
@@ -5860,7 +5872,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("MedicalRecordVersionId")
                         .HasColumnType("uuid");
@@ -5873,7 +5885,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("SignedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("SignedById")
                         .HasColumnType("uuid");
@@ -5886,7 +5898,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5908,7 +5920,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -5934,7 +5946,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -5961,7 +5973,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ChangedById")
                         .HasColumnType("uuid");
@@ -5977,7 +5989,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("MedicalRecordId")
                         .HasColumnType("uuid");
@@ -5994,7 +6006,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Version")
                         .HasColumnType("integer");
@@ -6042,7 +6054,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -6086,7 +6098,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6119,7 +6131,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("boolean");
@@ -6135,7 +6147,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6161,7 +6173,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ChangedBy")
                         .IsRequired()
@@ -6172,7 +6184,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ModuleConfigurationId")
                         .HasColumnType("uuid");
@@ -6197,7 +6209,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6232,13 +6244,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("numeric(18,3)");
 
                     b.Property<DateTime?>("ClosedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("ClosedByUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("Discrepancy")
                         .HasPrecision(18, 3)
@@ -6281,7 +6293,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("numeric(18,3)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Year")
                         .HasColumnType("integer");
@@ -6320,10 +6332,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeliveredAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ErrorMessage")
                         .HasMaxLength(2000)
@@ -6338,7 +6350,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ReadAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Recipient")
                         .IsRequired()
@@ -6349,7 +6361,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("SentAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -6367,7 +6379,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6400,7 +6412,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -6411,7 +6423,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastExecutedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("MaxRetries")
                         .HasColumnType("integer");
@@ -6427,7 +6439,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("NextExecutionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("RecipientFilter")
                         .HasMaxLength(2000)
@@ -6459,7 +6471,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6494,7 +6506,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("boolean");
@@ -6508,7 +6520,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6525,7 +6537,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CurrentSessionId")
                         .HasMaxLength(200)
@@ -6553,7 +6565,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -6579,7 +6591,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -6609,10 +6621,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("InactivatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("InactivationReason")
                         .HasMaxLength(500)
@@ -6625,7 +6637,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LinkedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
@@ -6644,7 +6656,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6670,17 +6682,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("IpAddress")
                         .HasMaxLength(45)
                         .HasColumnType("character varying(45)");
 
                     b.Property<DateTime>("LastActivityAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
@@ -6696,7 +6708,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .HasMaxLength(500)
@@ -6724,7 +6736,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Destination")
                         .IsRequired()
@@ -6732,7 +6744,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("boolean");
@@ -6754,10 +6766,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UsedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -6771,7 +6783,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(10)");
 
                     b.Property<DateTime?>("VerifiedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6795,10 +6807,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1500)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Document")
                         .IsRequired()
@@ -6835,7 +6847,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6864,13 +6876,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LinkedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uuid");
@@ -6884,7 +6896,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6920,7 +6932,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(10)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("HealthInsurancePlanId")
                         .HasColumnType("uuid");
@@ -6948,13 +6960,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ValidUntil")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -6985,7 +6997,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
@@ -6995,7 +7007,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -7007,7 +7019,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7033,7 +7045,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CancellationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CancellationReason")
                         .HasMaxLength(500)
@@ -7047,7 +7059,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Method")
                         .HasColumnType("integer");
@@ -7057,7 +7069,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PixKey")
                         .HasMaxLength(200)
@@ -7068,7 +7080,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("ProcessedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -7083,7 +7095,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7106,7 +7118,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Dosage")
                         .IsRequired()
@@ -7140,7 +7152,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7161,13 +7173,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("CurrentSequence")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("LastGeneratedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Prefix")
                         .IsRequired()
@@ -7186,7 +7198,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Year")
                         .HasColumnType("integer");
@@ -7214,7 +7226,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -7240,7 +7252,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7284,7 +7296,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -7315,7 +7327,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7334,7 +7346,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("MaterialId")
                         .HasColumnType("uuid");
@@ -7351,7 +7363,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7371,7 +7383,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -7390,7 +7402,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7412,14 +7424,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ReceivableId")
                         .HasColumnType("uuid");
@@ -7434,7 +7446,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7463,7 +7475,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -7499,7 +7511,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7514,10 +7526,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.HasData(
                         new
                         {
-                            Id = new Guid("139a39f4-2fa4-48c0-ade4-1240d03d11d7"),
+                            Id = new Guid("83dc5fe1-7984-4fb4-a45d-581f50e1a921"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}],\"sections\":[{\"title\":\"Revenue Overview\",\"type\":\"summary\"},{\"title\":\"MRR Trend\",\"type\":\"chart\",\"chartType\":\"line\"},{\"title\":\"Revenue by Plan\",\"type\":\"chart\",\"chartType\":\"pie\"},{\"title\":\"Top Customers\",\"type\":\"table\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2339),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(6438),
                             Description = "Comprehensive financial performance report including MRR, revenue, and growth metrics",
                             Icon = "assessment",
                             IsSystem = true,
@@ -7528,10 +7540,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("b2a6a082-8a55-4ce3-905a-1a53e437c8b5"),
+                            Id = new Guid("18e75c2e-332b-4af5-9af4-5e29f394235d"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"month\",\"type\":\"month\",\"required\":true,\"label\":\"Report Month\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2626),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(6828),
                             Description = "Detailed breakdown of revenue by plans, clinics, and payment methods",
                             Icon = "pie_chart",
                             IsSystem = true,
@@ -7542,10 +7554,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("1e623521-7114-437c-b99f-234f3d3b0559"),
+                            Id = new Guid("b32c7a68-5fae-4f05-8534-f99a16b228b3"),
                             Category = "customer",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2671),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(6912),
                             Description = "Analysis of new customer acquisition trends and conversion metrics",
                             Icon = "person_add",
                             IsSystem = true,
@@ -7556,10 +7568,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("34b20eb2-9878-4ca8-b168-481bf32d2d81"),
+                            Id = new Guid("53a9efad-3ba5-4118-9d12-176aeba9e901"),
                             Category = "customer",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2710),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(6998),
                             Description = "Comprehensive churn analysis with reasons and trends",
                             Icon = "exit_to_app",
                             IsSystem = true,
@@ -7570,10 +7582,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("7ea7bea9-5301-44b1-8a42-22f56b739835"),
+                            Id = new Guid("013e9e43-ddda-48e1-9153-83e25501ae02"),
                             Category = "operational",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2771),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(7138),
                             Description = "Detailed analysis of appointment scheduling, cancellations, and no-shows",
                             Icon = "event_note",
                             IsSystem = true,
@@ -7584,10 +7596,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("262ac068-2da4-4b34-9b99-e099781304d2"),
+                            Id = new Guid("645018e4-0bc9-4d02-85bb-b2f60232ed5d"),
                             Category = "operational",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2823),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(7250),
                             Description = "Overview of user activity, logins, and engagement metrics",
                             Icon = "analytics",
                             IsSystem = true,
@@ -7598,10 +7610,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("e2e21f47-7378-40b4-bad9-661de0e784f8"),
+                            Id = new Guid("740e044c-c0dd-4f89-b4c0-27fbb3a44254"),
                             Category = "clinical",
                             Configuration = "{\"parameters\":[{\"name\":\"clinicId\",\"type\":\"guid\",\"required\":false,\"label\":\"Clinic (Optional)\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2864),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(7327),
                             Description = "Statistical analysis of patient demographics and distribution",
                             Icon = "people",
                             IsSystem = true,
@@ -7612,10 +7624,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("eef183ad-162e-42b7-8146-10e3ef408331"),
+                            Id = new Guid("ea8fa21e-885e-4d6c-8896-66cfebc6f3e8"),
                             Category = "operational",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2896),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(7397),
                             Description = "Overview of system health, errors, and performance metrics",
                             Icon = "health_and_safety",
                             IsSystem = true,
@@ -7626,10 +7638,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("40c85ddd-8214-4887-9ee9-578e46bb2fce"),
+                            Id = new Guid("31748a32-9a83-4648-ae86-f61e4f8c229c"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"startDate\",\"type\":\"date\",\"required\":true,\"label\":\"Start Date\"},{\"name\":\"endDate\",\"type\":\"date\",\"required\":true,\"label\":\"End Date\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2928),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(7524),
                             Description = "Analysis of subscription lifecycle from acquisition to churn",
                             Icon = "loop",
                             IsSystem = true,
@@ -7640,10 +7652,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("e29961a2-ad04-47f7-8eac-1d3edd7ebffb"),
+                            Id = new Guid("f99c3a25-1049-42d2-a352-92273929a447"),
                             Category = "financial",
                             Configuration = "{\"parameters\":[{\"name\":\"month\",\"type\":\"month\",\"required\":true,\"label\":\"Report Month\"}],\"sections\":[{\"title\":\"Financial KPIs\",\"type\":\"metrics\"},{\"title\":\"Customer Metrics\",\"type\":\"metrics\"},{\"title\":\"Growth Trends\",\"type\":\"chart\"},{\"title\":\"Top Performers\",\"type\":\"table\"}]}",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2972),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(7608),
                             Description = "High-level executive summary with key metrics and trends",
                             Icon = "dashboard",
                             IsSystem = true,
@@ -7663,17 +7675,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ErrorMessage")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("GeneratedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("LastAttemptAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Month")
                         .HasColumnType("integer");
@@ -7683,10 +7695,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("ReportPeriodEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ReportPeriodStart")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -7707,10 +7719,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("TransmittedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("XmlContent")
                         .HasColumnType("text");
@@ -7757,7 +7769,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DurationMs")
                         .HasColumnType("bigint");
@@ -7802,7 +7814,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .HasMaxLength(500)
@@ -7838,7 +7850,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -7861,7 +7873,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasDefaultValue(true);
 
                     b.Property<DateTime?>("LastRunAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastRunError")
                         .IsRequired()
@@ -7879,7 +7891,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("NextRunAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("OutputFormat")
                         .IsRequired()
@@ -7903,7 +7915,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -7939,19 +7951,19 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(14)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DataHoraAtendimento")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DataHoraChamada")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataHoraEntrada")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DataHoraSaida")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("EspecialidadeId")
                         .HasColumnType("uuid");
@@ -8008,7 +8020,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8039,7 +8051,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("AcknowledgedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("AcknowledgedByUserId")
                         .HasColumnType("uuid");
@@ -8052,7 +8064,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -8077,7 +8089,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime?>("ResolvedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("ResolvedByUserId")
                         .HasColumnType("uuid");
@@ -8099,7 +8111,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8146,10 +8158,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("AttemptedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EndpointUrl")
                         .HasMaxLength(500)
@@ -8192,7 +8204,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("XmlHash")
                         .HasMaxLength(64)
@@ -8232,10 +8244,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CompletionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uuid");
@@ -8254,7 +8266,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("RecordDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -8262,7 +8274,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8306,7 +8318,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("GrantedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("GrantedBy")
                         .HasColumnType("uuid");
@@ -8337,7 +8349,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -8391,7 +8403,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8427,7 +8439,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DocumentNumber")
                         .HasMaxLength(20)
@@ -8471,7 +8483,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ZipCode")
                         .HasMaxLength(10)
@@ -8507,7 +8519,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Data")
                         .HasColumnType("text");
@@ -8520,7 +8532,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ReadAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -8535,7 +8547,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8545,7 +8557,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             modelBuilder.Entity("MedicSoft.Domain.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("AutomationRules")
@@ -8553,38 +8564,56 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(7)
+                        .HasColumnType("character varying(7)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<bool>("IsAutomatic")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("Order")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("TenantId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.HasIndex("Category")
+                        .HasDatabaseName("IX_Tags_Category");
+
+                    b.HasIndex("IsAutomatic")
+                        .HasDatabaseName("IX_Tags_IsAutomatic");
+
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("IX_Tags_TenantId");
+
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.TherapeuticPlan", b =>
@@ -8593,7 +8622,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExamRequests")
                         .HasMaxLength(3000)
@@ -8615,7 +8644,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -8628,7 +8657,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(5000)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8666,14 +8695,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LastStatusChangeAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
@@ -8695,7 +8724,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserEmail")
                         .IsRequired()
@@ -8738,7 +8767,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FileName")
                         .IsRequired()
@@ -8762,10 +8791,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8796,7 +8825,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsInternal")
                         .HasColumnType("boolean");
@@ -8813,7 +8842,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8832,7 +8861,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ChangedById")
                         .HasColumnType("uuid");
@@ -8846,7 +8875,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("NewStatus")
                         .HasColumnType("integer");
@@ -8863,7 +8892,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -8893,10 +8922,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("GlosedAmount")
                         .HasColumnType("decimal(18,2)");
@@ -8905,7 +8934,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ProcessedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ProtocolNumber")
                         .HasMaxLength(50)
@@ -8919,7 +8948,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("SubmittedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -8927,7 +8956,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("XmlFileName")
                         .HasMaxLength(500)
@@ -8971,13 +9000,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataGlosa")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataIdentificacao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DescricaoGlosa")
                         .IsRequired()
@@ -9015,7 +9044,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("ValorGlosado")
                         .HasColumnType("decimal(18,2)");
@@ -9062,7 +9091,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("GlosedAmount")
                         .HasColumnType("decimal(18,2)");
@@ -9083,7 +9112,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ServiceDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -9100,7 +9129,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -9136,7 +9165,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("GlosedAmount")
                         .HasColumnType("decimal(18,2)");
@@ -9173,7 +9202,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -9199,7 +9228,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -9226,7 +9255,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("UsaCertificadoDigital")
                         .HasColumnType("boolean");
@@ -9267,13 +9296,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataEnvio")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DataResposta")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("GlosaId")
                         .HasColumnType("uuid");
@@ -9296,7 +9325,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal?>("ValorDeferido")
                         .HasColumnType("decimal(18,2)");
@@ -9334,7 +9363,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(20)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -9345,7 +9374,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastUpdated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("ReferencePrice")
                         .HasColumnType("decimal(18,2)");
@@ -9359,7 +9388,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -9385,10 +9414,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("EnabledAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EnabledByIp")
                         .HasMaxLength(50)
@@ -9412,7 +9441,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -9442,7 +9471,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CurrentClinicId")
                         .HasColumnType("uuid");
@@ -9465,7 +9494,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -9497,7 +9526,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -9533,10 +9562,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("InactivatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("InactivationReason")
                         .HasMaxLength(500)
@@ -9553,7 +9582,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasDefaultValue(false);
 
                     b.Property<DateTime>("LinkedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -9561,7 +9590,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -9596,17 +9625,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("IpAddress")
                         .HasMaxLength(45)
                         .HasColumnType("character varying(45)");
 
                     b.Property<DateTime>("LastActivityAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("SessionId")
                         .IsRequired()
@@ -9614,7 +9643,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TenantId")
                         .IsRequired()
@@ -9622,7 +9651,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserAgent")
                         .HasMaxLength(500)
@@ -9658,7 +9687,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("DisplayMode")
                         .HasColumnType("integer");
@@ -9684,7 +9713,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -9709,19 +9738,19 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CalledTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CheckInTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ClinicId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CompletedTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("EstimatedWaitTimeMinutes")
                         .HasColumnType("integer");
@@ -9748,7 +9777,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -9787,7 +9816,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DefaultConfig")
                         .IsRequired()
@@ -9827,7 +9856,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -9845,9 +9874,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cd05dff1-655e-49eb-a0fb-8588114fa734"),
+                            Id = new Guid("ea3dfe4a-cf69-4671-920a-caad64629cd8"),
                             Category = "financial",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1043),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(4726),
                             DefaultConfig = "{\"xAxis\":\"month\",\"yAxis\":\"total_mrr\",\"color\":\"#10b981\",\"format\":\"currency\"}",
                             DefaultQuery = "\nSELECT \n    DATE_TRUNC('month', cs.\"CreatedAt\") as month,\n    SUM(p.\"MonthlyPrice\") as total_mrr\nFROM \"ClinicSubscriptions\" cs\nINNER JOIN \"SubscriptionPlans\" p ON cs.\"SubscriptionPlanId\" = p.\"Id\"\nWHERE cs.\"CreatedAt\" >= CURRENT_DATE - INTERVAL '12 months'\n    AND cs.\"Status\" = 'Active'\nGROUP BY DATE_TRUNC('month', cs.\"CreatedAt\")\nORDER BY month",
                             Description = "Monthly Recurring Revenue trend over the last 12 months",
@@ -9859,9 +9888,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("51b6f548-cb5a-49ea-834f-0210295ae229"),
+                            Id = new Guid("e63e701e-c3ba-4b16-8c4c-245013e86c50"),
                             Category = "financial",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1538),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5235),
                             DefaultConfig = "{\"labelField\":\"plan\",\"valueField\":\"revenue\",\"format\":\"currency\"}",
                             DefaultQuery = "\nSELECT \n    p.\"Name\" as plan,\n    SUM(p.\"MonthlyPrice\") as revenue\nFROM \"ClinicSubscriptions\" cs\nINNER JOIN \"SubscriptionPlans\" p ON cs.\"SubscriptionPlanId\" = p.\"Id\"\nWHERE cs.\"Status\" = 'Active'\nGROUP BY p.\"Name\"",
                             Description = "MRR distribution by plan type",
@@ -9873,9 +9902,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("8f06477b-b64e-4a05-ad9b-79fb15a298e7"),
+                            Id = new Guid("72fef700-4032-43a4-a96f-7cce4a84e772"),
                             Category = "financial",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1593),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5318),
                             DefaultConfig = "{\"format\":\"currency\",\"icon\":\"attach_money\",\"color\":\"#10b981\"}",
                             DefaultQuery = "\nSELECT SUM(p.\"MonthlyPrice\") as value\nFROM \"ClinicSubscriptions\" cs\nINNER JOIN \"SubscriptionPlans\" p ON cs.\"SubscriptionPlanId\" = p.\"Id\"\nWHERE cs.\"Status\" = 'Active'",
                             Description = "Current Monthly Recurring Revenue",
@@ -9887,9 +9916,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("ea4507d3-0649-4dcd-bdce-92323b8a2303"),
+                            Id = new Guid("4018dfbc-aaf3-4e44-988a-5914b435f5d4"),
                             Category = "customer",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1654),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5418),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"people\",\"color\":\"#3b82f6\"}",
                             DefaultQuery = "\nSELECT COUNT(DISTINCT \"ClinicId\") as value\nFROM \"ClinicSubscriptions\"\nWHERE \"Status\" = 'Active'",
                             Description = "Total number of active clinic customers",
@@ -9901,9 +9930,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("5a8eb84c-68ed-4c42-9260-7215613f039e"),
+                            Id = new Guid("7a509af0-0d2b-4e70-aeb3-3732abd47843"),
                             Category = "customer",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1686),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5462),
                             DefaultConfig = "{\"xAxis\":\"month\",\"yAxis\":\"new_customers\",\"color\":\"#3b82f6\"}",
                             DefaultQuery = "\nSELECT \n    DATE_TRUNC('month', \"CreatedAt\") as month,\n    COUNT(DISTINCT \"ClinicId\") as new_customers\nFROM \"ClinicSubscriptions\"\nWHERE \"CreatedAt\" >= CURRENT_DATE - INTERVAL '12 months'\nGROUP BY DATE_TRUNC('month', \"CreatedAt\")\nORDER BY month",
                             Description = "New customers acquired each month",
@@ -9915,9 +9944,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("e812da40-b535-4d45-bd34-783d469409b4"),
+                            Id = new Guid("5ab6dbe7-71d8-428f-879e-7287c2ffea47"),
                             Category = "customer",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1775),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5566),
                             DefaultConfig = "{\"format\":\"percent\",\"icon\":\"warning\",\"color\":\"#ef4444\",\"threshold\":{\"warning\":5,\"critical\":10}}",
                             DefaultQuery = "\nSELECT \n    ROUND(\n        CAST(COUNT(CASE WHEN \"Status\" = 'Cancelled' AND \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END) AS DECIMAL) / \n        NULLIF(COUNT(CASE WHEN \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END), 0) * 100,\n        2\n    ) as value\nFROM \"ClinicSubscriptions\"",
                             Description = "Monthly customer churn percentage",
@@ -9929,9 +9958,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("4b4ae0e8-a5b2-41f2-b162-debdfe9f4d5f"),
+                            Id = new Guid("71371967-8b17-4110-8540-1d2b7260f913"),
                             Category = "operational",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1915),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5715),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"event\",\"color\":\"#8b5cf6\"}",
                             DefaultQuery = "\nSELECT COUNT(*) as value\nFROM \"Appointments\"\nWHERE \"AppointmentDate\" >= CURRENT_DATE - INTERVAL '30 days'",
                             Description = "Total appointments scheduled",
@@ -9943,9 +9972,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("87fff2e6-518f-4a6e-8848-5b44edea87bb"),
+                            Id = new Guid("02c0c0ac-fed4-45b2-8c10-883704ec2f4a"),
                             Category = "operational",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(1971),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5795),
                             DefaultConfig = "{\"labelField\":\"status\",\"valueField\":\"count\"}",
                             DefaultQuery = "\nSELECT \n    \"Status\" as status,\n    COUNT(*) as count\nFROM \"Appointments\"\nWHERE \"AppointmentDate\" >= CURRENT_DATE - INTERVAL '30 days'\nGROUP BY \"Status\"",
                             Description = "Distribution of appointments by status",
@@ -9957,9 +9986,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("93477580-c577-44fa-b423-4b6ec58f4634"),
+                            Id = new Guid("4ac26e3c-0fef-489d-8ff7-62722154678c"),
                             Category = "operational",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2013),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5875),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"person\",\"color\":\"#06b6d4\"}",
                             DefaultQuery = "\nSELECT COUNT(*) as value\nFROM \"Users\"\nWHERE \"IsActive\" = true",
                             Description = "Number of active users in the system",
@@ -9971,9 +10000,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("c7f6cd8a-de5a-48e3-a92d-1e09ab742660"),
+                            Id = new Guid("2cd6edbc-9746-48dd-ae79-07a4f8d14001"),
                             Category = "clinical",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2082),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(5992),
                             DefaultConfig = "{\"format\":\"number\",\"icon\":\"local_hospital\",\"color\":\"#f97316\"}",
                             DefaultQuery = "\nSELECT COUNT(*) as value\nFROM \"Patients\"",
                             Description = "Total number of registered patients",
@@ -9985,9 +10014,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         },
                         new
                         {
-                            Id = new Guid("47267533-8c6e-405e-ae27-5fc078f6bf93"),
+                            Id = new Guid("cbb5e96a-caa7-4842-bb57-398964f79674"),
                             Category = "clinical",
-                            CreatedAt = new DateTime(2026, 1, 29, 20, 6, 20, 742, DateTimeKind.Utc).AddTicks(2159),
+                            CreatedAt = new DateTime(2026, 1, 30, 2, 23, 14, 89, DateTimeKind.Utc).AddTicks(6152),
                             DefaultConfig = "{\"xAxis\":\"clinic\",\"yAxis\":\"patient_count\",\"color\":\"#f97316\"}",
                             DefaultQuery = "\nSELECT \n    c.\"TradeName\" as clinic,\n    COUNT(p.\"Id\") as patient_count\nFROM \"Patients\" p\nINNER JOIN \"Clinics\" c ON p.\"ClinicId\" = c.\"Id\"\nGROUP BY c.\"TradeName\"\nORDER BY patient_count DESC\nLIMIT 10",
                             Description = "Patient distribution across clinics",
@@ -10008,7 +10037,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -10041,7 +10070,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -10075,7 +10104,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("DelaySeconds")
                         .HasColumnType("integer");
@@ -10084,7 +10113,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("WorkflowId")
                         .HasColumnType("integer");
@@ -10105,7 +10134,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Error")
                         .HasColumnType("text");
@@ -10114,7 +10143,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasColumnType("text");
 
                     b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -10147,13 +10176,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Error")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -11755,7 +11784,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                                 .HasColumnType("text");
 
                             b1.Property<DateTime?>("NextAppointmentDate")
-                                .HasColumnType("timestamp with time zone");
+                                .HasColumnType("timestamp without time zone");
 
                             b1.Property<string>("PatientInstructions")
                                 .HasColumnType("text");
@@ -11855,7 +11884,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                                         .HasColumnType("text");
 
                                     b2.Property<DateTime?>("ScheduledDate")
-                                        .HasColumnType("timestamp with time zone");
+                                        .HasColumnType("timestamp without time zone");
 
                                     b2.HasKey("PlanDataSoapRecordId", "Id");
 
@@ -12149,7 +12178,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                                 .HasColumnType("uuid");
 
                             b1.Property<DateTime?>("UsedAt")
-                                .HasColumnType("timestamp with time zone");
+                                .HasColumnType("timestamp without time zone");
 
                             b1.HasKey("Id");
 

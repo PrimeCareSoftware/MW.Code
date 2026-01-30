@@ -361,6 +361,10 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ReportTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ScheduledReportConfiguration());
 
+            // System Admin - Tags (Phase 2)
+            modelBuilder.ApplyConfiguration(new TagConfiguration());
+            modelBuilder.ApplyConfiguration(new ClinicTagConfiguration());
+
             // System Admin - Workflow Automation (Phase 4)
             modelBuilder.ApplyConfiguration(new WorkflowConfiguration());
             modelBuilder.ApplyConfiguration(new WorkflowActionConfiguration());
