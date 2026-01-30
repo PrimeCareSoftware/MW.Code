@@ -588,9 +588,9 @@ namespace MedicSoft.Application.Services.Dashboards
             // Collect all user IDs and parse them to Guids
             var userGuids = shares
                 .Where(s => !string.IsNullOrWhiteSpace(s.SharedWithUserId))
-                .Select(s => s.SharedWithUserId)
-                .Where(id => Guid.TryParse(id, out _))
-                .Select(id => Guid.Parse(id!))
+                .Select(s => new { UserId = s.SharedWithUserId, Parsed = Guid.TryParse(s.SharedWithUserId, out var guid) ? (Guid?)guid : null })
+                .Where(x => x.Parsed.HasValue)
+                .Select(x => x.Parsed!.Value)
                 .Distinct()
                 .ToList();
 
