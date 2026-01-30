@@ -579,38 +579,42 @@ namespace MedicSoft.Application.Services.Dashboards
         {
             _logger.LogInformation("Retrieving shares for dashboard: {DashboardId}", dashboardId);
 
-            // Optimized query: Load shares with user information in a single query
+            // Load all shares for the dashboard
             var shares = await _context.Set<DashboardShare>()
                 .Where(s => s.DashboardId == dashboardId)
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
 
-            var result = new List<DashboardShareDto>();
-            
-            foreach (var share in shares)
+            // Collect all user IDs and parse them to Guids
+            var userGuids = shares
+                .Where(s => !string.IsNullOrWhiteSpace(s.SharedWithUserId))
+                .Select(s => s.SharedWithUserId)
+                .Where(id => Guid.TryParse(id, out _))
+                .Select(id => Guid.Parse(id!))
+                .Distinct()
+                .ToList();
+
+            // Batch load all user information in a single query
+            var users = await _context.Set<User>()
+                .Where(u => userGuids.Contains(u.Id))
+                .Select(u => new { u.Id, u.Username })
+                .ToDictionaryAsync(u => u.Id.ToString(), u => u.Username);
+
+            // Map shares to DTOs with user information
+            var result = shares.Select(share => new DashboardShareDto
             {
-                string? userName = null;
-                if (!string.IsNullOrWhiteSpace(share.SharedWithUserId) && Guid.TryParse(share.SharedWithUserId, out var userGuid))
-                {
-                    userName = await _context.Set<User>()
-                        .Where(u => u.Id == userGuid)
-                        .Select(u => u.Username)
-                        .FirstOrDefaultAsync();
-                }
-                
-                result.Add(new DashboardShareDto
-                {
-                    Id = share.Id,
-                    DashboardId = share.DashboardId,
-                    SharedWithUserId = share.SharedWithUserId,
-                    SharedWithUserName = userName,
-                    SharedWithRole = share.SharedWithRole,
-                    PermissionLevel = share.PermissionLevel,
-                    SharedBy = share.SharedBy,
-                    ExpiresAt = share.ExpiresAt,
-                    CreatedAt = share.CreatedAt
-                });
-            }
+                Id = share.Id,
+                DashboardId = share.DashboardId,
+                SharedWithUserId = share.SharedWithUserId,
+                SharedWithUserName = !string.IsNullOrWhiteSpace(share.SharedWithUserId) && users.ContainsKey(share.SharedWithUserId)
+                    ? users[share.SharedWithUserId]
+                    : null,
+                SharedWithRole = share.SharedWithRole,
+                PermissionLevel = share.PermissionLevel,
+                SharedBy = share.SharedBy,
+                ExpiresAt = share.ExpiresAt,
+                CreatedAt = share.CreatedAt
+            }).ToList();
 
             return result;
         }
