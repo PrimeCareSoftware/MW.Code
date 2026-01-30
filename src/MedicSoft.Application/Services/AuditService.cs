@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MedicSoft.Application.DTOs;
@@ -8,16 +9,26 @@ using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.ValueObjects;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using MedicSoft.Repository.Context;
 
 namespace MedicSoft.Application.Services
 {
     public class AuditService : IAuditService
     {
         private readonly IAuditRepository _auditRepository;
+        private readonly MedicSoftDbContext _context;
+        private readonly ILogger<AuditService> _logger;
 
-        public AuditService(IAuditRepository auditRepository)
+        public AuditService(
+            IAuditRepository auditRepository,
+            MedicSoftDbContext context,
+            ILogger<AuditService> logger)
         {
             _auditRepository = auditRepository ?? throw new ArgumentNullException(nameof(auditRepository));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task LogAsync(CreateAuditLogDto dto)
@@ -332,5 +343,162 @@ namespace MedicSoft.Application.Services
         {
             return a.GetRawText() == b.GetRawText();
         }
+
+        public async Task<string> ExportToCsvAsync(AuditFilter filter)
+        {
+            var logs = await _auditRepository.QueryAsync(filter);
+            var csv = new StringBuilder();
+
+            // CSV Header
+            csv.AppendLine("Timestamp,UserId,UserName,UserEmail,Action,EntityType,EntityId,Result,IpAddress,Severity,RequestPath,HttpMethod");
+
+            // CSV Rows
+            foreach (var log in logs)
+            {
+                csv.AppendLine($"\"{log.Timestamp:yyyy-MM-dd HH:mm:ss}\",\"{EscapeCsv(log.UserId)}\",\"{EscapeCsv(log.UserName)}\",\"{EscapeCsv(log.UserEmail)}\",\"{log.Action}\",\"{EscapeCsv(log.EntityType)}\",\"{EscapeCsv(log.EntityId)}\",\"{log.Result}\",\"{EscapeCsv(log.IpAddress)}\",\"{log.Severity}\",\"{EscapeCsv(log.RequestPath)}\",\"{log.HttpMethod}\"");
+            }
+
+            return csv.ToString();
+        }
+
+        public async Task<string> ExportToJsonAsync(AuditFilter filter)
+        {
+            var logs = await _auditRepository.QueryAsync(filter);
+            var dtos = logs.Select(MapToDto).ToList();
+            
+            return JsonSerializer.Serialize(dtos, new JsonSerializerOptions 
+            { 
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+        }
+
+        public async Task<string> ExportLgpdComplianceReportAsync(string userId, string tenantId)
+        {
+            var report = await GenerateLgpdReportAsync(userId, tenantId);
+            
+            var json = new
+            {
+                ReportType = "LGPD Compliance Report",
+                GeneratedAt = report.GeneratedAt,
+                UserId = report.UserId,
+                UserName = report.UserName,
+                Summary = new
+                {
+                    TotalAccesses = report.TotalAccesses,
+                    DataModifications = report.DataModifications,
+                    DataExports = report.DataExports
+                },
+                RecentActivity = report.RecentActivity,
+                ComplianceStatement = "Este relatório atende aos requisitos da LGPD Art. 37 - Registro de Acesso a Dados Pessoais"
+            };
+
+            return JsonSerializer.Serialize(json, new JsonSerializerOptions 
+            { 
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+        }
+
+        public async Task<int> ApplyRetentionPolicyAsync(string tenantId, int retentionDays = 2555)
+        {
+            var cutoffDate = DateTime.UtcNow.AddDays(-retentionDays);
+            return await CleanupOldLogsAsync(tenantId, cutoffDate);
+        }
+
+        public async Task<int> CleanupOldLogsAsync(string tenantId, DateTime beforeDate)
+        {
+            try
+            {
+                var deletedCount = await _context.AuditLogs
+                    .Where(a => a.TenantId == tenantId && a.Timestamp < beforeDate)
+                    .ExecuteDeleteAsync();
+
+                _logger.LogInformation($"Cleaned up {deletedCount} audit logs before {beforeDate:yyyy-MM-dd} for tenant {tenantId}");
+                
+                return deletedCount;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to cleanup audit logs for tenant {tenantId}");
+                throw;
+            }
+        }
+
+        public async Task<AuditStatistics> GetStatisticsAsync(string tenantId, DateTime? startDate, DateTime? endDate)
+        {
+            var query = _context.AuditLogs.Where(a => a.TenantId == tenantId);
+
+            if (startDate.HasValue)
+                query = query.Where(a => a.Timestamp >= startDate.Value);
+
+            if (endDate.HasValue)
+                query = query.Where(a => a.Timestamp <= endDate.Value);
+
+            var totalLogs = await query.CountAsync();
+            var successfulOperations = await query.CountAsync(a => a.Result == OperationResult.SUCCESS);
+            var failedOperations = await query.CountAsync(a => a.Result == OperationResult.FAILED);
+            
+            var securityEvents = await query.CountAsync(a => 
+                a.Severity == AuditSeverity.WARNING || 
+                a.Severity == AuditSeverity.ERROR || 
+                a.Severity == AuditSeverity.CRITICAL);
+
+            var uniqueUsers = await query.Select(a => a.UserId).Distinct().CountAsync();
+            
+            var actionBreakdown = await query
+                .GroupBy(a => a.Action)
+                .Select(g => new ActionCount { Action = g.Key.ToString(), Count = g.Count() })
+                .ToListAsync();
+
+            var severityBreakdown = await query
+                .GroupBy(a => a.Severity)
+                .Select(g => new SeverityCount { Severity = g.Key.ToString(), Count = g.Count() })
+                .ToListAsync();
+
+            return new AuditStatistics(
+                TotalLogs: totalLogs,
+                SuccessfulOperations: successfulOperations,
+                FailedOperations: failedOperations,
+                SecurityEvents: securityEvents,
+                UniqueUsers: uniqueUsers,
+                ActionBreakdown: actionBreakdown,
+                SeverityBreakdown: severityBreakdown,
+                StartDate: startDate ?? DateTime.UtcNow.AddDays(-30),
+                EndDate: endDate ?? DateTime.UtcNow
+            );
+        }
+
+        private static string EscapeCsv(string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "";
+            
+            return value.Replace("\"", "\"\"");
+        }
+    }
+
+    public record AuditStatistics(
+        int TotalLogs,
+        int SuccessfulOperations,
+        int FailedOperations,
+        int SecurityEvents,
+        int UniqueUsers,
+        List<ActionCount> ActionBreakdown,
+        List<SeverityCount> SeverityBreakdown,
+        DateTime StartDate,
+        DateTime EndDate
+    );
+
+    public record ActionCount
+    {
+        public string Action { get; set; } = string.Empty;
+        public int Count { get; set; }
+    }
+
+    public record SeverityCount
+    {
+        public string Severity { get; set; } = string.Empty;
+        public int Count { get; set; }
     }
 }

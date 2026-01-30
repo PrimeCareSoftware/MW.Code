@@ -109,13 +109,33 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            // Indexes for performance
-            builder.HasIndex(a => a.UserId);
-            builder.HasIndex(a => a.TenantId);
-            builder.HasIndex(a => a.Timestamp);
-            builder.HasIndex(a => new { a.EntityType, a.EntityId });
-            builder.HasIndex(a => a.Action);
-            builder.HasIndex(a => a.Severity);
+            // Composite indexes for high-performance queries
+            builder.HasIndex(a => new { a.TenantId, a.UserId, a.Timestamp })
+                .HasDatabaseName("IX_AuditLogs_Tenant_User_Time");
+
+            builder.HasIndex(a => new { a.TenantId, a.EntityType, a.EntityId })
+                .HasDatabaseName("IX_AuditLogs_Tenant_Entity");
+
+            builder.HasIndex(a => new { a.TenantId, a.Action, a.Timestamp })
+                .HasDatabaseName("IX_AuditLogs_Tenant_Action_Time");
+
+            builder.HasIndex(a => new { a.TenantId, a.Timestamp })
+                .HasDatabaseName("IX_AuditLogs_Tenant_Time");
+
+            builder.HasIndex(a => new { a.TenantId, a.Severity })
+                .HasDatabaseName("IX_AuditLogs_Tenant_Severity");
+
+            // Partial index for high-severity events (better performance for security queries)
+            builder.HasIndex(a => new { a.TenantId, a.Severity, a.Timestamp })
+                .HasDatabaseName("IX_AuditLogs_Tenant_HighSeverity_Time")
+                .HasFilter("\"Severity\" IN ('WARNING', 'ERROR', 'CRITICAL')");
+
+            // Single column indexes for specific queries
+            builder.HasIndex(a => a.UserId)
+                .HasDatabaseName("IX_AuditLogs_UserId");
+
+            builder.HasIndex(a => a.Timestamp)
+                .HasDatabaseName("IX_AuditLogs_Timestamp");
         }
     }
 

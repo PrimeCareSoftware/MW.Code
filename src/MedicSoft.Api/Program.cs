@@ -488,6 +488,7 @@ builder.Services.AddScoped<ITissNotificationService, TissNotificationService>();
 // LGPD Audit System
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
+builder.Services.AddScoped<ISuspiciousActivityDetector, SuspiciousActivityDetector>();
 builder.Services.AddScoped<IDataProcessingConsentRepository, DataProcessingConsentRepository>();
 builder.Services.AddScoped<IDataAccessLogRepository, DataAccessLogRepository>();
 builder.Services.AddScoped<IDataConsentLogRepository, DataConsentLogRepository>();
@@ -495,6 +496,9 @@ builder.Services.AddScoped<IDataDeletionRequestRepository, DataDeletionRequestRe
 builder.Services.AddScoped<IConsentManagementService, ConsentManagementService>();
 builder.Services.AddScoped<IDataDeletionService, DataDeletionService>();
 builder.Services.AddScoped<IDataPortabilityService, DataPortabilityService>();
+
+// Audit Retention Background Job
+builder.Services.AddScoped<MedicSoft.Api.Jobs.AuditRetentionJob>();
 
 // Digital Signature System (ICP-Brasil)
 builder.Services.AddScoped<ICertificateManager, CertificateManager>();
@@ -709,6 +713,9 @@ if (app.Environment.IsDevelopment())
 
 // LGPD Audit Middleware - Logs all sensitive data operations (LGPD Art. 37)
 app.UseMiddleware<LgpdAuditMiddleware>();
+
+// Automatic Audit Middleware - Global audit logging for all operations
+app.UseMiddleware<AutomaticAuditMiddleware>();
 
 // CFM 1.638/2002 - Add medical record audit middleware (after authentication)
 app.UseMiddleware<MedicalRecordAuditMiddleware>();
@@ -955,6 +962,16 @@ try
         "sysadmin-check-unresponded-tickets",
         job => job.CheckUnrespondedTicketsAsync(),
         "0 */6 * * *", // Every 6 hours
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // LGPD Audit Retention Job - Clean up old audit logs (7 years retention)
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AuditRetentionJob>(
+        "audit-retention-policy",
+        job => job.ExecuteAsync(),
+        Cron.Daily(2, 0), // Daily at 02:00 UTC
         new RecurringJobOptions
         {
             TimeZone = TimeZoneInfo.Utc

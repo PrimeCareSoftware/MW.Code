@@ -75,5 +75,17 @@ namespace MedicSoft.Application.Services
             string tenantId);
         
         Task<(List<AuditLogDto> Logs, int TotalCount)> QueryAsync(AuditFilter filter);
+
+        // Export functionality
+        Task<string> ExportToCsvAsync(AuditFilter filter);
+        Task<string> ExportToJsonAsync(AuditFilter filter);
+        Task<string> ExportLgpdComplianceReportAsync(string userId, string tenantId);
+
+        // Data retention
+        Task<int> ApplyRetentionPolicyAsync(string tenantId, int retentionDays = 2555);
+        Task<int> CleanupOldLogsAsync(string tenantId, DateTime beforeDate);
+
+        // Statistics
+        Task<AuditStatistics> GetStatisticsAsync(string tenantId, DateTime? startDate, DateTime? endDate);
     }
 }
