@@ -498,13 +498,19 @@ namespace MedicSoft.Application.Services.Dashboards
             _logger.LogInformation("Sharing dashboard {DashboardId} with user {UserId} or role {Role}", 
                 dashboardId, dto.SharedWithUserId, dto.SharedWithRole);
 
-            // Validate dashboard exists
+            // Validate dashboard exists and user has permission to share it
             var dashboard = await _context.Set<CustomDashboard>()
                 .FirstOrDefaultAsync(d => d.Id == dashboardId);
 
             if (dashboard == null)
             {
                 throw new InvalidOperationException($"Dashboard with ID {dashboardId} not found");
+            }
+
+            // Security check: Only dashboard owner or public dashboards can be shared
+            if (dashboard.CreatedBy != sharedByUserId && !dashboard.IsPublic)
+            {
+                throw new UnauthorizedAccessException("You do not have permission to share this dashboard");
             }
 
             // Validate permission level
@@ -522,6 +528,28 @@ namespace MedicSoft.Application.Services.Dashboards
             if (!string.IsNullOrWhiteSpace(dto.SharedWithUserId) && !string.IsNullOrWhiteSpace(dto.SharedWithRole))
             {
                 throw new InvalidOperationException("Cannot specify both SharedWithUserId and SharedWithRole");
+            }
+
+            // Validate user exists if sharing with specific user
+            if (!string.IsNullOrWhiteSpace(dto.SharedWithUserId))
+            {
+                var userExists = await _context.Set<User>()
+                    .AnyAsync(u => u.Id == dto.SharedWithUserId);
+                
+                if (!userExists)
+                {
+                    throw new InvalidOperationException($"User with ID {dto.SharedWithUserId} not found");
+                }
+            }
+
+            // Validate role exists if sharing with role
+            if (!string.IsNullOrWhiteSpace(dto.SharedWithRole))
+            {
+                var validRoles = new[] { "SystemAdmin", "ClinicOwner", "Doctor", "Nurse", "Receptionist", "Accountant" };
+                if (!validRoles.Contains(dto.SharedWithRole))
+                {
+                    throw new InvalidOperationException($"Invalid role: {dto.SharedWithRole}");
+                }
             }
 
             var share = new DashboardShare
@@ -546,18 +574,34 @@ namespace MedicSoft.Application.Services.Dashboards
         {
             _logger.LogInformation("Retrieving shares for dashboard: {DashboardId}", dashboardId);
 
+            // Optimized query: Load shares with user information in a single query
             var shares = await _context.Set<DashboardShare>()
                 .Where(s => s.DashboardId == dashboardId)
                 .OrderByDescending(s => s.CreatedAt)
+                .Select(s => new
+                {
+                    Share = s,
+                    UserName = s.SharedWithUserId != null 
+                        ? _context.Set<User>()
+                            .Where(u => u.Id == s.SharedWithUserId)
+                            .Select(u => u.Username)
+                            .FirstOrDefault()
+                        : null
+                })
                 .ToListAsync();
 
-            var shareDtos = new List<DashboardShareDto>();
-            foreach (var share in shares)
+            return shares.Select(s => new DashboardShareDto
             {
-                shareDtos.Add(await MapShareToDto(share));
-            }
-
-            return shareDtos;
+                Id = s.Share.Id,
+                DashboardId = s.Share.DashboardId,
+                SharedWithUserId = s.Share.SharedWithUserId,
+                SharedWithUserName = s.UserName,
+                SharedWithRole = s.Share.SharedWithRole,
+                PermissionLevel = s.Share.PermissionLevel,
+                SharedBy = s.Share.SharedBy,
+                ExpiresAt = s.Share.ExpiresAt,
+                CreatedAt = s.Share.CreatedAt
+            }).ToList();
         }
 
         public async Task RevokeDashboardShareAsync(Guid shareId)
@@ -565,6 +609,7 @@ namespace MedicSoft.Application.Services.Dashboards
             _logger.LogInformation("Revoking dashboard share: {ShareId}", shareId);
 
             var share = await _context.Set<DashboardShare>()
+                .Include(s => s.Dashboard)
                 .FirstOrDefaultAsync(s => s.Id == shareId);
 
             if (share == null)
@@ -617,6 +662,19 @@ namespace MedicSoft.Application.Services.Dashboards
             if (originalDashboard == null)
             {
                 throw new InvalidOperationException($"Dashboard with ID {dashboardId} not found");
+            }
+
+            // Security check: User can duplicate if they own it, it's public, or it's shared with them
+            var canDuplicate = originalDashboard.CreatedBy == userId || 
+                              originalDashboard.IsPublic ||
+                              await _context.Set<DashboardShare>()
+                                  .AnyAsync(s => s.DashboardId == dashboardId && 
+                                                (s.SharedWithUserId == userId) &&
+                                                (s.ExpiresAt == null || s.ExpiresAt > DateTime.UtcNow));
+
+            if (!canDuplicate)
+            {
+                throw new UnauthorizedAccessException("You do not have permission to duplicate this dashboard");
             }
 
             var newDashboard = new CustomDashboard

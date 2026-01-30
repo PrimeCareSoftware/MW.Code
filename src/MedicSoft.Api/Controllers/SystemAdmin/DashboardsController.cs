@@ -216,7 +216,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpPost("{id}/duplicate")]
         public async Task<ActionResult<CustomDashboardDto>> DuplicateDashboard(
             Guid id, 
-            [FromBody] string newName = null)
+            [FromQuery] string newName = null)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var dashboard = await _dashboardService.DuplicateDashboardAsync(id, userId, newName);
