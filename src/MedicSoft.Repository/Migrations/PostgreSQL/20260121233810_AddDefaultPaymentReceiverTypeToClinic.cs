@@ -12,17 +12,19 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Convert DefaultPaymentReceiverType from int to string (enum conversion)
-            // The column was already added by migration 20260121193310_AddPaymentTrackingFields
+            // The column was already added by migration 20260121193310_AddPaymentTrackingFields as int
             // We need to alter it to use string instead of int
-            migrationBuilder.AlterColumn<string>(
-                name: "DefaultPaymentReceiverType",
-                table: "Clinics",
-                type: "character varying(50)",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "integer",
-                oldDefaultValue: 2);
+            // Using explicit SQL to handle the data conversion safely
+            migrationBuilder.Sql(@"
+                ALTER TABLE ""Clinics"" 
+                ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                TYPE character varying(50) 
+                USING CASE 
+                    WHEN ""DefaultPaymentReceiverType""::integer = 1 THEN 'Clinic'
+                    WHEN ""DefaultPaymentReceiverType""::integer = 2 THEN 'Secretary'
+                    ELSE 'Secretary'
+                END;
+            ");
             
             // Note: Appointment payment tracking columns (IsPaid, PaidAt, PaidByUserId, PaymentReceivedBy)
             // were already added by migration 20260121193310_AddPaymentTrackingFields
@@ -33,15 +35,21 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             // Revert DefaultPaymentReceiverType back to int type
-            migrationBuilder.AlterColumn<int>(
-                name: "DefaultPaymentReceiverType",
-                table: "Clinics",
-                type: "integer",
-                nullable: false,
-                defaultValue: 2,
-                oldClrType: typeof(string),
-                oldType: "character varying(50)",
-                oldMaxLength: 50);
+            // Using explicit SQL to handle the data conversion safely
+            migrationBuilder.Sql(@"
+                ALTER TABLE ""Clinics"" 
+                ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                TYPE integer 
+                USING CASE 
+                    WHEN ""DefaultPaymentReceiverType"" = 'Clinic' THEN 1
+                    WHEN ""DefaultPaymentReceiverType"" = 'Secretary' THEN 2
+                    ELSE 2
+                END;
+                
+                ALTER TABLE ""Clinics"" 
+                ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                SET DEFAULT 2;
+            ");
             
             // Note: Appointment payment tracking columns are NOT dropped here
             // because they were added by migration 20260121193310_AddPaymentTrackingFields
