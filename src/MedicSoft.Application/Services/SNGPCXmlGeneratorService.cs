@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.Xml;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -16,6 +19,7 @@ namespace MedicSoft.Application.Services
     public interface ISNGPCXmlGeneratorService
     {
         Task<string> GenerateXmlAsync(SNGPCReport report, IEnumerable<DigitalPrescription> prescriptions);
+        Task<string> SignXmlAsync(string xmlContent, X509Certificate2 certificate);
     }
 
     public class SNGPCXmlGeneratorService : ISNGPCXmlGeneratorService
@@ -277,6 +281,81 @@ namespace MedicSoft.Application.Services
             sanitized = System.Text.RegularExpressions.Regex.Replace(sanitized, @"[\x00-\x08\x0B\x0C\x0E-\x1F]", "");
             
             return sanitized;
+        }
+
+        /// <summary>
+        /// Signs XML content using X509 certificate for ANVISA compliance.
+        /// Implements XML-DSig standard required for SNGPC transmission.
+        /// NOTE: This is a synchronous operation wrapped in Task for API consistency.
+        /// </summary>
+        /// <param name="xmlContent">XML content to sign</param>
+        /// <param name="certificate">X509 certificate for signing</param>
+        /// <returns>Signed XML content</returns>
+        public Task<string> SignXmlAsync(string xmlContent, X509Certificate2 certificate)
+        {
+            if (string.IsNullOrWhiteSpace(xmlContent))
+                throw new ArgumentException("XML content cannot be empty", nameof(xmlContent));
+
+            if (certificate == null)
+                throw new ArgumentNullException(nameof(certificate));
+
+            if (!certificate.HasPrivateKey)
+                throw new InvalidOperationException("Certificate must have a private key for signing");
+
+            try
+            {
+                // Load XML document
+                var xmlDoc = new XmlDocument();
+                xmlDoc.PreserveWhitespace = true;
+                xmlDoc.LoadXml(xmlContent);
+
+                // Create signed XML object
+                var signedXml = new SignedXml(xmlDoc);
+                signedXml.SigningKey = certificate.GetRSAPrivateKey();
+
+                // Create reference to sign entire document
+                var reference = new Reference();
+                reference.Uri = ""; // Empty URI signs the whole document
+                reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
+                
+                // Add C14N transformation (Canonical XML 1.0)
+                reference.AddTransform(new XmlDsigC14NTransform());
+                
+                signedXml.AddReference(reference);
+
+                // Add certificate information to signature
+                var keyInfo = new KeyInfo();
+                keyInfo.AddClause(new KeyInfoX509Data(certificate));
+                signedXml.KeyInfo = keyInfo;
+
+                // Compute signature
+                signedXml.ComputeSignature();
+
+                // Get signature XML element
+                var signatureElement = signedXml.GetXml();
+
+                // Append signature to document root
+                xmlDoc.DocumentElement?.AppendChild(xmlDoc.ImportNode(signatureElement, true));
+
+                // Return signed XML as string
+                using var stringWriter = new StringWriter();
+                using var xmlWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings
+                {
+                    Encoding = Encoding.UTF8,
+                    Indent = true,
+                    IndentChars = "  ",
+                    NewLineChars = "\n",
+                    NewLineHandling = NewLineHandling.Replace
+                });
+                xmlDoc.Save(xmlWriter);
+                xmlWriter.Flush();
+
+                return Task.FromResult(stringWriter.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to sign XML: {ex.Message}", ex);
+            }
         }
     }
 }
