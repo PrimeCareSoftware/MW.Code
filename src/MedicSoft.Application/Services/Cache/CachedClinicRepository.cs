@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services.Cache;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Interfaces;
 using MedicSoft.Repository.Repositories;
 
 namespace MedicSoft.Application.Services.Cache
@@ -45,7 +46,7 @@ namespace MedicSoft.Application.Services.Cache
             }
 
             _logger.LogDebug("Clinic {ClinicId} not found in cache, retrieving from database", clinicId);
-            var clinic = await _clinicRepository.GetByIdAsync(clinicId);
+            var clinic = await _clinicRepository.GetByIdWithoutTenantAsync(clinicId);
 
             if (clinic != null)
             {

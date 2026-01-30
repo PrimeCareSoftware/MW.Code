@@ -146,5 +146,22 @@ namespace MedicSoft.Repository.Repositories
 
             return query;
         }
+
+        public async Task<List<Clinic>> GetAllActiveAsync()
+        {
+            return await _dbSet
+                .Where(c => c.IsActive)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+        }
+
+        public Task<ClinicCustomization?> GetCustomizationAsync(Guid clinicId)
+        {
+            // ClinicCustomization is managed by a separate repository (IClinicCustomizationRepository)
+            // This method is included in IClinicRepository for backward compatibility with CachedClinicRepository
+            // but should not be used directly. Use IClinicCustomizationRepository.GetByClinicIdAsync instead.
+            // TODO: Refactor CachedClinicRepository to inject IClinicCustomizationRepository separately
+            return Task.FromResult<ClinicCustomization?>(null);
+        }
     }
 }
