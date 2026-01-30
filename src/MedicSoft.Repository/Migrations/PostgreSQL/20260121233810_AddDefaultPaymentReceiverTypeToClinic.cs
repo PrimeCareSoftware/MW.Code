@@ -11,62 +11,41 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
+            // Convert DefaultPaymentReceiverType from int to string (enum conversion)
+            // The column was already added by migration 20260121193310_AddPaymentTrackingFields
+            // We need to alter it to use string instead of int
+            migrationBuilder.AlterColumn<string>(
                 name: "DefaultPaymentReceiverType",
                 table: "Clinics",
                 type: "character varying(50)",
                 maxLength: 50,
                 nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsPaid",
-                table: "Appointments",
-                type: "boolean",
-                nullable: false,
-                defaultValue: false);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "PaidAt",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "PaidByUserId",
-                table: "Appointments",
-                type: "uuid",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "PaymentReceivedBy",
-                table: "Appointments",
-                type: "integer",
-                nullable: true);
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldDefaultValue: 2);
+            
+            // Note: Appointment payment tracking columns (IsPaid, PaidAt, PaidByUserId, PaymentReceivedBy)
+            // were already added by migration 20260121193310_AddPaymentTrackingFields
+            // No need to add them again here
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
+            // Revert DefaultPaymentReceiverType back to int type
+            migrationBuilder.AlterColumn<int>(
                 name: "DefaultPaymentReceiverType",
-                table: "Clinics");
-
-            migrationBuilder.DropColumn(
-                name: "IsPaid",
-                table: "Appointments");
-
-            migrationBuilder.DropColumn(
-                name: "PaidAt",
-                table: "Appointments");
-
-            migrationBuilder.DropColumn(
-                name: "PaidByUserId",
-                table: "Appointments");
-
-            migrationBuilder.DropColumn(
-                name: "PaymentReceivedBy",
-                table: "Appointments");
+                table: "Clinics",
+                type: "integer",
+                nullable: false,
+                defaultValue: 2,
+                oldClrType: typeof(string),
+                oldType: "character varying(50)",
+                oldMaxLength: 50);
+            
+            // Note: Appointment payment tracking columns are NOT dropped here
+            // because they were added by migration 20260121193310_AddPaymentTrackingFields
+            // and should be dropped by that migration's Down() method
         }
     }
 }
