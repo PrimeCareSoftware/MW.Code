@@ -404,8 +404,26 @@ Central de documentação técnica detalhada do sistema.
 
 ### Patient Portal API
 **[patient-portal-api/](./patient-portal-api/)**
-- API dedicada para portal do paciente
-- Node.js + Express
+- API dedicada para portal do paciente (.NET 8)
+- **Status:** ✅ 98% Completo - Fase 11 (Testes) Completa
+- **[README.md](./patient-portal-api/README.md)** - Documentação principal da API
+- **[BOOKING_IMPLEMENTATION_GUIDE.md](./patient-portal-api/BOOKING_IMPLEMENTATION_GUIDE.md)** - Guia de agendamento online
+- **[NOTIFICATION_SERVICE_GUIDE.md](./patient-portal-api/NOTIFICATION_SERVICE_GUIDE.md)** - Serviço de notificações automáticas
+- **[DEVELOPER_QUICKSTART.md](./patient-portal-api/DEVELOPER_QUICKSTART.md)** - Guia rápido para desenvolvedores
+
+### Patient Portal Frontend
+**[frontend/patient-portal/](./frontend/patient-portal/)**
+- Portal Angular 18 para pacientes
+- **Status:** ✅ 98% Completo - Fase 11 (Testes) Completa
+- **[README.md](./frontend/patient-portal/README.md)** - Documentação principal do frontend
+- **[TESTING_GUIDE.md](./frontend/patient-portal/TESTING_GUIDE.md)** - Guia de testes (98.66% cobertura)
+- **[PWA_IMPLEMENTATION.md](./frontend/patient-portal/PWA_IMPLEMENTATION.md)** - Implementação PWA
+- **[INTEGRATION_GUIDE.md](./frontend/patient-portal/INTEGRATION_GUIDE.md)** - Guia de integração
+
+### Portal do Paciente - Documentação Consolidada
+- **[PORTAL_PACIENTE_STATUS_JAN2026.md](./PORTAL_PACIENTE_STATUS_JAN2026.md)** - ✅ Status técnico detalhado (98% completo)
+- **[FASE11_PORTAL_PACIENTE_TESTES_COMPLETO.md](./FASE11_PORTAL_PACIENTE_TESTES_COMPLETO.md)** - ✅ **NOVO** Fase 11 - Testes Completos (30 Jan 2026)
+- **[RELATORIO_IMPLEMENTACAO_PORTAL_PACIENTE.md](./RELATORIO_IMPLEMENTACAO_PORTAL_PACIENTE.md)** - Relatório de implementação
 
 ### Telemedicina
 **[telemedicine/](./telemedicine/)**
