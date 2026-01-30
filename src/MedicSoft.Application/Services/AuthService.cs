@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using MedicSoft.Application.Configuration;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 
@@ -22,19 +24,22 @@ namespace MedicSoft.Application.Services
         private readonly IUserSessionRepository _userSessionRepository;
         private readonly IOwnerSessionRepository _ownerSessionRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly MfaPolicySettings _mfaPolicySettings;
 
         public AuthService(
             IUserRepository userRepository, 
             IOwnerRepository ownerRepository,
             IUserSessionRepository userSessionRepository,
             IOwnerSessionRepository ownerSessionRepository,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            IOptions<MfaPolicySettings> mfaPolicySettings)
         {
             _userRepository = userRepository;
             _ownerRepository = ownerRepository;
             _userSessionRepository = userSessionRepository;
             _ownerSessionRepository = ownerSessionRepository;
             _passwordHasher = passwordHasher;
+            _mfaPolicySettings = mfaPolicySettings.Value;
         }
 
         public async Task<User?> AuthenticateUserAsync(string username, string password, string tenantId)
@@ -75,7 +80,7 @@ namespace MedicSoft.Application.Services
             await _userSessionRepository.DeleteAllUserSessionsAsync(userId, tenantId);
             
             // Update legacy field for backward compatibility
-            user.RecordLogin(sessionId);
+            user.RecordLogin(sessionId, _mfaPolicySettings.GracePeriodDays);
             await _userRepository.UpdateAsync(user);
 
             // Create new session record in database

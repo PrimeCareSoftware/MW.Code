@@ -146,8 +146,21 @@ namespace MedicSoft.Api.Middleware
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during MFA enforcement for user {UserId}", userIdClaim);
-                // On error, allow request to proceed to avoid blocking legitimate users
-                await _next(context);
+                
+                // SECURITY: Fail-secure approach - block access on critical errors
+                // Log this as a security event for monitoring
+                _logger.LogWarning(
+                    "SECURITY ALERT: MFA enforcement check failed for admin user {UserId} ({Role}). Access blocked for security.",
+                    userIdClaim,
+                    userRoleClaim);
+                
+                context.Response.StatusCode = 503;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(@"{
+                    ""error"": ""MFA_ENFORCEMENT_ERROR"",
+                    ""message"": ""Unable to verify MFA status. Please try again or contact support."",
+                    ""isSecurityError"": true
+                }");
                 return;
             }
 

@@ -45,11 +45,11 @@ namespace MedicSoft.Api.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "User not authenticated" });
 
-                var user = await _userRepository.GetByIdAsync(Guid.Parse(userId), CurrentTenantId);
+                var user = await _userRepository.GetByIdAsync(Guid.Parse(userId), GetTenantId());
                 if (user == null)
                     return NotFound(new { message = "User not found" });
 
-                var isEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(userId, CurrentTenantId);
+                var isEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(userId, GetTenantId());
 
                 return Ok(new MfaStatusResponse
                 {
@@ -79,12 +79,12 @@ namespace MedicSoft.Api.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "User not authenticated" });
 
-                var user = await _userRepository.GetByIdAsync(Guid.Parse(userId), CurrentTenantId);
+                var user = await _userRepository.GetByIdAsync(Guid.Parse(userId), GetTenantId());
                 if (user == null)
                     return NotFound(new { message = "User not found" });
 
                 // Check if already enabled
-                var isEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(userId, CurrentTenantId);
+                var isEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(userId, GetTenantId());
                 if (isEnabled)
                     return BadRequest(new { message = "MFA is already enabled for this user" });
 
@@ -93,12 +93,9 @@ namespace MedicSoft.Api.Controllers
                     userId, 
                     user.Email, 
                     ipAddress, 
-                    CurrentTenantId);
+                    GetTenantId());
 
-                // Clear grace period after successful setup
-                user.ClearMfaGracePeriod();
-                await _userRepository.UpdateAsync(user);
-
+                // Note: Grace period is NOT cleared here - will be cleared after successful verification
                 _logger.LogInformation("MFA setup initiated for user {UserId}", userId);
 
                 return Ok(new MfaSetupResponse
@@ -133,17 +130,26 @@ namespace MedicSoft.Api.Controllers
                 bool isValid;
                 if (request.IsBackupCode)
                 {
-                    isValid = await _twoFactorAuthService.VerifyBackupCodeAsync(userId, request.Code, CurrentTenantId);
+                    isValid = await _twoFactorAuthService.VerifyBackupCodeAsync(userId, request.Code, GetTenantId());
                 }
                 else
                 {
-                    isValid = await _twoFactorAuthService.VerifyTOTPAsync(userId, request.Code, CurrentTenantId);
+                    isValid = await _twoFactorAuthService.VerifyTOTPAsync(userId, request.Code, GetTenantId());
                 }
 
                 if (!isValid)
                 {
                     _logger.LogWarning("Invalid MFA code attempt for user {UserId}", userId);
                     return Unauthorized(new { message = "Invalid verification code" });
+                }
+
+                // Clear grace period after successful MFA verification
+                var user = await _userRepository.GetByIdAsync(Guid.Parse(userId), GetTenantId());
+                if (user != null && user.MfaGracePeriodEndsAt.HasValue)
+                {
+                    user.ClearMfaGracePeriod();
+                    await _userRepository.UpdateAsync(user);
+                    _logger.LogInformation("MFA grace period cleared for user {UserId} after successful verification", userId);
                 }
 
                 _logger.LogInformation("MFA verification successful for user {UserId}", userId);
@@ -173,11 +179,11 @@ namespace MedicSoft.Api.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "User not authenticated" });
 
-                var isEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(userId, CurrentTenantId);
+                var isEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(userId, GetTenantId());
                 if (!isEnabled)
                     return BadRequest(new { message = "MFA is not enabled for this user" });
 
-                var backupCodes = await _twoFactorAuthService.RegenerateBackupCodesAsync(userId, CurrentTenantId);
+                var backupCodes = await _twoFactorAuthService.RegenerateBackupCodesAsync(userId, GetTenantId());
 
                 _logger.LogInformation("Backup codes regenerated for user {UserId}", userId);
 
@@ -208,7 +214,7 @@ namespace MedicSoft.Api.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "User not authenticated" });
 
-                var user = await _userRepository.GetByIdAsync(Guid.Parse(userId), CurrentTenantId);
+                var user = await _userRepository.GetByIdAsync(Guid.Parse(userId), GetTenantId());
                 if (user == null)
                     return NotFound(new { message = "User not found" });
 
@@ -217,14 +223,14 @@ namespace MedicSoft.Api.Controllers
                     return BadRequest(new { message = "MFA is required by policy and cannot be disabled for your role" });
 
                 // Verify the code first
-                var isValid = await _twoFactorAuthService.VerifyTOTPAsync(userId, request.Code, CurrentTenantId);
+                var isValid = await _twoFactorAuthService.VerifyTOTPAsync(userId, request.Code, GetTenantId());
                 if (!isValid)
                 {
                     _logger.LogWarning("Invalid MFA code during disable attempt for user {UserId}", userId);
                     return Unauthorized(new { message = "Invalid verification code" });
                 }
 
-                await _twoFactorAuthService.DisableTwoFactorAsync(userId, CurrentTenantId);
+                await _twoFactorAuthService.DisableTwoFactorAsync(userId, GetTenantId());
 
                 _logger.LogInformation("MFA disabled for user {UserId}", userId);
 
