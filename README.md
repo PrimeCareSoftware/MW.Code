@@ -145,17 +145,21 @@ Aplicativo unificado acessando diferentes seções por rotas:
 - 🎨 **UX Consistente**: Design system unificado
 - 📦 **Menor footprint**: Dependências compartilhadas
 
-### 🏥 **Portal do Paciente** (`frontend/patient-portal`) 🟢 70% COMPLETO - MVP PRONTO
+### 🏥 **Portal do Paciente** (`frontend/patient-portal`) 🟢 98% COMPLETO - FASE 11 (TESTES) COMPLETA ✅
 Portal dedicado para acesso de pacientes (separado da aplicação principal):
+
+**Status:** [Fase 11 - Testes Completos](FASE11_PORTAL_PACIENTE_TESTES_COMPLETO.md) ✅ (30 Jan 2026)
 
 **Funcionalidades Implementadas (Prontas para Uso):**
 - 👤 **Usuários**: Pacientes (acesso externo)
 - ✅ **Login e Cadastro**: Sistema completo de autenticação JWT
+- 📅 **Agendamento Online**: Agendar, reagendar e cancelar consultas
 - 📋 **Ver Agendamentos**: Consulta e visualização de agendamentos
 - 📄 **Documentos Médicos**: Download de receitas, exames, atestados, encaminhamentos
 - 👤 **Perfil**: Gerenciamento de dados pessoais e alteração de senha
 - 🔐 **Autenticação**: JWT + Refresh Tokens (15min + 7 dias)
 - 🔒 **Segurança**: Account lockout, password hashing PBKDF2, LGPD compliant
+- 🧪 **Testes**: 98.66% cobertura, 52 unit + 30+ E2E + 35+ backend
 - 🔍 **Sistema de Auditoria LGPD Completo**: Rastreabilidade de todas operações ([ver documentação](system-admin/docs/lgpd/))
   - ✅ Registro automático de todas ações (AuditLog)
   - ✅ Rastreamento de acesso a dados sensíveis (DataAccessLog)
