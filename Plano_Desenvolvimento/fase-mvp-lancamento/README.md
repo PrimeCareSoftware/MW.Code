@@ -7,7 +7,7 @@ Esta pasta contém os **prompts detalhados** para implementar o roadmap completo
 **Estratégia**: Lançamento gradual com early adopters, validação de mercado, e desenvolvimento iterativo baseado em feedback real.
 
 **Período Total**: 12 meses
-**Investimento Estimado**: R$ 400.000 - R$ 550.000
+**Investimento Estimado**: R$ 500.000
 **ROI Esperado**: 150-200% no primeiro ano
 
 ## 🎯 Filosofia do MVP
