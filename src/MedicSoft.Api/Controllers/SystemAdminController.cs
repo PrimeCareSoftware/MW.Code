@@ -1111,4 +1111,131 @@ namespace MedicSoft.Api.Controllers
         public string Phone { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
     }
+
+    #region MFA Compliance
+
+    /// <summary>
+    /// Get MFA compliance statistics across all users
+    /// </summary>
+    [HttpGet("mfa-compliance")]
+    public async Task<ActionResult<MfaComplianceResponse>> GetMfaCompliance()
+    {
+        var allUsers = await _context.Users
+            .IgnoreQueryFilters()
+            .Include(u => u.ClinicLinks)
+            .ToListAsync();
+
+        var adminUsers = allUsers.Where(u => u.MfaRequiredByPolicy).ToList();
+        var userIds = adminUsers.Select(u => u.Id.ToString()).ToList();
+
+        // Get MFA status for all admin users
+        var twoFactorAuths = await _context.Set<TwoFactorAuth>()
+            .IgnoreQueryFilters()
+            .Where(t => userIds.Contains(t.UserId) && t.IsEnabled)
+            .ToListAsync();
+
+        var enabledUserIds = twoFactorAuths.Select(t => t.UserId).ToHashSet();
+
+        var totalAdmins = adminUsers.Count;
+        var adminsWithMfa = adminUsers.Count(u => enabledUserIds.Contains(u.Id.ToString()));
+        var adminsWithoutMfa = totalAdmins - adminsWithMfa;
+        var adminsInGracePeriod = adminUsers.Count(u => !enabledUserIds.Contains(u.Id.ToString()) && u.IsInMfaGracePeriod);
+        var adminsGraceExpired = adminUsers.Count(u => !enabledUserIds.Contains(u.Id.ToString()) && u.MfaGracePeriodExpired);
+
+        return Ok(new MfaComplianceResponse
+        {
+            TotalAdministrators = totalAdmins,
+            WithMfaEnabled = adminsWithMfa,
+            WithoutMfaEnabled = adminsWithoutMfa,
+            InGracePeriod = adminsInGracePeriod,
+            GracePeriodExpired = adminsGraceExpired,
+            CompliancePercentage = totalAdmins > 0 ? (decimal)adminsWithMfa / totalAdmins * 100 : 0
+        });
+    }
+
+    /// <summary>
+    /// Get list of administrators without MFA enabled
+    /// </summary>
+    [HttpGet("users-without-mfa")]
+    public async Task<ActionResult<List<UserMfaStatusDto>>> GetUsersWithoutMfa(
+        [FromQuery] bool? graceExpiredOnly = null)
+    {
+        var allUsers = await _context.Users
+            .IgnoreQueryFilters()
+            .Include(u => u.ClinicLinks)
+            .ThenInclude(cl => cl.Clinic)
+            .ToListAsync();
+
+        var adminUsers = allUsers.Where(u => u.MfaRequiredByPolicy).ToList();
+        var userIds = adminUsers.Select(u => u.Id.ToString()).ToList();
+
+        // Get MFA status for all admin users
+        var twoFactorAuths = await _context.Set<TwoFactorAuth>()
+            .IgnoreQueryFilters()
+            .Where(t => userIds.Contains(t.UserId) && t.IsEnabled)
+            .ToListAsync();
+
+        var enabledUserIds = twoFactorAuths.Select(t => t.UserId).ToHashSet();
+
+        var usersWithoutMfa = adminUsers
+            .Where(u => !enabledUserIds.Contains(u.Id.ToString()))
+            .ToList();
+
+        if (graceExpiredOnly == true)
+        {
+            usersWithoutMfa = usersWithoutMfa.Where(u => u.MfaGracePeriodExpired).ToList();
+        }
+
+        var result = usersWithoutMfa.Select(u => new UserMfaStatusDto
+        {
+            UserId = u.Id,
+            Username = u.Username,
+            Email = u.Email,
+            FullName = u.FullName,
+            Role = u.Role.ToString(),
+            TenantId = u.TenantId,
+            MfaEnabled = false,
+            IsInGracePeriod = u.IsInMfaGracePeriod,
+            GracePeriodEndsAt = u.MfaGracePeriodEndsAt,
+            GracePeriodExpired = u.MfaGracePeriodExpired,
+            FirstLoginAt = u.FirstLoginAt,
+            LastLoginAt = u.LastLoginAt,
+            ClinicName = u.ClinicLinks.FirstOrDefault()?.Clinic?.Name ?? "N/A"
+        }).ToList();
+
+        return Ok(result);
+    }
+
+    #endregion
+}
+    #region MFA Compliance DTOs
+
+    public class MfaComplianceResponse
+    {
+        public int TotalAdministrators { get; set; }
+        public int WithMfaEnabled { get; set; }
+        public int WithoutMfaEnabled { get; set; }
+        public int InGracePeriod { get; set; }
+        public int GracePeriodExpired { get; set; }
+        public decimal CompliancePercentage { get; set; }
+    }
+
+    public class UserMfaStatusDto
+    {
+        public Guid UserId { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public string TenantId { get; set; } = string.Empty;
+        public bool MfaEnabled { get; set; }
+        public bool IsInGracePeriod { get; set; }
+        public DateTime? GracePeriodEndsAt { get; set; }
+        public bool GracePeriodExpired { get; set; }
+        public DateTime? FirstLoginAt { get; set; }
+        public DateTime? LastLoginAt { get; set; }
+        public string ClinicName { get; set; } = string.Empty;
+    }
+
+    #endregion
 }

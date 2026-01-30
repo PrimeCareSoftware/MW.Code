@@ -256,6 +256,11 @@ builder.Services.Configure<MedicSoft.Application.Configuration.MediatRLicenseSet
     builder.Configuration.GetSection("MediatRLicense"));
 builder.Services.AddSingleton<MedicSoft.Application.Services.MediatRLicenseService>();
 
+// Configure MFA Policy
+builder.Services.Configure<MedicSoft.Application.Configuration.MfaPolicySettings>(
+    builder.Configuration.GetSection("MfaPolicy"));
+Log.Information("MFA policy configured from appsettings.json");
+
 // Configure Data Encryption Service for medical data protection (LGPD compliance)
 var encryptionKey = builder.Configuration["Security:DataEncryptionKey"];
 if (string.IsNullOrEmpty(encryptionKey))
@@ -707,6 +712,9 @@ app.UseMiddleware<LgpdAuditMiddleware>();
 
 // CFM 1.638/2002 - Add medical record audit middleware (after authentication)
 app.UseMiddleware<MedicalRecordAuditMiddleware>();
+
+// MFA Enforcement Middleware - Enforce MFA for administrative roles
+app.UseMiddleware<MfaEnforcementMiddleware>();
 
 // Enable rate limiting
 if (rateLimitEnabled)

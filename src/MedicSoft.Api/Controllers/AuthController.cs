@@ -23,17 +23,20 @@ namespace MedicSoft.Api.Controllers
         private readonly IJwtTokenService _jwtTokenService;
         private readonly ILogger<AuthController> _logger;
         private readonly IClinicSelectionService _clinicSelectionService;
+        private readonly ITwoFactorAuthService _twoFactorAuthService;
 
         public AuthController(
             IAuthService authService, 
             IJwtTokenService jwtTokenService,
             ILogger<AuthController> logger,
-            IClinicSelectionService clinicSelectionService)
+            IClinicSelectionService clinicSelectionService,
+            ITwoFactorAuthService twoFactorAuthService)
         {
             _authService = authService;
             _jwtTokenService = jwtTokenService;
             _logger = logger;
             _clinicSelectionService = clinicSelectionService;
+            _twoFactorAuthService = twoFactorAuthService;
         }
 
         /// <summary>
@@ -136,6 +139,10 @@ namespace MedicSoft.Api.Controllers
 
                 _logger.LogInformation("JWT token generated successfully for user: {UserId}", user.Id);
 
+                // Check MFA status
+                var mfaEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(user.Id.ToString(), tenantId);
+                var requiresMfaSetup = user.MfaRequiredByPolicy && !mfaEnabled;
+
                 return Ok(new LoginResponse
                 {
                     Token = token,
@@ -145,7 +152,10 @@ namespace MedicSoft.Api.Controllers
                     ClinicId = user.ClinicId,
                     CurrentClinicId = currentClinicId ?? user.ClinicId,
                     AvailableClinics = clinicList,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(60), // Should match JWT expiry
+                    MfaEnabled = mfaEnabled,
+                    RequiresMfaSetup = requiresMfaSetup,
+                    MfaGracePeriodEndsAt = user.MfaGracePeriodEndsAt
                 });
             }
             catch (Exception ex)
@@ -517,6 +527,11 @@ namespace MedicSoft.Api.Controllers
         public bool IsSystemOwner { get; set; }
         public DateTime ExpiresAt { get; set; }
         public List<UserClinicDto>? AvailableClinics { get; set; } // List of clinics user can access
+        
+        // MFA-related properties
+        public bool MfaEnabled { get; set; }
+        public bool RequiresMfaSetup { get; set; }
+        public DateTime? MfaGracePeriodEndsAt { get; set; }
     }
 
     public class TokenValidationRequest
