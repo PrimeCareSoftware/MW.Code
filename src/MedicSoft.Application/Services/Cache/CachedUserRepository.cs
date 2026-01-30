@@ -34,7 +34,7 @@ namespace MedicSoft.Application.Services.Cache
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<User> GetByIdAsync(string userId)
+        public async Task<User> GetByIdAsync(Guid userId, string tenantId)
         {
             var cacheKey = $"{USER_CACHE_KEY_PREFIX}{userId}";
 
@@ -48,7 +48,7 @@ namespace MedicSoft.Application.Services.Cache
             }
 
             _logger.LogDebug("User {UserId} not found in cache, retrieving from database", userId);
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId, tenantId);
 
             if (user != null)
             {
@@ -59,7 +59,7 @@ namespace MedicSoft.Application.Services.Cache
             return user;
         }
 
-        public async Task<User> GetByUsernameAsync(string username)
+        public async Task<User> GetByUsernameAsync(string username, string tenantId)
         {
             var cacheKey = $"{USER_CACHE_KEY_PREFIX}username:{username.ToLowerInvariant()}";
 
@@ -69,7 +69,7 @@ namespace MedicSoft.Application.Services.Cache
                 return cachedUser;
             }
 
-            var user = await _userRepository.GetByUsernameAsync(username);
+            var user = await _userRepository.GetUserByUsernameAsync(username, tenantId);
 
             if (user != null)
             {
@@ -81,7 +81,7 @@ namespace MedicSoft.Application.Services.Cache
             return user;
         }
 
-        public async Task<List<string>> GetUserPermissionsAsync(string userId)
+        public async Task<List<string>> GetUserPermissionsAsync(Guid userId, string tenantId)
         {
             var cacheKey = $"{USER_PERMISSIONS_KEY_PREFIX}{userId}";
 
@@ -97,15 +97,15 @@ namespace MedicSoft.Application.Services.Cache
             _logger.LogDebug("Permissions for user {UserId} not found in cache, retrieving from database", userId);
             
             // Get user with permissions loaded
-            var user = await _userRepository.GetByIdAsync(userId);
-            if (user?.Profile?.ProfilePermissions == null)
+            var user = await _userRepository.GetByIdAsync(userId, tenantId);
+            if (user?.Profile?.Permissions == null)
             {
                 return new List<string>();
             }
 
-            var permissions = user.Profile.ProfilePermissions
+            var permissions = user.Profile.Permissions
                 .Where(pp => pp.IsActive)
-                .Select(pp => pp.Permission.Name)
+                .Select(pp => pp.PermissionKey)
                 .ToList();
 
             await _cacheService.SetAsync(cacheKey, permissions, _permissionsCacheExpiration);
@@ -115,7 +115,7 @@ namespace MedicSoft.Application.Services.Cache
             return permissions;
         }
 
-        public async Task InvalidateUserCacheAsync(string userId)
+        public async Task InvalidateUserCacheAsync(Guid userId, string tenantId)
         {
             _logger.LogInformation("Invalidating cache for user {UserId}", userId);
 
@@ -123,7 +123,7 @@ namespace MedicSoft.Application.Services.Cache
             await _cacheService.RemoveAsync($"{USER_PERMISSIONS_KEY_PREFIX}{userId}");
 
             // Try to get username to invalidate that cache too
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId, tenantId);
             if (user != null)
             {
                 await _cacheService.RemoveAsync($"{USER_CACHE_KEY_PREFIX}username:{user.Username.ToLowerInvariant()}");
@@ -135,7 +135,7 @@ namespace MedicSoft.Application.Services.Cache
         public async Task UpdateAsync(User user)
         {
             await _userRepository.UpdateAsync(user);
-            await InvalidateUserCacheAsync(user.Id);
+            await InvalidateUserCacheAsync(user.Id, user.TenantId);
         }
     }
 }
