@@ -78,21 +78,35 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    // Include XML comments
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
+    // Include XML comments with error handling
+    try
     {
-        c.IncludeXmlComments(xmlPath);
+        var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        if (File.Exists(xmlPath))
+        {
+            c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+        }
+        else
+        {
+            // Log warning if XML documentation file is not found
+            // This helps diagnose build configuration issues
+            Log.Warning("XML documentation file not found at {XmlPath}. " +
+                       "API documentation will not include XML comments. " +
+                       "Ensure GenerateDocumentationFile is set to true in the project file.", xmlPath);
+        }
     }
-    else
+    catch (Exception ex)
     {
-        // Log warning if XML documentation file is not found
-        // This helps diagnose build configuration issues
-        Console.WriteLine($"Warning: XML documentation file not found at {xmlPath}. " +
-                         "API documentation will not include XML comments. " +
-                         "Ensure GenerateDocumentationFile is set to true in the project file.");
+        Log.Error(ex, "Error loading XML comments for Swagger documentation");
     }
+
+    // Configure Swagger to handle IFormFile in multipart/form-data properly
+    c.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary"
+    });
 
     // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
