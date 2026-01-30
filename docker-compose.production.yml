@@ -6,8 +6,9 @@ version: '3.8'
 services:
   # PostgreSQL - Banco de Dados (mais econômico que SQL Server)
   postgres:
-    image: postgres:16-alpine
+    image: docker.io/library/postgres:16-alpine
     container_name: primecare-postgres
+    pull_policy: missing
     restart: unless-stopped
     environment:
       POSTGRES_DB: primecare
