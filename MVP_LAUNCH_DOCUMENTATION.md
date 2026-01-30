@@ -8,6 +8,8 @@ Este documento detalha todas as funcionalidades implementadas na Fase 1 do MVP d
 **Data de Lançamento**: Janeiro 2026
 **Versão**: 1.0.0-MVP
 
+> ⚠️ **Nota**: Todos os contatos, emails e telefones neste documento são exemplos fictícios para fins de documentação.
+
 ## 🎯 Objetivos do MVP
 
 1. **Validar Aceitação do Mercado**: Testar se o produto atende às necessidades do público-alvo

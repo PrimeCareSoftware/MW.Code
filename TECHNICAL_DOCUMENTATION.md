@@ -8,6 +8,8 @@ Este documento fornece informações técnicas sobre a arquitetura, APIs, deploy
 **Data**: Janeiro 2026
 **Stack Principal**: .NET Core, Angular, PostgreSQL
 
+> ⚠️ **Nota**: Todos os exemplos de código, URLs, emails e telefones neste documento são fictícios para fins de documentação. Use valores reais em ambiente de produção.
+
 ---
 
 ## 🏗️ Arquitetura do Sistema

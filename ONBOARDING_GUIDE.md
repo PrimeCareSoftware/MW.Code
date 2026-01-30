@@ -4,6 +4,8 @@
 
 Obrigado por ser um **Early Adopter** do PrimeCare! Este guia vai te ajudar a configurar seu sistema em **15-30 minutos** e começar a usar todas as funcionalidades disponíveis.
 
+> ⚠️ **Nota**: Todos os contatos, emails, telefones e URLs neste documento são exemplos fictícios para fins de documentação.
+
 ## ⏱️ Tempo Estimado
 
 - ⚡ **Rápido**: 15 minutos (configuração básica)

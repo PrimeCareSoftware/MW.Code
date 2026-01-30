@@ -8,6 +8,8 @@ Este guia documenta o sistema de pagamento do PrimeCare Software, incluindo mét
 **Gateway**: Integração com provedor de pagamento brasileiro
 **Métodos**: PIX e Boleto Bancário
 
+> ⚠️ **Nota**: Todos os contatos, emails e telefones neste documento são exemplos fictícios para fins de documentação.
+
 ## 🎯 Métodos de Pagamento Disponíveis
 
 ### 1. PIX 📱

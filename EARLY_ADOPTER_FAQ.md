@@ -4,6 +4,8 @@
 
 Bem-vindo à seção de perguntas frequentes para **Early Adopters** do PrimeCare Software. Aqui você encontra respostas para as 20+ perguntas mais comuns.
 
+> ⚠️ **Nota**: Todos os contatos, emails, telefones e URLs neste documento são exemplos fictícios para fins de documentação.
+
 ---
 
 ## 🚀 Sobre o Programa Early Adopter

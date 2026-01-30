@@ -7,6 +7,8 @@ O Portal do Paciente é uma plataforma online que permite aos pacientes gerencia
 **Status**: ✅ MVP Fase 1 - Funcional
 **Acesso**: [https://paciente.primecaresoftware.com](https://paciente.primecaresoftware.com)
 
+> ⚠️ **Nota**: Todos os contatos, emails, telefones e URLs neste documento são exemplos fictícios para fins de documentação.
+
 ## 🎯 Funcionalidades Disponíveis
 
 ### ✅ Funcionalidades Implementadas
