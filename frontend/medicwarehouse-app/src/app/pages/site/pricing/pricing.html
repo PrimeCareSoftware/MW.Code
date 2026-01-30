@@ -12,7 +12,7 @@
   <section class="pricing-plans">
     <div class="container">
       <div class="plans-grid">
-        <div class="plan-card" *ngFor="let plan of plans" [class.recommended]="plan.isRecommended" [class.mvp]="plan.isMvp">
+        <div class="plan-card" *ngFor="let plan of plans" [class.recommended]="plan.isRecommended" [class.mvp]="plan.isMvp" [hidden]="!plan.isActive">
           <div class="plan-badge" *ngIf="plan.isRecommended">
             ⭐ Mais Indicado
           </div>
@@ -108,7 +108,7 @@
         <div class="guarantee-item">
           <div class="icon">💰</div>
           <h3>Preço Fixo Vitalício</h3>
-          <p>Seu preço de early adopter é mantido para sempre. Nunca pagaremos mais, independente de reajustes futuros!</p>
+          <p>Seu preço de early adopter é mantido para sempre. Você nunca pagará mais, independente de reajustes futuros!</p>
         </div>
         <div class="guarantee-item">
           <div class="icon">🎯</div>
