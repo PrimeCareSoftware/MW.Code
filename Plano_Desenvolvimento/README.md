@@ -1,12 +1,35 @@
 # 📋 Plano de Desenvolvimento - Prompts Otimizados
 
 > **Data de Criação:** 23 de Janeiro de 2026  
-> **Última Atualização:** 29 de Janeiro de 2026  
+> **Última Atualização:** 30 de Janeiro de 2026  
 > **Baseado em:** [PLANO_DESENVOLVIMENTO.md](../docs/PLANO_DESENVOLVIMENTO.md) (1814 linhas)  
-> **Status:** 24/24 prompts completos (100%) ✅  
-> **Investimento Total:** R$ 1.455.000 + R$ 442.000 (System Admin)  
+> **Status:** 24/24 prompts completos (100%) ✅ + 5 prompts MVP 🚀  
+> **Investimento Total:** R$ 1.455.000 + R$ 442.000 (System Admin) + R$ 500.000 (MVP Roadmap)  
 > **Tempo Total:** ~58-76 meses/dev (se executado sequencialmente)  
 > **System Admin Status:** ✅ **5 de 6 fases completas** (83%)
+
+## 🆕 NOVO: Roadmap de Desenvolvimento MVP
+
+**🚀 [Ver Índice Completo do MVP](./fase-mvp-lancamento/README.md)** (15 min)  
+**📋 [Ver MVP Implementation Guide](../MVP_IMPLEMENTATION_GUIDE.md)** (30 min)  
+**💰 [Ver Plano de Lançamento](../PLANO_LANCAMENTO_MVP_SAAS.md)** (45 min)
+
+Sistema completo de roadmap para lançamento e desenvolvimento do MVP PrimeCare SaaS:
+- Estratégia de Early Adopters com preços especiais
+- Planos: Starter (R$ 49), Professional (R$ 89), Enterprise (R$ 149)
+- Roadmap de 12 meses dividido em 5 fases
+- Desenvolvimento iterativo baseado em feedback
+
+**Investimento:** R$ 500.000 | **Tempo:** 12 meses | **ROI Esperado:** 150-200% no primeiro ano
+
+**Fases do Projeto:**
+- ✅ **Fase 1: MVP Launch** - Documentação e preparação (Mês 1-2)
+- 📋 **Fase 2: Validação** - 10-30 early adopters, feedback, ajustes (Mês 3-4)
+- 📋 **Fase 3: Recursos Essenciais** - WhatsApp, Lembretes, Analytics (Mês 5-7)
+- 📋 **Fase 4: Recursos Avançados** - Assinatura Digital, TISS, CRM, API (Mês 8-10)
+- 📋 **Fase 5: Inteligência** - ML, BI Avançado, AI Copilot (Mês 11-12)
+
+---
 
 ## 🆕 NOVO: Plano de Importação de Dados
 
@@ -69,9 +92,10 @@ Análise completa e plano de desenvolvimento para transformar o system-admin em 
 
 Esta pasta contém **prompts otimizados** para todas as tarefas pendentes do PrimeCare Software, organizados por fase de prioridade. Cada prompt foi desenhado para ser executado diretamente pelo GitHub Copilot ou outro agente de IA, com especificações técnicas completas e critérios de sucesso claros.
 
-**NOVO:** Inclui agora:
-- **Plano de Importação de Dados** - Sistema completo para migração de clientes de outros sistemas
-- **Plano de Melhorias do System Admin** - Baseado em análise de mercado de ferramentas modernas de administração
+**NOVO - Janeiro 2026:** Inclui agora:
+- 🚀 **Roadmap de Desenvolvimento MVP** - Guia completo de 12 meses para lançamento e crescimento com early adopters (5 fases)
+- 📥 **Plano de Importação de Dados** - Sistema completo para migração de clientes de outros sistemas (6 fases)
+- 🎯 **Plano de Melhorias do System Admin** - Baseado em análise de mercado de ferramentas modernas de administração (6 fases, 5 completas)
 
 ## 📁 Estrutura de Pastas
 
@@ -81,7 +105,15 @@ Plano_Desenvolvimento/
 ├── DEPENDENCIES.md (matriz de dependências entre tarefas)
 ├── EFFORT_ESTIMATES.md (estimativas detalhadas por fase)
 │
-├── 📥 Importação de Dados (NOVO - 12-17 meses - R$ 253-350k)
+├── 🚀 MVP Roadmap (NOVO - 12 meses - R$ 500k) 🆕
+│   ├── README.md (guia completo do roadmap MVP)
+│   ├── 01-fase1-mvp-launch-documentacao.md (Mês 1-2)
+│   ├── 02-fase2-validacao.md (Mês 3-4)
+│   ├── 03-fase3-recursos-essenciais.md (Mês 5-7)
+│   ├── 04-fase4-recursos-avancados.md (Mês 8-10)
+│   └── 05-fase5-inteligencia-automacao.md (Mês 11-12)
+│
+├── 📥 Importação de Dados (12-17 meses - R$ 253-350k)
 │   ├── INDEX_IMPORTACAO_DADOS.md (índice navegável)
 │   ├── PLANO_IMPORTACAO_DADOS.md (plano completo)
 │   ├── ESPECIFICACAO_TECNICA_IMPORTACAO.md (specs técnicas)
