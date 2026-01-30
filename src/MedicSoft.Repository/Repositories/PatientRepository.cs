@@ -71,18 +71,21 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<Patient>> SearchAsync(string searchTerm, string tenantId, Guid clinicId)
         {
             var searchTermLower = searchTerm.ToLower();
-            return await _dbSet
-                .Where(p => (p.Name.ToLower().Contains(searchTermLower) || 
-                            p.Document.Contains(searchTerm) ||  // CPF is numeric, case-insensitive not needed
-                            p.Phone.Number.Contains(searchTerm)) &&  // Phone is numeric, case-insensitive not needed
-                            p.TenantId == tenantId &&
-                            p.IsActive &&
-                            _context.Set<PatientClinicLink>().Any(cl => 
-                               cl.PatientId == p.Id && 
-                               cl.ClinicId == clinicId && 
-                               cl.IsActive))
-                .OrderBy(p => p.Name)
-                .ToListAsync();
+            
+            // Optimized query using JOIN instead of .Any() to avoid N+1 issue - Category 4.2
+            var query = from p in _dbSet
+                        join pcl in _context.Set<PatientClinicLink>() on p.Id equals pcl.PatientId
+                        where (p.Name.ToLower().Contains(searchTermLower) || 
+                               p.Document.Contains(searchTerm) ||
+                               p.Phone.Number.Contains(searchTerm)) &&
+                              p.TenantId == tenantId &&
+                              p.IsActive &&
+                              pcl.ClinicId == clinicId &&
+                              pcl.IsActive
+                        orderby p.Name
+                        select p;
+            
+            return await query.Distinct().ToListAsync();
         }
 
         public async Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null)

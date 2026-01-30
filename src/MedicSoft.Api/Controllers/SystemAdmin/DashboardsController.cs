@@ -162,5 +162,65 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
             var templates = await _dashboardService.GetWidgetTemplatesByCategoryAsync(category);
             return Ok(templates);
         }
+
+        // ========== Category 4.1: Dashboard Sharing Endpoints ==========
+
+        /// <summary>
+        /// Share a dashboard with a user or role
+        /// </summary>
+        [HttpPost("{id}/share")]
+        public async Task<ActionResult<DashboardShareDto>> ShareDashboard(
+            Guid id, 
+            [FromBody] CreateDashboardShareDto dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var share = await _dashboardService.ShareDashboardAsync(id, dto, userId);
+            return CreatedAtAction(nameof(GetDashboardShares), new { id }, share);
+        }
+
+        /// <summary>
+        /// Get all shares for a specific dashboard
+        /// </summary>
+        [HttpGet("{id}/shares")]
+        public async Task<ActionResult<List<DashboardShareDto>>> GetDashboardShares(Guid id)
+        {
+            var shares = await _dashboardService.GetDashboardSharesAsync(id);
+            return Ok(shares);
+        }
+
+        /// <summary>
+        /// Revoke a dashboard share
+        /// </summary>
+        [HttpDelete("shares/{shareId}")]
+        public async Task<IActionResult> RevokeDashboardShare(Guid shareId)
+        {
+            await _dashboardService.RevokeDashboardShareAsync(shareId);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Get dashboards shared with current user
+        /// </summary>
+        [HttpGet("shared")]
+        public async Task<ActionResult<List<CustomDashboardDto>>> GetSharedDashboards()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userRole = User.FindFirstValue(ClaimTypes.Role);
+            var dashboards = await _dashboardService.GetSharedDashboardsAsync(userId, userRole);
+            return Ok(dashboards);
+        }
+
+        /// <summary>
+        /// Duplicate a dashboard (useful for creating templates)
+        /// </summary>
+        [HttpPost("{id}/duplicate")]
+        public async Task<ActionResult<CustomDashboardDto>> DuplicateDashboard(
+            Guid id, 
+            [FromQuery] string newName = null)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var dashboard = await _dashboardService.DuplicateDashboardAsync(id, userId, newName);
+            return CreatedAtAction(nameof(Get), new { id = dashboard.Id }, dashboard);
+        }
     }
 }

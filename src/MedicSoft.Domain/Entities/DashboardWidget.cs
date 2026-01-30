@@ -18,7 +18,7 @@ namespace MedicSoft.Domain.Entities
         public virtual CustomDashboard Dashboard { get; set; }
 
         /// <summary>
-        /// Widget type: line, bar, pie, metric, table, map, markdown
+        /// Widget type: line, bar, pie, metric, table, map, markdown, gauge, heatmap, funnel, scatter, area, radar, donut, calendar, treemap, waterfall
         /// </summary>
         [Required]
         [MaxLength(50)]
