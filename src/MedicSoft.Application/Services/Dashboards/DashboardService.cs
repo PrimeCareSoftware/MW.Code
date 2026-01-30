@@ -490,5 +490,207 @@ namespace MedicSoft.Application.Services.Dashboards
                 Icon = template.Icon
             };
         }
+
+        // ========== Category 4.1: Dashboard Sharing Implementation ==========
+
+        public async Task<DashboardShareDto> ShareDashboardAsync(Guid dashboardId, CreateDashboardShareDto dto, string sharedByUserId)
+        {
+            _logger.LogInformation("Sharing dashboard {DashboardId} with user {UserId} or role {Role}", 
+                dashboardId, dto.SharedWithUserId, dto.SharedWithRole);
+
+            // Validate dashboard exists
+            var dashboard = await _context.Set<CustomDashboard>()
+                .FirstOrDefaultAsync(d => d.Id == dashboardId);
+
+            if (dashboard == null)
+            {
+                throw new InvalidOperationException($"Dashboard with ID {dashboardId} not found");
+            }
+
+            // Validate permission level
+            if (dto.PermissionLevel != "View" && dto.PermissionLevel != "Edit")
+            {
+                throw new InvalidOperationException("Permission level must be 'View' or 'Edit'");
+            }
+
+            // Validate either user or role is specified, not both
+            if (string.IsNullOrWhiteSpace(dto.SharedWithUserId) && string.IsNullOrWhiteSpace(dto.SharedWithRole))
+            {
+                throw new InvalidOperationException("Must specify either SharedWithUserId or SharedWithRole");
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.SharedWithUserId) && !string.IsNullOrWhiteSpace(dto.SharedWithRole))
+            {
+                throw new InvalidOperationException("Cannot specify both SharedWithUserId and SharedWithRole");
+            }
+
+            var share = new DashboardShare
+            {
+                DashboardId = dashboardId,
+                SharedWithUserId = dto.SharedWithUserId,
+                SharedWithRole = dto.SharedWithRole,
+                PermissionLevel = dto.PermissionLevel,
+                SharedBy = sharedByUserId,
+                ExpiresAt = dto.ExpiresAt
+            };
+
+            _context.Set<DashboardShare>().Add(share);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Dashboard share created with ID: {ShareId}", share.Id);
+
+            return await MapShareToDto(share);
+        }
+
+        public async Task<List<DashboardShareDto>> GetDashboardSharesAsync(Guid dashboardId)
+        {
+            _logger.LogInformation("Retrieving shares for dashboard: {DashboardId}", dashboardId);
+
+            var shares = await _context.Set<DashboardShare>()
+                .Where(s => s.DashboardId == dashboardId)
+                .OrderByDescending(s => s.CreatedAt)
+                .ToListAsync();
+
+            var shareDtos = new List<DashboardShareDto>();
+            foreach (var share in shares)
+            {
+                shareDtos.Add(await MapShareToDto(share));
+            }
+
+            return shareDtos;
+        }
+
+        public async Task RevokeDashboardShareAsync(Guid shareId)
+        {
+            _logger.LogInformation("Revoking dashboard share: {ShareId}", shareId);
+
+            var share = await _context.Set<DashboardShare>()
+                .FirstOrDefaultAsync(s => s.Id == shareId);
+
+            if (share == null)
+            {
+                throw new InvalidOperationException($"Dashboard share with ID {shareId} not found");
+            }
+
+            _context.Set<DashboardShare>().Remove(share);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Dashboard share revoked successfully");
+        }
+
+        public async Task<List<CustomDashboardDto>> GetSharedDashboardsAsync(string userId, string userRole)
+        {
+            _logger.LogInformation("Retrieving shared dashboards for user: {UserId} with role: {Role}", userId, userRole);
+
+            var currentDate = DateTime.UtcNow;
+
+            // Get dashboards shared with this user or their role (not expired)
+            var sharedDashboardIds = await _context.Set<DashboardShare>()
+                .Where(s => (s.SharedWithUserId == userId || s.SharedWithRole == userRole) &&
+                           (s.ExpiresAt == null || s.ExpiresAt > currentDate))
+                .Select(s => s.DashboardId)
+                .Distinct()
+                .ToListAsync();
+
+            if (!sharedDashboardIds.Any())
+            {
+                return new List<CustomDashboardDto>();
+            }
+
+            var dashboards = await _context.Set<CustomDashboard>()
+                .Include(d => d.Widgets)
+                .Where(d => sharedDashboardIds.Contains(d.Id))
+                .OrderBy(d => d.Name)
+                .ToListAsync();
+
+            return dashboards.Select(MapToDto).ToList();
+        }
+
+        public async Task<CustomDashboardDto> DuplicateDashboardAsync(Guid dashboardId, string userId, string newName)
+        {
+            _logger.LogInformation("Duplicating dashboard {DashboardId} for user {UserId}", dashboardId, userId);
+
+            var originalDashboard = await _context.Set<CustomDashboard>()
+                .Include(d => d.Widgets)
+                .FirstOrDefaultAsync(d => d.Id == dashboardId);
+
+            if (originalDashboard == null)
+            {
+                throw new InvalidOperationException($"Dashboard with ID {dashboardId} not found");
+            }
+
+            var newDashboard = new CustomDashboard
+            {
+                Name = newName ?? $"{originalDashboard.Name} (Copy)",
+                Description = originalDashboard.Description,
+                Layout = originalDashboard.Layout,
+                IsDefault = false, // Copies are never default
+                IsPublic = false, // Copies are private by default
+                CreatedBy = userId
+            };
+
+            _context.Set<CustomDashboard>().Add(newDashboard);
+            await _context.SaveChangesAsync();
+
+            // Copy widgets
+            foreach (var originalWidget in originalDashboard.Widgets)
+            {
+                var newWidget = new DashboardWidget
+                {
+                    DashboardId = newDashboard.Id,
+                    Type = originalWidget.Type,
+                    Title = originalWidget.Title,
+                    Config = originalWidget.Config,
+                    Query = originalWidget.Query,
+                    RefreshInterval = originalWidget.RefreshInterval,
+                    GridX = originalWidget.GridX,
+                    GridY = originalWidget.GridY,
+                    GridWidth = originalWidget.GridWidth,
+                    GridHeight = originalWidget.GridHeight
+                };
+
+                _context.Set<DashboardWidget>().Add(newWidget);
+            }
+
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Dashboard duplicated successfully with ID: {DashboardId}", newDashboard.Id);
+
+            // Reload with widgets
+            var result = await _context.Set<CustomDashboard>()
+                .Include(d => d.Widgets)
+                .FirstOrDefaultAsync(d => d.Id == newDashboard.Id);
+
+            return MapToDto(result);
+        }
+
+        private async Task<DashboardShareDto> MapShareToDto(DashboardShare share)
+        {
+            var dto = new DashboardShareDto
+            {
+                Id = share.Id,
+                DashboardId = share.DashboardId,
+                SharedWithUserId = share.SharedWithUserId,
+                SharedWithRole = share.SharedWithRole,
+                PermissionLevel = share.PermissionLevel,
+                SharedBy = share.SharedBy,
+                ExpiresAt = share.ExpiresAt,
+                CreatedAt = share.CreatedAt
+            };
+
+            // Try to get username if shared with a user
+            if (!string.IsNullOrWhiteSpace(share.SharedWithUserId))
+            {
+                var user = await _context.Set<User>()
+                    .FirstOrDefaultAsync(u => u.Id == share.SharedWithUserId);
+                
+                if (user != null)
+                {
+                    dto.SharedWithUserName = user.Username;
+                }
+            }
+
+            return dto;
+        }
     }
 }

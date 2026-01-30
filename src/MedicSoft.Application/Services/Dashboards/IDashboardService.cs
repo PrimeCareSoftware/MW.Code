@@ -70,6 +70,32 @@ namespace MedicSoft.Application.Services.Dashboards
         /// Get widget templates by category
         /// </summary>
         Task<List<WidgetTemplateDto>> GetWidgetTemplatesByCategoryAsync(string category);
+
+        // Category 4.1: Dashboard Sharing Methods
+        /// <summary>
+        /// Share a dashboard with a user or role
+        /// </summary>
+        Task<DashboardShareDto> ShareDashboardAsync(Guid dashboardId, CreateDashboardShareDto dto, string sharedByUserId);
+
+        /// <summary>
+        /// Get all shares for a specific dashboard
+        /// </summary>
+        Task<List<DashboardShareDto>> GetDashboardSharesAsync(Guid dashboardId);
+
+        /// <summary>
+        /// Revoke dashboard share
+        /// </summary>
+        Task RevokeDashboardShareAsync(Guid shareId);
+
+        /// <summary>
+        /// Get dashboards shared with current user
+        /// </summary>
+        Task<List<CustomDashboardDto>> GetSharedDashboardsAsync(string userId, string userRole);
+
+        /// <summary>
+        /// Duplicate a dashboard (useful for creating templates)
+        /// </summary>
+        Task<CustomDashboardDto> DuplicateDashboardAsync(Guid dashboardId, string userId, string newName);
     }
 
     /// <summary>
