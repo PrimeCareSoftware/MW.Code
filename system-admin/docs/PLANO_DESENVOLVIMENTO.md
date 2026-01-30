@@ -1373,7 +1373,7 @@ frontend/patient-portal/
 - [x] Portal web responsivo ✅
 - [x] Autenticação segura ✅
 - [x] Agendamento online ✅
-- [x] Confirmação de consultas ✅ (precisa config API)
+- [x] Confirmação de consultas ✅ (requer configuração da API)
 - [x] Download de documentos ✅
 - [x] Integração com telemedicina ✅ (preparado)
 

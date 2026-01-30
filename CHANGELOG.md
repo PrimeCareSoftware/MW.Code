@@ -85,7 +85,7 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 ### 📚 Documentação
 
 - Criado FASE11_PORTAL_PACIENTE_TESTES_COMPLETO.md
-  - 37 páginas de documentação detalhada
+  - 503 linhas de documentação detalhada
   - Guias de teste por categoria
   - Checklists de validação
   - Métricas e resultados consolidados

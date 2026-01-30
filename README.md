@@ -171,12 +171,12 @@ Portal dedicado para acesso de pacientes (separado da aplicação principal):
 - ✅ **Build Otimizado**: 394 KB (108 KB gzipped)
 
 **Funcionalidades Pendentes (Próximas Fases):**
-- ⏳ **Agendamento Online**: Booking, reagendamento, cancelamento (30%)
-- ⏳ **Notificações**: Lembretes automáticos WhatsApp/Email (0%)
-- ⏳ **PWA**: Service Worker, offline, notificações push (0%)
+- ✅ **Agendamento Online**: Booking, reagendamento, cancelamento (✅ 100% - Fase 11 completa)
+- ⏳ **Notificações**: Lembretes automáticos WhatsApp/Email (95% - requer configuração de APIs)
+- ⏳ **PWA Avançado**: Service Worker avançado, offline sync, notificações push (60% - opcional)
 - ⏳ **Histórico Médico Completo**: Timeline de eventos e diagnósticos (0%)
 
-**Status Detalhado:** 📊 [Ver documentação do portal do paciente](system-admin/docs/portal-paciente/)
+**Status Detalhado:** 📊 [Ver documentação do portal do paciente](PORTAL_PACIENTE_STATUS_JAN2026.md) | [Fase 11 - Testes](FASE11_PORTAL_PACIENTE_TESTES_COMPLETO.md)
 
 **Infraestrutura:**
 - **URL desenvolvimento**: `http://localhost:4202` (quando executado separadamente)
