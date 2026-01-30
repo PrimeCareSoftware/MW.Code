@@ -4,8 +4,9 @@ services:
   # PostgreSQL Database (shared with main application)
   # Note: In production, this would connect to the existing PrimeCare Software database
   postgres:
-    image: postgres:16-alpine
+    image: docker.io/library/postgres:16-alpine
     container_name: patient-portal-postgres
+    pull_policy: missing
     environment:
       POSTGRES_DB: medicwarehouse
       POSTGRES_USER: postgres

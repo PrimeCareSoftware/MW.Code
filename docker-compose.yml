@@ -1,7 +1,8 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: docker.io/library/postgres:16-alpine
     container_name: primecare-postgres
+    pull_policy: missing
     environment:
       POSTGRES_DB: primecare
       POSTGRES_USER: postgres

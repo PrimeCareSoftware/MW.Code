@@ -245,6 +245,57 @@ docker-compose exec -T postgres psql -U postgres medicwarehouse < backup.sql
 
 ## 🔍 Troubleshooting
 
+### Erro: "unable to copy from source" ou "i/o timeout" ao fazer pull da imagem
+
+Se você encontrar erros de timeout ao tentar baixar a imagem do PostgreSQL:
+
+```
+Error: unable to copy from source docker://postgres:16-alpine: copying system image from manifest list: parsing image configuration: Get "https://...": dial tcp ...: i/o timeout
+```
+
+**Causa:** Problemas de conectividade com o Docker Hub via CDN Cloudflare.
+
+**Solução 1 - Pré-baixar a imagem (Recomendado):**
+```bash
+# Com Podman - tentar baixar manualmente
+podman pull docker.io/library/postgres:16-alpine
+
+# Se ainda falhar, tentar com alternativa do Quay.io
+podman pull quay.io/fedora/postgresql:16
+
+# Depois iniciar os serviços
+podman-compose up postgres -d
+```
+
+**Solução 2 - Usar registro alternativo:**
+```bash
+# Editar registries.conf (Linux)
+sudo nano /etc/containers/registries.conf
+
+# Adicionar registros alternativos no início da lista:
+[registries.search]
+registries = ['quay.io', 'docker.io']
+```
+
+**Solução 3 - Configurar timeout maior:**
+```bash
+# Editar podman.conf (Linux)
+sudo nano /etc/containers/containers.conf
+
+# Adicionar na seção [engine]:
+[engine]
+image_pull_timeout = "10m"
+```
+
+**Solução 4 - Aguardar e tentar novamente:**
+```bash
+# Às vezes o problema é temporário no CDN
+# Aguarde alguns minutos e tente novamente
+podman-compose up postgres -d
+```
+
+**Nota:** Os arquivos compose já foram atualizados para usar a imagem qualificada `docker.io/library/postgres:16-alpine` e `pull_policy: missing` para evitar pulls desnecessários.
+
 ### Erro: "database does not exist"
 
 **Com Podman:**

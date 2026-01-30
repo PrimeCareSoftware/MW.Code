@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   postgres-test:
-    image: postgres:16-alpine
+    image: docker.io/library/postgres:16-alpine
     container_name: patient-portal-postgres-test
+    pull_policy: missing
     environment:
       POSTGRES_DB: patient_portal_test
       POSTGRES_USER: postgres
