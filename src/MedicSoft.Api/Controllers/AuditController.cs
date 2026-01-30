@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +19,15 @@ namespace MedicSoft.Api.Controllers
     public class AuditController : BaseController
     {
         private readonly IAuditService _auditService;
+        private readonly ISuspiciousActivityDetector _suspiciousActivityDetector;
 
         public AuditController(
             ITenantContext tenantContext,
-            IAuditService auditService) : base(tenantContext)
+            IAuditService auditService,
+            ISuspiciousActivityDetector suspiciousActivityDetector) : base(tenantContext)
         {
             _auditService = auditService ?? throw new ArgumentNullException(nameof(auditService));
+            _suspiciousActivityDetector = suspiciousActivityDetector ?? throw new ArgumentNullException(nameof(suspiciousActivityDetector));
         }
 
         /// <summary>
@@ -169,6 +174,157 @@ namespace MedicSoft.Api.Controllers
 
             return Ok(new { Message = "Data access logged successfully" });
         }
+
+        /// <summary>
+        /// Exporta logs de auditoria para CSV
+        /// </summary>
+        [HttpGet("export/csv")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
+        public async Task<IActionResult> ExportToCsv([FromQuery] AuditFilterRequest filterRequest)
+        {
+            var filter = MapToAuditFilter(filterRequest);
+            filter.TenantId = GetTenantId();
+
+            var csv = await _auditService.ExportToCsvAsync(filter);
+            var bytes = Encoding.UTF8.GetBytes(csv);
+            
+            return File(bytes, "text/csv", $"audit_logs_{DateTime.UtcNow:yyyyMMddHHmmss}.csv");
+        }
+
+        /// <summary>
+        /// Exporta logs de auditoria para JSON
+        /// </summary>
+        [HttpGet("export/json")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
+        public async Task<IActionResult> ExportToJson([FromQuery] AuditFilterRequest filterRequest)
+        {
+            var filter = MapToAuditFilter(filterRequest);
+            filter.TenantId = GetTenantId();
+
+            var json = await _auditService.ExportToJsonAsync(filter);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            
+            return File(bytes, "application/json", $"audit_logs_{DateTime.UtcNow:yyyyMMddHHmmss}.json");
+        }
+
+        /// <summary>
+        /// Gera relatório de compliance LGPD para um usuário específico
+        /// </summary>
+        [HttpGet("export/lgpd/{userId}")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
+        public async Task<IActionResult> ExportLgpdReport(string userId)
+        {
+            var tenantId = GetTenantId();
+            var json = await _auditService.ExportLgpdComplianceReportAsync(userId, tenantId);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            
+            return File(bytes, "application/json", $"lgpd_report_{userId}_{DateTime.UtcNow:yyyyMMddHHmmss}.json");
+        }
+
+        /// <summary>
+        /// Detecta atividades suspeitas
+        /// </summary>
+        [HttpGet("suspicious-activity")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
+        public async Task<IActionResult> GetSuspiciousActivity()
+        {
+            var tenantId = GetTenantId();
+            var alerts = await _suspiciousActivityDetector.DetectSuspiciousActivityAsync(tenantId);
+            
+            return Ok(new
+            {
+                TotalAlerts = alerts.Count,
+                CriticalAlerts = alerts.Count(a => a.Severity == Application.Services.SecurityAlertSeverity.Critical),
+                HighAlerts = alerts.Count(a => a.Severity == Application.Services.SecurityAlertSeverity.High),
+                MediumAlerts = alerts.Count(a => a.Severity == Application.Services.SecurityAlertSeverity.Medium),
+                LowAlerts = alerts.Count(a => a.Severity == Application.Services.SecurityAlertSeverity.Low),
+                Alerts = alerts
+            });
+        }
+
+        /// <summary>
+        /// Obtém alertas de segurança ativos
+        /// </summary>
+        [HttpGet("security-alerts")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
+        public async Task<IActionResult> GetSecurityAlerts()
+        {
+            var tenantId = GetTenantId();
+            var alerts = await _suspiciousActivityDetector.GetActiveAlertsAsync(tenantId);
+            
+            return Ok(alerts.OrderByDescending(a => a.Severity).ThenByDescending(a => a.DetectedAt));
+        }
+
+        /// <summary>
+        /// Obtém estatísticas de auditoria
+        /// </summary>
+        [HttpGet("statistics")]
+        [Authorize(Roles = "SystemAdmin,ClinicOwner")]
+        public async Task<IActionResult> GetStatistics(
+            [FromQuery] DateTime? startDate,
+            [FromQuery] DateTime? endDate)
+        {
+            var tenantId = GetTenantId();
+            var stats = await _auditService.GetStatisticsAsync(tenantId, startDate, endDate);
+            
+            return Ok(stats);
+        }
+
+        /// <summary>
+        /// Obtém informações sobre política de retenção
+        /// </summary>
+        [HttpGet("retention-policy")]
+        [Authorize(Roles = "SystemAdmin")]
+        public IActionResult GetRetentionPolicy()
+        {
+            return Ok(new
+            {
+                RetentionDays = 2555, // 7 years
+                RetentionYears = 7,
+                Description = "Audit logs are retained for 7 years (2555 days) as required by LGPD",
+                AutomaticCleanup = true,
+                CleanupSchedule = "Daily at 2:00 AM UTC"
+            });
+        }
+
+        /// <summary>
+        /// Aplica política de retenção manualmente
+        /// </summary>
+        [HttpPost("apply-retention")]
+        [Authorize(Roles = "SystemAdmin")]
+        public async Task<IActionResult> ApplyRetention([FromQuery] int? retentionDays)
+        {
+            var tenantId = GetTenantId();
+            var days = retentionDays ?? 2555; // Default 7 years
+            
+            var deletedCount = await _auditService.ApplyRetentionPolicyAsync(tenantId, days);
+            
+            return Ok(new
+            {
+                Message = "Retention policy applied successfully",
+                DeletedLogs = deletedCount,
+                RetentionDays = days,
+                CutoffDate = DateTime.UtcNow.AddDays(-days)
+            });
+        }
+
+        private AuditFilter MapToAuditFilter(AuditFilterRequest request)
+        {
+            return new AuditFilter
+            {
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                UserId = request.UserId,
+                EntityType = request.EntityType,
+                EntityId = request.EntityId,
+                Action = request.Action.HasValue ? Enum.Parse<AuditAction>(request.Action.Value) : null,
+                Result = request.Result.HasValue ? Enum.Parse<OperationResult>(request.Result.Value) : null,
+                Severity = request.Severity.HasValue ? Enum.Parse<AuditSeverity>(request.Severity.Value) : null,
+                PageNumber = request.PageNumber ?? 1,
+                PageSize = request.PageSize ?? 50,
+                TenantId = GetTenantId()
+            };
+        }
     }
 
     // Request DTOs
@@ -178,5 +334,18 @@ namespace MedicSoft.Api.Controllers
         string EntityDisplayName,
         DataCategory DataCategory = DataCategory.PERSONAL,
         LgpdPurpose Purpose = LgpdPurpose.HEALTHCARE
+    );
+
+    public record AuditFilterRequest(
+        DateTime? StartDate = null,
+        DateTime? EndDate = null,
+        string? UserId = null,
+        string? EntityType = null,
+        string? EntityId = null,
+        string? Action = null,
+        string? Result = null,
+        string? Severity = null,
+        int? PageNumber = null,
+        int? PageSize = null
     );
 }

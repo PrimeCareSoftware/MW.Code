@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MedicSoft.Domain.Attributes;
 using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.Entities
@@ -11,18 +12,33 @@ namespace MedicSoft.Domain.Entities
         public Guid PatientId { get; private set; }
         
         // CFM 1.821 - Campos obrigatórios de Anamnese
+        [Encrypted(Priority = EncryptionPriority.Critical, Reason = "Chief complaint contains sensitive medical information (LGPD Art. 11, CFM 1.821)")]
         public string ChiefComplaint { get; private set; } // Queixa principal
+        
+        [Encrypted(Priority = EncryptionPriority.Critical, Reason = "Medical history contains highly sensitive health data (LGPD Art. 11, CFM 1.821)")]
         public string HistoryOfPresentIllness { get; private set; } // História da doença atual (HDA)
         
         // CFM 1.821 - Campos recomendados de História Clínica
+        [Encrypted(Priority = EncryptionPriority.High, Reason = "Past medical history is sensitive health data (LGPD Art. 11)")]
         public string? PastMedicalHistory { get; private set; } // História patológica pregressa (HPP)
+        
+        [Encrypted(Priority = EncryptionPriority.Normal, Reason = "Family history may reveal genetic conditions (LGPD Art. 11)")]
         public string? FamilyHistory { get; private set; } // História familiar
+        
+        [Encrypted(Priority = EncryptionPriority.Normal, Reason = "Lifestyle habits can reveal sensitive personal information (LGPD Art. 11)")]
         public string? LifestyleHabits { get; private set; } // Hábitos de vida
+        
+        [Encrypted(Priority = EncryptionPriority.High, Reason = "Current medications reveal health conditions (LGPD Art. 11)")]
         public string? CurrentMedications { get; private set; } // Medicações em uso
         
         // Campos existentes (manter compatibilidade)
+        [Encrypted(Priority = EncryptionPriority.Critical, Reason = "Diagnosis is highly sensitive medical data (LGPD Art. 11)")]
         public string Diagnosis { get; private set; } // DEPRECATED: usar DiagnosticHypothesis
+        
+        [Encrypted(Priority = EncryptionPriority.High, Reason = "Prescription contains treatment information (LGPD Art. 11)")]
         public string Prescription { get; private set; } // DEPRECATED: usar TherapeuticPlan
+        
+        [Encrypted(Priority = EncryptionPriority.High, Reason = "Clinical notes contain sensitive observations (LGPD Art. 11)")]
         public string Notes { get; private set; }
         
         public int ConsultationDurationMinutes { get; private set; }

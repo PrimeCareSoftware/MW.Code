@@ -24,6 +24,8 @@ namespace MedicSoft.Domain.Entities
         public string? ProfessionalId { get; private set; } // CRM, CRO, etc.
         public string? Specialty { get; private set; }
         public Guid? CurrentClinicId { get; private set; } // The clinic where the user is currently working
+        public DateTime? MfaGracePeriodEndsAt { get; private set; } // Grace period for MFA setup
+        public DateTime? FirstLoginAt { get; private set; } // Track first login to calculate grace period
 
         // Navigation properties
         public Clinic? Clinic { get; private set; } // Deprecated navigation
@@ -128,13 +130,24 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
 
-        public void RecordLogin(string sessionId)
+        public void RecordLogin(string sessionId, int gracePeriodDays = 7)
         {
             if (string.IsNullOrWhiteSpace(sessionId))
                 throw new ArgumentException("Session ID cannot be empty", nameof(sessionId));
             
             LastLoginAt = DateTime.UtcNow;
             CurrentSessionId = sessionId;
+            
+            // Set first login time and grace period if this is the first login
+            if (!FirstLoginAt.HasValue)
+            {
+                FirstLoginAt = DateTime.UtcNow;
+                if (MfaRequiredByPolicy)
+                {
+                    MfaGracePeriodEndsAt = DateTime.UtcNow.AddDays(gracePeriodDays);
+                }
+            }
+            
             UpdateTimestamp();
         }
         
@@ -364,6 +377,30 @@ namespace MedicSoft.Domain.Entities
         {
             return _clinicLinks.Any(l => l.ClinicId == clinicId && l.IsActive) ||
                    (ClinicId.HasValue && ClinicId.Value == clinicId);
+        }
+
+        /// <summary>
+        /// Checks if MFA is required for this user based on their role
+        /// </summary>
+        public bool MfaRequiredByPolicy => Role == UserRole.SystemAdmin || Role == UserRole.ClinicOwner;
+
+        /// <summary>
+        /// Checks if user is within the MFA setup grace period
+        /// </summary>
+        public bool IsInMfaGracePeriod => MfaGracePeriodEndsAt.HasValue && DateTime.UtcNow < MfaGracePeriodEndsAt.Value;
+
+        /// <summary>
+        /// Checks if MFA grace period has expired
+        /// </summary>
+        public bool MfaGracePeriodExpired => MfaGracePeriodEndsAt.HasValue && DateTime.UtcNow >= MfaGracePeriodEndsAt.Value;
+
+        /// <summary>
+        /// Clears the MFA grace period (called after MFA is enabled)
+        /// </summary>
+        public void ClearMfaGracePeriod()
+        {
+            MfaGracePeriodEndsAt = null;
+            UpdateTimestamp();
         }
     }
 

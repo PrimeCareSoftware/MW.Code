@@ -206,6 +206,9 @@ namespace MedicSoft.Repository.Context
         public DbSet<WorkflowActionExecution> WorkflowActionExecutions { get; set; } = null!;
         public DbSet<SubscriptionCredit> SubscriptionCredits { get; set; } = null!;
 
+        // Encryption & Security
+        public DbSet<EncryptionKey> EncryptionKeys { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -370,6 +373,9 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new WorkflowActionConfiguration());
             modelBuilder.ApplyConfiguration(new WorkflowExecutionConfiguration());
             modelBuilder.ApplyConfiguration(new WorkflowActionExecutionConfiguration());
+
+            // Encryption & Security
+            modelBuilder.ApplyConfiguration(new EncryptionKeyConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
