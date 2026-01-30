@@ -2,6 +2,8 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
+> 🚀 **NOVO!** Plano de Lançamento MVP com Early Adopters! Preços especiais vitalícios para os primeiros clientes. [→ Ver Plano Completo](PLANO_LANCAMENTO_MVP_SAAS.md) | [→ Guia de Implementação](MVP_IMPLEMENTATION_GUIDE.md)
+
 > 🛡️ **COMPLETO!** Fase 9 - AUDITORIA COMPLETA (LGPD)! Backend 100% implementado, documentação completa para compliance total com Lei 13.709/2018. [→ Ver Relatório Final](FASE9_AUDITORIA_COMPLETA_FINAL.md) | [→ Checklist 100%](LGPD_COMPLIANCE_CHECKLIST_100.md) | [→ Guia do Usuário](USER_GUIDE_LGPD.md) | [→ Guia do Admin](LGPD_ADMIN_GUIDE.md)
 
 > 📚 **NOVO!** Toda a documentação foi reorganizada! [→ Ver Mapa de Documentação](DOCUMENTATION_MAP.md) | [→ Ver Central de Documentação](system-admin/README.md) | [→ Ver Índice Completo](system-admin/INDICE.md)
