@@ -421,7 +421,7 @@ namespace MedicSoft.Application.Services.Dashboards
                             {
                                 var columnName = reader.GetName(i);
                                 var value = reader.IsDBNull(i) ? null : reader.GetValue(i);
-                                row[columnName] = value;
+                                row[columnName] = value!;
                             }
                             
                             result.Add(row);
@@ -534,7 +534,7 @@ namespace MedicSoft.Application.Services.Dashboards
             if (!string.IsNullOrWhiteSpace(dto.SharedWithUserId))
             {
                 var userExists = await _context.Set<User>()
-                    .AnyAsync(u => u.Id == dto.SharedWithUserId);
+                    .AnyAsync(u => u.Id.ToString() == dto.SharedWithUserId);
                 
                 if (!userExists)
                 {
@@ -583,7 +583,7 @@ namespace MedicSoft.Application.Services.Dashboards
                     Share = s,
                     UserName = s.SharedWithUserId != null 
                         ? _context.Set<User>()
-                            .Where(u => u.Id == s.SharedWithUserId)
+                            .Where(u => u.Id.ToString() == s.SharedWithUserId)
                             .Select(u => u.Username)
                             .FirstOrDefault()
                         : null
@@ -740,7 +740,7 @@ namespace MedicSoft.Application.Services.Dashboards
             if (!string.IsNullOrWhiteSpace(share.SharedWithUserId))
             {
                 var user = await _context.Set<User>()
-                    .FirstOrDefaultAsync(u => u.Id == share.SharedWithUserId);
+                    .FirstOrDefaultAsync(u => u.Id.ToString() == share.SharedWithUserId);
                 
                 if (user != null)
                 {
