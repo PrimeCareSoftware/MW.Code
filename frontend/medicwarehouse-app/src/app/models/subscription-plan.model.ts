@@ -15,6 +15,12 @@ export interface SubscriptionPlan {
   type: PlanType;
   features: string[];
   isRecommended?: boolean;
+  isMvp?: boolean;
+  earlyAdopterPrice?: number;
+  futurePrice?: number;
+  savingsPercentage?: number;
+  featuresInDevelopment?: string[];
+  earlyAdopterBenefits?: string[];
 }
 
 export enum PlanType {
@@ -26,6 +32,46 @@ export enum PlanType {
 }
 
 export const AVAILABLE_PLANS: SubscriptionPlan[] = [
+  {
+    id: 'starter-mvp-plan',
+    name: 'Starter',
+    description: 'MVP Básico - Ideal para médicos autônomos',
+    monthlyPrice: 49,
+    earlyAdopterPrice: 49,
+    futurePrice: 149,
+    savingsPercentage: 67,
+    trialDays: 14,
+    maxUsers: 1,
+    maxPatients: 50,
+    hasReports: true,
+    hasWhatsAppIntegration: false,
+    hasSMSNotifications: false,
+    hasTissExport: false,
+    hasFinancialModule: false,
+    isActive: true,
+    isMvp: true,
+    type: PlanType.Basic,
+    features: [
+      'Até 1 usuário',
+      'Até 50 pacientes',
+      'Agenda de consultas básica',
+      'Cadastro de pacientes',
+      'Prontuário médico digital simples',
+      'Relatórios básicos',
+      'Suporte por email (48h)'
+    ],
+    featuresInDevelopment: [
+      'Integração WhatsApp Business',
+      'Lembretes automáticos',
+      'Backup automático diário'
+    ],
+    earlyAdopterBenefits: [
+      'Preço fixo vitalício de R$ 49/mês',
+      'R$ 100 em créditos de serviço',
+      'Acesso beta a novos recursos',
+      'Badge de Cliente Fundador'
+    ]
+  },
   {
     id: 'basic-plan',
     name: 'Básico',
@@ -39,7 +85,7 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
     hasSMSNotifications: false,
     hasTissExport: false,
     hasFinancialModule: false,
-    isActive: true,
+    isActive: false,
     type: PlanType.Basic,
     features: [
       'Até 2 usuários',
@@ -48,6 +94,53 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
       'Cadastro de pacientes',
       'Prontuário médico digital',
       'Suporte por email'
+    ]
+  },
+  {
+    id: 'professional-mvp-plan',
+    name: 'Professional',
+    description: 'MVP Intermediário - Ideal para consultórios pequenos',
+    monthlyPrice: 89,
+    earlyAdopterPrice: 89,
+    futurePrice: 239,
+    savingsPercentage: 63,
+    trialDays: 14,
+    maxUsers: 2,
+    maxPatients: 200,
+    hasReports: true,
+    hasWhatsAppIntegration: false,
+    hasSMSNotifications: false,
+    hasTissExport: false,
+    hasFinancialModule: true,
+    isActive: true,
+    isMvp: true,
+    type: PlanType.Standard,
+    isRecommended: true,
+    features: [
+      'Até 2 usuários',
+      'Até 200 pacientes',
+      'Todos os recursos do Starter',
+      'Agenda avançada (múltiplos profissionais)',
+      'Prontuário médico completo',
+      'Módulo Financeiro básico',
+      'Relatórios gerenciais',
+      'Portal do Paciente (básico)',
+      'Suporte prioritário (24h)'
+    ],
+    featuresInDevelopment: [
+      'Integração WhatsApp API',
+      'Notificações por SMS',
+      'Assinatura digital (ICP-Brasil)',
+      'Exportação TISS',
+      'Dashboard Analytics',
+      'API de Integração'
+    ],
+    earlyAdopterBenefits: [
+      'Preço fixo vitalício de R$ 89/mês',
+      'R$ 100 em créditos de serviço',
+      'Acesso beta a novos recursos',
+      'Treinamento personalizado (2h)',
+      'Badge de Cliente Fundador'
     ]
   },
   {
@@ -63,9 +156,9 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
     hasSMSNotifications: false,
     hasTissExport: false,
     hasFinancialModule: true,
-    isActive: true,
+    isActive: false,
     type: PlanType.Standard,
-    isRecommended: true,
+    isRecommended: false,
     features: [
       'Até 3 usuários',
       'Até 300 pacientes',
@@ -75,6 +168,58 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
       'Módulo Financeiro',
       'Lembretes de consulta',
       'Suporte prioritário'
+    ]
+  },
+  {
+    id: 'enterprise-mvp-plan',
+    name: 'Enterprise',
+    description: 'MVP Avançado - Ideal para clínicas estabelecidas',
+    monthlyPrice: 149,
+    earlyAdopterPrice: 149,
+    futurePrice: 389,
+    savingsPercentage: 62,
+    trialDays: 14,
+    maxUsers: 5,
+    maxPatients: 999999,
+    hasReports: true,
+    hasWhatsAppIntegration: false,
+    hasSMSNotifications: false,
+    hasTissExport: false,
+    hasFinancialModule: true,
+    isActive: true,
+    isMvp: true,
+    type: PlanType.Premium,
+    features: [
+      'Até 5 usuários',
+      'Pacientes ilimitados',
+      'Todos os recursos do Professional',
+      'Módulo Financeiro completo',
+      'Gestão de estoque',
+      'Fila de espera',
+      'Telemedicina (básica)',
+      'Portal do Paciente completo',
+      'Relatórios avançados',
+      'Conformidade LGPD',
+      'Suporte 24/7'
+    ],
+    featuresInDevelopment: [
+      'Assinatura digital (ICP-Brasil)',
+      'Exportação TISS completa',
+      'BI e Analytics avançado',
+      'CRM para gestão de leads',
+      'Automação de workflows',
+      'Integração com laboratórios',
+      'Agendamento online',
+      'Marketing automation'
+    ],
+    earlyAdopterBenefits: [
+      'Preço fixo vitalício de R$ 149/mês',
+      'R$ 100 em créditos de serviço',
+      'Acesso beta a novos recursos',
+      'Treinamento personalizado (2h)',
+      'Gerente de sucesso dedicado (3 meses)',
+      'Badge de Cliente Fundador',
+      'Voto no roadmap de desenvolvimento'
     ]
   },
   {
@@ -90,7 +235,7 @@ export const AVAILABLE_PLANS: SubscriptionPlan[] = [
     hasSMSNotifications: true,
     hasTissExport: true,
     hasFinancialModule: true,
-    isActive: true,
+    isActive: false,
     type: PlanType.Premium,
     features: [
       'Até 5 usuários',
