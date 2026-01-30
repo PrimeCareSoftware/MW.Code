@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services.Cache;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Interfaces;
 using MedicSoft.Repository.Repositories;
 
 namespace MedicSoft.Application.Services.Cache

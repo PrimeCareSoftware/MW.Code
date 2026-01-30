@@ -32,5 +32,15 @@ namespace MedicSoft.Domain.Interfaces
             string? city,
             string? state,
             string? clinicType);
+        
+        /// <summary>
+        /// Gets all active clinics.
+        /// </summary>
+        Task<List<Clinic>> GetAllActiveAsync();
+        
+        /// <summary>
+        /// Gets clinic customization by clinic ID.
+        /// </summary>
+        Task<ClinicCustomization?> GetCustomizationAsync(Guid clinicId);
     }
 }
