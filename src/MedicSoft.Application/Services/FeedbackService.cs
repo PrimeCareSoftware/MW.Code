@@ -59,8 +59,8 @@ namespace MedicSoft.Application.Services
 
             await _feedbackRepository.AddAsync(feedback);
             
-            var user = await _userRepository.GetByIdAsync(userId, tenantId);
-            return MapToDto(feedback, user?.Name ?? "Unknown");
+            var user = await GetUserByStringIdAsync(userId, tenantId);
+            return MapToDto(feedback, user?.FullName ?? "Unknown");
         }
 
         public async Task<UserFeedbackDto?> GetFeedbackByIdAsync(Guid id, string tenantId)
@@ -68,8 +68,8 @@ namespace MedicSoft.Application.Services
             var feedback = await _feedbackRepository.GetByIdAsync(id, tenantId);
             if (feedback == null) return null;
 
-            var user = await _userRepository.GetByIdAsync(feedback.UserId, tenantId);
-            return MapToDto(feedback, user?.Name ?? "Unknown");
+            var user = await GetUserByStringIdAsync(feedback.UserId, tenantId);
+            return MapToDto(feedback, user?.FullName ?? "Unknown");
         }
 
         public async Task<IEnumerable<UserFeedbackDto>> GetAllFeedbackAsync(string tenantId)
@@ -79,8 +79,8 @@ namespace MedicSoft.Application.Services
 
             foreach (var feedback in feedbacks)
             {
-                var user = await _userRepository.GetByIdAsync(feedback.UserId, tenantId);
-                result.Add(MapToDto(feedback, user?.Name ?? "Unknown"));
+                var user = await GetUserByStringIdAsync(feedback.UserId, tenantId);
+                result.Add(MapToDto(feedback, user?.FullName ?? "Unknown"));
             }
 
             return result;
@@ -89,8 +89,8 @@ namespace MedicSoft.Application.Services
         public async Task<IEnumerable<UserFeedbackDto>> GetFeedbackByUserAsync(string userId, string tenantId)
         {
             var feedbacks = await _feedbackRepository.GetByUserIdAsync(userId, tenantId);
-            var user = await _userRepository.GetByIdAsync(userId, tenantId);
-            var userName = user?.Name ?? "Unknown";
+            var user = await GetUserByStringIdAsync(userId, tenantId);
+            var userName = user?.FullName ?? "Unknown";
 
             return feedbacks.Select(f => MapToDto(f, userName));
         }
@@ -102,8 +102,8 @@ namespace MedicSoft.Application.Services
 
             foreach (var feedback in feedbacks)
             {
-                var user = await _userRepository.GetByIdAsync(feedback.UserId, tenantId);
-                result.Add(MapToDto(feedback, user?.Name ?? "Unknown"));
+                var user = await GetUserByStringIdAsync(feedback.UserId, tenantId);
+                result.Add(MapToDto(feedback, user?.FullName ?? "Unknown"));
             }
 
             return result;
@@ -118,8 +118,8 @@ namespace MedicSoft.Application.Services
             feedback.UpdateStatus(dto.Status, resolvedBy, dto.ResolutionNotes);
             await _feedbackRepository.UpdateAsync(feedback);
 
-            var user = await _userRepository.GetByIdAsync(feedback.UserId, tenantId);
-            return MapToDto(feedback, user?.Name ?? "Unknown");
+            var user = await GetUserByStringIdAsync(feedback.UserId, tenantId);
+            return MapToDto(feedback, user?.FullName ?? "Unknown");
         }
 
         public async Task<FeedbackStatisticsDto> GetStatisticsAsync(string tenantId)
@@ -178,6 +178,14 @@ namespace MedicSoft.Application.Services
                 feedback.CreatedAt
             );
         }
+
+        private async Task<User?> GetUserByStringIdAsync(string userId, string tenantId)
+        {
+            if (!Guid.TryParse(userId, out var userGuid))
+                return null;
+            
+            return await _userRepository.GetByIdAsync(userGuid, tenantId);
+        }
     }
 
     public class NpsSurveyService : INpsSurveyService
@@ -200,9 +208,9 @@ namespace MedicSoft.Application.Services
             if (hasResponded)
                 throw new InvalidOperationException("User has already responded to NPS survey");
 
-            var user = await _userRepository.GetByIdAsync(userId, tenantId);
+            var user = await GetUserByStringIdAsync(userId, tenantId);
             var daysAsUser = user != null ? (DateTime.UtcNow - user.CreatedAt).Days : 0;
-            var userRole = user?.Role ?? "Unknown";
+            var userRole = user?.Role.ToString() ?? "Unknown";
 
             var survey = new NpsSurvey(
                 userId,
@@ -215,7 +223,7 @@ namespace MedicSoft.Application.Services
 
             await _surveyRepository.AddAsync(survey);
             
-            return MapToDto(survey, user?.Name ?? "Unknown");
+            return MapToDto(survey, user?.FullName ?? "Unknown");
         }
 
         public async Task<NpsSurveyDto?> GetSurveyByIdAsync(Guid id, string tenantId)
@@ -223,8 +231,8 @@ namespace MedicSoft.Application.Services
             var survey = await _surveyRepository.GetByIdAsync(id, tenantId);
             if (survey == null) return null;
 
-            var user = await _userRepository.GetByIdAsync(survey.UserId, tenantId);
-            return MapToDto(survey, user?.Name ?? "Unknown");
+            var user = await GetUserByStringIdAsync(survey.UserId, tenantId);
+            return MapToDto(survey, user?.FullName ?? "Unknown");
         }
 
         public async Task<IEnumerable<NpsSurveyDto>> GetAllSurveysAsync(string tenantId)
@@ -234,8 +242,8 @@ namespace MedicSoft.Application.Services
 
             foreach (var survey in surveys)
             {
-                var user = await _userRepository.GetByIdAsync(survey.UserId, tenantId);
-                result.Add(MapToDto(survey, user?.Name ?? "Unknown"));
+                var user = await GetUserByStringIdAsync(survey.UserId, tenantId);
+                result.Add(MapToDto(survey, user?.FullName ?? "Unknown"));
             }
 
             return result;
@@ -294,6 +302,14 @@ namespace MedicSoft.Application.Services
                 survey.UserRole,
                 survey.DaysAsUser
             );
+        }
+
+        private async Task<User?> GetUserByStringIdAsync(string userId, string tenantId)
+        {
+            if (!Guid.TryParse(userId, out var userGuid))
+                return null;
+            
+            return await _userRepository.GetByIdAsync(userGuid, tenantId);
         }
     }
 }

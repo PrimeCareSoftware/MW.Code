@@ -421,7 +421,7 @@ namespace MedicSoft.Application.Services.Dashboards
                             {
                                 var columnName = reader.GetName(i);
                                 var value = reader.IsDBNull(i) ? null : reader.GetValue(i);
-                                row[columnName] = value;
+                                row[columnName] = value ?? (object)DBNull.Value;
                             }
                             
                             result.Add(row);
@@ -533,8 +533,13 @@ namespace MedicSoft.Application.Services.Dashboards
             // Validate user exists if sharing with specific user
             if (!string.IsNullOrWhiteSpace(dto.SharedWithUserId))
             {
+                if (!Guid.TryParse(dto.SharedWithUserId, out var userGuid))
+                {
+                    throw new InvalidOperationException($"Invalid user ID format: {dto.SharedWithUserId}");
+                }
+
                 var userExists = await _context.Set<User>()
-                    .AnyAsync(u => u.Id == dto.SharedWithUserId);
+                    .AnyAsync(u => u.Id == userGuid);
                 
                 if (!userExists)
                 {
@@ -574,34 +579,44 @@ namespace MedicSoft.Application.Services.Dashboards
         {
             _logger.LogInformation("Retrieving shares for dashboard: {DashboardId}", dashboardId);
 
-            // Optimized query: Load shares with user information in a single query
+            // Load all shares for the dashboard
             var shares = await _context.Set<DashboardShare>()
                 .Where(s => s.DashboardId == dashboardId)
                 .OrderByDescending(s => s.CreatedAt)
-                .Select(s => new
-                {
-                    Share = s,
-                    UserName = s.SharedWithUserId != null 
-                        ? _context.Set<User>()
-                            .Where(u => u.Id == s.SharedWithUserId)
-                            .Select(u => u.Username)
-                            .FirstOrDefault()
-                        : null
-                })
                 .ToListAsync();
 
-            return shares.Select(s => new DashboardShareDto
+            // Collect all user IDs and parse them to Guids
+            var userGuids = shares
+                .Where(s => !string.IsNullOrWhiteSpace(s.SharedWithUserId))
+                .Select(s => new { UserId = s.SharedWithUserId, Parsed = Guid.TryParse(s.SharedWithUserId, out var guid) ? (Guid?)guid : null })
+                .Where(x => x.Parsed.HasValue)
+                .Select(x => x.Parsed!.Value)
+                .Distinct()
+                .ToList();
+
+            // Batch load all user information in a single query
+            var users = await _context.Set<User>()
+                .Where(u => userGuids.Contains(u.Id))
+                .Select(u => new { u.Id, u.Username })
+                .ToDictionaryAsync(u => u.Id.ToString(), u => u.Username);
+
+            // Map shares to DTOs with user information
+            var result = shares.Select(share => new DashboardShareDto
             {
-                Id = s.Share.Id,
-                DashboardId = s.Share.DashboardId,
-                SharedWithUserId = s.Share.SharedWithUserId,
-                SharedWithUserName = s.UserName,
-                SharedWithRole = s.Share.SharedWithRole,
-                PermissionLevel = s.Share.PermissionLevel,
-                SharedBy = s.Share.SharedBy,
-                ExpiresAt = s.Share.ExpiresAt,
-                CreatedAt = s.Share.CreatedAt
+                Id = share.Id,
+                DashboardId = share.DashboardId,
+                SharedWithUserId = share.SharedWithUserId,
+                SharedWithUserName = !string.IsNullOrWhiteSpace(share.SharedWithUserId) && users.ContainsKey(share.SharedWithUserId)
+                    ? users[share.SharedWithUserId]
+                    : null,
+                SharedWithRole = share.SharedWithRole,
+                PermissionLevel = share.PermissionLevel,
+                SharedBy = share.SharedBy,
+                ExpiresAt = share.ExpiresAt,
+                CreatedAt = share.CreatedAt
             }).ToList();
+
+            return result;
         }
 
         public async Task RevokeDashboardShareAsync(Guid shareId)
@@ -737,10 +752,10 @@ namespace MedicSoft.Application.Services.Dashboards
             };
 
             // Try to get username if shared with a user
-            if (!string.IsNullOrWhiteSpace(share.SharedWithUserId))
+            if (!string.IsNullOrWhiteSpace(share.SharedWithUserId) && Guid.TryParse(share.SharedWithUserId, out var userGuid))
             {
                 var user = await _context.Set<User>()
-                    .FirstOrDefaultAsync(u => u.Id == share.SharedWithUserId);
+                    .FirstOrDefaultAsync(u => u.Id == userGuid);
                 
                 if (user != null)
                 {
