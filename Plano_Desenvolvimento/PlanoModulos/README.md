@@ -94,18 +94,25 @@ PlanoModulos/
 ### **Fase 1: Backend e API (2-3 semanas)**
 **Arquivo:** `01-PROMPT-BACKEND.md`
 
+**Status:** ✅ **CONCLUÍDA** (30 de Janeiro de 2026)
+
 **Tarefas:**
-- [ ] Expandir endpoints existentes da API
-- [ ] Criar endpoints para configuração global
-- [ ] Adicionar vinculação módulos ↔ planos
-- [ ] Implementar serviços de validação
-- [ ] Criar DTOs e ViewModels
-- [ ] Adicionar logs de auditoria
+- [x] Expandir endpoints existentes da API
+- [x] Criar endpoints para configuração global
+- [x] Adicionar vinculação módulos ↔ planos
+- [x] Implementar serviços de validação
+- [x] Criar DTOs e ViewModels
+- [x] Adicionar logs de auditoria
 
 **Entregas:**
-- API REST completa para CRUD de configurações
-- Endpoints para system-admin e clínica
-- Validações de negócio implementadas
+- ✅ API REST completa para CRUD de configurações
+- ✅ Endpoints para system-admin e clínica (`SystemAdminModuleController`)
+- ✅ Validações de negócio implementadas (`ModuleConfigurationService`)
+- ✅ Service de Analytics (`ModuleAnalyticsService`)
+- ✅ Auditoria completa (`ModuleConfigurationHistory`)
+- ✅ 9 endpoints para clínicas + 8 endpoints para system-admin
+- ✅ Migrations aplicadas
+- ✅ Documentação Swagger completa
 
 ---
 
