@@ -21,7 +21,10 @@ namespace MedicSoft.Repository.Configurations
 
             builder.Property(p => p.Document)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(500); // Increased for encrypted CPF
+
+            builder.Property(p => p.DocumentHash)
+                .HasMaxLength(100); // SHA-256 hash for searchable lookup
 
             builder.Property(p => p.Gender)
                 .IsRequired()
@@ -110,6 +113,9 @@ namespace MedicSoft.Repository.Configurations
             builder.HasIndex(p => new { p.TenantId, p.Document })
                 .IsUnique()
                 .HasDatabaseName("IX_Patients_TenantId_Document");
+
+            builder.HasIndex(p => p.DocumentHash)
+                .HasDatabaseName("IX_Patients_DocumentHash"); // For searchable encrypted field
 
             builder.HasIndex(p => p.TenantId)
                 .HasDatabaseName("IX_Patients_TenantId");

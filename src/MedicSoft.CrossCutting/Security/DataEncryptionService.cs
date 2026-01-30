@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using MedicSoft.Domain.Interfaces;
@@ -246,6 +248,47 @@ namespace MedicSoft.CrossCutting.Security
             var key = new byte[32]; // 256 bits
             RandomNumberGenerator.Fill(key);
             return Convert.ToBase64String(key);
+        }
+
+        /// <summary>
+        /// Generates a SHA-256 hash for searchable encrypted fields.
+        /// </summary>
+        /// <param name="plainText">Data to hash</param>
+        /// <returns>Base64-encoded hash, or empty string if input is null/empty</returns>
+        public string GenerateSearchableHash(string? plainText)
+        {
+            if (string.IsNullOrWhiteSpace(plainText))
+                return string.Empty;
+
+            using var sha256 = SHA256.Create();
+            var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(plainText));
+            return Convert.ToBase64String(hashBytes);
+        }
+
+        /// <summary>
+        /// Encrypts a batch of strings efficiently.
+        /// </summary>
+        /// <param name="plainTexts">Data to encrypt</param>
+        /// <returns>Encrypted data in the same order</returns>
+        public IEnumerable<string?> EncryptBatch(IEnumerable<string?> plainTexts)
+        {
+            if (plainTexts == null)
+                throw new ArgumentNullException(nameof(plainTexts));
+
+            return plainTexts.Select(Encrypt).ToList();
+        }
+
+        /// <summary>
+        /// Decrypts a batch of strings efficiently.
+        /// </summary>
+        /// <param name="cipherTexts">Encrypted data</param>
+        /// <returns>Decrypted data in the same order</returns>
+        public IEnumerable<string?> DecryptBatch(IEnumerable<string?> cipherTexts)
+        {
+            if (cipherTexts == null)
+                throw new ArgumentNullException(nameof(cipherTexts));
+
+            return cipherTexts.Select(Decrypt).ToList();
         }
     }
 }

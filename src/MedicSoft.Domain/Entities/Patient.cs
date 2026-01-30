@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MedicSoft.Domain.Attributes;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.ValueObjects;
 using MedicSoft.Domain.Services;
@@ -10,14 +11,25 @@ namespace MedicSoft.Domain.Entities
     public class Patient : BaseEntity
     {
         public string Name { get; private set; }
+        
+        [Encrypted(Searchable = true, Priority = EncryptionPriority.Critical, Reason = "CPF is highly sensitive personal data (LGPD Art. 5)")]
         public string Document { get; private set; } // CPF/RG/Passaporte
+        
+        // Hash for searchable CPF lookup
+        public string? DocumentHash { get; private set; }
+        
         public DateTime DateOfBirth { get; private set; }
         public string Gender { get; private set; }
         public Email Email { get; private set; }
         public Phone Phone { get; private set; }
         public Address Address { get; private set; }
+        
+        [Encrypted(Priority = EncryptionPriority.High, Reason = "Medical history contains sensitive health data (LGPD Art. 11)")]
         public string? MedicalHistory { get; private set; }
+        
+        [Encrypted(Priority = EncryptionPriority.High, Reason = "Allergy information is sensitive health data (LGPD Art. 11)")]
         public string? Allergies { get; private set; }
+        
         public string? MotherName { get; private set; } // CFM 1.821 - Recomendado
         public bool IsActive { get; private set; } = true;
 

@@ -33,5 +33,26 @@ namespace MedicSoft.Domain.Interfaces
         /// <param name="cipherBytes">Encrypted data</param>
         /// <returns>Decrypted data</returns>
         byte[] DecryptBytes(byte[] cipherBytes);
+
+        /// <summary>
+        /// Generates a SHA-256 hash for searchable encrypted fields.
+        /// </summary>
+        /// <param name="plainText">Data to hash</param>
+        /// <returns>Base64-encoded hash, or empty string if input is null/empty</returns>
+        string GenerateSearchableHash(string? plainText);
+
+        /// <summary>
+        /// Encrypts a batch of strings efficiently.
+        /// </summary>
+        /// <param name="plainTexts">Data to encrypt</param>
+        /// <returns>Encrypted data in the same order</returns>
+        IEnumerable<string?> EncryptBatch(IEnumerable<string?> plainTexts);
+
+        /// <summary>
+        /// Decrypts a batch of strings efficiently.
+        /// </summary>
+        /// <param name="cipherTexts">Encrypted data</param>
+        /// <returns>Decrypted data in the same order</returns>
+        IEnumerable<string?> DecryptBatch(IEnumerable<string?> cipherTexts);
     }
 }
