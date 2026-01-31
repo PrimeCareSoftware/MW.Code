@@ -1828,14 +1828,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidAt",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            // PaidAt column is already created with correct type in AddPaymentTrackingFields migration
+            // No need to alter it here
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedAt",
@@ -3902,14 +3896,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp without time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidAt",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // PaidAt column type is managed by AddPaymentTrackingFields migration
+            // No need to alter it here
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedAt",

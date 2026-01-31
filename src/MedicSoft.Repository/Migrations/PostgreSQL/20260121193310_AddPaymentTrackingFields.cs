@@ -22,7 +22,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.AddColumn<DateTime>(
                 name: "PaidAt",
                 table: "Appointments",
-                type: "timestamp with time zone",
+                type: "timestamp without time zone",
                 nullable: true);
 
             migrationBuilder.AddColumn<Guid>(
