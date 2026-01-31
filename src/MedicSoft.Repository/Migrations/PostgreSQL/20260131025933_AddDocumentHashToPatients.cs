@@ -239,26 +239,32 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 schema: "crm",
                 table: "AutomationActions");
 
-            // Conditionally alter Workflows table columns only if they exist with old type
+            // Conditionally alter Workflows table columns only if table and columns exist with old type
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
+                    -- Only proceed if the Workflows table exists
                     IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Workflows' 
-                        AND column_name = 'UpdatedAt'
-                        AND data_type = 'timestamp without time zone'
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'Workflows'
                     ) THEN
-                        ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
-                    END IF;
-                    
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Workflows' 
-                        AND column_name = 'CreatedAt'
-                        AND data_type = 'timestamp without time zone'
-                    ) THEN
-                        ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'Workflows' 
+                            AND column_name = 'UpdatedAt'
+                            AND data_type = 'timestamp without time zone'
+                        ) THEN
+                            ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                        END IF;
+                        
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'Workflows' 
+                            AND column_name = 'CreatedAt'
+                            AND data_type = 'timestamp without time zone'
+                        ) THEN
+                            ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                        END IF;
                     END IF;
                 END $$;
             ");
@@ -7245,29 +7251,31 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
+                    -- Only proceed if the Workflows table exists
                     IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Workflows' 
-                        AND column_name = 'UpdatedAt'
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'Workflows'
                         AND table_schema = 'public'
-                        AND data_type = 'timestamp with time zone'
                     ) THEN
-                        ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Workflows' 
-                        AND column_name = 'CreatedAt'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp with time zone'
-                    ) THEN
-                        ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'Workflows' 
+                            AND column_name = 'UpdatedAt'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp with time zone'
+                        ) THEN
+                            ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                        END IF;
+                        
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'Workflows' 
+                            AND column_name = 'CreatedAt'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp with time zone'
+                        ) THEN
+                            ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                        END IF;
                     END IF;
                 END $$;
             ");
