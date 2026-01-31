@@ -256,7 +256,7 @@ namespace MedicSoft.Application.Services.Dashboards
             }
         }
 
-        public async Task<byte[]> ExportDashboardAsync(Guid id, ExportFormat format)
+        public async Task<byte[]> ExportDashboardAsync(Guid id, DashboardExportFormat format)
         {
             _logger.LogInformation("Exporting dashboard: {DashboardId} as {Format}", id, format);
 
@@ -264,11 +264,11 @@ namespace MedicSoft.Application.Services.Dashboards
 
             switch (format)
             {
-                case ExportFormat.Json:
+                case DashboardExportFormat.Json:
                     return ExportToJson(dashboard);
                 
-                case ExportFormat.Pdf:
-                case ExportFormat.Excel:
+                case DashboardExportFormat.Pdf:
+                case DashboardExportFormat.Excel:
                     _logger.LogWarning("Dashboard export to {Format} format is not yet implemented", format);
                     throw new NotImplementedException($"Dashboard export to {format} format is not yet implemented");
                 

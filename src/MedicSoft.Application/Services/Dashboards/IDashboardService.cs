@@ -59,7 +59,7 @@ namespace MedicSoft.Application.Services.Dashboards
         /// <summary>
         /// Export dashboard to specified format
         /// </summary>
-        Task<byte[]> ExportDashboardAsync(Guid id, ExportFormat format);
+        Task<byte[]> ExportDashboardAsync(Guid id, DashboardExportFormat format);
 
         /// <summary>
         /// Get all widget templates
@@ -99,9 +99,9 @@ namespace MedicSoft.Application.Services.Dashboards
     }
 
     /// <summary>
-    /// Export format enumeration
+    /// Dashboard export format enumeration
     /// </summary>
-    public enum ExportFormat
+    public enum DashboardExportFormat
     {
         Json,
         Pdf,
