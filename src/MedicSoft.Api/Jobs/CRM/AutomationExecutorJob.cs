@@ -81,7 +81,7 @@ public class AutomationExecutorJob
         }
         catch (Npgsql.PostgresException pgEx) when (pgEx.SqlState == "42P01")
         {
-            _logger.LogFatal(pgEx, 
+            _logger.LogCritical(pgEx, 
                 "ERRO CRÍTICO: Tabela do CRM não existe no banco de dados. " +
                 "A migração '20260127205215_AddCRMEntities' não foi aplicada. " +
                 "Execute './run-all-migrations.sh' ou 'dotnet ef database update' para corrigir.");
