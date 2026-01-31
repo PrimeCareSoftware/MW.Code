@@ -330,6 +330,13 @@ namespace MedicSoft.Application.Services
                 // Delete data in the correct order to respect foreign key constraints
                 // Delete child entities first, then parent entities
                 
+                // 0. Delete AnamnesisTemplates (depends on Users)
+                var anamnesisTemplates = await _anamnesisTemplateRepository.GetAllAsync(_demoTenantId);
+                foreach (var template in anamnesisTemplates)
+                {
+                    await _anamnesisTemplateRepository.DeleteWithoutSaveAsync(template.Id, _demoTenantId);
+                }
+
                 // 1. Delete PrescriptionItems (depends on MedicalRecords and Medications)
                 var prescriptionItems = await _prescriptionItemRepository.GetAllAsync(_demoTenantId);
                 foreach (var item in prescriptionItems)
@@ -372,18 +379,18 @@ namespace MedicSoft.Application.Services
                     await _medicalRecordRepository.DeleteWithoutSaveAsync(record.Id, _demoTenantId);
                 }
 
-                // 5.1. Delete Invoices (depends on Payments)
-                var invoices = await _invoiceRepository.GetAllAsync(_demoTenantId);
-                foreach (var invoice in invoices)
-                {
-                    await _invoiceRepository.DeleteWithoutSaveAsync(invoice.Id, _demoTenantId);
-                }
-
                 // 6. Delete Payments (depends on Appointments)
                 var payments = await _paymentRepository.GetAllAsync(_demoTenantId);
                 foreach (var payment in payments)
                 {
                     await _paymentRepository.DeleteWithoutSaveAsync(payment.Id, _demoTenantId);
+                }
+
+                // 6.1. Delete Invoices (depends on Payments)
+                var invoices = await _invoiceRepository.GetAllAsync(_demoTenantId);
+                foreach (var invoice in invoices)
+                {
+                    await _invoiceRepository.DeleteWithoutSaveAsync(invoice.Id, _demoTenantId);
                 }
 
                 // 7. Delete AppointmentProcedures (depends on Appointments and Procedures)
@@ -407,7 +414,14 @@ namespace MedicSoft.Application.Services
                     await _patientClinicLinkRepository.DeleteWithoutSaveAsync(link.Id, _demoTenantId);
                 }
 
-                // 9.1. Delete HealthInsurancePlans (depends on HealthInsuranceOperators and Patients)
+                // 9.1. Delete ExamCatalogs (should be deleted before Patients to avoid constraint issues)
+                var examCatalogs = await _examCatalogRepository.GetAllAsync(_demoTenantId);
+                foreach (var examCatalog in examCatalogs)
+                {
+                    await _examCatalogRepository.DeleteWithoutSaveAsync(examCatalog.Id, _demoTenantId);
+                }
+
+                // 9.2. Delete HealthInsurancePlans (depends on HealthInsuranceOperators and Patients)
                 var healthInsurancePlans = await _healthInsurancePlanRepository.GetAllAsync(_demoTenantId);
                 foreach (var plan in healthInsurancePlans)
                 {
@@ -440,13 +454,6 @@ namespace MedicSoft.Application.Services
                 foreach (var medication in medications)
                 {
                     await _medicationRepository.DeleteWithoutSaveAsync(medication.Id, _demoTenantId);
-                }
-
-                // 13.1. Delete ExamCatalogs
-                var examCatalogs = await _examCatalogRepository.GetAllAsync(_demoTenantId);
-                foreach (var examCatalog in examCatalogs)
-                {
-                    await _examCatalogRepository.DeleteWithoutSaveAsync(examCatalog.Id, _demoTenantId);
                 }
 
                 // 14. Delete Procedures
@@ -510,6 +517,13 @@ namespace MedicSoft.Application.Services
                 foreach (var plan in subscriptionPlans)
                 {
                     await _subscriptionPlanRepository.DeleteWithoutSaveAsync(plan.Id, "system");
+                }
+
+                // 22. Delete ConsultationFormProfiles (system-wide templates)
+                var consultationFormProfiles = await _consultationFormProfileRepository.GetAllAsync("system");
+                foreach (var profile in consultationFormProfiles)
+                {
+                    await _consultationFormProfileRepository.DeleteWithoutSaveAsync(profile.Id, "system");
                 }
 
                 // Save all changes at once at the end of the transaction
