@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MedicSoft.Application.Services;
@@ -19,6 +20,7 @@ namespace MedicSoft.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("api/system-admin")]
+    [Authorize(Roles = "SystemAdmin")]
     public class SystemAdminController : BaseController
     {
         private readonly IClinicRepository _clinicRepository;
@@ -57,10 +59,6 @@ namespace MedicSoft.Api.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
-            // In production, verify user has SystemAdmin role
-            // var userRole = User.FindFirst("role")?.Value;
-            // if (userRole != "SystemAdmin") return Forbid();
-
             var query = _context.Clinics
                 .IgnoreQueryFilters() // Bypass tenant filter for cross-tenant access
                 .AsQueryable();
