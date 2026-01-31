@@ -3257,14 +3257,20 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidAt",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            // Only alter PaidAt if it exists (handles fresh database deployments)
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.columns 
+                        WHERE table_schema = 'public' AND table_name = 'Appointments' 
+                        AND column_name = 'PaidAt'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp without time zone USING ""PaidAt""::timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedAt",
@@ -6886,14 +6892,20 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp without time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidAt",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // Only alter PaidAt if it exists (handles fresh database deployments)
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.columns 
+                        WHERE table_schema = 'public' AND table_name = 'Appointments' 
+                        AND column_name = 'PaidAt'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp with time zone USING ""PaidAt""::timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedAt",
