@@ -476,8 +476,8 @@ namespace MedicSoft.Api.Controllers
 
                 bool isSessionValid;
                 
-                // Check if this is an owner or regular user
-                if (roleClaim == "Owner" || roleClaim == RoleNames.ClinicOwner)
+                // Check if this is an owner (Owner, ClinicOwner, or SystemAdmin) or regular user
+                if (roleClaim == "Owner" || roleClaim == RoleNames.ClinicOwner || roleClaim == RoleNames.SystemAdmin)
                 {
                     isSessionValid = await _authService.ValidateOwnerSessionAsync(userId, sessionIdClaim, tenantIdClaim);
                 }
