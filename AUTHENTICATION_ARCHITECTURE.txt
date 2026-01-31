@@ -1,0 +1,232 @@
+# PrimeCare Software - Authentication Architecture
+
+## System Overview
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│                         FRONTEND APPLICATIONS                              │
+└────────────────────────────────────────────────────────────────────────────┘
+
+  ┌───────────────────┐  ┌───────────────────┐  ┌────────────────────────┐
+  │ MedicWarehouse    │  │  System Admin     │  │  Patient Portal        │
+  │      App          │  │                   │  │                        │
+  │  localhost:4200   │  │  localhost:4201   │  │  localhost:4202        │
+  │                   │  │                   │  │                        │
+  │  Auth Service:    │  │  Auth Service:    │  │  Auth Service:         │
+  │  • stores token   │  │  • stores token   │  │  • stores accessToken  │
+  │  • validates JWT  │  │  • validates JWT  │  │  • refreshes token     │
+  │  • session check  │  │  • session check  │  │  • 2FA support         │
+  └─────────┬─────────┘  └─────────┬─────────┘  └───────────┬────────────┘
+            │                      │                         │
+            │ POST /auth/login     │ POST /auth/owner-login │ POST /auth/login
+            │                      │                         │
+            ▼                      ▼                         ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│                          BACKEND APIS                                      │
+└────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────┐     ┌─────────────────────────────┐
+    │    Main MedicSoft API             │     │   Patient Portal API        │
+    │    localhost:5293 (dev)           │     │   localhost:5101 (dev)      │
+    │    https://localhost:5000 (https) │     │   https://localhost:7030    │
+    │                                   │     │                             │
+    │  Endpoints:                       │     │   Endpoints:                │
+    │  • POST /api/auth/login           │     │   • POST /api/auth/login    │
+    │  • POST /api/auth/owner-login     │     │   • POST /api/auth/register │
+    │  • POST /api/auth/validate        │     │   • POST /api/auth/refresh  │
+    │  • POST /api/auth/validate-session│     │   • POST /api/auth/logout   │
+    │                                   │     │                             │
+    │  Response Format:                 │     │   Response Format:          │
+    │  {                                │     │   {                         │
+    │    "token": "eyJhbGc...",         │     │     "accessToken": "...",   │
+    │    "username": "admin",           │     │     "refreshToken": "...",  │
+    │    "tenantId": "clinic-001",      │     │     "expiresAt": "...",     │
+    │    "role": "Doctor",              │     │     "user": {               │
+    │    "clinicId": "...",             │     │       "id": "...",          │
+    │    "expiresAt": "...",            │     │       "email": "...",       │
+    │    "mfaEnabled": false            │     │       "fullName": "...",    │
+    │  }                                │     │       "twoFactorEnabled": …}│
+    │                                   │     │   }                         │
+    └───────────────┬───────────────────┘     └──────────────┬──────────────┘
+                    │                                        │
+                    │                                        │
+                    ▼                                        ▼
+    ┌────────────────────────────────────────────────────────────────────────┐
+    │                      PostgreSQL Databases                              │
+    │                                                                        │
+    │  ┌──────────────────┐              ┌────────────────────────────────┐│
+    │  │  MedicSoft DB    │              │   PatientPortal DB             ││
+    │  │                  │              │                                ││
+    │  │  • Users         │              │   • PatientUsers               ││
+    │  │  • Owners        │              │   • RefreshTokens              ││
+    │  │  • UserSessions  │              │   • EmailVerificationTokens    ││
+    │  │  • OwnerSessions │              │   • PasswordResetTokens        ││
+    │  │  • LoginAttempts │              │   • TwoFactorTokens            ││
+    │  └──────────────────┘              └────────────────────────────────┘│
+    └────────────────────────────────────────────────────────────────────────┘
+
+## Authentication Flow
+
+### 1. MedicWarehouse App / System Admin (Main API)
+
+┌─────────┐                    ┌──────────┐                  ┌──────────┐
+│Frontend │                    │Main API  │                  │Database  │
+└────┬────┘                    └────┬─────┘                  └────┬─────┘
+     │                              │                             │
+     │ 1. POST /api/auth/login      │                             │
+     │    { username, password,     │                             │
+     │      tenantId }               │                             │
+     ├─────────────────────────────>│                             │
+     │                              │ 2. Validate credentials     │
+     │                              ├────────────────────────────>│
+     │                              │                             │
+     │                              │ 3. User/Owner found         │
+     │                              │<────────────────────────────┤
+     │                              │                             │
+     │                              │ 4. Generate JWT token       │
+     │                              │ 5. Create session           │
+     │                              ├────────────────────────────>│
+     │                              │                             │
+     │ 6. Return token              │                             │
+     │<─────────────────────────────┤                             │
+     │                              │                             │
+     │ 7. Store in localStorage     │                             │
+     │    key: "auth_token"         │                             │
+     │                              │                             │
+     │ 8. Subsequent requests       │                             │
+     │    Authorization: Bearer...  │                             │
+     ├─────────────────────────────>│                             │
+     │                              │ 9. Validate token & session │
+     │                              ├────────────────────────────>│
+     │                              │                             │
+     │ 10. Resource data            │                             │
+     │<─────────────────────────────┤                             │
+     │                              │                             │
+
+### 2. Patient Portal (Separate API)
+
+┌─────────┐                    ┌──────────┐                  ┌──────────┐
+│Frontend │                    │Portal API│                  │Database  │
+└────┬────┘                    └────┬─────┘                  └────┬─────┘
+     │                              │                             │
+     │ 1. POST /api/auth/login      │                             │
+     │    { emailOrCPF, password }  │                             │
+     ├─────────────────────────────>│                             │
+     │                              │ 2. Validate credentials     │
+     │                              ├────────────────────────────>│
+     │                              │                             │
+     │                              │ 3. PatientUser found        │
+     │                              │<────────────────────────────┤
+     │                              │                             │
+     │                              │ 4. Check 2FA enabled?       │
+     │                              │    No: Generate tokens      │
+     │                              │ 5. Create refresh token     │
+     │                              ├────────────────────────────>│
+     │                              │                             │
+     │ 6. Return accessToken +      │                             │
+     │    refreshToken              │                             │
+     │<─────────────────────────────┤                             │
+     │                              │                             │
+     │ 7. Store in localStorage     │                             │
+     │    keys: "access_token",     │                             │
+     │          "refresh_token"     │                             │
+     │                              │                             │
+     │ 8. Subsequent requests       │                             │
+     │    Authorization: Bearer...  │                             │
+     ├─────────────────────────────>│                             │
+     │                              │ 9. Validate JWT             │
+     │                              │                             │
+     │ 10. Resource data            │                             │
+     │<─────────────────────────────┤                             │
+     │                              │                             │
+     │ (Token expires after 15 min) │                             │
+     │ 11. POST /api/auth/refresh   │                             │
+     │     { refreshToken }         │                             │
+     ├─────────────────────────────>│                             │
+     │                              │ 12. Validate refresh token  │
+     │                              ├────────────────────────────>│
+     │                              │                             │
+     │ 13. New token pair           │                             │
+     │<─────────────────────────────┤                             │
+     │                              │                             │
+
+## Security Features
+
+### Main API (MedicWarehouse & System Admin)
+✓ JWT tokens with 60-minute expiration
+✓ Session validation (single session per user)
+✓ Brute force protection
+✓ Login attempt tracking
+✓ Password hashing (PBKDF2)
+✓ HTTPS required in production
+✓ CORS protection
+
+### Patient Portal API
+✓ JWT tokens with 15-minute expiration
+✓ Refresh token rotation (7-day expiration)
+✓ Two-factor authentication (2FA)
+✓ Account lockout (5 failed attempts)
+✓ Password hashing (PBKDF2 with 100k iterations)
+✓ Email verification
+✓ Password reset flow
+✓ HTTPS required in production
+✓ CORS protection
+
+## Token Storage
+
+┌─────────────────────────────────────────────────────────────┐
+│                    localStorage                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  MedicWarehouse App:                                        │
+│  ├─ auth_token: "eyJhbGc..."                               │
+│  └─ user_info: { username, tenantId, role, ... }          │
+│                                                             │
+│  System Admin:                                              │
+│  ├─ auth_token: "eyJhbGc..."                               │
+│  └─ user_info: { username, tenantId, isSystemOwner, ... }  │
+│                                                             │
+│  Patient Portal:                                            │
+│  ├─ access_token: "eyJhbGc..."                             │
+│  ├─ refresh_token: "refresh_token_..."                     │
+│  └─ current_user: { id, email, fullName, cpf, ... }       │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+
+## Production Deployment (with Reverse Proxy)
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Nginx Reverse Proxy                         │
+│                         (Port 80/443)                               │
+└─────────────────────────────────────────────────────────────────────┘
+                                   │
+                  ┌────────────────┼────────────────┐
+                  │                │                │
+                  ▼                ▼                ▼
+        ┌────────────────┐  ┌────────────┐  ┌──────────────────┐
+        │  /app/         │  │  /admin/   │  │  /portal/        │
+        │  MedicWare App │  │  SysAdmin  │  │  Patient Portal  │
+        └────────────────┘  └────────────┘  └──────────────────┘
+                  │                │                │
+                  │                │                │
+        ┌─────────┴────────────────┴────────┐       │
+        │  /api/                            │       │
+        │  Main API                         │       │
+        │  (Backend for App & Admin)        │       │
+        └───────────────────────────────────┘       │
+                                                    │
+                                          ┌─────────┴─────────┐
+                                          │  /patient-portal- │
+                                          │  api/             │
+                                          │  Patient API      │
+                                          └───────────────────┘
+
+## Key Differences Summary
+
+╔═══════════════════╦══════════════════════╦═══════════════════════════╗
+║     System        ║   API Endpoint       ║    Token Field Name       ║
+╠═══════════════════╬══════════════════════╬═══════════════════════════╣
+║ MedicWarehouse    ║ Main API :5293       ║ token (single JWT)        ║
+║ System Admin      ║ Main API :5293       ║ token (single JWT)        ║
+║ Patient Portal    ║ Portal API :5101     ║ accessToken + refreshToken║
+╚═══════════════════╩══════════════════════╩═══════════════════════════╝
+
