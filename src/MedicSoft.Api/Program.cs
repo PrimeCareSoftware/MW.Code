@@ -768,8 +768,13 @@ using (var scope = app.Services.CreateScope())
     {
         Log.Fatal(ex, "Falha ao aplicar migrações do banco de dados: {Message}", ex.Message);
         Console.WriteLine($"Database migration failed: {ex.Message}");
-        Console.WriteLine("Application cannot start without database migrations. Exiting...");
-        Environment.Exit(1);
+        Console.WriteLine("A aplicação não pode iniciar sem as migrações do banco de dados.");
+        Console.WriteLine("Por favor, verifique:");
+        Console.WriteLine("1. A string de conexão está correta?");
+        Console.WriteLine("2. O banco de dados PostgreSQL está rodando?");
+        Console.WriteLine("3. O usuário tem permissões para criar schemas e tabelas?");
+        Console.WriteLine("4. Execute: dotnet ef database update --project src/MedicSoft.Api");
+        throw; // Halt application startup if migrations fail
     }
 }
 
