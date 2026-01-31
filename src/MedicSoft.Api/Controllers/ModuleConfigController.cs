@@ -18,7 +18,7 @@ namespace MedicSoft.Api.Controllers
     /// Controller for module configuration and access management
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/module-config")]
     public class ModuleConfigController : BaseController
     {
         private readonly MedicSoftDbContext _context;
