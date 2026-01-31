@@ -768,6 +768,8 @@ using (var scope = app.Services.CreateScope())
     {
         Log.Fatal(ex, "Falha ao aplicar migrações do banco de dados: {Message}", ex.Message);
         Console.WriteLine($"Database migration failed: {ex.Message}");
+        Console.WriteLine("Application cannot start without database migrations. Exiting...");
+        Environment.Exit(1);
     }
 }
 
