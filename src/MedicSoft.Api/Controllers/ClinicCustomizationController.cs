@@ -85,7 +85,7 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized)
+                if (!isAuthorized || clinicId == Guid.Empty)
                 {
                     return Forbid();
                 }
@@ -128,7 +128,7 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized)
+                if (!isAuthorized || clinicId == Guid.Empty)
                 {
                     return Forbid();
                 }
@@ -179,7 +179,7 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized)
+                if (!isAuthorized || clinicId == Guid.Empty)
                 {
                     return Forbid();
                 }
@@ -226,7 +226,7 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized)
+                if (!isAuthorized || clinicId == Guid.Empty)
                 {
                     return Forbid();
                 }
