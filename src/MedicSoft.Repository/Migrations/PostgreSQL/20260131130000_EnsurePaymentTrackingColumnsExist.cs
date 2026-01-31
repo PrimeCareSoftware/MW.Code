@@ -114,7 +114,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1
                         FROM pg_indexes
-                        WHERE schemaname = 'public'
+                        WHERE LOWER(schemaname) = 'public'
                         AND LOWER(tablename) = 'appointments'
                         AND LOWER(indexname) = 'ix_appointments_paidbyuserid'
                     ) THEN
@@ -130,7 +130,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1
                         FROM information_schema.table_constraints
-                        WHERE constraint_schema = 'public'
+                        WHERE LOWER(constraint_schema) = 'public'
                         AND LOWER(constraint_name) = 'fk_appointments_users_paidbyuserid'
                         AND LOWER(table_name) = 'appointments'
                     ) THEN
