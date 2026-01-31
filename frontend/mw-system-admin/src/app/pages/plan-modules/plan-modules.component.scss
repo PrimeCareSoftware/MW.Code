@@ -1,25 +1,29 @@
 .plan-modules-container {
   padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
   
   .header {
     margin-bottom: 24px;
     
     h1 {
-      font-size: 28px;
-      font-weight: 500;
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a202c;
       margin: 0 0 8px 0;
     }
     
     .subtitle {
-      color: rgba(0, 0, 0, 0.6);
+      color: #718096;
+      font-size: 16px;
       margin: 0;
     }
   }
 
   .loading-container {
-    display: flex;
-    justify-content: center;
-    padding: 48px;
+    text-align: center;
+    padding: 48px 24px;
+    color: #718096;
   }
 
   .content {
@@ -29,6 +33,21 @@
   }
 
   .plan-selector-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    
+    mat-card-header {
+      margin-bottom: 16px;
+      
+      mat-card-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3748;
+      }
+    }
+    
     .plan-select {
       width: 100%;
       max-width: 500px;
@@ -37,29 +56,59 @@
     .plan-info {
       margin-top: 16px;
       padding: 16px;
-      background-color: #f5f5f5;
-      border-radius: 4px;
+      background-color: #f7fafc;
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
 
       p {
         margin: 8px 0;
+        font-size: 14px;
+        color: #2d3748;
         
         strong {
-          color: rgba(0, 0, 0, 0.87);
+          color: #1a202c;
+          font-weight: 600;
         }
       }
     }
   }
 
   .modules-config-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    mat-card-header {
+      padding: 16px 24px;
+      background: #f7fafc;
+      border-bottom: 2px solid #e2e8f0;
+      
+      mat-card-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3748;
+      }
+      
+      mat-card-subtitle {
+        color: #718096;
+        font-size: 14px;
+      }
+    }
+    
+    mat-card-content {
+      padding: 24px;
+    }
+    
     .category-section {
       margin-bottom: 24px;
 
       .category-title {
         font-size: 18px;
-        font-weight: 500;
+        font-weight: 600;
+        color: #2d3748;
         margin: 0 0 16px 0;
         padding-bottom: 8px;
-        border-bottom: 2px solid #e0e0e0;
+        border-bottom: 2px solid #e2e8f0;
       }
 
       .modules-grid {
@@ -69,12 +118,14 @@
 
         .module-item {
           padding: 12px;
-          border: 1px solid #e0e0e0;
-          border-radius: 4px;
-          transition: background-color 0.2s;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          background: white;
+          transition: all 0.2s;
 
           &:hover:not(.disabled) {
-            background-color: #f5f5f5;
+            background-color: #f7fafc;
+            border-color: #cbd5e0;
           }
 
           &.disabled {
@@ -92,7 +143,7 @@
             gap: 12px;
 
             .module-icon {
-              color: #1976d2;
+              color: #667eea;
               font-size: 24px;
               width: 24px;
               height: 24px;
@@ -106,21 +157,21 @@
               gap: 4px;
 
               .module-name {
-                font-weight: 500;
+                font-weight: 600;
                 font-size: 14px;
-                color: rgba(0, 0, 0, 0.87);
+                color: #1a202c;
               }
 
               .module-description {
                 font-size: 12px;
-                color: rgba(0, 0, 0, 0.6);
+                color: #718096;
                 line-height: 1.4;
               }
 
               .core-badge {
                 display: inline-block;
                 padding: 2px 8px;
-                background-color: #4CAF50;
+                background-color: #48bb78;
                 color: white;
                 font-size: 10px;
                 font-weight: 600;
@@ -131,7 +182,7 @@
 
               .required-info {
                 font-size: 11px;
-                color: #ff9800;
+                color: #f6ad55;
                 font-style: italic;
               }
             }
@@ -144,10 +195,16 @@
   mat-card-actions {
     display: flex;
     gap: 12px;
-    padding: 16px;
-    border-top: 1px solid #e0e0e0;
+    padding: 24px;
+    border-top: 2px solid #e2e8f0;
+    background: #f7fafc;
 
     button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      
       mat-icon {
         margin-right: 8px;
       }
