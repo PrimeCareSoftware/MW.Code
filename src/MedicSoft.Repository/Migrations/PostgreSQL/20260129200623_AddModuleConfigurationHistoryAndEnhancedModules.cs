@@ -13,6 +13,82 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Create ReportTemplates table if it doesn't exist
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""ReportTemplates"" (
+                    ""Id"" uuid NOT NULL,
+                    ""Name"" character varying(200) NOT NULL,
+                    ""Description"" character varying(1000),
+                    ""Category"" character varying(50) NOT NULL,
+                    ""Configuration"" TEXT,
+                    ""Query"" TEXT,
+                    ""IsSystem"" boolean NOT NULL DEFAULT false,
+                    ""Icon"" character varying(50),
+                    ""SupportedFormats"" character varying(100),
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_ReportTemplates"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_ReportTemplates_Category"" ON ""ReportTemplates"" (""Category"");
+                CREATE INDEX IF NOT EXISTS ""IX_ReportTemplates_IsSystem"" ON ""ReportTemplates"" (""IsSystem"");
+            ");
+
+            // Create WidgetTemplates table if it doesn't exist
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""WidgetTemplates"" (
+                    ""Id"" uuid NOT NULL,
+                    ""Name"" character varying(200) NOT NULL,
+                    ""Description"" character varying(1000),
+                    ""Category"" character varying(50) NOT NULL,
+                    ""Type"" character varying(50) NOT NULL,
+                    ""DefaultConfig"" TEXT,
+                    ""DefaultQuery"" TEXT,
+                    ""IsSystem"" boolean NOT NULL DEFAULT false,
+                    ""Icon"" character varying(50),
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_WidgetTemplates"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_WidgetTemplates_Category"" ON ""WidgetTemplates"" (""Category"");
+                CREATE INDEX IF NOT EXISTS ""IX_WidgetTemplates_Type"" ON ""WidgetTemplates"" (""Type"");
+                CREATE INDEX IF NOT EXISTS ""IX_WidgetTemplates_IsSystem"" ON ""WidgetTemplates"" (""IsSystem"");
+            ");
+
+            // Create ScheduledReports table if it doesn't exist (depends on ReportTemplates)
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""ScheduledReports"" (
+                    ""Id"" uuid NOT NULL,
+                    ""ReportTemplateId"" uuid NOT NULL,
+                    ""Name"" character varying(200) NOT NULL,
+                    ""Description"" character varying(1000),
+                    ""CronExpression"" character varying(100) NOT NULL,
+                    ""OutputFormat"" character varying(20) NOT NULL,
+                    ""Recipients"" character varying(1000) NOT NULL,
+                    ""Parameters"" TEXT,
+                    ""IsActive"" boolean NOT NULL DEFAULT true,
+                    ""CreatedBy"" character varying(450) NOT NULL,
+                    ""LastRunAt"" timestamp with time zone,
+                    ""NextRunAt"" timestamp with time zone,
+                    ""LastRunStatus"" character varying(50),
+                    ""LastRunError"" character varying(2000),
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_ScheduledReports"" PRIMARY KEY (""Id""),
+                    CONSTRAINT ""FK_ScheduledReports_ReportTemplates_ReportTemplateId"" FOREIGN KEY (""ReportTemplateId"") 
+                        REFERENCES ""ReportTemplates"" (""Id"") ON DELETE RESTRICT
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_ReportTemplateId"" ON ""ScheduledReports"" (""ReportTemplateId"");
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_IsActive"" ON ""ScheduledReports"" (""IsActive"");
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_NextRunAt"" ON ""ScheduledReports"" (""NextRunAt"");
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_CreatedBy"" ON ""ScheduledReports"" (""CreatedBy"");
+            ");
+
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
                 keyColumn: "Id",
