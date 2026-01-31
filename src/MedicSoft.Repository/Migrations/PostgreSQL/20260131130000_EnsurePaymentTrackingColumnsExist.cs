@@ -18,7 +18,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE table_schema = 'public'
+                        AND table_name = 'Appointments' 
                         AND column_name = 'IsPaid'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""IsPaid"" boolean NOT NULL DEFAULT false;
@@ -33,7 +34,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE table_schema = 'public'
+                        AND table_name = 'Appointments' 
                         AND column_name = 'PaidAt'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaidAt"" timestamp without time zone NULL;
@@ -48,7 +50,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE table_schema = 'public'
+                        AND table_name = 'Appointments' 
                         AND column_name = 'PaidByUserId'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaidByUserId"" uuid NULL;
@@ -63,7 +66,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE table_schema = 'public'
+                        AND table_name = 'Appointments' 
                         AND column_name = 'PaymentReceivedBy'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaymentReceivedBy"" integer NULL;
@@ -78,7 +82,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE table_schema = 'public'
+                        AND table_name = 'Appointments' 
                         AND column_name = 'PaymentAmount'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaymentAmount"" numeric NULL;
@@ -93,7 +98,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE table_schema = 'public'
+                        AND table_name = 'Appointments' 
                         AND column_name = 'PaymentMethod'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaymentMethod"" integer NULL;
@@ -136,13 +142,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             ");
 
             // Add DefaultPaymentReceiverType column to Clinics if it doesn't exist
+            // Default value 2 = PaymentReceiverType.Secretary
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' 
+                        WHERE table_schema = 'public'
+                        AND table_name = 'Clinics' 
                         AND column_name = 'DefaultPaymentReceiverType'
                     ) THEN
                         ALTER TABLE ""Clinics"" ADD COLUMN ""DefaultPaymentReceiverType"" integer NOT NULL DEFAULT 2;
