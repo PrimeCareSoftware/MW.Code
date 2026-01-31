@@ -14,7 +14,13 @@ using PatientPortal.Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Explicitly configure camelCase for JSON serialization to ensure consistency
+        // Frontend expects: accessToken, refreshToken, expiresAt, user, etc.
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddEndpointsApiExplorer();
 
 // Configure Swagger with JWT support
