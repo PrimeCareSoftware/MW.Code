@@ -49,6 +49,16 @@ dotnet ef database update --context MedicSoftDbContext
 
 After applying the migration, verify the columns exist:
 
+**Option 1: Run the verification script**
+
+```bash
+psql -U postgres -d primecare -f scripts/verify-database-schema.sql
+```
+
+This script will check all payment tracking columns and show clear status messages.
+
+**Option 2: Manual SQL query**
+
 ```sql
 SELECT column_name, data_type, is_nullable
 FROM information_schema.columns
