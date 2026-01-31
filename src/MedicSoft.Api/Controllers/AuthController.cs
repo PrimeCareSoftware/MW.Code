@@ -237,25 +237,28 @@ namespace MedicSoft.Api.Controllers
                 }
 
                 // Generate JWT token with session ID
+                // System owners (no clinic) get SystemAdmin role, clinic owners get ClinicOwner role
+                var userRole = owner.IsSystemOwner ? RoleNames.SystemAdmin : RoleNames.ClinicOwner;
+                
                 var token = _jwtTokenService.GenerateToken(
                     username: owner.Username,
                     userId: owner.Id.ToString(),
                     tenantId: tenantId,
-                    role: RoleNames.ClinicOwner,
+                    role: userRole,
                     clinicId: owner.ClinicId?.ToString(),
                     isSystemOwner: owner.IsSystemOwner,
                     sessionId: sessionId,
                     ownerId: owner.Id.ToString()
                 );
 
-                _logger.LogInformation("JWT token generated successfully for owner: {OwnerId}", owner.Id);
+                _logger.LogInformation("JWT token generated successfully for owner: {OwnerId} with role: {Role}", owner.Id, userRole);
 
                 return Ok(new LoginResponse
                 {
                     Token = token,
                     Username = owner.Username,
                     TenantId = tenantId,
-                    Role = RoleNames.ClinicOwner,
+                    Role = userRole,
                     ClinicId = owner.ClinicId,
                     IsSystemOwner = owner.IsSystemOwner,
                     ExpiresAt = DateTime.UtcNow.AddMinutes(60) // Should match JWT expiry
