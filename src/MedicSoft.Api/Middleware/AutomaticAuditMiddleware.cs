@@ -209,7 +209,7 @@ namespace MedicSoft.Api.Middleware
             if (httpMethod == "POST" || httpMethod == "PUT" || httpMethod == "PATCH")
                 return AuditSeverity.INFO;
             
-            return AuditSeverity.INFO;
+            return AuditSeverity.DEBUG;
         }
 
         private DataCategory DetermineDataCategory(string path)
@@ -220,7 +220,7 @@ namespace MedicSoft.Api.Middleware
                 lowerPath.Contains("/prescription") || 
                 lowerPath.Contains("/exam") ||
                 lowerPath.Contains("/attendance"))
-                return DataCategory.SENSITIVE;
+                return DataCategory.HEALTH;
 
             if (lowerPath.Contains("/patient") || 
                 lowerPath.Contains("/user") ||
@@ -229,9 +229,9 @@ namespace MedicSoft.Api.Middleware
 
             if (lowerPath.Contains("/financial") || 
                 lowerPath.Contains("/payment"))
-                return DataCategory.PERSONAL;
+                return DataCategory.FINANCIAL;
 
-            return DataCategory.PUBLIC;
+            return DataCategory.SYSTEM;
         }
 
         private string ExtractEntityType(string path)
