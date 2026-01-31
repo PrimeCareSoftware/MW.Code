@@ -55,8 +55,11 @@ namespace MedicSoft.Domain.Enums
     {
         PUBLIC,          // Dados públicos
         PERSONAL,        // Dados pessoais (LGPD)
-        SENSITIVE,       // Dados sensíveis (saúde, biométricos)
-        CONFIDENTIAL     // Dados confidenciais (segredos comerciais)
+        SENSITIVE,       // Dados sensíveis (saúde, biométricos) - deprecated, use HEALTH
+        HEALTH,          // Dados de saúde (prontuários, exames, prescrições)
+        FINANCIAL,       // Dados financeiros (pagamentos, faturamento)
+        CONFIDENTIAL,    // Dados confidenciais (segredos comerciais)
+        SYSTEM           // Dados de sistema (logs internos, configurações)
     }
 
     /// <summary>
@@ -76,6 +79,7 @@ namespace MedicSoft.Domain.Enums
     /// </summary>
     public enum AuditSeverity
     {
+        DEBUG,      // Debug (desenvolvimento)
         INFO,       // Informativo
         WARNING,    // Aviso
         ERROR,      // Erro
