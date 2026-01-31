@@ -23,8 +23,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE LOWER(table_name) = LOWER('Clinics') 
-                        AND LOWER(column_name) = LOWER('DefaultPaymentReceiverType')
+                        WHERE LOWER(table_name) = 'clinics' 
+                        AND LOWER(column_name) = 'defaultpaymentreceivertype'
                         AND table_schema = 'public'
                     ) THEN
                         -- Column exists, alter it from int to varchar
@@ -56,50 +56,41 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             // Using explicit SQL to handle the data conversion safely
             migrationBuilder.Sql(@"
                 DO $$ 
+                DECLARE
+                    col_type TEXT;
                 BEGIN
-                    -- Check if the column exists (case-insensitive check for PostgreSQL compatibility)
-                    IF EXISTS (
-                        SELECT 1 
-                        FROM information_schema.columns 
-                        WHERE LOWER(table_name) = LOWER('Clinics') 
-                        AND LOWER(column_name) = LOWER('DefaultPaymentReceiverType')
-                        AND table_schema = 'public'
-                    ) THEN
-                        -- Get the column's data type to determine if we need to convert or drop
+                    -- Check if the column exists and get its data type in one query
+                    SELECT data_type INTO col_type
+                    FROM information_schema.columns 
+                    WHERE LOWER(table_name) = 'clinics' 
+                    AND LOWER(column_name) = 'defaultpaymentreceivertype'
+                    AND table_schema = 'public';
+                    
+                    -- If column exists and is varchar, proceed with conversion or drop
+                    IF col_type = 'character varying' THEN
+                        -- Check if previous migration created it as int
                         IF EXISTS (
                             SELECT 1 
-                            FROM information_schema.columns 
-                            WHERE LOWER(table_name) = LOWER('Clinics') 
-                            AND LOWER(column_name) = LOWER('DefaultPaymentReceiverType')
-                            AND data_type = 'character varying'
-                            AND table_schema = 'public'
+                            FROM ""__EFMigrationsHistory"" 
+                            WHERE ""MigrationId"" = '20260121193310_AddPaymentTrackingFields'
                         ) THEN
-                            -- Column is varchar (string), check if previous migration created it as int
-                            -- If the previous migration (20260121193310) exists, convert back to int
-                            -- Otherwise, drop it (it was created by this migration)
-                            IF EXISTS (
-                                SELECT 1 
-                                FROM ""__EFMigrationsHistory"" 
-                                WHERE ""MigrationId"" = '20260121193310_AddPaymentTrackingFields'
-                            ) THEN
-                                -- Previous migration exists, convert back to int
-                                ALTER TABLE ""Clinics"" 
-                                ALTER COLUMN ""DefaultPaymentReceiverType"" 
-                                TYPE integer 
-                                USING CASE 
-                                    WHEN ""DefaultPaymentReceiverType"" = 'Clinic' THEN 1
-                                    WHEN ""DefaultPaymentReceiverType"" = 'Secretary' THEN 2
-                                    ELSE 2
-                                END;
-                                
-                                ALTER TABLE ""Clinics"" 
-                                ALTER COLUMN ""DefaultPaymentReceiverType"" 
-                                SET DEFAULT 2;
-                            ELSE
-                                -- Previous migration doesn't exist, drop the column
-                                ALTER TABLE ""Clinics"" 
-                                DROP COLUMN ""DefaultPaymentReceiverType"";
-                            END IF;
+                            -- Previous migration exists, convert back to int
+                            ALTER TABLE ""Clinics"" 
+                            ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                            TYPE integer 
+                            USING CASE 
+                                WHEN ""DefaultPaymentReceiverType"" = 'Clinic' THEN 1
+                                WHEN ""DefaultPaymentReceiverType"" = 'Secretary' THEN 2
+                                ELSE 2
+                            END;
+                            
+                            ALTER TABLE ""Clinics"" 
+                            ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                            SET DEFAULT 2;
+                        ELSE
+                            -- Previous migration doesn't exist, drop the column
+                            ALTER TABLE ""Clinics"" 
+                            DROP COLUMN ""DefaultPaymentReceiverType"";
                         END IF;
                     END IF;
                 END $$;
