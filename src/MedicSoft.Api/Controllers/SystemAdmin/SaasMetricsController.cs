@@ -31,6 +31,13 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpGet("dashboard")]
         public async Task<ActionResult<SaasDashboardDto>> GetDashboard()
         {
+            // Verify user is a System Owner (not just a user with SystemAdmin role)
+            var isSystemOwner = User?.FindFirst("is_system_owner")?.Value;
+            if (isSystemOwner != "true")
+            {
+                return StatusCode(403, new { message = "Access denied. This endpoint is only accessible to System Owners. Please authenticate via /api/auth/owner-login with tenantId='system'." });
+            }
+
             var metrics = await _metricsService.GetSaasDashboardMetricsAsync();
             return Ok(metrics);
         }
@@ -41,6 +48,13 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpGet("mrr-breakdown")]
         public async Task<ActionResult<MrrBreakdownDto>> GetMrrBreakdown()
         {
+            // Verify user is a System Owner
+            var isSystemOwner = User?.FindFirst("is_system_owner")?.Value;
+            if (isSystemOwner != "true")
+            {
+                return StatusCode(403, new { message = "Access denied. This endpoint is only accessible to System Owners." });
+            }
+
             var breakdown = await _metricsService.GetMrrBreakdownAsync();
             return Ok(breakdown);
         }
@@ -51,6 +65,13 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpGet("churn-analysis")]
         public async Task<ActionResult<ChurnAnalysisDto>> GetChurnAnalysis()
         {
+            // Verify user is a System Owner
+            var isSystemOwner = User?.FindFirst("is_system_owner")?.Value;
+            if (isSystemOwner != "true")
+            {
+                return StatusCode(403, new { message = "Access denied. This endpoint is only accessible to System Owners." });
+            }
+
             var analysis = await _metricsService.GetChurnAnalysisAsync();
             return Ok(analysis);
         }
@@ -61,6 +82,13 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpGet("growth")]
         public async Task<ActionResult<GrowthMetricsDto>> GetGrowthMetrics()
         {
+            // Verify user is a System Owner
+            var isSystemOwner = User?.FindFirst("is_system_owner")?.Value;
+            if (isSystemOwner != "true")
+            {
+                return StatusCode(403, new { message = "Access denied. This endpoint is only accessible to System Owners." });
+            }
+
             var metrics = await _metricsService.GetGrowthMetricsAsync();
             return Ok(metrics);
         }
@@ -72,6 +100,13 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         public async Task<ActionResult<List<RevenueTimelineDto>>> GetRevenueTimeline(
             [FromQuery] int months = 12)
         {
+            // Verify user is a System Owner
+            var isSystemOwner = User?.FindFirst("is_system_owner")?.Value;
+            if (isSystemOwner != "true")
+            {
+                return StatusCode(403, new { message = "Access denied. This endpoint is only accessible to System Owners." });
+            }
+
             if (months < 1 || months > 36)
             {
                 return BadRequest(new { message = "Months must be between 1 and 36" });
@@ -87,6 +122,13 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         [HttpGet("customer-breakdown")]
         public async Task<ActionResult<CustomerBreakdownDto>> GetCustomerBreakdown()
         {
+            // Verify user is a System Owner
+            var isSystemOwner = User?.FindFirst("is_system_owner")?.Value;
+            if (isSystemOwner != "true")
+            {
+                return StatusCode(403, new { message = "Access denied. This endpoint is only accessible to System Owners." });
+            }
+
             var breakdown = await _metricsService.GetCustomerBreakdownAsync();
             return Ok(breakdown);
         }
