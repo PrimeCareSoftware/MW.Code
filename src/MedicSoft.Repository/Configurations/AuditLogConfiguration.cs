@@ -185,9 +185,9 @@ namespace MedicSoft.Repository.Configurations
                 .HasColumnType("text")
                 .IsRequired()
                 .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<List<Domain.Enums.DataCategory>>(
-                    (c1, c2) => c1.SequenceEqual(c2),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => c.ToList()));
+                    (c1, c2) => (c1 == null && c2 == null) || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
+                    c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c == null ? new List<Domain.Enums.DataCategory>() : c.ToList()));
 
             builder.Property(c => c.ConsentText)
                 .IsRequired()
