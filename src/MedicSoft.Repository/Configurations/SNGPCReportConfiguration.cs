@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MedicSoft.Domain.Entities;
+using System;
+using System.Linq;
 
 namespace MedicSoft.Repository.Configurations
 {
@@ -74,7 +76,11 @@ namespace MedicSoft.Repository.Configurations
                     v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
                     v => System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new List<Guid>()
                 )
-                .HasColumnType("jsonb");
+                .HasColumnType("jsonb")
+                .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<List<Guid>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c!.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c!.ToList()));
 
             // Indexes
             builder.HasIndex(sr => new { sr.TenantId, sr.Month, sr.Year })
