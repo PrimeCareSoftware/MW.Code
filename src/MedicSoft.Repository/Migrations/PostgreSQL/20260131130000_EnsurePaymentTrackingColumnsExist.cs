@@ -19,8 +19,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         SELECT 1 
                         FROM information_schema.columns 
                         WHERE table_schema = 'public'
-                        AND table_name = 'Appointments' 
-                        AND column_name = 'IsPaid'
+                        AND LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'ispaid'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""IsPaid"" boolean NOT NULL DEFAULT false;
                     END IF;
@@ -35,8 +35,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         SELECT 1 
                         FROM information_schema.columns 
                         WHERE table_schema = 'public'
-                        AND table_name = 'Appointments' 
-                        AND column_name = 'PaidAt'
+                        AND LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'paidat'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaidAt"" timestamp without time zone NULL;
                     END IF;
@@ -51,8 +51,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         SELECT 1 
                         FROM information_schema.columns 
                         WHERE table_schema = 'public'
-                        AND table_name = 'Appointments' 
-                        AND column_name = 'PaidByUserId'
+                        AND LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'paidbyuserid'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaidByUserId"" uuid NULL;
                     END IF;
@@ -67,8 +67,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         SELECT 1 
                         FROM information_schema.columns 
                         WHERE table_schema = 'public'
-                        AND table_name = 'Appointments' 
-                        AND column_name = 'PaymentReceivedBy'
+                        AND LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'paymentreceivedby'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaymentReceivedBy"" integer NULL;
                     END IF;
@@ -83,8 +83,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         SELECT 1 
                         FROM information_schema.columns 
                         WHERE table_schema = 'public'
-                        AND table_name = 'Appointments' 
-                        AND column_name = 'PaymentAmount'
+                        AND LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'paymentamount'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaymentAmount"" numeric NULL;
                     END IF;
@@ -99,8 +99,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         SELECT 1 
                         FROM information_schema.columns 
                         WHERE table_schema = 'public'
-                        AND table_name = 'Appointments' 
-                        AND column_name = 'PaymentMethod'
+                        AND LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'paymentmethod'
                     ) THEN
                         ALTER TABLE ""Appointments"" ADD COLUMN ""PaymentMethod"" integer NULL;
                     END IF;
@@ -114,8 +114,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1
                         FROM pg_indexes
-                        WHERE tablename = 'Appointments'
-                        AND indexname = 'IX_Appointments_PaidByUserId'
+                        WHERE schemaname = 'public'
+                        AND LOWER(tablename) = 'appointments'
+                        AND LOWER(indexname) = 'ix_appointments_paidbyuserid'
                     ) THEN
                         CREATE INDEX ""IX_Appointments_PaidByUserId"" ON ""Appointments"" (""PaidByUserId"");
                     END IF;
@@ -129,8 +130,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF NOT EXISTS (
                         SELECT 1
                         FROM information_schema.table_constraints
-                        WHERE constraint_name = 'FK_Appointments_Users_PaidByUserId'
-                        AND table_name = 'Appointments'
+                        WHERE constraint_schema = 'public'
+                        AND LOWER(constraint_name) = 'fk_appointments_users_paidbyuserid'
+                        AND LOWER(table_name) = 'appointments'
                     ) THEN
                         ALTER TABLE ""Appointments"" 
                         ADD CONSTRAINT ""FK_Appointments_Users_PaidByUserId"" 
@@ -150,8 +152,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         SELECT 1 
                         FROM information_schema.columns 
                         WHERE table_schema = 'public'
-                        AND table_name = 'Clinics' 
-                        AND column_name = 'DefaultPaymentReceiverType'
+                        AND LOWER(table_name) = 'clinics' 
+                        AND LOWER(column_name) = 'defaultpaymentreceivertype'
                     ) THEN
                         ALTER TABLE ""Clinics"" ADD COLUMN ""DefaultPaymentReceiverType"" integer NOT NULL DEFAULT 2;
                     END IF;
