@@ -46,7 +46,7 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<IReadOnlyCollection<WebhookEvent>>(
                     (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c!.Aggregate(0, (a, v) => System.HashCode.Combine(a, v.GetHashCode())),
-                    c => c!.ToList()));
+                    c => (IReadOnlyCollection<WebhookEvent>)c!.ToList()));
 
             builder.Property(ws => ws.MaxRetries)
                 .IsRequired()
