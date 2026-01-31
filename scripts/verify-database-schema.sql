@@ -27,11 +27,7 @@ SELECT
     column_name,
     data_type,
     is_nullable,
-    CASE 
-        WHEN column_name IN ('IsPaid', 'PaidAt', 'PaidByUserId', 'PaymentReceivedBy', 'PaymentAmount', 'PaymentMethod')
-        THEN '✓ Present'
-        ELSE '  -'
-    END as status
+    '✓ Present' as status
 FROM information_schema.columns
 WHERE table_schema = 'public'
   AND table_name = 'Appointments'
