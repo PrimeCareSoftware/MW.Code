@@ -19,12 +19,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$ 
                 BEGIN
-                    -- Check if the column exists
+                    -- Check if the column exists (case-insensitive check for PostgreSQL compatibility)
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' 
-                        AND column_name = 'DefaultPaymentReceiverType'
+                        WHERE LOWER(table_name) = LOWER('Clinics') 
+                        AND LOWER(column_name) = LOWER('DefaultPaymentReceiverType')
+                        AND table_schema = 'public'
                     ) THEN
                         -- Column exists, alter it from int to varchar
                         ALTER TABLE ""Clinics"" 
@@ -56,20 +57,22 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$ 
                 BEGIN
-                    -- Check if the column exists
+                    -- Check if the column exists (case-insensitive check for PostgreSQL compatibility)
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' 
-                        AND column_name = 'DefaultPaymentReceiverType'
+                        WHERE LOWER(table_name) = LOWER('Clinics') 
+                        AND LOWER(column_name) = LOWER('DefaultPaymentReceiverType')
+                        AND table_schema = 'public'
                     ) THEN
                         -- Get the column's data type to determine if we need to convert or drop
                         IF EXISTS (
                             SELECT 1 
                             FROM information_schema.columns 
-                            WHERE table_name = 'Clinics' 
-                            AND column_name = 'DefaultPaymentReceiverType'
+                            WHERE LOWER(table_name) = LOWER('Clinics') 
+                            AND LOWER(column_name) = LOWER('DefaultPaymentReceiverType')
                             AND data_type = 'character varying'
+                            AND table_schema = 'public'
                         ) THEN
                             -- Column is varchar (string), check if previous migration created it as int
                             -- If the previous migration (20260121193310) exists, convert back to int
