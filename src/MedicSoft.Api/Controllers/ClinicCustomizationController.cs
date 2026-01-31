@@ -85,9 +85,14 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized || clinicId == Guid.Empty)
+                if (!isAuthorized)
                 {
                     return Forbid();
+                }
+
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
                 }
 
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
@@ -128,9 +133,14 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized || clinicId == Guid.Empty)
+                if (!isAuthorized)
                 {
                     return Forbid();
+                }
+
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
                 }
 
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
@@ -179,9 +189,14 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized || clinicId == Guid.Empty)
+                if (!isAuthorized)
                 {
                     return Forbid();
+                }
+
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
                 }
 
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
@@ -226,9 +241,14 @@ namespace MedicSoft.Api.Controllers
 
                 var (clinicId, isAuthorized) = await GetClinicIdForOwnerAsync(userId, tenantId);
 
-                if (!isAuthorized || clinicId == Guid.Empty)
+                if (!isAuthorized)
                 {
                     return Forbid();
+                }
+
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
                 }
 
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
