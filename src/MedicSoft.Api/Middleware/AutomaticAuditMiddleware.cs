@@ -56,6 +56,8 @@ namespace MedicSoft.Api.Middleware
                 // Log the audit after request completes
                 await LogAuditAsync(context, auditService, tenantContext, statusCode);
 
+                // Copy the captured response back to the original stream
+                responseBody.Seek(0, SeekOrigin.Begin);
                 await responseBody.CopyToAsync(originalBodyStream);
             }
             catch (Exception ex)

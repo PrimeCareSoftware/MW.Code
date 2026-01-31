@@ -99,6 +99,7 @@ namespace MedicSoft.Api.Middleware
                     }
 
                     // Copy the response back to the original stream
+                    // Must seek to beginning before copying
                     responseBody.Seek(0, SeekOrigin.Begin);
                     await responseBody.CopyToAsync(originalBodyStream);
                 }
