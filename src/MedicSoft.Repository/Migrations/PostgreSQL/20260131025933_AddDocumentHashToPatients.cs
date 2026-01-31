@@ -239,73 +239,101 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 schema: "crm",
                 table: "AutomationActions");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Workflows",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // Conditionally alter Workflows table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Workflows' 
+                        AND column_name = 'UpdatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Workflows' 
+                        AND column_name = 'CreatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Workflows",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            // Conditionally alter WorkflowExecutions table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowExecutions' 
+                        AND column_name = 'StartedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowExecutions' 
+                        AND column_name = 'CompletedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                table: "WorkflowExecutions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            // Conditionally alter WorkflowActions table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActions' 
+                        AND column_name = 'UpdatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActions' 
+                        AND column_name = 'CreatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                table: "WorkflowExecutions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WorkflowActions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WorkflowActions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                table: "WorkflowActionExecutions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                table: "WorkflowActionExecutions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // Conditionally alter WorkflowActionExecutions table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActionExecutions' 
+                        AND column_name = 'StartedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActionExecutions' 
+                        AND column_name = 'CompletedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
