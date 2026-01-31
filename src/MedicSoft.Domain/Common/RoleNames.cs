@@ -12,5 +12,12 @@ namespace MedicSoft.Domain.Common
         public const string Nurse = "Nurse";
         public const string Receptionist = "Receptionist";
         public const string Secretary = "Secretary";
+        
+        /// <summary>
+        /// Legacy role name for clinic owners. Use ClinicOwner instead.
+        /// Kept for backward compatibility with existing tokens.
+        /// </summary>
+        [System.Obsolete("Use ClinicOwner instead. This constant is kept for backward compatibility.")]
+        public const string Owner = "Owner";
     }
 }

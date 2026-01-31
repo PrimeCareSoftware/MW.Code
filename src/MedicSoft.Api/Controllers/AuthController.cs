@@ -238,7 +238,8 @@ namespace MedicSoft.Api.Controllers
 
                 // Generate JWT token with session ID
                 // System owners (no clinic) get SystemAdmin role, clinic owners get ClinicOwner role
-                var userRole = owner.IsSystemOwner ? RoleNames.SystemAdmin : RoleNames.ClinicOwner;
+                // IsSystemOwner is a computed property that returns !ClinicId.HasValue, but we check both for clarity
+                var userRole = (owner.IsSystemOwner && !owner.ClinicId.HasValue) ? RoleNames.SystemAdmin : RoleNames.ClinicOwner;
                 
                 var token = _jwtTokenService.GenerateToken(
                     username: owner.Username,
@@ -476,8 +477,11 @@ namespace MedicSoft.Api.Controllers
 
                 bool isSessionValid;
                 
-                // Check if this is an owner (Owner, ClinicOwner, or SystemAdmin) or regular user
-                if (roleClaim == "Owner" || roleClaim == RoleNames.ClinicOwner || roleClaim == RoleNames.SystemAdmin)
+                // Check if this is an owner (Owner/ClinicOwner/SystemAdmin) or regular user
+                // "Owner" is a legacy role name, kept for backward compatibility with existing tokens
+                #pragma warning disable CS0618 // Type or member is obsolete
+                if (roleClaim == RoleNames.Owner || roleClaim == RoleNames.ClinicOwner || roleClaim == RoleNames.SystemAdmin)
+                #pragma warning restore CS0618
                 {
                     isSessionValid = await _authService.ValidateOwnerSessionAsync(userId, sessionIdClaim, tenantIdClaim);
                 }
