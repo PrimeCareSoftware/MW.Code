@@ -243,7 +243,7 @@ dotnet ef database update 0
 dotnet ef database update
 ```
 
-⚠️ **ATENÇÃO:** O comando `dotnet ef database update 0` irá **deletar todos os dados** do banco. Use apenas em ambiente de desenvolvimento!
+⚠️ **ATENÇÃO:** O comando `dotnet ef database update 0` irá **apagar todos os dados** do banco. Use apenas em ambiente de desenvolvimento!
 
 ## 🔐 Configuração da String de Conexão
 

@@ -84,7 +84,8 @@ public class AutomationExecutorJob
             _logger.LogCritical(pgEx, 
                 "ERRO CRÍTICO: Tabela do CRM não existe no banco de dados. " +
                 "A migração '20260127205215_AddCRMEntities' não foi aplicada. " +
-                "Execute './run-all-migrations.sh' ou 'dotnet ef database update' para corrigir.");
+                "Execute './run-all-migrations.sh' ou 'dotnet ef database update' para corrigir. " +
+                "Tabela faltando: {TableName}", pgEx.TableName ?? "desconhecida");
             throw;
         }
         catch (Exception ex)
