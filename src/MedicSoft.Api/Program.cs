@@ -58,6 +58,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter());
         // Add custom ProcedureCategory converter to accept both string names and numeric values
         options.JsonSerializerOptions.Converters.Add(new ProcedureCategoryJsonConverter());
+        // Add JsonStringEnumConverter to support string-to-enum conversion for all enums
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        // Enable case-insensitive property name matching
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 builder.Services.AddEndpointsApiExplorer();
 
