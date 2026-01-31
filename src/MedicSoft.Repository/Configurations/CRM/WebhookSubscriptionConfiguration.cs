@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MedicSoft.Domain.Entities.CRM;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MedicSoft.Repository.Configurations.CRM
 {
@@ -35,8 +37,16 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .HasMaxLength(100);
 
             builder.Property(ws => ws.SubscribedEvents)
+                .HasConversion(
+                    v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                    v => (IReadOnlyCollection<WebhookEvent>)(System.Text.Json.JsonSerializer.Deserialize<List<WebhookEvent>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new List<WebhookEvent>())
+                )
                 .HasColumnType("jsonb")
-                .IsRequired();
+                .IsRequired()
+                .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<IReadOnlyCollection<WebhookEvent>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c!.Aggregate(0, (a, v) => System.HashCode.Combine(a, v.GetHashCode())),
+                    c => (IReadOnlyCollection<WebhookEvent>)c!.ToList()));
 
             builder.Property(ws => ws.MaxRetries)
                 .IsRequired()

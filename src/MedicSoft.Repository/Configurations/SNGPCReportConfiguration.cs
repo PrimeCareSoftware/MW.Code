@@ -74,13 +74,13 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(sr => sr.PrescriptionIds)
                 .HasConversion(
                     v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
-                    v => System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new List<Guid>()
+                    v => (IReadOnlyCollection<Guid>)(System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new List<Guid>())
                 )
                 .HasColumnType("jsonb")
                 .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<IReadOnlyCollection<Guid>>(
                     (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c!.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => c!.ToList()));
+                    c => (IReadOnlyCollection<Guid>)c!.ToList()));
 
             // Indexes
             builder.HasIndex(sr => new { sr.TenantId, sr.Month, sr.Year })
