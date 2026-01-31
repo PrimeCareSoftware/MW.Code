@@ -2914,8 +2914,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     ComplaintsCount = table.Column<int>(type: "integer", nullable: false),
                     NoShowCount = table.Column<int>(type: "integer", nullable: false),
                     CancelledAppointmentsCount = table.Column<int>(type: "integer", nullable: false),
-                    RecommendedActions = table.Column<List<string>>(type: "jsonb", nullable: false),
-                    RiskFactors = table.Column<List<string>>(type: "jsonb", nullable: false),
+                    RecommendedActions = table.Column<string>(type: "jsonb", nullable: false),
+                    RiskFactors = table.Column<string>(type: "jsonb", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     TenantId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
@@ -2979,7 +2979,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     Subject = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     HtmlBody = table.Column<string>(type: "character varying(8000)", maxLength: 8000, nullable: false),
                     PlainTextBody = table.Column<string>(type: "character varying(8000)", maxLength: 8000, nullable: false),
-                    AvailableVariables = table.Column<List<string>>(type: "jsonb", nullable: false),
+                    AvailableVariables = table.Column<string>(type: "jsonb", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     TenantId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
@@ -3006,7 +3006,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     TimesExecuted = table.Column<int>(type: "integer", nullable: false),
                     LastExecutedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     SuccessRate = table.Column<double>(type: "double precision", nullable: false),
-                    Tags = table.Column<List<string>>(type: "jsonb", nullable: false),
+                    Tags = table.Column<string>(type: "jsonb", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     TenantId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
@@ -3059,7 +3059,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     NegativeScore = table.Column<double>(type: "double precision", nullable: false),
                     ConfidenceScore = table.Column<double>(type: "double precision", nullable: false),
                     AnalyzedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Topics = table.Column<List<string>>(type: "jsonb", nullable: false),
+                    Topics = table.Column<string>(type: "jsonb", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     TenantId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)

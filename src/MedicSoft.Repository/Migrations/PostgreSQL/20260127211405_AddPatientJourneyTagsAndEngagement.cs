@@ -1182,7 +1182,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<List<string>>(
+            migrationBuilder.AddColumn<string>(
                 name: "Tags",
                 schema: "crm",
                 table: "PatientJourneys",
