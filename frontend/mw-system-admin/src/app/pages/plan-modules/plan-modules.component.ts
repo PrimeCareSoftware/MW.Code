@@ -13,6 +13,7 @@ import { SystemAdminService } from '../../services/system-admin';
 import { ModuleConfigService } from '../../services/module-config.service';
 import { SubscriptionPlan } from '../../models/system-admin.model';
 import { ModuleInfo } from '../../models/module-config.model';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-plan-modules',
@@ -27,7 +28,8 @@ import { ModuleInfo } from '../../models/module-config.model';
     MatButtonModule,
     MatSnackBarModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    Navbar
   ],
   templateUrl: './plan-modules.component.html',
   styleUrls: ['./plan-modules.component.scss']

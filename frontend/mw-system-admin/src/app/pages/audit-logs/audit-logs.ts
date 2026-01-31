@@ -2,11 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuditService, AuditLog, AuditFilter } from '../../services/audit.service';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-audit-logs',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './audit-logs.html',
   styleUrl: './audit-logs.scss'
 })

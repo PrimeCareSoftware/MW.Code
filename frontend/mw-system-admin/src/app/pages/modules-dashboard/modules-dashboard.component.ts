@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { forkJoin } from 'rxjs';
 import { ModuleConfigService } from '../../services/module-config.service';
 import { ModuleUsage, ModuleAdoption } from '../../models/module-config.model';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-modules-dashboard',
@@ -22,7 +23,8 @@ import { ModuleUsage, ModuleAdoption } from '../../models/module-config.model';
     MatIconModule,
     MatProgressSpinnerModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    Navbar
   ],
   templateUrl: './modules-dashboard.component.html',
   styleUrls: ['./modules-dashboard.component.scss']
