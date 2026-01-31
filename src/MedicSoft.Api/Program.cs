@@ -101,6 +101,9 @@ builder.Services.AddSwaggerGen(c =>
         Log.Error(ex, "Error loading XML comments for Swagger documentation");
     }
 
+    // Configure Swagger to use fully qualified names to avoid schema ID conflicts
+    c.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
+
     // Configure Swagger to handle IFormFile in multipart/form-data properly
     c.MapType<IFormFile>(() => new OpenApiSchema
     {
