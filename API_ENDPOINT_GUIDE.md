@@ -233,9 +233,16 @@ const filter = {
   pageSize: 20
 };
 
-// ❌ Bad: Incorrect enum value
+// ❌ Bad: Incorrect enum value with separator
 const filter = {
-  healthStatus: "at-risk",  // Should be "AtRisk" (PascalCase)
+  healthStatus: "at-risk",  // Should be "AtRisk" (no dash separator)
+  page: 1,
+  pageSize: 20
+};
+
+// ✅ Also valid: Case variations work
+const filter = {
+  healthStatus: "atrisk",  // Case-insensitive matching
   page: 1,
   pageSize: 20
 };
@@ -249,10 +256,11 @@ JSON property names are case-insensitive, so all of these work:
 {"HEALTHSTATUS": "AtRisk"}
 ```
 
-However, **enum values** must match exactly (case-sensitive):
+**Enum values** are also case-insensitive with the current configuration:
 - ✅ `"AtRisk"`
-- ❌ `"atrisk"`
-- ❌ `"AT_RISK"`
+- ✅ `"atrisk"` (case-insensitive matching enabled)
+- ✅ `"ATRISK"`
+- ❌ `"AT_RISK"` (underscore not part of enum name)
 
 ---
 
