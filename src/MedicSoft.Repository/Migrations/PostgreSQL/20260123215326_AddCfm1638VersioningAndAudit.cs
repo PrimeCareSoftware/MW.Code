@@ -2318,7 +2318,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 table: "Companies",
                 column: "Subdomain",
                 unique: true,
-                filter: "[Subdomain] IS NOT NULL");
+                filter: "\"Subdomain\" IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecordAccessLogs_MedicalRecordId",

@@ -2532,7 +2532,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.HasIndex("Subdomain")
                         .IsUnique()
                         .HasDatabaseName("IX_Companies_Subdomain")
-                        .HasFilter("[Subdomain] IS NOT NULL");
+                        .HasFilter("\"Subdomain\" IS NOT NULL");
 
                     b.HasIndex("TenantId")
                         .HasDatabaseName("IX_Companies_TenantId");
