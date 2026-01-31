@@ -214,12 +214,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // This is a safety/repair migration that should not be rolled back
-            // If you really need to remove these columns, you can do so manually or
-            // create a new migration specifically for that purpose.
-            // The original migrations that were supposed to add these columns were:
-            // - 20260121193310_AddPaymentTrackingFields
-            // - 20260130000000_AddMfaGracePeriodToUsers
+            // This is a safety/repair migration that consolidates functionality from
+            // previously incomplete migrations. It should not be rolled back as it uses
+            // idempotent SQL that only adds columns if they don't exist.
+            // 
+            // If you need to remove these columns, create a new explicit migration
+            // specifically for that purpose rather than rolling this one back.
         }
     }
 }
