@@ -2,7 +2,7 @@
 
 [![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
 
-> 🚨 **ERRO COMUM?** Se você está vendo `column "IsPaid" of relation "Appointments" does not exist`, veja a [→ Solução Rápida](QUICK_FIX_ISPAID_ERROR.md)
+> 🚨 **ERRO COMUM?** Se você está vendo `column "IsPaid" of relation "Appointments" does not exist`, veja a [→ Solução Rápida](SOLUCAO_RAPIDA_ERRO_ISPAID.md) | [→ Quick Fix (EN)](QUICK_FIX_ISPAID_ERROR.md)
 
 > 🚀 **NOVO!** Plano de Lançamento MVP com Early Adopters! Preços especiais vitalícios para os primeiros clientes. [→ Ver Plano Completo](PLANO_LANCAMENTO_MVP_SAAS.md) | [→ Guia de Implementação](MVP_IMPLEMENTATION_GUIDE.md)
 
