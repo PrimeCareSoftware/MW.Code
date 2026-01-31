@@ -311,6 +311,7 @@ namespace MedicSoft.Api.Controllers
                     message = "Database cleared successfully",
                     deletedTables = new[]
                     {
+                        "AnamnesisTemplates",
                         "PrescriptionItems",
                         "ExamRequests",
                         "Notifications",
@@ -322,12 +323,12 @@ namespace MedicSoft.Api.Controllers
                         "AppointmentProcedures",
                         "Appointments",
                         "PatientClinicLinks",
+                        "ExamCatalogs",
                         "HealthInsurancePlans",
                         "Patients",
                         "PrescriptionTemplates",
                         "MedicalRecordTemplates",
                         "Medications",
-                        "ExamCatalogs",
                         "Procedures",
                         "Expenses",
                         "Users",
@@ -336,7 +337,8 @@ namespace MedicSoft.Api.Controllers
                         "Owners",
                         "Clinics",
                         "HealthInsuranceOperators",
-                        "SubscriptionPlans"
+                        "SubscriptionPlans",
+                        "ConsultationFormProfiles"
                     },
                     note = "All demo data has been removed from the database. You can now re-seed the database using POST /api/data-seeder/seed-demo"
                 });

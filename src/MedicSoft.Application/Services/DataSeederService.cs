@@ -379,18 +379,18 @@ namespace MedicSoft.Application.Services
                     await _medicalRecordRepository.DeleteWithoutSaveAsync(record.Id, _demoTenantId);
                 }
 
+                // 5.1. Delete Invoices (depends on Payments)
+                var invoices = await _invoiceRepository.GetAllAsync(_demoTenantId);
+                foreach (var invoice in invoices)
+                {
+                    await _invoiceRepository.DeleteWithoutSaveAsync(invoice.Id, _demoTenantId);
+                }
+
                 // 6. Delete Payments (depends on Appointments)
                 var payments = await _paymentRepository.GetAllAsync(_demoTenantId);
                 foreach (var payment in payments)
                 {
                     await _paymentRepository.DeleteWithoutSaveAsync(payment.Id, _demoTenantId);
-                }
-
-                // 6.1. Delete Invoices (depends on Payments)
-                var invoices = await _invoiceRepository.GetAllAsync(_demoTenantId);
-                foreach (var invoice in invoices)
-                {
-                    await _invoiceRepository.DeleteWithoutSaveAsync(invoice.Id, _demoTenantId);
                 }
 
                 // 7. Delete AppointmentProcedures (depends on Appointments and Procedures)
