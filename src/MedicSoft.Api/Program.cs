@@ -316,6 +316,7 @@ builder.Services.AddScoped<IOwnerClinicLinkRepository, OwnerClinicLinkRepository
 builder.Services.AddScoped<IExamCatalogRepository, ExamCatalogRepository>();
 builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
 builder.Services.AddScoped<IOwnerSessionRepository, OwnerSessionRepository>();
+builder.Services.AddScoped<ITwoFactorAuthRepository, TwoFactorAuthRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IAccessProfileRepository, AccessProfileRepository>();
 builder.Services.AddScoped<IClinicCustomizationRepository, ClinicCustomizationRepository>();
@@ -392,6 +393,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<ITwoFactorAuthService, TwoFactorAuthService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IClinicSelectionService, ClinicSelectionService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();

@@ -128,14 +128,14 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Export dashboard to specified format
         /// </summary>
         [HttpPost("{id}/export")]
-        public async Task<IActionResult> Export(Guid id, [FromQuery] ExportFormat format = ExportFormat.Json)
+        public async Task<IActionResult> Export(Guid id, [FromQuery] DashboardExportFormat format = DashboardExportFormat.Json)
         {
             var data = await _dashboardService.ExportDashboardAsync(id, format);
             
             var contentType = format switch
             {
-                ExportFormat.Pdf => "application/pdf",
-                ExportFormat.Excel => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                DashboardExportFormat.Pdf => "application/pdf",
+                DashboardExportFormat.Excel => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 _ => "application/json"
             };
 
