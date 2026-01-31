@@ -1,16 +1,19 @@
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
 #nullable disable
 
 namespace MedicSoft.Repository.Migrations.PostgreSQL
 {
     /// <inheritdoc />
-    public partial class EnsurePaymentTrackingColumnsExist : Migration
+    public partial class EnsurePaymentFieldsExist : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // This is an idempotent migration that safely adds payment tracking columns
+            // to the Appointments table and related configurations if they don't already exist.
+            // This handles cases where the database schema may be out of sync with the code model.
+
             // Add IsPaid column if it doesn't exist
             migrationBuilder.Sql(@"
                 DO $$
@@ -107,6 +110,37 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
+            // Add MFA grace period columns to Users if they don't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 
+                        FROM information_schema.columns 
+                        WHERE table_schema = 'public'
+                        AND LOWER(table_name) = 'users' 
+                        AND LOWER(column_name) = 'mfa_grace_period_ends_at'
+                    ) THEN
+                        ALTER TABLE ""Users"" ADD COLUMN ""mfa_grace_period_ends_at"" timestamp with time zone NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 
+                        FROM information_schema.columns 
+                        WHERE table_schema = 'public'
+                        AND LOWER(table_name) = 'users' 
+                        AND LOWER(column_name) = 'first_login_at'
+                    ) THEN
+                        ALTER TABLE ""Users"" ADD COLUMN ""first_login_at"" timestamp with time zone NULL;
+                    END IF;
+                END $$;
+            ");
+
             // Create index for PaidByUserId if it doesn't exist
             migrationBuilder.Sql(@"
                 DO $$
@@ -143,6 +177,22 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
+            // Create index for MFA grace period if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1
+                        FROM pg_indexes
+                        WHERE LOWER(schemaname) = 'public'
+                        AND LOWER(tablename) = 'users'
+                        AND LOWER(indexname) = 'ix_users_mfa_grace_period'
+                    ) THEN
+                        CREATE INDEX ""ix_users_mfa_grace_period"" ON ""Users"" (""mfa_grace_period_ends_at"");
+                    END IF;
+                END $$;
+            ");
+
             // Add DefaultPaymentReceiverType column to Clinics if it doesn't exist
             // Default value 2 = PaymentReceiverType.Secretary
             migrationBuilder.Sql(@"
@@ -164,11 +214,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // This is a safety migration that should not be rolled back
-            // as it only adds columns if they don't exist
-            // If you really need to remove these columns, use the original migration rollback:
-            // 20260121193310_AddPaymentTrackingFields
-            // 20260123011851_AddRoomConfigurationAndPaymentDetails
+            // This is a safety/repair migration that should not be rolled back
+            // If you really need to remove these columns, you can do so manually or
+            // create a new migration specifically for that purpose.
+            // The original migrations that were supposed to add these columns were:
+            // - 20260121193310_AddPaymentTrackingFields
+            // - 20260130000000_AddMfaGracePeriodToUsers
         }
     }
 }
