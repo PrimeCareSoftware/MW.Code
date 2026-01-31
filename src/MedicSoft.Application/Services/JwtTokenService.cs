@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using MedicSoft.CrossCutting.Authorization;
 
 namespace MedicSoft.Application.Services
 {
@@ -74,23 +75,23 @@ namespace MedicSoft.Application.Services
                 new Claim("nameid", userId),
                 new Claim(ClaimTypes.Role, role),
                 new Claim("role", role),
-                new Claim("tenant_id", tenantId),
-                new Claim("is_system_owner", isSystemOwner.ToString().ToLower())
+                new Claim(CustomClaimTypes.TenantId, tenantId),
+                new Claim(CustomClaimTypes.IsSystemOwner, isSystemOwner.ToString().ToLower())
             };
 
             if (!string.IsNullOrEmpty(clinicId))
             {
-                claims.Add(new Claim("clinic_id", clinicId));
+                claims.Add(new Claim(CustomClaimTypes.ClinicId, clinicId));
             }
 
             if (!string.IsNullOrEmpty(sessionId))
             {
-                claims.Add(new Claim("session_id", sessionId));
+                claims.Add(new Claim(CustomClaimTypes.SessionId, sessionId));
             }
 
             if (!string.IsNullOrEmpty(ownerId))
             {
-                claims.Add(new Claim("owner_id", ownerId));
+                claims.Add(new Claim(CustomClaimTypes.OwnerId, ownerId));
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();

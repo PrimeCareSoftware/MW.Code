@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs.SystemAdmin;
 using MedicSoft.Application.Services.SystemAdmin;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers.SystemAdmin
@@ -14,6 +15,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     [ApiController]
     [Route("api/system-admin/saas-metrics")]
     [Authorize(Roles = "SystemAdmin")]
+    [RequireSystemOwner]
     public class SaasMetricsController : BaseController
     {
         private readonly ISaasMetricsService _metricsService;

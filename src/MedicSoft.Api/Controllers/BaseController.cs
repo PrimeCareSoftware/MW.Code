@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 
 namespace MedicSoft.Api.Controllers
@@ -19,7 +20,7 @@ namespace MedicSoft.Api.Controllers
         protected string GetTenantId()
         {
             // Try to get tenant from JWT claims first
-            var tenantClaim = User?.FindFirst("tenant_id");
+            var tenantClaim = User?.FindFirst(CustomClaimTypes.TenantId);
             if (tenantClaim != null && !string.IsNullOrEmpty(tenantClaim.Value))
             {
                 return tenantClaim.Value;
@@ -65,7 +66,7 @@ namespace MedicSoft.Api.Controllers
         protected Guid? GetClinicId()
         {
             // Extract clinicId from JWT claims
-            var clinicIdClaim = User?.FindFirst("clinic_id");
+            var clinicIdClaim = User?.FindFirst(CustomClaimTypes.ClinicId);
             if (clinicIdClaim != null && Guid.TryParse(clinicIdClaim.Value, out var clinicId))
             {
                 return clinicId;
