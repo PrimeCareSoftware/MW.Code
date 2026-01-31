@@ -90,6 +90,11 @@ namespace MedicSoft.Api.Controllers
                     return Forbid();
                 }
 
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
+                }
+
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 // If no customization exists, create default one
@@ -131,6 +136,11 @@ namespace MedicSoft.Api.Controllers
                 if (!isAuthorized)
                 {
                     return Forbid();
+                }
+
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
                 }
 
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
@@ -184,6 +194,11 @@ namespace MedicSoft.Api.Controllers
                     return Forbid();
                 }
 
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
+                }
+
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);
                 
                 if (customization == null)
@@ -229,6 +244,11 @@ namespace MedicSoft.Api.Controllers
                 if (!isAuthorized)
                 {
                     return Forbid();
+                }
+
+                if (clinicId == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Clinic ID is required" });
                 }
 
                 var customization = await _customizationRepository.GetByClinicIdAsync(clinicId, tenantId);

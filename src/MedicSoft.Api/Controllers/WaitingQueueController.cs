@@ -7,7 +7,7 @@ using MedicSoft.CrossCutting.Identity;
 namespace MedicSoft.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/waiting-queue")]
     [Authorize]
     public class WaitingQueueController : BaseController
     {
