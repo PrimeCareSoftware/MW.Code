@@ -77,10 +77,10 @@ namespace MedicSoft.Repository.Configurations
                     v => (IReadOnlyCollection<Guid>)(System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new List<Guid>())
                 )
                 .HasColumnType("jsonb")
-                .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<IReadOnlyCollection<Guid>>(
+                .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<List<Guid>>(
                     (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c!.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => (IReadOnlyCollection<Guid>)c!.ToList()));
+                    c => c!.ToList()));
 
             // Indexes
             builder.HasIndex(sr => new { sr.TenantId, sr.Month, sr.Year })
