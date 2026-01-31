@@ -58,6 +58,37 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 CREATE INDEX IF NOT EXISTS ""IX_WidgetTemplates_IsSystem"" ON ""WidgetTemplates"" (""IsSystem"");
             ");
 
+            // Create ScheduledReports table if it doesn't exist (depends on ReportTemplates)
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""ScheduledReports"" (
+                    ""Id"" uuid NOT NULL,
+                    ""ReportTemplateId"" uuid NOT NULL,
+                    ""Name"" character varying(200) NOT NULL,
+                    ""Description"" character varying(1000),
+                    ""CronExpression"" character varying(100) NOT NULL,
+                    ""OutputFormat"" character varying(20) NOT NULL,
+                    ""Recipients"" character varying(1000) NOT NULL,
+                    ""Parameters"" TEXT,
+                    ""IsActive"" boolean NOT NULL DEFAULT true,
+                    ""CreatedBy"" character varying(450) NOT NULL,
+                    ""LastRunAt"" timestamp with time zone,
+                    ""NextRunAt"" timestamp with time zone,
+                    ""LastRunStatus"" character varying(50),
+                    ""LastRunError"" character varying(2000),
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_ScheduledReports"" PRIMARY KEY (""Id""),
+                    CONSTRAINT ""FK_ScheduledReports_ReportTemplates_ReportTemplateId"" FOREIGN KEY (""ReportTemplateId"") 
+                        REFERENCES ""ReportTemplates"" (""Id"") ON DELETE RESTRICT
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_ReportTemplateId"" ON ""ScheduledReports"" (""ReportTemplateId"");
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_IsActive"" ON ""ScheduledReports"" (""IsActive"");
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_NextRunAt"" ON ""ScheduledReports"" (""NextRunAt"");
+                CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_CreatedBy"" ON ""ScheduledReports"" (""CreatedBy"");
+            ");
+
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
                 keyColumn: "Id",
