@@ -763,8 +763,49 @@ using (var scope = app.Services.CreateScope())
         Log.Information("Aplicando migrações do banco de dados...");
         context.Database.Migrate();
         Log.Information("Migrações do banco de dados aplicadas com sucesso");
+        
+        // Verify critical CRM tables exist to prevent runtime errors
+        Log.Information("Verificando existência de tabelas críticas do CRM...");
+        var crmTablesExist = await context.Database.CanConnectAsync();
+        if (crmTablesExist)
+        {
+            try
+            {
+                // Test if critical CRM tables exist by attempting a simple query
+                // This will throw if tables don't exist
+                var _ = await context.MarketingAutomations.AnyAsync();
+                var __ = await context.SurveyQuestionResponses.AnyAsync();
+                Log.Information("Verificação de tabelas CRM concluída com sucesso");
+            }
+            catch (Npgsql.PostgresException pgEx) when (pgEx.SqlState == "42P01") // Table does not exist
+            {
+                Log.Fatal(pgEx, "ERRO CRÍTICO: Tabelas do CRM não existem no banco de dados. " +
+                    "Isso indica que as migrações não foram aplicadas corretamente.");
+                Console.WriteLine("═══════════════════════════════════════════════════════════════");
+                Console.WriteLine("❌ ERRO CRÍTICO: Tabelas do CRM não encontradas no banco de dados");
+                Console.WriteLine("═══════════════════════════════════════════════════════════════");
+                Console.WriteLine("");
+                Console.WriteLine("As migrações foram executadas mas as tabelas do CRM não existem.");
+                Console.WriteLine("Isso pode acontecer se:");
+                Console.WriteLine("  1. As migrações foram revertidas manualmente");
+                Console.WriteLine("  2. O banco de dados foi recriado sem aplicar as migrações");
+                Console.WriteLine("  3. Há um problema de permissões ao criar o schema 'crm'");
+                Console.WriteLine("");
+                Console.WriteLine("Solução:");
+                Console.WriteLine("  Execute o script de migrações:");
+                Console.WriteLine("  ./run-all-migrations.sh");
+                Console.WriteLine("");
+                Console.WriteLine("  Ou aplique manualmente:");
+                Console.WriteLine("  cd src/MedicSoft.Api");
+                Console.WriteLine("  dotnet ef database update");
+                Console.WriteLine("");
+                Console.WriteLine("Tabela faltando: {0}", pgEx.Message);
+                Console.WriteLine("═══════════════════════════════════════════════════════════════");
+                throw; // Halt application startup
+            }
+        }
     }
-    catch (Exception ex)
+    catch (Exception ex) when (ex is not Npgsql.PostgresException)
     {
         Log.Fatal(ex, "Falha ao aplicar migrações do banco de dados: {Message}", ex.Message);
         Console.WriteLine($"Database migration failed: {ex.Message}");
