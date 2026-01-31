@@ -239,272 +239,431 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 schema: "crm",
                 table: "AutomationActions");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Workflows",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // Conditionally alter Workflows table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Workflows' 
+                        AND column_name = 'UpdatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Workflows' 
+                        AND column_name = 'CreatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Workflows",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            // Conditionally alter WorkflowExecutions table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowExecutions' 
+                        AND column_name = 'StartedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowExecutions' 
+                        AND column_name = 'CompletedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                table: "WorkflowExecutions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            // Conditionally alter WorkflowActions table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActions' 
+                        AND column_name = 'UpdatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActions' 
+                        AND column_name = 'CreatedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                table: "WorkflowExecutions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // Conditionally alter WorkflowActionExecutions table columns only if they exist with old type
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActionExecutions' 
+                        AND column_name = 'StartedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone;
+                    END IF;
+                    
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActionExecutions' 
+                        AND column_name = 'CompletedAt'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WorkflowActions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WidgetTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WidgetTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WorkflowActions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WidgetTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WidgetTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                table: "WorkflowActionExecutions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                table: "WorkflowActionExecutions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'LastSuccessAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""LastSuccessAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WidgetTemplates",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'LastFailureAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""LastFailureAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WidgetTemplates",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'LastDeliveryAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""LastDeliveryAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastSuccessAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastFailureAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'NextRetryAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""NextRetryAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastDeliveryAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'FailedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""FailedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'DeliveredAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""DeliveredAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextRetryAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FailedAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DeliveredAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CompletedTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CompletedTime"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CheckInTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CheckInTime"" TYPE timestamp with time zone, ALTER COLUMN ""CheckInTime"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WaitingQueueEntries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CalledTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CalledTime"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WaitingQueueEntries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedTime",
-                table: "WaitingQueueEntries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CheckInTime",
-                table: "WaitingQueueEntries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Users' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Users"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CalledTime",
-                table: "WaitingQueueEntries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Users' 
+                        AND column_name = 'LastLoginAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Users"" ALTER COLUMN ""LastLoginAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WaitingQueueConfigurations",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WaitingQueueConfigurations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Users",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastLoginAt",
-                table: "Users",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Users",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Users' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Users"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "FirstLoginAt",
@@ -518,1176 +677,2045 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "timestamp with time zone",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "UserClinicLinks",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LinkedDate",
-                table: "UserClinicLinks",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "InactivatedDate",
-                table: "UserClinicLinks",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "UserClinicLinks",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastActivityAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UsedAt",
-                table: "TwoFactorBackupCodes",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TwoFactorAuth",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "EnabledAt",
-                table: "TwoFactorAuth",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TwoFactorAuth",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TussProcedures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastUpdated",
-                table: "TussProcedures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TussProcedures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissRecursosGlosa",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataResposta",
-                table: "TissRecursosGlosa",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataEnvio",
-                table: "TissRecursosGlosa",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissRecursosGlosa",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissOperadoraConfigs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissOperadoraConfigs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissGuides",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ServiceDate",
-                table: "TissGuides",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissGuides",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissGuideProcedures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissGuideProcedures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissGlosas",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataIdentificacao",
-                table: "TissGlosas",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataGlosa",
-                table: "TissGlosas",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissGlosas",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissBatches",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SubmittedDate",
-                table: "TissBatches",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ProcessedDate",
-                table: "TissBatches",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedDate",
-                table: "TissBatches",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissBatches",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Tickets",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastStatusChangeAt",
-                table: "Tickets",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Tickets",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TicketHistory",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TicketHistory",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ChangedAt",
-                table: "TicketHistory",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TicketComments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TicketComments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UploadedAt",
-                table: "TicketAttachments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TicketAttachments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TicketAttachments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TherapeuticPlans",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReturnDate",
-                table: "TherapeuticPlans",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TherapeuticPlans",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Tags",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Tags",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SystemNotifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReadAt",
-                table: "SystemNotifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SystemNotifications",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "Surveys",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "Surveys",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SurveyQuestions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SurveyQuestions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SurveyQuestionResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SurveyQuestionResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AnsweredAt",
-                schema: "crm",
-                table: "SurveyQuestionResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Suppliers",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Suppliers",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SubscriptionPlans",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SubscriptionPlans",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GrantedAt",
-                table: "SubscriptionCredits",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SoapRecords",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RecordDate",
-                table: "SoapRecords",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SoapRecords",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletionDate",
-                table: "SoapRecords",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SngpcTransmissions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SngpcTransmissions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AttemptedAt",
-                table: "SngpcTransmissions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SNGPCReports",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "TransmittedAt",
-                table: "SNGPCReports",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReportPeriodStart",
-                table: "SNGPCReports",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReportPeriodEnd",
-                table: "SNGPCReports",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastAttemptAt",
-                table: "SNGPCReports",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GeneratedAt",
-                table: "SNGPCReports",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SNGPCReports",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SngpcAlerts",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ResolvedAt",
-                table: "SngpcAlerts",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SngpcAlerts",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AcknowledgedAt",
-                table: "SngpcAlerts",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SentimentAnalyses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SentimentAnalyses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AnalyzedAt",
-                schema: "crm",
-                table: "SentimentAnalyses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SenhasFila",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraSaida",
-                table: "SenhasFila",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraEntrada",
-                table: "SenhasFila",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraChamada",
-                table: "SenhasFila",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraAtendimento",
-                table: "SenhasFila",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SenhasFila",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ScheduledReports",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextRunAt",
-                table: "ScheduledReports",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastRunAt",
-                table: "ScheduledReports",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ScheduledReports",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SalesFunnelMetrics",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SalesFunnelMetrics",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ReportTemplates",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ReportTemplates",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ReceivablePayments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "ReceivablePayments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ReceivablePayments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ProfilePermissions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ProfilePermissions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Procedures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Procedures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ProcedureMaterials",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ProcedureMaterials",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PrescriptionTemplates",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PrescriptionTemplates",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PrescriptionSequenceControls",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastGeneratedAt",
-                table: "PrescriptionSequenceControls",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PrescriptionSequenceControls",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PrescriptionItems",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PrescriptionItems",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PlanoContas",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PlanoContas",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Payments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ProcessedDate",
-                table: "Payments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "Payments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Payments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "Payments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PayablePayments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "PayablePayments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PayablePayments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "PatientTouchpoints",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Timestamp",
-                schema: "crm",
-                table: "PatientTouchpoints",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "PatientTouchpoints",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Patients",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'LinkedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""LinkedDate"" TYPE timestamp with time zone, ALTER COLUMN ""LinkedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'InactivatedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""InactivatedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'StartedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone, ALTER COLUMN ""StartedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'LastActivityAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""LastActivityAt"" TYPE timestamp with time zone, ALTER COLUMN ""LastActivityAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp with time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorBackupCodes' 
+                        AND column_name = 'UsedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorBackupCodes"" ALTER COLUMN ""UsedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorAuth' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorAuth"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorAuth' 
+                        AND column_name = 'EnabledAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorAuth"" ALTER COLUMN ""EnabledAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorAuth' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorAuth"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TussProcedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TussProcedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TussProcedures' 
+                        AND column_name = 'LastUpdated'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TussProcedures"" ALTER COLUMN ""LastUpdated"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TussProcedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TussProcedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'DataResposta'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""DataResposta"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'DataEnvio'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""DataEnvio"" TYPE timestamp with time zone, ALTER COLUMN ""DataEnvio"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissOperadoraConfigs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissOperadoraConfigs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissOperadoraConfigs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissOperadoraConfigs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuides' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuides"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuides' 
+                        AND column_name = 'ServiceDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuides"" ALTER COLUMN ""ServiceDate"" TYPE timestamp with time zone, ALTER COLUMN ""ServiceDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuides' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuides"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuideProcedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuideProcedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuideProcedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuideProcedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'DataIdentificacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""DataIdentificacao"" TYPE timestamp with time zone, ALTER COLUMN ""DataIdentificacao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'DataGlosa'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""DataGlosa"" TYPE timestamp with time zone, ALTER COLUMN ""DataGlosa"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'SubmittedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""SubmittedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'ProcessedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""ProcessedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'CreatedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""CreatedDate"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tickets' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Tickets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tickets' 
+                        AND column_name = 'LastStatusChangeAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Tickets"" ALTER COLUMN ""LastStatusChangeAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tickets' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Tickets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketHistory' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketHistory"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketHistory' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketHistory"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketHistory' 
+                        AND column_name = 'ChangedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketHistory"" ALTER COLUMN ""ChangedAt"" TYPE timestamp with time zone, ALTER COLUMN ""ChangedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketComments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketComments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketComments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketComments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketAttachments' 
+                        AND column_name = 'UploadedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketAttachments"" ALTER COLUMN ""UploadedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UploadedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketAttachments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketAttachments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketAttachments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketAttachments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TherapeuticPlans' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TherapeuticPlans"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TherapeuticPlans' 
+                        AND column_name = 'ReturnDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TherapeuticPlans"" ALTER COLUMN ""ReturnDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TherapeuticPlans' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""TherapeuticPlans"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tags' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Tags"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tags' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Tags"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND column_name = 'ReadAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Surveys' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Surveys"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Surveys' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Surveys"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'StartedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone, ALTER COLUMN ""StartedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'CompletedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""CompletedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestionResponses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestionResponses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestionResponses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestionResponses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestionResponses' 
+                        AND column_name = 'AnsweredAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestionResponses"" ALTER COLUMN ""AnsweredAt"" TYPE timestamp with time zone, ALTER COLUMN ""AnsweredAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Suppliers' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Suppliers"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Suppliers' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Suppliers"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionPlans' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionPlans"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionPlans' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionPlans"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionCredits' 
+                        AND column_name = 'GrantedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp with time zone, ALTER COLUMN ""GrantedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'RecordDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""RecordDate"" TYPE timestamp with time zone, ALTER COLUMN ""RecordDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'CompletionDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""CompletionDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcTransmissions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcTransmissions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcTransmissions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcTransmissions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcTransmissions' 
+                        AND column_name = 'AttemptedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcTransmissions"" ALTER COLUMN ""AttemptedAt"" TYPE timestamp with time zone, ALTER COLUMN ""AttemptedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'TransmittedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""TransmittedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'ReportPeriodStart'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""ReportPeriodStart"" TYPE timestamp with time zone, ALTER COLUMN ""ReportPeriodStart"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'ReportPeriodEnd'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""ReportPeriodEnd"" TYPE timestamp with time zone, ALTER COLUMN ""ReportPeriodEnd"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'LastAttemptAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""LastAttemptAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'GeneratedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""GeneratedAt"" TYPE timestamp with time zone, ALTER COLUMN ""GeneratedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'ResolvedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""ResolvedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'AcknowledgedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""AcknowledgedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SentimentAnalyses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SentimentAnalyses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SentimentAnalyses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SentimentAnalyses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SentimentAnalyses' 
+                        AND column_name = 'AnalyzedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SentimentAnalyses"" ALTER COLUMN ""AnalyzedAt"" TYPE timestamp with time zone, ALTER COLUMN ""AnalyzedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraSaida'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraSaida"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraEntrada'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraEntrada"" TYPE timestamp with time zone, ALTER COLUMN ""DataHoraEntrada"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraChamada'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraChamada"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraAtendimento'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraAtendimento"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'NextRunAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""NextRunAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'LastRunAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""LastRunAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SalesFunnelMetrics' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SalesFunnelMetrics"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SalesFunnelMetrics' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SalesFunnelMetrics"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReportTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ReportTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReportTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ReportTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReceivablePayments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ReceivablePayments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReceivablePayments' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ReceivablePayments"" ALTER COLUMN ""PaymentDate"" TYPE timestamp with time zone, ALTER COLUMN ""PaymentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReceivablePayments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ReceivablePayments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProfilePermissions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ProfilePermissions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProfilePermissions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ProfilePermissions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Procedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Procedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Procedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Procedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProcedureMaterials' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ProcedureMaterials"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProcedureMaterials' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ProcedureMaterials"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionSequenceControls"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        AND column_name = 'LastGeneratedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionSequenceControls"" ALTER COLUMN ""LastGeneratedAt"" TYPE timestamp with time zone, ALTER COLUMN ""LastGeneratedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionSequenceControls"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionItems' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionItems"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionItems' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionItems"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PlanoContas' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PlanoContas"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PlanoContas' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PlanoContas"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'ProcessedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""ProcessedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""PaymentDate"" TYPE timestamp with time zone, ALTER COLUMN ""PaymentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""CancellationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PayablePayments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PayablePayments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PayablePayments' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PayablePayments"" ALTER COLUMN ""PaymentDate"" TYPE timestamp with time zone, ALTER COLUMN ""PaymentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PayablePayments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PayablePayments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientTouchpoints' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientTouchpoints"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientTouchpoints' 
+                        AND column_name = 'Timestamp'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientTouchpoints"" ALTER COLUMN ""Timestamp"" TYPE timestamp with time zone, ALTER COLUMN ""Timestamp"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientTouchpoints' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientTouchpoints"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Patients' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Patients"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Document",
@@ -1699,21 +2727,35 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "character varying(50)",
                 oldMaxLength: 50);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DateOfBirth",
-                table: "Patients",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Patients' 
+                        AND column_name = 'DateOfBirth'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Patients"" ALTER COLUMN ""DateOfBirth"" TYPE timestamp with time zone, ALTER COLUMN ""DateOfBirth"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Patients",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Patients' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Patients"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<string>(
                 name: "DocumentHash",
@@ -1722,2414 +2764,4220 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 maxLength: 100,
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "PatientJourneys",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "PatientJourneys",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidUntil",
-                table: "PatientHealthInsurances",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidFrom",
-                table: "PatientHealthInsurances",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PatientHealthInsurances",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PatientHealthInsurances",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PatientClinicLinks",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LinkedAt",
-                table: "PatientClinicLinks",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PatientClinicLinks",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "VerifiedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UsedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                table: "PasswordResetTokens",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Owners",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastLoginAt",
-                table: "Owners",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Owners",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "OwnerClinicLinks",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LinkedDate",
-                table: "OwnerClinicLinks",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "InactivatedDate",
-                table: "OwnerClinicLinks",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "OwnerClinicLinks",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastActivityAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Notifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SentAt",
-                table: "Notifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReadAt",
-                table: "Notifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DeliveredAt",
-                table: "Notifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Notifications",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "NotificationRules",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "NotificationRules",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "NotificationRoutines",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextExecutionAt",
-                table: "NotificationRoutines",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastExecutedAt",
-                table: "NotificationRoutines",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "NotificationRoutines",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MonthlyControlledBalances",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MonthlyControlledBalances",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosedAt",
-                table: "MonthlyControlledBalances",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ModuleConfigurations",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ModuleConfigurations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ModuleConfigurationHistories",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ModuleConfigurationHistories",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ChangedAt",
-                table: "ModuleConfigurationHistories",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Medications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Medications",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordVersions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordVersions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ChangedAt",
-                table: "MedicalRecordVersions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordTemplates",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordTemplates",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordSignatures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SignedAt",
-                table: "MedicalRecordSignatures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordSignatures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecords",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReopenedAt",
-                table: "MedicalRecords",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecords",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsultationStartTime",
-                table: "MedicalRecords",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsultationEndTime",
-                table: "MedicalRecords",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosedAt",
-                table: "MedicalRecords",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordAccessLogs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordAccessLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AccessedAt",
-                table: "MedicalRecordAccessLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Materials",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Materials",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "MarketingAutomations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastExecutedAt",
-                schema: "crm",
-                table: "MarketingAutomations",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "MarketingAutomations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "LoginAttempts",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "LoginAttempts",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AttemptTime",
-                table: "LoginAttempts",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "LancamentosContabeis",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataLancamento",
-                table: "LancamentosContabeis",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "LancamentosContabeis",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExitedAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "EnteredAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Invoices",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SentDate",
-                table: "Invoices",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidDate",
-                table: "Invoices",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "Invoices",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "Invoices",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Invoices",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "Invoices",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "InvoiceConfigurations",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "InvoiceConfigurations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CertificateExpirationDate",
-                table: "InvoiceConfigurations",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "InformedConsents",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "InformedConsents",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AcceptedAt",
-                table: "InformedConsents",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ImpostosNotas",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataCalculo",
-                table: "ImpostosNotas",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ImpostosNotas",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidUntil",
-                table: "HealthInsurancePlans",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidFrom",
-                table: "HealthInsurancePlans",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "HealthInsurancePlans",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "HealthInsurancePlans",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "HealthInsuranceOperators",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "HealthInsuranceOperators",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "FinancialClosures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SettlementDate",
-                table: "FinancialClosures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "FinancialClosures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosureDate",
-                table: "FinancialClosures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "FinancialClosureItems",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "FinancialClosureItems",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "FilasEspera",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "FilasEspera",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Expenses",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidDate",
-                table: "Expenses",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "Expenses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Expenses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ExamRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ScheduledDate",
-                table: "ExamRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RequestedDate",
-                table: "ExamRequests",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ExamRequests",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedDate",
-                table: "ExamRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ExamCatalogs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ExamCatalogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "EmailTemplates",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "EmailTemplates",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ElectronicInvoices",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "ElectronicInvoices",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ElectronicInvoices",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "ElectronicInvoices",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AuthorizationDate",
-                table: "ElectronicInvoices",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DREs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PeriodoInicio",
-                table: "DREs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PeriodoFim",
-                table: "DREs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataGeracao",
-                table: "DREs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DREs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SignedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReportedToSNGPCAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssuedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ManufactureDate",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiryDate",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DiagnosticHypotheses",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DiagnosedAt",
-                table: "DiagnosticHypotheses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DiagnosticHypotheses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataProcessingConsents",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RevokedDate",
-                table: "DataProcessingConsents",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataProcessingConsents",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsentDate",
-                table: "DataProcessingConsents",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataDeletionRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RequestDate",
-                table: "DataDeletionRequests",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ProcessedDate",
-                table: "DataDeletionRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LegalApprovalDate",
-                table: "DataDeletionRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataDeletionRequests",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedDate",
-                table: "DataDeletionRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataConsentLogs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RevokedDate",
-                table: "DataConsentLogs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpirationDate",
-                table: "DataConsentLogs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataConsentLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsentDate",
-                table: "DataConsentLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataAccessLogs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Timestamp",
-                table: "DataAccessLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataAccessLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CustomDashboards",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CustomDashboards",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RegisteredAt",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DocumentDate",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Date",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConsultationFormProfiles",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConsultationFormProfiles",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConsultationFormConfigurations",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConsultationFormConfigurations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConsultasDiarias",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UltimaAtualizacao",
-                table: "ConsultasDiarias",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataConsolidacao",
-                table: "ConsultasDiarias",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Data",
-                table: "ConsultasDiarias",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConsultasDiarias",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "VigenciaInicio",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "VigenciaFim",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ResolvedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReceivedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FirstResponseAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "ComplaintInteractions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "InteractionDate",
-                schema: "crm",
-                table: "ComplaintInteractions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "ComplaintInteractions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Companies",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Companies",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicTags",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicTags",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AssignedAt",
-                table: "ClinicTags",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "TrialEndDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PlanChangeDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextPaymentDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ManualOverrideSetAt",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastPaymentDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FrozenStartDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FrozenEndDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "EndDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Clinics",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Clinics",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicCustomizations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicCustomizations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicalExaminations",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicalExaminations",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "ChurnPredictions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PredictedAt",
-                schema: "crm",
-                table: "ChurnPredictions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "ChurnPredictions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CertificadosDigitais",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataExpiracao",
-                table: "CertificadosDigitais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataEmissao",
-                table: "CertificadosDigitais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataCadastro",
-                table: "CertificadosDigitais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CertificadosDigitais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CashFlowEntries",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "TransactionDate",
-                table: "CashFlowEntries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CashFlowEntries",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "BalancosPatrimoniais",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataReferencia",
-                table: "BalancosPatrimoniais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataGeracao",
-                table: "BalancosPatrimoniais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "BalancosPatrimoniais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "AutomationActions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "AutomationActions",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AuthorizationRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RequestDate",
-                table: "AuthorizationRequests",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpirationDate",
-                table: "AuthorizationRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AuthorizationRequests",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AuthorizationDate",
-                table: "AuthorizationRequests",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AuditLogs",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Timestamp",
-                table: "AuditLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AuditLogs",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AssinaturasDigitais",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataUltimaValidacao",
-                table: "AssinaturasDigitais",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataTimestamp",
-                table: "AssinaturasDigitais",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraAssinatura",
-                table: "AssinaturasDigitais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AssinaturasDigitais",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ApuracoesImpostos",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataPagamento",
-                table: "ApuracoesImpostos",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataApuracao",
-                table: "ApuracoesImpostos",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ApuracoesImpostos",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ScheduledDate",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidAt",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CheckOutTime",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CheckInTime",
-                table: "Appointments",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AppointmentProcedures",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PerformedAt",
-                table: "AppointmentProcedures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AppointmentProcedures",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AnamnesisTemplates",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AnamnesisTemplates",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AnamnesisResponses",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ResponseDate",
-                table: "AnamnesisResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AnamnesisResponses",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccountsReceivable",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SettlementDate",
-                table: "AccountsReceivable",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "AccountsReceivable",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "AccountsReceivable",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccountsReceivable",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccountsPayable",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "AccountsPayable",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "AccountsPayable",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "AccountsPayable",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccountsPayable",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccountLockouts",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UnlocksAt",
-                table: "AccountLockouts",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UnlockedAt",
-                table: "AccountLockouts",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LockedAt",
-                table: "AccountLockouts",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccountLockouts",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccessProfiles",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccessProfiles",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientJourneys' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientJourneys"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientJourneys' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientJourneys"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'ValidUntil'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""ValidUntil"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'ValidFrom'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""ValidFrom"" TYPE timestamp with time zone, ALTER COLUMN ""ValidFrom"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientClinicLinks' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientClinicLinks"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientClinicLinks' 
+                        AND column_name = 'LinkedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientClinicLinks"" ALTER COLUMN ""LinkedAt"" TYPE timestamp with time zone, ALTER COLUMN ""LinkedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientClinicLinks' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientClinicLinks"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'VerifiedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""VerifiedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'UsedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""UsedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp with time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Owners' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Owners"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Owners' 
+                        AND column_name = 'LastLoginAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Owners"" ALTER COLUMN ""LastLoginAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Owners' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Owners"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'LinkedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""LinkedDate"" TYPE timestamp with time zone, ALTER COLUMN ""LinkedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'InactivatedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""InactivatedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'LastActivityAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""LastActivityAt"" TYPE timestamp with time zone, ALTER COLUMN ""LastActivityAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp with time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'SentAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""SentAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'ReadAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'DeliveredAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""DeliveredAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRules' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRules"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRules' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRules"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'NextExecutionAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""NextExecutionAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'LastExecutedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""LastExecutedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MonthlyControlledBalances' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MonthlyControlledBalances"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MonthlyControlledBalances' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MonthlyControlledBalances"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MonthlyControlledBalances' 
+                        AND column_name = 'ClosedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MonthlyControlledBalances"" ALTER COLUMN ""ClosedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurationHistories"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurationHistories"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        AND column_name = 'ChangedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurationHistories"" ALTER COLUMN ""ChangedAt"" TYPE timestamp with time zone, ALTER COLUMN ""ChangedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Medications' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Medications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Medications' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Medications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordVersions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordVersions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordVersions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordVersions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordVersions' 
+                        AND column_name = 'ChangedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordVersions"" ALTER COLUMN ""ChangedAt"" TYPE timestamp with time zone, ALTER COLUMN ""ChangedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordSignatures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordSignatures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordSignatures' 
+                        AND column_name = 'SignedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordSignatures"" ALTER COLUMN ""SignedAt"" TYPE timestamp with time zone, ALTER COLUMN ""SignedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordSignatures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordSignatures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ReopenedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ReopenedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ConsultationStartTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ConsultationStartTime"" TYPE timestamp with time zone, ALTER COLUMN ""ConsultationStartTime"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ConsultationEndTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ConsultationEndTime"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ClosedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ClosedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordAccessLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordAccessLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        AND column_name = 'AccessedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordAccessLogs"" ALTER COLUMN ""AccessedAt"" TYPE timestamp with time zone, ALTER COLUMN ""AccessedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Materials' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Materials"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Materials' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Materials"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MarketingAutomations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""MarketingAutomations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MarketingAutomations' 
+                        AND column_name = 'LastExecutedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""MarketingAutomations"" ALTER COLUMN ""LastExecutedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MarketingAutomations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""MarketingAutomations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LoginAttempts' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""LoginAttempts"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LoginAttempts' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""LoginAttempts"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LoginAttempts' 
+                        AND column_name = 'AttemptTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""LoginAttempts"" ALTER COLUMN ""AttemptTime"" TYPE timestamp with time zone, ALTER COLUMN ""AttemptTime"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LancamentosContabeis' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""LancamentosContabeis"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LancamentosContabeis' 
+                        AND column_name = 'DataLancamento'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""LancamentosContabeis"" ALTER COLUMN ""DataLancamento"" TYPE timestamp with time zone, ALTER COLUMN ""DataLancamento"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LancamentosContabeis' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""LancamentosContabeis"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'ExitedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""ExitedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'EnteredAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""EnteredAt"" TYPE timestamp with time zone, ALTER COLUMN ""EnteredAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'SentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""SentDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'PaidDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""PaidDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""IssueDate"" TYPE timestamp with time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""DueDate"" TYPE timestamp with time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""CancellationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InvoiceConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""InvoiceConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InvoiceConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""InvoiceConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InvoiceConfigurations' 
+                        AND column_name = 'CertificateExpirationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""InvoiceConfigurations"" ALTER COLUMN ""CertificateExpirationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InformedConsents' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""InformedConsents"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InformedConsents' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""InformedConsents"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InformedConsents' 
+                        AND column_name = 'AcceptedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""InformedConsents"" ALTER COLUMN ""AcceptedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ImpostosNotas' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ImpostosNotas"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ImpostosNotas' 
+                        AND column_name = 'DataCalculo'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ImpostosNotas"" ALTER COLUMN ""DataCalculo"" TYPE timestamp with time zone, ALTER COLUMN ""DataCalculo"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ImpostosNotas' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ImpostosNotas"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'ValidUntil'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""ValidUntil"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'ValidFrom'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""ValidFrom"" TYPE timestamp with time zone, ALTER COLUMN ""ValidFrom"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsuranceOperators' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsuranceOperators"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsuranceOperators' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsuranceOperators"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'SettlementDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""SettlementDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'ClosureDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""ClosureDate"" TYPE timestamp with time zone, ALTER COLUMN ""ClosureDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosureItems' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosureItems"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosureItems' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosureItems"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FilasEspera' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FilasEspera"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FilasEspera' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""FilasEspera"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'PaidDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""PaidDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""DueDate"" TYPE timestamp with time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'ScheduledDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""ScheduledDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'RequestedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""RequestedDate"" TYPE timestamp with time zone, ALTER COLUMN ""RequestedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'CompletedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""CompletedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamCatalogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamCatalogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamCatalogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamCatalogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'EmailTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""EmailTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'EmailTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""EmailTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""IssueDate"" TYPE timestamp with time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""CancellationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'AuthorizationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""AuthorizationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'PeriodoInicio'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""PeriodoInicio"" TYPE timestamp with time zone, ALTER COLUMN ""PeriodoInicio"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'PeriodoFim'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""PeriodoFim"" TYPE timestamp with time zone, ALTER COLUMN ""PeriodoFim"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'DataGeracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""DataGeracao"" TYPE timestamp with time zone, ALTER COLUMN ""DataGeracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'SignedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""SignedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'ReportedToSNGPCAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""ReportedToSNGPCAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'IssuedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""IssuedAt"" TYPE timestamp with time zone, ALTER COLUMN ""IssuedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp with time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'ManufactureDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""ManufactureDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'ExpiryDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""ExpiryDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DiagnosticHypotheses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DiagnosticHypotheses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DiagnosticHypotheses' 
+                        AND column_name = 'DiagnosedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DiagnosticHypotheses"" ALTER COLUMN ""DiagnosedAt"" TYPE timestamp with time zone, ALTER COLUMN ""DiagnosedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DiagnosticHypotheses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DiagnosticHypotheses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'RevokedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""RevokedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'ConsentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""ConsentDate"" TYPE timestamp with time zone, ALTER COLUMN ""ConsentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'RequestDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""RequestDate"" TYPE timestamp with time zone, ALTER COLUMN ""RequestDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'ProcessedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""ProcessedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'LegalApprovalDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""LegalApprovalDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'CompletedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""CompletedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'RevokedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""RevokedDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'ExpirationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""ExpirationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'ConsentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""ConsentDate"" TYPE timestamp with time zone, ALTER COLUMN ""ConsentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataAccessLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataAccessLogs' 
+                        AND column_name = 'Timestamp'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""Timestamp"" TYPE timestamp with time zone, ALTER COLUMN ""Timestamp"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataAccessLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CustomDashboards' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CustomDashboards' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'RegisteredAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""RegisteredAt"" TYPE timestamp with time zone, ALTER COLUMN ""RegisteredAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'DocumentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""DocumentDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'Date'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""Date"" TYPE timestamp with time zone, ALTER COLUMN ""Date"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormProfiles' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormProfiles"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormProfiles' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormProfiles"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'UltimaAtualizacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""UltimaAtualizacao"" TYPE timestamp with time zone, ALTER COLUMN ""UltimaAtualizacao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'DataConsolidacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""DataConsolidacao"" TYPE timestamp with time zone, ALTER COLUMN ""DataConsolidacao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'Data'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""Data"" TYPE timestamp with time zone, ALTER COLUMN ""Data"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'VigenciaInicio'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""VigenciaInicio"" TYPE timestamp with time zone, ALTER COLUMN ""VigenciaInicio"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'VigenciaFim'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""VigenciaFim"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'ResolvedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""ResolvedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'ReceivedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""ReceivedAt"" TYPE timestamp with time zone, ALTER COLUMN ""ReceivedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'FirstResponseAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""FirstResponseAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'ClosedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""ClosedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ComplaintInteractions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ComplaintInteractions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ComplaintInteractions' 
+                        AND column_name = 'InteractionDate'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ComplaintInteractions"" ALTER COLUMN ""InteractionDate"" TYPE timestamp with time zone, ALTER COLUMN ""InteractionDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ComplaintInteractions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ComplaintInteractions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Companies' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Companies"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Companies' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Companies"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicTags' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicTags"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicTags' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicTags"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicTags' 
+                        AND column_name = 'AssignedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicTags"" ALTER COLUMN ""AssignedAt"" TYPE timestamp with time zone, ALTER COLUMN ""AssignedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'TrialEndDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""TrialEndDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'StartDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""StartDate"" TYPE timestamp with time zone, ALTER COLUMN ""StartDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'PlanChangeDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""PlanChangeDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'NextPaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""NextPaymentDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'ManualOverrideSetAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""ManualOverrideSetAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'LastPaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""LastPaymentDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'FrozenStartDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""FrozenStartDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'FrozenEndDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""FrozenEndDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'EndDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""EndDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""CancellationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Clinics' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Clinics"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Clinics' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Clinics"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicCustomizations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicCustomizations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicCustomizations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicCustomizations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicalExaminations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicalExaminations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicalExaminations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicalExaminations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ChurnPredictions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ChurnPredictions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ChurnPredictions' 
+                        AND column_name = 'PredictedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ChurnPredictions"" ALTER COLUMN ""PredictedAt"" TYPE timestamp with time zone, ALTER COLUMN ""PredictedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ChurnPredictions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ChurnPredictions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'DataExpiracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""DataExpiracao"" TYPE timestamp with time zone, ALTER COLUMN ""DataExpiracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'DataEmissao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""DataEmissao"" TYPE timestamp with time zone, ALTER COLUMN ""DataEmissao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'DataCadastro'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""DataCadastro"" TYPE timestamp with time zone, ALTER COLUMN ""DataCadastro"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CashFlowEntries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CashFlowEntries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CashFlowEntries' 
+                        AND column_name = 'TransactionDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CashFlowEntries"" ALTER COLUMN ""TransactionDate"" TYPE timestamp with time zone, ALTER COLUMN ""TransactionDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CashFlowEntries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""CashFlowEntries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'DataReferencia'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""DataReferencia"" TYPE timestamp with time zone, ALTER COLUMN ""DataReferencia"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'DataGeracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""DataGeracao"" TYPE timestamp with time zone, ALTER COLUMN ""DataGeracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AutomationActions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""AutomationActions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AutomationActions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE crm.""AutomationActions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'RequestDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""RequestDate"" TYPE timestamp with time zone, ALTER COLUMN ""RequestDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'ExpirationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""ExpirationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'AuthorizationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""AuthorizationDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuditLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuditLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuditLogs' 
+                        AND column_name = 'Timestamp'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuditLogs"" ALTER COLUMN ""Timestamp"" TYPE timestamp with time zone, ALTER COLUMN ""Timestamp"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuditLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AuditLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'DataUltimaValidacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""DataUltimaValidacao"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'DataTimestamp'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""DataTimestamp"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'DataHoraAssinatura'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""DataHoraAssinatura"" TYPE timestamp with time zone, ALTER COLUMN ""DataHoraAssinatura"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'DataPagamento'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""DataPagamento"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'DataApuracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""DataApuracao"" TYPE timestamp with time zone, ALTER COLUMN ""DataApuracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'ScheduledDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""ScheduledDate"" TYPE timestamp with time zone, ALTER COLUMN ""ScheduledDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'PaidAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'CheckOutTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""CheckOutTime"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'CheckInTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""CheckInTime"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AppointmentProcedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AppointmentProcedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AppointmentProcedures' 
+                        AND column_name = 'PerformedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AppointmentProcedures"" ALTER COLUMN ""PerformedAt"" TYPE timestamp with time zone, ALTER COLUMN ""PerformedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AppointmentProcedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AppointmentProcedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisResponses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisResponses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisResponses' 
+                        AND column_name = 'ResponseDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisResponses"" ALTER COLUMN ""ResponseDate"" TYPE timestamp with time zone, ALTER COLUMN ""ResponseDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisResponses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisResponses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'SettlementDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""SettlementDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""IssueDate"" TYPE timestamp with time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""DueDate"" TYPE timestamp with time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""PaymentDate"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""IssueDate"" TYPE timestamp with time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""DueDate"" TYPE timestamp with time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'UnlocksAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""UnlocksAt"" TYPE timestamp with time zone, ALTER COLUMN ""UnlocksAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'UnlockedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""UnlockedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'LockedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""LockedAt"" TYPE timestamp with time zone, ALTER COLUMN ""LockedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccessProfiles' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccessProfiles"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccessProfiles' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""AccessProfiles"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.CreateTable(
                 name: "EncryptionKeys",
@@ -4394,799 +7242,1370 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 name: "DocumentHash",
                 table: "Patients");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Workflows",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Workflows",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                table: "WorkflowExecutions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                table: "WorkflowExecutions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WorkflowActions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WorkflowActions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                table: "WorkflowActionExecutions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                table: "WorkflowActionExecutions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WidgetTemplates",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WidgetTemplates",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastSuccessAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastFailureAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastDeliveryAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "WebhookSubscriptions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextRetryAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FailedAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DeliveredAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "WebhookDeliveries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WaitingQueueEntries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WaitingQueueEntries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedTime",
-                table: "WaitingQueueEntries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CheckInTime",
-                table: "WaitingQueueEntries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CalledTime",
-                table: "WaitingQueueEntries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "WaitingQueueConfigurations",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "WaitingQueueConfigurations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Users",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastLoginAt",
-                table: "Users",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Users",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "UserClinicLinks",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LinkedDate",
-                table: "UserClinicLinks",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "InactivatedDate",
-                table: "UserClinicLinks",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "UserClinicLinks",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastActivityAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "public",
-                table: "user_sessions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UsedAt",
-                table: "TwoFactorBackupCodes",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TwoFactorAuth",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "EnabledAt",
-                table: "TwoFactorAuth",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TwoFactorAuth",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TussProcedures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastUpdated",
-                table: "TussProcedures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TussProcedures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissRecursosGlosa",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataResposta",
-                table: "TissRecursosGlosa",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataEnvio",
-                table: "TissRecursosGlosa",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissRecursosGlosa",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissOperadoraConfigs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissOperadoraConfigs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissGuides",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ServiceDate",
-                table: "TissGuides",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissGuides",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissGuideProcedures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissGuideProcedures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissGlosas",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataIdentificacao",
-                table: "TissGlosas",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataGlosa",
-                table: "TissGlosas",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissGlosas",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TissBatches",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SubmittedDate",
-                table: "TissBatches",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ProcessedDate",
-                table: "TissBatches",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedDate",
-                table: "TissBatches",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TissBatches",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Tickets",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastStatusChangeAt",
-                table: "Tickets",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Tickets",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TicketHistory",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TicketHistory",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ChangedAt",
-                table: "TicketHistory",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TicketComments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TicketComments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UploadedAt",
-                table: "TicketAttachments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TicketAttachments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TicketAttachments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "TherapeuticPlans",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReturnDate",
-                table: "TherapeuticPlans",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "TherapeuticPlans",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Tags",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Tags",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SystemNotifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReadAt",
-                table: "SystemNotifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SystemNotifications",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "Surveys",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "Surveys",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedAt",
-                schema: "crm",
-                table: "SurveyResponses",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Workflows' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Workflows' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowExecutions' 
+                        AND column_name = 'StartedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp without time zone, ALTER COLUMN ""StartedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowExecutions' 
+                        AND column_name = 'CompletedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActionExecutions' 
+                        AND column_name = 'StartedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp without time zone, ALTER COLUMN ""StartedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WorkflowActionExecutions' 
+                        AND column_name = 'CompletedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WidgetTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WidgetTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WidgetTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WidgetTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'LastSuccessAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""LastSuccessAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'LastFailureAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""LastFailureAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'LastDeliveryAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""LastDeliveryAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookSubscriptions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookSubscriptions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'NextRetryAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""NextRetryAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'FailedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""FailedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'DeliveredAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""DeliveredAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WebhookDeliveries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""WebhookDeliveries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CompletedTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CompletedTime"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CheckInTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CheckInTime"" TYPE timestamp without time zone, ALTER COLUMN ""CheckInTime"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueEntries' 
+                        AND column_name = 'CalledTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueEntries"" ALTER COLUMN ""CalledTime"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'WaitingQueueConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""WaitingQueueConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Users' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Users"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Users' 
+                        AND column_name = 'LastLoginAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Users"" ALTER COLUMN ""LastLoginAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Users' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Users"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'LinkedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""LinkedDate"" TYPE timestamp without time zone, ALTER COLUMN ""LinkedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'InactivatedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""InactivatedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'UserClinicLinks' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""UserClinicLinks"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'StartedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""StartedAt"" TYPE timestamp without time zone, ALTER COLUMN ""StartedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'LastActivityAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""LastActivityAt"" TYPE timestamp without time zone, ALTER COLUMN ""LastActivityAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp without time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'user_sessions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""user_sessions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorBackupCodes' 
+                        AND column_name = 'UsedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorBackupCodes"" ALTER COLUMN ""UsedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorAuth' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorAuth"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorAuth' 
+                        AND column_name = 'EnabledAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorAuth"" ALTER COLUMN ""EnabledAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TwoFactorAuth' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TwoFactorAuth"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TussProcedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TussProcedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TussProcedures' 
+                        AND column_name = 'LastUpdated'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TussProcedures"" ALTER COLUMN ""LastUpdated"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TussProcedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TussProcedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'DataResposta'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""DataResposta"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'DataEnvio'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""DataEnvio"" TYPE timestamp without time zone, ALTER COLUMN ""DataEnvio"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissRecursosGlosa' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissRecursosGlosa"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissOperadoraConfigs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissOperadoraConfigs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissOperadoraConfigs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissOperadoraConfigs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuides' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuides"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuides' 
+                        AND column_name = 'ServiceDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuides"" ALTER COLUMN ""ServiceDate"" TYPE timestamp without time zone, ALTER COLUMN ""ServiceDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuides' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuides"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuideProcedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuideProcedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGuideProcedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGuideProcedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'DataIdentificacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""DataIdentificacao"" TYPE timestamp without time zone, ALTER COLUMN ""DataIdentificacao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'DataGlosa'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""DataGlosa"" TYPE timestamp without time zone, ALTER COLUMN ""DataGlosa"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissGlosas' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissGlosas"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'SubmittedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""SubmittedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'ProcessedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""ProcessedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'CreatedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""CreatedDate"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TissBatches' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TissBatches"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tickets' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Tickets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tickets' 
+                        AND column_name = 'LastStatusChangeAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Tickets"" ALTER COLUMN ""LastStatusChangeAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tickets' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Tickets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketHistory' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketHistory"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketHistory' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketHistory"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketHistory' 
+                        AND column_name = 'ChangedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketHistory"" ALTER COLUMN ""ChangedAt"" TYPE timestamp without time zone, ALTER COLUMN ""ChangedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketComments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketComments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketComments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketComments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketAttachments' 
+                        AND column_name = 'UploadedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketAttachments"" ALTER COLUMN ""UploadedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UploadedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketAttachments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketAttachments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TicketAttachments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TicketAttachments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TherapeuticPlans' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TherapeuticPlans"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TherapeuticPlans' 
+                        AND column_name = 'ReturnDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TherapeuticPlans"" ALTER COLUMN ""ReturnDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'TherapeuticPlans' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""TherapeuticPlans"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tags' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Tags"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Tags' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Tags"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND column_name = 'ReadAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Surveys' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Surveys"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Surveys' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Surveys"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'StartedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""StartedAt"" TYPE timestamp without time zone, ALTER COLUMN ""StartedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyResponses' 
+                        AND column_name = 'CompletedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyResponses"" ALTER COLUMN ""CompletedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "SurveyId1",
@@ -5195,23 +8614,35 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "uuid",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SurveyQuestions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SurveyQuestions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "SurveyId2",
@@ -5220,32 +8651,50 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "uuid",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SurveyQuestionResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestionResponses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestionResponses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SurveyQuestionResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestionResponses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestionResponses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AnsweredAt",
-                schema: "crm",
-                table: "SurveyQuestionResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SurveyQuestionResponses' 
+                        AND column_name = 'AnsweredAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SurveyQuestionResponses"" ALTER COLUMN ""AnsweredAt"" TYPE timestamp without time zone, ALTER COLUMN ""AnsweredAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "SurveyResponseId1",
@@ -5254,595 +8703,1040 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "uuid",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Suppliers",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Suppliers",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SubscriptionPlans",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SubscriptionPlans",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GrantedAt",
-                table: "SubscriptionCredits",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SoapRecords",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RecordDate",
-                table: "SoapRecords",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SoapRecords",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletionDate",
-                table: "SoapRecords",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SngpcTransmissions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SngpcTransmissions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AttemptedAt",
-                table: "SngpcTransmissions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SNGPCReports",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "TransmittedAt",
-                table: "SNGPCReports",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReportPeriodStart",
-                table: "SNGPCReports",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReportPeriodEnd",
-                table: "SNGPCReports",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastAttemptAt",
-                table: "SNGPCReports",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GeneratedAt",
-                table: "SNGPCReports",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SNGPCReports",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SngpcAlerts",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ResolvedAt",
-                table: "SngpcAlerts",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SngpcAlerts",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AcknowledgedAt",
-                table: "SngpcAlerts",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "SentimentAnalyses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "SentimentAnalyses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AnalyzedAt",
-                schema: "crm",
-                table: "SentimentAnalyses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SenhasFila",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraSaida",
-                table: "SenhasFila",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraEntrada",
-                table: "SenhasFila",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraChamada",
-                table: "SenhasFila",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraAtendimento",
-                table: "SenhasFila",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SenhasFila",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ScheduledReports",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextRunAt",
-                table: "ScheduledReports",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastRunAt",
-                table: "ScheduledReports",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ScheduledReports",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SalesFunnelMetrics",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SalesFunnelMetrics",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ReportTemplates",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ReportTemplates",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ReceivablePayments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "ReceivablePayments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ReceivablePayments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ProfilePermissions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ProfilePermissions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Procedures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Procedures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ProcedureMaterials",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ProcedureMaterials",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PrescriptionTemplates",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PrescriptionTemplates",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PrescriptionSequenceControls",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastGeneratedAt",
-                table: "PrescriptionSequenceControls",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PrescriptionSequenceControls",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PrescriptionItems",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PrescriptionItems",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PlanoContas",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PlanoContas",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Payments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ProcessedDate",
-                table: "Payments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "Payments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Payments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "Payments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PayablePayments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "PayablePayments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PayablePayments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "PatientTouchpoints",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Timestamp",
-                schema: "crm",
-                table: "PatientTouchpoints",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "PatientTouchpoints",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Suppliers' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Suppliers"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Suppliers' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Suppliers"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionPlans' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionPlans"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionPlans' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionPlans"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionCredits' 
+                        AND column_name = 'GrantedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp without time zone, ALTER COLUMN ""GrantedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'RecordDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""RecordDate"" TYPE timestamp without time zone, ALTER COLUMN ""RecordDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SoapRecords' 
+                        AND column_name = 'CompletionDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SoapRecords"" ALTER COLUMN ""CompletionDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcTransmissions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcTransmissions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcTransmissions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcTransmissions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcTransmissions' 
+                        AND column_name = 'AttemptedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcTransmissions"" ALTER COLUMN ""AttemptedAt"" TYPE timestamp without time zone, ALTER COLUMN ""AttemptedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'TransmittedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""TransmittedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'ReportPeriodStart'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""ReportPeriodStart"" TYPE timestamp without time zone, ALTER COLUMN ""ReportPeriodStart"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'ReportPeriodEnd'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""ReportPeriodEnd"" TYPE timestamp without time zone, ALTER COLUMN ""ReportPeriodEnd"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'LastAttemptAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""LastAttemptAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'GeneratedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""GeneratedAt"" TYPE timestamp without time zone, ALTER COLUMN ""GeneratedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SNGPCReports' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SNGPCReports"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'ResolvedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""ResolvedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SngpcAlerts' 
+                        AND column_name = 'AcknowledgedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SngpcAlerts"" ALTER COLUMN ""AcknowledgedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SentimentAnalyses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SentimentAnalyses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SentimentAnalyses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SentimentAnalyses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SentimentAnalyses' 
+                        AND column_name = 'AnalyzedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""SentimentAnalyses"" ALTER COLUMN ""AnalyzedAt"" TYPE timestamp without time zone, ALTER COLUMN ""AnalyzedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraSaida'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraSaida"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraEntrada'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraEntrada"" TYPE timestamp without time zone, ALTER COLUMN ""DataHoraEntrada"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraChamada'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraChamada"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'DataHoraAtendimento'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""DataHoraAtendimento"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SenhasFila' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SenhasFila"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'NextRunAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""NextRunAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'LastRunAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""LastRunAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ScheduledReports' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ScheduledReports"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SalesFunnelMetrics' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SalesFunnelMetrics"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SalesFunnelMetrics' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SalesFunnelMetrics"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReportTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ReportTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReportTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ReportTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReceivablePayments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ReceivablePayments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReceivablePayments' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ReceivablePayments"" ALTER COLUMN ""PaymentDate"" TYPE timestamp without time zone, ALTER COLUMN ""PaymentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ReceivablePayments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ReceivablePayments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProfilePermissions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ProfilePermissions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProfilePermissions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ProfilePermissions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Procedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Procedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Procedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Procedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProcedureMaterials' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ProcedureMaterials"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ProcedureMaterials' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ProcedureMaterials"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionSequenceControls"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        AND column_name = 'LastGeneratedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionSequenceControls"" ALTER COLUMN ""LastGeneratedAt"" TYPE timestamp without time zone, ALTER COLUMN ""LastGeneratedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionSequenceControls"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionItems' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionItems"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PrescriptionItems' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PrescriptionItems"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PlanoContas' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PlanoContas"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PlanoContas' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PlanoContas"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'ProcessedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""ProcessedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""PaymentDate"" TYPE timestamp without time zone, ALTER COLUMN ""PaymentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Payments' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Payments"" ALTER COLUMN ""CancellationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PayablePayments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PayablePayments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PayablePayments' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PayablePayments"" ALTER COLUMN ""PaymentDate"" TYPE timestamp without time zone, ALTER COLUMN ""PaymentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PayablePayments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PayablePayments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientTouchpoints' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientTouchpoints"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientTouchpoints' 
+                        AND column_name = 'Timestamp'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientTouchpoints"" ALTER COLUMN ""Timestamp"" TYPE timestamp without time zone, ALTER COLUMN ""Timestamp"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientTouchpoints' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientTouchpoints"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "JourneyStageId1",
@@ -5851,14 +9745,20 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "uuid",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Patients",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Patients' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Patients"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Document",
@@ -5870,695 +9770,1205 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "character varying(500)",
                 oldMaxLength: 500);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DateOfBirth",
-                table: "Patients",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Patients",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "PatientJourneys",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "PatientJourneys",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidUntil",
-                table: "PatientHealthInsurances",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidFrom",
-                table: "PatientHealthInsurances",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PatientHealthInsurances",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PatientHealthInsurances",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PatientClinicLinks",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LinkedAt",
-                table: "PatientClinicLinks",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PatientClinicLinks",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "VerifiedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UsedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                table: "PasswordResetTokens",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "PasswordResetTokens",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Owners",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastLoginAt",
-                table: "Owners",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Owners",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "OwnerClinicLinks",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LinkedDate",
-                table: "OwnerClinicLinks",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "InactivatedDate",
-                table: "OwnerClinicLinks",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "OwnerClinicLinks",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastActivityAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "public",
-                table: "owner_sessions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Notifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SentAt",
-                table: "Notifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReadAt",
-                table: "Notifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DeliveredAt",
-                table: "Notifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Notifications",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "NotificationRules",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "NotificationRules",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "NotificationRoutines",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextExecutionAt",
-                table: "NotificationRoutines",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastExecutedAt",
-                table: "NotificationRoutines",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "NotificationRoutines",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MonthlyControlledBalances",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MonthlyControlledBalances",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosedAt",
-                table: "MonthlyControlledBalances",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ModuleConfigurations",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ModuleConfigurations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ModuleConfigurationHistories",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ModuleConfigurationHistories",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ChangedAt",
-                table: "ModuleConfigurationHistories",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Medications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Medications",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordVersions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordVersions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ChangedAt",
-                table: "MedicalRecordVersions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordTemplates",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordTemplates",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordSignatures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SignedAt",
-                table: "MedicalRecordSignatures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordSignatures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecords",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReopenedAt",
-                table: "MedicalRecords",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecords",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsultationStartTime",
-                table: "MedicalRecords",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsultationEndTime",
-                table: "MedicalRecords",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosedAt",
-                table: "MedicalRecords",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "MedicalRecordAccessLogs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "MedicalRecordAccessLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AccessedAt",
-                table: "MedicalRecordAccessLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Materials",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Materials",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "MarketingAutomations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastExecutedAt",
-                schema: "crm",
-                table: "MarketingAutomations",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "MarketingAutomations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "LoginAttempts",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "LoginAttempts",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AttemptTime",
-                table: "LoginAttempts",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "LancamentosContabeis",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataLancamento",
-                table: "LancamentosContabeis",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "LancamentosContabeis",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExitedAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "EnteredAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "JourneyStages",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Patients' 
+                        AND column_name = 'DateOfBirth'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Patients"" ALTER COLUMN ""DateOfBirth"" TYPE timestamp without time zone, ALTER COLUMN ""DateOfBirth"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Patients' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Patients"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientJourneys' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientJourneys"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientJourneys' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""PatientJourneys"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'ValidUntil'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""ValidUntil"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'ValidFrom'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""ValidFrom"" TYPE timestamp without time zone, ALTER COLUMN ""ValidFrom"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientHealthInsurances' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientHealthInsurances"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientClinicLinks' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientClinicLinks"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientClinicLinks' 
+                        AND column_name = 'LinkedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientClinicLinks"" ALTER COLUMN ""LinkedAt"" TYPE timestamp without time zone, ALTER COLUMN ""LinkedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PatientClinicLinks' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PatientClinicLinks"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'VerifiedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""VerifiedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'UsedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""UsedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp without time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'PasswordResetTokens' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""PasswordResetTokens"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Owners' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Owners"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Owners' 
+                        AND column_name = 'LastLoginAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Owners"" ALTER COLUMN ""LastLoginAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Owners' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Owners"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'LinkedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""LinkedDate"" TYPE timestamp without time zone, ALTER COLUMN ""LinkedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'InactivatedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""InactivatedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'OwnerClinicLinks' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""OwnerClinicLinks"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'LastActivityAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""LastActivityAt"" TYPE timestamp without time zone, ALTER COLUMN ""LastActivityAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp without time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'owner_sessions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE public.""owner_sessions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'SentAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""SentAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'ReadAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'DeliveredAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""DeliveredAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Notifications' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Notifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRules' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRules"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRules' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRules"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'NextExecutionAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""NextExecutionAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'LastExecutedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""LastExecutedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'NotificationRoutines' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""NotificationRoutines"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MonthlyControlledBalances' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MonthlyControlledBalances"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MonthlyControlledBalances' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MonthlyControlledBalances"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MonthlyControlledBalances' 
+                        AND column_name = 'ClosedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MonthlyControlledBalances"" ALTER COLUMN ""ClosedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurationHistories"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurationHistories"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        AND column_name = 'ChangedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ModuleConfigurationHistories"" ALTER COLUMN ""ChangedAt"" TYPE timestamp without time zone, ALTER COLUMN ""ChangedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Medications' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Medications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Medications' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Medications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordVersions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordVersions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordVersions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordVersions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordVersions' 
+                        AND column_name = 'ChangedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordVersions"" ALTER COLUMN ""ChangedAt"" TYPE timestamp without time zone, ALTER COLUMN ""ChangedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordSignatures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordSignatures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordSignatures' 
+                        AND column_name = 'SignedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordSignatures"" ALTER COLUMN ""SignedAt"" TYPE timestamp without time zone, ALTER COLUMN ""SignedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordSignatures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordSignatures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ReopenedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ReopenedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ConsultationStartTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ConsultationStartTime"" TYPE timestamp without time zone, ALTER COLUMN ""ConsultationStartTime"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ConsultationEndTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ConsultationEndTime"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecords' 
+                        AND column_name = 'ClosedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecords"" ALTER COLUMN ""ClosedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordAccessLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordAccessLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        AND column_name = 'AccessedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""MedicalRecordAccessLogs"" ALTER COLUMN ""AccessedAt"" TYPE timestamp without time zone, ALTER COLUMN ""AccessedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Materials' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Materials"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Materials' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Materials"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MarketingAutomations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""MarketingAutomations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MarketingAutomations' 
+                        AND column_name = 'LastExecutedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""MarketingAutomations"" ALTER COLUMN ""LastExecutedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'MarketingAutomations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""MarketingAutomations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LoginAttempts' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""LoginAttempts"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LoginAttempts' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""LoginAttempts"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LoginAttempts' 
+                        AND column_name = 'AttemptTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""LoginAttempts"" ALTER COLUMN ""AttemptTime"" TYPE timestamp without time zone, ALTER COLUMN ""AttemptTime"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LancamentosContabeis' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""LancamentosContabeis"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LancamentosContabeis' 
+                        AND column_name = 'DataLancamento'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""LancamentosContabeis"" ALTER COLUMN ""DataLancamento"" TYPE timestamp without time zone, ALTER COLUMN ""DataLancamento"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'LancamentosContabeis' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""LancamentosContabeis"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'ExitedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""ExitedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'EnteredAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""EnteredAt"" TYPE timestamp without time zone, ALTER COLUMN ""EnteredAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'JourneyStages' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""JourneyStages"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "PatientJourneyId2",
@@ -6567,991 +10977,1730 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "uuid",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Invoices",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SentDate",
-                table: "Invoices",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidDate",
-                table: "Invoices",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "Invoices",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "Invoices",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Invoices",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "Invoices",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "InvoiceConfigurations",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "InvoiceConfigurations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CertificateExpirationDate",
-                table: "InvoiceConfigurations",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "InformedConsents",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "InformedConsents",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AcceptedAt",
-                table: "InformedConsents",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ImpostosNotas",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataCalculo",
-                table: "ImpostosNotas",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ImpostosNotas",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidUntil",
-                table: "HealthInsurancePlans",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ValidFrom",
-                table: "HealthInsurancePlans",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "HealthInsurancePlans",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "HealthInsurancePlans",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "HealthInsuranceOperators",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "HealthInsuranceOperators",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "FinancialClosures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SettlementDate",
-                table: "FinancialClosures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "FinancialClosures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosureDate",
-                table: "FinancialClosures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "FinancialClosureItems",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "FinancialClosureItems",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "FilasEspera",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "FilasEspera",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Expenses",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidDate",
-                table: "Expenses",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "Expenses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Expenses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ExamRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ScheduledDate",
-                table: "ExamRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RequestedDate",
-                table: "ExamRequests",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ExamRequests",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedDate",
-                table: "ExamRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ExamCatalogs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ExamCatalogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "EmailTemplates",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "EmailTemplates",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ElectronicInvoices",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "ElectronicInvoices",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ElectronicInvoices",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "ElectronicInvoices",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AuthorizationDate",
-                table: "ElectronicInvoices",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DREs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PeriodoInicio",
-                table: "DREs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PeriodoFim",
-                table: "DREs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataGeracao",
-                table: "DREs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DREs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SignedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReportedToSNGPCAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssuedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiresAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DigitalPrescriptions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ManufactureDate",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpiryDate",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DigitalPrescriptionItems",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DiagnosticHypotheses",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DiagnosedAt",
-                table: "DiagnosticHypotheses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DiagnosticHypotheses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataProcessingConsents",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RevokedDate",
-                table: "DataProcessingConsents",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataProcessingConsents",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsentDate",
-                table: "DataProcessingConsents",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataDeletionRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RequestDate",
-                table: "DataDeletionRequests",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ProcessedDate",
-                table: "DataDeletionRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LegalApprovalDate",
-                table: "DataDeletionRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataDeletionRequests",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CompletedDate",
-                table: "DataDeletionRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataConsentLogs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RevokedDate",
-                table: "DataConsentLogs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpirationDate",
-                table: "DataConsentLogs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataConsentLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ConsentDate",
-                table: "DataConsentLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DataAccessLogs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Timestamp",
-                table: "DataAccessLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DataAccessLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CustomDashboards",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CustomDashboards",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RegisteredAt",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DocumentDate",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Date",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ControlledMedicationRegistries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConsultationFormProfiles",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConsultationFormProfiles",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConsultationFormConfigurations",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConsultationFormConfigurations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConsultasDiarias",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UltimaAtualizacao",
-                table: "ConsultasDiarias",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataConsolidacao",
-                table: "ConsultasDiarias",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Data",
-                table: "ConsultasDiarias",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConsultasDiarias",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "VigenciaInicio",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "VigenciaFim",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ConfiguracoesFiscais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ResolvedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReceivedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FirstResponseAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ClosedAt",
-                schema: "crm",
-                table: "Complaints",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "ComplaintInteractions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "InteractionDate",
-                schema: "crm",
-                table: "ComplaintInteractions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "ComplaintInteractions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'SentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""SentDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'PaidDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""PaidDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""IssueDate"" TYPE timestamp without time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""DueDate"" TYPE timestamp without time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Invoices' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Invoices"" ALTER COLUMN ""CancellationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InvoiceConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""InvoiceConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InvoiceConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""InvoiceConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InvoiceConfigurations' 
+                        AND column_name = 'CertificateExpirationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""InvoiceConfigurations"" ALTER COLUMN ""CertificateExpirationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InformedConsents' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""InformedConsents"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InformedConsents' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""InformedConsents"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'InformedConsents' 
+                        AND column_name = 'AcceptedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""InformedConsents"" ALTER COLUMN ""AcceptedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ImpostosNotas' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ImpostosNotas"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ImpostosNotas' 
+                        AND column_name = 'DataCalculo'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ImpostosNotas"" ALTER COLUMN ""DataCalculo"" TYPE timestamp without time zone, ALTER COLUMN ""DataCalculo"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ImpostosNotas' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ImpostosNotas"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'ValidUntil'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""ValidUntil"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'ValidFrom'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""ValidFrom"" TYPE timestamp without time zone, ALTER COLUMN ""ValidFrom"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsurancePlans' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsurancePlans"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsuranceOperators' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsuranceOperators"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'HealthInsuranceOperators' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""HealthInsuranceOperators"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'SettlementDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""SettlementDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosures' 
+                        AND column_name = 'ClosureDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosures"" ALTER COLUMN ""ClosureDate"" TYPE timestamp without time zone, ALTER COLUMN ""ClosureDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosureItems' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosureItems"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FinancialClosureItems' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FinancialClosureItems"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FilasEspera' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FilasEspera"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'FilasEspera' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""FilasEspera"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'PaidDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""PaidDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""DueDate"" TYPE timestamp without time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Expenses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Expenses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'ScheduledDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""ScheduledDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'RequestedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""RequestedDate"" TYPE timestamp without time zone, ALTER COLUMN ""RequestedDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamRequests' 
+                        AND column_name = 'CompletedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamRequests"" ALTER COLUMN ""CompletedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamCatalogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamCatalogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ExamCatalogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ExamCatalogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'EmailTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""EmailTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'EmailTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""EmailTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""IssueDate"" TYPE timestamp without time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""CancellationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ElectronicInvoices' 
+                        AND column_name = 'AuthorizationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ElectronicInvoices"" ALTER COLUMN ""AuthorizationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'PeriodoInicio'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""PeriodoInicio"" TYPE timestamp without time zone, ALTER COLUMN ""PeriodoInicio"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'PeriodoFim'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""PeriodoFim"" TYPE timestamp without time zone, ALTER COLUMN ""PeriodoFim"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'DataGeracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""DataGeracao"" TYPE timestamp without time zone, ALTER COLUMN ""DataGeracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DREs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DREs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'SignedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""SignedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'ReportedToSNGPCAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""ReportedToSNGPCAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'IssuedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""IssuedAt"" TYPE timestamp without time zone, ALTER COLUMN ""IssuedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'ExpiresAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""ExpiresAt"" TYPE timestamp without time zone, ALTER COLUMN ""ExpiresAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'ManufactureDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""ManufactureDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'ExpiryDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""ExpiryDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DigitalPrescriptionItems"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DiagnosticHypotheses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DiagnosticHypotheses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DiagnosticHypotheses' 
+                        AND column_name = 'DiagnosedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DiagnosticHypotheses"" ALTER COLUMN ""DiagnosedAt"" TYPE timestamp without time zone, ALTER COLUMN ""DiagnosedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DiagnosticHypotheses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DiagnosticHypotheses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'RevokedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""RevokedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataProcessingConsents' 
+                        AND column_name = 'ConsentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataProcessingConsents"" ALTER COLUMN ""ConsentDate"" TYPE timestamp without time zone, ALTER COLUMN ""ConsentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'RequestDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""RequestDate"" TYPE timestamp without time zone, ALTER COLUMN ""RequestDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'ProcessedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""ProcessedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'LegalApprovalDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""LegalApprovalDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataDeletionRequests' 
+                        AND column_name = 'CompletedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataDeletionRequests"" ALTER COLUMN ""CompletedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'RevokedDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""RevokedDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'ExpirationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""ExpirationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataConsentLogs' 
+                        AND column_name = 'ConsentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataConsentLogs"" ALTER COLUMN ""ConsentDate"" TYPE timestamp without time zone, ALTER COLUMN ""ConsentDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataAccessLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataAccessLogs' 
+                        AND column_name = 'Timestamp'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""Timestamp"" TYPE timestamp without time zone, ALTER COLUMN ""Timestamp"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DataAccessLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CustomDashboards' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CustomDashboards' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'RegisteredAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""RegisteredAt"" TYPE timestamp without time zone, ALTER COLUMN ""RegisteredAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'DocumentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""DocumentDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'Date'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""Date"" TYPE timestamp without time zone, ALTER COLUMN ""Date"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ControlledMedicationRegistries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormProfiles' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormProfiles"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormProfiles' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormProfiles"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormConfigurations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormConfigurations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultationFormConfigurations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultationFormConfigurations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'UltimaAtualizacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""UltimaAtualizacao"" TYPE timestamp without time zone, ALTER COLUMN ""UltimaAtualizacao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'DataConsolidacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""DataConsolidacao"" TYPE timestamp without time zone, ALTER COLUMN ""DataConsolidacao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'Data'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""Data"" TYPE timestamp without time zone, ALTER COLUMN ""Data"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConsultasDiarias' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConsultasDiarias"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'VigenciaInicio'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""VigenciaInicio"" TYPE timestamp without time zone, ALTER COLUMN ""VigenciaInicio"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'VigenciaFim'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""VigenciaFim"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ConfiguracoesFiscais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'ResolvedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""ResolvedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'ReceivedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""ReceivedAt"" TYPE timestamp without time zone, ALTER COLUMN ""ReceivedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'FirstResponseAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""FirstResponseAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Complaints' 
+                        AND column_name = 'ClosedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""Complaints"" ALTER COLUMN ""ClosedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ComplaintInteractions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ComplaintInteractions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ComplaintInteractions' 
+                        AND column_name = 'InteractionDate'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ComplaintInteractions"" ALTER COLUMN ""InteractionDate"" TYPE timestamp without time zone, ALTER COLUMN ""InteractionDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
+
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ComplaintInteractions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ComplaintInteractions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "ComplaintId2",
@@ -7560,347 +12709,605 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "uuid",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Companies",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Companies' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Companies"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Companies",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Companies' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Companies"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicTags",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicTags' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicTags"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicTags",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicTags' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicTags"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AssignedAt",
-                table: "ClinicTags",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicTags' 
+                        AND column_name = 'AssignedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicTags"" ALTER COLUMN ""AssignedAt"" TYPE timestamp without time zone, ALTER COLUMN ""AssignedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "TrialEndDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'TrialEndDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""TrialEndDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "StartDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'StartDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""StartDate"" TYPE timestamp without time zone, ALTER COLUMN ""StartDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PlanChangeDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'PlanChangeDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""PlanChangeDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NextPaymentDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'NextPaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""NextPaymentDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ManualOverrideSetAt",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'ManualOverrideSetAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""ManualOverrideSetAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LastPaymentDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'LastPaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""LastPaymentDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FrozenStartDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'FrozenStartDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""FrozenStartDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "FrozenEndDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'FrozenEndDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""FrozenEndDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "EndDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'EndDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""EndDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CancellationDate",
-                table: "ClinicSubscriptions",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicSubscriptions' 
+                        AND column_name = 'CancellationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicSubscriptions"" ALTER COLUMN ""CancellationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Clinics",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Clinics' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Clinics"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Clinics",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Clinics' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Clinics"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicCustomizations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicCustomizations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicCustomizations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicCustomizations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicCustomizations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicCustomizations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ClinicalExaminations",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicalExaminations' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicalExaminations"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ClinicalExaminations",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ClinicalExaminations' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ClinicalExaminations"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "ChurnPredictions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ChurnPredictions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ChurnPredictions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PredictedAt",
-                schema: "crm",
-                table: "ChurnPredictions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ChurnPredictions' 
+                        AND column_name = 'PredictedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ChurnPredictions"" ALTER COLUMN ""PredictedAt"" TYPE timestamp without time zone, ALTER COLUMN ""PredictedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "ChurnPredictions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ChurnPredictions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""ChurnPredictions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CertificadosDigitais",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataExpiracao",
-                table: "CertificadosDigitais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'DataExpiracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""DataExpiracao"" TYPE timestamp without time zone, ALTER COLUMN ""DataExpiracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataEmissao",
-                table: "CertificadosDigitais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'DataEmissao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""DataEmissao"" TYPE timestamp without time zone, ALTER COLUMN ""DataEmissao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataCadastro",
-                table: "CertificadosDigitais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'DataCadastro'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""DataCadastro"" TYPE timestamp without time zone, ALTER COLUMN ""DataCadastro"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CertificadosDigitais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CertificadosDigitais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CertificadosDigitais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CashFlowEntries",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CashFlowEntries' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CashFlowEntries"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "TransactionDate",
-                table: "CashFlowEntries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CashFlowEntries' 
+                        AND column_name = 'TransactionDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CashFlowEntries"" ALTER COLUMN ""TransactionDate"" TYPE timestamp without time zone, ALTER COLUMN ""TransactionDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CashFlowEntries",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'CashFlowEntries' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""CashFlowEntries"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "BalancosPatrimoniais",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataReferencia",
-                table: "BalancosPatrimoniais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'DataReferencia'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""DataReferencia"" TYPE timestamp without time zone, ALTER COLUMN ""DataReferencia"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataGeracao",
-                table: "BalancosPatrimoniais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'DataGeracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""DataGeracao"" TYPE timestamp without time zone, ALTER COLUMN ""DataGeracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "BalancosPatrimoniais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'BalancosPatrimoniais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""BalancosPatrimoniais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                schema: "crm",
-                table: "AutomationActions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AutomationActions' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""AutomationActions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""UpdatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "crm",
-                table: "AutomationActions",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AutomationActions' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'crm'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE crm.""AutomationActions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "MarketingAutomationId1",
@@ -7909,412 +13316,725 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 type: "uuid",
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AuthorizationRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "RequestDate",
-                table: "AuthorizationRequests",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'RequestDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""RequestDate"" TYPE timestamp without time zone, ALTER COLUMN ""RequestDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ExpirationDate",
-                table: "AuthorizationRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'ExpirationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""ExpirationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AuthorizationRequests",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "AuthorizationDate",
-                table: "AuthorizationRequests",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuthorizationRequests' 
+                        AND column_name = 'AuthorizationDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuthorizationRequests"" ALTER COLUMN ""AuthorizationDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AuditLogs",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuditLogs' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuditLogs"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "Timestamp",
-                table: "AuditLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuditLogs' 
+                        AND column_name = 'Timestamp'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuditLogs"" ALTER COLUMN ""Timestamp"" TYPE timestamp without time zone, ALTER COLUMN ""Timestamp"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AuditLogs",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AuditLogs' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AuditLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AssinaturasDigitais",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataUltimaValidacao",
-                table: "AssinaturasDigitais",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'DataUltimaValidacao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""DataUltimaValidacao"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataTimestamp",
-                table: "AssinaturasDigitais",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'DataTimestamp'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""DataTimestamp"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataHoraAssinatura",
-                table: "AssinaturasDigitais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'DataHoraAssinatura'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""DataHoraAssinatura"" TYPE timestamp without time zone, ALTER COLUMN ""DataHoraAssinatura"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AssinaturasDigitais",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AssinaturasDigitais' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AssinaturasDigitais"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "ApuracoesImpostos",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataPagamento",
-                table: "ApuracoesImpostos",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'DataPagamento'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""DataPagamento"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataApuracao",
-                table: "ApuracoesImpostos",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'DataApuracao'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""DataApuracao"" TYPE timestamp without time zone, ALTER COLUMN ""DataApuracao"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "ApuracoesImpostos",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'ApuracoesImpostos' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""ApuracoesImpostos"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ScheduledDate",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'ScheduledDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""ScheduledDate"" TYPE timestamp without time zone, ALTER COLUMN ""ScheduledDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaidAt",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'PaidAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CheckOutTime",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'CheckOutTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""CheckOutTime"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CheckInTime",
-                table: "Appointments",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'Appointments' 
+                        AND column_name = 'CheckInTime'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""CheckInTime"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AppointmentProcedures",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AppointmentProcedures' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AppointmentProcedures"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PerformedAt",
-                table: "AppointmentProcedures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AppointmentProcedures' 
+                        AND column_name = 'PerformedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AppointmentProcedures"" ALTER COLUMN ""PerformedAt"" TYPE timestamp without time zone, ALTER COLUMN ""PerformedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AppointmentProcedures",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AppointmentProcedures' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AppointmentProcedures"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AnamnesisTemplates",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisTemplates' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisTemplates"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AnamnesisTemplates",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisTemplates' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisTemplates"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AnamnesisResponses",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisResponses' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisResponses"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ResponseDate",
-                table: "AnamnesisResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisResponses' 
+                        AND column_name = 'ResponseDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisResponses"" ALTER COLUMN ""ResponseDate"" TYPE timestamp without time zone, ALTER COLUMN ""ResponseDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AnamnesisResponses",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AnamnesisResponses' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AnamnesisResponses"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccountsReceivable",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "SettlementDate",
-                table: "AccountsReceivable",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'SettlementDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""SettlementDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "AccountsReceivable",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""IssueDate"" TYPE timestamp without time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "AccountsReceivable",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""DueDate"" TYPE timestamp without time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccountsReceivable",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsReceivable' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsReceivable"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccountsPayable",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PaymentDate",
-                table: "AccountsPayable",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'PaymentDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""PaymentDate"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "IssueDate",
-                table: "AccountsPayable",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'IssueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""IssueDate"" TYPE timestamp without time zone, ALTER COLUMN ""IssueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DueDate",
-                table: "AccountsPayable",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'DueDate'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""DueDate"" TYPE timestamp without time zone, ALTER COLUMN ""DueDate"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccountsPayable",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountsPayable' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountsPayable"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccountLockouts",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UnlocksAt",
-                table: "AccountLockouts",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'UnlocksAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""UnlocksAt"" TYPE timestamp without time zone, ALTER COLUMN ""UnlocksAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UnlockedAt",
-                table: "AccountLockouts",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'UnlockedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""UnlockedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "LockedAt",
-                table: "AccountLockouts",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'LockedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""LockedAt"" TYPE timestamp without time zone, ALTER COLUMN ""LockedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccountLockouts",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccountLockouts' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccountLockouts"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AccessProfiles",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccessProfiles' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccessProfiles"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "AccessProfiles",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql($@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'AccessProfiles' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""AccessProfiles"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.InsertData(
                 table: "ReportTemplates",
