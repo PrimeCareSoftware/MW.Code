@@ -2156,7 +2156,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_schema = 'public' AND LOWER(table_name) = 'appointments' 
+                        WHERE table_schema = 'public' AND table_name = 'Appointments' 
                         AND column_name = 'PaidAt'
                     ) THEN
                         ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp without time zone;
@@ -4619,7 +4619,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_schema = 'public' AND LOWER(table_name) = 'appointments' 
+                        WHERE table_schema = 'public' AND table_name = 'Appointments' 
                         AND column_name = 'PaidAt'
                     ) THEN
                         ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp with time zone;
