@@ -31,13 +31,22 @@ namespace MedicSoft.CrossCutting.Authorization
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            // Check if user is authenticated first
+            if (context.HttpContext.User?.Identity?.IsAuthenticated != true)
+            {
+                // User is not authenticated - return 401 Unauthorized to trigger authentication
+                context.Result = new UnauthorizedResult();
+                return;
+            }
+
             // Get the is_system_owner claim from the JWT token
             var isSystemOwnerClaim = context.HttpContext.User?.FindFirst(CustomClaimTypes.IsSystemOwner);
             
-            // Check if the claim exists and is exactly "true" (case-insensitive)
+            // Check if the claim exists and is exactly "true" (case-sensitive for security)
+            // The token generation always uses lowercase "true", so we use exact comparison
             var isSystemOwner = isSystemOwnerClaim?.Value;
             
-            if (string.IsNullOrEmpty(isSystemOwner) || !string.Equals(isSystemOwner, "true", StringComparison.OrdinalIgnoreCase))
+            if (isSystemOwner != "true")
             {
                 // Log the denial for security monitoring
                 var username = context.HttpContext.User?.Identity?.Name ?? "unknown";
