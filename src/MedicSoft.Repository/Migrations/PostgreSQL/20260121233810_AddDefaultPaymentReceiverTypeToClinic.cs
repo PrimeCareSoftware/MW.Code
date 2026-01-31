@@ -15,15 +15,32 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             // The column was already added by migration 20260121193310_AddPaymentTrackingFields as int
             // We need to alter it to use string instead of int
             // Using explicit SQL to handle the data conversion safely
+            // Check if column exists first to handle cases where the previous migration didn't complete
             migrationBuilder.Sql(@"
-                ALTER TABLE ""Clinics"" 
-                ALTER COLUMN ""DefaultPaymentReceiverType"" 
-                TYPE character varying(50) 
-                USING CASE 
-                    WHEN ""DefaultPaymentReceiverType""::integer = 1 THEN 'Clinic'
-                    WHEN ""DefaultPaymentReceiverType""::integer = 2 THEN 'Secretary'
-                    ELSE 'Secretary'
-                END;
+                DO $$ 
+                BEGIN
+                    -- Check if the column exists
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.columns 
+                        WHERE table_name = 'Clinics' 
+                        AND column_name = 'DefaultPaymentReceiverType'
+                    ) THEN
+                        -- Column exists, alter it from int to varchar
+                        ALTER TABLE ""Clinics"" 
+                        ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                        TYPE character varying(50) 
+                        USING CASE 
+                            WHEN ""DefaultPaymentReceiverType""::integer = 1 THEN 'Clinic'
+                            WHEN ""DefaultPaymentReceiverType""::integer = 2 THEN 'Secretary'
+                            ELSE 'Secretary'
+                        END;
+                    ELSE
+                        -- Column doesn't exist, create it directly as varchar with default value
+                        ALTER TABLE ""Clinics"" 
+                        ADD COLUMN ""DefaultPaymentReceiverType"" character varying(50) NOT NULL DEFAULT 'Secretary';
+                    END IF;
+                END $$;
             ");
             
             // Note: Appointment payment tracking columns (IsPaid, PaidAt, PaidByUserId, PaymentReceivedBy)
@@ -34,21 +51,55 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // Revert DefaultPaymentReceiverType back to int type
+            // Revert DefaultPaymentReceiverType back to int type or drop it if it was created by this migration
             // Using explicit SQL to handle the data conversion safely
             migrationBuilder.Sql(@"
-                ALTER TABLE ""Clinics"" 
-                ALTER COLUMN ""DefaultPaymentReceiverType"" 
-                TYPE integer 
-                USING CASE 
-                    WHEN ""DefaultPaymentReceiverType"" = 'Clinic' THEN 1
-                    WHEN ""DefaultPaymentReceiverType"" = 'Secretary' THEN 2
-                    ELSE 2
-                END;
-                
-                ALTER TABLE ""Clinics"" 
-                ALTER COLUMN ""DefaultPaymentReceiverType"" 
-                SET DEFAULT 2;
+                DO $$ 
+                BEGIN
+                    -- Check if the column exists
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.columns 
+                        WHERE table_name = 'Clinics' 
+                        AND column_name = 'DefaultPaymentReceiverType'
+                    ) THEN
+                        -- Get the column's data type to determine if we need to convert or drop
+                        IF EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE table_name = 'Clinics' 
+                            AND column_name = 'DefaultPaymentReceiverType'
+                            AND data_type = 'character varying'
+                        ) THEN
+                            -- Column is varchar (string), check if previous migration created it as int
+                            -- If the previous migration (20260121193310) exists, convert back to int
+                            -- Otherwise, drop it (it was created by this migration)
+                            IF EXISTS (
+                                SELECT 1 
+                                FROM ""__EFMigrationsHistory"" 
+                                WHERE ""MigrationId"" = '20260121193310_AddPaymentTrackingFields'
+                            ) THEN
+                                -- Previous migration exists, convert back to int
+                                ALTER TABLE ""Clinics"" 
+                                ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                                TYPE integer 
+                                USING CASE 
+                                    WHEN ""DefaultPaymentReceiverType"" = 'Clinic' THEN 1
+                                    WHEN ""DefaultPaymentReceiverType"" = 'Secretary' THEN 2
+                                    ELSE 2
+                                END;
+                                
+                                ALTER TABLE ""Clinics"" 
+                                ALTER COLUMN ""DefaultPaymentReceiverType"" 
+                                SET DEFAULT 2;
+                            ELSE
+                                -- Previous migration doesn't exist, drop the column
+                                ALTER TABLE ""Clinics"" 
+                                DROP COLUMN ""DefaultPaymentReceiverType"";
+                            END IF;
+                        END IF;
+                    END IF;
+                END $$;
             ");
             
             // Note: Appointment payment tracking columns are NOT dropped here
