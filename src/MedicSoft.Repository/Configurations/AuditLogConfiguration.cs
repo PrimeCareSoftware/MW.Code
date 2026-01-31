@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MedicSoft.Domain.Entities;
+using System;
+using System.Linq;
 using System.Text.Json;
 
 namespace MedicSoft.Repository.Configurations
@@ -78,7 +80,11 @@ namespace MedicSoft.Repository.Configurations
                     v => v != null ? JsonSerializer.Serialize(v, (JsonSerializerOptions?)null) : null,
                     v => v != null ? JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) : null
                 )
-                .HasColumnType("text");
+                .HasColumnType("text")
+                .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<List<string>?>(
+                    (c1, c2) => (c1 == null && c2 == null) || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
+                    c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c == null ? null : c.ToList()));
 
             builder.Property(a => a.Result)
                 .IsRequired()
@@ -177,7 +183,11 @@ namespace MedicSoft.Repository.Configurations
                     v => JsonSerializer.Deserialize<List<Domain.Enums.DataCategory>>(v, (JsonSerializerOptions?)null) ?? new List<Domain.Enums.DataCategory>()
                 )
                 .HasColumnType("text")
-                .IsRequired();
+                .IsRequired()
+                .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<List<Domain.Enums.DataCategory>>(
+                    (c1, c2) => c1.SequenceEqual(c2),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()));
 
             builder.Property(c => c.ConsentText)
                 .IsRequired()

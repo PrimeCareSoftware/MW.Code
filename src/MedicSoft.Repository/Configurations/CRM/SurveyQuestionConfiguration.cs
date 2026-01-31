@@ -45,7 +45,7 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .IsRequired();
 
             builder.HasOne(sq => sq.Survey)
-                .WithMany()
+                .WithMany(s => s.Questions)
                 .HasForeignKey(sq => sq.SurveyId)
                 .OnDelete(DeleteBehavior.Cascade);
 

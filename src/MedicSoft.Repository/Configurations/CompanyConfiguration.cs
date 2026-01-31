@@ -59,7 +59,7 @@ namespace MedicSoft.Repository.Configurations
             builder.HasIndex(c => c.Subdomain)
                 .IsUnique()
                 .HasDatabaseName("IX_Companies_Subdomain")
-                .HasFilter("[Subdomain] IS NOT NULL"); // Only unique if not null
+                .HasFilter("\"Subdomain\" IS NOT NULL"); // Only unique if not null
 
             builder.HasIndex(c => c.TenantId)
                 .HasDatabaseName("IX_Companies_TenantId");

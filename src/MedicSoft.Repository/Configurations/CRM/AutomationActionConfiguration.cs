@@ -51,7 +51,7 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .IsRequired();
 
             builder.HasOne(aa => aa.MarketingAutomation)
-                .WithMany()
+                .WithMany(ma => ma.Actions)
                 .HasForeignKey(aa => aa.MarketingAutomationId)
                 .OnDelete(DeleteBehavior.Cascade);
 

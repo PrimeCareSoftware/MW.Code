@@ -43,11 +43,11 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .IsRequired();
 
             builder.HasOne(js => js.PatientJourney)
-                .WithMany()
+                .WithMany(pj => pj.Stages)
                 .HasForeignKey(js => js.PatientJourneyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany<PatientTouchpoint>()
+            builder.HasMany(js => js.Touchpoints)
                 .WithOne(pt => pt.JourneyStage)
                 .HasForeignKey(pt => pt.JourneyStageId)
                 .OnDelete(DeleteBehavior.Cascade);

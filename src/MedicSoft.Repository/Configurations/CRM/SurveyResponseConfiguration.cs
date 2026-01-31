@@ -44,7 +44,7 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .IsRequired();
 
             builder.HasOne(sr => sr.Survey)
-                .WithMany()
+                .WithMany(s => s.Responses)
                 .HasForeignKey(sr => sr.SurveyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -53,7 +53,7 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .HasForeignKey(sr => sr.PatientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany<SurveyQuestionResponse>()
+            builder.HasMany(sr => sr.QuestionResponses)
                 .WithOne(sqr => sqr.SurveyResponse)
                 .HasForeignKey(sqr => sqr.SurveyResponseId)
                 .OnDelete(DeleteBehavior.Cascade);

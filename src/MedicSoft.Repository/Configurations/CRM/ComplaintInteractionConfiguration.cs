@@ -46,7 +46,7 @@ namespace MedicSoft.Repository.Configurations.CRM
                 .IsRequired();
 
             builder.HasOne(ci => ci.Complaint)
-                .WithMany()
+                .WithMany(c => c.Interactions)
                 .HasForeignKey(ci => ci.ComplaintId)
                 .OnDelete(DeleteBehavior.Cascade);
 
