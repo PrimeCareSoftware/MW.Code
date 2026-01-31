@@ -317,9 +317,9 @@ namespace MedicSoft.Api.Controllers
                 UserId = request.UserId,
                 EntityType = request.EntityType,
                 EntityId = request.EntityId,
-                Action = request.Action.HasValue ? Enum.Parse<AuditAction>(request.Action.Value) : null,
-                Result = request.Result.HasValue ? Enum.Parse<OperationResult>(request.Result.Value) : null,
-                Severity = request.Severity.HasValue ? Enum.Parse<AuditSeverity>(request.Severity.Value) : null,
+                Action = !string.IsNullOrEmpty(request.Action) ? Enum.Parse<AuditAction>(request.Action) : null,
+                Result = !string.IsNullOrEmpty(request.Result) ? Enum.Parse<OperationResult>(request.Result) : null,
+                Severity = !string.IsNullOrEmpty(request.Severity) ? Enum.Parse<AuditSeverity>(request.Severity) : null,
                 PageNumber = request.PageNumber ?? 1,
                 PageSize = request.PageSize ?? 50,
                 TenantId = GetTenantId()
