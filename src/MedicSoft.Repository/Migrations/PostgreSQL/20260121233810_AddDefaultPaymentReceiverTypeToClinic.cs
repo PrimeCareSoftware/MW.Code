@@ -60,6 +60,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     col_type TEXT;
                 BEGIN
                     -- Check if the column exists and get its data type in one query
+                    -- col_type will be NULL if column doesn't exist, which is handled below
                     SELECT data_type INTO col_type
                     FROM information_schema.columns 
                     WHERE LOWER(table_name) = 'clinics' 
@@ -67,6 +68,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     AND table_schema = 'public';
                     
                     -- If column exists and is varchar, proceed with conversion or drop
+                    -- If col_type is NULL (column doesn't exist), no action is needed
                     IF col_type = 'character varying' THEN
                         -- Check if previous migration created it as int
                         IF EXISTS (
