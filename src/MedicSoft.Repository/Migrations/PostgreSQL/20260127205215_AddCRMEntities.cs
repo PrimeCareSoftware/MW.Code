@@ -2656,7 +2656,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         WHERE table_schema = 'public' AND table_name = 'Appointments' 
                         AND column_name = 'PaidAt'
                     ) THEN
-                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp without time zone;
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp without time zone USING ""PaidAt""::timestamp without time zone;
                     END IF;
                 END $$;
             ");
@@ -6419,7 +6419,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         WHERE table_schema = 'public' AND table_name = 'Appointments' 
                         AND column_name = 'PaidAt'
                     ) THEN
-                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp with time zone;
+                        ALTER TABLE ""Appointments"" ALTER COLUMN ""PaidAt"" TYPE timestamp with time zone USING ""PaidAt""::timestamp with time zone;
                     END IF;
                 END $$;
             ");
