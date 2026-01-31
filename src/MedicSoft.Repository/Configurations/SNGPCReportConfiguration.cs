@@ -80,7 +80,7 @@ namespace MedicSoft.Repository.Configurations
                 .Metadata.SetValueComparer(new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<IReadOnlyCollection<Guid>>(
                     (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c!.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => c!.ToList().AsReadOnly()));
+                    c => (IReadOnlyCollection<Guid>)c!.ToList()));
 
             // Indexes
             builder.HasIndex(sr => new { sr.TenantId, sr.Month, sr.Year })
