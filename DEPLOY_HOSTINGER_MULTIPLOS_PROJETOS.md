@@ -1,5 +1,7 @@
 # 🚀 Deploy na Hostinger - Múltiplos Projetos (APIs + Angular + Banco de Dados)
 
+> 📄 **Quer um resumo rápido?** Veja o [Resumo Executivo](DEPLOY_HOSTINGER_RESUMO_EXECUTIVO.md) com as informações principais.
+
 ## 📋 Visão Geral
 
 Este guia é especialmente para você que precisa fazer deploy de **múltiplas aplicações** no Hostinger:
