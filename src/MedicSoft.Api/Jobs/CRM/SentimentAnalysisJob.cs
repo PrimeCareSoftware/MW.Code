@@ -91,6 +91,15 @@ public class SentimentAnalysisJob
                 $"Total: {analyzedCount}, Positivos: {positiveCount}, " +
                 $"Neutros: {neutralCount}, Negativos: {negativeCount}");
         }
+        catch (Npgsql.PostgresException pgEx) when (pgEx.SqlState == "42P01")
+        {
+            _logger.LogCritical(pgEx, 
+                "ERRO CRÍTICO: Tabela do CRM não existe no banco de dados. " +
+                "A migração '20260127205215_AddCRMEntities' não foi aplicada. " +
+                "Execute './run-all-migrations.sh' ou 'dotnet ef database update' para corrigir. " +
+                "Tabela faltando: {TableName}", pgEx.TableName ?? "desconhecida");
+            throw;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro na análise de comentários de surveys");
@@ -152,6 +161,15 @@ public class SentimentAnalysisJob
 
             _logger.LogInformation($"Análise de reclamações concluída. Total analisado: {analyzedCount}");
         }
+        catch (Npgsql.PostgresException pgEx) when (pgEx.SqlState == "42P01")
+        {
+            _logger.LogCritical(pgEx, 
+                "ERRO CRÍTICO: Tabela do CRM não existe no banco de dados. " +
+                "A migração '20260127205215_AddCRMEntities' não foi aplicada. " +
+                "Execute './run-all-migrations.sh' ou 'dotnet ef database update' para corrigir. " +
+                "Tabela faltando: {TableName}", pgEx.TableName ?? "desconhecida");
+            throw;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro na análise de reclamações");
@@ -203,6 +221,15 @@ public class SentimentAnalysisJob
             }
 
             _logger.LogInformation($"Análise de interações concluída. Total analisado: {analyzedCount}");
+        }
+        catch (Npgsql.PostgresException pgEx) when (pgEx.SqlState == "42P01")
+        {
+            _logger.LogCritical(pgEx, 
+                "ERRO CRÍTICO: Tabela do CRM não existe no banco de dados. " +
+                "A migração '20260127205215_AddCRMEntities' não foi aplicada. " +
+                "Execute './run-all-migrations.sh' ou 'dotnet ef database update' para corrigir. " +
+                "Tabela faltando: {TableName}", pgEx.TableName ?? "desconhecida");
+            throw;
         }
         catch (Exception ex)
         {

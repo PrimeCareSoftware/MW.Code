@@ -172,6 +172,79 @@ cd src/MedicSoft.Api
 dotnet ef database update 20260127205215_AddCRMEntities
 ```
 
+### Problema: Tabelas CRM não existem (MarketingAutomations, SurveyQuestionResponses)
+
+**Erro:**
+```
+42P01: relation "crm.MarketingAutomations" does not exist
+42P01: relation "crm.SurveyQuestionResponses" does not exist
+```
+
+**Causa:**
+As migrações do CRM não foram aplicadas ao banco de dados. Isso pode acontecer se:
+- É a primeira vez executando a aplicação
+- O banco de dados foi recriado manualmente
+- As migrações foram revertidas acidentalmente
+- Há problemas de permissão ao criar o schema `crm`
+
+**Solução:**
+
+1. **Verifique se o PostgreSQL está rodando:**
+```bash
+podman ps | grep postgres
+# ou
+docker ps | grep postgres
+```
+
+2. **Aplique todas as migrações:**
+```bash
+./run-all-migrations.sh
+```
+
+3. **Ou aplique manualmente a migração do CRM:**
+```bash
+cd src/MedicSoft.Api
+dotnet ef database update 20260127205215_AddCRMEntities
+```
+
+4. **Verifique se as tabelas foram criadas:**
+```sql
+-- Conecte ao banco
+psql -U postgres -d primecare
+
+-- Liste as tabelas do schema crm
+\dt crm.*
+
+-- Você deve ver:
+-- crm.AutomationActions
+-- crm.ChurnPredictions
+-- crm.ComplaintInteractions
+-- crm.Complaints
+-- crm.EmailTemplates
+-- crm.JourneyStages
+-- crm.MarketingAutomations
+-- crm.PatientJourneys
+-- crm.PatientTouchpoints
+-- crm.SentimentAnalyses
+-- crm.SurveyQuestionResponses
+-- crm.SurveyQuestions
+-- crm.SurveyResponses
+-- crm.Surveys
+-- crm.WebhookDeliveries
+-- crm.WebhookSubscriptions
+```
+
+5. **Se as tabelas ainda não existirem, force a recriação:**
+```bash
+cd src/MedicSoft.Api
+# Remove todas as migrações aplicadas
+dotnet ef database update 0
+# Reaplica todas as migrações
+dotnet ef database update
+```
+
+⚠️ **ATENÇÃO:** O comando `dotnet ef database update 0` irá **apagar todos os dados** do banco. Use apenas em ambiente de desenvolvimento!
+
 ## 🔐 Configuração da String de Conexão
 
 ### Desenvolvimento Local

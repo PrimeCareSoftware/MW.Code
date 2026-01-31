@@ -79,6 +79,15 @@ public class AutomationExecutorJob
                 $"Execução de automações concluída. Total agendadas: {executionCount}. " +
                 $"NOTA: Execução real pendente de implementação completa.");
         }
+        catch (Npgsql.PostgresException pgEx) when (pgEx.SqlState == "42P01")
+        {
+            _logger.LogCritical(pgEx, 
+                "ERRO CRÍTICO: Tabela do CRM não existe no banco de dados. " +
+                "A migração '20260127205215_AddCRMEntities' não foi aplicada. " +
+                "Execute './run-all-migrations.sh' ou 'dotnet ef database update' para corrigir. " +
+                "Tabela faltando: {TableName}", pgEx.TableName ?? "desconhecida");
+            throw;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro crítico na execução de automações");
