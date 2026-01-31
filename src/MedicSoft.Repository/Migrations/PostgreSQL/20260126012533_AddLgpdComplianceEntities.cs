@@ -22,7 +22,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     UserRole = table.Column<string>(type: "text", nullable: false),
                     EntityType = table.Column<string>(type: "text", nullable: false),
                     EntityId = table.Column<string>(type: "text", nullable: false),
-                    FieldsAccessed = table.Column<List<string>>(type: "text[]", nullable: false),
+                    FieldsAccessed = table.Column<string>(type: "text[]", nullable: false),
                     PatientId = table.Column<Guid>(type: "uuid", nullable: true),
                     PatientName = table.Column<string>(type: "text", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
