@@ -1,0 +1,252 @@
+# 📚 Guia de Migrações do Banco de Dados
+
+Este guia explica como aplicar e gerenciar migrações do Entity Framework Core no PrimeCare Software.
+
+## ⚡ Início Rápido
+
+### Aplicar Todas as Migrações (Recomendado)
+
+Use o script automatizado para aplicar todas as migrações em todos os contextos:
+
+```bash
+./run-all-migrations.sh
+```
+
+Ou com uma string de conexão personalizada:
+
+```bash
+./run-all-migrations.sh "Host=localhost;Database=primecare;Username=postgres;Password=SuaSenha"
+```
+
+## 🔍 Entendendo o Problema
+
+### Erro: "relation does not exist"
+
+Se você vê erros como:
+```
+42P01: relation "crm.SentimentAnalyses" does not exist
+42P01: relation "crm.Complaints" does not exist
+42P01: relation "crm.MarketingAutomations" does not exist
+```
+
+**Isso significa que as migrações do banco de dados não foram aplicadas.**
+
+## ✅ Solução
+
+### 1. Verifique se o PostgreSQL está Rodando
+
+```bash
+# Usando Podman
+podman ps | grep postgres
+
+# Usando Docker
+docker ps | grep postgres
+```
+
+Se não estiver rodando, inicie o PostgreSQL:
+
+```bash
+# Usando Podman
+podman-compose up postgres -d
+
+# Usando Docker
+docker-compose up postgres -d
+```
+
+### 2. Aplique as Migrações
+
+**Opção A: Script Automatizado (Recomendado)**
+
+```bash
+./run-all-migrations.sh
+```
+
+Este script aplica migrações em ordem para todos os contextos:
+- MedicSoftDbContext (aplicação principal)
+- PatientPortalDbContext (portal do paciente)
+- TelemedicineDbContext (telemedicina)
+- Outros microserviços
+
+**Opção B: Aplicar Manualmente para Contexto Específico**
+
+```bash
+# Para o contexto principal (MedicSoftDbContext)
+cd src/MedicSoft.Api
+dotnet ef database update --connection "Host=localhost;Database=primecare;Username=postgres;Password=Abc!123456"
+```
+
+### 3. Verifique se as Migrações Foram Aplicadas
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef migrations list
+```
+
+Você deve ver todas as migrações marcadas como "Applied".
+
+## 🔧 Comandos Úteis do Entity Framework
+
+### Listar Migrações
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef migrations list
+```
+
+### Ver Status do Banco de Dados
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef database get-migrations
+```
+
+### Criar Nova Migração
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef migrations add NomeDaMigracao
+```
+
+### Reverter Última Migração
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef database update MigracaoAnterior
+```
+
+### Remover Última Migração (Não Aplicada)
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef migrations remove
+```
+
+## 📋 Migrações Importantes do CRM
+
+As seguintes migrações criam as tabelas do CRM que são mencionadas nos erros:
+
+| Migração | Data | Descrição |
+|----------|------|-----------|
+| `20260127205215_AddCRMEntities` | 27/01/2026 | Cria schema `crm` e todas as tabelas CRM principais |
+| `20260127211405_AddPatientJourneyTagsAndEngagement` | 27/01/2026 | Adiciona tags e engagement ao CRM |
+
+## 🚨 Troubleshooting
+
+### Problema: Migration falha com erro de permissão
+
+**Erro:**
+```
+permission denied to create extension "uuid-ossp"
+```
+
+**Solução:**
+Execute como superusuário do PostgreSQL:
+
+```sql
+-- Conecte como postgres
+psql -U postgres -d primecare
+
+-- Habilite a extensão
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+```
+
+### Problema: Migration falha por timeout
+
+**Erro:**
+```
+Npgsql.NpgsqlException: Exception while connecting
+```
+
+**Solução:**
+1. Verifique se o PostgreSQL está rodando
+2. Verifique a string de conexão
+3. Verifique se o firewall não está bloqueando a porta 5432
+
+### Problema: Schema "crm" não existe
+
+**Solução:**
+A migração `20260127205215_AddCRMEntities` cria o schema automaticamente. Aplique-a:
+
+```bash
+cd src/MedicSoft.Api
+dotnet ef database update 20260127205215_AddCRMEntities
+```
+
+## 🔐 Configuração da String de Conexão
+
+### Desenvolvimento Local
+
+Em `src/MedicSoft.Api/appsettings.Development.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Database=primecare;Username=postgres;Password=Abc!123456"
+  }
+}
+```
+
+### Produção
+
+**⚠️ IMPORTANTE:** Nunca commite senhas em arquivos de configuração!
+
+Use variáveis de ambiente:
+
+```bash
+export DATABASE_CONNECTION_STRING="Host=seu-servidor;Database=primecare;Username=usuario;Password=senha-segura"
+```
+
+Ou configure em `appsettings.Production.json` com senhas seguras gerenciadas por Azure Key Vault, AWS Secrets Manager, etc.
+
+## 📊 Aplicação Automática de Migrações
+
+O PrimeCare Software **aplica migrações automaticamente** quando a aplicação inicia.
+
+Veja em `src/MedicSoft.Api/Program.cs`:
+
+```csharp
+// Apply database migrations
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
+    
+    try
+    {
+        Log.Information("Aplicando migrações do banco de dados...");
+        context.Database.Migrate();
+        Log.Information("Migrações do banco de dados aplicadas com sucesso");
+    }
+    catch (Exception ex)
+    {
+        Log.Fatal(ex, "Falha ao aplicar migrações do banco de dados");
+        throw; // Halt application startup if migrations fail
+    }
+}
+```
+
+**Como funciona:**
+1. Quando a aplicação inicia, ela verifica se há migrações pendentes
+2. Se há, aplica automaticamente
+3. Se falha, **a aplicação não inicia** e mostra erro detalhado
+
+## 🎯 Melhores Práticas
+
+1. **Sempre execute migrations antes de iniciar a aplicação em produção**
+2. **Faça backup do banco antes de aplicar migrations em produção**
+3. **Teste migrations em ambiente de staging primeiro**
+4. **Use o script `run-all-migrations.sh` para garantir ordem correta**
+5. **Monitore os logs durante aplicação de migrations**
+
+## 📞 Suporte
+
+Se você continuar tendo problemas com migrações:
+
+1. Verifique os logs da aplicação em `logs/`
+2. Verifique se todas as dependências estão instaladas
+3. Abra uma issue no GitHub com os logs de erro
+
+## 🔗 Links Úteis
+
+- [Entity Framework Core Migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [Npgsql - PostgreSQL .NET Driver](https://www.npgsql.org/)
