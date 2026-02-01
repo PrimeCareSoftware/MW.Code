@@ -7,6 +7,8 @@ using MedicSoft.CrossCutting.Identity;
 using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
+using MedicSoft.Application.Services.CRM;
+using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -21,19 +23,24 @@ namespace MedicSoft.Api.Controllers
         private readonly IPasswordResetTokenRepository _tokenRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IConfiguration _configuration;
-        // In real implementation, inject ISmsNotificationService and IEmailService
+        private readonly IEmailService _emailService;
+        private readonly ILogger<PasswordRecoveryController> _logger;
 
         public PasswordRecoveryController(
             ITenantContext tenantContext,
             IUserRepository userRepository,
             IPasswordResetTokenRepository tokenRepository,
             IPasswordHasher passwordHasher,
-            IConfiguration configuration) : base(tenantContext)
+            IConfiguration configuration,
+            IEmailService emailService,
+            ILogger<PasswordRecoveryController> logger) : base(tenantContext)
         {
             _userRepository = userRepository;
             _tokenRepository = tokenRepository;
             _passwordHasher = passwordHasher;
             _configuration = configuration;
+            _emailService = emailService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -92,12 +99,23 @@ namespace MedicSoft.Api.Controllers
             if (method == VerificationMethod.SMS)
             {
                 // TODO: Integrate with SMS service
-                // await _smsService.SendAsync(user.Phone, $"Seu código de verificação é: {verificationCode}");
+                _logger.LogWarning("SMS service not yet integrated. Code: {Code}", verificationCode);
             }
             else
             {
-                // TODO: Integrate with Email service
-                // await _emailService.SendPasswordResetCodeAsync(user.Email, verificationCode, user.FullName);
+                // Send verification code via email
+                try
+                {
+                    var emailSubject = "Código de Recuperação de Senha - PrimeCare";
+                    var emailBody = GeneratePasswordResetEmailBody(user.FullName, verificationCode);
+                    await _emailService.SendEmailAsync(user.Email, emailSubject, emailBody);
+                    _logger.LogInformation("Password reset code sent to {Email} for user {UserId}", user.Email, user.Id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to send password reset email to {Email}", user.Email);
+                    return StatusCode(500, new { message = "Erro ao enviar o código de verificação. Por favor, tente novamente." });
+                }
             }
 
             return Ok(new PasswordResetRequestResponse
@@ -230,12 +248,23 @@ namespace MedicSoft.Api.Controllers
             if (resetToken.Method == VerificationMethod.SMS)
             {
                 // TODO: Integrate with SMS service
-                // await _smsService.SendAsync(resetToken.Destination, $"Seu código de verificação é: {resetToken.VerificationCode}");
+                _logger.LogWarning("SMS service not yet integrated. Code: {Code}", resetToken.VerificationCode);
             }
             else
             {
-                // TODO: Integrate with Email service
-                // await _emailService.SendPasswordResetCodeAsync(resetToken.Destination, resetToken.VerificationCode, "");
+                // Send verification code via email
+                try
+                {
+                    var emailSubject = "Código de Recuperação de Senha - PrimeCare (Reenvio)";
+                    var emailBody = GeneratePasswordResetEmailBody("Usuário", resetToken.VerificationCode);
+                    await _emailService.SendEmailAsync(resetToken.Destination, emailSubject, emailBody);
+                    _logger.LogInformation("Password reset code resent to {Email}", resetToken.Destination);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to resend password reset email to {Email}", resetToken.Destination);
+                    return StatusCode(500, new { message = "Erro ao reenviar o código de verificação. Por favor, tente novamente." });
+                }
             }
 
             return Ok(new PasswordResetRequestResponse
@@ -263,8 +292,65 @@ namespace MedicSoft.Api.Controllers
 
         private string GenerateVerificationCode()
         {
-            var random = new Random();
-            return random.Next(100000, 999999).ToString();
+            // Use cryptographically secure random number generation
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                var randomBytes = new byte[4];
+                rng.GetBytes(randomBytes);
+                var randomNumber = BitConverter.ToUInt32(randomBytes, 0);
+                // Generate 6-digit code (100000-999999)
+                var code = (randomNumber % 900000) + 100000;
+                return code.ToString();
+            }
+        }
+
+        private string GeneratePasswordResetEmailBody(string userName, string verificationCode)
+        {
+            // HTML-encode user inputs to prevent XSS
+            var encodedUserName = System.Net.WebUtility.HtmlEncode(userName);
+            var encodedCode = System.Net.WebUtility.HtmlEncode(verificationCode);
+
+            return $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""UTF-8"">
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background-color: #007bff; color: white; padding: 20px; text-align: center; }}
+        .content {{ background-color: #f9f9f9; padding: 30px; border-radius: 5px; margin-top: 20px; }}
+        .code {{ font-size: 32px; font-weight: bold; color: #007bff; text-align: center; 
+                 padding: 20px; background-color: white; border-radius: 5px; margin: 20px 0; 
+                 letter-spacing: 5px; }}
+        .warning {{ background-color: #fff3cd; padding: 15px; border-radius: 5px; margin-top: 20px; 
+                    border-left: 4px solid #ffc107; }}
+        .footer {{ text-align: center; margin-top: 30px; font-size: 12px; color: #666; }}
+    </style>
+</head>
+<body>
+    <div class=""container"">
+        <div class=""header"">
+            <h1>Recuperação de Senha</h1>
+        </div>
+        <div class=""content"">
+            <p>Olá, <strong>{encodedUserName}</strong>,</p>
+            <p>Você solicitou a recuperação de senha da sua conta PrimeCare.</p>
+            <p>Use o código de verificação abaixo para continuar:</p>
+            <div class=""code"">{encodedCode}</div>
+            <p><strong>Este código é válido por 15 minutos.</strong></p>
+            <div class=""warning"">
+                <strong>⚠️ Atenção:</strong> Se você não solicitou esta recuperação de senha, 
+                ignore este e-mail. Sua conta permanece segura.
+            </div>
+        </div>
+        <div class=""footer"">
+            <p>© 2026 PrimeCare Software. Todos os direitos reservados.</p>
+            <p>Este é um e-mail automático. Por favor, não responda.</p>
+        </div>
+    </div>
+</body>
+</html>";
         }
     }
 

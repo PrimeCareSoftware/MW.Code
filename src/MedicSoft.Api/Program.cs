@@ -305,6 +305,7 @@ builder.Services.AddScoped<IProcedureRepository, ProcedureRepository>();
 builder.Services.AddScoped<IAppointmentProcedureRepository, AppointmentProcedureRepository>();
 builder.Services.AddScoped<IClinicSubscriptionRepository, ClinicSubscriptionRepository>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+builder.Services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
 // Register TISS repositories
 builder.Services.AddScoped<ITissGlosaRepository, TissGlosaRepository>();
 builder.Services.AddScoped<ITissOperadoraConfigRepository, TissOperadoraConfigRepository>();

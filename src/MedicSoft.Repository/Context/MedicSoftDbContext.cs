@@ -58,6 +58,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<ProcedureMaterial> ProcedureMaterials { get; set; } = null!;
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
+        public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; } = null!;
         public DbSet<ExamRequest> ExamRequests { get; set; } = null!;
         public DbSet<WaitingQueueEntry> WaitingQueueEntries { get; set; } = null!;
         public DbSet<WaitingQueueConfiguration> WaitingQueueConfigurations { get; set; } = null!;
@@ -242,6 +243,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new MaterialConfiguration());
             modelBuilder.ApplyConfiguration(new ProcedureMaterialConfiguration());
             modelBuilder.ApplyConfiguration(new PasswordResetTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new EmailVerificationTokenConfiguration());
             modelBuilder.ApplyConfiguration(new ExamRequestConfiguration());
             modelBuilder.ApplyConfiguration(new WaitingQueueEntryConfiguration());
             modelBuilder.ApplyConfiguration(new WaitingQueueConfigurationConfiguration());
