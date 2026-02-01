@@ -1506,79 +1506,212 @@ RETORNO: {{return_date}}",
 
         private List<SubscriptionPlan> CreateDemoSubscriptionPlans()
         {
-            return new List<SubscriptionPlan>
+            var plans = new List<SubscriptionPlan>();
+
+            // Plano Starter - MVP Early Adopter
+            var starterPlan = new SubscriptionPlan(
+                "Starter",
+                "Ideal para médicos autônomos iniciando consultório",
+                49.00m, // Early adopter price
+                14, // Trial days
+                1, // Max users
+                50, // Max patients
+                SubscriptionPlanType.Basic,
+                "system",
+                hasReports: false,
+                hasWhatsAppIntegration: false,
+                hasSMSNotifications: false,
+                hasTissExport: false,
+                maxClinics: 1
+            );
+            
+            // Set campaign pricing
+            starterPlan.SetCampaignPricing(
+                "MVP Early Adopter",
+                "Seja um dos primeiros clientes e garanta preço especial vitalício",
+                149.00m, // Future/original price
+                49.00m,  // Campaign price
+                DateTime.UtcNow.AddDays(-7), // Started a week ago
+                null, // No end date (lifetime for early adopters)
+                100 // Max 100 early adopters
+            );
+
+            // Set early adopter benefits
+            starterPlan.SetEarlyAdopterBenefits(new[]
             {
-                new SubscriptionPlan(
-                    "Trial Gratuito",
-                    "Plano de teste gratuito por 30 dias com funcionalidades básicas",
-                    0.00m,
-                    30,
-                    3,
-                    50,
-                    SubscriptionPlanType.Trial,
-                    "system",
-                    hasReports: false,
-                    hasWhatsAppIntegration: false,
-                    hasSMSNotifications: false,
-                    hasTissExport: false
-                ),
-                new SubscriptionPlan(
-                    "Básico",
-                    "Plano básico para pequenas clínicas com funcionalidades essenciais",
-                    99.90m,
-                    15,
-                    5,
-                    100,
-                    SubscriptionPlanType.Basic,
-                    "system",
-                    hasReports: true,
-                    hasWhatsAppIntegration: false,
-                    hasSMSNotifications: true,
-                    hasTissExport: false
-                ),
-                new SubscriptionPlan(
-                    "Standard",
-                    "Plano completo para clínicas médicas com todas as funcionalidades",
-                    199.90m,
-                    15,
-                    15,
-                    500,
-                    SubscriptionPlanType.Standard,
-                    "system",
-                    hasReports: true,
-                    hasWhatsAppIntegration: true,
-                    hasSMSNotifications: true,
-                    hasTissExport: true
-                ),
-                new SubscriptionPlan(
-                    "Premium",
-                    "Plano premium para grandes clínicas e hospitais",
-                    399.90m,
-                    15,
-                    50,
-                    2000,
-                    SubscriptionPlanType.Premium,
-                    "system",
-                    hasReports: true,
-                    hasWhatsAppIntegration: true,
-                    hasSMSNotifications: true,
-                    hasTissExport: true
-                ),
-                new SubscriptionPlan(
-                    "Enterprise",
-                    "Plano corporativo para redes de clínicas e hospitais com suporte dedicado",
-                    999.90m,
-                    30,
-                    200,
-                    10000,
-                    SubscriptionPlanType.Enterprise,
-                    "system",
-                    hasReports: true,
-                    hasWhatsAppIntegration: true,
-                    hasSMSNotifications: true,
-                    hasTissExport: true
-                )
-            };
+                "Preço vitalício de R$ 49/mês (67% OFF)",
+                "Economize R$ 100/mês para sempre",
+                "R$ 100 em créditos de serviço",
+                "Badge de Cliente Fundador",
+                "Acesso ao grupo VIP de early adopters",
+                "Prioridade em novos recursos",
+                "Migração gratuita de dados"
+            });
+
+            // Set available features
+            starterPlan.SetFeaturesAvailable(new[]
+            {
+                "Até 1 usuário",
+                "Até 50 pacientes",
+                "Agenda de consultas básica",
+                "Cadastro de pacientes",
+                "Prontuário médico digital simples",
+                "Relatórios básicos",
+                "Suporte por email (48h)"
+            });
+
+            // Set features in development
+            starterPlan.SetFeaturesInDevelopment(new[]
+            {
+                "Integração WhatsApp Business",
+                "Lembretes automáticos",
+                "Backup automático diário"
+            });
+
+            plans.Add(starterPlan);
+
+            // Plano Professional - MVP Early Adopter
+            var professionalPlan = new SubscriptionPlan(
+                "Professional",
+                "Ideal para consultórios pequenos e médicos em grupo",
+                89.00m, // Early adopter price
+                14, // Trial days
+                2, // Max users
+                200, // Max patients
+                SubscriptionPlanType.Standard,
+                "system",
+                hasReports: true,
+                hasWhatsAppIntegration: false,
+                hasSMSNotifications: true,
+                hasTissExport: false,
+                maxClinics: 1
+            );
+
+            // Set campaign pricing
+            professionalPlan.SetCampaignPricing(
+                "MVP Early Adopter",
+                "Seja um dos primeiros clientes e garanta preço especial vitalício",
+                239.00m, // Future/original price
+                89.00m,  // Campaign price
+                DateTime.UtcNow.AddDays(-7), // Started a week ago
+                null, // No end date (lifetime for early adopters)
+                100 // Max 100 early adopters
+            );
+
+            // Set early adopter benefits
+            professionalPlan.SetEarlyAdopterBenefits(new[]
+            {
+                "Preço vitalício de R$ 89/mês (63% OFF)",
+                "Economize R$ 150/mês para sempre",
+                "R$ 100 em créditos de serviço",
+                "Badge de Cliente Fundador",
+                "Acesso ao grupo VIP de early adopters",
+                "Prioridade em novos recursos",
+                "2 horas de treinamento personalizado",
+                "Gerente de sucesso dedicado (3 meses)"
+            });
+
+            // Set available features
+            professionalPlan.SetFeaturesAvailable(new[]
+            {
+                "Até 2 usuários",
+                "Até 200 pacientes",
+                "Todos os recursos do Starter",
+                "Agenda avançada (múltiplos profissionais)",
+                "Prontuário médico completo",
+                "Módulo Financeiro básico",
+                "Relatórios gerenciais",
+                "Portal do Paciente (básico)",
+                "Suporte prioritário (24h)"
+            });
+
+            // Set features in development
+            professionalPlan.SetFeaturesInDevelopment(new[]
+            {
+                "Integração WhatsApp API",
+                "Notificações por SMS",
+                "Assinatura digital (ICP-Brasil)",
+                "Exportação TISS",
+                "Dashboard Analytics",
+                "API de Integração"
+            });
+
+            plans.Add(professionalPlan);
+
+            // Plano Enterprise - MVP Early Adopter
+            var enterprisePlan = new SubscriptionPlan(
+                "Enterprise",
+                "Ideal para clínicas estabelecidas e grupos médicos",
+                149.00m, // Early adopter price
+                14, // Trial days
+                5, // Max users
+                10000, // Max patients (unlimited)
+                SubscriptionPlanType.Enterprise,
+                "system",
+                hasReports: true,
+                hasWhatsAppIntegration: true,
+                hasSMSNotifications: true,
+                hasTissExport: true,
+                maxClinics: 3
+            );
+
+            // Set campaign pricing
+            enterprisePlan.SetCampaignPricing(
+                "MVP Early Adopter",
+                "Seja um dos primeiros clientes e garanta preço especial vitalício",
+                389.00m, // Future/original price
+                149.00m,  // Campaign price
+                DateTime.UtcNow.AddDays(-7), // Started a week ago
+                null, // No end date (lifetime for early adopters)
+                100 // Max 100 early adopters
+            );
+
+            // Set early adopter benefits
+            enterprisePlan.SetEarlyAdopterBenefits(new[]
+            {
+                "Preço vitalício de R$ 149/mês (62% OFF)",
+                "Economize R$ 240/mês para sempre",
+                "R$ 100 em créditos de serviço",
+                "Badge de Cliente Fundador",
+                "Acesso ao grupo VIP de early adopters",
+                "Prioridade em novos recursos",
+                "2 horas de treinamento personalizado",
+                "Gerente de sucesso dedicado (6 meses)",
+                "Suporte 24/7"
+            });
+
+            // Set available features
+            enterprisePlan.SetFeaturesAvailable(new[]
+            {
+                "Até 5 usuários",
+                "Pacientes ilimitados",
+                "Todos os recursos do Professional",
+                "Módulo Financeiro completo",
+                "Gestão de estoque",
+                "Fila de espera",
+                "Telemedicina (básica)",
+                "Portal do Paciente completo",
+                "Relatórios avançados",
+                "Conformidade LGPD",
+                "Suporte 24/7"
+            });
+
+            // Set features in development
+            enterprisePlan.SetFeaturesInDevelopment(new[]
+            {
+                "Assinatura digital (ICP-Brasil)",
+                "Exportação TISS completa",
+                "BI e Analytics avançado",
+                "CRM para gestão de leads",
+                "Automação de workflows",
+                "Integração com laboratórios",
+                "Agendamento online",
+                "Marketing automation"
+            });
+
+            plans.Add(enterprisePlan);
+
+            return plans;
         }
 
         private ClinicSubscription CreateClinicSubscription(Guid clinicId, Guid subscriptionPlanId)

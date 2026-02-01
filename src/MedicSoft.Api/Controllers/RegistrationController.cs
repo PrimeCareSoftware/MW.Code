@@ -145,6 +145,7 @@ namespace MedicSoft.Api.Controllers
                 TrialDays = p.TrialDays,
                 MaxUsers = p.MaxUsers,
                 MaxPatients = p.MaxPatients,
+                MaxClinics = p.MaxClinics,
                 HasReports = p.HasReports,
                 HasWhatsAppIntegration = p.HasWhatsAppIntegration,
                 HasSMSNotifications = p.HasSMSNotifications,
@@ -152,7 +153,24 @@ namespace MedicSoft.Api.Controllers
                 IsActive = p.IsActive,
                 Type = (int)p.Type,
                 Features = GeneratePlanFeatures(p),
-                IsRecommended = p.Type == SubscriptionPlanType.Standard // Mark Standard plan as recommended
+                IsRecommended = p.Type == SubscriptionPlanType.Standard, // Mark Standard plan as recommended
+                
+                // Campaign fields
+                CampaignName = p.CampaignName,
+                CampaignDescription = p.CampaignDescription,
+                OriginalPrice = p.OriginalPrice,
+                CampaignPrice = p.CampaignPrice,
+                CampaignStartDate = p.CampaignStartDate,
+                CampaignEndDate = p.CampaignEndDate,
+                MaxEarlyAdopters = p.MaxEarlyAdopters,
+                CurrentEarlyAdopters = p.CurrentEarlyAdopters,
+                IsCampaignActive = p.IsCampaignActive(),
+                CanJoinCampaign = p.CanJoinCampaign(),
+                EffectivePrice = p.GetEffectivePrice(),
+                SavingsPercentage = p.GetSavingsPercentage(),
+                EarlyAdopterBenefits = p.GetEarlyAdopterBenefits()?.ToList() ?? new List<string>(),
+                FeaturesAvailable = p.GetFeaturesAvailable()?.ToList() ?? new List<string>(),
+                FeaturesInDevelopment = p.GetFeaturesInDevelopment()?.ToList() ?? new List<string>()
             }).ToList();
 
             return Ok(planDtos);
