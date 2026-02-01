@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MedicSoft.Application.Services.Email;
+using MedicSoft.Application.Services.EmailService;
 using Moq;
 using Xunit;
 
@@ -136,7 +136,7 @@ namespace MedicSoft.Test.Services.Email
         }
 
         [Fact]
-        public void SendEmailWithTemplateAsync_ShouldThrowNotImplementedException()
+        public async Task SendEmailWithTemplateAsync_ShouldThrowNotImplementedException()
         {
             // Arrange
             var service = CreateService();
@@ -148,7 +148,7 @@ namespace MedicSoft.Test.Services.Email
                 "test@test.com", templateId, variables, "tenant-123");
 
             // Assert
-            act.Should().ThrowAsync<NotImplementedException>()
+            await act.Should().ThrowAsync<NotImplementedException>()
                 .WithMessage("*Template-based email is not supported in SmtpEmailService*");
         }
 

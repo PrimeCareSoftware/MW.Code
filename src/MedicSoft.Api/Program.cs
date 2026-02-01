@@ -557,13 +557,13 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IAutomationEngine,
 // CRM Advanced - Messaging Services (Real implementations replacing stubs)
 // Email Service - Uses SMTP for production (direct email sending), stub for development
 // Configure SMTP email settings
-builder.Services.Configure<MedicSoft.Application.Services.Email.SmtpEmailSettings>(
-    builder.Configuration.GetSection(MedicSoft.Application.Services.Email.SmtpEmailSettings.SectionName));
+builder.Services.Configure<MedicSoft.Application.Services.EmailService.SmtpEmailSettings>(
+    builder.Configuration.GetSection(MedicSoft.Application.Services.EmailService.SmtpEmailSettings.SectionName));
 
 var useRealEmailService = builder.Configuration.GetValue<bool>("Email:Enabled");
 if (useRealEmailService)
 {
-    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Application.Services.Email.SmtpEmailService>();
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Application.Services.EmailService.SmtpEmailService>();
 }
 else
 {

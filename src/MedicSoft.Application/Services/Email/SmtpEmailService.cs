@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MedicSoft.Application.Services.CRM;
 
-namespace MedicSoft.Application.Services.Email
+namespace MedicSoft.Application.Services.EmailService
 {
     /// <summary>
     /// Configuration settings for SMTP email
