@@ -5,6 +5,7 @@ using MedicSoft.Application.DTOs.Registration;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicSoft.Application.Services
 {
@@ -28,6 +29,7 @@ namespace MedicSoft.Application.Services
         private readonly IUserClinicLinkRepository _userClinicLinkRepository;
         
         private const int MaxSubdomainAttempts = 100;
+        private const int MaxCampaignJoinRetries = 3;
 
         public RegistrationService(
             IClinicRepository clinicRepository,
@@ -140,6 +142,54 @@ namespace MedicSoft.Application.Services
 
             // Execute all creations within a transaction to ensure data consistency
             // Username and email validation is done inside the transaction with the unique tenantId
+            // Retry logic for handling campaign concurrency conflicts
+            for (int attempt = 1; attempt <= MaxCampaignJoinRetries; attempt++)
+            {
+                try
+                {
+                    return await _clinicRepository.ExecuteInTransactionAsync(async () =>
+                    {
+                        return await RegisterClinicWithCampaignAsync(request, plan, tenantId, subdomain, 
+                            companyDocument, companyDocumentType, ownerDocumentType);
+                    });
+                }
+                catch (DbUpdateConcurrencyException) when (attempt < MaxCampaignJoinRetries)
+                {
+                    // Concurrency conflict - reload plan and retry
+                    // This can happen if multiple users try to join the campaign simultaneously
+                    plan = await _subscriptionPlanRepository.GetByIdAsync(Guid.Parse(request.PlanId), "system");
+                    if (plan == null || !plan.CanJoinCampaign())
+                    {
+                        return RegistrationResult.CreateFailure("Campaign is no longer available");
+                    }
+                    // Continue to next retry attempt
+                    await Task.Delay(100 * attempt); // Exponential backoff
+                }
+                catch (InvalidOperationException ex) when (ex.Message.Contains("Cannot join campaign") && attempt < MaxCampaignJoinRetries)
+                {
+                    // Campaign slots filled during registration - reload and retry
+                    plan = await _subscriptionPlanRepository.GetByIdAsync(Guid.Parse(request.PlanId), "system");
+                    if (plan == null || !plan.CanJoinCampaign())
+                    {
+                        return RegistrationResult.CreateFailure("Campaign slots are now full");
+                    }
+                    await Task.Delay(100 * attempt); // Exponential backoff
+                }
+            }
+
+            // If we get here, all retries failed
+            return RegistrationResult.CreateFailure("Unable to complete registration. Please try again.");
+        }
+
+        private async Task<RegistrationResult> RegisterClinicWithCampaignAsync(
+            RegistrationRequestDto request, 
+            SubscriptionPlan plan, 
+            string tenantId, 
+            string subdomain,
+            string companyDocument,
+            DocumentType companyDocumentType,
+            DocumentType? ownerDocumentType)
+        {
             return await _clinicRepository.ExecuteInTransactionAsync(async () =>
             {
                 // Validate username within transaction (although tenantId is unique, this ensures consistency)

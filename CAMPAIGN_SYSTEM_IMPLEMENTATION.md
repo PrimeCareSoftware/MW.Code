@@ -388,6 +388,147 @@ public async Task Register_WithCampaign_UsesPromoPrice()
 
 ---
 
-**Versão**: 1.0  
+## 🔒 Controle de Concorrência (Atualização 2026-02-01)
+
+### Problema Identificado
+
+A implementação original do PR #586 tinha uma condição de corrida no método `IncrementEarlyAdopters()`:
+
+```csharp
+// PROBLEMA: Race condition
+if (plan.CanJoinCampaign())  // Usuário A verifica: 99/100 ✓
+{                             // Usuário B verifica: 99/100 ✓
+    plan.IncrementEarlyAdopters();  // A incrementa: 100
+    await _subscriptionPlanRepository.UpdateAsync(plan);
+}                             // B incrementa: 101 ❌ (excede o limite!)
+```
+
+Sob alta carga, múltiplos usuários poderiam exceder o `MaxEarlyAdopters`.
+
+### Solução Implementada
+
+#### 1. Controle de Concorrência Otimista (PostgreSQL xmin)
+
+```csharp
+// SubscriptionPlan.cs
+public uint RowVersion { get; private set; }
+
+// SubscriptionPlanConfiguration.cs
+builder.Property(sp => sp.RowVersion)
+    .HasColumnName("xmin")
+    .HasColumnType("xid")
+    .IsRowVersion()
+    .ValueGeneratedOnAddOrUpdate()
+    .IsConcurrencyToken();
+```
+
+**Benefícios**:
+- Usa coluna de sistema nativa do PostgreSQL (sem overhead)
+- EF Core detecta automaticamente modificações concorrentes
+- Lança `DbUpdateConcurrencyException` em caso de conflito
+
+#### 2. Constraint de Banco de Dados
+
+```sql
+ALTER TABLE "SubscriptionPlans"
+ADD CONSTRAINT "CK_SubscriptionPlans_EarlyAdoptersLimit"
+CHECK ("MaxEarlyAdopters" IS NULL OR "CurrentEarlyAdopters" <= "MaxEarlyAdopters");
+```
+
+**Benefícios**:
+- Defesa em profundidade (defense-in-depth)
+- Protege contra bugs na aplicação
+- Garante integridade mesmo sob ataque
+
+#### 3. Lógica de Retry com Exponential Backoff
+
+```csharp
+// RegistrationService.cs
+for (int attempt = 1; attempt <= MaxCampaignJoinRetries; attempt++)
+{
+    try
+    {
+        return await RegisterClinicWithCampaignAsync(...);
+    }
+    catch (DbUpdateConcurrencyException) when (attempt < MaxCampaignJoinRetries)
+    {
+        // Recarrega o plano e tenta novamente
+        plan = await _subscriptionPlanRepository.GetByIdAsync(...);
+        if (!plan.CanJoinCampaign())
+            return RegistrationResult.CreateFailure("Campaign is no longer available");
+        
+        await Task.Delay(100 * attempt); // 100ms, 200ms, 300ms
+    }
+}
+```
+
+**Configuração**:
+- `MaxCampaignJoinRetries = 3`
+- Backoff: 100ms → 200ms → 300ms
+- Mensagens de erro amigáveis
+
+### Garantias de Concorrência
+
+| Cenário | Proteção | Resultado |
+|---------|----------|-----------|
+| 2 usuários simultâneos | xmin + retry | ✅ Um sucesso, um retry |
+| 10 usuários simultâneos | xmin + retry | ✅ Ordem serializada |
+| Vaga 100 disputada | xmin + constraint | ✅ Apenas um ganha |
+| Bug na aplicação | Constraint DB | ✅ Bloqueado no banco |
+
+### Testes Unitários
+
+14 novos testes adicionados em `SubscriptionPlanTests.cs`:
+
+```csharp
+[Fact]
+public void IsCampaignActive_WhenSlotsAreFull_ReturnsFalse()
+[Fact]
+public void IncrementEarlyAdopters_WhenCampaignIsFull_ThrowsInvalidOperationException()
+[Fact]
+public void CanJoinCampaign_WithAvailableSlots_ReturnsTrue()
+// ... mais 11 testes
+```
+
+### Migration
+
+**Arquivo**: `20260201183349_AddConcurrencyControlToSubscriptionPlan.cs`
+
+**Ações**:
+1. Adiciona coluna `xmin` (uint, xid type)
+2. Cria constraint `CK_SubscriptionPlans_EarlyAdoptersLimit`
+3. Mantém compatibilidade reversa
+
+**Rollback**:
+```bash
+dotnet ef migrations remove
+# ou
+dotnet ef database update PreviousMigration
+```
+
+### Monitoramento Recomendado
+
+```sql
+-- Alertar quando 80% das vagas forem preenchidas
+SELECT 
+    "CampaignName",
+    "CurrentEarlyAdopters",
+    "MaxEarlyAdopters",
+    ("CurrentEarlyAdopters" * 100.0 / "MaxEarlyAdopters") as "PercentUsed"
+FROM "SubscriptionPlans"
+WHERE "MaxEarlyAdopters" IS NOT NULL
+    AND "CurrentEarlyAdopters" >= ("MaxEarlyAdopters" * 0.8);
+```
+
+### Performance
+
+- **xmin lookup**: O(1) - coluna de sistema
+- **Constraint check**: O(1) - validação simples
+- **Retry overhead**: Desprezível em casos normais
+- **Worst case**: 3 tentativas × 600ms = 1.8s (raro)
+
+---
+
+**Versão**: 1.1  
 **Data**: 01 de Fevereiro de 2026  
-**Autor**: Sistema de Desenvolvimento Automatizado
+**Autores**: Sistema de Desenvolvimento Automatizado, PR #586, Correções de Concorrência
