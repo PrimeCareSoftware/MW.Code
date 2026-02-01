@@ -218,16 +218,25 @@ namespace MedicSoft.Application.Services
                 // will be created and linked via UserClinicLink.
                 // The Phase 2 migration handles creating UserClinicLinks for existing users.
                 
-                // Step 5: Create subscription
+                // Step 5: Create subscription with campaign price if available
                 var trialDays = request.UseTrial ? plan.TrialDays : 0;
+                var effectivePrice = plan.GetEffectivePrice(); // Use campaign price if active, otherwise regular price
+                
                 var subscription = new ClinicSubscription(
                     clinic.Id,
                     plan.Id,
                     DateTime.UtcNow,
                     trialDays,
-                    plan.MonthlyPrice,
+                    effectivePrice,
                     tenantId
                 );
+                
+                // If joining a campaign, increment early adopter count
+                if (plan.CanJoinCampaign())
+                {
+                    plan.IncrementEarlyAdopters();
+                    await _planRepository.UpdateAsync(plan);
+                }
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
 
