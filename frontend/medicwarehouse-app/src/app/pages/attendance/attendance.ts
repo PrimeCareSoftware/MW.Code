@@ -484,14 +484,15 @@ export class Attendance implements OnInit, OnDestroy {
   onSave(): void {
     if (!this.medicalRecord()) return;
 
-    // Show warning instead of blocking if form is invalid
-    if (this.attendanceForm.invalid) {
-      this.warningMessage.set('Atenção: Alguns campos obrigatórios não foram preenchidos. Recomenda-se completá-los para conformidade com CFM 1.821/2007.');
-    }
-
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
+    this.warningMessage.set('');
+
+    // Show warning if form is invalid but continue with save
+    if (this.attendanceForm.invalid) {
+      this.warningMessage.set('⚠️ Atenção: Alguns campos obrigatórios não foram preenchidos. Recomenda-se completá-los para conformidade com CFM 1.821/2007.');
+    }
 
     const formValue = this.attendanceForm.value;
     
@@ -529,8 +530,8 @@ export class Attendance implements OnInit, OnDestroy {
     this.checkCfm1821Compliance(() => {
       // Show warning but allow completion
       if (!this.cfm1821IsCompliant()) {
-        const missingFields = this.cfm1821MissingRequirements().join('\n- ');
-        this.warningMessage.set(`ATENÇÃO: Atendimento não está em conformidade com CFM 1.821/2007. Campos faltando:\n- ${missingFields}\n\nO atendimento será finalizado mesmo assim.`);
+        const missingFieldsList = this.cfm1821MissingRequirements().map(field => `• ${field}`).join('\n');
+        this.warningMessage.set(`⚠️ ATENÇÃO: Atendimento não está em conformidade com CFM 1.821/2007.\n\nCampos faltando:\n${missingFieldsList}\n\nO atendimento será finalizado mesmo assim.`);
       }
 
       this.proceedWithCompletion();
@@ -541,6 +542,7 @@ export class Attendance implements OnInit, OnDestroy {
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
+    // Keep warning message visible during completion
 
     const formValue = this.attendanceForm.value;
     

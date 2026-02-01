@@ -13,7 +13,7 @@
     <div class="alert alert-error">{{ errorMessage() }}</div>
   }
   @if (warningMessage()) {
-    <div class="alert alert-warning">{{ warningMessage() }}</div>
+    <div class="alert alert-warning" style="white-space: pre-line;">{{ warningMessage() }}</div>
   }
   @if (successMessage()) {
     <div class="alert alert-success">{{ successMessage() }}</div>
