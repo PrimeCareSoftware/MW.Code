@@ -235,7 +235,7 @@ namespace MedicSoft.Application.Services
                 if (plan.CanJoinCampaign())
                 {
                     plan.IncrementEarlyAdopters();
-                    await _planRepository.UpdateAsync(plan);
+                    await _subscriptionPlanRepository.UpdateAsync(plan);
                 }
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
