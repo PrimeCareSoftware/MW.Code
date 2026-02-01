@@ -1,10 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { ConsentService } from '../../../services/consent.service';
 import { DataDeletionService } from '../../../services/data-deletion.service';
 import { AuditService } from '../../../services/audit.service';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 interface DashboardStats {
   totalConsents: number;
@@ -33,7 +35,7 @@ interface DeletionByType {
 @Component({
   selector: 'app-lgpd-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink, Navbar],
   templateUrl: './lgpd-dashboard.html',
   styleUrl: './lgpd-dashboard.scss'
 })

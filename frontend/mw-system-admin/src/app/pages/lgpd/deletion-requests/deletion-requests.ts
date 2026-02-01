@@ -10,11 +10,12 @@ import {
   LegalApprovalRequest
 } from '../../../services/data-deletion.service';
 import { Auth } from '../../../services/auth';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-deletion-requests',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './deletion-requests.html',
   styleUrl: './deletion-requests.scss'
 })

@@ -1,11 +1,13 @@
 .module-details-container {
-  padding: 24px;
+  padding: var(--spacing-6);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
 
   .header {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
 
     .header-content {
       flex: 1;
