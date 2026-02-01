@@ -1263,7 +1263,7 @@ namespace MedicSoft.Api.Controllers
         public bool HasWhatsAppIntegration { get; set; }
         public bool HasSMSNotifications { get; set; }
         public bool HasTissExport { get; set; }
-        public int Type { get; set; } = 2; // Default to Standard
+        public int Type { get; set; } = (int)SubscriptionPlanType.Standard; // Default to Standard
         
         // Campaign fields
         public string? CampaignName { get; set; }

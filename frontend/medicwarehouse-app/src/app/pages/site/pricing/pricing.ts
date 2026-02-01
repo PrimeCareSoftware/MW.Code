@@ -39,7 +39,8 @@ export class PricingComponent {
           earlyAdopterPrice: plan.campaignPrice || plan.effectivePrice,
           futurePrice: plan.originalPrice,
           savingsPercentage: plan.savingsPercentage || this.calculateSavings(plan.originalPrice, plan.campaignPrice),
-          // Use featuresAvailable from campaign if present, otherwise use features
+          // Use featuresAvailable from campaign if present (more detailed), otherwise fallback to features (auto-generated)
+          // featuresAvailable is manually configured for campaigns and takes precedence
           features: (plan.featuresAvailable && plan.featuresAvailable.length > 0) 
             ? plan.featuresAvailable 
             : plan.features,

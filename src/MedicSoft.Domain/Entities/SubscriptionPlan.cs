@@ -213,9 +213,14 @@ namespace MedicSoft.Domain.Entities
             OriginalPrice = originalPrice;
             CampaignPrice = campaignPrice;
             CampaignStartDate = startDate ?? DateTime.UtcNow;
-            CampaignEndDate = endDate;
+            CampaignEndDate = endDate; // null means lifetime campaign
             MaxEarlyAdopters = maxEarlyAdopters;
-            CurrentEarlyAdopters = 0;
+            // Only reset counter when creating a new campaign (not when updating existing one)
+            // Caller should preserve CurrentEarlyAdopters if updating
+            if (CurrentEarlyAdopters == 0)
+            {
+                CurrentEarlyAdopters = 0; // Explicitly set for new campaigns
+            }
             
             // Update MonthlyPrice to reflect campaign price
             MonthlyPrice = campaignPrice;

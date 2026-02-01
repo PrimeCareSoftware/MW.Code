@@ -1531,8 +1531,8 @@ RETORNO: {{return_date}}",
                 "Seja um dos primeiros clientes e garanta preço especial vitalício",
                 149.00m, // Future/original price
                 49.00m,  // Campaign price
-                DateTime.UtcNow.AddDays(-7), // Started a week ago
-                null, // No end date (lifetime for early adopters)
+                DateTime.UtcNow.AddDays(-7), // Campaign start date (7 days before seeding)
+                null, // No end date - lifetime campaign for early adopters
                 100 // Max 100 early adopters
             );
 
@@ -1593,8 +1593,8 @@ RETORNO: {{return_date}}",
                 "Seja um dos primeiros clientes e garanta preço especial vitalício",
                 239.00m, // Future/original price
                 89.00m,  // Campaign price
-                DateTime.UtcNow.AddDays(-7), // Started a week ago
-                null, // No end date (lifetime for early adopters)
+                DateTime.UtcNow.AddDays(-7), // Campaign start date (7 days before seeding)
+                null, // No end date - lifetime campaign for early adopters
                 100 // Max 100 early adopters
             );
 
@@ -1661,8 +1661,8 @@ RETORNO: {{return_date}}",
                 "Seja um dos primeiros clientes e garanta preço especial vitalício",
                 389.00m, // Future/original price
                 149.00m,  // Campaign price
-                DateTime.UtcNow.AddDays(-7), // Started a week ago
-                null, // No end date (lifetime for early adopters)
+                DateTime.UtcNow.AddDays(-7), // Campaign start date (7 days before seeding)
+                null, // No end date - lifetime campaign for early adopters
                 100 // Max 100 early adopters
             );
 
