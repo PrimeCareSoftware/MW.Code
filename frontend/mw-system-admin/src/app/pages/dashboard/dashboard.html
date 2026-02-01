@@ -1,9 +1,20 @@
 <app-navbar></app-navbar>
 
 <div class="dashboard">
-      <div class="header">
-        <h1>Painel de Administração do Sistema</h1>
-        <p class="subtitle">Gerencie todas as clínicas e visualize métricas do sistema</p>
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1>Bom dia! 👋</h1>
+          <p>Gerencie todas as clínicas e visualize métricas do sistema</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" (click)="navigateToClinics('')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Nova Clínica
+          </button>
+        </div>
       </div>
 
       @if (loading()) {
@@ -63,13 +74,18 @@
 
         <div class="analytics-grid">
           <!-- Clinics Card -->
-          <div class="card">
+          <div class="card stat-card stat-clinics">
             <div class="card-header">
               <h3>Clínicas</h3>
-              <i class="icon">🏥</i>
+              <div class="stat-icon">
+                <i class="icon">🏥</i>
+              </div>
             </div>
             <div class="card-body">
-              <div class="stat-large">{{ analytics()!.totalClinics }}</div>
+              <div class="stat-content">
+                <span class="stat-value">{{ analytics()!.totalClinics }}</span>
+                <span class="stat-label">Clínicas Cadastradas</span>
+              </div>
               <div class="stat-details">
                 <span class="stat-item">
                   <span class="stat-label">Ativas:</span>
@@ -84,13 +100,18 @@
           </div>
 
           <!-- Users Card -->
-          <div class="card">
+          <div class="card stat-card stat-users">
             <div class="card-header">
               <h3>Usuários</h3>
-              <i class="icon">👥</i>
+              <div class="stat-icon">
+                <i class="icon">👥</i>
+              </div>
             </div>
             <div class="card-body">
-              <div class="stat-large">{{ analytics()!.totalUsers }}</div>
+              <div class="stat-content">
+                <span class="stat-value">{{ analytics()!.totalUsers }}</span>
+                <span class="stat-label">Usuários Cadastrados</span>
+              </div>
               <div class="stat-details">
                 <span class="stat-item">
                   <span class="stat-label">Ativos:</span>
@@ -105,13 +126,18 @@
           </div>
 
           <!-- Patients Card -->
-          <div class="card">
+          <div class="card stat-card stat-patients">
             <div class="card-header">
               <h3>Pacientes</h3>
-              <i class="icon">🩺</i>
+              <div class="stat-icon">
+                <i class="icon">🩺</i>
+              </div>
             </div>
             <div class="card-body">
-              <div class="stat-large">{{ analytics()!.totalPatients }}</div>
+              <div class="stat-content">
+                <span class="stat-value">{{ analytics()!.totalPatients }}</span>
+                <span class="stat-label">Pacientes Cadastrados</span>
+              </div>
               <div class="stat-details">
                 <span class="stat-item">Total de pacientes cadastrados no sistema</span>
               </div>
@@ -119,15 +145,126 @@
           </div>
 
           <!-- Revenue Card -->
-          <div class="card highlight">
+          <div class="card stat-card stat-revenue highlight">
             <div class="card-header">
               <h3>Receita Mensal Recorrente</h3>
-              <i class="icon">💰</i>
+              <div class="stat-icon">
+                <i class="icon">💰</i>
+              </div>
             </div>
             <div class="card-body">
-              <div class="stat-large">{{ formatCurrency(analytics()!.monthlyRecurringRevenue) }}</div>
+              <div class="stat-content">
+                <span class="stat-value">{{ formatCurrency(analytics()!.monthlyRecurringRevenue) }}</span>
+                <span class="stat-label">MRR Total</span>
+              </div>
               <div class="stat-details">
                 <span class="stat-item">MRR total de todas as clínicas ativas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Access Section -->
+        <div class="section quick-access-section">
+          <h2>Acesso Rápido</h2>
+          <div class="quick-access-grid">
+            <a class="quick-card" (click)="navigateToClinics('')">
+              <div class="quick-icon clinics">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </div>
+              <div class="quick-content">
+                <h3>Clínicas</h3>
+                <p>Gerenciar clínicas cadastradas</p>
+              </div>
+              <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </a>
+
+            <a class="quick-card" (click)="navigateToPlans()">
+              <div class="quick-icon plans">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
+              <div class="quick-content">
+                <h3>Planos</h3>
+                <p>Gerenciar planos de assinatura</p>
+              </div>
+              <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </a>
+
+            <a class="quick-card" (click)="navigateToOwners()">
+              <div class="quick-icon owners">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div class="quick-content">
+                <h3>Proprietários</h3>
+                <p>Gerenciar proprietários de clínicas</p>
+              </div>
+              <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </a>
+
+            <a class="quick-card" (click)="navigateToSubdomains()">
+              <div class="quick-icon subdomains">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+              <div class="quick-content">
+                <h3>Subdomínios</h3>
+                <p>Configurar subdomínios personalizados</p>
+              </div>
+              <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </a>
+
+            <div class="quick-card disabled">
+              <div class="quick-icon analytics">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3v18h18"/>
+                  <path d="M18 17V9"/>
+                  <path d="M13 17V5"/>
+                  <path d="M8 17v-3"/>
+                </svg>
+              </div>
+              <div class="quick-content">
+                <h3>Analytics Avançado</h3>
+                <p>Análises e insights detalhados</p>
+                <span class="coming-soon">Em breve</span>
+              </div>
+            </div>
+
+            <div class="quick-card disabled">
+              <div class="quick-icon reports">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div class="quick-content">
+                <h3>Relatórios</h3>
+                <p>Relatórios e exportações</p>
+                <span class="coming-soon">Em breve</span>
               </div>
             </div>
           </div>
