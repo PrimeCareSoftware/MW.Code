@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Commands.MedicalRecords;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
@@ -13,17 +14,20 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly ICfm1821ValidationService _cfm1821ValidationService;
         private readonly IMapper _mapper;
+        private readonly ILogger<CompleteMedicalRecordCommandHandler> _logger;
 
         public CompleteMedicalRecordCommandHandler(
             IMedicalRecordRepository medicalRecordRepository,
             IAppointmentRepository appointmentRepository,
             ICfm1821ValidationService cfm1821ValidationService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<CompleteMedicalRecordCommandHandler> logger)
         {
             _medicalRecordRepository = medicalRecordRepository;
             _appointmentRepository = appointmentRepository;
             _cfm1821ValidationService = cfm1821ValidationService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<MedicalRecordDto> Handle(CompleteMedicalRecordCommand request, CancellationToken cancellationToken)
@@ -36,7 +40,15 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                     throw new InvalidOperationException("Medical record not found");
                 }
 
-                // CFM 1.821 validation removed - allow completion without all required fields
+                // CFM 1.821 - Check compliance but allow completion with warning
+                var validationResult = await _cfm1821ValidationService.ValidateMedicalRecordCompleteness(request.Id, request.TenantId);
+                if (!validationResult.IsCompliant)
+                {
+                    var missingFields = string.Join("; ", validationResult.MissingRequirements);
+                    _logger.LogWarning("Medical record {MedicalRecordId} completed without CFM 1.821/2007 compliance. Missing requirements: {MissingFields}. Tenant: {TenantId}", 
+                        request.Id, missingFields, request.TenantId);
+                }
+
                 // Complete the medical record
                 medicalRecord.CompleteConsultation(
                     request.CompleteDto.Diagnosis,
