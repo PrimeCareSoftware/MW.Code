@@ -346,8 +346,8 @@ namespace MedicSoft.Application.Services
                 return false;
             }
 
-            // Verify code
-            if (token.Code != code)
+            // Verify code using constant-time comparison to prevent timing attacks
+            if (!ConstantTimeEquals(token.Code, code))
             {
                 token.IncrementAttempts();
                 await _emailTokenRepository.UpdateAsync(token);
@@ -425,6 +425,26 @@ namespace MedicSoft.Application.Services
     </div>
 </body>
 </html>";
+        }
+
+        /// <summary>
+        /// Constant-time string comparison to prevent timing attacks
+        /// </summary>
+        private bool ConstantTimeEquals(string a, string b)
+        {
+            if (a == null || b == null)
+                return false;
+
+            if (a.Length != b.Length)
+                return false;
+
+            int result = 0;
+            for (int i = 0; i < a.Length; i++)
+            {
+                result |= a[i] ^ b[i];
+            }
+
+            return result == 0;
         }
     }
 }
