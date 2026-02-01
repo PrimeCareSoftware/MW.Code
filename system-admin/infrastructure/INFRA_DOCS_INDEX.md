@@ -97,6 +97,22 @@ Escolha o documento conforme sua necessidade:
 
 ---
 
+### [DEPLOY_MULTIPLOS_PROJETOS_HOSTINGER.md](DEPLOY_MULTIPLOS_PROJETOS_HOSTINGER.md) 🆕
+**🚀 Deploy de Múltiplas APIs + Angular | Hostinger**
+
+- ✅ Deploy de 2 APIs .NET (MedicSoft.Api + PatientPortal.Api)
+- ✅ Deploy de 4 apps Angular (medicwarehouse, admin, portal, docs)
+- ✅ Configuração de PostgreSQL para múltiplas bases
+- ✅ Recomendação de planos da Hostinger baseado em recursos
+- ✅ Arquitetura de domínios e subdomínios
+- ✅ Nginx como proxy reverso para múltiplas APIs
+- ✅ Gerenciamento de múltiplos serviços systemd
+- ✅ Estimativa de custos (R$ 40-75/mês)
+
+**👉 Use quando precisa fazer deploy de TODOS os projetos no Hostinger!**
+
+---
+
 ### [MIGRACAO_POSTGRESQL.md](MIGRACAO_POSTGRESQL.md)
 **🔄 Migração técnica | SQL Server → PostgreSQL**
 
@@ -276,6 +292,10 @@ Escolha o documento conforme sua necessidade:
 1. [DEPLOY_HOSTINGER_INICIO_RAPIDO.md](DEPLOY_HOSTINGER_INICIO_RAPIDO.md) - 30 min
 2. [DEPLOY_HOSTINGER_GUIA_COMPLETO.md](DEPLOY_HOSTINGER_GUIA_COMPLETO.md) - Consulta detalhada
 3. [CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md) - 10 min
+
+**Opção 3 - Hostinger VPS (Múltiplos Projetos):** 🆕
+1. [DEPLOY_MULTIPLOS_PROJETOS_HOSTINGER.md](DEPLOY_MULTIPLOS_PROJETOS_HOSTINGER.md) - Guia completo
+2. [CALCULADORA_CUSTOS.md](CALCULADORA_CUSTOS.md) - 10 min
 
 ### Para Técnicos (Quer entender tudo)
 1. [INFRA_PRODUCAO_BAIXO_CUSTO.md](INFRA_PRODUCAO_BAIXO_CUSTO.md) - 45 min

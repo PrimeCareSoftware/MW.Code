@@ -1509,12 +1509,19 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
   - Domínio e SSL explicados
   - R$ 20-60/mês
 
-- **[DEPLOY_HOSTINGER_INICIO_RAPIDO.md](system-admin/guias/DEPLOY_HOSTINGER_INICIO_RAPIDO.md)** - ⚡ **Hostinger em 30 min** 🆕
+- **[DEPLOY_HOSTINGER_INICIO_RAPIDO.md](system-admin/infrastructure/DEPLOY_HOSTINGER_INICIO_RAPIDO.md)** - ⚡ **Hostinger em 30 min** 🆕
   - Comandos prontos para uso
   - Deploy rápido no Hostinger
   - Checklist de verificação
 
-- **[MIGRACAO_POSTGRESQL.md](system-admin/guias/MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
+- **[DEPLOY_MULTIPLOS_PROJETOS_HOSTINGER.md](DEPLOY_HOSTINGER_MULTIPLOS_PROJETOS.md)** - 🚀 **Deploy de Múltiplos Projetos** 🆕
+  - 2 APIs .NET + 4 apps Angular
+  - PostgreSQL para múltiplas bases
+  - Recomendação de planos da Hostinger
+  - Arquitetura completa com subdomínios
+  - R$ 40-75/mês
+
+- **[MIGRACAO_POSTGRESQL.md](system-admin/infrastructure/MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
   - Migração SQL Server → PostgreSQL
   - Guia técnico completo
   - Scripts e validação
