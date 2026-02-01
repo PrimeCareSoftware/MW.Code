@@ -9,6 +9,8 @@ namespace MedicSoft.Application.Validation
     /// </summary>
     public class CepAttribute : ValidationAttribute
     {
+        private static readonly Regex CleanupRegex = new Regex(@"[^\d]", RegexOptions.Compiled);
+
         public CepAttribute() : base("CEP deve conter 8 dígitos")
         {
         }
@@ -27,7 +29,7 @@ namespace MedicSoft.Application.Validation
             }
 
             // Remove formatting characters (dashes, spaces)
-            var cleanCep = Regex.Replace(cep, @"[^\d]", "");
+            var cleanCep = CleanupRegex.Replace(cep, "");
 
             // Check if it has exactly 8 digits
             if (cleanCep.Length != 8)

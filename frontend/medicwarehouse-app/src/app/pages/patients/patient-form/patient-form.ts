@@ -196,14 +196,12 @@ export class PatientForm implements OnInit {
       const messages: string[] = [];
       
       // Iterate through all error fields
-      for (const field in errors) {
-        if (errors.hasOwnProperty(field)) {
-          const fieldErrors = errors[field];
-          if (Array.isArray(fieldErrors)) {
-            messages.push(...fieldErrors);
-          } else {
-            messages.push(fieldErrors);
-          }
+      for (const field of Object.keys(errors)) {
+        const fieldErrors = errors[field];
+        if (Array.isArray(fieldErrors)) {
+          messages.push(...fieldErrors);
+        } else {
+          messages.push(fieldErrors);
         }
       }
       

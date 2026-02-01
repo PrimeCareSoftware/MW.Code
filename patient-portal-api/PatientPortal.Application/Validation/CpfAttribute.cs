@@ -9,6 +9,8 @@ namespace PatientPortal.Application.Validation
     /// </summary>
     public class CpfAttribute : ValidationAttribute
     {
+        private static readonly Regex CleanupRegex = new Regex(@"[^\d]", RegexOptions.Compiled);
+
         public CpfAttribute() : base("CPF deve conter 11 dígitos")
         {
         }
@@ -27,7 +29,7 @@ namespace PatientPortal.Application.Validation
             }
 
             // Remove formatting characters (dots, dashes, spaces)
-            var cleanCpf = Regex.Replace(cpf, @"[^\d]", "");
+            var cleanCpf = CleanupRegex.Replace(cpf, "");
 
             // Check if it has exactly 11 digits
             if (cleanCpf.Length != 11)
