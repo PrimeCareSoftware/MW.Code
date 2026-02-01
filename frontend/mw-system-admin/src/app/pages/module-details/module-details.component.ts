@@ -12,6 +12,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { ModuleConfigService } from '../../services/module-config.service';
 import { ClinicModule } from '../../models/module-config.model';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-module-details',
@@ -26,7 +27,8 @@ import { ClinicModule } from '../../models/module-config.model';
     MatTableModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    Navbar
   ],
   templateUrl: './module-details.component.html',
   styleUrls: ['./module-details.component.scss']

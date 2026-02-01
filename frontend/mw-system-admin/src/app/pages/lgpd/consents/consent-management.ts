@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConsentService, ConsentLog, RevokeConsentRequest } from '../../../services/consent.service';
 import { Auth } from '../../../services/auth';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-consent-management',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './consent-management.html',
   styleUrl: './consent-management.scss'
 })
