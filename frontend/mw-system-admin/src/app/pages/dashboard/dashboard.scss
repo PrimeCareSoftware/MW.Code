@@ -308,6 +308,10 @@
         transition: all 0.3s;
         position: relative;
         overflow: hidden;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+        font-size: inherit;
 
         &::before {
           content: '';

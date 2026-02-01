@@ -3,7 +3,7 @@
 <div class="dashboard">
       <div class="dashboard-header">
         <div class="welcome-section">
-          <h1>Bom dia! 👋</h1>
+          <h1>{{ getGreeting() }}</h1>
           <p>Gerencie todas as clínicas e visualize métricas do sistema</p>
         </div>
         <div class="header-actions">
@@ -168,7 +168,7 @@
         <div class="section quick-access-section">
           <h2>Acesso Rápido</h2>
           <div class="quick-access-grid">
-            <a class="quick-card" (click)="navigateToClinics('')">
+            <button class="quick-card" (click)="navigateToClinics('')" type="button">
               <div class="quick-icon clinics">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -182,9 +182,9 @@
               <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
-            </a>
+            </button>
 
-            <a class="quick-card" (click)="navigateToPlans()">
+            <button class="quick-card" (click)="navigateToPlans()" type="button">
               <div class="quick-icon plans">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
@@ -198,9 +198,9 @@
               <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
-            </a>
+            </button>
 
-            <a class="quick-card" (click)="navigateToOwners()">
+            <button class="quick-card" (click)="navigateToOwners()" type="button">
               <div class="quick-icon owners">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -216,9 +216,9 @@
               <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
-            </a>
+            </button>
 
-            <a class="quick-card" (click)="navigateToSubdomains()">
+            <button class="quick-card" (click)="navigateToSubdomains()" type="button">
               <div class="quick-icon subdomains">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
@@ -233,7 +233,7 @@
               <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
-            </a>
+            </button>
 
             <div class="quick-card disabled">
               <div class="quick-icon analytics">
