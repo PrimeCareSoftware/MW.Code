@@ -165,7 +165,7 @@ namespace MedicSoft.Application.Services
                     // Continue to next retry attempt
                     await Task.Delay(100 * attempt); // Exponential backoff
                 }
-                catch (InvalidOperationException ex) when (ex.Message.Contains("campaign") && attempt < MaxCampaignJoinRetries)
+                catch (InvalidOperationException ex) when (ex.Message.Contains("Cannot join campaign") && attempt < MaxCampaignJoinRetries)
                 {
                     // Campaign slots filled during registration - reload and retry
                     plan = await _subscriptionPlanRepository.GetByIdAsync(Guid.Parse(request.PlanId), "system");

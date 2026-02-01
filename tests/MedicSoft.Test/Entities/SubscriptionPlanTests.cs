@@ -325,7 +325,7 @@ namespace MedicSoft.Test.Entities
             // Act
             var savings = plan.GetSavingsPercentage();
 
-            // Assert - 100 off 150 is approximately 67%
+            // Assert - (149.90 - 49.90) / 149.90 * 100 ≈ 66.7%
             Assert.InRange(savings, 66, 67);
         }
 
