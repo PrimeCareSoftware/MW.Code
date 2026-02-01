@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using PatientPortal.Application.Validation;
 
 namespace PatientPortal.Application.DTOs.Auth;
 
@@ -16,7 +17,7 @@ public class RegisterRequestDto
     public string Email { get; set; } = string.Empty;
     
     [Required(ErrorMessage = "CPF é obrigatório")]
-    [RegularExpression(@"^\d{11}$", ErrorMessage = "CPF deve conter 11 dígitos")]
+    [Cpf]
     public string CPF { get; set; } = string.Empty;
     
     [Required(ErrorMessage = "Telefone é obrigatório")]

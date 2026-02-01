@@ -185,6 +185,41 @@ export class PatientForm implements OnInit {
       currency: 'BRL' 
     }).format(amount);
   }
+
+  /**
+   * Extract validation error messages from API error response
+   */
+  private getValidationErrorMessage(error: any): string {
+    // Check if error has validation errors in errors property
+    if (error.error?.errors) {
+      const errors = error.error.errors;
+      const messages: string[] = [];
+      
+      // Iterate through all error fields
+      for (const field of Object.keys(errors)) {
+        const fieldErrors = errors[field];
+        if (Array.isArray(fieldErrors)) {
+          messages.push(...fieldErrors);
+        } else {
+          messages.push(fieldErrors);
+        }
+      }
+      
+      return messages.length > 0 ? messages.join('; ') : 'Erro de validação';
+    }
+    
+    // Check if error has a message property
+    if (error.error?.message) {
+      return error.error.message;
+    }
+    
+    // Check if error has a title property (ProblemDetails)
+    if (error.error?.title) {
+      return error.error.title;
+    }
+    
+    return 'Erro ao processar requisição';
+  }
   
   getStatusBadgeClass(status: string): string {
     const statusMap: { [key: string]: string } = {
@@ -362,8 +397,9 @@ export class PatientForm implements OnInit {
             setTimeout(() => this.router.navigate(['/patients']), 1500);
           },
           error: (error) => {
-            this.errorMessage.set('Erro ao atualizar paciente');
-            this.screenReader.announceError('Erro ao atualizar paciente');
+            const errorMsg = this.getValidationErrorMessage(error);
+            this.errorMessage.set(errorMsg);
+            this.screenReader.announceError(errorMsg);
             this.isLoading.set(false);
             console.error('Error updating patient:', error);
           }
@@ -382,8 +418,9 @@ export class PatientForm implements OnInit {
             setTimeout(() => this.router.navigate(['/patients']), 1500);
           },
           error: (error) => {
-            this.errorMessage.set('Erro ao cadastrar paciente');
-            this.screenReader.announceError('Erro ao cadastrar paciente');
+            const errorMsg = this.getValidationErrorMessage(error);
+            this.errorMessage.set(errorMsg);
+            this.screenReader.announceError(errorMsg);
             this.isLoading.set(false);
             console.error('Error creating patient:', error);
           }
