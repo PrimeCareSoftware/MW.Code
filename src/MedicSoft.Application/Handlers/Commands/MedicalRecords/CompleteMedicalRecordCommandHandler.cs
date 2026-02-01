@@ -36,14 +36,7 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                     throw new InvalidOperationException("Medical record not found");
                 }
 
-                // CFM 1.821 - Validate completeness before closing
-                var validationResult = await _cfm1821ValidationService.ValidateMedicalRecordCompleteness(request.Id, request.TenantId);
-                if (!validationResult.IsCompliant)
-                {
-                    var missingFields = string.Join("; ", validationResult.MissingRequirements);
-                    throw new InvalidOperationException($"Cannot complete medical record - CFM 1.821 compliance failed: {missingFields}");
-                }
-
+                // CFM 1.821 validation removed - allow completion without all required fields
                 // Complete the medical record
                 medicalRecord.CompleteConsultation(
                     request.CompleteDto.Diagnosis,

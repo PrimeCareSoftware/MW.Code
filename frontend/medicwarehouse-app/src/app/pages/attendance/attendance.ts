@@ -483,10 +483,11 @@ export class Attendance implements OnInit, OnDestroy {
   onSave(): void {
     if (!this.medicalRecord()) return;
 
-    if (this.attendanceForm.invalid) {
-      this.errorMessage.set('Por favor, preencha todos os campos obrigatórios corretamente.');
-      return;
-    }
+    // Validation removed - allow saving with incomplete fields
+    // if (this.attendanceForm.invalid) {
+    //   this.errorMessage.set('Por favor, preencha todos os campos obrigatórios corretamente.');
+    //   return;
+    // }
 
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -524,60 +525,52 @@ export class Attendance implements OnInit, OnDestroy {
   onComplete(): void {
     if (!this.medicalRecord() || !this.appointment()) return;
 
-    // Check CFM 1.821 compliance before completing
-    this.checkCfm1821Compliance(() => {
-      if (!this.cfm1821IsCompliant()) {
-        const missingFields = this.cfm1821MissingRequirements().join('\n- ');
-        this.errorMessage.set(`Não é possível finalizar o atendimento. Campos CFM 1.821 faltando:\n- ${missingFields}`);
-        return;
+    // CFM 1.821 compliance check removed - allow completion without all required fields
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    this.successMessage.set('');
+
+    const formValue = this.attendanceForm.value;
+    
+    // First complete the medical record
+    this.medicalRecordService.complete(this.medicalRecord()!.id, {
+      diagnosis: formValue.diagnosis,
+      prescription: formValue.prescription,
+      notes: formValue.notes
+    }).subscribe({
+      next: () => {
+        // Then complete the appointment (check-out)
+        this.appointmentService.complete(
+          this.appointment()!.id,
+          formValue.notes,
+          this.registerPaymentOnComplete()
+        ).subscribe({
+          next: () => {
+            this.stopTimer();
+            this.successMessage.set('Atendimento finalizado com sucesso!');
+            this.isLoading.set(false);
+            
+            // Notify secretary about completion
+            this.notifySecretaryConsultationCompleted();
+            
+            // Redireciona após 2 segundos
+            setTimeout(() => {
+              this.router.navigate(['/appointments']);
+            }, 2000);
+          },
+          error: (error) => {
+            console.error('Error completing appointment:', error);
+            this.errorMessage.set('Erro ao finalizar atendimento');
+            this.isLoading.set(false);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error completing consultation:', error);
+        const errorMessage = error.error?.message || error.error || 'Erro ao finalizar atendimento';
+        this.errorMessage.set(errorMessage);
+        this.isLoading.set(false);
       }
-
-      this.isLoading.set(true);
-      this.errorMessage.set('');
-      this.successMessage.set('');
-
-      const formValue = this.attendanceForm.value;
-      
-      // First complete the medical record
-      this.medicalRecordService.complete(this.medicalRecord()!.id, {
-        diagnosis: formValue.diagnosis,
-        prescription: formValue.prescription,
-        notes: formValue.notes
-      }).subscribe({
-        next: () => {
-          // Then complete the appointment (check-out)
-          this.appointmentService.complete(
-            this.appointment()!.id,
-            formValue.notes,
-            this.registerPaymentOnComplete()
-          ).subscribe({
-            next: () => {
-              this.stopTimer();
-              this.successMessage.set('Atendimento finalizado com sucesso!');
-              this.isLoading.set(false);
-              
-              // Notify secretary about completion
-              this.notifySecretaryConsultationCompleted();
-              
-              // Redireciona após 2 segundos
-              setTimeout(() => {
-                this.router.navigate(['/appointments']);
-              }, 2000);
-            },
-            error: (error) => {
-              console.error('Error completing appointment:', error);
-              this.errorMessage.set('Erro ao finalizar atendimento');
-              this.isLoading.set(false);
-            }
-          });
-        },
-        error: (error) => {
-          console.error('Error completing consultation:', error);
-          const errorMessage = error.error?.message || error.error || 'Erro ao finalizar atendimento';
-          this.errorMessage.set(errorMessage);
-          this.isLoading.set(false);
-        }
-      });
     });
   }
 
