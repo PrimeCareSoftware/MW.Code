@@ -15,7 +15,7 @@ import {
   providedIn: 'root'
 })
 export class ModuleConfigService {
-  private apiUrl = `${environment.apiUrl}/api/system-admin/modules`;
+  private apiUrl = `${environment.apiUrl}/system-admin/modules`;
 
   constructor(private http: HttpClient) {}
 
@@ -33,11 +33,11 @@ export class ModuleConfigService {
   }
 
   // Informações de Módulos
-  // Note: This endpoint uses /api/module-config instead of /api/system-admin/modules
+  // Note: This endpoint uses /module-config instead of /system-admin/modules
   // because it provides general module information that may be used by both
   // system-admin and clinic-specific contexts
   getModulesInfo(): Observable<ModuleInfo[]> {
-    return this.http.get<ModuleInfo[]>(`${environment.apiUrl}/api/module-config/info`);
+    return this.http.get<ModuleInfo[]>(`${environment.apiUrl}/module-config/info`);
   }
 
   // Ações Globais
@@ -57,7 +57,7 @@ export class ModuleConfigService {
   // Validação
   validateModule(clinicId: string, moduleName: string): Observable<ValidationResponse> {
     return this.http.post<ValidationResponse>(
-      `${environment.apiUrl}/api/module-config/validate`,
+      `${environment.apiUrl}/module-config/validate`,
       { moduleName }
     );
   }

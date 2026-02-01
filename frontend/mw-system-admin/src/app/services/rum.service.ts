@@ -233,7 +233,7 @@ export class RealUserMonitoringService {
     
     // In production, send to backend
     if (environment.production) {
-      this.http.post(`${environment.apiUrl}/api/system-admin/rum/metrics`, enrichedMetric)
+      this.http.post(`${environment.apiUrl}/system-admin/rum/metrics`, enrichedMetric)
         .subscribe({
           error: (err) => console.error('Error sending RUM metric:', err)
         });

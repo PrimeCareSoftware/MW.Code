@@ -108,7 +108,7 @@ export class ErrorTrackingService implements ErrorHandler {
     this.errorQueue = [];
     
     if (environment.production) {
-      this.http.post(`${environment.apiUrl}/api/system-admin/errors`, { errors })
+      this.http.post(`${environment.apiUrl}/system-admin/errors`, { errors })
         .subscribe({
           error: (err) => {
             console.error('Failed to send error reports:', err);

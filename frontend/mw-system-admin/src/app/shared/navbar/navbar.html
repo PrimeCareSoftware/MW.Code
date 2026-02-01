@@ -155,6 +155,71 @@
 
       <div class="nav-divider"></div>
       <div class="nav-section-title">
+        <span class="nav-text">Analytics e BI</span>
+      </div>
+
+      <!-- Custom Dashboards -->
+      <a routerLink="/custom-dashboards" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="9"/>
+          <rect x="14" y="3" width="7" height="5"/>
+          <rect x="14" y="12" width="7" height="9"/>
+          <rect x="3" y="16" width="7" height="5"/>
+        </svg>
+        <span class="nav-text">Dashboards Personalizados</span>
+      </a>
+
+      <!-- Reports -->
+      <a routerLink="/reports" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <path d="M9 15h6"/>
+          <path d="M9 11h6"/>
+        </svg>
+        <span class="nav-text">Relatórios</span>
+      </a>
+
+      <!-- Cohort Analysis -->
+      <a routerLink="/cohort-analysis" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span class="nav-text">Análise de Coorte</span>
+      </a>
+
+      <div class="nav-divider"></div>
+      <div class="nav-section-title">
+        <span class="nav-text">Automação</span>
+      </div>
+
+      <!-- Workflows -->
+      <a routerLink="/workflows" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 1v6m0 6v6"/>
+          <path d="m4.93 4.93 4.24 4.24m5.66 5.66 4.24 4.24"/>
+          <path d="M1 12h6m6 0h6"/>
+          <path d="m4.93 19.07 4.24-4.24m5.66-5.66 4.24-4.24"/>
+        </svg>
+        <span class="nav-text">Workflows</span>
+      </a>
+
+      <!-- Webhooks -->
+      <a routerLink="/webhooks" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+          <polyline points="16 6 12 2 8 6"/>
+          <line x1="12" y1="2" x2="12" y2="15"/>
+        </svg>
+        <span class="nav-text">Webhooks</span>
+      </a>
+
+      <div class="nav-divider"></div>
+      <div class="nav-section-title">
         <span class="nav-text">Catálogos e Dados</span>
       </div>
 
@@ -196,8 +261,52 @@
 
       <div class="nav-divider"></div>
       <div class="nav-section-title">
-        <span class="nav-text">Documentação</span>
+        <span class="nav-text">LGPD e Conformidade</span>
       </div>
+
+      <!-- LGPD Dashboard -->
+      <a routerLink="/lgpd/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span class="nav-text">Dashboard LGPD</span>
+      </a>
+
+      <!-- LGPD Consents -->
+      <a routerLink="/lgpd/consents" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        <span class="nav-text">Consentimentos</span>
+      </a>
+
+      <!-- LGPD Deletion Requests -->
+      <a routerLink="/lgpd/deletion-requests" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+        <span class="nav-text">Solicitações de Exclusão</span>
+      </a>
+
+      <div class="nav-divider"></div>
+      <div class="nav-section-title">
+        <span class="nav-text">Ajuda e Documentação</span>
+      </div>
+
+      <!-- Help Center -->
+      <a routerLink="/help" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span class="nav-text">Central de Ajuda</span>
+      </a>
 
       <!-- Documentation -->
       <a routerLink="/documentation" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
@@ -208,7 +317,7 @@
           <line x1="16" y1="17" x2="8" y2="17"/>
           <polyline points="10 9 9 9 8 9"/>
         </svg>
-        <span class="nav-text">Central de Documentação</span>
+        <span class="nav-text">Documentação Técnica</span>
       </a>
     </div>
   </div>
