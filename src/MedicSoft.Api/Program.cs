@@ -555,11 +555,15 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IMarketingAutomati
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IAutomationEngine, MedicSoft.Api.Services.CRM.AutomationEngine>();
 
 // CRM Advanced - Messaging Services (Real implementations replacing stubs)
-// Email Service - Uses SendGrid for production, stub for development
-var useRealEmailService = builder.Configuration.GetValue<bool>("Messaging:Email:Enabled");
+// Email Service - Uses SMTP for production (direct email sending), stub for development
+// Configure SMTP email settings
+builder.Services.Configure<MedicSoft.Application.Services.EmailService.SmtpEmailSettings>(
+    builder.Configuration.GetSection(MedicSoft.Application.Services.EmailService.SmtpEmailSettings.SectionName));
+
+var useRealEmailService = builder.Configuration.GetValue<bool>("Email:Enabled");
 if (useRealEmailService)
 {
-    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Api.Services.CRM.SendGridEmailService>();
+    builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Application.Services.EmailService.SmtpEmailService>();
 }
 else
 {
