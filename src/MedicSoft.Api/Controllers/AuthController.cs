@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -24,19 +25,22 @@ namespace MedicSoft.Api.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IClinicSelectionService _clinicSelectionService;
         private readonly ITwoFactorAuthService _twoFactorAuthService;
+        private readonly IUserRepository _userRepository;
 
         public AuthController(
             IAuthService authService, 
             IJwtTokenService jwtTokenService,
             ILogger<AuthController> logger,
             IClinicSelectionService clinicSelectionService,
-            ITwoFactorAuthService twoFactorAuthService)
+            ITwoFactorAuthService twoFactorAuthService,
+            IUserRepository userRepository)
         {
             _authService = authService;
             _jwtTokenService = jwtTokenService;
             _logger = logger;
             _clinicSelectionService = clinicSelectionService;
             _twoFactorAuthService = twoFactorAuthService;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -139,9 +143,64 @@ namespace MedicSoft.Api.Controllers
 
                 _logger.LogInformation("JWT token generated successfully for user: {UserId}", user.Id);
 
-                // Check MFA status
+                // Check MFA status and method
                 var mfaEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(user.Id.ToString(), tenantId);
                 var requiresMfaSetup = user.MfaRequiredByPolicy && !mfaEnabled;
+
+                // If MFA is enabled, check the method
+                if (mfaEnabled)
+                {
+                    var mfaMethod = await _twoFactorAuthService.GetTwoFactorMethodAsync(user.Id.ToString(), tenantId);
+                    
+                    // If email-based 2FA, send verification code
+                    if (mfaMethod == MedicSoft.Domain.Enums.TwoFactorMethod.Email)
+                    {
+                        try
+                        {
+                            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                            var tempToken = await _twoFactorAuthService.GenerateAndSendEmailCodeAsync(
+                                user.Id.ToString(), 
+                                user.Email, 
+                                ipAddress, 
+                                "Login", 
+                                tenantId
+                            );
+
+                            _logger.LogInformation("2FA email code sent to user: {UserId}", user.Id);
+
+                            return Ok(new TwoFactorRequiredResponse
+                            {
+                                RequiresTwoFactor = true,
+                                TempToken = tempToken,
+                                Method = "Email",
+                                Message = "Código de verificação enviado para seu e-mail"
+                            });
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            _logger.LogWarning(ex, "Rate limit exceeded for user: {UserId}", user.Id);
+                            return StatusCode(429, new { message = ex.Message });
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Failed to send 2FA code to user: {UserId}", user.Id);
+                            return StatusCode(500, new { message = "Erro ao enviar código de verificação. Por favor, tente novamente." });
+                        }
+                    }
+                    
+                    // For TOTP-based 2FA, the client should call the MFA verify endpoint
+                    // Return token but indicate MFA verification is required
+                    if (mfaMethod == MedicSoft.Domain.Enums.TwoFactorMethod.TOTP)
+                    {
+                        return Ok(new TwoFactorRequiredResponse
+                        {
+                            RequiresTwoFactor = true,
+                            TempToken = token,
+                            Method = "TOTP",
+                            Message = "Verificação de dois fatores necessária. Use seu aplicativo autenticador."
+                        });
+                    }
+                }
 
                 return Ok(new LoginResponse
                 {
@@ -514,6 +573,163 @@ namespace MedicSoft.Api.Controllers
                 return StatusCode(500, new { message = "Erro ao validar sessão" });
             }
         }
+
+        /// <summary>
+        /// Verify 2FA email code and complete login
+        /// </summary>
+        [HttpPost("verify-2fa-email")]
+        public async Task<ActionResult<LoginResponse>> VerifyTwoFactorEmail([FromBody] VerifyTwoFactorEmailRequest request)
+        {
+            try
+            {
+                // Decode temp token to get userId and tokenId
+                var decodedBytes = Convert.FromBase64String(request.TempToken);
+                var decodedString = Encoding.UTF8.GetString(decodedBytes);
+                var parts = decodedString.Split(':');
+                
+                if (parts.Length != 2)
+                {
+                    return BadRequest(new { message = "Token temporário inválido" });
+                }
+
+                var userId = parts[0];
+                var tokenId = parts[1];
+
+                // Get tenantId from context
+                var tenantId = HttpContext.Items["TenantId"] as string;
+                if (string.IsNullOrWhiteSpace(tenantId))
+                {
+                    return BadRequest(new { message = "Identificador da clínica não encontrado" });
+                }
+
+                // Verify the code
+                var isValid = await _twoFactorAuthService.VerifyEmailCodeAsync(userId, request.Code, tenantId);
+                if (!isValid)
+                {
+                    _logger.LogWarning("Failed 2FA email verification for user: {UserId}", userId);
+                    return BadRequest(new { message = "Código inválido ou expirado" });
+                }
+
+                // Get user
+                if (!Guid.TryParse(userId, out var userGuid))
+                {
+                    return BadRequest(new { message = "ID de usuário inválido" });
+                }
+
+                var user = await _userRepository.GetByIdAsync(userGuid, tenantId);
+                if (user == null)
+                {
+                    return BadRequest(new { message = "Usuário não encontrado" });
+                }
+
+                // Get available clinics
+                var availableClinics = await _clinicSelectionService.GetUserClinicsAsync(user.Id, tenantId);
+                var clinicList = availableClinics.ToList();
+
+                // Record login
+                var sessionId = await _authService.RecordUserLoginAsync(user.Id, tenantId);
+
+                // Generate JWT token
+                var token = _jwtTokenService.GenerateToken(
+                    username: user.Username,
+                    userId: user.Id.ToString(),
+                    tenantId: tenantId,
+                    role: user.Role.ToString(),
+                    clinicId: user.ClinicId?.ToString(),
+                    sessionId: sessionId
+                );
+
+                _logger.LogInformation("User {UserId} completed 2FA email verification and logged in successfully", user.Id);
+
+                return Ok(new LoginResponse
+                {
+                    Token = token,
+                    Username = user.Username,
+                    TenantId = tenantId,
+                    Role = user.Role.ToString(),
+                    ClinicId = user.ClinicId,
+                    CurrentClinicId = user.CurrentClinicId ?? user.ClinicId,
+                    AvailableClinics = clinicList,
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(60),
+                    MfaEnabled = true,
+                    RequiresMfaSetup = false,
+                    MfaGracePeriodEndsAt = user.MfaGracePeriodEndsAt
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error verifying 2FA email code");
+                return StatusCode(500, new { message = "Erro ao verificar código de verificação" });
+            }
+        }
+
+        /// <summary>
+        /// Resend 2FA email code
+        /// </summary>
+        [HttpPost("resend-2fa-email")]
+        public async Task<ActionResult> ResendTwoFactorEmail([FromBody] ResendTwoFactorEmailRequest request)
+        {
+            try
+            {
+                // Decode temp token to get userId
+                var decodedBytes = Convert.FromBase64String(request.TempToken);
+                var decodedString = Encoding.UTF8.GetString(decodedBytes);
+                var parts = decodedString.Split(':');
+                
+                if (parts.Length != 2)
+                {
+                    return BadRequest(new { message = "Token temporário inválido" });
+                }
+
+                var userId = parts[0];
+
+                // Get tenantId from context
+                var tenantId = HttpContext.Items["TenantId"] as string;
+                if (string.IsNullOrWhiteSpace(tenantId))
+                {
+                    return BadRequest(new { message = "Identificador da clínica não encontrado" });
+                }
+
+                // Get user to get email
+                if (!Guid.TryParse(userId, out var userGuid))
+                {
+                    return BadRequest(new { message = "ID de usuário inválido" });
+                }
+
+                var user = await _userRepository.GetByIdAsync(userGuid, tenantId);
+                if (user == null)
+                {
+                    return BadRequest(new { message = "Usuário não encontrado" });
+                }
+
+                // Send new code
+                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var newTempToken = await _twoFactorAuthService.GenerateAndSendEmailCodeAsync(
+                    userId, 
+                    user.Email, 
+                    ipAddress, 
+                    "Login", 
+                    tenantId
+                );
+
+                _logger.LogInformation("2FA email code resent to user: {UserId}", userId);
+
+                return Ok(new { 
+                    message = "Código reenviado com sucesso",
+                    tempToken = newTempToken
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "Rate limit exceeded when resending 2FA code");
+                return StatusCode(429, new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error resending 2FA email code");
+                return StatusCode(500, new { message = "Erro ao reenviar código de verificação" });
+            }
+        }
     }
 
     public class LoginRequest
@@ -563,5 +779,24 @@ namespace MedicSoft.Api.Controllers
     {
         public bool IsValid { get; set; }
         public string Message { get; set; } = string.Empty;
+    }
+
+    public class TwoFactorRequiredResponse
+    {
+        public bool RequiresTwoFactor { get; set; } = true;
+        public string TempToken { get; set; } = string.Empty;
+        public string Method { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
+    }
+
+    public class VerifyTwoFactorEmailRequest
+    {
+        public string TempToken { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
+    }
+
+    public class ResendTwoFactorEmailRequest
+    {
+        public string TempToken { get; set; } = string.Empty;
     }
 }
