@@ -745,13 +745,17 @@
   margin-top: 1rem;
   
   .info-text {
-    color: white;
+    color: white !important;
+    background: transparent !important;
+    border: none !important;
     margin-bottom: 0;
+    padding: 0;
     font-size: 0.95rem;
     line-height: 1.5;
     
     strong {
       font-weight: 600;
+      color: white;
     }
   }
 
