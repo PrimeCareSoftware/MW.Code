@@ -697,9 +697,48 @@ namespace MedicSoft.Api.Controllers
                 request.TrialDays,
                 request.MaxUsers,
                 request.MaxPatients,
-                SubscriptionPlanType.Standard,
-                "system" // System-wide plan
+                (SubscriptionPlanType)request.Type,
+                "system", // System-wide plan
+                request.HasReports,
+                request.HasWhatsAppIntegration,
+                request.HasSMSNotifications,
+                request.HasTissExport,
+                request.MaxClinics
             );
+
+            // Set campaign pricing if provided
+            if (!string.IsNullOrEmpty(request.CampaignName) && 
+                request.OriginalPrice.HasValue && 
+                request.CampaignPrice.HasValue)
+            {
+                plan.SetCampaignPricing(
+                    request.CampaignName,
+                    request.CampaignDescription ?? string.Empty,
+                    request.OriginalPrice.Value,
+                    request.CampaignPrice.Value,
+                    request.CampaignStartDate,
+                    request.CampaignEndDate,
+                    request.MaxEarlyAdopters
+                );
+            }
+
+            // Set early adopter benefits if provided
+            if (request.EarlyAdopterBenefits != null && request.EarlyAdopterBenefits.Any())
+            {
+                plan.SetEarlyAdopterBenefits(request.EarlyAdopterBenefits.ToArray());
+            }
+
+            // Set features available if provided
+            if (request.FeaturesAvailable != null && request.FeaturesAvailable.Any())
+            {
+                plan.SetFeaturesAvailable(request.FeaturesAvailable.ToArray());
+            }
+
+            // Set features in development if provided
+            if (request.FeaturesInDevelopment != null && request.FeaturesInDevelopment.Any())
+            {
+                plan.SetFeaturesInDevelopment(request.FeaturesInDevelopment.ToArray());
+            }
 
             _context.SubscriptionPlans.Add(plan);
             await _context.SaveChangesAsync();
@@ -730,11 +769,51 @@ namespace MedicSoft.Api.Controllers
                 request.MonthlyPrice,
                 request.MaxUsers,
                 request.MaxPatients,
-                false, // hasReports
-                false, // hasWhatsAppIntegration
-                false, // hasSMSNotifications
-                false  // hasTissExport
+                request.HasReports,
+                request.HasWhatsAppIntegration,
+                request.HasSMSNotifications,
+                request.HasTissExport,
+                request.MaxClinics
             );
+
+            // Update campaign pricing if provided
+            if (!string.IsNullOrEmpty(request.CampaignName) && 
+                request.OriginalPrice.HasValue && 
+                request.CampaignPrice.HasValue)
+            {
+                plan.SetCampaignPricing(
+                    request.CampaignName,
+                    request.CampaignDescription ?? string.Empty,
+                    request.OriginalPrice.Value,
+                    request.CampaignPrice.Value,
+                    request.CampaignStartDate,
+                    request.CampaignEndDate,
+                    request.MaxEarlyAdopters
+                );
+            }
+            else if (string.IsNullOrEmpty(request.CampaignName))
+            {
+                // Clear campaign if no campaign name provided
+                plan.ClearCampaignPricing();
+            }
+
+            // Update early adopter benefits
+            if (request.EarlyAdopterBenefits != null && request.EarlyAdopterBenefits.Any())
+            {
+                plan.SetEarlyAdopterBenefits(request.EarlyAdopterBenefits.ToArray());
+            }
+
+            // Update features available
+            if (request.FeaturesAvailable != null && request.FeaturesAvailable.Any())
+            {
+                plan.SetFeaturesAvailable(request.FeaturesAvailable.ToArray());
+            }
+
+            // Update features in development
+            if (request.FeaturesInDevelopment != null && request.FeaturesInDevelopment.Any())
+            {
+                plan.SetFeaturesInDevelopment(request.FeaturesInDevelopment.ToArray());
+            }
 
             if (request.IsActive != plan.IsActive)
             {
@@ -1178,7 +1257,25 @@ namespace MedicSoft.Api.Controllers
         public decimal MonthlyPrice { get; set; }
         public int MaxUsers { get; set; }
         public int MaxPatients { get; set; }
+        public int MaxClinics { get; set; } = 1;
         public int TrialDays { get; set; } = 14;
+        public bool HasReports { get; set; }
+        public bool HasWhatsAppIntegration { get; set; }
+        public bool HasSMSNotifications { get; set; }
+        public bool HasTissExport { get; set; }
+        public int Type { get; set; } = 2; // Default to Standard
+        
+        // Campaign fields
+        public string? CampaignName { get; set; }
+        public string? CampaignDescription { get; set; }
+        public decimal? OriginalPrice { get; set; }
+        public decimal? CampaignPrice { get; set; }
+        public DateTime? CampaignStartDate { get; set; }
+        public DateTime? CampaignEndDate { get; set; }
+        public int? MaxEarlyAdopters { get; set; }
+        public List<string>? EarlyAdopterBenefits { get; set; }
+        public List<string>? FeaturesAvailable { get; set; }
+        public List<string>? FeaturesInDevelopment { get; set; }
     }
 
     public class UpdateSubscriptionPlanRequest
@@ -1188,8 +1285,25 @@ namespace MedicSoft.Api.Controllers
         public decimal MonthlyPrice { get; set; }
         public int MaxUsers { get; set; }
         public int MaxPatients { get; set; }
+        public int MaxClinics { get; set; } = 1;
         public int TrialDays { get; set; }
         public bool IsActive { get; set; }
+        public bool HasReports { get; set; }
+        public bool HasWhatsAppIntegration { get; set; }
+        public bool HasSMSNotifications { get; set; }
+        public bool HasTissExport { get; set; }
+        
+        // Campaign fields
+        public string? CampaignName { get; set; }
+        public string? CampaignDescription { get; set; }
+        public decimal? OriginalPrice { get; set; }
+        public decimal? CampaignPrice { get; set; }
+        public DateTime? CampaignStartDate { get; set; }
+        public DateTime? CampaignEndDate { get; set; }
+        public int? MaxEarlyAdopters { get; set; }
+        public List<string>? EarlyAdopterBenefits { get; set; }
+        public List<string>? FeaturesAvailable { get; set; }
+        public List<string>? FeaturesInDevelopment { get; set; }
     }
 
     public class CreateSubdomainRequest
