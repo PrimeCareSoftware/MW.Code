@@ -57,7 +57,22 @@
 <nav class="sidebar" [class.open]="sidebarOpen">
   <div class="sidebar-content">
     <div class="sidebar-menu">
-      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item" (click)="closeSidebar()">
+      
+      <!-- Core Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('core')" [class.expanded]="isMenuGroupOpen('core')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span class="nav-text">Principal</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('core')">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item" (click)="closeSidebar()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="7" height="7"/>
           <rect x="14" y="3" width="7" height="7"/>
@@ -75,414 +90,513 @@
         </svg>
         <span class="nav-text">Pacientes</span>
       </a>
-      <a routerLink="/appointments" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
-        </svg>
-        <span class="nav-text">Agendamentos</span>
-      </a>
-      <a routerLink="/telemedicine" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
-          <polyline points="17 2 12 7 7 2"></polyline>
-        </svg>
-        <span class="nav-text">Telemedicina</span>
-      </a>
-      <a routerLink="/waiting-queue" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <line x1="19" y1="8" x2="19" y2="14"/>
-          <line x1="22" y1="11" x2="16" y2="11"/>
-        </svg>
-        <span class="nav-text">Fila de Espera</span>
-      </a>
-      <a routerLink="/analytics" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <a routerLink="/appointments" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <span class="nav-text">Agendamentos</span>
+        </a>
+        <a routerLink="/telemedicine" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+            <polyline points="17 2 12 7 7 2"></polyline>
+          </svg>
+          <span class="nav-text">Telemedicina</span>
+        </a>
+        <a routerLink="/waiting-queue" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+          </svg>
+          <span class="nav-text">Fila de Espera</span>
+        </a>
+      </div>
+
+      <!-- Analytics Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('analytics')" [class.expanded]="isMenuGroupOpen('analytics')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
           <path d="M3 3v18h18"/>
           <path d="M18 17V9"/>
           <path d="M13 17V5"/>
           <path d="M8 17v-3"/>
         </svg>
-        <span class="nav-text">Relatórios</span>
-      </a>
-      <a routerLink="/analytics/dashboard-clinico" routerLinkActive="active" class="nav-item nav-item-sub" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        <span class="nav-text">Analytics e Relatórios</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
         </svg>
-        <span class="nav-text">Dashboard Clínico</span>
-      </a>
-      <a routerLink="/analytics/dashboard-financeiro" routerLinkActive="active" class="nav-item nav-item-sub" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23"/>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-        </svg>
-        <span class="nav-text">Dashboard Financeiro</span>
-      </a>
-      <a routerLink="/soap-records" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('analytics')">
+        <a routerLink="/analytics" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9"/>
+            <path d="M13 17V5"/>
+            <path d="M8 17v-3"/>
+          </svg>
+          <span class="nav-text">Relatórios</span>
+        </a>
+        <a routerLink="/analytics/dashboard-clinico" routerLinkActive="active" class="nav-item nav-item-sub" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+          <span class="nav-text">Dashboard Clínico</span>
+        </a>
+        <a routerLink="/analytics/dashboard-financeiro" routerLinkActive="active" class="nav-item nav-item-sub" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <span class="nav-text">Dashboard Financeiro</span>
+        </a>
+      </div>
+
+      <!-- Clinical Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('clinical')" [class.expanded]="isMenuGroupOpen('clinical')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
           <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
           <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
-          <polyline points="10 9 9 9 8 9"/>
         </svg>
-        <span class="nav-text">Prontuários SOAP</span>
-      </a>
-      <a routerLink="/anamnesis/templates" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <circle cx="12" cy="13" r="2"/>
-          <path d="M12 15v2"/>
-          <path d="M12 9v2"/>
+        <span class="nav-text">Clínico</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
         </svg>
-        <span class="nav-text">Templates de Anamnese</span>
-      </a>
-      <a routerLink="/anamnesis/templates/manage" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <path d="M9 15h6"/>
-          <path d="M9 11h6"/>
-        </svg>
-        <span class="nav-text">Gerenciar Templates</span>
-      </a>
-      <a routerLink="/procedures" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <path d="M9 15h6"/>
-          <path d="M9 11h6"/>
-        </svg>
-        <span class="nav-text">Procedimentos</span>
-      </a>
-      <a routerLink="/tickets" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14 2 14 8 20 8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-        </svg>
-        <span class="nav-text">Tickets de Suporte</span>
-      </a>
-
-      <div class="nav-divider"></div>
-      <div class="nav-section-title">
-        <span class="nav-text">Gestão de Relacionamento (CRM)</span>
-      </div>
-      <a routerLink="/crm/complaints" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        <span class="nav-text">Reclamações/Denúncias</span>
-      </a>
-      <a routerLink="/crm/surveys" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="9" y1="13" x2="15" y2="13"/>
-          <line x1="9" y1="17" x2="13" y2="17"/>
-        </svg>
-        <span class="nav-text">Pesquisas de Satisfação</span>
-      </a>
-      <a routerLink="/crm/patient-journey" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9 22 9 12 15 12 15 22"/>
-          <path d="M9 6h6"/>
-        </svg>
-        <span class="nav-text">Jornada do Paciente</span>
-      </a>
-      <a routerLink="/crm/marketing" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        <span class="nav-text">Automação de Marketing</span>
-      </a>
-
-      <div class="nav-divider"></div>
-      <div class="nav-section-title">
-        <span class="nav-text">Financeiro</span>
-      </div>
-      <a routerLink="/financial/cash-flow" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23"/>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-        </svg>
-        <span class="nav-text">Fluxo de Caixa</span>
-      </a>
-      <a routerLink="/financial/receivables" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-          <path d="M12 21 5 14"/>
-          <path d="M9 5v5"/>
-          <path d="M15 5v5"/>
-        </svg>
-        <span class="nav-text">Contas a Receber</span>
-      </a>
-      <a routerLink="/financial/payables" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <path d="M7 15h0"/>
-          <path d="M2 9.5h20"/>
-        </svg>
-        <span class="nav-text">Contas a Pagar</span>
-      </a>
-      <a routerLink="/financial/suppliers" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
-          <path d="m3.3 7 8.7 5 8.7-5"/>
-          <path d="M12 22V12"/>
-        </svg>
-        <span class="nav-text">Fornecedores</span>
-      </a>
-      <a routerLink="/financial/closures" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
-          <line x1="16" y1="9" x2="8" y2="9"/>
-        </svg>
-        <span class="nav-text">Fechamentos</span>
-      </a>
-      <a routerLink="/financial/invoices" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="12" y1="18" x2="12" y2="12"/>
-          <line x1="9" y1="15" x2="15" y2="15"/>
-        </svg>
-        <span class="nav-text">Notas Fiscais</span>
-      </a>
-      <a routerLink="/financial/fiscal-dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <path d="M3 9h18"/>
-          <path d="M9 21V9"/>
-        </svg>
-        <span class="nav-text">Dashboard Fiscal</span>
-      </a>
-      <a routerLink="/financial/reports/dre" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="9" y1="15" x2="15" y2="15"/>
-        </svg>
-        <span class="nav-text">Relatório DRE</span>
-      </a>
-      <a routerLink="/financial/reports/cash-flow-forecast" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
-          <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
-          <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
-        </svg>
-        <span class="nav-text">Previsão de Fluxo</span>
-      </a>
-      <a routerLink="/financial/reports/profitability" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="20" x2="12" y2="10"/>
-          <line x1="18" y1="20" x2="18" y2="4"/>
-          <line x1="6" y1="20" x2="6" y2="16"/>
-        </svg>
-        <span class="nav-text">Análise de Rentabilidade</span>
-      </a>
-
-      <div class="nav-divider"></div>
-      @if (isOwner()) {
-        <div class="nav-section-title">
-          <span class="nav-text">Configurações</span>
-        </div>
-        <a routerLink="/settings/company" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('clinical')">
+        <a routerLink="/soap-records" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
           </svg>
-          <span class="nav-text">Empresa</span>
+          <span class="nav-text">Prontuários SOAP</span>
         </a>
-        <a routerLink="/clinic-admin/info" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <a routerLink="/anamnesis/templates" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <circle cx="12" cy="13" r="2"/>
+            <path d="M12 15v2"/>
+            <path d="M12 9v2"/>
           </svg>
-          <span class="nav-text">Clínicas</span>
+          <span class="nav-text">Templates de Anamnese</span>
         </a>
-        <a routerLink="/procedures/owner-management" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <a routerLink="/anamnesis/templates/manage" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
             <path d="M9 15h6"/>
             <path d="M9 11h6"/>
           </svg>
-          <span class="nav-text">Procedimentos (Proprietário)</span>
+          <span class="nav-text">Gerenciar Templates</span>
         </a>
-      }
-
-      <div class="nav-divider"></div>
-      <div class="nav-section-title">
-        <span class="nav-text">Compliance</span>
+        <a routerLink="/procedures" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <path d="M9 15h6"/>
+            <path d="M9 11h6"/>
+          </svg>
+          <span class="nav-text">Procedimentos</span>
+        </a>
       </div>
-      <a routerLink="/sngpc/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+      <!-- Support Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('support')" [class.expanded]="isMenuGroupOpen('support')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
           <polyline points="14 2 14 8 20 8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-          <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        <span class="nav-text">SNGPC - ANVISA</span>
-      </a>
-
-      <div class="nav-divider"></div>
-      <div class="nav-section-title">
-        <span class="nav-text">TISS / TUSS</span>
+        <span class="nav-text">Suporte</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('support')">
+        <a routerLink="/tickets" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span class="nav-text">Tickets de Suporte</span>
+        </a>
       </div>
-      <a routerLink="/tiss/operators" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
-        <span class="nav-text">Operadoras</span>
-      </a>
-      <a routerLink="/tiss/guides" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
-        </svg>
-        <span class="nav-text">Guias TISS</span>
-      </a>
-      <a routerLink="/tiss/batches" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-          <line x1="12" y1="22.08" x2="12" y2="12"/>
-        </svg>
-        <span class="nav-text">Lotes</span>
-      </a>
-      <a routerLink="/tiss/authorizations" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-        <span class="nav-text">Autorizações</span>
-      </a>
-      <a routerLink="/tiss/procedures" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <path d="M9 15h6"/>
-          <path d="M9 11h6"/>
-        </svg>
-        <span class="nav-text">Procedimentos TUSS</span>
-      </a>
-      <a routerLink="/tiss/dashboards/glosas" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <path d="M12 8v8"/>
-          <path d="M8 12h8"/>
-        </svg>
-        <span class="nav-text">Dashboard Glosas</span>
-      </a>
-      <a routerLink="/tiss/dashboards/performance" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-        </svg>
-        <span class="nav-text">Dashboard Performance</span>
-      </a>
-      <a routerLink="/tiss/reports" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
-          <polyline points="10 9 9 9 8 9"/>
-        </svg>
-        <span class="nav-text">Relatórios TISS</span>
-      </a>
 
-      @if (isOwner()) {
-        <div class="nav-divider"></div>
-        <div class="nav-section-title">
-          <span class="nav-text">Administração</span>
-        </div>
-        <a routerLink="/clinic-admin/users" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+      <!-- CRM Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('crm')" [class.expanded]="isMenuGroupOpen('crm')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+        </svg>
+        <span class="nav-text">CRM</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('crm')">
+        <a routerLink="/crm/complaints" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <line x1="23" y1="8" x2="23" y2="14"/>
-            <line x1="20" y1="11" x2="24" y2="11"/>
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
           </svg>
-          <span class="nav-text">Usuários</span>
+          <span class="nav-text">Reclamações/Denúncias</span>
         </a>
-        <a routerLink="/admin/profiles" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <a routerLink="/crm/surveys" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="9" y1="13" x2="15" y2="13"/>
+            <line x1="9" y1="17" x2="13" y2="17"/>
           </svg>
-          <span class="nav-text">Perfis de Acesso</span>
+          <span class="nav-text">Pesquisas de Satisfação</span>
         </a>
-        <a routerLink="/clinic-admin/customization" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <a routerLink="/crm/patient-journey" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
-            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
-            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
-            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
-            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+            <path d="M9 6h6"/>
           </svg>
-          <span class="nav-text">Personalização</span>
+          <span class="nav-text">Jornada do Paciente</span>
         </a>
-        <a routerLink="/clinic-admin/tiss-config" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <a routerLink="/crm/marketing" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          <span class="nav-text">TISS/TUSS</span>
+          <span class="nav-text">Automação de Marketing</span>
         </a>
-        <a routerLink="/clinic-admin/public-display" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+      </div>
+
+      <!-- Financial Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('financial')" [class.expanded]="isMenuGroupOpen('financial')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+        <span class="nav-text">Financeiro</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('financial')">
+          <a routerLink="/financial/cash-flow" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 16v-4"/>
-            <path d="M12 8h.01"/>
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
-          <span class="nav-text">Visibilidade Pública</span>
+          <span class="nav-text">Fluxo de Caixa</span>
         </a>
-        <a routerLink="/clinic-admin/subscription" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <a routerLink="/financial/receivables" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <path d="M12 21 5 14"/>
+            <path d="M9 5v5"/>
+            <path d="M15 5v5"/>
+          </svg>
+          <span class="nav-text">Contas a Receber</span>
+        </a>
+        <a routerLink="/financial/payables" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M7 15h0"/>
+            <path d="M2 9.5h20"/>
+          </svg>
+          <span class="nav-text">Contas a Pagar</span>
+        </a>
+        <a routerLink="/financial/suppliers" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+            <path d="m3.3 7 8.7 5 8.7-5"/>
+            <path d="M12 22V12"/>
+          </svg>
+          <span class="nav-text">Fornecedores</span>
+        </a>
+        <a routerLink="/financial/closures" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <line x1="16" y1="9" x2="8" y2="9"/>
+          </svg>
+          <span class="nav-text">Fechamentos</span>
+        </a>
+        <a routerLink="/financial/invoices" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          <span class="nav-text">Notas Fiscais</span>
+        </a>
+        <a routerLink="/financial/fiscal-dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
             <path d="M3 9h18"/>
             <path d="M9 21V9"/>
           </svg>
-          <span class="nav-text">Assinatura</span>
+          <span class="nav-text">Dashboard Fiscal</span>
         </a>
-        <a routerLink="/clinic-admin/modules" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="14" width="7" height="7" rx="1"/>
-            <rect x="3" y="14" width="7" height="7" rx="1"/>
-          </svg>
-          <span class="nav-text">Módulos</span>
-        </a>
-        <a routerLink="/audit-logs" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <a routerLink="/financial/reports/dre" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
-            <line x1="12" y1="11" x2="12" y2="17"/>
-            <polyline points="9 14 12 17 15 14"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
           </svg>
-          <span class="nav-text">Logs de Auditoria</span>
+          <span class="nav-text">Relatório DRE</span>
         </a>
+        <a routerLink="/financial/reports/cash-flow-forecast" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+            <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+          </svg>
+          <span class="nav-text">Previsão de Fluxo</span>
+        </a>
+        <a routerLink="/financial/reports/profitability" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="20" x2="12" y2="10"/>
+            <line x1="18" y1="20" x2="18" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="16"/>
+          </svg>
+          <span class="nav-text">Análise de Rentabilidade</span>
+        </a>
+      </div>
+
+      <!-- Settings Menu Group (Owner only) -->
+      @if (isOwner()) {
+        <button class="nav-group-header" (click)="toggleMenuGroup('settings')" [class.expanded]="isMenuGroupOpen('settings')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v6m0 6v6m-8-8h6m6 0h6"/>
+          </svg>
+          <span class="nav-text">Configurações</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('settings')">
+          <a routerLink="/settings/company" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="nav-text">Empresa</span>
+          </a>
+          <a routerLink="/clinic-admin/info" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="nav-text">Clínicas</span>
+          </a>
+          <a routerLink="/procedures/owner-management" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <path d="M9 15h6"/>
+              <path d="M9 11h6"/>
+            </svg>
+            <span class="nav-text">Procedimentos (Proprietário)</span>
+          </a>
+        </div>
       }
+
+      <!-- Compliance Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('compliance')" [class.expanded]="isMenuGroupOpen('compliance')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span class="nav-text">Compliance</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('compliance')">
+        <a routerLink="/sngpc/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span class="nav-text">SNGPC - ANVISA</span>
+        </a>
+      </div>
+
+      <!-- TISS/TUSS Menu Group -->
+      <button class="nav-group-header" (click)="toggleMenuGroup('tiss')" [class.expanded]="isMenuGroupOpen('tiss')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <span class="nav-text">TISS / TUSS</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('tiss')">
+        <a routerLink="/tiss/operators" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span class="nav-text">Operadoras</span>
+        </a>
+        <a routerLink="/tiss/guides" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <span class="nav-text">Guias TISS</span>
+        </a>
+        <a routerLink="/tiss/batches" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          <span class="nav-text">Lotes</span>
+        </a>
+        <a routerLink="/tiss/authorizations" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span class="nav-text">Autorizações</span>
+        </a>
+        <a routerLink="/tiss/procedures" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <path d="M9 15h6"/>
+            <path d="M9 11h6"/>
+          </svg>
+          <span class="nav-text">Procedimentos TUSS</span>
+        </a>
+        <a routerLink="/tiss/dashboards/glosas" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M12 8v8"/>
+            <path d="M8 12h8"/>
+          </svg>
+          <span class="nav-text">Dashboard Glosas</span>
+        </a>
+        <a routerLink="/tiss/dashboards/performance" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <span class="nav-text">Dashboard Performance</span>
+        </a>
+        <a routerLink="/tiss/reports" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span class="nav-text">Relatórios TISS</span>
+        </a>
+      </div>
+
+      <!-- Administration Menu Group (Owner only) -->
+      @if (isOwner()) {
+        <button class="nav-group-header" (click)="toggleMenuGroup('admin')" [class.expanded]="isMenuGroupOpen('admin')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-icon">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span class="nav-text">Administração</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="nav-group-content" [class.expanded]="isMenuGroupOpen('admin')">
+            <a routerLink="/clinic-admin/users" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="23" y1="8" x2="23" y2="14"/>
+              <line x1="20" y1="11" x2="24" y2="11"/>
+            </svg>
+            <span class="nav-text">Usuários</span>
+          </a>
+          <a routerLink="/admin/profiles" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <span class="nav-text">Perfis de Acesso</span>
+          </a>
+          <a routerLink="/clinic-admin/customization" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+            </svg>
+            <span class="nav-text">Personalização</span>
+          </a>
+          <a routerLink="/clinic-admin/tiss-config" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <span class="nav-text">TISS/TUSS</span>
+          </a>
+          <a routerLink="/clinic-admin/public-display" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4"/>
+              <path d="M12 8h.01"/>
+            </svg>
+            <span class="nav-text">Visibilidade Pública</span>
+          </a>
+          <a routerLink="/clinic-admin/subscription" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18"/>
+              <path d="M9 21V9"/>
+            </svg>
+            <span class="nav-text">Assinatura</span>
+          </a>
+          <a routerLink="/clinic-admin/modules" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span class="nav-text">Módulos</span>
+          </a>
+          <a routerLink="/audit-logs" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="11" x2="12" y2="17"/>
+              <polyline points="9 14 12 17 15 14"/>
+            </svg>
+            <span class="nav-text">Logs de Auditoria</span>
+          </a>
+        </div>
+      }
+      
     </div>
   </div>
 </nav>

@@ -204,6 +204,99 @@ body.theme-high-contrast .sidebar {
   padding: 0 var(--spacing-3);
 }
 
+// Nav group styles
+.nav-group-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  color: var(--gray-700);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-semibold);
+  font-size: var(--font-size-sm);
+  position: relative;
+  background: var(--gray-50);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  margin-top: var(--spacing-2);
+
+  .group-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .chevron-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    transition: transform var(--transition-fast);
+  }
+
+  &.expanded {
+    background: var(--primary-100);
+    color: var(--primary-700);
+
+    .chevron-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  &:hover {
+    background-color: var(--gray-100);
+    color: var(--gray-900);
+  }
+}
+
+.nav-group-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-base) ease-out;
+  
+  &.expanded {
+    max-height: 2000px;
+    transition: max-height var(--transition-base) ease-in;
+  }
+}
+
+// Dark theme styles for nav-group
+body.theme-dark .nav-group-header {
+  color: var(--gray-300);
+  background: var(--gray-800);
+
+  &.expanded {
+    background: var(--gray-700);
+    color: var(--primary-400);
+  }
+
+  &:hover {
+    background-color: var(--gray-700);
+    color: var(--gray-200);
+  }
+}
+
+// High contrast theme styles for nav-group
+body.theme-high-contrast .nav-group-header {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+
+  &.expanded {
+    background: var(--bg-tertiary);
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+  }
+
+  &:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color-hover);
+  }
+}
+
 
   .nav-item {
     display: flex;
