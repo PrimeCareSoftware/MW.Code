@@ -25,6 +25,19 @@ namespace MedicSoft.Domain.Entities
         public bool IsActive { get; private set; }
         public SubscriptionPlanType Type { get; private set; }
         public string? EnabledModules { get; private set; } // JSON array of enabled modules
+        
+        // Campaign fields
+        public string? CampaignName { get; private set; }
+        public string? CampaignDescription { get; private set; }
+        public decimal? OriginalPrice { get; private set; }
+        public decimal? CampaignPrice { get; private set; }
+        public DateTime? CampaignStartDate { get; private set; }
+        public DateTime? CampaignEndDate { get; private set; }
+        public int? MaxEarlyAdopters { get; private set; }
+        public int CurrentEarlyAdopters { get; private set; }
+        public string? EarlyAdopterBenefits { get; private set; } // JSON array
+        public string? FeaturesAvailable { get; private set; } // JSON array
+        public string? FeaturesInDevelopment { get; private set; } // JSON array
 
         private SubscriptionPlan()
         {
@@ -171,6 +184,253 @@ namespace MedicSoft.Domain.Entities
                 "TissExport" => HasTissExport,
                 _ => true // Core modules are available in all plans
             };
+        }
+
+        /// <summary>
+        /// Set campaign pricing and details
+        /// </summary>
+        public void SetCampaignPricing(string campaignName, string campaignDescription,
+            decimal originalPrice, decimal campaignPrice, DateTime? startDate = null,
+            DateTime? endDate = null, int? maxEarlyAdopters = null)
+        {
+            if (string.IsNullOrWhiteSpace(campaignName))
+                throw new ArgumentException("Campaign name cannot be empty", nameof(campaignName));
+
+            if (originalPrice < 0)
+                throw new ArgumentException("Original price cannot be negative", nameof(originalPrice));
+
+            if (campaignPrice < 0)
+                throw new ArgumentException("Campaign price cannot be negative", nameof(campaignPrice));
+
+            if (campaignPrice > originalPrice)
+                throw new ArgumentException("Campaign price cannot be higher than original price", nameof(campaignPrice));
+
+            if (maxEarlyAdopters.HasValue && maxEarlyAdopters.Value <= 0)
+                throw new ArgumentException("Max early adopters must be greater than zero", nameof(maxEarlyAdopters));
+
+            CampaignName = campaignName.Trim();
+            CampaignDescription = campaignDescription?.Trim() ?? string.Empty;
+            OriginalPrice = originalPrice;
+            CampaignPrice = campaignPrice;
+            CampaignStartDate = startDate ?? DateTime.UtcNow;
+            CampaignEndDate = endDate; // null means lifetime campaign
+            MaxEarlyAdopters = maxEarlyAdopters;
+            // Only reset counter when creating a new campaign (not when updating existing one)
+            // Caller should preserve CurrentEarlyAdopters if updating
+            if (CurrentEarlyAdopters == 0)
+            {
+                CurrentEarlyAdopters = 0; // Explicitly set for new campaigns
+            }
+            
+            // Update MonthlyPrice to reflect campaign price
+            MonthlyPrice = campaignPrice;
+            
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Clear campaign pricing (return to normal pricing)
+        /// </summary>
+        public void ClearCampaignPricing()
+        {
+            // If there was a campaign with original price, restore it
+            if (OriginalPrice.HasValue)
+            {
+                MonthlyPrice = OriginalPrice.Value;
+            }
+
+            CampaignName = null;
+            CampaignDescription = null;
+            OriginalPrice = null;
+            CampaignPrice = null;
+            CampaignStartDate = null;
+            CampaignEndDate = null;
+            MaxEarlyAdopters = null;
+            CurrentEarlyAdopters = 0;
+            EarlyAdopterBenefits = null;
+            FeaturesAvailable = null;
+            FeaturesInDevelopment = null;
+            
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Check if campaign is currently active
+        /// </summary>
+        public bool IsCampaignActive()
+        {
+            if (string.IsNullOrEmpty(CampaignName) || !CampaignPrice.HasValue)
+                return false;
+
+            var now = DateTime.UtcNow;
+
+            // Check if campaign has started
+            if (CampaignStartDate.HasValue && now < CampaignStartDate.Value)
+                return false;
+
+            // Check if campaign has ended
+            if (CampaignEndDate.HasValue && now > CampaignEndDate.Value)
+                return false;
+
+            // Check if early adopter slots are full
+            if (MaxEarlyAdopters.HasValue && CurrentEarlyAdopters >= MaxEarlyAdopters.Value)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if a new subscriber can join the campaign
+        /// </summary>
+        public bool CanJoinCampaign()
+        {
+            if (!IsCampaignActive())
+                return false;
+
+            // Check if there are available early adopter slots
+            if (MaxEarlyAdopters.HasValue)
+                return CurrentEarlyAdopters < MaxEarlyAdopters.Value;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Increment early adopter count when someone joins the campaign
+        /// </summary>
+        public void IncrementEarlyAdopters()
+        {
+            if (!CanJoinCampaign())
+                throw new InvalidOperationException("Cannot join campaign - campaign is not active or slots are full");
+
+            CurrentEarlyAdopters++;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Get the effective price (campaign price if active, otherwise regular price)
+        /// </summary>
+        public decimal GetEffectivePrice()
+        {
+            if (IsCampaignActive() && CampaignPrice.HasValue)
+                return CampaignPrice.Value;
+
+            return MonthlyPrice;
+        }
+
+        /// <summary>
+        /// Calculate savings percentage if campaign is active
+        /// </summary>
+        public int GetSavingsPercentage()
+        {
+            if (!IsCampaignActive() || !OriginalPrice.HasValue || !CampaignPrice.HasValue)
+                return 0;
+
+            if (OriginalPrice.Value == 0)
+                return 0;
+
+            return (int)Math.Round(((OriginalPrice.Value - CampaignPrice.Value) / OriginalPrice.Value) * 100);
+        }
+
+        /// <summary>
+        /// Set early adopter benefits
+        /// </summary>
+        public void SetEarlyAdopterBenefits(string[] benefits)
+        {
+            if (benefits == null || benefits.Length == 0)
+            {
+                EarlyAdopterBenefits = null;
+            }
+            else
+            {
+                EarlyAdopterBenefits = JsonSerializer.Serialize(benefits);
+            }
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Get early adopter benefits
+        /// </summary>
+        public string[] GetEarlyAdopterBenefits()
+        {
+            if (string.IsNullOrEmpty(EarlyAdopterBenefits))
+                return Array.Empty<string>();
+
+            try
+            {
+                return JsonSerializer.Deserialize<string[]>(EarlyAdopterBenefits) ?? Array.Empty<string>();
+            }
+            catch (JsonException)
+            {
+                return Array.Empty<string>();
+            }
+        }
+
+        /// <summary>
+        /// Set available features
+        /// </summary>
+        public void SetFeaturesAvailable(string[] features)
+        {
+            if (features == null || features.Length == 0)
+            {
+                FeaturesAvailable = null;
+            }
+            else
+            {
+                FeaturesAvailable = JsonSerializer.Serialize(features);
+            }
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Get available features
+        /// </summary>
+        public string[] GetFeaturesAvailable()
+        {
+            if (string.IsNullOrEmpty(FeaturesAvailable))
+                return Array.Empty<string>();
+
+            try
+            {
+                return JsonSerializer.Deserialize<string[]>(FeaturesAvailable) ?? Array.Empty<string>();
+            }
+            catch (JsonException)
+            {
+                return Array.Empty<string>();
+            }
+        }
+
+        /// <summary>
+        /// Set features in development
+        /// </summary>
+        public void SetFeaturesInDevelopment(string[] features)
+        {
+            if (features == null || features.Length == 0)
+            {
+                FeaturesInDevelopment = null;
+            }
+            else
+            {
+                FeaturesInDevelopment = JsonSerializer.Serialize(features);
+            }
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Get features in development
+        /// </summary>
+        public string[] GetFeaturesInDevelopment()
+        {
+            if (string.IsNullOrEmpty(FeaturesInDevelopment))
+                return Array.Empty<string>();
+
+            try
+            {
+                return JsonSerializer.Deserialize<string[]>(FeaturesInDevelopment) ?? Array.Empty<string>();
+            }
+            catch (JsonException)
+            {
+                return Array.Empty<string>();
+            }
         }
     }
 

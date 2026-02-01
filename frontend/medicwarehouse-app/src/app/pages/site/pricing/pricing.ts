@@ -31,7 +31,23 @@ export class PricingComponent {
 
     this.subscriptionService.getPlans().subscribe({
       next: (plans) => {
-        this.plans = plans;
+        // Map campaign fields to display fields for compatibility
+        this.plans = plans.map(plan => ({
+          ...plan,
+          // Map campaign fields to legacy fields for template compatibility
+          isMvp: plan.isCampaignActive || false,
+          earlyAdopterPrice: plan.campaignPrice || plan.effectivePrice,
+          futurePrice: plan.originalPrice,
+          savingsPercentage: plan.savingsPercentage || this.calculateSavings(plan.originalPrice, plan.campaignPrice),
+          // Use featuresAvailable from campaign if present (more detailed), otherwise fallback to features (auto-generated)
+          // featuresAvailable is manually configured for campaigns and takes precedence
+          features: (plan.featuresAvailable && plan.featuresAvailable.length > 0) 
+            ? plan.featuresAvailable 
+            : plan.features,
+          // Ensure featuresInDevelopment and earlyAdopterBenefits are available
+          featuresInDevelopment: plan.featuresInDevelopment || [],
+          earlyAdopterBenefits: plan.earlyAdopterBenefits || []
+        }));
         this.loading = false;
       },
       error: (error) => {
@@ -39,6 +55,13 @@ export class PricingComponent {
         this.loading = false;
       }
     });
+  }
+
+  private calculateSavings(originalPrice?: number, campaignPrice?: number): number {
+    if (!originalPrice || !campaignPrice || originalPrice === 0) {
+      return 0;
+    }
+    return Math.round(((originalPrice - campaignPrice) / originalPrice) * 100);
   }
 
   selectPlan(plan: SubscriptionPlan): void {
