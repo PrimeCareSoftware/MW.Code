@@ -215,7 +215,7 @@
                   <label>Nome da Campanha</label>
                   <input
                     type="text"
-                    [(ngModel)]="formData.campaignName"
+                    [(ngModel)]="activeFormData.campaignName"
                     name="campaignName"
                     placeholder="Ex: MVP Early Adopter"
                   />
@@ -224,7 +224,7 @@
                 <div class="form-group">
                   <label>Descrição da Campanha</label>
                   <textarea
-                    [(ngModel)]="formData.campaignDescription"
+                    [(ngModel)]="activeFormData.campaignDescription"
                     name="campaignDescription"
                     rows="2"
                     placeholder="Ex: Seja um dos primeiros clientes e garanta preço especial vitalício"
@@ -236,7 +236,7 @@
                     <label>Preço Original/Futuro (R$)</label>
                     <input
                       type="number"
-                      [(ngModel)]="formData.originalPrice"
+                      [(ngModel)]="activeFormData.originalPrice"
                       name="originalPrice"
                       min="0"
                       step="0.01"
@@ -248,7 +248,7 @@
                     <label>Preço Promocional (R$)</label>
                     <input
                       type="number"
-                      [(ngModel)]="formData.campaignPrice"
+                      [(ngModel)]="activeFormData.campaignPrice"
                       name="campaignPrice"
                       min="0"
                       step="0.01"
@@ -260,7 +260,7 @@
                     <label>Data Início</label>
                     <input
                       type="date"
-                      [(ngModel)]="formData.campaignStartDate"
+                      [(ngModel)]="activeFormData.campaignStartDate"
                       name="campaignStartDate"
                     />
                   </div>
@@ -269,7 +269,7 @@
                     <label>Data Fim (vazio = vitalício)</label>
                     <input
                       type="date"
-                      [(ngModel)]="formData.campaignEndDate"
+                      [(ngModel)]="activeFormData.campaignEndDate"
                       name="campaignEndDate"
                     />
                   </div>
@@ -278,7 +278,7 @@
                     <label>Max Early Adopters</label>
                     <input
                       type="number"
-                      [(ngModel)]="formData.maxEarlyAdopters"
+                      [(ngModel)]="activeFormData.maxEarlyAdopters"
                       name="maxEarlyAdopters"
                       min="0"
                       placeholder="100"
@@ -300,7 +300,7 @@
                     <button type="button" class="btn-add" (click)="addBenefit()">➕ Adicionar</button>
                   </div>
                   <ul class="array-list">
-                    @for (benefit of (editingPlan ? formDataUpdate.earlyAdopterBenefits : formData.earlyAdopterBenefits); track $index) {
+                    @for (benefit of activeFormData.earlyAdopterBenefits; track $index) {
                       <li>
                         <span>⭐ {{ benefit }}</span>
                         <button type="button" class="btn-remove" (click)="removeBenefit($index)">✕</button>
@@ -323,7 +323,7 @@
                     <button type="button" class="btn-add" (click)="addFeatureAvailable()">➕ Adicionar</button>
                   </div>
                   <ul class="array-list">
-                    @for (feature of (editingPlan ? formDataUpdate.featuresAvailable : formData.featuresAvailable); track $index) {
+                    @for (feature of activeFormData.featuresAvailable; track $index) {
                       <li>
                         <span>✓ {{ feature }}</span>
                         <button type="button" class="btn-remove" (click)="removeFeatureAvailable($index)">✕</button>
@@ -346,7 +346,7 @@
                     <button type="button" class="btn-add" (click)="addFeatureInDevelopment()">➕ Adicionar</button>
                   </div>
                   <ul class="array-list">
-                    @for (feature of (editingPlan ? formDataUpdate.featuresInDevelopment : formData.featuresInDevelopment); track $index) {
+                    @for (feature of activeFormData.featuresInDevelopment; track $index) {
                       <li>
                         <span>⏳ {{ feature }}</span>
                         <button type="button" class="btn-remove" (click)="removeFeatureInDevelopment($index)">✕</button>

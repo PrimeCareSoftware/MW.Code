@@ -67,6 +67,11 @@ export class PlansList implements OnInit {
   newBenefit: string = '';
   newFeatureAvailable: string = '';
   newFeatureInDevelopment: string = '';
+  
+  // Computed property to get the correct form data reference
+  get activeFormData(): CreateSubscriptionPlanRequest | UpdateSubscriptionPlanRequest {
+    return this.editingPlan ? this.formDataUpdate : this.formData;
+  }
 
   constructor(
     private systemAdminService: SystemAdminService,
@@ -230,40 +235,34 @@ export class PlansList implements OnInit {
   // Array management helpers
   addBenefit(): void {
     if (this.newBenefit.trim()) {
-      const benefits = this.editingPlan ? this.formDataUpdate.earlyAdopterBenefits! : this.formData.earlyAdopterBenefits!;
-      benefits.push(this.newBenefit.trim());
+      this.activeFormData.earlyAdopterBenefits!.push(this.newBenefit.trim());
       this.newBenefit = '';
     }
   }
   
   removeBenefit(index: number): void {
-    const benefits = this.editingPlan ? this.formDataUpdate.earlyAdopterBenefits! : this.formData.earlyAdopterBenefits!;
-    benefits.splice(index, 1);
+    this.activeFormData.earlyAdopterBenefits!.splice(index, 1);
   }
   
   addFeatureAvailable(): void {
     if (this.newFeatureAvailable.trim()) {
-      const features = this.editingPlan ? this.formDataUpdate.featuresAvailable! : this.formData.featuresAvailable!;
-      features.push(this.newFeatureAvailable.trim());
+      this.activeFormData.featuresAvailable!.push(this.newFeatureAvailable.trim());
       this.newFeatureAvailable = '';
     }
   }
   
   removeFeatureAvailable(index: number): void {
-    const features = this.editingPlan ? this.formDataUpdate.featuresAvailable! : this.formData.featuresAvailable!;
-    features.splice(index, 1);
+    this.activeFormData.featuresAvailable!.splice(index, 1);
   }
   
   addFeatureInDevelopment(): void {
     if (this.newFeatureInDevelopment.trim()) {
-      const features = this.editingPlan ? this.formDataUpdate.featuresInDevelopment! : this.formData.featuresInDevelopment!;
-      features.push(this.newFeatureInDevelopment.trim());
+      this.activeFormData.featuresInDevelopment!.push(this.newFeatureInDevelopment.trim());
       this.newFeatureInDevelopment = '';
     }
   }
   
   removeFeatureInDevelopment(index: number): void {
-    const features = this.editingPlan ? this.formDataUpdate.featuresInDevelopment! : this.formData.featuresInDevelopment!;
-    features.splice(index, 1);
+    this.activeFormData.featuresInDevelopment!.splice(index, 1);
   }
 }
