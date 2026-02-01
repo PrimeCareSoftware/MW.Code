@@ -283,7 +283,7 @@ namespace MedicSoft.Application.Services
             if (twoFactor != null)
             {
                 // Update existing 2FA to email method
-                await _twoFactorAuthRepository.DeleteAsync(twoFactor);
+                await _twoFactorAuthRepository.DeleteAsync(twoFactor.Id, tenantId);
             }
             
             // Create new email-based 2FA record
