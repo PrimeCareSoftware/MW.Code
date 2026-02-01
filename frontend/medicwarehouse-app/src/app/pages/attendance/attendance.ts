@@ -331,7 +331,8 @@ export class Attendance implements OnInit, OnDestroy {
         // Resume timer from saved elapsed time if consultation is still in progress
         if (record.consultationStartTime && !record.consultationEndTime) {
           // Initialize elapsed seconds from saved duration (convert minutes to seconds)
-          const savedSeconds = record.consultationDurationMinutes * 60;
+          // Handle null/undefined with fallback to 0
+          const savedSeconds = (record.consultationDurationMinutes || 0) * 60;
           this.elapsedSeconds.set(savedSeconds);
           this.startTimer();
         }
