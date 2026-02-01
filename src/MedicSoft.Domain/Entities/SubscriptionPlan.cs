@@ -38,6 +38,9 @@ namespace MedicSoft.Domain.Entities
         public string? EarlyAdopterBenefits { get; private set; } // JSON array
         public string? FeaturesAvailable { get; private set; } // JSON array
         public string? FeaturesInDevelopment { get; private set; } // JSON array
+        
+        // Concurrency control - using uint for PostgreSQL xmin
+        public uint RowVersion { get; private set; }
 
         private SubscriptionPlan()
         {

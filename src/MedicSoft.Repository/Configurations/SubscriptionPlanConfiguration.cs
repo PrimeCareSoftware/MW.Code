@@ -91,6 +91,14 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(sp => sp.FeaturesInDevelopment)
                 .HasColumnType("jsonb");
 
+            // Concurrency control using PostgreSQL's xmin system column
+            builder.Property(sp => sp.RowVersion)
+                .HasColumnName("xmin")
+                .HasColumnType("xid")
+                .IsRowVersion()
+                .ValueGeneratedOnAddOrUpdate()
+                .IsConcurrencyToken();
+
             // Indexes
             builder.HasIndex(sp => sp.Type);
             builder.HasIndex(sp => sp.IsActive);
