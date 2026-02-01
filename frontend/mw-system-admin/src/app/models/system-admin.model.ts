@@ -103,6 +103,23 @@ export interface SubscriptionPlan {
   hasWhatsAppIntegration?: boolean;
   hasSMSNotifications?: boolean;
   hasTissExport?: boolean;
+  
+  // Campaign fields
+  campaignName?: string;
+  campaignDescription?: string;
+  originalPrice?: number;
+  campaignPrice?: number;
+  campaignStartDate?: string;
+  campaignEndDate?: string;
+  maxEarlyAdopters?: number;
+  currentEarlyAdopters?: number;
+  isCampaignActive?: boolean;
+  canJoinCampaign?: boolean;
+  effectivePrice?: number;
+  savingsPercentage?: number;
+  earlyAdopterBenefits?: string[];
+  featuresAvailable?: string[];
+  featuresInDevelopment?: string[];
 }
 
 export interface CreateSubscriptionPlanRequest {
@@ -113,10 +130,41 @@ export interface CreateSubscriptionPlanRequest {
   maxUsers: number;
   maxPatients: number;
   trialDays: number;
+  
+  // Campaign fields
+  campaignName?: string;
+  campaignDescription?: string;
+  originalPrice?: number;
+  campaignPrice?: number;
+  campaignStartDate?: string;
+  campaignEndDate?: string;
+  maxEarlyAdopters?: number;
+  earlyAdopterBenefits?: string[];
+  featuresAvailable?: string[];
+  featuresInDevelopment?: string[];
 }
 
-export interface UpdateSubscriptionPlanRequest extends CreateSubscriptionPlanRequest {
+export interface UpdateSubscriptionPlanRequest {
+  name: string;
+  description?: string;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  maxUsers: number;
+  maxPatients: number;
+  trialDays: number;
   isActive: boolean;
+  
+  // Campaign fields
+  campaignName?: string;
+  campaignDescription?: string;
+  originalPrice?: number;
+  campaignPrice?: number;
+  campaignStartDate?: string;
+  campaignEndDate?: string;
+  maxEarlyAdopters?: number;
+  earlyAdopterBenefits?: string[];
+  featuresAvailable?: string[];
+  featuresInDevelopment?: string[];
 }
 
 export interface UpdateClinicRequest {

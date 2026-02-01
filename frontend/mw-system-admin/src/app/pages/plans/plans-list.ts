@@ -29,7 +29,17 @@ export class PlansList implements OnInit {
     yearlyPrice: 0,
     trialDays: 14,
     maxUsers: 10,
-    maxPatients: 100
+    maxPatients: 100,
+    campaignName: undefined,
+    campaignDescription: undefined,
+    originalPrice: undefined,
+    campaignPrice: undefined,
+    campaignStartDate: undefined,
+    campaignEndDate: undefined,
+    maxEarlyAdopters: undefined,
+    earlyAdopterBenefits: [],
+    featuresAvailable: [],
+    featuresInDevelopment: []
   };
 
   formDataUpdate: UpdateSubscriptionPlanRequest = {
@@ -40,8 +50,23 @@ export class PlansList implements OnInit {
     trialDays: 14,
     maxUsers: 10,
     maxPatients: 100,
-    isActive: true
+    isActive: true,
+    campaignName: undefined,
+    campaignDescription: undefined,
+    originalPrice: undefined,
+    campaignPrice: undefined,
+    campaignStartDate: undefined,
+    campaignEndDate: undefined,
+    maxEarlyAdopters: undefined,
+    earlyAdopterBenefits: [],
+    featuresAvailable: [],
+    featuresInDevelopment: []
   };
+  
+  // Helper properties for array fields
+  newBenefit: string = '';
+  newFeatureAvailable: string = '';
+  newFeatureInDevelopment: string = '';
 
   constructor(
     private systemAdminService: SystemAdminService,
@@ -77,8 +102,21 @@ export class PlansList implements OnInit {
       yearlyPrice: 0,
       trialDays: 14,
       maxUsers: 10,
-      maxPatients: 100
+      maxPatients: 100,
+      campaignName: undefined,
+      campaignDescription: undefined,
+      originalPrice: undefined,
+      campaignPrice: undefined,
+      campaignStartDate: undefined,
+      campaignEndDate: undefined,
+      maxEarlyAdopters: undefined,
+      earlyAdopterBenefits: [],
+      featuresAvailable: [],
+      featuresInDevelopment: []
     };
+    this.newBenefit = '';
+    this.newFeatureAvailable = '';
+    this.newFeatureInDevelopment = '';
     this.showModal = true;
   }
 
@@ -91,12 +129,25 @@ export class PlansList implements OnInit {
       yearlyPrice: plan.yearlyPrice,
       trialDays: plan.trialDays,
       maxUsers: plan.maxUsers,
-      maxPatients: plan.maxPatients
+      maxPatients: plan.maxPatients,
+      campaignName: plan.campaignName,
+      campaignDescription: plan.campaignDescription,
+      originalPrice: plan.originalPrice,
+      campaignPrice: plan.campaignPrice,
+      campaignStartDate: plan.campaignStartDate,
+      campaignEndDate: plan.campaignEndDate,
+      maxEarlyAdopters: plan.maxEarlyAdopters,
+      earlyAdopterBenefits: plan.earlyAdopterBenefits ? [...plan.earlyAdopterBenefits] : [],
+      featuresAvailable: plan.featuresAvailable ? [...plan.featuresAvailable] : [],
+      featuresInDevelopment: plan.featuresInDevelopment ? [...plan.featuresInDevelopment] : []
     };
     this.formDataUpdate = {
       ...this.formData,
       isActive: plan.isActive
     };
+    this.newBenefit = '';
+    this.newFeatureAvailable = '';
+    this.newFeatureInDevelopment = '';
     this.showModal = true;
   }
 
@@ -174,5 +225,45 @@ export class PlansList implements OnInit {
       style: 'currency',
       currency: 'BRL'
     }).format(value);
+  }
+  
+  // Array management helpers
+  addBenefit(): void {
+    if (this.newBenefit.trim()) {
+      const benefits = this.editingPlan ? this.formDataUpdate.earlyAdopterBenefits! : this.formData.earlyAdopterBenefits!;
+      benefits.push(this.newBenefit.trim());
+      this.newBenefit = '';
+    }
+  }
+  
+  removeBenefit(index: number): void {
+    const benefits = this.editingPlan ? this.formDataUpdate.earlyAdopterBenefits! : this.formData.earlyAdopterBenefits!;
+    benefits.splice(index, 1);
+  }
+  
+  addFeatureAvailable(): void {
+    if (this.newFeatureAvailable.trim()) {
+      const features = this.editingPlan ? this.formDataUpdate.featuresAvailable! : this.formData.featuresAvailable!;
+      features.push(this.newFeatureAvailable.trim());
+      this.newFeatureAvailable = '';
+    }
+  }
+  
+  removeFeatureAvailable(index: number): void {
+    const features = this.editingPlan ? this.formDataUpdate.featuresAvailable! : this.formData.featuresAvailable!;
+    features.splice(index, 1);
+  }
+  
+  addFeatureInDevelopment(): void {
+    if (this.newFeatureInDevelopment.trim()) {
+      const features = this.editingPlan ? this.formDataUpdate.featuresInDevelopment! : this.formData.featuresInDevelopment!;
+      features.push(this.newFeatureInDevelopment.trim());
+      this.newFeatureInDevelopment = '';
+    }
+  }
+  
+  removeFeatureInDevelopment(index: number): void {
+    const features = this.editingPlan ? this.formDataUpdate.featuresInDevelopment! : this.formData.featuresInDevelopment!;
+    features.splice(index, 1);
   }
 }
