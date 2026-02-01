@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using MedicSoft.Application.Validation;
 
 namespace MedicSoft.Application.DTOs
 {
@@ -34,7 +35,7 @@ namespace MedicSoft.Application.DTOs
         [StringLength(2, MinimumLength = 2, ErrorMessage = "Estado deve ter 2 caracteres (sigla)")]
         public string? State { get; set; }
         
-        [RegularExpression(@"^\d{8}$", ErrorMessage = "CEP deve conter 8 dígitos")]
+        [Cep]
         public string? ZipCode { get; set; }
         
         [StringLength(100, ErrorMessage = "Nome do banco deve ter no máximo 100 caracteres")]
@@ -83,7 +84,7 @@ namespace MedicSoft.Application.DTOs
         [StringLength(2, MinimumLength = 2, ErrorMessage = "Estado deve ter 2 caracteres (sigla)")]
         public string? State { get; set; }
         
-        [RegularExpression(@"^\d{8}$", ErrorMessage = "CEP deve conter 8 dígitos")]
+        [Cep]
         public string? ZipCode { get; set; }
         
         [StringLength(100, ErrorMessage = "Nome do banco deve ter no máximo 100 caracteres")]
@@ -128,7 +129,7 @@ namespace MedicSoft.Application.DTOs
         [StringLength(2, MinimumLength = 2, ErrorMessage = "Estado deve ter 2 caracteres (sigla)")]
         public string? State { get; set; }
         
-        [RegularExpression(@"^\d{8}$", ErrorMessage = "CEP deve conter 8 dígitos")]
+        [Cep]
         public string? ZipCode { get; set; }
         
         [StringLength(100, ErrorMessage = "Nome do banco deve ter no máximo 100 caracteres")]

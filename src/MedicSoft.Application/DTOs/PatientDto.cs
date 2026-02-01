@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using MedicSoft.Application.Validation;
 
 namespace MedicSoft.Application.DTOs
 {
@@ -76,7 +77,7 @@ namespace MedicSoft.Application.DTOs
         public string State { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "CEP é obrigatório")]
-        [RegularExpression(@"^\d{8}$", ErrorMessage = "CEP deve conter 8 dígitos")]
+        [Cep]
         public string ZipCode { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "País é obrigatório")]
@@ -91,7 +92,7 @@ namespace MedicSoft.Application.DTOs
         public string Name { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "CPF é obrigatório")]
-        [RegularExpression(@"^\d{11}$", ErrorMessage = "CPF deve conter 11 dígitos")]
+        [Cpf]
         public string Document { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "Data de nascimento é obrigatória")]

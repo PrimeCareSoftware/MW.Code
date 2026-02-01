@@ -100,11 +100,48 @@ export class RegisterComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
-        const errorMessage = error.error?.message || 'Erro ao registrar. Tente novamente.';
+        const errorMessage = this.getValidationErrorMessage(error);
         this.notificationService.error(errorMessage);
         this.loading = false;
       }
     });
+  }
+
+  /**
+   * Extract validation error messages from API error response
+   */
+  private getValidationErrorMessage(error: any): string {
+    // Check if error has validation errors in errors property
+    if (error.error?.errors) {
+      const errors = error.error.errors;
+      const messages: string[] = [];
+      
+      // Iterate through all error fields
+      for (const field in errors) {
+        if (errors.hasOwnProperty(field)) {
+          const fieldErrors = errors[field];
+          if (Array.isArray(fieldErrors)) {
+            messages.push(...fieldErrors);
+          } else {
+            messages.push(fieldErrors);
+          }
+        }
+      }
+      
+      return messages.length > 0 ? messages.join('; ') : 'Erro de validação';
+    }
+    
+    // Check if error has a message property
+    if (error.error?.message) {
+      return error.error.message;
+    }
+    
+    // Check if error has a title property (ProblemDetails)
+    if (error.error?.title) {
+      return error.error.title;
+    }
+    
+    return 'Erro ao registrar. Tente novamente.';
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {
