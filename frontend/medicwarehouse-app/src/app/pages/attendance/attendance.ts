@@ -81,7 +81,6 @@ export class Attendance implements OnInit, OnDestroy {
   elapsedSeconds = signal<number>(0);
   timerSubscription?: Subscription;
   autosaveSubscription?: Subscription;
-  startTime?: Date;
   lastSaveTime?: Date;
   
   // Autosave configuration
@@ -329,9 +328,12 @@ export class Attendance implements OnInit, OnDestroy {
         // Load CFM 1.821 entities
         this.loadCFMEntities(record.id);
         
-        // Calcula o tempo decorrido se a consulta ainda estiver em andamento
+        // Resume timer from saved elapsed time if consultation is still in progress
         if (record.consultationStartTime && !record.consultationEndTime) {
-          this.startTime = new Date(record.consultationStartTime);
+          // Initialize elapsed seconds from saved duration (convert minutes to seconds)
+          // Handle null/undefined with fallback to 0
+          const savedSeconds = (record.consultationDurationMinutes || 0) * 60;
+          this.elapsedSeconds.set(savedSeconds);
           this.startTimer();
         }
       },
@@ -379,7 +381,8 @@ export class Attendance implements OnInit, OnDestroy {
     }).subscribe({
       next: (record) => {
         this.medicalRecord.set(record);
-        this.startTime = new Date(now);
+        // Start timer at 00:00 for new consultations
+        this.elapsedSeconds.set(0);
         this.startTimer();
       },
       error: (error) => {
@@ -394,16 +397,15 @@ export class Attendance implements OnInit, OnDestroy {
       return; // Cronômetro já está em execução
     }
 
-    // Reset timer to 00:00 at the start of each consultation
-    // This ensures the timer always starts from zero regardless of previous state
-    this.elapsedSeconds.set(0);
-
+    // Timer increments from current elapsed seconds
+    // This ensures proper behavior when:
+    // 1. Starting a new consultation (elapsedSeconds = 0)
+    // 2. Resuming after leaving page (elapsedSeconds = saved value)
+    // 3. Starting appointments early (no dependency on scheduled time)
+    
     this.timerSubscription = interval(1000).subscribe(() => {
-      if (this.startTime) {
-        const now = new Date();
-        const diff = Math.floor((now.getTime() - this.startTime.getTime()) / 1000);
-        this.elapsedSeconds.set(diff);
-      }
+      // Simply increment elapsed seconds by 1 each second
+      this.elapsedSeconds.update(val => val + 1);
     });
 
     // Start autosave every 30 seconds (cleanup first to prevent duplicates)
