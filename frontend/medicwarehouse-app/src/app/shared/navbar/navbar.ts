@@ -19,12 +19,32 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   private sidebarElement: HTMLElement | null = null;
   private boundSaveScrollPosition: (() => void) | null = null;
   
+  // Menu group states - all start closed except the one containing the active route
+  menuGroups: { [key: string]: boolean } = {
+    core: false,
+    analytics: false,
+    clinical: false,
+    support: false,
+    crm: false,
+    financial: false,
+    settings: false,
+    compliance: false,
+    tiss: false,
+    admin: false
+  };
+  
   constructor(public authService: Auth, private elementRef: ElementRef) {
     // Check localStorage for sidebar state (only in browser environment)
     if (typeof localStorage !== 'undefined') {
       try {
         const savedState = localStorage.getItem('sidebarOpen');
         this.sidebarOpen = savedState !== null ? savedState === 'true' : true;
+        
+        // Restore menu group states
+        const savedMenuGroups = localStorage.getItem('menuGroups');
+        if (savedMenuGroups) {
+          this.menuGroups = JSON.parse(savedMenuGroups);
+        }
       } catch (error) {
         console.warn('Could not access localStorage:', error);
         this.sidebarOpen = true;
@@ -158,5 +178,22 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
     this.dropdownOpen = false;
     this.adminDropdownOpen = false;
     this.authService.logout();
+  }
+  
+  toggleMenuGroup(groupName: string): void {
+    this.menuGroups[groupName] = !this.menuGroups[groupName];
+    
+    // Save menu group states to localStorage
+    if (typeof localStorage !== 'undefined') {
+      try {
+        localStorage.setItem('menuGroups', JSON.stringify(this.menuGroups));
+      } catch (error) {
+        console.warn('Could not save menu groups to localStorage:', error);
+      }
+    }
+  }
+  
+  isMenuGroupOpen(groupName: string): boolean {
+    return this.menuGroups[groupName] || false;
   }
 }
