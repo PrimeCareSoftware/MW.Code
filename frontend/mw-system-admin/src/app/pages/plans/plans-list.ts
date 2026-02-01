@@ -235,34 +235,43 @@ export class PlansList implements OnInit {
   // Array management helpers
   addBenefit(): void {
     if (this.newBenefit.trim()) {
-      this.activeFormData.earlyAdopterBenefits!.push(this.newBenefit.trim());
+      const benefits = this.activeFormData.earlyAdopterBenefits ?? (this.activeFormData.earlyAdopterBenefits = []);
+      benefits.push(this.newBenefit.trim());
       this.newBenefit = '';
     }
   }
   
   removeBenefit(index: number): void {
-    this.activeFormData.earlyAdopterBenefits!.splice(index, 1);
+    if (this.activeFormData.earlyAdopterBenefits) {
+      this.activeFormData.earlyAdopterBenefits.splice(index, 1);
+    }
   }
   
   addFeatureAvailable(): void {
     if (this.newFeatureAvailable.trim()) {
-      this.activeFormData.featuresAvailable!.push(this.newFeatureAvailable.trim());
+      const features = this.activeFormData.featuresAvailable ?? (this.activeFormData.featuresAvailable = []);
+      features.push(this.newFeatureAvailable.trim());
       this.newFeatureAvailable = '';
     }
   }
   
   removeFeatureAvailable(index: number): void {
-    this.activeFormData.featuresAvailable!.splice(index, 1);
+    if (this.activeFormData.featuresAvailable) {
+      this.activeFormData.featuresAvailable.splice(index, 1);
+    }
   }
   
   addFeatureInDevelopment(): void {
     if (this.newFeatureInDevelopment.trim()) {
-      this.activeFormData.featuresInDevelopment!.push(this.newFeatureInDevelopment.trim());
+      const features = this.activeFormData.featuresInDevelopment ?? (this.activeFormData.featuresInDevelopment = []);
+      features.push(this.newFeatureInDevelopment.trim());
       this.newFeatureInDevelopment = '';
     }
   }
   
   removeFeatureInDevelopment(index: number): void {
-    this.activeFormData.featuresInDevelopment!.splice(index, 1);
+    if (this.activeFormData.featuresInDevelopment) {
+      this.activeFormData.featuresInDevelopment.splice(index, 1);
+    }
   }
 }

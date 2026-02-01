@@ -144,27 +144,8 @@ export interface CreateSubscriptionPlanRequest {
   featuresInDevelopment?: string[];
 }
 
-export interface UpdateSubscriptionPlanRequest {
-  name: string;
-  description?: string;
-  monthlyPrice: number;
-  yearlyPrice: number;
-  maxUsers: number;
-  maxPatients: number;
-  trialDays: number;
+export interface UpdateSubscriptionPlanRequest extends CreateSubscriptionPlanRequest {
   isActive: boolean;
-  
-  // Campaign fields
-  campaignName?: string;
-  campaignDescription?: string;
-  originalPrice?: number;
-  campaignPrice?: number;
-  campaignStartDate?: string;
-  campaignEndDate?: string;
-  maxEarlyAdopters?: number;
-  earlyAdopterBenefits?: string[];
-  featuresAvailable?: string[];
-  featuresInDevelopment?: string[];
 }
 
 export interface UpdateClinicRequest {
