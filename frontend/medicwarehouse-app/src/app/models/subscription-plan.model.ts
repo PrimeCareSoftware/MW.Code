@@ -6,6 +6,7 @@ export interface SubscriptionPlan {
   trialDays: number;
   maxUsers: number;
   maxPatients: number;
+  maxClinics?: number;
   hasReports: boolean;
   hasWhatsAppIntegration: boolean;
   hasSMSNotifications: boolean;
@@ -21,6 +22,20 @@ export interface SubscriptionPlan {
   savingsPercentage?: number;
   featuresInDevelopment?: string[];
   earlyAdopterBenefits?: string[];
+  
+  // Campaign fields from backend
+  campaignName?: string;
+  campaignDescription?: string;
+  originalPrice?: number;
+  campaignPrice?: number;
+  campaignStartDate?: string;
+  campaignEndDate?: string;
+  maxEarlyAdopters?: number;
+  currentEarlyAdopters?: number;
+  isCampaignActive?: boolean;
+  canJoinCampaign?: boolean;
+  effectivePrice?: number;
+  featuresAvailable?: string[];
 }
 
 export enum PlanType {
