@@ -34,6 +34,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<Clinic> Clinics { get; set; } = null!;
         public DbSet<Company> Companies { get; set; } = null!;
         public DbSet<Appointment> Appointments { get; set; } = null!;
+        public DbSet<BlockedTimeSlot> BlockedTimeSlots { get; set; } = null!;
+        public DbSet<RecurringAppointmentPattern> RecurringAppointmentPatterns { get; set; } = null!;
         public DbSet<HealthInsurancePlan> HealthInsurancePlans { get; set; } = null!;
         public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
         public DbSet<PatientClinicLink> PatientClinicLinks { get; set; } = null!;
