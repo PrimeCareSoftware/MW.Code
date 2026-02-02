@@ -275,6 +275,17 @@
                   <span class="error-text">Especialidade é obrigatória para médicos</span>
                 }
               </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    formControlName="showInAppointmentScheduling"
+                  />
+                  <span>Exibir no agendamento de consultas</span>
+                </label>
+                <small class="form-text">Se marcado, este profissional aparecerá na lista de médicos disponíveis para agendamento</small>
+              </div>
             }
           </div>
 
@@ -363,6 +374,17 @@
                   class="form-control"
                   placeholder="Ex: Clínico Geral"
                 />
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    formControlName="showInAppointmentScheduling"
+                  />
+                  <span>Exibir no agendamento de consultas</span>
+                </label>
+                <small class="form-text">Se marcado, este profissional aparecerá na lista de médicos disponíveis para agendamento</small>
               </div>
             }
           </div>

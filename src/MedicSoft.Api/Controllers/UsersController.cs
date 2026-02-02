@@ -59,7 +59,8 @@ namespace MedicSoft.Api.Controllers
                 IsActive = u.IsActive,
                 LastLoginAt = u.LastLoginAt,
                 ProfessionalId = u.ProfessionalId,
-                Specialty = u.Specialty
+                Specialty = u.Specialty,
+                ShowInAppointmentScheduling = u.ShowInAppointmentScheduling
             }));
         }
 
@@ -87,7 +88,8 @@ namespace MedicSoft.Api.Controllers
                 IsActive = user.IsActive,
                 LastLoginAt = user.LastLoginAt,
                 ProfessionalId = user.ProfessionalId,
-                Specialty = user.Specialty
+                Specialty = user.Specialty,
+                ShowInAppointmentScheduling = user.ShowInAppointmentScheduling
             });
         }
 
@@ -131,7 +133,8 @@ namespace MedicSoft.Api.Controllers
                     tenantId,
                     clinicId,
                     request.ProfessionalId,
-                    request.Specialty
+                    request.Specialty,
+                    request.ShowInAppointmentScheduling
                 );
 
                 return CreatedAtAction(nameof(GetUser), new { id = user.Id }, new UserDto
@@ -144,7 +147,8 @@ namespace MedicSoft.Api.Controllers
                     Role = user.Role.ToString(),
                     IsActive = user.IsActive,
                     ProfessionalId = user.ProfessionalId,
-                    Specialty = user.Specialty
+                    Specialty = user.Specialty,
+                    ShowInAppointmentScheduling = user.ShowInAppointmentScheduling
                 });
             }
             catch (InvalidOperationException ex)
@@ -170,7 +174,8 @@ namespace MedicSoft.Api.Controllers
                     request.Phone,
                     tenantId,
                     request.ProfessionalId,
-                    request.Specialty
+                    request.Specialty,
+                    request.ShowInAppointmentScheduling
                 );
 
                 return Ok(new { message = "User updated successfully" });
@@ -408,7 +413,7 @@ namespace MedicSoft.Api.Controllers
             var users = await _userService.GetUsersByClinicIdAsync(clinicId, tenantId);
             
             var professionals = users
-                .Where(u => u.Role == UserRole.Doctor || u.Role == UserRole.Dentist)
+                .Where(u => (u.Role == UserRole.Doctor || u.Role == UserRole.Dentist) && u.ShowInAppointmentScheduling)
                 .Select(u => new ProfessionalDto
                 {
                     Id = u.Id,
@@ -432,6 +437,7 @@ namespace MedicSoft.Api.Controllers
         public string Role { get; set; } = string.Empty;
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
+        public bool ShowInAppointmentScheduling { get; set; } = true;
     }
 
     public class UpdateUserRequest
@@ -441,6 +447,7 @@ namespace MedicSoft.Api.Controllers
         public string Phone { get; set; } = string.Empty;
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
+        public bool? ShowInAppointmentScheduling { get; set; }
     }
 
     public class ChangeRoleRequest
@@ -461,6 +468,7 @@ namespace MedicSoft.Api.Controllers
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
         public Guid? CurrentClinicId { get; set; }
+        public bool ShowInAppointmentScheduling { get; set; }
     }
 
     public class LinkUserToClinicRequest

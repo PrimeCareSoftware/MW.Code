@@ -26,6 +26,7 @@ namespace MedicSoft.Domain.Entities
         public Guid? CurrentClinicId { get; private set; } // The clinic where the user is currently working
         public DateTime? MfaGracePeriodEndsAt { get; private set; } // Grace period for MFA setup
         public DateTime? FirstLoginAt { get; private set; } // Track first login to calculate grace period
+        public bool ShowInAppointmentScheduling { get; private set; } // Whether this user should appear in appointment scheduling dropdowns
 
         // Navigation properties
         public Clinic? Clinic { get; private set; } // Deprecated navigation
@@ -48,7 +49,7 @@ namespace MedicSoft.Domain.Entities
 
         public User(string username, string email, string passwordHash, string fullName,
             string phone, UserRole role, string tenantId, Guid? clinicId = null,
-            string? professionalId = null, string? specialty = null) : base(tenantId)
+            string? professionalId = null, string? specialty = null, bool showInAppointmentScheduling = true) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username cannot be empty", nameof(username));
@@ -75,10 +76,11 @@ namespace MedicSoft.Domain.Entities
             ProfessionalId = professionalId?.Trim();
             Specialty = specialty?.Trim();
             IsActive = true;
+            ShowInAppointmentScheduling = showInAppointmentScheduling;
         }
 
         public void UpdateProfile(string email, string fullName, string phone,
-            string? professionalId = null, string? specialty = null)
+            string? professionalId = null, string? specialty = null, bool? showInAppointmentScheduling = null)
         {
             if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("Email cannot be empty", nameof(email));
@@ -94,6 +96,8 @@ namespace MedicSoft.Domain.Entities
             Phone = phone.Trim();
             ProfessionalId = professionalId?.Trim();
             Specialty = specialty?.Trim();
+            if (showInAppointmentScheduling.HasValue)
+                ShowInAppointmentScheduling = showInAppointmentScheduling.Value;
             UpdateTimestamp();
         }
 
