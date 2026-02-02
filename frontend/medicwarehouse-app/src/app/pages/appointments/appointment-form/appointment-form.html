@@ -55,6 +55,22 @@
         }
       </div>
 
+      <div class="form-group">
+        <label for="professionalId">Médico</label>
+        <select id="professionalId" formControlName="professionalId" class="form-control">
+          <option value="">Selecione um médico (opcional)</option>
+          @for (professional of professionals(); track professional.id) {
+            <option [value]="professional.id">
+              {{ professional.fullName }}
+              @if (professional.specialty) {
+                <span> - {{ professional.specialty }}</span>
+              }
+            </option>
+          }
+        </select>
+        <small class="form-text">Selecione o médico responsável pelo atendimento</small>
+      </div>
+
       <div class="form-row">
         <div class="form-group">
           <label for="scheduledDate">Data <span class="required">*</span></label>

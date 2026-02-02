@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, AvailableSlot } from '../models/appointment.model';
+import { Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, AvailableSlot, Professional } from '../models/appointment.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class AppointmentService {
   private apiUrl = `${environment.apiUrl}/appointments`;
+  private usersApiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) { }
 
@@ -24,10 +25,15 @@ export class AppointmentService {
     return this.http.put<void>(`${this.apiUrl}/${id}/cancel`, { cancellationReason });
   }
 
-  getDailyAgenda(clinicId: string, date: string): Observable<DailyAgenda> {
-    const params = new HttpParams()
+  getDailyAgenda(clinicId: string, date: string, professionalId?: string): Observable<DailyAgenda> {
+    let params = new HttpParams()
       .set('clinicId', clinicId)
       .set('date', date);
+    
+    if (professionalId) {
+      params = params.set('professionalId', professionalId);
+    }
+    
     return this.http.get<DailyAgenda>(`${this.apiUrl}/agenda`, { params });
   }
 
@@ -49,5 +55,9 @@ export class AppointmentService {
 
   complete(id: string, notes?: string, registerPayment: boolean = false): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/complete`, { notes, registerPayment });
+  }
+
+  getProfessionals(): Observable<Professional[]> {
+    return this.http.get<Professional[]>(`${this.usersApiUrl}/professionals`);
   }
 }

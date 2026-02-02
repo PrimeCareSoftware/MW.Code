@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
-import { Appointment } from '../../../models/appointment.model';
+import { Appointment, Professional } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 
@@ -44,6 +44,7 @@ export class AppointmentCalendar implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   selectedDoctorId = signal<string | null>(null);
+  professionals = signal<Professional[]>([]);
   
   // Clinic ID will be retrieved from authenticated user
   clinicId: string | null = null;
@@ -65,6 +66,7 @@ export class AppointmentCalendar implements OnInit {
     
     this.generateTimeSlots();
     this.generateWeekDays();
+    this.loadProfessionals();
     this.loadWeekAppointments();
   }
 
@@ -130,12 +132,13 @@ export class AppointmentCalendar implements OnInit {
     const weekStart = this.currentWeekStart();
     const days = this.weekDays();
     const clinicId = this.clinicId; // Store in local variable for type safety
+    const doctorId = this.selectedDoctorId(); // Get selected doctor filter
     
     try {
       // Load appointments for each day
       const promises = days.map(day => {
         const dateStr = day.date.toISOString().split('T')[0];
-        return this.appointmentService.getDailyAgenda(clinicId, dateStr).toPromise();
+        return this.appointmentService.getDailyAgenda(clinicId, dateStr, doctorId || undefined).toPromise();
       });
       
       const results = await Promise.all(promises);
@@ -143,7 +146,7 @@ export class AppointmentCalendar implements OnInit {
       // Update day columns with appointments
       results.forEach((agenda, index) => {
         if (agenda && agenda.appointments) {
-          days[index].appointments = this.filterAppointmentsByDoctor(agenda.appointments);
+          days[index].appointments = agenda.appointments;
         }
       });
       
@@ -157,15 +160,31 @@ export class AppointmentCalendar implements OnInit {
     }
   }
 
+  loadProfessionals(): void {
+    this.appointmentService.getProfessionals().subscribe({
+      next: (professionals) => {
+        this.professionals.set(professionals);
+      },
+      error: (error) => {
+        console.error('Error loading professionals:', error);
+        // Don't show error to user, just log it
+      }
+    });
+  }
+
+  onDoctorFilterChange(doctorId: string | null): void {
+    this.selectedDoctorId.set(doctorId);
+    this.loadWeekAppointments();
+  }
+
   filterAppointmentsByDoctor(appointments: Appointment[]): Appointment[] {
+    // Filter is now done on backend, but keep this for potential frontend-only filtering
     const doctorId = this.selectedDoctorId();
     if (!doctorId) {
       return appointments;
     }
-    // Filter by doctor if doctorId is set
     return appointments.filter(apt => {
-      // Assuming appointment has doctorId field - needs to be added to model
-      return (apt as any).doctorId === doctorId;
+      return apt.professionalId === doctorId || apt.doctorId === doctorId;
     });
   }
 

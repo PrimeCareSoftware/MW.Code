@@ -78,6 +78,51 @@
   }
 }
 
+.calendar-filters {
+  background: white;
+  padding: var(--spacing-4);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  margin-bottom: var(--spacing-4);
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+
+    label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-medium);
+      color: var(--gray-700);
+      white-space: nowrap;
+    }
+
+    .form-select {
+      flex: 1;
+      max-width: 400px;
+      padding: var(--spacing-2) var(--spacing-3);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      color: var(--gray-900);
+      background: white;
+      cursor: pointer;
+      transition: all var(--transition-base);
+
+      &:hover {
+        border-color: var(--primary-400);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-500);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+    }
+  }
+}
+
 .calendar-wrapper {
   background: white;
   border-radius: var(--radius-xl);
@@ -245,6 +290,16 @@
         font-size: var(--font-size-sm);
         font-weight: var(--font-semibold);
         color: var(--gray-900);
+        margin-bottom: var(--spacing-1);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .appointment-doctor {
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-medium);
+        color: var(--gray-700);
         margin-bottom: var(--spacing-1);
         white-space: nowrap;
         overflow: hidden;

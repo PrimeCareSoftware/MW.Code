@@ -2,8 +2,10 @@ export interface Appointment {
   id: string;
   patientId: string;
   patientName: string;
-  doctorId?: string;
-  doctorName?: string;
+  professionalId?: string; // Backend uses ProfessionalId
+  professionalName?: string;
+  doctorId?: string; // Alias for professionalId (for backward compatibility)
+  doctorName?: string; // Alias for professionalName
   clinicId: string;
   clinicName: string;
   scheduledDate: string;
@@ -27,6 +29,7 @@ export interface Appointment {
 export interface CreateAppointment {
   patientId: string;
   clinicId: string;
+  professionalId?: string; // Doctor/Professional ID
   scheduledDate: string;
   scheduledTime: string;
   durationMinutes: number;
@@ -35,11 +38,20 @@ export interface CreateAppointment {
 }
 
 export interface UpdateAppointment {
+  professionalId?: string; // Doctor/Professional ID
   scheduledDate: string;
   scheduledTime: string;
   durationMinutes: number;
   type: string;
   notes?: string;
+}
+
+export interface Professional {
+  id: string;
+  fullName: string;
+  professionalId?: string; // CRM, CRO, etc.
+  specialty?: string;
+  role: string;
 }
 
 export interface DailyAgenda {
