@@ -242,7 +242,11 @@ export class PlansList implements OnInit {
     
     // If it's already an array, validate and return a copy with strings only
     if (Array.isArray(field)) {
-      return field.filter(item => typeof item === 'string');
+      const filtered = field.filter(item => typeof item === 'string');
+      if (filtered.length < field.length) {
+        console.warn('parseArrayField: Some non-string elements were filtered out', field);
+      }
+      return filtered;
     }
     
     // If it's a string, try to parse it as JSON
@@ -251,11 +255,15 @@ export class PlansList implements OnInit {
         const parsed = JSON.parse(field);
         if (Array.isArray(parsed)) {
           // Ensure all elements are strings
-          return parsed.filter(item => typeof item === 'string');
+          const filtered = parsed.filter(item => typeof item === 'string');
+          if (filtered.length < parsed.length) {
+            console.warn('parseArrayField: Some non-string elements were filtered out from parsed JSON', parsed);
+          }
+          return filtered;
         }
         return [];
-      } catch {
-        // If parsing fails, return empty array
+      } catch (error) {
+        console.warn('parseArrayField: Failed to parse JSON string', field, error);
         return [];
       }
     }
