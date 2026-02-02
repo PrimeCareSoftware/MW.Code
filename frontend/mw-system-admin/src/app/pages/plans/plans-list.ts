@@ -242,7 +242,7 @@ export class PlansList implements OnInit {
     
     // If it's already an array, validate and return a copy with strings only
     if (Array.isArray(field)) {
-      return field.filter(item => typeof item === 'string').map(item => String(item));
+      return field.filter(item => typeof item === 'string');
     }
     
     // If it's a string, try to parse it as JSON
@@ -251,7 +251,7 @@ export class PlansList implements OnInit {
         const parsed = JSON.parse(field);
         if (Array.isArray(parsed)) {
           // Ensure all elements are strings
-          return parsed.filter(item => typeof item === 'string').map(item => String(item));
+          return parsed.filter(item => typeof item === 'string');
         }
         return [];
       } catch {
