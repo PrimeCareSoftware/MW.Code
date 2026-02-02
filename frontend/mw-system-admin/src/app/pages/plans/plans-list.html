@@ -26,6 +26,7 @@
                 <th>Plano</th>
                 <th>Preço Mensal</th>
                 <th>Preço Anual</th>
+                <th>Campanha</th>
                 <th>Trial (dias)</th>
                 <th>Max Usuários</th>
                 <th>Max Pacientes</th>
@@ -46,6 +47,21 @@
                   </td>
                   <td>{{ formatCurrency(plan.monthlyPrice) }}</td>
                   <td>{{ formatCurrency(plan.yearlyPrice) }}</td>
+                  <td>
+                    @if (plan.campaignName) {
+                      <div class="campaign-info">
+                        <div class="campaign-badge">🎯 {{ plan.campaignName }}</div>
+                        @if (plan.campaignPrice) {
+                          <div class="campaign-price">{{ formatCurrency(plan.campaignPrice!) }}</div>
+                        }
+                        @if (plan.currentEarlyAdopters !== undefined && plan.maxEarlyAdopters) {
+                          <div class="campaign-slots">{{ plan.currentEarlyAdopters }}/{{ plan.maxEarlyAdopters }} vagas</div>
+                        }
+                      </div>
+                    } @else {
+                      <span class="no-campaign">—</span>
+                    }
+                  </td>
                   <td>{{ plan.trialDays }} dias</td>
                   <td>{{ plan.maxUsers }}</td>
                   <td>{{ plan.maxPatients }}</td>
@@ -189,6 +205,155 @@
                     </select>
                   </div>
                 }
+              </div>
+              
+              <!-- Campaign Section -->
+              <div class="campaign-section">
+                <h3 class="section-title">🎯 Dados de Campanha (Opcional)</h3>
+                
+                <div class="form-group">
+                  <label>Nome da Campanha</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="activeFormData.campaignName"
+                    name="campaignName"
+                    placeholder="Ex: MVP Early Adopter"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Descrição da Campanha</label>
+                  <textarea
+                    [(ngModel)]="activeFormData.campaignDescription"
+                    name="campaignDescription"
+                    rows="2"
+                    placeholder="Ex: Seja um dos primeiros clientes e garanta preço especial vitalício"
+                  ></textarea>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Preço Original/Futuro (R$)</label>
+                    <input
+                      type="number"
+                      [(ngModel)]="activeFormData.originalPrice"
+                      name="originalPrice"
+                      min="0"
+                      step="0.01"
+                      placeholder="0.00"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Preço Promocional (R$)</label>
+                    <input
+                      type="number"
+                      [(ngModel)]="activeFormData.campaignPrice"
+                      name="campaignPrice"
+                      min="0"
+                      step="0.01"
+                      placeholder="0.00"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Data Início</label>
+                    <input
+                      type="date"
+                      [(ngModel)]="activeFormData.campaignStartDate"
+                      name="campaignStartDate"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Data Fim (vazio = vitalício)</label>
+                    <input
+                      type="date"
+                      [(ngModel)]="activeFormData.campaignEndDate"
+                      name="campaignEndDate"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Max Early Adopters</label>
+                    <input
+                      type="number"
+                      [(ngModel)]="activeFormData.maxEarlyAdopters"
+                      name="maxEarlyAdopters"
+                      min="0"
+                      placeholder="100"
+                    />
+                  </div>
+                </div>
+
+                <!-- Early Adopter Benefits -->
+                <div class="form-group array-field">
+                  <label>🎁 Benefícios Early Adopter</label>
+                  <div class="array-input">
+                    <input
+                      type="text"
+                      [(ngModel)]="newBenefit"
+                      name="newBenefit"
+                      placeholder="Ex: Preço vitalício de R$ 49/mês (67% OFF)"
+                      (keyup.enter)="addBenefit()"
+                    />
+                    <button type="button" class="btn-add" (click)="addBenefit()">➕ Adicionar</button>
+                  </div>
+                  <ul class="array-list">
+                    @for (benefit of activeFormData.earlyAdopterBenefits; track $index) {
+                      <li>
+                        <span>⭐ {{ benefit }}</span>
+                        <button type="button" class="btn-remove" (click)="removeBenefit($index)">✕</button>
+                      </li>
+                    }
+                  </ul>
+                </div>
+
+                <!-- Features Available -->
+                <div class="form-group array-field">
+                  <label>✅ Recursos Disponíveis</label>
+                  <div class="array-input">
+                    <input
+                      type="text"
+                      [(ngModel)]="newFeatureAvailable"
+                      name="newFeatureAvailable"
+                      placeholder="Ex: Até 2 usuários"
+                      (keyup.enter)="addFeatureAvailable()"
+                    />
+                    <button type="button" class="btn-add" (click)="addFeatureAvailable()">➕ Adicionar</button>
+                  </div>
+                  <ul class="array-list">
+                    @for (feature of activeFormData.featuresAvailable; track $index) {
+                      <li>
+                        <span>✓ {{ feature }}</span>
+                        <button type="button" class="btn-remove" (click)="removeFeatureAvailable($index)">✕</button>
+                      </li>
+                    }
+                  </ul>
+                </div>
+
+                <!-- Features In Development -->
+                <div class="form-group array-field">
+                  <label>🔄 Recursos em Desenvolvimento</label>
+                  <div class="array-input">
+                    <input
+                      type="text"
+                      [(ngModel)]="newFeatureInDevelopment"
+                      name="newFeatureInDevelopment"
+                      placeholder="Ex: Assinatura digital (ICP-Brasil)"
+                      (keyup.enter)="addFeatureInDevelopment()"
+                    />
+                    <button type="button" class="btn-add" (click)="addFeatureInDevelopment()">➕ Adicionar</button>
+                  </div>
+                  <ul class="array-list">
+                    @for (feature of activeFormData.featuresInDevelopment; track $index) {
+                      <li>
+                        <span>⏳ {{ feature }}</span>
+                        <button type="button" class="btn-remove" (click)="removeFeatureInDevelopment($index)">✕</button>
+                      </li>
+                    }
+                  </ul>
+                </div>
               </div>
 
               @if (modalError()) {
