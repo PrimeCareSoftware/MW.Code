@@ -560,7 +560,7 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IAutomationEngine,
 builder.Services.Configure<MedicSoft.Application.Services.EmailService.SmtpEmailSettings>(
     builder.Configuration.GetSection(MedicSoft.Application.Services.EmailService.SmtpEmailSettings.SectionName));
 
-var useRealEmailService = builder.Configuration.GetValue<bool>("Email:Enabled");
+var useRealEmailService = builder.Configuration.GetValue<bool>("Email:Enabled", true);
 if (useRealEmailService)
 {
     builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IEmailService, MedicSoft.Application.Services.EmailService.SmtpEmailService>();
