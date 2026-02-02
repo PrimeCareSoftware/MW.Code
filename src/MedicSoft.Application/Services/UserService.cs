@@ -11,13 +11,13 @@ namespace MedicSoft.Application.Services
     {
         Task<User> CreateUserAsync(string username, string email, string password, string fullName,
             string phone, UserRole role, string tenantId, Guid? clinicId = null,
-            string? professionalId = null, string? specialty = null);
+            string? professionalId = null, string? specialty = null, bool showInAppointmentScheduling = true);
         Task<User?> GetUserByIdAsync(Guid id, string tenantId);
         Task<User?> GetUserByUsernameAsync(string username, string tenantId);
         Task<IEnumerable<User>> GetUsersByClinicIdAsync(Guid clinicId, string tenantId);
         Task<int> GetUserCountByClinicIdAsync(Guid clinicId, string tenantId);
         Task UpdateUserProfileAsync(Guid id, string email, string fullName, string phone, 
-            string tenantId, string? professionalId = null, string? specialty = null);
+            string tenantId, string? professionalId = null, string? specialty = null, bool? showInAppointmentScheduling = null);
         Task ChangeUserRoleAsync(Guid id, UserRole newRole, string tenantId);
         Task ChangeUserPasswordAsync(Guid id, string newPassword, string tenantId);
         Task ActivateUserAsync(Guid id, string tenantId);
@@ -56,7 +56,7 @@ namespace MedicSoft.Application.Services
 
         public async Task<User> CreateUserAsync(string username, string email, string password, string fullName,
             string phone, UserRole role, string tenantId, Guid? clinicId = null,
-            string? professionalId = null, string? specialty = null)
+            string? professionalId = null, string? specialty = null, bool showInAppointmentScheduling = true)
         {
             // Check if username already exists
             var existingUser = await _userRepository.GetUserByUsernameAsync(username, tenantId);
@@ -77,7 +77,7 @@ namespace MedicSoft.Application.Services
 
             var passwordHash = _passwordHasher.HashPassword(password);
             var user = new User(username, email, passwordHash, fullName, phone, role, tenantId, 
-                clinicId, professionalId, specialty);
+                clinicId, professionalId, specialty, showInAppointmentScheduling);
             
             await _userRepository.AddAsync(user);
             return user;
@@ -104,7 +104,7 @@ namespace MedicSoft.Application.Services
         }
 
         public async Task UpdateUserProfileAsync(Guid id, string email, string fullName, string phone, 
-            string tenantId, string? professionalId = null, string? specialty = null)
+            string tenantId, string? professionalId = null, string? specialty = null, bool? showInAppointmentScheduling = null)
         {
             var user = await _userRepository.GetByIdAsync(id, tenantId);
             if (user == null)
@@ -122,7 +122,7 @@ namespace MedicSoft.Application.Services
                     throw new InvalidOperationException("Specialty is required for doctors in this clinic");
             }
 
-            user.UpdateProfile(email, fullName, phone, professionalId, specialty);
+            user.UpdateProfile(email, fullName, phone, professionalId, specialty, showInAppointmentScheduling);
             await _userRepository.UpdateAsync(user);
         }
 
