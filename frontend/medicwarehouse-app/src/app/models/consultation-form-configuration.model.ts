@@ -49,5 +49,6 @@ export enum CustomFieldType {
   Data = 3,
   SelecaoUnica = 4,
   SelecaoMultipla = 5,
-  CheckBox = 6
+  CheckBox = 6,
+  SimNao = 7
 }

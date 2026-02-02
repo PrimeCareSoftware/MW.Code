@@ -198,6 +198,15 @@
             </div>
           </div>
 
+          <!-- Specialty-Specific Custom Fields -->
+          @if (formConfig()?.customFields && formConfig()!.customFields!.length > 0) {
+            <app-custom-fields-renderer
+              [customFields]="formConfig()!.customFields!"
+              [formGroup]="attendanceForm"
+              [sectionTitle]="'Campos Específicos - ' + (terminology()?.professional || 'Profissional')"
+            ></app-custom-fields-renderer>
+          }
+
           <!-- CFM 1.821 - Clinical Examination -->
           <div class="card">
             <div class="card-header-flex">

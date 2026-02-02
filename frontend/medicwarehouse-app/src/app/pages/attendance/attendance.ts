@@ -10,6 +10,7 @@ import { InformedConsentFormComponent } from './components/informed-consent-form
 import { ClinicalExaminationFormComponent } from './components/clinical-examination-form.component';
 import { DiagnosticHypothesisFormComponent } from './components/diagnostic-hypothesis-form.component';
 import { TherapeuticPlanFormComponent } from './components/therapeutic-plan-form.component';
+import { CustomFieldsRendererComponent } from './components/custom-fields-renderer.component';
 import { NotificationModalComponent } from '../../shared/notification-modal/notification-modal';
 import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
@@ -40,7 +41,20 @@ const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent, ClinicalExaminationFormComponent, DiagnosticHypothesisFormComponent, TherapeuticPlanFormComponent, NotificationModalComponent],
+  imports: [
+    HelpButtonComponent, 
+    CommonModule, 
+    ReactiveFormsModule, 
+    RouterLink, 
+    Navbar, 
+    RichTextEditor, 
+    InformedConsentFormComponent, 
+    ClinicalExaminationFormComponent, 
+    DiagnosticHypothesisFormComponent, 
+    TherapeuticPlanFormComponent,
+    CustomFieldsRendererComponent,
+    NotificationModalComponent
+  ],
   templateUrl: './attendance.html',
   styleUrl: './attendance.scss'
 })
