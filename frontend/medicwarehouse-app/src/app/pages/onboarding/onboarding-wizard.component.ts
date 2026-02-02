@@ -317,7 +317,7 @@ export class OnboardingWizardComponent {
       return;
     }
 
-    const selectedClinic = this.clinicSelectionService.getSelectedClinic();
+    const selectedClinic = this.clinicSelectionService.currentClinic();
     if (!selectedClinic) {
       this.error = 'Nenhuma clínica selecionada.';
       return;
@@ -327,7 +327,7 @@ export class OnboardingWizardComponent {
     this.error = '';
 
     const dto: CreateBusinessConfigurationDto = {
-      clinicId: selectedClinic.id,
+      clinicId: selectedClinic.clinicId,
       businessType: this.selectedBusinessType,
       primarySpecialty: this.selectedSpecialty
     };
@@ -348,5 +348,16 @@ export class OnboardingWizardComponent {
 
   getProgressPercentage(): number {
     return (this.currentStep / this.totalSteps) * 100;
+  }
+
+  // Getter methods for template bindings
+  getSelectedBusinessTypeLabel(): string {
+    const option = this.businessTypeOptions.find(opt => opt.value === this.selectedBusinessType);
+    return option?.label || '';
+  }
+
+  getSelectedSpecialtyLabel(): string {
+    const option = this.specialtyOptions.find(opt => opt.value === this.selectedSpecialty);
+    return option?.label || '';
   }
 }

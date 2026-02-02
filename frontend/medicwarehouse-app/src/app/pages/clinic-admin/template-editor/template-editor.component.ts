@@ -33,6 +33,11 @@ export class TemplateEditorComponent implements OnInit {
   // Notification state
   notification: { message: string; type: 'success' | 'error' } | null = null;
   
+  // Template placeholder examples for help text
+  placeholders = '{{patientName}}, {{consultationDate}}';
+  patientName = 'Nome do Paciente';
+  consultationDate = 'Data da Consulta';
+  
   templatePresets: TemplatePreset[] = [
     {
       specialty: ProfessionalSpecialty.Medico,
@@ -319,9 +324,9 @@ CRO: {{professionalRegistration}}`
   }
 
   private loadTerminology(): void {
-    const selectedClinic = this.clinicSelectionService.getSelectedClinic();
+    const selectedClinic = this.clinicSelectionService.currentClinic();
     if (selectedClinic) {
-      this.terminologyService.loadTerminology(selectedClinic.id).subscribe(terminology => {
+      this.terminologyService.loadTerminology(selectedClinic.clinicId).subscribe(terminology => {
         this.terminology = terminology;
       });
     }
