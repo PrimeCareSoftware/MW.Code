@@ -1,0 +1,102 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="header-icon">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <div>
+          <h1>Documentação Técnica</h1>
+          <p class="header-subtitle">Central de documentação e implementações do sistema</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <!-- Search and Stats -->
+    <div class="search-section">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="Buscar documentação..."
+          (input)="onSearch($event)"
+          [value]="searchQuery()"
+        />
+      </div>
+
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-content">
+            <div class="stat-value">{{ filteredCategories().length }}</div>
+            <div class="stat-label">Categorias</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📄</div>
+          <div class="stat-content">
+            <div class="stat-value">{{ getTotalDocs() }}</div>
+            <div class="stat-label">Documentos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documentation Categories -->
+    <div class="categories-grid">
+      @for (category of filteredCategories(); track category.name) {
+        <div class="category-card">
+          <div class="category-header">
+            <span class="category-icon">{{ category.icon }}</span>
+            <h2>{{ category.name }}</h2>
+          </div>
+
+          <div class="docs-list">
+            @for (doc of category.docs; track doc.id) {
+              <div 
+                class="doc-item" 
+                (click)="openDocumentation(doc.path)"
+                (keydown.enter)="openDocumentation(doc.path)"
+                (keydown.space)="openDocumentation(doc.path)"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="'Abrir ' + doc.title">
+                <div class="doc-icon">{{ doc.icon }}</div>
+                <div class="doc-content">
+                  <div class="doc-title">{{ doc.title }}</div>
+                  <div class="doc-description">{{ doc.description }}</div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="doc-arrow">
+                  <path d="M5 12h14"/>
+                  <path d="m12 5 7 7-7 7"/>
+                </svg>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (filteredCategories().length === 0) {
+      <div class="no-results">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="no-results-icon">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <h3>Nenhum documento encontrado</h3>
+        <p>Tente ajustar sua pesquisa</p>
+      </div>
+    }
+  </div>
+</div>
