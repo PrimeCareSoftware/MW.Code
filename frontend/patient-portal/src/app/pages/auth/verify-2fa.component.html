@@ -1,0 +1,62 @@
+<div class="verify-2fa-container">
+  <mat-card class="verify-2fa-card">
+    <mat-card-header>
+      <div class="logo-container">
+        <mat-icon class="logo-icon">verified_user</mat-icon>
+      </div>
+      <mat-card-title>Verificação em Duas Etapas</mat-card-title>
+      <mat-card-subtitle>Digite o código de 6 dígitos enviado para seu e-mail</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="verifyForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width code-field">
+          <mat-label>Código de Verificação</mat-label>
+          <input matInput 
+                 formControlName="code" 
+                 placeholder="000000"
+                 maxlength="6"
+                 (input)="onCodeInput($event)"
+                 autocomplete="one-time-code"
+                 inputmode="numeric">
+          <mat-icon matPrefix>pin</mat-icon>
+          <mat-error *ngIf="verifyForm.get('code')?.hasError('required')">
+            Código é obrigatório
+          </mat-error>
+          <mat-error *ngIf="verifyForm.get('code')?.hasError('pattern')">
+            Código deve conter 6 dígitos
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" 
+                [disabled]="loading" 
+                class="full-width verify-button">
+          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+          <span *ngIf="!loading">
+            <mat-icon>check_circle</mat-icon>
+            Verificar
+          </span>
+        </button>
+      </form>
+
+      <div class="resend-section">
+        <p class="resend-text">Não recebeu o código?</p>
+        <button mat-button 
+                class="resend-button"
+                [disabled]="resending || countdown > 0"
+                (click)="resendCode()">
+          <mat-spinner *ngIf="resending" diameter="16"></mat-spinner>
+          <span *ngIf="!resending && countdown <= 0">Reenviar código</span>
+          <span *ngIf="!resending && countdown > 0">Reenviar em {{ countdown }}s</span>
+        </button>
+      </div>
+
+      <div class="back-to-login">
+        <a routerLink="/auth/login" class="link">
+          <mat-icon>arrow_back</mat-icon>
+          Voltar ao login
+        </a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
