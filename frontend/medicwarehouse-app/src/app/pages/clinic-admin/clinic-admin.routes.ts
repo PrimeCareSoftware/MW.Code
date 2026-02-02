@@ -40,6 +40,10 @@ export const CLINIC_ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./business-configuration/business-configuration.component').then(m => m.BusinessConfigurationComponent)
       },
       {
+        path: 'template-editor',
+        loadComponent: () => import('./template-editor/template-editor.component').then(m => m.TemplateEditorComponent)
+      },
+      {
         path: '',
         redirectTo: 'info',
         pathMatch: 'full'

@@ -1,0 +1,119 @@
+<div class="template-editor-container">
+  <div class="page-header">
+    <h1>Editor de Modelos de Documentos</h1>
+    <p class="subtitle">Personalize os modelos de documentos para sua especialidade</p>
+  </div>
+
+  <div class="editor-layout">
+    <!-- Sidebar: Preset Selection -->
+    <div class="sidebar">
+      <h3>Modelos por Especialidade</h3>
+      <div class="preset-list">
+        <div 
+          *ngFor="let preset of templatePresets"
+          class="preset-item"
+          [class.selected]="selectedPreset === preset"
+          (click)="selectPreset(preset)"
+        >
+          <span class="preset-icon">{{ preset.icon }}</span>
+          <span class="preset-name">{{ preset.name }}</span>
+        </div>
+      </div>
+
+      <div class="placeholders-section" *ngIf="selectedPreset">
+        <h3>Campos Disponíveis</h3>
+        <p class="help-text">Clique para inserir no modelo</p>
+        <div class="placeholder-list">
+          <button 
+            *ngFor="let placeholder of availablePlaceholders"
+            class="placeholder-btn"
+            (click)="insertPlaceholder(placeholder.key)"
+            type="button"
+          >
+            <span class="placeholder-key">{{placeholder.key}}</span>
+            <span class="placeholder-label">{{ placeholder.label }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content: Template Editor -->
+    <div class="main-content" *ngIf="selectedPreset">
+      <div class="template-tabs">
+        <button 
+          class="tab-btn"
+          [class.active]="previewMode === 'main'"
+          (click)="setPreviewMode('main')"
+          type="button"
+        >
+          {{ terminology?.mainDocument || 'Documento Principal' }}
+        </button>
+        <button 
+          class="tab-btn"
+          [class.active]="previewMode === 'exit'"
+          (click)="setPreviewMode('exit')"
+          type="button"
+        >
+          {{ terminology?.exitDocument || 'Documento de Saída' }}
+        </button>
+      </div>
+
+      <div class="editor-section">
+        <div class="editor-header">
+          <h3>Editar Modelo</h3>
+          <div class="editor-actions">
+            <button class="btn btn-secondary" (click)="resetTemplate()" type="button">
+              🔄 Restaurar Padrão
+            </button>
+            <button class="btn btn-primary" (click)="saveTemplate()" type="button">
+              💾 Salvar
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-body">
+          <textarea 
+            class="template-textarea"
+            [(ngModel)]="currentTemplate"
+            placeholder="Digite seu modelo aqui..."
+            rows="20"
+          ></textarea>
+        </div>
+
+        <div class="editor-footer">
+          <p class="help-text">
+            💡 <strong>Dica:</strong> Use {{placeholders}} para inserir dados dinâmicos. 
+            Exemplo: {{patientName}}, {{consultationDate}}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="preview-panel" *ngIf="selectedPreset && currentTemplate">
+      <div class="preview-header">
+        <h3>Pré-visualização</h3>
+        <span class="preview-badge">Com dados de exemplo</span>
+      </div>
+      
+      <div class="preview-content">
+        <div class="document-preview">
+          <pre>{{ getPreviewWithTerminology() }}</pre>
+        </div>
+      </div>
+
+      <div class="preview-footer">
+        <p class="help-text">
+          ℹ️ Esta pré-visualização mostra como o documento aparecerá com dados reais.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!selectedPreset">
+    <div class="empty-icon">📄</div>
+    <h2>Selecione uma especialidade</h2>
+    <p>Escolha um modelo de especialidade na barra lateral para começar a editar.</p>
+  </div>
+</div>
