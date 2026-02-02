@@ -148,6 +148,31 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Get terminology for a specific professional specialty
+        /// Note: AllowAnonymous is safe here as terminology is generic localization data
+        /// (e.g., "Consulta" vs "Sessão") and contains no sensitive information
+        /// </summary>
+        [HttpGet("terminology/{specialty}")]
+        [AllowAnonymous] // Allow anonymous access for public scheduling interfaces
+        public ActionResult<Dictionary<string, string>> GetTerminology(string specialty)
+        {
+            try
+            {
+                if (!Enum.TryParse<Domain.Enums.ProfessionalSpecialty>(specialty, true, out var specialtyEnum))
+                {
+                    return BadRequest($"Invalid specialty: {specialty}");
+                }
+
+                var terminology = Domain.ValueObjects.TerminologyMap.For(specialtyEnum);
+                return Ok(terminology.ToDictionary());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     public class CreateConfigurationFromProfileRequest

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, catchError, shareReplay, filter } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface TerminologyMap {
   appointment: string;
@@ -12,12 +13,26 @@ export interface TerminologyMap {
   exitDocument: string;
 }
 
+export enum ProfessionalSpecialty {
+  Medico = 'Medico',
+  Psicologo = 'Psicologo',
+  Nutricionista = 'Nutricionista',
+  Fisioterapeuta = 'Fisioterapeuta',
+  Dentista = 'Dentista',
+  Enfermeiro = 'Enfermeiro',
+  TerapeutaOcupacional = 'TerapeutaOcupacional',
+  Fonoaudiologo = 'Fonoaudiologo',
+  Outro = 'Outro'
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class TerminologyService {
   private readonly baseUrl = '/api/BusinessConfiguration';
+  private readonly terminologyUrl = `${environment.apiUrl}/api/consultation-form-configurations/terminology`;
   private terminologyCache$ = new BehaviorSubject<TerminologyMap | null>(null);
+  private specialtyTerminologyCache = new Map<string, Observable<TerminologyMap>>();
   private loading = false;
 
   // Default terminology (Medical specialty)
@@ -65,6 +80,30 @@ export class TerminologyService {
   }
 
   /**
+   * Get terminology for a specific professional specialty
+   */
+  getTerminologyBySpecialty(specialty?: string): Observable<TerminologyMap> {
+    if (!specialty) {
+      return of(this.defaultTerminology);
+    }
+
+    // Check cache first
+    if (this.specialtyTerminologyCache.has(specialty)) {
+      return this.specialtyTerminologyCache.get(specialty)!;
+    }
+
+    // Fetch from API and cache
+    const request = this.http.get<TerminologyMap>(`${this.terminologyUrl}/${specialty}`)
+      .pipe(
+        catchError(() => of(this.defaultTerminology)),
+        shareReplay(1)
+      );
+
+    this.specialtyTerminologyCache.set(specialty, request);
+    return request;
+  }
+
+  /**
    * Get the current terminology or default if not loaded
    */
   getTerminology(): TerminologyMap {
@@ -91,6 +130,7 @@ export class TerminologyService {
    */
   clearCache(): void {
     this.terminologyCache$.next(null);
+    this.specialtyTerminologyCache.clear();
     this.loading = false;
   }
 
@@ -107,5 +147,99 @@ export class TerminologyService {
     });
     
     return result;
+  }
+
+  /**
+   * Parse specialty string to enum value (case-insensitive, handles various formats)
+   */
+  parseSpecialty(specialtyStr?: string): ProfessionalSpecialty {
+    if (!specialtyStr) {
+      return ProfessionalSpecialty.Outro;
+    }
+
+    const normalized = specialtyStr.toLowerCase().replace(/[^a-z]/g, '');
+    
+    switch (normalized) {
+      case 'medico':
+      case 'doctor':
+      case 'doutor':
+        return ProfessionalSpecialty.Medico;
+      case 'psicologo':
+      case 'psychologist':
+        return ProfessionalSpecialty.Psicologo;
+      case 'nutricionista':
+      case 'nutritionist':
+        return ProfessionalSpecialty.Nutricionista;
+      case 'fisioterapeuta':
+      case 'physiotherapist':
+        return ProfessionalSpecialty.Fisioterapeuta;
+      case 'dentista':
+      case 'dentist':
+      case 'odontologo':
+        return ProfessionalSpecialty.Dentista;
+      case 'enfermeiro':
+      case 'nurse':
+        return ProfessionalSpecialty.Enfermeiro;
+      case 'terapeutaocupacional':
+      case 'occupationaltherapist':
+        return ProfessionalSpecialty.TerapeutaOcupacional;
+      case 'fonoaudiologo':
+      case 'speechtherapist':
+        return ProfessionalSpecialty.Fonoaudiologo;
+      default:
+        return ProfessionalSpecialty.Outro;
+    }
+  }
+
+  /**
+   * Get the icon for a professional specialty
+   */
+  getSpecialtyIcon(specialty: ProfessionalSpecialty): string {
+    switch (specialty) {
+      case ProfessionalSpecialty.Medico:
+        return '🩺';
+      case ProfessionalSpecialty.Psicologo:
+        return '🧠';
+      case ProfessionalSpecialty.Nutricionista:
+        return '🥗';
+      case ProfessionalSpecialty.Fisioterapeuta:
+        return '💪';
+      case ProfessionalSpecialty.Dentista:
+        return '🦷';
+      case ProfessionalSpecialty.Enfermeiro:
+        return '🩹';
+      case ProfessionalSpecialty.TerapeutaOcupacional:
+        return '🎨';
+      case ProfessionalSpecialty.Fonoaudiologo:
+        return '🗣️';
+      default:
+        return '⚕️';
+    }
+  }
+
+  /**
+   * Get translated specialty name (Portuguese)
+   */
+  getSpecialtyName(specialty: ProfessionalSpecialty): string {
+    switch (specialty) {
+      case ProfessionalSpecialty.Medico:
+        return 'Médico';
+      case ProfessionalSpecialty.Psicologo:
+        return 'Psicólogo';
+      case ProfessionalSpecialty.Nutricionista:
+        return 'Nutricionista';
+      case ProfessionalSpecialty.Fisioterapeuta:
+        return 'Fisioterapeuta';
+      case ProfessionalSpecialty.Dentista:
+        return 'Dentista';
+      case ProfessionalSpecialty.Enfermeiro:
+        return 'Enfermeiro';
+      case ProfessionalSpecialty.TerapeutaOcupacional:
+        return 'Terapeuta Ocupacional';
+      case ProfessionalSpecialty.Fonoaudiologo:
+        return 'Fonoaudiólogo';
+      default:
+        return 'Outro';
+    }
   }
 }

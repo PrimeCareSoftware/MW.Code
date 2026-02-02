@@ -21,6 +21,8 @@ namespace MedicSoft.Application.DTOs
 
         public string? ProfessionalName { get; set; }
         
+        public string? ProfessionalSpecialty { get; set; }
+        
         [Required(ErrorMessage = "Data agendada é obrigatória")]
         public DateTime ScheduledDate { get; set; }
         

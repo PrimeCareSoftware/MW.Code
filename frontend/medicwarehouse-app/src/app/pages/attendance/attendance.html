@@ -3,8 +3,8 @@
 <div class="attendance-container">
   <div class="page-header">
     <div>
-      <h1>Atendimento ao Paciente</h1>
-      <p>Registro de consulta e prontuário médico</p>
+      <h1>{{ terminology()?.appointment || 'Atendimento' }} ao {{ terminology()?.client || 'Paciente' }}</h1>
+      <p>Registro de {{ terminology()?.appointment?.toLowerCase() || 'atendimento' }} e {{ terminology()?.mainDocument?.toLowerCase() || 'prontuário' }}</p>
     </div>
     <button class="btn btn-secondary" routerLink="/appointments">Voltar para Agenda</button>
   </div>
@@ -27,7 +27,7 @@
       <div class="left-panel">
         <!-- Patient Info Card -->
         <div class="card patient-info">
-          <h3>Informações do Paciente</h3>
+          <h3>Informações do {{ terminology()?.client || 'Paciente' }}</h3>
           @if (patient()) {
             <div class="patient-details">
               <div class="detail-row">
@@ -82,22 +82,22 @@
 
         <!-- Timer Card -->
         <div class="card timer-card">
-          <h3>Tempo de Consulta</h3>
+          <h3>Tempo de {{ terminology()?.appointment || 'Consulta' }}</h3>
           <div class="timer-display">
             {{ formatTime(elapsedSeconds()) }}
           </div>
           <p class="timer-info">
             @if (medicalRecord()?.consultationEndTime) {
-              Consulta finalizada
+              {{ terminology()?.appointment || 'Consulta' }} finalizada
             } @else {
-              Consulta em andamento
+              {{ terminology()?.appointment || 'Consulta' }} em andamento
             }
           </p>
         </div>
 
         <!-- Patient History Card -->
         <div class="card patient-history">
-          <h3>Histórico de Consultas</h3>
+          <h3>Histórico de {{ terminology()?.appointment || 'Atendimento' }}s</h3>
           @if (patientHistory().length > 0) {
             <div class="history-list">
               @for (record of patientHistory(); track record.id) {
@@ -197,6 +197,15 @@
               ></textarea>
             </div>
           </div>
+
+          <!-- Specialty-Specific Custom Fields -->
+          @if (formConfig()?.customFields && formConfig()!.customFields!.length > 0) {
+            <app-custom-fields-renderer
+              [customFields]="formConfig()!.customFields!"
+              [formGroup]="attendanceForm"
+              [sectionTitle]="getCustomFieldsSectionTitle()"
+            ></app-custom-fields-renderer>
+          }
 
           <!-- CFM 1.821 - Clinical Examination -->
           <div class="card">

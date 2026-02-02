@@ -66,6 +66,8 @@ namespace MedicSoft.Application.Mappings
             CreateMap<Appointment, AppointmentDto>()
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name))
                 .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic.Name))
+                .ForMember(dest => dest.ProfessionalName, opt => opt.MapFrom(src => src.Professional != null ? src.Professional.FullName : null))
+                .ForMember(dest => dest.ProfessionalSpecialty, opt => opt.MapFrom(src => src.Professional != null ? src.Professional.Specialty : null))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
 

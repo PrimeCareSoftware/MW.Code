@@ -1,0 +1,178 @@
+<div class="card custom-fields-section" *ngIf="customFields && customFields.length > 0">
+  <h3>{{ sectionTitle }}</h3>
+  
+  <div class="custom-fields-container" [formGroup]="formGroup">
+    <div *ngFor="let field of getSortedFields()" class="form-group custom-field">
+      
+      <!-- Text Input (Short) -->
+      <div *ngIf="field.fieldType === CustomFieldType.TextoCurto">
+        <label [for]="field.fieldKey">
+          {{ field.label }}
+          <span *ngIf="field.isRequired" class="required">*</span>
+        </label>
+        <input 
+          [id]="field.fieldKey"
+          [formControlName]="field.fieldKey"
+          type="text"
+          class="form-control"
+          [placeholder]="field.placeholder || ''"
+        />
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+        <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
+          {{ getErrorMessage(field.fieldKey) }}
+        </div>
+      </div>
+
+      <!-- Text Area (Long Text) -->
+      <div *ngIf="field.fieldType === CustomFieldType.TextoLongo">
+        <label [for]="field.fieldKey">
+          {{ field.label }}
+          <span *ngIf="field.isRequired" class="required">*</span>
+        </label>
+        <textarea 
+          [id]="field.fieldKey"
+          [formControlName]="field.fieldKey"
+          class="form-control"
+          rows="4"
+          [placeholder]="field.placeholder || ''"
+        ></textarea>
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+        <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
+          {{ getErrorMessage(field.fieldKey) }}
+        </div>
+      </div>
+
+      <!-- Number Input -->
+      <div *ngIf="field.fieldType === CustomFieldType.Numero">
+        <label [for]="field.fieldKey">
+          {{ field.label }}
+          <span *ngIf="field.isRequired" class="required">*</span>
+        </label>
+        <input 
+          [id]="field.fieldKey"
+          [formControlName]="field.fieldKey"
+          type="number"
+          class="form-control"
+          [placeholder]="field.placeholder || ''"
+        />
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+        <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
+          {{ getErrorMessage(field.fieldKey) }}
+        </div>
+      </div>
+
+      <!-- Date Input -->
+      <div *ngIf="field.fieldType === CustomFieldType.Data">
+        <label [for]="field.fieldKey">
+          {{ field.label }}
+          <span *ngIf="field.isRequired" class="required">*</span>
+        </label>
+        <input 
+          [id]="field.fieldKey"
+          [formControlName]="field.fieldKey"
+          type="date"
+          class="form-control"
+        />
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+        <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
+          {{ getErrorMessage(field.fieldKey) }}
+        </div>
+      </div>
+
+      <!-- Radio Buttons (Single Selection) -->
+      <div *ngIf="field.fieldType === CustomFieldType.SelecaoUnica">
+        <label>
+          {{ field.label }}
+          <span *ngIf="field.isRequired" class="required">*</span>
+        </label>
+        <div class="radio-group">
+          <div *ngFor="let option of field.options" class="radio-option">
+            <input 
+              [id]="field.fieldKey + '_' + option"
+              [formControlName]="field.fieldKey"
+              type="radio"
+              [value]="option"
+            />
+            <label [for]="field.fieldKey + '_' + option">{{ option }}</label>
+          </div>
+        </div>
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+        <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
+          {{ getErrorMessage(field.fieldKey) }}
+        </div>
+      </div>
+
+      <!-- Checkboxes (Multiple Selection) -->
+      <div *ngIf="field.fieldType === CustomFieldType.SelecaoMultipla">
+        <label>
+          {{ field.label }}
+          <span *ngIf="field.isRequired" class="required">*</span>
+        </label>
+        <div class="checkbox-group">
+          <div *ngFor="let option of field.options" class="checkbox-option">
+            <input 
+              [id]="field.fieldKey + '_' + option"
+              type="checkbox"
+              [checked]="isMultiSelectOptionChecked(field.fieldKey, option)"
+              (change)="onMultiSelectChange(field.fieldKey, option, $event)"
+            />
+            <label [for]="field.fieldKey + '_' + option">{{ option }}</label>
+          </div>
+        </div>
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+        <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
+          {{ getErrorMessage(field.fieldKey) }}
+        </div>
+      </div>
+
+      <!-- Single Checkbox -->
+      <div *ngIf="field.fieldType === CustomFieldType.CheckBox">
+        <div class="checkbox-single">
+          <input 
+            [id]="field.fieldKey"
+            [formControlName]="field.fieldKey"
+            type="checkbox"
+          />
+          <label [for]="field.fieldKey">
+            {{ field.label }}
+            <span *ngIf="field.isRequired" class="required">*</span>
+          </label>
+        </div>
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+      </div>
+
+      <!-- Yes/No Radio (SimNao) -->
+      <div *ngIf="field.fieldType === CustomFieldType.SimNao">
+        <label>
+          {{ field.label }}
+          <span *ngIf="field.isRequired" class="required">*</span>
+        </label>
+        <div class="radio-group yes-no-group">
+          <div class="radio-option">
+            <input 
+              [id]="field.fieldKey + '_sim'"
+              [formControlName]="field.fieldKey"
+              type="radio"
+              [value]="true"
+            />
+            <label [for]="field.fieldKey + '_sim'">Sim</label>
+          </div>
+          <div class="radio-option">
+            <input 
+              [id]="field.fieldKey + '_nao'"
+              [formControlName]="field.fieldKey"
+              type="radio"
+              [value]="false"
+            />
+            <label [for]="field.fieldKey + '_nao'">Não</label>
+          </div>
+        </div>
+        <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
+        <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
+          {{ getErrorMessage(field.fieldKey) }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

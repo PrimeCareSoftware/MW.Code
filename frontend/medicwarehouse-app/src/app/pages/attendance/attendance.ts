@@ -10,6 +10,7 @@ import { InformedConsentFormComponent } from './components/informed-consent-form
 import { ClinicalExaminationFormComponent } from './components/clinical-examination-form.component';
 import { DiagnosticHypothesisFormComponent } from './components/diagnostic-hypothesis-form.component';
 import { TherapeuticPlanFormComponent } from './components/therapeutic-plan-form.component';
+import { CustomFieldsRendererComponent } from './components/custom-fields-renderer.component';
 import { NotificationModalComponent } from '../../shared/notification-modal/notification-modal';
 import { AppointmentService } from '../../services/appointment';
 import { MedicalRecordService } from '../../services/medical-record';
@@ -22,6 +23,7 @@ import { DiagnosticHypothesisService } from '../../services/diagnostic-hypothesi
 import { TherapeuticPlanService } from '../../services/therapeutic-plan.service';
 import { InformedConsentService } from '../../services/informed-consent.service';
 import { ConsultationFormConfigurationService } from '../../services/consultation-form-configuration.service';
+import { TerminologyService, TerminologyMap } from '../../services/terminology.service';
 import { Appointment } from '../../models/appointment.model';
 import { MedicalRecord, ClinicalExamination, DiagnosticHypothesis, TherapeuticPlan, InformedConsent, DiagnosisType, DiagnosisTypeLabels } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
@@ -39,7 +41,20 @@ const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, RouterLink, Navbar, RichTextEditor, InformedConsentFormComponent, ClinicalExaminationFormComponent, DiagnosticHypothesisFormComponent, TherapeuticPlanFormComponent, NotificationModalComponent],
+  imports: [
+    HelpButtonComponent, 
+    CommonModule, 
+    ReactiveFormsModule, 
+    RouterLink, 
+    Navbar, 
+    RichTextEditor, 
+    InformedConsentFormComponent, 
+    ClinicalExaminationFormComponent, 
+    DiagnosticHypothesisFormComponent, 
+    TherapeuticPlanFormComponent,
+    CustomFieldsRendererComponent,
+    NotificationModalComponent
+  ],
   templateUrl: './attendance.html',
   styleUrl: './attendance.scss'
 })
@@ -53,6 +68,7 @@ export class Attendance implements OnInit, OnDestroy {
   patientHistory = signal<MedicalRecord[]>([]);
   nextPatient = signal<Appointment | null>(null);
   formConfig = signal<ConsultationFormConfigurationDto | null>(null);
+  terminology = signal<TerminologyMap | null>(null);
   
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
@@ -112,6 +128,7 @@ export class Attendance implements OnInit, OnDestroy {
 
   // Services
   private consultationFormConfigService = inject(ConsultationFormConfigurationService);
+  private terminologyService = inject(TerminologyService);
 
   constructor(
     private fb: FormBuilder,
@@ -195,12 +212,33 @@ export class Attendance implements OnInit, OnDestroy {
         this.loadPatient(appointment.patientId);
         this.loadOrCreateMedicalRecord(appointment.id, appointment.patientId);
         this.loadFormConfiguration(appointment.clinicId);
+        this.loadTerminology(appointment.professionalSpecialty);
         this.isLoading.set(false);
       },
       error: (error) => {
         console.error('Error loading appointment:', error);
         this.errorMessage.set('Erro ao carregar agendamento');
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  loadTerminology(specialty?: string): void {
+    this.terminologyService.getTerminologyBySpecialty(specialty).subscribe({
+      next: (terminology) => {
+        this.terminology.set(terminology);
+      },
+      error: (error) => {
+        console.error('Error loading terminology:', error);
+        // Fallback to default terminology
+        this.terminology.set({
+          appointment: 'Consulta',
+          professional: 'Profissional',
+          registration: 'Registro',
+          client: 'Paciente',
+          mainDocument: 'Prontuário',
+          exitDocument: 'Documento'
+        });
       }
     });
   }
@@ -481,6 +519,14 @@ export class Attendance implements OnInit, OnDestroy {
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  /**
+   * Get the title for the custom fields section based on professional terminology
+   */
+  getCustomFieldsSectionTitle(): string {
+    const professionalTerm = this.terminology()?.professional || 'Profissional';
+    return `Campos Específicos - ${professionalTerm}`;
   }
 
   onSave(): void {
