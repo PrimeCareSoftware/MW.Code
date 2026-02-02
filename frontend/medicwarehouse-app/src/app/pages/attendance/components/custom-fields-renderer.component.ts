@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomFieldDto, CustomFieldType } from '../../../models/consultation-form-configuration.model';
@@ -116,5 +116,34 @@ export class CustomFieldsRendererComponent {
       [CustomFieldType.SimNao]: 'Sim/Não'
     };
     return labels[fieldType] || 'Desconhecido';
+  }
+
+  /**
+   * Get error message for a field
+   */
+  getErrorMessage(fieldKey: string): string {
+    const control = this.formGroup.get(fieldKey);
+    if (!control || !control.errors) return '';
+
+    if (control.errors['required']) {
+      return 'Este campo é obrigatório';
+    }
+    if (control.errors['minlength']) {
+      return `Mínimo de ${control.errors['minlength'].requiredLength} caracteres`;
+    }
+    if (control.errors['maxlength']) {
+      return `Máximo de ${control.errors['maxlength'].requiredLength} caracteres`;
+    }
+    if (control.errors['min']) {
+      return `Valor mínimo: ${control.errors['min'].min}`;
+    }
+    if (control.errors['max']) {
+      return `Valor máximo: ${control.errors['max'].max}`;
+    }
+    if (control.errors['pattern']) {
+      return 'Formato inválido';
+    }
+    
+    return 'Valor inválido';
   }
 }

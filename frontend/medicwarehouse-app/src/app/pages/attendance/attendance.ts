@@ -521,6 +521,14 @@ export class Attendance implements OnInit, OnDestroy {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
+  /**
+   * Get the title for the custom fields section based on professional terminology
+   */
+  getCustomFieldsSectionTitle(): string {
+    const professionalTerm = this.terminology()?.professional || 'Profissional';
+    return `Campos Específicos - ${professionalTerm}`;
+  }
+
   onSave(): void {
     if (!this.medicalRecord()) return;
 

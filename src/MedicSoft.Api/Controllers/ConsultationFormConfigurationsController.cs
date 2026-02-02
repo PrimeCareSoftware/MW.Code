@@ -151,6 +151,8 @@ namespace MedicSoft.Api.Controllers
 
         /// <summary>
         /// Get terminology for a specific professional specialty
+        /// Note: AllowAnonymous is safe here as terminology is generic localization data
+        /// (e.g., "Consulta" vs "Sessão") and contains no sensitive information
         /// </summary>
         [HttpGet("terminology/{specialty}")]
         [AllowAnonymous] // Allow anonymous access for public scheduling interfaces

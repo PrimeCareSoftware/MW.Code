@@ -203,7 +203,7 @@
             <app-custom-fields-renderer
               [customFields]="formConfig()!.customFields!"
               [formGroup]="attendanceForm"
-              [sectionTitle]="'Campos Específicos - ' + (terminology()?.professional || 'Profissional')"
+              [sectionTitle]="getCustomFieldsSectionTitle()"
             ></app-custom-fields-renderer>
           }
 

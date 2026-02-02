@@ -19,7 +19,7 @@
         />
         <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
         <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
-          Campo obrigatório
+          {{ getErrorMessage(field.fieldKey) }}
         </div>
       </div>
 
@@ -38,7 +38,7 @@
         ></textarea>
         <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
         <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
-          Campo obrigatório
+          {{ getErrorMessage(field.fieldKey) }}
         </div>
       </div>
 
@@ -57,7 +57,7 @@
         />
         <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
         <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
-          Campo obrigatório
+          {{ getErrorMessage(field.fieldKey) }}
         </div>
       </div>
 
@@ -75,7 +75,7 @@
         />
         <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
         <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
-          Campo obrigatório
+          {{ getErrorMessage(field.fieldKey) }}
         </div>
       </div>
 
@@ -98,7 +98,7 @@
         </div>
         <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
         <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
-          Campo obrigatório
+          {{ getErrorMessage(field.fieldKey) }}
         </div>
       </div>
 
@@ -121,7 +121,7 @@
         </div>
         <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
         <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
-          Campo obrigatório
+          {{ getErrorMessage(field.fieldKey) }}
         </div>
       </div>
 
@@ -169,7 +169,7 @@
         </div>
         <small *ngIf="field.helpText" class="help-text">{{ field.helpText }}</small>
         <div *ngIf="formGroup.get(field.fieldKey)?.invalid && formGroup.get(field.fieldKey)?.touched" class="error-message">
-          Campo obrigatório
+          {{ getErrorMessage(field.fieldKey) }}
         </div>
       </div>
 
