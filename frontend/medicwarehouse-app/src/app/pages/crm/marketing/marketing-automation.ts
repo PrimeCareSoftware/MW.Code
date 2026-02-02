@@ -29,4 +29,10 @@ export class MarketingAutomation implements OnInit {
       this.isLoading.set(false);
     }
   }
+
+  onNewCampaign(): void {
+    // TODO: Open modal or navigate to campaign creation form
+    console.log('Nova Campanha clicked');
+    alert('Funcionalidade "Nova Campanha" será implementada em breve.');
+  }
 }
