@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { environment } from '../../../environments/environment';
 
 interface DeletionRequestData {
@@ -32,7 +33,8 @@ interface DeletionRequestData {
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatStepperModule
+    MatStepperModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './DeletionRequest.component.html',
   styleUrls: ['./privacy.scss']
@@ -67,6 +69,11 @@ export class DeletionRequestComponent {
 
   isStep3Valid(): boolean {
     return this.requestData.confirmation && this.requestData.understanding;
+  }
+
+  getRequestTypeLabel(): string {
+    const type = this.requestTypes.find(t => t.value === this.requestData.requestType);
+    return type ? type.label : '';
   }
 
   submitRequest(): void {

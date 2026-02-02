@@ -38,3 +38,27 @@ export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface TwoFactorRequiredResponse {
+  requiresTwoFactor: boolean;
+  tempToken: string;
+  message: string;
+}
+
+export interface VerifyTwoFactorRequest {
+  tempToken: string;
+  code: string;
+}
+
+export interface ResendTwoFactorCodeRequest {
+  tempToken: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}

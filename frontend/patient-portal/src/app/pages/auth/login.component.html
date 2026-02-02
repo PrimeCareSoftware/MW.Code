@@ -41,6 +41,12 @@
           </mat-error>
         </mat-form-field>
 
+        <div class="remember-me-container">
+          <mat-checkbox formControlName="rememberMe">
+            Manter conectado
+          </mat-checkbox>
+        </div>
+
         <button mat-raised-button color="primary" type="submit" 
                 [disabled]="loading" 
                 class="full-width login-button">

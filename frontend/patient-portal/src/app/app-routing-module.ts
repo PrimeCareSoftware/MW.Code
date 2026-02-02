@@ -17,6 +17,18 @@ const routes: Routes = [
     loadComponent: () => import('./pages/auth/register.component').then(m => m.RegisterComponent)
   },
   {
+    path: 'auth/verify-2fa',
+    loadComponent: () => import('./pages/auth/verify-2fa.component').then(m => m.VerifyTwoFactorComponent)
+  },
+  {
+    path: 'auth/forgot-password',
+    loadComponent: () => import('./pages/auth/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'auth/reset-password',
+    loadComponent: () => import('./pages/auth/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
     path: 'dashboard',
     loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [authGuard]

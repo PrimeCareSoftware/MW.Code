@@ -95,7 +95,7 @@
               <h4>Resumo da Solicitação</h4>
               <div class="summary-item">
                 <strong>Tipo:</strong>
-                <span>{{ requestTypes.find(t => t.value === requestData.requestType)?.label }}</span>
+                <span>{{ getRequestTypeLabel() }}</span>
               </div>
               <div class="summary-item">
                 <strong>Motivo:</strong>

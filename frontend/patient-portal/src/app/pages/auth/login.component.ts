@@ -9,8 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
+import { TwoFactorRequiredResponse } from '../../models/auth.model';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +27,8 @@ import { NotificationService } from '../../services/notification.service';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCheckboxModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -46,7 +49,8 @@ export class LoginComponent {
   ) {
     this.loginForm = this.fb.group({
       emailOrCPF: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      rememberMe: [false]
     });
 
     // Get return url from route parameters or default to dashboard
@@ -63,10 +67,27 @@ export class LoginComponent {
     this.loading = true;
     this.errorMessage = '';
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: () => {
-        this.notificationService.success('Login realizado com sucesso!');
-        this.router.navigate([this.returnUrl]);
+    const { emailOrCPF, password, rememberMe } = this.loginForm.value;
+
+    this.authService.login({ emailOrCPF, password }, rememberMe).subscribe({
+      next: (response) => {
+        // Check if 2FA is required
+        if ('requiresTwoFactor' in response && response.requiresTwoFactor) {
+          const twoFactorResponse = response as TwoFactorRequiredResponse;
+          this.notificationService.info(twoFactorResponse.message);
+          // Navigate to 2FA verification screen with temp token
+          this.router.navigate(['/auth/verify-2fa'], {
+            queryParams: { 
+              tempToken: twoFactorResponse.tempToken,
+              returnUrl: this.returnUrl 
+            }
+          });
+        } else {
+          // Normal login success
+          this.notificationService.success('Login realizado com sucesso!');
+          this.router.navigate([this.returnUrl]);
+        }
+        this.loading = false;
       },
       error: (error) => {
         this.errorMessage = error.error?.message || 'Erro ao fazer login. Verifique suas credenciais.';
