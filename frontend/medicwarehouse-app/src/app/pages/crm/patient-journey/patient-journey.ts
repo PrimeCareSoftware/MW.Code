@@ -29,4 +29,10 @@ export class PatientJourney implements OnInit {
       this.isLoading.set(false);
     }
   }
+
+  onViewAnalytics(): void {
+    // TODO: Open analytics dashboard or modal
+    console.log('Analytics clicked');
+    alert('Funcionalidade "Analytics" será implementada em breve.');
+  }
 }

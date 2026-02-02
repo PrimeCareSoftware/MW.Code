@@ -29,4 +29,10 @@ export class ComplaintList implements OnInit {
       this.isLoading.set(false);
     }
   }
+
+  onNewComplaint(): void {
+    // TODO: Open modal or navigate to complaint creation form
+    console.log('Nova Reclamação clicked');
+    alert('Funcionalidade "Nova Reclamação" será implementada em breve.');
+  }
 }

@@ -29,4 +29,10 @@ export class SurveyList implements OnInit {
       this.isLoading.set(false);
     }
   }
+
+  onNewSurvey(): void {
+    // TODO: Open modal or navigate to survey creation form
+    console.log('Nova Pesquisa clicked');
+    alert('Funcionalidade "Nova Pesquisa" será implementada em breve.');
+  }
 }
