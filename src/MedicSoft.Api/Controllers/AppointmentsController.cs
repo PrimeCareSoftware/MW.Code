@@ -95,11 +95,11 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpGet]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
-        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgenda([FromQuery] DateTime date, [FromQuery] Guid clinicId)
+        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgenda([FromQuery] DateTime date, [FromQuery] Guid clinicId, [FromQuery] Guid? professionalId = null)
         {
             try
             {
-                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId());
+                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId(), professionalId);
                 return Ok(agenda);
             }
             catch (InvalidOperationException ex)
@@ -113,11 +113,11 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpGet("agenda")]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
-        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgendaAlias([FromQuery] DateTime date, [FromQuery] Guid clinicId)
+        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgendaAlias([FromQuery] DateTime date, [FromQuery] Guid clinicId, [FromQuery] Guid? professionalId = null)
         {
             try
             {
-                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId());
+                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId(), professionalId);
                 return Ok(agenda);
             }
             catch (InvalidOperationException ex)

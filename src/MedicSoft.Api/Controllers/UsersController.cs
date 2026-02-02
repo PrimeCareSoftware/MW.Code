@@ -390,6 +390,36 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Get professionals (doctors) for the current clinic (requires appointments.view permission for secretary to see doctors)
+        /// </summary>
+        [HttpGet("professionals")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsView)]
+        public async Task<ActionResult<IEnumerable<ProfessionalDto>>> GetProfessionals()
+        {
+            var tenantId = GetTenantId();
+            var clinicId = GetClinicId() ?? Guid.Empty;
+
+            if (clinicId == Guid.Empty)
+                return BadRequest(new { message = "Clinic ID is required" });
+
+            // Get users with professional roles (Doctor, Dentist, etc.)
+            var users = await _userService.GetUsersByClinicIdAsync(clinicId, tenantId);
+            
+            var professionals = users
+                .Where(u => u.Role == UserRole.Doctor || u.Role == UserRole.Dentist)
+                .Select(u => new ProfessionalDto
+                {
+                    Id = u.Id,
+                    FullName = u.FullName,
+                    ProfessionalId = u.ProfessionalId,
+                    Specialty = u.Specialty,
+                    Role = u.Role.ToString()
+                });
+
+            return Ok(professionals);
+        }
     }
 
     public class CreateUserRequest
@@ -446,5 +476,14 @@ namespace MedicSoft.Api.Controllers
         public DateTime LinkedDate { get; set; }
         public bool IsActive { get; set; }
         public bool IsPreferredClinic { get; set; }
+    }
+
+    public class ProfessionalDto
+    {
+        public Guid Id { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        public string? ProfessionalId { get; set; }
+        public string? Specialty { get; set; }
+        public string Role { get; set; } = string.Empty;
     }
 }

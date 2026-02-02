@@ -10,7 +10,7 @@ namespace MedicSoft.Application.Services
         Task<AppointmentDto> CreateAppointmentAsync(CreateAppointmentDto createAppointmentDto, string tenantId);
         Task<AppointmentDto> UpdateAppointmentAsync(Guid appointmentId, UpdateAppointmentDto updateAppointmentDto, string tenantId);
         Task<bool> CancelAppointmentAsync(Guid appointmentId, string cancellationReason, string tenantId);
-        Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId);
+        Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId, Guid? professionalId = null);
         Task<IEnumerable<AvailableSlotDto>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, int durationMinutes, string tenantId);
         Task<AppointmentDto?> GetByIdAsync(Guid appointmentId, string tenantId);
         Task<bool> MarkAppointmentAsPaidAsync(Guid appointmentId, Guid paidByUserId, string paymentReceiverType, string tenantId, decimal? paymentAmount = null, string? paymentMethod = null);
@@ -44,9 +44,9 @@ namespace MedicSoft.Application.Services
             return await _mediator.Send(command);
         }
 
-        public async Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId)
+        public async Task<DailyAgendaDto> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId, Guid? professionalId = null)
         {
-            var query = new GetDailyAgendaQuery(date, clinicId, tenantId);
+            var query = new GetDailyAgendaQuery(date, clinicId, tenantId, professionalId);
             return await _mediator.Send(query);
         }
 
