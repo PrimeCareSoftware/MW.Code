@@ -177,17 +177,6 @@ export class AppointmentCalendar implements OnInit {
     this.loadWeekAppointments();
   }
 
-  filterAppointmentsByDoctor(appointments: Appointment[]): Appointment[] {
-    // Filter is now done on backend, but keep this for potential frontend-only filtering
-    const doctorId = this.selectedDoctorId();
-    if (!doctorId) {
-      return appointments;
-    }
-    return appointments.filter(apt => {
-      return apt.professionalId === doctorId || apt.doctorId === doctorId;
-    });
-  }
-
   generateCalendarGrid(): void {
     const timeSlots = this.timeSlots();
     const days = this.weekDays();

@@ -54,10 +54,7 @@
         <option value="">Todos os Médicos</option>
         @for (professional of professionals(); track professional.id) {
           <option [value]="professional.id">
-            {{ professional.fullName }}
-            @if (professional.specialty) {
-              <span> - {{ professional.specialty }}</span>
-            }
+            {{ professional.fullName }}@if (professional.specialty) { - {{ professional.specialty }}}
           </option>
         }
       </select>
