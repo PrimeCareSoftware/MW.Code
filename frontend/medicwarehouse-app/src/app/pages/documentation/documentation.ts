@@ -379,8 +379,10 @@ export class Documentation implements OnInit {
     const validPrefixes = ['/system-admin/', '/README.md', '/CHANGELOG.md', '/telemedicine/'];
     const hasValidPrefix = validPrefixes.some(prefix => path.startsWith(prefix));
     
-    // Also allow root-level markdown files
-    if (!hasValidPrefix && !path.match(/^\/[A-Z_]+\.md$/)) {
+    // Also allow root-level markdown files with common naming conventions
+    const isRootMarkdown = /^\/[A-Za-z0-9_-]+\.md$/.test(path);
+    
+    if (!hasValidPrefix && !isRootMarkdown) {
       return null;
     }
     
@@ -389,6 +391,12 @@ export class Documentation implements OnInit {
     
     // Prevent path traversal attacks
     if (sanitized.includes('..')) {
+      return null;
+    }
+    
+    // Additional validation: ensure path only contains safe characters
+    // Allow only alphanumeric, slashes, dots, hyphens, underscores
+    if (!/^[A-Za-z0-9\/_.-]+$/.test(sanitized)) {
       return null;
     }
     
