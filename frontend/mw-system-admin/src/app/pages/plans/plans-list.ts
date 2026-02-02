@@ -142,9 +142,9 @@ export class PlansList implements OnInit {
       campaignStartDate: plan.campaignStartDate,
       campaignEndDate: plan.campaignEndDate,
       maxEarlyAdopters: plan.maxEarlyAdopters,
-      earlyAdopterBenefits: plan.earlyAdopterBenefits ? [...plan.earlyAdopterBenefits] : [],
-      featuresAvailable: plan.featuresAvailable ? [...plan.featuresAvailable] : [],
-      featuresInDevelopment: plan.featuresInDevelopment ? [...plan.featuresInDevelopment] : []
+      earlyAdopterBenefits: this.parseArrayField(plan.earlyAdopterBenefits),
+      featuresAvailable: this.parseArrayField(plan.featuresAvailable),
+      featuresInDevelopment: this.parseArrayField(plan.featuresInDevelopment)
     };
     this.formDataUpdate = {
       ...this.formData,
@@ -230,6 +230,47 @@ export class PlansList implements OnInit {
       style: 'currency',
       currency: 'BRL'
     }).format(value);
+  }
+  
+  /**
+   * Parse array field that might be a JSON string or already an array
+   */
+  private parseArrayField(field: string | string[] | null | undefined): string[] {
+    if (!field) {
+      return [];
+    }
+    
+    // If it's already an array, validate and return a copy with strings only
+    if (Array.isArray(field)) {
+      const filtered = field.filter(item => typeof item === 'string');
+      if (filtered.length < field.length) {
+        console.warn('parseArrayField: Some non-string elements were filtered out', field);
+      }
+      return filtered;
+    }
+    
+    // If it's a string, try to parse it as JSON
+    if (typeof field === 'string') {
+      try {
+        const parsed = JSON.parse(field);
+        if (Array.isArray(parsed)) {
+          // Ensure all elements are strings
+          const filtered = parsed.filter(item => typeof item === 'string');
+          if (filtered.length < parsed.length) {
+            console.warn('parseArrayField: Some non-string elements were filtered out from parsed JSON', parsed);
+          }
+          return filtered;
+        }
+        console.warn('parseArrayField: Parsed JSON is not an array', parsed);
+        return [];
+      } catch (error) {
+        console.warn('parseArrayField: Failed to parse JSON string', field, error);
+        return [];
+      }
+    }
+    
+    // For any other type, return empty array
+    return [];
   }
   
   // Array management helpers
