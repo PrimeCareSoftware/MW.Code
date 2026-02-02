@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { tap, catchError, shareReplay } from 'rxjs/operators';
+import { tap, catchError, shareReplay, filter } from 'rxjs/operators';
 
 export interface TerminologyMap {
   appointment: string;
@@ -36,8 +36,16 @@ export class TerminologyService {
    * Load terminology for a specific clinic
    */
   loadTerminology(clinicId: string): Observable<TerminologyMap> {
+    const cached = this.terminologyCache$.value;
+    if (cached) {
+      return of(cached);
+    }
+
     if (this.loading) {
-      return this.terminologyCache$.asObservable() as Observable<TerminologyMap>;
+      // Return existing cache observable instead of making duplicate requests
+      return this.terminologyCache$.asObservable().pipe(
+        filter(term => term !== null)
+      ) as Observable<TerminologyMap>;
     }
 
     this.loading = true;

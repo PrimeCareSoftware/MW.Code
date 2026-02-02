@@ -30,6 +30,9 @@ export class TemplateEditorComponent implements OnInit {
   previewMode: 'main' | 'exit' = 'main';
   currentTemplate = '';
   
+  // Notification state
+  notification: { message: string; type: 'success' | 'error' } | null = null;
+  
   templatePresets: TemplatePreset[] = [
     {
       specialty: ProfessionalSpecialty.Medico,
@@ -386,7 +389,12 @@ CRO: {{professionalRegistration}}`
       previewMode: this.previewMode,
       template: this.currentTemplate
     });
-    alert('Template salvo com sucesso! (funcionalidade de demonstração)');
+    
+    // Show success notification
+    this.showNotification('Template salvo com sucesso!', 'success');
+    
+    // Auto-hide notification after 3 seconds
+    setTimeout(() => this.notification = null, 3000);
   }
 
   resetTemplate(): void {
@@ -395,5 +403,9 @@ CRO: {{professionalRegistration}}`
         ? this.selectedPreset.templates.mainDocument 
         : this.selectedPreset.templates.exitDocument;
     }
+  }
+
+  private showNotification(message: string, type: 'success' | 'error'): void {
+    this.notification = { message, type };
   }
 }

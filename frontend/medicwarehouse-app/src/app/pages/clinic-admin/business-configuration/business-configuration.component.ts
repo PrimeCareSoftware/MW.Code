@@ -249,8 +249,8 @@ export class BusinessConfigurationComponent implements OnInit {
         next: () => {
           this.success = 'Tipo de negócio atualizado com sucesso!';
           this.saving = false;
-          // Reload to get updated default features
-          setTimeout(() => this.loadConfiguration(), 1000);
+          // Reload configuration immediately to get updated features
+          this.loadConfiguration();
         },
         error: (err) => {
           console.error('Error updating business type:', err);
@@ -275,8 +275,8 @@ export class BusinessConfigurationComponent implements OnInit {
         next: () => {
           this.success = 'Especialidade atualizada com sucesso!';
           this.saving = false;
-          // Reload to get updated terminology and features
-          setTimeout(() => this.loadConfiguration(), 1000);
+          // Reload configuration immediately to get updated terminology and features
+          this.loadConfiguration();
         },
         error: (err) => {
           console.error('Error updating specialty:', err);
@@ -298,10 +298,11 @@ export class BusinessConfigurationComponent implements OnInit {
       .updateFeature(this.configuration.id, dto)
       .subscribe({
         next: () => {
-          // Update local state
-          const config = this.configuration as any;
-          config[featureName] = enabled;
-          this.buildFeatureCategories();
+          // Update local state using type-safe property access
+          if (this.isValidFeatureName(featureName)) {
+            (this.configuration as any)[featureName] = enabled;
+            this.buildFeatureCategories();
+          }
         },
         error: (err) => {
           console.error('Error updating feature:', err);
@@ -310,6 +311,17 @@ export class BusinessConfigurationComponent implements OnInit {
           this.buildFeatureCategories();
         }
       });
+  }
+
+  private isValidFeatureName(name: string): boolean {
+    const validFeatures = [
+      'electronicPrescription', 'labIntegration', 'vaccineControl', 'inventoryManagement',
+      'multiRoom', 'receptionQueue', 'financialModule', 'healthInsurance',
+      'telemedicine', 'homeVisit', 'groupSessions',
+      'publicProfile', 'onlineBooking', 'patientReviews',
+      'biReports', 'apiAccess', 'whiteLabel'
+    ];
+    return validFeatures.includes(name);
   }
 
   getBusinessTypeLabel(type: BusinessType): string {

@@ -4,6 +4,12 @@
     <p class="subtitle">Personalize os modelos de documentos para sua especialidade</p>
   </div>
 
+  <!-- Notification -->
+  <div *ngIf="notification" class="notification" [class.success]="notification.type === 'success'" [class.error]="notification.type === 'error'">
+    <span class="icon">{{ notification.type === 'success' ? '✓' : '⚠️' }}</span>
+    <span>{{ notification.message }}</span>
+  </div>
+
   <div class="editor-layout">
     <!-- Sidebar: Preset Selection -->
     <div class="sidebar">
