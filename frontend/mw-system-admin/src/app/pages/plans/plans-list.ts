@@ -235,7 +235,7 @@ export class PlansList implements OnInit {
   /**
    * Parse array field that might be a JSON string or already an array
    */
-  private parseArrayField(field: any): string[] {
+  private parseArrayField(field: string | string[] | null | undefined): string[] {
     if (!field) {
       return [];
     }
@@ -261,6 +261,7 @@ export class PlansList implements OnInit {
           }
           return filtered;
         }
+        console.warn('parseArrayField: Parsed JSON is not an array', parsed);
         return [];
       } catch (error) {
         console.warn('parseArrayField: Failed to parse JSON string', field, error);
