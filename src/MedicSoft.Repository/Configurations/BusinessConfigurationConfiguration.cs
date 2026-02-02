@@ -49,6 +49,7 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(x => x.BiReports).IsRequired();
             builder.Property(x => x.ApiAccess).IsRequired();
             builder.Property(x => x.WhiteLabel).IsRequired();
+            builder.Property(x => x.CreditCardPayments).IsRequired();
             
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
