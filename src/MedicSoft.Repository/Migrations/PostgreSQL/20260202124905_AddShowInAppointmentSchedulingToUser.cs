@@ -1060,7 +1060,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SubscriptionCredits') THEN
+                              AND LOWER(table_name) = LOWER('SubscriptionCredits')) THEN
                         ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp with time zone;
                     END IF;
                 END $$;
@@ -5259,7 +5259,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SubscriptionCredits') THEN
+                              AND LOWER(table_name) = LOWER('SubscriptionCredits')) THEN
                         ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp without time zone;
                     END IF;
                 END $$;
