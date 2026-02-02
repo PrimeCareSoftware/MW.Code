@@ -7,9 +7,13 @@ import { Auth } from '../../services/auth';
 import { NotificationService } from '../../services/notification.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
+import { format, startOfMonth, endOfMonth } from 'date-fns';
+import { firstValueFrom } from 'rxjs';
 import { MOCK_DASHBOARD_QUEUE_DATA } from '../../mocks/dashboard.mock';
 import { AnalyticsBIService } from '../../services/analytics-bi.service';
+
+// Configuration constants
+const NO_SHOW_RATE_THRESHOLD = 15; // Percentage threshold for no-show alerts
 
 interface DashboardStats {
   totalPatients: number;
@@ -29,8 +33,8 @@ interface DashboardStats {
   returningPatients: number;
   weeklyRecordsCreated: number;
   // Alerts
-  pendingPaymentsCount: number;
-  overduePaymentsCount: number;
+  hasOverduePayments: boolean;
+  hasPendingPayments: boolean;
 }
 
 interface AppointmentSummary {
@@ -57,6 +61,7 @@ interface AlertItem {
 })
 export class Dashboard implements OnInit {
   loading = true;
+  readonly NO_SHOW_RATE_THRESHOLD = NO_SHOW_RATE_THRESHOLD;
   stats: DashboardStats = {
     totalPatients: 0,
     todayAppointments: 0,
@@ -72,8 +77,8 @@ export class Dashboard implements OnInit {
     newPatients: 0,
     returningPatients: 0,
     weeklyRecordsCreated: 0,
-    pendingPaymentsCount: 0,
-    overduePaymentsCount: 0
+    hasOverduePayments: false,
+    hasPendingPayments: false
   };
   
   alerts: AlertItem[] = [];
@@ -103,7 +108,6 @@ export class Dashboard implements OnInit {
       }
 
       const today = format(new Date(), 'yyyy-MM-dd');
-      const { firstValueFrom } = await import('rxjs');
       
       // Load patients count
       const patientsResponse = await firstValueFrom(this.http.get<any[]>(`${environment.apiUrl}/patients?clinicId=${clinicId}`));
@@ -151,7 +155,6 @@ export class Dashboard implements OnInit {
     try {
       const startDate = format(startOfMonth(new Date()), 'yyyy-MM-dd');
       const endDate = format(endOfMonth(new Date()), 'yyyy-MM-dd');
-      const { firstValueFrom } = await import('rxjs');
       
       const financialData = await firstValueFrom(
         this.analyticsBIService.getDashboardFinanceiro(startDate, endDate)
@@ -162,27 +165,27 @@ export class Dashboard implements OnInit {
       this.stats.revenuePending = financialData.receitaPendente || 0;
       this.stats.revenueOverdue = financialData.receitaAtrasada || 0;
       
-      // Count payments for alerts
-      this.stats.pendingPaymentsCount = this.stats.revenuePending > 0 ? 1 : 0;
-      this.stats.overduePaymentsCount = this.stats.revenueOverdue > 0 ? 1 : 0;
+      // Set payment flags for alerts
+      this.stats.hasPendingPayments = this.stats.revenuePending > 0;
+      this.stats.hasOverduePayments = this.stats.revenueOverdue > 0;
       
       // Create alerts based on financial data
-      if (this.stats.revenueOverdue > 0) {
+      if (this.stats.hasOverduePayments) {
         this.alerts.push({
           id: 'overdue-payments',
           type: 'error',
           title: 'Pagamentos Atrasados',
-          message: `R$ ${this.stats.revenueOverdue.toFixed(2)} em pagamentos vencidos`,
+          message: `${this.formatCurrency(this.stats.revenueOverdue)} em pagamentos vencidos`,
           link: '/financial/receivables'
         });
       }
       
-      if (this.stats.revenuePending > 0) {
+      if (this.stats.hasPendingPayments) {
         this.alerts.push({
           id: 'pending-payments',
           type: 'warning',
           title: 'Pagamentos Pendentes',
-          message: `R$ ${this.stats.revenuePending.toFixed(2)} aguardando recebimento`,
+          message: `${this.formatCurrency(this.stats.revenuePending)} aguardando recebimento`,
           link: '/financial/receivables'
         });
       }
@@ -197,7 +200,6 @@ export class Dashboard implements OnInit {
     try {
       const startDate = format(startOfMonth(new Date()), 'yyyy-MM-dd');
       const endDate = format(endOfMonth(new Date()), 'yyyy-MM-dd');
-      const { firstValueFrom } = await import('rxjs');
       
       const clinicalData = await firstValueFrom(
         this.analyticsBIService.getDashboardClinico(startDate, endDate)
@@ -208,7 +210,7 @@ export class Dashboard implements OnInit {
       this.stats.returningPatients = clinicalData.pacientesRetorno || 0;
       
       // Add alert for high no-show rate
-      if (this.stats.noShowRate > 15) {
+      if (this.stats.noShowRate > NO_SHOW_RATE_THRESHOLD) {
         this.alerts.push({
           id: 'high-noshow',
           type: 'warning',

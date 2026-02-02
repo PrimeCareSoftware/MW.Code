@@ -161,7 +161,7 @@
         <span class="stat-value">{{ stats.noShowRate | number:'1.1-1' }}%</span>
         <span class="stat-label">Taxa de Faltas</span>
       </div>
-      @if (stats.noShowRate > 15) {
+      @if (stats.noShowRate > NO_SHOW_RATE_THRESHOLD) {
         <div class="stat-badge danger">
           <span>Acima da meta</span>
         </div>
