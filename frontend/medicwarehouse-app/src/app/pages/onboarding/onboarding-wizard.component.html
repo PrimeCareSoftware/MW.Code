@@ -1,0 +1,204 @@
+<div class="onboarding-wizard">
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+    </div>
+    <div class="steps-indicator">
+      <div 
+        *ngFor="let step of steps" 
+        class="step-item"
+        [class.active]="step.id === currentStep"
+        [class.completed]="step.completed"
+        (click)="goToStep(step.id)"
+      >
+        <div class="step-number">
+          <span *ngIf="!step.completed">{{ step.id }}</span>
+          <span *ngIf="step.completed" class="checkmark">✓</span>
+        </div>
+        <div class="step-info">
+          <div class="step-title">{{ step.title }}</div>
+          <div class="step-description">{{ step.description }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="error" class="alert alert-error">
+    <span class="icon">⚠️</span>
+    <span>{{ error }}</span>
+  </div>
+
+  <!-- Step 1: Business Type -->
+  <div *ngIf="currentStep === 1" class="wizard-step">
+    <div class="step-header">
+      <h1>Qual o tipo do seu negócio?</h1>
+      <p>Selecione o porte que melhor descreve sua clínica ou consultório</p>
+    </div>
+
+    <div class="options-grid">
+      <div 
+        *ngFor="let option of businessTypeOptions"
+        class="option-card large"
+        [class.selected]="selectedBusinessType === option.value"
+        (click)="selectBusinessType(option.value)"
+      >
+        <div class="option-icon">{{ option.icon }}</div>
+        <h3>{{ option.label }}</h3>
+        <p class="description">{{ option.description }}</p>
+        <p class="details">{{ option.details }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Specialty -->
+  <div *ngIf="currentStep === 2" class="wizard-step">
+    <div class="step-header">
+      <h1>Qual sua especialidade principal?</h1>
+      <p>Isso ajudará a personalizar a terminologia e recursos do sistema</p>
+    </div>
+
+    <div class="options-grid specialty-grid">
+      <div 
+        *ngFor="let option of specialtyOptions"
+        class="option-card"
+        [class.selected]="selectedSpecialty === option.value"
+        (click)="selectSpecialty(option.value)"
+      >
+        <div class="option-icon">{{ option.icon }}</div>
+        <h3>{{ option.label }}</h3>
+        <p class="description">{{ option.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Features Preview -->
+  <div *ngIf="currentStep === 3" class="wizard-step">
+    <div class="step-header">
+      <h1>Recursos Recomendados</h1>
+      <p>Com base nas suas escolhas, estes recursos serão habilitados</p>
+    </div>
+
+    <div class="features-preview">
+      <div class="preview-card">
+        <h3>✨ Recursos Ativados</h3>
+        <ul class="features-list">
+          <li *ngFor="let feature of recommendedFeatures">
+            <span class="feature-icon">✓</span>
+            <span>{{ feature }}</span>
+          </li>
+        </ul>
+        <p class="note">
+          Você poderá personalizar estes recursos depois nas configurações.
+        </p>
+      </div>
+
+      <div class="preview-card" *ngIf="previewTerminology">
+        <h3>📝 Terminologia Personalizada</h3>
+        <div class="terminology-examples">
+          <div class="terminology-item">
+            <span class="term-label">Atendimento:</span>
+            <span class="term-value">{{ previewTerminology.appointment }}</span>
+          </div>
+          <div class="terminology-item">
+            <span class="term-label">Profissional:</span>
+            <span class="term-value">{{ previewTerminology.professional }}</span>
+          </div>
+          <div class="terminology-item">
+            <span class="term-label">Registro:</span>
+            <span class="term-value">{{ previewTerminology.registration }}</span>
+          </div>
+          <div class="terminology-item">
+            <span class="term-label">Cliente:</span>
+            <span class="term-value">{{ previewTerminology.client }}</span>
+          </div>
+          <div class="terminology-item">
+            <span class="term-label">Documento Principal:</span>
+            <span class="term-value">{{ previewTerminology.mainDocument }}</span>
+          </div>
+          <div class="terminology-item">
+            <span class="term-label">Documento de Saída:</span>
+            <span class="term-value">{{ previewTerminology.exitDocument }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Confirmation -->
+  <div *ngIf="currentStep === 4" class="wizard-step">
+    <div class="step-header">
+      <h1>Confirme sua Configuração</h1>
+      <p>Revise as informações antes de finalizar</p>
+    </div>
+
+    <div class="confirmation-summary">
+      <div class="summary-card">
+        <div class="summary-icon">✅</div>
+        <h2>Tudo Pronto!</h2>
+        <p>Sua clínica será configurada com as seguintes características:</p>
+        
+        <div class="summary-details">
+          <div class="detail-item">
+            <span class="detail-label">Tipo de Negócio:</span>
+            <span class="detail-value">
+              {{ businessTypeOptions.find(opt => opt.value === selectedBusinessType)?.label }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Especialidade:</span>
+            <span class="detail-value">
+              {{ specialtyOptions.find(opt => opt.value === selectedSpecialty)?.label }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Recursos Ativados:</span>
+            <span class="detail-value">{{ recommendedFeatures.length }} recursos</span>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <p>
+            <strong>O que acontece agora?</strong><br>
+            Ao confirmar, sua configuração será salva e você será redirecionado para o painel de administração,
+            onde poderá ajustar qualquer configuração conforme necessário.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="wizard-navigation">
+    <button 
+      class="btn btn-secondary"
+      *ngIf="currentStep > 1"
+      (click)="previousStep()"
+      [disabled]="loading"
+    >
+      ← Voltar
+    </button>
+
+    <div class="spacer"></div>
+
+    <button 
+      class="btn btn-primary"
+      *ngIf="currentStep < totalSteps"
+      (click)="nextStep()"
+      [disabled]="!canProceedToNextStep()"
+    >
+      Continuar →
+    </button>
+
+    <button 
+      class="btn btn-success"
+      *ngIf="currentStep === totalSteps"
+      (click)="finish()"
+      [disabled]="loading || !canProceedToNextStep()"
+    >
+      <span *ngIf="!loading">Finalizar Configuração</span>
+      <span *ngIf="loading">Salvando...</span>
+    </button>
+  </div>
+</div>
