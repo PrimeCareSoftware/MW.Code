@@ -87,6 +87,53 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 CREATE INDEX IF NOT EXISTS ""IX_RecurringAppointmentPatterns_ProfessionalId"" ON ""RecurringAppointmentPatterns"" (""ProfessionalId"");
             ");
 
+            // CustomDashboards table
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""CustomDashboards"" (
+                    ""Id"" uuid NOT NULL,
+                    ""Name"" character varying(200) NOT NULL,
+                    ""Description"" character varying(1000) NOT NULL,
+                    ""Layout"" TEXT NOT NULL,
+                    ""IsDefault"" boolean NOT NULL DEFAULT false,
+                    ""IsPublic"" boolean NOT NULL DEFAULT false,
+                    ""CreatedBy"" character varying(450) NOT NULL,
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_CustomDashboards"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_CustomDashboards_CreatedBy"" ON ""CustomDashboards"" (""CreatedBy"");
+                CREATE INDEX IF NOT EXISTS ""IX_CustomDashboards_IsDefault"" ON ""CustomDashboards"" (""IsDefault"");
+                CREATE INDEX IF NOT EXISTS ""IX_CustomDashboards_TenantId"" ON ""CustomDashboards"" (""TenantId"");
+            ");
+
+            // DashboardWidgets table
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""DashboardWidgets"" (
+                    ""Id"" uuid NOT NULL,
+                    ""DashboardId"" uuid NOT NULL,
+                    ""Type"" character varying(50) NOT NULL,
+                    ""Title"" character varying(200) NOT NULL,
+                    ""Query"" TEXT NOT NULL,
+                    ""Config"" TEXT NOT NULL,
+                    ""GridX"" integer NOT NULL DEFAULT 0,
+                    ""GridY"" integer NOT NULL DEFAULT 0,
+                    ""GridWidth"" integer NOT NULL DEFAULT 4,
+                    ""GridHeight"" integer NOT NULL DEFAULT 3,
+                    ""RefreshInterval"" integer NOT NULL DEFAULT 0,
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_DashboardWidgets"" PRIMARY KEY (""Id""),
+                    CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" FOREIGN KEY (""DashboardId"") 
+                        REFERENCES ""CustomDashboards"" (""Id"") ON DELETE CASCADE
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_DashboardWidgets_DashboardId"" ON ""DashboardWidgets"" (""DashboardId"");
+                CREATE INDEX IF NOT EXISTS ""IX_DashboardWidgets_Type"" ON ""DashboardWidgets"" (""Type"");
+            ");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_AutomationActions_MarketingAutomations_MarketingAutomationI~",
                 schema: "crm",
