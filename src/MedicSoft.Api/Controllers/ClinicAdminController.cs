@@ -742,6 +742,10 @@ namespace MedicSoft.Api.Controllers
                 }
 
                 var currentUserCount = await _userService.GetUserCountByClinicIdAsync(clinicId, tenantId);
+                
+                // Get current clinic count for the owner
+                var ownerLinks = await _ownerClinicLinkRepository.GetClinicsByOwnerIdAsync(userId);
+                var currentClinicsCount = ownerLinks.Count(link => link.IsActive);
 
                 return Ok(new
                 {
@@ -760,7 +764,9 @@ namespace MedicSoft.Api.Controllers
                     {
                         MaxUsers = plan.MaxUsers,
                         MaxPatients = plan.MaxPatients,
-                        CurrentUsers = currentUserCount
+                        MaxClinics = plan.MaxClinics,
+                        CurrentUsers = currentUserCount,
+                        CurrentClinics = currentClinicsCount
                     },
                     Features = new
                     {

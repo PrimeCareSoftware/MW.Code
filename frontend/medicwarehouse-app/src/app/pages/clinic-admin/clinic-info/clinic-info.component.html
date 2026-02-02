@@ -29,9 +29,18 @@
       <div class="clinics-section">
         <div class="section-header">
           <h2>Minhas Clínicas ({{ ownerClinics().length }})</h2>
-          <button class="btn btn-primary" (click)="openCreateClinicModal()">
-            <span>+ Nova Clínica</span>
-          </button>
+          @if (canCreateClinic()) {
+            <button class="btn btn-primary" (click)="openCreateClinicModal()">
+              <span>+ Nova Clínica</span>
+            </button>
+          } @else if (hasReachedClinicLimit()) {
+            <button class="btn btn-primary" disabled [title]="getClinicLimitMessage()">
+              <span>+ Nova Clínica</span>
+            </button>
+            <div class="alert alert-warning" style="margin-top: 1rem;">
+              {{ getClinicLimitMessage() }}
+            </div>
+          }
         </div>
 
         <div class="clinics-grid">
