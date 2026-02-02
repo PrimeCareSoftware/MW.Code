@@ -393,6 +393,8 @@ builder.Services.AddScoped<IBalancoPatrimonialRepository, BalancoPatrimonialRepo
 // Consultation Form Configuration - Repositories
 builder.Services.AddScoped<IConsultationFormProfileRepository, ConsultationFormProfileRepository>();
 builder.Services.AddScoped<IConsultationFormConfigurationRepository, ConsultationFormConfigurationRepository>();
+builder.Services.AddScoped<IBusinessConfigurationRepository, BusinessConfigurationRepository>();
+builder.Services.AddScoped<IDocumentTemplateRepository, DocumentTemplateRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
@@ -446,6 +448,7 @@ builder.Services.AddScoped<IMedicalRecordAuditService, MedicalRecordAuditService
 
 // Consultation Form Configuration - Services
 builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFormConfigurationService>();
+builder.Services.AddScoped<BusinessConfigurationService>();
 
 // Module Configuration Services
 builder.Services.AddScoped<IModuleConfigurationService, ModuleConfigurationService>();
