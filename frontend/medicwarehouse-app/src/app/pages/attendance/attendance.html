@@ -97,7 +97,7 @@
 
         <!-- Patient History Card -->
         <div class="card patient-history">
-          <h3>Histórico de {{ terminology()?.appointment || 'Consultas' }}</h3>
+          <h3>Histórico de {{ terminology()?.appointment || 'Atendimento' }}s</h3>
           @if (patientHistory().length > 0) {
             <div class="history-list">
               @for (record of patientHistory(); track record.id) {
