@@ -13,6 +13,80 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Create missing tables that are referenced later in this migration
+            // SubscriptionCredits table
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""SubscriptionCredits"" (
+                    ""Id"" serial NOT NULL,
+                    ""SubscriptionId"" uuid NOT NULL,
+                    ""Days"" integer NOT NULL,
+                    ""Reason"" text NOT NULL,
+                    ""GrantedAt"" timestamp with time zone NOT NULL,
+                    ""GrantedBy"" uuid NOT NULL,
+                    ""GrantedByUserId"" uuid NOT NULL,
+                    CONSTRAINT ""PK_SubscriptionCredits"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_SubscriptionCredits_GrantedByUserId"" ON ""SubscriptionCredits"" (""GrantedByUserId"");
+                CREATE INDEX IF NOT EXISTS ""IX_SubscriptionCredits_SubscriptionId"" ON ""SubscriptionCredits"" (""SubscriptionId"");
+            ");
+
+            // BlockedTimeSlots table
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""BlockedTimeSlots"" (
+                    ""Id"" uuid NOT NULL,
+                    ""ClinicId"" uuid NOT NULL,
+                    ""Date"" timestamp with time zone NOT NULL,
+                    ""StartTime"" interval NOT NULL,
+                    ""EndTime"" interval NOT NULL,
+                    ""Type"" integer NOT NULL,
+                    ""IsRecurring"" boolean NOT NULL DEFAULT false,
+                    ""RecurringPatternId"" uuid,
+                    ""ProfessionalId"" uuid,
+                    ""Reason"" text,
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_BlockedTimeSlots"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_BlockedTimeSlots_ClinicId"" ON ""BlockedTimeSlots"" (""ClinicId"");
+                CREATE INDEX IF NOT EXISTS ""IX_BlockedTimeSlots_ProfessionalId"" ON ""BlockedTimeSlots"" (""ProfessionalId"");
+                CREATE INDEX IF NOT EXISTS ""IX_BlockedTimeSlots_RecurringPatternId"" ON ""BlockedTimeSlots"" (""RecurringPatternId"");
+            ");
+
+            // RecurringAppointmentPatterns table
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""RecurringAppointmentPatterns"" (
+                    ""Id"" uuid NOT NULL,
+                    ""StartDate"" timestamp with time zone NOT NULL,
+                    ""StartTime"" interval NOT NULL,
+                    ""EndDate"" timestamp with time zone,
+                    ""EndTime"" interval NOT NULL,
+                    ""DaysOfWeek"" integer,
+                    ""DayOfMonth"" integer,
+                    ""Interval"" integer NOT NULL,
+                    ""Frequency"" integer NOT NULL,
+                    ""IsActive"" boolean NOT NULL DEFAULT true,
+                    ""OccurrencesCount"" integer,
+                    ""DurationMinutes"" integer,
+                    ""AppointmentType"" integer,
+                    ""BlockedSlotType"" integer,
+                    ""PatientId"" uuid,
+                    ""ProfessionalId"" uuid,
+                    ""ClinicId"" uuid NOT NULL,
+                    ""Notes"" text,
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_RecurringAppointmentPatterns"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_RecurringAppointmentPatterns_ClinicId"" ON ""RecurringAppointmentPatterns"" (""ClinicId"");
+                CREATE INDEX IF NOT EXISTS ""IX_RecurringAppointmentPatterns_PatientId"" ON ""RecurringAppointmentPatterns"" (""PatientId"");
+                CREATE INDEX IF NOT EXISTS ""IX_RecurringAppointmentPatterns_ProfessionalId"" ON ""RecurringAppointmentPatterns"" (""ProfessionalId"");
+            ");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_AutomationActions_MarketingAutomations_MarketingAutomationI~",
                 schema: "crm",
