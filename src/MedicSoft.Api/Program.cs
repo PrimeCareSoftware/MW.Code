@@ -394,6 +394,7 @@ builder.Services.AddScoped<IBalancoPatrimonialRepository, BalancoPatrimonialRepo
 builder.Services.AddScoped<IConsultationFormProfileRepository, ConsultationFormProfileRepository>();
 builder.Services.AddScoped<IConsultationFormConfigurationRepository, ConsultationFormConfigurationRepository>();
 builder.Services.AddScoped<IBusinessConfigurationRepository, BusinessConfigurationRepository>();
+builder.Services.AddScoped<IDocumentTemplateRepository, DocumentTemplateRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();

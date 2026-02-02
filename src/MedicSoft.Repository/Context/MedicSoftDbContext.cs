@@ -213,7 +213,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<EncryptionKey> EncryptionKeys { get; set; } = null!;
         
         // Business Configuration
-        public DbSet<BusinessConfiguration> BusinessConfigurations { get; set; } = null!
+        public DbSet<BusinessConfiguration> BusinessConfigurations { get; set; } = null!;
+        public DbSet<DocumentTemplate> DocumentTemplates { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -386,6 +387,7 @@ namespace MedicSoft.Repository.Context
             
             // Business Configuration
             modelBuilder.ApplyConfiguration(new BusinessConfigurationConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentTemplateConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
