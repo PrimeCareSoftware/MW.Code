@@ -4,6 +4,7 @@ export interface Appointment {
   patientName: string;
   professionalId?: string; // Backend uses ProfessionalId
   professionalName?: string;
+  professionalSpecialty?: string; // Added: Professional's specialty (e.g., "Médico", "Psicólogo", etc.)
   doctorId?: string; // Alias for professionalId (for backward compatibility)
   doctorName?: string; // Alias for professionalName
   clinicId: string;
