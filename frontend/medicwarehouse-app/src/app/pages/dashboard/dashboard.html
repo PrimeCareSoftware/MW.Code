@@ -96,7 +96,116 @@
         <span>Aguardando</span>
       </div>
     </div>
+    
+    <!-- Financial Cards -->
+    <div class="stat-card stat-revenue">
+      <div class="stat-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ formatCurrency(stats.monthlyRevenue) }}</span>
+        <span class="stat-label">Receita do Mês</span>
+      </div>
+      <div class="stat-detail">
+        <span class="detail-item received">{{ formatCurrency(stats.revenueReceived) }} recebido</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-pending">
+      <div class="stat-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ formatCurrency(stats.revenuePending) }}</span>
+        <span class="stat-label">A Receber</span>
+      </div>
+      @if (stats.revenueOverdue > 0) {
+        <div class="stat-badge danger">
+          <span>{{ formatCurrency(stats.revenueOverdue) }} atrasado</span>
+        </div>
+      }
+    </div>
+
+    <div class="stat-card stat-clinical">
+      <div class="stat-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <polyline points="17 11 19 13 23 9"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ stats.newPatients + stats.returningPatients }}</span>
+        <span class="stat-label">Pacientes Atendidos (Mês)</span>
+      </div>
+      <div class="stat-detail">
+        <span class="detail-item">{{ stats.newPatients }} novos</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-noshow">
+      <div class="stat-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ stats.noShowRate | number:'1.1-1' }}%</span>
+        <span class="stat-label">Taxa de Faltas</span>
+      </div>
+      @if (stats.noShowRate > NO_SHOW_RATE_THRESHOLD) {
+        <div class="stat-badge danger">
+          <span>Acima da meta</span>
+        </div>
+      } @else {
+        <div class="stat-badge success">
+          <span>Dentro da meta</span>
+        </div>
+      }
+    </div>
   </div>
+
+  <!-- Alerts Section -->
+  @if (alerts.length > 0) {
+    <div class="alerts-section">
+      <div class="section-header-simple">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          Alertas e Notificações
+        </h2>
+      </div>
+      <div class="alerts-grid">
+        @for (alert of alerts; track alert.id) {
+          <a [routerLink]="alert.link" class="alert-card" [class.alert-error]="alert.type === 'error'" [class.alert-warning]="alert.type === 'warning'" [class.alert-info]="alert.type === 'info'">
+            <div class="alert-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path [attr.d]="getAlertIcon(alert.type)"/>
+              </svg>
+            </div>
+            <div class="alert-content">
+              <h4>{{ alert.title }}</h4>
+              <p>{{ alert.message }}</p>
+            </div>
+            <svg class="alert-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </a>
+        }
+      </div>
+    </div>
+  }
 
   <!-- Main Content Grid -->
   <div class="content-grid">

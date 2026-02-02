@@ -7,8 +7,13 @@ import { Auth } from '../../services/auth';
 import { NotificationService } from '../../services/notification.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { format } from 'date-fns';
+import { format, startOfMonth, endOfMonth } from 'date-fns';
+import { firstValueFrom } from 'rxjs';
 import { MOCK_DASHBOARD_QUEUE_DATA } from '../../mocks/dashboard.mock';
+import { AnalyticsBIService } from '../../services/analytics-bi.service';
+
+// Configuration constants
+const NO_SHOW_RATE_THRESHOLD = 15; // Percentage threshold for no-show alerts
 
 interface DashboardStats {
   totalPatients: number;
@@ -17,6 +22,19 @@ interface DashboardStats {
   waitingQueue: number;
   patientsGrowth: number;
   todaySchedule: AppointmentSummary[];
+  // Financial metrics
+  monthlyRevenue: number;
+  revenueReceived: number;
+  revenuePending: number;
+  revenueOverdue: number;
+  // Clinical metrics
+  noShowRate: number;
+  newPatients: number;
+  returningPatients: number;
+  weeklyRecordsCreated: number;
+  // Alerts
+  hasOverduePayments: boolean;
+  hasPendingPayments: boolean;
 }
 
 interface AppointmentSummary {
@@ -27,6 +45,14 @@ interface AppointmentSummary {
   status: string;
 }
 
+interface AlertItem {
+  id: string;
+  type: 'warning' | 'error' | 'info';
+  title: string;
+  message: string;
+  link?: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, RouterLink, Navbar, Loading],
@@ -35,23 +61,39 @@ interface AppointmentSummary {
 })
 export class Dashboard implements OnInit {
   loading = true;
+  readonly NO_SHOW_RATE_THRESHOLD = NO_SHOW_RATE_THRESHOLD;
   stats: DashboardStats = {
     totalPatients: 0,
     todayAppointments: 0,
     completedAppointments: 0,
     waitingQueue: 0,
     patientsGrowth: 0,
-    todaySchedule: []
+    todaySchedule: [],
+    monthlyRevenue: 0,
+    revenueReceived: 0,
+    revenuePending: 0,
+    revenueOverdue: 0,
+    noShowRate: 0,
+    newPatients: 0,
+    returningPatients: 0,
+    weeklyRecordsCreated: 0,
+    hasOverduePayments: false,
+    hasPendingPayments: false
   };
+  
+  alerts: AlertItem[] = [];
 
   constructor(
     public authService: Auth,
     private http: HttpClient,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private analyticsBIService: AnalyticsBIService
   ) {}
 
   ngOnInit() {
     this.loadDashboardStats();
+    this.loadFinancialData();
+    this.loadClinicalMetrics();
     // Load notifications for authenticated users
     this.notificationService.loadNotifications();
   }
@@ -66,7 +108,6 @@ export class Dashboard implements OnInit {
       }
 
       const today = format(new Date(), 'yyyy-MM-dd');
-      const { firstValueFrom } = await import('rxjs');
       
       // Load patients count
       const patientsResponse = await firstValueFrom(this.http.get<any[]>(`${environment.apiUrl}/patients?clinicId=${clinicId}`));
@@ -110,6 +151,81 @@ export class Dashboard implements OnInit {
     }
   }
 
+  async loadFinancialData() {
+    try {
+      const startDate = format(startOfMonth(new Date()), 'yyyy-MM-dd');
+      const endDate = format(endOfMonth(new Date()), 'yyyy-MM-dd');
+      
+      const financialData = await firstValueFrom(
+        this.analyticsBIService.getDashboardFinanceiro(startDate, endDate)
+      );
+      
+      this.stats.monthlyRevenue = financialData.receitaTotal || 0;
+      this.stats.revenueReceived = financialData.receitaRecebida || 0;
+      this.stats.revenuePending = financialData.receitaPendente || 0;
+      this.stats.revenueOverdue = financialData.receitaAtrasada || 0;
+      
+      // Set payment flags for alerts
+      this.stats.hasPendingPayments = this.stats.revenuePending > 0;
+      this.stats.hasOverduePayments = this.stats.revenueOverdue > 0;
+      
+      // Create alerts based on financial data
+      if (this.stats.hasOverduePayments) {
+        this.alerts.push({
+          id: 'overdue-payments',
+          type: 'error',
+          title: 'Pagamentos Atrasados',
+          message: `${this.formatCurrency(this.stats.revenueOverdue)} em pagamentos vencidos`,
+          link: '/financial/receivables'
+        });
+      }
+      
+      if (this.stats.hasPendingPayments) {
+        this.alerts.push({
+          id: 'pending-payments',
+          type: 'warning',
+          title: 'Pagamentos Pendentes',
+          message: `${this.formatCurrency(this.stats.revenuePending)} aguardando recebimento`,
+          link: '/financial/receivables'
+        });
+      }
+      
+    } catch (error) {
+      console.error('Error loading financial data:', error);
+      // Silently fail - financial data is optional
+    }
+  }
+
+  async loadClinicalMetrics() {
+    try {
+      const startDate = format(startOfMonth(new Date()), 'yyyy-MM-dd');
+      const endDate = format(endOfMonth(new Date()), 'yyyy-MM-dd');
+      
+      const clinicalData = await firstValueFrom(
+        this.analyticsBIService.getDashboardClinico(startDate, endDate)
+      );
+      
+      this.stats.noShowRate = clinicalData.taxaNoShow || 0;
+      this.stats.newPatients = clinicalData.pacientesNovos || 0;
+      this.stats.returningPatients = clinicalData.pacientesRetorno || 0;
+      
+      // Add alert for high no-show rate
+      if (this.stats.noShowRate > NO_SHOW_RATE_THRESHOLD) {
+        this.alerts.push({
+          id: 'high-noshow',
+          type: 'warning',
+          title: 'Taxa de Falta Elevada',
+          message: `${this.stats.noShowRate.toFixed(1)}% dos pacientes não compareceram`,
+          link: '/appointments'
+        });
+      }
+      
+    } catch (error) {
+      console.error('Error loading clinical metrics:', error);
+      // Silently fail - clinical metrics are optional
+    }
+  }
+
   translateAppointmentType(type: string): string {
     const translations: { [key: string]: string } = {
       'Regular': 'Consulta Regular',
@@ -140,5 +256,21 @@ export class Dashboard implements OnInit {
       'NoShow': 'Não compareceu'
     };
     return statusLabels[status] || status;
+  }
+
+  formatCurrency(value: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  }
+
+  getAlertIcon(type: string): string {
+    const icons: { [key: string]: string } = {
+      'error': 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
+      'warning': 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
+      'info': 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+    };
+    return icons[type] || icons['info'];
   }
 }
