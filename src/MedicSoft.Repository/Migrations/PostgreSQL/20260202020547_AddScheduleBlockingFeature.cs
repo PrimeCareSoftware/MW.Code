@@ -1047,13 +1047,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp with time zone",
                 oldNullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GrantedAt",
-                table: "SubscriptionCredits",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            // Only alter SubscriptionCredits table if it exists
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (SELECT FROM information_schema.tables 
+                              WHERE table_schema = 'public' 
+                              AND table_name = 'SubscriptionCredits') THEN
+                        ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -5301,13 +5305,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp without time zone",
                 oldNullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GrantedAt",
-                table: "SubscriptionCredits",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            // Only alter SubscriptionCredits table if it exists
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (SELECT FROM information_schema.tables 
+                              WHERE table_schema = 'public' 
+                              AND table_name = 'SubscriptionCredits') THEN
+                        ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
