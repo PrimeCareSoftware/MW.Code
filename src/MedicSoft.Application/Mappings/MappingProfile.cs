@@ -234,6 +234,16 @@ namespace MedicSoft.Application.Mappings
             
             CreateMap<MedicalRecordAccessLog, MedicalRecordAccessLogDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.FullName : string.Empty));
+
+            // Schedule Blocking and Recurring Appointments
+            CreateMap<BlockedTimeSlot, BlockedTimeSlotDto>()
+                .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic != null ? src.Clinic.Name : null))
+                .ForMember(dest => dest.ProfessionalName, opt => opt.MapFrom(src => src.Professional != null ? src.Professional.FullName : null));
+
+            CreateMap<RecurringAppointmentPattern, RecurringAppointmentPatternDto>()
+                .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic != null ? src.Clinic.Name : null))
+                .ForMember(dest => dest.ProfessionalName, opt => opt.MapFrom(src => src.Professional != null ? src.Professional.FullName : null))
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient != null ? src.Patient.Name : null));
         }
     }
 }
