@@ -116,8 +116,8 @@ export class ClinicInfoComponent implements OnInit {
     const user = this.auth.currentUser();
     const sub = this.subscription();
     
-    // Check if user has Owner or ClinicOwner role
-    if (!user || (user.role !== 'Owner' && user.role !== 'ClinicOwner' && user.role !== 'SystemAdmin' && !user.isSystemOwner)) {
+    // Check if user has permission to create clinics
+    if (!user || !this.hasClinicCreationPermission(user)) {
       return false;
     }
 
@@ -127,6 +127,11 @@ export class ClinicInfoComponent implements OnInit {
     }
 
     return false;
+  }
+
+  private hasClinicCreationPermission(user: any): boolean {
+    const allowedRoles = ['Owner', 'ClinicOwner', 'SystemAdmin'];
+    return allowedRoles.includes(user.role) || user.isSystemOwner;
   }
 
   hasReachedClinicLimit(): boolean {
