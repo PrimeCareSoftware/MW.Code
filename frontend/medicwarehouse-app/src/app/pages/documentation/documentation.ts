@@ -376,10 +376,11 @@ export class Documentation implements OnInit {
 
   private sanitizePath(path: string): string | null {
     // Ensure path starts with a valid prefix
-    const validPrefixes = ['/system-admin/', '/README.md', '/CHANGELOG.md', '/telemedicine/', '/'];
+    const validPrefixes = ['/system-admin/', '/README.md', '/CHANGELOG.md', '/telemedicine/'];
     const hasValidPrefix = validPrefixes.some(prefix => path.startsWith(prefix));
     
-    if (!hasValidPrefix) {
+    // Also allow root-level markdown files
+    if (!hasValidPrefix && !path.match(/^\/[A-Z_]+\.md$/)) {
       return null;
     }
     

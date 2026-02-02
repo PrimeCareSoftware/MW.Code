@@ -68,7 +68,7 @@
                 class="doc-item" 
                 (click)="openDocumentation(doc.path)"
                 (keydown.enter)="openDocumentation(doc.path)"
-                (keydown.space)="openDocumentation(doc.path)"
+                (keydown.space)="openDocumentation(doc.path); $event.preventDefault()"
                 tabindex="0"
                 role="button"
                 [attr.aria-label]="'Abrir ' + doc.title">
