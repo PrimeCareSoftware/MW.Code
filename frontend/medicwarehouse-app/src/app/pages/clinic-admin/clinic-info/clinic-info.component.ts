@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { OwnerClinicService, ClinicDto, CreateClinicDto, UpdateClinicDto } from '../../../services/owner-clinic.service';
-import { ClinicAdminInfoDto } from '../../../models/clinic-admin.model';
+import { ClinicAdminInfoDto, SubscriptionDetailsDto } from '../../../models/clinic-admin.model';
 import { Navbar } from '../../../shared/navbar/navbar';
+import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-clinic-info',
@@ -16,6 +17,7 @@ export class ClinicInfoComponent implements OnInit {
   clinicForm: FormGroup;
   clinicInfo = signal<ClinicAdminInfoDto | null>(null);
   ownerClinics = signal<ClinicDto[]>([]);
+  subscription = signal<SubscriptionDetailsDto | null>(null);
   isLoading = signal<boolean>(false);
   isSaving = signal<boolean>(false);
   errorMessage = signal<string>('');
@@ -30,7 +32,8 @@ export class ClinicInfoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private clinicAdminService: ClinicAdminService,
-    private ownerClinicService: OwnerClinicService
+    private ownerClinicService: OwnerClinicService,
+    private auth: Auth
   ) {
     this.clinicForm = this.fb.group({
       phone: [''],
@@ -58,6 +61,7 @@ export class ClinicInfoComponent implements OnInit {
   ngOnInit(): void {
     this.loadClinicInfo();
     this.loadOwnerClinics();
+    this.loadSubscription();
   }
 
   loadClinicInfo(): void {
@@ -95,6 +99,55 @@ export class ClinicInfoComponent implements OnInit {
         }
       }
     });
+  }
+
+  loadSubscription(): void {
+    this.clinicAdminService.getSubscriptionDetails().subscribe({
+      next: (data) => {
+        this.subscription.set(data);
+      },
+      error: (error) => {
+        console.error('Error loading subscription:', error);
+      }
+    });
+  }
+
+  canCreateClinic(): boolean {
+    const user = this.auth.currentUser();
+    const sub = this.subscription();
+    
+    // Check if user has permission to create clinics
+    if (!user || !this.hasClinicCreationPermission(user)) {
+      return false;
+    }
+
+    // Check if subscription allows more clinics
+    if (sub && sub.limits) {
+      return sub.limits.currentClinics < sub.limits.maxClinics;
+    }
+
+    return false;
+  }
+
+  private hasClinicCreationPermission(user: any): boolean {
+    const allowedRoles = ['Owner', 'ClinicOwner', 'SystemAdmin'];
+    return allowedRoles.includes(user.role) || user.isSystemOwner;
+  }
+
+  hasReachedClinicLimit(): boolean {
+    const sub = this.subscription();
+    if (sub && sub.limits) {
+      return sub.limits.currentClinics >= sub.limits.maxClinics;
+    }
+    return false;
+  }
+
+  getClinicLimitMessage(): string {
+    const sub = this.subscription();
+    if (sub && sub.limits) {
+      return `Você atingiu o limite de ${sub.limits.maxClinics} clínica(s) do seu plano ${sub.planName}. Faça upgrade para criar mais clínicas.`;
+    }
+    return '';
   }
 
   onSubmit(): void {
@@ -185,6 +238,7 @@ export class ClinicInfoComponent implements OnInit {
         next: (clinic) => {
           this.successMessage.set('Clínica criada com sucesso!');
           this.loadOwnerClinics();
+          this.loadSubscription(); // Reload subscription to update clinic count
           this.closeClinicModal();
           this.isSaving.set(false);
           setTimeout(() => this.successMessage.set(''), 5000);

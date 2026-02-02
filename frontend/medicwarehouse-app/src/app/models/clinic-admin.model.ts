@@ -82,7 +82,9 @@ export interface SubscriptionDetailsDto {
   limits: {
     maxUsers: number;
     maxPatients: number;
+    maxClinics: number;
     currentUsers: number;
+    currentClinics: number;
   };
   features: {
     hasReports: boolean;
