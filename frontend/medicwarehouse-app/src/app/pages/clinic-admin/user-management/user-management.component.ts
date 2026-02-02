@@ -59,7 +59,8 @@ export class UserManagementComponent implements OnInit {
       phone: [''],
       role: ['Doctor', Validators.required],
       professionalId: [''],
-      specialty: ['']
+      specialty: [''],
+      showInAppointmentScheduling: [true]
     });
 
     this.editUserForm = this.fb.group({
@@ -67,7 +68,8 @@ export class UserManagementComponent implements OnInit {
       name: ['', Validators.required],
       phone: [''],
       professionalId: [''],
-      specialty: ['']
+      specialty: [''],
+      showInAppointmentScheduling: [true]
     });
 
     this.passwordForm = this.fb.group({
@@ -196,7 +198,8 @@ export class UserManagementComponent implements OnInit {
       name: user.name,
       phone: '', // Phone is not returned from backend, so keep empty
       professionalId: user.professionalId || '',
-      specialty: user.specialty || ''
+      specialty: user.specialty || '',
+      showInAppointmentScheduling: user.showInAppointmentScheduling
     });
     this.showEditDialog.set(true);
   }

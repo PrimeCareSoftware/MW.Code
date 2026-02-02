@@ -138,6 +138,10 @@ export class AppointmentForm implements OnInit {
     this.appointmentService.getProfessionals().subscribe({
       next: (professionals) => {
         this.professionals.set(professionals);
+        // Auto-select professional if only one is available
+        if (professionals.length === 1 && !this.isEditMode()) {
+          this.appointmentForm.patchValue({ professionalId: professionals[0].id });
+        }
       },
       error: (error) => {
         console.error('Error loading professionals:', error);

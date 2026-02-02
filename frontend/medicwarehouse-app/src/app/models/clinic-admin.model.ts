@@ -26,6 +26,7 @@ export interface ClinicUserDto {
   createdAt: string;
   professionalId?: string;
   specialty?: string;
+  showInAppointmentScheduling: boolean;
 }
 
 export interface CreateClinicUserRequest {
@@ -37,6 +38,7 @@ export interface CreateClinicUserRequest {
   role: string;
   professionalId?: string;
   specialty?: string;
+  showInAppointmentScheduling?: boolean;
 }
 
 export interface UpdateClinicUserRequest {
@@ -46,6 +48,7 @@ export interface UpdateClinicUserRequest {
   isActive?: boolean;
   professionalId?: string;
   specialty?: string;
+  showInAppointmentScheduling?: boolean;
 }
 
 export interface ChangeUserPasswordRequest {
