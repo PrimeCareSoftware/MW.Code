@@ -240,16 +240,20 @@ export class PlansList implements OnInit {
       return [];
     }
     
-    // If it's already an array, return a copy
+    // If it's already an array, validate and return a copy with strings only
     if (Array.isArray(field)) {
-      return [...field];
+      return field.filter(item => typeof item === 'string').map(item => String(item));
     }
     
     // If it's a string, try to parse it as JSON
     if (typeof field === 'string') {
       try {
         const parsed = JSON.parse(field);
-        return Array.isArray(parsed) ? parsed : [];
+        if (Array.isArray(parsed)) {
+          // Ensure all elements are strings
+          return parsed.filter(item => typeof item === 'string').map(item => String(item));
+        }
+        return [];
       } catch {
         // If parsing fails, return empty array
         return [];
