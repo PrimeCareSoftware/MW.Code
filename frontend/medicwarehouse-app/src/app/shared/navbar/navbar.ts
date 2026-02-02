@@ -30,7 +30,8 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
     settings: false,
     compliance: false,
     tiss: false,
-    admin: false
+    admin: false,
+    help: false
   };
   
   constructor(public authService: Auth, private elementRef: ElementRef) {
