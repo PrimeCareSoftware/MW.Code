@@ -1,0 +1,128 @@
+<div class="business-configuration-container">
+  <div class="page-header">
+    <h1>Configuração do Negócio</h1>
+    <p class="subtitle">Configure o tipo de negócio, especialidade e recursos disponíveis</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando configuração...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="alert alert-error">
+    <span class="icon">⚠️</span>
+    <span>{{ error }}</span>
+  </div>
+
+  <!-- Success State -->
+  <div *ngIf="success" class="alert alert-success">
+    <span class="icon">✓</span>
+    <span>{{ success }}</span>
+  </div>
+
+  <!-- Configuration Form -->
+  <div *ngIf="!loading && configuration" class="configuration-form">
+    
+    <!-- Business Type Section -->
+    <section class="config-section">
+      <h2>Tipo de Negócio</h2>
+      <p class="section-description">
+        Selecione o porte da sua clínica. Isso ajustará automaticamente os recursos recomendados.
+      </p>
+      
+      <div class="business-type-grid">
+        <div 
+          *ngFor="let option of businessTypeOptions" 
+          class="business-type-card"
+          [class.selected]="configuration.businessType === option.value"
+          (click)="configuration.businessType = option.value; updateBusinessType()"
+        >
+          <h3>{{ option.label }}</h3>
+          <p>{{ option.description }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specialty Section -->
+    <section class="config-section">
+      <h2>Especialidade Principal</h2>
+      <p class="section-description">
+        A especialidade define a terminologia e recursos adequados ao seu tipo de prática.
+      </p>
+      
+      <div class="specialty-grid">
+        <div 
+          *ngFor="let option of specialtyOptions" 
+          class="specialty-card"
+          [class.selected]="configuration.primarySpecialty === option.value"
+          (click)="configuration.primarySpecialty = option.value; updatePrimarySpecialty()"
+        >
+          <span class="specialty-icon">{{ option.icon }}</span>
+          <span class="specialty-label">{{ option.label }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="config-section">
+      <h2>Recursos e Funcionalidades</h2>
+      <p class="section-description">
+        Ative ou desative recursos de acordo com as necessidades da sua clínica.
+      </p>
+
+      <div class="features-container">
+        <div *ngFor="let category of featureCategories" class="feature-category">
+          <h3 class="category-title">{{ category.name }}</h3>
+          
+          <div class="features-list">
+            <div *ngFor="let feature of category.features" class="feature-item">
+              <div class="feature-info">
+                <label class="feature-label">{{ feature.label }}</label>
+                <p class="feature-description">{{ feature.description }}</p>
+              </div>
+              <div class="feature-toggle">
+                <label class="switch">
+                  <input 
+                    type="checkbox" 
+                    [checked]="feature.enabled"
+                    (change)="toggleFeature(feature.key, $any($event.target).checked)"
+                  >
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuration Summary -->
+    <section class="config-section summary-section">
+      <h2>Resumo da Configuração</h2>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <label>Tipo de Negócio:</label>
+          <span>{{ getBusinessTypeLabel(configuration.businessType) }}</span>
+        </div>
+        <div class="summary-item">
+          <label>Especialidade:</label>
+          <span>{{ getSpecialtyLabel(configuration.primarySpecialty) }}</span>
+        </div>
+        <div class="summary-item">
+          <label>Última Atualização:</label>
+          <span>{{ configuration.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- No Configuration State -->
+  <div *ngIf="!loading && !configuration && !error" class="no-config-state">
+    <div class="empty-state-icon">⚙️</div>
+    <h2>Configuração não encontrada</h2>
+    <p>Esta clínica ainda não possui configuração de negócio.</p>
+    <p>Entre em contato com o suporte para configurar sua clínica.</p>
+  </div>
+</div>

@@ -87,6 +87,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/register/register').then(m => m.Register)
   },
 
+  // Onboarding wizard - requires authentication
+  { 
+    path: 'onboarding', 
+    loadComponent: () => import('./pages/onboarding/onboarding-wizard.component').then(m => m.OnboardingWizardComponent),
+    canActivate: [authGuard]
+  },
+
   // Homepage - redirect to site
   { path: '', redirectTo: '/site', pathMatch: 'full' },
 
