@@ -64,7 +64,7 @@ export class AuthService {
             // Don't store tokens yet, wait for 2FA verification
             return;
           }
-          this.handleAuthResponse(response as LoginResponse);
+          this.handleAuthResponse(response as LoginResponse, rememberMe);
         })
       );
   }
@@ -72,7 +72,7 @@ export class AuthService {
   register(request: RegisterRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/register`, request)
       .pipe(
-        tap(response => this.handleAuthResponse(response))
+        tap(response => this.handleAuthResponse(response, false))
       );
   }
 
@@ -83,9 +83,10 @@ export class AuthService {
     }
 
     const request: RefreshTokenRequest = { refreshToken };
+    const rememberMe = this.isRememberMeEnabled();
     return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/refresh`, request)
       .pipe(
-        tap(response => this.handleAuthResponse(response))
+        tap(response => this.handleAuthResponse(response, rememberMe))
       );
   }
 
@@ -107,9 +108,10 @@ export class AuthService {
   }
 
   verifyTwoFactor(request: VerifyTwoFactorRequest): Observable<LoginResponse> {
+    const rememberMe = this.isRememberMeEnabled();
     return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/verify-2fa`, request)
       .pipe(
-        tap(response => this.handleAuthResponse(response))
+        tap(response => this.handleAuthResponse(response, rememberMe))
       );
   }
 
@@ -129,9 +131,7 @@ export class AuthService {
     return localStorage.getItem(this.REMEMBER_ME_KEY) === 'true';
   }
 
-  private handleAuthResponse(response: LoginResponse): void {
-    const rememberMe = this.isRememberMeEnabled();
-    
+  private handleAuthResponse(response: LoginResponse, rememberMe: boolean): void {
     if (rememberMe) {
       // Store in localStorage for persistence
       localStorage.setItem(this.TOKEN_KEY, response.accessToken);

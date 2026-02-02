@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -28,14 +28,14 @@ import { NotificationService } from '../../services/notification.service';
   templateUrl: './verify-2fa.component.html',
   styleUrls: ['./verify-2fa.component.scss']
 })
-export class VerifyTwoFactorComponent implements OnInit {
+export class VerifyTwoFactorComponent implements OnInit, OnDestroy {
   verifyForm: FormGroup;
   loading = false;
   resending = false;
   tempToken = '';
   returnUrl = '/dashboard';
   countdown = 0;
-  private countdownInterval?: any;
+  private countdownInterval?: number;
 
   constructor(
     private fb: FormBuilder,

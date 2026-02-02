@@ -69,8 +69,15 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     if (password.value !== confirmPassword.value) {
-      confirmPassword.setErrors({ passwordMismatch: true });
+      // Instead of setting errors directly, return validation error
       return { passwordMismatch: true };
+    }
+
+    // Clear the mismatch error if passwords match
+    const currentErrors = confirmPassword.errors;
+    if (currentErrors && 'passwordMismatch' in currentErrors) {
+      delete currentErrors['passwordMismatch'];
+      confirmPassword.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
     }
 
     return null;
