@@ -334,31 +334,109 @@ export class FinancialDashboard implements OnInit {
 
 ### 4.1 Configuração Inicial
 
-O sistema deve integrar com um gateway de pagamento brasileiro. Opções recomendadas:
+✅ **IMPLEMENTADO** - O sistema foi configurado para integração com Mercado Pago.
 
-1. **Stripe** (internacional, bom suporte)
-2. **PagSeguro** (nacional, boa penetração)
-3. **Mercado Pago** (nacional, muitos recursos)
+**Status:** Aguardando credenciais do Mercado Pago para ativação completa.
 
-### 4.2 Fluxo de Assinatura
+#### Componentes Implementados:
+
+1. **PaymentGatewaySettings** - Configurações do gateway em `appsettings.json`
+2. **IPaymentGatewayService** - Interface para operações de pagamento
+3. **MercadoPagoPaymentGatewayService** - Implementação do serviço
+4. **CreditCardPayments Feature Flag** - Flag para habilitar/desabilitar pagamentos por cartão
+
+#### Configuração em appsettings.json:
+
+```json
+"PaymentGateway": {
+  "Provider": "MercadoPago",
+  "Enabled": true,
+  "MercadoPago": {
+    "AccessToken": "",
+    "PublicKey": "",
+    "WebhookSecret": "",
+    "ApiUrl": "https://api.mercadopago.com",
+    "Enabled": false,
+    "NotificationUrl": ""
+  },
+  "EnableCreditCardPayments": true,
+  "EnablePixPayments": true,
+  "EnableBankSlipPayments": false,
+  "TimeoutSeconds": 30
+}
+```
+
+#### Gateway Recomendado: Mercado Pago
+
+**Vantagens:**
+- Ampla aceitação no Brasil
+- Suporte a múltiplos métodos de pagamento (cartão, PIX, boleto)
+- API bem documentada
+- SDKs oficiais para .NET
+- Sistema de webhooks robusto
+- Ambiente de sandbox para testes
+
+### 4.2 Feature Flag para Pagamentos por Cartão
+
+✅ **IMPLEMENTADO** - Feature flag `CreditCardPayments` adicionada à `BusinessConfiguration`.
+
+Esta flag permite habilitar/desabilitar pagamentos por cartão de crédito por clínica:
+
+**Habilitar via API:**
+```http
+PUT /api/businessconfiguration/{clinicId}/feature
+Content-Type: application/json
+
+{
+  "featureName": "CreditCardPayments",
+  "enabled": true
+}
+```
+
+**Desabilitar via API:**
+```http
+PUT /api/businessconfiguration/{clinicId}/feature
+Content-Type: application/json
+
+{
+  "featureName": "CreditCardPayments",
+  "enabled": false
+}
+```
+
+**Verificar via código:**
+```csharp
+var config = await _businessConfigurationRepository.GetByClinicIdAsync(clinicId);
+bool canProcessCard = config.IsFeatureEnabled("CreditCardPayments");
+```
+
+### 4.3 Fluxo de Assinatura
 
 ```
 1. Cliente seleciona plano → 
 2. Sistema verifica disponibilidade de campanha → 
-3. Apresenta preço (campaign ou regular) → 
-4. Cliente confirma → 
-5. Sistema cria assinatura no gateway → 
-6. Gateway retorna status → 
-7. Sistema ativa clínica com plano escolhido
+3. Sistema verifica se pagamentos por cartão estão habilitados (feature flag) →
+4. Apresenta preço (campaign ou regular) → 
+5. Cliente confirma → 
+6. Sistema cria pagamento no gateway (Mercado Pago) → 
+7. Gateway retorna status → 
+8. Sistema ativa clínica com plano escolhido
 ```
 
-### 4.3 Endpoints de Pagamento
+### 4.4 Exemplo de Uso do Gateway
 
 ```csharp
 // POST /api/subscriptions/create
 [HttpPost("create")]
 public async Task<IActionResult> CreateSubscription([FromBody] CreateSubscriptionRequest request)
 {
+    // Verificar se pagamentos por cartão estão habilitados
+    var config = await _businessConfigurationRepository.GetByClinicIdAsync(request.ClinicId);
+    if (!config.IsFeatureEnabled("CreditCardPayments"))
+    {
+        return BadRequest("Pagamentos por cartão não estão habilitados para esta clínica");
+    }
+    
     var plan = await _subscriptionPlanRepository.GetByIdAsync(request.PlanId);
     
     if (plan == null)
@@ -367,11 +445,13 @@ public async Task<IActionResult> CreateSubscription([FromBody] CreateSubscriptio
     var effectivePrice = plan.GetEffectivePrice();
     var canJoinCampaign = plan.CanJoinCampaign();
     
-    // Criar assinatura no gateway de pagamento
-    var paymentResult = await _paymentGatewayService.CreateSubscription(
+    // Criar pagamento no gateway de pagamento (Mercado Pago)
+    var paymentResult = await _paymentGatewayService.CreateSubscriptionPaymentAsync(
         request.CustomerId,
+        request.CustomerEmail,
         effectivePrice,
-        plan.Name
+        plan.Name,
+        request.TenantId
     );
     
     if (paymentResult.Success)
@@ -387,6 +467,23 @@ public async Task<IActionResult> CreateSubscription([FromBody] CreateSubscriptio
     return Ok(paymentResult);
 }
 ```
+
+### 4.5 Próximos Passos
+
+Para completar a integração com Mercado Pago:
+
+1. ✅ Configuração básica implementada
+2. ✅ Interface do serviço criada
+3. ✅ Feature flag de pagamentos implementada
+4. ⏳ Obter credenciais do Mercado Pago (AccessToken, PublicKey, WebhookSecret)
+5. ⏳ Adicionar SDK do Mercado Pago: `dotnet add package MercadoPagoCore`
+6. ⏳ Implementar criação de preferências de pagamento
+7. ⏳ Implementar processamento de webhooks
+8. ⏳ Implementar consulta de status de pagamento
+9. ⏳ Implementar reembolsos
+10. ⏳ Configurar URL de notificação (webhook)
+
+**Documentação Completa:** Consulte `PAYMENT_GATEWAY_README.md` para detalhes de configuração e uso.
 
 ---
 
@@ -586,8 +683,15 @@ Configure Application Insights ou similar para rastrear:
 - [x] SubscriptionPlan entity implementada
 - [x] BusinessConfiguration entity implementada
 - [x] Repositórios e serviços criados
+- [x] PaymentGatewaySettings configuração criada
+- [x] IPaymentGatewayService interface implementada
+- [x] MercadoPagoPaymentGatewayService implementado
+- [x] CreditCardPayments feature flag adicionada
+- [x] Migração para feature flag criada
 - [ ] Endpoints de métricas financeiras
-- [ ] Integração com gateway de pagamento
+- [ ] Credenciais Mercado Pago configuradas
+- [ ] SDK Mercado Pago instalado
+- [ ] Integração completa com Mercado Pago
 - [ ] Sistema de notificações
 - [ ] Seed dos planos conforme plano financeiro
 - [ ] Testes unitários e integração

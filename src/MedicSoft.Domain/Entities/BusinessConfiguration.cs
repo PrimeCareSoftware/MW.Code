@@ -40,6 +40,9 @@ namespace MedicSoft.Domain.Entities
         public bool ApiAccess { get; private set; }
         public bool WhiteLabel { get; private set; }
         
+        // Payment Features
+        public bool CreditCardPayments { get; private set; }
+        
         // Navigation properties
         public Clinic? Clinic { get; private set; }
         
@@ -74,6 +77,7 @@ namespace MedicSoft.Domain.Entities
             FinancialModule = true;
             OnlineBooking = true;
             PublicProfile = true;
+            CreditCardPayments = true;
             
             // Business type specific defaults
             switch (BusinessType)
