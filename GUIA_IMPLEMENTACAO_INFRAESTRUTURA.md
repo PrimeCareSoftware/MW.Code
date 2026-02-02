@@ -77,7 +77,7 @@ source ~/.bashrc
 # Criar configuração do site
 sudo nano /etc/nginx/sites-available/medicsoft
 
-# Adicionar configuração:
+# Adicionar configuração inicial (HTTP - será atualizado para HTTPS pelo Certbot):
 server {
     listen 80;
     server_name seu-dominio.com.br;
@@ -291,12 +291,18 @@ twilio api:usage:records:list --category=video-group-minutes
 
 #### Dashboard de Custos
 ```python
+#!/usr/bin/env python3
 # Script Python para dashboard de custos Twilio
 # Salvar como: /usr/local/bin/twilio-cost-monitor.py
+# Instalar dependências: pip install twilio
 
 from twilio.rest import Client
 import os
 from datetime import datetime
+
+# Configurações (ajustar conforme necessário)
+USD_TO_BRL_RATE = 5.0  # Taxa de conversão USD para BRL
+TWILIO_COST_PER_MINUTE = 0.004  # Custo por minuto em USD
 
 account_sid = os.environ['TWILIO_ACCOUNT_SID']
 auth_token = os.environ['TWILIO_AUTH_TOKEN']
@@ -310,8 +316,8 @@ records = client.usage.records.list(
 )
 
 total_minutes = sum([float(r.usage) for r in records])
-cost_usd = total_minutes * 0.004  # Custo por minuto
-cost_brl = cost_usd * 5.0  # Conversão USD to BRL
+cost_usd = total_minutes * TWILIO_COST_PER_MINUTE
+cost_brl = cost_usd * USD_TO_BRL_RATE
 
 print(f"Total de minutos usados: {total_minutes:.2f}")
 print(f"Custo estimado: USD ${cost_usd:.2f} / BRL R$ {cost_brl:.2f}")

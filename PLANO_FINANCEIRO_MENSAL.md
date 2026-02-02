@@ -205,7 +205,7 @@ Baseado nas implementações dos PRs #608 e #609, que estabeleceram a fundação
 **Serviço**: Twilio Programmable Video API  
 **Uso**: Videochamadas para consultas de telemedicina
 
-**Modelo de Precificação** (valores em USD convertidos para BRL, cotação aproximada R$ 5,00):
+**Modelo de Precificação** (valores em USD convertidos para BRL, cotação aproximada R$ 5,00 - **sujeito a variação cambial**):
 
 | Tipo de Sala | Custo (USD/min) | Custo (BRL/min) | Custo Hora (BRL) |
 |--------------|-----------------|-----------------|------------------|
@@ -476,7 +476,7 @@ Assumindo crescimento de 150% na base de clientes:
 | Custo Total/Mês | R$ 27.495 | R$ 26.271,90 | **-R$ 1.223** ✅ |
 | Break-even (clientes) | 324 | 309 | **-15 clientes** ✅ |
 | Break-even (meses) | 10-12 | 9-11 | **-1 mês** ✅ |
-| Prejuízo Ano 1 | R$ 10.821 lucro | R$ -41.601 prejuízo | *Ajuste realista* |
+| Resultado Ano 1 | R$ 10.821 lucro | R$ -41.601 prejuízo | *Projeção mais realista* |
 | Lucro Ano 2 | R$ 690.000 | R$ 670.000 | -R$ 20.000 |
 
 **Conclusão**: Os custos reais de infraestrutura são mais baixos, mas o modelo requer investimento inicial maior para cobrir prejuízos do primeiro ano. Entretanto, o break-even operacional (MRR > Custos) acontece ~1 mês antes.
