@@ -291,6 +291,8 @@ builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IUserClinicLinkRepository, UserClinicLinkRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IBlockedTimeSlotRepository, BlockedTimeSlotRepository>();
+builder.Services.AddScoped<IRecurringAppointmentPatternRepository, RecurringAppointmentPatternRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<ISoapRecordRepository, SoapRecordRepository>();
 builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
@@ -526,6 +528,7 @@ builder.Services.AddScoped<IAnamnesisResponseRepository, AnamnesisResponseReposi
 
 // Register domain services
 builder.Services.AddScoped<AppointmentSchedulingService>();
+builder.Services.AddScoped<RecurringPatternExpansionService>();
 builder.Services.AddScoped<ISubscriptionService>(provider =>
 {
     var notificationService = provider.GetRequiredService<MedicSoft.Domain.Services.INotificationService>();

@@ -75,14 +75,9 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 request.Appointment.DurationMinutes,
                 appointmentType,
                 request.TenantId,
+                request.Appointment.ProfessionalId,
                 request.Appointment.Notes
             );
-
-            // Set professional if provided
-            if (request.Appointment.ProfessionalId.HasValue)
-            {
-                appointment.UpdateProfessional(request.Appointment.ProfessionalId.Value);
-            }
 
             // Set room number if provided (before creating medical record)
             if (!string.IsNullOrWhiteSpace(request.Appointment.RoomNumber))
