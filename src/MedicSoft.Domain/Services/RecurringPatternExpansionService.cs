@@ -12,6 +12,11 @@ namespace MedicSoft.Domain.Services
     public class RecurringPatternExpansionService
     {
         /// <summary>
+        /// Maximum number of occurrences to prevent infinite loops or excessive memory usage
+        /// </summary>
+        public const int MaxOccurrences = 1000;
+
+        /// <summary>
         /// Generates dates based on a recurring pattern within a date range
         /// </summary>
         public IEnumerable<DateTime> ExpandPattern(RecurringAppointmentPattern pattern, DateTime? endDate = null)
@@ -37,8 +42,9 @@ namespace MedicSoft.Domain.Services
 
                 currentDate = GetNextDate(pattern, currentDate);
 
-                // Safety check to prevent infinite loops
-                if (dates.Count > 1000)
+                // Safety check to prevent infinite loops or excessive memory usage
+                // If you need more than MaxOccurrences, consider splitting into multiple patterns
+                if (dates.Count >= MaxOccurrences)
                     break;
             }
 
