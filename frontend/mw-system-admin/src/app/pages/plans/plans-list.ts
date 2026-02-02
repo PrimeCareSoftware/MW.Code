@@ -142,9 +142,9 @@ export class PlansList implements OnInit {
       campaignStartDate: plan.campaignStartDate,
       campaignEndDate: plan.campaignEndDate,
       maxEarlyAdopters: plan.maxEarlyAdopters,
-      earlyAdopterBenefits: plan.earlyAdopterBenefits ? [...plan.earlyAdopterBenefits] : [],
-      featuresAvailable: plan.featuresAvailable ? [...plan.featuresAvailable] : [],
-      featuresInDevelopment: plan.featuresInDevelopment ? [...plan.featuresInDevelopment] : []
+      earlyAdopterBenefits: this.parseArrayField(plan.earlyAdopterBenefits),
+      featuresAvailable: this.parseArrayField(plan.featuresAvailable),
+      featuresInDevelopment: this.parseArrayField(plan.featuresInDevelopment)
     };
     this.formDataUpdate = {
       ...this.formData,
@@ -230,6 +230,34 @@ export class PlansList implements OnInit {
       style: 'currency',
       currency: 'BRL'
     }).format(value);
+  }
+  
+  /**
+   * Parse array field that might be a JSON string or already an array
+   */
+  private parseArrayField(field: any): string[] {
+    if (!field) {
+      return [];
+    }
+    
+    // If it's already an array, return a copy
+    if (Array.isArray(field)) {
+      return [...field];
+    }
+    
+    // If it's a string, try to parse it as JSON
+    if (typeof field === 'string') {
+      try {
+        const parsed = JSON.parse(field);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        // If parsing fails, return empty array
+        return [];
+      }
+    }
+    
+    // For any other type, return empty array
+    return [];
   }
   
   // Array management helpers
