@@ -35,6 +35,13 @@ namespace MedicSoft.Application.Handlers.Queries.Appointments
             }
 
             var appointments = await _appointmentRepository.GetDailyAgendaAsync(request.Date, request.ClinicId, request.TenantId);
+            
+            // Filter by professional if specified
+            if (request.ProfessionalId.HasValue)
+            {
+                appointments = appointments.Where(a => a.ProfessionalId == request.ProfessionalId.Value);
+            }
+            
             var availableSlots = await _schedulingService.GetAvailableSlotsAsync(
                 request.Date, request.ClinicId, clinic.AppointmentDurationMinutes, request.TenantId);
 

@@ -6,6 +6,7 @@ import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
+import { Professional } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
 import { ScreenReaderService } from '../../../shared/accessibility/hooks/screen-reader.service';
 import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/accessibility/components/accessible-breadcrumbs.component';
@@ -19,6 +20,7 @@ import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/
 export class AppointmentForm implements OnInit {
   appointmentForm: FormGroup;
   patients = signal<Patient[]>([]);
+  professionals = signal<Professional[]>([]);
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
@@ -38,6 +40,7 @@ export class AppointmentForm implements OnInit {
     this.appointmentForm = this.fb.group({
       patientId: ['', [Validators.required]],
       clinicId: ['', [Validators.required]],
+      professionalId: [''], // Optional
       scheduledDate: ['', [Validators.required]],
       scheduledTime: ['', [Validators.required]],
       durationMinutes: [30, [Validators.required, Validators.min(15)]],
@@ -79,6 +82,7 @@ export class AppointmentForm implements OnInit {
     this.appointmentForm.patchValue({ clinicId });
     
     this.loadPatients();
+    this.loadProfessionals();
     
     // Pre-fill date and time from query parameters if provided (only in create mode)
     if (!this.isEditMode()) {
@@ -100,6 +104,7 @@ export class AppointmentForm implements OnInit {
         this.appointmentForm.patchValue({
           patientId: appointment.patientId,
           clinicId: appointment.clinicId,
+          professionalId: appointment.professionalId || '',
           scheduledDate: appointment.scheduledDate,
           scheduledTime: appointment.scheduledTime,
           durationMinutes: appointment.durationMinutes,
@@ -129,6 +134,18 @@ export class AppointmentForm implements OnInit {
     });
   }
 
+  loadProfessionals(): void {
+    this.appointmentService.getProfessionals().subscribe({
+      next: (professionals) => {
+        this.professionals.set(professionals);
+      },
+      error: (error) => {
+        console.error('Error loading professionals:', error);
+        // Don't show error to user, professionals are optional
+      }
+    });
+  }
+
   onSubmit(): void {
     if (this.appointmentForm.valid) {
       this.isLoading.set(true);
@@ -139,6 +156,7 @@ export class AppointmentForm implements OnInit {
       if (this.isEditMode() && this.appointmentId) {
         // Update existing appointment - only send editable fields
         const updateData = {
+          professionalId: this.appointmentForm.value.professionalId || null,
           scheduledDate: this.appointmentForm.value.scheduledDate,
           scheduledTime: this.appointmentForm.value.scheduledTime,
           durationMinutes: this.appointmentForm.value.durationMinutes,
@@ -162,7 +180,12 @@ export class AppointmentForm implements OnInit {
         });
       } else {
         // Create new appointment - send all fields
-        this.appointmentService.create(this.appointmentForm.value).subscribe({
+        const createData = {
+          ...this.appointmentForm.value,
+          professionalId: this.appointmentForm.value.professionalId || null
+        };
+        
+        this.appointmentService.create(createData).subscribe({
           next: () => {
             this.successMessage.set('Agendamento criado com sucesso!');
             this.screenReader.announceSuccess('Agendamento criado com sucesso!');

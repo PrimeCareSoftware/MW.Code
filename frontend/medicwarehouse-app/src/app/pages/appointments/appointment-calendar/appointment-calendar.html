@@ -47,6 +47,20 @@
     </button>
   </div>
 
+  <div class="calendar-filters">
+    <div class="filter-group">
+      <label for="doctorFilter">Filtrar por Médico:</label>
+      <select id="doctorFilter" class="form-select" (change)="onDoctorFilterChange($any($event.target).value || null)">
+        <option value="">Todos os Médicos</option>
+        @for (professional of professionals(); track professional.id) {
+          <option [value]="professional.id">
+            {{ professional.fullName }}@if (professional.specialty) { - {{ professional.specialty }}}
+          </option>
+        }
+      </select>
+    </div>
+  </div>
+
   @if (isLoading()) {
     <div class="loading">Carregando calendário...</div>
   } @else {
@@ -82,6 +96,9 @@
               @if (slot.appointment) {
                 <div class="appointment-block" [class]="getStatusClass(slot.appointment.status)">
                   <div class="appointment-patient">{{ slot.appointment.patientName }}</div>
+                  @if (slot.appointment.professionalName || slot.appointment.doctorName) {
+                    <div class="appointment-doctor">Dr(a). {{ slot.appointment.professionalName || slot.appointment.doctorName }}</div>
+                  }
                   <div class="appointment-duration">{{ slot.appointment.durationMinutes }}min</div>
                   <div class="appointment-type">{{ slot.appointment.type }}</div>
                 </div>

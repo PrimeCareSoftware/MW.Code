@@ -8,12 +8,14 @@ namespace MedicSoft.Application.Queries.Appointments
         public DateTime Date { get; }
         public Guid ClinicId { get; }
         public string TenantId { get; }
+        public Guid? ProfessionalId { get; }
 
-        public GetDailyAgendaQuery(DateTime date, Guid clinicId, string tenantId)
+        public GetDailyAgendaQuery(DateTime date, Guid clinicId, string tenantId, Guid? professionalId = null)
         {
             Date = date;
             ClinicId = clinicId;
             TenantId = tenantId;
+            ProfessionalId = professionalId;
         }
     }
 }
