@@ -1,6 +1,15 @@
 # Índice de Documentação - System Admin
 
+> **📢 ATUALIZAÇÃO (Fevereiro 2026):** Documentação reorganizada! Veja [docs/README.md](docs/README.md) para a estrutura atualizada e simplificada.
+
 Este documento serve como índice central para toda a documentação do PrimeCare Software, organizada por categorias.
+
+## 🔄 Reorganização Recente
+
+- **68 documentos ativos** na pasta `/docs`
+- **52 documentos arquivados** em `/docs/archive` (organizados por categoria)
+- **Documentos consolidados:** Owner management, Notification system
+- **Ver:** [docs/archive/README.md](docs/archive/README.md) para acessar documentos arquivados
 
 ## 📁 Estrutura de Diretórios
 
@@ -57,28 +66,19 @@ Documentação técnica, guias de desenvolvimento e materiais de referência ger
 - [Error Handling PT](docs/ERROR_HANDLING_PT.md)
 - [Financial System Analysis 2026](docs/FINANCIAL_SYSTEM_ANALYSIS_2026.md)
 - [Fluxo Completo do Sistema](docs/FLUXO_COMPLETO_SISTEMA.md)
-- [Funcionalidades Implementadas](docs/FUNCIONALIDADES_IMPLEMENTADAS.md)
 - [GitHub Pages Setup Required](docs/GITHUB_PAGES_SETUP_REQUIRED.md)
 - [Glossário Termos Empresariais](docs/GLOSSARIO_TERMOS_EMPRESARIAIS.md)
-- [Granting Owner Permissions](docs/GRANTING_OWNER_PERMISSIONS.md)
 - [Guia Rápido IA](docs/GUIA_RAPIDO_IA.md) 🆕 **NOVO!** 🤖
 - [Implementação Fechamento Consulta](docs/IMPLEMENTACAO_FECHAMENTO_CONSULTA.md)
-- [Implementação Resumo Final](docs/IMPLEMENTACAO_RESUMO_FINAL.md)
 - [Índice Análise Competitiva](docs/INDICE_ANALISE_COMPETITIVA.md)
 - [Integração Copilot IA](docs/INTEGRACAO_COPILOT_IA.md) 🆕 **NOVO!** 🤖
 - [Integrated Payment Flow](docs/INTEGRATED_PAYMENT_FLOW.md)
-- [Microservices Discontinued](docs/MICROSERVICES_DISCONTINUED.md)
 - [Migrations Quick Reference](docs/MIGRATIONS_QUICK_REFERENCE.md)
-- [Mobile to PWA Migration](docs/MOBILE_TO_PWA_MIGRATION.md)
 - [Módulo Financeiro](docs/MODULO_FINANCEIRO.md)
-- [Mudanças Janeiro 2026](docs/MUDANCAS_JANEIRO_2026.md)
 - [MW Site Documentation](docs/MW_SITE_DOCUMENTATION.md)
-- [Notification Routines Documentation](docs/NOTIFICATION_ROUTINES_DOCUMENTATION.md)
-- [Notification Routines Example](docs/NOTIFICATION_ROUTINES_EXAMPLE.md)
+- [Notification System](docs/NOTIFICATION_SYSTEM.md) - Sistema de notificações (consolidado)
 - [Ordem Correta de Cadastro](docs/ORDEM_CORRETA_CADASTRO.md)
-- [Owner Dashboard Permissions](docs/OWNER_DASHBOARD_PERMISSIONS.md)
-- [Owner Flow Documentation](docs/OWNER_FLOW_DOCUMENTATION.md)
-- [Owner Menu Fix](docs/OWNER_MENU_FIX.md)
+- [Owner Management](docs/OWNER_MANAGEMENT.md) - Gerenciamento de proprietários (consolidado)
 - [Pending Tasks](docs/PENDING_TASKS.md)
 - [Plano de Ação Competitividade](docs/PLANO_ACAO_COMPETITIVIDADE.md)
 - [Plano de Desenvolvimento](docs/PLANO_DESENVOLVIMENTO.md)
