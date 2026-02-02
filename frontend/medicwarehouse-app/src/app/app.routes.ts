@@ -87,8 +87,8 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/register/register').then(m => m.Register)
   },
 
-  // Homepage - redirect to dashboard (will be protected by authGuard)
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  // Homepage - redirect to site
+  { path: '', redirectTo: '/site', pathMatch: 'full' },
 
   // Main application routes - require authentication
   { 

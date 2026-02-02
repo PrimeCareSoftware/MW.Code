@@ -28,4 +28,8 @@ export class Unauthorized implements OnInit {
     
     this.router.navigate([loginPath], { queryParams: { returnUrl: this.returnUrl } });
   }
+
+  navigateToSite() {
+    this.router.navigate(['/site']);
+  }
 }
