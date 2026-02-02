@@ -33,10 +33,10 @@ export class TemplateEditorComponent implements OnInit {
   // Notification state
   notification: { message: string; type: 'success' | 'error' } | null = null;
   
-  // Template placeholder examples for help text
+  // Template placeholder examples for help text (shown as literal text to users)
   placeholders = '{{patientName}}, {{consultationDate}}';
-  patientName = 'Nome do Paciente';
-  consultationDate = 'Data da Consulta';
+  examplePatientName = 'Nome do Paciente';
+  exampleConsultationDate = 'Data da Consulta';
   
   templatePresets: TemplatePreset[] = [
     {
