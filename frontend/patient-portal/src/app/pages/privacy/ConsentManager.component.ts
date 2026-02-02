@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { environment } from '../../../environments/environment';
 
 interface Consent {
@@ -31,7 +32,8 @@ interface Consent {
     MatTableModule,
     MatSlideToggleModule,
     MatChipsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule
   ],
   templateUrl: './ConsentManager.component.html',
   styleUrls: ['./privacy.scss']
