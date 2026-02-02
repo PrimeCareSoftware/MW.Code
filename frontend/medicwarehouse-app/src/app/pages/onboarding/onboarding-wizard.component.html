@@ -143,13 +143,13 @@
           <div class="detail-item">
             <span class="detail-label">Tipo de Negócio:</span>
             <span class="detail-value">
-              {{ businessTypeOptions.find(opt => opt.value === selectedBusinessType)?.label }}
+              {{ getSelectedBusinessTypeLabel() }}
             </span>
           </div>
           <div class="detail-item">
             <span class="detail-label">Especialidade:</span>
             <span class="detail-value">
-              {{ specialtyOptions.find(opt => opt.value === selectedSpecialty)?.label }}
+              {{ getSelectedSpecialtyLabel() }}
             </span>
           </div>
           <div class="detail-item">

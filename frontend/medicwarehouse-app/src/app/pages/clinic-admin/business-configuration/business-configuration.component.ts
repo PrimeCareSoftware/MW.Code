@@ -72,7 +72,7 @@ export class BusinessConfigurationComponent implements OnInit {
   }
 
   private loadConfiguration(): void {
-    const selectedClinic = this.clinicSelectionService.getSelectedClinic();
+    const selectedClinic = this.clinicSelectionService.currentClinic();
     if (!selectedClinic) {
       this.error = 'Nenhuma clínica selecionada';
       return;
@@ -81,11 +81,11 @@ export class BusinessConfigurationComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.businessConfigService.getByClinicId(selectedClinic.id).subscribe({
+    this.businessConfigService.getByClinicId(selectedClinic.clinicId).subscribe({
       next: (config) => {
         this.configuration = config;
         this.buildFeatureCategories();
-        this.loadTerminology(selectedClinic.id);
+        this.loadTerminology(selectedClinic.clinicId);
         this.loading = false;
       },
       error: (err) => {
