@@ -9,6 +9,7 @@ import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels }
 import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
+import { RecurrenceActionDialogComponent } from '../recurrence-action-dialog/recurrence-action-dialog.component';
 
 interface TimeSlot {
   time: string;
@@ -322,28 +323,50 @@ export class AppointmentCalendar implements OnInit {
   onDeleteBlock(event: Event, blockedSlot: BlockedTimeSlot): void {
     event.stopPropagation();
     
-    // Use Material Dialog for confirmation (TODO: Create a reusable confirmation dialog component)
-    const confirmDelete = confirm(`Tem certeza que deseja remover este bloqueio?`);
-    
-    if (confirmDelete) {
-      this.appointmentService.deleteBlockedTimeSlot(blockedSlot.id).subscribe({
-        next: () => {
-          this.snackBar.open('Bloqueio removido com sucesso', 'Fechar', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-          this.loadWeekAppointments();
-        },
-        error: (error) => {
-          console.error('Error deleting block:', error);
-          this.snackBar.open(
-            error.error?.message || 'Erro ao deletar bloqueio',
-            'Fechar',
-            { duration: 3000 }
-          );
+    // If this is a recurring block, ask user if they want to delete single or series
+    if (blockedSlot.isRecurring && blockedSlot.recurringPatternId) {
+      const dialogRef = this.dialog.open(RecurrenceActionDialogComponent, {
+        width: '500px',
+        data: {
+          action: 'delete',
+          blockDate: new Date(blockedSlot.date)
         }
       });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          const deleteSeries = result === 'series';
+          this.performDelete(blockedSlot.id, deleteSeries);
+        }
+      });
+    } else {
+      // Non-recurring block, use simple confirmation
+      const confirmDelete = confirm(`Tem certeza que deseja remover este bloqueio?`);
+      if (confirmDelete) {
+        this.performDelete(blockedSlot.id, false);
+      }
     }
+  }
+
+  private performDelete(blockId: string, deleteSeries: boolean): void {
+    this.appointmentService.deleteBlockedTimeSlot(blockId, deleteSeries).subscribe({
+      next: () => {
+        const message = deleteSeries ? 'Série de bloqueios removida com sucesso' : 'Bloqueio removido com sucesso';
+        this.snackBar.open(message, 'Fechar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        this.loadWeekAppointments();
+      },
+      error: (error) => {
+        console.error('Error deleting block:', error);
+        this.snackBar.open(
+          error.error?.message || 'Erro ao deletar bloqueio',
+          'Fechar',
+          { duration: 3000 }
+        );
+      }
+    });
   }
 
   getBlockTypeLabel(type: number): string {
@@ -389,5 +412,36 @@ export class AppointmentCalendar implements OnInit {
 
   getStatusClass(status: string): string {
     return `status-${status.toLowerCase()}`;
+  }
+
+  getProfessionalColor(professionalId?: string): string {
+    if (!professionalId) return '#2196F3'; // Default blue color
+    
+    const professional = this.professionals().find(p => p.id === professionalId);
+    return professional?.calendarColor || this.getDefaultColorForProfessional(professionalId);
+  }
+
+  private getDefaultColorForProfessional(professionalId: string): string {
+    // Generate a consistent color based on professional ID
+    const colors = [
+      '#2196F3', // Blue
+      '#4CAF50', // Green
+      '#FF9800', // Orange
+      '#9C27B0', // Purple
+      '#F44336', // Red
+      '#00BCD4', // Cyan
+      '#FFEB3B', // Yellow
+      '#795548', // Brown
+      '#607D8B', // Blue Grey
+      '#E91E63'  // Pink
+    ];
+    
+    // Simple hash function to get consistent color for ID
+    let hash = 0;
+    for (let i = 0; i < professionalId.length; i++) {
+      hash = professionalId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    return colors[Math.abs(hash) % colors.length];
   }
 }

@@ -100,14 +100,17 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpPut("{id}")]
         [RequirePermissionKey(PermissionKeys.AppointmentsEdit)]
-        public async Task<ActionResult<BlockedTimeSlotDto>> Update(Guid id, [FromBody] UpdateBlockedTimeSlotDto updateDto)
+        public async Task<ActionResult<BlockedTimeSlotDto>> Update(
+            Guid id, 
+            [FromBody] UpdateBlockedTimeSlotDto updateDto,
+            [FromQuery] bool updateSeries = false)
         {
             if (!ModelState.IsValid)
                 return BadRequestInvalidModel();
 
             try
             {
-                var command = new UpdateBlockedTimeSlotCommand(id, updateDto, GetTenantId());
+                var command = new UpdateBlockedTimeSlotCommand(id, updateDto, GetTenantId(), updateSeries);
                 var result = await _mediator.Send(command);
                 return Ok(result);
             }
@@ -126,9 +129,9 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpDelete("{id}")]
         [RequirePermissionKey(PermissionKeys.AppointmentsDelete)]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id, [FromQuery] bool deleteSeries = false)
         {
-            var command = new DeleteBlockedTimeSlotCommand(id, GetTenantId());
+            var command = new DeleteBlockedTimeSlotCommand(id, GetTenantId(), deleteSeries);
             var result = await _mediator.Send(command);
             
             if (!result)

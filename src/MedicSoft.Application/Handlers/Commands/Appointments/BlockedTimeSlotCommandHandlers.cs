@@ -77,7 +77,17 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             if (blockedTimeSlot == null)
                 return false;
 
-            await _blockedTimeSlotRepository.DeleteAsync(request.Id, request.TenantId);
+            // If DeleteSeries is true and this is a recurring block, delete all instances
+            if (request.DeleteSeries && blockedTimeSlot.IsRecurring && blockedTimeSlot.RecurringPatternId.HasValue)
+            {
+                await _blockedTimeSlotRepository.DeleteByRecurringPatternIdAsync(blockedTimeSlot.RecurringPatternId.Value, request.TenantId);
+            }
+            else
+            {
+                // Delete only this instance
+                await _blockedTimeSlotRepository.DeleteAsync(request.Id, request.TenantId);
+            }
+            
             return true;
         }
     }
@@ -101,25 +111,44 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             if (blockedTimeSlot == null)
                 throw new ArgumentException("Blocked time slot not found");
 
-            // Check for overlapping blocks (excluding current one)
-            var hasOverlap = await _blockedTimeSlotRepository.HasOverlappingBlockAsync(
-                blockedTimeSlot.ClinicId,
-                blockedTimeSlot.Date,
-                request.BlockedTimeSlot.StartTime,
-                request.BlockedTimeSlot.EndTime,
-                blockedTimeSlot.ProfessionalId,
-                request.TenantId,
-                request.Id);
+            // If UpdateSeries is true and this is a recurring block, update all instances
+            if (request.UpdateSeries && blockedTimeSlot.IsRecurring && blockedTimeSlot.RecurringPatternId.HasValue)
+            {
+                var seriesBlocks = await _blockedTimeSlotRepository.GetByRecurringPatternIdAsync(
+                    blockedTimeSlot.RecurringPatternId.Value, 
+                    request.TenantId);
 
-            if (hasOverlap)
-                throw new InvalidOperationException("Updated time slot overlaps with an existing blocked time slot");
+                foreach (var block in seriesBlocks)
+                {
+                    block.UpdateTimeSlot(request.BlockedTimeSlot.StartTime, request.BlockedTimeSlot.EndTime);
+                    block.UpdateType(request.BlockedTimeSlot.Type);
+                    block.UpdateReason(request.BlockedTimeSlot.Reason);
+                    await _blockedTimeSlotRepository.UpdateAsync(block);
+                }
+            }
+            else
+            {
+                // Update only this instance
+                // Check for overlapping blocks (excluding current one)
+                var hasOverlap = await _blockedTimeSlotRepository.HasOverlappingBlockAsync(
+                    blockedTimeSlot.ClinicId,
+                    blockedTimeSlot.Date,
+                    request.BlockedTimeSlot.StartTime,
+                    request.BlockedTimeSlot.EndTime,
+                    blockedTimeSlot.ProfessionalId,
+                    request.TenantId,
+                    request.Id);
 
-            // Update properties
-            blockedTimeSlot.UpdateTimeSlot(request.BlockedTimeSlot.StartTime, request.BlockedTimeSlot.EndTime);
-            blockedTimeSlot.UpdateType(request.BlockedTimeSlot.Type);
-            blockedTimeSlot.UpdateReason(request.BlockedTimeSlot.Reason);
+                if (hasOverlap)
+                    throw new InvalidOperationException("Updated time slot overlaps with an existing blocked time slot");
 
-            await _blockedTimeSlotRepository.UpdateAsync(blockedTimeSlot);
+                // Update properties
+                blockedTimeSlot.UpdateTimeSlot(request.BlockedTimeSlot.StartTime, request.BlockedTimeSlot.EndTime);
+                blockedTimeSlot.UpdateType(request.BlockedTimeSlot.Type);
+                blockedTimeSlot.UpdateReason(request.BlockedTimeSlot.Reason);
+
+                await _blockedTimeSlotRepository.UpdateAsync(blockedTimeSlot);
+            }
 
             return _mapper.Map<BlockedTimeSlotDto>(blockedTimeSlot);
         }

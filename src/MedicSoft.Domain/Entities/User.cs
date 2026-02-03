@@ -27,6 +27,7 @@ namespace MedicSoft.Domain.Entities
         public DateTime? MfaGracePeriodEndsAt { get; private set; } // Grace period for MFA setup
         public DateTime? FirstLoginAt { get; private set; } // Track first login to calculate grace period
         public bool ShowInAppointmentScheduling { get; private set; } // Whether this user should appear in appointment scheduling dropdowns
+        public string? CalendarColor { get; private set; } // Hex color for calendar display (e.g., "#4CAF50")
 
         // Navigation properties
         public Clinic? Clinic { get; private set; } // Deprecated navigation
@@ -49,7 +50,8 @@ namespace MedicSoft.Domain.Entities
 
         public User(string username, string email, string passwordHash, string fullName,
             string phone, UserRole role, string tenantId, Guid? clinicId = null,
-            string? professionalId = null, string? specialty = null, bool showInAppointmentScheduling = true) : base(tenantId)
+            string? professionalId = null, string? specialty = null, bool showInAppointmentScheduling = true, 
+            string? calendarColor = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username cannot be empty", nameof(username));
@@ -77,10 +79,12 @@ namespace MedicSoft.Domain.Entities
             Specialty = specialty?.Trim();
             IsActive = true;
             ShowInAppointmentScheduling = showInAppointmentScheduling;
+            CalendarColor = calendarColor?.Trim();
         }
 
         public void UpdateProfile(string email, string fullName, string phone,
-            string? professionalId = null, string? specialty = null, bool? showInAppointmentScheduling = null)
+            string? professionalId = null, string? specialty = null, bool? showInAppointmentScheduling = null,
+            string? calendarColor = null)
         {
             if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("Email cannot be empty", nameof(email));
@@ -98,6 +102,8 @@ namespace MedicSoft.Domain.Entities
             Specialty = specialty?.Trim();
             if (showInAppointmentScheduling.HasValue)
                 ShowInAppointmentScheduling = showInAppointmentScheduling.Value;
+            if (calendarColor != null)
+                CalendarColor = calendarColor.Trim();
             UpdateTimestamp();
         }
 

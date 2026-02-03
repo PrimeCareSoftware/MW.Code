@@ -53,6 +53,7 @@ export interface Professional {
   professionalId?: string; // CRM, CRO, etc.
   specialty?: string;
   role: string;
+  calendarColor?: string; // Hex color for calendar display
 }
 
 export interface DailyAgenda {

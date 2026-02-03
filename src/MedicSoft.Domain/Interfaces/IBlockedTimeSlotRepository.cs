@@ -13,5 +13,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<BlockedTimeSlot>> GetByClinicAsync(Guid clinicId, DateTime startDate, DateTime endDate, string tenantId);
         Task<bool> HasOverlappingBlockAsync(Guid clinicId, DateTime date, TimeSpan startTime, TimeSpan endTime, 
             Guid? professionalId, string tenantId, Guid? excludeBlockId = null);
+        Task<IEnumerable<BlockedTimeSlot>> GetByRecurringPatternIdAsync(Guid recurringPatternId, string tenantId);
+        Task DeleteByRecurringPatternIdAsync(Guid recurringPatternId, string tenantId);
     }
 }
