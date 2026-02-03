@@ -2,7 +2,7 @@
 
 ## 📋 Resumo Executivo
 
-Em Janeiro de 2026, toda a documentação do PrimeCare Software foi consolidada em uma estrutura organizada centralizada no diretório `/system-admin`. Esta reorganização facilita a organização de demandas, consulta a regras de negócio e acesso à documentação técnica.
+Em Janeiro de 2026, toda a documentação do Omni Care Software foi consolidada em uma estrutura organizada centralizada no diretório `/system-admin`. Esta reorganização facilita a organização de demandas, consulta a regras de negócio e acesso à documentação técnica.
 
 ## 🎯 Objetivo
 
@@ -236,7 +236,7 @@ system-admin/
 
 ## ✨ Conclusão
 
-A migração foi concluída com sucesso! Toda a documentação do PrimeCare Software agora está organizada em uma estrutura lógica e fácil de navegar no diretório `/system-admin`. Esta reorganização facilitará significativamente a consulta a regras de negócio, organização de demandas e onboarding de novos membros da equipe.
+A migração foi concluída com sucesso! Toda a documentação do Omni Care Software agora está organizada em uma estrutura lógica e fácil de navegar no diretório `/system-admin`. Esta reorganização facilitará significativamente a consulta a regras de negócio, organização de demandas e onboarding de novos membros da equipe.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 📌 Visão Geral
 
-Este guia fornece instruções completas para configurar e testar o módulo de Atendimento e Consultas do PrimeCare Software, cobrindo todo o fluxo desde o agendamento até a conclusão do atendimento.
+Este guia fornece instruções completas para configurar e testar o módulo de Atendimento e Consultas do Omni Care Software, cobrindo todo o fluxo desde o agendamento até a conclusão do atendimento.
 
 ## 🔧 Pré-requisitos
 

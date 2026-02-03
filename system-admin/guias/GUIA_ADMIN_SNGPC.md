@@ -647,8 +647,8 @@ tail -f /var/log/sngpc-jobs.log | grep "CreateMonthlyReport"
 
 > **Nota:** Os números de telefone abaixo são placeholders. Substitua pelos números reais da sua organização antes de usar este guia.
 
-**Suporte PrimeCare:**
-- Email: suporte@primecaresoftware.com
+**Suporte Omni Care:**
+- Email: suporte@omnicaresoftware.com
 - Telefone: (11) XXXX-XXXX _(substituir com número real)_
 - Horário: 8h-18h dias úteis
 
@@ -673,4 +673,4 @@ tail -f /var/log/sngpc-jobs.log | grep "CreateMonthlyReport"
 
 **Última Atualização:** 29 de Janeiro de 2026  
 **Versão:** 1.0  
-**Autor:** PrimeCare Software
+**Autor:** Omni Care Software

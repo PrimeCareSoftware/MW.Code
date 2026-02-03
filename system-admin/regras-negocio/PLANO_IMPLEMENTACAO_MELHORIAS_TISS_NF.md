@@ -42,7 +42,7 @@ Após análise detalhada do sistema atual e comparação com as principais ferra
 
 #### TISS/TUSS - Funcionalidades Premium
 
-| Funcionalidade | iClinic | Doctoralia | Nuvem | PrimeCare | Gap |
+| Funcionalidade | iClinic | Doctoralia | Nuvem | Omni Care | Gap |
 |----------------|---------|------------|-------|-----------|-----|
 | Gestão de Operadoras | ✅ | ✅ | ✅ | ✅ | 0% |
 | Gestão de Planos | ✅ | ✅ | ✅ | ✅ | 0% |
@@ -59,7 +59,7 @@ Após análise detalhada do sistema atual e comparação com as principais ferra
 
 #### Notas Fiscais - Funcionalidades Premium
 
-| Funcionalidade | Omie | Bling | Conta Azul | PrimeCare | Gap |
+| Funcionalidade | Omie | Bling | Conta Azul | Omni Care | Gap |
 |----------------|------|-------|------------|-----------|-----|
 | Emissão NFSe/NFe | ✅ | ✅ | ✅ | ✅ | 0% |
 | Cálculos Fiscais | ✅ | ✅ | ✅ | ✅ | 0% |

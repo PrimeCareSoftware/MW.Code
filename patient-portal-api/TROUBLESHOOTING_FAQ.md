@@ -309,7 +309,7 @@ builder.Services.AddCors(options =>
         builder
             .WithOrigins(
                 "http://localhost:4200",
-                "https://portal.primecare.com"
+                "https://portal.omnicare.com"
             )
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -599,14 +599,14 @@ catch (ApiException ex)
 s1._domainkey TXT "k=rsa; p=MIGfMA0GCS..."
 
 ; DMARC
-_dmarc TXT "v=DMARC1; p=quarantine; rua=mailto:postmaster@primecare.com"
+_dmarc TXT "v=DMARC1; p=quarantine; rua=mailto:postmaster@omnicare.com"
 ```
 
 2. **Usar domínio próprio:**
 
 ```csharp
 // NÃO usar @gmail.com ou @hotmail.com
-FromEmail = "noreply@primecare.com" // ✅
+FromEmail = "noreply@omnicare.com" // ✅
 
 // Evitar
 FromEmail = "noreply@gmail.com" // ❌
@@ -793,7 +793,7 @@ docker logs patient-portal-api --tail 100
 kubectl logs -f deployment/patient-portal-api
 
 # Azure App Service
-az webapp log tail --name patient-portal-api --resource-group primecare-rg
+az webapp log tail --name patient-portal-api --resource-group omnicare-rg
 ```
 
 **Checklist:**
@@ -929,5 +929,5 @@ A: Sandbox é grátis (teste). Produção: pay-per-message (~$0.005/msg).
 ---
 
 **Última Atualização:** 26 de Janeiro de 2026  
-**Mantido por:** Equipe PrimeCare  
+**Mantido por:** Equipe Omni Care  
 **Contribua:** Abra uma issue no GitHub com sugestões de melhorias

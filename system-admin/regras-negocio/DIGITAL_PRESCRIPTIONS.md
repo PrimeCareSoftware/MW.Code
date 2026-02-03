@@ -512,4 +512,4 @@ For issues or questions:
 
 ## License
 
-Part of PrimeCare Software system - Internal use only
+Part of Omni Care Software system - Internal use only

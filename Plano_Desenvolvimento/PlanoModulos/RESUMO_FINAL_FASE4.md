@@ -256,7 +256,7 @@ O projeto possui erros de compilação não relacionados aos testes:
 dotnet --version
 
 # Clonar repositório
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 cd MW.Code
 ```
 

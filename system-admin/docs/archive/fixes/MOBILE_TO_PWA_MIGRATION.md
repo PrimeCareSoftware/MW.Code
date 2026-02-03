@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O PrimeCare Software migrou de aplicativos nativos (iOS e Android) para PWA (Progressive Web App). Esta decisão traz diversos benefícios para usuários e para o negócio.
+O Omni Care Software migrou de aplicativos nativos (iOS e Android) para PWA (Progressive Web App). Esta decisão traz diversos benefícios para usuários e para o negócio.
 
 ## Por que migramos para PWA?
 
@@ -63,7 +63,7 @@ O PrimeCare Software migrou de aplicativos nativos (iOS e Android) para PWA (Pro
 
 ### Para Usuários Atuais:
 
-1. **Acesse o PWA**: `https://app.primecaresoftware.com.br`
+1. **Acesse o PWA**: `https://app.omnicaresoftware.com.br`
 2. **Instale o PWA**: Siga o [Guia de Instalação](./PWA_INSTALLATION_GUIDE.md)
 3. **Faça Login**: Use as mesmas credenciais
 4. **Desinstale o app antigo** (opcional, mas recomendado)
@@ -230,7 +230,7 @@ navigator.serviceWorker.getRegistrations().then(registrations => {
 ## Migração de Código
 
 ### Funcionalidades iOS migradas:
-- `PrimeCareApp.swift` → `app.ts` (Bootstrap)
+- `Omni CareApp.swift` → `app.ts` (Bootstrap)
 - `LoginView.swift` → `login.component.ts`
 - `DashboardView.swift` → `dashboard.component.ts`
 - `PatientsListView.swift` → `patients-list.component.ts`
@@ -247,7 +247,7 @@ navigator.serviceWorker.getRegistrations().then(registrations => {
 
 ### Para Usuários:
 - 📖 [Guia de Instalação do PWA](./PWA_INSTALLATION_GUIDE.md)
-- 📧 Email: suporte@primecaresoftware.com.br
+- 📧 Email: suporte@omnicaresoftware.com.br
 
 ### Para Desenvolvedores:
 - 📖 [Documentação PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)

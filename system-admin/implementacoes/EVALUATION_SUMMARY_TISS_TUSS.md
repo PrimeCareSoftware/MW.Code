@@ -9,7 +9,7 @@
 
 ## 🎯 Objetivo da Avaliação
 
-Avaliar o status real da implementação TISS/TUSS no sistema PrimeCare Software e atualizar toda a documentação relacionada com informações precisas e atualizadas.
+Avaliar o status real da implementação TISS/TUSS no sistema Omni Care Software e atualizar toda a documentação relacionada com informações precisas e atualizadas.
 
 ---
 
@@ -712,4 +712,4 @@ A descoberta desta implementação evita duplicação de esforço e permite que 
 
 **Documento gerado em:** 19 de Janeiro de 2026  
 **Próxima revisão:** Após conclusão da Fase 1 (Fevereiro 2026)  
-**Responsável:** Equipe de Desenvolvimento PrimeCare Software
+**Responsável:** Equipe de Desenvolvimento Omni Care Software

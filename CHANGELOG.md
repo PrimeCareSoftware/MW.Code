@@ -1,4 +1,4 @@
-# 📝 CHANGELOG - PrimeCare Software
+# 📝 CHANGELOG - Omni Care Software
 
 > **Histórico de Desenvolvimento e Atualizações**  
 > **Última Atualização:** 30 de Janeiro de 2026
@@ -522,7 +522,7 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
 
 #### SEO e Meta Tags
 - **Meta Tags Aprimorados**: Otimização para motores de busca e redes sociais
-  - Title atualizado: "PrimeCare Software - Sistema de Gestão para Clínicas Médicas"
+  - Title atualizado: "Omni Care Software - Sistema de Gestão para Clínicas Médicas"
   - Meta description expandida com keywords relevantes
   - Keywords adicionados: software médico, gestão clínica, prontuário eletrônico
   - Open Graph tags para Facebook/LinkedIn
@@ -535,7 +535,7 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
   - Informações de preço e moeda (R$ 89,00/mês)
   - Rating agregado: 4.9/5 com 500 avaliações
   - Descrição completa do produto
-  - Informação do provedor (PrimeCare Software)
+  - Informação do provedor (Omni Care Software)
 
 #### UX/UI Melhorias
 - **Classes de Animação**: Aplicadas em múltiplos componentes
@@ -935,7 +935,7 @@ Este changelog segue o formato [Keep a Changelog](https://keepachangelog.com/pt-
   - API completa: close, reopen, versions, access-logs
 
 #### Frontend
-- **PrimeCare Software App** - Aplicativo principal das clínicas
+- **Omni Care Software App** - Aplicativo principal das clínicas
   - 10+ páginas funcionais
   - Dashboard com estatísticas
   - Gestão completa de pacientes
@@ -1275,11 +1275,11 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](../LICENSE) para
 
 ## Contato
 
-- **Projeto**: PrimeCare Software
-- **Email**: contato@primecaresoftware.com
-- **GitHub**: https://github.com/PrimeCare Software/MW.Code
-- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
+- **Projeto**: Omni Care Software
+- **Email**: contato@omnicaresoftware.com
+- **GitHub**: https://github.com/Omni Care Software/MW.Code
+- **Issues**: https://github.com/Omni Care Software/MW.Code/issues
 
 ---
 
-**Mantido com ❤️ pela equipe PrimeCare Software**
+**Mantido com ❤️ pela equipe Omni Care Software**

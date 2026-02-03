@@ -2,7 +2,7 @@
 # 2FA Email Token Display, Password Recovery & Remember Me Feature
 
 **Date:** February 2, 2026  
-**Repository:** PrimeCareSoftware/MW.Code  
+**Repository:** Omni CareSoftware/MW.Code  
 **Branch:** copilot/fix-2fa-email-token-issue  
 **Status:** ✅ COMPLETE AND READY FOR DEPLOYMENT
 

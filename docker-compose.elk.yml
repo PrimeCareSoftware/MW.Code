@@ -3,12 +3,12 @@ version: '3.8'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
-    container_name: primecare-elasticsearch
+    container_name: omnicare-elasticsearch
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=true
       - xpack.security.enrollment.enabled=true
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-primecare_elastic_2026}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-omnicare_elastic_2026}
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -25,7 +25,7 @@ services:
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.11.0
-    container_name: primecare-logstash
+    container_name: omnicare-logstash
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
@@ -38,7 +38,7 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
       ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-primecare_elastic_2026}
+      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-omnicare_elastic_2026}
     networks:
       - elk
     depends_on:
@@ -47,12 +47,12 @@ services:
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.11.0
-    container_name: primecare-kibana
+    container_name: omnicare-kibana
     environment:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - ELASTICSEARCH_USERNAME=elastic
-      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD:-primecare_elastic_2026}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD:-omnicare_elastic_2026}
       - xpack.security.enabled=true
     ports:
       - "5601:5601"
@@ -69,7 +69,7 @@ services:
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.11.0
-    container_name: primecare-filebeat
+    container_name: omnicare-filebeat
     user: root
     volumes:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro

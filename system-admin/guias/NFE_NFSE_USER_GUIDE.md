@@ -16,7 +16,7 @@
 
 ## Introdução
 
-O Sistema de Notas Fiscais Eletrônicas integrado ao PrimeCare permite a emissão e gerenciamento de documentos fiscais obrigatórios para prestação de serviços médicos e venda de produtos no Brasil.
+O Sistema de Notas Fiscais Eletrônicas integrado ao Omni Care permite a emissão e gerenciamento de documentos fiscais obrigatórios para prestação de serviços médicos e venda de produtos no Brasil.
 
 ### Tipos de Documentos Suportados
 
@@ -92,7 +92,7 @@ Exemplos de provedores:
 
 ### Passo 1: Acessar Configurações
 
-1. Faça login no PrimeCare
+1. Faça login no Omni Care
 2. Acesse **Menu** → **Configurações** → **Notas Fiscais**
 
 ![Tela de configurações - placeholder para screenshot]
@@ -680,7 +680,7 @@ Se pulou números na sequência:
 
 ### Suporte Técnico
 
-- **E-mail**: suporte@primecare.com.br
+- **E-mail**: suporte@omnicare.com.br
 - **Telefone**: (11) 1234-5678
 - **Horário**: Segunda a Sexta, 8h às 18h
 - **Chat**: Disponível no sistema
@@ -710,7 +710,7 @@ Entre em contato diretamente com seu provedor para questões de:
 
 **Versão do documento**: 1.0  
 **Última atualização**: Janeiro 2025  
-**Sistema**: PrimeCare v2.0
+**Sistema**: Omni Care v2.0
 
 ---
 

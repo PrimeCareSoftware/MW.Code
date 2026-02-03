@@ -1,6 +1,6 @@
-# 📱 Pendências de Desenvolvimento - Aplicativos PrimeCare Software
+# 📱 Pendências de Desenvolvimento - Aplicativos Omni Care Software
 
-> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema PrimeCare Software.
+> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema Omni Care Software.
 
 > **Última Atualização:** Janeiro 2026  
 > **Status:** Em desenvolvimento ativo - Atualizado conforme implementações recentes
@@ -9,11 +9,11 @@
 
 ## 📊 Visão Geral do Ecossistema
 
-O PrimeCare Software possui **7 aplicativos** que compõem o ecossistema completo:
+O Omni Care Software possui **7 aplicativos** que compõem o ecossistema completo:
 
 | Aplicativo | Tecnologia | Localização | Status |
 |------------|-----------|-------------|--------|
-| 🏥 **PrimeCare Software App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Produção (60%) |
+| 🏥 **Omni Care Software App** | Angular 20 | `frontend/medicwarehouse-app` | ✅ Produção (60%) |
 | 🔧 **MW System Admin** | Angular 20 | `frontend/mw-system-admin` | ✅ Beta (30%) |
 | 🌐 **MW Site** | Angular 20 | `frontend/mw-site` | ✅ Produção (40%) |
 | 📚 **MW Docs** | Angular 20 | `frontend/mw-docs` | ✅ Produção (45%) |
@@ -23,7 +23,7 @@ O PrimeCare Software possui **7 aplicativos** que compõem o ecossistema complet
 
 ---
 
-## 🏥 PrimeCare Software App (Frontend Principal)
+## 🏥 Omni Care Software App (Frontend Principal)
 
 **Descrição:** Aplicativo principal para gestão de clínicas, pacientes, agendamentos e atendimentos.
 
@@ -404,7 +404,7 @@ frontend/patient-portal/
 
 ## 📱 iOS App (Swift/SwiftUI)
 
-**Descrição:** Aplicativo nativo iOS para acesso mobile ao sistema PrimeCare Software.
+**Descrição:** Aplicativo nativo iOS para acesso mobile ao sistema Omni Care Software.
 
 **Tecnologias:**
 - Swift 5.9
@@ -447,8 +447,8 @@ frontend/patient-portal/
 ### 📁 Estrutura do Projeto
 
 ```
-mobile/ios/PrimeCare Software/
-├── PrimeCare SoftwareApp.swift    # Entry point
+mobile/ios/Omni Care Software/
+├── Omni Care SoftwareApp.swift    # Entry point
 ├── ContentView.swift          # Root view
 ├── Views/
 │   ├── LoginView.swift        # Tela de login
@@ -468,7 +468,7 @@ mobile/ios/PrimeCare Software/
 
 ## 🤖 Android App (Kotlin/Jetpack Compose)
 
-**Descrição:** Aplicativo nativo Android para acesso mobile ao sistema PrimeCare Software.
+**Descrição:** Aplicativo nativo Android para acesso mobile ao sistema Omni Care Software.
 
 **Tecnologias:**
 - Kotlin 1.9.20
@@ -513,7 +513,7 @@ mobile/ios/PrimeCare Software/
 ```
 mobile/android/app/src/main/kotlin/com/medicwarehouse/app/
 ├── MainActivity.kt           # Activity principal
-├── PrimeCare SoftwareApp.kt     # Application class
+├── Omni Care SoftwareApp.kt     # Application class
 ├── ui/
 │   ├── screens/
 │   │   ├── LoginScreen.kt    # Tela de login

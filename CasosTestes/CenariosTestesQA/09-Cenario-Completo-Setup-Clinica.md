@@ -82,7 +82,7 @@ Plano: Profissional (R$ 197/mês)
 2. Clique em "Cadastre-se"
 3. Preencha todas as 6 etapas do formulário
 4. Anote o Tenant ID: `abc123-def456-ghi789`
-5. Anote o Subdomínio: `saudetotal.primecare.com.br`
+5. Anote o Subdomínio: `saudetotal.omnicare.com.br`
 
 **Resultado Esperado:**
 ```
@@ -94,7 +94,7 @@ Plano: Profissional (R$ 197/mês)
 ### 2.2. ETAPA 2: Primeiro Acesso (5 minutos)
 
 **Passos:**
-1. Acesse `http://localhost:4200` (ou `https://saudetotal.primecare.com.br`)
+1. Acesse `http://localhost:4200` (ou `https://saudetotal.omnicare.com.br`)
 2. Faça login:
    - Usuário: `joao.silva`
    - Senha: `SenhaForte@123`
@@ -934,4 +934,4 @@ GESTÃO:
 
 **Versão:** 1.0  
 **Última Atualização:** Fevereiro 2026  
-**Mantido por:** Equipe PrimeCare Software
+**Mantido por:** Equipe Omni Care Software

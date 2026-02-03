@@ -98,19 +98,19 @@ Opções:
 
 ```bash
 # Criar Resource Group
-az group create --name primecare-rg --location brazilsouth
+az group create --name omnicare-rg --location brazilsouth
 
 # Criar Key Vault
 az keyvault create \
-  --name primecare-keyvault \
-  --resource-group primecare-rg \
+  --name omnicare-keyvault \
+  --resource-group omnicare-rg \
   --location brazilsouth \
   --enable-soft-delete true \
   --enable-purge-protection true
 
 # Criar chave de criptografia
 az keyvault key create \
-  --vault-name primecare-keyvault \
+  --vault-name omnicare-keyvault \
   --name medical-data-encryption-key \
   --protection software \
   --size 256 \
@@ -118,7 +118,7 @@ az keyvault key create \
 
 # Configurar rotação automática (365 dias)
 az keyvault key rotation-policy update \
-  --vault-name primecare-keyvault \
+  --vault-name omnicare-keyvault \
   --name medical-data-encryption-key \
   --value '{
     "lifetimeActions": [{
@@ -130,7 +130,7 @@ az keyvault key rotation-policy update \
 
 # Dar permissões à aplicação
 az keyvault set-policy \
-  --name primecare-keyvault \
+  --name omnicare-keyvault \
   --spn <APP_CLIENT_ID> \
   --key-permissions get unwrapKey wrapKey \
   --secret-permissions get list
@@ -141,18 +141,18 @@ az keyvault set-policy \
 ```bash
 # Habilitar Managed Identity para App Service
 az webapp identity assign \
-  --name primecare-api \
-  --resource-group primecare-rg
+  --name omnicare-api \
+  --resource-group omnicare-rg
 
 # Obter Principal ID
 PRINCIPAL_ID=$(az webapp identity show \
-  --name primecare-api \
-  --resource-group primecare-rg \
+  --name omnicare-api \
+  --resource-group omnicare-rg \
   --query principalId -o tsv)
 
 # Dar permissões ao Managed Identity
 az keyvault set-policy \
-  --name primecare-keyvault \
+  --name omnicare-keyvault \
   --object-id $PRINCIPAL_ID \
   --key-permissions get unwrapKey wrapKey \
   --secret-permissions get list
@@ -923,7 +923,7 @@ public class EncryptionIntegrationTests : IClassFixture<WebApplicationFactory<Pr
 {
   "Azure": {
     "KeyVault": {
-      "Url": "https://primecare-keyvault.vault.azure.net/",
+      "Url": "https://omnicare-keyvault.vault.azure.net/",
       "KeyName": "medical-data-encryption-key",
       "UseManagedIdentity": true
     }

@@ -2,7 +2,7 @@
 
 **Versão:** 1.0  
 **Data:** Janeiro 2026  
-**Sistema:** MedicSoft - PrimeCare
+**Sistema:** MedicSoft - Omni Care
 
 ---
 
@@ -513,9 +513,9 @@ Visualize métricas consolidadas:
 ### Contato
 
 Para suporte técnico ou dúvidas:
-- **Email:** suporte@primecare.com.br
+- **Email:** suporte@omnicare.com.br
 - **Telefone:** (11) 9999-9999
-- **Portal:** https://suporte.primecare.com.br
+- **Portal:** https://suporte.omnicare.com.br
 
 ---
 

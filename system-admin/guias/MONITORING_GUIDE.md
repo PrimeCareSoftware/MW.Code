@@ -1,4 +1,4 @@
-# Sistema de Monitoramento e Logging - PrimeCare Software API
+# Sistema de Monitoramento e Logging - Omni Care Software API
 
 ## 📊 Visão Geral
 
@@ -42,7 +42,7 @@ O sistema de monitoramento implementado oferece logging detalhado, rastreamento 
     },
     "WriteTo": [
       { "Name": "Console" },
-      { "Name": "File", "Args": { "path": "Logs/primecare-.log" } },
+      { "Name": "File", "Args": { "path": "Logs/omnicare-.log" } },
       { "Name": "Seq", "Args": { "serverUrl": "http://localhost:5341" } }
     ]
   },
@@ -62,8 +62,8 @@ O sistema de monitoramento implementado oferece logging detalhado, rastreamento 
 ### Logs em Arquivo
 Os logs são salvos em `Logs/` com rotação diária:
 
-- **primecare-YYYYMMDD.log**: Todos os logs (Information e acima)
-- **primecare-errors-YYYYMMDD.log**: Apenas erros e avisos
+- **omnicare-YYYYMMDD.log**: Todos os logs (Information e acima)
+- **omnicare-errors-YYYYMMDD.log**: Apenas erros e avisos
 - Retenção: 30 dias para logs gerais, 60 dias para erros
 - Rotação automática ao atingir 10MB
 
@@ -164,7 +164,7 @@ PerformanceCategory = "WARNING" or PerformanceCategory = "CRITICAL"
 
 ```bash
 # Em arquivos de log
-grep "SLOW REQUEST" Logs/primecare-*.log
+grep "SLOW REQUEST" Logs/omnicare-*.log
 
 # No Seq
 @Message like "%SLOW REQUEST%"
@@ -177,10 +177,10 @@ grep "SLOW REQUEST" Logs/primecare-*.log
 
 ```bash
 # Encontrar o erro
-grep "ERROR" Logs/primecare-errors-*.log | tail -n 20
+grep "ERROR" Logs/omnicare-errors-*.log | tail -n 20
 
 # Buscar todo o contexto da requisição pelo RequestId
-grep "RequestId=abc-123" Logs/primecare-*.log
+grep "RequestId=abc-123" Logs/omnicare-*.log
 ```
 
 ### 3. Monitorar Query SQL Lenta
@@ -201,7 +201,7 @@ SELECT * FROM Patients WHERE ClinicId = @p0
 
 ```bash
 # Contar requisições por tenant
-grep "TenantId=clinic-001" Logs/primecare-*.log | wc -l
+grep "TenantId=clinic-001" Logs/omnicare-*.log | wc -l
 
 # No Seq
 TenantId != "None" 
@@ -368,7 +368,7 @@ curl http://localhost:5341
 ## 📞 Suporte
 
 Para dúvidas ou problemas:
-1. Verifique os logs em `Logs/primecare-errors-*.log`
+1. Verifique os logs em `Logs/omnicare-errors-*.log`
 2. Consulte o Seq em http://localhost:5341
 3. Entre em contato com o suporte técnico
 

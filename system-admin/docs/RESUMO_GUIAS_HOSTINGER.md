@@ -2,7 +2,7 @@
 
 ## 🎉 O que foi criado
 
-Foram criados **2 guias completos** para fazer deploy do PrimeCare Software no Hostinger VPS, especialmente pensados para iniciantes:
+Foram criados **2 guias completos** para fazer deploy do Omni Care Software no Hostinger VPS, especialmente pensados para iniciantes:
 
 ### 1. 📚 Guia Completo (DEPLOY_HOSTINGER_GUIA_COMPLETO.md)
 
@@ -220,7 +220,7 @@ Após o deploy bem-sucedido:
 
 ## ✅ Conclusão
 
-Com estes guias, você tem tudo que precisa para fazer o deploy do PrimeCare Software no Hostinger, desde o básico até a configuração avançada.
+Com estes guias, você tem tudo que precisa para fazer o deploy do Omni Care Software no Hostinger, desde o básico até a configuração avançada.
 
 **Escolha o guia adequado ao seu nível de conhecimento** e siga os passos cuidadosamente. Se tiver dúvidas, consulte a seção de troubleshooting ou o guia completo.
 
@@ -230,4 +230,4 @@ Com estes guias, você tem tudo que precisa para fazer o deploy do PrimeCare Sof
 
 **Criado em**: Janeiro 2025  
 **Versão**: 1.0  
-**Mantenedor**: PrimeCare Software Team
+**Mantenedor**: Omni Care Software Team

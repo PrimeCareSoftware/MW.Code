@@ -1,4 +1,4 @@
-# 📑 Índice - Análise Competitiva PrimeCare Software
+# 📑 Índice - Análise Competitiva Omni Care Software
 
 > **Análise Completa:** Janeiro 2026  
 > **Total de Documentação:** 4 documentos, ~68.000 palavras  
@@ -66,7 +66,7 @@
 ### Análise de Regras de Negócio
 **Ver:** [RESUMO_FINAL.md](RESUMO_FINAL.md) - "Análise de Regras de Negócio"
 - Funcionalidades core
-- Diferenciais únicos do PrimeCare
+- Diferenciais únicos do Omni Care
 - Features que faltam
 
 ### Estratégia Lean (Sistema Enxuto)
@@ -209,7 +209,7 @@
 
 **Ver:** [RESUMO_FINAL.md](RESUMO_FINAL.md) - "Roadmap 2026"
 
-### 10. PrimeCare é melhor que os concorrentes?
+### 10. Omni Care é melhor que os concorrentes?
 **R:** Tecnicamente SIM (melhor arquitetura, mais testes), mas falta features de negócio críticas. Com as melhorias propostas, será Top 3 no mercado mid-tier.
 
 **Ver:** [RESUMO_FINAL.md](RESUMO_FINAL.md) - "Análise Técnica"
@@ -251,9 +251,9 @@
 ## 📞 Suporte
 
 Para dúvidas ou discussões sobre esta análise:
-- **Email:** contato@primecaresoftware.com
-- **GitHub:** https://github.com/PrimeCareSoftware/MW.Code
-- **Issues:** https://github.com/PrimeCareSoftware/MW.Code/issues
+- **Email:** contato@omnicaresoftware.com
+- **GitHub:** https://github.com/Omni CareSoftware/MW.Code
+- **Issues:** https://github.com/Omni CareSoftware/MW.Code/issues
 
 ---
 

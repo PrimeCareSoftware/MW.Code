@@ -8,7 +8,7 @@
 
 ## 📋 Visão Geral
 
-Este guia mostra como integrar a funcionalidade de **Assinatura Digital ICP-Brasil** com os módulos de documentos existentes no sistema PrimeCare (prontuários, receitas, atestados, laudos, etc.).
+Este guia mostra como integrar a funcionalidade de **Assinatura Digital ICP-Brasil** com os módulos de documentos existentes no sistema Omni Care (prontuários, receitas, atestados, laudos, etc.).
 
 A infraestrutura de assinatura digital está **100% implementada e funcional**. Os componentes foram projetados como **standalone** e podem ser facilmente importados e utilizados em qualquer módulo.
 
@@ -600,4 +600,4 @@ Basta seguir este guia e adaptar para cada módulo específico!
 
 **Versão:** 1.0  
 **Data:** 27 de Janeiro de 2026  
-**Autor:** PrimeCare Software Team
+**Autor:** Omni Care Software Team

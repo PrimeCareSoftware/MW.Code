@@ -360,4 +360,4 @@ A documentação de planejamento e estratégia foi **completamente atualizada** 
 **Commit:** Update planning and strategy docs with architectural simplification changes  
 **Status:** COMPLETO ✅
 
-**Esta atualização mantém a documentação do PrimeCare Software alinhada com a realidade técnica e estratégica do projeto.**
+**Esta atualização mantém a documentação do Omni Care Software alinhada com a realidade técnica e estratégica do projeto.**

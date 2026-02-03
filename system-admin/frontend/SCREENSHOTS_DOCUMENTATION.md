@@ -1,12 +1,12 @@
 # 📸 Documentação Visual - Screenshots das Telas
 
-> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do PrimeCare Software.
+> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do Omni Care Software.
 
 > **Última Atualização:** Novembro 2025
 
 ---
 
-## 🏥 PrimeCare Software App (Frontend Principal)
+## 🏥 Omni Care Software App (Frontend Principal)
 
 ### 1. Tela de Login
 

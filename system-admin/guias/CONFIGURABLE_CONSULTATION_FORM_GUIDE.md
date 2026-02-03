@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Configurable Consultation Form feature allows clinic owners to customize their medical consultation forms based on their specialty (doctor, psychologist, nutritionist, etc.). This makes the PrimeCare Software adaptable to different types of healthcare professionals.
+The Configurable Consultation Form feature allows clinic owners to customize their medical consultation forms based on their specialty (doctor, psychologist, nutritionist, etc.). This makes the Omni Care Software adaptable to different types of healthcare professionals.
 
 ## System Default Profiles
 
@@ -360,4 +360,4 @@ These permissions should be assigned to clinic owners only.
 
 ## Support
 
-For questions or issues, please contact support at support@primecaresoftware.com
+For questions or issues, please contact support at support@omnicaresoftware.com

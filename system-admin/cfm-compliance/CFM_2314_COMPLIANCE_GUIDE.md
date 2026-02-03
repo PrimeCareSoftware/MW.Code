@@ -422,6 +422,6 @@ Para certificar que sua clínica está 100% conforme:
 **Status:** ✅ 100% Conforme CFM 2.314/2022
 
 **Contato:**  
-Time: PrimeCare Software Team  
-Email: suporte@primecaresoftware.com  
+Time: Omni Care Software Team  
+Email: suporte@omnicaresoftware.com  
 Documentação Técnica: `/telemedicine/CFM_2314_IMPLEMENTATION.md`

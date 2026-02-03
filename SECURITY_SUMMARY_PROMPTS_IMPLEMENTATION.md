@@ -94,7 +94,7 @@ this.meta.updateTag({ name: 'description', content: meta.description });
 **🔒 Recommendations:**
 1. Add input validation for URLs in `updateCanonicalUrl()`:
    ```typescript
-   if (!url.startsWith('https://primecare.com.br')) {
+   if (!url.startsWith('https://omnicare.com.br')) {
      console.warn('Invalid canonical URL:', url);
      return;
    }
@@ -162,7 +162,7 @@ this.meta.updateTag({ name: 'description', content: meta.description });
 
 2. **CSP for Images:**
    ```
-   img-src 'self' https://cdn.primecare.com.br https://primecare.com.br;
+   img-src 'self' https://cdn.omnicare.com.br https://omnicare.com.br;
    ```
 
 3. **Add CSRF Token:** When backend is ready, add CSRF protection to like/view tracking
@@ -396,7 +396,7 @@ No immediate security concerns. The code is production-ready from a security per
 ## Contact
 
 For security concerns or questions about this implementation:
-- **Team:** PrimeCare Development Team
+- **Team:** Omni Care Development Team
 - **Date:** January 28, 2026
 - **Review Status:** ✅ Approved for merge
 

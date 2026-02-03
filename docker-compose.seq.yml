@@ -3,7 +3,7 @@ version: '3.8'
 services:
   seq:
     image: datalust/seq:latest
-    container_name: primecare-seq
+    container_name: omnicare-seq
     environment:
       - ACCEPT_EULA=Y
     ports:
@@ -12,12 +12,12 @@ services:
       - seq-data:/data
     restart: unless-stopped
     networks:
-      - primecare-network
+      - omnicare-network
 
 volumes:
   seq-data:
     driver: local
 
 networks:
-  primecare-network:
+  omnicare-network:
     driver: bridge

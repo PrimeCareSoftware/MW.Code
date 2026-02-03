@@ -1,6 +1,6 @@
 # System Admin - Central de Documentação
 
-Este diretório centraliza toda a documentação do sistema PrimeCare Software, facilitando a organização das demandas, consulta às regras de negócio e documentação técnica.
+Este diretório centraliza toda a documentação do sistema Omni Care Software, facilitando a organização das demandas, consulta às regras de negócio e documentação técnica.
 
 ## 📁 Estrutura de Diretórios
 

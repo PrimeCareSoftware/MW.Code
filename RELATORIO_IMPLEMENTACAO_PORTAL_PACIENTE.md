@@ -202,7 +202,7 @@ Referência: [`10-portal-paciente.md`](./Plano_Desenvolvimento/fase-2-seguranca-
    - **Guia:** [`EXTERNAL_API_CONFIGURATION_GUIDE.md`](./patient-portal-api/EXTERNAL_API_CONFIGURATION_GUIDE.md)
 
 2. **Deploy em Produção** (1 dia)
-   - [ ] Configurar domínio (portal.primecare.com)
+   - [ ] Configurar domínio (portal.omnicare.com)
    - [ ] Deploy backend + frontend
    - [ ] Configurar SSL/HTTPS
    - [ ] Health checks

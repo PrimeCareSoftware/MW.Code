@@ -400,7 +400,7 @@ O mercado de SAAS para gestão de consultórios e profissionais de saúde no Bra
 ❌ Interface datada  
 ❌ App mobile limitado
 
-#### Lições para PrimeCare
+#### Lições para Omni Care
 1. **Especialização vertical funciona** (preço premium)
 2. **Terminologia específica** é muito valorizada
 3. **Integrações de nicho** são diferencial
@@ -522,7 +522,7 @@ O mercado de SAAS para gestão de consultórios e profissionais de saúde no Bra
 | **SimplesVet** | R$ 147/mês | Veterinário | ❌ | ❌ | Especialização vet |
 | **ClinicWeb** | R$ 97/mês | Todas | ❌ | ❌ | Preço acessível |
 | **HiDoctor** | R$ 189/mês | Médico, Dentista | ⚠️ | ❌ | Marca consolidada |
-| **PrimeCare** | **R$ 79/mês** | **Todas** | **✅✅** | **Opcional** | **Preço + Flexibilidade** |
+| **Omni Care** | **R$ 79/mês** | **Todas** | **✅✅** | **Opcional** | **Preço + Flexibilidade** |
 
 *Zenklub: ou 30% comissão
 
@@ -591,10 +591,10 @@ O mercado de SAAS para gestão de consultórios e profissionais de saúde no Bra
 ### 4. Especializações Verticais
 
 **Roadmap:**
-1. **Q2 2026:** Lançar "PrimeCare Psico" (vertical de psicologia)
-2. **Q3 2026:** Lançar "PrimeCare Nutri" (vertical de nutrição)
-3. **Q4 2026:** Lançar "PrimeCare Fisio" (vertical de fisioterapia)
-4. **Q1 2027:** Lançar "PrimeCare Dental" (vertical de odontologia)
+1. **Q2 2026:** Lançar "Omni Care Psico" (vertical de psicologia)
+2. **Q3 2026:** Lançar "Omni Care Nutri" (vertical de nutrição)
+3. **Q4 2026:** Lançar "Omni Care Fisio" (vertical de fisioterapia)
+4. **Q1 2027:** Lançar "Omni Care Dental" (vertical de odontologia)
 
 Cada vertical tem:
 - Landing page específica
@@ -631,7 +631,7 @@ Cada vertical tem:
 Recursos  ─────────────┼───────────── Recursos
 Básicos                 │            Avançados
                         │
-         Agendor ●      │      ● PrimeCare 🚀
+         Agendor ●      │      ● Omni Care 🚀
                         │      ● ClinicWeb
          Doctoralia ●   │
                         │
@@ -650,7 +650,7 @@ Básicos                 │            Avançados
 - Orçamento: R$ 50-100/mês
 - Dor: Doctoralia é caro, Zenklub cobra comissão alta
 
-**Solução PrimeCare:**
+**Solução Omni Care:**
 - Plano Solo: R$ 79/mês
 - Cadastro com CPF (sem burocracia)
 - Telemedicina incluída
@@ -665,7 +665,7 @@ Básicos                 │            Avançados
 - Orçamento: R$ 200-300/mês (dividido entre 3)
 - Dor: iClinic é caro e focado em médicos, não tem recursos de nutrição
 
-**Solução PrimeCare:**
+**Solução Omni Care:**
 - Plano Clínica: R$ 299/mês (R$ 100 por pessoa)
 - Templates de planos alimentares
 - Calculadora nutricional integrada
@@ -680,7 +680,7 @@ Básicos                 │            Avançados
 - Orçamento: R$ 500-800/mês
 - Dor: HiDoctor é antigo, iClinic é muito caro
 
-**Solução PrimeCare:**
+**Solução Omni Care:**
 - Plano Clínica: R$ 299/mês
 - Odontograma digital
 - TISS para dentistas
@@ -837,8 +837,8 @@ Básicos                 │            Avançados
 
 ## 📞 Contato
 
-**Equipe de Produto PrimeCare**  
-**Email:** produto@primecare.com.br  
+**Equipe de Produto Omni Care**  
+**Email:** produto@omnicare.com.br  
 **Documento Relacionado:** [PLANO_ADAPTACAO_MULTI_NEGOCIOS.md](./PLANO_ADAPTACAO_MULTI_NEGOCIOS.md)
 
 ---

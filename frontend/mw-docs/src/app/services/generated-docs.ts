@@ -65,7 +65,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "CFM 1.638/2002 - Implementation Complete ✅",
         "category": "CFM Compliance",
         "path": "system-admin/cfm-compliance/CFM1638_IMPLEMENTATION_COMPLETE.md",
-        "description": "This document describes the complete implementation of CFM 1.638/2002 compliance for medical record versioning and audit in the PrimeCare Software system.",
+        "description": "This document describes the complete implementation of CFM 1.638/2002 compliance for medical record versioning and audit in the Omni Care Software system.",
         "size": "12KB"
       },
       {
@@ -92,7 +92,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "CFM 1.821 - Implementação Completa",
         "category": "CFM Compliance",
         "path": "system-admin/cfm-compliance/CFM_1821_IMPLEMENTACAO.md",
-        "description": "Este documento descreve a implementação realizada para conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos médicos no sistema PrimeCare Software.",
+        "description": "Este documento descreve a implementação realizada para conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos médicos no sistema Omni Care Software.",
         "size": "18KB"
       },
       {
@@ -137,7 +137,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📋 Guia do Médico - Sistema Conforme CFM 1.821/2007",
         "category": "CFM Compliance",
         "path": "system-admin/cfm-compliance/GUIA_MEDICO_CFM_1821.md",
-        "description": "> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o PrimeCare Software em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.",
+        "description": "> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o Omni Care Software em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.",
         "size": "19KB"
       },
       {
@@ -170,7 +170,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Apple-Inspired Design System",
         "category": "Frontend",
         "path": "system-admin/frontend/APPLE_DESIGN_SYSTEM.md",
-        "description": "This document describes the Apple-inspired design system implemented across all PrimeCare Software frontend applications (mw-site, mw-docs, medicwarehouse-app, and mw-system-admin).",
+        "description": "This document describes the Apple-inspired design system implemented across all Omni Care Software frontend applications (mw-site, mw-docs, medicwarehouse-app, and mw-system-admin).",
         "size": "7KB"
       },
       {
@@ -194,10 +194,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "frontend-frontend_integration_guide",
         "title": "FRONTEND_INTEGRATION_GUIDE.md",
-        "fullTitle": "Frontend Integration Guide - PrimeCare Software API",
+        "fullTitle": "Frontend Integration Guide - Omni Care Software API",
         "category": "Frontend",
         "path": "system-admin/frontend/FRONTEND_INTEGRATION_GUIDE.md",
-        "description": "This guide provides everything you need to integrate your frontend application with the PrimeCare Software API.",
+        "description": "This guide provides everything you need to integrate your frontend application with the Omni Care Software API.",
         "size": "15KB"
       },
       {
@@ -206,7 +206,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Frontend Port Configuration",
         "category": "Frontend",
         "path": "system-admin/frontend/FRONTEND_PORTS.md",
-        "description": "This document describes the port configuration for all frontend projects in the PrimeCare Software repository. Each project has been assigned a unique port to prevent conflicts when running multiple f",
+        "description": "This document describes the port configuration for all frontend projects in the Omni Care Software repository. Each project has been assigned a unique port to prevent conflicts when running multiple f",
         "size": "3KB"
       },
       {
@@ -215,7 +215,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Guia de Integração da API de Telemedicina no Frontend",
         "category": "Frontend",
         "path": "system-admin/frontend/FRONTEND_TELEMEDICINE_INTEGRATION.md",
-        "description": "Este documento descreve como usar a integração da API de Telemedicina (videochamadas) do MedicSoft no frontend do PrimeCare Software.",
+        "description": "Este documento descreve como usar a integração da API de Telemedicina (videochamadas) do MedicSoft no frontend do Omni Care Software.",
         "size": "9KB"
       },
       {
@@ -224,7 +224,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Input Mask Directives Documentation",
         "category": "Frontend",
         "path": "system-admin/frontend/INPUT_MASKS_DOCUMENTATION.md",
-        "description": "This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the PrimeCare Software frontend applications.",
+        "description": "This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the Omni Care Software frontend applications.",
         "size": "7KB"
       },
       {
@@ -233,16 +233,16 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📸 Documentação Visual - Screenshots das Telas",
         "category": "Frontend",
         "path": "system-admin/frontend/SCREENSHOTS_DOCUMENTATION.md",
-        "description": "> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do PrimeCare Software.",
+        "description": "> **Objetivo:** Documentação visual completa com capturas de tela de todas as aplicações do Omni Care Software.",
         "size": "5KB"
       },
       {
         "id": "frontend-screens_documentation",
         "title": "SCREENS_DOCUMENTATION.md",
-        "fullTitle": "Documentação de Telas e Fluxos - PrimeCare Software",
+        "fullTitle": "Documentação de Telas e Fluxos - Omni Care Software",
         "category": "Frontend",
         "path": "system-admin/frontend/SCREENS_DOCUMENTATION.md",
-        "description": "Este documento apresenta todas as telas do sistema PrimeCare Software com seus fluxos de navegação e funcionalidades.",
+        "description": "Este documento apresenta todas as telas do sistema Omni Care Software com seus fluxos de navegação e funcionalidades.",
         "size": "44KB"
       },
       {
@@ -266,7 +266,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🚀 CI/CD com GitHub Actions",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/CI_CD_DOCUMENTATION.md",
-        "description": "Este documento descreve a implementação do pipeline de CI/CD para o PrimeCare Software usando GitHub Actions.",
+        "description": "Este documento descreve a implementação do pipeline de CI/CD para o Omni Care Software usando GitHub Actions.",
         "size": "9KB"
       },
       {
@@ -275,7 +275,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🚀 Guia Completo de Deploy no Hostinger - Para Iniciantes",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/DEPLOY_HOSTINGER_GUIA_COMPLETO.md",
-        "description": "Este guia foi criado especialmente para **iniciantes** e mostra **passo a passo** como fazer o deploy completo do PrimeCare Software no Hostinger.",
+        "description": "Este guia foi criado especialmente para **iniciantes** e mostra **passo a passo** como fazer o deploy completo do Omni Care Software no Hostinger.",
         "size": "23KB"
       },
       {
@@ -284,7 +284,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🚀 Hostinger - Guia de Início Rápido (30 minutos)",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/DEPLOY_HOSTINGER_INICIO_RAPIDO.md",
-        "description": "> **Para iniciantes**: Este guia resume os passos essenciais para colocar o PrimeCare no ar rapidamente.",
+        "description": "> **Para iniciantes**: Este guia resume os passos essenciais para colocar o Omni Care no ar rapidamente.",
         "size": "10KB"
       },
       {
@@ -293,7 +293,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🐳 Docker PostgreSQL Setup Guide",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/DOCKER_POSTGRES_SETUP.md",
-        "description": "Este guia fornece instruções completas para configurar e executar o PrimeCare Software com PostgreSQL usando Docker.",
+        "description": "Este guia fornece instruções completas para configurar e executar o Omni Care Software com PostgreSQL usando Docker.",
         "size": "8KB"
       },
       {
@@ -302,7 +302,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🔄 Guia de Migração: Docker para Podman",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/DOCKER_TO_PODMAN_MIGRATION.md",
-        "description": "Este guia orienta a migração do Docker para o Podman no PrimeCare Software. O Podman é uma alternativa **100% gratuita e open-source** ao Docker, ideal para uso em produção sem custos de licenciamento",
+        "description": "Este guia orienta a migração do Docker para o Podman no Omni Care Software. O Podman é uma alternativa **100% gratuita e open-source** ao Docker, ideal para uso em produção sem custos de licenciamento",
         "size": "10KB"
       },
       {
@@ -320,7 +320,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🏗️ Guia de Infraestrutura de Produção com Baixo Custo",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/INFRA_PRODUCAO_BAIXO_CUSTO.md",
-        "description": "Este guia apresenta estratégias para colocar o PrimeCare Software em produção com **custo mínimo** enquanto você ainda não tem clientes grandes, permitindo crescimento gradual conforme a demanda aumen",
+        "description": "Este guia apresenta estratégias para colocar o Omni Care Software em produção com **custo mínimo** enquanto você ainda não tem clientes grandes, permitindo crescimento gradual conforme a demanda aumen",
         "size": "14KB"
       },
       {
@@ -329,7 +329,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🔄 Guia de Migração: SQL Server → PostgreSQL",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/MIGRACAO_POSTGRESQL.md",
-        "description": "✅ **MIGRAÇÃO COMPLETA!** O PrimeCare Software agora usa PostgreSQL por padrão, com suporte retrocompatível para SQL Server.",
+        "description": "✅ **MIGRAÇÃO COMPLETA!** O Omni Care Software agora usa PostgreSQL por padrão, com suporte retrocompatível para SQL Server.",
         "size": "12KB"
       },
       {
@@ -338,7 +338,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🐳 Podman PostgreSQL Setup Guide",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/PODMAN_POSTGRES_SETUP.md",
-        "description": "Este guia fornece instruções completas para configurar e executar o PrimeCare Software com PostgreSQL usando Podman (ou Docker como alternativa).",
+        "description": "Este guia fornece instruções completas para configurar e executar o Omni Care Software com PostgreSQL usando Podman (ou Docker como alternativa).",
         "size": "11KB"
       },
       {
@@ -356,13 +356,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🚀 Guia Rápido: Do Zero à Produção em 30 Minutos",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/QUICK_START_PRODUCTION.md",
-        "description": "Colocar o PrimeCare Software em produção **com custo mínimo** ($5-20/mês) de forma rápida e segura.",
+        "description": "Colocar o Omni Care Software em produção **com custo mínimo** ($5-20/mês) de forma rápida e segura.",
         "size": "8KB"
       },
       {
         "id": "infrastructure-setup_monitoring",
         "title": "SETUP_MONITORING.md",
-        "fullTitle": "Setup do Sistema de Monitoramento - PrimeCare Software",
+        "fullTitle": "Setup do Sistema de Monitoramento - Omni Care Software",
         "category": "Infraestrutura",
         "path": "system-admin/infrastructure/SETUP_MONITORING.md",
         "description": "```bash",
@@ -407,7 +407,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Índice de Documentação - System Admin",
         "category": ".",
         "path": "system-admin/INDICE.md",
-        "description": "Este documento serve como índice central para toda a documentação do PrimeCare Software, organizada por categorias.",
+        "description": "Este documento serve como índice central para toda a documentação do Omni Care Software, organizada por categorias.",
         "size": "19KB"
       },
       {
@@ -416,7 +416,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Relatório de Migração de Documentação - System Admin",
         "category": ".",
         "path": "system-admin/MIGRATION_REPORT.md",
-        "description": "Em Janeiro de 2026, toda a documentação do PrimeCare Software foi consolidada em uma estrutura organizada centralizada no diretório `/system-admin`. Esta reorganização facilita a organização de demand",
+        "description": "Em Janeiro de 2026, toda a documentação do Omni Care Software foi consolidada em uma estrutura organizada centralizada no diretório `/system-admin`. Esta reorganização facilita a organização de demand",
         "size": "8KB"
       },
       {
@@ -425,7 +425,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "System Admin - Central de Documentação",
         "category": ".",
         "path": "system-admin/README.md",
-        "description": "Este diretório centraliza toda a documentação do sistema PrimeCare Software, facilitando a organização das demandas, consulta às regras de negócio e documentação técnica.",
+        "description": "Este diretório centraliza toda a documentação do sistema Omni Care Software, facilitando a organização das demandas, consulta às regras de negócio e documentação técnica.",
         "size": "3KB"
       }
     ]
@@ -440,7 +440,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Dynamic Appointment Calendar and Notification System",
         "category": "Regras de Negócio",
         "path": "system-admin/regras-negocio/APPOINTMENT_CALENDAR_FEATURES.md",
-        "description": "This document describes the new features implemented for the PrimeCare Software appointment system.",
+        "description": "This document describes the new features implemented for the Omni Care Software appointment system.",
         "size": "8KB"
       },
       {
@@ -566,7 +566,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🎥 MedicSoft Telemedicine Microservice",
         "category": "Regras de Negócio",
         "path": "system-admin/regras-negocio/TELEMEDICINE_SERVICE.md",
-        "description": "Microserviço independente para teleconsultas médicas com videochamadas integradas ao PrimeCare Software.",
+        "description": "Microserviço independente para teleconsultas médicas com videochamadas integradas ao Omni Care Software.",
         "size": "9KB"
       },
       {
@@ -575,7 +575,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🎥 Análise de Serviços de Videochamada para Telemedicina",
         "category": "Regras de Negócio",
         "path": "system-admin/regras-negocio/TELEMEDICINE_VIDEO_SERVICES_ANALYSIS.md",
-        "description": "Este documento analisa as melhores opções de serviços de videochamada considerando custo-benefício para implementação no PrimeCare Software.",
+        "description": "Este documento analisa as melhores opções de serviços de videochamada considerando custo-benefício para implementação no Omni Care Software.",
         "size": "12KB"
       },
       {
@@ -599,7 +599,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "regras-negocio-patient-portal-readme",
         "title": "README.md",
-        "fullTitle": "Portal do Paciente (Patient Portal) - PrimeCare Software",
+        "fullTitle": "Portal do Paciente (Patient Portal) - Omni Care Software",
         "category": "Regras de Negócio",
         "path": "system-admin/regras-negocio/patient-portal/README.md",
         "description": "> **📚 Documentação Completa**: Para documentação detalhada, consulte:",
@@ -650,10 +650,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "guias-authentication_guide",
         "title": "AUTHENTICATION_GUIDE.md",
-        "fullTitle": "Authentication Documentation - PrimeCare Software API",
+        "fullTitle": "Authentication Documentation - Omni Care Software API",
         "category": "Guias",
         "path": "system-admin/guias/AUTHENTICATION_GUIDE.md",
-        "description": "The PrimeCare Software API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.",
+        "description": "The Omni Care Software API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.",
         "size": "9KB"
       },
       {
@@ -671,7 +671,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Guia de Gerenciamento de Clínicas e Procedimentos",
         "category": "Guias",
         "path": "system-admin/guias/CLINIC_PROCEDURE_CRUD_GUIDE.md",
-        "description": "Este documento descreve as funcionalidades de gerenciamento de clínicas e procedimentos para proprietários no sistema PrimeCare, implementado em Janeiro de 2026.",
+        "description": "Este documento descreve as funcionalidades de gerenciamento de clínicas e procedimentos para proprietários no sistema Omni Care, implementado em Janeiro de 2026.",
         "size": "12KB"
       },
       {
@@ -698,13 +698,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🚂 Guia Completo de Deploy no Railway",
         "category": "Guias",
         "path": "system-admin/guias/DEPLOY_RAILWAY_GUIDE.md",
-        "description": "Este guia mostra passo a passo como fazer deploy do PrimeCare Software no Railway com **PostgreSQL**, a opção mais econômica e simples para começar.",
+        "description": "Este guia mostra passo a passo como fazer deploy do Omni Care Software no Railway com **PostgreSQL**, a opção mais econômica e simples para começar.",
         "size": "12KB"
       },
       {
         "id": "guias-guia_completo_apis",
         "title": "GUIA_COMPLETO_APIs.md",
-        "fullTitle": "📚 Guia Completo de APIs - PrimeCare Software",
+        "fullTitle": "📚 Guia Completo de APIs - Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/GUIA_COMPLETO_APIs.md",
         "description": "> **Última Atualização:** Janeiro 2026",
@@ -722,34 +722,34 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "guias-guia_execucao",
         "title": "GUIA_EXECUCAO.md",
-        "fullTitle": "📋 Guia de Execução Passo a Passo - PrimeCare Software",
+        "fullTitle": "📋 Guia de Execução Passo a Passo - Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/GUIA_EXECUCAO.md",
-        "description": "Este guia fornece instruções detalhadas para executar o sistema PrimeCare Software em seu PC, começando pela criação do banco de dados SQL Server via Docker.",
+        "description": "Este guia fornece instruções detalhadas para executar o sistema Omni Care Software em seu PC, começando pela criação do banco de dados SQL Server via Docker.",
         "size": "16KB"
       },
       {
         "id": "guias-guia_inicio_rapido_local",
         "title": "GUIA_INICIO_RAPIDO_LOCAL.md",
-        "fullTitle": "🚀 Guia de Início Rápido - Executar PrimeCare Software Localmente",
+        "fullTitle": "🚀 Guia de Início Rápido - Executar Omni Care Software Localmente",
         "category": "Guias",
         "path": "system-admin/guias/GUIA_INICIO_RAPIDO_LOCAL.md",
-        "description": "> **Objetivo:** Colocar o sistema PrimeCare Software rodando em seu PC para testes completos em menos de 10 minutos!",
+        "description": "> **Objetivo:** Colocar o sistema Omni Care Software rodando em seu PC para testes completos em menos de 10 minutos!",
         "size": "10KB"
       },
       {
         "id": "guias-guia_multiplataforma",
         "title": "GUIA_MULTIPLATAFORMA.md",
-        "fullTitle": "🌍 Guia de Desenvolvimento Multiplataforma - PrimeCare Software",
+        "fullTitle": "🌍 Guia de Desenvolvimento Multiplataforma - Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/GUIA_MULTIPLATAFORMA.md",
-        "description": "Este guia explica como desenvolver o PrimeCare Software em diferentes sistemas operacionais (macOS, Windows e Linux), mantendo compatibilidade total entre plataformas.",
+        "description": "Este guia explica como desenvolver o Omni Care Software em diferentes sistemas operacionais (macOS, Windows e Linux), mantendo compatibilidade total entre plataformas.",
         "size": "13KB"
       },
       {
         "id": "guias-guia_rapido_telemedicina",
         "title": "GUIA_RAPIDO_TELEMEDICINA.md",
-        "fullTitle": "🚀 Guia Rápido: Telemedicina no PrimeCare Software",
+        "fullTitle": "🚀 Guia Rápido: Telemedicina no Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/GUIA_RAPIDO_TELEMEDICINA.md",
         "description": "**Versão**: 1.0.0",
@@ -758,10 +758,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "guias-guia_testes_passo_a_passo",
         "title": "GUIA_TESTES_PASSO_A_PASSO.md",
-        "fullTitle": "🧪 Guia Completo de Testes Passo a Passo - PrimeCare Software",
+        "fullTitle": "🧪 Guia Completo de Testes Passo a Passo - Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/GUIA_TESTES_PASSO_A_PASSO.md",
-        "description": "Este guia fornece instruções detalhadas para testar cada tela e API do sistema PrimeCare Software no seu computador local.",
+        "description": "Este guia fornece instruções detalhadas para testar cada tela e API do sistema Omni Care Software no seu computador local.",
         "size": "40KB"
       },
       {
@@ -770,7 +770,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📝 Guia de Tradução de Código para Português",
         "category": "Guias",
         "path": "system-admin/guias/GUIA_TRADUCAO_CODIGO.md",
-        "description": "Este guia estabelece o padrão para traduzir comentários, documentação e mensagens do código PrimeCare Software para português, mantendo os identificadores (classes, métodos, variáveis) em inglês.",
+        "description": "Este guia estabelece o padrão para traduzir comentários, documentação e mensagens do código Omni Care Software para português, mantendo os identificadores (classes, métodos, variáveis) em inglês.",
         "size": "9KB"
       },
       {
@@ -806,16 +806,16 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Guia de Integração com Operadoras de Planos de Saúde",
         "category": "Guias",
         "path": "system-admin/guias/HEALTH_INSURANCE_INTEGRATION_GUIDE.md",
-        "description": "Este documento descreve como funciona a integração com operadoras de planos de saúde no Brasil, fornecendo um roteiro para implementação gradual no sistema PrimeCare Software.",
+        "description": "Este documento descreve como funciona a integração com operadoras de planos de saúde no Brasil, fornecendo um roteiro para implementação gradual no sistema Omni Care Software.",
         "size": "21KB"
       },
       {
         "id": "guias-migrations_guide",
         "title": "MIGRATIONS_GUIDE.md",
-        "fullTitle": "PrimeCare Software - Database Migrations Guide",
+        "fullTitle": "Omni Care Software - Database Migrations Guide",
         "category": "Guias",
         "path": "system-admin/guias/MIGRATIONS_GUIDE.md",
-        "description": "Este documento descreve como executar todas as migrations do sistema PrimeCare Software na ordem correta para manter o banco de dados sincronizado durante o desenvolvimento.",
+        "description": "Este documento descreve como executar todas as migrations do sistema Omni Care Software na ordem correta para manter o banco de dados sincronizado durante o desenvolvimento.",
         "size": "8KB"
       },
       {
@@ -830,10 +830,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "guias-mobile_apps_guide",
         "title": "MOBILE_APPS_GUIDE.md",
-        "fullTitle": "Guia Completo dos Aplicativos Móveis PrimeCare Software",
+        "fullTitle": "Guia Completo dos Aplicativos Móveis Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/MOBILE_APPS_GUIDE.md",
-        "description": "Este documento fornece uma visão geral completa dos aplicativos móveis nativos do PrimeCare Software para iOS e Android.",
+        "description": "Este documento fornece uma visão geral completa dos aplicativos móveis nativos do Omni Care Software para iOS e Android.",
         "size": "13KB"
       },
       {
@@ -842,13 +842,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Guia de Dados Mockados (Mock Data)",
         "category": "Guias",
         "path": "system-admin/guias/MOCK_DATA_GUIDE.md",
-        "description": "Este guia documenta a funcionalidade de dados mockados implementada nos aplicativos frontend do PrimeCare Software. Esta funcionalidade permite que os aplicativos sejam executados sem a necessidade de",
+        "description": "Este guia documenta a funcionalidade de dados mockados implementada nos aplicativos frontend do Omni Care Software. Esta funcionalidade permite que os aplicativos sejam executados sem a necessidade de",
         "size": "12KB"
       },
       {
         "id": "guias-monitoring_guide",
         "title": "MONITORING_GUIDE.md",
-        "fullTitle": "Sistema de Monitoramento e Logging - PrimeCare Software API",
+        "fullTitle": "Sistema de Monitoramento e Logging - Omni Care Software API",
         "category": "Guias",
         "path": "system-admin/guias/MONITORING_GUIDE.md",
         "description": "O sistema de monitoramento implementado oferece logging detalhado, rastreamento de performance e detecção automática de problemas sem necessidade de debugging manual.",
@@ -941,7 +941,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📮 Como Importar a Coleção da API no Postman",
         "category": "Guias",
         "path": "system-admin/guias/POSTMAN_IMPORT_GUIDE.md",
-        "description": "Este arquivo contém todas as APIs do PrimeCare Software exportadas para o Postman.",
+        "description": "Este arquivo contém todas as APIs do Omni Care Software exportadas para o Postman.",
         "size": "6KB"
       },
       {
@@ -965,7 +965,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "guias-pwa_installation_guide",
         "title": "PWA_INSTALLATION_GUIDE.md",
-        "fullTitle": "Guia de Instalação do PWA - PrimeCare Software",
+        "fullTitle": "Guia de Instalação do PWA - Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/PWA_INSTALLATION_GUIDE.md",
         "description": "PWA (Progressive Web App) é uma aplicação web que pode ser instalada e usada como se fosse um aplicativo nativo, mas sem precisar das lojas de aplicativos (App Store/Play Store).",
@@ -974,10 +974,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "guias-seeder_guide",
         "title": "SEEDER_GUIDE.md",
-        "fullTitle": "Guia de Seeders - PrimeCare Software",
+        "fullTitle": "Guia de Seeders - Omni Care Software",
         "category": "Guias",
         "path": "system-admin/guias/SEEDER_GUIDE.md",
-        "description": "O sistema PrimeCare Software possui seeders abrangentes para popular o banco de dados com dados de demonstração realísticos. Isso permite testar todas as funcionalidades do sistema sem precisar inseri",
+        "description": "O sistema Omni Care Software possui seeders abrangentes para popular o banco de dados com dados de demonstração realísticos. Isso permite testar todas as funcionalidades do sistema sem precisar inseri",
         "size": "12KB"
       },
       {
@@ -1022,7 +1022,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Área Administrativa do System Owner - Guia de Uso",
         "category": "Guias",
         "path": "system-admin/guias/SYSTEM_ADMIN_AREA_GUIDE.md",
-        "description": "A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no PrimeCare Software, visualizem métricas globais do sistema e controlem",
+        "description": "A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no Omni Care Software, visualizem métricas globais do sistema e controlem",
         "size": "11KB"
       },
       {
@@ -1049,7 +1049,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Guia da Fila de Espera (Waiting Queue)",
         "category": "Guias",
         "path": "system-admin/guias/WAITING_QUEUE_GUIDE.md",
-        "description": "A funcionalidade de Fila de Espera do PrimeCare Software permite gerenciar o fluxo de atendimento de pacientes de forma eficiente, com priorização por triagem, chamada de pacientes e controle de tempo",
+        "description": "A funcionalidade de Fila de Espera do Omni Care Software permite gerenciar o fluxo de atendimento de pacientes de forma eficiente, com priorização por triagem, chamada de pacientes e controle de tempo",
         "size": "9KB"
       }
     ]
@@ -1064,13 +1064,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Sistema de Perfis de Acesso e Permissões",
         "category": "Documentação Geral",
         "path": "system-admin/docs/ACCESS_PROFILES_DOCUMENTATION.md",
-        "description": "O PrimeCare Software implementa um sistema completo de perfis de acesso e permissões granulares, permitindo que proprietários de clínicas gerenciem de forma flexível quais funcionalidades cada usuário",
+        "description": "O Omni Care Software implementa um sistema completo de perfis de acesso e permissões granulares, permitindo que proprietários de clínicas gerenciem de forma flexível quais funcionalidades cada usuário",
         "size": "15KB"
       },
       {
         "id": "docs-analise_competitiva_2026",
         "title": "ANALISE_COMPETITIVA_2026.md",
-        "fullTitle": "🎯 Análise Competitiva e Estratégia de Otimização - PrimeCare Software",
+        "fullTitle": "🎯 Análise Competitiva e Estratégia de Otimização - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/ANALISE_COMPETITIVA_2026.md",
         "description": "> **Data:** Janeiro 2026",
@@ -1079,7 +1079,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-analise_melhorias_sistema",
         "title": "ANALISE_MELHORIAS_SISTEMA.md",
-        "fullTitle": "📊 Análise Comparativa e Melhorias - PrimeCare Software",
+        "fullTitle": "📊 Análise Comparativa e Melhorias - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/ANALISE_MELHORIAS_SISTEMA.md",
         "description": "> **Data:** Outubro 2025",
@@ -1088,10 +1088,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-apps_pending_tasks",
         "title": "APPS_PENDING_TASKS.md",
-        "fullTitle": "📱 Pendências de Desenvolvimento - Aplicativos PrimeCare Software",
+        "fullTitle": "📱 Pendências de Desenvolvimento - Aplicativos Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/APPS_PENDING_TASKS.md",
-        "description": "> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema PrimeCare Software.",
+        "description": "> **Objetivo:** Documento centralizado com todas as pendências específicas de cada aplicativo do ecossistema Omni Care Software.",
         "size": "25KB"
       },
       {
@@ -1124,10 +1124,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-business_rules",
         "title": "BUSINESS_RULES.md",
-        "fullTitle": "Regras de Negócio - PrimeCare Software",
+        "fullTitle": "Regras de Negócio - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/BUSINESS_RULES.md",
-        "description": "O PrimeCare Software é um sistema multitenant de gestão para consultórios e clínicas médicas (SaaS) que implementa regras de negócio específicas para garantir a privacidade dos dados médicos e a flexi",
+        "description": "O Omni Care Software é um sistema multitenant de gestão para consultórios e clínicas médicas (SaaS) que implementa regras de negócio específicas para garantir a privacidade dos dados médicos e a flexi",
         "size": "33KB"
       },
       {
@@ -1136,25 +1136,25 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "💰 Calculadora de Custos de Infraestrutura",
         "category": "Documentação Geral",
         "path": "system-admin/docs/CALCULADORA_CUSTOS.md",
-        "description": "Esta calculadora ajuda você a estimar os custos de infraestrutura do PrimeCare Software conforme seu negócio cresce.",
+        "description": "Esta calculadora ajuda você a estimar os custos de infraestrutura do Omni Care Software conforme seu negócio cresce.",
         "size": "9KB"
       },
       {
         "id": "docs-carga_inicial_testes",
         "title": "CARGA_INICIAL_TESTES.md",
-        "fullTitle": "Carga Inicial para Testes - PrimeCare Software",
+        "fullTitle": "Carga Inicial para Testes - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/CARGA_INICIAL_TESTES.md",
-        "description": "Este documento descreve a carga inicial de dados implementada para testar **todos os pontos do sistema** PrimeCare Software. Os dados de teste são abrangentes e cobrem todas as principais entidades e ",
+        "description": "Este documento descreve a carga inicial de dados implementada para testar **todos os pontos do sistema** Omni Care Software. Os dados de teste são abrangentes e cobrem todas as principais entidades e ",
         "size": "10KB"
       },
       {
         "id": "docs-checklist_testes_completo",
         "title": "CHECKLIST_TESTES_COMPLETO.md",
-        "fullTitle": "✅ Checklist Completo de Testes - PrimeCare Software",
+        "fullTitle": "✅ Checklist Completo de Testes - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/CHECKLIST_TESTES_COMPLETO.md",
-        "description": "> **Objetivo:** Documento para verificar todos os métodos, APIs, front-end e fluxos do sistema PrimeCare Software",
+        "description": "> **Objetivo:** Documento para verificar todos os métodos, APIs, front-end e fluxos do sistema Omni Care Software",
         "size": "16KB"
       },
       {
@@ -1187,7 +1187,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-documentation_index",
         "title": "DOCUMENTATION_INDEX.md",
-        "fullTitle": "📚 Índice de Documentação - PrimeCare Software",
+        "fullTitle": "📚 Índice de Documentação - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/DOCUMENTATION_INDEX.md",
         "description": "> **Última Atualização:** Janeiro 2026",
@@ -1196,7 +1196,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-entity_diagram",
         "title": "ENTITY_DIAGRAM.md",
-        "fullTitle": "Diagrama de Entidades - PrimeCare Software",
+        "fullTitle": "Diagrama de Entidades - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/ENTITY_DIAGRAM.md",
         "description": "```",
@@ -1217,7 +1217,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Análise Completa do Sistema Financeiro - Janeiro 2026",
         "category": "Documentação Geral",
         "path": "system-admin/docs/FINANCIAL_SYSTEM_ANALYSIS_2026.md",
-        "description": "Este documento apresenta a análise completa do sistema financeiro do PrimeCare Software, identificação de gaps em relação ao mercado, e implementação de funcionalidades críticas para competitividade.",
+        "description": "Este documento apresenta a análise completa do sistema financeiro do Omni Care Software, identificação de gaps em relação ao mercado, e implementação de funcionalidades críticas para competitividade.",
         "size": "14KB"
       },
       {
@@ -1241,16 +1241,16 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-fluxo_completo_sistema",
         "title": "FLUXO_COMPLETO_SISTEMA.md",
-        "fullTitle": "📱 Fluxo Completo do Sistema PrimeCare Software",
+        "fullTitle": "📱 Fluxo Completo do Sistema Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/FLUXO_COMPLETO_SISTEMA.md",
-        "description": "> **Objetivo:** Este documento apresenta o fluxo completo do sistema PrimeCare Software, desde a primeira visita ao site até a conclusão de uma consulta médica, incluindo screenshots e diagramas visua",
+        "description": "> **Objetivo:** Este documento apresenta o fluxo completo do sistema Omni Care Software, desde a primeira visita ao site até a conclusão de uma consulta médica, incluindo screenshots e diagramas visua",
         "size": "4KB"
       },
       {
         "id": "docs-funcionalidades_implementadas",
         "title": "FUNCIONALIDADES_IMPLEMENTADAS.md",
-        "fullTitle": "Funcionalidades Implementadas - PrimeCare Software",
+        "fullTitle": "Funcionalidades Implementadas - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/FUNCIONALIDADES_IMPLEMENTADAS.md",
         "description": "> **Última Atualização:** Janeiro 2026",
@@ -1268,10 +1268,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-glossario_termos_empresariais",
         "title": "GLOSSARIO_TERMOS_EMPRESARIAIS.md",
-        "fullTitle": "Glossário de Termos Empresariais - PrimeCare Software",
+        "fullTitle": "Glossário de Termos Empresariais - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/GLOSSARIO_TERMOS_EMPRESARIAIS.md",
-        "description": "Este documento foi criado para ajudar você a entender os **termos empresariais e de negócio** utilizados no sistema PrimeCare Software. Se você não tem familiaridade com conceitos da área empresarial,",
+        "description": "Este documento foi criado para ajudar você a entender os **termos empresariais e de negócio** utilizados no sistema Omni Care Software. Se você não tem familiaridade com conceitos da área empresarial,",
         "size": "19KB"
       },
       {
@@ -1313,7 +1313,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-indice_analise_competitiva",
         "title": "INDICE_ANALISE_COMPETITIVA.md",
-        "fullTitle": "📑 Índice - Análise Competitiva PrimeCare Software",
+        "fullTitle": "📑 Índice - Análise Competitiva Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/INDICE_ANALISE_COMPETITIVA.md",
         "description": "> **Análise Completa:** Janeiro 2026",
@@ -1331,7 +1331,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-microservices_discontinued",
         "title": "MICROSERVICES_DISCONTINUED.md",
-        "fullTitle": "PrimeCare Software Microservices - DESCONTINUADO",
+        "fullTitle": "Omni Care Software Microservices - DESCONTINUADO",
         "category": "Documentação Geral",
         "path": "system-admin/docs/MICROSERVICES_DISCONTINUED.md",
         "description": "> ⚠️ **IMPORTANTE**: Os microserviços foram **descontinuados** em Janeiro de 2026.",
@@ -1352,7 +1352,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Migração de Apps Nativos para PWA",
         "category": "Documentação Geral",
         "path": "system-admin/docs/MOBILE_TO_PWA_MIGRATION.md",
-        "description": "O PrimeCare Software migrou de aplicativos nativos (iOS e Android) para PWA (Progressive Web App). Esta decisão traz diversos benefícios para usuários e para o negócio.",
+        "description": "O Omni Care Software migrou de aplicativos nativos (iOS e Android) para PWA (Progressive Web App). Esta decisão traz diversos benefícios para usuários e para o negócio.",
         "size": "8KB"
       },
       {
@@ -1379,7 +1379,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "MW.Site - Marketing and SaaS Subscription Website",
         "category": "Documentação Geral",
         "path": "system-admin/docs/MW_SITE_DOCUMENTATION.md",
-        "description": "MW.Site é o site de marketing e contratação do PrimeCare Software SaaS. Desenvolvido em Angular 20, oferece uma experiência completa para visitantes conhecerem o produto, visualizarem planos e realiza",
+        "description": "MW.Site é o site de marketing e contratação do Omni Care Software SaaS. Desenvolvido em Angular 20, oferece uma experiência completa para visitantes conhecerem o produto, visualizarem planos e realiza",
         "size": "15KB"
       },
       {
@@ -1421,10 +1421,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-owner_flow_documentation",
         "title": "OWNER_FLOW_DOCUMENTATION.md",
-        "fullTitle": "Fluxo de Proprietários (Owners) - PrimeCare Software",
+        "fullTitle": "Fluxo de Proprietários (Owners) - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/OWNER_FLOW_DOCUMENTATION.md",
-        "description": "O sistema PrimeCare Software agora possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor co",
+        "description": "O sistema Omni Care Software agora possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor co",
         "size": "11KB"
       },
       {
@@ -1439,16 +1439,16 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-pending_tasks",
         "title": "PENDING_TASKS.md",
-        "fullTitle": "📋 Pendências de Desenvolvimento e Planejamento Futuro - PrimeCare Software",
+        "fullTitle": "📋 Pendências de Desenvolvimento e Planejamento Futuro - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/PENDING_TASKS.md",
-        "description": "> **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema PrimeCare Software.",
+        "description": "> **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema Omni Care Software.",
         "size": "95KB"
       },
       {
         "id": "docs-plano_acao_competitividade",
         "title": "PLANO_ACAO_COMPETITIVIDADE.md",
-        "fullTitle": "🚀 Plano de Ação - Tornar PrimeCare Competitivo",
+        "fullTitle": "🚀 Plano de Ação - Tornar Omni Care Competitivo",
         "category": "Documentação Geral",
         "path": "system-admin/docs/PLANO_ACAO_COMPETITIVIDADE.md",
         "description": "> **Data:** 16 de Janeiro de 2026",
@@ -1457,7 +1457,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-plano_desenvolvimento",
         "title": "PLANO_DESENVOLVIMENTO.md",
-        "fullTitle": "📋 Plano de Desenvolvimento Priorizado - PrimeCare Software",
+        "fullTitle": "📋 Plano de Desenvolvimento Priorizado - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/PLANO_DESENVOLVIMENTO.md",
         "description": "> **Documento Consolidado:** Este documento unifica PLANO_DESENVOLVIMENTO_PRIORIZADO.md (Parte 1) e PLANO_DESENVOLVIMENTO_PRIORIZADO_PARTE2.md (Parte 2)",
@@ -1466,7 +1466,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-prompts_copilot_desenvolvimento",
         "title": "PROMPTS_COPILOT_DESENVOLVIMENTO.md",
-        "fullTitle": "🤖 Prompts para Copilot - Desenvolvimento PrimeCare Software",
+        "fullTitle": "🤖 Prompts para Copilot - Desenvolvimento Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/PROMPTS_COPILOT_DESENVOLVIMENTO.md",
         "description": "> **Objetivo:** Prompts estruturados para solicitar ao GitHub Copilot o desenvolvimento de cada etapa do plano de desenvolvimento, agilizando o processo e evitando erros.",
@@ -1484,7 +1484,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-readme_monitoring",
         "title": "README_MONITORING.md",
-        "fullTitle": "📊 Sistema de Monitoramento e Logging - PrimeCare Software",
+        "fullTitle": "📊 Sistema de Monitoramento e Logging - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/README_MONITORING.md",
         "description": "Sistema completo de monitoramento e logging implementado para capturar **erros**, **execuções lentas**, **timeouts** e **métricas detalhadas** sem necessidade de debugging manual.",
@@ -1493,7 +1493,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-resumo_analise_melhorias",
         "title": "RESUMO_ANALISE_MELHORIAS.md",
-        "fullTitle": "📋 Resumo da Análise de Melhorias - PrimeCare Software",
+        "fullTitle": "📋 Resumo da Análise de Melhorias - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/RESUMO_ANALISE_MELHORIAS.md",
         "description": "> **Data:** 27 de Outubro de 2025",
@@ -1511,7 +1511,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-resumo_estrategia_lean",
         "title": "RESUMO_ESTRATEGIA_LEAN.md",
-        "fullTitle": "📋 Resumo Executivo - Estratégia Lean PrimeCare Software",
+        "fullTitle": "📋 Resumo Executivo - Estratégia Lean Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/RESUMO_ESTRATEGIA_LEAN.md",
         "description": "> **Data:** 16 de Janeiro de 2026",
@@ -1520,7 +1520,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-resumo_final",
         "title": "RESUMO_FINAL.md",
-        "fullTitle": "🎯 Análise Competitiva PrimeCare Software - Resumo Final",
+        "fullTitle": "🎯 Análise Competitiva Omni Care Software - Resumo Final",
         "category": "Documentação Geral",
         "path": "system-admin/docs/RESUMO_FINAL.md",
         "description": "> **Data:** Janeiro 2026",
@@ -1541,13 +1541,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📖 Resumo da Documentação de Deploy no Hostinger",
         "category": "Documentação Geral",
         "path": "system-admin/docs/RESUMO_GUIAS_HOSTINGER.md",
-        "description": "Foram criados **2 guias completos** para fazer deploy do PrimeCare Software no Hostinger VPS, especialmente pensados para iniciantes:",
+        "description": "Foram criados **2 guias completos** para fazer deploy do Omni Care Software no Hostinger VPS, especialmente pensados para iniciantes:",
         "size": "7KB"
       },
       {
         "id": "docs-resumo_sistema_completo",
         "title": "RESUMO_SISTEMA_COMPLETO.md",
-        "fullTitle": "📊 Resumo Completo do Sistema PrimeCare Software",
+        "fullTitle": "📊 Resumo Completo do Sistema Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/RESUMO_SISTEMA_COMPLETO.md",
         "description": "> **Data:** Novembro 2024",
@@ -1556,7 +1556,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-resumo_tecnico_completo",
         "title": "RESUMO_TECNICO_COMPLETO.md",
-        "fullTitle": "📊 Resumo Técnico Completo - PrimeCare Software",
+        "fullTitle": "📊 Resumo Técnico Completo - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/RESUMO_TECNICO_COMPLETO.md",
         "description": "> **Última Atualização:** Janeiro 2026",
@@ -1568,13 +1568,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Sales Funnel Tracking System",
         "category": "Documentação Geral",
         "path": "system-admin/docs/SALES_FUNNEL_TRACKING.md",
-        "description": "This system implements comprehensive sales funnel tracking for the PrimeCare Software registration process. It monitors customer journey through all registration steps, identifies drop-off points, and",
+        "description": "This system implements comprehensive sales funnel tracking for the Omni Care Software registration process. It monitors customer journey through all registration steps, identifies drop-off points, and",
         "size": "9KB"
       },
       {
         "id": "docs-seeder_quick_reference",
         "title": "SEEDER_QUICK_REFERENCE.md",
-        "fullTitle": "Guia Rápido - Seeders PrimeCare Software",
+        "fullTitle": "Guia Rápido - Seeders Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/SEEDER_QUICK_REFERENCE.md",
         "description": "Popular o banco de dados com dados demo realísticos para teste completo do sistema.",
@@ -1592,7 +1592,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-sugestoes_melhorias_seguranca",
         "title": "SUGESTOES_MELHORIAS_SEGURANCA.md",
-        "fullTitle": "🔐 Sugestões de Melhorias de Segurança - PrimeCare Software",
+        "fullTitle": "🔐 Sugestões de Melhorias de Segurança - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/SUGESTOES_MELHORIAS_SEGURANCA.md",
         "description": "> **IMPORTANTE**: Este documento contém apenas **sugestões** de melhorias de segurança. Nenhuma implementação foi realizada.",
@@ -1601,10 +1601,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-system_mapping",
         "title": "SYSTEM_MAPPING.md",
-        "fullTitle": "Mapeamento Completo do Sistema PrimeCare Software",
+        "fullTitle": "Mapeamento Completo do Sistema Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/SYSTEM_MAPPING.md",
-        "description": "O PrimeCare Software é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).",
+        "description": "O Omni Care Software é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).",
         "size": "17KB"
       },
       {
@@ -1613,16 +1613,16 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Documentação de Acesso e Cadastro Inicial - System Owner",
         "category": "Documentação Geral",
         "path": "system-admin/docs/SYSTEM_OWNER_ACCESS.md",
-        "description": "Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal PrimeCare Software.",
+        "description": "Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal Omni Care Software.",
         "size": "9KB"
       },
       {
         "id": "docs-telas_com_fluxo",
         "title": "TELAS_COM_FLUXO.md",
-        "fullTitle": "📸 Documentação Visual Completa - PrimeCare Software",
+        "fullTitle": "📸 Documentação Visual Completa - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/TELAS_COM_FLUXO.md",
-        "description": "> **Nota**: Este documento fornece uma documentação visual completa de todas as telas do sistema PrimeCare Software, incluindo mockups detalhados e fluxos de navegação.",
+        "description": "> **Nota**: Este documento fornece uma documentação visual completa de todas as telas do sistema Omni Care Software, incluindo mockups detalhados e fluxos de navegação.",
         "size": "53KB"
       },
       {
@@ -1649,7 +1649,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Sistema de Chamados / Ticketing System",
         "category": "Documentação Geral",
         "path": "system-admin/docs/TICKETING_SYSTEM.md",
-        "description": "O Sistema de Chamados do PrimeCare Software permite que usuários abram tickets para reportar bugs, solicitar funcionalidades, obter suporte técnico e gerenciar questões financeiras. System owners pode",
+        "description": "O Sistema de Chamados do Omni Care Software permite que usuários abram tickets para reportar bugs, solicitar funcionalidades, obter suporte técnico e gerenciar questões financeiras. System owners pode",
         "size": "10KB"
       },
       {
@@ -1682,7 +1682,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-visual_documentation_index",
         "title": "VISUAL_DOCUMENTATION_INDEX.md",
-        "fullTitle": "📸 Visual Documentation Index - PrimeCare Software",
+        "fullTitle": "📸 Visual Documentation Index - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/VISUAL_DOCUMENTATION_INDEX.md",
         "description": "This index helps you find the right visual documentation for your needs.",
@@ -1694,7 +1694,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Apple-Inspired UX/UI Implementation Summary",
         "category": "Documentação Geral",
         "path": "system-admin/docs/archive/APPLE_UX_UI_IMPLEMENTATION_SUMMARY.md",
-        "description": "This document summarizes the implementation of Apple-inspired UX/UI refinements across all PrimeCare Software frontend applications.",
+        "description": "This document summarizes the implementation of Apple-inspired UX/UI refinements across all Omni Care Software frontend applications.",
         "size": "8KB"
       },
       {
@@ -1721,7 +1721,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🚀 Implementation Summary - New Features",
         "category": "Documentação Geral",
         "path": "system-admin/docs/archive/IMPLEMENTATION_NEW_FEATURES.md",
-        "description": "This document summarizes the implementation of new features requested in the problem statement for PrimeCare Software.",
+        "description": "This document summarizes the implementation of new features requested in the problem statement for Omni Care Software.",
         "size": "9KB"
       },
       {
@@ -1730,7 +1730,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Owner Dashboard and Permission System - Implementation Summary",
         "category": "Documentação Geral",
         "path": "system-admin/docs/archive/IMPLEMENTATION_OWNER_PERMISSIONS.md",
-        "description": "This implementation adds comprehensive owner management capabilities and a granular permission system to the PrimeCare Software platform, addressing the following requirements:",
+        "description": "This implementation adds comprehensive owner management capabilities and a granular permission system to the Omni Care Software platform, addressing the following requirements:",
         "size": "12KB"
       },
       {
@@ -1748,7 +1748,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Resumo da Implementação - Regras de Negócio",
         "category": "Documentação Geral",
         "path": "system-admin/docs/archive/IMPLEMENTATION_SUMMARY_BUSINESS_RULES.md",
-        "description": "Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema PrimeCare Software, conforme especificado no issue.",
+        "description": "Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema Omni Care Software, conforme especificado no issue.",
         "size": "8KB"
       },
       {
@@ -1784,7 +1784,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Resumo da Implementação dos Aplicativos Móveis",
         "category": "Documentação Geral",
         "path": "system-admin/docs/archive/MOBILE_IMPLEMENTATION_SUMMARY.md",
-        "description": "Conforme solicitado, foram criados aplicativos móveis nativos para **iOS** (usando Xcode e Swift) e **Android** (usando Kotlin) do sistema PrimeCare Software, com interfaces modernas e atraentes para ",
+        "description": "Conforme solicitado, foram criados aplicativos móveis nativos para **iOS** (usando Xcode e Swift) e **Android** (usando Kotlin) do sistema Omni Care Software, com interfaces modernas e atraentes para ",
         "size": "11KB"
       },
       {
@@ -1862,10 +1862,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "docs-archive-resumo_tarefa_concluida",
         "title": "RESUMO_TAREFA_CONCLUIDA.md",
-        "fullTitle": "✅ Tarefa Concluída - Análise e Preparação do Sistema PrimeCare Software",
+        "fullTitle": "✅ Tarefa Concluída - Análise e Preparação do Sistema Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/archive/RESUMO_TAREFA_CONCLUIDA.md",
-        "description": "**Objetivo:** Analisar todos os métodos, APIs, front-end e fluxos do sistema PrimeCare Software, verificar pendências na documentação e ajustar a API de seed para testes hoje.",
+        "description": "**Objetivo:** Analisar todos os métodos, APIs, front-end e fluxos do sistema Omni Care Software, verificar pendências na documentação e ajustar a API de seed para testes hoje.",
         "size": "13KB"
       },
       {
@@ -2126,7 +2126,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📋 Cadastro de Paciente - Guia de Configuração e Testes",
         "category": "Documentação Geral",
         "path": "system-admin/docs/testes-configuracao/01-CADASTRO-PACIENTE.md",
-        "description": "Este guia fornece instruções completas para configurar e testar o módulo de Cadastro de Paciente do PrimeCare Software, incluindo todos os fluxos e cenários possíveis.",
+        "description": "Este guia fornece instruções completas para configurar e testar o módulo de Cadastro de Paciente do Omni Care Software, incluindo todos os fluxos e cenários possíveis.",
         "size": "14KB"
       },
       {
@@ -2135,7 +2135,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📋 Atendimento e Consulta - Guia de Configuração e Testes",
         "category": "Documentação Geral",
         "path": "system-admin/docs/testes-configuracao/02-ATENDIMENTO-CONSULTA.md",
-        "description": "Este guia fornece instruções completas para configurar e testar o módulo de Atendimento e Consultas do PrimeCare Software, cobrindo todo o fluxo desde o agendamento até a conclusão do atendimento.",
+        "description": "Este guia fornece instruções completas para configurar e testar o módulo de Atendimento e Consultas do Omni Care Software, cobrindo todo o fluxo desde o agendamento até a conclusão do atendimento.",
         "size": "16KB"
       },
       {
@@ -2144,7 +2144,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "💰 Módulo Financeiro - Guia de Configuração e Testes",
         "category": "Documentação Geral",
         "path": "system-admin/docs/testes-configuracao/03-MODULO-FINANCEIRO.md",
-        "description": "Este guia fornece instruções completas para configurar e testar o módulo Financeiro do PrimeCare Software, incluindo contas a receber, contas a pagar, fluxo de caixa, e relatórios financeiros.",
+        "description": "Este guia fornece instruções completas para configurar e testar o módulo Financeiro do Omni Care Software, incluindo contas a receber, contas a pagar, fluxo de caixa, e relatórios financeiros.",
         "size": "18KB"
       },
       {
@@ -2162,7 +2162,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "📋 TUSS (Terminologia Unificada da Saúde Suplementar) - Guia de Configuração e Testes",
         "category": "Documentação Geral",
         "path": "system-admin/docs/testes-configuracao/05-TUSS-TABELA.md",
-        "description": "Este guia fornece instruções completas para configurar e testar a Tabela TUSS (Terminologia Unificada da Saúde Suplementar) no PrimeCare Software, incluindo importação da tabela, cadastro de procedime",
+        "description": "Este guia fornece instruções completas para configurar e testar a Tabela TUSS (Terminologia Unificada da Saúde Suplementar) no Omni Care Software, incluindo importação da tabela, cadastro de procedime",
         "size": "15KB"
       },
       {
@@ -2171,25 +2171,25 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🎥 Telemedicina - Guia de Configuração e Testes",
         "category": "Documentação Geral",
         "path": "system-admin/docs/testes-configuracao/06-TELEMEDICINA.md",
-        "description": "Este guia fornece instruções completas para configurar e testar o módulo de Telemedicina do PrimeCare Software, incluindo videoconsultas, gravação de sessões, integração com Daily.co e conformidade co",
+        "description": "Este guia fornece instruções completas para configurar e testar o módulo de Telemedicina do Omni Care Software, incluindo videoconsultas, gravação de sessões, integração com Daily.co e conformidade co",
         "size": "18KB"
       },
       {
         "id": "docs-testes-configuracao-07-cenarios-completos",
         "title": "07-CENARIOS-COMPLETOS.md",
-        "fullTitle": "🧪 Cenários de Testes Completos - PrimeCare Software",
+        "fullTitle": "🧪 Cenários de Testes Completos - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/testes-configuracao/07-CENARIOS-COMPLETOS.md",
-        "description": "Este documento consolida TODOS os cenários de testes possíveis do PrimeCare Software, organizados por módulo, fluxo de trabalho e complexidade. Use este guia como checklist completo para garantir que ",
+        "description": "Este documento consolida TODOS os cenários de testes possíveis do Omni Care Software, organizados por módulo, fluxo de trabalho e complexidade. Use este guia como checklist completo para garantir que ",
         "size": "14KB"
       },
       {
         "id": "docs-testes-configuracao-readme",
         "title": "README.md",
-        "fullTitle": "📚 Guia Completo de Configuração e Testes - PrimeCare Software",
+        "fullTitle": "📚 Guia Completo de Configuração e Testes - Omni Care Software",
         "category": "Documentação Geral",
         "path": "system-admin/docs/testes-configuracao/README.md",
-        "description": "Este é o guia definitivo para configurar e testar TODAS as funcionalidades do PrimeCare Software. Aqui você encontrará instruções passo a passo, cenários de teste, exemplos de API e troubleshooting pa",
+        "description": "Este é o guia definitivo para configurar e testar TODAS as funcionalidades do Omni Care Software. Aqui você encontrará instruções passo a passo, cenários de teste, exemplos de API e troubleshooting pa",
         "size": "12KB"
       }
     ]
@@ -2213,16 +2213,16 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "🔐 Medical Data Encryption - Implementation Guide",
         "category": "Segurança",
         "path": "system-admin/seguranca/ENCRYPTION_README.md",
-        "description": "Medical data encryption feature for PrimeCare Software, implementing **AES-256-GCM** encryption for sensitive patient information, ensuring **LGPD compliance** and protecting confidential medical data",
+        "description": "Medical data encryption feature for Omni Care Software, implementing **AES-256-GCM** encryption for sensitive patient information, ensuring **LGPD compliance** and protecting confidential medical data",
         "size": "4KB"
       },
       {
         "id": "seguranca-lgpd_compliance_documentation",
         "title": "LGPD_COMPLIANCE_DOCUMENTATION.md",
-        "fullTitle": "Conformidade com LGPD - PrimeCare Software",
+        "fullTitle": "Conformidade com LGPD - Omni Care Software",
         "category": "Segurança",
         "path": "system-admin/seguranca/LGPD_COMPLIANCE_DOCUMENTATION.md",
-        "description": "Este documento descreve as implementações realizadas no frontend do PrimeCare Software para garantir conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).",
+        "description": "Este documento descreve as implementações realizadas no frontend do Omni Care Software para garantir conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).",
         "size": "8KB"
       },
       {
@@ -2231,7 +2231,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Criptografia de Dados Médicos - Documentação de Implementação",
         "category": "Segurança",
         "path": "system-admin/seguranca/MEDICAL_DATA_ENCRYPTION.md",
-        "description": "Esta implementação adiciona criptografia de dados médicos sensíveis ao sistema PrimeCare Software, garantindo conformidade com a LGPD (Lei Geral de Proteção de Dados) e protegendo informações confiden",
+        "description": "Esta implementação adiciona criptografia de dados médicos sensíveis ao sistema Omni Care Software, garantindo conformidade com a LGPD (Lei Geral de Proteção de Dados) e protegendo informações confiden",
         "size": "12KB"
       },
       {
@@ -2240,25 +2240,25 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Análise de Segurança e Qualidade de Código - Dezembro 2025",
         "category": "Segurança",
         "path": "system-admin/seguranca/SECURITY_CODE_QUALITY_ANALYSIS.md",
-        "description": "Este documento resume a análise completa de segurança e qualidade de código realizada no projeto PrimeCare Software.",
+        "description": "Este documento resume a análise completa de segurança e qualidade de código realizada no projeto Omni Care Software.",
         "size": "11KB"
       },
       {
         "id": "seguranca-security_guide",
         "title": "SECURITY_GUIDE.md",
-        "fullTitle": "Guia de Segurança - PrimeCare Software",
+        "fullTitle": "Guia de Segurança - Omni Care Software",
         "category": "Segurança",
         "path": "system-admin/seguranca/SECURITY_GUIDE.md",
-        "description": "Este documento descreve todas as medidas de segurança implementadas no sistema PrimeCare Software para proteger contra ataques comuns como SQL Injection, XSS, CSRF, e outras ameaças.",
+        "description": "Este documento descreve todas as medidas de segurança implementadas no sistema Omni Care Software para proteger contra ataques comuns como SQL Injection, XSS, CSRF, e outras ameaças.",
         "size": "9KB"
       },
       {
         "id": "seguranca-security_validations",
         "title": "SECURITY_VALIDATIONS.md",
-        "fullTitle": "Relatório de Segurança e Validações - PrimeCare Software",
+        "fullTitle": "Relatório de Segurança e Validações - Omni Care Software",
         "category": "Segurança",
         "path": "system-admin/seguranca/SECURITY_VALIDATIONS.md",
-        "description": "Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema PrimeCare Software para garantir a integridade e segurança dos dados.",
+        "description": "Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema Omni Care Software para garantir a integridade e segurança dos dados.",
         "size": "10KB"
       },
       {
@@ -2267,7 +2267,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Guia de Gerenciamento de Sessões",
         "category": "Segurança",
         "path": "system-admin/seguranca/SESSION_MANAGEMENT_GUIDE.md",
-        "description": "Este guia documenta o sistema de gerenciamento de sessões implementado no PrimeCare Software, que garante que **apenas uma sessão ativa por usuário** seja permitida por vez.",
+        "description": "Este guia documenta o sistema de gerenciamento de sessões implementado no Omni Care Software, que garante que **apenas uma sessão ativa por usuário** seja permitida por vez.",
         "size": "5KB"
       }
     ]
@@ -2309,7 +2309,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "MediatR License Configuration Guide",
         "category": "Backend",
         "path": "system-admin/backend/MEDIATR_LICENSE_CONFIGURATION.md",
-        "description": "This document explains how to configure the LuckyPennySoftware MediatR license key in the PrimeCare Software application.",
+        "description": "This document explains how to configure the LuckyPennySoftware MediatR license key in the Omni Care Software application.",
         "size": "6KB"
       },
       {
@@ -2333,10 +2333,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "backend-service_layer_architecture",
         "title": "SERVICE_LAYER_ARCHITECTURE.md",
-        "fullTitle": "Arquitetura de Serviços - PrimeCare Software",
+        "fullTitle": "Arquitetura de Serviços - Omni Care Software",
         "category": "Backend",
         "path": "system-admin/backend/SERVICE_LAYER_ARCHITECTURE.md",
-        "description": "Este documento descreve a nova arquitetura em camadas do PrimeCare Software, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.",
+        "description": "Este documento descreve a nova arquitetura em camadas do Omni Care Software, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.",
         "size": "9KB"
       }
     ]
@@ -2405,7 +2405,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Implementation Summary: AI-Styled Public Clinic Listing",
         "category": "Implementações",
         "path": "system-admin/implementacoes/CLINIC_LISTING_SUMMARY.md",
-        "description": "Successfully implemented a comprehensive public clinic listing feature with modern AI-styled design for the PrimeCare Software platform.",
+        "description": "Successfully implemented a comprehensive public clinic listing feature with modern AI-styled design for the Omni Care Software platform.",
         "size": "8KB"
       },
       {
@@ -2486,13 +2486,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Consolidação Frontend Completa - Janeiro 2026",
         "category": "Implementações",
         "path": "system-admin/implementacoes/FRONTEND_CONSOLIDATION_COMPLETE.md",
-        "description": "Em Janeiro de 2026, concluímos a consolidação dos projetos frontend do PrimeCare Software, eliminando redundâncias e simplificando a arquitetura do sistema.",
+        "description": "Em Janeiro de 2026, concluímos a consolidação dos projetos frontend do Omni Care Software, eliminando redundâncias e simplificando a arquitetura do sistema.",
         "size": "8KB"
       },
       {
         "id": "implementacoes-frontend_consolidation_guide",
         "title": "FRONTEND_CONSOLIDATION_GUIDE.md",
-        "fullTitle": "🔄 Guia de Consolidação Frontend - PrimeCare Software",
+        "fullTitle": "🔄 Guia de Consolidação Frontend - Omni Care Software",
         "category": "Implementações",
         "path": "system-admin/implementacoes/FRONTEND_CONSOLIDATION_GUIDE.md",
         "description": "> **Data**: Janeiro 2026",
@@ -2855,13 +2855,13 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "SOAP Medical Records - Technical Implementation Summary",
         "category": "Implementações",
         "path": "system-admin/implementacoes/SOAP_TECHNICAL_SUMMARY.md",
-        "description": "Complete implementation of the SOAP (Subjective-Objective-Assessment-Plan) Medical Record system for PrimeCare Software, following the specification in `/docs/prompts-copilot/alta/06-prontuario-soap.m",
+        "description": "Complete implementation of the SOAP (Subjective-Objective-Assessment-Plan) Medical Record system for Omni Care Software, following the specification in `/docs/prompts-copilot/alta/06-prontuario-soap.m",
         "size": "15KB"
       },
       {
         "id": "implementacoes-solution_complete",
         "title": "SOLUTION_COMPLETE.md",
-        "fullTitle": "🎯 Solução Completa de Monitoramento - PrimeCare Software API",
+        "fullTitle": "🎯 Solução Completa de Monitoramento - Omni Care Software API",
         "category": "Implementações",
         "path": "system-admin/implementacoes/SOLUTION_COMPLETE.md",
         "description": "> \"Quero conseguir monitorar meu sistema obtendo logs mais precisos sem ter que debugar, apresente sugestões gratuitas pois o sistema ainda não está no ar para que eu consiga monitorar meu sistema, qu",
@@ -2873,7 +2873,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
         "fullTitle": "Implementação das Regras de Negócio - Documentação Técnica",
         "category": "Implementações",
         "path": "system-admin/implementacoes/TECHNICAL_IMPLEMENTATION.md",
-        "description": "Este documento descreve a implementação técnica das regras de negócio do PrimeCare Software, focando em como o sistema suporta múltiplas clínicas, isolamento de dados e templates reutilizáveis.",
+        "description": "Este documento descreve a implementação técnica das regras de negócio do Omni Care Software, focando em como o sistema suporta múltiplas clínicas, isolamento de dados e templates reutilizáveis.",
         "size": "21KB"
       },
       {
@@ -2888,7 +2888,7 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "implementacoes-test_summary",
         "title": "TEST_SUMMARY.md",
-        "fullTitle": "📊 Resumo dos Testes Unitários - PrimeCare Software",
+        "fullTitle": "📊 Resumo dos Testes Unitários - Omni Care Software",
         "category": "Implementações",
         "path": "system-admin/implementacoes/TEST_SUMMARY.md",
         "description": "```",
@@ -2978,10 +2978,10 @@ export const SYSTEM_ADMIN_DOCS: DocCategory[] = [
       {
         "id": "implementacoes-visual_flow_summary",
         "title": "VISUAL_FLOW_SUMMARY.md",
-        "fullTitle": "Resumo Visual dos Fluxos - PrimeCare Software",
+        "fullTitle": "Resumo Visual dos Fluxos - Omni Care Software",
         "category": "Implementações",
         "path": "system-admin/implementacoes/VISUAL_FLOW_SUMMARY.md",
-        "description": "Este documento apresenta um resumo visual rápido dos principais fluxos do sistema PrimeCare Software.",
+        "description": "Este documento apresenta um resumo visual rápido dos principais fluxos do sistema Omni Care Software.",
         "size": "12KB"
       }
     ]

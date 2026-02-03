@@ -1,6 +1,6 @@
 # 🚀 Implementation Summary - New Features
 
-This document summarizes the implementation of new features requested in the problem statement for PrimeCare Software.
+This document summarizes the implementation of new features requested in the problem statement for Omni Care Software.
 
 ## 📋 Problem Statement Requirements
 

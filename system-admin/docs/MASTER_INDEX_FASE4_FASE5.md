@@ -346,15 +346,15 @@ Este documento serve como **índice central** para toda a documentação das **F
 ## 📞 Suporte e Contatos
 
 ### Dúvidas sobre TISS
-- Email: suporte-tiss@primecare.com.br
+- Email: suporte-tiss@omnicare.com.br
 - Documentação: [TISS_DOCUMENTATION_INDEX.md](../regras-negocio/TISS_DOCUMENTATION_INDEX.md)
 
 ### Dúvidas sobre CFM 1.638
-- Email: compliance@primecare.com.br
+- Email: compliance@omnicare.com.br
 - Documentação: [CFM-1638-VERSIONING-README.md](../cfm-compliance/CFM-1638-VERSIONING-README.md)
 
 ### Suporte Técnico
-- Email: devops@primecare.com.br
+- Email: devops@omnicare.com.br
 - Slack: #medicsoft-support
 - Emergência: (11) 99999-9999
 

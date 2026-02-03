@@ -120,7 +120,7 @@ GET    /api/feedback/nps/statistics     - Get NPS statistics (Admin/Owner)
 **Purpose**: Standardized response templates for support team
 
 **16 Templates**:
-1. Welcome to PrimeCare
+1. Welcome to Omni Care
 2. Onboarding Check-in
 3. Bug Report Acknowledgment
 4. Bug Resolved

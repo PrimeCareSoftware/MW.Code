@@ -10,7 +10,7 @@
 
 ## 📋 Sumário Executivo
 
-Este guia detalha como configurar o PrimeCare Software para diferentes tipos de profissionais e clínicas de saúde. O sistema é altamente flexível e pode ser adaptado para:
+Este guia detalha como configurar o Omni Care Software para diferentes tipos de profissionais e clínicas de saúde. O sistema é altamente flexível e pode ser adaptado para:
 
 - 🧠 Psicólogos (solo ou clínica)
 - 🥗 Nutricionistas (solo ou clínica)
@@ -149,7 +149,7 @@ Este guia detalha como configurar o PrimeCare Software para diferentes tipos de 
 {
   "virtualRoom": {
     "slug": "julia.silva.psicologa",
-    "subdomain": "juliasilva",            // juliasilva.primecare.com.br
+    "subdomain": "juliasilva",            // juliasilva.omnicare.com.br
     "branding": {
       "logoUrl": "https://storage.../logo.png",
       "primaryColor": "#6B46C1",          // Roxo (calmo, terapêutico)
@@ -229,7 +229,7 @@ Este guia detalha como configurar o PrimeCare Software para diferentes tipos de 
 
 ```
 ✅ Perfil criado: Julia Silva - Psicóloga
-✅ Sala virtual: juliasilva.primecare.com.br
+✅ Sala virtual: juliasilva.omnicare.com.br
 ✅ Agenda configurada: 8 sessões/dia, 50 min cada
 ✅ Teleatendimento ativo
 ✅ Prontuário psicológico
@@ -815,10 +815,10 @@ Passo 5: Configuração Automática
 ## 📞 Suporte e Recursos
 
 ### Central de Ajuda
-- 📚 **Base de Conhecimento:** [help.primecare.com.br](https://help.primecare.com.br)
+- 📚 **Base de Conhecimento:** [help.omnicare.com.br](https://help.omnicare.com.br)
 - 🎥 **Vídeos Tutoriais:** [youtube.com/primecare](https://youtube.com/primecare)
 - 💬 **Chat:** Disponível 9h-18h (dias úteis)
-- 📧 **Email:** suporte@primecare.com.br
+- 📧 **Email:** suporte@omnicare.com.br
 - 📞 **WhatsApp:** +55 11 9 9999-9999
 
 ### Documentação Relacionada

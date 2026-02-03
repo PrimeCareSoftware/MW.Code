@@ -377,7 +377,7 @@ export class DocumentationService {
           title: 'Índice Geral de Testes',
           category: 'Testes e Configuração',
           path: 'docs/testes-configuracao/README.md',
-          description: 'Guia completo de configuração e testes do PrimeCare Software - Centro de testes com 200+ cenários',
+          description: 'Guia completo de configuração e testes do Omni Care Software - Centro de testes com 200+ cenários',
           size: '11KB / 315 linhas',
           idealFor: 'Testadores, QA, desenvolvedores, administradores'
         },

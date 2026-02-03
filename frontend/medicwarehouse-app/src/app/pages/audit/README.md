@@ -1,6 +1,6 @@
 # Audit Components
 
-Angular components for the LGPD Audit System in PrimeCare Software.
+Angular components for the LGPD Audit System in Omni Care Software.
 
 ## Components
 

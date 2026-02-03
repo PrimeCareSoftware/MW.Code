@@ -119,7 +119,7 @@ mkdir -p /var/www/medicsoft
 cd /var/www/medicsoft
 
 # Clonar repositório (ou fazer upload via FTP)
-git clone https://github.com/PrimeCareSoftware/MW.Code.git .
+git clone https://github.com/Omni CareSoftware/MW.Code.git .
 
 # Build da aplicação
 dotnet publish -c Release -o ./publish

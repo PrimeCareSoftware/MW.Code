@@ -293,25 +293,25 @@ Warnings: 42 (pre-existing, unrelated to SNGPC)
 
 ### 1. Check for Approaching Deadlines
 ```bash
-curl -X GET "https://api.primecare.com/api/SNGPCReports/alerts/deadlines?daysBeforeDeadline=7" \
+curl -X GET "https://api.omnicare.com/api/SNGPCReports/alerts/deadlines?daysBeforeDeadline=7" \
   -H "Authorization: Bearer {token}"
 ```
 
 ### 2. Get Critical Alerts Only
 ```bash
-curl -X GET "https://api.primecare.com/api/SNGPCReports/alerts?severity=Critical" \
+curl -X GET "https://api.omnicare.com/api/SNGPCReports/alerts?severity=Critical" \
   -H "Authorization: Bearer {token}"
 ```
 
 ### 3. Validate Current Month Compliance
 ```bash
-curl -X GET "https://api.primecare.com/api/SNGPCReports/alerts/compliance" \
+curl -X GET "https://api.omnicare.com/api/SNGPCReports/alerts/compliance" \
   -H "Authorization: Bearer {token}"
 ```
 
 ### 4. Detect Anomalies in Last 30 Days
 ```bash
-curl -X GET "https://api.primecare.com/api/SNGPCReports/alerts/anomalies?startDate=2026-01-01&endDate=2026-01-31" \
+curl -X GET "https://api.omnicare.com/api/SNGPCReports/alerts/anomalies?startDate=2026-01-01&endDate=2026-01-31" \
   -H "Authorization: Bearer {token}"
 ```
 

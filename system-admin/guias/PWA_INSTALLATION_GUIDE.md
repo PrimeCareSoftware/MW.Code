@@ -1,4 +1,4 @@
-# Guia de Instalação do PWA - PrimeCare Software
+# Guia de Instalação do PWA - Omni Care Software
 
 ## O que é um PWA?
 
@@ -24,7 +24,7 @@ PWA (Progressive Web App) é uma aplicação web que pode ser instalada e usada 
 ### Passo a Passo:
 
 1. **Abra o Safari** (não funciona no Chrome iOS)
-   - Acesse: `https://app.primecaresoftware.com.br`
+   - Acesse: `https://app.omnicaresoftware.com.br`
 
 2. **Clique no ícone de compartilhar** 📤
    - Está na parte inferior da tela (iPhone)
@@ -45,7 +45,7 @@ PWA (Progressive Web App) é uma aplicação web que pode ser instalada e usada 
 ### Passo a Passo:
 
 1. **Abra o Chrome** (recomendado)
-   - Acesse: `https://app.primecaresoftware.com.br`
+   - Acesse: `https://app.omnicaresoftware.com.br`
 
 2. **Aguarde o prompt** de instalação aparecer
    - Ou clique no menu (⋮) no canto superior direito
@@ -65,18 +65,18 @@ PWA (Progressive Web App) é uma aplicação web que pode ser instalada e usada 
 ### Chrome/Edge:
 
 1. **Abra o navegador**
-   - Acesse: `https://app.primecaresoftware.com.br`
+   - Acesse: `https://app.omnicaresoftware.com.br`
 
 2. **Clique no ícone de instalação** ⊕
    - Aparece na barra de endereço
 
-3. **Ou vá em Menu** → "Instalar PrimeCare Software..."
+3. **Ou vá em Menu** → "Instalar Omni Care Software..."
 
 4. **Confirme** a instalação
 
 5. **Pronto!** O app abrirá em janela própria
 
-## Recursos PWA do PrimeCare Software
+## Recursos PWA do Omni Care Software
 
 ### ✅ Já Funcionando:
 - Instalação em todos os dispositivos
@@ -107,7 +107,7 @@ PWA (Progressive Web App) é uma aplicação web que pode ser instalada e usada 
 
 ### 1. O PWA substitui completamente os apps nativos?
 
-**Sim!** Para a maioria dos casos de uso do PrimeCare Software, o PWA oferece todos os recursos necessários. As funcionalidades dos apps iOS e Android foram migradas para o PWA.
+**Sim!** Para a maioria dos casos de uso do Omni Care Software, o PWA oferece todos os recursos necessários. As funcionalidades dos apps iOS e Android foram migradas para o PWA.
 
 ### 2. Preciso estar online para usar?
 
@@ -160,10 +160,10 @@ O PWA atualiza automaticamente em segundo plano. Na próxima vez que abrir o app
 **"As notificações não funcionam"**
 - Verifique as permissões do navegador/sistema
 - No iOS, vá em Configurações → Notificações → Safari
-- No Android, vá em Configurações → Apps → PrimeCare Software → Notificações
+- No Android, vá em Configurações → Apps → Omni Care Software → Notificações
 
 ### Contato:
-- **Email**: suporte@primecaresoftware.com.br
+- **Email**: suporte@omnicaresoftware.com.br
 - **Telefone**: (11) 1234-5678
 - **Chat**: Disponível no app
 
@@ -186,7 +186,7 @@ O PWA atualiza automaticamente em segundo plano. Na próxima vez que abrir o app
 
 Sua opinião é importante! Se tiver sugestões ou problemas com o PWA, entre em contato:
 - Dentro do app: Menu → "Enviar Feedback"
-- Email: feedback@primecaresoftware.com.br
+- Email: feedback@omnicaresoftware.com.br
 
 ---
 

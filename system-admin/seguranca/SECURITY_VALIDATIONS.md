@@ -1,8 +1,8 @@
-# Relatório de Segurança e Validações - PrimeCare Software
+# Relatório de Segurança e Validações - Omni Care Software
 
 ## 📋 Resumo Executivo
 
-Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema PrimeCare Software para garantir a integridade e segurança dos dados.
+Este documento descreve todas as melhorias de segurança, validações de campos e testes unitários implementados no sistema Omni Care Software para garantir a integridade e segurança dos dados.
 
 ## 🔒 Validações de Segurança Implementadas
 
@@ -314,7 +314,7 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ## 📝 Conclusão
 
-O sistema PrimeCare Software agora possui:
+O sistema Omni Care Software agora possui:
 
 - ✅ Validações robustas de CPF, CNPJ e CRM
 - ✅ Proteção contra null pointer exceptions

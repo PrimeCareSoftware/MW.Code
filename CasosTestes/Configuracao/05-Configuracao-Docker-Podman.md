@@ -16,7 +16,7 @@
 
 ## 🐳 Visão Geral
 
-O PrimeCare Software pode ser executado completamente em containers, facilitando:
+O Omni Care Software pode ser executado completamente em containers, facilitando:
 - ✅ Setup rápido (1 comando)
 - ✅ Ambiente isolado
 - ✅ Consistência entre ambientes
@@ -240,7 +240,7 @@ podman-compose down
 
 ### 4. Migrar de Docker para Podman
 
-O PrimeCare já inclui arquivos específicos para Podman:
+O Omni Care já inclui arquivos específicos para Podman:
 
 ```bash
 # Usar configuração Podman

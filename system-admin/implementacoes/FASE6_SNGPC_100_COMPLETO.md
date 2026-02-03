@@ -514,7 +514,7 @@ A **Fase 6 - SNGPC ANVISA** foi **concluída com 100% de sucesso**. Todos os obj
 
 ### 🎉 Resultado
 
-O sistema PrimeCare agora possui uma **solução completa e production-ready** para gerenciamento de medicamentos controlados conforme SNGPC/ANVISA, incluindo:
+O sistema Omni Care agora possui uma **solução completa e production-ready** para gerenciamento de medicamentos controlados conforme SNGPC/ANVISA, incluindo:
 
 - ✅ Registro completo de prescrições e dispensações
 - ✅ Controle automático de estoque
@@ -529,7 +529,7 @@ O sistema PrimeCare agora possui uma **solução completa e production-ready** p
 
 ---
 
-**Documento Criado Por:** Equipe Técnica PrimeCare  
+**Documento Criado Por:** Equipe Técnica Omni Care  
 **Data de Conclusão:** 29 de Janeiro de 2026  
 **Versão:** 1.0  
 **Status:** ✅ FASE 6 - 100% COMPLETA  

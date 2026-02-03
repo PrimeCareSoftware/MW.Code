@@ -40,7 +40,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("Iniciando PrimeCare Software API...");
+    Log.Information("Iniciando Omni Care Software API...");
     Log.Information("Configuração de logging Serilog aplicada com sucesso");
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,14 +70,14 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "PrimeCare Software API",
+        Title = "Omni Care Software API",
         Version = "v1",
-        Description = "PrimeCare Software - Sistema de Gestão para Consultórios Médicos. " +
+        Description = "Omni Care Software - Sistema de Gestão para Consultórios Médicos. " +
                       "Esta API fornece endpoints para gestão completa de clínicas, incluindo: " +
                       "módulos configuráveis, gestão de pacientes, agendamentos, prontuários, e muito mais.",
         Contact = new OpenApiContact
         {
-            Name = "PrimeCare Software",
+            Name = "Omni Care Software",
             Email = "contato@medicwarehouse.com"
         }
     });
@@ -204,8 +204,8 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
-var issuer = jwtSettings["Issuer"] ?? "PrimeCare Software";
-var audience = jwtSettings["Audience"] ?? "PrimeCare Software-API";
+var issuer = jwtSettings["Issuer"] ?? "Omni Care Software";
+var audience = jwtSettings["Audience"] ?? "Omni Care Software-API";
 
 builder.Services.AddAuthentication(options =>
 {
@@ -670,7 +670,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "PrimeCare Software API v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Omni Care Software API v1");
         c.RoutePrefix = "swagger"; // Set Swagger UI at /swagger
     });
     
@@ -727,7 +727,7 @@ if (app.Environment.IsDevelopment())
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
         Authorization = new[] { new HangfireAuthorizationFilter() },
-        DashboardTitle = "PrimeCare - Background Jobs"
+        DashboardTitle = "Omni Care - Background Jobs"
     });
 }
 
@@ -1064,9 +1064,9 @@ catch (Exception ex)
     Log.Error(ex, "Erro ao configurar jobs recorrentes do Hangfire: {Message}", ex.Message);
 }
 
-    Log.Information("PrimeCare Software API iniciada com sucesso");
+    Log.Information("Omni Care Software API iniciada com sucesso");
     app.Run();
-    Log.Information("PrimeCare Software API finalizada com sucesso");
+    Log.Information("Omni Care Software API finalizada com sucesso");
 }
 catch (Exception ex)
 {

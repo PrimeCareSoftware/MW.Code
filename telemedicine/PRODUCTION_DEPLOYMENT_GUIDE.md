@@ -646,4 +646,4 @@ artillery run load-test.yml
 
 **Last Updated:** January 29, 2026  
 **Version:** 1.0.0  
-**Maintainer:** PrimeCare Software DevOps Team
+**Maintainer:** Omni Care Software DevOps Team

@@ -433,7 +433,7 @@ TODOS os acessos ao prontuário são registrados:
 
 ### Precisa de ajuda?
 
-- 📧 **Email:** suporte@primecare.com.br
+- 📧 **Email:** suporte@omnicare.com.br
 - 📱 **Telefone:** (11) 3000-0000
 - 💬 **Chat:** Disponível no sistema (canto inferior direito)
 - 📚 **Documentação:** [Documentação Técnica CFM 1.638](./CFM-1638-VERSIONING-README.md)

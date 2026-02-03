@@ -1,12 +1,12 @@
-# 🌍 Guia de Desenvolvimento Multiplataforma - PrimeCare Software
+# 🌍 Guia de Desenvolvimento Multiplataforma - Omni Care Software
 
 ## 📋 Visão Geral
 
-Este guia explica como desenvolver o PrimeCare Software em diferentes sistemas operacionais (macOS, Windows e Linux), mantendo compatibilidade total entre plataformas.
+Este guia explica como desenvolver o Omni Care Software em diferentes sistemas operacionais (macOS, Windows e Linux), mantendo compatibilidade total entre plataformas.
 
 ## ✅ Compatibilidade Garantida
 
-O PrimeCare Software foi projetado para ser **totalmente cross-platform**:
+O Omni Care Software foi projetado para ser **totalmente cross-platform**:
 
 - ✅ **Backend (.NET 8)**: Funciona nativamente em macOS, Windows e Linux
 - ✅ **Frontend (Angular/Node.js)**: Compatível com todos os sistemas operacionais
@@ -27,7 +27,7 @@ Execute o script de configuração automatizada:
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/PrimeCare Software/MW.Code.git
+git clone https://github.com/Omni Care Software/MW.Code.git
 cd MW.Code
 
 # Executar script de setup
@@ -94,7 +94,7 @@ npm start
 ### Dicas para macOS
 
 - **Apple Silicon (M1/M2/M3)**: Todos os componentes são nativos para ARM64
-- **Rosetta 2**: Não é necessário para o PrimeCare Software
+- **Rosetta 2**: Não é necessário para o Omni Care Software
 - **Permissões**: Use `sudo` apenas quando solicitado pelo Homebrew
 - **Terminal**: Terminal.app, iTerm2 ou outro de sua preferência funcionam igualmente
 
@@ -111,7 +111,7 @@ Execute o script de configuração automatizada no PowerShell como **Administrad
 
 ```powershell
 # Clonar o repositório
-git clone https://github.com/PrimeCare Software/MW.Code.git
+git clone https://github.com/Omni Care Software/MW.Code.git
 cd MW.Code
 
 # Executar script de setup (PowerShell como Administrador)
@@ -218,7 +218,7 @@ sudo apt install -y podman podman-compose
 sudo apt install -y git
 
 # Clonar e configurar projeto
-git clone https://github.com/PrimeCare Software/MW.Code.git
+git clone https://github.com/Omni Care Software/MW.Code.git
 cd MW.Code
 dotnet restore
 cd frontend/medicwarehouse-app && npm install && cd ../..
@@ -241,7 +241,7 @@ sudo dnf install podman podman-compose
 sudo dnf install git
 
 # Clonar e configurar projeto
-git clone https://github.com/PrimeCare Software/MW.Code.git
+git clone https://github.com/Omni Care Software/MW.Code.git
 cd MW.Code
 dotnet restore
 cd frontend/medicwarehouse-app && npm install && cd ../..

@@ -1,8 +1,8 @@
-# Arquitetura de Serviços - PrimeCare Software
+# Arquitetura de Serviços - Omni Care Software
 
 ## Visão Geral
 
-Este documento descreve a nova arquitetura em camadas do PrimeCare Software, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.
+Este documento descreve a nova arquitetura em camadas do Omni Care Software, onde todas as APIs utilizam a camada de Application Services em vez de acessar diretamente os repositórios.
 
 ## Estrutura em Camadas
 

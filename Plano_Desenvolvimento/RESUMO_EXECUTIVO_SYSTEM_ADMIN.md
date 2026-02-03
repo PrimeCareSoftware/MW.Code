@@ -8,7 +8,7 @@
 
 ## 🎯 Objetivo
 
-Transformar o system-admin do PrimeCare Software em uma ferramenta de administração SaaS de classe mundial, baseada nas melhores práticas de mercado.
+Transformar o system-admin do Omni Care Software em uma ferramenta de administração SaaS de classe mundial, baseada nas melhores práticas de mercado.
 
 ---
 
@@ -310,7 +310,7 @@ Transformar o system-admin do PrimeCare Software em uma ferramenta de administra
 
 ## 🎖️ Diferencial Competitivo
 
-Com este plano implementado, o PrimeCare terá:
+Com este plano implementado, o Omni Care terá:
 
 ### No Mercado Brasileiro
 - 🥇 **#1** em admin panel para health tech
@@ -323,7 +323,7 @@ Com este plano implementado, o PrimeCare terá:
 - **Doctoralia:** Foco em marketplace, admin limitado
 
 ### Posicionamento
-> "PrimeCare Software: A única plataforma de gestão clínica com admin panel de classe enterprise"
+> "Omni Care Software: A única plataforma de gestão clínica com admin panel de classe enterprise"
 
 ---
 
@@ -333,10 +333,10 @@ Com este plano implementado, o PrimeCare terá:
 [PLANO_MELHORIAS_SYSTEM_ADMIN_2026.md](./PLANO_MELHORIAS_SYSTEM_ADMIN_2026.md)
 
 **GitHub:**  
-https://github.com/PrimeCareSoftware/MW.Code
+https://github.com/Omni CareSoftware/MW.Code
 
 **Issues:**  
-https://github.com/PrimeCareSoftware/MW.Code/issues
+https://github.com/Omni CareSoftware/MW.Code/issues
 
 ---
 
@@ -351,4 +351,4 @@ https://github.com/PrimeCareSoftware/MW.Code/issues
 > "A melhor ferramenta administrativa não é aquela com mais features, mas aquela que torna o admin 10x mais produtivo."  
 > — Princípio do Design de Admin Panels
 
-**Este plano coloca o PrimeCare Software nessa categoria. 🚀**
+**Este plano coloca o Omni Care Software nessa categoria. 🚀**

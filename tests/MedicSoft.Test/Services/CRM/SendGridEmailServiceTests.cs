@@ -28,8 +28,8 @@ namespace MedicSoft.Test.Services.CRM
                 Email = new EmailConfiguration
                 {
                     ApiKey = "SG.test_api_key_123456789",
-                    FromEmail = "test@primecare.com.br",
-                    FromName = "PrimeCare Test",
+                    FromEmail = "test@omnicare.com.br",
+                    FromName = "Omni Care Test",
                     UseSandbox = true,
                     Enabled = true
                 }

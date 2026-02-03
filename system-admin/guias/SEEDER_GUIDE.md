@@ -1,8 +1,8 @@
-# Guia de Seeders - PrimeCare Software
+# Guia de Seeders - Omni Care Software
 
 ## Visão Geral
 
-O sistema PrimeCare Software possui seeders abrangentes para popular o banco de dados com dados de demonstração realísticos. Isso permite testar todas as funcionalidades do sistema sem precisar inserir dados manualmente.
+O sistema Omni Care Software possui seeders abrangentes para popular o banco de dados com dados de demonstração realísticos. Isso permite testar todas as funcionalidades do sistema sem precisar inserir dados manualmente.
 
 ### ✨ Características Principais
 
@@ -39,7 +39,7 @@ Cria um owner/administrador do sistema (apenas em ambiente de desenvolvimento).
 | Entidade | Quantidade | Descrição |
 |----------|-----------|-----------|
 | **Planos de Assinatura** | 5 | Trial, Básico, Standard, Premium, Enterprise |
-| **Clínicas** | 1 | Clínica Demo PrimeCare Software |
+| **Clínicas** | 1 | Clínica Demo Omni Care Software |
 | **Assinaturas** | 1 | Assinatura ativa no plano Standard |
 | **Proprietários (Owners)** | 1 | Proprietário da clínica demo |
 | **Usuários** | 3 | Admin, Médico, Recepcionista |
@@ -392,4 +392,4 @@ Os dados são criados na ordem correta respeitando todas as dependências:
 
 - [Documentação da API](../README.md)
 - [Guia de Autenticação](./AUTHENTICATION_GUIDE.md)
-- [Postman Collection](../PrimeCare Software-Postman-Collection.json)
+- [Postman Collection](../Omni Care Software-Postman-Collection.json)

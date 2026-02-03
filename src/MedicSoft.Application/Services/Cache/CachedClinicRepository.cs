@@ -18,8 +18,8 @@ namespace MedicSoft.Application.Services.Cache
         private readonly IClinicRepository _clinicRepository;
         private readonly ICacheService _cacheService;
         private readonly ILogger<CachedClinicRepository> _logger;
-        private const string CLINIC_CACHE_KEY_PREFIX = "PrimeCare:clinic:";
-        private const string CLINIC_CONFIG_KEY_PREFIX = "PrimeCare:clinic:config:";
+        private const string CLINIC_CACHE_KEY_PREFIX = "Omni Care:clinic:";
+        private const string CLINIC_CONFIG_KEY_PREFIX = "Omni Care:clinic:config:";
         private readonly TimeSpan _clinicCacheExpiration = TimeSpan.FromMinutes(60);
 
         public CachedClinicRepository(

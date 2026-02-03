@@ -206,4 +206,4 @@ A implementação foi concluída com sucesso! Toda a documentação do system-ad
 
 ---
 
-**PrimeCare Software** © 2025 - Documentação HTML Navegável Implementada com Sucesso
+**Omni Care Software** © 2025 - Documentação HTML Navegável Implementada com Sucesso

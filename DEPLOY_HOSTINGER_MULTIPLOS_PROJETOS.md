@@ -131,23 +131,23 @@ Para rodar **2 APIs .NET + 3-4 Angular apps + PostgreSQL**, você precisa consid
 Você precisará de pelo menos 1 domínio principal. Recomendamos usar subdomínios:
 
 ```
-# Exemplo com domínio: meuprimecare.com.br
+# Exemplo com domínio: meuomnicare.com.br
 
 # Frontend Principal
-https://meuprimecare.com.br               → medicwarehouse-app
+https://meuomnicare.com.br               → medicwarehouse-app
 
 # API Principal
-https://api.meuprimecare.com.br           → MedicSoft.Api (porta 5000)
+https://api.meuomnicare.com.br           → MedicSoft.Api (porta 5000)
 
 # Portal do Paciente
-https://paciente.meuprimecare.com.br      → patient-portal (frontend)
-https://api-paciente.meuprimecare.com.br  → PatientPortal.Api (porta 5001)
+https://paciente.meuomnicare.com.br      → patient-portal (frontend)
+https://api-paciente.meuomnicare.com.br  → PatientPortal.Api (porta 5001)
 
 # Admin
-https://admin.meuprimecare.com.br         → mw-system-admin
+https://admin.meuomnicare.com.br         → mw-system-admin
 
 # Documentação (opcional)
-https://docs.meuprimecare.com.br          → mw-docs
+https://docs.meuomnicare.com.br          → mw-docs
 ```
 
 ### 🔒 Portas e Serviços
@@ -328,22 +328,22 @@ sudo -u postgres psql
 Execute os seguintes comandos SQL:
 
 ```sql
--- Criar usuário para o PrimeCare
-CREATE USER primecare_user WITH PASSWORD 'SuaSenhaForte123!';
+-- Criar usuário para o Omni Care
+CREATE USER omnicare_user WITH PASSWORD 'SuaSenhaForte123!';
 
 -- Criar banco de dados principal
-CREATE DATABASE primecare_db;
+CREATE DATABASE omnicare_db;
 
 -- Criar banco de dados do Portal do Paciente
 CREATE DATABASE patient_portal_db;
 
 -- Dar permissões
-GRANT ALL PRIVILEGES ON DATABASE primecare_db TO primecare_user;
-GRANT ALL PRIVILEGES ON DATABASE patient_portal_db TO primecare_user;
+GRANT ALL PRIVILEGES ON DATABASE omnicare_db TO omnicare_user;
+GRANT ALL PRIVILEGES ON DATABASE patient_portal_db TO omnicare_user;
 
 -- Configurar owner
-ALTER DATABASE primecare_db OWNER TO primecare_user;
-ALTER DATABASE patient_portal_db OWNER TO primecare_user;
+ALTER DATABASE omnicare_db OWNER TO omnicare_user;
+ALTER DATABASE patient_portal_db OWNER TO omnicare_user;
 
 -- Listar bancos criados
 \l
@@ -428,7 +428,7 @@ su - primecare
 
 # Clonar repositório
 cd /home/primecare/deploy
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 cd MW.Code
 ```
 
@@ -442,20 +442,20 @@ cd /home/primecare/deploy/MW.Code/src/MedicSoft.Api
 cat > appsettings.Production.json << 'EOF'
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=primecare_db;Username=primecare_user;Password=SuaSenhaForte123!"
+    "DefaultConnection": "Host=localhost;Port=5432;Database=omnicare_db;Username=omnicare_user;Password=SuaSenhaForte123!"
   },
   "JwtSettings": {
     "SecretKey": "GERE_UMA_CHAVE_SEGURA_DE_PELO_MENOS_32_CARACTERES",
     "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Software",
-    "Audience": "PrimeCare Software-API"
+    "Issuer": "Omni Care Software",
+    "Audience": "Omni Care Software-API"
   },
   "Cors": {
     "AllowedOrigins": [
-      "https://meuprimecare.com.br",
-      "https://admin.meuprimecare.com.br",
-      "https://paciente.meuprimecare.com.br",
-      "https://docs.meuprimecare.com.br"
+      "https://meuomnicare.com.br",
+      "https://admin.meuomnicare.com.br",
+      "https://paciente.meuomnicare.com.br",
+      "https://docs.meuomnicare.com.br"
     ]
   },
   "Logging": {
@@ -484,17 +484,17 @@ cd /home/primecare/deploy/MW.Code/patient-portal-api/PatientPortal.Api
 cat > appsettings.Production.json << 'EOF'
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=patient_portal_db;Username=primecare_user;Password=SuaSenhaForte123!"
+    "DefaultConnection": "Host=localhost;Port=5432;Database=patient_portal_db;Username=omnicare_user;Password=SuaSenhaForte123!"
   },
   "JwtSettings": {
     "SecretKey": "MESMA_CHAVE_DA_API_PRINCIPAL_OU_OUTRA_SEGURA",
     "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Patient Portal",
-    "Audience": "PrimeCare Patient Portal API"
+    "Issuer": "Omni Care Patient Portal",
+    "Audience": "Omni Care Patient Portal API"
   },
   "Cors": {
     "AllowedOrigins": [
-      "https://paciente.meuprimecare.com.br"
+      "https://paciente.meuomnicare.com.br"
     ]
   },
   "Logging": {
@@ -518,13 +518,13 @@ ls -la /var/www/primecare/patient-portal-api
 #### API Principal:
 
 ```bash
-sudo nano /etc/systemd/system/primecare-api.service
+sudo nano /etc/systemd/system/omnicare-api.service
 ```
 
 Conteúdo:
 ```ini
 [Unit]
-Description=PrimeCare API
+Description=Omni Care API
 After=network.target postgresql.service
 
 [Service]
@@ -535,7 +535,7 @@ ExecStart=/usr/bin/dotnet /var/www/primecare/api/MedicSoft.Api.dll
 Restart=always
 RestartSec=10
 KillSignal=SIGINT
-SyslogIdentifier=primecare-api
+SyslogIdentifier=omnicare-api
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 Environment=ASPNETCORE_URLS=http://localhost:5000
@@ -557,7 +557,7 @@ sudo nano /etc/systemd/system/patient-portal-api.service
 Conteúdo:
 ```ini
 [Unit]
-Description=PrimeCare Patient Portal API
+Description=Omni Care Patient Portal API
 After=network.target postgresql.service
 
 [Service]
@@ -600,18 +600,18 @@ sudo -u primecare dotnet ef database update --project /home/primecare/deploy/MW.
 sudo systemctl daemon-reload
 
 # Iniciar e habilitar serviços
-sudo systemctl start primecare-api
-sudo systemctl enable primecare-api
+sudo systemctl start omnicare-api
+sudo systemctl enable omnicare-api
 
 sudo systemctl start patient-portal-api
 sudo systemctl enable patient-portal-api
 
 # Verificar status
-sudo systemctl status primecare-api
+sudo systemctl status omnicare-api
 sudo systemctl status patient-portal-api
 
 # Ver logs em tempo real
-sudo journalctl -u primecare-api -f
+sudo journalctl -u omnicare-api -f
 sudo journalctl -u patient-portal-api -f
 ```
 
@@ -635,8 +635,8 @@ cd medicwarehouse-app
 cat > src/environments/environment.prod.ts << 'EOF'
 export const environment = {
   production: true,
-  apiUrl: 'https://api.meuprimecare.com.br',
-  appName: 'PrimeCare Software',
+  apiUrl: 'https://api.meuomnicare.com.br',
+  appName: 'Omni Care Software',
   version: '1.0.0'
 };
 EOF
@@ -661,8 +661,8 @@ cd ../mw-system-admin
 cat > src/environments/environment.prod.ts << 'EOF'
 export const environment = {
   production: true,
-  apiUrl: 'https://api.meuprimecare.com.br',
-  appName: 'PrimeCare Admin',
+  apiUrl: 'https://api.meuomnicare.com.br',
+  appName: 'Omni Care Admin',
   version: '1.0.0'
 };
 EOF
@@ -687,7 +687,7 @@ cd ../patient-portal
 cat > src/environments/environment.prod.ts << 'EOF'
 export const environment = {
   production: true,
-  apiUrl: 'https://api-paciente.meuprimecare.com.br',
+  apiUrl: 'https://api-paciente.meuomnicare.com.br',
   appName: 'Portal do Paciente',
   version: '1.0.0'
 };
@@ -741,7 +741,7 @@ sudo rm /etc/nginx/sites-enabled/default
 ### 8.2. Configuração Principal (API)
 
 ```bash
-sudo nano /etc/nginx/sites-available/primecare-api
+sudo nano /etc/nginx/sites-available/omnicare-api
 ```
 
 Conteúdo:
@@ -750,7 +750,7 @@ Conteúdo:
 limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
 
 # Upstream para API Principal
-upstream primecare_api {
+upstream omnicare_api {
     server localhost:5000;
     keepalive 32;
 }
@@ -764,7 +764,7 @@ upstream patient_portal_api {
 # API Principal
 server {
     listen 80;
-    server_name api.meuprimecare.com.br;
+    server_name api.meuomnicare.com.br;
     
     # Redirect para HTTPS (será configurado depois)
     return 301 https://$server_name$request_uri;
@@ -772,11 +772,11 @@ server {
 
 server {
     listen 443 ssl http2;
-    server_name api.meuprimecare.com.br;
+    server_name api.meuomnicare.com.br;
     
     # SSL certificates (será preenchido pelo Certbot)
-    # ssl_certificate /etc/letsencrypt/live/api.meuprimecare.com.br/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/api.meuprimecare.com.br/privkey.pem;
+    # ssl_certificate /etc/letsencrypt/live/api.meuomnicare.com.br/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/api.meuomnicare.com.br/privkey.pem;
     
     # SSL configuration
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -800,7 +800,7 @@ server {
         # Rate limiting
         limit_req zone=api_limit burst=20 nodelay;
         
-        proxy_pass http://primecare_api;
+        proxy_pass http://omnicare_api;
         proxy_http_version 1.1;
         
         proxy_set_header Upgrade $http_upgrade;
@@ -821,18 +821,18 @@ server {
 # API Portal do Paciente
 server {
     listen 80;
-    server_name api-paciente.meuprimecare.com.br;
+    server_name api-paciente.meuomnicare.com.br;
     
     return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name api-paciente.meuprimecare.com.br;
+    server_name api-paciente.meuomnicare.com.br;
     
     # SSL certificates (será preenchido pelo Certbot)
-    # ssl_certificate /etc/letsencrypt/live/api-paciente.meuprimecare.com.br/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/api-paciente.meuprimecare.com.br/privkey.pem;
+    # ssl_certificate /etc/letsencrypt/live/api-paciente.meuomnicare.com.br/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/api-paciente.meuomnicare.com.br/privkey.pem;
     
     # SSL configuration
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -876,7 +876,7 @@ server {
 ### 8.3. Configuração dos Frontends
 
 ```bash
-sudo nano /etc/nginx/sites-available/primecare-frontend
+sudo nano /etc/nginx/sites-available/omnicare-frontend
 ```
 
 Conteúdo:
@@ -884,25 +884,25 @@ Conteúdo:
 # Frontend Principal (Medicwarehouse App)
 server {
     listen 80;
-    server_name meuprimecare.com.br www.meuprimecare.com.br;
+    server_name meuomnicare.com.br www.meuomnicare.com.br;
     
     return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name meuprimecare.com.br www.meuprimecare.com.br;
+    server_name meuomnicare.com.br www.meuomnicare.com.br;
     
     # SSL certificates
-    # ssl_certificate /etc/letsencrypt/live/meuprimecare.com.br/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/meuprimecare.com.br/privkey.pem;
+    # ssl_certificate /etc/letsencrypt/live/meuomnicare.com.br/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/meuomnicare.com.br/privkey.pem;
     
     root /var/www/primecare/frontend/medicwarehouse-app;
     index index.html;
     
     # Logs
-    access_log /var/log/nginx/primecare-frontend-access.log;
-    error_log /var/log/nginx/primecare-frontend-error.log;
+    access_log /var/log/nginx/omnicare-frontend-access.log;
+    error_log /var/log/nginx/omnicare-frontend-error.log;
     
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
@@ -928,18 +928,18 @@ server {
 # System Admin
 server {
     listen 80;
-    server_name admin.meuprimecare.com.br;
+    server_name admin.meuomnicare.com.br;
     
     return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name admin.meuprimecare.com.br;
+    server_name admin.meuomnicare.com.br;
     
     # SSL certificates
-    # ssl_certificate /etc/letsencrypt/live/admin.meuprimecare.com.br/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/admin.meuprimecare.com.br/privkey.pem;
+    # ssl_certificate /etc/letsencrypt/live/admin.meuomnicare.com.br/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/admin.meuomnicare.com.br/privkey.pem;
     
     root /var/www/primecare/frontend/mw-system-admin;
     index index.html;
@@ -971,18 +971,18 @@ server {
 # Patient Portal
 server {
     listen 80;
-    server_name paciente.meuprimecare.com.br;
+    server_name paciente.meuomnicare.com.br;
     
     return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name paciente.meuprimecare.com.br;
+    server_name paciente.meuomnicare.com.br;
     
     # SSL certificates
-    # ssl_certificate /etc/letsencrypt/live/paciente.meuprimecare.com.br/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/paciente.meuprimecare.com.br/privkey.pem;
+    # ssl_certificate /etc/letsencrypt/live/paciente.meuomnicare.com.br/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/paciente.meuomnicare.com.br/privkey.pem;
     
     root /var/www/primecare/frontend/patient-portal;
     index index.html;
@@ -1014,18 +1014,18 @@ server {
 # Documentação (Opcional)
 server {
     listen 80;
-    server_name docs.meuprimecare.com.br;
+    server_name docs.meuomnicare.com.br;
     
     return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name docs.meuprimecare.com.br;
+    server_name docs.meuomnicare.com.br;
     
     # SSL certificates
-    # ssl_certificate /etc/letsencrypt/live/docs.meuprimecare.com.br/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/docs.meuprimecare.com.br/privkey.pem;
+    # ssl_certificate /etc/letsencrypt/live/docs.meuomnicare.com.br/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/docs.meuomnicare.com.br/privkey.pem;
     
     root /var/www/primecare/frontend/mw-docs;
     index index.html;
@@ -1059,8 +1059,8 @@ server {
 
 ```bash
 # Criar links simbólicos
-sudo ln -s /etc/nginx/sites-available/primecare-api /etc/nginx/sites-enabled/
-sudo ln -s /etc/nginx/sites-available/primecare-frontend /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/omnicare-api /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/omnicare-frontend /etc/nginx/sites-enabled/
 
 # Testar configuração
 sudo nginx -t
@@ -1095,12 +1095,12 @@ Após a propagação do DNS:
 
 ```bash
 # Obter certificados para todos os domínios
-sudo certbot --nginx -d meuprimecare.com.br -d www.meuprimecare.com.br
-sudo certbot --nginx -d api.meuprimecare.com.br
-sudo certbot --nginx -d api-paciente.meuprimecare.com.br
-sudo certbot --nginx -d admin.meuprimecare.com.br
-sudo certbot --nginx -d paciente.meuprimecare.com.br
-sudo certbot --nginx -d docs.meuprimecare.com.br
+sudo certbot --nginx -d meuomnicare.com.br -d www.meuomnicare.com.br
+sudo certbot --nginx -d api.meuomnicare.com.br
+sudo certbot --nginx -d api-paciente.meuomnicare.com.br
+sudo certbot --nginx -d admin.meuomnicare.com.br
+sudo certbot --nginx -d paciente.meuomnicare.com.br
+sudo certbot --nginx -d docs.meuomnicare.com.br
 
 # O Certbot irá:
 # 1. Obter certificados do Let's Encrypt
@@ -1133,7 +1133,7 @@ sudo systemctl restart nginx
 Crie um script para monitorar o sistema:
 
 ```bash
-sudo nano /usr/local/bin/primecare-status.sh
+sudo nano /usr/local/bin/omnicare-status.sh
 ```
 
 Conteúdo:
@@ -1147,7 +1147,7 @@ echo ""
 
 # APIs
 echo "🔧 SERVIÇOS:"
-echo "  API Principal:      $(systemctl is-active primecare-api)"
+echo "  API Principal:      $(systemctl is-active omnicare-api)"
 echo "  Patient Portal API: $(systemctl is-active patient-portal-api)"
 echo "  PostgreSQL:         $(systemctl is-active postgresql)"
 echo "  Nginx:              $(systemctl is-active nginx)"
@@ -1163,13 +1163,13 @@ echo ""
 # Conexões PostgreSQL
 echo "🗄️ POSTGRESQL:"
 echo "  Conexões ativas: $(sudo -u postgres psql -c "SELECT count(*) FROM pg_stat_activity;" -t | xargs)"
-echo "  Tamanho primecare_db: $(sudo -u postgres psql -c "SELECT pg_size_pretty(pg_database_size('primecare_db'));" -t | xargs)"
+echo "  Tamanho omnicare_db: $(sudo -u postgres psql -c "SELECT pg_size_pretty(pg_database_size('omnicare_db'));" -t | xargs)"
 echo "  Tamanho patient_portal_db: $(sudo -u postgres psql -c "SELECT pg_size_pretty(pg_database_size('patient_portal_db'));" -t | xargs)"
 echo ""
 
 # Últimos erros
 echo "⚠️ ÚLTIMOS ERROS (API Principal):"
-sudo journalctl -u primecare-api --since "10 minutes ago" | grep -i error | tail -3
+sudo journalctl -u omnicare-api --since "10 minutes ago" | grep -i error | tail -3
 echo ""
 
 echo "⚠️ ÚLTIMOS ERROS (Patient Portal API):"
@@ -1181,18 +1181,18 @@ echo "================================================"
 
 Tornar executável:
 ```bash
-sudo chmod +x /usr/local/bin/primecare-status.sh
+sudo chmod +x /usr/local/bin/omnicare-status.sh
 ```
 
 Usar:
 ```bash
-primecare-status.sh
+omnicare-status.sh
 ```
 
 ### 10.2. Configurar Backups Automáticos
 
 ```bash
-sudo nano /usr/local/bin/primecare-backup.sh
+sudo nano /usr/local/bin/omnicare-backup.sh
 ```
 
 Conteúdo:
@@ -1209,14 +1209,14 @@ mkdir -p $BACKUP_DIR
 
 # Backup PostgreSQL
 echo "Fazendo backup dos bancos de dados..."
-sudo -u postgres pg_dump primecare_db | gzip > $BACKUP_DIR/primecare_db_$DATE.sql.gz
+sudo -u postgres pg_dump omnicare_db | gzip > $BACKUP_DIR/omnicare_db_$DATE.sql.gz
 sudo -u postgres pg_dump patient_portal_db | gzip > $BACKUP_DIR/patient_portal_db_$DATE.sql.gz
 
 # Backup arquivos de configuração
 echo "Fazendo backup de configurações..."
 tar -czf $BACKUP_DIR/config_$DATE.tar.gz \
     /etc/nginx/sites-available/ \
-    /etc/systemd/system/primecare-api.service \
+    /etc/systemd/system/omnicare-api.service \
     /etc/systemd/system/patient-portal-api.service \
     /var/www/primecare/api/appsettings.Production.json \
     /var/www/primecare/patient-portal-api/appsettings.Production.json
@@ -1232,7 +1232,7 @@ ls -lh $BACKUP_DIR | tail -5
 
 Tornar executável:
 ```bash
-sudo chmod +x /usr/local/bin/primecare-backup.sh
+sudo chmod +x /usr/local/bin/omnicare-backup.sh
 ```
 
 Agendar backup diário:
@@ -1241,39 +1241,39 @@ Agendar backup diário:
 crontab -e
 
 # Adicionar linha para backup diário às 2h da manhã
-0 2 * * * /usr/local/bin/primecare-backup.sh >> /var/log/primecare-backup.log 2>&1
+0 2 * * * /usr/local/bin/omnicare-backup.sh >> /var/log/omnicare-backup.log 2>&1
 ```
 
 ### 10.3. Monitoramento de Logs
 
 ```bash
 # Ver logs das APIs em tempo real
-sudo journalctl -u primecare-api -f
+sudo journalctl -u omnicare-api -f
 sudo journalctl -u patient-portal-api -f
 
 # Ver logs do Nginx
-sudo tail -f /var/log/nginx/primecare-frontend-access.log
-sudo tail -f /var/log/nginx/primecare-frontend-error.log
+sudo tail -f /var/log/nginx/omnicare-frontend-access.log
+sudo tail -f /var/log/nginx/omnicare-frontend-error.log
 
 # Ver erros de todas as APIs
-sudo journalctl -u primecare-api -u patient-portal-api --since "1 hour ago" | grep -i error
+sudo journalctl -u omnicare-api -u patient-portal-api --since "1 hour ago" | grep -i error
 ```
 
 ### 10.4. Script de Atualização
 
 ```bash
-sudo nano /usr/local/bin/primecare-update.sh
+sudo nano /usr/local/bin/omnicare-update.sh
 ```
 
 Conteúdo:
 ```bash
 #!/bin/bash
 
-echo "🚀 Iniciando atualização do PrimeCare..."
+echo "🚀 Iniciando atualização do Omni Care..."
 
 # Backup antes de atualizar
 echo "📦 Fazendo backup..."
-/usr/local/bin/primecare-backup.sh
+/usr/local/bin/omnicare-backup.sh
 
 # Ir para diretório do código
 cd /home/primecare/deploy/MW.Code
@@ -1286,7 +1286,7 @@ git pull origin main
 echo "🔧 Atualizando API Principal..."
 cd src/MedicSoft.Api
 dotnet publish -c Release -o /var/www/primecare/api
-sudo systemctl restart primecare-api
+sudo systemctl restart omnicare-api
 
 # Atualizar Patient Portal API
 echo "🔧 Atualizando Patient Portal API..."
@@ -1307,7 +1307,7 @@ sleep 10
 
 # Verificar status
 echo "✅ Verificando status..."
-sudo systemctl status primecare-api --no-pager
+sudo systemctl status omnicare-api --no-pager
 sudo systemctl status patient-portal-api --no-pager
 
 echo "✨ Atualização concluída!"
@@ -1315,7 +1315,7 @@ echo "✨ Atualização concluída!"
 
 Tornar executável:
 ```bash
-sudo chmod +x /usr/local/bin/primecare-update.sh
+sudo chmod +x /usr/local/bin/omnicare-update.sh
 ```
 
 ---
@@ -1328,7 +1328,7 @@ sudo chmod +x /usr/local/bin/primecare-update.sh
 - [ ] DNS configurado e propagado
 - [ ] SSL instalado em todos os domínios
 - [ ] PostgreSQL instalado e otimizado
-- [ ] Banco de dados criados (primecare_db e patient_portal_db)
+- [ ] Banco de dados criados (omnicare_db e patient_portal_db)
 - [ ] Migrations executadas com sucesso
 - [ ] API Principal rodando na porta 5000
 - [ ] Patient Portal API rodando na porta 5001
@@ -1344,12 +1344,12 @@ sudo chmod +x /usr/local/bin/primecare-update.sh
 
 ### URLs para Testar
 
-- [ ] https://meuprimecare.com.br (Frontend Principal)
-- [ ] https://admin.meuprimecare.com.br (System Admin)
-- [ ] https://paciente.meuprimecare.com.br (Portal do Paciente)
-- [ ] https://docs.meuprimecare.com.br (Documentação)
-- [ ] https://api.meuprimecare.com.br/swagger (API Principal)
-- [ ] https://api-paciente.meuprimecare.com.br/swagger (Patient Portal API)
+- [ ] https://meuomnicare.com.br (Frontend Principal)
+- [ ] https://admin.meuomnicare.com.br (System Admin)
+- [ ] https://paciente.meuomnicare.com.br (Portal do Paciente)
+- [ ] https://docs.meuomnicare.com.br (Documentação)
+- [ ] https://api.meuomnicare.com.br/swagger (API Principal)
+- [ ] https://api-paciente.meuomnicare.com.br/swagger (Patient Portal API)
 
 ---
 
@@ -1359,7 +1359,7 @@ sudo chmod +x /usr/local/bin/primecare-update.sh
 
 ```bash
 # Verificar logs
-sudo journalctl -u primecare-api -n 50
+sudo journalctl -u omnicare-api -n 50
 
 # Verificar se a porta está em uso
 sudo netstat -tulpn | grep 5000
@@ -1375,7 +1375,7 @@ ls -la /var/www/primecare/api
 ls -la /var/www/primecare/frontend/medicwarehouse-app/
 
 # Verificar logs do Nginx
-sudo tail -f /var/log/nginx/primecare-frontend-error.log
+sudo tail -f /var/log/nginx/omnicare-frontend-error.log
 
 # Verificar configuração do Nginx
 sudo nginx -t
@@ -1461,4 +1461,4 @@ Seguindo este guia, você terá:
 **Capacidade**: 10-30 usuários simultâneos  
 **Tempo de setup**: 3-4 horas
 
-Agora seu PrimeCare Software está no ar! 🎉
+Agora seu Omni Care Software está no ar! 🎉

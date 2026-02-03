@@ -2,7 +2,7 @@
 
 ## Overview
 
-Medical data encryption feature for PrimeCare Software, implementing **AES-256-GCM** encryption for sensitive patient information, ensuring **LGPD compliance** and protecting confidential medical data.
+Medical data encryption feature for Omni Care Software, implementing **AES-256-GCM** encryption for sensitive patient information, ensuring **LGPD compliance** and protecting confidential medical data.
 
 ## 🎯 Key Features
 

@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Microservice for telemedicine video consultations",
         Contact = new OpenApiContact
         {
-            Name = "PrimeCare Software Team"
+            Name = "Omni Care Software Team"
         }
     });
     

@@ -19,7 +19,7 @@
 
 ## Introdução
 
-O módulo de Telemedicina do PrimeCare permite que profissionais de saúde realizem consultas, acompanhamentos e orientações médicas à distância, utilizando tecnologia de videoconferência segura e integrada ao prontuário eletrônico.
+O módulo de Telemedicina do Omni Care permite que profissionais de saúde realizem consultas, acompanhamentos e orientações médicas à distância, utilizando tecnologia de videoconferência segura e integrada ao prontuário eletrônico.
 
 ### O que é Telemedicina?
 
@@ -439,7 +439,7 @@ R: Sistema usa criptografia de ponta a ponta, mesmo padrão de bancos.
 ### Suporte Técnico
 
 **Central de Ajuda:**
-- 📧 E-mail: suporte@primecare.com.br
+- 📧 E-mail: suporte@omnicare.com.br
 - 📞 Telefone: (11) 1234-5678
 - 💬 Chat: Disponível no sistema
 - ☎️ Emergência 24/7: 0800-XXX-XXXX
@@ -483,7 +483,7 @@ R: Sistema usa criptografia de ponta a ponta, mesmo padrão de bancos.
 
 **Versão do documento**: 1.0  
 **Última atualização**: Janeiro 2025  
-**Sistema**: PrimeCare v2.0
+**Sistema**: Omni Care v2.0
 
 ---
 

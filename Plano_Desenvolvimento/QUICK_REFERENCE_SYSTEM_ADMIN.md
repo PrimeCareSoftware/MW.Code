@@ -158,7 +158,7 @@
 **Financeiras:** Ver Resumo Executivo seção "ROI"  
 **Estratégicas:** Ver Plano Completo seção "Comparação com Mercado"
 
-**Issues:** https://github.com/PrimeCareSoftware/MW.Code/issues
+**Issues:** https://github.com/Omni CareSoftware/MW.Code/issues
 
 ---
 

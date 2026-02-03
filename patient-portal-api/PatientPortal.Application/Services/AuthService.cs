@@ -321,7 +321,7 @@ public class AuthService : IAuthService
         await _passwordResetTokenRepository.CreateAsync(resetToken);
 
         // Send password reset email
-        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.primecare.com";
+        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.omnicare.com";
         var resetLink = $"{portalBaseUrl}/reset-password?token={resetToken.Token}";
         
         var emailBody = EmailTemplateHelper.GeneratePasswordResetEmail(user.FullName, resetLink, portalBaseUrl);
@@ -386,7 +386,7 @@ public class AuthService : IAuthService
         await _emailVerificationTokenRepository.CreateAsync(verificationToken);
 
         // Send verification email
-        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.primecare.com";
+        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.omnicare.com";
         var verificationLink = $"{portalBaseUrl}/verify-email?token={verificationToken.Token}";
         
         var emailBody = EmailTemplateHelper.GenerateEmailVerificationEmail(user.FullName, verificationLink, portalBaseUrl);

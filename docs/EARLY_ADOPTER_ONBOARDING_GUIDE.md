@@ -2,7 +2,7 @@
 
 ## 👋 Welcome!
 
-Welcome to PrimeCare! As an early adopter, you're not just a customer—you're a partner in building something special. This guide will help you get started quickly and make the most of your early adopter benefits.
+Welcome to Omni Care! As an early adopter, you're not just a customer—you're a partner in building something special. This guide will help you get started quickly and make the most of your early adopter benefits.
 
 **Version**: 1.0  
 **Last Updated**: January 2026
@@ -123,7 +123,7 @@ Speed up your workflow with these shortcuts:
 ## 💬 Communication Channels
 
 ### Support
-- **Email**: suporte@primecare.com.br
+- **Email**: suporte@omnicare.com.br
 - **WhatsApp**: [Number to be added]
 - **Response Time**: 
   - Starter: < 48h
@@ -147,7 +147,7 @@ Speed up your workflow with these shortcuts:
 ### Getting the Most Value
 
 1. **Use Daily**
-   - The more you use PrimeCare, the more valuable it becomes
+   - The more you use Omni Care, the more valuable it becomes
    - Your data builds a complete patient history
    - Analytics become more useful over time
 
@@ -220,7 +220,7 @@ For features not yet available, see [COMMON_ISSUES.md](COMMON_ISSUES.md) for tem
    - Screenshot is captured automatically
 
 2. **Via Email**
-   - Send to suporte@primecare.com.br
+   - Send to suporte@omnicare.com.br
    - Include: steps to reproduce, expected vs actual behavior
    - Attach screenshots if helpful
 
@@ -390,7 +390,7 @@ As an early adopter, you're part of Phase 2 (Validation). Here's what that means
 ### Immediate Issues
 - **Critical bug?** WhatsApp us: [Number]
 - **Quick question?** Use in-app feedback widget
-- **Account issue?** Email: suporte@primecare.com.br
+- **Account issue?** Email: suporte@omnicare.com.br
 
 ### Scheduled Support
 - **Training session?** Book here: [Calendar link]
@@ -405,14 +405,14 @@ As an early adopter, you're part of Phase 2 (Validation). Here's what that means
 
 ## 🙏 Thank You!
 
-Thank you for being an early adopter! Your participation is invaluable in shaping PrimeCare into a product that truly serves medical professionals.
+Thank you for being an early adopter! Your participation is invaluable in shaping Omni Care into a product that truly serves medical professionals.
 
 Together, we're building something special. 🚀
 
 ---
 
-**Questions?** Contact us anytime: suporte@primecare.com.br
+**Questions?** Contact us anytime: suporte@omnicare.com.br
 
 **Version**: 1.0  
-**Team**: PrimeCare Development Team  
+**Team**: Omni Care Development Team  
 **Last Updated**: January 2026

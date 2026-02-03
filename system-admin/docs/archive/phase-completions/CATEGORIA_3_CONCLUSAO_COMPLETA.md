@@ -9,7 +9,7 @@
 
 ## 📊 Resumo Executivo
 
-A **Categoria 3 - Experiência do Usuário** continha 4 itens focados em melhorar a experiência e usabilidade do sistema PrimeCare:
+A **Categoria 3 - Experiência do Usuário** continha 4 itens focados em melhorar a experiência e usabilidade do sistema Omni Care:
 
 | Item | Status Inicial | Status Final | Observações |
 |------|---------------|--------------|-------------|

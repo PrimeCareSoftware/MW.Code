@@ -8,12 +8,12 @@
 
 ## 🎯 Objetivo
 
-Desenvolver um sistema robusto e escalável para importar dados de clientes (pacientes) de outras plataformas e sistemas, permitindo que clínicas migrem facilmente seus dados históricos para o PrimeCare Software.
+Desenvolver um sistema robusto e escalável para importar dados de clientes (pacientes) de outras plataformas e sistemas, permitindo que clínicas migrem facilmente seus dados históricos para o Omni Care Software.
 
 ## 📋 Visão Geral
 
 ### Problema a Resolver
-Clínicas que utilizam outros sistemas de gestão precisam migrar seus dados históricos de pacientes quando adotam o PrimeCare Software. O processo manual é:
+Clínicas que utilizam outros sistemas de gestão precisam migrar seus dados históricos de pacientes quando adotam o Omni Care Software. O processo manual é:
 - ⏱️ Demorado e propenso a erros
 - 📊 Inconsistente na qualidade dos dados
 - 💰 Custoso em tempo de equipe

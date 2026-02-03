@@ -328,7 +328,7 @@ public class TwoFactorService : ITwoFactorService
     /// </summary>
     private async Task SendCodeByEmailAsync(string email, string fullName, string code)
     {
-        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.primecare.com";
+        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.omnicare.com";
         
         var emailBody = EmailTemplateHelper.GenerateTwoFactorCodeEmail(fullName, code, portalBaseUrl);
         
@@ -353,7 +353,7 @@ public class TwoFactorService : ITwoFactorService
     /// </summary>
     private async Task SendSecurityNotificationAsync(string email, string fullName, string action)
     {
-        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.primecare.com";
+        var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.omnicare.com";
         
         // HTML-encode user-provided data to prevent rendering issues
         var encodedFullName = System.Net.WebUtility.HtmlEncode(fullName);
@@ -387,7 +387,7 @@ public class TwoFactorService : ITwoFactorService
             <p>Data: {DateTime.UtcNow.AddHours(-3):dd/MM/yyyy HH:mm} (Horário de Brasília)</p>
         </div>
         <div class='footer'>
-            <p>© 2026 PrimeCare Software. Todos os direitos reservados.</p>
+            <p>© 2026 Omni Care Software. Todos os direitos reservados.</p>
             <p><a href='{portalBaseUrl}'>Acessar Portal do Paciente</a></p>
         </div>
     </div>

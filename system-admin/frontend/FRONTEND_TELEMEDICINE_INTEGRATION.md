@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento descreve como usar a integração da API de Telemedicina (videochamadas) do MedicSoft no frontend do PrimeCare Software.
+Este documento descreve como usar a integração da API de Telemedicina (videochamadas) do MedicSoft no frontend do Omni Care Software.
 
 ## Configuração
 

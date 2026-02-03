@@ -2,7 +2,7 @@
 
 ## 📌 Visão Geral
 
-Este guia fornece instruções completas para configurar e testar a Tabela TUSS (Terminologia Unificada da Saúde Suplementar) no PrimeCare Software, incluindo importação da tabela, cadastro de procedimentos, vinculação com convênios e precificação.
+Este guia fornece instruções completas para configurar e testar a Tabela TUSS (Terminologia Unificada da Saúde Suplementar) no Omni Care Software, incluindo importação da tabela, cadastro de procedimentos, vinculação com convênios e precificação.
 
 ## 🔧 Pré-requisitos
 
@@ -44,7 +44,7 @@ TUSS (Terminologia Unificada da Saúde Suplementar) é a **tabela única** de re
 
 ### Versão TUSS Implementada
 
-O PrimeCare Software suporta **TUSS versão Vigente** (atualização automática via ANS)
+O Omni Care Software suporta **TUSS versão Vigente** (atualização automática via ANS)
 
 ---
 

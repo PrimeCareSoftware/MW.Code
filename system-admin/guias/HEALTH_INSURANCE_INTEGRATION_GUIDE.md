@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento descreve como funciona a integração com operadoras de planos de saúde no Brasil, fornecendo um roteiro para implementação gradual no sistema PrimeCare Software.
+Este documento descreve como funciona a integração com operadoras de planos de saúde no Brasil, fornecendo um roteiro para implementação gradual no sistema Omni Care Software.
 
 ## 1. Contexto e Padrões no Brasil
 
@@ -645,4 +645,4 @@ A integração com operadoras de planos de saúde é um projeto robusto que adic
 
 **Última Atualização**: 2024-11-19  
 **Versão**: 1.0  
-**Autor**: PrimeCare Software Team
+**Autor**: Omni Care Software Team

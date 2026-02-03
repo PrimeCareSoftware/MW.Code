@@ -67,7 +67,7 @@ Certifique-se que os seguintes usuários existem no banco (criados pelo seed):
 **Validações Adicionais:**
 ```javascript
 // Abrir DevTools (F12) > Console
-localStorage.getItem('primecare_token') !== null
+localStorage.getItem('omnicare_token') !== null
 // Deve retornar: true
 ```
 
@@ -380,7 +380,7 @@ docker-compose logs backend | grep "Login attempt"
 **Validação:**
 ```javascript
 // DevTools > Console
-localStorage.getItem('primecare_token')
+localStorage.getItem('omnicare_token')
 // Deve retornar: null
 ```
 

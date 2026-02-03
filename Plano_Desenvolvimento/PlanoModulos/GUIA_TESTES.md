@@ -51,7 +51,7 @@ git --version
 
 ```bash
 # 1. Clonar o repositório
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 cd MW.Code
 
 # 2. Restaurar dependências

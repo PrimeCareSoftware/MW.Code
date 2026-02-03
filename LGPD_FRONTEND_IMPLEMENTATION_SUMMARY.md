@@ -568,8 +568,8 @@ npm run build
 ### Environment Configuration
 Ensure `environment.apiUrl` is configured for each environment:
 - Development: `http://localhost:5000`
-- Staging: `https://api-staging.primecare.com.br`
-- Production: `https://api.primecare.com.br`
+- Staging: `https://api-staging.omnicare.com.br`
+- Production: `https://api.omnicare.com.br`
 
 ## Maintenance
 
@@ -611,7 +611,7 @@ Current implementation supports:
 For issues or questions:
 - Create GitHub issue in MW.Code repository
 - Contact development team
-- Email: tech@primecare.com.br
+- Email: tech@omnicare.com.br
 
 ### DPO Contact
 Data Protection Officer contact information displayed in Privacy Center.

@@ -2,7 +2,7 @@
 
 ## 📋 Contexto
 
-A Fase 5 transforma o PrimeCare em uma plataforma inteligente, utilizando Machine Learning e BI avançado para fornecer insights acionáveis e automação preditiva. Esta fase posiciona o produto como líder em inovação.
+A Fase 5 transforma o Omni Care em uma plataforma inteligente, utilizando Machine Learning e BI avançado para fornecer insights acionáveis e automação preditiva. Esta fase posiciona o produto como líder em inovação.
 
 **Referência**: `MVP_IMPLEMENTATION_GUIDE.md` - Fase 5
 **Status**: 📋 Planejado

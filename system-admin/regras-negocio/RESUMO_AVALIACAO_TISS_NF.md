@@ -8,7 +8,7 @@
 
 ## 🎯 Objetivo da Tarefa
 
-Avaliar os sistemas TISS/TUSS e Notas Fiscais Eletrônicas do PrimeCare Software, comparando com as melhores ferramentas do mercado, e implementar o que está faltando em:
+Avaliar os sistemas TISS/TUSS e Notas Fiscais Eletrônicas do Omni Care Software, comparando com as melhores ferramentas do mercado, e implementar o que está faltando em:
 - ✅ Frontend
 - ✅ Backend
 - ✅ Documentação
@@ -84,7 +84,7 @@ Avaliar os sistemas TISS/TUSS e Notas Fiscais Eletrônicas do PrimeCare Software
 
 **Resultado:** ✅ **Paridade ou Superior em 80% das funcionalidades**
 
-| Funcionalidade | Mercado | PrimeCare | Gap |
+| Funcionalidade | Mercado | Omni Care | Gap |
 |----------------|---------|-----------|-----|
 | Gestão de Operadoras | ✅ | ✅ | 0% |
 | Gestão de Planos | ✅ | ✅ | 0% |
@@ -110,7 +110,7 @@ Avaliar os sistemas TISS/TUSS e Notas Fiscais Eletrônicas do PrimeCare Software
 
 **Resultado:** ✅ **Paridade ou Superior em 85% das funcionalidades**
 
-| Funcionalidade | Mercado | PrimeCare | Gap |
+| Funcionalidade | Mercado | Omni Care | Gap |
 |----------------|---------|-----------|-----|
 | Tipos de Nota (NFSe/NFe/NFCe) | ✅ | ✅ | 0% |
 | Cálculos Fiscais | ✅ | ✅ | 0% |

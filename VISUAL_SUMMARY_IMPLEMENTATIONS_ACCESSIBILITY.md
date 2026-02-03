@@ -85,7 +85,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                      Main Application                        │
 │                                                               │
-│  Top Bar: [☰] PrimeCare Software    [Clinic] [Theme] [User] │
+│  Top Bar: [☰] Omni Care Software    [Clinic] [Theme] [User] │
 ├─────────────────────────────────────────────────────────────┤
 │                                                               │
 │  Sidebar Menu:                                               │
@@ -231,7 +231,7 @@
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │  documentation: {                                         │  │
 │  │    repositoryUrl:                                         │  │
-│  │      'https://github.com/PrimeCareSoftware/MW.Code/      │  │
+│  │      'https://github.com/Omni CareSoftware/MW.Code/      │  │
 │  │       blob/main'                                          │  │
 │  │  }                                                         │  │
 │  └──────────────────────────────────────────────────────────┘  │
@@ -306,7 +306,7 @@
 ├─────────────────────────────────────────────────────────────┤
 │  const url = `${repositoryUrl}${sanitizedPath}`;            │
 │  // Example:                                                 │
-│  // https://github.com/PrimeCareSoftware/MW.Code/           │
+│  // https://github.com/Omni CareSoftware/MW.Code/           │
 │  //   blob/main/system-admin/implementacoes/INDEX.md        │
 └─────────────────────┬───────────────────────────────────────┘
                       │

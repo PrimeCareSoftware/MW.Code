@@ -113,8 +113,8 @@ Implemented a comprehensive appointment reminder system that automatically sends
     "SmtpServer": "smtp.gmail.com",
     "SmtpPort": 587,
     "UseSsl": true,
-    "From": "noreply@primecare.com",
-    "FromName": "PrimeCare Portal"
+    "From": "noreply@omnicare.com",
+    "FromName": "Omni Care Portal"
   }
 }
 ```

@@ -290,7 +290,7 @@ No new environment variables required. Uses existing configuration:
 - [Main README](../README.md)
 
 ### Issue Reporting
-- GitHub Issues: https://github.com/PrimeCare Software/MW.Code/issues
+- GitHub Issues: https://github.com/Omni Care Software/MW.Code/issues
 - Include component name and error details
 - Attach screenshots if UI-related
 

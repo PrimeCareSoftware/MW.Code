@@ -8,7 +8,7 @@
 
 ## 📋 Visão Geral
 
-Este documento descreve a implementação de **Multi-Factor Authentication (MFA) obrigatório** para usuários com funções administrativas no PrimeCare Software, conforme especificado no documento `IMPLEMENTACOES_PARA_100_PORCENTO.md`.
+Este documento descreve a implementação de **Multi-Factor Authentication (MFA) obrigatório** para usuários com funções administrativas no Omni Care Software, conforme especificado no documento `IMPLEMENTACOES_PARA_100_PORCENTO.md`.
 
 ### Objetivos
 
@@ -134,7 +134,7 @@ Após o primeiro login, se sua função requer MFA:
 ```json
 {
   "secretKey": "JBSWY3DPEHPK3PXP",
-  "qrCodeUrl": "otpauth://totp/PrimeCare:user@email.com?secret=JBSWY3DPEHPK3PXP&issuer=PrimeCare",
+  "qrCodeUrl": "otpauth://totp/Omni Care:user@email.com?secret=JBSWY3DPEHPK3PXP&issuer=Omni Care",
   "backupCodes": [
     "12345678",
     "87654321",
@@ -584,11 +584,11 @@ curl -X GET http://localhost:5000/api/system-admin/mfa-compliance \
 ## 📞 Suporte
 
 ### Dúvidas Técnicas
-- Email: dev@primecare.com.br
+- Email: dev@omnicare.com.br
 - Documentação: `/docs/api/mfa`
 
 ### Problemas de Acesso
-- Email: suporte@primecare.com.br
+- Email: suporte@omnicare.com.br
 - Telefone: (11) 1234-5678
 
 ---
@@ -609,4 +609,4 @@ curl -X GET http://localhost:5000/api/system-admin/mfa-compliance \
 **Documentação criada em:** 30 de Janeiro de 2026  
 **Última atualização:** 30 de Janeiro de 2026  
 **Versão:** 1.0  
-**Autor:** PrimeCare Development Team
+**Autor:** Omni Care Development Team

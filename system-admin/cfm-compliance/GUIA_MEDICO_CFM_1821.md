@@ -1,6 +1,6 @@
 # 📋 Guia do Médico - Sistema Conforme CFM 1.821/2007
 
-> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o PrimeCare Software em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
+> **Objetivo:** Orientar médicos e profissionais de saúde sobre como utilizar o Omni Care Software em conformidade com a Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
 
 > **Data:** Janeiro 2026  
 > **Versão:** 1.0  
@@ -25,7 +25,7 @@
 
 ## 🩺 Introdução
 
-O PrimeCare Software foi desenvolvido em total conformidade com a **Resolução CFM 1.821/2007**, que estabelece as normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio de prontuários médicos.
+O Omni Care Software foi desenvolvido em total conformidade com a **Resolução CFM 1.821/2007**, que estabelece as normas técnicas para digitalização e uso de sistemas informatizados para a guarda e manuseio de prontuários médicos.
 
 Este guia tem como objetivo orientar você, médico(a), sobre como preencher corretamente um prontuário eletrônico conforme as exigências do Conselho Federal de Medicina.
 
@@ -550,16 +550,16 @@ Apenas **você** e outros profissionais da **sua clínica** com permissão adequ
 
 Se tiver dúvidas sobre o uso do sistema ou precisar de suporte técnico:
 
-- 📧 **Email**: suporte@primecaresoftware.com.br
+- 📧 **Email**: suporte@omnicaresoftware.com.br
 - 📱 **WhatsApp**: Entre em contato pelo email para obter o número de suporte
 - 🌐 **Portal de Suporte**: Em desenvolvimento
 - 📖 **Documentação**: Consulte os arquivos MD na pasta `docs/`
 
 ---
 
-**Documento Elaborado Por:** Equipe PrimeCare Software  
+**Documento Elaborado Por:** Equipe Omni Care Software  
 **Data de Atualização:** Janeiro 2026  
 **Versão:** 1.0  
 **Status:** Oficial
 
-**Agradecemos por usar o PrimeCare Software! 💙**
+**Agradecemos por usar o Omni Care Software! 💙**

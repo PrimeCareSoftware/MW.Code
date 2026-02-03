@@ -64,7 +64,7 @@ Modernizar experiência do usuário com:
 @use '@angular/material' as mat;
 
 // Paleta customizada
-$primecare-primary: (
+$omnicare-primary: (
   50: #e8f5e9,
   100: #c8e6c9,
   200: #a5d6a7,
@@ -89,7 +89,7 @@ $primecare-primary: (
   )
 );
 
-$primecare-accent: (
+$omnicare-accent: (
   50: #e3f2fd,
   100: #bbdefb,
   200: #90caf9,
@@ -106,8 +106,8 @@ $primecare-accent: (
 // Light theme
 $light-theme: mat.define-light-theme((
   color: (
-    primary: mat.define-palette($primecare-primary),
-    accent: mat.define-palette($primecare-accent),
+    primary: mat.define-palette($omnicare-primary),
+    accent: mat.define-palette($omnicare-accent),
   ),
   typography: mat.define-typography-config(
     $font-family: 'Inter, system-ui, sans-serif',
@@ -118,8 +118,8 @@ $light-theme: mat.define-light-theme((
 // Dark theme
 $dark-theme: mat.define-dark-theme((
   color: (
-    primary: mat.define-palette($primecare-primary),
-    accent: mat.define-palette($primecare-accent),
+    primary: mat.define-palette($omnicare-primary),
+    accent: mat.define-palette($omnicare-accent),
   ),
   typography: mat.define-typography-config(
     $font-family: 'Inter, system-ui, sans-serif',

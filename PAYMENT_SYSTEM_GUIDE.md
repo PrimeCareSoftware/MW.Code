@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este guia documenta o sistema de pagamento do PrimeCare Software, incluindo métodos de pagamento disponíveis, fluxos de cobrança e gestão de assinaturas.
+Este guia documenta o sistema de pagamento do Omni Care Software, incluindo métodos de pagamento disponíveis, fluxos de cobrança e gestão de assinaturas.
 
 **Status**: ✅ MVP Fase 1 - Funcional
 **Gateway**: Integração com provedor de pagamento brasileiro
@@ -236,7 +236,7 @@ Após pagamento: Renovação confirmada
 5. (Opcional) Informar motivo
 
 **Por Email**:
-- Enviar para: assinaturas@primecaresoftware.com
+- Enviar para: assinaturas@omnicaresoftware.com
 - Assunto: "Solicitação de Cancelamento"
 - Informar: Nome da clínica, CNPJ, email cadastrado
 
@@ -450,18 +450,18 @@ R: Ainda não, mas planejado para Fase 2.
 
 ### Problemas com Pagamento
 
-**Email**: financeiro@primecaresoftware.com
+**Email**: financeiro@omnicaresoftware.com
 **Telefone**: (11) 99999-9999 (ramal 2)
 **Horário**: Seg-Sex, 9h-18h
 
 ### Dúvidas sobre Fatura
 
-**Email**: assinaturas@primecaresoftware.com
-**Portal**: [https://app.primecaresoftware.com/suporte](https://app.primecaresoftware.com/suporte)
+**Email**: assinaturas@omnicaresoftware.com
+**Portal**: [https://app.omnicaresoftware.com/suporte](https://app.omnicaresoftware.com/suporte)
 
 ### Problemas Técnicos
 
-**Email**: suporte@primecaresoftware.com
+**Email**: suporte@omnicaresoftware.com
 **Telefone**: (11) 99999-9999
 **Chat**: Disponível no portal
 
@@ -475,7 +475,7 @@ R: Ainda não, mas planejado para Fase 2.
 - Disponível no portal em "Minhas Faturas"
 
 **Informações**:
-- Descrição: Assinatura PrimeCare Software
+- Descrição: Assinatura Omni Care Software
 - CNAE: Serviços de tecnologia
 - ISS: Conforme município
 

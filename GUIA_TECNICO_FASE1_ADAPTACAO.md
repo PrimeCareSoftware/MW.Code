@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este guia documenta a implementação da Fase 1 do refatoramento do sistema PrimeCare para adaptação a diferentes tipos profissionais de clínicas e empresas.
+Este guia documenta a implementação da Fase 1 do refatoramento do sistema Omni Care para adaptação a diferentes tipos profissionais de clínicas e empresas.
 
 ## Componentes Implementados
 
@@ -262,7 +262,7 @@ dotnet ef database update --context MedicSoftDbContext
 ## Contato
 
 - **GitHub Issues:** Para bugs e melhorias
-- **Email:** produto@primecare.com.br
+- **Email:** produto@omnicare.com.br
 - **Documentação:** `/Plano_Desenvolvimento/`
 
 ---

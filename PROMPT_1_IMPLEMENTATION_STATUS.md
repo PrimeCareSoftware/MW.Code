@@ -27,7 +27,7 @@ A implementação do **Prompt 1 - Redesign da Homepage** do PROMPTS_IMPLEMENTACA
 - [x] **2 CTAs principais**: "Começar Gratuitamente" e "Ver Preços"
 - [x] **Trust badges**: "15 dias grátis", "Sem cartão", "Cancele quando quiser"
 - [x] **Background visual**: Gradientes sutis com circles animados
-- [x] **Badge de confiança**: "Mais de 500 clínicas confiam no PrimeCare"
+- [x] **Badge de confiança**: "Mais de 500 clínicas confiam no Omni Care"
 - [x] **Animações**: fadeInUp, fadeInDown implementadas
 
 **Arquivo:** `/frontend/medicwarehouse-app/src/app/pages/site/home/home.html` (linhas 3-65)
@@ -63,7 +63,7 @@ A implementação do **Prompt 1 - Redesign da Homepage** do PROMPTS_IMPLEMENTACA
 - [x] **Player placeholder** estilizado com gradiente dark
 - [x] **Play button** grande e animado (pulse animation)
 - [x] **Badge**: "Veja o sistema em ação"
-- [x] **Headline**: "Conheça o PrimeCare em detalhes"
+- [x] **Headline**: "Conheça o Omni Care em detalhes"
 - [x] **Descrição** clara
 - [x] **3 Features listadas**:
   - ✅ Interface intuitiva
@@ -76,7 +76,7 @@ A implementação do **Prompt 1 - Redesign da Homepage** do PROMPTS_IMPLEMENTACA
 
 ### 5. Testimonial Section ✅ (100%)
 - [x] **Depoimento destacado**: Cliente real com resultados mensuráveis
-- [x] **Quote**: "O PrimeCare reduziu nossas faltas em 65%..."
+- [x] **Quote**: "O Omni Care reduziu nossas faltas em 65%..."
 - [x] **Autor**: Dr. João Silva, Clínica São Paulo
 - [x] **Avatar** com gradiente personalizado
 - [x] **Rating de 5 estrelas** visual
@@ -208,19 +208,19 @@ A implementação do **Prompt 1 - Redesign da Homepage** do PROMPTS_IMPLEMENTACA
 ## 🔍 SEO ✅ (100%)
 
 ### Meta Tags Básicas
-- [x] **Title**: "PrimeCare Software - Sistema de Gestão para Clínicas Médicas"
+- [x] **Title**: "Omni Care Software - Sistema de Gestão para Clínicas Médicas"
 - [x] **Description**: Descrição completa com keywords
 - [x] **Keywords**: software médico, gestão clínica, prontuário eletrônico...
-- [x] **Author**: PrimeCare Software
+- [x] **Author**: Omni Care Software
 - [x] **Theme-color**: #6366F1
-- [x] **Canonical URL**: https://primecare.com.br
+- [x] **Canonical URL**: https://omnicare.com.br
 
 **Arquivo:** `/frontend/medicwarehouse-app/src/index.html` (linhas 5-15, 34)
 
 ### Open Graph (Facebook/LinkedIn)
 - [x] **og:type**: website
-- [x] **og:url**: https://primecare.com.br
-- [x] **og:title**: PrimeCare Software - Sistema de Gestão Clínica
+- [x] **og:url**: https://omnicare.com.br
+- [x] **og:title**: Omni Care Software - Sistema de Gestão Clínica
 - [x] **og:description**: Descrição completa
 - [x] **og:image**: Placeholder (TODO: criar imagem 1200x630px)
 
@@ -228,8 +228,8 @@ A implementação do **Prompt 1 - Redesign da Homepage** do PROMPTS_IMPLEMENTACA
 
 ### Twitter Card
 - [x] **twitter:card**: summary_large_image
-- [x] **twitter:url**: https://primecare.com.br
-- [x] **twitter:title**: PrimeCare Software
+- [x] **twitter:url**: https://omnicare.com.br
+- [x] **twitter:title**: Omni Care Software
 - [x] **twitter:description**: Descrição resumida
 - [x] **twitter:image**: Placeholder (TODO: criar imagem 1200x600px)
 
@@ -242,7 +242,7 @@ A implementação do **Prompt 1 - Redesign da Homepage** do PROMPTS_IMPLEMENTACA
 - [x] **offers**: Preço R$ 89,00/mês
 - [x] **aggregateRating**: 4.9/5 com 500 avaliações
 - [x] **description**: Descrição completa
-- [x] **provider**: Organization (PrimeCare Software)
+- [x] **provider**: Organization (Omni Care Software)
 
 **Arquivo:** `/frontend/medicwarehouse-app/src/index.html` (linhas 51-78)
 
@@ -430,7 +430,7 @@ A implementação do **Prompt 1 - Redesign da Homepage** está **totalmente comp
 - **Documentação Completa**: [PROMPT_1_HOMEPAGE_REDESIGN_COMPLETO.md](./PROMPT_1_HOMEPAGE_REDESIGN_COMPLETO.md)
 - **Análise de Segurança**: [SECURITY_SUMMARY_PROMPT1.md](./SECURITY_SUMMARY_PROMPT1.md)
 - **Histórico**: [CHANGELOG.md](./CHANGELOG.md)
-- **Repository**: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- **Repository**: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 
 ---
 

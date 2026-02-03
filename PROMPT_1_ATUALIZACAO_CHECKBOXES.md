@@ -39,7 +39,7 @@ Todos os checkboxes do Prompt 1 foram atualizados para refletir o status real:
 - [x] 2 CTAs principais: "Começar gratuitamente" + "Ver preços"
 - [x] Trust badges: "15 dias grátis", "Sem cartão", "Cancele quando quiser"
 - [x] Background visual com gradientes e circles animados
-- [x] Badge de confiança: "Mais de 500 clínicas confiam no PrimeCare"
+- [x] Badge de confiança: "Mais de 500 clínicas confiam no Omni Care"
 
 #### Social Proof Section ✅ 100% Implementado
 - [x] 4 Estatísticas: 500+ clínicas, 50k+ pacientes, 98% satisfação, 70% menos faltas

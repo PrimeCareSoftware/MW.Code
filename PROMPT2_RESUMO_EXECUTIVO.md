@@ -9,7 +9,7 @@
 
 ## 🎯 Objetivo da Tarefa
 
-Implementar as pendências do PROMPT 2 de PROMPTS_IMPLEMENTACAO_DETALHADOS.md, que trata do **Vídeo Demonstrativo** do sistema PrimeCare, e atualizar todas as documentações relacionadas.
+Implementar as pendências do PROMPT 2 de PROMPTS_IMPLEMENTACAO_DETALHADOS.md, que trata do **Vídeo Demonstrativo** do sistema Omni Care, e atualizar todas as documentações relacionadas.
 
 ---
 

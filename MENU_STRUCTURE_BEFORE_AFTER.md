@@ -3,7 +3,7 @@
 ## BEFORE Implementation
 
 ```
-PrimeCare Software Menu
+Omni Care Software Menu
 ├── Dashboard
 ├── Pacientes
 ├── Agendamentos
@@ -60,7 +60,7 @@ PrimeCare Software Menu
 ## AFTER Implementation ✨
 
 ```
-PrimeCare Software Menu
+Omni Care Software Menu
 ├── Dashboard
 ├── Pacientes
 ├── Agendamentos

@@ -2,7 +2,7 @@
 
 ## Issue Description
 
-The PrimeCare Software application was experiencing runtime errors when CRM jobs attempted to access database tables that didn't exist:
+The Omni Care Software application was experiencing runtime errors when CRM jobs attempted to access database tables that didn't exist:
 
 ```
 Npgsql.PostgresException (0x80004005): 42P01: relation "crm.SentimentAnalyses" does not exist

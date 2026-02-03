@@ -463,8 +463,8 @@ public class WorkflowTemplateSeeder
                     Config = JsonSerializer.Serialize(new
                     {
                         to = "{{email}}",
-                        subject = "Bem-vindo ao PrimeCare, {{name}}!",
-                        body = "Olá {{name}},\n\nBem-vindo ao PrimeCare! Estamos felizes em tê-lo conosco..."
+                        subject = "Bem-vindo ao Omni Care, {{name}}!",
+                        body = "Olá {{name}},\n\nBem-vindo ao Omni Care! Estamos felizes em tê-lo conosco..."
                     })
                 },
                 new WorkflowAction
@@ -495,7 +495,7 @@ public class WorkflowTemplateSeeder
                     Config = JsonSerializer.Serialize(new
                     {
                         to = "{{email}}",
-                        subject = "Como está sendo sua experiência com o PrimeCare?",
+                        subject = "Como está sendo sua experiência com o Omni Care?",
                         body = "Olá {{name}},\n\nJá faz uma semana desde que você começou..."
                     })
                 }
@@ -1328,7 +1328,7 @@ public class SendGridIntegrationService
     {
         var client = new SendGridClient(Environment.GetEnvironmentVariable("SENDGRID_API_KEY"));
         var msg = new SendGridMessage();
-        msg.SetFrom(new EmailAddress("noreply@primecare.com", "PrimeCare"));
+        msg.SetFrom(new EmailAddress("noreply@omnicare.com", "Omni Care"));
         msg.AddTo(new EmailAddress(to));
         msg.SetTemplateId(templateId);
         msg.SetTemplateData(data);
@@ -1349,7 +1349,7 @@ public class SlackIntegrationService
         {
             channel,
             text = message,
-            username = "PrimeCare Bot",
+            username = "Omni Care Bot",
             icon_emoji = ":hospital:"
         };
         

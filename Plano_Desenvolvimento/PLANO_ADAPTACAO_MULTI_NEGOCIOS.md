@@ -4,13 +4,13 @@
 > **Data de Criação:** 26 de Janeiro de 2026  
 > **Versão:** 1.0  
 > **Status:** Em Planejamento  
-> **Objetivo:** Transformar o PrimeCare de um sistema focado em clínicas para uma plataforma adaptável a múltiplos modelos de negócio em saúde
+> **Objetivo:** Transformar o Omni Care de um sistema focado em clínicas para uma plataforma adaptável a múltiplos modelos de negócio em saúde
 
 ---
 
 ## 📋 Sumário Executivo
 
-O PrimeCare Software está atualmente focado no modelo de clínicas tradicionais com CNPJ, salas físicas e estrutura corporativa. Este documento apresenta um plano de desenvolvimento para tornar o sistema **altamente adaptável** a diversos modelos de negócio em saúde:
+O Omni Care Software está atualmente focado no modelo de clínicas tradicionais com CNPJ, salas físicas e estrutura corporativa. Este documento apresenta um plano de desenvolvimento para tornar o sistema **altamente adaptável** a diversos modelos de negócio em saúde:
 
 ### Público-Alvo Expandido
 1. **Profissionais Autônomos**
@@ -571,10 +571,10 @@ templates/
 
 #### Tarefas:
 1. **Landing Pages Específicas** (3 semanas)
-   - primecare.com.br/psicologos
-   - primecare.com.br/nutricionistas
-   - primecare.com.br/dentistas
-   - primecare.com.br/fisioterapeutas
+   - omnicare.com.br/psicologos
+   - omnicare.com.br/nutricionistas
+   - omnicare.com.br/dentistas
+   - omnicare.com.br/fisioterapeutas
    - Conteúdo SEO-optimized
 
 2. **Casos de Uso por Especialidade** (2 semanas)
@@ -867,9 +867,9 @@ templates/
 
 ## 📞 Contato e Suporte
 
-**Responsável pelo Projeto:** Equipe de Produto PrimeCare  
-**Email:** produto@primecare.com.br  
-**GitHub:** [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)  
+**Responsável pelo Projeto:** Equipe de Produto Omni Care  
+**Email:** produto@omnicare.com.br  
+**GitHub:** [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)  
 **Documentação:** `/Plano_Desenvolvimento/`
 
 ---

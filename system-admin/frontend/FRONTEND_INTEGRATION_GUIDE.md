@@ -1,8 +1,8 @@
-# Frontend Integration Guide - PrimeCare Software API
+# Frontend Integration Guide - Omni Care Software API
 
 ## Quick Start for Frontend Developers
 
-This guide provides everything you need to integrate your frontend application with the PrimeCare Software API.
+This guide provides everything you need to integrate your frontend application with the Omni Care Software API.
 
 ## 🔐 Authentication Flow
 
@@ -511,7 +511,7 @@ export class LoginComponent {
 ```html
 <!-- login.component.html -->
 <div class="login-container">
-  <h2>PrimeCare Software Login</h2>
+  <h2>Omni Care Software Login</h2>
   
   <div class="login-type-toggle">
     <button 
@@ -624,5 +624,5 @@ If you encounter CORS errors, make sure the backend is configured with your fron
 ## 🤝 Support
 
 For issues or questions:
-- Email: contato@primecaresoftware.com
-- GitHub: https://github.com/PrimeCare Software/MW.Code
+- Email: contato@omnicaresoftware.com
+- GitHub: https://github.com/Omni Care Software/MW.Code

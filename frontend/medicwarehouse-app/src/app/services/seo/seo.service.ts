@@ -43,10 +43,10 @@ export class SeoService {
   private router = inject(Router);
   
   private defaultMetadata: SeoMetadata = {
-    title: 'PrimeCare Software - Sistema de Gestão para Clínicas Médicas',
+    title: 'Omni Care Software - Sistema de Gestão para Clínicas Médicas',
     description: 'Software completo para gestão de consultórios e clínicas. Agenda, prontuário eletrônico, telemedicina e mais. Experimente grátis por 15 dias.',
     keywords: ['software médico', 'gestão clínica', 'prontuário eletrônico', 'agenda médica', 'telemedicina'],
-    image: 'https://primecare.com.br/assets/og-image.jpg',
+    image: 'https://omnicare.com.br/assets/og-image.jpg',
     type: 'website',
     locale: 'pt_BR'
   };
@@ -207,10 +207,10 @@ export class SeoService {
       },
       'publisher': {
         '@type': 'Organization',
-        'name': 'PrimeCare Software',
+        'name': 'Omni Care Software',
         'logo': {
           '@type': 'ImageObject',
-          'url': 'https://primecare.com.br/assets/logo.png'
+          'url': 'https://omnicare.com.br/assets/logo.png'
         }
       },
       'datePublished': article.publishedAt.toISOString(),
@@ -291,9 +291,9 @@ export class SeoService {
     return {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      'name': 'PrimeCare Software',
-      'url': 'https://primecare.com.br',
-      'logo': 'https://primecare.com.br/assets/logo.png',
+      'name': 'Omni Care Software',
+      'url': 'https://omnicare.com.br',
+      'logo': 'https://omnicare.com.br/assets/logo.png',
       'description': 'Software completo para gestão de consultórios e clínicas médicas',
       'contactPoint': {
         '@type': 'ContactPoint',

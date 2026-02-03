@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema PrimeCare Software, conforme especificado no issue.
+Este documento apresenta um resumo executivo da implementação das regras de negócio para o sistema Omni Care Software, conforme especificado no issue.
 
 ## ✅ Requisitos Implementados
 
@@ -271,8 +271,8 @@ Duration: 176 ms
 ## 📞 Suporte
 
 - **Documentação**: Veja `BUSINESS_RULES.md` e `TECHNICAL_IMPLEMENTATION.md`
-- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
-- **Email**: contato@primecaresoftware.com
+- **Issues**: https://github.com/Omni Care Software/MW.Code/issues
+- **Email**: contato@omnicaresoftware.com
 
 ## 🎉 Conclusão
 

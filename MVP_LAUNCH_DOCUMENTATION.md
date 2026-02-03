@@ -1,8 +1,8 @@
-# 🚀 Documentação de Lançamento MVP - PrimeCare Software
+# 🚀 Documentação de Lançamento MVP - Omni Care Software
 
 ## 📋 Visão Geral
 
-Este documento detalha todas as funcionalidades implementadas na Fase 1 do MVP do PrimeCare Software, um sistema SaaS completo para gestão de clínicas e consultórios médicos.
+Este documento detalha todas as funcionalidades implementadas na Fase 1 do MVP do Omni Care Software, um sistema SaaS completo para gestão de clínicas e consultórios médicos.
 
 **Status**: ✅ MVP Fase 1 - Concluído
 **Data de Lançamento**: Janeiro 2026
@@ -344,16 +344,16 @@ Todos os planos Early Adopter incluem:
 ### Canais de Suporte:
 
 #### Email:
-- **Suporte**: suporte@primecaresoftware.com
+- **Suporte**: suporte@omnicaresoftware.com
 - **Tempo de resposta**: 48h (dias úteis)
 
 #### Documentação:
-- Base de conhecimento: [docs.primecaresoftware.com](https://docs.primecaresoftware.com)
+- Base de conhecimento: [docs.omnicaresoftware.com](https://docs.omnicaresoftware.com)
 - FAQs: Ver arquivo `EARLY_ADOPTER_FAQ.md`
 - Guias: Ver arquivo `ONBOARDING_GUIDE.md`
 
 #### Early Adopters:
-- Email prioritário: earlyAdopters@primecaresoftware.com
+- Email prioritário: earlyAdopters@omnicaresoftware.com
 - Tempo de resposta: 24h (dias úteis)
 - Grupo exclusivo no WhatsApp (breve)
 
@@ -391,15 +391,15 @@ Todos os planos Early Adopter incluem:
 ## 📞 Contatos
 
 ### Comercial:
-- Email: vendas@primecaresoftware.com
+- Email: vendas@omnicaresoftware.com
 - Telefone: (11) 99999-9999
 
 ### Suporte Técnico:
-- Email: suporte@primecaresoftware.com
-- Portal: https://suporte.primecaresoftware.com
+- Email: suporte@omnicaresoftware.com
+- Portal: https://suporte.omnicaresoftware.com
 
 ### Early Adopters:
-- Email: earlyAdopters@primecaresoftware.com
+- Email: earlyAdopters@omnicaresoftware.com
 
 ---
 

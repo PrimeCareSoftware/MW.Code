@@ -77,7 +77,7 @@ namespace MedicSoft.Api.Controllers
                 return Ok(new RegistrationResponseDto
                 {
                     Success = true,
-                    Message = "Registration successful! Welcome to PrimeCare Software. You can now login with your credentials.",
+                    Message = "Registration successful! Welcome to Omni Care Software. You can now login with your credentials.",
                     ClinicId = result.ClinicId,
                     UserId = result.OwnerId,
                     TenantId = result.TenantId,

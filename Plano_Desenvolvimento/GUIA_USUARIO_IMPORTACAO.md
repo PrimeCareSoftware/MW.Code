@@ -7,7 +7,7 @@
 
 ## 🎯 Introdução
 
-Este guia explica como utilizar o Sistema de Importação de Dados do PrimeCare Software para migrar seus dados de outros sistemas de gestão médica para nossa plataforma.
+Este guia explica como utilizar o Sistema de Importação de Dados do Omni Care Software para migrar seus dados de outros sistemas de gestão médica para nossa plataforma.
 
 ### O que você pode importar?
 
@@ -24,7 +24,7 @@ Este guia explica como utilizar o Sistema de Importação de Dados do PrimeCare 
 
 Antes de iniciar a importação, certifique-se de que:
 
-1. **Você tem permissão de administrador** no PrimeCare Software
+1. **Você tem permissão de administrador** no Omni Care Software
 2. **Você exportou os dados** do seu sistema atual
 3. **Os dados estão em formato compatível:**
    - CSV (Excel salvo como CSV)
@@ -89,7 +89,7 @@ Maria Santos,987.654.321-00,22/07/1990,Feminino,maria@email.com,(11) 91234-5678,
 
 ### Passo 2: Acessar o Sistema de Importação
 
-1. Faça login no PrimeCare Software
+1. Faça login no Omni Care Software
 2. No menu principal, clique em **⚙️ Configurações**
 3. Selecione **📥 Importação de Dados**
 4. Clique no botão **+ Nova Importação**
@@ -105,13 +105,13 @@ Maria Santos,987.654.321-00,22/07/1990,Feminino,maria@email.com,(11) 91234-5678,
 
 ### Passo 4: Mapeamento de Colunas
 
-Esta é a etapa mais importante! Aqui você conecta as colunas do seu arquivo aos campos do PrimeCare.
+Esta é a etapa mais importante! Aqui você conecta as colunas do seu arquivo aos campos do Omni Care.
 
 #### Mapeamento Automático
 
 O sistema tentará detectar automaticamente as colunas. Revise as sugestões:
 
-| Coluna do Arquivo | → | Campo do PrimeCare | Status |
+| Coluna do Arquivo | → | Campo do Omni Care | Status |
 |-------------------|---|-------------------|--------|
 | Nome Completo | → | Nome | ✅ Correto |
 | CPF | → | Documento (CPF) | ✅ Correto |
@@ -130,7 +130,7 @@ Se algo estiver incorreto:
 
 Para a coluna **Sexo/Gênero**, você pode precisar transformar os valores:
 
-| Valor no Arquivo | → | Valor no PrimeCare |
+| Valor no Arquivo | → | Valor no Omni Care |
 |------------------|---|-------------------|
 | M | → | Masculino |
 | F | → | Feminino |
@@ -157,7 +157,7 @@ Se você já importou dados deste sistema antes, pode usar um template salvo:
 - 📋 ClinicWeb
 - 📋 Softmed
 - 📋 Amplimed
-- 📋 CSV Padrão PrimeCare
+- 📋 CSV Padrão Omni Care
 
 ### Passo 5: Validação de Dados
 
@@ -401,10 +401,10 @@ Para ver logs detalhados de erro:
 
 Se você precisar de ajuda:
 
-**📧 Email:** suporte@primecaresoftware.com.br  
+**📧 Email:** suporte@omnicaresoftware.com.br  
 **📱 WhatsApp:** (11) 9999-9999  
 **💬 Chat:** Disponível no sistema (canto inferior direito)  
-**📖 Central de Ajuda:** https://ajuda.primecaresoftware.com.br
+**📖 Central de Ajuda:** https://ajuda.omnicaresoftware.com.br
 
 **Horário de Atendimento:**
 - Segunda a Sexta: 8h às 18h
@@ -423,7 +423,7 @@ Antes de começar, certifique-se de:
 - [ ] Telefones e emails estão válidos
 - [ ] Fiz backup dos dados originais
 - [ ] Li este guia completamente
-- [ ] Tenho permissão de administrador no PrimeCare
+- [ ] Tenho permissão de administrador no Omni Care
 
 Durante a importação:
 

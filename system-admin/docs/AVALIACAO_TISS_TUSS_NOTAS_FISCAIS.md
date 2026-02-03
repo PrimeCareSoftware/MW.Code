@@ -8,7 +8,7 @@
 
 ## 📋 Sumário Executivo
 
-Esta avaliação examinou a implementação dos sistemas TISS/TUSS e Notas Fiscais Eletrônicas (NF-e/NFS-e) no PrimeCare Software, comparando com as melhores práticas do mercado e padrões regulatórios brasileiros (ANS, SEFAZ, ANVISA).
+Esta avaliação examinou a implementação dos sistemas TISS/TUSS e Notas Fiscais Eletrônicas (NF-e/NFS-e) no Omni Care Software, comparando com as melhores práticas do mercado e padrões regulatórios brasileiros (ANS, SEFAZ, ANVISA).
 
 ### Resultado da Avaliação
 
@@ -558,7 +558,7 @@ O sistema de Notas Fiscais Eletrônicas permite a emissão de NF-e, NFS-e e NFC-
 
 ### 6.1 Resumo da Avaliação
 
-O sistema PrimeCare Software possui uma **implementação robusta e completa** dos módulos TISS/TUSS e Notas Fiscais Eletrônicas, com **95% de completude em TISS/TUSS** e **100% em Notas Fiscais**.
+O sistema Omni Care Software possui uma **implementação robusta e completa** dos módulos TISS/TUSS e Notas Fiscais Eletrônicas, com **95% de completude em TISS/TUSS** e **100% em Notas Fiscais**.
 
 **Pontos Positivos:**
 - ✅ Arquitetura de qualidade enterprise

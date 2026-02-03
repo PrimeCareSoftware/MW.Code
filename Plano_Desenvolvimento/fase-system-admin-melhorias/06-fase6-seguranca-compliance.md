@@ -89,7 +89,7 @@ public class MfaService : IMfaService
         await _context.SaveChangesAsync();
         
         // Gerar QR Code para Google Authenticator
-        var totpUrl = $"otpauth://totp/PrimeCare:{user.Email}?secret={secretKeyBase32}&issuer=PrimeCare";
+        var totpUrl = $"otpauth://totp/Omni Care:{user.Email}?secret={secretKeyBase32}&issuer=Omni Care";
         var qrCode = QrCodeGenerator.Generate(totpUrl);
         
         return new MfaSetupDto
@@ -166,7 +166,7 @@ public class MfaService : IMfaService
             
         // Enviar SMS
         await _smsService.SendAsync(user.Phone, 
-            $"Seu código de verificação PrimeCare: {code}");
+            $"Seu código de verificação Omni Care: {code}");
     }
     
     public async Task<bool> VerifySmsCode(int userId, string code)
@@ -511,7 +511,7 @@ export class MfaSetupComponent implements OnInit {
   
   downloadBackupCodes() {
     const blob = new Blob([this.backupCodes.join('\n')], { type: 'text/plain' });
-    saveAs(blob, 'primecare-backup-codes.txt');
+    saveAs(blob, 'omnicare-backup-codes.txt');
   }
   
   async completeMfaSetup() {

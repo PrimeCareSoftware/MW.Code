@@ -316,4 +316,4 @@ Se encontrar problemas após esta consolidação:
 
 ---
 
-*PrimeCare Software* - Sistema de Gestão Médica
+*Omni Care Software* - Sistema de Gestão Médica

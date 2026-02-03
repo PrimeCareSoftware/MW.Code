@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-This document describes the port configuration for all frontend projects in the PrimeCare Software repository. Each project has been assigned a unique port to prevent conflicts when running multiple frontend applications simultaneously during development.
+This document describes the port configuration for all frontend projects in the Omni Care Software repository. Each project has been assigned a unique port to prevent conflicts when running multiple frontend applications simultaneously during development.
 
 ## 🔌 Port Assignments
 

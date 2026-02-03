@@ -182,7 +182,7 @@ Adicionada configuração completa no `appsettings.json`:
     "CacheProvider": "Redis",
     "Redis": {
       "ConnectionString": "localhost:6379",
-      "InstanceName": "PrimeCare:",
+      "InstanceName": "Omni Care:",
       "DefaultExpirationMinutes": 60,
       "SlidingExpirationMinutes": 30
     },

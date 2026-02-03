@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento descreve as funcionalidades de gerenciamento de clínicas e procedimentos para proprietários no sistema PrimeCare, implementado em Janeiro de 2026.
+Este documento descreve as funcionalidades de gerenciamento de clínicas e procedimentos para proprietários no sistema Omni Care, implementado em Janeiro de 2026.
 
 ## 📋 Índice
 
@@ -448,4 +448,4 @@ Para dúvidas ou sugestões sobre estas funcionalidades, entre em contato com a 
 
 **Versão do Documento**: 1.0  
 **Data**: Janeiro 2026  
-**Autor**: PrimeCare Development Team
+**Autor**: Omni Care Development Team

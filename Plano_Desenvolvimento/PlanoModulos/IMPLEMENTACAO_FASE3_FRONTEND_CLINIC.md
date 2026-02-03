@@ -356,9 +356,9 @@ Nenhum problema conhecido no momento.
 ## 📞 Suporte
 
 Para dúvidas ou problemas:
-- **GitHub:** [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- **GitHub:** [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - **Documentação:** `/docs`
-- **Issues:** [GitHub Issues](https://github.com/PrimeCareSoftware/MW.Code/issues)
+- **Issues:** [GitHub Issues](https://github.com/Omni CareSoftware/MW.Code/issues)
 
 ---
 
@@ -372,4 +372,4 @@ Para dúvidas ou problemas:
 
 > **Documento criado em:** 29 de Janeiro de 2026  
 > **Última atualização:** 29 de Janeiro de 2026  
-> **Autor:** GitHub Copilot + Equipe PrimeCare
+> **Autor:** GitHub Copilot + Equipe Omni Care

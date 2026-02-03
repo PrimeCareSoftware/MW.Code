@@ -46,7 +46,7 @@ namespace MedicSoft.Application.Services.DigitalSignature
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<AssinaturaDigitalService> _logger;
         
-        private const string DefaultSystemName = "Sistema PrimeCare";
+        private const string DefaultSystemName = "Sistema Omni Care";
 
         public AssinaturaDigitalService(
             ICertificateManager certificateManager,

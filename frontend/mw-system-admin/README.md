@@ -96,4 +96,4 @@ The application communicates with the backend API at the configured `apiUrl` in 
 
 ## License
 
-Proprietary - PrimeCare Software
+Proprietary - Omni Care Software

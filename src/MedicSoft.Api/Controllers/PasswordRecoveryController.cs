@@ -106,7 +106,7 @@ namespace MedicSoft.Api.Controllers
                 // Send verification code via email
                 try
                 {
-                    var emailSubject = "Código de Recuperação de Senha - PrimeCare";
+                    var emailSubject = "Código de Recuperação de Senha - Omni Care";
                     var emailBody = GeneratePasswordResetEmailBody(user.FullName, verificationCode);
                     await _emailService.SendEmailAsync(user.Email, emailSubject, emailBody);
                     _logger.LogInformation("Password reset code sent to {Email} for user {UserId}", user.Email, user.Id);
@@ -255,7 +255,7 @@ namespace MedicSoft.Api.Controllers
                 // Send verification code via email
                 try
                 {
-                    var emailSubject = "Código de Recuperação de Senha - PrimeCare (Reenvio)";
+                    var emailSubject = "Código de Recuperação de Senha - Omni Care (Reenvio)";
                     var emailBody = GeneratePasswordResetEmailBody("Usuário", resetToken.VerificationCode);
                     await _emailService.SendEmailAsync(resetToken.Destination, emailSubject, emailBody);
                     _logger.LogInformation("Password reset code resent to {Email}", resetToken.Destination);
@@ -335,7 +335,7 @@ namespace MedicSoft.Api.Controllers
         </div>
         <div class=""content"">
             <p>Olá, <strong>{encodedUserName}</strong>,</p>
-            <p>Você solicitou a recuperação de senha da sua conta PrimeCare.</p>
+            <p>Você solicitou a recuperação de senha da sua conta Omni Care.</p>
             <p>Use o código de verificação abaixo para continuar:</p>
             <div class=""code"">{encodedCode}</div>
             <p><strong>Este código é válido por 15 minutos.</strong></p>
@@ -345,7 +345,7 @@ namespace MedicSoft.Api.Controllers
             </div>
         </div>
         <div class=""footer"">
-            <p>© 2026 PrimeCare Software. Todos os direitos reservados.</p>
+            <p>© 2026 Omni Care Software. Todos os direitos reservados.</p>
             <p>Este é um e-mail automático. Por favor, não responda.</p>
         </div>
     </div>

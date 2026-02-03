@@ -1,4 +1,4 @@
-# Resumo da Correção de Autenticação - PrimeCare Software
+# Resumo da Correção de Autenticação - Omni Care Software
 
 ## 🎯 Problema Identificado
 

@@ -33,7 +33,7 @@ export class CasesComponent {
 
   ngOnInit(): void {
     // Track page view
-    this.analytics.trackPageView('/site/cases', 'Cases de Sucesso - PrimeCare');
+    this.analytics.trackPageView('/site/cases', 'Cases de Sucesso - Omni Care');
   }
 
   onCaseView(caseItem: SuccessCase): void {
@@ -50,7 +50,7 @@ export class CasesComponent {
       clinicName: 'Clínica Sorriso',
       specialty: 'Odontologia',
       location: 'São Paulo, SP',
-      quote: 'O PrimeCare reduziu nosso tempo de agendamento em 70% e eliminou completamente os erros de prontuário.',
+      quote: 'O Omni Care reduziu nosso tempo de agendamento em 70% e eliminou completamente os erros de prontuário.',
       authorName: 'Dra. Maria Silva',
       authorRole: 'Diretora Clínica',
       metrics: [

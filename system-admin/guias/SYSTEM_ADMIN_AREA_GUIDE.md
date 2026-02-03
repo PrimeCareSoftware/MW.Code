@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no PrimeCare Software, visualizem métricas globais do sistema e controlem assinaturas.
+A área administrativa do System Owner permite que proprietários do sistema (como Igor) gerenciem todas as clínicas cadastradas no Omni Care Software, visualizem métricas globais do sistema e controlem assinaturas.
 
 ## Acesso
 
@@ -395,7 +395,7 @@ clinic-detail         | 10.83 kB | 3.00 kB
 ## Contato e Suporte
 
 Para dúvidas ou problemas relacionados à área administrativa:
-- **Email**: suporte@primecaresoftware.com
+- **Email**: suporte@omnicaresoftware.com
 - **Documentação Técnica**: [README.md](../README.md)
 - **Issue Tracker**: GitHub Issues
 
@@ -403,4 +403,4 @@ Para dúvidas ou problemas relacionados à área administrativa:
 
 **Última Atualização**: 14 de Outubro de 2024  
 **Versão**: 1.0.0  
-**Autor**: GitHub Copilot para PrimeCare Software
+**Autor**: GitHub Copilot para Omni Care Software

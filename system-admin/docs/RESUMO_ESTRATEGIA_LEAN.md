@@ -1,4 +1,4 @@
-# 📋 Resumo Executivo - Estratégia Lean PrimeCare Software
+# 📋 Resumo Executivo - Estratégia Lean Omni Care Software
 
 > **Data:** 16 de Janeiro de 2026  
 > **Status:** Sistema 95% completo → Fase 1 da Estratégia COMPLETA ✅  
@@ -8,7 +8,7 @@
 
 ## 🎯 Problema Identificado (Dezembro 2025)
 
-O PrimeCare Software possuía:
+O Omni Care Software possuía:
 - ✅ Base técnica excelente (DDD, 734+ testes, multi-tenancy)
 - ✅ 92% de completude funcional
 - ⚠️ **MAS:** 85+ tarefas pendentes de desenvolvimento
@@ -81,7 +81,7 @@ O PrimeCare Software possuía:
 
 ### Matriz Comparativa - Features Críticas
 
-| Feature | PrimeCare | iClinic | Doctoralia | Nuvem |
+| Feature | Omni Care | iClinic | Doctoralia | Nuvem |
 |---------|-----------|---------|------------|-------|
 | Agenda Online | ✅ | ✅ | ✅ | ✅ |
 | Prontuário | ✅ | ✅ | ✅ | ✅ |
@@ -311,7 +311,7 @@ O PrimeCare Software possuía:
 
 ### Comparativo
 
-| Plano | PrimeCare | iClinic | Nuvem |
+| Plano | Omni Care | iClinic | Nuvem |
 |-------|-----------|---------|-------|
 | Básico | R$ 99 | R$ 129 | R$ 99 |
 | Intermediário | R$ 149 | R$ 249 | R$ 149 |
@@ -520,8 +520,8 @@ O PrimeCare Software possuía:
 **Status:** FASE 1 COMPLETA ✅ | FASE 2 EM ANDAMENTO ⏳
 
 **Contato:**
-- Email: contato@primecaresoftware.com
-- GitHub: https://github.com/PrimeCareSoftware/MW.Code
+- Email: contato@omnicaresoftware.com
+- GitHub: https://github.com/Omni CareSoftware/MW.Code
 
 **Próxima Revisão:** 30 de Janeiro de 2026
 
@@ -569,4 +569,4 @@ O PrimeCare Software possuía:
 
 ---
 
-**Esta simplificação coloca o PrimeCare na posição ideal para crescer de forma sustentável e competitiva em 2026.**
+**Esta simplificação coloca o Omni Care na posição ideal para crescer de forma sustentável e competitiva em 2026.**

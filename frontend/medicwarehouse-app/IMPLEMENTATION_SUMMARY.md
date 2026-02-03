@@ -84,7 +84,7 @@ The project has **two separate frontend applications**:
 - **Screens**: Patients, appointments, medical records, billing, etc.
 
 #### 2. **mw-system-admin** (System Admin App)
-- **Users**: PrimeCare system administrators only
+- **Users**: Omni Care system administrators only
 - **Purpose**: Manage multiple clinics, subscriptions, subdomains
 - **Already fixed**: Previously cleaned up in January 2026
 

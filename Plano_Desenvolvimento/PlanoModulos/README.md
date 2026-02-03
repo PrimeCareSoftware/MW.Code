@@ -503,8 +503,8 @@ O **Sistema de Configuração de Módulos** está **93% completo e pronto para p
 
 ## 📞 Contato
 
-**PrimeCare Software - Equipe de Desenvolvimento**
-- GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+**Omni Care Software - Equipe de Desenvolvimento**
+- GitHub: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - Documentação: `/Plano_Desenvolvimento/PlanoModulos/`
 
 ---

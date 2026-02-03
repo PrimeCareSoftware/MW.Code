@@ -84,7 +84,7 @@ namespace MedicSoft.Application.Services
             return new TwoFactorSetupInfo
             {
                 SecretKey = secretKey,
-                QRCodeUrl = $"otpauth://totp/PrimeCare:{email}?secret={secretKey}&issuer=PrimeCare",
+                QRCodeUrl = $"otpauth://totp/Omni Care:{email}?secret={secretKey}&issuer=Omni Care",
                 BackupCodes = backupCodes
             };
         }
@@ -317,7 +317,7 @@ namespace MedicSoft.Application.Services
             await _emailTokenRepository.AddAsync(token);
 
             // Send email
-            var emailSubject = "Código de Verificação 2FA - PrimeCare";
+            var emailSubject = "Código de Verificação 2FA - Omni Care";
             var emailBody = GenerateEmailBody(code, purpose);
             await _emailService.SendEmailAsync(email, emailSubject, emailBody);
 
@@ -409,7 +409,7 @@ namespace MedicSoft.Application.Services
             <h1>Código de Verificação 2FA</h1>
         </div>
         <div class=""content"">
-            <p>Você solicitou autenticação de dois fatores para {purposeText} na sua conta PrimeCare.</p>
+            <p>Você solicitou autenticação de dois fatores para {purposeText} na sua conta Omni Care.</p>
             <p>Use o código de verificação abaixo:</p>
             <div class=""code"">{encodedCode}</div>
             <p><strong>Este código é válido por 5 minutos.</strong></p>
@@ -419,7 +419,7 @@ namespace MedicSoft.Application.Services
             </div>
         </div>
         <div class=""footer"">
-            <p>© 2026 PrimeCare Software. Todos os direitos reservados.</p>
+            <p>© 2026 Omni Care Software. Todos os direitos reservados.</p>
             <p>Este é um e-mail automático. Por favor, não responda.</p>
         </div>
     </div>

@@ -123,7 +123,7 @@ namespace MedicSoft.Api.Controllers
                 },
                 clinic = new
                 {
-                    name = "Clínica Demo PrimeCare Software",
+                    name = "Clínica Demo Omni Care Software",
                     tradeName = "Clínica Demo"
                 },
                 users = new[]

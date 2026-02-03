@@ -192,4 +192,4 @@ For questions or issues:
 
 ## License
 
-Copyright © 2026 PrimeCare Software. All rights reserved.
+Copyright © 2026 Omni Care Software. All rights reserved.

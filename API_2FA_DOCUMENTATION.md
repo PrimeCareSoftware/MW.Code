@@ -6,7 +6,7 @@
 
 ## Overview
 
-This document describes the 2FA (Two-Factor Authentication) API endpoints for the PrimeCare Patient Portal. The 2FA system adds an extra layer of security by requiring users to verify their identity with a code sent to their email in addition to their password.
+This document describes the 2FA (Two-Factor Authentication) API endpoints for the Omni Care Patient Portal. The 2FA system adds an extra layer of security by requiring users to verify their identity with a code sent to their email in addition to their password.
 
 ## Table of Contents
 
@@ -472,7 +472,7 @@ if (token.VerificationAttempts >= 5)
 ```typescript
 // Step 1: Login
 async function login(email: string, password: string) {
-  const response = await fetch('https://api.primecare.com/api/auth/login', {
+  const response = await fetch('https://api.omnicare.com/api/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -504,7 +504,7 @@ async function login(email: string, password: string) {
 
 // Step 2: Verify 2FA Code
 async function verify2FA(tempToken: string, code: string) {
-  const response = await fetch('https://api.primecare.com/api/auth/verify-2fa', {
+  const response = await fetch('https://api.omnicare.com/api/auth/verify-2fa', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -531,7 +531,7 @@ async function verify2FA(tempToken: string, code: string) {
 
 // Resend Code
 async function resendCode(tempToken: string) {
-  const response = await fetch('https://api.primecare.com/api/auth/resend-2fa-code', {
+  const response = await fetch('https://api.omnicare.com/api/auth/resend-2fa-code', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -551,7 +551,7 @@ async function resendCode(tempToken: string) {
 
 // Enable 2FA
 async function enable2FA(accessToken: string) {
-  const response = await fetch('https://api.primecare.com/api/auth/enable-2fa', {
+  const response = await fetch('https://api.omnicare.com/api/auth/enable-2fa', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -569,7 +569,7 @@ async function enable2FA(accessToken: string) {
 
 // Disable 2FA
 async function disable2FA(accessToken: string) {
-  const response = await fetch('https://api.primecare.com/api/auth/disable-2fa', {
+  const response = await fetch('https://api.omnicare.com/api/auth/disable-2fa', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -587,7 +587,7 @@ async function disable2FA(accessToken: string) {
 
 // Check 2FA Status
 async function get2FAStatus(accessToken: string) {
-  const response = await fetch('https://api.primecare.com/api/auth/2fa-status', {
+  const response = await fetch('https://api.omnicare.com/api/auth/2fa-status', {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -629,14 +629,14 @@ async function loginFlow() {
 
 **Enable 2FA:**
 ```bash
-curl -X POST https://api.primecare.com/api/auth/enable-2fa \
+curl -X POST https://api.omnicare.com/api/auth/enable-2fa \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
   -H "Content-Type: application/json"
 ```
 
 **Verify 2FA Code:**
 ```bash
-curl -X POST https://api.primecare.com/api/auth/verify-2fa \
+curl -X POST https://api.omnicare.com/api/auth/verify-2fa \
   -H "Content-Type: application/json" \
   -d '{
     "tempToken": "dGVtcF90b2tlbl8xMjM0NTY=",
@@ -646,7 +646,7 @@ curl -X POST https://api.primecare.com/api/auth/verify-2fa \
 
 **Resend Code:**
 ```bash
-curl -X POST https://api.primecare.com/api/auth/resend-2fa-code \
+curl -X POST https://api.omnicare.com/api/auth/resend-2fa-code \
   -H "Content-Type: application/json" \
   -d '{
     "tempToken": "dGVtcF90b2tlbl8xMjM0NTY="
@@ -700,10 +700,10 @@ curl -X POST https://api.primecare.com/api/auth/resend-2fa-code \
 
 For technical support or questions:
 
-- **Documentation:** https://docs.primecare.com
-- **API Support:** api-support@primecaresoftware.com
-- **General Support:** suporte@primecaresoftware.com
+- **Documentation:** https://docs.omnicare.com
+- **API Support:** api-support@omnicaresoftware.com
+- **General Support:** suporte@omnicaresoftware.com
 
 ---
 
-© 2026 PrimeCare Software. All rights reserved.
+© 2026 Omni Care Software. All rights reserved.

@@ -8,7 +8,7 @@
 
 ## 🎯 Objetivo
 
-Adaptar o PrimeCare Software de um sistema focado em **clínicas médicas** para uma plataforma **adaptável a múltiplos modelos de negócio em saúde**, incluindo:
+Adaptar o Omni Care Software de um sistema focado em **clínicas médicas** para uma plataforma **adaptável a múltiplos modelos de negócio em saúde**, incluindo:
 
 - 🧠 **Psicólogos autônomos** (com ou sem CNPJ)
 - 🥗 **Nutricionistas** (solo ou clínicas)
@@ -207,9 +207,9 @@ Preço: R$ 299/mês
 
 ## 📞 Contato
 
-**Equipe de Produto PrimeCare**
-- 📧 Email: produto@primecare.com.br
-- 🐙 GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+**Equipe de Produto Omni Care**
+- 📧 Email: produto@omnicare.com.br
+- 🐙 GitHub: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - 📁 Documentação: `/Plano_Desenvolvimento/`
 
 ---

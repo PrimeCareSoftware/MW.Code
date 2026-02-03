@@ -619,5 +619,5 @@ A única pendência não-crítica é a integração real do ICP-Brasil, que est�
 ---
 
 **Última Atualização:** 29 de Janeiro de 2026  
-**Autor:** Equipe de Desenvolvimento PrimeCare Software  
+**Autor:** Equipe de Desenvolvimento Omni Care Software  
 **Status:** ✅ FASE 3 COMPLETA

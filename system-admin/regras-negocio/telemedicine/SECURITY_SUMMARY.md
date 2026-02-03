@@ -200,7 +200,7 @@ public class IdentityVerificationController : ControllerBase
 If you discover a security vulnerability in this implementation:
 
 1. **DO NOT** open a public GitHub issue
-2. Email: security@primecare.com.br (TODO: set up)
+2. Email: security@omnicare.com.br (TODO: set up)
 3. Include:
    - Description of the vulnerability
    - Steps to reproduce

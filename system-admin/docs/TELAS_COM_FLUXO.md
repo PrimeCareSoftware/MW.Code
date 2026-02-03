@@ -1,7 +1,7 @@
-# 📸 Documentação Visual Completa - PrimeCare Software
+# 📸 Documentação Visual Completa - Omni Care Software
 ## Todas as Telas com Fluxo de Navegação
 
-> **Nota**: Este documento fornece uma documentação visual completa de todas as telas do sistema PrimeCare Software, incluindo mockups detalhados e fluxos de navegação.
+> **Nota**: Este documento fornece uma documentação visual completa de todas as telas do sistema Omni Care Software, incluindo mockups detalhados e fluxos de navegação.
 
 ---
 
@@ -190,7 +190,7 @@
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 Omni Care Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  Bem-vindo(a), Dr. João Silva! 👨‍⚕️                                   ║
@@ -263,7 +263,7 @@
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 Omni Care Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  GERENCIAMENTO DE PACIENTES                                         ║
@@ -324,7 +324,7 @@
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 Omni Care Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  CADASTRO DE PACIENTE                                               ║
@@ -401,7 +401,7 @@
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 Omni Care Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  AGENDA DE CONSULTAS                                                ║
@@ -484,7 +484,7 @@
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 Omni Care Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  NOVO AGENDAMENTO                                                   ║
@@ -559,7 +559,7 @@
 
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
-║ 🏥 PrimeCare Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
+║ 🏥 Omni Care Software │ Dashboard │ Pacientes │ Agendamentos │ Sair 👤  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║                                                                      ║
 ║  ATENDIMENTO - João Silva (45 anos) ⏱️ 00:15:34                    ║
@@ -781,9 +781,9 @@ Para mais informações, consulte:
 **Criado em**: 28 de outubro de 2025  
 **Versão**: 1.0.0  
 **Última atualização**: 28 de outubro de 2025  
-**Autores**: Equipe PrimeCare Software  
+**Autores**: Equipe Omni Care Software  
 **Status**: ✅ Completo
 
 ---
 
-**© 2025 PrimeCare Software - Todos os direitos reservados**
+**© 2025 Omni Care Software - Todos os direitos reservados**

@@ -1,6 +1,6 @@
-# PrimeCare Software - Sistema de Gestão para Consultórios Médicos
+# Omni Care Software - Sistema de Gestão para Consultórios Médicos
 
-[![CI - Test Frontend e Backend](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/MedicWarehouse/MW.Code/actions/workflows/ci.yml)
+[![CI - Test Frontend e Backend](https://github.com/OmniCareSoftware/MW.Code/actions/workflows/ci.yml/badge.svg)](https://github.com/OmniCareSoftware/MW.Code/actions/workflows/ci.yml)
 
 > 🚨 **ERRO COMUM?** Se você está vendo `column "IsPaid" of relation "Appointments" does not exist`, veja a [→ Solução Rápida](SOLUCAO_RAPIDA_ERRO_ISPAID.md) | [→ Quick Fix (EN)](QUICK_FIX_ISPAID_ERROR.md)
 
@@ -50,7 +50,7 @@ Uma solução **DDD** multitenant completa para gestão de consultórios médico
 
 ## 🌍 Compatibilidade Multiplataforma
 
-O PrimeCare Software é **100% cross-platform**:
+O Omni Care Software é **100% cross-platform**:
 
 - ✅ **macOS**: Script automatizado de setup (`setup-macos.sh`)
 - ✅ **Windows**: Script PowerShell de setup (`setup-windows.ps1`)
@@ -67,7 +67,7 @@ O PrimeCare Software é **100% cross-platform**:
 
 ## 📱 Aplicativo Móvel (PWA) 🆕
 
-O PrimeCare Software agora é um **Progressive Web App (PWA)** que funciona em todos os dispositivos:
+O Omni Care Software agora é um **Progressive Web App (PWA)** que funciona em todos os dispositivos:
 
 ### Características do PWA:
 - 📱 **Multiplataforma**: Funciona em iOS, Android, Windows, macOS e Linux
@@ -100,9 +100,9 @@ Os aplicativos nativos iOS (Swift) e Android (Kotlin) foram **descontinuados** e
 
 ## 🖥️ Frontend Application
 
-O PrimeCare Software agora possui **um único aplicativo Angular unificado** que consolida todas as funcionalidades:
+O Omni Care Software agora possui **um único aplicativo Angular unificado** que consolida todas as funcionalidades:
 
-### **PrimeCare Frontend** (`frontend/medicwarehouse-app`)
+### **Omni Care Frontend** (`frontend/medicwarehouse-app`)
 Aplicativo unificado acessando diferentes seções por rotas:
 
 #### 📱 **Clínica** (rotas principais)
@@ -222,7 +222,7 @@ All frontend projects are configured with unique ports to allow running them sim
 
 ## ♿ Acessibilidade (WCAG 2.1 AA) 🆕
 
-**PrimeCare Software está comprometido com a acessibilidade digital para todos os usuários!**
+**Omni Care Software está comprometido com a acessibilidade digital para todos os usuários!**
 
 ### 📊 Status de Conformidade
 
@@ -1121,7 +1121,7 @@ POST http://localhost:5000/api/data-seeder/seed-demo
 
 ```bash
 # Clone o repositório
-git clone https://github.com/MedicWarehouse/MW.Code.git
+git clone https://github.com/OmniCareSoftware/MW.Code.git
 cd MW.Code
 
 # Execute com Podman Compose
@@ -1153,7 +1153,7 @@ dotnet run
 
 #### Frontend (Angular)
 
-**PrimeCare Frontend Unificado** (aplicativo único com todas as funcionalidades):
+**Omni Care Frontend Unificado** (aplicativo único com todas as funcionalidades):
 ```bash
 # Navegar para o frontend
 cd frontend/medicwarehouse-app
@@ -1184,7 +1184,7 @@ podman-compose up postgres -d
 
 # Ou executar PostgreSQL standalone com Podman:
 podman run -d \
-  --name primecare-postgres \
+  --name omnicare-postgres \
   -e POSTGRES_DB=medicwarehouse \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
@@ -1232,7 +1232,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 ```
 
 **Opção 3: Usando Postman**
-1. Importe `PrimeCare-Postman-Collection.json`
+1. Importe `Omni Care-Postman-Collection.json`
 2. Execute: `Data Seeder > Seed Demo Data`
 3. Execute: `Auth > Login`
 
@@ -1268,7 +1268,7 @@ Após executar a aplicação, acesse a documentação interativa do Swagger:
 
 Para facilitar o teste e integração, todas as APIs foram exportadas para o Postman:
 
-- 📥 **Arquivo**: [`PrimeCare-Postman-Collection.json`](PrimeCare-Postman-Collection.json)
+- 📥 **Arquivo**: [`Omni Care-Postman-Collection.json`](Omni Care-Postman-Collection.json)
 - 📖 **Guia de Importação**: [`POSTMAN_IMPORT_GUIDE.md`](system-admin/guias/POSTMAN_IMPORT_GUIDE.md)
 - ✨ **Recursos incluídos**:
   - Todos os endpoints organizados por funcionalidade
@@ -1440,7 +1440,7 @@ Este documento inclui:
 
 ## 🔐 Segurança
 
-O PrimeCare Software implementa múltiplas camadas de segurança para proteger dados sensíveis:
+O Omni Care Software implementa múltiplas camadas de segurança para proteger dados sensíveis:
 
 ### Implementações de Segurança
 
@@ -1607,7 +1607,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 📞 Contato
 
-- **Projeto**: PrimeCare Software
-- **Email**: contato@primecaresoftware.com
-- **GitHub**: [https://github.com/MedicWarehouse/MW.Code](https://github.com/MedicWarehouse/MW.Code)
+- **Projeto**: Omni Care Software
+- **Email**: contato@omnicaresoftware.com
+- **GitHub**: [https://github.com/OmniCareSoftware/MW.Code](https://github.com/OmniCareSoftware/MW.Code)
 

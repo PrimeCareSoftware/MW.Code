@@ -47,7 +47,7 @@ TISS (Troca de Informações na Saúde Suplementar) é o **padrão obrigatório*
 
 ### Versão TISS Implementada
 
-O PrimeCare Software suporta **TISS 4.03.00** (versão vigente - Janeiro 2026)
+O Omni Care Software suporta **TISS 4.03.00** (versão vigente - Janeiro 2026)
 
 ---
 

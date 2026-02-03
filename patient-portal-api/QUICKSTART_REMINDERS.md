@@ -33,11 +33,11 @@ psql -h localhost -U postgres -d primecare -f patient-portal-api/migrations/001_
     "UseSsl": true,
     "Username": "your-email@gmail.com",
     "Password": "your-app-password",
-    "From": "noreply@primecare.com",
-    "FromName": "PrimeCare Portal"
+    "From": "noreply@omnicare.com",
+    "FromName": "Omni Care Portal"
   },
   "PortalSettings": {
-    "BaseUrl": "https://portal.primecare.com"
+    "BaseUrl": "https://portal.omnicare.com"
   }
 }
 ```

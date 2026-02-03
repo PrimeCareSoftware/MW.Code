@@ -1,4 +1,4 @@
-# Guia Rápido - Seeders PrimeCare Software
+# Guia Rápido - Seeders Omni Care Software
 
 ## 🎯 Objetivo
 Popular o banco de dados com dados demo realísticos para teste completo do sistema.

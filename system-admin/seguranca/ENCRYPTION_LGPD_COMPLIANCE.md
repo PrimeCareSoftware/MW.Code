@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este documento demonstra como a implementação de criptografia de dados médicos do PrimeCare Software atende aos requisitos da Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
+Este documento demonstra como a implementação de criptografia de dados médicos do Omni Care Software atende aos requisitos da Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
 
 ## 🎯 Objetivo
 
@@ -135,7 +135,7 @@ KEK (Key Encryption Key) - Azure Key Vault HSM
 
 | Responsabilidade | Controle Implementado | Status |
 |------------------|----------------------|--------|
-| **Controlador de Dados** | PrimeCare Software Ltda | ✅ |
+| **Controlador de Dados** | Omni Care Software Ltda | ✅ |
 | **Operador (Azure)** | Azure Key Vault | ✅ |
 | **Segregação de Funções** | Managed Identity separada por ambiente | ✅ |
 | **Treinamento** | Documentação completa para equipe | ✅ |
@@ -283,7 +283,7 @@ KEK (Key Encryption Key) - Azure Key Vault HSM
 - [x] Testes de segurança
 
 ### Artigo 47 - Responsabilidades
-- [x] Controlador definido (PrimeCare Software)
+- [x] Controlador definido (Omni Care Software)
 - [x] Operador qualificado (Microsoft Azure)
 - [x] Treinamento da equipe
 - [x] Procedimentos documentados
@@ -332,11 +332,11 @@ KEK (Key Encryption Key) - Azure Key Vault HSM
 
 ### DPO (Data Protection Officer)
 - **Nome**: [A ser definido]
-- **Email**: dpo@primecare.com
+- **Email**: dpo@omnicare.com
 - **Telefone**: [A ser definido]
 
 ### Equipe de Segurança
-- **Email**: security@primecare.com
+- **Email**: security@omnicare.com
 - **Plantão**: +55 (11) 99999-9999
 - **Slack**: #security-team
 
@@ -361,9 +361,9 @@ KEK (Key Encryption Key) - Azure Key Vault HSM
 
 **Declaração de Conformidade:**
 
-Declaramos que o sistema de criptografia de dados médicos implementado no PrimeCare Software está em conformidade com todos os artigos relevantes da Lei Geral de Proteção de Dados (Lei nº 13.709/2018), especialmente no que diz respeito ao tratamento de dados pessoais sensíveis de saúde (Art. 11) e às medidas de segurança técnicas e administrativas (Art. 46).
+Declaramos que o sistema de criptografia de dados médicos implementado no Omni Care Software está em conformidade com todos os artigos relevantes da Lei Geral de Proteção de Dados (Lei nº 13.709/2018), especialmente no que diz respeito ao tratamento de dados pessoais sensíveis de saúde (Art. 11) e às medidas de segurança técnicas e administrativas (Art. 46).
 
-**Responsável Técnico**: Equipe de Desenvolvimento PrimeCare Software  
+**Responsável Técnico**: Equipe de Desenvolvimento Omni Care Software  
 **Data**: Janeiro de 2026  
 **Próxima Revisão**: Julho de 2026
 

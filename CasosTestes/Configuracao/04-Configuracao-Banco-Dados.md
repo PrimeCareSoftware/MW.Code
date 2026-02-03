@@ -16,7 +16,7 @@
 
 ## 🗄️ Visão Geral do Banco
 
-O PrimeCare Software usa **PostgreSQL 16** como banco de dados principal.
+O Omni Care Software usa **PostgreSQL 16** como banco de dados principal.
 
 ### Características
 

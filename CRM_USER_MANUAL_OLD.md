@@ -1,8 +1,8 @@
-# 📖 Manual do Usuário - CRM Avançado PrimeCare
+# 📖 Manual do Usuário - CRM Avançado Omni Care
 
 ## Bem-vindo ao CRM Avançado
 
-O CRM Avançado do PrimeCare é uma solução completa para gerenciamento do relacionamento com pacientes, permitindo:
+O CRM Avançado do Omni Care é uma solução completa para gerenciamento do relacionamento com pacientes, permitindo:
 - Acompanhar a jornada completa do paciente
 - Automatizar comunicações personalizadas
 - Coletar feedback através de pesquisas NPS/CSAT
@@ -512,10 +512,10 @@ A: Sim, todos os relatórios podem ser exportados em PDF, Excel ou CSV.
 ## 📞 Suporte
 
 Para dúvidas ou problemas:
-- **Email**: suporte@primecare.com.br
+- **Email**: suporte@omnicare.com.br
 - **Telefone**: (11) 1234-5678
 - **Chat**: Disponível no sistema
-- **Documentação**: docs.primecare.com.br
+- **Documentação**: docs.omnicare.com.br
 
 ---
 

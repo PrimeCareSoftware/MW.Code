@@ -454,7 +454,7 @@ _* Projeções baseadas nos objetivos do [`10-portal-paciente.md`](./Plano_Desen
    - SendGrid para Email (30 min de setup)
    - Testar envio de lembretes (1 hora)
 2. **Deploy em ambiente de produção**
-   - Configurar domínio (portal.primecare.com)
+   - Configurar domínio (portal.omnicare.com)
    - Deploy backend + frontend
    - Configurar SSL/HTTPS
 3. **Onboarding de primeiros usuários** (beta test)

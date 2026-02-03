@@ -27,8 +27,8 @@ O método de autenticação de dois fatores (2FA) por email foi refatorado com s
     "UseSsl": true,
     "Username": "",
     "Password": "",
-    "From": "noreply@primecare.com.br",
-    "FromName": "PrimeCare Software",
+    "From": "noreply@omnicare.com.br",
+    "FromName": "Omni Care Software",
     "Enabled": false,
     "TimeoutSeconds": 30
   }
@@ -166,7 +166,7 @@ export EMAIL_ENABLED="true"
 1. Habilitar 2FA no perfil do usuário
 2. Fazer logout e login
 3. Verificar recebimento do código por email
-4. Conferir logs: `tail -f Logs/primecare-*.log | grep -i email`
+4. Conferir logs: `tail -f Logs/omnicare-*.log | grep -i email`
 
 ### 3. Verificar Logs
 
@@ -207,4 +207,4 @@ Para dúvidas ou problemas:
 **Data de Conclusão**: 01/02/2026  
 **Status**: ✅ **CONCLUÍDO COM SUCESSO**  
 **Versão**: 1.0  
-**Autor**: PrimeCare Software Development Team
+**Autor**: Omni Care Software Development Team

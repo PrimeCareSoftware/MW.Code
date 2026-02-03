@@ -74,7 +74,7 @@ namespace MedicSoft.Domain.Services
 
 Identificamos que o pagamento da sua assinatura está em atraso.
 
-⚠️ ATENÇÃO: Seu acesso ao sistema PrimeCare Software ficará indisponível até a regularização do pagamento.
+⚠️ ATENÇÃO: Seu acesso ao sistema Omni Care Software ficará indisponível até a regularização do pagamento.
 
 Valor: R$ {subscription.CurrentPrice:F2}
 Data de vencimento: {subscription.NextPaymentDate:dd/MM/yyyy}
@@ -86,11 +86,11 @@ Após o pagamento, seu acesso será restabelecido automaticamente.
 Dúvidas? Entre em contato conosco.
 
 Atenciosamente,
-Equipe PrimeCare Software";
+Equipe Omni Care Software";
 
             // Send via all channels
             await _notificationService.SendSMS(subscription.Clinic.Phone, message);
-            await _notificationService.SendEmail(subscription.Clinic.Email, "Pagamento em Atraso - PrimeCare Software", message);
+            await _notificationService.SendEmail(subscription.Clinic.Email, "Pagamento em Atraso - Omni Care Software", message);
             await _notificationService.SendWhatsApp(subscription.Clinic.Phone, message);
         }
 

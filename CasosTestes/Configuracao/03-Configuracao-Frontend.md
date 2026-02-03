@@ -1,6 +1,6 @@
 # 03 - Configuração do Frontend (Angular 20)
 
-> **Objetivo:** Configurar e executar a aplicação frontend do PrimeCare Software  
+> **Objetivo:** Configurar e executar a aplicação frontend do Omni Care Software  
 > **Tempo estimado:** 10-15 minutos  
 > **Pré-requisitos:** [01-Configuracao-Ambiente.md](01-Configuracao-Ambiente.md) e [02-Configuracao-Backend.md](02-Configuracao-Backend.md) completos
 
@@ -15,7 +15,7 @@
 
 ## 🏗️ Visão Geral da Arquitetura
 
-O frontend do PrimeCare é construído com **Angular 20** e possui três aplicações principais:
+O frontend do Omni Care é construído com **Angular 20** e possui três aplicações principais:
 
 ```
 frontend/                      # Aplicação principal (porta 4200)
@@ -104,8 +104,8 @@ export const environment = {
   version: '1.0.0',
   
   // JWT
-  jwtTokenKey: 'primecare_token',
-  jwtRefreshTokenKey: 'primecare_refresh_token',
+  jwtTokenKey: 'omnicare_token',
+  jwtRefreshTokenKey: 'omnicare_refresh_token',
   
   // Upload
   maxFileSize: 10 * 1024 * 1024, // 10 MB
@@ -256,7 +256,7 @@ Abra o navegador em:
 http://localhost:4200
 ```
 
-Você deve ver a página de login do PrimeCare Software.
+Você deve ver a página de login do Omni Care Software.
 
 ### 2. Verificar Console do Navegador
 
@@ -474,19 +474,19 @@ O sistema usa Angular Material com tema customizado:
 // frontend/src/styles.scss
 @use '@angular/material' as mat;
 
-$primecare-primary: mat.define-palette(mat.$indigo-palette);
-$primecare-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$primecare-warn: mat.define-palette(mat.$red-palette);
+$omnicare-primary: mat.define-palette(mat.$indigo-palette);
+$omnicare-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$omnicare-warn: mat.define-palette(mat.$red-palette);
 
-$primecare-theme: mat.define-light-theme((
+$omnicare-theme: mat.define-light-theme((
   color: (
-    primary: $primecare-primary,
-    accent: $primecare-accent,
-    warn: $primecare-warn,
+    primary: $omnicare-primary,
+    accent: $omnicare-accent,
+    warn: $omnicare-warn,
   )
 ));
 
-@include mat.all-component-themes($primecare-theme);
+@include mat.all-component-themes($omnicare-theme);
 ```
 
 ### Dark Mode

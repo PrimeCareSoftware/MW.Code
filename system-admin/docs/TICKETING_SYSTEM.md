@@ -2,11 +2,11 @@
 
 ## Visão Geral
 
-O Sistema de Chamados do PrimeCare Software permite que usuários abram tickets para reportar bugs, solicitar funcionalidades, obter suporte técnico e gerenciar questões financeiras. System owners podem gerenciar todos os chamados através de um quadro Kanban interativo.
+O Sistema de Chamados do Omni Care Software permite que usuários abram tickets para reportar bugs, solicitar funcionalidades, obter suporte técnico e gerenciar questões financeiras. System owners podem gerenciar todos os chamados através de um quadro Kanban interativo.
 
 ## Funcionalidades Principais
 
-### Para Usuários (PrimeCare Software App)
+### Para Usuários (Omni Care Software App)
 
 #### 1. Abertura de Chamados
 - **Botão Flutuante (FAB)**: Disponível em todas as telas do sistema
@@ -121,7 +121,7 @@ GET    /api/tickets/statistics         - Estatísticas
 
 ### Frontend
 
-#### PrimeCare Software App
+#### Omni Care Software App
 ```typescript
 Componentes:
 - TicketFab: Botão flutuante com modal de criação
@@ -355,4 +355,4 @@ Para dúvidas ou problemas:
 
 ## License
 
-© 2024 PrimeCare Software. All rights reserved.
+© 2024 Omni Care Software. All rights reserved.

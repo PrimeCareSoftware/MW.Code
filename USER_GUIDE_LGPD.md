@@ -1,6 +1,6 @@
 # 📖 Guia do Usuário - LGPD e Privacidade de Dados
 
-**PrimeCare Software**  
+**Omni Care Software**  
 **Versão:** 1.0  
 **Data:** 29 de Janeiro de 2026  
 **Público-alvo:** Pacientes e Usuários Finais
@@ -25,13 +25,13 @@
 
 ## 🎯 Introdução
 
-Bem-vindo ao guia de privacidade e proteção de dados do PrimeCare Software. Este documento foi criado para ajudá-lo a entender e exercer seus direitos sobre seus dados pessoais, conforme garantido pela **Lei Geral de Proteção de Dados (LGPD)** - Lei 13.709/2018.
+Bem-vindo ao guia de privacidade e proteção de dados do Omni Care Software. Este documento foi criado para ajudá-lo a entender e exercer seus direitos sobre seus dados pessoais, conforme garantido pela **Lei Geral de Proteção de Dados (LGPD)** - Lei 13.709/2018.
 
 ### O Que Você Vai Aprender
 
 - Como seus dados são tratados
 - Quais são seus direitos
-- Como exercer esses direitos no PrimeCare
+- Como exercer esses direitos no Omni Care
 - Como gerenciar seus consentimentos
 - Como acessar e exportar seus dados
 - Como solicitar a exclusão de seus dados
@@ -120,7 +120,7 @@ A LGPD garante vários direitos aos titulares de dados (você!). Aqui estão seu
 
 ### Através do Portal do Paciente
 
-1. **Acesse o Portal:** https://seudominio.primecare.com.br
+1. **Acesse o Portal:** https://seudominio.omnicare.com.br
 2. **Faça login** com seu CPF e senha
 3. **Navegue até:** Menu → **Privacidade e Dados**
 4. **Escolha a opção desejada:**
@@ -132,7 +132,7 @@ A LGPD garante vários direitos aos titulares de dados (você!). Aqui estão seu
 
 ### Por Email
 
-Envie um email para: **lgpd@primecare.com**
+Envie um email para: **lgpd@omnicare.com**
 
 **Modelo de email:**
 ```
@@ -261,7 +261,7 @@ Você decide se quer dar ou não:
    - Ou solicite alteração para dados restritos
 
 2. **Por Email:**
-   - Envie para lgpd@primecare.com
+   - Envie para lgpd@omnicare.com
    - Informe qual dado está errado
    - Informe o dado correto
 
@@ -519,7 +519,7 @@ Você pode exportar o histórico de acessos:
 
 **Se notar algo suspeito:**
 1. **Anote** os detalhes do acesso
-2. **Entre em contato** com lgpd@primecare.com
+2. **Entre em contato** com lgpd@omnicare.com
 3. **Relate** a situação
 4. Nossa equipe investigará imediatamente
 
@@ -543,7 +543,7 @@ R: Não. Você só pode acessar seus próprios dados, exceto:
 ### Acesso aos Dados
 
 **P: O que fazer se encontrar um dado incorreto?**  
-R: Solicite a correção através do Portal → Meus Dados → Corrigir, ou entre em contato com lgpd@primecare.com.
+R: Solicite a correção através do Portal → Meus Dados → Corrigir, ou entre em contato com lgpd@omnicare.com.
 
 **P: Posso acessar prontuários antigos?**  
 R: Sim! Todos os seus prontuários estão disponíveis, mesmo os mais antigos.
@@ -601,7 +601,7 @@ R: Sim! Usamos:
 - Conformidade com LGPD
 
 **P: O que fazer se suspeitar de acesso indevido?**  
-R: Entre em contato imediatamente com lgpd@primecare.com. Investigaremos o caso.
+R: Entre em contato imediatamente com lgpd@omnicare.com. Investigaremos o caso.
 
 **P: Vocês compartilham meus dados com terceiros?**  
 R: Apenas quando necessário para seu atendimento (laboratórios, convênios) ou com seu consentimento explícito. Você pode ver o histórico de compartilhamentos.
@@ -612,21 +612,21 @@ R: Apenas quando necessário para seu atendimento (laboratórios, convênios) ou
 
 ### Canal LGPD
 
-**Email:** lgpd@primecare.com  
+**Email:** lgpd@omnicare.com  
 **Horário de Resposta:** Até 15 dias corridos  
 **Para:** Solicitações LGPD, dúvidas sobre privacidade
 
 ### Encarregado de Dados (DPO)
 
-**Email:** dpo@primecare.com  
+**Email:** dpo@omnicare.com  
 **Telefone:** [A SER CONFIGURADO PELA CLÍNICA]  
 **Horário:** Segunda a Sexta, 9h às 18h  
 **Para:** Questões complexas, reclamações, incidentes de segurança
 
 ### Suporte Técnico
 
-**Portal:** https://suporte.primecare.com.br  
-**Email:** suporte@primecare.com  
+**Portal:** https://suporte.omnicare.com.br  
+**Email:** suporte@omnicare.com  
 **Telefone:** [A SER CONFIGURADO PELA CLÍNICA]  
 **Horário:** 24/7  
 **Para:** Problemas técnicos, dificuldades de acesso
@@ -642,10 +642,10 @@ Se você não estiver satisfeito com nossas respostas, pode contatar a ANPD:
 
 ## 📚 Documentos Relacionados
 
-- [Política de Privacidade](https://primecare.com.br/privacidade)
-- [Termos de Uso](https://primecare.com.br/termos)
+- [Política de Privacidade](https://omnicare.com.br/privacidade)
+- [Termos de Uso](https://omnicare.com.br/termos)
 - [Guia Técnico LGPD](./LGPD_COMPLIANCE_GUIDE.md)
-- [FAQ Completo](https://primecare.com.br/faq)
+- [FAQ Completo](https://omnicare.com.br/faq)
 
 ---
 
@@ -662,4 +662,4 @@ Se você não estiver satisfeito com nossas respostas, pode contatar a ANPD:
 
 ---
 
-**PrimeCare Software** - Sua saúde, nossa prioridade. Seus dados, sua privacidade.
+**Omni Care Software** - Sua saúde, nossa prioridade. Seus dados, sua privacidade.

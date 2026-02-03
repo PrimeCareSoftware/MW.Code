@@ -2,7 +2,7 @@
 
 ## 📋 Resumo
 
-Esta implementação adiciona criptografia de dados médicos sensíveis ao sistema PrimeCare Software, garantindo conformidade com a LGPD (Lei Geral de Proteção de Dados) e protegendo informações confidenciais de pacientes.
+Esta implementação adiciona criptografia de dados médicos sensíveis ao sistema Omni Care Software, garantindo conformidade com a LGPD (Lei Geral de Proteção de Dados) e protegendo informações confidenciais de pacientes.
 
 ## 🔐 Tecnologia de Criptografia
 
@@ -340,5 +340,5 @@ Para questões sobre a implementação de criptografia:
 
 **Versão:** 1.0  
 **Data:** Janeiro 2026  
-**Autor:** PrimeCare Software Development Team  
+**Autor:** Omni Care Software Development Team  
 **Status:** ✅ Implementado e Testado

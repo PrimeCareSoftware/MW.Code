@@ -19,8 +19,8 @@ namespace MedicSoft.Application.Services.Cache
         private readonly IUserRepository _userRepository;
         private readonly ICacheService _cacheService;
         private readonly ILogger<CachedUserRepository> _logger;
-        private const string USER_CACHE_KEY_PREFIX = "PrimeCare:user:";
-        private const string USER_PERMISSIONS_KEY_PREFIX = "PrimeCare:user:permissions:";
+        private const string USER_CACHE_KEY_PREFIX = "Omni Care:user:";
+        private const string USER_PERMISSIONS_KEY_PREFIX = "Omni Care:user:permissions:";
         private readonly TimeSpan _userCacheExpiration = TimeSpan.FromMinutes(30);
         private readonly TimeSpan _permissionsCacheExpiration = TimeSpan.FromMinutes(15);
 

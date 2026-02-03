@@ -1,12 +1,12 @@
-# PrimeCare Software - Database Migrations Guide
+# Omni Care Software - Database Migrations Guide
 
 ## Visão Geral
 
-Este documento descreve como executar todas as migrations do sistema PrimeCare Software na ordem correta para manter o banco de dados sincronizado durante o desenvolvimento.
+Este documento descreve como executar todas as migrations do sistema Omni Care Software na ordem correta para manter o banco de dados sincronizado durante o desenvolvimento.
 
 ## Arquitetura de Banco de Dados
 
-O PrimeCare Software utiliza **PostgreSQL** como banco de dados principal e possui múltiplos contextos EF Core:
+O Omni Care Software utiliza **PostgreSQL** como banco de dados principal e possui múltiplos contextos EF Core:
 
 ### 1. **Aplicação Principal** (`MedicSoftDbContext`)
 - Localização: `src/MedicSoft.Api`
@@ -220,4 +220,4 @@ dotnet ef migrations remove --context NomeDoContexto
 
 - [Documentação EF Core Migrations](https://docs.microsoft.com/ef/core/managing-schemas/migrations/)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-- [PrimeCare Software README Principal](./README.md)
+- [Omni Care Software README Principal](./README.md)

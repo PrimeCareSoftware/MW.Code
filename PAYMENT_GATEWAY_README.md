@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento descreve a implementação do gateway de pagamento Mercado Pago no sistema PrimeCare, incluindo configuração, uso e feature flags.
+Este documento descreve a implementação do gateway de pagamento Mercado Pago no sistema Omni Care, incluindo configuração, uso e feature flags.
 
 **Data de Criação:** 02 de Fevereiro de 2026  
 **Status:** Implementado - Aguardando Credenciais
@@ -285,7 +285,7 @@ POST /api/webhooks/mercadopago
 
 ### 7.1 Mapeamento de Status
 
-| Mercado Pago | PrimeCare Gateway | Descrição |
+| Mercado Pago | Omni Care Gateway | Descrição |
 |--------------|-------------------|-----------|
 | `pending` | `Pending` | Aguardando pagamento |
 | `in_process` | `Processing` | Pagamento em processamento |
@@ -413,7 +413,7 @@ if (!isConfigured)
 
 Para questões sobre a implementação:
 
-- **Técnicas**: Time de desenvolvimento PrimeCare
+- **Técnicas**: Time de desenvolvimento Omni Care
 - **Mercado Pago**: [Suporte Mercado Pago](https://www.mercadopago.com.br/developers/pt/support)
 - **Documentação**: Este arquivo e `GUIA_IMPLEMENTACAO_PLANO_FINANCEIRO.md`
 

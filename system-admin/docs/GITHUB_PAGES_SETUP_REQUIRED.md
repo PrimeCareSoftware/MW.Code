@@ -21,7 +21,7 @@ O workflow de deploy está configurado corretamente, mas o GitHub Pages precisa 
 ### Passo a Passo
 
 1. **Acesse as configurações do repositório:**
-   - Vá para: https://github.com/PrimeCare Software/MW.Code/settings/pages
+   - Vá para: https://github.com/Omni Care Software/MW.Code/settings/pages
    - Ou navegue: **Repository** → **Settings** → **Pages** (no menu lateral esquerdo)
 
 2. **Configure a fonte (Source):**
@@ -45,7 +45,7 @@ Na seção **"Build and deployment"**, certifique-se de que está selecionado:
 ## 🚀 Após Habilitar GitHub Pages
 
 1. **Execute o workflow novamente:**
-   - Vá para: https://github.com/PrimeCare Software/MW.Code/actions
+   - Vá para: https://github.com/Omni Care Software/MW.Code/actions
    - Selecione o workflow **"Deploy MW.Docs to GitHub Pages"**
    - Clique em **"Run workflow"**
    - Selecione a branch **main**
@@ -129,4 +129,4 @@ Após habilitar GitHub Pages e realizar o primeiro deploy com sucesso:
 
 **⏰ Esta é uma configuração única que leva apenas 5 minutos!**
 
-**🔗 Link direto para configuração:** https://github.com/PrimeCare Software/MW.Code/settings/pages
+**🔗 Link direto para configuração:** https://github.com/Omni Care Software/MW.Code/settings/pages

@@ -48,7 +48,7 @@ Implementar as funcionalidades pendentes documentadas em `PROMPTS_IMPLEMENTACAO_
   - **First Login Tour:** Navegação Dashboard → Agenda → Pacientes → Configurações
   - **First Consultation Tour:** Agendamento passo a passo
   - **First Record Tour:** Preenchimento de prontuário SOAP
-- ✅ Tema customizado PrimeCare
+- ✅ Tema customizado Omni Care
 - ✅ Modal overlay com destaque de elementos
 - ✅ Controles: Pular, Voltar, Próximo, Finalizar
 - ✅ Estado persistido em localStorage

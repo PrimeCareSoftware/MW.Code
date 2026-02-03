@@ -1,6 +1,6 @@
-# 📚 PrimeCare Software Docs - Central de Documentação
+# 📚 Omni Care Software Docs - Central de Documentação
 
-Aplicação Angular standalone criada para centralizar e facilitar a consulta de toda a documentação do projeto PrimeCare Software, incluindo **todos os 323 documentos do system-admin**.
+Aplicação Angular standalone criada para centralizar e facilitar a consulta de toda a documentação do projeto Omni Care Software, incluindo **todos os 323 documentos do system-admin**.
 
 ## 🎯 Objetivo
 
@@ -267,7 +267,7 @@ Para contribuir com melhorias:
 
 ## 📄 Licença
 
-Este projeto faz parte do PrimeCare Software e segue a mesma licença do projeto principal.
+Este projeto faz parte do Omni Care Software e segue a mesma licença do projeto principal.
 
 ## 📞 Suporte
 
@@ -275,4 +275,4 @@ Para dúvidas ou problemas, consulte a documentação principal ou entre em cont
 
 ---
 
-**PrimeCare Software** © 2025 - Sistema de Gestão Médica
+**Omni Care Software** © 2025 - Sistema de Gestão Médica

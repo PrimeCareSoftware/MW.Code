@@ -316,7 +316,7 @@ db459f2 - Initial plan
 
 **Developer**: GitHub Copilot Agent  
 **Date**: 2026-02-02  
-**Project**: MW.Code - PrimeCare Software  
+**Project**: MW.Code - Omni Care Software  
 **Branch**: copilot/evaluate-implementations-accessibility
 
 ---

@@ -130,7 +130,7 @@ function generateHTMLReport(results, reportDir) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Relatório de Acessibilidade WCAG 2.1 AA - PrimeCare</title>
+      <title>Relatório de Acessibilidade WCAG 2.1 AA - Omni Care</title>
       <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -236,7 +236,7 @@ function generateHTMLReport(results, reportDir) {
     <body>
       <div class="container">
         <h1>📊 Relatório de Acessibilidade</h1>
-        <p class="subtitle">WCAG 2.1 Level AA - PrimeCare Software</p>
+        <p class="subtitle">WCAG 2.1 Level AA - Omni Care Software</p>
         
         ${totalCritical === 0 && totalSerious === 0 
           ? '<div class="status pass">✅ CONFORMIDADE APROVADA</div>'

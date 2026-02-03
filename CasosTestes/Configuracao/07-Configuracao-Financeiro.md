@@ -24,7 +24,7 @@
 
 ### 1.1. Funcionalidades Disponíveis
 
-O módulo financeiro do PrimeCare oferece:
+O módulo financeiro do Omni Care oferece:
 
 **Contas a Receber:**
 - ✅ Controle de recebimentos de consultas
@@ -545,10 +545,10 @@ Categoria:
 
 ```
 Informações Básicas:
-✅ Razão Social: "PrimeCare Software Ltda"
-✅ Nome Fantasia: "PrimeCare"
+✅ Razão Social: "Omni Care Software Ltda"
+✅ Nome Fantasia: "Omni Care"
 ✅ CNPJ: "33.444.555/0001-66"
-✅ Email: "financeiro@primecare.com.br"
+✅ Email: "financeiro@omnicare.com.br"
 
 Informações Financeiras:
 ✅ Forma de Pagamento: Cartão de Crédito (recorrente)
@@ -594,7 +594,7 @@ Fornecedores Cadastrados:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ Med Supply (Material Médico)
 ✅ Limpeza Total (Limpeza)
-✅ PrimeCare Software (Software/TI)
+✅ Omni Care Software (Software/TI)
 ✅ Contabilidade Silva (Serviços)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Total: 4 fornecedores ativos
@@ -908,4 +908,4 @@ Após configurar o módulo financeiro, prossiga para:
 
 **Versão:** 1.0  
 **Última Atualização:** Fevereiro 2026  
-**Mantido por:** Equipe PrimeCare Software
+**Mantido por:** Equipe Omni Care Software

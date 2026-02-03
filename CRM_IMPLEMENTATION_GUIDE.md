@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento descreve a implementação do sistema **CRM Avançado e Customer Experience** do PrimeCare, conforme especificado no prompt 17 do Plano de Desenvolvimento (fase-4-analytics-otimizacao).
+Este documento descreve a implementação do sistema **CRM Avançado e Customer Experience** do Omni Care, conforme especificado no prompt 17 do Plano de Desenvolvimento (fase-4-analytics-otimizacao).
 
 ## 🎯 Objetivos do Sistema
 
@@ -534,6 +534,6 @@ Para contribuir com o desenvolvimento do CRM:
 ## 📞 Suporte
 
 Para questões sobre a implementação, consulte:
-- Time de Desenvolvimento PrimeCare
+- Time de Desenvolvimento Omni Care
 - Documentação técnica no repositório
 - Issues no GitHub

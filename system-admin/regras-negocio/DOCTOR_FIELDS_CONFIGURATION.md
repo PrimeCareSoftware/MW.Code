@@ -4,7 +4,7 @@ Este guia explica como configurar os campos obrigatórios para cadastro de médi
 
 ## Visão Geral
 
-O sistema PrimeCare permite que o proprietário da clínica configure se os campos específicos de médicos (CRM e Especialidade) são obrigatórios ou opcionais ao criar/editar usuários com perfil "Médico".
+O sistema Omni Care permite que o proprietário da clínica configure se os campos específicos de médicos (CRM e Especialidade) são obrigatórios ou opcionais ao criar/editar usuários com perfil "Médico".
 
 ## Campos Disponíveis
 

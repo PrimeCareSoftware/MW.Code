@@ -1,6 +1,6 @@
-# 📋 Pendências de Desenvolvimento e Planejamento Futuro - PrimeCare Software
+# 📋 Pendências de Desenvolvimento e Planejamento Futuro - Omni Care Software
 
-> **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema PrimeCare Software.
+> **Objetivo:** Documento centralizado com visão macro de todas as pendências, melhorias e planejamento futuro do sistema Omni Care Software.
 
 > **Última Atualização:** 22 de Janeiro 2026  
 > **Status:** Sistema em produção - 98% completo - Roadmap atualizado  
@@ -12,7 +12,7 @@
 
 ### Status Geral do Sistema
 
-O PrimeCare Software possui uma **base técnica sólida** com:
+O Omni Care Software possui uma **base técnica sólida** com:
 - ✅ Arquitetura DDD bem implementada
 - ✅ 734+ testes automatizados (100% cobertura domínio)
 - ✅ Sistema de assinaturas SaaS completo
@@ -264,7 +264,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
   - Total: ~1.500 linhas de código frontend production-ready
 
 #### Frontend - Aplicações Web
-- ✅ **PrimeCare Software App** (Principal) - 100%
+- ✅ **Omni Care Software App** (Principal) - 100%
   - Dashboard com estatísticas
   - Gestão de pacientes
   - Sistema de agendamentos
@@ -354,7 +354,7 @@ Após análise detalhada dos principais concorrentes (Doctoralia, iClinic, Nuvem
 - **Controllers Backend:** 53+ (incluindo 8 do Patient Portal API + 3 TISS/Convênios)
 - **Entidades de Domínio:** 59+ (incluindo PatientUser, RefreshToken, AppointmentView, DocumentView + 8 TISS)
 - **Componentes Frontend:** 177+ (incluindo 4 CFM, 4 Receitas Digitais, **Patient Portal Completo** + 6 TISS)
-- **Apps Frontend:** 5 (PrimeCare Software App, MW System Admin, MW Site, MW Docs, **Patient Portal ✅ COMPLETO**) + 2 mobile
+- **Apps Frontend:** 5 (Omni Care Software App, MW System Admin, MW Site, MW Docs, **Patient Portal ✅ COMPLETO**) + 2 mobile
 - **Apps Mobile:** 2 (iOS + Android MVP)
 - **Microservices:** 8 (incluindo Telemedicine e Patient Portal API)
 - **Testes Automatizados:** 1.004+ (64 WhatsApp AI + 58 Patient Portal Frontend + testes do Patient Portal Backend + **212 TISS entidades** ✅)
@@ -2696,7 +2696,7 @@ Baixo Impacto, Alto Esforço (Avoid):
 - **Objetivo:** Centralizar todas as pendências e planejamento futuro
 - **Frequência de Atualização:** Trimestral (ou conforme necessário)
 - **Responsável:** Product Owner / Tech Lead
-- **Feedback:** Enviar para contato@primecaresoftware.com
+- **Feedback:** Enviar para contato@omnicaresoftware.com
 
 ### Considerações Importantes
 
@@ -2791,4 +2791,4 @@ Baixo Impacto, Alto Esforço (Avoid):
 **Versão:** 2.0 - Compliance Regulatório Brasileiro  
 **Status:** Documento centralizado consolidado com melhorias regulatórias
 
-**Este documento serve como fonte única da verdade para todas as pendências e planejamento futuro do PrimeCare Software, incluindo conformidade total com regulamentações brasileiras (CFM, ANVISA, ANS, Receita Federal, LGPD).**
+**Este documento serve como fonte única da verdade para todas as pendências e planejamento futuro do Omni Care Software, incluindo conformidade total com regulamentações brasileiras (CFM, ANVISA, ANS, Receita Federal, LGPD).**

@@ -114,9 +114,9 @@ TwilioSettings__Enabled=true
 1. Vá para **Settings** > **Sender Authentication** > **Single Sender Verification**
 2. Clique em **Create New Sender**
 3. Preencha:
-   - **From Name:** PrimeCare Software
-   - **From Email:** noreply@primecare.com (ou seu domínio verificado)
-   - **Reply To:** suporte@primecare.com
+   - **From Name:** Omni Care Software
+   - **From Email:** noreply@omnicare.com (ou seu domínio verificado)
+   - **Reply To:** suporte@omnicare.com
    - **Company Address:** Endereço da clínica
 4. Verifique o email de confirmação
 
@@ -128,8 +128,8 @@ Edite o arquivo `patient-portal-api/PatientPortal.Api/appsettings.json`:
 {
   "EmailSettings": {
     "ApiKey": "SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "FromEmail": "noreply@primecare.com",
-    "FromName": "PrimeCare Software",
+    "FromEmail": "noreply@omnicare.com",
+    "FromName": "Omni Care Software",
     "Enabled": true
   }
 }
@@ -140,8 +140,8 @@ Para **produção**, use `appsettings.Production.json` ou variáveis de ambiente
 ```bash
 # Variáveis de ambiente (recomendado para produção)
 EmailSettings__ApiKey=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-EmailSettings__FromEmail=noreply@primecare.com
-EmailSettings__FromName=PrimeCare Software
+EmailSettings__FromEmail=noreply@omnicare.com
+EmailSettings__FromName=Omni Care Software
 EmailSettings__Enabled=true
 ```
 
@@ -197,7 +197,7 @@ Criar endpoint de teste (opcional) ou usar o existente:
 POST /api/test/send-whatsapp
 {
   "toNumber": "+5511999999999",
-  "message": "Teste de notificação WhatsApp - PrimeCare"
+  "message": "Teste de notificação WhatsApp - Omni Care"
 }
 ```
 
@@ -326,7 +326,7 @@ Os logs incluem:
 1. Verificar domínio no SendGrid (Domain Authentication)
 2. Configurar SPF, DKIM, DMARC records
 3. Evitar palavras de spam no assunto ("Grátis", "Urgente", etc.)
-4. Pedir pacientes adicionarem noreply@primecare.com aos contatos
+4. Pedir pacientes adicionarem noreply@omnicare.com aos contatos
 
 ### Reminder Service não executa
 

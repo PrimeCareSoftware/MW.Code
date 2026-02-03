@@ -56,16 +56,16 @@ Cada log contém:
 ### 1. Debugar erro em produção
 ```bash
 # Encontrar o erro recente
-tail -50 Logs/primecare-errors-*.log
+tail -50 Logs/omnicare-errors-*.log
 
 # Buscar todo o contexto pelo RequestId
-grep "RequestId=abc-123" Logs/primecare-*.log
+grep "RequestId=abc-123" Logs/omnicare-*.log
 ```
 
 ### 2. Identificar endpoints lentos
 ```bash
 # No terminal
-grep "SLOW REQUEST" Logs/primecare-*.log
+grep "SLOW REQUEST" Logs/omnicare-*.log
 
 # No Seq
 @Message like "%SLOW REQUEST%"
@@ -97,8 +97,8 @@ Queries lentas são automaticamente logadas com:
 
 ### Destinos de Log
 1. **Console**: Todos os logs INFO+
-2. **Arquivo Geral**: `Logs/primecare-YYYYMMDD.log` (30 dias)
-3. **Arquivo Erros**: `Logs/primecare-errors-YYYYMMDD.log` (60 dias)
+2. **Arquivo Geral**: `Logs/omnicare-YYYYMMDD.log` (30 dias)
+3. **Arquivo Erros**: `Logs/omnicare-errors-YYYYMMDD.log` (60 dias)
 4. **Seq**: http://localhost:5341 (tempo real)
 
 ### Rotação de Logs
@@ -119,7 +119,7 @@ dotnet run
 
 # 3. Acessar logs
 # - Console: Ver saída do terminal
-# - Arquivo: cat Logs/primecare-*.log
+# - Arquivo: cat Logs/omnicare-*.log
 # - Seq: http://localhost:5341
 ```
 
@@ -127,17 +127,17 @@ dotnet run
 
 #### Ver logs em tempo real
 ```bash
-tail -f Logs/primecare-$(date +%Y%m%d).log
+tail -f Logs/omnicare-$(date +%Y%m%d).log
 ```
 
 #### Filtrar apenas erros
 ```bash
-grep -E "\[ERR\]|\[WRN\]" Logs/primecare-*.log
+grep -E "\[ERR\]|\[WRN\]" Logs/omnicare-*.log
 ```
 
 #### Buscar por usuário
 ```bash
-grep "UserId=doctor@example.com" Logs/primecare-*.log
+grep "UserId=doctor@example.com" Logs/omnicare-*.log
 ```
 
 ## 📈 Benefícios Implementados

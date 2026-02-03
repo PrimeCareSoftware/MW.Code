@@ -45,8 +45,8 @@ http://localhost:4202
 1. In DevTools, go to **Application** tab
 2. Click **Manifest** in left menu
 3. Verify all fields are populated:
-   - Name: "PrimeCare - Portal do Paciente"
-   - Short name: "PrimeCare"
+   - Name: "Omni Care - Portal do Paciente"
+   - Short name: "Omni Care"
    - Start URL: "/"
    - Theme color: #1e40af
    - Icons: 8 icons displayed
@@ -166,7 +166,7 @@ In browser console:
 
 **Expected**: 
 - White background
-- PrimeCare icon
+- Omni Care icon
 - Smooth transition to app
 
 ### ✅ Theme Color
@@ -356,8 +356,8 @@ test('manifest is valid', async ({ page }) => {
     return response.json();
   });
   
-  expect(manifest.name).toBe('PrimeCare - Portal do Paciente');
-  expect(manifest.short_name).toBe('PrimeCare');
+  expect(manifest.name).toBe('Omni Care - Portal do Paciente');
+  expect(manifest.short_name).toBe('Omni Care');
 });
 
 test('works offline', async ({ page, context }) => {

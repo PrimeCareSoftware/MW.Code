@@ -728,4 +728,4 @@ When deploying Phase 2, ensure:
 For questions or issues:
 - Email: suporte@medicwarehouse.com.br
 - Documentation: https://docs.medicwarehouse.com.br
-- GitHub: https://github.com/PrimeCareSoftware/MW.Code
+- GitHub: https://github.com/Omni CareSoftware/MW.Code

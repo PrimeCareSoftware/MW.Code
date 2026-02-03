@@ -14,7 +14,7 @@ Este documento fornece instruções detalhadas sobre como configurar o envio de 
 
 ## Visão Geral
 
-O sistema PrimeCare agora envia emails diretamente através de SMTP (Simple Mail Transfer Protocol) ao invés de usar APIs externas como SendGrid. Isso oferece:
+O sistema Omni Care agora envia emails diretamente através de SMTP (Simple Mail Transfer Protocol) ao invés de usar APIs externas como SendGrid. Isso oferece:
 
 - ✅ Maior controle sobre o envio de emails
 - ✅ Sem dependência de serviços externos pagos
@@ -104,7 +104,7 @@ Edite o arquivo `appsettings.json` ou `appsettings.Production.json`:
     "Username": "noreply@seudominio.com.br",
     "Password": "SuaSenhaForte123!",
     "From": "noreply@seudominio.com.br",
-    "FromName": "PrimeCare - Portal do Paciente"
+    "FromName": "Omni Care - Portal do Paciente"
   }
 }
 ```
@@ -122,7 +122,7 @@ Edite o arquivo `appsettings.json` ou `appsettings.Production.json`:
     "Username": "noreply@seudominio.com.br",
     "Password": "SuaSenhaForte123!",
     "From": "noreply@seudominio.com.br",
-    "FromName": "PrimeCare Software",
+    "FromName": "Omni Care Software",
     "Enabled": true
   }
 }
@@ -139,7 +139,7 @@ export EMAIL_SMTP_PORT="587"
 export EMAIL_USERNAME="noreply@seudominio.com.br"
 export EMAIL_PASSWORD="SuaSenhaForte123!"
 export EMAIL_FROM="noreply@seudominio.com.br"
-export EMAIL_FROM_NAME="PrimeCare Software"
+export EMAIL_FROM_NAME="Omni Care Software"
 
 # Windows PowerShell
 $env:EMAIL_SMTP_SERVER="smtp.hostinger.com"
@@ -147,7 +147,7 @@ $env:EMAIL_SMTP_PORT="587"
 $env:EMAIL_USERNAME="noreply@seudominio.com.br"
 $env:EMAIL_PASSWORD="SuaSenhaForte123!"
 $env:EMAIL_FROM="noreply@seudominio.com.br"
-$env:EMAIL_FROM_NAME="PrimeCare Software"
+$env:EMAIL_FROM_NAME="Omni Care Software"
 ```
 
 Ou adicione ao arquivo `.env`:
@@ -160,7 +160,7 @@ EMAIL_USE_SSL=true
 EMAIL_USERNAME=noreply@seudominio.com.br
 EMAIL_PASSWORD=SuaSenhaForte123!
 EMAIL_FROM=noreply@seudominio.com.br
-EMAIL_FROM_NAME=PrimeCare Software
+EMAIL_FROM_NAME=Omni Care Software
 EMAIL_ENABLED=true
 ```
 
@@ -203,7 +203,7 @@ Após tentar enviar um email, verifique os logs da aplicação:
 
 ```bash
 # Logs da aplicação
-tail -f Logs/primecare-*.log | grep -i email
+tail -f Logs/omnicare-*.log | grep -i email
 ```
 
 Você deve ver mensagens como:
@@ -349,4 +349,4 @@ Seguindo este guia, você terá o sistema de email configurado corretamente usan
 
 **Última Atualização**: Fevereiro 2026  
 **Versão**: 1.0  
-**Autor**: PrimeCare Software Team
+**Autor**: Omni Care Software Team

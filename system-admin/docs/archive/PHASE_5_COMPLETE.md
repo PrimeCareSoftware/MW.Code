@@ -302,7 +302,7 @@ A **Fase 5** da implementação do sistema conforme a Resolução CFM 1.821/2007
 - [CID-10 - OMS](https://icd.who.int/browse10/2019/en)
 
 ### Suporte Técnico
-- 📧 Email: suporte@primecaresoftware.com.br
+- 📧 Email: suporte@omnicaresoftware.com.br
 - 📱 WhatsApp: Entre em contato pelo email para obter o número de suporte
 - 🌐 Portal: Em desenvolvimento
 - 📖 Docs: Consulte os arquivos MD na pasta `docs/`
@@ -311,7 +311,7 @@ A **Fase 5** da implementação do sistema conforme a Resolução CFM 1.821/2007
 
 ## 🎉 Conclusão
 
-A **Fase 5** foi concluída com **100% de sucesso**. O sistema PrimeCare Software agora possui:
+A **Fase 5** foi concluída com **100% de sucesso**. O sistema Omni Care Software agora possui:
 
 ✅ **Backend 100% conforme CFM 1.821**  
 ✅ **Frontend 100% conforme CFM 1.821**  

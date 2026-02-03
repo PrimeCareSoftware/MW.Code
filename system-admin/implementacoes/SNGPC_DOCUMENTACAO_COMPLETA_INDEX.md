@@ -8,7 +8,7 @@
 
 ## 🎯 Visão Geral
 
-Este é o índice completo de toda a documentação do sistema SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) implementado no PrimeCare. A documentação está organizada por público-alvo e tipo de conteúdo.
+Este é o índice completo de toda a documentação do sistema SNGPC (Sistema Nacional de Gerenciamento de Produtos Controlados) implementado no Omni Care. A documentação está organizada por público-alvo e tipo de conteúdo.
 
 ### Status de Implementação
 
@@ -297,8 +297,8 @@ Este é o índice completo de toda a documentação do sistema SNGPC (Sistema Na
 
 ### Dúvidas sobre a Documentação?
 
-**Email:** documentacao@primecare.com.br  
-**Suporte Técnico:** suporte@primecare.com.br  
+**Email:** documentacao@omnicare.com.br  
+**Suporte Técnico:** suporte@omnicare.com.br  
 **Telefone:** (11) XXXX-XXXX
 
 ### Reportar Erro na Documentação
@@ -306,7 +306,7 @@ Este é o índice completo de toda a documentação do sistema SNGPC (Sistema Na
 Se encontrar algum erro ou inconsistência:
 1. Anote o documento, página e seção
 2. Descreva o erro ou sugestão
-3. Envie para documentacao@primecare.com.br
+3. Envie para documentacao@omnicare.com.br
 
 ### Solicitar Nova Documentação
 
@@ -314,7 +314,7 @@ Se precisa de documentação adicional:
 1. Descreva o tópico desejado
 2. Indique o público-alvo
 3. Explique o caso de uso
-4. Envie para documentacao@primecare.com.br
+4. Envie para documentacao@omnicare.com.br
 
 ---
 
@@ -374,7 +374,7 @@ Documentação será revisada e atualizada quando:
 
 ---
 
-**Criado por:** Equipe Técnica PrimeCare  
+**Criado por:** Equipe Técnica Omni Care  
 **Data:** 29 de Janeiro de 2026  
 **Versão:** 1.0  
 **Status:** ✅ DOCUMENTAÇÃO 100% COMPLETA  

@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Esta fase contém 5 prompts abrangentes para implementação de funcionalidades críticas de segurança e compliance LGPD no sistema PrimeCare.
+Esta fase contém 5 prompts abrangentes para implementação de funcionalidades críticas de segurança e compliance LGPD no sistema Omni Care.
 
 **Prioridade:** 🔥🔥 P1 - ALTA (Todas as tarefas)  
 **Custo Total:** R$ 210.000  

@@ -380,12 +380,12 @@ Ao contribuir com esta funcionalidade, certifique-se de:
 
 Para dúvidas ou problemas relacionados a esta funcionalidade:
 
-- **Issues:** https://github.com/PrimeCareSoftware/MW.Code/issues
-- **Documentação:** https://github.com/PrimeCareSoftware/MW.Code/tree/main/docs
-- **E-mail:** suporte@primecaresoftware.com.br
+- **Issues:** https://github.com/Omni CareSoftware/MW.Code/issues
+- **Documentação:** https://github.com/Omni CareSoftware/MW.Code/tree/main/docs
+- **E-mail:** suporte@omnicaresoftware.com.br
 
 ---
 
 **Última Atualização:** Janeiro 2026  
 **Versão da API:** 1.0  
-**Autor:** Equipe PrimeCare Software
+**Autor:** Equipe Omni Care Software

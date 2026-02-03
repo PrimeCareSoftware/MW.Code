@@ -8,7 +8,7 @@
 
 ## 📋 Visão Geral
 
-Este documento descreve o fluxo financeiro integrado implementado no sistema PrimeCare, que conecta automaticamente:
+Este documento descreve o fluxo financeiro integrado implementado no sistema Omni Care, que conecta automaticamente:
 - **Appointment** (Agendamento/Atendimento)
 - **Payment** (Pagamento)
 - **Invoice** (Nota Fiscal)

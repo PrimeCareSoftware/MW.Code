@@ -2,13 +2,13 @@
 
 ## 📋 Visão Geral
 
-Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal PrimeCare Software.
+Este documento descreve como configurar, acessar e utilizar o novo sistema de administração MW System Admin, separado do aplicativo principal Omni Care Software.
 
 ## 🏗️ Arquitetura da Separação
 
-O PrimeCare Software agora é composto por **dois aplicativos Angular independentes**:
+O Omni Care Software agora é composto por **dois aplicativos Angular independentes**:
 
-### 1. **PrimeCare Software App** (`medicwarehouse-app`)
+### 1. **Omni Care Software App** (`medicwarehouse-app`)
 - **Usuários**: Proprietários de clínicas, médicos, secretárias, etc.
 - **Funcionalidades**: 
   - Dashboard da clínica
@@ -39,7 +39,7 @@ O PrimeCare Software agora é composto por **dois aplicativos Angular independen
 cd frontend/mw-system-admin
 npm install
 
-# PrimeCare Software App (se necessário)
+# Omni Care Software App (se necessário)
 cd ../medicwarehouse-app
 npm install
 ```
@@ -69,7 +69,7 @@ Para rodar ambos os projetos simultaneamente, configure portas diferentes:
 ### Passo 3: Executar os Projetos
 
 ```bash
-# Terminal 1 - PrimeCare Software App
+# Terminal 1 - Omni Care Software App
 cd frontend/medicwarehouse-app
 npm start
 # Disponível em http://localhost:4200
@@ -377,8 +377,8 @@ Ambos os sistemas são totalmente responsivos:
 
 Para problemas ou dúvidas:
 
-- **Email**: suporte@primecaresoftware.com
-- **GitHub Issues**: https://github.com/PrimeCare Software/MW.Code/issues
+- **Email**: suporte@omnicaresoftware.com
+- **GitHub Issues**: https://github.com/Omni Care Software/MW.Code/issues
 - **Documentação**: Veja os arquivos `.md` no repositório
 
 ## 🔄 Atualizações Futuras

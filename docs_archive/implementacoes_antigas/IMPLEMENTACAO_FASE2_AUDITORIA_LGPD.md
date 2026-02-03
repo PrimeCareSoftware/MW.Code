@@ -79,7 +79,7 @@ var document = Document.Create(container => {
         page.Content().Column(column => {
             // Seções estruturadas...
         });
-        page.Footer().Text("MedicSoft - PrimeCare Software");
+        page.Footer().Text("MedicSoft - Omni Care Software");
     });
 });
 ```

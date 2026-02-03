@@ -76,7 +76,7 @@
 **Configuração de Ambiente / Environment Config**:
 ```typescript
 documentation: {
-  repositoryUrl: 'https://github.com/PrimeCareSoftware/MW.Code/blob/main'
+  repositoryUrl: 'https://github.com/Omni CareSoftware/MW.Code/blob/main'
 }
 ```
 

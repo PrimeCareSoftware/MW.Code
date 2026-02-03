@@ -44,7 +44,7 @@
 - ✅ Modal overlay com destaque de elementos
 
 **2. Tema Customizado Shepherd.js**
-- ✅ CSS customizado integrado ao design system PrimeCare
+- ✅ CSS customizado integrado ao design system Omni Care
 - ✅ Cores e tipografia consistentes com a marca
 - ✅ Responsivo e acessível
 

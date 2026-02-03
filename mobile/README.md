@@ -1,4 +1,4 @@
-# PrimeCare Software Mobile Apps - DESCONTINUADO E DELETADO
+# Omni Care Software Mobile Apps - DESCONTINUADO E DELETADO
 
 > ⚠️ **IMPORTANTE**: Os aplicativos nativos iOS e Android foram **descontinuados** em Janeiro de 2026 e **DELETADOS** do repositório.
 > 
@@ -6,7 +6,7 @@
 
 ## 📱 Por que migramos para PWA?
 
-O PrimeCare Software migrou de apps nativos para **PWA (Progressive Web App)** com os seguintes benefícios:
+O Omni Care Software migrou de apps nativos para **PWA (Progressive Web App)** com os seguintes benefícios:
 
 ### Para Usuários:
 - ✅ **Instalação Mais Simples**: Sem necessidade de ir à loja de apps
@@ -23,7 +23,7 @@ O PrimeCare Software migrou de apps nativos para **PWA (Progressive Web App)** c
 
 ## 📖 Novo PWA
 
-Acesse o novo PWA em: **https://app.primecaresoftware.com.br**
+Acesse o novo PWA em: **https://app.omnicaresoftware.com.br**
 
 - 📱 [Como Instalar no iOS/Android](../docs/PWA_INSTALLATION_GUIDE.md)
 - 📖 [Documentação Completa da Migração](../docs/MOBILE_TO_PWA_MIGRATION.md)
@@ -52,7 +52,7 @@ Para qualquer dúvida sobre a migração para PWA:
 
 - **Documentação PWA**: [PWA Installation Guide](../docs/PWA_INSTALLATION_GUIDE.md)
 - **Issues**: GitHub Issues
-- **Email**: contato@primecaresoftware.com
+- **Email**: contato@omnicaresoftware.com
 
 ---
 

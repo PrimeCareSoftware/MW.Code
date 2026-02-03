@@ -1,4 +1,4 @@
-# 📊 Guia de Consulta de Audit Logs - PrimeCare
+# 📊 Guia de Consulta de Audit Logs - Omni Care
 
 **Sistema de Auditoria e Rastreabilidade**  
 **Versão:** 1.0  

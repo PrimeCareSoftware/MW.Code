@@ -30,7 +30,7 @@ dotnet run
 
 Os logs já estão sendo gravados em:
 - **Console**: Saída padrão do terminal
-- **Arquivo**: `Logs/primecare-YYYYMMDD.log`
+- **Arquivo**: `Logs/omnicare-YYYYMMDD.log`
 - **Seq**: http://localhost:5341 (se configurado)
 
 ## 🎯 Principais Recursos
@@ -101,24 +101,24 @@ SELECT * FROM Patients WHERE ClinicId = @p0
 
 ```bash
 # Últimos 20 erros
-tail -n 20 Logs/primecare-errors-$(date +%Y%m%d).log
+tail -n 20 Logs/omnicare-errors-$(date +%Y%m%d).log
 
 # Buscar erro específico
-grep "NullReferenceException" Logs/primecare-errors-*.log
+grep "NullReferenceException" Logs/omnicare-errors-*.log
 ```
 
 ### Analisar Requisições por Tenant
 
 ```bash
 # Contar requisições de uma clínica
-grep "TenantId=clinic-001" Logs/primecare-$(date +%Y%m%d).log | wc -l
+grep "TenantId=clinic-001" Logs/omnicare-$(date +%Y%m%d).log | wc -l
 ```
 
 ### Rastrear Requisição Específica
 
 ```bash
 # Buscar todos os logs de uma requisição
-grep "RequestId=abc-123" Logs/primecare-*.log
+grep "RequestId=abc-123" Logs/omnicare-*.log
 ```
 
 ## ⚙️ Configuração Customizada
@@ -183,9 +183,9 @@ Mantenha o Seq aberto em uma aba do navegador durante o desenvolvimento:
 ### 3. Debug de Erros em Produção
 
 ```
-1. Localize o erro em: Logs/primecare-errors-*.log
+1. Localize o erro em: Logs/omnicare-errors-*.log
 2. Copie o RequestId
-3. Busque todo o contexto: grep "RequestId=..." Logs/primecare-*.log
+3. Busque todo o contexto: grep "RequestId=..." Logs/omnicare-*.log
 4. Analise o fluxo completo da requisição
 ```
 
@@ -244,4 +244,4 @@ Após configurar, verifique:
 
 **Pronto para começar!** 🎉
 
-Qualquer dúvida, consulte o guia completo ou os logs de erro em `Logs/primecare-errors-*.log`.
+Qualquer dúvida, consulte o guia completo ou os logs de erro em `Logs/omnicare-errors-*.log`.

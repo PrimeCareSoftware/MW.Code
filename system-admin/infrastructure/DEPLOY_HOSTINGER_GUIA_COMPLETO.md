@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este guia foi criado especialmente para **iniciantes** e mostra **passo a passo** como fazer o deploy completo do PrimeCare Software no Hostinger.
+Este guia foi criado especialmente para **iniciantes** e mostra **passo a passo** como fazer o deploy completo do Omni Care Software no Hostinger.
 
 **Tempo estimado**: 2-3 horas (primeira vez)  
 **Custo inicial**: R$ 19,99 - R$ 59,99/mês (VPS)  
@@ -46,7 +46,7 @@ Este guia foi criado especialmente para **iniciantes** e mostra **passo a passo*
 - **VPS**: Você tem seu próprio servidor virtual (recomendado para aplicações .NET)
 - **Servidor Dedicado**: Você tem uma máquina física inteira (caro, não necessário no início)
 
-### Por que VPS para PrimeCare Software?
+### Por que VPS para Omni Care Software?
 
 - ✅ Você tem controle total do servidor
 - ✅ Pode instalar .NET 8, PostgreSQL e qualquer outra ferramenta
@@ -185,7 +185,7 @@ sudo ufw status
 - Porta 22: SSH (acesso remoto)
 - Porta 80: HTTP (site sem criptografia)
 - Porta 443: HTTPS (site com SSL)
-- Porta 5000: API do PrimeCare
+- Porta 5000: API do Omni Care
 
 ---
 
@@ -342,7 +342,7 @@ sudo chown -R $USER:$USER /var/www/primecare
 
 # Clonar repositório
 cd /var/www/primecare
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 cd MW.Code
 ```
 
@@ -396,8 +396,8 @@ nano /var/www/primecare/MW.Code/src/MedicSoft.Api/appsettings.Production.json
   "JwtSettings": {
     "SecretKey": "sua-chave-jwt-gerada",
     "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Software",
-    "Audience": "PrimeCare Software-API"
+    "Issuer": "Omni Care Software",
+    "Audience": "Omni Care Software-API"
   },
   "Logging": {
     "LogLevel": {
@@ -461,13 +461,13 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 
 ```bash
 # Criar arquivo de serviço
-sudo nano /etc/systemd/system/primecare-api.service
+sudo nano /etc/systemd/system/omnicare-api.service
 ```
 
 **Adicione este conteúdo:**
 ```ini
 [Unit]
-Description=PrimeCare Software API
+Description=Omni Care Software API
 After=network.target postgresql.service
 
 [Service]
@@ -476,7 +476,7 @@ ExecStart=/usr/bin/dotnet /var/www/primecare/api/MedicSoft.Api.dll
 Restart=always
 RestartSec=10
 KillSignal=SIGINT
-SyslogIdentifier=primecare-api
+SyslogIdentifier=omnicare-api
 User=www-data
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
@@ -492,13 +492,13 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 
 # Ativar serviço (iniciar no boot)
-sudo systemctl enable primecare-api
+sudo systemctl enable omnicare-api
 
 # Iniciar serviço
-sudo systemctl start primecare-api
+sudo systemctl start omnicare-api
 
 # Verificar status
-sudo systemctl status primecare-api
+sudo systemctl status omnicare-api
 ```
 
 **Deve mostrar**: "active (running)" ✅
@@ -622,7 +622,7 @@ sudo systemctl restart nginx
 
 Abra seu navegador e acesse: `http://seu-ip-do-vps`
 
-Você deve ver o PrimeCare Software rodando! 🎉
+Você deve ver o Omni Care Software rodando! 🎉
 
 ---
 
@@ -727,7 +727,7 @@ sudo crontab -e
 **Adicione no final:**
 ```bash
 # Backup diário às 3h da manhã
-0 3 * * * /usr/local/bin/backup-primecare.sh >> /var/log/primecare-backup.log 2>&1
+0 3 * * * /usr/local/bin/backup-primecare.sh >> /var/log/omnicare-backup.log 2>&1
 ```
 
 Salve e saia.
@@ -742,13 +742,13 @@ Salve e saia.
 
 ```bash
 # Ver logs em tempo real
-sudo journalctl -u primecare-api -f
+sudo journalctl -u omnicare-api -f
 
 # Ver últimas 100 linhas
-sudo journalctl -u primecare-api -n 100
+sudo journalctl -u omnicare-api -n 100
 
 # Ver logs de hoje
-sudo journalctl -u primecare-api --since today
+sudo journalctl -u omnicare-api --since today
 ```
 
 ### Ver Logs do Nginx
@@ -765,7 +765,7 @@ sudo tail -f /var/log/nginx/error.log
 
 ```bash
 # API
-sudo systemctl status primecare-api
+sudo systemctl status omnicare-api
 
 # PostgreSQL
 sudo systemctl status postgresql
@@ -811,7 +811,7 @@ dotnet ef database update \
   --startup-project src/MedicSoft.Api
 
 # Reiniciar API
-sudo systemctl restart primecare-api
+sudo systemctl restart omnicare-api
 
 # Atualizar frontend
 cd frontend/medicwarehouse-app
@@ -829,7 +829,7 @@ sudo systemctl restart nginx
 
 **Verificar logs:**
 ```bash
-sudo journalctl -u primecare-api -n 50
+sudo journalctl -u omnicare-api -n 50
 ```
 
 **Causas comuns:**
@@ -934,7 +934,7 @@ Antes de considerar o deploy concluído, verifique:
 
 ### O que é uma API?
 
-API (Application Programming Interface) é a parte do sistema que recebe e processa requisições. No PrimeCare, a API .NET:
+API (Application Programming Interface) é a parte do sistema que recebe e processa requisições. No Omni Care, a API .NET:
 - Processa login
 - Gerencia pacientes
 - Salva dados no banco
@@ -942,7 +942,7 @@ API (Application Programming Interface) é a parte do sistema que recebe e proce
 
 ### O que é Frontend?
 
-Frontend é a interface visual que o usuário vê e interage (o site). No PrimeCare, é feito em Angular.
+Frontend é a interface visual que o usuário vê e interage (o site). No Omni Care, é feito em Angular.
 
 ### O que é um Proxy Reverso?
 

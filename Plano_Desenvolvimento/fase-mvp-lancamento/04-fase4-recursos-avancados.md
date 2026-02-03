@@ -2,7 +2,7 @@
 
 ## 📋 Contexto
 
-A Fase 4 adiciona recursos avançados que posicionam o PrimeCare como uma solução completa e competitiva no mercado. Estes recursos são diferenciadores importantes e elevam significativamente o valor da plataforma.
+A Fase 4 adiciona recursos avançados que posicionam o Omni Care como uma solução completa e competitiva no mercado. Estes recursos são diferenciadores importantes e elevam significativamente o valor da plataforma.
 
 **Referência**: `MVP_IMPLEMENTATION_GUIDE.md` - Fase 4
 **Status**: 📋 Planejado
@@ -354,7 +354,7 @@ interface Action {
 
 ```csharp
 // RESTful API with OpenAPI/Swagger documentation
-// Base URL: https://api.primecare.com.br/v1/
+// Base URL: https://api.omnicare.com.br/v1/
 
 // Autenticação: OAuth 2.0 + API Keys
 // Rate limiting: 1000 requests/hour por API key

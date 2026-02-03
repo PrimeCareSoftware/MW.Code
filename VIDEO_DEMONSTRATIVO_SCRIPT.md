@@ -1,4 +1,4 @@
-# Vídeo Demonstrativo PrimeCare - Script Completo
+# Vídeo Demonstrativo Omni Care - Script Completo
 
 > **Data:** 28 de Janeiro de 2026  
 > **Versão:** 1.0  
@@ -41,7 +41,7 @@
 
 #### Cena 1 (0-5s)
 **Visual:**
-- Fade in do logo PrimeCare com animação suave
+- Fade in do logo Omni Care com animação suave
 - Background: gradiente azul/branco clean
 - Música: intro instrumental suave
 
@@ -50,7 +50,7 @@
 
 **Texto na Tela:**
 ```
-PrimeCare Software
+Omni Care Software
 Gestão Clínica Simplificada
 ```
 
@@ -84,13 +84,13 @@ Gestão Clínica Simplificada
 #### Feature 1: Agenda Inteligente (15-35s)
 
 **Visual:**
-- Tela da agenda do PrimeCare em ação
+- Tela da agenda do Omni Care em ação
 - Mouse/cursor clicando para criar agendamento
 - Calendar view com consultas organizadas por cores
 - Animação smooth de drag & drop
 
 **Áudio/Narração:**
-> "Com a Agenda Inteligente do PrimeCare, agende consultas em segundos. 
+> "Com a Agenda Inteligente do Omni Care, agende consultas em segundos. 
 > Visualize sua semana completa, evite conflitos e envie lembretes automáticos aos pacientes."
 
 **Texto na Tela (overlays):**
@@ -248,10 +248,10 @@ Gestão Clínica Simplificada
 **Visual:**
 - Voltando para a homepage
 - Animação dos logos de clientes/depoimentos rápidos
-- Contador animado: "500+ clínicas confiam no PrimeCare"
+- Contador animado: "500+ clínicas confiam no Omni Care"
 
 **Áudio/Narração:**
-> "Junte-se a mais de 500 clínicas que já transformaram sua gestão com o PrimeCare. 
+> "Junte-se a mais de 500 clínicas que já transformaram sua gestão com o Omni Care. 
 > Experimente gratuitamente por 15 dias. Sem compromisso, sem cartão de crédito."
 
 **Texto na Tela:**
@@ -270,19 +270,19 @@ Gestão Clínica Simplificada
 - QR Code no canto (opcional)
 
 **Áudio/Narração:**
-> "Comece agora mesmo. Visite primecare.com.br e experimente a diferença."
+> "Comece agora mesmo. Visite omnicare.com.br e experimente a diferença."
 
 **Texto na Tela (centralizado, grande):**
 ```
 Comece Gratuitamente
 
-www.primecare.com.br
+www.omnicare.com.br
 
 ou ligue: 0800 123 4567
 ```
 
 **Fade Out:**
-- Logo PrimeCare
+- Logo Omni Care
 - Música fecha suavemente
 - Duração fade: 3-5 segundos
 
@@ -320,7 +320,7 @@ ou ligue: 0800 123 4567
 - Pausas estratégicas para absorção
 
 ### Pronúncia
-- **PrimeCare:** "Praime-kér"
+- **Omni Care:** "Praime-kér"
 - **Dashboard:** "Dechbord"
 - **Telemedicina:** Ênfase no "medi-CI-na"
 - **Software:** "Sóf-twér"
@@ -396,7 +396,7 @@ ou ligue: 0800 123 4567
 <div class="video-player-wrapper">
   <iframe 
     src="https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1&cc_load_policy=1&cc_lang_pref=pt"
-    title="PrimeCare Software - Vídeo Demonstrativo"
+    title="Omni Care Software - Vídeo Demonstrativo"
     loading="lazy"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
     allowfullscreen>
@@ -502,7 +502,7 @@ ou ligue: 0800 123 4567
 <meta property="og:video:width" content="1920">
 <meta property="og:video:height" content="1080">
 <meta name="twitter:player" content="https://video-url.com/player">
-<meta name="description" content="Conheça o PrimeCare Software em 3 minutos. Sistema completo de gestão clínica com agenda, prontuário eletrônico, financeiro e telemedicina.">
+<meta name="description" content="Conheça o Omni Care Software em 3 minutos. Sistema completo de gestão clínica com agenda, prontuário eletrônico, financeiro e telemedicina.">
 ```
 
 ---
@@ -523,6 +523,6 @@ ou ligue: 0800 123 4567
 ---
 
 **Documento preparado por:** GitHub Copilot Agent  
-**Para:** PrimeCare Software (MedicWarehouse)  
+**Para:** Omni Care Software (MedicWarehouse)  
 **Última atualização:** 28 de Janeiro de 2026  
 **Versão:** 1.0

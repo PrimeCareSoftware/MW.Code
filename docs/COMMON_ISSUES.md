@@ -188,7 +188,7 @@ _(Planned fix)_
 ### Email Notifications Not Received
 **Frequency**: Reported by 8% of users  
 **Common Causes**:
-1. Email in spam folder → Ask users to whitelist noreply@primecare.com.br
+1. Email in spam folder → Ask users to whitelist noreply@omnicare.com.br
 2. Invalid email address → Verify email in profile settings
 3. Email service delay → Typically delivered within 5 minutes
 
@@ -302,5 +302,5 @@ If you encounter an issue not listed here:
 ---
 
 **Version**: 1.0  
-**Maintained by**: PrimeCare Support Team  
+**Maintained by**: Omni Care Support Team  
 **Last Review**: January 2026

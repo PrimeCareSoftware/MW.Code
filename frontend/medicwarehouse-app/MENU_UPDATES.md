@@ -1,4 +1,4 @@
-# Menu Updates - PrimeCare Frontend (medicwarehouse-app)
+# Menu Updates - Omni Care Frontend (medicwarehouse-app)
 
 Data: 26 de janeiro de 2026
 
@@ -80,7 +80,7 @@ Esta correção reforça a **clara separação** entre duas aplicações:
 - ✅ Administração de usuários e perfis
 
 ### 🔧 mw-system-admin (Aplicação Separada)
-**Público**: Administradores do sistema PrimeCare
+**Público**: Administradores do sistema Omni Care
 **Funcionalidades**:
 - ✅ Gerenciar clínicas
 - ✅ Gerenciar planos de assinatura
@@ -165,7 +165,7 @@ Todas as rotas no menu agora correspondem a rotas **definidas em `app.routes.ts`
 ✅ **Build Status**: Sucesso (desenvolvimento)
 ```
 Application bundle generation complete. [24.465 seconds]
-Output location: dist/primecare-frontend
+Output location: dist/omnicare-frontend
 ```
 
 ✅ **Sem erros de compilação**

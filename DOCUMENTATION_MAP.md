@@ -1,9 +1,9 @@
-# 📚 Mapa de Documentação - PrimeCare Software
+# 📚 Mapa de Documentação - Omni Care Software
 
 > **Última Atualização:** Janeiro 2026  
 > **Propósito:** Índice completo de toda documentação do projeto
 
-Este documento fornece uma visão geral de toda a documentação disponível no repositório PrimeCare Software.
+Este documento fornece uma visão geral de toda a documentação disponível no repositório Omni Care Software.
 
 ## 📍 Documentação Principal (Raiz)
 

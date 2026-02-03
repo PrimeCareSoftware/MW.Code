@@ -1,4 +1,4 @@
-# 🧪 Guia de Testes de Acessibilidade - PrimeCare Software
+# 🧪 Guia de Testes de Acessibilidade - Omni Care Software
 
 > **Conformidade:** WCAG 2.1 Level AA  
 > **Última Atualização:** Janeiro 2026

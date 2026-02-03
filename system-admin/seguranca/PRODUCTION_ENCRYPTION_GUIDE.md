@@ -22,7 +22,7 @@ Fornecer um guia passo a passo para:
 - ✅ Azure CLI instalado
 
 ### Aplicação
-- ✅ Sistema PrimeCare implantado
+- ✅ Sistema Omni Care implantado
 - ✅ Backup completo do banco de dados
 - ✅ Todos os testes passando
 - ✅ Janela de manutenção agendada
@@ -37,9 +37,9 @@ az login
 
 # Criar Resource Group
 az group create \
-  --name primecare-prod-rg \
+  --name omnicare-prod-rg \
   --location brazilsouth \
-  --tags Environment=Production Application=PrimeCare
+  --tags Environment=Production Application=Omni Care
 ```
 
 ### 1.2 Criar Azure Key Vault
@@ -47,20 +47,20 @@ az group create \
 ```bash
 # Criar Key Vault com proteção avançada
 az keyvault create \
-  --name primecare-prod-kv \
-  --resource-group primecare-prod-rg \
+  --name omnicare-prod-kv \
+  --resource-group omnicare-prod-rg \
   --location brazilsouth \
   --enable-soft-delete true \
   --soft-delete-retention-days 90 \
   --enable-purge-protection true \
   --enable-rbac-authorization false \
   --sku premium \
-  --tags Environment=Production Application=PrimeCare Purpose=MedicalDataEncryption
+  --tags Environment=Production Application=Omni Care Purpose=MedicalDataEncryption
 
 # Verificar criação
 az keyvault show \
-  --name primecare-prod-kv \
-  --resource-group primecare-prod-rg
+  --name omnicare-prod-kv \
+  --resource-group omnicare-prod-rg
 ```
 
 **Explicação dos parâmetros:**
@@ -74,7 +74,7 @@ az keyvault show \
 ```bash
 # Opção 1: Chave protegida por software (mais barato)
 az keyvault key create \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key \
   --protection software \
   --kty RSA \
@@ -83,7 +83,7 @@ az keyvault key create \
 
 # Opção 2: Chave protegida por HSM (mais seguro, recomendado para produção)
 az keyvault key create \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key \
   --protection hsm \
   --kty RSA-HSM \
@@ -92,7 +92,7 @@ az keyvault key create \
 
 # Verificar chave
 az keyvault key show \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key
 ```
 
@@ -101,7 +101,7 @@ az keyvault key show \
 ```bash
 # Criar política de rotação (365 dias)
 az keyvault key rotation-policy update \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key \
   --value '{
     "lifetimeActions": [
@@ -129,7 +129,7 @@ az keyvault key rotation-policy update \
 
 # Verificar política de rotação
 az keyvault key rotation-policy show \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key
 ```
 
@@ -139,17 +139,17 @@ az keyvault key rotation-policy show \
 
 ```bash
 # Obter nome do App Service
-APP_SERVICE_NAME="primecare-prod-api"
+APP_SERVICE_NAME="omnicare-prod-api"
 
 # Habilitar System-Assigned Managed Identity
 az webapp identity assign \
   --name $APP_SERVICE_NAME \
-  --resource-group primecare-prod-rg
+  --resource-group omnicare-prod-rg
 
 # Obter Principal ID da Managed Identity
 PRINCIPAL_ID=$(az webapp identity show \
   --name $APP_SERVICE_NAME \
-  --resource-group primecare-prod-rg \
+  --resource-group omnicare-prod-rg \
   --query principalId \
   --output tsv)
 
@@ -161,14 +161,14 @@ echo "Managed Identity Principal ID: $PRINCIPAL_ID"
 ```bash
 # Dar permissões de acesso às chaves
 az keyvault set-policy \
-  --name primecare-prod-kv \
+  --name omnicare-prod-kv \
   --object-id $PRINCIPAL_ID \
   --key-permissions get list encrypt decrypt wrapKey unwrapKey \
   --secret-permissions get list
 
 # Verificar permissões
 az keyvault show \
-  --name primecare-prod-kv \
+  --name omnicare-prod-kv \
   --query "properties.accessPolicies[?objectId=='$PRINCIPAL_ID']"
 ```
 
@@ -182,7 +182,7 @@ Não adicione secrets no appsettings.json! Use App Configuration ou Environment 
 {
   "Azure": {
     "KeyVault": {
-      "VaultUri": "https://primecare-prod-kv.vault.azure.net/",
+      "VaultUri": "https://omnicare-prod-kv.vault.azure.net/",
       "KeyName": "medical-data-encryption-key",
       "UseManagedIdentity": true,
       "CacheExpirationMinutes": 60
@@ -201,20 +201,20 @@ Não adicione secrets no appsettings.json! Use App Configuration ou Environment 
 ```bash
 # Criar App Configuration (se não existir)
 az appconfig create \
-  --name primecare-prod-config \
-  --resource-group primecare-prod-rg \
+  --name omnicare-prod-config \
+  --resource-group omnicare-prod-rg \
   --location brazilsouth \
   --sku Standard
 
 # Adicionar configurações
 az appconfig kv set \
-  --name primecare-prod-config \
+  --name omnicare-prod-config \
   --key "Azure:KeyVault:VaultUri" \
-  --value "https://primecare-prod-kv.vault.azure.net/" \
+  --value "https://omnicare-prod-kv.vault.azure.net/" \
   --yes
 
 az appconfig kv set \
-  --name primecare-prod-config \
+  --name omnicare-prod-config \
   --key "Azure:KeyVault:KeyName" \
   --value "medical-data-encryption-key" \
   --yes
@@ -222,8 +222,8 @@ az appconfig kv set \
 # Conectar App Service ao App Configuration
 az webapp config appsettings set \
   --name $APP_SERVICE_NAME \
-  --resource-group primecare-prod-rg \
-  --settings "AzureAppConfiguration__Endpoint=https://primecare-prod-config.azconfig.io"
+  --resource-group omnicare-prod-rg \
+  --settings "AzureAppConfiguration__Endpoint=https://omnicare-prod-config.azconfig.io"
 ```
 
 ### 3.3 Configurar via Environment Variables (Alternativa)
@@ -232,9 +232,9 @@ az webapp config appsettings set \
 # Configurar variáveis de ambiente no App Service
 az webapp config appsettings set \
   --name $APP_SERVICE_NAME \
-  --resource-group primecare-prod-rg \
+  --resource-group omnicare-prod-rg \
   --settings \
-    "Azure__KeyVault__VaultUri=https://primecare-prod-kv.vault.azure.net/" \
+    "Azure__KeyVault__VaultUri=https://omnicare-prod-kv.vault.azure.net/" \
     "Azure__KeyVault__KeyName=medical-data-encryption-key" \
     "Azure__KeyVault__UseManagedIdentity=true" \
     "Encryption__Enabled=true"
@@ -257,7 +257,7 @@ sqlcmd -S SERVER -d DATABASE -Q "BACKUP DATABASE [DATABASE] TO DISK='C:\Backups\
 
 ```bash
 # 1. Colocar aplicação em modo de manutenção
-az webapp stop --name $APP_SERVICE_NAME --resource-group primecare-prod-rg
+az webapp stop --name $APP_SERVICE_NAME --resource-group omnicare-prod-rg
 
 # 2. Executar script de migração de dados
 # (O script deve ser executado via console do App Service ou localmente com VPN)
@@ -273,7 +273,7 @@ tail -f /home/LogFiles/migration.log
 dotnet run --project tools/ValidateEncryption/ValidateEncryption.csproj
 
 # 5. Reativar aplicação
-az webapp start --name $APP_SERVICE_NAME --resource-group primecare-prod-rg
+az webapp start --name $APP_SERVICE_NAME --resource-group omnicare-prod-rg
 ```
 
 ### 4.3 Script de Migração (C#)
@@ -403,22 +403,22 @@ class Program
 ```bash
 # Criar Application Insights
 az monitor app-insights component create \
-  --app primecare-prod-insights \
+  --app omnicare-prod-insights \
   --location brazilsouth \
-  --resource-group primecare-prod-rg \
+  --resource-group omnicare-prod-rg \
   --application-type web
 
 # Obter Instrumentation Key
 INSTRUMENTATION_KEY=$(az monitor app-insights component show \
-  --app primecare-prod-insights \
-  --resource-group primecare-prod-rg \
+  --app omnicare-prod-insights \
+  --resource-group omnicare-prod-rg \
   --query instrumentationKey \
   --output tsv)
 
 # Configurar no App Service
 az webapp config appsettings set \
   --name $APP_SERVICE_NAME \
-  --resource-group primecare-prod-rg \
+  --resource-group omnicare-prod-rg \
   --settings "APPINSIGHTS_INSTRUMENTATIONKEY=$INSTRUMENTATION_KEY"
 ```
 
@@ -427,30 +427,30 @@ az webapp config appsettings set \
 ```bash
 # Criar Action Group para notificações
 az monitor action-group create \
-  --name primecare-security-alerts \
-  --resource-group primecare-prod-rg \
+  --name omnicare-security-alerts \
+  --resource-group omnicare-prod-rg \
   --short-name SecAlerts \
-  --email-receiver name=SecurityTeam email=security@primecare.com
+  --email-receiver name=SecurityTeam email=security@omnicare.com
 
 # Alerta para tentativas de acesso negadas
 az monitor metrics alert create \
   --name kv-access-denied \
-  --resource-group primecare-prod-rg \
-  --scopes /subscriptions/SUBSCRIPTION_ID/resourceGroups/primecare-prod-rg/providers/Microsoft.KeyVault/vaults/primecare-prod-kv \
+  --resource-group omnicare-prod-rg \
+  --scopes /subscriptions/SUBSCRIPTION_ID/resourceGroups/omnicare-prod-rg/providers/Microsoft.KeyVault/vaults/omnicare-prod-kv \
   --condition "count ServiceApiResult where ResultType == 'Unauthorized' > 5" \
   --window-size 5m \
   --evaluation-frequency 1m \
-  --action primecare-security-alerts
+  --action omnicare-security-alerts
 
 # Alerta para uso excessivo de chaves (possível vazamento)
 az monitor metrics alert create \
   --name kv-excessive-usage \
-  --resource-group primecare-prod-rg \
-  --scopes /subscriptions/SUBSCRIPTION_ID/resourceGroups/primecare-prod-rg/providers/Microsoft.KeyVault/vaults/primecare-prod-kv \
+  --resource-group omnicare-prod-rg \
+  --scopes /subscriptions/SUBSCRIPTION_ID/resourceGroups/omnicare-prod-rg/providers/Microsoft.KeyVault/vaults/omnicare-prod-kv \
   --condition "count ServiceApiHit > 10000" \
   --window-size 1h \
   --evaluation-frequency 5m \
-  --action primecare-security-alerts
+  --action omnicare-security-alerts
 ```
 
 ### 5.3 Habilitar Diagnostic Logs do Key Vault
@@ -458,16 +458,16 @@ az monitor metrics alert create \
 ```bash
 # Criar Log Analytics Workspace
 az monitor log-analytics workspace create \
-  --resource-group primecare-prod-rg \
-  --workspace-name primecare-prod-logs
+  --resource-group omnicare-prod-rg \
+  --workspace-name omnicare-prod-logs
 
 # Habilitar logs de diagnóstico
 az monitor diagnostic-settings create \
   --name kv-diagnostics \
-  --resource /subscriptions/SUBSCRIPTION_ID/resourceGroups/primecare-prod-rg/providers/Microsoft.KeyVault/vaults/primecare-prod-kv \
+  --resource /subscriptions/SUBSCRIPTION_ID/resourceGroups/omnicare-prod-rg/providers/Microsoft.KeyVault/vaults/omnicare-prod-kv \
   --logs '[{"category": "AuditEvent", "enabled": true}]' \
   --metrics '[{"category": "AllMetrics", "enabled": true}]' \
-  --workspace /subscriptions/SUBSCRIPTION_ID/resourceGroups/primecare-prod-rg/providers/Microsoft.OperationalInsights/workspaces/primecare-prod-logs
+  --workspace /subscriptions/SUBSCRIPTION_ID/resourceGroups/omnicare-prod-rg/providers/Microsoft.OperationalInsights/workspaces/omnicare-prod-logs
 ```
 
 ## 🚨 Parte 6: Disaster Recovery
@@ -477,7 +477,7 @@ az monitor diagnostic-settings create \
 ```bash
 # Backup da chave (guarde em local MUITO seguro)
 az keyvault key backup \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key \
   --file medical-data-encryption-key.backup
 
@@ -495,22 +495,22 @@ az storage blob upload \
 ```bash
 # Em caso de perda do Key Vault, criar novo
 az keyvault create \
-  --name primecare-prod-kv-recovery \
-  --resource-group primecare-prod-rg \
+  --name omnicare-prod-kv-recovery \
+  --resource-group omnicare-prod-rg \
   --location brazilsouth \
   --enable-soft-delete true \
   --enable-purge-protection true
 
 # Restaurar chave do backup
 az keyvault key restore \
-  --vault-name primecare-prod-kv-recovery \
+  --vault-name omnicare-prod-kv-recovery \
   --file medical-data-encryption-key.backup
 
 # Atualizar configuração da aplicação para novo Key Vault
 az webapp config appsettings set \
   --name $APP_SERVICE_NAME \
-  --resource-group primecare-prod-rg \
-  --settings "Azure__KeyVault__VaultUri=https://primecare-prod-kv-recovery.vault.azure.net/"
+  --resource-group omnicare-prod-rg \
+  --settings "Azure__KeyVault__VaultUri=https://omnicare-prod-kv-recovery.vault.azure.net/"
 ```
 
 ### 6.3 Teste de Disaster Recovery (Quarterly)
@@ -555,7 +555,7 @@ az webapp config appsettings set \
 ## 📞 Contatos de Emergência
 
 ### Equipe de Segurança
-- **Email**: security@primecare.com
+- **Email**: security@omnicare.com
 - **Telefone Plantão**: +55 (11) 99999-9999
 - **Slack**: #security-incidents
 
@@ -575,4 +575,4 @@ az webapp config appsettings set \
 
 **Versão**: 1.0  
 **Última Atualização**: Janeiro 2026  
-**Responsável**: Equipe de Segurança - PrimeCare Software
+**Responsável**: Equipe de Segurança - Omni Care Software

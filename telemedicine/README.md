@@ -441,13 +441,13 @@ Use Visual Studio ou VS Code com a configuração de launch incluída.
 
 ## 📞 Suporte
 
-- **Email:** suporte@primecaresoftware.com
+- **Email:** suporte@omnicaresoftware.com
 - **Documentação:** [/docs](../docs/)
 - **Issues:** GitHub Issues
 
 ## 📄 Licença
 
-Proprietary - PrimeCare Software © 2026
+Proprietary - Omni Care Software © 2026
 
 ## 🎉 Agradecimentos
 
@@ -459,4 +459,4 @@ Proprietary - PrimeCare Software © 2026
 
 **Última Atualização:** 29 de Janeiro de 2026  
 **Versão:** 2.0.0  
-**Maintainer:** PrimeCare Software Team
+**Maintainer:** Omni Care Software Team

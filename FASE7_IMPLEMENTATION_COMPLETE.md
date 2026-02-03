@@ -382,10 +382,10 @@ complianceService.recordConsent(consentRequest, tenantId).subscribe(
 ## 📞 Suporte
 
 Para dúvidas ou problemas:
-- **Time:** PrimeCare Software Team
+- **Time:** Omni Care Software Team
 - **Documentação:** `/telemedicine/README.md`
 - **Issues:** GitHub Issues do repositório
-- **Email:** suporte@primecaresoftware.com
+- **Email:** suporte@omnicaresoftware.com
 
 ---
 

@@ -1,4 +1,4 @@
-# 🚀 Guia Rápido: Telemedicina no PrimeCare Software
+# 🚀 Guia Rápido: Telemedicina no Omni Care Software
 
 **Versão**: 1.0.0  
 **Data**: Outubro/Novembro 2024  

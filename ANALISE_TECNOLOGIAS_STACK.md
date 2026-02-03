@@ -1,4 +1,4 @@
-# Análise de Tecnologias e Stack - PrimeCare Software
+# Análise de Tecnologias e Stack - Omni Care Software
 
 > **Data:** 28 de Janeiro de 2026  
 > **Versão:** 1.0  
@@ -6,7 +6,7 @@
 
 ## 📊 Executive Summary
 
-O PrimeCare Software possui um stack tecnológico **moderno e superior** comparado à 
+O Omni Care Software possui um stack tecnológico **moderno e superior** comparado à 
 maioria dos concorrentes no mercado brasileiro de gestão clínica. A escolha de 
 tecnologias open-source (Angular, .NET, PostgreSQL) garante:
 
@@ -18,7 +18,7 @@ tecnologias open-source (Angular, .NET, PostgreSQL) garante:
 
 ---
 
-## 🎯 Stack Atual - PrimeCare Software
+## 🎯 Stack Atual - Omni Care Software
 
 ### Frontend
 
@@ -50,7 +50,7 @@ tecnologias open-source (Angular, .NET, PostgreSQL) garante:
 | **Ecossistema** | Grande | Enorme | Grande |
 | **Jobs disponíveis** | Muitos | Muitos | Médio |
 
-**Veredito:** Angular é escolha sólida para enterprise SaaS como PrimeCare.
+**Veredito:** Angular é escolha sólida para enterprise SaaS como Omni Care.
 
 #### UI Framework
 **Angular Material 20**
@@ -292,7 +292,7 @@ jobs:
 
 **Comparação:**
 
-| Aspecto | PrimeCare | iClinic |
+| Aspecto | Omni Care | iClinic |
 |---------|-----------|---------|
 | **Frontend Framework** | Angular 20 ✅ | React 19 ✅ |
 | **Type Safety** | TypeScript nativo ✅ | TypeScript ⚠️ |
@@ -302,9 +302,9 @@ jobs:
 | **Custo de infra** | Baixo ✅ | Médio ⚠️ |
 
 **Análise:**
-- PrimeCare tem vantagem em **type safety** (C# + TS vs JS + TS)
-- PrimeCare tem vantagem em **transações** (ACID completo)
-- PrimeCare tem vantagem em **custos** (PostgreSQL grátis)
+- Omni Care tem vantagem em **type safety** (C# + TS vs JS + TS)
+- Omni Care tem vantagem em **transações** (ACID completo)
+- Omni Care tem vantagem em **custos** (PostgreSQL grátis)
 - iClinic tem vantagem em **velocidade de dev** (Node.js mais ágil)
 
 ### Clinicorp (Enterprise)
@@ -317,7 +317,7 @@ jobs:
 
 **Comparação:**
 
-| Aspecto | PrimeCare | Clinicorp |
+| Aspecto | Omni Care | Clinicorp |
 |---------|-----------|-----------|
 | **Frontend** | Angular 20 ✅ | Angular 10? ⚠️ |
 | **Backend** | .NET 8 ✅ | Java 17 ✅ |
@@ -326,8 +326,8 @@ jobs:
 | **Modernidade** | Atual ✅ | Legado ⚠️ |
 
 **Análise:**
-- PrimeCare é mais **moderno** (Angular 20 vs 10)
-- PrimeCare tem **custo infinitamente menor** (PostgreSQL vs Oracle)
+- Omni Care é mais **moderno** (Angular 20 vs 10)
+- Omni Care tem **custo infinitamente menor** (PostgreSQL vs Oracle)
 - Clinicorp pode ter **mais features enterprise** (anos de mercado)
 
 ### Amplimed (Telemedicina)
@@ -340,7 +340,7 @@ jobs:
 
 **Comparação:**
 
-| Aspecto | PrimeCare | Amplimed |
+| Aspecto | Omni Care | Amplimed |
 |---------|-----------|-----------|
 | **Frontend** | Angular ✅ | React ✅ |
 | **Backend** | .NET 8 ✅ | Python ⚠️ |
@@ -350,8 +350,8 @@ jobs:
 
 **Análise:**
 - Tecnicamente **similares** em capacidade
-- PrimeCare tem **melhor performance** (.NET > Python)
-- PrimeCare tem **telemedicina própria** (mais controle)
+- Omni Care tem **melhor performance** (.NET > Python)
+- Omni Care tem **telemedicina própria** (mais controle)
 
 ---
 
@@ -592,7 +592,7 @@ dotnet list package --vulnerable
 
 ## ✅ Conclusão
 
-O stack tecnológico do PrimeCare Software é **moderno, robusto e escalável**. 
+O stack tecnológico do Omni Care Software é **moderno, robusto e escalável**. 
 As escolhas técnicas favorecem:
 
 1. **Performance** - .NET 8 + PostgreSQL = Class-leading
@@ -617,6 +617,6 @@ As escolhas técnicas favorecem:
 
 > **Última Atualização:** 28 de Janeiro de 2026  
 > **Versão:** 1.0  
-> **Responsável:** Equipe de Arquitetura PrimeCare
+> **Responsável:** Equipe de Arquitetura Omni Care
 
 > **Revisão:** Agendar para Q2 2026

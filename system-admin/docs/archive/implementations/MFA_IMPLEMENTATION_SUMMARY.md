@@ -305,6 +305,6 @@ From `IMPLEMENTACOES_PARA_100_PORCENTO.md` Category 2.3:
 
 **Document Created:** 30 January 2026  
 **Last Updated:** 30 January 2026  
-**Author:** PrimeCare Development Team  
+**Author:** Omni Care Development Team  
 **Version:** 1.0  
 **Status:** Final

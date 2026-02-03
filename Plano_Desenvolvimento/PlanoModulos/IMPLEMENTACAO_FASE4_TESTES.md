@@ -436,7 +436,7 @@ Conforme `05-PROMPT-DOCUMENTACAO.md`:
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 
 # Restaurar dependências
 dotnet restore
@@ -448,7 +448,7 @@ dotnet test --filter "FullyQualifiedName~ModuleConfig"
 ### Relatório de Issues
 
 Problemas com os testes? Abra uma issue em:
-https://github.com/PrimeCareSoftware/MW.Code/issues
+https://github.com/Omni CareSoftware/MW.Code/issues
 
 ---
 

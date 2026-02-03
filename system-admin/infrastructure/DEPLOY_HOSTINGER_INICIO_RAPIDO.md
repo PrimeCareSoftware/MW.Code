@@ -1,6 +1,6 @@
 # 🚀 Hostinger - Guia de Início Rápido (30 minutos)
 
-> **Para iniciantes**: Este guia resume os passos essenciais para colocar o PrimeCare no ar rapidamente.  
+> **Para iniciantes**: Este guia resume os passos essenciais para colocar o Omni Care no ar rapidamente.  
 > **Para guia detalhado**: Veja [DEPLOY_HOSTINGER_GUIA_COMPLETO.md](DEPLOY_HOSTINGER_GUIA_COMPLETO.md)
 
 ## 📋 Pré-requisitos
@@ -130,7 +130,7 @@ mkdir -p /var/www/primecare
 cd /var/www/primecare
 
 # Clonar código
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 cd MW.Code
 
 # Gerar chave JWT forte
@@ -155,8 +155,8 @@ nano src/MedicSoft.Api/appsettings.Production.json
   "JwtSettings": {
     "SecretKey": "COLE_SUA_CHAVE_JWT_AQUI",
     "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Software",
-    "Audience": "PrimeCare Software-API"
+    "Issuer": "Omni Care Software",
+    "Audience": "Omni Care Software-API"
   },
   "AllowedHosts": "*"
 }
@@ -181,9 +181,9 @@ dotnet ef database update \
   --startup-project src/MedicSoft.Api
 
 # Criar serviço systemd
-cat > /etc/systemd/system/primecare-api.service << 'EOF'
+cat > /etc/systemd/system/omnicare-api.service << 'EOF'
 [Unit]
-Description=PrimeCare API
+Description=Omni Care API
 After=network.target
 
 [Service]
@@ -200,11 +200,11 @@ EOF
 
 # Iniciar serviço
 systemctl daemon-reload
-systemctl enable primecare-api
-systemctl start primecare-api
+systemctl enable omnicare-api
+systemctl start omnicare-api
 
 # Verificar se está rodando
-systemctl status primecare-api
+systemctl status omnicare-api
 ```
 
 **✅ Se mostrar "active (running)", backend está OK!**
@@ -285,14 +285,14 @@ curl http://localhost:5000/health
 # Deve retornar: {"status":"Healthy"}
 
 # Verificar serviços
-systemctl status primecare-api nginx postgresql
+systemctl status omnicare-api nginx postgresql
 # Todos devem estar "active (running)"
 ```
 
 ### 6.2 Teste no Navegador
 
 1. Abra: `http://SEU-IP-DO-VPS`
-2. Você deve ver o PrimeCare Software! 🎉
+2. Você deve ver o Omni Care Software! 🎉
 
 3. Abra: `http://SEU-IP-DO-VPS/swagger`
 4. Você deve ver a documentação da API!
@@ -324,7 +324,7 @@ systemctl status primecare-api nginx postgresql
 
 ```bash
 # Logs da API
-journalctl -u primecare-api -f
+journalctl -u omnicare-api -f
 
 # Logs do Nginx
 tail -f /var/log/nginx/error.log
@@ -336,7 +336,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 ### Reiniciar Serviços
 
 ```bash
-systemctl restart primecare-api
+systemctl restart omnicare-api
 systemctl restart nginx
 systemctl restart postgresql
 ```
@@ -344,7 +344,7 @@ systemctl restart postgresql
 ### Status dos Serviços
 
 ```bash
-systemctl status primecare-api
+systemctl status omnicare-api
 systemctl status nginx
 systemctl status postgresql
 ```
@@ -357,7 +357,7 @@ systemctl status postgresql
 
 ```bash
 # Ver erro
-journalctl -u primecare-api -n 50
+journalctl -u omnicare-api -n 50
 
 # Verificar connection string
 nano /var/www/primecare/MW.Code/src/MedicSoft.Api/appsettings.Production.json

@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O sistema de módulos permite habilitar/desabilitar funcionalidades do PrimeCare de forma flexível, vinculado aos planos de assinatura.
+O sistema de módulos permite habilitar/desabilitar funcionalidades do Omni Care de forma flexível, vinculado aos planos de assinatura.
 
 **Objetivo Principal:** Permitir que clínicas e administradores do sistema gerenciem quais funcionalidades estão disponíveis, de acordo com o plano contratado e necessidades específicas.
 

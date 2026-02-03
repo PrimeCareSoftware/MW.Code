@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Esta documentação contém roteiros detalhados para produção de vídeos tutoriais sobre o Sistema de Módulos do PrimeCare.
+Esta documentação contém roteiros detalhados para produção de vídeos tutoriais sobre o Sistema de Módulos do Omni Care.
 
 **Total de Vídeos:** 5  
 **Duração Total:** ~25 minutos  
@@ -31,12 +31,12 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 #### Cena 1: Abertura (0:00 - 0:10)
 
 **Visual:**
-- Logo PrimeCare
+- Logo Omni Care
 - Título: "Sistema de Módulos"
-- Subtítulo: "Personalize seu PrimeCare"
+- Subtítulo: "Personalize seu Omni Care"
 
 **Narração:**
-> "Bem-vindo ao PrimeCare! Hoje vamos conhecer o Sistema de Módulos, a funcionalidade que permite personalizar o sistema de acordo com suas necessidades."
+> "Bem-vindo ao Omni Care! Hoje vamos conhecer o Sistema de Módulos, a funcionalidade que permite personalizar o sistema de acordo com suas necessidades."
 
 **Música:** Introdução animada (fade in)
 
@@ -52,7 +52,7 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 - Highlight em "Relatórios"
 
 **Narração:**
-> "Módulos são funcionalidades do PrimeCare que você pode habilitar ou desabilitar. Por exemplo: Gestão de Pacientes, Integração com WhatsApp, Relatórios Avançados. Cada módulo representa uma área do sistema que você pode ativar conforme necessidade."
+> "Módulos são funcionalidades do Omni Care que você pode habilitar ou desabilitar. Por exemplo: Gestão de Pacientes, Integração com WhatsApp, Relatórios Avançados. Cada módulo representa uma área do sistema que você pode ativar conforme necessidade."
 
 **Animação:**
 - Zoom suave em cada módulo mencionado
@@ -110,7 +110,7 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 - Tela de módulos completa
 
 **Narração:**
-> "Para acessar os módulos, faça login no PrimeCare, clique no menu Configurações e selecione Módulos. Pronto! Você verá todos os módulos disponíveis para sua clínica ou, se for System Admin, poderá gerenciar módulos globalmente."
+> "Para acessar os módulos, faça login no Omni Care, clique no menu Configurações e selecione Módulos. Pronto! Você verá todos os módulos disponíveis para sua clínica ou, se for System Admin, poderá gerenciar módulos globalmente."
 
 **Animação:**
 - Cursor navegando pelo menu
@@ -146,7 +146,7 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 - Audacity (áudio)
 
 **Ativos:**
-- Logo PrimeCare (PNG transparente)
+- Logo Omni Care (PNG transparente)
 - Música de fundo (livre de direitos)
 - Ícones animados
 
@@ -197,7 +197,7 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 - Tela de módulos carrega
 
 **Narração:**
-> "Primeiro, faça login no PrimeCare. No menu lateral, clique em Configurações. Agora, clique em Módulos. Pronto! A tela de gerenciamento de módulos será exibida."
+> "Primeiro, faça login no Omni Care. No menu lateral, clique em Configurações. Agora, clique em Módulos. Pronto! A tela de gerenciamento de módulos será exibida."
 
 **Destaque:**
 - Cursor com círculo destacado
@@ -306,7 +306,7 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 - Seção 3: Ícone de revisão
 
 **Narração:**
-> "Três dicas importantes: Primeira, habilite apenas o que você vai usar. Isso mantém a interface limpa e focada. Segunda, teste novos módulos gradualmente. Habilite um de cada vez e treine sua equipe. Terceira, revise periodicamente. Desabilite módulos não usados e explore novos disponíveis. Isso garante que você está aproveitando ao máximo o PrimeCare."
+> "Três dicas importantes: Primeira, habilite apenas o que você vai usar. Isso mantém a interface limpa e focada. Segunda, teste novos módulos gradualmente. Habilite um de cada vez e treine sua equipe. Terceira, revise periodicamente. Desabilite módulos não usados e explore novos disponíveis. Isso garante que você está aproveitando ao máximo o Omni Care."
 
 **Texto na tela:**
 - 1️⃣ Habilite apenas o necessário
@@ -945,7 +945,7 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 - [ ] Canva (thumbnails)
 
 **Ativos:**
-- [ ] Logo PrimeCare (PNG transparente)
+- [ ] Logo Omni Care (PNG transparente)
 - [ ] Intro animada (5s)
 - [ ] Outro animada (5s)
 - [ ] Música de fundo (livre de direitos)
@@ -1020,7 +1020,7 @@ Esta documentação contém roteiros detalhados para produção de vídeos tutor
 
 **Exemplo de Descrição:**
 ```
-🎯 Neste vídeo, você vai aprender a habilitar e desabilitar módulos no PrimeCare.
+🎯 Neste vídeo, você vai aprender a habilitar e desabilitar módulos no Omni Care.
 
 ⏱️ TIMESTAMPS:
 0:00 - Introdução
@@ -1044,10 +1044,10 @@ Configurações Avançadas: [link]
 Sistema de Módulos: [link]
 
 💬 SUPORTE:
-Email: suporte@primecare.com.br
+Email: suporte@omnicare.com.br
 WhatsApp: (11) 98765-4321
 
-#PrimeCare #SistemaDeSaude #Módulos #Tutorial
+#Omni Care #SistemaDeSaude #Módulos #Tutorial
 ```
 
 ### Divulgação
@@ -1066,17 +1066,17 @@ WhatsApp: (11) 98765-4321
 
 **Exemplo de Post LinkedIn:**
 ```
-🚀 Novo Tutorial: Sistema de Módulos do PrimeCare
+🚀 Novo Tutorial: Sistema de Módulos do Omni Care
 
 Acabamos de lançar uma série completa de vídeos tutoriais sobre nosso novo Sistema de Módulos!
 
-✅ Aprenda a personalizar o PrimeCare
+✅ Aprenda a personalizar o Omni Care
 ✅ Habilite apenas o que você usa
 ✅ Otimize custos e eficiência
 
 🎥 Assista agora: [link]
 
-#Saúde #Tecnologia #SaaS #PrimeCare
+#Saúde #Tecnologia #SaaS #Omni Care
 ```
 
 ---
@@ -1100,4 +1100,4 @@ Acabamos de lançar uma série completa de vídeos tutoriais sobre nosso novo Si
 
 *Documento criado em: 29 de Janeiro de 2026*  
 *Versão: 1.0*  
-*Responsável: PrimeCare Marketing & Education Team*
+*Responsável: Omni Care Marketing & Education Team*

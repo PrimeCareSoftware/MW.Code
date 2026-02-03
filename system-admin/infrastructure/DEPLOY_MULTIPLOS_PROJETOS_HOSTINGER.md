@@ -77,12 +77,12 @@ Para rodar **2 APIs .NET + PostgreSQL + 4 frontends Angular**, o KVM 2 oferece:
 ### Estrutura de Domínios
 
 ```
-meuprimecare.com.br               → medicwarehouse-app
-api.meuprimecare.com.br           → MedicSoft.Api
-admin.meuprimecare.com.br         → mw-system-admin
-paciente.meuprimecare.com.br      → patient-portal
-api-paciente.meuprimecare.com.br  → PatientPortal.Api
-docs.meuprimecare.com.br          → mw-docs
+meuomnicare.com.br               → medicwarehouse-app
+api.meuomnicare.com.br           → MedicSoft.Api
+admin.meuomnicare.com.br         → mw-system-admin
+paciente.meuomnicare.com.br      → patient-portal
+api-paciente.meuomnicare.com.br  → PatientPortal.Api
+docs.meuomnicare.com.br          → mw-docs
 ```
 
 ---
@@ -157,17 +157,17 @@ apt install -y certbot python3-certbot-nginx
 sudo -u postgres psql
 
 -- Criar usuário e bancos
-CREATE USER primecare_user WITH PASSWORD 'SenhaForte123!';
-CREATE DATABASE primecare_db;
+CREATE USER omnicare_user WITH PASSWORD 'SenhaForte123!';
+CREATE DATABASE omnicare_db;
 CREATE DATABASE patient_portal_db;
-GRANT ALL PRIVILEGES ON DATABASE primecare_db TO primecare_user;
-GRANT ALL PRIVILEGES ON DATABASE patient_portal_db TO primecare_user;
+GRANT ALL PRIVILEGES ON DATABASE omnicare_db TO omnicare_user;
+GRANT ALL PRIVILEGES ON DATABASE patient_portal_db TO omnicare_user;
 ```
 
 ### 4. Deploy das APIs
 ```bash
 # Clonar repositório
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 
 # API Principal
 cd MW.Code/src/MedicSoft.Api
@@ -219,12 +219,12 @@ systemctl restart nginx
 ### 7. Configurar SSL
 ```bash
 # Obter certificados para todos os domínios
-certbot --nginx -d meuprimecare.com.br -d www.meuprimecare.com.br
-certbot --nginx -d api.meuprimecare.com.br
-certbot --nginx -d api-paciente.meuprimecare.com.br
-certbot --nginx -d admin.meuprimecare.com.br
-certbot --nginx -d paciente.meuprimecare.com.br
-certbot --nginx -d docs.meuprimecare.com.br
+certbot --nginx -d meuomnicare.com.br -d www.meuomnicare.com.br
+certbot --nginx -d api.meuomnicare.com.br
+certbot --nginx -d api-paciente.meuomnicare.com.br
+certbot --nginx -d admin.meuomnicare.com.br
+certbot --nginx -d paciente.meuomnicare.com.br
+certbot --nginx -d docs.meuomnicare.com.br
 ```
 
 ---
@@ -251,31 +251,31 @@ certbot --nginx -d docs.meuprimecare.com.br
 
 ```bash
 # Status do sistema
-/usr/local/bin/primecare-status.sh
+/usr/local/bin/omnicare-status.sh
 
 # Backup manual
-/usr/local/bin/primecare-backup.sh
+/usr/local/bin/omnicare-backup.sh
 
 # Atualização
-/usr/local/bin/primecare-update.sh
+/usr/local/bin/omnicare-update.sh
 ```
 
 ### Ver Logs
 
 ```bash
 # Logs das APIs
-journalctl -u primecare-api -f
+journalctl -u omnicare-api -f
 journalctl -u patient-portal-api -f
 
 # Logs do Nginx
-tail -f /var/log/nginx/primecare-frontend-access.log
-tail -f /var/log/nginx/primecare-frontend-error.log
+tail -f /var/log/nginx/omnicare-frontend-access.log
+tail -f /var/log/nginx/omnicare-frontend-error.log
 ```
 
 ### Verificar Status dos Serviços
 
 ```bash
-systemctl status primecare-api
+systemctl status omnicare-api
 systemctl status patient-portal-api
 systemctl status postgresql
 systemctl status nginx
@@ -330,7 +330,7 @@ systemctl status nginx
 ### API não inicia
 ```bash
 # Verificar logs
-journalctl -u primecare-api -n 50
+journalctl -u omnicare-api -n 50
 
 # Verificar porta
 netstat -tulpn | grep 5000
@@ -342,7 +342,7 @@ netstat -tulpn | grep 5000
 ls -la /var/www/primecare/frontend/medicwarehouse-app/
 
 # Ver logs
-tail -f /var/log/nginx/primecare-frontend-error.log
+tail -f /var/log/nginx/omnicare-frontend-error.log
 ```
 
 ### Erro de conexão com banco

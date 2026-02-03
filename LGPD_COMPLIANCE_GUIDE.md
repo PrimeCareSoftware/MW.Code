@@ -1,4 +1,4 @@
-# 🛡️ Guia de Compliance LGPD - PrimeCare
+# 🛡️ Guia de Compliance LGPD - Omni Care
 
 **Lei Geral de Proteção de Dados - Lei 13.709/2018**  
 **Versão:** 1.0  
@@ -42,7 +42,7 @@ A Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) é a legislação br
 
 **Titular:** Pessoa natural a quem se referem os dados pessoais  
 **Controlador:** Quem decide sobre o tratamento (Clínicas)  
-**Operador:** Quem trata dados em nome do controlador (PrimeCare)  
+**Operador:** Quem trata dados em nome do controlador (Omni Care)  
 **Encarregado (DPO):** Canal de comunicação entre controlador, titulares e ANPD
 
 ---
@@ -55,7 +55,7 @@ A Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) é a legislação br
 
 **Direito:** Saber se a empresa trata seus dados e acessá-los.
 
-**Implementação no PrimeCare:**
+**Implementação no Omni Care:**
 
 ```csharp
 [RequirePermission("data.export")]
@@ -91,7 +91,7 @@ public async Task<IActionResult> ExportUserData(string id)
 
 **Direito:** Anonimizar, bloquear ou eliminar dados desnecessários, excessivos ou tratados em desconformidade.
 
-**Implementação no PrimeCare:**
+**Implementação no Omni Care:**
 
 ```csharp
 [RequirePermission("data.delete")]
@@ -176,7 +176,7 @@ var usersWhoAccessed = accessLogs
 
 ### Art. 7 - Bases Legais para Tratamento
 
-O PrimeCare utiliza as seguintes bases legais:
+O Omni Care utiliza as seguintes bases legais:
 
 #### 1. Consentimento (Art. 7, I)
 
@@ -270,7 +270,7 @@ public class UserConsent
 
 Dados relacionados a pessoa identificada ou identificável (Art. 5, I)
 
-**Exemplos no PrimeCare:**
+**Exemplos no Omni Care:**
 - Nome, email, telefone
 - Endereço, CPF, RG
 - Data de nascimento
@@ -284,7 +284,7 @@ Dados relacionados a pessoa identificada ou identificável (Art. 5, I)
 
 Dados que podem gerar discriminação (Art. 5, II)
 
-**Exemplos no PrimeCare:**
+**Exemplos no Omni Care:**
 - **Origem racial ou étnica** (autodeclaração)
 - **Dados de saúde** ⭐ (principal categoria)
 - **Vida sexual**
@@ -441,7 +441,7 @@ patient.Email = $"anonymized-{Guid.NewGuid()}@example.com";
 - Continua sob LGPD
 
 ```csharp
-// Pseudonimização (não implementado no PrimeCare atualmente)
+// Pseudonimização (não implementado no Omni Care atualmente)
 var pseudonym = _crypto.Hash(patient.Cpf, secretKey);
 patient.CpfHash = pseudonym;
 ```
@@ -463,7 +463,7 @@ Titular → Solicitação → Canal de Atendimento → Validação → Execuçã
 ### 1. Solicitação de Acesso aos Dados
 
 **Canais:**
-- Email: lgpd@primecare.com
+- Email: lgpd@omnicare.com
 - Portal: Sistema → Segurança → Meus Dados
 - Presencial: Clínica/Consultório
 
@@ -627,7 +627,7 @@ await _auditService.LogAsync(new CreateAuditLogDto {
 
 **Template de Comunicação aos Titulares:**
 ```
-Assunto: Notificação de Incidente de Segurança - PrimeCare
+Assunto: Notificação de Incidente de Segurança - Omni Care
 
 Prezado(a) [Nome],
 
@@ -649,10 +649,10 @@ Recomendações:
 - [Monitorar contas]
 - [Ativar MFA]
 
-Para mais informações: lgpd@primecare.com
+Para mais informações: lgpd@omnicare.com
 
 Atenciosamente,
-Equipe PrimeCare
+Equipe Omni Care
 ```
 
 ---
@@ -765,14 +765,14 @@ Equipe PrimeCare
 
 ### Encarregado de Dados (DPO)
 
-**Email:** dpo@primecare.com  
+**Email:** dpo@omnicare.com  
 **Telefone:** +55 (11) XXXX-XXXX  
 **Horário:** Segunda a Sexta, 9h às 18h
 
 ### Canal de Atendimento LGPD
 
-**Email:** lgpd@primecare.com  
-**Portal:** https://primecare.com.br/lgpd  
+**Email:** lgpd@omnicare.com  
+**Portal:** https://omnicare.com.br/lgpd  
 **Resposta:** Até 15 dias corridos
 
 ---

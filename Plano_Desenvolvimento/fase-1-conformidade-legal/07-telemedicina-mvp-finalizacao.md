@@ -244,13 +244,13 @@ export let options = {
 
 export default function() {
   // Test REST API
-  let response = http.get('https://telemedicine-api.primecare.com/health');
+  let response = http.get('https://telemedicine-api.omnicare.com/health');
   check(response, {
     'status is 200': (r) => r.status === 200,
   });
   
   // Test WebSocket (WebRTC signaling)
-  const ws = new WebSocket('wss://telemedicine-api.primecare.com/signaling');
+  const ws = new WebSocket('wss://telemedicine-api.omnicare.com/signaling');
   
   ws.on('open', () => {
     ws.send(JSON.stringify({ type: 'join', roomId: 'test-room' }));
@@ -297,7 +297,7 @@ export function testPoorNetwork() {
   // Adicionar delay artificial
   sleep(Math.random() * 2); // 0-2s de latência aleatória
   
-  let response = http.get('https://telemedicine-api.primecare.com/api/rooms');
+  let response = http.get('https://telemedicine-api.omnicare.com/api/rooms');
   
   check(response, {
     'handles latency gracefully': (r) => r.status === 200,
@@ -309,7 +309,7 @@ export function testPoorNetwork() {
 ```bash
 # OWASP ZAP ou similar
 docker run -t owasp/zap2docker-stable zap-baseline.py \
-  -t https://telemedicine-api.primecare.com \
+  -t https://telemedicine-api.omnicare.com \
   -r telemedicine_security_report.html
 ```
 
@@ -497,7 +497,7 @@ services:
     ports:
       - "5001:80"
     networks:
-      - primecare-network
+      - omnicare-network
     depends_on:
       - redis
     healthcheck:
@@ -513,7 +513,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - primecare-network
+      - omnicare-network
     volumes:
       - redis-data:/data
   
@@ -528,12 +528,12 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./ssl:/etc/nginx/ssl:ro
     networks:
-      - primecare-network
+      - omnicare-network
     depends_on:
       - telemedicine-api
 
 networks:
-  primecare-network:
+  omnicare-network:
     driver: bridge
 
 volumes:
@@ -555,14 +555,14 @@ http {
     # HTTP -> HTTPS redirect
     server {
         listen 80;
-        server_name telemedicine.primecare.com;
+        server_name telemedicine.omnicare.com;
         return 301 https://$server_name$request_uri;
     }
     
     # HTTPS
     server {
         listen 443 ssl http2;
-        server_name telemedicine.primecare.com;
+        server_name telemedicine.omnicare.com;
         
         ssl_certificate /etc/nginx/ssl/fullchain.pem;
         ssl_certificate_key /etc/nginx/ssl/privkey.pem;
@@ -600,7 +600,7 @@ http {
 sudo apt install certbot python3-certbot-nginx -y
 
 # Obter certificado SSL
-sudo certbot --nginx -d telemedicine.primecare.com
+sudo certbot --nginx -d telemedicine.omnicare.com
 
 # Auto-renewal (cron)
 sudo certbot renew --dry-run
@@ -629,7 +629,7 @@ echo "⏳ Waiting for service to be healthy..."
 sleep 10
 
 # 5. Health check
-curl -f https://telemedicine.primecare.com/health || exit 1
+curl -f https://telemedicine.omnicare.com/health || exit 1
 
 echo "✅ Deployment successful!"
 ```
@@ -638,7 +638,7 @@ echo "✅ Deployment successful!"
 
 #### 5.1 Guia do Usuário - Médicos
 ```markdown
-# Guia do Médico - Telemedicina PrimeCare
+# Guia do Médico - Telemedicina Omni Care
 
 ## Como Fazer uma Teleconsulta
 
@@ -692,7 +692,7 @@ echo "✅ Deployment successful!"
 
 #### 5.2 Guia do Usuário - Pacientes
 ```markdown
-# Guia do Paciente - Teleconsulta PrimeCare
+# Guia do Paciente - Teleconsulta Omni Care
 
 ## O que é Telemedicina?
 Consulta médica por videoconferência, segura e legal conforme CFM 2.314/2022.
@@ -743,7 +743,7 @@ Recomenda-se que a primeira consulta seja presencial, mas há exceções (áreas
 # Roteiro de Vídeo Tutorial (2-3 minutos)
 
 ## Cena 1: Introdução (10s)
-- "Olá! Neste vídeo você aprenderá a usar a Telemedicina do PrimeCare"
+- "Olá! Neste vídeo você aprenderá a usar a Telemedicina do Omni Care"
 
 ## Cena 2: Agendamento (20s)
 - Demonstrar criação de agendamento com modalidade "Teleconsulta"
@@ -870,7 +870,7 @@ k6 run --vus 30 --duration 24h test-stability.js
 
 ### Testes de Segurança
 ```bash
-docker run -t owasp/zap2docker-stable zap-baseline.py -t https://telemedicine.primecare.com
+docker run -t owasp/zap2docker-stable zap-baseline.py -t https://telemedicine.omnicare.com
 ```
 
 ## 📊 Métricas

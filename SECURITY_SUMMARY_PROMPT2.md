@@ -334,7 +334,7 @@ The implementation follows security best practices and introduces **no new vulne
 **For security concerns or questions:**
 - Review: [PROMPT2_IMPLEMENTATION_STATUS.md](./PROMPT2_IMPLEMENTATION_STATUS.md)
 - Contact: Security Team / Tech Lead
-- Report vulnerabilities: security@primecare.com.br (placeholder)
+- Report vulnerabilities: security@omnicare.com.br (placeholder)
 
 ---
 

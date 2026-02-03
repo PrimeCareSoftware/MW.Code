@@ -214,7 +214,7 @@ export class BlogService {
         readTime: 5,
         views: 1250,
         likes: 87,
-        metaTitle: 'Como escolher o melhor software médico | PrimeCare',
+        metaTitle: 'Como escolher o melhor software médico | Omni Care',
         metaDescription: 'Guia completo com critérios essenciais para escolher o software de gestão clínica ideal para sua prática médica.',
         metaKeywords: ['software médico', 'gestão clínica', 'tecnologia médica']
       },
@@ -234,7 +234,7 @@ export class BlogService {
         readTime: 7,
         views: 980,
         likes: 64,
-        metaTitle: '7 benefícios do prontuário eletrônico | PrimeCare Blog',
+        metaTitle: '7 benefícios do prontuário eletrônico | Omni Care Blog',
         metaDescription: 'Descubra como o prontuário eletrônico pode transformar sua clínica com mais eficiência e qualidade no atendimento.',
         metaKeywords: ['prontuário eletrônico', 'pep', 'digitalização']
       },
@@ -254,7 +254,7 @@ export class BlogService {
         readTime: 6,
         views: 1540,
         likes: 112,
-        metaTitle: 'Telemedicina: o futuro da saúde | PrimeCare',
+        metaTitle: 'Telemedicina: o futuro da saúde | Omni Care',
         metaDescription: 'Entenda como a telemedicina está transformando o atendimento médico e criando novas oportunidades.',
         metaKeywords: ['telemedicina', 'saúde digital', 'consulta online']
       },
@@ -274,7 +274,7 @@ export class BlogService {
         readTime: 8,
         views: 820,
         likes: 56,
-        metaTitle: 'Gestão financeira para clínicas | PrimeCare Blog',
+        metaTitle: 'Gestão financeira para clínicas | Omni Care Blog',
         metaDescription: 'Descubra dicas práticas para melhorar a gestão financeira da sua clínica e aumentar a lucratividade.',
         metaKeywords: ['gestão financeira', 'clínicas', 'lucratividade']
       },
@@ -294,7 +294,7 @@ export class BlogService {
         readTime: 10,
         views: 1120,
         likes: 93,
-        metaTitle: 'LGPD nas clínicas médicas: guia completo | PrimeCare',
+        metaTitle: 'LGPD nas clínicas médicas: guia completo | Omni Care',
         metaDescription: 'Guia completo sobre como aplicar a LGPD em clínicas médicas e proteger os dados dos pacientes.',
         metaKeywords: ['LGPD', 'proteção de dados', 'privacidade médica']
       }

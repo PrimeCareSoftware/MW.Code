@@ -6,7 +6,7 @@
 
 ## 📋 Visão Geral
 
-Sistema completo de Business Intelligence e Analytics implementado para o PrimeCare Software, incluindo dashboards interativos, consolidação de dados, análise preditiva com Machine Learning integrado ao frontend, dashboards operacionais e de qualidade, e background jobs automatizados. **Sistema está 100% completo e pronto para produção.**
+Sistema completo de Business Intelligence e Analytics implementado para o Omni Care Software, incluindo dashboards interativos, consolidação de dados, análise preditiva com Machine Learning integrado ao frontend, dashboards operacionais e de qualidade, e background jobs automatizados. **Sistema está 100% completo e pronto para produção.**
 
 ---
 

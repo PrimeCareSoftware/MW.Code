@@ -1,26 +1,26 @@
-# Penetration Testing Guide - PrimeCare Software
+# Penetration Testing Guide - Omni Care Software
 
-This document provides the scope, requirements, and process for conducting professional penetration testing of the PrimeCare healthcare management platform.
+This document provides the scope, requirements, and process for conducting professional penetration testing of the Omni Care healthcare management platform.
 
 ## Executive Summary
 
-Penetration testing is a critical security measure to identify vulnerabilities before they can be exploited by malicious actors. This document outlines the scope, methodology, and expectations for professional security testing of PrimeCare.
+Penetration testing is a critical security measure to identify vulnerabilities before they can be exploited by malicious actors. This document outlines the scope, methodology, and expectations for professional security testing of Omni Care.
 
 ## Testing Scope
 
 ### In-Scope Systems
 
 #### 1. Web Applications
-- **Main Portal:** https://app.primecare.com.br
-- **Patient Portal:** https://portal.primecare.com.br
-- **Admin Dashboard:** https://admin.primecare.com.br
-- **Public Website:** https://www.primecare.com.br
+- **Main Portal:** https://app.omnicare.com.br
+- **Patient Portal:** https://portal.omnicare.com.br
+- **Admin Dashboard:** https://admin.omnicare.com.br
+- **Public Website:** https://www.omnicare.com.br
 
 #### 2. API Endpoints
-- **Main API:** https://api.primecare.com.br/api/*
-- **Patient Portal API:** https://api.primecare.com.br/patient-portal/*
-- **Authentication:** https://api.primecare.com.br/api/auth/*
-- **WebSocket:** wss://api.primecare.com.br/ws
+- **Main API:** https://api.omnicare.com.br/api/*
+- **Patient Portal API:** https://api.omnicare.com.br/patient-portal/*
+- **Authentication:** https://api.omnicare.com.br/api/auth/*
+- **WebSocket:** wss://api.omnicare.com.br/ws
 
 #### 3. Infrastructure
 - SSL/TLS Configuration
@@ -216,13 +216,13 @@ If production testing is required:
 
 **Primary Contact:**
 - Name: [Security Team Lead]
-- Email: security@primecare.com.br
+- Email: security@omnicare.com.br
 - Phone: +55 (XX) XXXXX-XXXX
 - Slack: #security-team
 
 **Technical Contact:**
 - Name: [DevOps Lead]
-- Email: devops@primecare.com.br
+- Email: devops@omnicare.com.br
 - Slack: #devops-alerts
 
 ### Escalation Process
@@ -425,5 +425,5 @@ Pentesting firm should have:
 
 **Document Version:** 1.0  
 **Last Updated:** 27 de Janeiro de 2026  
-**Owner:** PrimeCare Security Team  
+**Owner:** Omni Care Security Team  
 **Review Cycle:** Annually or after significant changes

@@ -2,7 +2,7 @@
 
 ## Bem-vindo ao Sistema de Módulos
 
-Este guia ensina como gerenciar módulos do PrimeCare como administrador do sistema.
+Este guia ensina como gerenciar módulos do Omni Care como administrador do sistema.
 
 Como **System Admin**, você tem controle total sobre:
 - 📊 Visualização de métricas de uso de módulos
@@ -519,7 +519,7 @@ O que fazer: [INSTRUÇÕES]
 Dúvidas? Entre em contato: [CONTATO]
 
 Atenciosamente,
-Equipe PrimeCare
+Equipe Omni Care
 ```
 
 ---
@@ -613,7 +613,7 @@ Podemos agendar uma call para discutir a melhor opção?
 
 Atenciosamente,
 [Seu Nome]
-System Admin - PrimeCare
+System Admin - Omni Care
 ```
 
 ### "Erro ao salvar configurações"
@@ -726,7 +726,7 @@ Configurar alertas para eventos importantes:
 ### Contatos
 
 **Suporte Técnico:**
-- 📧 Email: suporte@primecare.com.br
+- 📧 Email: suporte@omnicare.com.br
 - 📱 WhatsApp: (11) 98765-4321
 - 💬 Chat: [Abrir Ticket no Sistema]
 - 📚 Base de Conhecimento: [Central de Ajuda]
@@ -852,4 +852,4 @@ Apresente mensalmente ao management:
 *Última atualização: 29 de Janeiro de 2026*
 
 **Versão:** 1.0  
-**Autor:** PrimeCare Software - System Admin Team
+**Autor:** Omni Care Software - System Admin Team

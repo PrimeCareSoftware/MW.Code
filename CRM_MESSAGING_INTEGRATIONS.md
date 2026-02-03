@@ -58,8 +58,8 @@ This document describes the implementation of real messaging integrations for th
   "Messaging": {
     "Email": {
       "ApiKey": "",
-      "FromEmail": "no-reply@primecare.com.br",
-      "FromName": "PrimeCare Software",
+      "FromEmail": "no-reply@omnicare.com.br",
+      "FromName": "Omni Care Software",
       "UseSandbox": true,
       "Enabled": false
     },

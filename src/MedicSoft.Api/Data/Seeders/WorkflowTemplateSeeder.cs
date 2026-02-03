@@ -65,8 +65,8 @@ namespace MedicSoft.Api.Data.Seeders
                         Config = JsonSerializer.Serialize(new
                         {
                             to = "{{Email}}",
-                            subject = "Bem-vindo ao PrimeCare!",
-                            body = "Olá! Bem-vindo ao PrimeCare!"
+                            subject = "Bem-vindo ao Omni Care!",
+                            body = "Olá! Bem-vindo ao Omni Care!"
                         }),
                         CreatedAt = DateTime.UtcNow
                     }

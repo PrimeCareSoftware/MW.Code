@@ -8,7 +8,7 @@
 
 ## 🎯 Visão Geral
 
-Este documento resume a implementação da infraestrutura de acessibilidade no PrimeCare Software, conforme especificado no prompt **19-acessibilidade-wcag.md**.
+Este documento resume a implementação da infraestrutura de acessibilidade no Omni Care Software, conforme especificado no prompt **19-acessibilidade-wcag.md**.
 
 ### Objetivos Alcançados
 

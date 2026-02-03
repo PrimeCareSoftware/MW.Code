@@ -5,7 +5,7 @@
 
 ## Contexto
 
-Este documento resume a finalização do desenvolvimento iniciado nos PRs #608 e #609, complementado com um planejamento financeiro completo para o sistema PrimeCare SaaS multi-especialidades.
+Este documento resume a finalização do desenvolvimento iniciado nos PRs #608 e #609, complementado com um planejamento financeiro completo para o sistema Omni Care SaaS multi-especialidades.
 
 ---
 
@@ -390,8 +390,8 @@ Com base nas análises:
 - [README.md](README.md) - Documentação principal atualizada
 
 ### Pull Requests
-- [PR #608](https://github.com/PrimeCareSoftware/MW.Code/pull/608) - Backend multi-specialty
-- [PR #609](https://github.com/PrimeCareSoftware/MW.Code/pull/609) - Frontend integration
+- [PR #608](https://github.com/Omni CareSoftware/MW.Code/pull/608) - Backend multi-specialty
+- [PR #609](https://github.com/Omni CareSoftware/MW.Code/pull/609) - Frontend integration
 
 ### Código Relacionado
 - `src/MedicSoft.Domain/Entities/SubscriptionPlan.cs`

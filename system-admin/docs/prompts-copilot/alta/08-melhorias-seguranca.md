@@ -361,7 +361,7 @@ public async Task<IActionResult> VerifyMfa([FromBody] VerifyMfaRequest request)
 **1. Configuração Cloudflare:**
 ```bash
 # DNS apontando para Cloudflare
-primecare.com.br -> Cloudflare Proxy -> Origin Server
+omnicare.com.br -> Cloudflare Proxy -> Origin Server
 
 # Regras WAF (Cloudflare Dashboard)
 - OWASP Core Rule Set (CRS 3.3)
@@ -445,11 +445,11 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .Enrich.WithMachineName()
     .Enrich.WithThreadId()
-    .Enrich.WithProperty("Application", "PrimeCare")
+    .Enrich.WithProperty("Application", "Omni Care")
     .Enrich.WithProperty("Environment", environment.EnvironmentName)
     .WriteTo.Console()
     .WriteTo.Seq("http://seq-server:5341", apiKey: seqApiKey)
-    .WriteTo.File("logs/primecare-.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.File("logs/omnicare-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
 builder.Host.UseSerilog();

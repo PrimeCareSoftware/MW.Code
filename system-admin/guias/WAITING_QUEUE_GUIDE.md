@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-A funcionalidade de Fila de Espera do PrimeCare Software permite gerenciar o fluxo de atendimento de pacientes de forma eficiente, com priorização por triagem, chamada de pacientes e controle de tempo de espera.
+A funcionalidade de Fila de Espera do Omni Care Software permite gerenciar o fluxo de atendimento de pacientes de forma eficiente, com priorização por triagem, chamada de pacientes e controle de tempo de espera.
 
 ## Recursos Principais
 
@@ -234,4 +234,4 @@ localStorage.setItem('clinicId', 'seu-clinic-id-aqui');
 Para mais informações ou suporte, consulte:
 - [Documentação Principal](../README.md)
 - [Guia de API](API_GUIDE.md)
-- [Issues do GitHub](https://github.com/PrimeCare Software/MW.Code/issues)
+- [Issues do GitHub](https://github.com/Omni Care Software/MW.Code/issues)

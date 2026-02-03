@@ -137,7 +137,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 $"Motivo: {reason}\n\n" +
                 $"Sua nova data de vencimento: {subscription.EndDate:dd/MM/yyyy}\n\n" +
                 $"Aproveite!\n\n" +
-                $"Equipe PrimeCare"
+                $"Equipe Omni Care"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);
@@ -195,7 +195,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 $"Aplicamos um desconto de {percentage}% em sua assinatura por {months} meses.\n" +
                 $"Código: {discountCode}\n\n" +
                 $"Aproveite!\n\n" +
-                $"Equipe PrimeCare"
+                $"Equipe Omni Care"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);
@@ -258,7 +258,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 $"Motivo: {reason}\n\n" +
                 $"{reactivationInfo}\n\n" +
                 $"Se tiver dúvidas, entre em contato com nosso suporte.\n\n" +
-                $"Equipe PrimeCare"
+                $"Equipe Omni Care"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);
@@ -408,7 +408,7 @@ namespace MedicSoft.Application.Services.SystemAdmin
                 $"Novo valor mensal: R$ {newPlan.MonthlyPrice:F2}\n\n" +
                 (proRata ? "Ajuste pro-rata será aplicado na próxima fatura.\n\n" : "") +
                 $"Aproveite os novos recursos!\n\n" +
-                $"Equipe PrimeCare"
+                $"Equipe Omni Care"
             );
 
             var admin = await _context.Users.FindAsync(adminUserId);

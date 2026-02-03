@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento resume a implementação da autenticação de dois fatores (2FA) no Portal do Paciente da PrimeCare Software. A implementação foi feita de forma modular, extensível e seguindo as melhores práticas de segurança.
+Este documento resume a implementação da autenticação de dois fatores (2FA) no Portal do Paciente da Omni Care Software. A implementação foi feita de forma modular, extensível e seguindo as melhores práticas de segurança.
 
 ## Status da Implementação
 
@@ -251,18 +251,18 @@ CREATE INDEX "IX_TwoFactorTokens_CreatedAt"
 ```json
 {
   "EmailSettings": {
-    "From": "noreply@primecare.com",
-    "FromName": "PrimeCare Portal do Paciente",
+    "From": "noreply@omnicare.com",
+    "FromName": "Omni Care Portal do Paciente",
     "SmtpServer": "smtp.sendgrid.net",
     "SmtpPort": 587,
     "UseSsl": true,
     "Username": "apikey",
     "Password": "SG.xxxxxxxxxxxxxxxxxxxxx"
   },
-  "PortalBaseUrl": "https://portal.primecare.com",
+  "PortalBaseUrl": "https://portal.omnicare.com",
   "JwtSettings": {
     "SecretKey": "your-secret-key-here",
-    "Issuer": "PrimeCare",
+    "Issuer": "Omni Care",
     "Audience": "PatientPortal",
     "ExpiryMinutes": 15
   }
@@ -274,7 +274,7 @@ CREATE INDEX "IX_TwoFactorTokens_CreatedAt"
 ```bash
 EMAILSETTINGS__PASSWORD=SG.xxxxxxxxxxxxxxxxxxxxx
 JWTSETTINGS__SECRETKEY=your-production-secret-key
-PORTALBASEURL=https://portal.primecare.com
+PORTALBASEURL=https://portal.omnicare.com
 ```
 
 ## Métricas de Sucesso
@@ -421,8 +421,8 @@ PORTALBASEURL=https://portal.primecare.com
 - Aprovação: Pendente
 
 **Suporte:**
-- E-mail: api-support@primecaresoftware.com
-- Documentação: https://docs.primecare.com
+- E-mail: api-support@omnicaresoftware.com
+- Documentação: https://docs.omnicare.com
 
 ---
 
@@ -434,4 +434,4 @@ PORTALBASEURL=https://portal.primecare.com
 
 ---
 
-© 2026 PrimeCare Software. Todos os direitos reservados.
+© 2026 Omni Care Software. Todos os direitos reservados.

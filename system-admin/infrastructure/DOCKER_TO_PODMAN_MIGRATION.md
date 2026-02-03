@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este guia orienta a migração do Docker para o Podman no PrimeCare Software. O Podman é uma alternativa **100% gratuita e open-source** ao Docker, ideal para uso em produção sem custos de licenciamento.
+Este guia orienta a migração do Docker para o Podman no Omni Care Software. O Podman é uma alternativa **100% gratuita e open-source** ao Docker, ideal para uso em produção sem custos de licenciamento.
 
 ## 🎯 Por que migrar para Podman?
 
@@ -362,7 +362,7 @@ podman volume create mwcode_postgres_data
 - [Podman Compose GitHub](https://github.com/containers/podman-compose)
 - [Podman vs Docker Comparison](https://docs.podman.io/en/latest/Introduction.html)
 
-### Guias do PrimeCare Software
+### Guias do Omni Care Software
 - [PODMAN_POSTGRES_SETUP.md](PODMAN_POSTGRES_SETUP.md) - Setup completo do PostgreSQL com Podman
 - [QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md) - Deploy em produção
 - [README.md](../README.md) - Documentação principal do projeto

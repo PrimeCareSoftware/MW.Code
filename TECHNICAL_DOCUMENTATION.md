@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este documento fornece informações técnicas sobre a arquitetura, APIs, deployment e operação do PrimeCare Software MVP Fase 1.
+Este documento fornece informações técnicas sobre a arquitetura, APIs, deployment e operação do Omni Care Software MVP Fase 1.
 
 **Versão**: 1.0.0-MVP
 **Data**: Janeiro 2026
@@ -85,7 +85,7 @@ Este documento fornece informações técnicas sobre a arquitetura, APIs, deploy
 
 ### Documentação Swagger
 
-**URL**: `https://api.primecaresoftware.com/swagger`
+**URL**: `https://api.omnicaresoftware.com/swagger`
 
 **Acesso**: 
 - Desenvolvimento: Público
@@ -400,26 +400,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 # Database
 DATABASE_HOST=postgres.internal
 DATABASE_PORT=5432
-DATABASE_NAME=primecare_db
-DATABASE_USER=primecare_user
+DATABASE_NAME=omnicare_db
+DATABASE_USER=omnicare_user
 DATABASE_PASSWORD=***SECURE_PASSWORD***
 
 # JWT
 JWT_SECRET=***SECURE_SECRET_KEY***
 JWT_EXPIRATION=3600
-JWT_ISSUER=primecare.com
-JWT_AUDIENCE=primecare-api
+JWT_ISSUER=omnicare.com
+JWT_AUDIENCE=omnicare-api
 
 # SMTP (Email)
 SMTP_HOST=smtp.example.com
 SMTP_PORT=587
-SMTP_USER=noreply@primecaresoftware.com
+SMTP_USER=noreply@omnicaresoftware.com
 SMTP_PASSWORD=***SECURE_PASSWORD***
-SMTP_FROM=noreply@primecaresoftware.com
+SMTP_FROM=noreply@omnicaresoftware.com
 
 # Storage (Arquivos)
 STORAGE_TYPE=S3  # ou LOCAL
-S3_BUCKET=primecare-files
+S3_BUCKET=omnicare-files
 S3_REGION=us-east-1
 S3_ACCESS_KEY=***ACCESS_KEY***
 S3_SECRET_KEY=***SECRET_KEY***
@@ -430,11 +430,11 @@ PAYMENT_API_KEY=***API_KEY***
 PAYMENT_WEBHOOK_SECRET=***WEBHOOK_SECRET***
 
 # Application
-APP_NAME=PrimeCare
+APP_NAME=Omni Care
 APP_ENV=production  # development, staging, production
 APP_DEBUG=false
-APP_URL=https://app.primecaresoftware.com
-API_URL=https://api.primecaresoftware.com
+APP_URL=https://app.omnicaresoftware.com
+API_URL=https://api.omnicaresoftware.com
 
 # Redis (Cache)
 REDIS_HOST=redis.internal
@@ -450,8 +450,8 @@ LOG_LEVEL=info  # debug, info, warn, error
 
 ```bash
 # API
-API_URL=https://api.primecaresoftware.com
-PATIENT_PORTAL_URL=https://paciente.primecaresoftware.com
+API_URL=https://api.omnicaresoftware.com
+PATIENT_PORTAL_URL=https://paciente.omnicaresoftware.com
 
 # Authentication
 JWT_SECRET=***SECURE_SECRET_KEY***  # Mesmo da API principal
@@ -468,23 +468,23 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: primecare_db
-      POSTGRES_USER: primecare_user
+      POSTGRES_DB: omnicare_db
+      POSTGRES_USER: omnicare_user
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
-      - primecare_network
+      - omnicare_network
 
   api:
     image: primecare/api:latest
     environment:
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
-      - DATABASE_NAME=primecare_db
-      - DATABASE_USER=primecare_user
+      - DATABASE_NAME=omnicare_db
+      - DATABASE_USER=omnicare_user
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
     depends_on:
@@ -492,7 +492,7 @@ services:
     ports:
       - "5000:80"
     networks:
-      - primecare_network
+      - omnicare_network
 
   frontend:
     image: primecare/frontend:latest
@@ -501,7 +501,7 @@ services:
     ports:
       - "4200:80"
     networks:
-      - primecare_network
+      - omnicare_network
 
   nginx:
     image: nginx:alpine
@@ -514,13 +514,13 @@ services:
       - api
       - frontend
     networks:
-      - primecare_network
+      - omnicare_network
 
 volumes:
   postgres_data:
 
 networks:
-  primecare_network:
+  omnicare_network:
     driver: bridge
 ```
 
@@ -569,7 +569,7 @@ kubectl apply -f k8s/
 
 ```bash
 # Rodar migrations do banco
-docker exec -it primecare_api dotnet ef database update
+docker exec -it omnicare_api dotnet ef database update
 ```
 
 ### CI/CD Pipeline
@@ -621,10 +621,10 @@ jobs:
 **Manual**:
 ```bash
 # Backup
-docker exec primecare_postgres pg_dump -U primecare_user primecare_db > backup_$(date +%Y%m%d).sql
+docker exec omnicare_postgres pg_dump -U omnicare_user omnicare_db > backup_$(date +%Y%m%d).sql
 
 # Restore
-docker exec -i primecare_postgres psql -U primecare_user primecare_db < backup_20260130.sql
+docker exec -i omnicare_postgres psql -U omnicare_user omnicare_db < backup_20260130.sql
 ```
 
 #### Retenção de Backups
@@ -672,8 +672,8 @@ docker exec -i primecare_postgres psql -U primecare_user primecare_db < backup_2
 
 **Verificar**:
 1. Container está rodando: `docker ps`
-2. Logs do container: `docker logs primecare_api`
-3. Conectividade com banco: `docker exec primecare_api ping postgres`
+2. Logs do container: `docker logs omnicare_api`
+3. Conectividade com banco: `docker exec omnicare_api ping postgres`
 
 #### Problema: Banco de dados lento
 
@@ -690,7 +690,7 @@ docker exec -i primecare_postgres psql -U primecare_user primecare_db < backup_2
 df -h
 
 # Tamanho do banco
-docker exec primecare_postgres psql -U primecare_user -c "SELECT pg_size_pretty(pg_database_size('primecare_db'));"
+docker exec omnicare_postgres psql -U omnicare_user -c "SELECT pg_size_pretty(pg_database_size('omnicare_db'));"
 
 # Limpar logs antigos
 find /var/log/primecare -type f -mtime +30 -delete
@@ -703,13 +703,13 @@ find /var/log/primecare -type f -mtime +30 -delete
 ### Contatos
 
 **Equipe DevOps**:
-- Email: devops@primecaresoftware.com
+- Email: devops@omnicaresoftware.com
 - Urgências: +55 11 99999-9999 (plantão)
 
 **Documentação Adicional**:
-- Wiki: https://wiki.primecaresoftware.com
-- Runbooks: https://docs.primecaresoftware.com/runbooks
-- Status Page: https://status.primecaresoftware.com
+- Wiki: https://wiki.omnicaresoftware.com
+- Runbooks: https://docs.omnicaresoftware.com/runbooks
+- Status Page: https://status.omnicaresoftware.com
 
 ---
 
