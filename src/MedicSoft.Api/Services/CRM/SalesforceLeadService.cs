@@ -292,6 +292,9 @@ namespace MedicSoft.Api.Services.CRM
             // Authenticate using OAuth 2.0 Password Flow
             var tokenEndpoint = $"{_config.InstanceUrl}/services/oauth2/token";
             
+            // SECURITY NOTE: Credentials are in FormUrlEncodedContent which is not logged
+            // HttpClient does not log request bodies by default
+            // For additional security, ensure HTTP logging middleware excludes oauth2/token endpoints
             var content = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("grant_type", "password"),

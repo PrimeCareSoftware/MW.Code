@@ -13,7 +13,7 @@ namespace MedicSoft.Api.Controllers.CRM
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "SystemAdmin")]
     public class SalesforceLeadsController : BaseController
     {
         private readonly ISalesforceLeadService _salesforceLeadService;

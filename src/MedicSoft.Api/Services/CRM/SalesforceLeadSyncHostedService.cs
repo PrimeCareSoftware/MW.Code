@@ -2,12 +2,14 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MedicSoft.Application.DTOs.CRM;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Repository.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace MedicSoft.Api.Services.CRM
 {
@@ -19,14 +21,18 @@ namespace MedicSoft.Api.Services.CRM
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<SalesforceLeadSyncHostedService> _logger;
-        private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(30);
+        private readonly TimeSpan _checkInterval;
 
         public SalesforceLeadSyncHostedService(
             IServiceProvider serviceProvider,
+            IOptions<SalesforceConfiguration> config,
             ILogger<SalesforceLeadSyncHostedService> logger)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
+            _checkInterval = TimeSpan.FromMinutes(config.Value.SyncIntervalMinutes > 0 
+                ? config.Value.SyncIntervalMinutes 
+                : 60);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -59,13 +65,13 @@ namespace MedicSoft.Api.Services.CRM
             try
             {
                 // Find abandoned sessions (last activity > 24 hours ago, not converted)
-                var abandonedSessions = await funnelRepository
+                // Get all sessions with activity older than 24 hours
+                var allSessions = await funnelRepository
                     .FindAsync(m => 
                         !m.IsConverted && 
-                        m.Action == "abandoned" &&
                         m.CreatedAt < DateTime.UtcNow.AddHours(-24));
 
-                var sessionIds = abandonedSessions
+                var sessionIds = allSessions
                     .Select(m => m.SessionId)
                     .Distinct()
                     .ToList();

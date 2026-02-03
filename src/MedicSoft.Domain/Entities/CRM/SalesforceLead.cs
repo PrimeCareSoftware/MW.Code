@@ -152,7 +152,7 @@ namespace MedicSoft.Domain.Entities.CRM
             string? utmCampaign = null,
             string? utmSource = null,
             string? utmMedium = null,
-            string? metadata = null) : base(TenantConstants.SystemTenantId)
+            string? metadata = null) : base(TenantConstants.SystemTenantId) // Leads are captured from public registration flow (system-wide)
         {
             if (string.IsNullOrWhiteSpace(sessionId))
                 throw new ArgumentException("Session ID cannot be empty", nameof(sessionId));
