@@ -41,7 +41,7 @@ namespace MedicSoft.Api.Services.CRM
             {
                 // Get all funnel metrics for this session
                 var funnelMetrics = await _funnelRepository
-                    .FindAsync(m => m.SessionId == sessionId);
+                    .FindAsync(m => m.SessionId == sessionId, TenantConstants.SystemTenantId);
 
                 if (!funnelMetrics.Any())
                 {
@@ -49,8 +49,9 @@ namespace MedicSoft.Api.Services.CRM
                 }
 
                 // Check if lead already exists
-                var existingLead = await _leadRepository
-                    .FindFirstAsync(l => l.SessionId == sessionId);
+                var existingLeads = await _leadRepository
+                    .FindAsync(l => l.SessionId == sessionId, TenantConstants.SystemTenantId);
+                var existingLead = existingLeads.FirstOrDefault();
 
                 if (existingLead != null)
                 {
@@ -109,17 +110,17 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<IEnumerable<Lead>> GetUnassignedLeadsAsync()
         {
-            return await _leadRepository.FindAsync(l => l.AssignedToUserId == null && !l.IsDeleted);
+            return await _leadRepository.FindAsync(l => l.AssignedToUserId == null && !l.IsDeleted, TenantConstants.SystemTenantId);
         }
 
         public async Task<IEnumerable<Lead>> GetLeadsAssignedToUserAsync(Guid userId)
         {
-            return await _leadRepository.FindAsync(l => l.AssignedToUserId == userId && !l.IsDeleted);
+            return await _leadRepository.FindAsync(l => l.AssignedToUserId == userId && !l.IsDeleted, TenantConstants.SystemTenantId);
         }
 
         public async Task<IEnumerable<Lead>> GetLeadsByStatusAsync(LeadStatus status)
         {
-            return await _leadRepository.FindAsync(l => l.Status == status && !l.IsDeleted);
+            return await _leadRepository.FindAsync(l => l.Status == status && !l.IsDeleted, TenantConstants.SystemTenantId);
         }
 
         public async Task<IEnumerable<Lead>> GetLeadsNeedingFollowUpAsync()
@@ -130,7 +131,7 @@ namespace MedicSoft.Api.Services.CRM
                 l.NextFollowUpDate.Value.Date <= today &&
                 l.Status != LeadStatus.Converted &&
                 l.Status != LeadStatus.Lost &&
-                !l.IsDeleted);
+                !l.IsDeleted, TenantConstants.SystemTenantId);
         }
 
         public async Task<bool> AssignLeadAsync(Guid leadId, Guid userId, Guid assignedByUserId)
@@ -281,13 +282,13 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<IEnumerable<LeadActivity>> GetLeadActivitiesAsync(Guid leadId)
         {
-            var activities = await _activityRepository.FindAsync(a => a.LeadId == leadId && !a.IsDeleted);
+            var activities = await _activityRepository.FindAsync(a => a.LeadId == leadId && !a.IsDeleted, TenantConstants.SystemTenantId);
             return activities.OrderByDescending(a => a.ActivityDate);
         }
 
         public async Task<LeadStatistics> GetLeadStatisticsAsync()
         {
-            var allLeads = await _leadRepository.FindAsync(l => !l.IsDeleted);
+            var allLeads = await _leadRepository.FindAsync(l => !l.IsDeleted, TenantConstants.SystemTenantId);
             var today = DateTime.UtcNow.Date;
 
             var stats = new LeadStatistics
@@ -318,7 +319,7 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<Dictionary<Guid, UserLeadStatistics>> GetStatisticsByUserAsync()
         {
-            var allLeads = await _leadRepository.FindAsync(l => !l.IsDeleted && l.AssignedToUserId.HasValue);
+            var allLeads = await _leadRepository.FindAsync(l => !l.IsDeleted && l.AssignedToUserId.HasValue, TenantConstants.SystemTenantId);
             var today = DateTime.UtcNow.Date;
 
             var statsByUser = allLeads
@@ -332,18 +333,18 @@ namespace MedicSoft.Api.Services.CRM
                         return new UserLeadStatistics
                         {
                             UserId = g.Key,
-                            AssignedLeads = userLeads.Count,
+                            AssignedLeads = userLeads.Count(),
                             ConvertedLeads = converted,
                             NeedingFollowUp = userLeads.Count(l =>
                                 l.NextFollowUpDate.HasValue &&
                                 l.NextFollowUpDate.Value.Date <= today &&
                                 l.Status != LeadStatus.Converted &&
                                 l.Status != LeadStatus.Lost),
-                            ConversionRate = userLeads.Count > 0 ? (decimal)converted / userLeads.Count * 100 : 0
+                            ConversionRate = userLeads.Count() > 0 ? (decimal)converted / userLeads.Count() * 100 : 0
                         };
                     });
 
-            return statsByUser;
+            return statsByUser!;
         }
 
         public async Task<bool> UpdateLeadContactInfoAsync(Guid leadId, string? contactName, string? email, string? phone)
@@ -441,7 +442,7 @@ namespace MedicSoft.Api.Services.CRM
                 (l.ContactName != null && l.ContactName.ToLower().Contains(searchLower) ||
                  l.Email != null && l.Email.ToLower().Contains(searchLower) ||
                  l.Phone != null && l.Phone.Contains(searchTerm) ||
-                 l.CompanyName != null && l.CompanyName.ToLower().Contains(searchLower)));
+                 l.CompanyName != null && l.CompanyName.ToLower().Contains(searchLower)), TenantConstants.SystemTenantId);
         }
 
         #region Helper Methods

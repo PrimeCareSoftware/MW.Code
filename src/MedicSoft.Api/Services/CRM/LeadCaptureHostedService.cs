@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MedicSoft.Application.Services.CRM;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,8 +59,8 @@ namespace MedicSoft.Api.Services.CRM
                 var abandonmentThreshold = DateTime.UtcNow.AddHours(-AbandonmentThresholdHours);
                 var abandonedSessions = await funnelRepository.FindAsync(m =>
                     m.CreatedAt < abandonmentThreshold &&
-                    !m.Converted &&
-                    m.Step >= 2); // At least reached step 2 (has some data)
+                    !m.IsConverted &&
+                    m.Step >= 2, TenantConstants.SystemTenantId); // At least reached step 2 (has some data)
 
                 if (!abandonedSessions.Any())
                 {
@@ -72,7 +73,7 @@ namespace MedicSoft.Api.Services.CRM
                     .GroupBy(m => m.SessionId)
                     .ToList();
 
-                _logger.LogInformation("Found {Count} abandoned sessions to process", sessionGroups.Count);
+                _logger.LogInformation("Found {Count} abandoned sessions to process", sessionGroups.Count());
 
                 int created = 0;
                 int skipped = 0;

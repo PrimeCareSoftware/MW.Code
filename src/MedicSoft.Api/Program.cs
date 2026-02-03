@@ -12,6 +12,7 @@ using Serilog.Events;
 using MedicSoft.Api.Filters;
 using MedicSoft.Api.JsonConverters;
 using MedicSoft.Api.Middleware;
+using MedicSoft.Application.Interfaces;
 using MedicSoft.Application.Mappings;
 using MedicSoft.Application.Services;
 using MedicSoft.Application.Services.DigitalSignature;
