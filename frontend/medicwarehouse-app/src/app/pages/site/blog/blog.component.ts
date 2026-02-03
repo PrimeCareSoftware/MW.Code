@@ -14,6 +14,8 @@ interface BlogPost {
   image?: string;
 }
 
+const PLACEHOLDER_IMAGE = '/assets/images/blog-placeholder.svg';
+
 @Component({
   selector: 'app-blog',
   standalone: true,
@@ -30,7 +32,7 @@ export class BlogComponent implements OnInit {
       category: "Telemedicina",
       date: "2024-01-15",
       readTime: "5 min",
-      image: "/placeholder.svg",
+      image: PLACEHOLDER_IMAGE,
     },
     {
       id: 2,
@@ -39,7 +41,7 @@ export class BlogComponent implements OnInit {
       category: "Gestão",
       date: "2024-01-10",
       readTime: "4 min",
-      image: "/placeholder.svg",
+      image: PLACEHOLDER_IMAGE,
     },
     {
       id: 3,
@@ -48,7 +50,7 @@ export class BlogComponent implements OnInit {
       category: "Compliance",
       date: "2024-01-05",
       readTime: "8 min",
-      image: "/placeholder.svg",
+      image: PLACEHOLDER_IMAGE,
     },
     {
       id: 4,
@@ -57,7 +59,7 @@ export class BlogComponent implements OnInit {
       category: "Tecnologia",
       date: "2024-01-01",
       readTime: "6 min",
-      image: "/placeholder.svg",
+      image: PLACEHOLDER_IMAGE,
     },
     {
       id: 5,
@@ -66,7 +68,7 @@ export class BlogComponent implements OnInit {
       category: "Marketing",
       date: "2023-12-28",
       readTime: "7 min",
-      image: "/placeholder.svg",
+      image: PLACEHOLDER_IMAGE,
     },
     {
       id: 6,
@@ -75,7 +77,7 @@ export class BlogComponent implements OnInit {
       category: "Inovação",
       date: "2023-12-20",
       readTime: "5 min",
-      image: "/placeholder.svg",
+      image: PLACEHOLDER_IMAGE,
     },
   ];
 
