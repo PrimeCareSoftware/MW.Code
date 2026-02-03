@@ -18,6 +18,7 @@ namespace MedicSoft.Application.Services
         Task<SenhaFilaDto> IniciarAtendimentoAsync(Guid senhaId, string tenantId);
         Task<SenhaFilaDto> FinalizarAtendimentoAsync(Guid senhaId, string tenantId);
         Task CancelarSenhaAsync(Guid senhaId, string tenantId);
+        Task<SenhaFilaDto> MarcarNaoCompareceuAsync(Guid senhaId, string tenantId);
         Task<int> CalcularTempoEsperaAsync(Guid senhaId, string tenantId);
         Task<int> ObterPosicaoNaFilaAsync(Guid senhaId, string tenantId);
         Task<SenhaFilaDto?> ConsultarSenhaAsync(string numeroSenha, Guid filaId, string tenantId);
@@ -196,6 +197,20 @@ namespace MedicSoft.Application.Services
             
             await _senhaRepository.UpdateAsync(senha);
             await _senhaRepository.SaveChangesAsync();
+        }
+
+        public async Task<SenhaFilaDto> MarcarNaoCompareceuAsync(Guid senhaId, string tenantId)
+        {
+            var senha = await _senhaRepository.GetByIdAsync(senhaId, tenantId);
+            if (senha == null)
+                throw new InvalidOperationException("Senha não encontrada");
+
+            senha.MarcarNaoCompareceu();
+            
+            await _senhaRepository.UpdateAsync(senha);
+            await _senhaRepository.SaveChangesAsync();
+
+            return MapSenhaToDto(senha, 0, 0);
         }
 
         public async Task<int> CalcularTempoEsperaAsync(Guid senhaId, string tenantId)
