@@ -418,6 +418,7 @@ builder.Services.AddScoped<IOwnerClinicLinkService, OwnerClinicLinkService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAccessProfileService, AccessProfileService>();
 builder.Services.AddSingleton<IInAppNotificationService, InAppNotificationService>();
+builder.Services.AddScoped<IAlertService, AlertService>();
 builder.Services.AddScoped<DataSeederService>();
 builder.Services.AddScoped<ISalesFunnelService, SalesFunnelService>();
 
@@ -752,6 +753,7 @@ if (rateLimitEnabled)
 app.MapControllers();
 app.MapHub<MedicSoft.Api.Hubs.FilaHub>("/hubs/fila");
 app.MapHub<MedicSoft.Api.Hubs.SystemNotificationHub>("/hubs/system-notifications");
+app.MapHub<MedicSoft.Api.Hubs.AlertHub>("/hubs/alerts");
 
 // Initialize MediatR License
 using (var scope = app.Services.CreateScope())
