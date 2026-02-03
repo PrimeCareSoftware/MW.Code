@@ -3142,22 +3142,18 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CustomDashboards",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CustomDashboards",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            // Only alter CustomDashboards columns if the table exists
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" DROP NOT NULL;
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone;
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -7433,22 +7429,18 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "CustomDashboards",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "CustomDashboards",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            // Only alter CustomDashboards columns if the table exists (rollback)
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" DROP NOT NULL;
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
