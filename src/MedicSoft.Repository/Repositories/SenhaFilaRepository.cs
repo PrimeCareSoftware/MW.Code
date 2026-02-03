@@ -151,5 +151,21 @@ namespace MedicSoft.Repository.Repositories
                             (s.Prioridade == senha.Prioridade && s.DataHoraEntrada < senha.DataHoraEntrada)))
                 .CountAsync();
         }
+
+        public async Task<List<SenhaFila>> GetUltimasChamadasAsync(Guid filaId, int quantidade, string tenantId)
+        {
+            return await _dbSet
+                .Include(s => s.Paciente)
+                .Include(s => s.Medico)
+                .Where(s => s.FilaId == filaId && 
+                           s.TenantId == tenantId &&
+                           s.DataHoraChamada != null &&
+                           (s.Status == StatusSenha.EmAtendimento || 
+                            s.Status == StatusSenha.Atendido ||
+                            s.Status == StatusSenha.Chamando))
+                .OrderByDescending(s => s.DataHoraChamada)
+                .Take(quantidade)
+                .ToListAsync();
+        }
     }
 }

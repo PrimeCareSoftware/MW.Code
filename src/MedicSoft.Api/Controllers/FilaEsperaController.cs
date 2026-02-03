@@ -247,6 +247,51 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Obter lista de senhas aguardando atendimento
+        /// </summary>
+        [AllowAnonymous]
+        [HttpGet("{filaId}/senhas/aguardando")]
+        public async Task<ActionResult<List<SenhaFilaDto>>> GetSenhasAguardando(Guid filaId, [FromQuery] string tenantId)
+        {
+            if (string.IsNullOrWhiteSpace(tenantId))
+                return BadRequest("TenantId é obrigatório");
+
+            try
+            {
+                var senhas = await _filaService.GetSenhasAguardandoAsync(filaId, tenantId);
+                return Ok(senhas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obter histórico das últimas senhas chamadas
+        /// </summary>
+        [AllowAnonymous]
+        [HttpGet("{filaId}/senhas/ultimas-chamadas")]
+        public async Task<ActionResult<List<SenhaFilaDto>>> GetUltimasChamadas(
+            Guid filaId, 
+            [FromQuery] int quantidade = 5,
+            [FromQuery] string tenantId = "")
+        {
+            if (string.IsNullOrWhiteSpace(tenantId))
+                return BadRequest("TenantId é obrigatório");
+
+            try
+            {
+                var senhas = await _filaService.GetUltimasChamadasAsync(filaId, quantidade, tenantId);
+                return Ok(senhas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     // Request DTOs

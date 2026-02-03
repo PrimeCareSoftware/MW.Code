@@ -16,6 +16,7 @@ namespace MedicSoft.Application.Services
         Task<FilaMetricsDto> GetMetricasDoDiaAsync(DateTime data, Guid? filaId, string tenantId);
         Task<FilaMetricsDto> GetMetricasDoPeriodoAsync(DateTime dataInicio, DateTime dataFim, Guid? filaId, string tenantId);
         Task<double> GetTempoMedioEsperaAsync(Guid? especialidadeId, string tenantId);
+        Task<double> GetTempoMedioEsperaFilaAsync(Guid filaId, string tenantId);
         Task<double> GetTempoMedioAtendimentoAsync(Guid? especialidadeId, string tenantId);
         Task<HorarioPicoDto> GetHorarioPicoAsync(DateTime data, Guid? filaId, string tenantId);
         Task<double> CalcularTaxaNaoComparecimentoAsync(DateTime data, Guid? filaId, string tenantId);
@@ -130,6 +131,29 @@ namespace MedicSoft.Application.Services
 
             var lista = senhasFiltradas.ToList();
             return lista.Any() ? lista.Average(s => s.TempoEsperaMinutos) : 0;
+        }
+
+        /// <summary>
+        /// Obtém tempo médio de espera para uma fila específica (hoje)
+        /// </summary>
+        public async Task<double> GetTempoMedioEsperaFilaAsync(Guid filaId, string tenantId)
+        {
+            var hoje = DateTime.Today;
+            var todasSenhas = await _senhaRepository.GetByFilaIdAsync(filaId, tenantId);
+            
+            var senhasHoje = todasSenhas
+                .Where(s => s.DataHoraEntrada.Date == hoje && 
+                           (s.Status == StatusSenha.Atendido || s.Status == StatusSenha.EmAtendimento))
+                .ToList();
+
+            if (!senhasHoje.Any())
+            {
+                // If no data today, get average wait time from the queue configuration
+                var fila = await _filaRepository.GetByIdAsync(filaId, tenantId);
+                return fila?.TempoMedioAtendimento ?? 15; // Default 15 minutes
+            }
+
+            return senhasHoje.Average(s => s.TempoEsperaMinutos);
         }
 
         /// <summary>

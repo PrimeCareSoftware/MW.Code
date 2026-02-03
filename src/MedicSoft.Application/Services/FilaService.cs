@@ -21,6 +21,8 @@ namespace MedicSoft.Application.Services
         Task<int> CalcularTempoEsperaAsync(Guid senhaId, string tenantId);
         Task<int> ObterPosicaoNaFilaAsync(Guid senhaId, string tenantId);
         Task<SenhaFilaDto?> ConsultarSenhaAsync(string numeroSenha, Guid filaId, string tenantId);
+        Task<List<SenhaFilaDto>> GetSenhasAguardandoAsync(Guid filaId, string tenantId);
+        Task<List<SenhaFilaDto>> GetUltimasChamadasAsync(Guid filaId, int quantidade, string tenantId);
     }
 
     public class FilaService : IFilaService
@@ -295,6 +297,37 @@ namespace MedicSoft.Application.Services
                 CreatedAt = fila.CreatedAt,
                 UpdatedAt = fila.UpdatedAt ?? fila.CreatedAt
             };
+        }
+
+        public async Task<List<SenhaFilaDto>> GetSenhasAguardandoAsync(Guid filaId, string tenantId)
+        {
+            var senhas = await _senhaRepository.GetAguardandoByFilaAsync(filaId, tenantId);
+            
+            var senhasDto = new List<SenhaFilaDto>();
+            foreach (var senha in senhas)
+            {
+                var posicao = await _senhaRepository.GetPosicaoNaFilaAsync(senha.Id, tenantId);
+                var tempoEstimado = await CalcularTempoEsperaInternoAsync(senha.Id, tenantId);
+                senhasDto.Add(MapSenhaToDto(senha, posicao, tempoEstimado));
+            }
+            
+            return senhasDto;
+        }
+
+        public async Task<List<SenhaFilaDto>> GetUltimasChamadasAsync(Guid filaId, int quantidade, string tenantId)
+        {
+            var senhas = await _senhaRepository.GetUltimasChamadasAsync(filaId, quantidade, tenantId);
+            
+            var senhasDto = new List<SenhaFilaDto>();
+            foreach (var senha in senhas)
+            {
+                // For called passwords, position doesn't matter
+                var posicao = 0;
+                var tempoEstimado = 0;
+                senhasDto.Add(MapSenhaToDto(senha, posicao, tempoEstimado));
+            }
+            
+            return senhasDto;
         }
 
         private static SenhaFilaDto MapSenhaToDto(SenhaFila senha, int posicao, int tempoEstimado)
