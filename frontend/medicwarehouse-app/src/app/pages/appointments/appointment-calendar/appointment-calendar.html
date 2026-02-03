@@ -125,7 +125,9 @@
                   </button>
                 </div>
               } @else if (slot.appointment) {
-                <div class="appointment-block" [class]="getStatusClass(slot.appointment.status)">
+                <div class="appointment-block" 
+                     [class]="getStatusClass(slot.appointment.status)"
+                     [style.border-left-color]="getProfessionalColor(slot.appointment.professionalId || slot.appointment.doctorId)">
                   <div class="appointment-patient">{{ slot.appointment.patientName }}</div>
                   @if (slot.appointment.professionalName || slot.appointment.doctorName) {
                     <div class="appointment-doctor">Dr(a). {{ slot.appointment.professionalName || slot.appointment.doctorName }}</div>

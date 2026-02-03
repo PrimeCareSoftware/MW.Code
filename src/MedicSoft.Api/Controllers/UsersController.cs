@@ -420,7 +420,8 @@ namespace MedicSoft.Api.Controllers
                     FullName = u.FullName,
                     ProfessionalId = u.ProfessionalId,
                     Specialty = u.Specialty,
-                    Role = u.Role.ToString()
+                    Role = u.Role.ToString(),
+                    CalendarColor = u.CalendarColor
                 });
 
             return Ok(professionals);
@@ -493,5 +494,6 @@ namespace MedicSoft.Api.Controllers
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
         public string Role { get; set; } = string.Empty;
+        public string? CalendarColor { get; set; }
     }
 }

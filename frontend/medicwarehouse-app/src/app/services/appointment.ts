@@ -72,12 +72,14 @@ export class AppointmentService {
     return this.http.post<BlockedTimeSlot>(this.blockedSlotsApiUrl, blockedSlot);
   }
 
-  updateBlockedTimeSlot(id: string, blockedSlot: UpdateBlockedTimeSlot): Observable<BlockedTimeSlot> {
-    return this.http.put<BlockedTimeSlot>(`${this.blockedSlotsApiUrl}/${id}`, blockedSlot);
+  updateBlockedTimeSlot(id: string, blockedSlot: UpdateBlockedTimeSlot, updateSeries: boolean = false): Observable<BlockedTimeSlot> {
+    const params = new HttpParams().set('updateSeries', updateSeries.toString());
+    return this.http.put<BlockedTimeSlot>(`${this.blockedSlotsApiUrl}/${id}`, blockedSlot, { params });
   }
 
-  deleteBlockedTimeSlot(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.blockedSlotsApiUrl}/${id}`);
+  deleteBlockedTimeSlot(id: string, deleteSeries: boolean = false): Observable<void> {
+    const params = new HttpParams().set('deleteSeries', deleteSeries.toString());
+    return this.http.delete<void>(`${this.blockedSlotsApiUrl}/${id}`, { params });
   }
 
   getBlockedTimeSlotsByDate(date: string, clinicId: string, professionalId?: string): Observable<BlockedTimeSlot[]> {

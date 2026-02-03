@@ -97,5 +97,28 @@ namespace MedicSoft.Repository.Repositories
 
             return await query.AnyAsync();
         }
+
+        public async Task<IEnumerable<BlockedTimeSlot>> GetByRecurringPatternIdAsync(Guid recurringPatternId, string tenantId)
+        {
+            return await _dbSet
+                .Include(b => b.Clinic)
+                .Include(b => b.Professional)
+                .Where(b => b.RecurringPatternId == recurringPatternId && 
+                           b.TenantId == tenantId)
+                .OrderBy(b => b.Date)
+                .ThenBy(b => b.StartTime)
+                .ToListAsync();
+        }
+
+        public async Task DeleteByRecurringPatternIdAsync(Guid recurringPatternId, string tenantId)
+        {
+            var blocksToDelete = await _dbSet
+                .Where(b => b.RecurringPatternId == recurringPatternId && 
+                           b.TenantId == tenantId)
+                .ToListAsync();
+
+            _dbSet.RemoveRange(blocksToDelete);
+            // Note: SaveChanges will be called by the unit of work/calling code
+        }
     }
 }

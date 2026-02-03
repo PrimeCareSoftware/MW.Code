@@ -9,6 +9,7 @@ import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels }
 import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
+import { RecurrenceActionDialogComponent } from '../recurrence-action-dialog/recurrence-action-dialog.component';
 
 interface TimeSlot {
   time: string;
@@ -322,28 +323,50 @@ export class AppointmentCalendar implements OnInit {
   onDeleteBlock(event: Event, blockedSlot: BlockedTimeSlot): void {
     event.stopPropagation();
     
-    // Use Material Dialog for confirmation (TODO: Create a reusable confirmation dialog component)
-    const confirmDelete = confirm(`Tem certeza que deseja remover este bloqueio?`);
-    
-    if (confirmDelete) {
-      this.appointmentService.deleteBlockedTimeSlot(blockedSlot.id).subscribe({
-        next: () => {
-          this.snackBar.open('Bloqueio removido com sucesso', 'Fechar', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-          this.loadWeekAppointments();
-        },
-        error: (error) => {
-          console.error('Error deleting block:', error);
-          this.snackBar.open(
-            error.error?.message || 'Erro ao deletar bloqueio',
-            'Fechar',
-            { duration: 3000 }
-          );
+    // If this is a recurring block, ask user if they want to delete single or series
+    if (blockedSlot.isRecurring && blockedSlot.recurringPatternId) {
+      const dialogRef = this.dialog.open(RecurrenceActionDialogComponent, {
+        width: '500px',
+        data: {
+          action: 'delete',
+          blockDate: new Date(blockedSlot.date)
         }
       });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          const deleteSeries = result === 'series';
+          this.performDelete(blockedSlot.id, deleteSeries);
+        }
+      });
+    } else {
+      // Non-recurring block, use simple confirmation
+      const confirmDelete = confirm(`Tem certeza que deseja remover este bloqueio?`);
+      if (confirmDelete) {
+        this.performDelete(blockedSlot.id, false);
+      }
     }
+  }
+
+  private performDelete(blockId: string, deleteSeries: boolean): void {
+    this.appointmentService.deleteBlockedTimeSlot(blockId, deleteSeries).subscribe({
+      next: () => {
+        const message = deleteSeries ? 'Série de bloqueios removida com sucesso' : 'Bloqueio removido com sucesso';
+        this.snackBar.open(message, 'Fechar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        this.loadWeekAppointments();
+      },
+      error: (error) => {
+        console.error('Error deleting block:', error);
+        this.snackBar.open(
+          error.error?.message || 'Erro ao deletar bloqueio',
+          'Fechar',
+          { duration: 3000 }
+        );
+      }
+    });
   }
 
   getBlockTypeLabel(type: number): string {
@@ -389,5 +412,37 @@ export class AppointmentCalendar implements OnInit {
 
   getStatusClass(status: string): string {
     return `status-${status.toLowerCase()}`;
+  }
+
+  getProfessionalColor(professionalId?: string): string {
+    if (!professionalId) return '#2196F3'; // Default blue color
+    
+    const professional = this.professionals().find(p => p.id === professionalId);
+    return professional?.calendarColor || this.getDefaultColorForProfessional(professionalId);
+  }
+
+  private getDefaultColorForProfessional(professionalId: string): string {
+    // Generate a consistent color based on professional ID
+    // Using colors with good contrast against white backgrounds (WCAG AA compliant)
+    const colors = [
+      '#1976D2', // Blue (darker for better contrast)
+      '#388E3C', // Green (darker for better contrast)
+      '#F57C00', // Orange (darker for better contrast)
+      '#7B1FA2', // Purple (darker for better contrast)
+      '#D32F2F', // Red (darker for better contrast)
+      '#0097A7', // Cyan (darker for better contrast)
+      '#F9A825', // Amber (darker yellow for better contrast)
+      '#5D4037', // Brown
+      '#455A64', // Blue Grey (darker)
+      '#C2185B'  // Pink (darker for better contrast)
+    ];
+    
+    // Simple hash function to get consistent color for ID
+    let hash = 0;
+    for (let i = 0; i < professionalId.length; i++) {
+      hash = professionalId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    return colors[Math.abs(hash) % colors.length];
   }
 }

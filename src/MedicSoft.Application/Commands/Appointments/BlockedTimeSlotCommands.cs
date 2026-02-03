@@ -19,11 +19,13 @@ namespace MedicSoft.Application.Commands.Appointments
     {
         public Guid Id { get; }
         public string TenantId { get; }
+        public bool DeleteSeries { get; } // If true, delete all instances in the series
 
-        public DeleteBlockedTimeSlotCommand(Guid id, string tenantId)
+        public DeleteBlockedTimeSlotCommand(Guid id, string tenantId, bool deleteSeries = false)
         {
             Id = id;
             TenantId = tenantId;
+            DeleteSeries = deleteSeries;
         }
     }
 
@@ -32,12 +34,14 @@ namespace MedicSoft.Application.Commands.Appointments
         public Guid Id { get; }
         public UpdateBlockedTimeSlotDto BlockedTimeSlot { get; }
         public string TenantId { get; }
+        public bool UpdateSeries { get; } // If true, update all instances in the series
 
-        public UpdateBlockedTimeSlotCommand(Guid id, UpdateBlockedTimeSlotDto blockedTimeSlot, string tenantId)
+        public UpdateBlockedTimeSlotCommand(Guid id, UpdateBlockedTimeSlotDto blockedTimeSlot, string tenantId, bool updateSeries = false)
         {
             Id = id;
             BlockedTimeSlot = blockedTimeSlot;
             TenantId = tenantId;
+            UpdateSeries = updateSeries;
         }
     }
 }
