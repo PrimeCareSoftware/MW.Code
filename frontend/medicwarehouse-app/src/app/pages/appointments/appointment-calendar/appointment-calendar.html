@@ -4,9 +4,16 @@
   <div class="page-header">
     <div>
       <h1>Calendário de Agendamentos</h1>
-      <p>Visualização semanal - clique em um horário para agendar</p>
+      <p>Visualização semanal - clique em um horário para agendar ou bloquear</p>
     </div>
     <div class="header-actions">
+      <button class="btn btn-outline" (click)="onBlockSchedule()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+        </svg>
+        Bloquear Agenda
+      </button>
       <button class="btn btn-outline" routerLink="/appointments/list">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="8" y1="6" x2="21" y2="6"></line>
@@ -90,10 +97,34 @@
               class="calendar-slot"
               [class.available]="slot.isAvailable"
               [class.occupied]="!slot.isAvailable"
+              [class.blocked]="slot.isBlocked"
               [class.today-column]="slot.dayColumn.isToday"
               (click)="onSlotClick(slot)"
             >
-              @if (slot.appointment) {
+              @if (slot.blockedSlot) {
+                <div class="blocked-block">
+                  <div class="blocked-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                    <span class="blocked-type">{{ getBlockTypeLabel(slot.blockedSlot.type) }}</span>
+                  </div>
+                  @if (slot.blockedSlot.professionalName) {
+                    <div class="blocked-professional">{{ slot.blockedSlot.professionalName }}</div>
+                  }
+                  @if (slot.blockedSlot.reason) {
+                    <div class="blocked-reason">{{ slot.blockedSlot.reason }}</div>
+                  }
+                  <div class="blocked-time">{{ slot.blockedSlot.startTime }} - {{ slot.blockedSlot.endTime }}</div>
+                  <button class="delete-block-btn" (click)="onDeleteBlock($event, slot.blockedSlot)" title="Remover bloqueio">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              } @else if (slot.appointment) {
                 <div class="appointment-block" [class]="getStatusClass(slot.appointment.status)">
                   <div class="appointment-patient">{{ slot.appointment.patientName }}</div>
                   @if (slot.appointment.professionalName || slot.appointment.doctorName) {

@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, AvailableSlot, Professional } from '../models/appointment.model';
+import { 
+  Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, AvailableSlot, Professional,
+  BlockedTimeSlot, CreateBlockedTimeSlot, UpdateBlockedTimeSlot, 
+  RecurringAppointmentPattern, CreateRecurringBlockedSlots
+} from '../models/appointment.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -10,6 +14,8 @@ import { environment } from '../../environments/environment';
 export class AppointmentService {
   private apiUrl = `${environment.apiUrl}/appointments`;
   private usersApiUrl = `${environment.apiUrl}/users`;
+  private blockedSlotsApiUrl = `${environment.apiUrl}/blocked-time-slots`;
+  private recurringApiUrl = `${environment.apiUrl}/recurring-appointments`;
 
   constructor(private http: HttpClient) { }
 
@@ -59,5 +65,56 @@ export class AppointmentService {
 
   getProfessionals(): Observable<Professional[]> {
     return this.http.get<Professional[]>(`${this.usersApiUrl}/professionals`);
+  }
+
+  // Blocked Time Slots Methods
+  createBlockedTimeSlot(blockedSlot: CreateBlockedTimeSlot): Observable<BlockedTimeSlot> {
+    return this.http.post<BlockedTimeSlot>(this.blockedSlotsApiUrl, blockedSlot);
+  }
+
+  updateBlockedTimeSlot(id: string, blockedSlot: UpdateBlockedTimeSlot): Observable<BlockedTimeSlot> {
+    return this.http.put<BlockedTimeSlot>(`${this.blockedSlotsApiUrl}/${id}`, blockedSlot);
+  }
+
+  deleteBlockedTimeSlot(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.blockedSlotsApiUrl}/${id}`);
+  }
+
+  getBlockedTimeSlotsByDate(date: string, clinicId: string, professionalId?: string): Observable<BlockedTimeSlot[]> {
+    let params = new HttpParams()
+      .set('date', date)
+      .set('clinicId', clinicId);
+    
+    if (professionalId) {
+      params = params.set('professionalId', professionalId);
+    }
+    
+    return this.http.get<BlockedTimeSlot[]>(this.blockedSlotsApiUrl, { params });
+  }
+
+  getBlockedTimeSlotsByDateRange(startDate: string, endDate: string, clinicId: string): Observable<BlockedTimeSlot[]> {
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate)
+      .set('clinicId', clinicId);
+    
+    return this.http.get<BlockedTimeSlot[]>(`${this.blockedSlotsApiUrl}/range`, { params });
+  }
+
+  getBlockedTimeSlotById(id: string): Observable<BlockedTimeSlot> {
+    return this.http.get<BlockedTimeSlot>(`${this.blockedSlotsApiUrl}/${id}`);
+  }
+
+  // Recurring Blocked Slots Methods
+  createRecurringBlockedSlots(pattern: CreateRecurringBlockedSlots): Observable<RecurringAppointmentPattern> {
+    return this.http.post<RecurringAppointmentPattern>(`${this.recurringApiUrl}/blocked-slots`, pattern);
+  }
+
+  getRecurringPatternsByClinic(clinicId: string): Observable<RecurringAppointmentPattern[]> {
+    return this.http.get<RecurringAppointmentPattern[]>(`${this.recurringApiUrl}/clinic/${clinicId}`);
+  }
+
+  getRecurringPatternsByProfessional(professionalId: string): Observable<RecurringAppointmentPattern[]> {
+    return this.http.get<RecurringAppointmentPattern[]>(`${this.recurringApiUrl}/professional/${professionalId}`);
   }
 }
