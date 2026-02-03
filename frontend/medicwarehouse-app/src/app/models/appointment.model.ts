@@ -80,7 +80,7 @@ export enum BlockedTimeSlotType {
   Other = 6           // Outro motivo
 }
 
-export const BlockedTimeSlotTypeLabels = {
+export const BlockedTimeSlotTypeLabels: { [key: number]: string } = {
   [BlockedTimeSlotType.Break]: 'Intervalo',
   [BlockedTimeSlotType.Unavailable]: 'Indisponível',
   [BlockedTimeSlotType.Maintenance]: 'Manutenção',
@@ -98,7 +98,7 @@ export enum RecurrenceFrequency {
   Custom = 5
 }
 
-export const RecurrenceFrequencyLabels = {
+export const RecurrenceFrequencyLabels: { [key: number]: string } = {
   [RecurrenceFrequency.Daily]: 'Diário',
   [RecurrenceFrequency.Weekly]: 'Semanal',
   [RecurrenceFrequency.Biweekly]: 'Quinzenal',
@@ -118,7 +118,7 @@ export enum RecurrenceDays {
   Saturday = 64
 }
 
-export const RecurrenceDaysLabels = {
+export const RecurrenceDaysLabels: { [key: number]: string } = {
   [RecurrenceDays.Sunday]: 'Domingo',
   [RecurrenceDays.Monday]: 'Segunda',
   [RecurrenceDays.Tuesday]: 'Terça',
