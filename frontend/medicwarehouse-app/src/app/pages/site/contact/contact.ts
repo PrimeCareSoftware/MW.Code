@@ -31,6 +31,7 @@ export class ContactComponent {
   isSubmitting = false;
   submitSuccess = false;
   submitError = '';
+  showSuccessMessage = false;
 
   onSubmit(): void {
     if (!this.isValid()) {
@@ -45,6 +46,7 @@ export class ContactComponent {
     this.subscriptionService.sendContactMessage(this.model).subscribe({
       next: (response) => {
         this.submitSuccess = true;
+        this.showSuccessMessage = true;
         this.resetForm();
         this.isSubmitting = false;
       },
@@ -73,5 +75,11 @@ export class ContactComponent {
 
   openWhatsApp(): void {
     window.open(`https://wa.me/${this.whatsappNumber}`, '_blank');
+  }
+
+  resetSuccessState(): void {
+    this.showSuccessMessage = false;
+    this.submitSuccess = false;
+    this.resetForm();
   }
 }
