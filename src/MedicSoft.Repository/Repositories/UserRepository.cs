@@ -28,8 +28,9 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<User?> GetUserByUsernameAsync(string username, string tenantId)
         {
+            var normalizedUsername = username.ToLowerInvariant();
             return await _context.Users
-                .Where(u => u.Username == username.ToLowerInvariant() && u.TenantId == tenantId)
+                .Where(u => u.Username == normalizedUsername && u.TenantId == tenantId)
                 .Include(u => u.Clinic)
                 .Include(u => u.Profile!)
                     .ThenInclude(p => p.Permissions)
