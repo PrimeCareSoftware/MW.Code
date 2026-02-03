@@ -21,6 +21,7 @@ namespace MedicSoft.Application.DTOs
         public string DefaultPaymentReceiverType { get; set; } = "Secretary";
         public int NumberOfRooms { get; set; } = 1;
         public bool NotifyPrimaryDoctorOnOtherDoctorAppointment { get; set; } = true;
+        public bool EnableOnlineAppointmentScheduling { get; set; } = true;
     }
 
     public class UpdateClinicInfoRequest
@@ -34,6 +35,7 @@ namespace MedicSoft.Application.DTOs
         public bool? AllowEmergencySlots { get; set; }
         public int? NumberOfRooms { get; set; }
         public bool? NotifyPrimaryDoctorOnOtherDoctorAppointment { get; set; }
+        public bool? EnableOnlineAppointmentScheduling { get; set; }
     }
 
     public class ClinicUserDto

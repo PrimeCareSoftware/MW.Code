@@ -36,6 +36,25 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
     {
         try
         {
+            // Check if online appointment scheduling is enabled for this clinic
+            var clinicSettingsQuery = @"
+                SELECT ""EnableOnlineAppointmentScheduling""
+                FROM ""Clinics""
+                WHERE ""Id"" = {0} AND ""TenantId"" = {1}";
+            
+            var clinicSettings = await _mainDatabase.ExecuteQueryAsync<ClinicSchedulingSettings>(
+                clinicSettingsQuery,
+                clinicId,
+                tenantId
+            );
+            
+            var settings = clinicSettings.FirstOrDefault();
+            if (settings == null || !settings.EnableOnlineAppointmentScheduling)
+            {
+                _logger.LogWarning("Online appointment scheduling is disabled for clinic {ClinicId}", clinicId);
+                return new List<DoctorAvailabilityDto>();
+            }
+
             var availableSlots = new List<DoctorAvailabilityDto>();
 
             // Query doctors from the main Users table (doctors have Role = Doctor)
@@ -286,6 +305,11 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
     }
 
     // Helper classes for raw SQL queries
+    private class ClinicSchedulingSettings
+    {
+        public bool EnableOnlineAppointmentScheduling { get; set; }
+    }
+
     private class DoctorInfo
     {
         public Guid Id { get; set; }

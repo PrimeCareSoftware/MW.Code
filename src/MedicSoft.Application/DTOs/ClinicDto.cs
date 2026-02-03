@@ -19,6 +19,7 @@ namespace MedicSoft.Application.DTOs
         public string DefaultPaymentReceiverType { get; set; } = "Secretary"; // Doctor, Secretary, Other
         public int NumberOfRooms { get; set; } = 1;
         public bool NotifyPrimaryDoctorOnOtherDoctorAppointment { get; set; } = true;
+        public bool EnableOnlineAppointmentScheduling { get; set; } = true;
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
@@ -50,5 +51,6 @@ namespace MedicSoft.Application.DTOs
         public string? DefaultPaymentReceiverType { get; set; } // Doctor, Secretary, Other
         public int? NumberOfRooms { get; set; }
         public bool? NotifyPrimaryDoctorOnOtherDoctorAppointment { get; set; }
+        public bool? EnableOnlineAppointmentScheduling { get; set; }
     }
 }

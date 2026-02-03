@@ -106,6 +106,22 @@ public class AppointmentService : IAppointmentService
             if (patientInfo == null)
                 throw new InvalidOperationException("Patient not found");
 
+            // Check if online appointment scheduling is enabled for the requested clinic
+            var clinicSettingsQuery = await _mainDatabase.ExecuteQueryAsync<ClinicSchedulingSettings>(
+                @"SELECT ""EnableOnlineAppointmentScheduling""
+                  FROM ""Clinics""
+                  WHERE ""Id"" = {0} AND ""TenantId"" = {1}",
+                request.ClinicId,
+                patientInfo.TenantId
+            );
+
+            var clinicSettings = clinicSettingsQuery.FirstOrDefault();
+            if (clinicSettings == null || !clinicSettings.EnableOnlineAppointmentScheduling)
+            {
+                _logger.LogWarning("Attempt to book appointment at clinic {ClinicId} with online scheduling disabled", request.ClinicId);
+                throw new InvalidOperationException("Online appointment scheduling is not enabled for this clinic");
+            }
+
             // Create new appointment using raw SQL insert
             var appointmentId = Guid.NewGuid();
             var now = DateTime.UtcNow;
@@ -348,5 +364,11 @@ public class AppointmentService : IAppointmentService
         public Guid Id { get; set; }
         public string TenantId { get; set; } = string.Empty;
         public Guid ClinicId { get; set; }
+    }
+
+    // Helper class for clinic settings
+    private class ClinicSchedulingSettings
+    {
+        public bool EnableOnlineAppointmentScheduling { get; set; }
     }
 }
