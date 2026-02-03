@@ -1,11 +1,13 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
-import { Appointment, Professional } from '../../../models/appointment.model';
+import { Appointment, Professional, BlockedTimeSlot } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
+import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
 
 interface TimeSlot {
   time: string;
@@ -19,13 +21,16 @@ interface DayColumn {
   dayNumber: number;
   isToday: boolean;
   appointments: Appointment[];
+  blockedSlots: BlockedTimeSlot[];
 }
 
 interface CalendarSlot {
   timeSlot: TimeSlot;
   dayColumn: DayColumn;
   appointment: Appointment | null;
+  blockedSlot: BlockedTimeSlot | null;
   isAvailable: boolean;
+  isBlocked: boolean;
 }
 
 @Component({
@@ -52,7 +57,8 @@ export class AppointmentCalendar implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private router: Router,
-    private auth: Auth
+    private auth: Auth,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -115,7 +121,8 @@ export class AppointmentCalendar implements OnInit {
         dayName: dayNames[i],
         dayNumber: date.getDate(),
         isToday: date.getTime() === today.getTime(),
-        appointments: []
+        appointments: [],
+        blockedSlots: []
       });
     }
     
@@ -130,25 +137,59 @@ export class AppointmentCalendar implements OnInit {
     
     this.isLoading.set(true);
     const weekStart = this.currentWeekStart();
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
     const days = this.weekDays();
     const clinicId = this.clinicId; // Store in local variable for type safety
     const doctorId = this.selectedDoctorId(); // Get selected doctor filter
     
     try {
       // Load appointments for each day
-      const promises = days.map(day => {
+      const appointmentPromises = days.map(day => {
         const dateStr = day.date.toISOString().split('T')[0];
         return this.appointmentService.getDailyAgenda(clinicId, dateStr, doctorId || undefined).toPromise();
       });
       
-      const results = await Promise.all(promises);
+      // Load blocked slots for the week
+      const startDateStr = weekStart.toISOString().split('T')[0];
+      const endDateStr = weekEnd.toISOString().split('T')[0];
+      const blockedSlotsPromise = this.appointmentService.getBlockedTimeSlotsByDateRange(
+        startDateStr,
+        endDateStr,
+        clinicId
+      ).toPromise();
+      
+      const [appointmentResults, blockedSlots] = await Promise.all([
+        Promise.all(appointmentPromises),
+        blockedSlotsPromise
+      ]);
       
       // Update day columns with appointments
-      results.forEach((agenda, index) => {
+      appointmentResults.forEach((agenda, index) => {
         if (agenda && agenda.appointments) {
           days[index].appointments = agenda.appointments;
         }
       });
+      
+      // Update day columns with blocked slots
+      if (blockedSlots) {
+        blockedSlots.forEach(block => {
+          const blockDate = new Date(block.date);
+          blockDate.setHours(0, 0, 0, 0);
+          const dayIndex = days.findIndex(d => {
+            const dayDate = new Date(d.date);
+            dayDate.setHours(0, 0, 0, 0);
+            return dayDate.getTime() === blockDate.getTime();
+          });
+          
+          if (dayIndex >= 0) {
+            // Filter by professional if doctor filter is active
+            if (!doctorId || !block.professionalId || block.professionalId === doctorId) {
+              days[dayIndex].blockedSlots.push(block);
+            }
+          }
+        });
+      }
       
       this.weekDays.set([...days]);
       this.generateCalendarGrid();
@@ -187,12 +228,15 @@ export class AppointmentCalendar implements OnInit {
       
       days.forEach(day => {
         const appointment = this.findAppointmentForSlot(day.appointments, timeSlot);
+        const blockedSlot = this.findBlockedSlotForSlot(day.blockedSlots, timeSlot);
         
         row.push({
           timeSlot,
           dayColumn: day,
           appointment,
-          isAvailable: !appointment
+          blockedSlot,
+          isAvailable: !appointment && !blockedSlot,
+          isBlocked: !!blockedSlot
         });
       });
       
@@ -210,14 +254,35 @@ export class AppointmentCalendar implements OnInit {
     }) || null;
   }
 
+  findBlockedSlotForSlot(blockedSlots: BlockedTimeSlot[], timeSlot: TimeSlot): BlockedTimeSlot | null {
+    return blockedSlots.find(block => {
+      const startParts = block.startTime.split(':');
+      const endParts = block.endTime.split(':');
+      const startHour = parseInt(startParts[0]);
+      const startMinute = parseInt(startParts[1]);
+      const endHour = parseInt(endParts[0]);
+      const endMinute = parseInt(endParts[1]);
+      
+      const slotMinutes = timeSlot.hour * 60 + timeSlot.minute;
+      const blockStart = startHour * 60 + startMinute;
+      const blockEnd = endHour * 60 + endMinute;
+      
+      return slotMinutes >= blockStart && slotMinutes < blockEnd;
+    }) || null;
+  }
+
   onSlotClick(slot: CalendarSlot): void {
-    if (slot.appointment) {
+    if (slot.blockedSlot) {
+      // Open dialog to view/edit blocked slot
+      this.openBlockingDialog(slot.dayColumn.date, slot.timeSlot, slot.blockedSlot);
+    } else if (slot.appointment) {
       // Navigate to appointment details or attendance
       if (slot.appointment.status === 'Scheduled' || slot.appointment.status === 'Confirmed') {
         this.router.navigate(['/appointments', slot.appointment.id, 'attendance']);
       }
     } else {
-      // Create new appointment for this slot
+      // Show context menu or create new appointment
+      // For now, just navigate to new appointment
       const dateStr = slot.dayColumn.date.toISOString().split('T')[0];
       this.router.navigate(['/appointments/new'], {
         queryParams: {
@@ -226,6 +291,58 @@ export class AppointmentCalendar implements OnInit {
         }
       });
     }
+  }
+
+  openBlockingDialog(date?: Date, timeSlot?: TimeSlot, existingBlock?: BlockedTimeSlot): void {
+    const dialogRef = this.dialog.open(ScheduleBlockingDialogComponent, {
+      width: '600px',
+      data: {
+        clinicId: this.clinicId,
+        date: date,
+        timeSlot: timeSlot,
+        professionals: this.professionals(),
+        blockedSlot: existingBlock
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Reload the week appointments to show the new/updated block
+        this.loadWeekAppointments();
+      }
+    });
+  }
+
+  onBlockSchedule(): void {
+    this.openBlockingDialog();
+  }
+
+  onDeleteBlock(event: Event, blockedSlot: BlockedTimeSlot): void {
+    event.stopPropagation();
+    
+    if (confirm(`Tem certeza que deseja remover este bloqueio?`)) {
+      this.appointmentService.deleteBlockedTimeSlot(blockedSlot.id).subscribe({
+        next: () => {
+          this.loadWeekAppointments();
+        },
+        error: (error) => {
+          console.error('Error deleting block:', error);
+          alert('Erro ao deletar bloqueio');
+        }
+      });
+    }
+  }
+
+  getBlockTypeLabel(type: number): string {
+    const labels: { [key: number]: string } = {
+      1: 'Intervalo',
+      2: 'Indisponível',
+      3: 'Manutenção',
+      4: 'Treinamento',
+      5: 'Reunião',
+      6: 'Outro'
+    };
+    return labels[type] || 'Bloqueado';
   }
 
   previousWeek(): void {
