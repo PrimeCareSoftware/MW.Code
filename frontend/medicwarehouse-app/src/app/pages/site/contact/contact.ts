@@ -19,6 +19,8 @@ export class ContactComponent {
   whatsappNumber = environment.whatsappNumber;
   companyEmail = environment.companyEmail;
   companyPhone = environment.companyPhone;
+  companyAddress = environment.companyAddress;
+  companyAddressDetails = environment.companyAddressDetails;
   
   model: ContactRequest = {
     name: '',
