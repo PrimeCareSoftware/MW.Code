@@ -570,6 +570,71 @@
   }
 }
 
+.btn-icon {
+  padding: 8px;
+  border: none;
+  background: var(--gray-100);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: var(--gray-700);
+  }
+
+  &:hover {
+    background: var(--gray-200);
+
+    svg {
+      color: var(--primary-500);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.modal-close {
+  padding: 8px 16px;
+  border: 1px solid var(--gray-300);
+  background: white;
+  color: var(--gray-700);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--gray-100);
+  }
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--gray-300);
+  border-radius: 6px;
+  font-size: 0.95rem;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-color-alpha);
+  }
+
+  &:disabled {
+    background: var(--gray-100);
+    cursor: not-allowed;
+  }
+}
+
 .spinner {
   display: inline-block;
   width: 20px;
