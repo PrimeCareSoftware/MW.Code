@@ -435,6 +435,7 @@ builder.Services.AddSingleton<MedicSoft.Application.Services.SystemAdmin.IMonito
 
 // System Admin - Background Jobs
 builder.Services.AddScoped<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>();
+builder.Services.AddScoped<MedicSoft.Api.Jobs.AlertProcessingJob>();
 
 // CFM 1.821 - Register new services
 builder.Services.AddScoped<IClinicalExaminationService, ClinicalExaminationService>();
@@ -1044,6 +1045,61 @@ try
         "sysadmin-check-unresponded-tickets",
         job => job.CheckUnrespondedTicketsAsync(),
         "0 */6 * * *", // Every 6 hours
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    // Alert Processing Jobs - Automated alert generation
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
+        "alert-mark-expired",
+        job => job.MarkExpiredAlertsAsync(),
+        Cron.Hourly(), // Every hour
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
+        "alert-cleanup-old",
+        job => job.CleanupOldAlertsAsync(),
+        Cron.Daily(3, 0), // Daily at 03:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
+        "alert-check-overdue-appointments",
+        job => job.CheckOverdueAppointmentsAsync(),
+        "*/15 * * * *", // Every 15 minutes
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
+        "alert-check-overdue-payments",
+        job => job.CheckOverduePaymentsAsync(),
+        Cron.Daily(8, 0), // Daily at 08:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
+        "alert-check-low-stock",
+        job => job.CheckLowStockAsync(),
+        Cron.Daily(7, 0), // Daily at 07:00 UTC
+        new RecurringJobOptions
+        {
+            TimeZone = TimeZoneInfo.Utc
+        });
+    
+    RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
+        "alert-check-expiring-subscriptions",
+        job => job.CheckExpiringSubscriptionsAsync(),
+        Cron.Daily(6, 0), // Daily at 06:00 UTC
         new RecurringJobOptions
         {
             TimeZone = TimeZoneInfo.Utc
