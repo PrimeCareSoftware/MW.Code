@@ -190,6 +190,10 @@ namespace MedicSoft.Repository.Context
         // System Admin - Notifications
         public DbSet<SystemNotification> SystemNotifications { get; set; } = null!;
         public DbSet<NotificationRule> NotificationRules { get; set; } = null!;
+        
+        // Alerts System
+        public DbSet<Alert> Alerts { get; set; } = null!;
+        public DbSet<AlertConfiguration> AlertConfigurations { get; set; } = null!;
 
         // System Admin - Tags (Phase 2)
         public DbSet<Tag> Tags { get; set; } = null!;
