@@ -273,7 +273,7 @@ namespace MedicSoft.Application.Services
                 DeliveryChannels = alert.DeliveryChannels.Select(c => c.ToString()).ToList(),
                 Metadata = alert.Metadata,
                 CreatedAt = alert.CreatedAt,
-                UpdatedAt = alert.UpdatedAt,
+                UpdatedAt = alert.UpdatedAt ?? alert.CreatedAt,
                 IsExpired = alert.IsExpired(),
                 RequiresUrgentAction = alert.RequiresUrgentAction()
             };
