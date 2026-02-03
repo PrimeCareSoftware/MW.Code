@@ -2,9 +2,10 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
-import { Appointment, Professional, BlockedTimeSlot } from '../../../models/appointment.model';
+import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
@@ -58,7 +59,8 @@ export class AppointmentCalendar implements OnInit {
     private appointmentService: AppointmentService,
     private router: Router,
     private auth: Auth,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -320,29 +322,32 @@ export class AppointmentCalendar implements OnInit {
   onDeleteBlock(event: Event, blockedSlot: BlockedTimeSlot): void {
     event.stopPropagation();
     
-    if (confirm(`Tem certeza que deseja remover este bloqueio?`)) {
+    // Use Material Dialog for confirmation (TODO: Create a reusable confirmation dialog component)
+    const confirmDelete = confirm(`Tem certeza que deseja remover este bloqueio?`);
+    
+    if (confirmDelete) {
       this.appointmentService.deleteBlockedTimeSlot(blockedSlot.id).subscribe({
         next: () => {
+          this.snackBar.open('Bloqueio removido com sucesso', 'Fechar', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
           this.loadWeekAppointments();
         },
         error: (error) => {
           console.error('Error deleting block:', error);
-          alert('Erro ao deletar bloqueio');
+          this.snackBar.open(
+            error.error?.message || 'Erro ao deletar bloqueio',
+            'Fechar',
+            { duration: 3000 }
+          );
         }
       });
     }
   }
 
   getBlockTypeLabel(type: number): string {
-    const labels: { [key: number]: string } = {
-      1: 'Intervalo',
-      2: 'Indisponível',
-      3: 'Manutenção',
-      4: 'Treinamento',
-      5: 'Reunião',
-      6: 'Outro'
-    };
-    return labels[type] || 'Bloqueado';
+    return BlockedTimeSlotTypeLabels[type] || 'Bloqueado';
   }
 
   previousWeek(): void {

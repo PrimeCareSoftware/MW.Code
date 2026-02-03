@@ -542,7 +542,7 @@ export class ScheduleBlockingDialogComponent implements OnInit {
     const frequency = formValue.frequency;
     const daysOfWeek = frequency === RecurrenceFrequency.Weekly ? this.selectedDays() : undefined;
 
-    if (frequency === RecurrenceFrequency.Weekly && !daysOfWeek) {
+    if (frequency === RecurrenceFrequency.Weekly && (daysOfWeek === undefined || daysOfWeek === 0)) {
       this.errorMessage.set('Selecione pelo menos um dia da semana');
       this.saving.set(false);
       return;
