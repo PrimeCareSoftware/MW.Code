@@ -12,6 +12,7 @@ namespace PatientPortal.Application.Services;
 public class DoctorAvailabilityService : IDoctorAvailabilityService
 {
     private readonly IMainDatabaseContext _mainDatabase;
+    private readonly IClinicSettingsService _clinicSettings;
     private readonly ILogger<DoctorAvailabilityService> _logger;
 
     // Default working hours (can be overridden by doctor schedule)
@@ -21,9 +22,11 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
 
     public DoctorAvailabilityService(
         IMainDatabaseContext mainDatabase,
+        IClinicSettingsService clinicSettings,
         ILogger<DoctorAvailabilityService> logger)
     {
         _mainDatabase = mainDatabase;
+        _clinicSettings = clinicSettings;
         _logger = logger;
     }
 
@@ -36,6 +39,14 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
     {
         try
         {
+            // Check if online appointment scheduling is enabled for this clinic
+            var isEnabled = await _clinicSettings.IsOnlineSchedulingEnabledAsync(clinicId, tenantId);
+            if (!isEnabled)
+            {
+                _logger.LogWarning("Online appointment scheduling is disabled for clinic {ClinicId}", clinicId);
+                return new List<DoctorAvailabilityDto>();
+            }
+
             var availableSlots = new List<DoctorAvailabilityDto>();
 
             // Query doctors from the main Users table (doctors have Role = Doctor)

@@ -13,6 +13,7 @@ public class AppointmentService : IAppointmentService
     private readonly IAppointmentViewRepository _appointmentViewRepository;
     private readonly IPatientUserRepository _patientUserRepository;
     private readonly IMainDatabaseContext _mainDatabase;
+    private readonly IClinicSettingsService _clinicSettings;
     private readonly INotificationService _notificationService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AppointmentService> _logger;
@@ -21,6 +22,7 @@ public class AppointmentService : IAppointmentService
         IAppointmentViewRepository appointmentViewRepository,
         IPatientUserRepository patientUserRepository,
         IMainDatabaseContext mainDatabase,
+        IClinicSettingsService clinicSettings,
         INotificationService notificationService,
         IConfiguration configuration,
         ILogger<AppointmentService> logger)
@@ -28,6 +30,7 @@ public class AppointmentService : IAppointmentService
         _appointmentViewRepository = appointmentViewRepository;
         _patientUserRepository = patientUserRepository;
         _mainDatabase = mainDatabase;
+        _clinicSettings = clinicSettings;
         _notificationService = notificationService;
         _configuration = configuration;
         _logger = logger;
@@ -105,6 +108,14 @@ public class AppointmentService : IAppointmentService
             var patientInfo = patientQuery.FirstOrDefault();
             if (patientInfo == null)
                 throw new InvalidOperationException("Patient not found");
+
+            // Check if online appointment scheduling is enabled for the requested clinic
+            var isEnabled = await _clinicSettings.IsOnlineSchedulingEnabledAsync(request.ClinicId, patientInfo.TenantId);
+            if (!isEnabled)
+            {
+                _logger.LogWarning("Attempt to book appointment at clinic {ClinicId} with online scheduling disabled", request.ClinicId);
+                throw new InvalidOperationException("Online appointment scheduling is not enabled for this clinic");
+            }
 
             // Create new appointment using raw SQL insert
             var appointmentId = Guid.NewGuid();

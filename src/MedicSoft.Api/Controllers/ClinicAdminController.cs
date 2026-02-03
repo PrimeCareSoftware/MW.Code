@@ -159,6 +159,12 @@ namespace MedicSoft.Api.Controllers
                     clinic.UpdateNotifyPrimaryDoctorSetting(request.NotifyPrimaryDoctorOnOtherDoctorAppointment.Value);
                 }
 
+                // Update online appointment scheduling setting if provided
+                if (request.EnableOnlineAppointmentScheduling.HasValue)
+                {
+                    clinic.UpdateOnlineSchedulingSetting(request.EnableOnlineAppointmentScheduling.Value);
+                }
+
                 await _clinicRepository.UpdateAsync(clinic);
 
                 _logger.LogInformation("Clinic information updated: {ClinicId}", clinic.Id);
@@ -1046,7 +1052,8 @@ namespace MedicSoft.Api.Controllers
                 WhatsAppNumber = clinic.WhatsAppNumber,
                 DefaultPaymentReceiverType = clinic.DefaultPaymentReceiverType.ToString(),
                 NumberOfRooms = clinic.NumberOfRooms,
-                NotifyPrimaryDoctorOnOtherDoctorAppointment = clinic.NotifyPrimaryDoctorOnOtherDoctorAppointment
+                NotifyPrimaryDoctorOnOtherDoctorAppointment = clinic.NotifyPrimaryDoctorOnOtherDoctorAppointment,
+                EnableOnlineAppointmentScheduling = clinic.EnableOnlineAppointmentScheduling
             };
         }
 

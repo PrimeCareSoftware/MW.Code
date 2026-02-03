@@ -9,14 +9,16 @@ namespace PatientPortal.Tests.Services;
 public class DoctorAvailabilityServiceTests
 {
     private readonly Mock<IMainDatabaseContext> _mockDatabase;
+    private readonly Mock<IClinicSettingsService> _mockClinicSettings;
     private readonly Mock<ILogger<DoctorAvailabilityService>> _mockLogger;
     private readonly DoctorAvailabilityService _service;
 
     public DoctorAvailabilityServiceTests()
     {
         _mockDatabase = new Mock<IMainDatabaseContext>();
+        _mockClinicSettings = new Mock<IClinicSettingsService>();
         _mockLogger = new Mock<ILogger<DoctorAvailabilityService>>();
-        _service = new DoctorAvailabilityService(_mockDatabase.Object, _mockLogger.Object);
+        _service = new DoctorAvailabilityService(_mockDatabase.Object, _mockClinicSettings.Object, _mockLogger.Object);
     }
 
     [Fact]

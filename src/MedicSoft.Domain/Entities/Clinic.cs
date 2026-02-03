@@ -28,6 +28,7 @@ namespace MedicSoft.Domain.Entities
         public PaymentReceiverType DefaultPaymentReceiverType { get; private set; } = PaymentReceiverType.Secretary; // Padrão: secretária recebe
         public int NumberOfRooms { get; private set; } = 1; // Número de salas de atendimento da clínica
         public bool NotifyPrimaryDoctorOnOtherDoctorAppointment { get; private set; } = true; // Notificar médico principal quando paciente é atendido por outro médico
+        public bool EnableOnlineAppointmentScheduling { get; private set; } = true; // Permite que pacientes agendem consultas online através do portal
 
         // Navigation properties
         public Company? Company { get; private set; }
@@ -241,6 +242,22 @@ namespace MedicSoft.Domain.Entities
         public void UpdateNotifyPrimaryDoctorSetting(bool notifyPrimaryDoctor)
         {
             NotifyPrimaryDoctorOnOtherDoctorAppointment = notifyPrimaryDoctor;
+            UpdateTimestamp();
+        }
+
+        public void EnableOnlineScheduling()
+        {
+            UpdateOnlineSchedulingSetting(true);
+        }
+
+        public void DisableOnlineScheduling()
+        {
+            UpdateOnlineSchedulingSetting(false);
+        }
+
+        public void UpdateOnlineSchedulingSetting(bool enable)
+        {
+            EnableOnlineAppointmentScheduling = enable;
             UpdateTimestamp();
         }
 

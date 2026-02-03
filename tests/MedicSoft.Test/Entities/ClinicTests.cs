@@ -399,5 +399,69 @@ namespace MedicSoft.Test.Entities
                 appointmentDuration
             );
         }
+
+        [Fact]
+        public void Constructor_SetsDefaultEnableOnlineAppointmentSchedulingToTrue()
+        {
+            // Arrange & Act
+            var clinic = CreateValidClinic();
+
+            // Assert
+            Assert.True(clinic.EnableOnlineAppointmentScheduling);
+        }
+
+        [Fact]
+        public void EnableOnlineScheduling_EnablesOnlineAppointmentScheduling()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+            clinic.DisableOnlineScheduling();
+
+            // Act
+            clinic.EnableOnlineScheduling();
+
+            // Assert
+            Assert.True(clinic.EnableOnlineAppointmentScheduling);
+        }
+
+        [Fact]
+        public void DisableOnlineScheduling_DisablesOnlineAppointmentScheduling()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+
+            // Act
+            clinic.DisableOnlineScheduling();
+
+            // Assert
+            Assert.False(clinic.EnableOnlineAppointmentScheduling);
+        }
+
+        [Fact]
+        public void UpdateOnlineSchedulingSetting_WithTrue_EnablesOnlineAppointmentScheduling()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+            clinic.DisableOnlineScheduling();
+
+            // Act
+            clinic.UpdateOnlineSchedulingSetting(true);
+
+            // Assert
+            Assert.True(clinic.EnableOnlineAppointmentScheduling);
+        }
+
+        [Fact]
+        public void UpdateOnlineSchedulingSetting_WithFalse_DisablesOnlineAppointmentScheduling()
+        {
+            // Arrange
+            var clinic = CreateValidClinic();
+
+            // Act
+            clinic.UpdateOnlineSchedulingSetting(false);
+
+            // Assert
+            Assert.False(clinic.EnableOnlineAppointmentScheduling);
+        }
     }
 }

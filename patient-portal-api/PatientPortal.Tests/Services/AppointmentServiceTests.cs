@@ -16,6 +16,7 @@ public class AppointmentServiceTests
     private readonly Mock<IAppointmentViewRepository> _mockAppointmentViewRepository;
     private readonly Mock<IPatientUserRepository> _mockPatientUserRepository;
     private readonly Mock<IMainDatabaseContext> _mockDatabase;
+    private readonly Mock<IClinicSettingsService> _mockClinicSettings;
     private readonly Mock<INotificationService> _mockNotificationService;
     private readonly Mock<IConfiguration> _mockConfiguration;
     private readonly Mock<ILogger<AppointmentService>> _mockLogger;
@@ -26,6 +27,7 @@ public class AppointmentServiceTests
         _mockAppointmentViewRepository = new Mock<IAppointmentViewRepository>();
         _mockPatientUserRepository = new Mock<IPatientUserRepository>();
         _mockDatabase = new Mock<IMainDatabaseContext>();
+        _mockClinicSettings = new Mock<IClinicSettingsService>();
         _mockNotificationService = new Mock<INotificationService>();
         _mockConfiguration = new Mock<IConfiguration>();
         _mockLogger = new Mock<ILogger<AppointmentService>>();
@@ -37,6 +39,7 @@ public class AppointmentServiceTests
             _mockAppointmentViewRepository.Object,
             _mockPatientUserRepository.Object,
             _mockDatabase.Object,
+            _mockClinicSettings.Object,
             _mockNotificationService.Object,
             _mockConfiguration.Object,
             _mockLogger.Object);
@@ -254,5 +257,9 @@ public class AppointmentServiceTests
         await Assert.ThrowsAsync<InvalidOperationException>(
             async () => await _service.RescheduleAppointmentAsync(appointmentId, patientUserId, request));
     }
+
+    // Note: Testing appointment booking with EnableOnlineAppointmentScheduling flag
+    // requires integration tests with a real database due to raw SQL queries.
+    // The flag validation logic is covered by unit tests in ClinicTests.
 }
 
