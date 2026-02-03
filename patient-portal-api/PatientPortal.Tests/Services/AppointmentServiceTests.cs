@@ -254,5 +254,9 @@ public class AppointmentServiceTests
         await Assert.ThrowsAsync<InvalidOperationException>(
             async () => await _service.RescheduleAppointmentAsync(appointmentId, patientUserId, request));
     }
+
+    // Note: Testing appointment booking with EnableOnlineAppointmentScheduling flag
+    // requires integration tests with a real database due to raw SQL queries.
+    // The flag validation logic is covered by unit tests in ClinicTests.
 }
 
