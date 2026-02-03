@@ -7,11 +7,12 @@ import {
   LeadStatistics, 
   LeadStatus 
 } from '../../models/salesforce-lead.model';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-salesforce-leads',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './salesforce-leads.html',
   styleUrls: ['./salesforce-leads.scss']
 })

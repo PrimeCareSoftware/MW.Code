@@ -1,21 +1,26 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Gestão de Leads</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="loadData()">
-        <ion-icon name="refresh-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-navbar></app-navbar>
 
-<ion-content>
-  <div class="content-wrapper">
-    <!-- Statistics Dashboard -->
-    <div class="statistics-section" *ngIf="statistics">
+<div class="leads-container">
+  <div class="header">
+    <div class="header-content">
+      <h1>Gestão de Leads</h1>
+      <p>Gerencie e acompanhe seus leads de vendas</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="loadData()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        Atualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistics Dashboard -->
+  @if (statistics) {
+    <div class="statistics-section">
       <h2>Estatísticas de Leads</h2>
       <div class="stats-grid">
         <div class="stat-card">
@@ -52,49 +57,74 @@
         </div>
       </div>
     </div>
+  }
 
-    <!-- Filters -->
-    <div class="filters-section">
-      <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="onSearchChange()" 
-        placeholder="Buscar por nome, email, telefone ou empresa">
-      </ion-searchbar>
-      
-      <div class="filter-row">
-        <ion-select [(ngModel)]="statusFilter" (ionChange)="onStatusFilterChange()" 
-          placeholder="Filtrar por Status">
-          <ion-select-option value="all">Todos os Status</ion-select-option>
-          <ion-select-option [value]="LeadStatus.New">Novo</ion-select-option>
-          <ion-select-option [value]="LeadStatus.Contacted">Contactado</ion-select-option>
-          <ion-select-option [value]="LeadStatus.Qualified">Qualificado</ion-select-option>
-          <ion-select-option [value]="LeadStatus.Converted">Convertido</ion-select-option>
-          <ion-select-option [value]="LeadStatus.Lost">Perdido</ion-select-option>
-          <ion-select-option [value]="LeadStatus.Nurturing">Nutrição</ion-select-option>
-        </ion-select>
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="search-group">
+      <input 
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Buscar por nome, email, telefone ou empresa"
+        class="search-input">
+    </div>
+    
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="status-filter">Filtrar por Status:</label>
+        <select 
+          id="status-filter"
+          [(ngModel)]="statusFilter"
+          (ngModelChange)="onStatusFilterChange()"
+          class="filter-select">
+          <option value="all">Todos os Status</option>
+          <option [value]="LeadStatus.New">Novo</option>
+          <option [value]="LeadStatus.Contacted">Contactado</option>
+          <option [value]="LeadStatus.Qualified">Qualificado</option>
+          <option [value]="LeadStatus.Converted">Convertido</option>
+          <option [value]="LeadStatus.Lost">Perdido</option>
+          <option [value]="LeadStatus.Nurturing">Nutrição</option>
+        </select>
+      </div>
 
-        <ion-select [(ngModel)]="assignmentFilter" (ionChange)="onAssignmentFilterChange()" 
-          placeholder="Filtrar por Atribuição">
-          <ion-select-option value="all">Todos</ion-select-option>
-          <ion-select-option value="assigned">Atribuídos</ion-select-option>
-          <ion-select-option value="unassigned">Não Atribuídos</ion-select-option>
-        </ion-select>
+      <div class="filter-group">
+        <label for="assignment-filter">Filtrar por Atribuição:</label>
+        <select 
+          id="assignment-filter"
+          [(ngModel)]="assignmentFilter"
+          (ngModelChange)="onAssignmentFilterChange()"
+          class="filter-select">
+          <option value="all">Todos</option>
+          <option value="assigned">Atribuídos</option>
+          <option value="unassigned">Não Atribuídos</option>
+        </select>
       </div>
     </div>
+  </div>
 
-    <!-- Leads Table -->
-    <div class="leads-section">
-      <h3>Leads ({{ filteredLeads.length }})</h3>
-      
-      <div *ngIf="loading" class="loading-container">
-        <ion-spinner></ion-spinner>
-        <p>Carregando leads...</p>
+  <!-- Leads Table -->
+  <div class="leads-section">
+    <h3>Leads ({{ filteredLeads.length }})</h3>
+    
+    @if (loading) {
+      <div class="loading">
+        <span class="spinner"></span>
+        Carregando leads...
       </div>
-
-      <div *ngIf="!loading && filteredLeads.length === 0" class="empty-state">
-        <ion-icon name="people-outline"></ion-icon>
-        <p>Nenhum lead encontrado</p>
+    } @else if (!loading && filteredLeads.length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="8.5" cy="7" r="4"></circle>
+          <line x1="20" y1="8" x2="20" y2="14"></line>
+          <line x1="23" y1="11" x2="17" y2="11"></line>
+        </svg>
+        <h3>Nenhum lead encontrado</h3>
+        <p>Não há leads para exibir com os filtros selecionados.</p>
       </div>
-
-      <div *ngIf="!loading && filteredLeads.length > 0" class="table-responsive">
+    } @else {
+      <div class="table-responsive">
         <table class="leads-table">
           <thead>
             <tr>
@@ -111,49 +141,67 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let lead of filteredLeads" (click)="selectLead(lead)" 
-              [class.selected]="selectedLead?.id === lead.id">
-              <td>
-                <ion-badge [color]="getScoreColor(lead.score)">
-                  {{ lead.score }}
-                </ion-badge>
-              </td>
-              <td>{{ lead.contactName || '-' }}</td>
-              <td>{{ lead.companyName || '-' }}</td>
-              <td>{{ lead.email || '-' }}</td>
-              <td>{{ lead.phone || '-' }}</td>
-              <td>{{ lead.planName || '-' }}</td>
-              <td>
-                <ion-badge [color]="getStatusColor(lead.status)">
-                  {{ getStatusLabel(lead.status) }}
-                </ion-badge>
-              </td>
-              <td>{{ formatDate(lead.capturedAt) }}</td>
-              <td>
-                <span *ngIf="lead.nextFollowUpDate" class="followup-date">
-                  {{ formatDate(lead.nextFollowUpDate) }}
-                </span>
-                <span *ngIf="!lead.nextFollowUpDate">-</span>
-              </td>
-              <td class="actions-cell">
-                <ion-button size="small" fill="clear" (click)="openAssignModal(lead); $event.stopPropagation()">
-                  <ion-icon name="person-add-outline"></ion-icon>
-                </ion-button>
-                <ion-button size="small" fill="clear" (click)="openFollowUpModal(lead); $event.stopPropagation()">
-                  <ion-icon name="calendar-outline"></ion-icon>
-                </ion-button>
-                <ion-button size="small" fill="clear" (click)="openActivityModal(lead); $event.stopPropagation()">
-                  <ion-icon name="add-circle-outline"></ion-icon>
-                </ion-button>
-              </td>
-            </tr>
+            @for (lead of filteredLeads; track lead.id) {
+              <tr (click)="selectLead(lead)" [class.selected]="selectedLead?.id === lead.id">
+                <td>
+                  <span class="status-badge" [ngClass]="getScoreColor(lead.score)">
+                    {{ lead.score }}
+                  </span>
+                </td>
+                <td>{{ lead.contactName || '-' }}</td>
+                <td>{{ lead.companyName || '-' }}</td>
+                <td>{{ lead.email || '-' }}</td>
+                <td>{{ lead.phone || '-' }}</td>
+                <td>{{ lead.planName || '-' }}</td>
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusColor(lead.status)">
+                    {{ getStatusLabel(lead.status) }}
+                  </span>
+                </td>
+                <td>{{ formatDate(lead.capturedAt) }}</td>
+                <td>
+                  @if (lead.nextFollowUpDate) {
+                    <span class="followup-date">{{ formatDate(lead.nextFollowUpDate) }}</span>
+                  } @else {
+                    <span>-</span>
+                  }
+                </td>
+                <td class="actions-cell">
+                  <button class="btn-icon" (click)="openAssignModal(lead); $event.stopPropagation()" title="Atribuir">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="8.5" cy="7" r="4"></circle>
+                      <line x1="20" y1="8" x2="20" y2="14"></line>
+                      <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                  </button>
+                  <button class="btn-icon" (click)="openFollowUpModal(lead); $event.stopPropagation()" title="Agendar Follow-up">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </button>
+                  <button class="btn-icon" (click)="openActivityModal(lead); $event.stopPropagation()" title="Adicionar Atividade">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="16"></line>
+                      <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
-    </div>
+    }
+  </div>
 
-    <!-- Lead Details Panel -->
-    <div *ngIf="selectedLead" class="lead-details-panel">
+  <!-- Lead Details Panel -->
+  @if (selectedLead) {
+    <div class="lead-details-panel">
       <h3>Detalhes do Lead</h3>
       
       <div class="detail-section">
@@ -170,168 +218,222 @@
         <p><strong>Plano:</strong> {{ selectedLead.planName || '-' }}</p>
         <p><strong>Última Etapa:</strong> {{ selectedLead.lastStepReached }}/6</p>
         <p><strong>Score:</strong> 
-          <ion-badge [color]="getScoreColor(selectedLead.score)">{{ selectedLead.score }}</ion-badge>
+          <span class="status-badge" [ngClass]="getScoreColor(selectedLead.score)">{{ selectedLead.score }}</span>
         </p>
         <p><strong>Status:</strong> 
-          <ion-badge [color]="getStatusColor(selectedLead.status)">{{ getStatusLabel(selectedLead.status) }}</ion-badge>
+          <span class="status-badge" [ngClass]="getStatusColor(selectedLead.status)">{{ getStatusLabel(selectedLead.status) }}</span>
         </p>
         <p><strong>Fonte:</strong> {{ selectedLead.leadSource }}</p>
       </div>
 
-      <div class="detail-section" *ngIf="selectedLead.notes">
-        <h4>Notas</h4>
-        <p class="notes-content">{{ selectedLead.notes }}</p>
-      </div>
+      @if (selectedLead.notes) {
+        <div class="detail-section">
+          <h4>Notas</h4>
+          <p class="notes-content">{{ selectedLead.notes }}</p>
+        </div>
+      }
 
       <div class="detail-section">
         <h4>Timeline de Atividades</h4>
-        <div *ngIf="selectedLeadActivities.length === 0" class="empty-activities">
-          <p>Nenhuma atividade registrada</p>
-        </div>
-        <div *ngFor="let activity of selectedLeadActivities" class="activity-item">
-          <div class="activity-header">
-            <ion-badge>{{ getActivityTypeLabel(activity.type) }}</ion-badge>
-            <span class="activity-date">{{ formatDateTime(activity.activityDate) }}</span>
+        @if (selectedLeadActivities.length === 0) {
+          <div class="empty-activities">
+            <p>Nenhuma atividade registrada</p>
           </div>
-          <h5>{{ activity.title }}</h5>
-          <p *ngIf="activity.description">{{ activity.description }}</p>
-          <p *ngIf="activity.outcome"><strong>Resultado:</strong> {{ activity.outcome }}</p>
-          <p *ngIf="activity.performedByUserName" class="activity-user">
-            Por: {{ activity.performedByUserName }}
-          </p>
-        </div>
+        } @else {
+          @for (activity of selectedLeadActivities; track activity.id) {
+            <div class="activity-item">
+              <div class="activity-header">
+                <span class="status-badge">{{ getActivityTypeLabel(activity.type) }}</span>
+                <span class="activity-date">{{ formatDateTime(activity.activityDate) }}</span>
+              </div>
+              <h5>{{ activity.title }}</h5>
+              @if (activity.description) {
+                <p>{{ activity.description }}</p>
+              }
+              @if (activity.outcome) {
+                <p><strong>Resultado:</strong> {{ activity.outcome }}</p>
+              }
+              @if (activity.performedByUserName) {
+                <p class="activity-user">Por: {{ activity.performedByUserName }}</p>
+              }
+            </div>
+          }
+        }
       </div>
 
       <div class="detail-actions">
-        <ion-button expand="block" (click)="openActivityModal(selectedLead)">
+        <button class="btn btn-primary" (click)="openActivityModal(selectedLead)">
           Adicionar Atividade
-        </ion-button>
-        <ion-button expand="block" fill="outline" (click)="openNotesModal(selectedLead)">
+        </button>
+        <button class="btn btn-secondary" (click)="openNotesModal(selectedLead)">
           Adicionar Notas
-        </ion-button>
+        </button>
       </div>
     </div>
-  </div>
+  }
 
   <!-- Activity Modal -->
-  <ion-modal [isOpen]="showActivityModal" (didDismiss)="showActivityModal = false">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Adicionar Atividade</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="showActivityModal = false">Fechar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item>
-          <ion-label position="stacked">Tipo de Atividade</ion-label>
-          <ion-select [(ngModel)]="newActivity.type">
-            <ion-select-option [value]="ActivityType.PhoneCall">Ligação</ion-select-option>
-            <ion-select-option [value]="ActivityType.Email">Email</ion-select-option>
-            <ion-select-option [value]="ActivityType.Meeting">Reunião</ion-select-option>
-            <ion-select-option [value]="ActivityType.Note">Nota</ion-select-option>
-            <ion-select-option [value]="ActivityType.Other">Outro</ion-select-option>
-          </ion-select>
-        </ion-item>
+  @if (showActivityModal) {
+    <div class="modal-overlay" (click)="showActivityModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Adicionar Atividade</h3>
+          <button class="modal-close" (click)="showActivityModal = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="activity-type">Tipo de Atividade</label>
+            <select id="activity-type" [(ngModel)]="newActivity.type" class="form-control">
+              <option [value]="ActivityType.PhoneCall">Ligação</option>
+              <option [value]="ActivityType.Email">Email</option>
+              <option [value]="ActivityType.Meeting">Reunião</option>
+              <option [value]="ActivityType.Note">Nota</option>
+              <option [value]="ActivityType.Other">Outro</option>
+            </select>
+          </div>
 
-        <ion-item>
-          <ion-label position="stacked">Título *</ion-label>
-          <ion-input [(ngModel)]="newActivity.title" placeholder="Ex: Ligação de Follow-up"></ion-input>
-        </ion-item>
+          <div class="form-group">
+            <label for="activity-title">Título *</label>
+            <input 
+              id="activity-title"
+              type="text"
+              [(ngModel)]="newActivity.title"
+              placeholder="Ex: Ligação de Follow-up"
+              class="form-control">
+          </div>
 
-        <ion-item>
-          <ion-label position="stacked">Descrição</ion-label>
-          <ion-textarea [(ngModel)]="newActivity.description" rows="4"></ion-textarea>
-        </ion-item>
+          <div class="form-group">
+            <label for="activity-description">Descrição</label>
+            <textarea 
+              id="activity-description"
+              [(ngModel)]="newActivity.description"
+              rows="4"
+              class="form-control"></textarea>
+          </div>
 
-        <ion-item>
-          <ion-label position="stacked">Duração (minutos)</ion-label>
-          <ion-input type="number" [(ngModel)]="newActivity.durationMinutes"></ion-input>
-        </ion-item>
+          <div class="form-group">
+            <label for="activity-duration">Duração (minutos)</label>
+            <input 
+              id="activity-duration"
+              type="number"
+              [(ngModel)]="newActivity.durationMinutes"
+              class="form-control">
+          </div>
 
-        <ion-item>
-          <ion-label position="stacked">Resultado</ion-label>
-          <ion-textarea [(ngModel)]="newActivity.outcome" rows="3"></ion-textarea>
-        </ion-item>
+          <div class="form-group">
+            <label for="activity-outcome">Resultado</label>
+            <textarea 
+              id="activity-outcome"
+              [(ngModel)]="newActivity.outcome"
+              rows="3"
+              class="form-control"></textarea>
+          </div>
 
-        <ion-button expand="block" (click)="submitActivity()" [disabled]="!newActivity.title">
-          Salvar Atividade
-        </ion-button>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+          <button class="btn btn-primary btn-block" (click)="submitActivity()" [disabled]="!newActivity.title">
+            Salvar Atividade
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 
   <!-- Notes Modal -->
-  <ion-modal [isOpen]="showNotesModal" (didDismiss)="showNotesModal = false">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Adicionar Notas</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="showNotesModal = false">Fechar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item>
-          <ion-label position="stacked">Notas *</ion-label>
-          <ion-textarea [(ngModel)]="newNotes" rows="6" placeholder="Digite suas notas aqui..."></ion-textarea>
-        </ion-item>
+  @if (showNotesModal) {
+    <div class="modal-overlay" (click)="showNotesModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Adicionar Notas</h3>
+          <button class="modal-close" (click)="showNotesModal = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="notes-textarea">Notas *</label>
+            <textarea 
+              id="notes-textarea"
+              [(ngModel)]="newNotes"
+              rows="6"
+              placeholder="Digite suas notas aqui..."
+              class="form-control"></textarea>
+          </div>
 
-        <ion-button expand="block" (click)="submitNotes()" [disabled]="!newNotes">
-          Salvar Notas
-        </ion-button>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+          <button class="btn btn-primary btn-block" (click)="submitNotes()" [disabled]="!newNotes">
+            Salvar Notas
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 
   <!-- Follow-up Modal -->
-  <ion-modal [isOpen]="showFollowUpModal" (didDismiss)="showFollowUpModal = false">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Agendar Follow-up</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="showFollowUpModal = false">Fechar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item>
-          <ion-label position="stacked">Data do Follow-up *</ion-label>
-          <ion-input type="datetime-local" [(ngModel)]="followUpDate"></ion-input>
-        </ion-item>
+  @if (showFollowUpModal) {
+    <div class="modal-overlay" (click)="showFollowUpModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Agendar Follow-up</h3>
+          <button class="modal-close" (click)="showFollowUpModal = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="followup-date">Data do Follow-up *</label>
+            <input 
+              id="followup-date"
+              type="datetime-local"
+              [(ngModel)]="followUpDate"
+              class="form-control">
+          </div>
 
-        <ion-button expand="block" (click)="submitFollowUp()" [disabled]="!followUpDate">
-          Agendar
-        </ion-button>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+          <button class="btn btn-primary btn-block" (click)="submitFollowUp()" [disabled]="!followUpDate">
+            Agendar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 
   <!-- Assign Modal -->
-  <ion-modal [isOpen]="showAssignModal" (didDismiss)="showAssignModal = false">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Atribuir Lead</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="showAssignModal = false">Fechar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item>
-          <ion-label position="stacked">ID do Usuário *</ion-label>
-          <ion-input [(ngModel)]="assignUserId" placeholder="Digite o ID do usuário"></ion-input>
-        </ion-item>
+  @if (showAssignModal) {
+    <div class="modal-overlay" (click)="showAssignModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Atribuir Lead</h3>
+          <button class="modal-close" (click)="showAssignModal = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="assign-user-id">ID do Usuário *</label>
+            <input 
+              id="assign-user-id"
+              type="text"
+              [(ngModel)]="assignUserId"
+              placeholder="Digite o ID do usuário"
+              class="form-control">
+          </div>
 
-        <ion-button expand="block" (click)="submitAssignment()" [disabled]="!assignUserId">
-          Atribuir
-        </ion-button>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-</ion-content>
+          <button class="btn btn-primary btn-block" (click)="submitAssignment()" [disabled]="!assignUserId">
+            Atribuir
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
