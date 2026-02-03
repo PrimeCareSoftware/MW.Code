@@ -69,3 +69,136 @@ export interface AvailableSlot {
   durationMinutes: number;
   isAvailable: boolean;
 }
+
+// Blocked Time Slot Types
+export enum BlockedTimeSlotType {
+  Break = 1,           // Intervalo (almoço, descanso)
+  Unavailable = 2,     // Indisponível (férias, compromisso pessoal)
+  Maintenance = 3,     // Manutenção (limpeza, equipamento)
+  Training = 4,        // Treinamento
+  Meeting = 5,         // Reunião
+  Other = 6           // Outro motivo
+}
+
+export const BlockedTimeSlotTypeLabels = {
+  [BlockedTimeSlotType.Break]: 'Intervalo',
+  [BlockedTimeSlotType.Unavailable]: 'Indisponível',
+  [BlockedTimeSlotType.Maintenance]: 'Manutenção',
+  [BlockedTimeSlotType.Training]: 'Treinamento',
+  [BlockedTimeSlotType.Meeting]: 'Reunião',
+  [BlockedTimeSlotType.Other]: 'Outro'
+};
+
+// Recurrence Frequency
+export enum RecurrenceFrequency {
+  Daily = 1,
+  Weekly = 2,
+  Biweekly = 3,
+  Monthly = 4,
+  Custom = 5
+}
+
+export const RecurrenceFrequencyLabels = {
+  [RecurrenceFrequency.Daily]: 'Diário',
+  [RecurrenceFrequency.Weekly]: 'Semanal',
+  [RecurrenceFrequency.Biweekly]: 'Quinzenal',
+  [RecurrenceFrequency.Monthly]: 'Mensal',
+  [RecurrenceFrequency.Custom]: 'Personalizado'
+};
+
+// Recurrence Days (flags)
+export enum RecurrenceDays {
+  None = 0,
+  Sunday = 1,
+  Monday = 2,
+  Tuesday = 4,
+  Wednesday = 8,
+  Thursday = 16,
+  Friday = 32,
+  Saturday = 64
+}
+
+export const RecurrenceDaysLabels = {
+  [RecurrenceDays.Sunday]: 'Domingo',
+  [RecurrenceDays.Monday]: 'Segunda',
+  [RecurrenceDays.Tuesday]: 'Terça',
+  [RecurrenceDays.Wednesday]: 'Quarta',
+  [RecurrenceDays.Thursday]: 'Quinta',
+  [RecurrenceDays.Friday]: 'Sexta',
+  [RecurrenceDays.Saturday]: 'Sábado'
+};
+
+export interface BlockedTimeSlot {
+  id: string;
+  clinicId: string;
+  professionalId?: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: BlockedTimeSlotType;
+  reason?: string;
+  isRecurring: boolean;
+  recurringPatternId?: string;
+  createdAt: string;
+  updatedAt?: string;
+  clinicName?: string;
+  professionalName?: string;
+}
+
+export interface CreateBlockedTimeSlot {
+  clinicId: string;
+  professionalId?: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: BlockedTimeSlotType;
+  reason?: string;
+}
+
+export interface UpdateBlockedTimeSlot {
+  startTime: string;
+  endTime: string;
+  type: BlockedTimeSlotType;
+  reason?: string;
+}
+
+export interface RecurringAppointmentPattern {
+  id: string;
+  clinicId: string;
+  professionalId?: string;
+  patientId?: string;
+  frequency: RecurrenceFrequency;
+  interval: number;
+  daysOfWeek?: number; // RecurrenceDays flags
+  dayOfMonth?: number;
+  startDate: string;
+  endDate?: string;
+  occurrencesCount?: number;
+  startTime: string;
+  endTime: string;
+  durationMinutes?: number;
+  appointmentType?: string;
+  blockedSlotType?: BlockedTimeSlotType;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  clinicName?: string;
+  professionalName?: string;
+  patientName?: string;
+}
+
+export interface CreateRecurringBlockedSlots {
+  clinicId: string;
+  professionalId?: string;
+  frequency: RecurrenceFrequency;
+  interval: number;
+  daysOfWeek?: number;
+  dayOfMonth?: number;
+  startDate: string;
+  endDate?: string;
+  occurrencesCount?: number;
+  startTime: string;
+  endTime: string;
+  blockedSlotType: BlockedTimeSlotType;
+  notes?: string;
+}
