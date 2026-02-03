@@ -1,218 +1,175 @@
 <app-header></app-header>
 
-<div class="clinic-search-container">
-  <div class="search-header">
-    <h1>Encontre sua clínica</h1>
-    <p class="subtitle">Busque profissionais de saúde próximos a você</p>
-  </div>
-
-  <!-- Filtros de Busca -->
-  <div class="search-filters card">
-    <div class="filter-group">
-      <div class="input-wrapper">
-        <input 
-          type="text" 
-          [(ngModel)]="searchName" 
-          placeholder="Nome da clínica"
-          class="form-control"
-          (keyup.enter)="onSearch()"
-        />
+<main class="omni-care-site">
+  <section class="section-padding">
+    <div class="container-custom">
+      <!-- Header -->
+      <div class="clinic-search-header">
+        <span class="section-badge">
+          Rede de Clínicas
+        </span>
+        <h1 class="section-title">
+          Encontre a clínica <span class="text-gradient">perfeita para você</span>
+        </h1>
+        <p class="section-description">
+          Mais de 500 clínicas e profissionais credenciados em todo o Brasil.
+        </p>
       </div>
-      
-      <div class="input-wrapper">
-        <select 
-          [(ngModel)]="searchClinicType" 
-          class="form-control"
-          (change)="onSearch()">
-          <option *ngFor="let type of clinicTypes" [value]="type.value">
-            {{ type.label }}
-          </option>
-        </select>
-      </div>
-      
-      <div class="input-wrapper">
-        <input 
-          type="text" 
-          [(ngModel)]="searchCity" 
-          placeholder="Cidade"
-          class="form-control"
-          (keyup.enter)="onSearch()"
-        />
-      </div>
-      
-      <div class="input-wrapper">
-        <input 
-          type="text" 
-          [(ngModel)]="searchState" 
-          placeholder="Estado (ex: SP)"
-          class="form-control"
-          maxlength="2"
-          (keyup.enter)="onSearch()"
-        />
-      </div>
-    </div>
-    <div class="filter-actions">
-      <button class="btn btn-primary" (click)="onSearch()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="7" cy="7" r="5"/>
-          <path d="M14 14l-3-3"/>
-        </svg>
-        Buscar
-      </button>
-      <button class="btn btn-secondary" (click)="clearFilters()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M14 2L2 14M2 2l12 12"/>
-        </svg>
-        Limpar
-      </button>
-    </div>
-  </div>
 
-  <!-- Loading State -->
-  <div *ngIf="loading" class="loading-state">
-    <div class="spinner"></div>
-    <p>Carregando clínicas...</p>
-  </div>
-
-  <!-- Error State -->
-  <div *ngIf="error && !loading" class="error-state alert alert-danger">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <circle cx="12" cy="12" r="10"/>
-      <path d="M12 8v4M12 16h.01"/>
-    </svg>
-    <p>{{ error }}</p>
-    <button class="btn btn-primary" (click)="searchClinics()">Tentar Novamente</button>
-  </div>
-
-  <!-- Results -->
-  <div *ngIf="!loading && !error" class="search-results">
-    <div class="results-header">
-      <p *ngIf="totalCount > 0">
-        Encontramos <strong>{{ totalCount }}</strong> clínica<span *ngIf="totalCount !== 1">s</span>
-      </p>
-      <p *ngIf="totalCount === 0">
-        Nenhuma clínica encontrada. Tente ajustar os filtros de busca.
-      </p>
-    </div>
-
-    <!-- Clinic Cards -->
-    <div class="clinic-grid">
-      <div *ngFor="let clinic of clinics" class="clinic-card card">
-        <div class="clinic-header">
-          <div class="clinic-title-section">
-            <h3>{{ clinic.name }}</h3>
-            <span class="clinic-type-badge">{{ getClinicTypeLabel(clinic.clinicType) }}</span>
+      <!-- Filters -->
+      <div class="card-elevated search-bar">
+        <div class="search-filters">
+          <div class="search-input-wrapper">
+            <span class="material-icons search-icon">search</span>
+            <input 
+              type="text" 
+              [(ngModel)]="searchName" 
+              placeholder="Buscar clínica por nome..."
+              class="omni-input"
+              (keyup.enter)="onSearch()"
+            />
           </div>
-          <span class="badge" [class.badge-success]="clinic.isAcceptingNewPatients" 
-                            [class.badge-secondary]="!clinic.isAcceptingNewPatients">
-            {{ clinic.isAcceptingNewPatients ? 'Aceitando pacientes' : 'Indisponível' }}
-          </span>
-        </div>
-        
-        <div class="clinic-info">
-          <p class="trade-name" *ngIf="clinic.tradeName !== clinic.name">{{ clinic.tradeName }}</p>
-          
-          <div class="info-row">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M13 6.5c0 3.5-5 7.5-5 7.5S3 10 3 6.5C3 4 5 2 8 2s5 2 5 4.5z"/>
-              <circle cx="8" cy="6.5" r="1.5"/>
-            </svg>
-            <span>{{ clinic.address }}</span>
+
+          <div class="filter-select-wrapper">
+            <span class="material-icons filter-icon">location_on</span>
+            <input 
+              type="text" 
+              [(ngModel)]="searchCity" 
+              placeholder="Cidade"
+              class="omni-input"
+              (keyup.enter)="onSearch()"
+            />
           </div>
-          
-          <div class="info-row" *ngIf="clinic.city && clinic.state">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <rect x="2" y="4" width="12" height="10" rx="1"/>
-              <path d="M2 7h12M5 4V2M11 4V2"/>
-            </svg>
-            <span>{{ clinic.city }} - {{ clinic.state }}</span>
-          </div>
-          
-          <div class="info-row">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="8" cy="8" r="6"/>
-              <path d="M8 4v4l3 2"/>
-            </svg>
-            <span>{{ formatTime(clinic.openingTime) }} - {{ formatTime(clinic.closingTime) }}</span>
+
+          <div class="filter-select-wrapper">
+            <span class="material-icons filter-icon">medical_services</span>
+            <select 
+              [(ngModel)]="searchClinicType" 
+              class="omni-select"
+              (change)="onSearch()">
+              <option *ngFor="let type of clinicTypes" [value]="type.value">
+                {{ type.label }}
+              </option>
+            </select>
           </div>
         </div>
+      </div>
 
-        <div class="clinic-contact">
-          <div class="contact-buttons">
-            <button 
-              *ngIf="hasWhatsApp(clinic)"
-              class="btn btn-whatsapp" 
-              (click)="openWhatsApp(clinic)"
-              title="Entrar em contato via WhatsApp">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                <path d="M13.5 2.5C12 1 10 0 8 0 3.5 0 0 3.5 0 8c0 1.4.4 2.8 1 4L0 16l4.2-1C5.3 15.6 6.6 16 8 16c4.5 0 8-3.5 8-8 0-2-.7-4-2.5-5.5zM8 14.5c-1.2 0-2.4-.3-3.5-1l-.3-.2-2.7.7.7-2.6-.2-.3c-.7-1.1-1-2.3-1-3.6 0-3.6 3-6.5 6.5-6.5 1.7 0 3.4.7 4.6 1.9 1.2 1.2 1.9 2.9 1.9 4.6 0 3.6-2.9 6.5-6.5 6.5zm3.6-4.9c-.2-.1-1.2-.6-1.4-.7-.2-.1-.3-.1-.4.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.8-.3-1.5-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4.1-.1.2-.2.3-.4.1-.1.1-.2.2-.4 0-.1 0-.3-.1-.4-.1-.1-.4-1-.6-1.4-.2-.3-.3-.3-.4-.3h-.4c-.1 0-.3.1-.5.3-.2.2-.7.7-.7 1.7s.7 2 .8 2.1c.1.1 1.4 2.1 3.4 2.9.5.2.8.3 1.1.4.5.2 1 .1 1.3.1.4-.1 1.2-.5 1.4-1 .2-.5.2-.9.1-1-.1-.1-.2-.2-.4-.3z"/>
-              </svg>
-              WhatsApp
-            </button>
-            
-            <a 
-              [href]="'tel:' + clinic.phone"
-              class="btn btn-phone"
-              title="Ligar para a clínica">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <path d="M14 11v2c0 .5-.5 1-1 1-6.5 0-11-4.5-11-11 0-.5.5-1 1-1h2c.5 0 1 .5 1 1 0 1 .2 2 .5 2.5.2.3.1.7-.1.9L5 7.5c1 1.5 2.5 3 4 4l1.1-1.4c.2-.2.6-.3.9-.1.5.3 1.5.5 2.5.5.5 0 1 .5 1 1z"/>
-              </svg>
-              Ligar
-            </a>
-            
-            <a 
-              [href]="'mailto:' + clinic.email"
-              class="btn btn-email"
-              title="Enviar e-mail">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <rect x="1" y="3" width="14" height="10" rx="1"/>
-                <path d="M1 4l7 5 7-5"/>
-              </svg>
-              E-mail
-            </a>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando clínicas...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-state">
+        <span class="material-icons error-icon">error</span>
+        <p>{{ error }}</p>
+        <button class="omni-btn omni-btn-primary" (click)="searchClinics()">Tentar Novamente</button>
+      </div>
+
+      <!-- Results -->
+      <div *ngIf="!loading && !error" class="search-results">
+        <p class="results-count">
+          <span *ngIf="totalCount > 0">{{ totalCount }} clínicas encontradas</span>
+          <span *ngIf="totalCount === 0">Nenhuma clínica encontrada com os filtros selecionados.</span>
+        </p>
+
+        <!-- Clinics Grid -->
+        <div class="clinics-grid">
+          <div *ngFor="let clinic of clinics; let i = index" 
+               class="clinic-card card-elevated"
+               [style.animation-delay]="(i * 0.05) + 's'">
+            <!-- Image/Icon Header -->
+            <div class="clinic-image">
+              <div class="clinic-icon-wrapper">
+                <span class="material-icons clinic-icon">medical_services</span>
+              </div>
+              <div class="clinic-rating" *ngIf="clinic.rating">
+                <span class="material-icons star-icon">star</span>
+                {{ clinic.rating | number:'1.1-1' }} ({{ clinic.reviewCount || 0 }})
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="clinic-content">
+              <div class="clinic-header">
+                <h3 class="clinic-name">{{ clinic.name }}</h3>
+                <span class="clinic-specialty-badge">{{ getClinicTypeLabel(clinic.clinicType) }}</span>
+              </div>
+
+              <div class="clinic-info">
+                <div class="info-item">
+                  <span class="material-icons info-icon">location_on</span>
+                  <span class="info-text">{{ clinic.address }}</span>
+                </div>
+
+                <div class="info-item" *ngIf="clinic.city && clinic.state">
+                  <span class="material-icons info-icon">place</span>
+                  <span class="info-text">{{ clinic.city }} - {{ clinic.state }}</span>
+                </div>
+
+                <div class="info-item" *ngIf="clinic.openingTime && clinic.closingTime">
+                  <span class="material-icons info-icon">schedule</span>
+                  <span class="info-text">{{ formatTime(clinic.openingTime) }} - {{ formatTime(clinic.closingTime) }}</span>
+                </div>
+
+                <div class="info-item" *ngIf="clinic.phone">
+                  <span class="material-icons info-icon">phone</span>
+                  <span class="info-text">{{ clinic.phone }}</span>
+                </div>
+              </div>
+
+              <div class="clinic-footer">
+                <span class="professionals-count" *ngIf="clinic.professionalCount">
+                  {{ clinic.professionalCount }} profissionais
+                </span>
+                <button 
+                  class="omni-btn omni-btn-primary btn-schedule" 
+                  (click)="scheduleAppointment(clinic)"
+                  [disabled]="!clinic.isAcceptingNewPatients">
+                  <span class="material-icons btn-icon">event</span>
+                  Agendar
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="clinic-actions">
+        <!-- Empty State -->
+        <div *ngIf="totalCount === 0" class="empty-state">
+          <span class="material-icons empty-icon">search_off</span>
+          <p>Nenhuma clínica encontrada com os filtros selecionados.</p>
+          <button class="omni-btn omni-btn-secondary" (click)="clearFilters()">Limpar Filtros</button>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="totalPages > 1" class="pagination">
           <button 
-            class="btn btn-primary btn-schedule" 
-            (click)="scheduleAppointment(clinic)"
-            [disabled]="!clinic.isAcceptingNewPatients">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <rect x="2" y="3" width="12" height="11" rx="1"/>
-              <path d="M5 1v3M11 1v3M2 6h12"/>
-            </svg>
-            Agendar consulta
+            class="omni-btn omni-btn-outline" 
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1">
+            ‹ Anterior
+          </button>
+          
+          <button 
+            *ngFor="let page of getPaginationArray()"
+            class="omni-btn omni-btn-outline"
+            [class.active]="page === currentPage"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+          
+          <button 
+            class="omni-btn omni-btn-outline" 
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">
+            Próxima ›
           </button>
         </div>
       </div>
     </div>
-
-    <!-- Pagination -->
-    <div *ngIf="totalPages > 1" class="pagination">
-      <button 
-        class="btn btn-sm" 
-        (click)="goToPage(currentPage - 1)"
-        [disabled]="currentPage === 1">
-        ‹ Anterior
-      </button>
-      
-      <button 
-        *ngFor="let page of getPaginationArray()"
-        class="btn btn-sm"
-        [class.active]="page === currentPage"
-        (click)="goToPage(page)">
-        {{ page }}
-      </button>
-      
-      <button 
-        class="btn btn-sm" 
-        (click)="goToPage(currentPage + 1)"
-        [disabled]="currentPage === totalPages">
-        Próxima ›
-      </button>
-    </div>
-  </div>
-</div>
+  </section>
+</main>
 
 <app-footer></app-footer>

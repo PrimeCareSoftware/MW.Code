@@ -59,10 +59,6 @@ export const routes: Routes = [
       { 
         path: 'blog/:slug', 
         loadComponent: () => import('./pages/site/blog/blog-article.component').then(m => m.BlogArticleComponent)
-      },
-      {
-        path: 'omni-care',
-        loadComponent: () => import('./pages/site/omni-care/home/omni-care-home.component').then(m => m.OmniCareHomeComponent)
       }
     ]
   },

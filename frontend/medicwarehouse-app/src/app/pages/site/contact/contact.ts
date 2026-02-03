@@ -19,6 +19,8 @@ export class ContactComponent {
   whatsappNumber = environment.whatsappNumber;
   companyEmail = environment.companyEmail;
   companyPhone = environment.companyPhone;
+  companyAddress = environment.companyAddress;
+  companyAddressDetails = environment.companyAddressDetails;
   
   model: ContactRequest = {
     name: '',
@@ -31,6 +33,7 @@ export class ContactComponent {
   isSubmitting = false;
   submitSuccess = false;
   submitError = '';
+  showSuccessMessage = false;
 
   onSubmit(): void {
     if (!this.isValid()) {
@@ -45,6 +48,7 @@ export class ContactComponent {
     this.subscriptionService.sendContactMessage(this.model).subscribe({
       next: (response) => {
         this.submitSuccess = true;
+        this.showSuccessMessage = true;
         this.resetForm();
         this.isSubmitting = false;
       },
@@ -62,6 +66,9 @@ export class ContactComponent {
   }
 
   resetForm(): void {
+    this.submitSuccess = false;
+    this.showSuccessMessage = false;
+    this.submitError = '';
     this.model = {
       name: '',
       email: '',
@@ -73,5 +80,9 @@ export class ContactComponent {
 
   openWhatsApp(): void {
     window.open(`https://wa.me/${this.whatsappNumber}`, '_blank');
+  }
+
+  resetSuccessState(): void {
+    this.resetForm();
   }
 }
