@@ -565,7 +565,7 @@ Com base nos objetivos da FASE 2 do PLANO_MELHORIAS_WEBSITE_UXUI.md:
 
 ✅ **PROMPT 3: Design System Atualização** foi implementado com sucesso!
 
-Todas as melhorias de UX/UI especificadas no PLANO_MELHORIAS_WEBSITE_UXUI.md (Fase 2) foram adicionadas ao sistema de design do PrimeCare. O código está pronto para uso e todos os componentes são reutilizáveis.
+Todas as melhorias de UX/UI especificadas no PLANO_MELHORIAS_WEBSITE_UXUI.md (Fase 2) foram adicionadas ao sistema de design do Omni Care. O código está pronto para uso e todos os componentes são reutilizáveis.
 
 **Impacto esperado:**
 - Experiência de usuário mais moderna e polida

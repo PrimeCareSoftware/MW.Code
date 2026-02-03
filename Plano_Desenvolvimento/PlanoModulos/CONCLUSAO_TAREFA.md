@@ -391,7 +391,7 @@ PlanoModulos/
 ## 📞 Informações de Contato
 
 **Repositório:**
-- GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- GitHub: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - Branch: `copilot/update-development-plan`
 - PR: Em andamento
 

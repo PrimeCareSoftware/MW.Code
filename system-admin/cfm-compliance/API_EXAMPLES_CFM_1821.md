@@ -611,7 +611,7 @@ PUT /api/medicalrecords/{id}
 
 ---
 
-**Documento Elaborado Por:** Equipe PrimeCare Software  
+**Documento Elaborado Por:** Equipe Omni Care Software  
 **Data de Atualização:** Janeiro 2026  
 **Versão:** 1.0  
 **Status:** Oficial

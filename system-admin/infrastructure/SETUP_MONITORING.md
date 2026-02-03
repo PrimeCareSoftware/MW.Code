@@ -1,4 +1,4 @@
-# Setup do Sistema de Monitoramento - PrimeCare Software
+# Setup do Sistema de Monitoramento - Omni Care Software
 
 ## 🚀 Início Rápido (3 passos)
 
@@ -33,13 +33,13 @@ Os logs aparecem automaticamente na saída do terminal.
 #### Em Arquivo
 ```bash
 # Ver todos os logs de hoje
-cat Logs/primecare-$(date +%Y%m%d).log
+cat Logs/omnicare-$(date +%Y%m%d).log
 
 # Ver apenas erros
-cat Logs/primecare-errors-$(date +%Y%m%d).log
+cat Logs/omnicare-errors-$(date +%Y%m%d).log
 
 # Seguir logs em tempo real
-tail -f Logs/primecare-$(date +%Y%m%d).log
+tail -f Logs/omnicare-$(date +%Y%m%d).log
 ```
 
 #### No Seq (se configurado)
@@ -53,7 +53,7 @@ tail -f Logs/primecare-$(date +%Y%m%d).log
 
 **No terminal:**
 ```bash
-grep "SLOW REQUEST" Logs/primecare-*.log
+grep "SLOW REQUEST" Logs/omnicare-*.log
 ```
 
 **No Seq:**
@@ -65,7 +65,7 @@ grep "SLOW REQUEST" Logs/primecare-*.log
 
 **No terminal:**
 ```bash
-tail -20 Logs/primecare-errors-$(date +%Y%m%d).log
+tail -20 Logs/omnicare-errors-$(date +%Y%m%d).log
 ```
 
 **No Seq:**
@@ -90,10 +90,10 @@ tail -20 Logs/primecare-errors-$(date +%Y%m%d).log
 **No terminal:**
 ```bash
 # Encontrar RequestId no erro
-grep "ERROR" Logs/primecare-errors-*.log | tail -1
+grep "ERROR" Logs/omnicare-errors-*.log | tail -1
 
 # Buscar todo o contexto
-grep "RequestId=abc-123" Logs/primecare-*.log
+grep "RequestId=abc-123" Logs/omnicare-*.log
 ```
 
 **No Seq:**
@@ -165,23 +165,23 @@ docker logs seq
 
 ```bash
 # Contar requisições de hoje
-grep "Request initiated" Logs/primecare-$(date +%Y%m%d).log | wc -l
+grep "Request initiated" Logs/omnicare-$(date +%Y%m%d).log | wc -l
 
 # Top 10 endpoints mais usados
-grep "Request initiated" Logs/primecare-*.log | awk '{print $7}' | sort | uniq -c | sort -rn | head -10
+grep "Request initiated" Logs/omnicare-*.log | awk '{print $7}' | sort | uniq -c | sort -rn | head -10
 
 # Erros agrupados por tipo
-grep "\[ERR\]" Logs/primecare-errors-*.log | awk -F'ExceptionType=' '{print $2}' | awk '{print $1}' | sort | uniq -c
+grep "\[ERR\]" Logs/omnicare-errors-*.log | awk -F'ExceptionType=' '{print $2}' | awk '{print $1}' | sort | uniq -c
 ```
 
 ### Limpeza de Logs
 
 ```bash
 # Remover logs antigos (mais de 30 dias)
-find Logs/ -name "primecare-*.log" -mtime +30 -delete
+find Logs/ -name "omnicare-*.log" -mtime +30 -delete
 
 # Remover logs de erro antigos (mais de 60 dias)
-find Logs/ -name "primecare-errors-*.log" -mtime +60 -delete
+find Logs/ -name "omnicare-errors-*.log" -mtime +60 -delete
 ```
 
 ## 📚 Documentação Completa

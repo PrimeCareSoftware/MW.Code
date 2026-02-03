@@ -6,7 +6,7 @@
 
 ## 📊 Executive Summary
 
-Esta análise compara o **PrimeCare Software (MedicWarehouse)** com os principais concorrentes do mercado de gestão clínica no Brasil, identificando pontos fortes, oportunidades de melhoria e recomendações estratégicas para tornar o produto mais competitivo.
+Esta análise compara o **Omni Care Software (MedicWarehouse)** com os principais concorrentes do mercado de gestão clínica no Brasil, identificando pontos fortes, oportunidades de melhoria e recomendações estratégicas para tornar o produto mais competitivo.
 
 ### Principais Descobertas
 
@@ -148,7 +148,7 @@ Esta análise compara o **PrimeCare Software (MedicWarehouse)** com os principai
 
 ## 📈 Análise Comparativa - Matriz de Características
 
-| Característica | PrimeCare | iClinic | Clinicorp | Amplimed | Doctoralia | HiDoctor |
+| Característica | Omni Care | iClinic | Clinicorp | Amplimed | Doctoralia | HiDoctor |
 |----------------|-----------|---------|-----------|----------|------------|----------|
 | **Agenda** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Prontuário** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -205,7 +205,7 @@ Esta análise compara o **PrimeCare Software (MedicWarehouse)** com os principai
 - Vídeos tutoriais curtos
 - Templates pré-configurados
 
-### Estado Atual do PrimeCare
+### Estado Atual do Omni Care
 
 #### ✅ Pontos Fortes UX/UI
 1. **Estrutura sólida:** Angular 20 + Material Design
@@ -260,7 +260,7 @@ Esta análise compara o **PrimeCare Software (MedicWarehouse)** com os principai
 | Clinicorp | Consultar | Consultar | Consultar | Sob consulta |
 | Doctoralia | R$ 150 | R$ 250 | R$ 400 | 14 dias |
 | HiDoctor | R$ 129 | R$ 219 | R$ 399 | 7 dias |
-| **PrimeCare** | **A definir** | **A definir** | **A definir** | **15 dias** |
+| **Omni Care** | **A definir** | **A definir** | **A definir** | **15 dias** |
 
 ### Recomendação de Precificação
 
@@ -307,7 +307,7 @@ Esta análise compara o **PrimeCare Software (MedicWarehouse)** com os principai
 
 ## 🚀 Tecnologias - Análise Comparativa
 
-### Stack Tecnológico - PrimeCare
+### Stack Tecnológico - Omni Care
 
 **Frontend:**
 - ✅ Angular 20 (latest) - Moderno, rápido, escalável
@@ -339,7 +339,7 @@ Esta análise compara o **PrimeCare Software (MedicWarehouse)** com os principai
 | Doctoralia | Vue.js | PHP/Ruby | MySQL | Multi-país |
 | HiDoctor | jQuery | C# .NET | SQL Server | Desktop + Web |
 
-### Vantagens Tecnológicas do PrimeCare
+### Vantagens Tecnológicas do Omni Care
 
 1. ✅ **Angular 20 SSR:** Performance superior, SEO friendly
 2. ✅ **PWA avançado:** Funcionalidade offline robusta

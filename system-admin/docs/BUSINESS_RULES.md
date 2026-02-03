@@ -1,8 +1,8 @@
-# Regras de Negócio - PrimeCare Software
+# Regras de Negócio - Omni Care Software
 
 ## Visão Geral
 
-O PrimeCare Software é um sistema multitenant de gestão para consultórios e clínicas médicas (SaaS) que implementa regras de negócio específicas para garantir a privacidade dos dados médicos e a flexibilidade de vínculos entre pacientes e clínicas.
+O Omni Care Software é um sistema multitenant de gestão para consultórios e clínicas médicas (SaaS) que implementa regras de negócio específicas para garantir a privacidade dos dados médicos e a flexibilidade de vínculos entre pacientes e clínicas.
 
 ## 1. Gestão de Pacientes e Vínculos com Clínicas
 
@@ -503,15 +503,15 @@ Todos os registros mantêm:
 
 Para dúvidas, sugestões ou suporte técnico:
 
-- **Email**: contato@primecaresoftware.com
+- **Email**: contato@omnicaresoftware.com
 - **Documentação Técnica**: Consulte README.md e IMPLEMENTATION.md
-- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
+- **Issues**: https://github.com/Omni Care Software/MW.Code/issues
 
 ---
 
 **Última Atualização**: Janeiro 2025  
 **Versão do Documento**: 1.0  
-**Autor**: Equipe PrimeCare Software
+**Autor**: Equipe Omni Care Software
 
 ## 6. Sistema de Assinaturas e Cobrança
 
@@ -946,4 +946,4 @@ A documentação visual complementa as regras de negócio descritas neste docume
 
 **Data**: Janeiro 2025  
 **Versão**: 1.1  
-**Equipe**: PrimeCare Software
+**Equipe**: Omni Care Software

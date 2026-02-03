@@ -55,7 +55,7 @@ Criados dois guias completos em português para usuários finais:
 
 1. **GUIA_USUARIO_TISS.md** (707 linhas)
    - O que é TISS e para que serve
-   - Como funciona no PrimeCare
+   - Como funciona no Omni Care
    - Passo a passo completo:
      - Cadastro de operadoras e planos
      - Solicitação de autorizações prévias

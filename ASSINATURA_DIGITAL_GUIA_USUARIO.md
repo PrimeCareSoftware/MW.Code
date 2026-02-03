@@ -55,7 +55,7 @@ A assinatura digital é o equivalente eletrônico da assinatura manuscrita, com 
 
 #### Para Certificado A1:
 
-1. Acesse o sistema PrimeCare
+1. Acesse o sistema Omni Care
 2. Vá em **Configurações** → **Certificado Digital**
 3. Clique em **Importar Certificado A1**
 4. Selecione o arquivo `.pfx` baixado
@@ -68,7 +68,7 @@ A assinatura digital é o equivalente eletrônico da assinatura manuscrita, com 
 
 1. Conecte o token USB no computador
 2. Instale os drivers do token (se necessário)
-3. Acesse o sistema PrimeCare
+3. Acesse o sistema Omni Care
 4. Vá em **Configurações** → **Certificado Digital**
 5. Clique em **Detectar Certificado A3**
 6. Selecione o certificado na lista
@@ -216,7 +216,7 @@ Ao importar um novo certificado, o anterior é automaticamente desativado.
 - A1: R$ 200-300/ano
 - A3: R$ 250-500 (certificado 3-5 anos) + R$ 50-100 (token)
 
-**Sem custo adicional no sistema PrimeCare** - funcionalidade incluída.
+**Sem custo adicional no sistema Omni Care** - funcionalidade incluída.
 
 ## 🆘 Resolução de Problemas
 
@@ -263,8 +263,8 @@ Ao importar um novo certificado, o anterior é automaticamente desativado.
 - Entre em contato com sua Autoridade Certificadora
 
 **Dúvidas sobre o sistema:**
-- Contate o suporte técnico do PrimeCare
-- Email: suporte@primecare.com.br
+- Contate o suporte técnico do Omni Care
+- Email: suporte@omnicare.com.br
 - Telefone: (XX) XXXX-XXXX
 
 ## 📚 Recursos Adicionais
@@ -277,4 +277,4 @@ Ao importar um novo certificado, o anterior é automaticamente desativado.
 
 **Versão:** 1.0  
 **Última atualização:** Janeiro 2026  
-**Sistema:** PrimeCare Medical Warehouse
+**Sistema:** Omni Care Medical Warehouse

@@ -8,7 +8,7 @@
 
 ## 📋 Sumário Executivo
 
-Este documento apresenta a análise de segurança da **Fase 1 - Backend** do sistema de configuração de módulos. Todas as implementações seguem as melhores práticas de segurança da indústria e estão em conformidade com os padrões do projeto PrimeCare.
+Este documento apresenta a análise de segurança da **Fase 1 - Backend** do sistema de configuração de módulos. Todas as implementações seguem as melhores práticas de segurança da indústria e estão em conformidade com os padrões do projeto Omni Care.
 
 ### Status de Segurança Geral
 🟢 **APROVADO** - Nenhuma vulnerabilidade crítica identificada
@@ -347,8 +347,8 @@ return BadRequest(new { message = "Invalid module name" });
 
 ## 📞 Contato de Segurança
 
-**Equipe de Segurança PrimeCare**
-- GitHub Security: [Security Policy](https://github.com/PrimeCareSoftware/MW.Code/security/policy)
+**Equipe de Segurança Omni Care**
+- GitHub Security: [Security Policy](https://github.com/Omni CareSoftware/MW.Code/security/policy)
 - Email: security@medicwarehouse.com
 
 ---

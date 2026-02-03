@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Esta pasta contém os **prompts detalhados** para implementar o roadmap completo do MVP do PrimeCare Software, conforme especificado no `MVP_IMPLEMENTATION_GUIDE.md`.
+Esta pasta contém os **prompts detalhados** para implementar o roadmap completo do MVP do Omni Care Software, conforme especificado no `MVP_IMPLEMENTATION_GUIDE.md`.
 
 **Estratégia**: Lançamento gradual com early adopters, validação de mercado, e desenvolvimento iterativo baseado em feedback real.
 
@@ -139,7 +139,7 @@ Total: 12 meses | R$ 500k
 - 📧 **Marketing Automation**: Campanhas automatizadas
 - 🔌 **API Pública**: Integrações com terceiros
 
-**Posicionamento**: PrimeCare como solução completa e premium
+**Posicionamento**: Omni Care como solução completa e premium
 
 **Critério de Sucesso**: Features avançadas funcionais, primeiras integrações via API
 
@@ -162,7 +162,7 @@ Total: 12 meses | R$ 500k
 - 🔬 **Integração Laboratórios**: Solicitação e recebimento de exames
 - 🤝 **AI Copilot**: Assistente virtual inteligente
 
-**Posicionamento**: PrimeCare como líder em inovação
+**Posicionamento**: Omni Care como líder em inovação
 
 **Critério de Sucesso**: Modelos de ML operacionais com acurácia > 75%
 
@@ -360,7 +360,7 @@ Prompt 01 → Prompt 02 → Prompt 03 → Prompt 04 → Prompt 05
 ### Canais de Comunicação
 
 - **Early Adopters**: Grupo WhatsApp exclusivo
-- **Email**: suporte@primecare.com.br
+- **Email**: suporte@omnicare.com.br
 - **Feedback In-App**: Widget de feedback
 - **Reuniões**: Check-in mensal com early adopters
 
@@ -402,5 +402,5 @@ Este roadmap MVP foi cuidadosamente planejado para:
 
 **Versão**: 1.0
 **Data**: Janeiro 2026
-**Autor**: PrimeCare Development Team
+**Autor**: Omni Care Development Team
 **Última Atualização**: 30 de Janeiro de 2026

@@ -27,7 +27,7 @@ export class PricingComponent {
 
   ngOnInit(): void {
     // Track page view
-    this.analytics.trackPageView('/site/pricing', 'Planos e Preços - PrimeCare');
+    this.analytics.trackPageView('/site/pricing', 'Planos e Preços - Omni Care');
 
     this.subscriptionService.getPlans().subscribe({
       next: (plans) => {

@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este guia documenta o sistema de gerenciamento de sessões implementado no PrimeCare Software, que garante que **apenas uma sessão ativa por usuário** seja permitida por vez.
+Este guia documenta o sistema de gerenciamento de sessões implementado no Omni Care Software, que garante que **apenas uma sessão ativa por usuário** seja permitida por vez.
 
 ## Funcionalidade
 

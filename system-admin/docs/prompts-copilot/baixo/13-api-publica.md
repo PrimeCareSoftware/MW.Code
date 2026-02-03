@@ -190,13 +190,13 @@ services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("public-v1", new OpenApiInfo
     {
-        Title = "PrimeCare Public API",
+        Title = "Omni Care Public API",
         Version = "v1",
         Description = "API pública para integrações de terceiros",
         Contact = new OpenApiContact
         {
-            Name = "Suporte PrimeCare",
-            Email = "api@primecare.com.br"
+            Name = "Suporte Omni Care",
+            Email = "api@omnicare.com.br"
         }
     });
     
@@ -214,9 +214,9 @@ services.AddSwaggerGen(c =>
 
 ```javascript
 // JavaScript/Node.js SDK
-const PrimeCare = require('@primecare/sdk');
+const Omni Care = require('@primecare/sdk');
 
-const client = new PrimeCare({
+const client = new Omni Care({
   apiKey: 'your-api-key',
   apiSecret: 'your-api-secret'
 });
@@ -238,9 +238,9 @@ const appointment = await client.appointments.create({
 
 ```python
 # Python SDK
-from primecare import PrimeCareClient
+from primecare import Omni CareClient
 
-client = PrimeCareClient(
+client = Omni CareClient(
     api_key='your-api-key',
     api_secret='your-api-secret'
 )

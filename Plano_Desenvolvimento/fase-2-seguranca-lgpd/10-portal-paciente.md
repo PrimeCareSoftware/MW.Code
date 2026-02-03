@@ -662,7 +662,7 @@ public class AppointmentReminderService : BackgroundService
                 appointment.Patient.Phone,
                 $"Olá {appointment.Patient.Name}! Você tem consulta marcada com {appointment.Doctor.Name} " +
                 $"amanhã às {appointment.ScheduledDate:HH:mm}. " +
-                $"Confirme aqui: https://portal.primecare.com/appointments/{appointment.Id}/confirm"
+                $"Confirme aqui: https://portal.omnicare.com/appointments/{appointment.Id}/confirm"
             );
             
             // Enviar Email
@@ -785,8 +785,8 @@ export class AppComponent implements OnInit {
 
 ```json
 {
-  "name": "PrimeCare - Portal do Paciente",
-  "short_name": "PrimeCare",
+  "name": "Omni Care - Portal do Paciente",
+  "short_name": "Omni Care",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

@@ -1,4 +1,4 @@
-# 📜 Declaração de Conformidade WCAG 2.1 AA - PrimeCare Software
+# 📜 Declaração de Conformidade WCAG 2.1 AA - Omni Care Software
 
 > **Data da Declaração:** Janeiro 2026  
 > **Última Atualização:** 29 de Janeiro de 2026  
@@ -9,16 +9,16 @@
 
 ## 📋 Informações Gerais
 
-**Nome do Sistema:** PrimeCare Software - Sistema de Gestão para Consultórios Médicos  
-**URL:** https://primecare.com.br  
-**Organização:** PrimeCare Software  
+**Nome do Sistema:** Omni Care Software - Sistema de Gestão para Consultórios Médicos  
+**URL:** https://omnicare.com.br  
+**Organização:** Omni Care Software  
 **Padrão de Conformidade:** [WCAG 2.1](https://www.w3.org/TR/WCAG21/) Level AA  
 
 ---
 
 ## 🎯 Nível de Conformidade
 
-O PrimeCare Software está em processo de conformidade com o **Web Content Accessibility Guidelines (WCAG) 2.1 Level AA**, conforme publicado pelo W3C.
+O Omni Care Software está em processo de conformidade com o **Web Content Accessibility Guidelines (WCAG) 2.1 Level AA**, conforme publicado pelo W3C.
 
 ### O que significa WCAG 2.1 Level AA?
 
@@ -245,11 +245,11 @@ Alguns componentes de terceiros podem não atender completamente WCAG 2.1 AA:
 
 ### Como Relatar Problemas de Acessibilidade
 
-Se você encontrar barreiras de acessibilidade no PrimeCare Software:
+Se você encontrar barreiras de acessibilidade no Omni Care Software:
 
-**Email:** acessibilidade@primecare.com.br  
+**Email:** acessibilidade@omnicare.com.br  
 **Telefone:** +55 (11) 1234-5678  
-**GitHub Issues:** [Reportar problema](https://github.com/PrimeCareSoftware/MW.Code/issues)
+**GitHub Issues:** [Reportar problema](https://github.com/Omni CareSoftware/MW.Code/issues)
 
 Esperamos responder em até **3 dias úteis**.
 
@@ -265,7 +265,7 @@ Esperamos responder em até **3 dias úteis**.
 
 ## 🎯 Compromisso Contínuo
 
-O PrimeCare Software está comprometido em:
+O Omni Care Software está comprometido em:
 
 1. **Manter Conformidade:** Monitoramento contínuo de acessibilidade
 2. **Melhorias Incrementais:** Correções prioritárias de violações
@@ -321,10 +321,10 @@ O PrimeCare Software está comprometido em:
 
 ## ✍️ Assinatura
 
-Esta declaração foi preparada em **28 de janeiro de 2026** e reflete o status atual de conformidade do PrimeCare Software com WCAG 2.1 Level AA.
+Esta declaração foi preparada em **28 de janeiro de 2026** e reflete o status atual de conformidade do Omni Care Software com WCAG 2.1 Level AA.
 
 **Responsável pela Declaração:**  
-Equipe de Desenvolvimento PrimeCare Software
+Equipe de Desenvolvimento Omni Care Software
 
 **Próxima Revisão:** Abril 2026
 

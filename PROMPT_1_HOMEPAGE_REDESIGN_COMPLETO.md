@@ -10,7 +10,7 @@
 
 ## 📋 Sumário Executivo
 
-Este documento detalha a implementação completa do **Prompt 1 - Redesign da Homepage** do PrimeCare Software (MedicWarehouse). A implementação focou em criar uma homepage moderna, focada em conversão, confiável, rápida e acessível, seguindo as melhores práticas de UX/UI para SaaS de saúde.
+Este documento detalha a implementação completa do **Prompt 1 - Redesign da Homepage** do Omni Care Software (MedicWarehouse). A implementação focou em criar uma homepage moderna, focada em conversão, confiável, rápida e acessível, seguindo as melhores práticas de UX/UI para SaaS de saúde.
 
 ### ✅ Objetivos Alcançados
 
@@ -40,7 +40,7 @@ Este documento detalha a implementação completa do **Prompt 1 - Redesign da Ho
   - "✓ Sem cartão"
   - "✓ Cancele quando quiser"
 - ✅ **Background visual**: Gradiente sutil com circles animados
-- ✅ **Badge de confiança**: "Mais de 500 clínicas confiam no PrimeCare"
+- ✅ **Badge de confiança**: "Mais de 500 clínicas confiam no Omni Care"
 
 #### Tecnologias Utilizadas:
 ```typescript
@@ -111,7 +111,7 @@ filter: blur(80px);
 
 #### Elementos Implementados:
 - ✅ **Depoimento destacado**: 
-  > "O PrimeCare reduziu nossas faltas em 65% e economizou mais de 10 horas por semana. A equipe consegue focar no que realmente importa: cuidar dos pacientes."
+  > "O Omni Care reduziu nossas faltas em 65% e economizou mais de 10 horas por semana. A equipe consegue focar no que realmente importa: cuidar dos pacientes."
 - ✅ **Autor**: Dr. João Silva, Clínica São Paulo
 - ✅ **Avatar com gradiente** personalizado
 - ✅ **Rating de 5 estrelas** visual
@@ -150,7 +150,7 @@ filter: blur(80px);
 #### Pronto para:
 ```html
 <!-- Future implementation: Replace placeholder with video URL -->
-<iframe src="YOUR_VIDEO_URL" title="PrimeCare System Demo" ...></iframe>
+<iframe src="YOUR_VIDEO_URL" title="Omni Care System Demo" ...></iframe>
 ```
 
 ---
@@ -311,25 +311,25 @@ private setupScrollAnimations(): void {
 
 ```html
 <!-- Basic SEO -->
-<title>PrimeCare Software - Sistema de Gestão para Clínicas Médicas</title>
+<title>Omni Care Software - Sistema de Gestão para Clínicas Médicas</title>
 <meta name="description" content="Software completo para gestão de consultórios e clínicas. Agenda, prontuário eletrônico, telemedicina e mais. Experimente grátis por 15 dias.">
 <meta name="keywords" content="software médico, gestão clínica, prontuário eletrônico, agenda médica, telemedicina">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://primecare.com.br">
-<meta property="og:title" content="PrimeCare Software - Sistema de Gestão Clínica">
+<meta property="og:url" content="https://omnicare.com.br">
+<meta property="og:title" content="Omni Care Software - Sistema de Gestão Clínica">
 <meta property="og:description" content="...">
-<meta property="og:image" content="https://primecare.com.br/assets/og-image.jpg">
+<meta property="og:image" content="https://omnicare.com.br/assets/og-image.jpg">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PrimeCare Software">
+<meta name="twitter:title" content="Omni Care Software">
 <meta name="twitter:description" content="...">
-<meta name="twitter:image" content="https://primecare.com.br/assets/twitter-image.jpg">
+<meta name="twitter:image" content="https://omnicare.com.br/assets/twitter-image.jpg">
 
 <!-- Canonical -->
-<link rel="canonical" href="https://primecare.com.br">
+<link rel="canonical" href="https://omnicare.com.br">
 ```
 
 ### Structured Data (Schema.org) 🆕 ✅
@@ -338,7 +338,7 @@ private setupScrollAnimations(): void {
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "PrimeCare Software",
+  "name": "Omni Care Software",
   "applicationCategory": "HealthApplication",
   "operatingSystem": "Web, iOS, Android",
   "offers": {
@@ -545,14 +545,14 @@ small: 0.9375rem
 **Implementação:** GitHub Copilot Agent  
 **Design Base:** PROMPTS_IMPLEMENTACAO_DETALHADOS.md (Prompt 1)  
 **Data:** 28 de Janeiro de 2026  
-**Produto:** PrimeCare Software (MedicWarehouse)
+**Produto:** Omni Care Software (MedicWarehouse)
 
 ---
 
 ## 📞 Contato
 
 Para dúvidas ou feedback sobre esta implementação:
-- **Repository**: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- **Repository**: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - **Documentação**: [README.md](./README.md)
 - **Changelog**: [CHANGELOG.md](./CHANGELOG.md)
 

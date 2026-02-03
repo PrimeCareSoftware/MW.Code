@@ -14,7 +14,7 @@
 **📋 [Ver MVP Implementation Guide](../MVP_IMPLEMENTATION_GUIDE.md)** (30 min)  
 **💰 [Ver Plano de Lançamento](../PLANO_LANCAMENTO_MVP_SAAS.md)** (45 min)
 
-Sistema completo de roadmap para lançamento e desenvolvimento do MVP PrimeCare SaaS:
+Sistema completo de roadmap para lançamento e desenvolvimento do MVP Omni Care SaaS:
 - Estratégia de Early Adopters com preços especiais
 - Planos: Starter (R$ 49), Professional (R$ 89), Enterprise (R$ 149)
 - Roadmap de 12 meses dividido em 5 fases
@@ -90,7 +90,7 @@ Análise completa e plano de desenvolvimento para transformar o system-admin em 
 
 ## 🎯 Visão Geral
 
-Esta pasta contém **prompts otimizados** para todas as tarefas pendentes do PrimeCare Software, organizados por fase de prioridade. Cada prompt foi desenhado para ser executado diretamente pelo GitHub Copilot ou outro agente de IA, com especificações técnicas completas e critérios de sucesso claros.
+Esta pasta contém **prompts otimizados** para todas as tarefas pendentes do Omni Care Software, organizados por fase de prioridade. Cada prompt foi desenhado para ser executado diretamente pelo GitHub Copilot ou outro agente de IA, com especificações técnicas completas e critérios de sucesso claros.
 
 **NOVO - Janeiro 2026:** Inclui agora:
 - 🚀 **Roadmap de Desenvolvimento MVP** - Guia completo de 12 meses para lançamento e crescimento com early adopters (5 fases)
@@ -281,7 +281,7 @@ Plano_Desenvolvimento/
 - Implementações já completas documentadas em `/docs`
 - APIs documentadas em controllers
 - Componentes frontend documentados inline
-- Postman Collection: `PrimeCare-Postman-Collection.json`
+- Postman Collection: `Omni Care-Postman-Collection.json`
 
 ## ⚠️ Avisos Importantes
 
@@ -317,8 +317,8 @@ Plano_Desenvolvimento/
 
 ## 📞 Contato
 
-**PrimeCare Software - Equipe de Desenvolvimento**
-- GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+**Omni Care Software - Equipe de Desenvolvimento**
+- GitHub: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - Documentação completa em `/docs`
 
 ---

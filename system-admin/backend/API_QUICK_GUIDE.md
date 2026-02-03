@@ -546,4 +546,4 @@ X-Tenant-Id: demo-clinic-001
 
 **Versão**: 1.1  
 **Data**: Novembro 2025  
-**Autor**: Equipe PrimeCare Software
+**Autor**: Equipe Omni Care Software

@@ -25,7 +25,7 @@
 
 ## 🎯 Visão Geral
 
-O Sistema de Auditoria LGPD do PrimeCare Software é uma solução completa para registro, análise e compliance de todas as operações sensíveis no sistema. Atende aos requisitos do **Art. 37 da LGPD** (Lei 13.709/2018) para rastreabilidade de acesso a dados pessoais.
+O Sistema de Auditoria LGPD do Omni Care Software é uma solução completa para registro, análise e compliance de todas as operações sensíveis no sistema. Atende aos requisitos do **Art. 37 da LGPD** (Lei 13.709/2018) para rastreabilidade de acesso a dados pessoais.
 
 ### Principais Funcionalidades
 
@@ -251,7 +251,7 @@ O `AutomaticAuditMiddleware` intercepta todas as requisições HTTP antes de che
 
 **Exemplo de Uso:**
 ```bash
-curl -X GET "https://api.primecare.com/api/audit/export/csv?startDate=2026-01-01&endDate=2026-01-30" \
+curl -X GET "https://api.omnicare.com/api/audit/export/csv?startDate=2026-01-01&endDate=2026-01-30" \
   -H "Authorization: Bearer {token}" \
   -o audit_logs.csv
 ```
@@ -268,7 +268,7 @@ Timestamp,UserId,UserName,UserEmail,Action,EntityType,EntityId,Result,IpAddress,
 
 **Exemplo de Uso:**
 ```bash
-curl -X GET "https://api.primecare.com/api/audit/export/json?userId=usr123" \
+curl -X GET "https://api.omnicare.com/api/audit/export/json?userId=usr123" \
   -H "Authorization: Bearer {token}" \
   -o audit_logs.json
 ```
@@ -303,7 +303,7 @@ Gera relatório completo de compliance LGPD para um usuário específico.
 
 **Exemplo de Uso:**
 ```bash
-curl -X GET "https://api.primecare.com/api/audit/export/lgpd/usr123" \
+curl -X GET "https://api.omnicare.com/api/audit/export/lgpd/usr123" \
   -H "Authorization: Bearer {token}" \
   -o lgpd_report.json
 ```
@@ -557,7 +557,7 @@ Com os índices implementados:
 
 **Via API:**
 ```bash
-curl -X GET "https://api.primecare.com/api/audit/lgpd-report/my-user-id" \
+curl -X GET "https://api.omnicare.com/api/audit/lgpd-report/my-user-id" \
   -H "Authorization: Bearer {token}" \
   -o my_lgpd_report.json
 ```
@@ -607,7 +607,7 @@ Os pacientes podem solicitar relatórios de acesso aos seus dados através do **
 
 1. **Verificar Alertas Diariamente**
 ```bash
-curl -X GET "https://api.primecare.com/api/audit/suspicious-activity" \
+curl -X GET "https://api.omnicare.com/api/audit/suspicious-activity" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -651,7 +651,7 @@ Se precisar ajustar (apenas em casos especiais):
 
 **Aplicar manualmente:**
 ```bash
-curl -X POST "https://api.primecare.com/api/audit/apply-retention?retentionDays=3650" \
+curl -X POST "https://api.omnicare.com/api/audit/apply-retention?retentionDays=3650" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -664,12 +664,12 @@ curl -X POST "https://api.primecare.com/api/audit/apply-retention?retentionDays=
 mkdir -p /backups/audit/2026/01
 
 # Exportar CSV
-curl -X GET "https://api.primecare.com/api/audit/export/csv?startDate=2026-01-01&endDate=2026-01-31" \
+curl -X GET "https://api.omnicare.com/api/audit/export/csv?startDate=2026-01-01&endDate=2026-01-31" \
   -H "Authorization: Bearer {token}" \
   -o /backups/audit/2026/01/audit_jan2026.csv
 
 # Exportar JSON
-curl -X GET "https://api.primecare.com/api/audit/export/json?startDate=2026-01-01&endDate=2026-01-31" \
+curl -X GET "https://api.omnicare.com/api/audit/export/json?startDate=2026-01-01&endDate=2026-01-31" \
   -H "Authorization: Bearer {token}" \
   -o /backups/audit/2026/01/audit_jan2026.json
 
@@ -723,7 +723,7 @@ interface AuditFilter {
 #### Query Avançada
 
 ```bash
-curl -X POST "https://api.primecare.com/api/audit/query" \
+curl -X POST "https://api.omnicare.com/api/audit/query" \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -739,7 +739,7 @@ curl -X POST "https://api.primecare.com/api/audit/query" \
 #### Obter Eventos de Segurança
 
 ```bash
-curl -X GET "https://api.primecare.com/api/audit/security-events?startDate=2026-01-29&endDate=2026-01-30" \
+curl -X GET "https://api.omnicare.com/api/audit/security-events?startDate=2026-01-29&endDate=2026-01-30" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -902,7 +902,7 @@ public async Task<IActionResult> CreateSensitiveData([FromBody] SensitiveDto dto
 **Solução:** Verificar se job de retenção está executando:
 ```bash
 # Via Hangfire Dashboard
-https://api.primecare.com/hangfire/jobs/recurring
+https://api.omnicare.com/hangfire/jobs/recurring
 
 # Forçar execução manual
 POST /api/audit/apply-retention
@@ -950,7 +950,7 @@ POST /api/audit/apply-retention
 
 ---
 
-**Desenvolvido por:** PrimeCare Software Development Team  
+**Desenvolvido por:** Omni Care Software Development Team  
 **Data:** 30 de Janeiro de 2026  
 **Versão:** 1.0  
 **Status:** ✅ Produção

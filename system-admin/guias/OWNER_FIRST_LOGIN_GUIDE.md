@@ -51,7 +51,7 @@ Este documento explica o fluxo completo desde o registro da clínica até o prim
 
 #### Opção 1: Login com Subdomínio (Recomendado)
 
-Se sua clínica tiver um subdomínio configurado (ex: `minhaclinica.primecare.com`):
+Se sua clínica tiver um subdomínio configurado (ex: `minhaclinica.omnicare.com`):
 
 1. Acesse através do subdomínio
 2. Digite seu **usuário**

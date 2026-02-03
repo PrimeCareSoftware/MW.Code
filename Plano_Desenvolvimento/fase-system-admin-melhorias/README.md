@@ -10,7 +10,7 @@
 
 ## 🎯 Visão Geral
 
-Esta fase transforma o **system-admin** do PrimeCare em uma ferramenta de administração SaaS de classe mundial, baseada nas melhores práticas de mercado (Retool, Forest Admin, Stripe Dashboard, Zendesk, AWS Console, Vercel).
+Esta fase transforma o **system-admin** do Omni Care em uma ferramenta de administração SaaS de classe mundial, baseada nas melhores práticas de mercado (Retool, Forest Admin, Stripe Dashboard, Zendesk, AWS Console, Vercel).
 
 **Objetivo:** Aumentar eficiência administrativa em 60%, reduzir churn em 20%, e proporcionar insights profundos de negócio através de dashboards avançados, automações inteligentes e UX moderna.
 
@@ -344,7 +344,7 @@ Implementar Fases 1-2 primeiro (6 meses, R$ 156k) e avaliar impacto antes de dec
 
 ## 🎖️ Diferencial Competitivo
 
-Com este plano implementado, o PrimeCare terá:
+Com este plano implementado, o Omni Care terá:
 
 ### No Mercado Brasileiro
 - 🥇 **#1** em admin panel para health tech
@@ -357,7 +357,7 @@ Com este plano implementado, o PrimeCare terá:
 - **Doctoralia:** Foco em marketplace, admin limitado
 
 ### Posicionamento
-> "PrimeCare Software: A única plataforma de gestão clínica com admin panel de classe enterprise"
+> "Omni Care Software: A única plataforma de gestão clínica com admin panel de classe enterprise"
 
 ---
 

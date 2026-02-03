@@ -2,7 +2,7 @@
 
 ## 📌 Visão Geral
 
-Este guia fornece instruções completas para configurar e testar o módulo de Cadastro de Paciente do PrimeCare Software, incluindo todos os fluxos e cenários possíveis.
+Este guia fornece instruções completas para configurar e testar o módulo de Cadastro de Paciente do Omni Care Software, incluindo todos os fluxos e cenários possíveis.
 
 ## 🔧 Pré-requisitos
 

@@ -1,6 +1,6 @@
 # Dynamic Appointment Calendar and Notification System
 
-This document describes the new features implemented for the PrimeCare Software appointment system.
+This document describes the new features implemented for the Omni Care Software appointment system.
 
 ## Features
 

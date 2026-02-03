@@ -40,7 +40,7 @@
 ✅ **LocalStorage Security**
 - Only non-sensitive data stored (tour completion status, onboarding progress)
 - No user credentials or tokens in localStorage
-- Data is properly namespaced with `primecare_` prefix
+- Data is properly namespaced with `omnicare_` prefix
 
 ✅ **API Integration**
 - HttpClient with proper error handling

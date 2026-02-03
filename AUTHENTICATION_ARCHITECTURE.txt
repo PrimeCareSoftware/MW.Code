@@ -1,4 +1,4 @@
-# PrimeCare Software - Authentication Architecture
+# Omni Care Software - Authentication Architecture
 
 ## System Overview
 

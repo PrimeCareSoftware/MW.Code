@@ -8,7 +8,7 @@
 
 ## 📊 Visão Geral Executiva
 
-Este documento resume a conclusão bem-sucedida da implementação TISS/TUSS no sistema PrimeCare Software, elevando a completude de **70% para 95%+** conforme especificado na documentação PENDING_TASKS.md.
+Este documento resume a conclusão bem-sucedida da implementação TISS/TUSS no sistema Omni Care Software, elevando a completude de **70% para 95%+** conforme especificado na documentação PENDING_TASKS.md.
 
 ### Padrões Implementados
 - **TISS**: Troca de Informações na Saúde Suplementar (ANS)

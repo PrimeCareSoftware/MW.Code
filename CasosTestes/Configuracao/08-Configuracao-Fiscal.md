@@ -347,7 +347,7 @@ ISS:
 
 ### 4.1. Configuração Básica de Invoice (Controle Interno)
 
-**O sistema PrimeCare oferece controle interno de invoices:**
+**O sistema Omni Care oferece controle interno de invoices:**
 
 ```
 Numeração:
@@ -458,7 +458,7 @@ Data de Emissão: 15/02/2026
 ✅ Série da NFS-e
 ```
 
-### 5.3. Configurar Integração no PrimeCare
+### 5.3. Configurar Integração no Omni Care
 
 **Passos:**
 1. Menu **"Fiscal"** → **"Configurações"** → **"NF-e/NFS-e"**
@@ -944,4 +944,4 @@ A responsabilidade pelo correto cumprimento das obrigações fiscais é do propr
 
 **Versão:** 1.0  
 **Última Atualização:** Fevereiro 2026  
-**Mantido por:** Equipe PrimeCare Software
+**Mantido por:** Equipe Omni Care Software

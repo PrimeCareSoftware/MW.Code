@@ -340,5 +340,5 @@ describe('Start Attendance Flow', () => {
 
 Para dúvidas ou problemas:
 - [Documentação Principal](../README.md)
-- [GitHub Issues](https://github.com/PrimeCare Software/MW.Code/issues)
-- [Wiki do Projeto](https://github.com/PrimeCare Software/MW.Code/wiki)
+- [GitHub Issues](https://github.com/Omni Care Software/MW.Code/issues)
+- [Wiki do Projeto](https://github.com/Omni Care Software/MW.Code/wiki)

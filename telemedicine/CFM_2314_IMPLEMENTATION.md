@@ -546,7 +546,7 @@ FileStorage__SecretKey=<AWS_SECRET_KEY>
 ## 📧 Suporte
 
 Para dúvidas ou problemas relacionados à implementação CFM 2.314/2022:
-- Time: PrimeCare Software Team
+- Time: Omni Care Software Team
 - Documentação: `/telemedicine/README.md`
 - Issues: GitHub Issues do repositório
 

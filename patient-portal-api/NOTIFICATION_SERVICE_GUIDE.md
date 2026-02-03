@@ -424,7 +424,7 @@ namespace PatientPortal.Api.BackgroundServices
                 
                 // Gerar token de confirmação único
                 var confirmationToken = GenerateConfirmationToken();
-                var confirmationLink = $"https://portal.primecare.com/appointments/{appointment.Id}/confirm?token={confirmationToken}";
+                var confirmationLink = $"https://portal.omnicare.com/appointments/{appointment.Id}/confirm?token={confirmationToken}";
                 
                 // Enviar WhatsApp
                 if (!string.IsNullOrEmpty(appointment.Patient.Phone))
@@ -473,7 +473,7 @@ namespace PatientPortal.Api.BackgroundServices
         
         private string BuildWhatsAppMessage(Appointment appointment, string confirmationLink)
         {
-            return $@"🏥 *Lembrete de Consulta - PrimeCare*
+            return $@"🏥 *Lembrete de Consulta - Omni Care*
 
 Olá, {appointment.Patient.Name}! 👋
 
@@ -540,10 +540,10 @@ _Mensagem automática - Não responda_";
                 <li>Cancelamentos devem ser feitos com 24h de antecedência</li>
             </ul>
             
-            <p>Se precisar cancelar ou reagendar, acesse seu <a href='https://portal.primecare.com'>Portal do Paciente</a> ou ligue para (11) 9999-9999.</p>
+            <p>Se precisar cancelar ou reagendar, acesse seu <a href='https://portal.omnicare.com'>Portal do Paciente</a> ou ligue para (11) 9999-9999.</p>
         </div>
         <div class='footer'>
-            <p>© 2026 PrimeCare Software - Sistema de Gestão Médica</p>
+            <p>© 2026 Omni Care Software - Sistema de Gestão Médica</p>
             <p>Esta é uma mensagem automática. Por favor, não responda este email.</p>
         </div>
     </div>
@@ -810,8 +810,8 @@ export class ConfirmAppointmentComponent implements OnInit {
   },
   "SendGrid": {
     "ApiKey": "YOUR_SENDGRID_API_KEY",
-    "FromEmail": "noreply@primecare.com",
-    "FromName": "PrimeCare - Portal do Paciente"
+    "FromEmail": "noreply@omnicare.com",
+    "FromName": "Omni Care - Portal do Paciente"
   },
   "AppointmentReminders": {
     "Enabled": true,

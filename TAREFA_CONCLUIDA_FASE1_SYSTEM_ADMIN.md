@@ -313,8 +313,8 @@ Implementar as pendências do prompt `01-fase1-fundacao-ux.md` e atualizar as do
 - [Phase 1 Prompt](./Plano_Desenvolvimento/fase-system-admin-melhorias/01-fase1-fundacao-ux.md)
 
 ### Contato
-- GitHub: https://github.com/PrimeCareSoftware/MW.Code
-- Issues: https://github.com/PrimeCareSoftware/MW.Code/issues
+- GitHub: https://github.com/Omni CareSoftware/MW.Code
+- Issues: https://github.com/Omni CareSoftware/MW.Code/issues
 - Pull Request: [Link da PR atual]
 
 ---

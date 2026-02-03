@@ -61,12 +61,12 @@ Necessária quando há suspeita de comprometimento ou mudança de ambiente.
 ```bash
 # Verificar política de rotação
 az keyvault key rotation-policy show \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key
 
 # Verificar versões da chave
 az keyvault key list-versions \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key
 ```
 
@@ -75,7 +75,7 @@ az keyvault key list-versions \
 ```bash
 # Atualizar política se necessário
 az keyvault key rotation-policy update \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key \
   --value '{
     "lifetimeActions": [
@@ -108,9 +108,9 @@ az keyvault key rotation-policy update \
 # Configurar alerta para notificação de rotação
 az monitor activity-log alert create \
   --name key-rotation-alert \
-  --resource-group primecare-prod-rg \
+  --resource-group omnicare-prod-rg \
   --condition category=Administrative and operationName=Microsoft.KeyVault/vaults/keys/rotate/action \
-  --action primecare-security-alerts
+  --action omnicare-security-alerts
 ```
 
 ## 🔄 Procedimento de Rotação Manual de Emergência
@@ -122,7 +122,7 @@ az monitor activity-log alert create \
 ```bash
 # 1. Verificar logs de acesso suspeito
 az monitor activity-log list \
-  --resource-group primecare-prod-rg \
+  --resource-group omnicare-prod-rg \
   --start-time $(date -u -d '7 days ago' +"%Y-%m-%dT%H:%M:%SZ") \
   --end-time $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
   --query "[?contains(operationName.value, 'KeyVault/vaults/keys')]" \
@@ -130,13 +130,13 @@ az monitor activity-log list \
 
 # 2. Identificar IPs suspeitos
 az monitor activity-log list \
-  --resource-group primecare-prod-rg \
+  --resource-group omnicare-prod-rg \
   --query "[?contains(operationName.value, 'KeyVault') && claims.ipaddr != 'YOUR_ALLOWED_IPS'].{Time:eventTimestamp, IP:claims.ipaddr, Operation:operationName.localizedValue}" \
   --output table
 
 # 3. Backup da chave atual (CRÍTICO)
 az keyvault key backup \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key \
   --file medical-data-encryption-key_emergency_backup_$(date +%Y%m%d_%H%M%S).backup
 ```
@@ -147,7 +147,7 @@ az keyvault key backup \
 # 1. Revogar todas as access policies (exceto admin)
 # Listar policies atuais
 az keyvault show \
-  --name primecare-prod-kv \
+  --name omnicare-prod-kv \
   --query "properties.accessPolicies[].objectId" \
   --output tsv > current_policies.txt
 
@@ -156,19 +156,19 @@ while read -r object_id; do
     if [ "$object_id" != "$ADMIN_PRINCIPAL_ID" ]; then
         echo "Revoking access for: $object_id"
         az keyvault delete-policy \
-          --name primecare-prod-kv \
+          --name omnicare-prod-kv \
           --object-id $object_id
     fi
 done < current_policies.txt
 
 # 3. Criar nova Managed Identity
 az identity create \
-  --name primecare-prod-api-new-identity \
-  --resource-group primecare-prod-rg
+  --name omnicare-prod-api-new-identity \
+  --resource-group omnicare-prod-rg
 
 NEW_PRINCIPAL_ID=$(az identity show \
-  --name primecare-prod-api-new-identity \
-  --resource-group primecare-prod-rg \
+  --name omnicare-prod-api-new-identity \
+  --resource-group omnicare-prod-rg \
   --query principalId \
   --output tsv)
 ```
@@ -178,13 +178,13 @@ NEW_PRINCIPAL_ID=$(az identity show \
 ```bash
 # 1. Desabilitar chave comprometida (NÃO deletar - precisamos descriptografar dados antigos)
 az keyvault key set-attributes \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key \
   --enabled false
 
 # 2. Criar nova chave com nome diferente
 az keyvault key create \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key-v2 \
   --protection hsm \
   --kty RSA-HSM \
@@ -193,7 +193,7 @@ az keyvault key create \
 
 # 3. Conceder permissões à nova Managed Identity
 az keyvault set-policy \
-  --name primecare-prod-kv \
+  --name omnicare-prod-kv \
   --object-id $NEW_PRINCIPAL_ID \
   --key-permissions get list encrypt decrypt wrapKey unwrapKey \
   --secret-permissions get list
@@ -203,24 +203,24 @@ az keyvault set-policy \
 
 ```bash
 # 1. Parar aplicação
-az webapp stop --name primecare-prod-api --resource-group primecare-prod-rg
+az webapp stop --name omnicare-prod-api --resource-group omnicare-prod-rg
 
 # 2. Atualizar Managed Identity
 az webapp identity assign \
-  --name primecare-prod-api \
-  --resource-group primecare-prod-rg \
-  --identities /subscriptions/SUBSCRIPTION_ID/resourcegroups/primecare-prod-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/primecare-prod-api-new-identity
+  --name omnicare-prod-api \
+  --resource-group omnicare-prod-rg \
+  --identities /subscriptions/SUBSCRIPTION_ID/resourcegroups/omnicare-prod-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/omnicare-prod-api-new-identity
 
 # 3. Atualizar configuração
 az webapp config appsettings set \
-  --name primecare-prod-api \
-  --resource-group primecare-prod-rg \
+  --name omnicare-prod-api \
+  --resource-group omnicare-prod-rg \
   --settings \
     "Azure__KeyVault__KeyName=medical-data-encryption-key-v2" \
     "Azure__KeyVault__OldKeyName=medical-data-encryption-key"
 
 # 4. Reiniciar aplicação
-az webapp start --name primecare-prod-api --resource-group primecare-prod-rg
+az webapp start --name omnicare-prod-api --resource-group omnicare-prod-rg
 ```
 
 #### Fase 5: Re-criptografar Dados (8-48 horas, depende do volume)
@@ -246,12 +246,12 @@ dotnet run --project tools/ValidateEncryption/ValidateEncryption.csproj \
 
 # 2. Após confirmação (30 dias), deletar chave antiga
 az keyvault key delete \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key
 
 # 3. Purge após período de soft-delete (90 dias)
 az keyvault key purge \
-  --vault-name primecare-prod-kv \
+  --vault-name omnicare-prod-kv \
   --name medical-data-encryption-key
 ```
 
@@ -495,8 +495,8 @@ public class MultiKeyEncryptionService : IDataEncryptionService
 ## 📞 Contatos de Emergência
 
 ### Durante Rotação
-- **Equipe de Segurança**: security@primecare.com
-- **DevOps**: devops@primecare.com
+- **Equipe de Segurança**: security@omnicare.com
+- **DevOps**: devops@omnicare.com
 - **Plantão**: +55 (11) 99999-9999
 
 ### Suporte Azure Key Vault
@@ -514,4 +514,4 @@ public class MultiKeyEncryptionService : IDataEncryptionService
 
 **Versão**: 1.0  
 **Última Atualização**: Janeiro 2026  
-**Responsável**: Equipe de Segurança - PrimeCare Software
+**Responsável**: Equipe de Segurança - Omni Care Software

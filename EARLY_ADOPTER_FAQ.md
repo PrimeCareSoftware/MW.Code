@@ -1,8 +1,8 @@
-# 🙋 FAQ - Early Adopters PrimeCare
+# 🙋 FAQ - Early Adopters Omni Care
 
 ## 📋 Perguntas Frequentes
 
-Bem-vindo à seção de perguntas frequentes para **Early Adopters** do PrimeCare Software. Aqui você encontra respostas para as 20+ perguntas mais comuns.
+Bem-vindo à seção de perguntas frequentes para **Early Adopters** do Omni Care Software. Aqui você encontra respostas para as 20+ perguntas mais comuns.
 
 > ⚠️ **Nota**: Todos os contatos, emails, telefones e URLs neste documento são exemplos fictícios para fins de documentação.
 
@@ -12,7 +12,7 @@ Bem-vindo à seção de perguntas frequentes para **Early Adopters** do PrimeCar
 
 ### 1. O que é o programa Early Adopter?
 
-É um programa especial de lançamento do PrimeCare que oferece **preços promocionais vitalícios** e benefícios exclusivos para os primeiros 300 clientes que adotarem o sistema durante a fase MVP.
+É um programa especial de lançamento do Omni Care que oferece **preços promocionais vitalícios** e benefícios exclusivos para os primeiros 300 clientes que adotarem o sistema durante a fase MVP.
 
 ### 2. Quais são os benefícios de ser Early Adopter?
 
@@ -137,7 +137,7 @@ Ver roadmap completo: `MVP_IMPLEMENTATION_GUIDE.md`
 ### 13. Posso sugerir novas funcionalidades?
 
 **Sim!** Como Early Adopter, você tem **influência direta no roadmap**. Envie suas sugestões para:
-- Email: earlyAdopters@primecaresoftware.com
+- Email: earlyAdopters@omnicaresoftware.com
 - Portal: Menu > Feedback > Nova Sugestão
 - Votações mensais para priorizar funcionalidades
 
@@ -213,7 +213,7 @@ Para reativar, basta pagar a fatura em aberto. Ativação é imediata (PIX) ou e
 
 ### 21. Preciso instalar algum programa?
 
-**Não!** O PrimeCare é 100% online (SaaS). Você acessa pelo navegador:
+**Não!** O Omni Care é 100% online (SaaS). Você acessa pelo navegador:
 - Chrome (recomendado)
 - Firefox
 - Safari
@@ -253,14 +253,14 @@ Atualmente **não**. O sistema precisa de conexão com internet. Funcionalidade 
 
 **Para Early Adopters** (diferenciado):
 
-- 📧 **Email Prioritário**: earlyAdopters@primecaresoftware.com
+- 📧 **Email Prioritário**: earlyAdopters@omnicaresoftware.com
 - ⏰ **Resposta**: Até 24h (dias úteis)
 - 💬 **Grupo WhatsApp**: Comunidade exclusiva (em breve)
 - 📞 **Telefone**: (11) 99999-9999
 
 **Para todos os usuários**:
 
-- 📚 **Base de Conhecimento**: docs.primecaresoftware.com
+- 📚 **Base de Conhecimento**: docs.omnicaresoftware.com
 - 🎥 **Vídeos Tutoriais**: Passo-a-passo em vídeo
 - 📄 **Documentação**: Guias completos
 - 💬 **Chat**: No portal (em breve)
@@ -292,13 +292,13 @@ A interface é intuitiva e fácil de aprender!
 ### 29. Como migro dados do meu sistema atual?
 
 **Opção 1: Importação Manual**
-1. Baixe template Excel do PrimeCare
+1. Baixe template Excel do Omni Care
 2. Exporte dados do sistema antigo
-3. Formate no template PrimeCare
+3. Formate no template Omni Care
 4. Importe via portal
 
 **Opção 2: Suporte Assistido** (Early Adopters)
-- Entre em contato: earlyAdopters@primecaresoftware.com
+- Entre em contato: earlyAdopters@omnicaresoftware.com
 - Nossa equipe pode ajudar na migração
 - Sem custo adicional para Early Adopters
 
@@ -332,7 +332,7 @@ A interface é intuitiva e fácil de aprender!
 
 ### 33. Como posso contribuir com feedback?
 
-- 📧 **Email**: earlyAdopters@primecaresoftware.com
+- 📧 **Email**: earlyAdopters@omnicaresoftware.com
 - 💬 **Portal**: Menu > Feedback
 - 📝 **Pesquisas**: Mensais sobre novos recursos
 - 🗣️ **Entrevistas**: Participação em testes de usabilidade
@@ -346,19 +346,19 @@ Seu feedback é **muito valioso** para nós!
 ### Canais de Contato
 
 **Early Adopters (Prioritário)**:
-- 📧 Email: earlyAdopters@primecaresoftware.com
+- 📧 Email: earlyAdopters@omnicaresoftware.com
 - 📞 Telefone: (11) 99999-9999
 - ⏰ Horário: Seg-Sex, 9h-18h
 - ⚡ Resposta: Até 24h
 
 **Suporte Geral**:
-- 📧 Email: suporte@primecaresoftware.com
-- 💬 Portal: [suporte.primecaresoftware.com](https://suporte.primecaresoftware.com)
+- 📧 Email: suporte@omnicaresoftware.com
+- 💬 Portal: [suporte.omnicaresoftware.com](https://suporte.omnicaresoftware.com)
 - ⏰ Horário: Seg-Sex, 9h-18h
 - ⚡ Resposta: Até 48h
 
 **Comercial**:
-- 📧 Email: vendas@primecaresoftware.com
+- 📧 Email: vendas@omnicaresoftware.com
 - 📞 Telefone: (11) 99999-9999
 
 ### Documentação Adicional
@@ -374,4 +374,4 @@ Seu feedback é **muito valioso** para nós!
 **Última atualização**: Janeiro 2026
 **Versão do documento**: 1.0.0
 
-**Bem-vindo à família PrimeCare!** 🎉
+**Bem-vindo à família Omni Care!** 🎉

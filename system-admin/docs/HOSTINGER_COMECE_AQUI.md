@@ -315,7 +315,7 @@ Se conseguir fazer o deploy, compartilhe sua experiência! Isso ajuda outros ini
 
 ## 📞 Suporte
 
-- **Issues**: [GitHub Issues](https://github.com/PrimeCareSoftware/MW.Code/issues)
+- **Issues**: [GitHub Issues](https://github.com/Omni CareSoftware/MW.Code/issues)
 - **Documentação**: Este repositório
 - **Hostinger**: Suporte via ticket/chat
 
@@ -323,4 +323,4 @@ Se conseguir fazer o deploy, compartilhe sua experiência! Isso ajuda outros ini
 
 **Criado em**: Janeiro 2025  
 **Para**: Usuários que preferem Hostinger  
-**Mantenedor**: PrimeCare Software Team
+**Mantenedor**: Omni Care Software Team

@@ -1,4 +1,4 @@
-# 🔐 Sugestões de Melhorias de Segurança - PrimeCare Software
+# 🔐 Sugestões de Melhorias de Segurança - Omni Care Software
 
 > **IMPORTANTE**: Este documento contém apenas **sugestões** de melhorias de segurança. Nenhuma implementação foi realizada.
 
@@ -380,7 +380,7 @@ nikto -h https://sua-api.medicwarehouse.com
 dotnet list package --vulnerable --include-transitive
 
 # OWASP Dependency-Check
-dependency-check --project PrimeCare Software --scan ./src
+dependency-check --project Omni Care Software --scan ./src
 
 # Snyk
 snyk test
@@ -614,13 +614,13 @@ CREATE MASTER KEY ENCRYPTION BY PASSWORD = '<senha-forte>';
 GO
 CREATE CERTIFICATE TDECert WITH SUBJECT = 'TDE Certificate';
 GO
-USE PrimeCare Software;
+USE Omni Care Software;
 GO
 CREATE DATABASE ENCRYPTION KEY
 WITH ALGORITHM = AES_256
 ENCRYPTION BY SERVER CERTIFICATE TDECert;
 GO
-ALTER DATABASE PrimeCare Software SET ENCRYPTION ON;
+ALTER DATABASE Omni Care Software SET ENCRYPTION ON;
 GO
 ```
 

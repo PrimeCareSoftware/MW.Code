@@ -2,7 +2,7 @@
 
 ## 📊 Estimativa de Custos por Número de Clínicas
 
-Esta calculadora ajuda você a estimar os custos de infraestrutura do PrimeCare Software conforme seu negócio cresce.
+Esta calculadora ajuda você a estimar os custos de infraestrutura do Omni Care Software conforme seu negócio cresce.
 
 ---
 

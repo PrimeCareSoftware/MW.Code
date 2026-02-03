@@ -1,4 +1,4 @@
-# 📋 Plano de Desenvolvimento Priorizado - PrimeCare Software
+# 📋 Plano de Desenvolvimento Priorizado - Omni Care Software
 
 > **Documento Consolidado:** Este documento unifica PLANO_DESENVOLVIMENTO_PRIORIZADO.md (Parte 1) e PLANO_DESENVOLVIMENTO_PRIORIZADO_PARTE2.md (Parte 2)
 
@@ -217,7 +217,7 @@ Antes de prosseguir com o plano futuro, é importante reconhecer o que JÁ foi e
 - ✅ **Status e Priorização**
 
 #### 8. Aplicações Frontend (100% Completo)
-- ✅ **PrimeCare Software App** (Principal)
+- ✅ **Omni Care Software App** (Principal)
   - 10+ páginas funcionais
   - Dashboard com estatísticas
   - Gestão completa de pacientes
@@ -296,7 +296,7 @@ Antes de prosseguir com o plano futuro, é importante reconhecer o que JÁ foi e
 
 ## 🎯 Visão Executiva do Plano Futuro
 
-Este documento organiza TODAS as pendências RESTANTES do PrimeCare Software em uma ordem de prioridade clara, considerando:
+Este documento organiza TODAS as pendências RESTANTES do Omni Care Software em uma ordem de prioridade clara, considerando:
 
 1. **Obrigatoriedade Legal** (CFM, ANVISA, Receita Federal, ANS)
 2. **Impacto no Negócio** (Aquisição de clientes, retenção, receita)
@@ -1076,7 +1076,7 @@ O sistema de emissão de NF-e/NFS-e foi totalmente implementado e está pronto p
 **Versão:** 2.1 - Atualizado com simplificação arquitetural  
 **Status:** Sistema 95% completo - Arquitetura otimizada e simplificada
 
-**Este documento serve como roteiro detalhado de desenvolvimento do PrimeCare Software para 2026, considerando as implementações já realizadas em 2025 e a simplificação arquitetural de Janeiro 2026.**
+**Este documento serve como roteiro detalhado de desenvolvimento do Omni Care Software para 2026, considerando as implementações já realizadas em 2025 e a simplificação arquitetural de Janeiro 2026.**
 
 # 📋 Plano de Desenvolvimento Priorizado - Parte 2
 ## Prioridades Médias e Baixas + Apps
@@ -1792,7 +1792,7 @@ public class SOAPMedicalRecord
 
 ## 🌐 APLICATIVOS WEB
 
-### PrimeCare Software App (Frontend Principal)
+### Omni Care Software App (Frontend Principal)
 
 **Prioridade Alta:**
 1. Dashboard de Relatórios (4 semanas)

@@ -3,7 +3,7 @@
 > **Status:** ✅ **CONCLUÍDA**  
 > **Data de Conclusão:** 30 de Janeiro de 2026  
 > **Duração:** Fase 1 já estava implementada  
-> **Desenvolvedores:** Equipe PrimeCare Software
+> **Desenvolvedores:** Equipe Omni Care Software
 
 ---
 
@@ -419,7 +419,7 @@ A Fase 1 está completa. Os próximos passos são:
 4. Testar endpoints em `/api/system-admin/modules` (system admin)
 
 ### Via Postman
-1. Importar collection `PrimeCare-Postman-Collection.json`
+1. Importar collection `Omni Care-Postman-Collection.json`
 2. Configurar variáveis de ambiente (token, baseUrl)
 3. Executar requests na pasta "Module Configuration"
 
@@ -433,8 +433,8 @@ dotnet test --filter "FullyQualifiedName~ModuleConfiguration"
 
 ## 📞 Suporte
 
-**Equipe PrimeCare Software**
-- GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+**Equipe Omni Care Software**
+- GitHub: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - Documentação: `/Plano_Desenvolvimento/PlanoModulos/`
 
 ---

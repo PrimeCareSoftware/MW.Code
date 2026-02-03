@@ -47,13 +47,13 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "PrimeCare - Module Configuration API",
+        Title = "Omni Care - Module Configuration API",
         Version = "v1",
         Description = "API para gerenciamento de módulos do sistema",
         Contact = new OpenApiContact
         {
-            Name = "PrimeCare Software",
-            Email = "dev@primecare.com.br"
+            Name = "Omni Care Software",
+            Email = "dev@omnicare.com.br"
         }
     });
 
@@ -111,7 +111,7 @@ public class ModuleConfigController : BaseController
 
 ## Visão Geral
 
-O sistema de módulos permite habilitar/desabilitar funcionalidades do PrimeCare 
+O sistema de módulos permite habilitar/desabilitar funcionalidades do Omni Care 
 de forma flexível, vinculado aos planos de assinatura.
 
 ## Componentes
@@ -193,7 +193,7 @@ Auditoria e rastreabilidade de mudanças críticas.
 
 ## Bem-vindo ao Sistema de Módulos
 
-Este guia ensina como gerenciar módulos do PrimeCare como administrador do sistema.
+Este guia ensina como gerenciar módulos do Omni Care como administrador do sistema.
 
 ## 📊 Dashboard de Módulos
 
@@ -324,7 +324,7 @@ Identifique módulos em crescimento ou declínio.
 ## 📞 Suporte
 
 Dúvidas? Entre em contato:
-- Email: suporte@primecare.com.br
+- Email: suporte@omnicare.com.br
 - Tel: (11) 1234-5678
 - Chat: [Sistema de Tickets]
 ```
@@ -532,7 +532,7 @@ Veja seu plano atual na aba **"Assinatura"**.
 ## 📞 Precisa de Ajuda?
 
 **Suporte Técnico:**
-- 📧 Email: suporte@primecare.com.br
+- 📧 Email: suporte@omnicare.com.br
 - 📱 WhatsApp: (11) 98765-4321
 - 💬 Chat: [Abrir Ticket]
 - 📚 Base de Conhecimento: [Central de Ajuda]
@@ -692,7 +692,7 @@ ng build
 
 ## 👥 Créditos
 
-Desenvolvido por PrimeCare Software Development Team
+Desenvolvido por Omni Care Software Development Team
 
 ---
 
@@ -716,7 +716,7 @@ Desenvolvido por PrimeCare Software Development Team
 
 **Roteiro:**
 1. Abertura (10s)
-   - "Bem-vindo ao PrimeCare!"
+   - "Bem-vindo ao Omni Care!"
    - "Hoje vamos conhecer o Sistema de Módulos"
 
 2. O que são módulos? (30s)

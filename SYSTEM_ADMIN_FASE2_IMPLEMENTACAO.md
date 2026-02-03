@@ -477,13 +477,13 @@ Nenhum problema conhecido no momento.
 
 **Dúvidas ou Problemas:**
 - Email: suporte@medicwarehouse.com.br
-- GitHub Issues: https://github.com/PrimeCareSoftware/MW.Code/issues
+- GitHub Issues: https://github.com/Omni CareSoftware/MW.Code/issues
 - Documentação: https://docs.medicwarehouse.com.br
 
 ---
 
 ## 🏆 Créditos
 
-**Desenvolvido por:** PrimeCare Software  
+**Desenvolvido por:** Omni Care Software  
 **Data:** Janeiro 2026  
 **Versão:** 2.0.0

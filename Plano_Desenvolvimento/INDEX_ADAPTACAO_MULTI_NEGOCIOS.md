@@ -9,7 +9,7 @@
 
 ## 🎯 Visão Geral
 
-Esta documentação apresenta o **Plano de Adaptação Multi-Negócios** do PrimeCare Software, transformando o sistema de um foco exclusivo em clínicas médicas para uma **plataforma adaptável** que atende:
+Esta documentação apresenta o **Plano de Adaptação Multi-Negócios** do Omni Care Software, transformando o sistema de um foco exclusivo em clínicas médicas para uma **plataforma adaptável** que atende:
 
 - 🧠 **Psicólogos** (solo e clínicas)
 - 🥗 **Nutricionistas** (solo e clínicas)
@@ -330,8 +330,8 @@ Plano_Desenvolvimento/
 ## 📞 Contato e Suporte
 
 ### Equipe de Produto
-- **Email:** produto@primecare.com.br
-- **GitHub:** [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- **Email:** produto@omnicare.com.br
+- **GitHub:** [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - **Documentação:** `/Plano_Desenvolvimento/`
 
 ### Para Dúvidas sobre Documentação
@@ -374,7 +374,7 @@ Plano_Desenvolvimento/
 ---
 
 > **Documentação Criada:** 26 de Janeiro de 2026  
-> **Responsável:** Equipe de Produto PrimeCare  
+> **Responsável:** Equipe de Produto Omni Care  
 > **Próxima Revisão:** Fevereiro 2026  
 > **Status:** ✅ Completa e Aguardando Aprovação
 
@@ -382,7 +382,7 @@ Plano_Desenvolvimento/
 
 ## 🎉 Conclusão
 
-Esta documentação representa um plano **completo e viável** para transformar o PrimeCare Software em uma plataforma verdadeiramente adaptável para múltiplos modelos de negócio em saúde.
+Esta documentação representa um plano **completo e viável** para transformar o Omni Care Software em uma plataforma verdadeiramente adaptável para múltiplos modelos de negócio em saúde.
 
 **Benefícios:**
 - 📈 **Mercado 4x maior** (1.8M profissionais vs. 500k médicos)

@@ -447,7 +447,7 @@ Digite o nome no campo de medicamento - o autocomplete mostra ícones coloridos 
 
 > **Nota:** Os números de telefone abaixo são placeholders. Substitua pelos números reais da sua clínica antes de distribuir este guia.
 
-**Email:** suporte@primecaresoftware.com  
+**Email:** suporte@omnicaresoftware.com  
 **Telefone:** (11) XXXX-XXXX _(substituir com número real)_  
 **Horário:** Segunda a Sexta, 8h às 18h
 
@@ -464,4 +464,4 @@ Digite o nome no campo de medicamento - o autocomplete mostra ícones coloridos 
 
 **Última Atualização:** 29 de Janeiro de 2026  
 **Versão:** 1.0  
-**Autor:** PrimeCare Software
+**Autor:** Omni Care Software

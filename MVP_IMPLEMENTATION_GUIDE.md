@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este guia detalha os passos necessários para ativar o lançamento do MVP do PrimeCare Software com a estratégia de Early Adopters.
+Este guia detalha os passos necessários para ativar o lançamento do MVP do Omni Care Software com a estratégia de Early Adopters.
 
 ## 🎯 Objetivos do MVP
 
@@ -282,9 +282,9 @@ if (isFeatureInDevelopment('digitalSignatureICPBrasil')) {
 ## 📞 Suporte
 
 ### Canais
-- **Email**: suporte@primecare.com.br
+- **Email**: suporte@omnicare.com.br
 - **WhatsApp**: (11) 9xxxx-xxxx
-- **Base de Conhecimento**: docs.primecare.com.br
+- **Base de Conhecimento**: docs.omnicare.com.br
 
 ### SLA por Plano
 - **Starter**: 48h (dias úteis)
@@ -327,4 +327,4 @@ Este MVP permite:
 
 **Versão**: 1.0  
 **Data**: Janeiro 2026  
-**Autor**: PrimeCare Development Team
+**Autor**: Omni Care Development Team

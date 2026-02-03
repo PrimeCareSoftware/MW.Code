@@ -1,4 +1,4 @@
-# 📊 Resumo dos Testes Unitários - PrimeCare Software
+# 📊 Resumo dos Testes Unitários - Omni Care Software
 
 ## Estatísticas Gerais
 

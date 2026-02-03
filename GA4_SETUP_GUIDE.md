@@ -1,11 +1,11 @@
-# Google Analytics 4 Setup Guide - PrimeCare
+# Google Analytics 4 Setup Guide - Omni Care
 
 > **Última atualização:** 28 de Janeiro de 2026  
 > **Status:** Implementado (95%) - Aguardando configuração de Measurement ID
 
 ## 📋 Visão Geral
 
-O PrimeCare implementou tracking completo com Google Analytics 4 (GA4) para monitorar o comportamento dos usuários no site público e medir conversões.
+O Omni Care implementou tracking completo com Google Analytics 4 (GA4) para monitorar o comportamento dos usuários no site público e medir conversões.
 
 ## ✅ O Que Já Está Implementado
 
@@ -64,10 +64,10 @@ Script adicionado no `<head>`:
 
 1. Acesse https://analytics.google.com/
 2. Clique em **Admin** (ícone de engrenagem no canto inferior esquerdo)
-3. Na coluna **Account**, selecione ou crie uma conta para "PrimeCare"
+3. Na coluna **Account**, selecione ou crie uma conta para "Omni Care"
 4. Na coluna **Property**, clique em **Create Property**
 5. Preencha os dados:
-   - **Property name:** PrimeCare Software
+   - **Property name:** Omni Care Software
    - **Reporting time zone:** (GMT-03:00) Brasília
    - **Currency:** Brazilian Real (R$)
 6. Clique em **Next**
@@ -81,8 +81,8 @@ Script adicionado no `<head>`:
 1. Na nova propriedade criada, vá em **Admin > Data Streams**
 2. Clique em **Add stream** > **Web**
 3. Preencha:
-   - **Website URL:** https://primecare.com.br (ou domínio atual)
-   - **Stream name:** PrimeCare Website
+   - **Website URL:** https://omnicare.com.br (ou domínio atual)
+   - **Stream name:** Omni Care Website
 4. Clique em **Create stream**
 5. **Copie o Measurement ID** (formato: `G-XXXXXXXXXX`)
 

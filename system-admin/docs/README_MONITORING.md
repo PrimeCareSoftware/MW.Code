@@ -1,4 +1,4 @@
-# 📊 Sistema de Monitoramento e Logging - PrimeCare Software
+# 📊 Sistema de Monitoramento e Logging - Omni Care Software
 
 ## 🎯 Visão Geral
 
@@ -25,7 +25,7 @@ dotnet run
 
 ### 3️⃣ Acessar Logs
 - **Console:** Saída do terminal
-- **Arquivo:** `Logs/primecare-*.log`
+- **Arquivo:** `Logs/omnicare-*.log`
 - **Seq:** http://localhost:5341
 
 ---
@@ -74,7 +74,7 @@ dotnet run
 ### Ver Requisições Lentas
 ```bash
 # Terminal
-grep "SLOW REQUEST" Logs/primecare-*.log
+grep "SLOW REQUEST" Logs/omnicare-*.log
 
 # Seq
 @Message like "%SLOW REQUEST%"
@@ -83,10 +83,10 @@ grep "SLOW REQUEST" Logs/primecare-*.log
 ### Rastrear Erro Específico
 ```bash
 # Encontrar erro
-grep "ERROR" Logs/primecare-errors-*.log | tail -1
+grep "ERROR" Logs/omnicare-errors-*.log | tail -1
 
 # Rastrear requisição completa
-grep "RequestId=abc-123" Logs/primecare-*.log
+grep "RequestId=abc-123" Logs/omnicare-*.log
 ```
 
 ### Analisar Performance por Endpoint
@@ -303,7 +303,7 @@ dotnet run
 curl http://localhost:5000/api/health
 
 # Veja os logs
-tail -f Logs/primecare-*.log
+tail -f Logs/omnicare-*.log
 ```
 
 **É isso!** Seu sistema já está sendo monitorado. 🎉

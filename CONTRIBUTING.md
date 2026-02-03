@@ -1,6 +1,6 @@
-# 🤝 Guia de Contribuição - PrimeCare Software
+# 🤝 Guia de Contribuição - Omni Care Software
 
-> **Bem-vindo!** Obrigado por considerar contribuir para o PrimeCare Software.
+> **Bem-vindo!** Obrigado por considerar contribuir para o Omni Care Software.
 
 ---
 
@@ -105,7 +105,7 @@ git clone https://github.com/seu-usuario/MW.Code.git
 cd MW.Code
 
 # Adicione o upstream
-git remote add upstream https://github.com/PrimeCare Software/MW.Code.git
+git remote add upstream https://github.com/Omni Care Software/MW.Code.git
 
 # Configure .env
 cp .env.example .env
@@ -553,7 +553,7 @@ Procure por issues marcadas com:
 
 ### Encontrar uma Issue
 
-1. Veja as [issues abertas](https://github.com/PrimeCare Software/MW.Code/issues)
+1. Veja as [issues abertas](https://github.com/Omni Care Software/MW.Code/issues)
 2. Escolha uma que você consiga resolver
 3. Comente na issue dizendo que vai trabalhar nela
 4. Aguarde aprovação do maintainer
@@ -565,7 +565,7 @@ Não hesite em pedir ajuda:
 
 - Comente na issue
 - Entre no canal de discussões
-- Envie um email para contato@primecaresoftware.com
+- Envie um email para contato@omnicaresoftware.com
 
 ---
 
@@ -613,8 +613,8 @@ Todos os contribuidores são listados no README e no arquivo AUTHORS.
 
 ## 📞 Contato
 
-- **GitHub Issues:** [github.com/PrimeCare Software/MW.Code/issues](https://github.com/PrimeCare Software/MW.Code/issues)
-- **Email:** contato@primecaresoftware.com
+- **GitHub Issues:** [github.com/Omni Care Software/MW.Code/issues](https://github.com/Omni Care Software/MW.Code/issues)
+- **Email:** contato@omnicaresoftware.com
 - **Documentação:** [Índice Completo](docs/DOCUMENTATION_INDEX.md)
 
 ---
@@ -631,4 +631,4 @@ Todos os contribuidores são listados no README e no arquivo AUTHORS.
 
 **Obrigado por contribuir! 🎉**
 
-Sua contribuição ajuda a tornar o PrimeCare Software melhor para todos.
+Sua contribuição ajuda a tornar o Omni Care Software melhor para todos.

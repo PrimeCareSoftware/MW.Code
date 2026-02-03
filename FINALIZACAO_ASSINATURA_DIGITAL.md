@@ -441,9 +441,9 @@ O sistema agora oferece uma solução completa e robusta para assinatura digital
 
 **Status Final:** ✅ 100% COMPLETO  
 **Data de Conclusão:** 27 de Janeiro de 2026  
-**Desenvolvido por:** PrimeCare Software Team  
+**Desenvolvido por:** Omni Care Software Team  
 **Com suporte de:** GitHub Copilot  
 
 ---
 
-*Este documento marca a conclusão oficial da implementação da funcionalidade de Assinatura Digital ICP-Brasil no sistema PrimeCare.*
+*Este documento marca a conclusão oficial da implementação da funcionalidade de Assinatura Digital ICP-Brasil no sistema Omni Care.*

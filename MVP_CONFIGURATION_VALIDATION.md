@@ -5,7 +5,7 @@
 Este documento confirma que todas as configurações do MVP Fase 1 estão corretas e funcionais conforme especificado no guia de implementação.
 
 **Data da Validação**: Janeiro 2026
-**Responsável**: Equipe PrimeCare
+**Responsável**: Equipe Omni Care
 **Status**: ✅ Todos os 3 planos MVP validados e funcionais
 
 ---

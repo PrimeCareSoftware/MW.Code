@@ -1,4 +1,4 @@
-# 🔐 Security Best Practices Guide - PrimeCare System Admin
+# 🔐 Security Best Practices Guide - Omni Care System Admin
 
 **Version:** 1.0  
 **Last Updated:** Janeiro 2026  
@@ -488,9 +488,9 @@ var hashedCode = _passwordHasher.HashPassword(code);
 ### Contatos de Emergência
 
 ```
-Security Team: security@primecare.com
+Security Team: security@omnicare.com
 Emergency Hotline: +55 (11) XXXX-XXXX
-LGPD DPO: dpo@primecare.com
+LGPD DPO: dpo@omnicare.com
 ```
 
 ### Notificação de Vazamento (LGPD Art. 48)

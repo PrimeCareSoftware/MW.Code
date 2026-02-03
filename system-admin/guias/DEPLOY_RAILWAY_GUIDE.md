@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este guia mostra passo a passo como fazer deploy do PrimeCare Software no Railway com **PostgreSQL**, a opção mais econômica e simples para começar.
+Este guia mostra passo a passo como fazer deploy do Omni Care Software no Railway com **PostgreSQL**, a opção mais econômica e simples para começar.
 
 **Tempo estimado**: 30 minutos  
 **Custo inicial**: ~$5-15/mês  
@@ -106,8 +106,8 @@ Edite: `src/MedicSoft.Api/appsettings.Production.json`
   "JwtSettings": {
     "SecretKey": "${JWT_SECRET_KEY}",
     "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Software",
-    "Audience": "PrimeCare Software-API"
+    "Issuer": "Omni Care Software",
+    "Audience": "Omni Care Software-API"
   },
   "Logging": {
     "LogLevel": {
@@ -135,7 +135,7 @@ git push origin main
 2. Click em **"Start a New Project"**
 3. Login com GitHub
 4. Click em **"Deploy from GitHub repo"**
-5. Selecione o repositório: `PrimeCare Software/MW.Code`
+5. Selecione o repositório: `Omni Care Software/MW.Code`
 6. Railway detectará automaticamente que é um projeto .NET
 
 ### Passo 2: Adicionar PostgreSQL

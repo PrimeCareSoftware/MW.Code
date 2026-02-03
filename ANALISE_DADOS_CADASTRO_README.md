@@ -323,7 +323,7 @@ Lead C: Score 82 (chegou no passo 4, forneceu email e telefone)
 
 ## 📝 Licença
 
-Documentação proprietária - PrimeCare Software © 2026
+Documentação proprietária - Omni Care Software © 2026
 
 ---
 

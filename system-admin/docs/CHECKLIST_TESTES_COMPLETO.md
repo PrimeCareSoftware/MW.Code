@@ -1,12 +1,12 @@
-# ✅ Checklist Completo de Testes - PrimeCare Software
+# ✅ Checklist Completo de Testes - Omni Care Software
 
-> **Objetivo:** Documento para verificar todos os métodos, APIs, front-end e fluxos do sistema PrimeCare Software
+> **Objetivo:** Documento para verificar todos os métodos, APIs, front-end e fluxos do sistema Omni Care Software
 
 ## 📋 Índice
 
 1. [Preparação do Ambiente](#preparação-do-ambiente)
 2. [Testes de API - Backend](#testes-de-api---backend)
-3. [Testes de Frontend - PrimeCare Software App](#testes-de-frontend---medicwarehouse-app)
+3. [Testes de Frontend - Omni Care Software App](#testes-de-frontend---medicwarehouse-app)
 4. [Testes de Frontend - System Admin](#testes-de-frontend---system-admin)
 5. [Testes de Integração](#testes-de-integração)
 6. [Testes de Segurança](#testes-de-segurança)
@@ -197,7 +197,7 @@ curl http://localhost:5000/api/data-seeder/demo-info
 
 ---
 
-## 🖥️ Testes de Frontend - PrimeCare Software App
+## 🖥️ Testes de Frontend - Omni Care Software App
 
 ### Autenticação
 

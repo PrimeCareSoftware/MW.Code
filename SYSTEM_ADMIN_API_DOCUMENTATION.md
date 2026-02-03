@@ -515,23 +515,23 @@ Authorization: Bearer {jwt_token}
 
 ### cURL Examples
 
-**Note:** Replace `https://api.primecare.com` with your actual API base URL.
+**Note:** Replace `https://api.omnicare.com` with your actual API base URL.
 
 **Get Dashboard Metrics:**
 ```bash
-curl -X GET "https://api.primecare.com/api/system-admin/saas-metrics/dashboard" \
+curl -X GET "https://api.omnicare.com/api/system-admin/saas-metrics/dashboard" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 **Search:**
 ```bash
-curl -X GET "https://api.primecare.com/api/system-admin/search?q=clinic&maxResults=10" \
+curl -X GET "https://api.omnicare.com/api/system-admin/search?q=clinic&maxResults=10" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 **Mark Notification as Read:**
 ```bash
-curl -X POST "https://api.primecare.com/api/system-admin/notifications/1/read" \
+curl -X POST "https://api.omnicare.com/api/system-admin/notifications/1/read" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
@@ -572,7 +572,7 @@ await fetch(`${API_URL}/system-admin/notifications/${notificationId}/read`, {
 
 **Note:** The contact information below may be placeholders. Please verify with your organization's actual support contacts.
 
-For API support, contact: dev@primecare.com.br
+For API support, contact: dev@omnicare.com.br
 
 ---
 

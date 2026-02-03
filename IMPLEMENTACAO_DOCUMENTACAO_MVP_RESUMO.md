@@ -237,15 +237,15 @@ Conforme especificado no prompt, as seguintes métricas devem ser monitoradas:
 ## 📞 Informações de Contato
 
 ### Para Early Adopters
-- Email: earlyAdopters@primecaresoftware.com
+- Email: earlyAdopters@omnicaresoftware.com
 - Resposta: Até 24h (dias úteis)
 
 ### Suporte Geral
-- Email: suporte@primecaresoftware.com
+- Email: suporte@omnicaresoftware.com
 - Resposta: Até 48h (dias úteis)
 
 ### Comercial
-- Email: vendas@primecaresoftware.com
+- Email: vendas@omnicaresoftware.com
 
 > ⚠️ **Nota**: Todos os contatos acima são exemplos para documentação. Use contatos reais em produção.
 

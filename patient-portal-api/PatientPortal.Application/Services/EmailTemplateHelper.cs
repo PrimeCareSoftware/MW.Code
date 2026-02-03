@@ -30,15 +30,15 @@ public static class EmailTemplateHelper
         sb.AppendLine("        </div>");
         sb.AppendLine("        <div class=\"content\">");
         sb.AppendLine($"            <p>Olá <strong>{patientName}</strong>,</p>");
-        sb.AppendLine("            <p>Bem-vindo ao Portal do Paciente PrimeCare! Para concluir seu cadastro, precisamos confirmar seu endereço de e-mail.</p>");
+        sb.AppendLine("            <p>Bem-vindo ao Portal do Paciente Omni Care! Para concluir seu cadastro, precisamos confirmar seu endereço de e-mail.</p>");
         sb.AppendLine("            <div class=\"buttons\">");
         sb.AppendLine($"                <a href=\"{verificationLink}\" class=\"btn btn-primary\">✅ Confirmar E-mail</a>");
         sb.AppendLine("            </div>");
         sb.AppendLine("            <div class=\"alert\">");
         sb.AppendLine("                <strong>⚠️ Importante:</strong> Este link de verificação expira em 24 horas.");
         sb.AppendLine("            </div>");
-        sb.AppendLine("            <p>Se você não criou uma conta no Portal do Paciente PrimeCare, por favor ignore este e-mail.</p>");
-        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe PrimeCare</strong></p>");
+        sb.AppendLine("            <p>Se você não criou uma conta no Portal do Paciente Omni Care, por favor ignore este e-mail.</p>");
+        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe Omni Care</strong></p>");
         sb.AppendLine("        </div>");
         sb.AppendLine(GetEmailFooter());
         sb.AppendLine("    </div>");
@@ -70,7 +70,7 @@ public static class EmailTemplateHelper
         sb.AppendLine("        </div>");
         sb.AppendLine("        <div class=\"content\">");
         sb.AppendLine($"            <p>Olá <strong>{patientName}</strong>,</p>");
-        sb.AppendLine("            <p>Recebemos uma solicitação para redefinir a senha da sua conta no Portal do Paciente PrimeCare.</p>");
+        sb.AppendLine("            <p>Recebemos uma solicitação para redefinir a senha da sua conta no Portal do Paciente Omni Care.</p>");
         sb.AppendLine("            <div class=\"buttons\">");
         sb.AppendLine($"                <a href=\"{resetLink}\" class=\"btn btn-primary\">🔑 Redefinir Senha</a>");
         sb.AppendLine("            </div>");
@@ -78,7 +78,7 @@ public static class EmailTemplateHelper
         sb.AppendLine("                <strong>⚠️ Importante:</strong> Este link de recuperação expira em 1 hora.");
         sb.AppendLine("            </div>");
         sb.AppendLine("            <p>Se você não solicitou a recuperação de senha, por favor ignore este e-mail. Sua senha permanecerá inalterada.</p>");
-        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe PrimeCare</strong></p>");
+        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe Omni Care</strong></p>");
         sb.AppendLine("        </div>");
         sb.AppendLine(GetEmailFooter());
         sb.AppendLine("    </div>");
@@ -147,7 +147,7 @@ public static class EmailTemplateHelper
         sb.AppendLine("            </div>");
         
         sb.AppendLine("            <p>Em caso de dúvidas, entre em contato conosco.</p>");
-        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe PrimeCare</strong></p>");
+        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe Omni Care</strong></p>");
         sb.AppendLine("        </div>");
         sb.AppendLine(GetEmailFooter());
         sb.AppendLine("    </div>");
@@ -194,7 +194,7 @@ public static class EmailTemplateHelper
         var sb = new StringBuilder();
         sb.AppendLine("        <div class=\"footer\">");
         sb.AppendLine("            <p>Este é um e-mail automático. Por favor, não responda.</p>");
-        sb.AppendLine($"            <p>© {DateTime.UtcNow.Year} PrimeCare Software. Todos os direitos reservados.</p>");
+        sb.AppendLine($"            <p>© {DateTime.UtcNow.Year} Omni Care Software. Todos os direitos reservados.</p>");
         sb.AppendLine("        </div>");
         return sb.ToString();
     }
@@ -262,7 +262,7 @@ public static class EmailTemplateHelper
         sb.AppendLine("            </div>");
         
         sb.AppendLine("            <p>Em caso de dúvidas, entre em contato conosco.</p>");
-        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe PrimeCare</strong></p>");
+        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe Omni Care</strong></p>");
         sb.AppendLine("        </div>");
         sb.AppendLine(GetEmailFooter());
         sb.AppendLine("    </div>");
@@ -285,7 +285,7 @@ public static class EmailTemplateHelper
                $"👨‍⚕️ {appointment.DoctorName} - {appointment.DoctorSpecialty}\n" +
                $"🏢 {appointment.ClinicName}\n\n" +
                $"Confirme sua presença: {confirmUrl}\n\n" +
-               $"Equipe PrimeCare";
+               $"Equipe Omni Care";
     }
 
     /// <summary>
@@ -313,7 +313,7 @@ public static class EmailTemplateHelper
         sb.AppendLine("        </div>");
         sb.AppendLine("        <div class=\"content\">");
         sb.AppendLine($"            <p>Olá <strong>{patientName}</strong>,</p>");
-        sb.AppendLine("            <p>Você solicitou um código de verificação para acessar o Portal do Paciente PrimeCare.</p>");
+        sb.AppendLine("            <p>Você solicitou um código de verificação para acessar o Portal do Paciente Omni Care.</p>");
         sb.AppendLine("            <p>Seu código de verificação é:</p>");
         sb.AppendLine($"            <div class=\"verification-code\">{code}</div>");
         sb.AppendLine("            <div class=\"alert\">");
@@ -321,7 +321,7 @@ public static class EmailTemplateHelper
         sb.AppendLine("            </div>");
         sb.AppendLine("            <p>Se você não solicitou este código, ignore este e-mail ou entre em contato conosco imediatamente se acredita que sua conta está comprometida.</p>");
         sb.AppendLine("            <p>Por segurança, nunca compartilhe este código com ninguém.</p>");
-        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe PrimeCare</strong></p>");
+        sb.AppendLine("            <p>Atenciosamente,<br><strong>Equipe Omni Care</strong></p>");
         sb.AppendLine("        </div>");
         sb.AppendLine(GetEmailFooter());
         sb.AppendLine("    </div>");

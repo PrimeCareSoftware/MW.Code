@@ -62,7 +62,7 @@ Patients receive reminder emails 24 hours before their appointment.
 ## Email Templates
 
 All email templates use a consistent HTML design with:
-- Professional styling with PrimeCare branding
+- Professional styling with Omni Care branding
 - Responsive design for mobile devices
 - Clear call-to-action buttons
 - Important information highlighted
@@ -89,11 +89,11 @@ Configure SMTP settings in `appsettings.json`:
     "UseSsl": true,
     "Username": "your-email@example.com",
     "Password": "your-app-password",
-    "From": "noreply@primecare.com",
-    "FromName": "PrimeCare Portal",
+    "From": "noreply@omnicare.com",
+    "FromName": "Omni Care Portal",
     "SendGridApiKey": ""  // Optional: Use SendGrid instead of SMTP
   },
-  "PortalBaseUrl": "https://portal.primecare.com"
+  "PortalBaseUrl": "https://portal.omnicare.com"
 }
 ```
 

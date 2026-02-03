@@ -2,7 +2,7 @@
 
 ## 📋 Objetivo
 
-Colocar o PrimeCare Software em produção **com custo mínimo** ($5-20/mês) de forma rápida e segura.
+Colocar o Omni Care Software em produção **com custo mínimo** ($5-20/mês) de forma rápida e segura.
 
 ## 🎯 O Que Você Vai Conseguir
 
@@ -21,7 +21,7 @@ Colocar o PrimeCare Software em produção **com custo mínimo** ($5-20/mês) de
 
 ```bash
 # 1. Clone o repositório (se ainda não tem)
-git clone https://github.com/PrimeCare Software/MW.Code.git
+git clone https://github.com/Omni Care Software/MW.Code.git
 cd MW.Code
 
 # 2. Gere uma chave JWT segura
@@ -139,7 +139,7 @@ docker compose version
 
 ```bash
 # Clonar repositório
-git clone https://github.com/PrimeCare Software/MW.Code.git
+git clone https://github.com/Omni Care Software/MW.Code.git
 cd MW.Code
 
 # Criar arquivo .env

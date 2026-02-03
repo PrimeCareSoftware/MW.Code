@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Patient Portal API",
         Version = "v1",
-        Description = "API for Patient Portal - PrimeCare Software\n\n" +
+        Description = "API for Patient Portal - Omni Care Software\n\n" +
                       "This API provides secure access for patients to view their medical appointments, " +
                       "documents, and manage their profile information.\n\n" +
                       "**Authentication:** JWT Bearer Token\n" +
@@ -48,8 +48,8 @@ builder.Services.AddSwaggerGen(options =>
                       "- LGPD compliant data handling",
         Contact = new OpenApiContact
         {
-            Name = "PrimeCare Software",
-            Email = "support@primecaresoftware.com"
+            Name = "Omni Care Software",
+            Email = "support@omnicaresoftware.com"
         },
         License = new OpenApiLicense
         {
@@ -92,7 +92,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Configure Database - Using the same database as PrimeCare Software
+// Configure Database - Using the same database as Omni Care Software
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 

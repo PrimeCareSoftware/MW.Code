@@ -95,7 +95,7 @@ Aguardando:
 1. Criar/usar conta YouTube da empresa
 2. Upload do vídeo
 3. Configurar:
-   - Título: "PrimeCare Software - Vídeo Demonstrativo"
+   - Título: "Omni Care Software - Vídeo Demonstrativo"
    - Descrição: [copiar de VIDEO_DEMONSTRATIVO_SCRIPT.md]
    - Thumbnail: personalizado (extrair do vídeo)
    - Privacidade: "Público" ou "Não listado"

@@ -1,8 +1,8 @@
-# 🚀 Plano de Lançamento MVP - PrimeCare SaaS
+# 🚀 Plano de Lançamento MVP - Omni Care SaaS
 
 ## 📋 Visão Geral
 
-Este documento detalha a estratégia de lançamento do MVP (Minimum Viable Product) do PrimeCare Software, focando em minimizar custos iniciais enquanto valida a aceitação do mercado.
+Este documento detalha a estratégia de lançamento do MVP (Minimum Viable Product) do Omni Care Software, focando em minimizar custos iniciais enquanto valida a aceitação do mercado.
 
 ## 🎯 Objetivo do MVP
 
@@ -273,7 +273,7 @@ Lançar uma versão funcional do sistema com recursos essenciais para:
 ## 📞 Suporte MVP
 
 ### Canais
-- **Email**: suporte@primecare.com.br
+- **Email**: suporte@omnicare.com.br
 - **WhatsApp**: (11) 9xxxx-xxxx (horário comercial)
 - **Base de Conhecimento**: Documentação online
 - **Vídeos**: Tutoriais no YouTube
@@ -374,7 +374,7 @@ Lançar uma versão funcional do sistema com recursos essenciais para:
 
 ## 📝 Conclusão
 
-Este plano permite lançar o MVP do PrimeCare com investimento mínimo, focando em:
+Este plano permite lançar o MVP do Omni Care com investimento mínimo, focando em:
 - ✅ Validação do mercado
 - ✅ Construção de base de clientes fiéis
 - ✅ Geração de receita para reinvestimento

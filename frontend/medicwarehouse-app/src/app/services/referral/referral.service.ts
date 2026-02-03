@@ -156,7 +156,7 @@ export class ReferralService {
   shareVia(platform: 'whatsapp' | 'email' | 'linkedin' | 'twitter' | 'copy'): Observable<{ success: boolean; message: string }> {
     const link = this.getShareableLink();
     const message = encodeURIComponent(
-      `Conheça o PrimeCare Software - o melhor sistema de gestão para clínicas! Use meu código e ganhe desconto: ${link}`
+      `Conheça o Omni Care Software - o melhor sistema de gestão para clínicas! Use meu código e ganhe desconto: ${link}`
     );
     
     try {
@@ -165,7 +165,7 @@ export class ReferralService {
           window.open(`https://wa.me/?text=${message}`, '_blank');
           break;
         case 'email':
-          window.open(`mailto:?subject=Conheça o PrimeCare&body=${message}`, '_blank');
+          window.open(`mailto:?subject=Conheça o Omni Care&body=${message}`, '_blank');
           break;
         case 'linkedin':
           window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`, '_blank');

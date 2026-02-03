@@ -129,7 +129,7 @@ export class PatientListComponent {
 
 ## 🎨 Design System Compliance
 
-O componente segue o design system do PrimeCare:
+O componente segue o design system do Omni Care:
 
 - ✅ **Cores**: Usa variáveis CSS (--primary-*, --gray-*)
 - ✅ **Espaçamento**: Sistema de 8px (--spacing-*)

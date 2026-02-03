@@ -114,9 +114,9 @@ export class ReferralInvitationModalComponent implements OnDestroy {
     return `
 Olá! 👋
 
-${personalMessage || 'Gostaria de te convidar para conhecer o PrimeCare, o melhor software de gestão clínica do mercado!'}
+${personalMessage || 'Gostaria de te convidar para conhecer o Omni Care, o melhor software de gestão clínica do mercado!'}
 
-Com o PrimeCare você consegue:
+Com o Omni Care você consegue:
 ✅ Gerenciar consultas e pacientes
 ✅ Prontuário eletrônico completo
 ✅ Controle financeiro integrado

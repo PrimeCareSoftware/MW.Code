@@ -18,8 +18,8 @@ namespace MedicSoft.Application.Services
 
     public class JwtTokenService : IJwtTokenService
     {
-        private const string DefaultIssuer = "PrimeCare Software";
-        private const string DefaultAudience = "PrimeCare Software-API";
+        private const string DefaultIssuer = "Omni Care Software";
+        private const string DefaultAudience = "Omni Care Software-API";
         
         private readonly IConfiguration _configuration;
         private readonly ILogger<JwtTokenService> _logger;

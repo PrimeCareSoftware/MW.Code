@@ -9,7 +9,7 @@
 
 ## 🎯 Objetivo
 
-Completar a integração dos componentes de Conformidade CFM 1.821/2007 e Receitas Médicas Digitais no fluxo de atendimento do sistema PrimeCare Software, conforme especificado no documento PENDING_TASKS.md.
+Completar a integração dos componentes de Conformidade CFM 1.821/2007 e Receitas Médicas Digitais no fluxo de atendimento do sistema Omni Care Software, conforme especificado no documento PENDING_TASKS.md.
 
 ---
 

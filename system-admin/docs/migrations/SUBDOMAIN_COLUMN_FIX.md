@@ -28,7 +28,7 @@ psql -U postgres -d primecare < scripts/migrations/001_add_subdomain_to_clinics.
 
 Or via Docker:
 ```bash
-docker exec -i primecare-postgres psql -U postgres -d primecare < scripts/migrations/001_add_subdomain_to_clinics.sql
+docker exec -i omnicare-postgres psql -U postgres -d primecare < scripts/migrations/001_add_subdomain_to_clinics.sql
 ```
 
 ## What Was Fixed

@@ -9,7 +9,7 @@
 
 ## 📋 Sumário Executivo
 
-A Fase 9 implementa o sistema completo de auditoria e compliance LGPD (Lei Geral de Proteção de Dados) para o PrimeCare Software, garantindo conformidade legal com a legislação brasileira de proteção de dados e atendimento aos direitos dos titulares de dados.
+A Fase 9 implementa o sistema completo de auditoria e compliance LGPD (Lei Geral de Proteção de Dados) para o Omni Care Software, garantindo conformidade legal com a legislação brasileira de proteção de dados e atendimento aos direitos dos titulares de dados.
 
 ### Objetivos Alcançados
 
@@ -606,17 +606,17 @@ A Fase 9 foi **100% completada** em 29 de Janeiro de 2026, incluindo:
 ## 📞 Contatos
 
 ### Encarregado de Dados (DPO)
-**Email:** dpo@primecare.com  
+**Email:** dpo@omnicare.com  
 **Telefone:** +55 (11) XXXX-XXXX  
 **Horário:** Segunda a Sexta, 9h às 18h
 
 ### Canal de Atendimento LGPD
-**Email:** lgpd@primecare.com  
-**Portal:** https://primecare.com.br/lgpd  
+**Email:** lgpd@omnicare.com  
+**Portal:** https://omnicare.com.br/lgpd  
 **Resposta:** Até 15 dias corridos
 
 ### Equipe de Desenvolvimento
-**GitHub:** [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)  
+**GitHub:** [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)  
 **Documentação:** `/docs` e `/Plano_Desenvolvimento/`
 
 ---

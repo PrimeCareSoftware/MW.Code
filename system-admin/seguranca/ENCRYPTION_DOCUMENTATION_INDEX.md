@@ -2,7 +2,7 @@
 
 ## 🎯 Visão Geral
 
-Este índice reúne toda a documentação relacionada à implementação de criptografia de dados médicos sensíveis no PrimeCare Software, organizada por tipo de usuário e finalidade.
+Este índice reúne toda a documentação relacionada à implementação de criptografia de dados médicos sensíveis no Omni Care Software, organizada por tipo de usuário e finalidade.
 
 ## 👥 Navegação por Persona
 
@@ -211,16 +211,16 @@ Este índice reúne toda a documentação relacionada à implementação de crip
 ## 🆘 Contatos e Suporte
 
 ### Equipe Técnica
-- **Desenvolvimento**: dev@primecare.com
-- **DevOps**: devops@primecare.com
-- **Segurança**: security@primecare.com
+- **Desenvolvimento**: dev@omnicare.com
+- **DevOps**: devops@omnicare.com
+- **Segurança**: security@omnicare.com
 
 ### Emergências
 - **Plantão 24/7**: +55 (11) 99999-9999
 - **Slack**: #security-incidents
 
 ### DPO (Data Protection Officer)
-- **Email**: dpo@primecare.com
+- **Email**: dpo@omnicare.com
 - **Telefone**: [A ser definido]
 
 ## 📚 Referências Externas
@@ -296,6 +296,6 @@ Toda a documentação necessária para implementar, operar e manter o sistema de
 
 **Versão**: 1.0  
 **Última Atualização**: Janeiro 2026  
-**Mantido por**: Equipe de Segurança - PrimeCare Software
+**Mantido por**: Equipe de Segurança - Omni Care Software
 
-**Feedback**: Para sugestões de melhoria desta documentação, abra uma issue no GitHub ou contate security@primecare.com
+**Feedback**: Para sugestões de melhoria desta documentação, abra uma issue no GitHub ou contate security@omnicare.com

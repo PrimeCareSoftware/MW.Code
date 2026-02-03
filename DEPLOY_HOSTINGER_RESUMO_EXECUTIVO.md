@@ -22,7 +22,7 @@ Este é um resumo executivo do guia completo de deploy para **múltiplos projeto
 
 ### Banco de Dados
 1. **PostgreSQL 16** com 2 bancos de dados:
-   - `primecare_db` (API Principal)
+   - `omnicare_db` (API Principal)
    - `patient_portal_db` (Portal do Paciente)
 
 ---
@@ -68,7 +68,7 @@ Este é um resumo executivo do guia completo de deploy para **múltiplos projeto
         |                               ┗━ mw-docs
         ↓
   PostgreSQL 16 (5432)
-  ┣━ primecare_db
+  ┣━ omnicare_db
   ┗━ patient_portal_db
 ```
 
@@ -76,16 +76,16 @@ Este é um resumo executivo do guia completo de deploy para **múltiplos projeto
 
 ## 🌐 Estrutura de Domínios
 
-Com 1 domínio (ex: `meuprimecare.com.br`), você criará **7 subdomínios**:
+Com 1 domínio (ex: `meuomnicare.com.br`), você criará **7 subdomínios**:
 
 | Subdomínio | Aplicação | Tipo |
 |------------|-----------|------|
-| `meuprimecare.com.br` | medicwarehouse-app | Frontend Principal |
-| `api.meuprimecare.com.br` | MedicSoft.Api | API Principal |
-| `admin.meuprimecare.com.br` | mw-system-admin | Frontend Admin |
-| `paciente.meuprimecare.com.br` | patient-portal | Frontend Portal |
-| `api-paciente.meuprimecare.com.br` | PatientPortal.Api | API Portal |
-| `docs.meuprimecare.com.br` | mw-docs | Frontend Docs |
+| `meuomnicare.com.br` | medicwarehouse-app | Frontend Principal |
+| `api.meuomnicare.com.br` | MedicSoft.Api | API Principal |
+| `admin.meuomnicare.com.br` | mw-system-admin | Frontend Admin |
+| `paciente.meuomnicare.com.br` | patient-portal | Frontend Portal |
+| `api-paciente.meuomnicare.com.br` | PatientPortal.Api | API Portal |
+| `docs.meuomnicare.com.br` | mw-docs | Frontend Docs |
 
 **Todos com SSL/HTTPS gratuito via Let's Encrypt!**
 
@@ -177,21 +177,21 @@ apt install certbot python3-certbot-nginx
 ### 4️⃣ Configurar Banco de Dados
 ```sql
 -- Criar usuário
-CREATE USER primecare_user WITH PASSWORD 'SenhaForte123!';
+CREATE USER omnicare_user WITH PASSWORD 'SenhaForte123!';
 
 -- Criar bancos
-CREATE DATABASE primecare_db;
+CREATE DATABASE omnicare_db;
 CREATE DATABASE patient_portal_db;
 
 -- Dar permissões
-GRANT ALL PRIVILEGES ON DATABASE primecare_db TO primecare_user;
-GRANT ALL PRIVILEGES ON DATABASE patient_portal_db TO primecare_user;
+GRANT ALL PRIVILEGES ON DATABASE omnicare_db TO omnicare_user;
+GRANT ALL PRIVILEGES ON DATABASE patient_portal_db TO omnicare_user;
 ```
 
 ### 5️⃣ Deploy das APIs
 ```bash
 # Clonar repositório
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 
 # Publicar API Principal
 cd src/MedicSoft.Api
@@ -203,7 +203,7 @@ dotnet publish -c Release -o /var/www/primecare/patient-portal-api
 
 # Criar serviços systemd para ambas as APIs
 # Iniciar serviços
-systemctl start primecare-api
+systemctl start omnicare-api
 systemctl start patient-portal-api
 ```
 
@@ -237,12 +237,12 @@ No seu provedor de domínio, criar registros A:
 ### 9️⃣ Configurar SSL
 ```bash
 # Obter certificados para todos os domínios
-certbot --nginx -d meuprimecare.com.br
-certbot --nginx -d api.meuprimecare.com.br
-certbot --nginx -d api-paciente.meuprimecare.com.br
-certbot --nginx -d admin.meuprimecare.com.br
-certbot --nginx -d paciente.meuprimecare.com.br
-certbot --nginx -d docs.meuprimecare.com.br
+certbot --nginx -d meuomnicare.com.br
+certbot --nginx -d api.meuomnicare.com.br
+certbot --nginx -d api-paciente.meuomnicare.com.br
+certbot --nginx -d admin.meuomnicare.com.br
+certbot --nginx -d paciente.meuomnicare.com.br
+certbot --nginx -d docs.meuomnicare.com.br
 ```
 
 ### 🔟 Configurar Backups Automáticos
@@ -305,12 +305,12 @@ Antes de considerar completo:
 - [ ] Logs sendo gerados corretamente
 
 **Testes:**
-- [ ] https://meuprimecare.com.br acessível
-- [ ] https://api.meuprimecare.com.br/swagger acessível
-- [ ] https://api-paciente.meuprimecare.com.br/swagger acessível
-- [ ] https://admin.meuprimecare.com.br acessível
-- [ ] https://paciente.meuprimecare.com.br acessível
-- [ ] https://docs.meuprimecare.com.br acessível
+- [ ] https://meuomnicare.com.br acessível
+- [ ] https://api.meuomnicare.com.br/swagger acessível
+- [ ] https://api-paciente.meuomnicare.com.br/swagger acessível
+- [ ] https://admin.meuomnicare.com.br acessível
+- [ ] https://paciente.meuomnicare.com.br acessível
+- [ ] https://docs.meuomnicare.com.br acessível
 - [ ] Login funcionando
 - [ ] APIs respondendo corretamente
 
@@ -321,7 +321,7 @@ Antes de considerar completo:
 ### API não inicia
 ```bash
 # Ver logs
-journalctl -u primecare-api -n 50
+journalctl -u omnicare-api -n 50
 
 # Verificar porta
 netstat -tulpn | grep 5000

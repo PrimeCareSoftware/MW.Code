@@ -2,7 +2,7 @@
 
 ## Overview
 
-This implementation adds comprehensive owner management capabilities and a granular permission system to the PrimeCare Software platform, addressing the following requirements:
+This implementation adds comprehensive owner management capabilities and a granular permission system to the Omni Care Software platform, addressing the following requirements:
 
 1. **Owner Screen**: Allow clinic owners to manage users, clients, and create users with various profiles
 2. **Permission System**: Implement page and flow logic permissions to prevent unauthorized access
@@ -364,9 +364,9 @@ Migration will run automatically on first startup.
 
 ## Support
 
-- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
+- **Issues**: https://github.com/Omni Care Software/MW.Code/issues
 - **Docs**: https://docs.medicwarehouse.com
-- **Email**: contato@primecaresoftware.com
+- **Email**: contato@omnicaresoftware.com
 
 ---
 

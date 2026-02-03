@@ -2,7 +2,7 @@
 
 ## Base URL
 ```
-https://api.primecare.com.br/api/v1/crm
+https://api.omnicare.com.br/api/v1/crm
 ```
 
 ## Authentication
@@ -1027,6 +1027,6 @@ Official SDKs available:
 
 ## 📞 Support
 
-API Documentation: https://docs.primecare.com.br/api/crm
-Support Email: api-support@primecare.com.br
-Status Page: https://status.primecare.com.br
+API Documentation: https://docs.omnicare.com.br/api/crm
+Support Email: api-support@omnicare.com.br
+Status Page: https://status.omnicare.com.br

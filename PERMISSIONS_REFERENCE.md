@@ -1,4 +1,4 @@
-# 📋 Referência de Permissões - PrimeCare System Admin
+# 📋 Referência de Permissões - Omni Care System Admin
 
 **Versão:** 1.0  
 **Atualizado:** Janeiro 2026  
@@ -19,7 +19,7 @@
 
 ## 🎯 Visão Geral
 
-O sistema PrimeCare utiliza um sistema de permissões granulares baseado em recursos e ações. Cada permissão segue o formato:
+O sistema Omni Care utiliza um sistema de permissões granulares baseado em recursos e ações. Cada permissão segue o formato:
 
 ```
 recurso.ação

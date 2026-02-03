@@ -1,8 +1,8 @@
-# Authentication Documentation - PrimeCare Software API
+# Authentication Documentation - Omni Care Software API
 
 ## Overview
 
-The PrimeCare Software API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.
+The Omni Care Software API uses **JWT (JSON Web Token)** authentication with **HMAC-SHA256** encryption to secure all endpoints. This document describes how to authenticate and use the API.
 
 ## Authentication Endpoints
 
@@ -129,8 +129,8 @@ The JWT token includes the following claims:
 | `tenant_id` | string | Tenant identifier | `clinic-tenant-id` |
 | `clinic_id` | string? | Clinic ID (optional, null for system owners) | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` |
 | `is_system_owner` | string | Whether user is a system owner | `true` or `false` |
-| `iss` | string | Token issuer | `PrimeCare Software` |
-| `aud` | string | Token audience | `PrimeCare Software-API` |
+| `iss` | string | Token issuer | `Omni Care Software` |
+| `aud` | string | Token audience | `Omni Care Software-API` |
 | `exp` | number | Expiration timestamp | Unix timestamp |
 
 ### Token Example (Decoded)
@@ -152,8 +152,8 @@ The JWT token includes the following claims:
   "tenant_id": "clinic-tenant-id",
   "clinic_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "is_system_owner": "false",
-  "iss": "PrimeCare Software",
-  "aud": "PrimeCare Software-API",
+  "iss": "Omni Care Software",
+  "aud": "Omni Care Software-API",
   "exp": 1697158570
 }
 ```
@@ -233,8 +233,8 @@ axios.get('https://api.medicwarehouse.com/api/patients', {
 
 ### 3. Token Validation
 - Validates signature
-- Validates issuer (`PrimeCare Software`)
-- Validates audience (`PrimeCare Software-API`)
+- Validates issuer (`Omni Care Software`)
+- Validates audience (`Omni Care Software-API`)
 - Validates expiration time
 - No tolerance for expired tokens (ClockSkew = 0)
 
@@ -276,8 +276,8 @@ axios.get('https://api.medicwarehouse.com/api/patients', {
   "JwtSettings": {
     "SecretKey": "YourSecretKey-MustBe-AtLeast32Characters-ForSecurity!",
     "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Software",
-    "Audience": "PrimeCare Software-API"
+    "Issuer": "Omni Care Software",
+    "Audience": "Omni Care Software-API"
   }
 }
 ```
@@ -388,5 +388,5 @@ If you're migrating from a version without authentication:
 ## Support
 
 For issues or questions:
-- Email: contato@primecaresoftware.com
-- GitHub: https://github.com/PrimeCare Software/MW.Code
+- Email: contato@omnicaresoftware.com
+- GitHub: https://github.com/Omni Care Software/MW.Code

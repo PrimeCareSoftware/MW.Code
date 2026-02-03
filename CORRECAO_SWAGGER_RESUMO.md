@@ -169,6 +169,6 @@ Para ver a lista completa de tabelas, consulte o arquivo `MedicSoftDbContextMode
 ## Suporte
 
 Se ainda encontrar problemas com o Swagger ou com as migrations, verifique:
-1. Logs da aplicação em `/Logs/primecare-errors-.log`
+1. Logs da aplicação em `/Logs/omnicare-errors-.log`
 2. Logs do Serilog no console durante a inicialização
 3. Verifique se o PostgreSQL está acessível e aceitando conexões

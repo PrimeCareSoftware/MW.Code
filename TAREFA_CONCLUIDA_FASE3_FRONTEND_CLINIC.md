@@ -330,7 +330,7 @@ A Fase 3 do projeto de Sistema de Configuração de Módulos foi **implementada 
 - Maintainable
 
 ### Issues
-- Reportar em: [GitHub Issues](https://github.com/PrimeCareSoftware/MW.Code/issues)
+- Reportar em: [GitHub Issues](https://github.com/Omni CareSoftware/MW.Code/issues)
 - Tag: `frontend`, `module-config`, `phase-3`
 
 ---

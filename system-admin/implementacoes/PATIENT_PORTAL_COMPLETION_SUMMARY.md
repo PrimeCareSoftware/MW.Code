@@ -561,7 +561,7 @@ O **Portal do Paciente** está agora **100% completo e pronto para produção**.
 ✅ **Build**: Produção otimizado (394 KB)  
 ✅ **Qualidade**: Code review aprovado, 0 vulnerabilidades
 
-### Sistema PrimeCare Software
+### Sistema Omni Care Software
 
 **Completude Geral:** 95% (↑2% com Patient Portal)  
 **Testes Automatizados:** 792+ (↑58 com Patient Portal)  

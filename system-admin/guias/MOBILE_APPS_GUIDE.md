@@ -1,10 +1,10 @@
-# Guia Completo dos Aplicativos Móveis PrimeCare Software
+# Guia Completo dos Aplicativos Móveis Omni Care Software
 
-Este documento fornece uma visão geral completa dos aplicativos móveis nativos do PrimeCare Software para iOS e Android.
+Este documento fornece uma visão geral completa dos aplicativos móveis nativos do Omni Care Software para iOS e Android.
 
 ## 📱 Visão Geral
 
-O PrimeCare Software agora oferece aplicativos móveis nativos que complementam perfeitamente o sistema web, permitindo que médicos, secretárias e proprietários de clínicas gerenciem suas operações em qualquer lugar.
+O Omni Care Software agora oferece aplicativos móveis nativos que complementam perfeitamente o sistema web, permitindo que médicos, secretárias e proprietários de clínicas gerenciem suas operações em qualquer lugar.
 
 ### Plataformas Disponíveis
 
@@ -216,7 +216,7 @@ dotnet run
 
 ```bash
 cd mobile/ios
-open PrimeCare Software.xcodeproj
+open Omni Care Software.xcodeproj
 
 # No Xcode:
 # 1. Selecione um simulador ou dispositivo
@@ -374,7 +374,7 @@ Ambos os apps utilizam componentes nativos de suas plataformas:
 ### API
 - [Documentação da API](../README.md)
 - [Swagger UI](http://localhost:5000/swagger)
-- [Postman Collection](../PrimeCare Software-Postman-Collection.json)
+- [Postman Collection](../Omni Care Software-Postman-Collection.json)
 
 ### Desenvolvimento
 - [Guia de Desenvolvimento Auth](GUIA_DESENVOLVIMENTO_AUTH.md)
@@ -401,7 +401,7 @@ Interessado em contribuir para os apps móveis?
 ## 📞 Suporte
 
 - **GitHub Issues**: Para bugs e feature requests
-- **Email**: contato@primecaresoftware.com
+- **Email**: contato@omnicaresoftware.com
 - **Documentação**: Consulte os READMEs específicos
 
 ---

@@ -212,7 +212,7 @@ Authorization: Bearer {seu-token-jwt}
 ```
 Olá João Silva,
 
-Você solicitou um código de verificação para acessar o Portal do Paciente PrimeCare.
+Você solicitou um código de verificação para acessar o Portal do Paciente Omni Care.
 
 Seu código de verificação é:
 
@@ -223,7 +223,7 @@ Seu código de verificação é:
 Se você não solicitou este código, ignore este e-mail ou entre em contato conosco.
 
 Atenciosamente,
-Equipe PrimeCare
+Equipe Omni Care
 ```
 
 ### 2. 2FA Habilitado
@@ -240,7 +240,7 @@ Se você não realizou esta ação, entre em contato conosco imediatamente.
 Data: 29/01/2026 10:30 (Horário de Brasília)
 
 Atenciosamente,
-Equipe PrimeCare
+Equipe Omni Care
 ```
 
 ### 3. 2FA Desabilitado
@@ -257,7 +257,7 @@ Se você não realizou esta ação, entre em contato conosco imediatamente.
 Data: 29/01/2026 11:45 (Horário de Brasília)
 
 Atenciosamente,
-Equipe PrimeCare
+Equipe Omni Care
 ```
 
 ## Problemas Comuns e Soluções
@@ -344,7 +344,7 @@ Equipe PrimeCare
 
 ### Contato
 
-- **E-mail:** suporte@primecaresoftware.com
+- **E-mail:** suporte@omnicaresoftware.com
 - **Telefone:** (XX) XXXX-XXXX
 - **Horário:** Segunda a Sexta, 8h às 18h
 
@@ -414,4 +414,4 @@ Se seu e-mail for comprometido:
 
 ---
 
-© 2026 PrimeCare Software. Todos os direitos reservados.
+© 2026 Omni Care Software. Todos os direitos reservados.

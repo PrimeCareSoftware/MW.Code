@@ -1,8 +1,8 @@
-# 📚 Guia Completo de Configuração e Testes - PrimeCare Software
+# 📚 Guia Completo de Configuração e Testes - Omni Care Software
 
 ## 🎯 Bem-vindo ao Centro de Testes e Configuração
 
-Este é o guia definitivo para configurar e testar TODAS as funcionalidades do PrimeCare Software. Aqui você encontrará instruções passo a passo, cenários de teste, exemplos de API e troubleshooting para cada módulo do sistema.
+Este é o guia definitivo para configurar e testar TODAS as funcionalidades do Omni Care Software. Aqui você encontrará instruções passo a passo, cenários de teste, exemplos de API e troubleshooting para cada módulo do sistema.
 
 ---
 
@@ -344,9 +344,9 @@ Depois de testar todos os módulos:
 - [Daily.co Docs](https://docs.daily.co/)
 
 ### Repositório
-- [GitHub - MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
-- [Issues](https://github.com/PrimeCareSoftware/MW.Code/issues)
-- [Pull Requests](https://github.com/PrimeCareSoftware/MW.Code/pulls)
+- [GitHub - MW.Code](https://github.com/Omni CareSoftware/MW.Code)
+- [Issues](https://github.com/Omni CareSoftware/MW.Code/issues)
+- [Pull Requests](https://github.com/Omni CareSoftware/MW.Code/pulls)
 
 ---
 
@@ -354,7 +354,7 @@ Depois de testar todos os módulos:
 
 Precisa de ajuda? Entre em contato:
 
-- 📧 **Email:** suporte@primecare.com.br
+- 📧 **Email:** suporte@omnicare.com.br
 - 💬 **Chat:** Portal de Suporte
 - 📖 **Documentação:** [Índice Completo](../DOCUMENTATION_INDEX.md)
 - 🎫 **Tickets:** Sistema interno de chamados
@@ -378,7 +378,7 @@ Encontrou um erro nesta documentação ou quer adicionar novos cenários?
 
 **Versão:** 1.0.0  
 **Data:** Janeiro 2026  
-**Autor:** Equipe PrimeCare Software
+**Autor:** Equipe Omni Care Software
 
 ### Histórico de Alterações
 
@@ -392,7 +392,7 @@ Encontrou um erro nesta documentação ou quer adicionar novos cenários?
 
 ## 🎉 Conclusão
 
-Este guia foi criado para garantir que você possa configurar e testar TODAS as funcionalidades do PrimeCare Software com confiança. 
+Este guia foi criado para garantir que você possa configurar e testar TODAS as funcionalidades do Omni Care Software com confiança. 
 
 **Lembre-se:** Testes completos = Sistema confiável = Clientes satisfeitos!
 
@@ -400,4 +400,4 @@ Bons testes! 🚀
 
 ---
 
-**[⬆ Voltar ao Topo](#-guia-completo-de-configuração-e-testes---primecare-software)**
+**[⬆ Voltar ao Topo](#-guia-completo-de-configuração-e-testes---omnicare-software)**

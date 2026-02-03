@@ -1,8 +1,8 @@
-# 🧪 Cenários de Testes Completos - PrimeCare Software
+# 🧪 Cenários de Testes Completos - Omni Care Software
 
 ## 📌 Visão Geral
 
-Este documento consolida TODOS os cenários de testes possíveis do PrimeCare Software, organizados por módulo, fluxo de trabalho e complexidade. Use este guia como checklist completo para garantir que todas as funcionalidades foram testadas.
+Este documento consolida TODOS os cenários de testes possíveis do Omni Care Software, organizados por módulo, fluxo de trabalho e complexidade. Use este guia como checklist completo para garantir que todas as funcionalidades foram testadas.
 
 ## 📖 Índice
 

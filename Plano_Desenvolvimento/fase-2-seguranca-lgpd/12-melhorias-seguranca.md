@@ -321,7 +321,7 @@ public class TwoFactorAuthService : ITwoFactorAuthService
         
         return new TwoFactorSetupInfo {
             SecretKey = secretKey,
-            QRCodeUrl = $"otpauth://totp/PrimeCare:{email}?secret={secretKey}&issuer=PrimeCare"
+            QRCodeUrl = $"otpauth://totp/Omni Care:{email}?secret={secretKey}&issuer=Omni Care"
         };
     }
     
@@ -455,12 +455,12 @@ filter {
 output {
   elasticsearch {
     hosts => ["elasticsearch:9200"]
-    index => "primecare-logs-%{+YYYY.MM.dd}"
+    index => "omnicare-logs-%{+YYYY.MM.dd}"
   }
   
   if "critical" in [tags] {
     email {
-      to => "security@primecare.com"
+      to => "security@omnicare.com"
       subject => "🚨 Security Alert"
     }
   }
@@ -634,12 +634,12 @@ export class TokenInterceptor implements HttpInterceptor {
 ### Escopo
 
 ```markdown
-## Scope - PrimeCare Security Testing
+## Scope - Omni Care Security Testing
 
 ### In Scope
-- Web Application: https://api.primecare.com
-- Frontend: https://app.primecare.com
-- Patient Portal: https://portal.primecare.com
+- Web Application: https://api.omnicare.com
+- Frontend: https://app.omnicare.com
+- Patient Portal: https://portal.omnicare.com
 - REST APIs: /api/*
 - Authentication & Authorization
 - File Upload

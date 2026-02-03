@@ -31,14 +31,14 @@
 
 ```markdown
 # CONTEXTO
-Você é um designer UX/UI especializado em SaaS de saúde. O PrimeCare Software 
+Você é um designer UX/UI especializado em SaaS de saúde. O Omni Care Software 
 (MedicWarehouse) precisa de uma homepage moderna que converta visitantes em trials.
 
 O sistema é um software de gestão clínica completo construído com Angular 20, .NET 8 
 e PostgreSQL. Já possui funcionalidades robustas mas precisa de uma "vitrine" melhor.
 
 # OBJETIVO ✅ **ALCANÇADO**
-Redesenhar completamente a homepage do PrimeCare para ser:
+Redesenhar completamente a homepage do Omni Care para ser:
 - ✅ **Moderna e profissional** (benchmark: Stripe, Linear, Notion, iClinic)
 - ✅ **Focada em conversão** (CTAs claros, social proof, urgência sutil)
 - ✅ **Confiável** (badges, depoimentos, certificações)
@@ -79,7 +79,7 @@ Redesenhar completamente a homepage do PrimeCare para ser:
   - ✅ Circles gradientes animados (gradient-circle-1 e gradient-circle-2)
   
 - [x] **Ilustração/Imagem:** ✅ **IMPLEMENTADO**
-  - ✅ Badge de confiança: "Mais de 500 clínicas confiam no PrimeCare"
+  - ✅ Badge de confiança: "Mais de 500 clínicas confiam no Omni Care"
   - ⚠️ Mockup do dashboard - Pode ser adicionado futuramente
 
 ### Design guidelines Hero:
@@ -135,11 +135,11 @@ Redesenhar completamente a homepage do PrimeCare para ser:
   
 - [x] **Logos de clientes** (se disponíveis): ⚠️ **PARCIALMENTE IMPLEMENTADO**
   - ⚠️ Não implementado - pode ser adicionado futuramente com logos reais
-  - ✅ Badge de confiança implementado: "Mais de 500 clínicas confiam no PrimeCare"
+  - ✅ Badge de confiança implementado: "Mais de 500 clínicas confiam no Omni Care"
   
 - [x] **Depoimento destacado:** ✅ **IMPLEMENTADO**
   ```
-  ✅ "O PrimeCare reduziu nossas faltas em 65% e economizou 10 horas/semana"
+  ✅ "O Omni Care reduziu nossas faltas em 65% e economizou 10 horas/semana"
   ✅ - Dr. João Silva, Clínica São Paulo
   ✅ [Avatar com gradiente] [5 estrelas]
   ```
@@ -229,7 +229,7 @@ Redesenhar completamente a homepage do PrimeCare para ser:
   
 - [x] **Texto de apoio:** ✅ **IMPLEMENTADO**
   - ✅ Badge: "Veja o sistema em ação"
-  - ✅ Headline: "Conheça o PrimeCare em detalhes"
+  - ✅ Headline: "Conheça o Omni Care em detalhes"
   - ✅ Descrição: "Assista ao vídeo e descubra como..."
   
 - [x] **Features listadas ao lado:** ✅ **IMPLEMENTADO**
@@ -532,7 +532,7 @@ $wide: 1280px;
 
 <img 
   src="dashboard-mockup.webp" 
-  alt="Screenshot do dashboard do PrimeCare mostrando agenda e estatísticas">
+  alt="Screenshot do dashboard do Omni Care mostrando agenda e estatísticas">
 ```
 
 # PERFORMANCE ✅ **PARCIALMENTE IMPLEMENTADO**
@@ -576,24 +576,24 @@ $wide: 1280px;
 
 ## Meta Tags obrigatórias:
 ```html
-<title>PrimeCare Software - Sistema de Gestão para Clínicas Médicas</title>
+<title>Omni Care Software - Sistema de Gestão para Clínicas Médicas</title>
 <meta name="description" 
       content="Software completo para gestão de consultórios e clínicas. Agenda, prontuário eletrônico, telemedicina e mais. Experimente grátis por 15 dias.">
 
 <!-- Open Graph -->
-<meta property="og:title" content="PrimeCare Software - Sistema de Gestão Clínica">
+<meta property="og:title" content="Omni Care Software - Sistema de Gestão Clínica">
 <meta property="og:description" content="Software completo para gestão de consultórios...">
-<meta property="og:image" content="https://primecare.com.br/og-image.jpg">
-<meta property="og:url" content="https://primecare.com.br">
+<meta property="og:image" content="https://omnicare.com.br/og-image.jpg">
+<meta property="og:url" content="https://omnicare.com.br">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PrimeCare Software">
+<meta name="twitter:title" content="Omni Care Software">
 <meta name="twitter:description" content="Software completo...">
-<meta name="twitter:image" content="https://primecare.com.br/twitter-image.jpg">
+<meta name="twitter:image" content="https://omnicare.com.br/twitter-image.jpg">
 
 <!-- Canonical -->
-<link rel="canonical" href="https://primecare.com.br">
+<link rel="canonical" href="https://omnicare.com.br">
 ```
 
 ## Structured Data (Schema.org):
@@ -602,7 +602,7 @@ $wide: 1280px;
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "PrimeCare Software",
+  "name": "Omni Care Software",
   "applicationCategory": "HealthApplication",
   "offers": {
     "@type": "Offer",
@@ -767,7 +767,7 @@ não apenas "ficar bonito".
 
 Criar um vídeo demonstrativo profissional de 2-3 minutos que:
 - Apresente o problema e a solução (0-15s)
-- Demonstre as 6 principais funcionalidades do PrimeCare (15s-2min)
+- Demonstre as 6 principais funcionalidades do Omni Care (15s-2min)
 - Converta espectadores em trial users com CTA claro (2-3min)
 
 ### 📊 Features Demonstradas
@@ -943,7 +943,7 @@ exibir. São oportunidades para guiar o usuário sobre próximas ações.
 
 # OBJETIVO
 Criar empty states amigáveis e acionáveis para todas as principais telas do 
-PrimeCare Software.
+Omni Care Software.
 
 # PRINCÍPIOS DE EMPTY STATES
 
@@ -1100,9 +1100,9 @@ PrimeCare Software.
 ```html
 <div class="empty-state-onboarding">
   <img src="/assets/illustrations/welcome.svg" 
-       alt="Bem-vindo ao PrimeCare">
+       alt="Bem-vindo ao Omni Care">
   
-  <h2>Bem-vindo ao PrimeCare! 👋</h2>
+  <h2>Bem-vindo ao Omni Care! 👋</h2>
   <p>
     Vamos configurar sua clínica em 5 minutos.
     Você pode pular etapas e fazer depois.
@@ -1559,14 +1559,14 @@ Foi criada a infraestrutura completa para o sistema de onboarding e tours intera
     - Tour 1: Primeiro Login (Dashboard → Agenda → Pacientes → Configurações)
     - Tour 2: Primeira Consulta (contextual, agenda interativa)
     - Tour 3: Primeiro Atendimento (prontuário SOAP)
-  - Tema customizado PrimeCare para Shepherd.js
+  - Tema customizado Omni Care para Shepherd.js
   - Navegação automática entre páginas durante o tour
   - Botões de controle (Pular, Voltar, Próximo, Finalizar)
 
 - [x] **Shepherd.js Library** - Instalado e configurado
   - Versão mais recente instalada via npm
   - CSS importado em styles.scss global
-  - Tema customizado com variáveis CSS do PrimeCare
+  - Tema customizado com variáveis CSS do Omni Care
   - Modal overlay para destaque dos elementos
 
 #### ⏳ Pendente (10%)
@@ -2006,7 +2006,7 @@ Foi criada a infraestrutura completa para o sistema de onboarding e tours intera
 // Exemplo de uso
 this.referralService.getReferralProgram().subscribe(program => {
   console.log('Seu link:', program.referralLink);
-  // https://primecare.com.br/site/register?ref=PRIME-A7B9
+  // https://omnicare.com.br/site/register?ref=PRIME-A7B9
 });
 
 this.referralService.getReferralStats().subscribe(stats => {

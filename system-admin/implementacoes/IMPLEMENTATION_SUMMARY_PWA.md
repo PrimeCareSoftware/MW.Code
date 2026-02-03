@@ -69,8 +69,8 @@
 1. **frontend/medicwarehouse-app/public/manifest.json** (NOVO)
    ```json
    {
-     "name": "PrimeCare Software",
-     "short_name": "PrimeCare",
+     "name": "Omni Care Software",
+     "short_name": "Omni Care",
      "theme_color": "#6366F1",
      "display": "standalone",
      "icons": [...]
@@ -180,7 +180,7 @@ public async Task<string> RecordUserLoginAsync(Guid userId, string tenantId)
 ```
 
 **Manifest PWA:**
-- Nome: "PrimeCare Software"
+- Nome: "Omni Care Software"
 - Tema: #6366F1 (Indigo)
 - Display: standalone (tela cheia)
 - Orientação: portrait-primary
@@ -289,11 +289,11 @@ Todas as regras de negócio do sistema foram mantidas intactas:
 ## 📞 Suporte
 
 ### Para Questões Técnicas:
-- GitHub Issues: https://github.com/PrimeCareSoftware/MW.Code/issues
-- Email Dev: dev@primecaresoftware.com.br
+- GitHub Issues: https://github.com/Omni CareSoftware/MW.Code/issues
+- Email Dev: dev@omnicaresoftware.com.br
 
 ### Para Questões de Usuário:
-- Email Suporte: suporte@primecaresoftware.com.br
+- Email Suporte: suporte@omnicaresoftware.com.br
 - Documentação: [PWA Installation Guide](PWA_INSTALLATION_GUIDE.md)
 
 ## ✨ Agradecimentos

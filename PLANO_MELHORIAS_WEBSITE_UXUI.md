@@ -6,9 +6,9 @@
 
 ## 🎯 Visão Geral
 
-Este documento detalha o plano completo de melhorias para tornar o PrimeCare Software (MedicWarehouse) o sistema de gestão clínica mais competitivo e atrativo do mercado brasileiro.
+Este documento detalha o plano completo de melhorias para tornar o Omni Care Software (MedicWarehouse) o sistema de gestão clínica mais competitivo e atrativo do mercado brasileiro.
 
-**Objetivo:** Transformar o PrimeCare no #1 em UX/UI do setor de healthtech no Brasil.
+**Objetivo:** Transformar o Omni Care no #1 em UX/UI do setor de healthtech no Brasil.
 
 **Prazo:** 6-9 meses  
 **Investimento Estimado:** R$ 180.000 - R$ 240.000  
@@ -91,7 +91,7 @@ Este documento detalha o plano completo de melhorias para tornar o PrimeCare Sof
 **Página:** `/site/comparacao`
 
 **Tabela comparativa:**
-- PrimeCare vs iClinic vs Clinicorp vs Amplimed
+- Omni Care vs iClinic vs Clinicorp vs Amplimed
 - Features principais (20-25 linhas)
 - Preços
 - Diferenciais destacados
@@ -732,7 +732,7 @@ Prompts incluídos:
 
 > **Última Atualização:** 28 de Janeiro de 2026  
 > **Versão:** 1.0  
-> **Autor:** Equipe PrimeCare Software  
+> **Autor:** Equipe Omni Care Software  
 > **Status:** Aguardando Aprovação
 
 > **Próximo Review:** 15 de Fevereiro de 2026

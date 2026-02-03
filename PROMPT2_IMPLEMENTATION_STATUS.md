@@ -102,7 +102,7 @@ Receita Mensal: R$ 45.000 (147 consultas, ticket médio R$ 306)
 demoVideoUrl: string = ''; // Empty = show placeholder
 // Example YouTube: 'https://www.youtube.com/embed/VIDEO_ID?rel=0...'
 // Example Vimeo: 'https://player.vimeo.com/video/VIDEO_ID'
-// Example Self-hosted: '/assets/videos/primecare-demo.mp4'
+// Example Self-hosted: '/assets/videos/omnicare-demo.mp4'
 
 get hasVideo(): boolean {
   return !!this.demoVideoUrl && this.demoVideoUrl.length > 0;
@@ -263,7 +263,7 @@ get hasVideo(): boolean {
   - [ ] Thumbnail personalizado
   - [ ] Legendas (arquivo SRT/VTT)
 - [ ] Configurar metadados
-  - [ ] Título: "PrimeCare Software - Vídeo Demonstrativo"
+  - [ ] Título: "Omni Care Software - Vídeo Demonstrativo"
   - [ ] Descrição otimizada para SEO
   - [ ] Tags/Keywords
   - [ ] Privacidade (público/unlisted)

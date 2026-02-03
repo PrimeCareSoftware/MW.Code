@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   # PostgreSQL Database (shared with main application)
-  # Note: In production, this would connect to the existing PrimeCare Software database
+  # Note: In production, this would connect to the existing Omni Care Software database
   postgres:
     image: docker.io/library/postgres:16-alpine
     container_name: patient-portal-postgres

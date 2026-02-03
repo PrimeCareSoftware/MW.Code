@@ -434,7 +434,7 @@ dotnet build src/MedicSoft.Api/MedicSoft.Api.csproj --configuration Release
 
 ---
 
-**Desenvolvido por:** GitHub Copilot + PrimeCare Development Team  
+**Desenvolvido por:** GitHub Copilot + Omni Care Development Team  
 **Data:** 30 de Janeiro de 2026  
 **Branch:** copilot/finalize-category-2-implementations  
 **Commit:** c43cfcb

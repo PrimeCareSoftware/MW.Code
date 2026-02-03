@@ -1,4 +1,4 @@
-# Guia de Produção - Vídeo Demonstrativo PrimeCare
+# Guia de Produção - Vídeo Demonstrativo Omni Care
 
 > **Documento Técnico**  
 > **Para:** Equipe de Produção / Freelancers / Agência  
@@ -570,7 +570,7 @@ Existe uma forma melhor.
 
 4
 00:00:15,000 --> 00:00:20,000
-Com a Agenda Inteligente do PrimeCare,
+Com a Agenda Inteligente do Omni Care,
 agende consultas em segundos.
 ```
 
@@ -596,15 +596,15 @@ Papéis, planilhas confusas, pacientes esperando...
 
 **Nome do arquivo:**
 ```
-primecare-video-demonstrativo-v1.0-1080p-pt-br.mp4
+omnicare-video-demonstrativo-v1.0-1080p-pt-br.mp4
 ```
 
 **Metadados a incluir (metadata):**
-- Title: "PrimeCare Software - Vídeo Demonstrativo"
-- Description: "Conheça o PrimeCare em 3 minutos..."
+- Title: "Omni Care Software - Vídeo Demonstrativo"
+- Description: "Conheça o Omni Care em 3 minutos..."
 - Keywords: "gestão clínica, software médico, prontuário eletrônico"
-- Author: "PrimeCare Software"
-- Copyright: "© 2026 PrimeCare Software. Todos os direitos reservados."
+- Author: "Omni Care Software"
+- Copyright: "© 2026 Omni Care Software. Todos os direitos reservados."
 - Creation Date: YYYY-MM-DD
 
 ### 6.5 Checklist Final de Entrega
@@ -688,10 +688,10 @@ primecare-video-demonstrativo-v1.0-1080p-pt-br.mp4
 - Consultar: VIDEO_DEMONSTRATIVO_SCRIPT.md
 
 **Dúvidas técnicas do sistema:**
-- Equipe de desenvolvimento: dev@primecare.com.br
+- Equipe de desenvolvimento: dev@omnicare.com.br
 
 **Aprovações:**
-- Product Manager: pm@primecare.com.br
+- Product Manager: pm@omnicare.com.br
 
 **Fornecedores recomendados:**
 - **Narração (PT-BR):** [Locutores Brasileiros](https://locutores.com.br)

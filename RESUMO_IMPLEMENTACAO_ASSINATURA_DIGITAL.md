@@ -499,4 +499,4 @@ else
 **Versão:** 2.0  
 **Status:** 100% Completo (Backend + Frontend) ✅  
 **Última Atualização:** 27 de Janeiro 2026  
-**Desenvolvido por:** PrimeCare Software Team
+**Desenvolvido por:** Omni Care Software Team

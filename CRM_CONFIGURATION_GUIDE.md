@@ -2,7 +2,7 @@
 
 **Versão:** 1.0  
 **Data:** Janeiro 2026  
-**Sistema:** MedicSoft - PrimeCare
+**Sistema:** MedicSoft - Omni Care
 
 ---
 
@@ -113,7 +113,7 @@ Value: v=spf1 include:sendgrid.net ~all
 
 1. Vá para **Settings > Sender Authentication > Single Sender Verification**
 2. Adicione:
-   - **From Name:** PrimeCare Saúde
+   - **From Name:** Omni Care Saúde
    - **From Email:** noreply@seudominio.com.br
    - **Reply To:** contato@seudominio.com.br
    - **Company Address:** Endereço completo da clínica
@@ -137,7 +137,7 @@ Edite `.env` ou configure no servidor:
 EMAIL_SERVICE_PROVIDER=SendGrid
 SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 SENDGRID_FROM_EMAIL=noreply@seudominio.com.br
-SENDGRID_FROM_NAME=PrimeCare Saúde
+SENDGRID_FROM_NAME=Omni Care Saúde
 SENDGRID_REPLY_TO=contato@seudominio.com.br
 ```
 
@@ -150,7 +150,7 @@ SENDGRID_REPLY_TO=contato@seudominio.com.br
     "SendGrid": {
       "ApiKey": "SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
       "FromEmail": "noreply@seudominio.com.br",
-      "FromName": "PrimeCare Saúde",
+      "FromName": "Omni Care Saúde",
       "ReplyTo": "contato@seudominio.com.br",
       "EnableClickTracking": true,
       "EnableOpenTracking": true
@@ -736,7 +736,7 @@ O sistema de webhooks permite que aplicações externas recebam notificações e
 ### Passo 1: Criar Subscrição
 
 ```bash
-curl -X POST https://api.primecare.com.br/api/crm/webhooks \
+curl -X POST https://api.omnicare.com.br/api/crm/webhooks \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -763,7 +763,7 @@ curl -X POST https://api.primecare.com.br/api/crm/webhooks \
 ### Passo 2: Ativar Subscrição
 
 ```bash
-curl -X POST https://api.primecare.com.br/api/crm/webhooks/{id}/activate \
+curl -X POST https://api.omnicare.com.br/api/crm/webhooks/{id}/activate \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -920,7 +920,7 @@ Verifique o status das entregas:
 
 ```bash
 # Listar últimas 50 entregas
-curl -X GET "https://api.primecare.com.br/api/crm/webhooks/{subscriptionId}/deliveries?limit=50" \
+curl -X GET "https://api.omnicare.com.br/api/crm/webhooks/{subscriptionId}/deliveries?limit=50" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -985,7 +985,7 @@ DATABASE_CONNECTION_STRING=Host=localhost;Database=medicsoft;Username=medicsoft;
 EMAIL_SERVICE_PROVIDER=SendGrid
 SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 SENDGRID_FROM_EMAIL=noreply@seudominio.com.br
-SENDGRID_FROM_NAME=PrimeCare Saúde
+SENDGRID_FROM_NAME=Omni Care Saúde
 SENDGRID_REPLY_TO=contato@seudominio.com.br
 
 # Twilio SMS

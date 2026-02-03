@@ -1,17 +1,17 @@
 export const environment = {
   production: true,
   // Default API URL (for backward compatibility)
-  apiUrl: 'https://api.primecare.com/api',
+  apiUrl: 'https://api.omnicare.com/api',
   
   // Microservices URLs (configure with actual production URLs)
   microservices: {
-    auth: 'https://auth.primecare.com/api',
-    patients: 'https://patients.primecare.com/api',
-    appointments: 'https://appointments.primecare.com/api',
-    medicalRecords: 'https://medicalrecords.primecare.com/api',
-    billing: 'https://billing.primecare.com/api',
-    systemAdmin: 'https://systemadmin.primecare.com/api',
-    telemedicine: 'https://telemedicine.primecare.com/api'
+    auth: 'https://auth.omnicare.com/api',
+    patients: 'https://patients.omnicare.com/api',
+    appointments: 'https://appointments.omnicare.com/api',
+    medicalRecords: 'https://medicalrecords.omnicare.com/api',
+    billing: 'https://billing.omnicare.com/api',
+    systemAdmin: 'https://systemadmin.omnicare.com/api',
+    telemedicine: 'https://telemedicine.omnicare.com/api'
   },
   
   // Flag to enable microservices mode
@@ -27,12 +27,12 @@ export const environment = {
     // Paths that should not be treated as tenant identifiers
     excludedPaths: ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets', 'health', 'swagger'],
     // Domain suffix for subdomain display (can be changed to any domain)
-    // Examples: 'primecare.com', 'primecare.com.br', 'yourdomain.com'
-    domainSuffix: 'primecare.com'
+    // Examples: 'omnicare.com', 'omnicare.com.br', 'yourdomain.com'
+    domainSuffix: 'omnicare.com'
   },
   
   // Documentation repository
   documentation: {
-    repositoryUrl: 'https://github.com/PrimeCareSoftware/MW.Code/blob/main'
+    repositoryUrl: 'https://github.com/Omni CareSoftware/MW.Code/blob/main'
   }
 };

@@ -1,4 +1,4 @@
-# 📋 Casos de Testes - PrimeCare Software
+# 📋 Casos de Testes - Omni Care Software
 
 > **Última Atualização:** Fevereiro 2026  
 > **Objetivo:** Documentação completa para configuração e execução de testes do sistema
@@ -113,7 +113,7 @@ Esta documentação é destinada para:
 
 ## 📊 Status do Sistema
 
-O PrimeCare Software está com **95% de completude**:
+O Omni Care Software está com **95% de completude**:
 
 - ✅ Backend .NET 8 (50+ controllers)
 - ✅ Frontend Angular 20 (171+ componentes)
@@ -190,4 +190,4 @@ Se tiver dúvidas ou precisar de ajuda:
 
 **Versão do Sistema:** 1.0  
 **Última Revisão:** Fevereiro 2026  
-**Mantido por:** Equipe PrimeCare Software
+**Mantido por:** Equipe Omni Care Software

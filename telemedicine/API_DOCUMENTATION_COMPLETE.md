@@ -789,4 +789,4 @@ curl -X POST https://api.medicsoft.com.br/api/telemedicine/sessions/$SESSION_ID/
 
 **Last Updated:** January 29, 2026  
 **API Version:** 1.0.0  
-**Maintained by:** PrimeCare Software Engineering Team
+**Maintained by:** Omni Care Software Engineering Team

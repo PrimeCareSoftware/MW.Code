@@ -250,7 +250,7 @@ Todos os prompts para atender ao Roadmap de Desenvolvimento do MVP foram criados
 **Total de Conteúdo**: ~77KB de documentação técnica detalhada
 **Cobertura**: 100% do MVP_IMPLEMENTATION_GUIDE.md
 
-Os prompts estão prontos para serem executados sequencialmente, fornecendo um guia completo para o desenvolvimento do MVP do PrimeCare ao longo de 12 meses.
+Os prompts estão prontos para serem executados sequencialmente, fornecendo um guia completo para o desenvolvimento do MVP do Omni Care ao longo de 12 meses.
 
 ---
 

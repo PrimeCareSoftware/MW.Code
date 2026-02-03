@@ -8,7 +8,7 @@ Este documento detalha os problemas de configuração encontrados na última exe
 
 ### 1. Frontend - Projeto Não Encontrado
 
-**Erro**: `Could not find a default branch for project with key 'PrimeCare Software_MW.Code_Frontend'`
+**Erro**: `Could not find a default branch for project with key 'Omni Care Software_MW.Code_Frontend'`
 
 **Causa**: O projeto frontend ainda não foi criado no SonarCloud.
 
@@ -17,8 +17,8 @@ Este documento detalha os problemas de configuração encontrados na última exe
 **Solução Necessária**:
 1. Acessar https://sonarcloud.io/
 2. Fazer login com a conta da organização `medicwarehouse`
-3. Criar um novo projeto com a chave `PrimeCare Software_MW.Code_Frontend`
-4. Vincular ao repositório GitHub `PrimeCare Software/MW.Code`
+3. Criar um novo projeto com a chave `Omni Care Software_MW.Code_Frontend`
+4. Vincular ao repositório GitHub `Omni Care Software/MW.Code`
 5. Configurar como análise de pull request e branch principal
 
 **Documentação**: [Creating a Project in SonarCloud](https://docs.sonarcloud.io/getting-started/github/)
@@ -43,7 +43,7 @@ Este documento detalha os problemas de configuração encontrados na última exe
 
 **Passos para Desabilitar Análise Automática**:
 1. Acessar https://sonarcloud.io/
-2. Navegar para o projeto `PrimeCare Software_MW.Code`
+2. Navegar para o projeto `Omni Care Software_MW.Code`
 3. Ir em **Administration** > **Analysis Method**
 4. Desabilitar **Automatic Analysis**
 5. Confirmar que apenas **CI-based Analysis** está ativo
@@ -87,8 +87,8 @@ Ver: `docs/SONAR_FIXES_SUMMARY.md` para mais detalhes
 ## 🎯 Próximos Passos
 
 ### Prioridade Alta
-1. [ ] Criar projeto frontend no SonarCloud (`PrimeCare Software_MW.Code_Frontend`)
-2. [ ] Desabilitar análise automática no projeto backend (`PrimeCare Software_MW.Code`)
+1. [ ] Criar projeto frontend no SonarCloud (`Omni Care Software_MW.Code_Frontend`)
+2. [ ] Desabilitar análise automática no projeto backend (`Omni Care Software_MW.Code`)
 3. [ ] Reexecutar workflow CI/CD para validar configurações
 
 ### Prioridade Média
@@ -116,7 +116,7 @@ Ver: `docs/SONAR_FIXES_SUMMARY.md` para mais detalhes
 
 Para questões sobre configuração do SonarCloud:
 - **Equipe**: DevOps / Qualidade
-- **Repositório**: https://github.com/PrimeCare Software/MW.Code
+- **Repositório**: https://github.com/Omni Care Software/MW.Code
 - **Issues**: Criar issue com label `sonarcloud`
 
 ---

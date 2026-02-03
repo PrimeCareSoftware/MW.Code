@@ -410,5 +410,5 @@ Authorization: Bearer {token}
 **Versão:** 2.0  
 **Data:** 27 de Janeiro de 2026  
 **Status:** 100% Completo (Backend + Frontend) ✅  
-**Desenvolvido por:** PrimeCare Software Team  
+**Desenvolvido por:** Omni Care Software Team  
 **Contribuidores:** GitHub Copilot, igorleessa

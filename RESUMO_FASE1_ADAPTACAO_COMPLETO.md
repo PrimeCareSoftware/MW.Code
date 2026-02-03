@@ -2,7 +2,7 @@
 
 ## 🎯 Objetivo Concluído
 
-Implementação da **Fase 1 do Plano de Adaptação Multi-Negócios**, conforme definido no documento `Plano_Desenvolvimento/PLANO_ADAPTACAO_MULTI_NEGOCIOS.md`. O sistema PrimeCare agora possui a infraestrutura base para se adaptar a diferentes tipos profissionais de clínicas e empresas.
+Implementação da **Fase 1 do Plano de Adaptação Multi-Negócios**, conforme definido no documento `Plano_Desenvolvimento/PLANO_ADAPTACAO_MULTI_NEGOCIOS.md`. O sistema Omni Care agora possui a infraestrutura base para se adaptar a diferentes tipos profissionais de clínicas e empresas.
 
 ## ✅ O Que Foi Implementado
 
@@ -285,7 +285,7 @@ dotnet ef database update --context MedicSoftDbContext
 
 ## 🎉 Conclusão
 
-A **Fase 1 do refatoramento foi concluída com sucesso!** O sistema PrimeCare agora possui a infraestrutura fundamental para se adaptar a diferentes tipos de profissionais e modelos de negócio em saúde. A implementação seguiu o plano estratégico definido e está pronta para a Fase 2 de integração com o frontend.
+A **Fase 1 do refatoramento foi concluída com sucesso!** O sistema Omni Care agora possui a infraestrutura fundamental para se adaptar a diferentes tipos de profissionais e modelos de negócio em saúde. A implementação seguiu o plano estratégico definido e está pronta para a Fase 2 de integração com o frontend.
 
 ---
 

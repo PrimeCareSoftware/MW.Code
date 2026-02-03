@@ -1,4 +1,4 @@
-# Portal do Paciente (Patient Portal) - PrimeCare Software
+# Portal do Paciente (Patient Portal) - Omni Care Software
 
 > **🚀 NOVO DESENVOLVEDOR?** Comece aqui: [DEVELOPER_QUICKSTART.md](./DEVELOPER_QUICKSTART.md) - Setup em < 30 minutos!
 
@@ -391,16 +391,16 @@ Após executar a API, acesse a documentação Swagger interativa em:
 
 ## 👥 Autores
 
-- **PrimeCare Software Team**
+- **Omni Care Software Team**
 - **GitHub Copilot** - Desenvolvimento assistido por IA
 
 ## 📄 Licença
 
-Este projeto faz parte do sistema PrimeCare Software.
+Este projeto faz parte do sistema Omni Care Software.
 
 ## 🔗 Links Relacionados
 
-- [Documentação Principal do PrimeCare Software](../../docs/README.md)
+- [Documentação Principal do Omni Care Software](../../docs/README.md)
 - [PLANO_DESENVOLVIMENTO.md](../../docs/PLANO_DESENVOLVIMENTO.md)
 - [PENDING_TASKS.md](../../docs/PENDING_TASKS.md)
 - [RESUMO_TECNICO_COMPLETO.md](../../docs/RESUMO_TECNICO_COMPLETO.md)

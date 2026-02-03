@@ -2,7 +2,7 @@
 
 ## 📌 Visão Geral
 
-Este guia fornece instruções completas para configurar e testar o módulo de Telemedicina do PrimeCare Software, incluindo videoconsultas, gravação de sessões, integração com Daily.co e conformidade com CFM 1821/2018.
+Este guia fornece instruções completas para configurar e testar o módulo de Telemedicina do Omni Care Software, incluindo videoconsultas, gravação de sessões, integração com Daily.co e conformidade com CFM 1821/2018.
 
 ## 🔧 Pré-requisitos
 
@@ -186,7 +186,7 @@ Este guia fornece instruções completas para configurar e testar o módulo de T
 **Perfil:** Paciente no Patient Portal
 
 **Passos:**
-1. Paciente acessa: https://portal.primecare.com.br
+1. Paciente acessa: https://portal.omnicare.com.br
 2. Faz login
 3. Clica em **"Agendar Consulta"**
 4. Seleciona médico: Dr. João Santos

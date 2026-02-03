@@ -1,4 +1,4 @@
-# PrimeCare Software Microservices - DESCONTINUADO
+# Omni Care Software Microservices - DESCONTINUADO
 
 > ⚠️ **IMPORTANTE**: Os microserviços foram **descontinuados** em Janeiro de 2026.
 > 

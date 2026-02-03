@@ -1,6 +1,6 @@
 # 📱 Guia de Configuração MFA - Autenticação de Dois Fatores
 
-**Sistema:** PrimeCare System Admin  
+**Sistema:** Omni Care System Admin  
 **Versão:** 1.0  
 **Atualizado:** Janeiro 2026
 
@@ -62,7 +62,7 @@ Escolha um dos aplicativos recomendados e instale no seu smartphone:
 
 ### Passo 2: Acesse as Configurações de Segurança
 
-1. Faça login no PrimeCare
+1. Faça login no Omni Care
 2. Clique no seu perfil (canto superior direito)
 3. Selecione **"Configurações"**
 4. Clique na aba **"Segurança"**
@@ -80,13 +80,13 @@ Escolha um dos aplicativos recomendados e instale no seu smartphone:
 2. Toque em "+" ou "Adicionar conta"
 3. Escolha "Escanear QR Code"
 4. Aponte a câmera para o QR Code na tela
-5. O PrimeCare será adicionado automaticamente
+5. O Omni Care será adicionado automaticamente
 
 **Opção B - Código Manual:**
 1. Se não conseguir escanear, clique em "Digitar manualmente"
 2. No aplicativo, escolha "Inserir chave de configuração"
 3. Digite:
-   - **Nome da conta:** PrimeCare
+   - **Nome da conta:** Omni Care
    - **Chave:** (copie da tela)
    - **Tipo:** Baseado em tempo
 4. Salve
@@ -171,7 +171,7 @@ O sistema automaticamente **exigirá MFA**, mesmo que você não tenha habilitad
 Se você não tem códigos de backup nem SMS configurado:
 
 1. Contate o administrador da sua clínica
-2. Ou envie email para: **suporte@primecare.com**
+2. Ou envie email para: **suporte@omnicare.com**
 3. Será necessário:
    - Identificação
    - Comprovação de vínculo com a clínica
@@ -318,7 +318,7 @@ Se você não tem códigos de backup nem SMS configurado:
 R: Verifique se:
 - O relógio do celular está sincronizado
 - Você está digitando o código certo (muda a cada 30s)
-- O código é do PrimeCare (não de outra conta)
+- O código é do Omni Care (não de outra conta)
 
 **P: Perdi meu celular!**  
 R: Use um código de backup ou contate o administrador imediatamente.
@@ -334,7 +334,7 @@ R: Sim, mas em alguns casos você pode marcar "Confiar neste dispositivo por 30 
 
 ### Contato
 
-- **Email:** suporte@primecare.com
+- **Email:** suporte@omnicare.com
 - **Telefone:** +55 (11) XXXX-XXXX
 - **Chat:** Disponível das 8h às 18h
 

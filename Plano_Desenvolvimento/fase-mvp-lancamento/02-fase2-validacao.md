@@ -84,7 +84,7 @@ interface Feedback {
 
 **2.2 NPS Survey**
 - [ ] Implementar pesquisa NPS quinzenal
-- [ ] Pergunta: "Em uma escala de 0 a 10, qual a probabilidade de você recomendar o PrimeCare para um colega?"
+- [ ] Pergunta: "Em uma escala de 0 a 10, qual a probabilidade de você recomendar o Omni Care para um colega?"
 - [ ] Campo aberto: "O que podemos melhorar?"
 - [ ] Disparar após 2 semanas de uso
 

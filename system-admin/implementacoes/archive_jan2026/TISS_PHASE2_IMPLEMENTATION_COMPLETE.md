@@ -529,7 +529,7 @@ GET /api/tiss-analytics/glosa-alerts?clinicId={id}&startDate={date}&endDate={dat
 
 **Exemplo (cURL):**
 ```bash
-curl -X GET "https://api.primecare.com/api/tiss-analytics/glosas-summary?clinicId=123&startDate=2026-01-01&endDate=2026-01-31" \
+curl -X GET "https://api.omnicare.com/api/tiss-analytics/glosas-summary?clinicId=123&startDate=2026-01-01&endDate=2026-01-31" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -713,7 +713,7 @@ A implementação das **Fases 1 e 2 do TISS/TUSS** foi concluída com sucesso. O
 
 ### Diferencial Competitivo
 
-Com a conclusão da Fase 2, o sistema PrimeCare agora está **no mesmo nível ou superior** aos principais concorrentes de mercado (iClinic, Doctoralia, Nuvem Saúde) em termos de funcionalidades TISS/TUSS e analytics.
+Com a conclusão da Fase 2, o sistema Omni Care agora está **no mesmo nível ou superior** aos principais concorrentes de mercado (iClinic, Doctoralia, Nuvem Saúde) em termos de funcionalidades TISS/TUSS e analytics.
 
 ---
 

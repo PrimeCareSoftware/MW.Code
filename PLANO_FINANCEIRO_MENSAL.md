@@ -1,10 +1,10 @@
-# Plano Financeiro Mensal - PrimeCare SaaS Multi-Especialidades
+# Plano Financeiro Mensal - Omni Care SaaS Multi-Especialidades
 
 ## Data de Criação
 02 de Fevereiro de 2026
 
 ## Contexto
-Baseado nas implementações dos PRs #608 e #609, que estabeleceram a fundação multi-especialidades do sistema PrimeCare (8 especialidades: Medicina, Psicologia, Nutrição, Fisioterapia, Odontologia, Enfermagem, Terapia Ocupacional e Fonoaudiologia), este documento define o planejamento financeiro mensal unificado.
+Baseado nas implementações dos PRs #608 e #609, que estabeleceram a fundação multi-especialidades do sistema Omni Care (8 especialidades: Medicina, Psicologia, Nutrição, Fisioterapia, Odontologia, Enfermagem, Terapia Ocupacional e Fonoaudiologia), este documento define o planejamento financeiro mensal unificado.
 
 **Premissa Inicial**: Não haverá diferenciação de preço por tipo de clínica/especialidade. Todos os tipos profissionais pagarão o mesmo valor baseado no tamanho do negócio e recursos utilizados.
 

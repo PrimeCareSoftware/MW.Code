@@ -1,10 +1,10 @@
-# 📚 Índice de Documentação - PrimeCare Software
+# 📚 Índice de Documentação - Omni Care Software
 
 > **Última Atualização:** Janeiro 2026  
 > **Status:** Documentação consolidada e atualizada  
 > **Localização Centralizada:** Toda a documentação está agora consolidada na pasta `/docs`
 
-Este documento serve como guia de navegação para toda a documentação do sistema PrimeCare Software.
+Este documento serve como guia de navegação para toda a documentação do sistema Omni Care Software.
 
 ## 📍 Localização da Documentação
 
@@ -168,7 +168,7 @@ Este documento serve como guia de navegação para toda a documentação do sist
 | [GUIA_COMPLETO_APIs.md](./GUIA_COMPLETO_APIs.md) | ⭐ **NOVO!** Guia completo de todos os endpoints da API | 40 min |
 | [POSTMAN_QUICK_GUIDE.md](./POSTMAN_QUICK_GUIDE.md) | Guia rápido do Postman | 5 min |
 | [POSTMAN_IMPORT_GUIDE.md](./POSTMAN_IMPORT_GUIDE.md) | Como importar collection | 3 min |
-| [PrimeCare Software-Postman-Collection.json](../PrimeCare Software-Postman-Collection.json) | Collection do Postman | - |
+| [Omni Care Software-Postman-Collection.json](../Omni Care Software-Postman-Collection.json) | Collection do Postman | - |
 
 ### 🌐 Frontend e Integração
 
@@ -284,7 +284,7 @@ MW.Code/
 │       ├── DEPLOY_RAILWAY_GUIDE.md
 │       └── MIGRACAO_POSTGRESQL.md
 │
-└── PrimeCare Software-Postman-Collection.json
+└── Omni Care Software-Postman-Collection.json
 ```
 
 ⭐ = Documentos essenciais
@@ -404,7 +404,7 @@ Ao adicionar nova documentação:
 Se não encontrar o que procura:
 1. Verifique o [SYSTEM_MAPPING.md](./SYSTEM_MAPPING.md) para visão geral
 2. Consulte o [SEEDER_GUIDE.md](./SEEDER_GUIDE.md) para dados de teste
-3. Veja a [Postman Collection](../PrimeCare Software-Postman-Collection.json) para exemplos de API
+3. Veja a [Postman Collection](../Omni Care Software-Postman-Collection.json) para exemplos de API
 
 ---
 

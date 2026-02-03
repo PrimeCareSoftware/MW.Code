@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O PrimeCare Software implementa um sistema completo de perfis de acesso e permissões granulares, permitindo que proprietários de clínicas gerenciem de forma flexível quais funcionalidades cada usuário pode acessar.
+O Omni Care Software implementa um sistema completo de perfis de acesso e permissões granulares, permitindo que proprietários de clínicas gerenciem de forma flexível quais funcionalidades cada usuário pode acessar.
 
 ## Arquitetura
 
@@ -585,4 +585,4 @@ dotnet ef database update --context MedicSoftDbContext
 
 ## Conclusão
 
-O sistema de perfis de acesso e permissões do PrimeCare Software oferece controle granular e flexível sobre o que cada usuário pode fazer na plataforma, seguindo as melhores práticas de segurança e experiência do usuário das principais ferramentas do mercado.
+O sistema de perfis de acesso e permissões do Omni Care Software oferece controle granular e flexível sobre o que cada usuário pode fazer na plataforma, seguindo as melhores práticas de segurança e experiência do usuário das principais ferramentas do mercado.

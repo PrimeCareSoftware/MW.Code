@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document summarizes the security analysis and fixes applied to the Two-Factor Authentication (2FA) implementation for the PrimeCare Patient Portal.
+This document summarizes the security analysis and fixes applied to the Two-Factor Authentication (2FA) implementation for the Omni Care Patient Portal.
 
 ## Security Fixes Applied
 
@@ -435,4 +435,4 @@ Users are notified when:
 
 ---
 
-© 2026 PrimeCare Software. Internal Security Documentation.
+© 2026 Omni Care Software. Internal Security Documentation.

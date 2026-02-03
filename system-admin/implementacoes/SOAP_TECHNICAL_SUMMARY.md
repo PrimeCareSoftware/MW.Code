@@ -2,7 +2,7 @@
 
 ## Overview
 
-Complete implementation of the SOAP (Subjective-Objective-Assessment-Plan) Medical Record system for PrimeCare Software, following the specification in `/docs/prompts-copilot/alta/06-prontuario-soap.md`.
+Complete implementation of the SOAP (Subjective-Objective-Assessment-Plan) Medical Record system for Omni Care Software, following the specification in `/docs/prompts-copilot/alta/06-prontuario-soap.md`.
 
 ## Architecture
 
@@ -590,5 +590,5 @@ The SOAP Medical Records system is **production-ready** and provides:
 
 **Version:** 1.0  
 **Created:** January 2026  
-**Author:** PrimeCare Development Team  
+**Author:** Omni Care Development Team  
 **Status:** ✅ Complete - Ready for Testing

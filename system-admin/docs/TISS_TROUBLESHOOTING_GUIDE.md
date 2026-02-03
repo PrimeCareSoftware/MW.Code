@@ -778,7 +778,7 @@ WHERE "GuideDate" >= '2026-01-01';
    - Anexar logs e screenshots
 
 4. **Entrar em contato:**
-   - Email: suporte@primecare.com.br
+   - Email: suporte@omnicare.com.br
    - Slack: #medicsoft-tiss
 
 ---

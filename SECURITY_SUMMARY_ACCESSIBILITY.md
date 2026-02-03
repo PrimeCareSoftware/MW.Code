@@ -193,5 +193,5 @@ Nenhuma vulnerabilidade foi introduzida e todas as práticas de segurança foram
 
 **Aprovação de Segurança:** ✅ APROVADO  
 **Data:** 28 de Janeiro de 2026  
-**Responsável:** Equipe de Desenvolvimento PrimeCare Software  
+**Responsável:** Equipe de Desenvolvimento Omni Care Software  
 **Próxima Revisão:** Abril 2026

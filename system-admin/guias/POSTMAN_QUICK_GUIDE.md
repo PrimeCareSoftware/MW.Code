@@ -5,7 +5,7 @@
 Após importar a coleção no Postman, você verá:
 
 ```
-📁 PrimeCare Software API
+📁 Omni Care Software API
    │
    ├── 🔐 Auth (2 requests)
    │   ├── 📨 Login
@@ -179,6 +179,6 @@ Todos os requests já incluem automaticamente:
 
 ---
 
-**Arquivo**: `PrimeCare Software-Postman-Collection.json`  
+**Arquivo**: `Omni Care Software-Postman-Collection.json`  
 **Guia Completo**: `POSTMAN_IMPORT_GUIDE.md`  
-**Repositório**: https://github.com/PrimeCare Software/MW.Code
+**Repositório**: https://github.com/Omni Care Software/MW.Code

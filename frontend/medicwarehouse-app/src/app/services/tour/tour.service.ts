@@ -75,7 +75,7 @@ export class TourService {
     this.currentTour.addSteps([
       {
         id: 'welcome',
-        title: '👋 Bem-vindo ao PrimeCare!',
+        title: '👋 Bem-vindo ao Omni Care!',
         text: 'Vamos fazer um tour rápido pelas principais funcionalidades do sistema. Isso levará apenas 2 minutos.',
         buttons: [
           {
@@ -234,7 +234,7 @@ export class TourService {
       {
         id: 'consultation-welcome',
         title: '🩺 Primeira Consulta',
-        text: 'Vamos aprender como agendar e gerenciar consultas no PrimeCare.',
+        text: 'Vamos aprender como agendar e gerenciar consultas no Omni Care.',
         buttons: [
           {
             text: 'Pular',

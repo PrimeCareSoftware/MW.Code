@@ -10,7 +10,7 @@
 
 ## 📋 Sumário Executivo
 
-Este documento especifica as adaptações necessárias no sistema de telemedicina do PrimeCare para atender profissionais autônomos que trabalham **100% online**, sem consultório físico ou com consultório compartilhado. Este segmento representa aproximadamente **35-40%** dos profissionais de saúde no Brasil (principalmente psicólogos, nutricionistas e coaches).
+Este documento especifica as adaptações necessárias no sistema de telemedicina do Omni Care para atender profissionais autônomos que trabalham **100% online**, sem consultório físico ou com consultório compartilhado. Este segmento representa aproximadamente **35-40%** dos profissionais de saúde no Brasil (principalmente psicólogos, nutricionistas e coaches).
 
 ### Contexto
 - **Profissionais Autônomos:** ~150.000 no Brasil (35% do total)
@@ -34,7 +34,7 @@ Este documento especifica as adaptações necessárias no sistema de telemedicin
 
 **Necessidades:**
 1. **Sala Virtual Permanente**
-   - Link fixo para suas sessões (ex: primecare.com.br/julia.silva)
+   - Link fixo para suas sessões (ex: omnicare.com.br/julia.silva)
    - Personalização (logo, cores, mensagem de boas-vindas)
    - Disponível 24/7
 
@@ -176,14 +176,14 @@ Cada profissional tem uma "sala virtual" fixa, como se fosse um consultório fí
 
 **URL Personalizada:**
 ```
-https://primecare.com.br/sala/{username}
+https://omnicare.com.br/sala/{username}
 OU
-https://{subdomain}.primecare.com.br
+https://{subdomain}.omnicare.com.br
 ```
 
 **Exemplos:**
-- `https://primecare.com.br/sala/dra.julia.psicologa`
-- `https://juliasilva.primecare.com.br`
+- `https://omnicare.com.br/sala/dra.julia.psicologa`
+- `https://juliasilva.omnicare.com.br`
 
 **Funcionalidades:**
 - ✅ Sempre disponível (24/7)
@@ -650,7 +650,7 @@ class ScreenShareService {
 
 ### Comparação com Concorrentes
 
-| Feature | PrimeCare Solo | Zenklub | Doctoralia |
+| Feature | Omni Care Solo | Zenklub | Doctoralia |
 |---------|----------------|---------|------------|
 | **Preço** | R$ 69/mês | R$ 89/mês + 20% comissão | R$ 149/mês |
 | **Comissão** | ❌ Nenhuma | ✅ 10-30% | ❌ Nenhuma |
@@ -745,8 +745,8 @@ class ScreenShareService {
 
 ## 📞 Contato
 
-**Equipe de Produto PrimeCare**  
-**Email:** produto@primecare.com.br  
+**Equipe de Produto Omni Care**  
+**Email:** produto@omnicare.com.br  
 **Documentos Relacionados:**
 - [PLANO_ADAPTACAO_MULTI_NEGOCIOS.md](./PLANO_ADAPTACAO_MULTI_NEGOCIOS.md)
 - [ANALISE_MERCADO_SAAS_SAUDE.md](./ANALISE_MERCADO_SAAS_SAUDE.md)

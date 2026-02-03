@@ -8,7 +8,7 @@ export const environment = {
   
   // Company contact information (for marketing site)
   whatsappNumber: '5511999999999',
-  companyEmail: 'contato@primecare.com',
+  companyEmail: 'contato@omnicare.com',
   companyPhone: '(11) 99999-9999',
   companyAddress: 'Av. Paulista, 1000',
   companyAddressDetails: 'São Paulo - SP, 01310-100',
@@ -37,12 +37,12 @@ export const environment = {
     // Paths that should not be treated as tenant identifiers
     excludedPaths: ['api', 'login', 'register', 'dashboard', 'patients', 'appointments', 'assets', 'health', 'swagger'],
     // Domain suffix for subdomain display (can be changed to any domain)
-    // Examples: 'localhost:4200', 'primecare.com', 'yourdomain.com'
+    // Examples: 'localhost:4200', 'omnicare.com', 'yourdomain.com'
     domainSuffix: 'localhost:4200'
   },
   
   // Documentation repository
   documentation: {
-    repositoryUrl: 'https://github.com/PrimeCareSoftware/MW.Code/blob/main'
+    repositoryUrl: 'https://github.com/Omni CareSoftware/MW.Code/blob/main'
   }
 };

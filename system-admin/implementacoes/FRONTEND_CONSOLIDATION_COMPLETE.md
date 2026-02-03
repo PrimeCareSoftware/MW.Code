@@ -2,7 +2,7 @@
 
 ## 📋 Resumo Executivo
 
-Em Janeiro de 2026, concluímos a consolidação dos projetos frontend do PrimeCare Software, eliminando redundâncias e simplificando a arquitetura do sistema.
+Em Janeiro de 2026, concluímos a consolidação dos projetos frontend do Omni Care Software, eliminando redundâncias e simplificando a arquitetura do sistema.
 
 ## 🎯 Objetivo
 

@@ -8,7 +8,7 @@ Aprenda a gerenciar os módulos disponíveis para sua clínica de forma simples 
 
 ## 🎯 O que são Módulos?
 
-Módulos são **funcionalidades** do sistema PrimeCare que você pode habilitar ou desabilitar conforme a necessidade da sua clínica.
+Módulos são **funcionalidades** do sistema Omni Care que você pode habilitar ou desabilitar conforme a necessidade da sua clínica.
 
 ### Benefícios
 
@@ -40,7 +40,7 @@ Módulos são **funcionalidades** do sistema PrimeCare que você pode habilitar 
 
 ### Passo a Passo
 
-1. Faça **login** na área administrativa do PrimeCare
+1. Faça **login** na área administrativa do Omni Care
 2. No menu lateral, clique em **"Configurações"**
 3. Selecione a opção **"Módulos"**
 4. Você verá todos os módulos disponíveis para sua clínica
@@ -263,7 +263,7 @@ Alguns módulos permitem configurações detalhadas para personalizar seu funcio
 {
   "ativo": true,
   "eventos": ["lembrete_consulta", "confirmacao_agendamento", "resultado_exame"],
-  "remetente": "PrimeCare"
+  "remetente": "Omni Care"
 }
 ```
 
@@ -359,7 +359,7 @@ Esse módulo está disponível apenas em planos superiores ao seu atual.
 **Ou:**
 
 📞 Entre em contato diretamente:
-- Email: comercial@primecare.com.br
+- Email: comercial@omnicare.com.br
 - Telefone: (11) 1234-5678
 - WhatsApp: (11) 98765-4321
 
@@ -743,7 +743,7 @@ Se problema persistir após 30 minutos:
 **Solução:**
 1. Verificar sua conexão com internet
 2. Tentar novamente após alguns segundos
-3. Se persistir, verificar status do sistema: https://status.primecare.com.br
+3. Se persistir, verificar status do sistema: https://status.omnicare.com.br
 
 ### "Módulo foi desabilitado sozinho"
 
@@ -771,10 +771,10 @@ Se problema persistir após 30 minutos:
 ### Suporte Técnico
 
 **Canais de Atendimento:**
-- 📧 Email: suporte@primecare.com.br
+- 📧 Email: suporte@omnicare.com.br
 - 📱 WhatsApp: (11) 98765-4321
 - 💬 Chat: Clique no ícone de chat no canto inferior direito
-- 📚 Base de Conhecimento: https://ajuda.primecare.com.br
+- 📚 Base de Conhecimento: https://ajuda.omnicare.com.br
 
 **Horário de Atendimento:**
 - **Segunda a Sexta:** 8h às 18h
@@ -992,8 +992,8 @@ Aguardo retorno.
 *Última atualização: 29 de Janeiro de 2026*
 
 **Versão:** 1.0  
-**Autor:** PrimeCare Software - Customer Success Team
+**Autor:** Omni Care Software - Customer Success Team
 
 ---
 
-**Dúvidas?** Acesse nossa [Central de Ajuda](https://ajuda.primecare.com.br) ou [abra um ticket](https://suporte.primecare.com.br)
+**Dúvidas?** Acesse nossa [Central de Ajuda](https://ajuda.omnicare.com.br) ou [abra um ticket](https://suporte.omnicare.com.br)

@@ -1,4 +1,4 @@
-# 📚 Guia de Acessibilidade - PrimeCare Software
+# 📚 Guia de Acessibilidade - Omni Care Software
 
 > **Conformidade:** WCAG 2.1 Level AA | Lei Brasileira de Inclusão (LBI)  
 > **Última Atualização:** Janeiro 2026  
@@ -16,7 +16,7 @@
 
 ## 🎯 Visão Geral
 
-O PrimeCare Software está comprometido com a acessibilidade digital, garantindo que todas as pessoas, independentemente de suas habilidades, possam usar o sistema de forma eficaz.
+O Omni Care Software está comprometido com a acessibilidade digital, garantindo que todas as pessoas, independentemente de suas habilidades, possam usar o sistema de forma eficaz.
 
 ### Princípios WCAG 2.1
 

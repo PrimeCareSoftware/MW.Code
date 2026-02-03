@@ -16,7 +16,7 @@ The Patient Portal has been successfully converted into a Progressive Web App (P
 
 #### 2. Web App Manifest
 - **File**: `public/manifest.webmanifest`
-- **Name**: "PrimeCare - Portal do Paciente"
+- **Name**: "Omni Care - Portal do Paciente"
 - **Theme**: #1e40af (primary blue)
 - **Display**: Standalone mode
 - **Icons**: 8 sizes from 72x72 to 512x512

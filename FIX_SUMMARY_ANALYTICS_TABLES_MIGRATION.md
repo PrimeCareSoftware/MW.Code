@@ -2,7 +2,7 @@
 
 ## Issue Description
 
-The PrimeCare Software application was experiencing a critical database migration failure when attempting to start:
+The Omni Care Software application was experiencing a critical database migration failure when attempting to start:
 
 ```
 [23:42:22 ERR] Microsoft.EntityFrameworkCore.Database.Command

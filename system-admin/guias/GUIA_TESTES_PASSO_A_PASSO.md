@@ -1,6 +1,6 @@
-# 🧪 Guia Completo de Testes Passo a Passo - PrimeCare Software
+# 🧪 Guia Completo de Testes Passo a Passo - Omni Care Software
 
-Este guia fornece instruções detalhadas para testar cada tela e API do sistema PrimeCare Software no seu computador local.
+Este guia fornece instruções detalhadas para testar cada tela e API do sistema Omni Care Software no seu computador local.
 
 ## 📋 Índice
 
@@ -118,7 +118,7 @@ POST /api/registration
 ```json
 {
   "success": true,
-  "message": "Registration successful! Welcome to PrimeCare Software. You can now login with your credentials.",
+  "message": "Registration successful! Welcome to Omni Care Software. You can now login with your credentials.",
   "clinicId": "guid-da-clinica-criada",
   "userId": "guid-do-owner-criado"
 }

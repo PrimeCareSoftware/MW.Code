@@ -22,7 +22,7 @@
 
 ## 📋 Sumário Executivo
 
-O **Sistema de Módulos v1.0** é uma funcionalidade completa que permite gerenciar módulos do PrimeCare de forma flexível e intuitiva. Administradores do sistema podem configurar módulos por plano de assinatura, enquanto clínicas podem habilitar/desabilitar módulos conforme suas necessidades.
+O **Sistema de Módulos v1.0** é uma funcionalidade completa que permite gerenciar módulos do Omni Care de forma flexível e intuitiva. Administradores do sistema podem configurar módulos por plano de assinatura, enquanto clínicas podem habilitar/desabilitar módulos conforme suas necessidades.
 
 **Principais Benefícios:**
 - 🎯 **Flexibilidade:** Habilitar/desabilitar funcionalidades conforme necessidade
@@ -514,8 +514,8 @@ npm run build:prod
 ```bash
 # Backend API
 az webapp deployment source config-zip \
-  --resource-group primecare-rg \
-  --name primecare-api \
+  --resource-group omnicare-rg \
+  --name omnicare-api \
   --src ./publish.zip
 
 # Frontend System Admin
@@ -537,17 +537,17 @@ az storage blob upload-batch \
 
 ```bash
 # Backend
-curl https://api.primecare.com.br/health
+curl https://api.omnicare.com.br/health
 
 # Esperado: {"status": "Healthy"}
 
 # Frontend System Admin
-curl https://admin.primecare.com.br
+curl https://admin.omnicare.com.br
 
 # Esperado: HTML da aplicação
 
 # Frontend Clínica
-curl https://app.primecare.com.br
+curl https://app.omnicare.com.br
 
 # Esperado: HTML da aplicação
 ```
@@ -694,18 +694,18 @@ npm test
 ### Equipe de Desenvolvimento
 
 **Backend:**
-- Desenvolvimento: PrimeCare Backend Team
+- Desenvolvimento: Omni Care Backend Team
 - Arquitetura: Sistema baseado em DDD e Clean Architecture
 - Testes: QA Team
 
 **Frontend:**
-- Desenvolvimento: PrimeCare Frontend Team
+- Desenvolvimento: Omni Care Frontend Team
 - UX/UI Design: Design Team
 - Testes: QA Team
 
 **Infraestrutura:**
-- DevOps: PrimeCare DevOps Team
-- Security: PrimeCare Security Team
+- DevOps: Omni Care DevOps Team
+- Security: Omni Care Security Team
 
 **Documentação:**
 - Technical Writing: Documentation Team
@@ -740,17 +740,17 @@ npm test
 ### Contatos
 
 **Para Dúvidas Técnicas:**
-- 📧 Email: dev@primecare.com.br
+- 📧 Email: dev@omnicare.com.br
 - 💬 Slack: #module-system
-- 📚 Docs: https://docs.primecare.com.br
+- 📚 Docs: https://docs.omnicare.com.br
 
 **Para Usuários Finais:**
-- 📧 Email: suporte@primecare.com.br
+- 📧 Email: suporte@omnicare.com.br
 - 📱 WhatsApp: (11) 98765-4321
-- 💬 Chat: https://ajuda.primecare.com.br
+- 💬 Chat: https://ajuda.omnicare.com.br
 
 **Para Issues e Bugs:**
-- 🐛 GitHub Issues: https://github.com/PrimeCareSoftware/MW.Code/issues
+- 🐛 GitHub Issues: https://github.com/Omni CareSoftware/MW.Code/issues
 - 🚀 Feature Requests: Use label `enhancement`
 
 ### SLA
@@ -764,7 +764,7 @@ npm test
 
 ## 📄 Licença
 
-Proprietary - © 2026 PrimeCare Software  
+Proprietary - © 2026 Omni Care Software  
 Todos os direitos reservados.
 
 ---

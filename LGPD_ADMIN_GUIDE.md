@@ -1,6 +1,6 @@
 # 🛡️ Guia do Administrador - Sistema de Auditoria LGPD
 
-**PrimeCare Software - System Admin**  
+**Omni Care Software - System Admin**  
 **Versão:** 1.0  
 **Data:** 29 de Janeiro de 2026  
 **Público-alvo:** Administradores de Sistema, DPO, Equipe de Compliance
@@ -24,7 +24,7 @@
 
 ## 🎯 Introdução
 
-Este guia fornece instruções completas para administradores do sistema PrimeCare sobre como gerenciar o sistema de auditoria LGPD, processar solicitações de titulares de dados e garantir compliance contínuo com a Lei 13.709/2018.
+Este guia fornece instruções completas para administradores do sistema Omni Care sobre como gerenciar o sistema de auditoria LGPD, processar solicitações de titulares de dados e garantir compliance contínuo com a Lei 13.709/2018.
 
 ### Responsabilidades do Administrador
 
@@ -866,7 +866,7 @@ O Dashboard oferece visão consolidada do status de compliance LGPD da organiza�
 
 ```
 RELATÓRIO DE COMPLIANCE LGPD
-PrimeCare Software
+Omni Care Software
 
 Data: [DATA]
 Período: [INÍCIO] a [FIM]
@@ -877,7 +877,7 @@ Solicitação: [NÚMERO/REFERÊNCIA ANPD]
    CNPJ: [CNPJ]
    Endereço: [Endereço Completo]
    DPO: [Nome do Encarregado]
-   Email DPO: dpo@primecare.com
+   Email DPO: dpo@omnicare.com
 
 2. SISTEMA DE AUDITORIA
    [Descrição do sistema implementado]
@@ -908,7 +908,7 @@ Solicitação: [NÚMERO/REFERÊNCIA ANPD]
 
 Atenciosamente,
 [Nome do DPO]
-Encarregado de Dados - PrimeCare Software
+Encarregado de Dados - Omni Care Software
 ```
 
 ---
@@ -1034,7 +1034,7 @@ Data desta Notificação: [DATA]
 
 **Template de comunicação aos titulares:**
 ```
-Assunto: Notificação de Incidente de Segurança - PrimeCare
+Assunto: Notificação de Incidente de Segurança - Omni Care
 
 Prezado(a) [Nome],
 
@@ -1057,11 +1057,11 @@ RECOMENDAÇÕES:
 - Ativar autenticação em dois fatores
 
 Para mais informações, entre em contato:
-Email: lgpd@primecare.com
+Email: lgpd@omnicare.com
 Telefone: +55 (11) XXXX-XXXX
 
 Atenciosamente,
-Equipe PrimeCare
+Equipe Omni Care
 ```
 
 #### Fase 6: Lições Aprendidas
@@ -1220,15 +1220,15 @@ Equipe PrimeCare
 ### Contatos
 
 **Equipe LGPD:**
-- Email: lgpd@primecare.com
+- Email: lgpd@omnicare.com
 - Telefone: [A SER CONFIGURADO PELA CLÍNICA]
 
 **DPO (Encarregado):**
-- Email: dpo@primecare.com
+- Email: dpo@omnicare.com
 - Telefone: [A SER CONFIGURADO PELA CLÍNICA]
 
 **Suporte Técnico:**
-- Email: suporte@primecare.com
+- Email: suporte@omnicare.com
 - Telefone: [A SER CONFIGURADO PELA CLÍNICA] (24/7)
 
 ### Documentação Adicional
@@ -1246,4 +1246,4 @@ Equipe PrimeCare
 
 ---
 
-**PrimeCare Software** - Compliance LGPD com Excelência
+**Omni Care Software** - Compliance LGPD com Excelência

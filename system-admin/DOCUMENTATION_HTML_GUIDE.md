@@ -130,7 +130,7 @@ O workflow `.github/workflows/deploy-docs.yml` cuida de:
 
 Se o deploy falhar com erro 404:
 
-1. Acesse: `https://github.com/PrimeCareSoftware/MW.Code/settings/pages`
+1. Acesse: `https://github.com/Omni CareSoftware/MW.Code/settings/pages`
 2. Em "Source", selecione: **GitHub Actions**
 3. Salve (automático)
 4. Re-execute o workflow manualmente
@@ -285,4 +285,4 @@ Para dúvidas ou problemas:
 
 ---
 
-**PrimeCare Software** © 2025 - Documentação HTML Navegável
+**Omni Care Software** © 2025 - Documentação HTML Navegável

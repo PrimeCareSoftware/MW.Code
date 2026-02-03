@@ -239,7 +239,7 @@ SESSION_EXPIRATION_HOURS=24
 
 ## 📝 Licença
 
-Propriedade de PrimeCare Software
+Propriedade de Omni Care Software
 
 ## 📞 Suporte
 

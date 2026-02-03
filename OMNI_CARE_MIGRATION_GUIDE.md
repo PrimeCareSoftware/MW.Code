@@ -277,7 +277,7 @@ cd frontend/medicwarehouse-app
 npm run build
 ```
 
-Os arquivos compilados estarão em `dist/primecare-frontend/browser/`
+Os arquivos compilados estarão em `dist/omnicare-frontend/browser/`
 
 ## Estrutura de Arquivos
 

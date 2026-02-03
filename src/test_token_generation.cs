@@ -13,8 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 // Simular o JwtTokenService
 public class TestJwtTokenService
 {
-    private const string DefaultIssuer = "PrimeCare Software";
-    private const string DefaultAudience = "PrimeCare Software-API";
+    private const string DefaultIssuer = "Omni Care Software";
+    private const string DefaultAudience = "Omni Care Software-API";
     private readonly IConfiguration _configuration;
     private readonly ILogger<TestJwtTokenService> _logger;
 
@@ -140,8 +140,8 @@ var config = new ConfigurationBuilder()
     .AddInMemoryCollection(new Dictionary<string, string?>
     {
         {"JwtSettings:SecretKey", "TestSecretKey-MustBe-AtLeast32Characters-ForSecurity!"},
-        {"JwtSettings:Issuer", "PrimeCare Software"},
-        {"JwtSettings:Audience", "PrimeCare Software-API"},
+        {"JwtSettings:Issuer", "Omni Care Software"},
+        {"JwtSettings:Audience", "Omni Care Software-API"},
         {"JwtSettings:ExpiryMinutes", "60"}
     })
     .Build();

@@ -1,4 +1,4 @@
-# SIEM Configuration - ELK Stack for PrimeCare
+# SIEM Configuration - ELK Stack for Omni Care
 
 This document describes the Security Information and Event Management (SIEM) setup using the ELK Stack (Elasticsearch, Logstash, Kibana).
 
@@ -16,7 +16,7 @@ The SIEM provides:
 
 ```
 ┌─────────────────┐
-│  PrimeCare API  │
+│  Omni Care API  │
 │   .NET Core     │
 └────────┬────────┘
          │ Logs
@@ -67,9 +67,9 @@ docker-compose -f docker-compose.elk.yml ps
 
 1. Go to Management → Stack Management → Index Patterns
 2. Create index patterns:
-   - `primecare-logs-*`
-   - `primecare-security-critical-*`
-   - `primecare-failed-logins-*`
+   - `omnicare-logs-*`
+   - `omnicare-security-critical-*`
+   - `omnicare-failed-logins-*`
 
 ## Security Dashboards
 
@@ -138,7 +138,7 @@ docker-compose -f docker-compose.elk.yml ps
   },
   "actions": {
     "email": {
-      "to": ["security@primecare.com.br"],
+      "to": ["security@omnicare.com.br"],
       "subject": "🚨 Multiple Failed Login Attempts Detected",
       "body": "{{ctx.results[0].hits.total.value}} failed login attempts detected from IP: {{ctx.payload.aggregations.by_ip.buckets.0.key}}"
     }
@@ -171,12 +171,12 @@ docker-compose -f docker-compose.elk.yml ps
   },
   "actions": {
     "email": {
-      "to": ["security@primecare.com.br"],
+      "to": ["security@omnicare.com.br"],
       "subject": "⚠️ Account Lockout - Immediate Action Required",
       "priority": "high"
     },
     "webhook": {
-      "url": "https://api.primecare.com.br/webhooks/security-alert"
+      "url": "https://api.omnicare.com.br/webhooks/security-alert"
     }
   }
 }
@@ -202,7 +202,7 @@ docker-compose -f docker-compose.elk.yml ps
   },
   "actions": {
     "email": {
-      "to": ["security@primecare.com.br"],
+      "to": ["security@omnicare.com.br"],
       "subject": "🌍 Unusual Login Location Detected"
     }
   }
@@ -234,7 +234,7 @@ docker-compose -f docker-compose.elk.yml ps
   },
   "actions": {
     "email": {
-      "to": ["security@primecare.com.br", "admin@primecare.com.br"],
+      "to": ["security@omnicare.com.br", "admin@omnicare.com.br"],
       "subject": "🚨 CRITICAL SECURITY EVENT",
       "priority": "urgent"
     },
@@ -387,7 +387,7 @@ _logger.LogInformation("Successful login with MFA for user {UserId} from {IpAddr
 
 ```bash
 # Check logs
-docker logs primecare-elasticsearch
+docker logs omnicare-elasticsearch
 
 # Increase vm.max_map_count
 sudo sysctl -w vm.max_map_count=262144
@@ -400,7 +400,7 @@ sudo sysctl -w vm.max_map_count=262144
 telnet localhost 5044
 
 # Check Logstash logs
-docker logs primecare-logstash
+docker logs omnicare-logstash
 ```
 
 ### Kibana connection error
@@ -410,7 +410,7 @@ docker logs primecare-logstash
 curl http://localhost:9200/_cluster/health
 
 # Check Kibana logs
-docker logs primecare-kibana
+docker logs omnicare-kibana
 ```
 
 ## Security Best Practices
@@ -433,4 +433,4 @@ docker logs primecare-kibana
 ---
 
 **Última Atualização:** 27 de Janeiro de 2026  
-**Responsável:** Equipe de Segurança PrimeCare
+**Responsável:** Equipe de Segurança Omni Care

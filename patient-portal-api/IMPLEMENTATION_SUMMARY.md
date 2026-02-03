@@ -40,7 +40,7 @@ Successfully implemented comprehensive email verification and notification funct
 - All templates use consistent, professional HTML design
 - Portuguese language content
 - Responsive mobile-friendly design
-- PrimeCare branding
+- Omni Care branding
 
 ## Technical Implementation
 
@@ -113,10 +113,10 @@ Both tables include:
     "UseSsl": true,
     "Username": "your-email@example.com",
     "Password": "your-app-password",
-    "From": "noreply@primecare.com",
-    "FromName": "PrimeCare Portal"
+    "From": "noreply@omnicare.com",
+    "FromName": "Omni Care Portal"
   },
-  "PortalBaseUrl": "https://portal.primecare.com"
+  "PortalBaseUrl": "https://portal.omnicare.com"
 }
 ```
 

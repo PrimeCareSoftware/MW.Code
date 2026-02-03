@@ -75,7 +75,7 @@ curl -X GET http://localhost:5000/api/data-seeder/demo-info
 {
   "tenantId": "demo-clinic-001",
   "clinic": {
-    "name": "Clínica Demo PrimeCare Software",
+    "name": "Clínica Demo Omni Care Software",
     "tradeName": "Clínica Demo"
   },
   "users": [
@@ -293,7 +293,7 @@ curl -X DELETE http://localhost:5000/api/data-seeder/clear-database
 ### Clínica Demo
 
 ```
-Nome: Clínica Demo PrimeCare Software
+Nome: Clínica Demo Omni Care Software
 Nome Fantasia: Clínica Demo
 CNPJ: 12.345.678/0001-95
 Telefone: +55 11 98765-4321
@@ -428,7 +428,7 @@ O sistema inclui um catálogo completo com mais de 100 medicamentos organizados 
 | Energia | Utilities | R$ 450,00 | Há 20 dias | ✅ Pago |
 | Internet | Utilities | R$ 199,90 | Há 18 dias | ✅ Pago |
 | Material Limpeza | Supplies | R$ 350,00 | Há 15 dias | ✅ Pago |
-| Software PrimeCare | Software | R$ 199,90 | Daqui 5 dias | ⏳ Pendente |
+| Software Omni Care | Software | R$ 199,90 | Daqui 5 dias | ⏳ Pendente |
 | Material Médico | Supplies | R$ 890,00 | Daqui 10 dias | ⏳ Pendente |
 | Manutenção AC | Maintenance | R$ 280,00 | Há 5 dias | ⚠️ Vencida |
 | Contador | ProfessionalServices | R$ 650,00 | Daqui 15 dias | ⏳ Pendente |
@@ -452,7 +452,7 @@ O sistema inclui um catálogo completo com mais de 100 medicamentos organizados 
 1. **Importe a coleção do Postman**
    - Abra o Postman
    - File > Import
-   - Selecione o arquivo `PrimeCare-Postman-Collection.json`
+   - Selecione o arquivo `Omni Care-Postman-Collection.json`
 
 2. **Popule os dados de exemplo**
    - Na pasta "Data Seeder", execute: `Seed Demo Data`
@@ -723,9 +723,9 @@ Após popular os dados de exemplo:
 
 Problemas ou dúvidas? 
 
-- 📧 Email: support@primecaresoftware.com
-- 🐛 Issues: [GitHub Issues](https://github.com/PrimeCareSoftware/MW.Code/issues)
-- 📖 Documentação: [Wiki do Projeto](https://github.com/PrimeCareSoftware/MW.Code/wiki)
+- 📧 Email: support@omnicaresoftware.com
+- 🐛 Issues: [GitHub Issues](https://github.com/Omni CareSoftware/MW.Code/issues)
+- 📖 Documentação: [Wiki do Projeto](https://github.com/Omni CareSoftware/MW.Code/wiki)
 
 ---
 

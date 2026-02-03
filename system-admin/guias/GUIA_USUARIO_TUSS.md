@@ -3,7 +3,7 @@
 ## 📋 Índice
 1. [O que é TUSS](#o-que-é-tuss)
 2. [Para que serve](#para-que-serve)
-3. [Como funciona no PrimeCare](#como-funciona-no-primecare)
+3. [Como funciona no Omni Care](#como-funciona-no-primecare)
 4. [Estrutura dos Códigos TUSS](#estrutura-dos-códigos-tuss)
 5. [Categorias de Procedimentos](#categorias-de-procedimentos)
 6. [Como Buscar Procedimentos](#como-buscar-procedimentos)
@@ -63,9 +63,9 @@ O TUSS serve para:
 
 ---
 
-## Como funciona no PrimeCare?
+## Como funciona no Omni Care?
 
-O PrimeCare Software tem a **tabela TUSS integrada**, permitindo:
+O Omni Care Software tem a **tabela TUSS integrada**, permitindo:
 
 1. 🔍 **Buscar procedimentos** por código ou descrição
 2. 📝 **Cadastrar procedimentos personalizados** usando códigos TUSS
@@ -236,7 +236,7 @@ Conjuntos de procedimentos oferecidos em pacote.
 
 ## Como Buscar Procedimentos
 
-### No PrimeCare Software
+### No Omni Care Software
 
 **Menu:** Configurações → Procedimentos TUSS → Buscar
 
@@ -369,7 +369,7 @@ A ANS atualiza a tabela TUSS periodicamente (geralmente a cada 1-2 anos).
 - Descrições são atualizadas
 - Códigos podem ser reorganizados
 
-**No PrimeCare:**
+**No Omni Care:**
 - Sistema é atualizado automaticamente
 - Você é **notificado** de mudanças
 - Procedimentos antigos ficam marcados como "obsoletos"
@@ -510,7 +510,7 @@ O que você **pode fazer:**
 3. **Experiência**
    - Com o tempo, você aprende quais requerem
 
-4. **No PrimeCare**
+4. **No Omni Care**
    - Cadastre essa informação por operadora/plano
    - Sistema alerta automaticamente
 
@@ -598,7 +598,7 @@ Você pode:
 2. **E-mails das operadoras**
    - Operadoras informam seus credenciados sobre mudanças
 
-3. **PrimeCare Software**
+3. **Omni Care Software**
    - Sistema é atualizado automaticamente
    - Você recebe notificação de mudanças
 
@@ -614,12 +614,12 @@ Você pode:
 
 ## 📞 Suporte
 
-Dúvidas sobre o uso da tabela TUSS no PrimeCare?
+Dúvidas sobre o uso da tabela TUSS no Omni Care?
 
-- 📧 **E-mail:** suporte@primecaresoftware.com
+- 📧 **E-mail:** suporte@omnicaresoftware.com
 - 💬 **Chat:** Disponível no sistema (canto inferior direito)
-- 📚 **Base de conhecimento:** [docs.primecaresoftware.com](https://docs.primecaresoftware.com)
-- 🎥 **Vídeos tutoriais:** Canal do YouTube PrimeCare Software
+- 📚 **Base de conhecimento:** [docs.omnicaresoftware.com](https://docs.omnicaresoftware.com)
+- 🎥 **Vídeos tutoriais:** Canal do YouTube Omni Care Software
 
 ---
 
@@ -642,4 +642,4 @@ Dúvidas sobre o uso da tabela TUSS no PrimeCare?
 
 **Última atualização:** Janeiro 2026  
 **Versão:** 1.0  
-**Elaborado por:** PrimeCare Software
+**Elaborado por:** Omni Care Software

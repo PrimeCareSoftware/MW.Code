@@ -1,8 +1,8 @@
 # 🚀 Guia de Onboarding - Early Adopters
 
-## 👋 Bem-vindo ao PrimeCare Software!
+## 👋 Bem-vindo ao Omni Care Software!
 
-Obrigado por ser um **Early Adopter** do PrimeCare! Este guia vai te ajudar a configurar seu sistema em **15-30 minutos** e começar a usar todas as funcionalidades disponíveis.
+Obrigado por ser um **Early Adopter** do Omni Care! Este guia vai te ajudar a configurar seu sistema em **15-30 minutos** e começar a usar todas as funcionalidades disponíveis.
 
 > ⚠️ **Nota**: Todos os contatos, emails, telefones e URLs neste documento são exemplos fictícios para fins de documentação.
 
@@ -26,7 +26,7 @@ Antes de começar, tenha em mãos:
 
 #### 1.1 Ativar Conta
 
-1. Abra o email de boas-vindas: **"Bem-vindo ao PrimeCare!"**
+1. Abra o email de boas-vindas: **"Bem-vindo ao Omni Care!"**
 2. Clique no botão **"Ativar Minha Conta"**
 3. Crie uma senha forte (mínimo 8 caracteres):
    - Pelo menos 1 letra maiúscula
@@ -37,7 +37,7 @@ Antes de começar, tenha em mãos:
 
 #### 1.2 Login Inicial
 
-1. Acesse: [https://app.primecaresoftware.com](https://app.primecaresoftware.com)
+1. Acesse: [https://app.omnicaresoftware.com](https://app.omnicaresoftware.com)
 2. Digite seu email e senha
 3. (Opcional) Ative 2FA para maior segurança
 
@@ -352,7 +352,7 @@ Se você vem de outro sistema:
 ### Após o Onboarding
 
 **Base de Conhecimento**:
-- [docs.primecaresoftware.com](https://docs.primecaresoftware.com)
+- [docs.omnicaresoftware.com](https://docs.omnicaresoftware.com)
 - Artigos e tutoriais em vídeo
 
 **FAQs**:
@@ -360,7 +360,7 @@ Se você vem de outro sistema:
 - Perguntas mais comuns respondidas
 
 **Suporte Early Adopter**:
-- Email: earlyAdopters@primecaresoftware.com
+- Email: earlyAdopters@omnicaresoftware.com
 - Resposta em até 24h (dias úteis)
 
 **Grupo WhatsApp** (em breve):
@@ -410,7 +410,7 @@ Se você vem de outro sistema:
 
 ### Vídeos Tutoriais
 
-1. **Introdução ao PrimeCare** (5 min)
+1. **Introdução ao Omni Care** (5 min)
    - Visão geral do sistema
    - Principais funcionalidades
 
@@ -423,12 +423,12 @@ Se você vem de outro sistema:
    - Prescrições e exames
    - Assinaturas
 
-> 📺 Acesse: [videos.primecaresoftware.com](https://videos.primecaresoftware.com)
+> 📺 Acesse: [videos.omnicaresoftware.com](https://videos.omnicaresoftware.com)
 
 ### Guia Rápido (1 Página)
 
 Baixe o PDF com resumo visual:
-- [Guia Rápido PrimeCare.pdf](https://docs.primecaresoftware.com/quickstart.pdf)
+- [Guia Rápido Omni Care.pdf](https://docs.omnicaresoftware.com/quickstart.pdf)
 - Imprima e deixe na recepção
 
 ## 🎁 Benefícios Early Adopter
@@ -443,13 +443,13 @@ Lembre-se dos seus benefícios exclusivos:
 
 ## 📞 Contatos
 
-**Email Early Adopters**: earlyAdopters@primecaresoftware.com
+**Email Early Adopters**: earlyAdopters@omnicaresoftware.com
 **Telefone**: (11) 99999-9999
-**Portal de Suporte**: [suporte.primecaresoftware.com](https://suporte.primecaresoftware.com)
+**Portal de Suporte**: [suporte.omnicaresoftware.com](https://suporte.omnicaresoftware.com)
 
 ---
 
 **Última atualização**: Janeiro 2026
 **Versão do documento**: 1.0.0
 
-Bem-vindo à família PrimeCare! 🎉
+Bem-vindo à família Omni Care! 🎉

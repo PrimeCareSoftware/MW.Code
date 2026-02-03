@@ -1,4 +1,4 @@
-# 🔄 Guia de Consolidação Frontend - PrimeCare Software
+# 🔄 Guia de Consolidação Frontend - Omni Care Software
 
 > **Data**: Janeiro 2026  
 > **Status**: ✅ CONCLUÍDO  
@@ -243,7 +243,7 @@ export const environment = {
 
 ```json
 {
-  "name": "primecare-frontend",  // Renomeado
+  "name": "omnicare-frontend",  // Renomeado
   "version": "1.0.0",            // Incrementado
   "dependencies": {
     "@angular/cdk": "^20.2.14",  // NOVO: Adicionado
@@ -284,7 +284,7 @@ npm start
 ```bash
 npm run build
 
-# Output em: dist/primecare-frontend/
+# Output em: dist/omnicare-frontend/
 ```
 
 ---
@@ -460,7 +460,7 @@ whatsappNumber, companyEmail, companyPhone, appUrl
 ## 👥 Contato e Suporte
 
 Para dúvidas sobre a consolidação frontend:
-- **Email**: dev@primecaresoftware.com
+- **Email**: dev@omnicaresoftware.com
 - **Documentação**: Este arquivo
 
 ---

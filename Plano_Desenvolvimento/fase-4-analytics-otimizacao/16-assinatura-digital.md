@@ -173,7 +173,7 @@ public class AssinaturaDigitalService
             DataTimestamp = timestamp?.Data,
             TimestampBytes = timestamp?.Bytes,
             Valida = true,
-            LocalAssinatura = "Sistema PrimeCare",
+            LocalAssinatura = "Sistema Omni Care",
             IpAssinatura = GetClientIp()
         };
         

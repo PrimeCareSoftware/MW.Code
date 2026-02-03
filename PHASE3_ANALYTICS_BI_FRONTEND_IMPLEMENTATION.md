@@ -553,7 +553,7 @@ For frontend team:
 **Implementation:** GitHub Copilot CLI  
 **Date:** January 28, 2026  
 **Specification:** `/Plano_Desenvolvimento/fase-system-admin-melhorias/03-fase3-analytics-bi.md`  
-**Repository:** PrimeCareSoftware/MW.Code  
+**Repository:** Omni CareSoftware/MW.Code  
 **Branch:** copilot/update-documentation-analytics-bi  
 
 ---

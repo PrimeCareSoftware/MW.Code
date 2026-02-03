@@ -78,5 +78,5 @@ This document captures key learnings, insights, and patterns discovered during P
 ---
 
 **Version**: 1.0  
-**Authors**: PrimeCare Development Team  
+**Authors**: Omni Care Development Team  
 **Review Cycle**: Weekly during Phase 2

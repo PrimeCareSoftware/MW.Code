@@ -2,7 +2,7 @@
 
 > **📢 ATUALIZAÇÃO (Fevereiro 2026):** Documentação reorganizada! Veja [docs/README.md](docs/README.md) para a estrutura atualizada e simplificada.
 
-Este documento serve como índice central para toda a documentação do PrimeCare Software, organizada por categorias.
+Este documento serve como índice central para toda a documentação do Omni Care Software, organizada por categorias.
 
 ## 🔄 Reorganização Recente
 

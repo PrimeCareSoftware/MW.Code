@@ -1,8 +1,8 @@
-# Carga Inicial para Testes - PrimeCare Software
+# Carga Inicial para Testes - Omni Care Software
 
 ## 📋 Visão Geral
 
-Este documento descreve a carga inicial de dados implementada para testar **todos os pontos do sistema** PrimeCare Software. Os dados de teste são abrangentes e cobrem todas as principais entidades e funcionalidades do sistema.
+Este documento descreve a carga inicial de dados implementada para testar **todos os pontos do sistema** Omni Care Software. Os dados de teste são abrangentes e cobrem todas as principais entidades e funcionalidades do sistema.
 
 ## 🎯 Objetivo
 
@@ -20,7 +20,7 @@ Gerar dados de demonstração completos e interconectados que permitam testar:
 ## 📦 Dados Gerados
 
 ### 1. Clínica Demo
-- **Nome**: Clínica Demo PrimeCare Software
+- **Nome**: Clínica Demo Omni Care Software
 - **TenantId**: `demo-clinic-001`
 - **CNPJ**: 12.345.678/0001-95
 - **Horário**: 08:00 - 18:00
@@ -293,4 +293,4 @@ Para mais informações sobre o sistema, consulte:
 
 ## 🎉 Conclusão
 
-A carga inicial implementada fornece uma base completa e realista para testar todos os aspectos do sistema PrimeCare Software, desde o cadastro básico até fluxos complexos de atendimento médico com prescrições e notificações.
+A carga inicial implementada fornece uma base completa e realista para testar todos os aspectos do sistema Omni Care Software, desde o cadastro básico até fluxos complexos de atendimento médico com prescrições e notificações.

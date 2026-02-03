@@ -237,8 +237,8 @@ npm start
 
 ### Usando Postman
 
-Importe a collection do PrimeCare Software:
-- Arquivo: `PrimeCare Software-Postman-Collection.json`
+Importe a collection do Omni Care Software:
+- Arquivo: `Omni Care Software-Postman-Collection.json`
 - Configure a variável `{{baseUrl}}` para `http://localhost:5000`
 
 ### CORS

@@ -1,4 +1,4 @@
-# 🎯 Solução Completa de Monitoramento - PrimeCare Software API
+# 🎯 Solução Completa de Monitoramento - Omni Care Software API
 
 ## Problema Original
 
@@ -85,8 +85,8 @@
 - Formato legível
 
 **Arquivos (Produção):**
-- `Logs/primecare-YYYYMMDD.log` - Todos os logs
-- `Logs/primecare-errors-YYYYMMDD.log` - Apenas erros
+- `Logs/omnicare-YYYYMMDD.log` - Todos os logs
+- `Logs/omnicare-errors-YYYYMMDD.log` - Apenas erros
 - Rotação automática diária
 - Retenção configurável (30-60 dias)
 
@@ -106,10 +106,10 @@
 **Exemplo:**
 ```bash
 # Encontrar erro
-grep "ERROR" Logs/primecare-errors-*.log | tail -1
+grep "ERROR" Logs/omnicare-errors-*.log | tail -1
 
 # Rastrear requisição completa
-grep "RequestId=abc-123" Logs/primecare-*.log
+grep "RequestId=abc-123" Logs/omnicare-*.log
 ```
 
 ### ✅ Execuções Lentas
@@ -220,7 +220,7 @@ dotnet run
 
 ### 3. Acessar Logs
 - **Console**: Ver terminal
-- **Arquivo**: `cat Logs/primecare-*.log`
+- **Arquivo**: `cat Logs/omnicare-*.log`
 - **Seq**: http://localhost:5341
 
 ## ✅ Validação

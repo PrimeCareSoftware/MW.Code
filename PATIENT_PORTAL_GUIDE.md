@@ -5,7 +5,7 @@
 O Portal do Paciente é uma plataforma online que permite aos pacientes gerenciar suas consultas, acessar documentos médicos e atualizar informações pessoais de forma segura e conveniente.
 
 **Status**: ✅ MVP Fase 1 - Funcional
-**Acesso**: [https://paciente.primecaresoftware.com](https://paciente.primecaresoftware.com)
+**Acesso**: [https://paciente.omnicaresoftware.com](https://paciente.omnicaresoftware.com)
 
 > ⚠️ **Nota**: Todos os contatos, emails, telefones e URLs neste documento são exemplos fictícios para fins de documentação.
 
@@ -54,8 +54,8 @@ O Portal do Paciente é uma plataforma online que permite aos pacientes gerencia
 Após ser cadastrado pela clínica, você receberá um email:
 
 ```
-Assunto: Bem-vindo ao Portal do Paciente - PrimeCare
-De: noreply@primecaresoftware.com
+Assunto: Bem-vindo ao Portal do Paciente - Omni Care
+De: noreply@omnicaresoftware.com
 ```
 
 #### Passo 2: Criar Senha
@@ -74,7 +74,7 @@ De: noreply@primecaresoftware.com
 
 #### Passo 3: Fazer Login
 
-1. Acesse: [https://paciente.primecaresoftware.com](https://paciente.primecaresoftware.com)
+1. Acesse: [https://paciente.omnicaresoftware.com](https://paciente.omnicaresoftware.com)
 2. Digite seu email (usado no cadastro)
 3. Digite a senha que você criou
 4. Clique em **"Entrar"**
@@ -423,7 +423,7 @@ Você tem direito a:
 Para exercer seus direitos:
 1. Vá em **"Configurações"** > **"LGPD"**
 2. Escolha a ação desejada
-3. Ou envie email para: lgpd@primecaresoftware.com
+3. Ou envie email para: lgpd@omnicaresoftware.com
 
 ## 📱 Acesso Mobile
 
@@ -477,9 +477,9 @@ Em desenvolvimento para Fase 3:
 - Eles têm acesso aos seus dados e podem ajudar
 
 **Suporte Técnico**:
-- Email: suporte@primecaresoftware.com
+- Email: suporte@omnicaresoftware.com
 - Telefone: (11) 99999-9999
-- Portal: [suporte.primecaresoftware.com](https://suporte.primecaresoftware.com)
+- Portal: [suporte.omnicaresoftware.com](https://suporte.omnicaresoftware.com)
 
 ## 📊 Perguntas Frequentes
 
@@ -518,8 +518,8 @@ R: Sim, com assinatura digital do médico e CRM válido.
 
 ## 📞 Contatos
 
-**Portal do Paciente**: [https://paciente.primecaresoftware.com](https://paciente.primecaresoftware.com)
-**Email Suporte**: suporte@primecaresoftware.com
+**Portal do Paciente**: [https://paciente.omnicaresoftware.com](https://paciente.omnicaresoftware.com)
+**Email Suporte**: suporte@omnicaresoftware.com
 **Telefone**: (11) 99999-9999
 
 ---

@@ -24,7 +24,7 @@ Antes de começar, certifique-se de ter instalado:
 ### 1. Clone o Repositório
 
 ```bash
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 cd MW.Code
 ```
 

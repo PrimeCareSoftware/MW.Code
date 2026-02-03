@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the PrimeCare Software frontend applications.
+This document describes the input mask directives implemented to improve user experience when entering formatted data in forms across the Omni Care Software frontend applications.
 
 ## Purpose
 

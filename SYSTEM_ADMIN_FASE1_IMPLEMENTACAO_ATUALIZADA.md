@@ -458,8 +458,8 @@ POST /api/system-admin/notifications (criar)
 - [Implementation Summary](./RESUMO_FINAL_FASE1_SYSTEM_ADMIN.md)
 
 ### Contato
-- **GitHub**: https://github.com/PrimeCareSoftware/MW.Code
-- **Issues**: https://github.com/PrimeCareSoftware/MW.Code/issues
+- **GitHub**: https://github.com/Omni CareSoftware/MW.Code
+- **Issues**: https://github.com/Omni CareSoftware/MW.Code/issues
 
 ---
 

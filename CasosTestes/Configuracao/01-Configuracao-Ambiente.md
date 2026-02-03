@@ -1,6 +1,6 @@
 # 01 - Configuração do Ambiente de Desenvolvimento
 
-> **Objetivo:** Instalar todas as ferramentas necessárias para executar o PrimeCare Software  
+> **Objetivo:** Instalar todas as ferramentas necessárias para executar o Omni Care Software  
 > **Tempo estimado:** 15-20 minutos  
 > **Pré-requisitos:** Nenhum
 

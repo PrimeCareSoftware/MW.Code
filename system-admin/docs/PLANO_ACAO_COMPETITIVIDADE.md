@@ -1,4 +1,4 @@
-# 🚀 Plano de Ação - Tornar PrimeCare Competitivo
+# 🚀 Plano de Ação - Tornar Omni Care Competitivo
 
 > **Data:** 29 de Janeiro de 2026 (Atualização)  
 > **Objetivo:** Guia prático e acionável para tornar o sistema enxuto e competitivo  
@@ -114,7 +114,7 @@
 
 ### Tabela Comparativa Detalhada - ⭐ ATUALIZADA 29/JAN/2026
 
-| Funcionalidade | PrimeCare | iClinic | Doctoralia | Nuvem Saúde | Importância |
+| Funcionalidade | Omni Care | iClinic | Doctoralia | Nuvem Saúde | Importância |
 |----------------|-----------|---------|------------|-------------|-------------|
 | **CORE FEATURES** |
 | Agenda Online | ✅ | ✅ | ✅ | ✅ | Obrigatório |
@@ -151,7 +151,7 @@
 - 🟡 Diferencial
 - ⚪ Não relevante para mercado
 
-**DESCOBERTA IMPORTANTE:** PrimeCare já tem paridade ou superioridade em 85% das funcionalidades!
+**DESCOBERTA IMPORTANTE:** Omni Care já tem paridade ou superioridade em 85% das funcionalidades!
 
 ### Análise de Prioridades - ⭐ ATUALIZADA 29/JAN/2026
 
@@ -853,8 +853,8 @@ Escalar para 400 clientes com eficiência
 **Status:** EM EXECUÇÃO - Fase 1 (Simplificação) COMPLETA ✅
 
 **Contato:**
-- Email: contato@primecaresoftware.com
-- GitHub: https://github.com/PrimeCareSoftware/MW.Code
+- Email: contato@omnicaresoftware.com
+- GitHub: https://github.com/Omni CareSoftware/MW.Code
 
 **Próxima Revisão:** 30 de Janeiro de 2026
 

@@ -95,7 +95,7 @@ Video production requires external resources (videographer, editor, narrator) an
 ```typescript
 // In any component
 this.seo.updateMetadata({
-  title: 'Artigo - Blog PrimeCare',
+  title: 'Artigo - Blog Omni Care',
   description: 'Descrição do artigo...',
   type: 'article',
   author: 'Dr. João Silva',
@@ -160,7 +160,7 @@ ngOnInit() {
   // Get user's referral program details
   this.referralService.getReferralProgram().subscribe(program => {
     console.log('Your referral link:', program?.referralLink);
-    // Example: https://primecare.com.br/register?ref=PRIME-A7B9
+    // Example: https://omnicare.com.br/register?ref=PRIME-A7B9
   });
   
   // Get referral statistics
@@ -224,7 +224,7 @@ ngOnInit() {
 
 **Steps to Configure:**
 1. Go to https://analytics.google.com/
-2. Create new GA4 property for primecare.com.br
+2. Create new GA4 property for omnicare.com.br
 3. Get Measurement ID (format: G-XXXXXXXXXX)
 4. Replace 'GA_MEASUREMENT_ID' in index.html
 5. Deploy and verify tracking in GA4 real-time reports

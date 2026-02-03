@@ -225,7 +225,7 @@ this.seo.addStructuredData(
 ```typescript
 // Get user's program
 this.referralService.getReferralProgram().subscribe(program => {
-  // program.referralLink: https://primecare.com.br/register?ref=PRIME-A7B9
+  // program.referralLink: https://omnicare.com.br/register?ref=PRIME-A7B9
   // program.rewardPerConversion: 100.00 BRL
 });
 

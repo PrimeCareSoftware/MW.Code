@@ -9,7 +9,7 @@
 
 ## 🎯 Contexto
 
-Em dezembro de 2025, após análise competitiva detalhada, foi identificado que o PrimeCare Software tinha:
+Em dezembro de 2025, após análise competitiva detalhada, foi identificado que o Omni Care Software tinha:
 - ✅ Excelente base técnica (DDD, 670+ testes, multi-tenancy)
 - ✅ 92% de completude funcional
 - ⚠️ Complexidade arquitetural excessiva (7 microserviços)
@@ -357,12 +357,12 @@ services:
 ## 📞 Contato e Suporte
 
 **Responsáveis:**
-- Equipe de Desenvolvimento PrimeCare
-- GitHub: https://github.com/PrimeCareSoftware/MW.Code
+- Equipe de Desenvolvimento Omni Care
+- GitHub: https://github.com/Omni CareSoftware/MW.Code
 
 **Para Dúvidas:**
-- Email: contato@primecaresoftware.com
-- Issues: https://github.com/PrimeCareSoftware/MW.Code/issues
+- Email: contato@omnicaresoftware.com
+- Issues: https://github.com/Omni CareSoftware/MW.Code/issues
 
 **Documentos Relacionados:**
 - [PLANO_DESENVOLVIMENTO.md](PLANO_DESENVOLVIMENTO.md) - Plano de desenvolvimento completo
@@ -396,7 +396,7 @@ A simplificação arquitetural foi um **sucesso completo**:
 - Performance mantida ou melhorada
 - Feedback positivo da equipe
 
-**A estratégia lean está funcionando. PrimeCare está agora em posição ideal para crescer de forma sustentável e competitiva em 2026.**
+**A estratégia lean está funcionando. Omni Care está agora em posição ideal para crescer de forma sustentável e competitiva em 2026.**
 
 ---
 

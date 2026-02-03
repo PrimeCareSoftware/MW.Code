@@ -1,6 +1,6 @@
 # 02 - Configuração do Backend (.NET 8)
 
-> **Objetivo:** Configurar e executar a API do PrimeCare Software  
+> **Objetivo:** Configurar e executar a API do Omni Care Software  
 > **Tempo estimado:** 10-15 minutos  
 > **Pré-requisitos:** [01-Configuracao-Ambiente.md](01-Configuracao-Ambiente.md) completo
 
@@ -16,7 +16,7 @@
 
 ## 🏗️ Visão Geral da Arquitetura
 
-O backend do PrimeCare é construído com **Domain-Driven Design (DDD)** e possui a seguinte estrutura:
+O backend do Omni Care é construído com **Domain-Driven Design (DDD)** e possui a seguinte estrutura:
 
 ```
 src/
@@ -51,7 +51,7 @@ system-admin/                   # Admin SPA (Angular)
 ### 1. Clone o Repositório (se ainda não fez)
 
 ```bash
-git clone https://github.com/PrimeCareSoftware/MW.Code.git
+git clone https://github.com/Omni CareSoftware/MW.Code.git
 cd MW.Code
 ```
 
@@ -92,8 +92,8 @@ DATABASE_PASSWORD=sua_senha_aqui
 
 # Configuração JWT
 JWT_SECRET=sua_chave_secreta_minimo_32_caracteres_aqui
-JWT_ISSUER=PrimeCare
-JWT_AUDIENCE=PrimeCare-API
+JWT_ISSUER=Omni Care
+JWT_AUDIENCE=Omni Care-API
 JWT_EXPIRATION_MINUTES=60
 
 # Configuração de Email (para testes, use Mailtrap ou similar)
@@ -101,7 +101,7 @@ SMTP_HOST=smtp.mailtrap.io
 SMTP_PORT=2525
 SMTP_USER=seu_usuario
 SMTP_PASSWORD=sua_senha
-SMTP_FROM=noreply@primecare.com.br
+SMTP_FROM=noreply@omnicare.com.br
 
 # Configuração de Upload de Arquivos
 UPLOAD_PATH=./uploads
@@ -130,8 +130,8 @@ Edite `src/MedicSoft.Api/appsettings.Development.json`:
   },
   "JwtSettings": {
     "Secret": "sua_chave_secreta_minimo_32_caracteres_aqui",
-    "Issuer": "PrimeCare",
-    "Audience": "PrimeCare-API",
+    "Issuer": "Omni Care",
+    "Audience": "Omni Care-API",
     "ExpirationInMinutes": 60
   },
   "Logging": {

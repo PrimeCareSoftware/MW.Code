@@ -6,7 +6,7 @@ Este documento explica como configurar e usar o deploy automático do projeto de
 
 ## 📋 Visão Geral
 
-O workflow de deploy foi criado para publicar automaticamente a documentação do projeto PrimeCare Software sempre que houver alterações na branch `main`. A documentação ficará disponível publicamente em:
+O workflow de deploy foi criado para publicar automaticamente a documentação do projeto Omni Care Software sempre que houver alterações na branch `main`. A documentação ficará disponível publicamente em:
 
 **URL**: https://medicwarehouse.github.io/MW.Code/
 
@@ -140,7 +140,7 @@ Após o deploy ser concluído (geralmente leva 2-3 minutos), acesse:
 
 📖 **Ver guia completo**: [GITHUB_PAGES_SETUP_REQUIRED.md](../../GITHUB_PAGES_SETUP_REQUIRED.md)
 
-🔗 **Link direto**: https://github.com/PrimeCare Software/MW.Code/settings/pages
+🔗 **Link direto**: https://github.com/Omni Care Software/MW.Code/settings/pages
 
 ### Erro: "Permission denied"
 
@@ -228,10 +228,10 @@ Para contribuir com melhorias no processo de deploy:
 
 Para problemas relacionados ao deploy:
 
-- **Issues**: https://github.com/PrimeCare Software/MW.Code/issues
+- **Issues**: https://github.com/Omni Care Software/MW.Code/issues
 - **Documentação GitHub Pages**: https://docs.github.com/pages
 - **Documentação GitHub Actions**: https://docs.github.com/actions
 
 ---
 
-**PrimeCare Software** © 2025 - Sistema de Gestão Médica
+**Omni Care Software** © 2025 - Sistema de Gestão Médica

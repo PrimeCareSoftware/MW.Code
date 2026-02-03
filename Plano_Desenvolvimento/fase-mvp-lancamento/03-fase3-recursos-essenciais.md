@@ -2,7 +2,7 @@
 
 ## 📋 Contexto
 
-A Fase 3 adiciona recursos essenciais que diferenciam o PrimeCare no mercado e aumentam significativamente o valor percebido pelos clientes. Estes recursos são fortemente solicitados e têm impacto direto na retenção.
+A Fase 3 adiciona recursos essenciais que diferenciam o Omni Care no mercado e aumentam significativamente o valor percebido pelos clientes. Estes recursos são fortemente solicitados e têm impacto direto na retenção.
 
 **Referência**: `MVP_IMPLEMENTATION_GUIDE.md` - Fase 3
 **Status**: 📋 Planejado

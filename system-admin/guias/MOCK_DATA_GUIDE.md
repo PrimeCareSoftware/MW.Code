@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este guia documenta a funcionalidade de dados mockados implementada nos aplicativos frontend do PrimeCare Software. Esta funcionalidade permite que os aplicativos sejam executados sem a necessidade de um backend ativo, facilitando o desenvolvimento, testes e demonstrações.
+Este guia documenta a funcionalidade de dados mockados implementada nos aplicativos frontend do Omni Care Software. Esta funcionalidade permite que os aplicativos sejam executados sem a necessidade de um backend ativo, facilitando o desenvolvimento, testes e demonstrações.
 
 ## Benefícios
 
@@ -15,7 +15,7 @@ Este guia documenta a funcionalidade de dados mockados implementada nos aplicati
 
 ### Opção 1: Através das Variáveis de Ambiente
 
-#### PrimeCare Software App
+#### Omni Care Software App
 
 Edite o arquivo `/frontend/medicwarehouse-app/src/environments/environment.ts`:
 
@@ -58,7 +58,7 @@ Em versões futuras, será possível habilitar/desabilitar dados mockados atrav�
 
 ## Estrutura dos Arquivos
 
-### PrimeCare Software App
+### Omni Care Software App
 
 ```
 frontend/medicwarehouse-app/src/app/
@@ -87,7 +87,7 @@ frontend/mw-system-admin/src/app/
 
 ## Dados Mockados Disponíveis
 
-### PrimeCare Software App
+### Omni Care Software App
 
 #### Pacientes (`patient.mock.ts`)
 - 3 pacientes de exemplo
@@ -160,7 +160,7 @@ Os interceptors são executados na ordem:
 
 ## Endpoints Mockados
 
-### PrimeCare Software App
+### Omni Care Software App
 
 #### Autenticação
 - `POST /api/auth/login` - Login com credenciais

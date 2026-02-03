@@ -7,7 +7,7 @@
 
 ## 📚 Documentos Disponíveis
 
-Este diretório contém toda a documentação necessária para planejar, desenvolver e implementar o Sistema de Importação de Dados do PrimeCare Software.
+Este diretório contém toda a documentação necessária para planejar, desenvolver e implementar o Sistema de Importação de Dados do Omni Care Software.
 
 ### 📋 Planejamento e Estratégia
 
@@ -236,11 +236,11 @@ Manual do usuário passo a passo:
 **Dúvidas sobre este plano?**
 
 **Equipe de Produto:**
-- Email: produto@primecaresoftware.com.br
+- Email: produto@omnicaresoftware.com.br
 
 **Equipe de Desenvolvimento:**
-- Email: dev@primecaresoftware.com.br
-- GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- Email: dev@omnicaresoftware.com.br
+- GitHub: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 
 ## 📅 Histórico de Versões
 

@@ -1,4 +1,4 @@
-# 💡 Sugestões de Uso de IA para Clientes do PrimeCare Software
+# 💡 Sugestões de Uso de IA para Clientes do Omni Care Software
 
 > **Documento:** Guia de Casos de Uso de IA  
 > **Público:** Proprietários de clínicas, médicos e administradores  
@@ -1075,9 +1075,9 @@ ROI médio: **3-6 meses**
 
 **Quer implementar IA na sua clínica?**
 
-📧 **Email**: ia@primecaresoftware.com  
+📧 **Email**: ia@omnicaresoftware.com  
 📱 **WhatsApp**: (11) 98765-4321  
-🌐 **Site**: www.primecaresoftware.com.br/ia  
+🌐 **Site**: www.omnicaresoftware.com.br/ia  
 📅 **Agendar Demo**: [Clique aqui]
 
 **Horário de Atendimento**:
@@ -1102,7 +1102,7 @@ ROI médio: **3-6 meses**
 
 ---
 
-**Documento mantido por**: Equipe de IA - PrimeCare Software  
+**Documento mantido por**: Equipe de IA - Omni Care Software  
 **Última atualização**: Janeiro 2026  
 **Próxima revisão**: Março 2026  
 **Versão**: 1.0

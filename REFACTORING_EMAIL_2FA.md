@@ -54,7 +54,7 @@ A seção de configuração foi atualizada:
     "Email": {
       "ApiKey": "",
       "FromEmail": "no-reply@primecaretech.com.br",
-      "FromName": "PrimeCare Software",
+      "FromName": "Omni Care Software",
       "UseSandbox": true,
       "Enabled": false
     }
@@ -71,8 +71,8 @@ A seção de configuração foi atualizada:
     "UseSsl": true,
     "Username": "",
     "Password": "",
-    "From": "noreply@primecare.com.br",
-    "FromName": "PrimeCare Software",
+    "From": "noreply@omnicare.com.br",
+    "FromName": "Omni Care Software",
     "Enabled": false,
     "TimeoutSeconds": 30
   }
@@ -130,7 +130,7 @@ EMAIL_USE_SSL=true
 EMAIL_USERNAME=noreply@seudominio.com.br
 EMAIL_PASSWORD=
 EMAIL_FROM=noreply@seudominio.com.br
-EMAIL_FROM_NAME=PrimeCare Software
+EMAIL_FROM_NAME=Omni Care Software
 EMAIL_ENABLED=true
 EMAIL_TIMEOUT_SECONDS=30
 ```
@@ -212,10 +212,10 @@ Os seguintes serviços continuam funcionando normalmente:
 3. **Reiniciar Aplicação**:
    ```bash
    # Parar aplicação
-   systemctl stop primecare-api
+   systemctl stop omnicare-api
    
    # Iniciar com novas configurações
-   systemctl start primecare-api
+   systemctl start omnicare-api
    ```
 
 4. **Testar Envio de Email**:
@@ -246,7 +246,7 @@ Os seguintes serviços continuam funcionando normalmente:
 dotnet run --project src/MedicSoft.Api
 
 # Verificar logs
-tail -f Logs/primecare-*.log
+tail -f Logs/omnicare-*.log
 ```
 
 ### 2. Teste de 2FA

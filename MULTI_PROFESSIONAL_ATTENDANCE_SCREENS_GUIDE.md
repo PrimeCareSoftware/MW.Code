@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-This implementation adds specialized attendance screens for different healthcare professional specialties to the PrimeCare system. The system dynamically adapts the UI based on the professional's specialty, showing appropriate terminology and custom assessment fields.
+This implementation adds specialized attendance screens for different healthcare professional specialties to the Omni Care system. The system dynamically adapts the UI based on the professional's specialty, showing appropriate terminology and custom assessment fields.
 
 **Status**: ✅ Complete and Ready for Testing  
 **Implementation Date**: February 2026  
@@ -317,7 +317,7 @@ To add a new specialty:
 
 ## 📄 License
 
-Part of PrimeCare Software - Internal Use Only
+Part of Omni Care Software - Internal Use Only
 
 ---
 

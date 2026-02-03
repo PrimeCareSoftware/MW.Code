@@ -266,8 +266,8 @@ Nenhum risco de segurança alto identificado.
 ## 📞 Contato de Segurança
 
 Para reportar vulnerabilidades:
-- **GitHub Security:** [Report a security vulnerability](https://github.com/PrimeCareSoftware/MW.Code/security)
-- **Email:** security@primecare.com (se disponível)
+- **GitHub Security:** [Report a security vulnerability](https://github.com/Omni CareSoftware/MW.Code/security)
+- **Email:** security@omnicare.com (se disponível)
 
 ---
 

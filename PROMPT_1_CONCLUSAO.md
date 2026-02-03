@@ -295,7 +295,7 @@ Verificado que **TODAS** as seções estão implementadas:
 - `/frontend/medicwarehouse-app/src/index.html`
 
 ### Links Úteis
-- Repository: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- Repository: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - Issue tracking: GitHub Issues
 - CI/CD: GitHub Actions
 

@@ -1,6 +1,6 @@
 # 🎥 MedicSoft Telemedicine Microservice
 
-Microserviço independente para teleconsultas médicas com videochamadas integradas ao PrimeCare Software.
+Microserviço independente para teleconsultas médicas com videochamadas integradas ao Omni Care Software.
 
 ## 📋 Visão Geral
 
@@ -358,7 +358,7 @@ O projeto segue:
 
 ## 📄 Licença
 
-Este projeto é parte do PrimeCare Software.
+Este projeto é parte do Omni Care Software.
 
 ---
 

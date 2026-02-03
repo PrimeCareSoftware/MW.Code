@@ -24,7 +24,7 @@
 **Passos:**
 1. Acesse o site principal em:
    - **Desenvolvimento:** `http://localhost:5000`
-   - **Produção:** `https://primecare.com.br`
+   - **Produção:** `https://omnicare.com.br`
 
 2. Clique em **"Cadastre-se"** ou **"Começar Teste Grátis"**
 
@@ -111,7 +111,7 @@ Informações importantes:
 Tenant ID: abc123-def456-ghi789
 Nome de Usuário: joao.silva
 Nome da Clínica: Clínica Saúde Total
-Subdomínio: saudetotal.primecare.com.br
+Subdomínio: saudetotal.omnicare.com.br
 Período de Teste: 14 dias
 Data de Vencimento: 15/02/2026
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -132,13 +132,13 @@ Data de Vencimento: 15/02/2026
 
 **Opção 1: Acesso pelo Subdomínio (Recomendado)**
 ```
-URL: https://saudetotal.primecare.com.br
+URL: https://saudetotal.omnicare.com.br
 (ou http://localhost:4200 em desenvolvimento)
 ```
 
 **Opção 2: Acesso Direto com Tenant ID**
 ```
-URL: https://app.primecare.com.br
+URL: https://app.omnicare.com.br
 (ou http://localhost:4200 em desenvolvimento)
 ```
 
@@ -677,4 +677,4 @@ Após a configuração básica da clínica, prossiga para:
 
 **Versão:** 1.0  
 **Última Atualização:** Fevereiro 2026  
-**Mantido por:** Equipe PrimeCare Software
+**Mantido por:** Equipe Omni Care Software

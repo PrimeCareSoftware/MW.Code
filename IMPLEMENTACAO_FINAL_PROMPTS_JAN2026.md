@@ -239,12 +239,12 @@ frontend/medicwarehouse-app/src/app/components/referral/
 
 **Acessar blog:**
 ```
-https://primecare.com.br/site/blog
+https://omnicare.com.br/site/blog
 ```
 
 **Acessar artigo específico:**
 ```
-https://primecare.com.br/site/blog/[slug-do-artigo]
+https://omnicare.com.br/site/blog/[slug-do-artigo]
 ```
 
 **Navegação:**
@@ -254,7 +254,7 @@ https://primecare.com.br/site/blog/[slug-do-artigo]
 
 **Acessar dashboard:**
 ```
-https://primecare.com.br/referral
+https://omnicare.com.br/referral
 ```
 (Requer autenticação)
 

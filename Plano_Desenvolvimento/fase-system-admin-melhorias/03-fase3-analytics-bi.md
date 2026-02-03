@@ -760,7 +760,7 @@ public class ReportService : IReportService
         var font = new XFont("Arial", 12);
         
         // Header com logo
-        gfx.DrawString("PrimeCare - Report", 
+        gfx.DrawString("Omni Care - Report", 
             new XFont("Arial", 20, XFontStyle.Bold), 
             XBrushes.Black, 
             new XPoint(50, 50));

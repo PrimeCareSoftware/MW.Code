@@ -1,4 +1,4 @@
-# ⚡ Guia Rápido - IA no PrimeCare Software
+# ⚡ Guia Rápido - IA no Omni Care Software
 
 > **Documento**: Referência Rápida de IA  
 > **Público**: Todos os usuários  
@@ -7,7 +7,7 @@
 
 ---
 
-## 🎯 O Que é IA no PrimeCare?
+## 🎯 O Que é IA no Omni Care?
 
 Inteligência Artificial integrada ao sistema para:
 - 🤖 **Automatizar** tarefas repetitivas
@@ -342,13 +342,13 @@ Financeiro:
 
 **Durante Horário Comercial**:
 - 📱 WhatsApp: (11) 98765-4321
-- 📧 Email: suporte@primecaresoftware.com
+- 📧 Email: suporte@omnicaresoftware.com
 - 💬 Chat: Dentro do sistema (canto inferior direito)
 
 **Fora do Horário**:
-- 📖 Central de Ajuda: help.primecaresoftware.com
+- 📖 Central de Ajuda: help.omnicaresoftware.com
 - 🎥 Vídeos: youtube.com/primecaresoftware
-- 📚 Documentação: docs.primecaresoftware.com
+- 📚 Documentação: docs.omnicaresoftware.com
 
 **Urgências (24/7)**:
 - ☎️ Telefone: 0800-123-4567
@@ -429,7 +429,7 @@ Atualizações automáticas:
 ### Comunidade
 - 💬 **Slack**: #ia-usuarios
 - 📱 **WhatsApp**: Grupo de Usuários IA
-- 🌐 **Fórum**: forum.primecaresoftware.com
+- 🌐 **Fórum**: forum.omnicaresoftware.com
 
 ### Eventos
 - 🎓 **Webinars**: Quinzenais (quartas, 19h)
@@ -476,7 +476,7 @@ Primeiro Mês:
 
 **Dúvidas? Estamos aqui para ajudar!**
 
-📧 ia@primecaresoftware.com  
+📧 ia@omnicaresoftware.com  
 📱 (11) 98765-4321  
 💬 Chat no sistema
 
@@ -484,4 +484,4 @@ Primeiro Mês:
 
 **Última Atualização**: Janeiro 2026  
 **Versão**: 1.0  
-**Mantido por**: Equipe de IA - PrimeCare Software
+**Mantido por**: Equipe de IA - Omni Care Software

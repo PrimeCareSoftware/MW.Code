@@ -158,7 +158,7 @@ namespace MedicSoft.Application.Services
             await _auditService.LogAsync(new DTOs.CreateAuditLogDto(
                 UserId: userId,
                 UserName: "System",
-                UserEmail: "system@primecare.com",
+                UserEmail: "system@omnicare.com",
                 Action: AuditAction.DELETE,
                 ActionDescription: "Dados da clínica anonimizados (LGPD)",
                 EntityType: "Clinic",
@@ -249,7 +249,7 @@ namespace MedicSoft.Application.Services
             await _auditService.LogAsync(new DTOs.CreateAuditLogDto(
                 UserId: requestedByUserId,
                 UserName: "System",
-                UserEmail: "system@primecare.com",
+                UserEmail: "system@omnicare.com",
                 Action: AuditAction.DELETE,
                 ActionDescription: "Dados do usuário anonimizados (LGPD)",
                 EntityType: "User",

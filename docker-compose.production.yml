@@ -1,13 +1,13 @@
 version: '3.8'
 
-# Docker Compose para Produção - PrimeCare Software
+# Docker Compose para Produção - Omni Care Software
 # Otimizado para baixo consumo de recursos e alta performance
 
 services:
   # PostgreSQL - Banco de Dados (mais econômico que SQL Server)
   postgres:
     image: docker.io/library/postgres:16-alpine
-    container_name: primecare-postgres
+    container_name: omnicare-postgres
     pull_policy: missing
     restart: unless-stopped
     environment:
@@ -25,7 +25,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - primecare-network
+      - omnicare-network
     healthcheck:
       test: pg_isready -U primecare -d primecare
       interval: 10s
@@ -49,7 +49,7 @@ services:
       dockerfile: src/MedicSoft.Api/Dockerfile
       args:
         CONFIGURATION: Release
-    container_name: primecare-api
+    container_name: omnicare-api
     restart: unless-stopped
     environment:
       # Ambiente
@@ -62,8 +62,8 @@ services:
       # JWT Settings (IMPORTANTE: Use variável de ambiente segura)
       - JwtSettings__SecretKey=${JWT_SECRET_KEY}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=PrimeCare Software
-      - JwtSettings__Audience=PrimeCare Software-API
+      - JwtSettings__Issuer=Omni Care Software
+      - JwtSettings__Audience=Omni Care Software-API
       
       # Security
       - Security__RequireHttps=true
@@ -87,7 +87,7 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - primecare-network
+      - omnicare-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -111,7 +111,7 @@ services:
       dockerfile: Dockerfile.production
       args:
         API_URL: ${API_URL:-http://api:8080}
-    container_name: primecare-frontend
+    container_name: omnicare-frontend
     restart: unless-stopped
     environment:
       - NODE_ENV=production
@@ -120,7 +120,7 @@ services:
     depends_on:
       - api
     networks:
-      - primecare-network
+      - omnicare-network
     # Limites de recursos (Nginx consome pouco)
     deploy:
       resources:
@@ -138,7 +138,7 @@ services:
       dockerfile: Dockerfile.production
       args:
         API_URL: ${API_URL:-http://api:8080}
-    container_name: primecare-system-admin
+    container_name: omnicare-system-admin
     restart: unless-stopped
     environment:
       - NODE_ENV=production
@@ -147,7 +147,7 @@ services:
     depends_on:
       - api
     networks:
-      - primecare-network
+      - omnicare-network
     # Limites de recursos
     deploy:
       resources:
@@ -162,7 +162,7 @@ services:
   # Descomente se quiser servir tudo em uma única porta
   # nginx:
   #   image: nginx:alpine
-  #   container_name: primecare-nginx
+  #   container_name: omnicare-nginx
   #   restart: unless-stopped
   #   ports:
   #     - "80:80"
@@ -175,7 +175,7 @@ services:
   #     - frontend
   #     - system-admin
   #   networks:
-  #     - primecare-network
+  #     - omnicare-network
   #   deploy:
   #     resources:
   #       limits:
@@ -192,7 +192,7 @@ volumes:
     #   o: bind
 
 networks:
-  primecare-network:
+  omnicare-network:
     driver: bridge
 
 # INSTRUÇÕES DE USO:
@@ -215,10 +215,10 @@ networks:
 #    docker compose -f docker-compose.production.yml down
 #
 # 6. Backup do banco:
-#    docker exec primecare-postgres pg_dump -U primecare primecare > backup.sql
+#    docker exec omnicare-postgres pg_dump -U primecare primecare > backup.sql
 #
 # 7. Restore do banco:
-#    docker exec -i primecare-postgres psql -U primecare primecare < backup.sql
+#    docker exec -i omnicare-postgres psql -U primecare primecare < backup.sql
 #
 # RECURSOS TOTAIS ESTIMADOS:
 # - CPU: ~2.0 vCPU total (picos)

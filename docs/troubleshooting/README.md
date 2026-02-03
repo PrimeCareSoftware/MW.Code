@@ -1,6 +1,6 @@
 # Troubleshooting Guides
 
-This directory contains guides to help you resolve common issues with the PrimeCare Software system.
+This directory contains guides to help you resolve common issues with the Omni Care Software system.
 
 ## Available Guides
 

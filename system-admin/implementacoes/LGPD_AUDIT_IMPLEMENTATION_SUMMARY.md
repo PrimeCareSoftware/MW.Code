@@ -6,7 +6,7 @@
 
 ## 📋 Visão Geral
 
-Sistema completo de auditoria para rastreabilidade de todas as ações no sistema PrimeCare Software, garantindo **compliance total com a LGPD** (Lei Geral de Proteção de Dados).
+Sistema completo de auditoria para rastreabilidade de todas as ações no sistema Omni Care Software, garantindo **compliance total com a LGPD** (Lei Geral de Proteção de Dados).
 
 Este é um requisito **OBRIGATÓRIO POR LEI** para sistemas que processam dados pessoais e sensíveis de saúde.
 
@@ -354,7 +354,7 @@ dotnet test --filter "FullyQualifiedName~Audit"
 
 ## 🎉 Conclusão
 
-O Sistema de Auditoria LGPD está **100% completo e pronto para produção**. Todos os requisitos legais foram atendidos, e o sistema fornece rastreabilidade completa de todas as ações no PrimeCare Software.
+O Sistema de Auditoria LGPD está **100% completo e pronto para produção**. Todos os requisitos legais foram atendidos, e o sistema fornece rastreabilidade completa de todas as ações no Omni Care Software.
 
 A implementação garante compliance total com a LGPD e oferece transparência aos titulares de dados sobre o tratamento de suas informações pessoais e sensíveis.
 

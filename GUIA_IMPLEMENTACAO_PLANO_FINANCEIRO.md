@@ -1,7 +1,7 @@
 # Guia de Implementação - Plano Financeiro
 
 ## Visão Geral
-Este guia descreve como implementar os planos financeiros definidos no documento `PLANO_FINANCEIRO_MENSAL.md` no sistema PrimeCare, garantindo que a infraestrutura de assinaturas já existente suporte adequadamente a estratégia de precificação unificada.
+Este guia descreve como implementar os planos financeiros definidos no documento `PLANO_FINANCEIRO_MENSAL.md` no sistema Omni Care, garantindo que a infraestrutura de assinaturas já existente suporte adequadamente a estratégia de precificação unificada.
 
 ## Data de Criação
 02 de Fevereiro de 2026
@@ -511,7 +511,7 @@ public class FinancialNotificationService
     public async Task NotifyNewSubscription(Clinic clinic, SubscriptionPlan plan)
     {
         await _emailService.SendAsync(
-            "team@primecare.com",
+            "team@omnicare.com",
             "Novo Cliente Pagante!",
             $"Cliente: {clinic.Name} - Plano: {plan.Name} - Valor: R$ {plan.GetEffectivePrice()}"
         );
@@ -530,7 +530,7 @@ public class FinancialNotificationService
         if (percentage >= 90)
         {
             await _emailService.SendAsync(
-                "marketing@primecare.com",
+                "marketing@omnicare.com",
                 $"Campanha {plan.CampaignName} perto do limite",
                 $"Restam apenas {remaining} vagas!"
             );

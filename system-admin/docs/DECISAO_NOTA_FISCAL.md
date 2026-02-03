@@ -6,7 +6,7 @@
 
 ## Contexto
 
-O sistema PrimeCare Software possui uma implementação básica de gerenciamento de invoices (notas fiscais), mas a **emissão oficial de NF-e/NFS-e** está pendente de decisão estratégica sobre qual abordagem adotar.
+O sistema Omni Care Software possui uma implementação básica de gerenciamento de invoices (notas fiscais), mas a **emissão oficial de NF-e/NFS-e** está pendente de decisão estratégica sobre qual abordagem adotar.
 
 ### Implementação Existente
 

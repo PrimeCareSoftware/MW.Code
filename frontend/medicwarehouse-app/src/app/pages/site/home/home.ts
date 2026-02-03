@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     // Track page view
-    this.analytics.trackPageView('/home', 'PrimeCare Software - Home');
+    this.analytics.trackPageView('/home', 'Omni Care Software - Home');
     
     // Setup throttled scroll tracking
     this.scrollSubject

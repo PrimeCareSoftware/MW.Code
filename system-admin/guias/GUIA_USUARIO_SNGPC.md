@@ -422,7 +422,7 @@ Configure em **Configurações → Notificações**:
 ### Precisa de Ajuda?
 
 **Suporte Técnico:**
-- 📧 Email: suporte@primecare.com.br
+- 📧 Email: suporte@omnicare.com.br
 - 📱 Telefone: (11) XXXX-XXXX
 - 💬 Chat: Disponível no sistema (canto inferior direito)
 
@@ -471,4 +471,4 @@ Configure em **Configurações → Notificações**:
 **Versão:** 1.0  
 **Última Atualização:** 29 de Janeiro de 2026  
 **Próxima Revisão:** Julho de 2026  
-**Documento aprovado por:** Equipe Técnica PrimeCare + Consultoria Jurídica
+**Documento aprovado por:** Equipe Técnica Omni Care + Consultoria Jurídica

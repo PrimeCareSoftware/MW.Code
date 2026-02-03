@@ -115,8 +115,8 @@ Analysis Result for 'javascript': ✅ 0 alerts found
 
 ```html
 <!-- TODO: Create and upload before production -->
-<meta property="og:image" content="https://primecare.com.br/assets/og-image.jpg">
-<meta name="twitter:image" content="https://primecare.com.br/assets/twitter-image.jpg">
+<meta property="og:image" content="https://omnicare.com.br/assets/og-image.jpg">
+<meta name="twitter:image" content="https://omnicare.com.br/assets/twitter-image.jpg">
 ```
 
 **Recomendação:**
@@ -236,7 +236,7 @@ ng build --configuration production
 export const environment = {
   production: true,
   whatsappNumber: '5511999999999', // Configurar via CI/CD
-  apiUrl: 'https://api.primecare.com.br',
+  apiUrl: 'https://api.omnicare.com.br',
   enableDebug: false,
   enableAnalytics: true
 };
@@ -271,7 +271,7 @@ Antes do deployment em produção:
 ## 📞 Contato
 
 Para questões de segurança relacionadas a esta implementação:
-- **Repository**: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+- **Repository**: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - **Documentação**: [PROMPT_1_HOMEPAGE_REDESIGN_COMPLETO.md](./PROMPT_1_HOMEPAGE_REDESIGN_COMPLETO.md)
 
 ---

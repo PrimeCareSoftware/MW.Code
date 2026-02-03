@@ -1,10 +1,10 @@
-# Security Improvements Implementation Guide - PrimeCare
+# Security Improvements Implementation Guide - Omni Care
 
 This document provides a comprehensive guide for all security improvements implemented based on the `12-melhorias-seguranca.md` specification.
 
 ## Overview
 
-This implementation includes **6 critical security improvements** that provide defense-in-depth protection for the PrimeCare healthcare platform:
+This implementation includes **6 critical security improvements** that provide defense-in-depth protection for the Omni Care healthcare platform:
 
 1. **Account Lockout** - Brute force protection
 2. **MFA (Multi-Factor Authentication)** - Mandatory for administrators
@@ -197,7 +197,7 @@ if (!isValid)
 
 **Cloudflare Business Plan ($200/month):**
 - Full OWASP Core Rule Set
-- Custom rules for PrimeCare
+- Custom rules for Omni Care
 - Rate limiting per endpoint
 - Bot management
 - SSL/TLS management
@@ -235,7 +235,7 @@ Monitor via Cloudflare dashboard:
 
 **Configuration Files:**
 - `docker-compose.elk.yml` - ELK Stack deployment
-- `logstash/pipeline/primecare-security.conf` - Log processing
+- `logstash/pipeline/omnicare-security.conf` - Log processing
 - `system-admin/seguranca/SIEM_ELK_SETUP.md` - Complete guide
 
 **Components:**

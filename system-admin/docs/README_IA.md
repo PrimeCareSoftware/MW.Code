@@ -1,4 +1,4 @@
-# 🤖 Documentação de IA - PrimeCare Software
+# 🤖 Documentação de IA - Omni Care Software
 
 > **Central de Documentação sobre Inteligência Artificial**  
 > **Data:** Janeiro 2026  
@@ -13,7 +13,7 @@
 #### [📖 Integração Copilot IA](INTEGRACAO_COPILOT_IA.md)
 **Tempo de Leitura:** 45 minutos
 
-Guia técnico completo para integração de IA no PrimeCare Software.
+Guia técnico completo para integração de IA no Omni Care Software.
 
 **Conteúdo:**
 - O que é GitHub Copilot e como usar
@@ -206,20 +206,20 @@ Referência rápida para usar recursos de IA no dia a dia.
 ## 📞 Contato e Suporte
 
 ### Dúvidas Técnicas (Desenvolvedores)
-- 📧 Email: dev@primecaresoftware.com
+- 📧 Email: dev@omnicaresoftware.com
 - 💬 Slack: #ai-integration
 - 📖 Docs: Ver documentação técnica
 
 ### Comercial (Clientes)
-- 📧 Email: ia@primecaresoftware.com
+- 📧 Email: ia@omnicaresoftware.com
 - 📱 WhatsApp: (11) 98765-4321
-- 🌐 Site: www.primecaresoftware.com.br/ia
+- 🌐 Site: www.omnicaresoftware.com.br/ia
 - 📅 Agendar Demo: [Link para agendamento]
 
 ### Suporte (Usuários)
 - ☎️ Telefone: 0800-123-4567 (24/7)
 - 💬 Chat: Dentro do sistema
-- 📖 Help Center: help.primecaresoftware.com
+- 📖 Help Center: help.omnicaresoftware.com
 
 ---
 
@@ -227,7 +227,7 @@ Referência rápida para usar recursos de IA no dia a dia.
 
 ### Webinars (Gratuitos)
 - 🗓️ **Quintas, 19h**: "IA na Prática"
-- 📺 YouTube: [Canal PrimeCare Software]
+- 📺 YouTube: [Canal Omni Care Software]
 - 🎥 Gravações disponíveis
 
 ### Materiais
@@ -291,7 +291,7 @@ Referência rápida para usar recursos de IA no dia a dia.
 
 ## 🎉 Conclusão
 
-A integração de IA no PrimeCare Software representa uma **evolução significativa** na forma como clínicas médicas operam. Com investimento de apenas **R$ 880/mês** e retorno de **18x**, a IA não é mais um luxo, mas uma **necessidade competitiva**.
+A integração de IA no Omni Care Software representa uma **evolução significativa** na forma como clínicas médicas operam. Com investimento de apenas **R$ 880/mês** e retorno de **18x**, a IA não é mais um luxo, mas uma **necessidade competitiva**.
 
 ### Próximos Passos
 
@@ -302,7 +302,7 @@ A integração de IA no PrimeCare Software representa uma **evolução significa
 
 ---
 
-**Documentação mantida por**: Equipe de IA - PrimeCare Software  
+**Documentação mantida por**: Equipe de IA - Omni Care Software  
 **Última atualização**: Janeiro 2026  
 **Próxima revisão**: Março 2026  
 **Versão**: 1.0

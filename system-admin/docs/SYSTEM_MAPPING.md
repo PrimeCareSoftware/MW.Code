@@ -1,13 +1,13 @@
-# Mapeamento Completo do Sistema PrimeCare Software
+# Mapeamento Completo do Sistema Omni Care Software
 
 ## 📊 Visão Geral da Arquitetura
 
-O PrimeCare Software é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).
+O Omni Care Software é um sistema de gestão para clínicas médicas desenvolvido em .NET 8.0 com arquitetura em camadas (Clean Architecture).
 
 ### Estrutura de Projetos
 
 ```
-PrimeCare Software.sln
+Omni Care Software.sln
 ├── src/
 │   ├── MedicSoft.Domain         - Entidades, interfaces e lógica de domínio
 │   ├── MedicSoft.Application    - Serviços de aplicação e casos de uso
@@ -527,4 +527,4 @@ Os seeders criam um ambiente completo de teste com:
 
 ---
 
-Este mapeamento fornece uma visão completa e detalhada de todo o sistema PrimeCare Software, suas entidades, relacionamentos, fluxos e funcionalidades.
+Este mapeamento fornece uma visão completa e detalhada de todo o sistema Omni Care Software, suas entidades, relacionamentos, fluxos e funcionalidades.

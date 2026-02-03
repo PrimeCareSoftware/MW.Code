@@ -17,8 +17,8 @@ The Patient Portal has been configured as a Progressive Web App (PWA), enabling 
 ### 2. Web App Manifest
 - **File**: `public/manifest.webmanifest`
 - **Configuration**:
-  - App name: "PrimeCare - Portal do Paciente"
-  - Short name: "PrimeCare"
+  - App name: "Omni Care - Portal do Paciente"
+  - Short name: "Omni Care"
   - Theme color: #1e40af (primary blue)
   - Background color: #ffffff
   - Display mode: standalone

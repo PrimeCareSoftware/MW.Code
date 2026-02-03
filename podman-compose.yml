@@ -1,6 +1,6 @@
 version: '3.8'
 
-# Podman Compose para PrimeCare Software - Ambiente de Desenvolvimento
+# Podman Compose para Omni Care Software - Ambiente de Desenvolvimento
 # Este arquivo também é compatível com Docker Compose
 #
 # Executar com Podman (recomendado - livre e open-source):
@@ -12,7 +12,7 @@ version: '3.8'
 services:
   postgres:
     image: docker.io/library/postgres:16-alpine
-    container_name: primecare-postgres
+    container_name: omnicare-postgres
     pull_policy: missing
     environment:
       POSTGRES_DB: primecare
@@ -24,7 +24,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - primecare-network
+      - omnicare-network
     healthcheck:
       test: pg_isready -U postgres -d primecare
       interval: 10s
@@ -36,27 +36,27 @@ services:
     build:
       context: .
       dockerfile: src/MedicSoft.Api/Dockerfile
-    container_name: primecare-api
+    container_name: omnicare-api
     ports:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres};Include Error Detail=true
-      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-PrimeCare Software-SuperSecretKey-2024-Development-MinLength32Chars!}
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-Omni Care Software-SuperSecretKey-2024-Development-MinLength32Chars!}
       - JwtSettings__ExpiryMinutes=60
-      - JwtSettings__Issuer=PrimeCare Software
-      - JwtSettings__Audience=PrimeCare Software-API
+      - JwtSettings__Issuer=Omni Care Software
+      - JwtSettings__Audience=Omni Care Software-API
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - primecare-network
+      - omnicare-network
 
   frontend:
     build:
       context: ./frontend/medicwarehouse-app
       dockerfile: Dockerfile
-    container_name: primecare-frontend
+    container_name: omnicare-frontend
     ports:
       - "4200:4200"
     environment:
@@ -64,13 +64,13 @@ services:
     depends_on:
       - api
     networks:
-      - primecare-network
+      - omnicare-network
   
   system-admin:
     build:
       context: ./frontend/mw-system-admin
       dockerfile: Dockerfile
-    container_name: primecare-system-admin
+    container_name: omnicare-system-admin
     ports:
       - "4201:4201"
     environment:
@@ -78,11 +78,11 @@ services:
     depends_on:
       - api
     networks:
-      - primecare-network
+      - omnicare-network
 
 volumes:
   postgres_data:
 
 networks:
-  primecare-network:
+  omnicare-network:
     driver: bridge

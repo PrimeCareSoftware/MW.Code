@@ -12,7 +12,7 @@
 
 ## Introdução
 
-Os Relatórios Financeiros do PrimeCare Software são ferramentas poderosas para análise estratégica da saúde financeira da sua clínica. Este guia irá ajudá-lo a entender e utilizar cada relatório de forma eficaz.
+Os Relatórios Financeiros do Omni Care Software são ferramentas poderosas para análise estratégica da saúde financeira da sua clínica. Este guia irá ajudá-lo a entender e utilizar cada relatório de forma eficaz.
 
 ### Relatórios Disponíveis
 
@@ -28,7 +28,7 @@ Para acessar os relatórios financeiros, você precisa ter a permissão **Report
 
 ### Navegação
 
-1. Faça login no sistema PrimeCare
+1. Faça login no sistema Omni Care
 2. No menu lateral, clique em **Financeiro**
 3. Selecione **Relatórios**
 4. Escolha o relatório desejado:

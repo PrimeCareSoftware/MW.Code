@@ -11,7 +11,7 @@
 
 ### Situação Atual
 
-O sistema PrimeCare já possui uma **base funcional** para gerenciamento de módulos:
+O sistema Omni Care já possui uma **base funcional** para gerenciamento de módulos:
 
 **Existente:**
 - ✅ `ModuleConfiguration` (entidade do domínio)

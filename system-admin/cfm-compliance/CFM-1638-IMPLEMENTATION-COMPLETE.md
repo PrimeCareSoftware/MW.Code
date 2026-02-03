@@ -291,5 +291,5 @@ All core requirements have been successfully implemented:
 
 **Implementation Date**: January 23, 2026  
 **Developer**: GitHub Copilot  
-**Repository**: PrimeCareSoftware/MW.Code  
+**Repository**: Omni CareSoftware/MW.Code  
 **Branch**: copilot/implement-versionamento-prompt-02-cfm-1638

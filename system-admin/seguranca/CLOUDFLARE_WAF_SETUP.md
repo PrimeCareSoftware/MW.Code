@@ -1,6 +1,6 @@
-# Cloudflare WAF Configuration for PrimeCare
+# Cloudflare WAF Configuration for Omni Care
 
-This document describes the Web Application Firewall (WAF) configuration for PrimeCare using Cloudflare.
+This document describes the Web Application Firewall (WAF) configuration for Omni Care using Cloudflare.
 
 ## Overview
 
@@ -134,7 +134,7 @@ rules:
 ### 1. Add Domain to Cloudflare
 
 1. Sign up at cloudflare.com
-2. Add your domain (e.g., primecare.com.br)
+2. Add your domain (e.g., omnicare.com.br)
 3. Update nameservers at your domain registrar
 4. Wait for DNS propagation (usually 2-24 hours)
 
@@ -200,7 +200,7 @@ Configure alerts for:
 | Business | $200 | Full WAF, OWASP, Custom rules ⭐ |
 | Enterprise | Custom | Advanced features, 24/7 support |
 
-**Recommended for PrimeCare:** Business Plan ($200/month)
+**Recommended for Omni Care:** Business Plan ($200/month)
 
 ## Testing
 
@@ -208,14 +208,14 @@ Configure alerts for:
 
 ```bash
 # Should be blocked
-curl -X POST "https://api.primecare.com.br/api/patients?id=1' OR '1'='1"
+curl -X POST "https://api.omnicare.com.br/api/patients?id=1' OR '1'='1"
 ```
 
 ### Test XSS Protection
 
 ```bash
 # Should be blocked
-curl -X POST "https://api.primecare.com.br/api/search?q=<script>alert('xss')</script>"
+curl -X POST "https://api.omnicare.com.br/api/search?q=<script>alert('xss')</script>"
 ```
 
 ### Test Rate Limiting
@@ -223,7 +223,7 @@ curl -X POST "https://api.primecare.com.br/api/search?q=<script>alert('xss')</sc
 ```bash
 # Run 15 times quickly - should start blocking after 10
 for i in {1..15}; do
-  curl -X POST "https://api.primecare.com.br/api/auth/login" \
+  curl -X POST "https://api.omnicare.com.br/api/auth/login" \
     -d '{"username":"test","password":"test"}'
 done
 ```
@@ -253,4 +253,4 @@ done
 ---
 
 **Última Atualização:** 27 de Janeiro de 2026  
-**Responsável:** Equipe de Segurança PrimeCare
+**Responsável:** Equipe de Segurança Omni Care

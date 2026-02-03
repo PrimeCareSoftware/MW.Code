@@ -324,7 +324,7 @@ public class AppointmentService : IAppointmentService
                 IsTelehealth = appointment.IsTelehealth
             };
 
-            var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.primecare.com";
+            var portalBaseUrl = _configuration["PortalBaseUrl"] ?? "https://portal.omnicare.com";
             var emailBody = EmailTemplateHelper.GenerateAppointmentConfirmationEmail(appointmentDto, portalBaseUrl);
             
             await _notificationService.SendEmailAsync(

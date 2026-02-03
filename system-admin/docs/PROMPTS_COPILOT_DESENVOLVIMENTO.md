@@ -1,4 +1,4 @@
-# 🤖 Prompts para Copilot - Desenvolvimento PrimeCare Software
+# 🤖 Prompts para Copilot - Desenvolvimento Omni Care Software
 
 > **Objetivo:** Prompts estruturados para solicitar ao GitHub Copilot o desenvolvimento de cada etapa do plano de desenvolvimento, agilizando o processo e evitando erros.
 
@@ -129,7 +129,7 @@ Todos os prompts seguem este padrão:
 # Prompt para Copilot - CFM 1.821 - Etapa 1: Análise
 
 📋 CONTEXTO:
-Trabalho no PrimeCare Software, sistema de gestão para clínicas médicas (.NET 8 + Angular 20).
+Trabalho no Omni Care Software, sistema de gestão para clínicas médicas (.NET 8 + Angular 20).
 Preciso implementar conformidade com Resolução CFM 1.821/2007 sobre prontuários eletrônicos.
 
 🎯 OBJETIVO:
@@ -211,11 +211,11 @@ Por favor, crie documento completo baseado na Resolução CFM 1.821/2007.
 # Prompt para Copilot - CFM 1.821 - Etapa 2: Modelagem BD
 
 📋 CONTEXTO:
-PrimeCare Software (.NET 8, EF Core 8, PostgreSQL 15, Clean Architecture).
+Omni Care Software (.NET 8, EF Core 8, PostgreSQL 15, Clean Architecture).
 Especificação CFM 1.821 está pronta. Preciso criar entidades de domínio.
 
 🎯 OBJETIVO:
-Criar/atualizar entidades em src/PrimeCare Software.Domain/Entities para suportar
+Criar/atualizar entidades em src/Omni Care Software.Domain/Entities para suportar
 todos os campos obrigatórios CFM 1.821.
 
 🔧 REQUISITOS TÉCNICOS:
@@ -223,7 +223,7 @@ todos os campos obrigatórios CFM 1.821.
 1. Criar/atualizar entidades:
 
 ```csharp
-// src/PrimeCare Software.Domain/Entities/MedicalRecord.cs
+// src/Omni Care Software.Domain/Entities/MedicalRecord.cs
 public class MedicalRecord : BaseEntity
 {
     // Relacionamentos
@@ -382,7 +382,7 @@ O sistema de emissão de NF-e/NFS-e foi **totalmente implementado** conforme esp
 # Prompt para Copilot - NF-e - Etapa 1: Análise de Gateways
 
 📋 CONTEXTO:
-PrimeCare Software precisa emitir NF-e/NFS-e para clínicas ficarem em conformidade 
+Omni Care Software precisa emitir NF-e/NFS-e para clínicas ficarem em conformidade 
 com Receita Federal. Preciso avaliar gateways de integração.
 
 🎯 OBJETIVO:
@@ -480,7 +480,7 @@ Por favor, crie análise comparativa completa de gateways NF-e/NFS-e.
 # Prompt para Copilot - LGPD - Etapa 1: Auditoria
 
 📋 CONTEXTO:
-PrimeCare Software armazena dados sensíveis de saúde. Preciso auditar conformidade
+Omni Care Software armazena dados sensíveis de saúde. Preciso auditar conformidade
 com LGPD (Lei 13.709/2018).
 
 🎯 OBJETIVO:
@@ -789,7 +789,7 @@ Este documento cobre prompts para:
 ## 🎉 Pronto para Começar!
 
 Este documento contém prompts detalhados para acelerar o desenvolvimento das 
-tarefas mais críticas do PrimeCare Software.
+tarefas mais críticas do Omni Care Software.
 
 ### Como Começar:
 

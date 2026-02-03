@@ -312,8 +312,8 @@ Durante a análise, foram identificados warnings de build não relacionados ao s
 
 ## 📞 Contato
 
-**Equipe PrimeCare Software**
-- GitHub: [PrimeCareSoftware/MW.Code](https://github.com/PrimeCareSoftware/MW.Code)
+**Equipe Omni Care Software**
+- GitHub: [Omni CareSoftware/MW.Code](https://github.com/Omni CareSoftware/MW.Code)
 - Documentação: `/Plano_Desenvolvimento/PlanoModulos/`
 
 ---

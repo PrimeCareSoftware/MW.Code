@@ -440,8 +440,8 @@ dotnet test --filter Category=LGPD
 ## 📞 Suporte
 
 Para dúvidas sobre o sistema de auditoria LGPD:
-- Email: dpo@primecaresoftware.com
-- Documentação: https://docs.primecaresoftware.com/lgpd
+- Email: dpo@omnicaresoftware.com
+- Documentação: https://docs.omnicaresoftware.com/lgpd
 - Implementação Detalhada: [Plano de Desenvolvimento - Fase 2](./Plano_Desenvolvimento/fase-2-seguranca-lgpd/)
 
 **Última atualização:** 26 de Janeiro de 2026  

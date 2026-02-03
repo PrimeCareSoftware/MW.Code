@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the complete implementation of CFM 1.638/2002 compliance for medical record versioning and audit in the PrimeCare Software system.
+This document describes the complete implementation of CFM 1.638/2002 compliance for medical record versioning and audit in the Omni Care Software system.
 
 **Status:** ✅ COMPLETE  
 **Compliance:** CFM 1.638/2002 - Prontuário Eletrônico  

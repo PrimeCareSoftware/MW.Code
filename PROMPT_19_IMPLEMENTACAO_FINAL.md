@@ -506,7 +506,7 @@ npm run test:a11y        # Testes unitários específicos
 ## 📞 Suporte
 
 Para dúvidas sobre acessibilidade:
-- **Email:** acessibilidade@primecare.com.br
+- **Email:** acessibilidade@omnicare.com.br
 - **Documentação:** Ver arquivos ACCESSIBILITY_*.md
 - **Testes:** `npm run test:a11y`
 - **Auditoria:** `npm run audit:axe`
@@ -526,10 +526,10 @@ Os componentes de acessibilidade estão **integrados, testados e documentados**,
 - ✅ **Navegação contextual** com breadcrumbs semânticos
 - ✅ **96% de conformidade WCAG 2.1** (48/50 critérios)
 
-O sistema PrimeCare agora oferece uma experiência **verdadeiramente inclusiva**, atendendo aos requisitos legais (LBI) e garantindo acesso a **todos os usuários**, independentemente de suas capacidades.
+O sistema Omni Care agora oferece uma experiência **verdadeiramente inclusiva**, atendendo aos requisitos legais (LBI) e garantindo acesso a **todos os usuários**, independentemente de suas capacidades.
 
 ---
 
 **Documento preparado em:** 28 de Janeiro de 2026  
-**Responsável:** Equipe de Desenvolvimento PrimeCare Software  
+**Responsável:** Equipe de Desenvolvimento Omni Care Software  
 **Status:** ✅ Implementação Concluída

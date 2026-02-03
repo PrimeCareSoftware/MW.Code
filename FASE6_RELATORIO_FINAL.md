@@ -8,7 +8,7 @@
 
 ## 🎯 Resumo Executivo
 
-A **Fase 6 - Segurança e Compliance** foi **concluída com sucesso**, implementando recursos de **segurança enterprise-grade** e **compliance LGPD** no PrimeCare System Admin.
+A **Fase 6 - Segurança e Compliance** foi **concluída com sucesso**, implementando recursos de **segurança enterprise-grade** e **compliance LGPD** no Omni Care System Admin.
 
 ### Principais Conquistas
 
@@ -356,8 +356,8 @@ return await _context.UserSessions
 
 ### Equipe de Segurança
 
-**Email:** security@primecare.com  
-**DPO:** dpo@primecare.com  
+**Email:** security@omnicare.com  
+**DPO:** dpo@omnicare.com  
 **Emergência:** +55 (11) XXXX-XXXX
 
 ### Documentação

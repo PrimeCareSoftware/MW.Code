@@ -3,7 +3,7 @@
 ## 📋 Índice
 1. [O que é TISS](#o-que-é-tiss)
 2. [Para que serve](#para-que-serve)
-3. [Como funciona no PrimeCare](#como-funciona-no-primecare)
+3. [Como funciona no Omni Care](#como-funciona-no-primecare)
 4. [Passo a Passo](#passo-a-passo)
 5. [Tipos de Guias TISS](#tipos-de-guias-tiss)
 6. [Solicitação de Autorizações](#solicitação-de-autorizações)
@@ -55,9 +55,9 @@ O TISS serve para:
 
 ---
 
-## Como funciona no PrimeCare?
+## Como funciona no Omni Care?
 
-O PrimeCare Software gerencia todo o processo TISS de forma **automatizada**, desde a verificação do convênio do paciente até o recebimento do pagamento.
+O Omni Care Software gerencia todo o processo TISS de forma **automatizada**, desde a verificação do convênio do paciente até o recebimento do pagamento.
 
 ### Fluxo Completo:
 
@@ -419,7 +419,7 @@ Não são todos os procedimentos que exigem autorização. Geralmente:
 - Fisioterapia (múltiplas sessões)
 - Terapias especializadas
 
-**Dica:** No PrimeCare, ao cadastrar o plano, marque quais tipos de procedimento requerem autorização. O sistema alertará automaticamente.
+**Dica:** No Omni Care, ao cadastrar o plano, marque quais tipos de procedimento requerem autorização. O sistema alertará automaticamente.
 
 ### Como solicitar:
 
@@ -658,7 +658,7 @@ Ao configurar a operadora no sistema, informe qual versão ela aceita.
 
 **Não.** O TISS é exclusivo para **convênios e planos de saúde**.
 
-Para pacientes particulares, você usa o **sistema financeiro normal** do PrimeCare (recibos, notas fiscais, etc.).
+Para pacientes particulares, você usa o **sistema financeiro normal** do Omni Care (recibos, notas fiscais, etc.).
 
 ### 10. E se a operadora negar a autorização?
 
@@ -685,12 +685,12 @@ Para pacientes particulares, você usa o **sistema financeiro normal** do PrimeC
 
 ## 📞 Suporte
 
-Dúvidas sobre o uso do sistema TISS no PrimeCare?
+Dúvidas sobre o uso do sistema TISS no Omni Care?
 
-- 📧 **E-mail:** suporte@primecaresoftware.com
+- 📧 **E-mail:** suporte@omnicaresoftware.com
 - 💬 **Chat:** Disponível no sistema (canto inferior direito)
-- 📚 **Base de conhecimento:** [docs.primecaresoftware.com](https://docs.primecaresoftware.com)
-- 🎥 **Vídeos tutoriais:** Canal do YouTube PrimeCare Software
+- 📚 **Base de conhecimento:** [docs.omnicaresoftware.com](https://docs.omnicaresoftware.com)
+- 🎥 **Vídeos tutoriais:** Canal do YouTube Omni Care Software
 
 ---
 
@@ -704,4 +704,4 @@ Dúvidas sobre o uso do sistema TISS no PrimeCare?
 
 **Última atualização:** Janeiro 2026  
 **Versão:** 1.0  
-**Elaborado por:** PrimeCare Software
+**Elaborado por:** Omni Care Software

@@ -722,7 +722,7 @@ Documente:
 
 ### Contatos
 
-- **Email:** devops@primecare.com.br
+- **Email:** devops@omnicare.com.br
 - **Slack:** #medicsoft-admin
 - **Emergência:** (11) 99999-9999
 

@@ -434,5 +434,5 @@ public class AuthServiceTests
 ---
 
 **Versão:** 1.0.0  
-**Autor:** PrimeCare Software Team  
+**Autor:** Omni Care Software Team  
 **Data:** Janeiro 2026

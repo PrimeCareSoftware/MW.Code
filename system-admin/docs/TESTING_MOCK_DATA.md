@@ -15,7 +15,7 @@ Este guia fornece instruções passo a passo para testar a funcionalidade de dad
 ### 1.1 Instalar Dependências
 
 ```bash
-# PrimeCare Software App
+# Omni Care Software App
 cd frontend/medicwarehouse-app
 npm install
 
@@ -26,7 +26,7 @@ npm install
 
 ## Passo 2: Habilitar Dados Mockados
 
-### 2.1 PrimeCare Software App
+### 2.1 Omni Care Software App
 
 Edite `frontend/medicwarehouse-app/src/environments/environment.ts`:
 
@@ -56,7 +56,7 @@ export const environment = {
 
 ## Passo 3: Executar os Aplicativos
 
-### 3.1 PrimeCare Software App
+### 3.1 Omni Care Software App
 
 ```bash
 cd frontend/medicwarehouse-app
@@ -76,7 +76,7 @@ O aplicativo estará disponível em: `http://localhost:4201`
 
 ## Passo 4: Cenários de Teste
 
-### Cenário 1: Login no PrimeCare Software App
+### Cenário 1: Login no Omni Care Software App
 
 1. Acesse `http://localhost:4200/login`
 2. Digite qualquer credencial (com mocks habilitados, qualquer credencial funciona):
@@ -249,7 +249,7 @@ O aplicativo estará disponível em: `http://localhost:4201`
 
 ## Passo 8: Verificar Build de Produção
 
-### Build PrimeCare Software App
+### Build Omni Care Software App
 
 ```bash
 cd frontend/medicwarehouse-app

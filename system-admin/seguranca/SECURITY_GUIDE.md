@@ -1,8 +1,8 @@
-# Guia de Segurança - PrimeCare Software
+# Guia de Segurança - Omni Care Software
 
 ## 📋 Visão Geral
 
-Este documento descreve todas as medidas de segurança implementadas no sistema PrimeCare Software para proteger contra ataques comuns como SQL Injection, XSS, CSRF, e outras ameaças.
+Este documento descreve todas as medidas de segurança implementadas no sistema Omni Care Software para proteger contra ataques comuns como SQL Injection, XSS, CSRF, e outras ameaças.
 
 ## 🔒 Medidas de Segurança Implementadas
 
@@ -219,7 +219,7 @@ Nunca commitar secrets no código. Use variáveis de ambiente:
 
 ```bash
 export DB_SERVER="seu-servidor.database.windows.net"
-export DB_NAME="PrimeCare Software"
+export DB_NAME="Omni Care Software"
 export DB_USER="admin_user"
 export DB_PASSWORD="SuaSenhaSegura123!"
 export JWT_SECRET_KEY="SuaChaveSecretaComPeloMenos32Caracteres!"
@@ -235,8 +235,8 @@ export JWT_SECRET_KEY="SuaChaveSecretaComPeloMenos32Caracteres!"
   "JwtSettings": {
     "SecretKey": "${JWT_SECRET_KEY}",
     "ExpiryMinutes": 60,
-    "Issuer": "PrimeCare Software",
-    "Audience": "PrimeCare Software-API"
+    "Issuer": "Omni Care Software",
+    "Audience": "Omni Care Software-API"
   },
   "Security": {
     "RequireHttps": true,

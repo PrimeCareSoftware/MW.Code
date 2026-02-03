@@ -12,7 +12,7 @@
 
 ### Situação Atual
 
-O **system-admin** do PrimeCare possui funcionalidades básicas de administração, mas carece de recursos modernos encontrados em ferramentas SaaS de classe mundial.
+O **system-admin** do Omni Care possui funcionalidades básicas de administração, mas carece de recursos modernos encontrados em ferramentas SaaS de classe mundial.
 
 **Funcionalidades Existentes:**
 - ✅ Dashboard com métricas básicas (clínicas, usuários, MRR)

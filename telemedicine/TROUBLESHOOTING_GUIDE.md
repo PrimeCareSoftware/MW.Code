@@ -632,4 +632,4 @@ When contacting support, include:
 
 **Last Updated:** January 29, 2026  
 **Version:** 1.0.0  
-**Maintained by:** PrimeCare Software Support Team
+**Maintained by:** Omni Care Software Support Team

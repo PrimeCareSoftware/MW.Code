@@ -1,8 +1,8 @@
-# Conformidade com LGPD - PrimeCare Software
+# Conformidade com LGPD - Omni Care Software
 
 ## Visão Geral
 
-Este documento descreve as implementações realizadas no frontend do PrimeCare Software para garantir conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
+Este documento descreve as implementações realizadas no frontend do Omni Care Software para garantir conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
 
 ## Recursos Implementados
 

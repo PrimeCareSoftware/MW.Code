@@ -2,7 +2,7 @@
 
 ## 📌 Visão Geral
 
-Este guia fornece instruções completas para configurar e testar o módulo Financeiro do PrimeCare Software, incluindo contas a receber, contas a pagar, fluxo de caixa, e relatórios financeiros.
+Este guia fornece instruções completas para configurar e testar o módulo Financeiro do Omni Care Software, incluindo contas a receber, contas a pagar, fluxo de caixa, e relatórios financeiros.
 
 ## 🔧 Pré-requisitos
 

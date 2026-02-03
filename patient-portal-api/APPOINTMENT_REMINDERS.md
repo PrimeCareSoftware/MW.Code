@@ -49,11 +49,11 @@ Indexes created for optimal query performance.
     "UseSsl": true,
     "Username": "your-email@gmail.com",
     "Password": "your-app-password",
-    "From": "noreply@primecare.com",
-    "FromName": "PrimeCare Portal"
+    "From": "noreply@omnicare.com",
+    "FromName": "Omni Care Portal"
   },
   "PortalSettings": {
-    "BaseUrl": "https://portal.primecare.com"
+    "BaseUrl": "https://portal.omnicare.com"
   }
 }
 ```
@@ -286,4 +286,4 @@ For issues or questions:
 
 ## License
 
-Proprietary - PrimeCare Software © 2026
+Proprietary - Omni Care Software © 2026

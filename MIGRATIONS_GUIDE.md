@@ -1,6 +1,6 @@
 # 📚 Guia de Migrações do Banco de Dados
 
-Este guia explica como aplicar e gerenciar migrações do Entity Framework Core no PrimeCare Software.
+Este guia explica como aplicar e gerenciar migrações do Entity Framework Core no Omni Care Software.
 
 ## ⚡ Início Rápido
 
@@ -273,7 +273,7 @@ Ou configure em `appsettings.Production.json` com senhas seguras gerenciadas por
 
 ## 📊 Aplicação Automática de Migrações
 
-O PrimeCare Software **aplica migrações automaticamente** quando a aplicação inicia.
+O Omni Care Software **aplica migrações automaticamente** quando a aplicação inicia.
 
 Veja em `src/MedicSoft.Api/Program.cs`:
 

@@ -330,8 +330,8 @@ AppComponent {
 
 // manifest.json (linha 786-813)
 {
-  name: "PrimeCare - Portal do Paciente",
-  short_name: "PrimeCare",
+  name: "Omni Care - Portal do Paciente",
+  short_name: "Omni Care",
   theme_color: "#1976d2",
   background_color: "#fafafa",
   display: "standalone",
@@ -605,5 +605,5 @@ O Portal do Paciente está **70% completo e pronto para MVP (Minimum Viable Prod
 **Documento Atualizado Por:** GitHub Copilot Agent  
 **Data:** 26 de Janeiro de 2026  
 **Próxima Revisão:** Após implementação da Fase 1 (Agendamento Online)  
-**Contato:** Equipe PrimeCare Software
+**Contato:** Equipe Omni Care Software
 

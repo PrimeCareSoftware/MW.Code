@@ -94,7 +94,7 @@ Cada card contém:
 ### 3. Cases Implementados
 
 #### Case 1: Clínica Sorriso (Odontologia, São Paulo)
-**Citação:** "O PrimeCare reduziu nosso tempo de agendamento em 70% e eliminou completamente os erros de prontuário."  
+**Citação:** "O Omni Care reduziu nosso tempo de agendamento em 70% e eliminou completamente os erros de prontuário."  
 **Autora:** Dra. Maria Silva, Diretora Clínica
 
 **Métricas:**
@@ -296,7 +296,7 @@ Para ativar a página, adicionar em `app.routes.ts`:
 {
   path: 'cases',
   loadComponent: () => import('./pages/site/cases/cases').then(m => m.CasesComponent),
-  title: 'Cases de Sucesso - PrimeCare'
+  title: 'Cases de Sucesso - Omni Care'
 }
 ```
 

@@ -1,4 +1,4 @@
-# 📚 Documentação System Admin - PrimeCare Software
+# 📚 Documentação System Admin - Omni Care Software
 
 **Última Atualização:** Fevereiro 2026  
 **Status:** Documentação reorganizada e consolidada

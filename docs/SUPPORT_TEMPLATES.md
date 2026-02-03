@@ -37,16 +37,16 @@ This document provides standardized templates for responding to common support r
 
 ## 🤝 Welcome & Onboarding
 
-### Template #1: Welcome to PrimeCare (First Contact)
+### Template #1: Welcome to Omni Care (First Contact)
 
-**Subject**: Bem-vindo ao PrimeCare! 🎉 [User Name]
+**Subject**: Bem-vindo ao Omni Care! 🎉 [User Name]
 
 ```
 Olá [First Name],
 
-Seja muito bem-vindo(a) ao PrimeCare! 🎉
+Seja muito bem-vindo(a) ao Omni Care! 🎉
 
-É uma honra tê-lo(a) como um dos nossos early adopters. Você está fazendo parte da construção de algo especial, e sua opinião e feedback serão fundamentais para moldar o futuro do PrimeCare.
+É uma honra tê-lo(a) como um dos nossos early adopters. Você está fazendo parte da construção de algo especial, e sua opinião e feedback serão fundamentais para moldar o futuro do Omni Care.
 
 📋 Primeiros Passos:
 1. Complete o cadastro da sua clínica
@@ -71,19 +71,19 @@ Estou aqui para qualquer dúvida. Não hesite em me contatar!
 
 Um abraço,
 [Support Agent Name]
-Time PrimeCare
+Time Omni Care
 ```
 
 ---
 
 ### Template #2: Onboarding Check-in (Day 3)
 
-**Subject**: Como está sendo sua experiência com o PrimeCare? 😊
+**Subject**: Como está sendo sua experiência com o Omni Care? 😊
 
 ```
 Olá [First Name],
 
-Tudo bem? Espero que esteja aproveitando o PrimeCare!
+Tudo bem? Espero que esteja aproveitando o Omni Care!
 
 Vi que você já está usando o sistema há alguns dias. Como tem sido a experiência até aqui? Conseguiu configurar tudo tranquilamente?
 
@@ -94,7 +94,7 @@ Algumas perguntas rápidas (opcional, mas ajudam muito):
 - Encontrou alguma dificuldade no processo? 🤔
 - Tem alguma sugestão de melhoria? 💡
 
-Muito obrigado por fazer parte do PrimeCare!
+Muito obrigado por fazer parte do Omni Care!
 
 [Support Agent Name]
 ```
@@ -110,7 +110,7 @@ Muito obrigado por fazer parte do PrimeCare!
 ```
 Olá [First Name],
 
-Obrigado por reportar este problema! Seu feedback é essencial para melhorarmos o PrimeCare.
+Obrigado por reportar este problema! Seu feedback é essencial para melhorarmos o Omni Care.
 
 📋 Resumo do Bug:
 - **Descrição**: [Brief description]
@@ -162,7 +162,7 @@ Nenhuma ação necessária. A correção já está ativa automaticamente.
 
 Pode testar agora e confirmar se está funcionando corretamente? Qualquer problema, me avise!
 
-Muito obrigado por reportar este bug. Seu feedback ajuda a tornar o PrimeCare melhor para todos! 🙏
+Muito obrigado por reportar este bug. Seu feedback ajuda a tornar o Omni Care melhor para todos! 🙏
 
 [Support Agent Name]
 ```
@@ -354,7 +354,7 @@ Olá [First Name],
 
 Vi que você deu uma nota [Score] no nosso NPS. Agradeço muito pela honestidade! 🙏
 
-Queria entender melhor o que podemos fazer para melhorar sua experiência com o PrimeCare. Sua resposta foi:
+Queria entender melhor o que podemos fazer para melhorar sua experiência com o Omni Care. Sua resposta foi:
 
 "[Their feedback]"
 
@@ -367,7 +367,7 @@ Gostaria de entender melhor seus desafios e ver como podemos resolver. Sua opini
 
 Se preferir, pode me responder por aqui mesmo. Estou aqui para ouvir e ajudar!
 
-Muito obrigado por fazer parte do PrimeCare,
+Muito obrigado por fazer parte do Omni Care,
 [Support Agent Name]
 ```
 
@@ -388,9 +388,9 @@ Seu feedback me deixou muito feliz! 😊🎉
 
 Comentários como este motivam muito nossa equipe! Posso compartilhar internamente?
 
-Se você conhece outros profissionais que se beneficiariam do PrimeCare, ficaríamos honrados com uma indicação. Oferecemos benefícios especiais para indicações de early adopters!
+Se você conhece outros profissionais que se beneficiariam do Omni Care, ficaríamos honrados com uma indicação. Oferecemos benefícios especiais para indicações de early adopters!
 
-Muito obrigado por fazer parte do PrimeCare! 🚀
+Muito obrigado por fazer parte do Omni Care! 🚀
 
 Com gratidão,
 [Support Agent Name]
@@ -432,12 +432,12 @@ Seus dados são criptografados e o link de download expira automaticamente.
 
 ### Template #13: Training Resources
 
-**Subject**: Recursos de treinamento do PrimeCare
+**Subject**: Recursos de treinamento do Omni Care
 
 ```
 Olá [First Name],
 
-Preparei alguns recursos que vão te ajudar a aproveitar ao máximo o PrimeCare! 📚
+Preparei alguns recursos que vão te ajudar a aproveitar ao máximo o Omni Care! 📚
 
 🎥 Vídeos:
 - Onboarding completo (10 min): [Link]
@@ -523,12 +523,12 @@ Ticket: #[Number]
 
 ### Template #16: Periodic Check-in
 
-**Subject**: Como está sua experiência com o PrimeCare?
+**Subject**: Como está sua experiência com o Omni Care?
 
 ```
 Olá [First Name],
 
-Faz [X semanas] que você está usando o PrimeCare. Como está sendo a experiência? 😊
+Faz [X semanas] que você está usando o Omni Care. Como está sendo a experiência? 😊
 
 📊 Rápida pesquisa (2 minutos):
 [Survey link]
@@ -572,5 +572,5 @@ Obrigado,
 ---
 
 **Version**: 1.0  
-**Maintained by**: PrimeCare Support Team  
+**Maintained by**: Omni Care Support Team  
 **Last Review**: January 2026

@@ -1,9 +1,9 @@
-# 🤖 Integração com GitHub Copilot e IA no PrimeCare Software
+# 🤖 Integração com GitHub Copilot e IA no Omni Care Software
 
 > **Documento:** Guia de Integração de IA  
 > **Data:** Janeiro 2026  
 > **Versão:** 1.0  
-> **Autor:** PrimeCare Software Team
+> **Autor:** Omni Care Software Team
 
 ---
 
@@ -11,7 +11,7 @@
 
 1. [Visão Geral](#visão-geral)
 2. [O que é GitHub Copilot](#o-que-é-github-copilot)
-3. [Benefícios da IA no PrimeCare](#benefícios-da-ia-no-primecare)
+3. [Benefícios da IA no Omni Care](#benefícios-da-ia-no-primecare)
 4. [Arquitetura de Integração](#arquitetura-de-integração)
 5. [Opções de Integração](#opções-de-integração)
 6. [Implementação Técnica](#implementação-técnica)
@@ -24,7 +24,7 @@
 
 ## 🎯 Visão Geral
 
-Este documento descreve como integrar recursos de **Inteligência Artificial** no PrimeCare Software usando **GitHub Copilot**, **Azure OpenAI** e outras tecnologias de IA para aprimorar a experiência de clínicas e pacientes.
+Este documento descreve como integrar recursos de **Inteligência Artificial** no Omni Care Software usando **GitHub Copilot**, **Azure OpenAI** e outras tecnologias de IA para aprimorar a experiência de clínicas e pacientes.
 
 ### Objetivo
 
@@ -64,11 +64,11 @@ Capacitar clínicas a utilizarem IA para:
 | **Custom models** | ❌ | ❌ | ✅ |
 | **Fine-tuning** | ❌ | ❌ | ✅ |
 
-**Recomendação para PrimeCare**: **Copilot Business** (melhor custo-benefício)
+**Recomendação para Omni Care**: **Copilot Business** (melhor custo-benefício)
 
 ---
 
-## 💡 Benefícios da IA no PrimeCare
+## 💡 Benefícios da IA no Omni Care
 
 ### Para Desenvolvedores
 - ⚡ **40% mais produtividade** no desenvolvimento
@@ -99,7 +99,7 @@ Capacitar clínicas a utilizarem IA para:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  PrimeCare Software                      │
+│                  Omni Care Software                      │
 │                                                          │
 │  ┌──────────────┐         ┌──────────────┐             │
 │  │   Frontend   │ ←─────→ │   Backend    │             │
@@ -140,7 +140,7 @@ Capacitar clínicas a utilizarem IA para:
 
 ### 1. GitHub Copilot (Para Desenvolvimento)
 
-**Uso:** Acelerar desenvolvimento do PrimeCare
+**Uso:** Acelerar desenvolvimento do Omni Care
 
 #### Implementação:
 ```bash
@@ -192,7 +192,7 @@ services.AddScoped<IAIService, AzureOpenAIService>();
 #### Serviço de IA:
 
 ```csharp
-// src/PrimeCare.Application/Services/AIService.cs
+// src/Omni Care.Application/Services/AIService.cs
 public interface IAIService
 {
     Task<string> GenerateClinicalSuggestion(string symptoms);
@@ -311,7 +311,7 @@ dotnet add package OpenAI --version 1.11.0
 ### Passo 2: Criar Controlador de IA
 
 ```csharp
-// src/PrimeCare.API/Controllers/AIController.cs
+// src/Omni Care.API/Controllers/AIController.cs
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -527,10 +527,10 @@ public const string AI_DISCLAIMER =
 | Plano | Custo/Mês | Recomendado Para |
 |-------|-----------|------------------|
 | Individual | $10/usuário | Desenvolvedores freelance |
-| Business | $19/usuário | **Equipe PrimeCare** ⭐ |
+| Business | $19/usuário | **Equipe Omni Care** ⭐ |
 | Enterprise | $39/usuário | Grandes empresas |
 
-**Estimativa PrimeCare**: 5 desenvolvedores × $19 = **$95/mês** (~R$ 470/mês)
+**Estimativa Omni Care**: 5 desenvolvedores × $19 = **$95/mês** (~R$ 470/mês)
 
 ### Azure OpenAI
 
@@ -540,7 +540,7 @@ public const string AI_DISCLAIMER =
 | GPT-3.5 Turbo | $0.0005 (input) / $0.0015 (output) | 1M tokens | $1/mês |
 | Whisper | $0.006/minuto | 100 horas | $36/mês |
 
-**Estimativa PrimeCare**: **$82/mês** (~R$ 410/mês)
+**Estimativa Omni Care**: **$82/mês** (~R$ 410/mês)
 
 ### Alternativa: OpenAI Direto
 
@@ -651,12 +651,12 @@ TOTAL:                               R$ 880/mês
 
 **Dúvidas ou sugestões?**
 
-- 📧 Email: dev@primecaresoftware.com
+- 📧 Email: dev@omnicaresoftware.com
 - 💬 Slack: #ai-integration
 - 📖 Wiki: [Documentação Completa](../README.md)
 
 ---
 
-**Documento mantido por**: Equipe de Desenvolvimento PrimeCare  
+**Documento mantido por**: Equipe de Desenvolvimento Omni Care  
 **Última atualização**: Janeiro 2026  
 **Próxima revisão**: Março 2026

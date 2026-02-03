@@ -12,7 +12,7 @@
 
 ## Visão Geral
 
-O sistema PrimeCare Software possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor controle e gerenciamento das permissões e responsabilidades dentro do sistema.
+O sistema Omni Care Software possui um fluxo separado para gerenciamento de **Proprietários (Owners)** de clínicas, distinto do fluxo de **Usuários (Users)**. Esta separação permite um melhor controle e gerenciamento das permissões e responsabilidades dentro do sistema.
 
 ---
 
