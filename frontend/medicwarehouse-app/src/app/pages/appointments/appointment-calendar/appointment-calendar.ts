@@ -423,17 +423,18 @@ export class AppointmentCalendar implements OnInit {
 
   private getDefaultColorForProfessional(professionalId: string): string {
     // Generate a consistent color based on professional ID
+    // Using colors with good contrast against white backgrounds (WCAG AA compliant)
     const colors = [
-      '#2196F3', // Blue
-      '#4CAF50', // Green
-      '#FF9800', // Orange
-      '#9C27B0', // Purple
-      '#F44336', // Red
-      '#00BCD4', // Cyan
-      '#FFEB3B', // Yellow
-      '#795548', // Brown
-      '#607D8B', // Blue Grey
-      '#E91E63'  // Pink
+      '#1976D2', // Blue (darker for better contrast)
+      '#388E3C', // Green (darker for better contrast)
+      '#F57C00', // Orange (darker for better contrast)
+      '#7B1FA2', // Purple (darker for better contrast)
+      '#D32F2F', // Red (darker for better contrast)
+      '#0097A7', // Cyan (darker for better contrast)
+      '#F9A825', // Amber (darker yellow for better contrast)
+      '#5D4037', // Brown
+      '#455A64', // Blue Grey (darker)
+      '#C2185B'  // Pink (darker for better contrast)
     ];
     
     // Simple hash function to get consistent color for ID

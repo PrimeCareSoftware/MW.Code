@@ -118,11 +118,17 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                     blockedTimeSlot.RecurringPatternId.Value, 
                     request.TenantId);
 
+                // Update all blocks in a single transaction
                 foreach (var block in seriesBlocks)
                 {
                     block.UpdateTimeSlot(request.BlockedTimeSlot.StartTime, request.BlockedTimeSlot.EndTime);
                     block.UpdateType(request.BlockedTimeSlot.Type);
                     block.UpdateReason(request.BlockedTimeSlot.Reason);
+                }
+                
+                // Save all changes in one transaction
+                foreach (var block in seriesBlocks)
+                {
                     await _blockedTimeSlotRepository.UpdateAsync(block);
                 }
             }

@@ -79,7 +79,7 @@ namespace MedicSoft.Domain.Entities
             Specialty = specialty?.Trim();
             IsActive = true;
             ShowInAppointmentScheduling = showInAppointmentScheduling;
-            CalendarColor = calendarColor?.Trim();
+            CalendarColor = ValidateAndFormatColor(calendarColor);
         }
 
         public void UpdateProfile(string email, string fullName, string phone,
@@ -103,8 +103,22 @@ namespace MedicSoft.Domain.Entities
             if (showInAppointmentScheduling.HasValue)
                 ShowInAppointmentScheduling = showInAppointmentScheduling.Value;
             if (calendarColor != null)
-                CalendarColor = calendarColor.Trim();
+                CalendarColor = ValidateAndFormatColor(calendarColor);
             UpdateTimestamp();
+        }
+
+        private static string? ValidateAndFormatColor(string? color)
+        {
+            if (string.IsNullOrWhiteSpace(color))
+                return null;
+
+            var trimmedColor = color.Trim();
+            
+            // Check if it matches hex color format (#RRGGBB or #RGB)
+            if (System.Text.RegularExpressions.Regex.IsMatch(trimmedColor, @"^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$"))
+                return trimmedColor.ToUpperInvariant();
+
+            throw new ArgumentException("Calendar color must be a valid hex color format (e.g., #FF5733 or #F57)", nameof(color));
         }
 
         public void UpdatePassword(string newPasswordHash)

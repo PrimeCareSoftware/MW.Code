@@ -118,7 +118,7 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
 
             _dbSet.RemoveRange(blocksToDelete);
-            await _context.SaveChangesAsync();
+            // Note: SaveChanges will be called by the unit of work/calling code
         }
     }
 }
