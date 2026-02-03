@@ -101,8 +101,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            // DashboardWidgets table - Using proper EF Core migration methods
-            // Check if table exists before creating to handle both fresh and existing databases
+            // DashboardWidgets table - Create without FK first
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
@@ -122,13 +121,27 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             ""CreatedAt"" timestamp with time zone NOT NULL,
                             ""UpdatedAt"" timestamp with time zone,
                             ""TenantId"" text NOT NULL DEFAULT '',
-                            CONSTRAINT ""PK_DashboardWidgets"" PRIMARY KEY (""Id""),
-                            CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" FOREIGN KEY (""DashboardId"") 
-                                REFERENCES ""CustomDashboards"" (""Id"") ON DELETE CASCADE
+                            CONSTRAINT ""PK_DashboardWidgets"" PRIMARY KEY (""Id"")
                         );
                         
                         CREATE INDEX ""IX_DashboardWidgets_DashboardId"" ON ""DashboardWidgets"" (""DashboardId"");
                         CREATE INDEX ""IX_DashboardWidgets_Type"" ON ""DashboardWidgets"" (""Type"");
+                    END IF;
+                END $$;
+            ");
+            
+            // Add FK constraint separately after both tables exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 FROM pg_constraint 
+                        WHERE conname = 'FK_DashboardWidgets_CustomDashboards_DashboardId'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" 
+                        ADD CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" 
+                        FOREIGN KEY (""DashboardId"") 
+                        REFERENCES ""CustomDashboards"" (""Id"") ON DELETE CASCADE;
                     END IF;
                 END $$;
             ");
