@@ -1,0 +1,261 @@
+<app-navbar></app-navbar>
+
+<div class="salesforce-leads-container">
+  <div class="header">
+    <div class="header-content">
+      <h1>Gestão de Leads Salesforce</h1>
+      <p>Gerencie leads capturados do fluxo de cadastro abandonado</p>
+    </div>
+    <div class="header-actions">
+      <button 
+        class="btn btn-secondary" 
+        (click)="testConnection()"
+        [disabled]="testingConnection()">
+        @if (testingConnection()) {
+          <span class="spinner"></span>
+          Testando...
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Testar Conexão
+        }
+      </button>
+      <button 
+        class="btn btn-primary" 
+        (click)="syncAllLeads()"
+        [disabled]="syncing() || !statistics()?.unsyncedLeads">
+        @if (syncing()) {
+          <span class="spinner"></span>
+          Sincronizando...
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Sincronizar Todos
+        }
+      </button>
+    </div>
+  </div>
+
+  @if (connectionStatus()) {
+    <div class="connection-status" [class.error]="!connectionStatus()!.connected">
+      @if (connectionStatus()!.connected) {
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Conexão com Salesforce OK
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        Erro de conexão: {{ connectionStatus()!.error }}
+      }
+    </div>
+  }
+
+  @if (statistics()) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics()!.totalLeads }}</div>
+          <div class="stat-label">Total de Leads</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🆕</div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics()!.newLeads }}</div>
+          <div class="stat-label">Novos</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics()!.qualifiedLeads }}</div>
+          <div class="stat-label">Qualificados</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics()!.convertedLeads }}</div>
+          <div class="stat-label">Convertidos</div>
+          <div class="stat-subtitle">{{ getPercentage(statistics()!.convertedLeads, statistics()!.totalLeads) }}% taxa</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔄</div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics()!.syncedLeads }}</div>
+          <div class="stat-label">Sincronizados</div>
+          <div class="stat-subtitle">{{ statistics()!.unsyncedLeads }} pendentes</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="filters">
+    <div class="filter-group">
+      <label for="status-filter">Filtrar por Status:</label>
+      <select 
+        id="status-filter" 
+        [(ngModel)]="selectedStatus" 
+        (ngModelChange)="onStatusChange()"
+        class="filter-select">
+        <option value="all">Todos (Não Sincronizados)</option>
+        <option [value]="LeadStatus.New">Novos</option>
+        <option [value]="LeadStatus.Contacted">Contactados</option>
+        <option [value]="LeadStatus.Qualified">Qualificados</option>
+        <option [value]="LeadStatus.Converted">Convertidos</option>
+        <option [value]="LeadStatus.Lost">Perdidos</option>
+        <option [value]="LeadStatus.Nurturing">Em Nutrição</option>
+      </select>
+    </div>
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por nome, email ou telefone..."
+        class="search-input">
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <span class="spinner"></span>
+      Carregando leads...
+    </div>
+  } @else if (error()) {
+    <div class="error-message">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <p>{{ error() }}</p>
+      <button class="btn btn-secondary" (click)="loadLeads()">Tentar Novamente</button>
+    </div>
+  } @else {
+    <div class="leads-table-container">
+      @if (filteredLeads().length === 0) {
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          <h3>Nenhum lead encontrado</h3>
+          <p>Não há leads para exibir com os filtros selecionados.</p>
+        </div>
+      } @else {
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Contato</th>
+              <th>Email / Telefone</th>
+              <th>Plano</th>
+              <th>Última Etapa</th>
+              <th>Status</th>
+              <th>Capturado em</th>
+              <th>Salesforce</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (lead of filteredLeads(); track lead.id) {
+              <tr>
+                <td>
+                  <div class="company-cell">
+                    <strong>{{ lead.companyName || '-' }}</strong>
+                    @if (lead.city || lead.state) {
+                      <small>{{ lead.city }}{{ lead.city && lead.state ? ', ' : '' }}{{ lead.state }}</small>
+                    }
+                  </div>
+                </td>
+                <td>{{ lead.contactName || '-' }}</td>
+                <td>
+                  <div class="contact-cell">
+                    <div>{{ lead.email || '-' }}</div>
+                    @if (lead.phone) {
+                      <small>{{ lead.phone }}</small>
+                    }
+                  </div>
+                </td>
+                <td>{{ lead.planName || '-' }}</td>
+                <td>
+                  <div class="step-cell">
+                    <span class="step-badge">{{ lead.lastStepReached }}/6</span>
+                    <small>{{ getStepName(lead.lastStepReached) }}</small>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusColor(lead.status)">
+                    {{ getStatusText(lead.status) }}
+                  </span>
+                </td>
+                <td>{{ formatDate(lead.capturedAt) }}</td>
+                <td>
+                  @if (lead.isSyncedToSalesforce) {
+                    <div class="sync-status success">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span>Sincronizado</span>
+                    </div>
+                  } @else {
+                    <div class="sync-status pending">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      <span>Pendente</span>
+                      @if (lead.syncAttempts > 0) {
+                        <small>({{ lead.syncAttempts }} tentativas)</small>
+                      }
+                    </div>
+                  }
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    @if (!lead.isSyncedToSalesforce) {
+                      <button 
+                        class="btn-icon" 
+                        (click)="syncLead(lead.id)"
+                        title="Sincronizar com Salesforce">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="23 4 23 10 17 10"></polyline>
+                          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                      </button>
+                    }
+                    <select 
+                      class="status-select"
+                      [value]="lead.status"
+                      (change)="updateLeadStatus(lead.id, +$any($event.target).value)"
+                      title="Alterar status">
+                      <option [value]="LeadStatus.New">Novo</option>
+                      <option [value]="LeadStatus.Contacted">Contactado</option>
+                      <option [value]="LeadStatus.Qualified">Qualificado</option>
+                      <option [value]="LeadStatus.Converted">Convertido</option>
+                      <option [value]="LeadStatus.Lost">Perdido</option>
+                      <option [value]="LeadStatus.Nurturing">Nutrição</option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+</div>
