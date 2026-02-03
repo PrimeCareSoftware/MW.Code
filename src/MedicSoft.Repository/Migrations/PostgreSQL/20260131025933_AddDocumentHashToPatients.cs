@@ -101,8 +101,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            // DashboardWidgets table - Using proper EF Core migration methods
-            // Check if table exists before creating to handle both fresh and existing databases
+            // DashboardWidgets table - Create without FK first
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
@@ -122,9 +121,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             ""CreatedAt"" timestamp with time zone NOT NULL,
                             ""UpdatedAt"" timestamp with time zone,
                             ""TenantId"" text NOT NULL DEFAULT '',
-                            CONSTRAINT ""PK_DashboardWidgets"" PRIMARY KEY (""Id""),
-                            CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" FOREIGN KEY (""DashboardId"") 
-                                REFERENCES ""CustomDashboards"" (""Id"") ON DELETE CASCADE
+                            CONSTRAINT ""PK_DashboardWidgets"" PRIMARY KEY (""Id"")
                         );
                         
                         CREATE INDEX ""IX_DashboardWidgets_DashboardId"" ON ""DashboardWidgets"" (""DashboardId"");
@@ -132,92 +129,57 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     END IF;
                 END $$;
             ");
+            
+            // Add FK constraint separately after both tables exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 FROM pg_constraint 
+                        WHERE conname = 'FK_DashboardWidgets_CustomDashboards_DashboardId'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" 
+                        ADD CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" 
+                        FOREIGN KEY (""DashboardId"") 
+                        REFERENCES ""CustomDashboards"" (""Id"") ON DELETE CASCADE;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_AutomationActions_MarketingAutomations_MarketingAutomationI~",
-                schema: "crm",
-                table: "AutomationActions");
+            // Drop foreign keys only if they exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    -- Try to drop FK, ignore if not exists
+                    BEGIN
+                        EXECUTE 'ALTER TABLE crm.""AutomationActions"" DROP CONSTRAINT IF EXISTS ""FK_AutomationActions_MarketingAutomations_MarketingAutomationI~""';
+                    EXCEPTION WHEN OTHERS THEN
+                        -- Ignore errors, constraint may not exist or name is different
+                    END;
+                    
+                    ALTER TABLE crm.""ComplaintInteractions"" DROP CONSTRAINT IF EXISTS ""FK_ComplaintInteractions_Complaints_ComplaintId2"";
+                    ALTER TABLE crm.""JourneyStages"" DROP CONSTRAINT IF EXISTS ""FK_JourneyStages_PatientJourneys_PatientJourneyId2"";
+                    ALTER TABLE crm.""PatientTouchpoints"" DROP CONSTRAINT IF EXISTS ""FK_PatientTouchpoints_JourneyStages_JourneyStageId1"";
+                    ALTER TABLE crm.""SurveyQuestionResponses"" DROP CONSTRAINT IF EXISTS ""FK_SurveyQuestionResponses_SurveyResponses_SurveyResponseId1"";
+                    ALTER TABLE crm.""SurveyQuestions"" DROP CONSTRAINT IF EXISTS ""FK_SurveyQuestions_Surveys_SurveyId2"";
+                    ALTER TABLE crm.""SurveyResponses"" DROP CONSTRAINT IF EXISTS ""FK_SurveyResponses_Surveys_SurveyId1"";
+                END $$;
+            ");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_ComplaintInteractions_Complaints_ComplaintId2",
-                schema: "crm",
-                table: "ComplaintInteractions");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_JourneyStages_PatientJourneys_PatientJourneyId2",
-                schema: "crm",
-                table: "JourneyStages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_PatientTouchpoints_JourneyStages_JourneyStageId1",
-                schema: "crm",
-                table: "PatientTouchpoints");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SurveyQuestionResponses_SurveyResponses_SurveyResponseId1",
-                schema: "crm",
-                table: "SurveyQuestionResponses");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SurveyQuestions_Surveys_SurveyId2",
-                schema: "crm",
-                table: "SurveyQuestions");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SurveyResponses_Surveys_SurveyId1",
-                schema: "crm",
-                table: "SurveyResponses");
-
-            migrationBuilder.DropIndex(
-                name: "IX_SurveyResponses_SurveyId1",
-                schema: "crm",
-                table: "SurveyResponses");
-
-            migrationBuilder.DropIndex(
-                name: "IX_SurveyQuestions_SurveyId2",
-                schema: "crm",
-                table: "SurveyQuestions");
-
-            migrationBuilder.DropIndex(
-                name: "IX_SurveyQuestionResponses_SurveyResponseId1",
-                schema: "crm",
-                table: "SurveyQuestionResponses");
-
-            migrationBuilder.DropIndex(
-                name: "IX_PatientTouchpoints_JourneyStageId1",
-                schema: "crm",
-                table: "PatientTouchpoints");
-
-            migrationBuilder.DropIndex(
-                name: "IX_JourneyStages_PatientJourneyId2",
-                schema: "crm",
-                table: "JourneyStages");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ComplaintInteractions_ComplaintId2",
-                schema: "crm",
-                table: "ComplaintInteractions");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AutomationActions_MarketingAutomationId1",
-                schema: "crm",
-                table: "AutomationActions");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Action",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_EntityType_EntityId",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Severity",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_TenantId",
-                table: "AuditLogs");
+            // Drop indexes only if they exist
+            migrationBuilder.Sql(@"
+                DROP INDEX IF EXISTS crm.""IX_SurveyResponses_SurveyId1"";
+                DROP INDEX IF EXISTS crm.""IX_SurveyQuestions_SurveyId2"";
+                DROP INDEX IF EXISTS crm.""IX_SurveyQuestionResponses_SurveyResponseId1"";
+                DROP INDEX IF EXISTS crm.""IX_PatientTouchpoints_JourneyStageId1"";
+                DROP INDEX IF EXISTS crm.""IX_JourneyStages_PatientJourneyId2"";
+                DROP INDEX IF EXISTS crm.""IX_ComplaintInteractions_ComplaintId2"";
+                DROP INDEX IF EXISTS crm.""IX_AutomationActions_MarketingAutomationId1"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Action"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_EntityType_EntityId"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Severity"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_TenantId"";
+            ");
 
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
@@ -324,40 +286,33 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 keyColumn: "Id",
                 keyValue: new Guid("ea3dfe4a-cf69-4671-920a-caad64629cd8"));
 
-            migrationBuilder.DropColumn(
-                name: "SurveyId1",
-                schema: "crm",
-                table: "SurveyResponses");
-
-            migrationBuilder.DropColumn(
-                name: "SurveyId2",
-                schema: "crm",
-                table: "SurveyQuestions");
-
-            migrationBuilder.DropColumn(
-                name: "SurveyResponseId1",
-                schema: "crm",
-                table: "SurveyQuestionResponses");
-
-            migrationBuilder.DropColumn(
-                name: "JourneyStageId1",
-                schema: "crm",
-                table: "PatientTouchpoints");
-
-            migrationBuilder.DropColumn(
-                name: "PatientJourneyId2",
-                schema: "crm",
-                table: "JourneyStages");
-
-            migrationBuilder.DropColumn(
-                name: "ComplaintId2",
-                schema: "crm",
-                table: "ComplaintInteractions");
-
-            migrationBuilder.DropColumn(
-                name: "MarketingAutomationId1",
-                schema: "crm",
-                table: "AutomationActions");
+            // Drop columns only if they exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'crm' AND table_name = 'SurveyResponses' AND column_name = 'SurveyId1') THEN
+                        ALTER TABLE crm.""SurveyResponses"" DROP COLUMN ""SurveyId1"";
+                    END IF;
+                    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'crm' AND table_name = 'SurveyQuestions' AND column_name = 'SurveyId2') THEN
+                        ALTER TABLE crm.""SurveyQuestions"" DROP COLUMN ""SurveyId2"";
+                    END IF;
+                    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'crm' AND table_name = 'SurveyQuestionResponses' AND column_name = 'SurveyResponseId1') THEN
+                        ALTER TABLE crm.""SurveyQuestionResponses"" DROP COLUMN ""SurveyResponseId1"";
+                    END IF;
+                    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'crm' AND table_name = 'PatientTouchpoints' AND column_name = 'JourneyStageId1') THEN
+                        ALTER TABLE crm.""PatientTouchpoints"" DROP COLUMN ""JourneyStageId1"";
+                    END IF;
+                    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'crm' AND table_name = 'JourneyStages' AND column_name = 'PatientJourneyId2') THEN
+                        ALTER TABLE crm.""JourneyStages"" DROP COLUMN ""PatientJourneyId2"";
+                    END IF;
+                    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'crm' AND table_name = 'ComplaintInteractions' AND column_name = 'ComplaintId2') THEN
+                        ALTER TABLE crm.""ComplaintInteractions"" DROP COLUMN ""ComplaintId2"";
+                    END IF;
+                    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'crm' AND table_name = 'AutomationActions' AND column_name = 'MarketingAutomationId1') THEN
+                        ALTER TABLE crm.""AutomationActions"" DROP COLUMN ""MarketingAutomationId1"";
+                    END IF;
+                END $$;
+            ");
 
             // Conditionally alter Workflows table columns only if table and columns exist with old type
             migrationBuilder.Sql(@"
@@ -7241,33 +7196,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.DropTable(
                 name: "EncryptionKeys");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Patients_DocumentHash",
-                table: "Patients");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Tenant_Action_Time",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Tenant_Entity",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Tenant_HighSeverity_Time",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Tenant_Severity",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Tenant_Time",
-                table: "AuditLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AuditLogs_Tenant_User_Time",
-                table: "AuditLogs");
+            // Drop indexes only if they exist
+            migrationBuilder.Sql(@"
+                DROP INDEX IF EXISTS ""IX_Patients_DocumentHash"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Tenant_Action_Time"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Tenant_Entity"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Tenant_HighSeverity_Time"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Tenant_Severity"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Tenant_Time"";
+                DROP INDEX IF EXISTS ""IX_AuditLogs_Tenant_User_Time"";
+            ");
 
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
