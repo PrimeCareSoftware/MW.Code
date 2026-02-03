@@ -5,9 +5,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MedicSoft.Application.DTOs.CRM;
 using MedicSoft.Application.Services.CRM;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Entities.CRM;
-using MedicSoft.Repository.Interfaces;
+using MedicSoft.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Api.Services.CRM
@@ -136,7 +137,7 @@ namespace MedicSoft.Api.Services.CRM
         {
             try
             {
-                var lead = await _leadRepository.GetByIdAsync(leadId);
+                var lead = await _leadRepository.GetByIdAsync(leadId, TenantConstants.SystemTenantId);
                 if (lead == null || lead.IsDeleted)
                 {
                     _logger.LogWarning("Lead {LeadId} not found", leadId);
@@ -170,7 +171,7 @@ namespace MedicSoft.Api.Services.CRM
         {
             try
             {
-                var lead = await _leadRepository.GetByIdAsync(leadId);
+                var lead = await _leadRepository.GetByIdAsync(leadId, TenantConstants.SystemTenantId);
                 if (lead == null || lead.IsDeleted)
                 {
                     _logger.LogWarning("Lead {LeadId} not found", leadId);
@@ -206,7 +207,7 @@ namespace MedicSoft.Api.Services.CRM
         {
             try
             {
-                var lead = await _leadRepository.GetByIdAsync(leadId);
+                var lead = await _leadRepository.GetByIdAsync(leadId, TenantConstants.SystemTenantId);
                 if (lead == null || lead.IsDeleted)
                 {
                     _logger.LogWarning("Lead {LeadId} not found", leadId);
@@ -249,7 +250,7 @@ namespace MedicSoft.Api.Services.CRM
         {
             try
             {
-                var lead = await _leadRepository.GetByIdAsync(leadId);
+                var lead = await _leadRepository.GetByIdAsync(leadId, TenantConstants.SystemTenantId);
                 if (lead == null || lead.IsDeleted)
                 {
                     throw new InvalidOperationException($"Lead {leadId} not found");
@@ -349,7 +350,7 @@ namespace MedicSoft.Api.Services.CRM
         {
             try
             {
-                var lead = await _leadRepository.GetByIdAsync(leadId);
+                var lead = await _leadRepository.GetByIdAsync(leadId, TenantConstants.SystemTenantId);
                 if (lead == null || lead.IsDeleted)
                 {
                     _logger.LogWarning("Lead {LeadId} not found", leadId);
@@ -373,7 +374,7 @@ namespace MedicSoft.Api.Services.CRM
         {
             try
             {
-                var lead = await _leadRepository.GetByIdAsync(leadId);
+                var lead = await _leadRepository.GetByIdAsync(leadId, TenantConstants.SystemTenantId);
                 if (lead == null || lead.IsDeleted)
                 {
                     _logger.LogWarning("Lead {LeadId} not found", leadId);
@@ -407,7 +408,7 @@ namespace MedicSoft.Api.Services.CRM
         {
             try
             {
-                var lead = await _leadRepository.GetByIdAsync(leadId);
+                var lead = await _leadRepository.GetByIdAsync(leadId, TenantConstants.SystemTenantId);
                 if (lead == null || lead.IsDeleted)
                 {
                     _logger.LogWarning("Lead {LeadId} not found", leadId);

@@ -54,6 +54,16 @@ namespace MedicSoft.Domain.Entities.CRM
         public string? Outcome { get; private set; }
 
         /// <summary>
+        /// Soft delete flag
+        /// </summary>
+        public bool IsDeleted { get; private set; }
+
+        /// <summary>
+        /// Soft delete timestamp
+        /// </summary>
+        public DateTime? DeletedAt { get; private set; }
+
+        /// <summary>
         /// Navigation property to Lead
         /// </summary>
         public virtual Lead Lead { get; private set; }

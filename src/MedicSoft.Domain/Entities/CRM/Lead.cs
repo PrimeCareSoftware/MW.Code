@@ -136,6 +136,16 @@ namespace MedicSoft.Domain.Entities.CRM
         public string? Metadata { get; private set; }
 
         /// <summary>
+        /// Soft delete flag
+        /// </summary>
+        public bool IsDeleted { get; private set; }
+
+        /// <summary>
+        /// Soft delete timestamp
+        /// </summary>
+        public DateTime? DeletedAt { get; private set; }
+
+        /// <summary>
         /// Navigation property for activities
         /// </summary>
         public virtual ICollection<LeadActivity> Activities { get; private set; }

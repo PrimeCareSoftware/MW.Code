@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities;
-using MedicSoft.Repository.Interfaces;
+using MedicSoft.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
