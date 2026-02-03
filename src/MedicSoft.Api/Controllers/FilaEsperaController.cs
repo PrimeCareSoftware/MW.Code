@@ -247,6 +247,42 @@ namespace MedicSoft.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Obter lista de senhas aguardando atendimento
+        /// </summary>
+        [HttpGet("{filaId}/senhas/aguardando")]
+        public async Task<ActionResult<List<SenhaFilaDto>>> GetSenhasAguardando(Guid filaId)
+        {
+            try
+            {
+                var senhas = await _filaService.GetSenhasAguardandoAsync(filaId, GetTenantId());
+                return Ok(senhas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obter histórico das últimas senhas chamadas
+        /// </summary>
+        [HttpGet("{filaId}/senhas/ultimas-chamadas")]
+        public async Task<ActionResult<List<SenhaFilaDto>>> GetUltimasChamadas(
+            Guid filaId, 
+            [FromQuery] int quantidade = 5)
+        {
+            try
+            {
+                var senhas = await _filaService.GetUltimasChamadasAsync(filaId, quantidade, GetTenantId());
+                return Ok(senhas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     // Request DTOs

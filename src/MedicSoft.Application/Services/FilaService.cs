@@ -21,6 +21,8 @@ namespace MedicSoft.Application.Services
         Task<int> CalcularTempoEsperaAsync(Guid senhaId, string tenantId);
         Task<int> ObterPosicaoNaFilaAsync(Guid senhaId, string tenantId);
         Task<SenhaFilaDto?> ConsultarSenhaAsync(string numeroSenha, Guid filaId, string tenantId);
+        Task<List<SenhaFilaDto>> GetSenhasAguardandoAsync(Guid filaId, string tenantId);
+        Task<List<SenhaFilaDto>> GetUltimasChamadasAsync(Guid filaId, int quantidade, string tenantId);
     }
 
     public class FilaService : IFilaService
@@ -295,6 +297,23 @@ namespace MedicSoft.Application.Services
                 CreatedAt = fila.CreatedAt,
                 UpdatedAt = fila.UpdatedAt ?? fila.CreatedAt
             };
+        }
+
+        public async Task<List<SenhaFilaDto>> GetSenhasAguardandoAsync(Guid filaId, string tenantId)
+        {
+            var senhas = await _senhaRepository.GetAguardandoByFilaAsync(filaId, tenantId);
+            
+            // For waiting queue display, we don't need detailed position/time calculations
+            // as these are for simple listing on the TV panel
+            return senhas.Select(senha => MapSenhaToDto(senha, 0, 0)).ToList();
+        }
+
+        public async Task<List<SenhaFilaDto>> GetUltimasChamadasAsync(Guid filaId, int quantidade, string tenantId)
+        {
+            var senhas = await _senhaRepository.GetUltimasChamadasAsync(filaId, quantidade, tenantId);
+            
+            // For call history display, position and estimated time are not relevant
+            return senhas.Select(senha => MapSenhaToDto(senha, 0, 0)).ToList();
         }
 
         private static SenhaFilaDto MapSenhaToDto(SenhaFila senha, int posicao, int tempoEstimado)
