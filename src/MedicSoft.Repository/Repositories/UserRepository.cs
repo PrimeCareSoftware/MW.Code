@@ -29,25 +29,30 @@ namespace MedicSoft.Repository.Repositories
         public async Task<User?> GetUserByUsernameAsync(string username, string tenantId)
         {
             return await _context.Users
+                .Where(u => u.Username == username.ToLowerInvariant() && u.TenantId == tenantId)
                 .Include(u => u.Clinic)
                 .Include(u => u.Profile!)
                     .ThenInclude(p => p.Permissions)
-                .FirstOrDefaultAsync(u => u.Username == username.ToLowerInvariant() && u.TenantId == tenantId);
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public async Task<User?> GetByIdAsync(Guid id, string tenantId)
         {
             return await _context.Users
+                .Where(u => u.Id == id && u.TenantId == tenantId)
                 .Include(u => u.Clinic)
                 .Include(u => u.Profile!)
                     .ThenInclude(p => p.Permissions)
-                .FirstOrDefaultAsync(u => u.Id == id && u.TenantId == tenantId);
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<User>> GetByClinicIdAsync(Guid clinicId, string tenantId)
         {
             return await _context.Users
                 .Where(u => u.ClinicId == clinicId && u.TenantId == tenantId && u.IsActive)
+                .AsNoTracking()
                 .OrderBy(u => u.FullName)
                 .ToListAsync();
         }
@@ -56,6 +61,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _context.Users
                 .Where(u => u.TenantId == tenantId && u.IsActive)
+                .AsNoTracking()
                 .OrderBy(u => u.FullName)
                 .ToListAsync();
         }

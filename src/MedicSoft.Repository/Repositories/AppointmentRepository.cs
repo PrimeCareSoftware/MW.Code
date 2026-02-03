@@ -15,9 +15,10 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<Appointment>> GetByDateAsync(DateTime date, string tenantId)
         {
             return await _dbSet
+                .Where(a => a.ScheduledDate.Date == date.Date && a.TenantId == tenantId)
                 .Include(a => a.Patient)
                 .Include(a => a.Clinic)
-                .Where(a => a.ScheduledDate.Date == date.Date && a.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderBy(a => a.ScheduledTime)
                 .ToListAsync();
         }
@@ -25,9 +26,10 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<Appointment>> GetByPatientIdAsync(Guid patientId, string tenantId)
         {
             return await _dbSet
+                .Where(a => a.PatientId == patientId && a.TenantId == tenantId)
                 .Include(a => a.Patient)
                 .Include(a => a.Clinic)
-                .Where(a => a.PatientId == patientId && a.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderByDescending(a => a.ScheduledDate)
                 .ThenByDescending(a => a.ScheduledTime)
                 .ToListAsync();
@@ -36,9 +38,10 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<Appointment>> GetByClinicIdAsync(Guid clinicId, string tenantId)
         {
             return await _dbSet
+                .Where(a => a.ClinicId == clinicId && a.TenantId == tenantId)
                 .Include(a => a.Patient)
                 .Include(a => a.Clinic)
-                .Where(a => a.ClinicId == clinicId && a.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderByDescending(a => a.ScheduledDate)
                 .ThenBy(a => a.ScheduledTime)
                 .ToListAsync();
@@ -47,11 +50,12 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<Appointment>> GetByDateRangeAsync(DateTime startDate, DateTime endDate, string tenantId)
         {
             return await _dbSet
-                .Include(a => a.Patient)
-                .Include(a => a.Clinic)
                 .Where(a => a.ScheduledDate.Date >= startDate.Date && 
                            a.ScheduledDate.Date <= endDate.Date && 
                            a.TenantId == tenantId)
+                .Include(a => a.Patient)
+                .Include(a => a.Clinic)
+                .AsNoTracking()
                 .OrderBy(a => a.ScheduledDate)
                 .ThenBy(a => a.ScheduledTime)
                 .ToListAsync();
@@ -60,12 +64,13 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<Appointment>> GetDailyAgendaAsync(DateTime date, Guid clinicId, string tenantId)
         {
             return await _dbSet
-                .Include(a => a.Patient)
-                .Include(a => a.Clinic)
                 .Where(a => a.ScheduledDate.Date == date.Date && 
                            a.ClinicId == clinicId && 
                            a.TenantId == tenantId &&
                            a.Status != AppointmentStatus.Cancelled)
+                .Include(a => a.Patient)
+                .Include(a => a.Clinic)
+                .AsNoTracking()
                 .OrderBy(a => a.ScheduledTime)
                 .ToListAsync();
         }
@@ -102,12 +107,13 @@ namespace MedicSoft.Repository.Repositories
             var endDate = DateTime.Today.AddDays(days);
 
             return await _dbSet
-                .Include(a => a.Patient)
-                .Include(a => a.Clinic)
                 .Where(a => a.ScheduledDate >= DateTime.Today &&
                            a.ScheduledDate <= endDate &&
                            a.TenantId == tenantId &&
                            (a.Status == AppointmentStatus.Scheduled || a.Status == AppointmentStatus.Confirmed))
+                .Include(a => a.Patient)
+                .Include(a => a.Clinic)
+                .AsNoTracking()
                 .OrderBy(a => a.ScheduledDate)
                 .ThenBy(a => a.ScheduledTime)
                 .ToListAsync();

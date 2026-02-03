@@ -14,18 +14,20 @@ namespace MedicSoft.Repository.Repositories
         public async Task<TissGuide?> GetByGuideNumberAsync(string guideNumber, string tenantId)
         {
             return await _dbSet
+                .Where(g => g.GuideNumber == guideNumber && g.TenantId == tenantId)
                 .Include(g => g.PatientHealthInsurance)
                 .Include(g => g.Appointment)
-                .Where(g => g.GuideNumber == guideNumber && g.TenantId == tenantId)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<TissGuide>> GetByBatchIdAsync(Guid batchId, string tenantId)
         {
             return await _dbSet
+                .Where(g => g.TissBatchId == batchId && g.TenantId == tenantId)
                 .Include(g => g.PatientHealthInsurance)
                 .Include(g => g.Appointment)
-                .Where(g => g.TissBatchId == batchId && g.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderBy(g => g.GuideNumber)
                 .ToListAsync();
         }
@@ -33,17 +35,19 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<TissGuide>> GetByAppointmentIdAsync(Guid appointmentId, string tenantId)
         {
             return await _dbSet
-                .Include(g => g.PatientHealthInsurance)
                 .Where(g => g.AppointmentId == appointmentId && g.TenantId == tenantId)
+                .Include(g => g.PatientHealthInsurance)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<TissGuide>> GetByStatusAsync(GuideStatus status, string tenantId)
         {
             return await _dbSet
+                .Where(g => g.Status == status && g.TenantId == tenantId)
                 .Include(g => g.PatientHealthInsurance)
                 .Include(g => g.Appointment)
-                .Where(g => g.Status == status && g.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderBy(g => g.ServiceDate)
                 .ToListAsync();
         }
@@ -51,10 +55,11 @@ namespace MedicSoft.Repository.Repositories
         public async Task<TissGuide?> GetWithProceduresAsync(Guid id, string tenantId)
         {
             return await _dbSet
+                .Where(g => g.Id == id && g.TenantId == tenantId)
                 .Include(g => g.PatientHealthInsurance)
                 .Include(g => g.Appointment)
                 .Include(g => g.Procedures)
-                .Where(g => g.Id == id && g.TenantId == tenantId)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
     }
