@@ -12,6 +12,7 @@ namespace PatientPortal.Application.Services;
 public class DoctorAvailabilityService : IDoctorAvailabilityService
 {
     private readonly IMainDatabaseContext _mainDatabase;
+    private readonly ClinicSettingsService _clinicSettings;
     private readonly ILogger<DoctorAvailabilityService> _logger;
 
     // Default working hours (can be overridden by doctor schedule)
@@ -21,9 +22,11 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
 
     public DoctorAvailabilityService(
         IMainDatabaseContext mainDatabase,
+        ClinicSettingsService clinicSettings,
         ILogger<DoctorAvailabilityService> logger)
     {
         _mainDatabase = mainDatabase;
+        _clinicSettings = clinicSettings;
         _logger = logger;
     }
 
@@ -37,19 +40,8 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
         try
         {
             // Check if online appointment scheduling is enabled for this clinic
-            var clinicSettingsQuery = @"
-                SELECT ""EnableOnlineAppointmentScheduling""
-                FROM ""Clinics""
-                WHERE ""Id"" = {0} AND ""TenantId"" = {1}";
-            
-            var clinicSettings = await _mainDatabase.ExecuteQueryAsync<ClinicSchedulingSettings>(
-                clinicSettingsQuery,
-                clinicId,
-                tenantId
-            );
-            
-            var settings = clinicSettings.FirstOrDefault();
-            if (settings == null || !settings.EnableOnlineAppointmentScheduling)
+            var isEnabled = await _clinicSettings.IsOnlineSchedulingEnabledAsync(clinicId, tenantId);
+            if (!isEnabled)
             {
                 _logger.LogWarning("Online appointment scheduling is disabled for clinic {ClinicId}", clinicId);
                 return new List<DoctorAvailabilityDto>();
@@ -305,11 +297,6 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
     }
 
     // Helper classes for raw SQL queries
-    private class ClinicSchedulingSettings
-    {
-        public bool EnableOnlineAppointmentScheduling { get; set; }
-    }
-
     private class DoctorInfo
     {
         public Guid Id { get; set; }

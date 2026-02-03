@@ -13,6 +13,7 @@ public class AppointmentService : IAppointmentService
     private readonly IAppointmentViewRepository _appointmentViewRepository;
     private readonly IPatientUserRepository _patientUserRepository;
     private readonly IMainDatabaseContext _mainDatabase;
+    private readonly ClinicSettingsService _clinicSettings;
     private readonly INotificationService _notificationService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AppointmentService> _logger;
@@ -21,6 +22,7 @@ public class AppointmentService : IAppointmentService
         IAppointmentViewRepository appointmentViewRepository,
         IPatientUserRepository patientUserRepository,
         IMainDatabaseContext mainDatabase,
+        ClinicSettingsService clinicSettings,
         INotificationService notificationService,
         IConfiguration configuration,
         ILogger<AppointmentService> logger)
@@ -28,6 +30,7 @@ public class AppointmentService : IAppointmentService
         _appointmentViewRepository = appointmentViewRepository;
         _patientUserRepository = patientUserRepository;
         _mainDatabase = mainDatabase;
+        _clinicSettings = clinicSettings;
         _notificationService = notificationService;
         _configuration = configuration;
         _logger = logger;
@@ -107,16 +110,8 @@ public class AppointmentService : IAppointmentService
                 throw new InvalidOperationException("Patient not found");
 
             // Check if online appointment scheduling is enabled for the requested clinic
-            var clinicSettingsQuery = await _mainDatabase.ExecuteQueryAsync<ClinicSchedulingSettings>(
-                @"SELECT ""EnableOnlineAppointmentScheduling""
-                  FROM ""Clinics""
-                  WHERE ""Id"" = {0} AND ""TenantId"" = {1}",
-                request.ClinicId,
-                patientInfo.TenantId
-            );
-
-            var clinicSettings = clinicSettingsQuery.FirstOrDefault();
-            if (clinicSettings == null || !clinicSettings.EnableOnlineAppointmentScheduling)
+            var isEnabled = await _clinicSettings.IsOnlineSchedulingEnabledAsync(request.ClinicId, patientInfo.TenantId);
+            if (!isEnabled)
             {
                 _logger.LogWarning("Attempt to book appointment at clinic {ClinicId} with online scheduling disabled", request.ClinicId);
                 throw new InvalidOperationException("Online appointment scheduling is not enabled for this clinic");
@@ -364,11 +359,5 @@ public class AppointmentService : IAppointmentService
         public Guid Id { get; set; }
         public string TenantId { get; set; } = string.Empty;
         public Guid ClinicId { get; set; }
-    }
-
-    // Helper class for clinic settings
-    private class ClinicSchedulingSettings
-    {
-        public bool EnableOnlineAppointmentScheduling { get; set; }
     }
 }
