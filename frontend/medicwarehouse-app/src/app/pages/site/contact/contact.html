@@ -5,7 +5,7 @@
       <!-- Success State -->
       <div *ngIf="showSuccessMessage" class="max-w-lg mx-auto text-center">
         <div class="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-6">
-          <span class="material-icons text-success" style="font-size: 2.5rem;">check_circle</span>
+          <span class="material-icons text-success success-icon">check_circle</span>
         </div>
         <h1 class="font-display text-3xl font-bold text-foreground mb-4">
           Mensagem Enviada!
@@ -101,13 +101,13 @@
 
               <!-- Success Alert -->
               <div class="alert alert-success" *ngIf="submitSuccess && !showSuccessMessage">
-                <span class="material-icons" style="font-size: 1.25rem;">check_circle</span>
+                <span class="material-icons alert-icon">check_circle</span>
                 Mensagem enviada com sucesso! Entraremos em contato em breve.
               </div>
 
               <!-- Error Alert -->
               <div class="alert alert-error" *ngIf="submitError">
-                <span class="material-icons" style="font-size: 1.25rem;">error</span>
+                <span class="material-icons alert-icon">error</span>
                 {{ submitError }}
               </div>
 
@@ -184,7 +184,7 @@
                 [disabled]="isSubmitting || !isValid()"
               >
                 <span *ngIf="!isSubmitting" class="flex items-center gap-2">
-                  <span class="material-icons" style="font-size: 1.25rem;">send</span>
+                  <span class="material-icons btn-icon">send</span>
                   Enviar Mensagem
                 </span>
                 <span *ngIf="isSubmitting">Enviando...</span>
