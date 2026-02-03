@@ -150,27 +150,19 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'FK_AutomationActions_MarketingAutomations_MarketingAutomationI~') THEN
-                        ALTER TABLE crm.""AutomationActions"" DROP CONSTRAINT ""FK_AutomationActions_MarketingAutomations_MarketingAutomationI~"";
-                    END IF;
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'FK_ComplaintInteractions_Complaints_ComplaintId2') THEN
-                        ALTER TABLE crm.""ComplaintInteractions"" DROP CONSTRAINT ""FK_ComplaintInteractions_Complaints_ComplaintId2"";
-                    END IF;
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'FK_JourneyStages_PatientJourneys_PatientJourneyId2') THEN
-                        ALTER TABLE crm.""JourneyStages"" DROP CONSTRAINT ""FK_JourneyStages_PatientJourneys_PatientJourneyId2"";
-                    END IF;
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'FK_PatientTouchpoints_JourneyStages_JourneyStageId1') THEN
-                        ALTER TABLE crm.""PatientTouchpoints"" DROP CONSTRAINT ""FK_PatientTouchpoints_JourneyStages_JourneyStageId1"";
-                    END IF;
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'FK_SurveyQuestionResponses_SurveyResponses_SurveyResponseId1') THEN
-                        ALTER TABLE crm.""SurveyQuestionResponses"" DROP CONSTRAINT ""FK_SurveyQuestionResponses_SurveyResponses_SurveyResponseId1"";
-                    END IF;
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'FK_SurveyQuestions_Surveys_SurveyId2') THEN
-                        ALTER TABLE crm.""SurveyQuestions"" DROP CONSTRAINT ""FK_SurveyQuestions_Surveys_SurveyId2"";
-                    END IF;
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'FK_SurveyResponses_Surveys_SurveyId1') THEN
-                        ALTER TABLE crm.""SurveyResponses"" DROP CONSTRAINT ""FK_SurveyResponses_Surveys_SurveyId1"";
-                    END IF;
+                    -- Try to drop FK, ignore if not exists
+                    BEGIN
+                        EXECUTE 'ALTER TABLE crm.""AutomationActions"" DROP CONSTRAINT IF EXISTS ""FK_AutomationActions_MarketingAutomations_MarketingAutomationI~""';
+                    EXCEPTION WHEN OTHERS THEN
+                        -- Ignore errors, constraint may not exist or name is different
+                    END;
+                    
+                    ALTER TABLE crm.""ComplaintInteractions"" DROP CONSTRAINT IF EXISTS ""FK_ComplaintInteractions_Complaints_ComplaintId2"";
+                    ALTER TABLE crm.""JourneyStages"" DROP CONSTRAINT IF EXISTS ""FK_JourneyStages_PatientJourneys_PatientJourneyId2"";
+                    ALTER TABLE crm.""PatientTouchpoints"" DROP CONSTRAINT IF EXISTS ""FK_PatientTouchpoints_JourneyStages_JourneyStageId1"";
+                    ALTER TABLE crm.""SurveyQuestionResponses"" DROP CONSTRAINT IF EXISTS ""FK_SurveyQuestionResponses_SurveyResponses_SurveyResponseId1"";
+                    ALTER TABLE crm.""SurveyQuestions"" DROP CONSTRAINT IF EXISTS ""FK_SurveyQuestions_Surveys_SurveyId2"";
+                    ALTER TABLE crm.""SurveyResponses"" DROP CONSTRAINT IF EXISTS ""FK_SurveyResponses_Surveys_SurveyId1"";
                 END $$;
             ");
 
