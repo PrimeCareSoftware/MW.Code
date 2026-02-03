@@ -21,16 +21,19 @@ namespace MedicSoft.Repository.Repositories
         public async Task<MedicalRecordVersion?> GetByIdAsync(Guid id, string tenantId)
         {
             return await _context.Set<MedicalRecordVersion>()
+                .Where(v => v.Id == id && v.TenantId == tenantId)
                 .Include(v => v.ChangedBy)
                 .Include(v => v.MedicalRecord)
-                .FirstOrDefaultAsync(v => v.Id == id && v.TenantId == tenantId);
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<MedicalRecordVersion>> GetVersionHistoryAsync(Guid medicalRecordId, string tenantId)
         {
             return await _context.Set<MedicalRecordVersion>()
-                .Include(v => v.ChangedBy)
                 .Where(v => v.MedicalRecordId == medicalRecordId && v.TenantId == tenantId)
+                .Include(v => v.ChangedBy)
+                .AsNoTracking()
                 .OrderByDescending(v => v.Version)
                 .ToListAsync();
         }
@@ -38,19 +41,22 @@ namespace MedicSoft.Repository.Repositories
         public async Task<MedicalRecordVersion?> GetVersionAsync(Guid medicalRecordId, int version, string tenantId)
         {
             return await _context.Set<MedicalRecordVersion>()
+                .Where(v => v.MedicalRecordId == medicalRecordId 
+                    && v.Version == version 
+                    && v.TenantId == tenantId)
                 .Include(v => v.ChangedBy)
                 .Include(v => v.MedicalRecord)
-                .FirstOrDefaultAsync(v => v.MedicalRecordId == medicalRecordId 
-                    && v.Version == version 
-                    && v.TenantId == tenantId);
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public async Task<MedicalRecordVersion?> GetLatestVersionAsync(Guid medicalRecordId, string tenantId)
         {
             return await _context.Set<MedicalRecordVersion>()
+                .Where(v => v.MedicalRecordId == medicalRecordId && v.TenantId == tenantId)
                 .Include(v => v.ChangedBy)
                 .Include(v => v.MedicalRecord)
-                .Where(v => v.MedicalRecordId == medicalRecordId && v.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderByDescending(v => v.Version)
                 .FirstOrDefaultAsync();
         }
@@ -65,9 +71,10 @@ namespace MedicSoft.Repository.Repositories
         public async Task<List<MedicalRecordVersion>> GetAllAsync(string tenantId)
         {
             return await _context.Set<MedicalRecordVersion>()
+                .Where(v => v.TenantId == tenantId)
                 .Include(v => v.ChangedBy)
                 .Include(v => v.MedicalRecord)
-                .Where(v => v.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderByDescending(v => v.ChangedAt)
                 .ToListAsync();
         }

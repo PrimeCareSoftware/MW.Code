@@ -20,6 +20,7 @@ namespace MedicSoft.Repository.Repositories
             return await _dbSet
                 .Where(r => r.PatientId == patientId && r.TenantId == tenantId)
                 .Include(r => r.Payments)
+                .AsNoTracking()
                 .OrderByDescending(r => r.DueDate)
                 .ToListAsync();
         }
@@ -29,6 +30,7 @@ namespace MedicSoft.Repository.Repositories
             return await _dbSet
                 .Where(r => r.AppointmentId == appointmentId && r.TenantId == tenantId)
                 .Include(r => r.Payments)
+                .AsNoTracking()
                 .OrderByDescending(r => r.DueDate)
                 .ToListAsync();
         }
@@ -38,6 +40,7 @@ namespace MedicSoft.Repository.Repositories
             return await _dbSet
                 .Where(r => r.Status == status && r.TenantId == tenantId)
                 .Include(r => r.Payments)
+                .AsNoTracking()
                 .OrderBy(r => r.DueDate)
                 .ToListAsync();
         }
@@ -52,6 +55,7 @@ namespace MedicSoft.Repository.Repositories
                            r.Status != ReceivableStatus.Cancelled &&
                            r.Status != ReceivableStatus.Paid)
                 .Include(r => r.Payments)
+                .AsNoTracking()
                 .OrderBy(r => r.DueDate)
                 .ToListAsync();
         }
@@ -63,6 +67,7 @@ namespace MedicSoft.Repository.Repositories
                            r.DueDate >= startDate && 
                            r.DueDate <= endDate)
                 .Include(r => r.Payments)
+                .AsNoTracking()
                 .OrderBy(r => r.DueDate)
                 .ToListAsync();
         }
@@ -93,6 +98,7 @@ namespace MedicSoft.Repository.Repositories
             return await _dbSet
                 .Where(r => r.DocumentNumber == documentNumber && r.TenantId == tenantId)
                 .Include(r => r.Payments)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
@@ -104,6 +110,7 @@ namespace MedicSoft.Repository.Repositories
                 .Include(r => r.Patient)
                 .Include(r => r.Appointment)
                 .Include(r => r.HealthInsuranceOperator)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
     }

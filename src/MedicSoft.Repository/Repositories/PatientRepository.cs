@@ -15,6 +15,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _dbSet
                 .Where(p => p.TenantId == tenantId && p.IsActive)
+                .AsNoTracking()
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
@@ -44,6 +45,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _dbSet
                 .Where(p => p.Name.Contains(name) && p.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
@@ -52,6 +54,7 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _dbSet
                 .Where(p => p.Phone.Number.Contains(phoneNumber) && p.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
@@ -64,6 +67,7 @@ namespace MedicSoft.Repository.Repositories
                             p.Document.Contains(searchTerm) ||  // CPF is numeric, case-insensitive not needed
                             p.Phone.Number.Contains(searchTerm)) &&  // Phone is numeric, case-insensitive not needed
                             p.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
@@ -85,7 +89,7 @@ namespace MedicSoft.Repository.Repositories
                         orderby p.Name
                         select p;
             
-            return await query.Distinct().ToListAsync();
+            return await query.AsNoTracking().Distinct().ToListAsync();
         }
 
         public async Task<bool> IsDocumentUniqueAsync(string document, string tenantId, Guid? excludeId = null)
@@ -116,21 +120,24 @@ namespace MedicSoft.Repository.Repositories
         {
             return await _dbSet
                 .Where(p => p.GuardianId == guardianId && p.TenantId == tenantId && p.IsActive)
+                .AsNoTracking()
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Patient>> GetByClinicIdAsync(Guid clinicId, string tenantId)
         {
-            return await _dbSet
-                .Where(p => p.TenantId == tenantId && 
-                           p.IsActive && 
-                           _context.Set<PatientClinicLink>().Any(cl => 
-                               cl.PatientId == p.Id && 
-                               cl.ClinicId == clinicId && 
-                               cl.IsActive))
-                .OrderBy(p => p.Name)
-                .ToListAsync();
+            // Optimized query using JOIN instead of .Any() to avoid N+1 issue
+            var query = from p in _dbSet
+                        join pcl in _context.Set<PatientClinicLink>() on p.Id equals pcl.PatientId
+                        where p.TenantId == tenantId && 
+                              p.IsActive && 
+                              pcl.ClinicId == clinicId && 
+                              pcl.IsActive
+                        orderby p.Name
+                        select p;
+            
+            return await query.AsNoTracking().Distinct().ToListAsync();
         }
     }
 }

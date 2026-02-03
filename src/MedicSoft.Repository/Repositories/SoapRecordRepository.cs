@@ -14,19 +14,21 @@ namespace MedicSoft.Repository.Repositories
         public async Task<SoapRecord?> GetByAppointmentIdAsync(Guid appointmentId, string tenantId)
         {
             return await _dbSet
+                .Where(sr => sr.AppointmentId == appointmentId && sr.TenantId == tenantId)
                 .Include(sr => sr.Patient)
                 .Include(sr => sr.Appointment)
                 .Include(sr => sr.Doctor)
-                .Where(sr => sr.AppointmentId == appointmentId && sr.TenantId == tenantId)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<SoapRecord>> GetByPatientIdAsync(Guid patientId, string tenantId)
         {
             return await _dbSet
+                .Where(sr => sr.PatientId == patientId && sr.TenantId == tenantId)
                 .Include(sr => sr.Appointment)
                 .Include(sr => sr.Doctor)
-                .Where(sr => sr.PatientId == patientId && sr.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderByDescending(sr => sr.RecordDate)
                 .ToListAsync();
         }
@@ -34,9 +36,10 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<SoapRecord>> GetByDoctorIdAsync(Guid doctorId, string tenantId)
         {
             return await _dbSet
+                .Where(sr => sr.DoctorId == doctorId && sr.TenantId == tenantId)
                 .Include(sr => sr.Patient)
                 .Include(sr => sr.Appointment)
-                .Where(sr => sr.DoctorId == doctorId && sr.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderByDescending(sr => sr.RecordDate)
                 .ToListAsync();
         }

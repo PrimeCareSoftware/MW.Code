@@ -14,17 +14,19 @@ namespace MedicSoft.Repository.Repositories
         public async Task<AuthorizationRequest?> GetByRequestNumberAsync(string requestNumber, string tenantId)
         {
             return await _dbSet
+                .Where(ar => ar.RequestNumber == requestNumber && ar.TenantId == tenantId)
                 .Include(ar => ar.Patient)
                 .Include(ar => ar.PatientHealthInsurance)
-                .Where(ar => ar.RequestNumber == requestNumber && ar.TenantId == tenantId)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<AuthorizationRequest>> GetByPatientIdAsync(Guid patientId, string tenantId)
         {
             return await _dbSet
-                .Include(ar => ar.PatientHealthInsurance)
                 .Where(ar => ar.PatientId == patientId && ar.TenantId == tenantId)
+                .Include(ar => ar.PatientHealthInsurance)
+                .AsNoTracking()
                 .OrderByDescending(ar => ar.RequestDate)
                 .ToListAsync();
         }
@@ -32,9 +34,10 @@ namespace MedicSoft.Repository.Repositories
         public async Task<IEnumerable<AuthorizationRequest>> GetByStatusAsync(AuthorizationStatus status, string tenantId)
         {
             return await _dbSet
+                .Where(ar => ar.Status == status && ar.TenantId == tenantId)
                 .Include(ar => ar.Patient)
                 .Include(ar => ar.PatientHealthInsurance)
-                .Where(ar => ar.Status == status && ar.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderBy(ar => ar.RequestDate)
                 .ToListAsync();
         }
@@ -48,42 +51,47 @@ namespace MedicSoft.Repository.Repositories
         {
             var now = DateTime.UtcNow;
             return await _dbSet
-                .Include(ar => ar.Patient)
-                .Include(ar => ar.PatientHealthInsurance)
                 .Where(ar => ar.Status == AuthorizationStatus.Approved && 
                             ar.ExpirationDate.HasValue && 
                             ar.ExpirationDate.Value < now && 
                             ar.TenantId == tenantId)
+                .Include(ar => ar.Patient)
+                .Include(ar => ar.PatientHealthInsurance)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task<AuthorizationRequest?> GetByAuthorizationNumberAsync(string authorizationNumber, string tenantId)
         {
             return await _dbSet
+                .Where(ar => ar.AuthorizationNumber == authorizationNumber && ar.TenantId == tenantId)
                 .Include(ar => ar.Patient)
                 .Include(ar => ar.PatientHealthInsurance)
-                .Where(ar => ar.AuthorizationNumber == authorizationNumber && ar.TenantId == tenantId)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         public async Task<AuthorizationRequest?> GetByIdWithDetailsAsync(Guid id, string tenantId)
         {
             return await _dbSet
+                .Where(ar => ar.Id == id && ar.TenantId == tenantId)
                 .Include(ar => ar.Patient)
                 .Include(ar => ar.PatientHealthInsurance)
                     .ThenInclude(phi => phi!.HealthInsurancePlan)
                         .ThenInclude(plan => plan!.Operator)
-                .FirstOrDefaultAsync(ar => ar.Id == id && ar.TenantId == tenantId);
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<AuthorizationRequest>> GetAllWithDetailsAsync(string tenantId)
         {
             return await _dbSet
+                .Where(ar => ar.TenantId == tenantId)
                 .Include(ar => ar.Patient)
                 .Include(ar => ar.PatientHealthInsurance)
                     .ThenInclude(phi => phi!.HealthInsurancePlan)
                         .ThenInclude(plan => plan!.Operator)
-                .Where(ar => ar.TenantId == tenantId)
+                .AsNoTracking()
                 .OrderByDescending(ar => ar.RequestDate)
                 .ToListAsync();
         }

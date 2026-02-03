@@ -16,6 +16,7 @@ namespace MedicSoft.Repository.Repositories
             return await _dbSet
                 .Where(e => e.AppointmentId == appointmentId && e.TenantId == tenantId)
                 .Include(e => e.Patient)
+                .AsNoTracking()
                 .OrderBy(e => e.RequestedDate)
                 .ToListAsync();
         }
@@ -25,6 +26,7 @@ namespace MedicSoft.Repository.Repositories
             return await _dbSet
                 .Where(e => e.PatientId == patientId && e.TenantId == tenantId)
                 .Include(e => e.Appointment)
+                .AsNoTracking()
                 .OrderByDescending(e => e.RequestedDate)
                 .ToListAsync();
         }
@@ -35,6 +37,7 @@ namespace MedicSoft.Repository.Repositories
                 .Where(e => e.Status == status && e.TenantId == tenantId)
                 .Include(e => e.Patient)
                 .Include(e => e.Appointment)
+                .AsNoTracking()
                 .OrderBy(e => e.RequestedDate)
                 .ToListAsync();
         }
@@ -45,6 +48,7 @@ namespace MedicSoft.Repository.Repositories
                 .Where(e => e.Status == ExamRequestStatus.Pending && e.TenantId == tenantId)
                 .Include(e => e.Patient)
                 .Include(e => e.Appointment)
+                .AsNoTracking()
                 .OrderBy(e => e.Urgency)
                 .ThenBy(e => e.RequestedDate)
                 .ToListAsync();
@@ -59,6 +63,7 @@ namespace MedicSoft.Repository.Repositories
                     && e.TenantId == tenantId)
                 .Include(e => e.Patient)
                 .Include(e => e.Appointment)
+                .AsNoTracking()
                 .OrderBy(e => e.Urgency)
                 .ThenBy(e => e.RequestedDate)
                 .ToListAsync();
