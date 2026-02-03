@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -30,12 +30,11 @@ interface Testimonial {
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   whatsappNumber = environment.whatsappNumber;
   private pageStartTime = Date.now();
   private scrollDepthTracked = { 25: false, 50: false, 75: false, 100: false };
   private scrollSubject = new Subject<void>();
-  private destroy$ = new Subject<void>();
   
   benefits = [
     'Gestão completa em uma única plataforma',
@@ -111,16 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(() => this.trackScrollDepth());
   }
 
-  ngOnDestroy(): void {
-    // Complete subjects
-    this.scrollSubject.complete();
-    this.destroy$.next();
-    this.destroy$.complete();
-    
-    // Track engagement time when leaving the page
-    const timeOnPage = (Date.now() - this.pageStartTime) / 1000;
-    this.analytics.trackEngagementTime('home', timeOnPage);
-  }
+
   
   @HostListener('window:scroll')
   onScroll(): void {

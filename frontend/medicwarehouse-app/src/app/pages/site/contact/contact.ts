@@ -66,6 +66,9 @@ export class ContactComponent {
   }
 
   resetForm(): void {
+    this.submitSuccess = false;
+    this.showSuccessMessage = false;
+    this.submitError = '';
     this.model = {
       name: '',
       email: '',
@@ -80,8 +83,6 @@ export class ContactComponent {
   }
 
   resetSuccessState(): void {
-    this.showSuccessMessage = false;
-    this.submitSuccess = false;
     this.resetForm();
   }
 }
