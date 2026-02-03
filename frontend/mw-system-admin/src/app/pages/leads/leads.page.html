@@ -1,0 +1,337 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Gestão de Leads</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadData()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="content-wrapper">
+    <!-- Statistics Dashboard -->
+    <div class="statistics-section" *ngIf="statistics">
+      <h2>Estatísticas de Leads</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">{{ statistics.totalLeads }}</div>
+          <div class="stat-label">Total de Leads</div>
+        </div>
+        <div class="stat-card stat-new">
+          <div class="stat-value">{{ statistics.newLeads }}</div>
+          <div class="stat-label">Novos</div>
+        </div>
+        <div class="stat-card stat-qualified">
+          <div class="stat-value">{{ statistics.qualifiedLeads }}</div>
+          <div class="stat-label">Qualificados</div>
+        </div>
+        <div class="stat-card stat-converted">
+          <div class="stat-value">{{ statistics.convertedLeads }}</div>
+          <div class="stat-label">Convertidos</div>
+        </div>
+        <div class="stat-card stat-rate">
+          <div class="stat-value">{{ statistics.conversionRate.toFixed(1) }}%</div>
+          <div class="stat-label">Taxa de Conversão</div>
+        </div>
+        <div class="stat-card stat-score">
+          <div class="stat-value">{{ statistics.averageScore }}</div>
+          <div class="stat-label">Score Médio</div>
+        </div>
+        <div class="stat-card stat-followup">
+          <div class="stat-value">{{ statistics.needingFollowUp }}</div>
+          <div class="stat-label">Precisam Follow-up</div>
+        </div>
+        <div class="stat-card stat-unassigned">
+          <div class="stat-value">{{ statistics.unassignedLeads }}</div>
+          <div class="stat-label">Não Atribuídos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+      <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="onSearchChange()" 
+        placeholder="Buscar por nome, email, telefone ou empresa">
+      </ion-searchbar>
+      
+      <div class="filter-row">
+        <ion-select [(ngModel)]="statusFilter" (ionChange)="onStatusFilterChange()" 
+          placeholder="Filtrar por Status">
+          <ion-select-option value="all">Todos os Status</ion-select-option>
+          <ion-select-option [value]="LeadStatus.New">Novo</ion-select-option>
+          <ion-select-option [value]="LeadStatus.Contacted">Contactado</ion-select-option>
+          <ion-select-option [value]="LeadStatus.Qualified">Qualificado</ion-select-option>
+          <ion-select-option [value]="LeadStatus.Converted">Convertido</ion-select-option>
+          <ion-select-option [value]="LeadStatus.Lost">Perdido</ion-select-option>
+          <ion-select-option [value]="LeadStatus.Nurturing">Nutrição</ion-select-option>
+        </ion-select>
+
+        <ion-select [(ngModel)]="assignmentFilter" (ionChange)="onAssignmentFilterChange()" 
+          placeholder="Filtrar por Atribuição">
+          <ion-select-option value="all">Todos</ion-select-option>
+          <ion-select-option value="assigned">Atribuídos</ion-select-option>
+          <ion-select-option value="unassigned">Não Atribuídos</ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+
+    <!-- Leads Table -->
+    <div class="leads-section">
+      <h3>Leads ({{ filteredLeads.length }})</h3>
+      
+      <div *ngIf="loading" class="loading-container">
+        <ion-spinner></ion-spinner>
+        <p>Carregando leads...</p>
+      </div>
+
+      <div *ngIf="!loading && filteredLeads.length === 0" class="empty-state">
+        <ion-icon name="people-outline"></ion-icon>
+        <p>Nenhum lead encontrado</p>
+      </div>
+
+      <div *ngIf="!loading && filteredLeads.length > 0" class="table-responsive">
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th>Score</th>
+              <th>Contato</th>
+              <th>Empresa</th>
+              <th>Email</th>
+              <th>Telefone</th>
+              <th>Plano</th>
+              <th>Status</th>
+              <th>Capturado</th>
+              <th>Follow-up</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lead of filteredLeads" (click)="selectLead(lead)" 
+              [class.selected]="selectedLead?.id === lead.id">
+              <td>
+                <ion-badge [color]="getScoreColor(lead.score)">
+                  {{ lead.score }}
+                </ion-badge>
+              </td>
+              <td>{{ lead.contactName || '-' }}</td>
+              <td>{{ lead.companyName || '-' }}</td>
+              <td>{{ lead.email || '-' }}</td>
+              <td>{{ lead.phone || '-' }}</td>
+              <td>{{ lead.planName || '-' }}</td>
+              <td>
+                <ion-badge [color]="getStatusColor(lead.status)">
+                  {{ getStatusLabel(lead.status) }}
+                </ion-badge>
+              </td>
+              <td>{{ formatDate(lead.capturedAt) }}</td>
+              <td>
+                <span *ngIf="lead.nextFollowUpDate" class="followup-date">
+                  {{ formatDate(lead.nextFollowUpDate) }}
+                </span>
+                <span *ngIf="!lead.nextFollowUpDate">-</span>
+              </td>
+              <td class="actions-cell">
+                <ion-button size="small" fill="clear" (click)="openAssignModal(lead); $event.stopPropagation()">
+                  <ion-icon name="person-add-outline"></ion-icon>
+                </ion-button>
+                <ion-button size="small" fill="clear" (click)="openFollowUpModal(lead); $event.stopPropagation()">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                </ion-button>
+                <ion-button size="small" fill="clear" (click)="openActivityModal(lead); $event.stopPropagation()">
+                  <ion-icon name="add-circle-outline"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Lead Details Panel -->
+    <div *ngIf="selectedLead" class="lead-details-panel">
+      <h3>Detalhes do Lead</h3>
+      
+      <div class="detail-section">
+        <h4>Informações de Contato</h4>
+        <p><strong>Nome:</strong> {{ selectedLead.contactName || '-' }}</p>
+        <p><strong>Email:</strong> {{ selectedLead.email || '-' }}</p>
+        <p><strong>Telefone:</strong> {{ selectedLead.phone || '-' }}</p>
+        <p><strong>Empresa:</strong> {{ selectedLead.companyName || '-' }}</p>
+        <p><strong>Cidade/Estado:</strong> {{ selectedLead.city || '-' }} / {{ selectedLead.state || '-' }}</p>
+      </div>
+
+      <div class="detail-section">
+        <h4>Informações do Lead</h4>
+        <p><strong>Plano:</strong> {{ selectedLead.planName || '-' }}</p>
+        <p><strong>Última Etapa:</strong> {{ selectedLead.lastStepReached }}/6</p>
+        <p><strong>Score:</strong> 
+          <ion-badge [color]="getScoreColor(selectedLead.score)">{{ selectedLead.score }}</ion-badge>
+        </p>
+        <p><strong>Status:</strong> 
+          <ion-badge [color]="getStatusColor(selectedLead.status)">{{ getStatusLabel(selectedLead.status) }}</ion-badge>
+        </p>
+        <p><strong>Fonte:</strong> {{ selectedLead.leadSource }}</p>
+      </div>
+
+      <div class="detail-section" *ngIf="selectedLead.notes">
+        <h4>Notas</h4>
+        <p class="notes-content">{{ selectedLead.notes }}</p>
+      </div>
+
+      <div class="detail-section">
+        <h4>Timeline de Atividades</h4>
+        <div *ngIf="selectedLeadActivities.length === 0" class="empty-activities">
+          <p>Nenhuma atividade registrada</p>
+        </div>
+        <div *ngFor="let activity of selectedLeadActivities" class="activity-item">
+          <div class="activity-header">
+            <ion-badge>{{ getActivityTypeLabel(activity.type) }}</ion-badge>
+            <span class="activity-date">{{ formatDateTime(activity.activityDate) }}</span>
+          </div>
+          <h5>{{ activity.title }}</h5>
+          <p *ngIf="activity.description">{{ activity.description }}</p>
+          <p *ngIf="activity.outcome"><strong>Resultado:</strong> {{ activity.outcome }}</p>
+          <p *ngIf="activity.performedByUserName" class="activity-user">
+            Por: {{ activity.performedByUserName }}
+          </p>
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <ion-button expand="block" (click)="openActivityModal(selectedLead)">
+          Adicionar Atividade
+        </ion-button>
+        <ion-button expand="block" fill="outline" (click)="openNotesModal(selectedLead)">
+          Adicionar Notas
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Modal -->
+  <ion-modal [isOpen]="showActivityModal" (didDismiss)="showActivityModal = false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Adicionar Atividade</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="showActivityModal = false">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-label position="stacked">Tipo de Atividade</ion-label>
+          <ion-select [(ngModel)]="newActivity.type">
+            <ion-select-option [value]="ActivityType.PhoneCall">Ligação</ion-select-option>
+            <ion-select-option [value]="ActivityType.Email">Email</ion-select-option>
+            <ion-select-option [value]="ActivityType.Meeting">Reunião</ion-select-option>
+            <ion-select-option [value]="ActivityType.Note">Nota</ion-select-option>
+            <ion-select-option [value]="ActivityType.Other">Outro</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Título *</ion-label>
+          <ion-input [(ngModel)]="newActivity.title" placeholder="Ex: Ligação de Follow-up"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Descrição</ion-label>
+          <ion-textarea [(ngModel)]="newActivity.description" rows="4"></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Duração (minutos)</ion-label>
+          <ion-input type="number" [(ngModel)]="newActivity.durationMinutes"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Resultado</ion-label>
+          <ion-textarea [(ngModel)]="newActivity.outcome" rows="3"></ion-textarea>
+        </ion-item>
+
+        <ion-button expand="block" (click)="submitActivity()" [disabled]="!newActivity.title">
+          Salvar Atividade
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Notes Modal -->
+  <ion-modal [isOpen]="showNotesModal" (didDismiss)="showNotesModal = false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Adicionar Notas</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="showNotesModal = false">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-label position="stacked">Notas *</ion-label>
+          <ion-textarea [(ngModel)]="newNotes" rows="6" placeholder="Digite suas notas aqui..."></ion-textarea>
+        </ion-item>
+
+        <ion-button expand="block" (click)="submitNotes()" [disabled]="!newNotes">
+          Salvar Notas
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Follow-up Modal -->
+  <ion-modal [isOpen]="showFollowUpModal" (didDismiss)="showFollowUpModal = false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Agendar Follow-up</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="showFollowUpModal = false">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-label position="stacked">Data do Follow-up *</ion-label>
+          <ion-input type="datetime-local" [(ngModel)]="followUpDate"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" (click)="submitFollowUp()" [disabled]="!followUpDate">
+          Agendar
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Assign Modal -->
+  <ion-modal [isOpen]="showAssignModal" (didDismiss)="showAssignModal = false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Atribuir Lead</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="showAssignModal = false">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-label position="stacked">ID do Usuário *</ion-label>
+          <ion-input [(ngModel)]="assignUserId" placeholder="Digite o ID do usuário"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" (click)="submitAssignment()" [disabled]="!assignUserId">
+          Atribuir
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
