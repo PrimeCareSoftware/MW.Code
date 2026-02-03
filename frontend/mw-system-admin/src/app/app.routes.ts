@@ -80,10 +80,10 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
-  // Salesforce Leads Management
+  // Lead Management (Standalone)
   {
-    path: 'salesforce-leads',
-    loadComponent: () => import('./pages/salesforce-leads/salesforce-leads').then(m => m.SalesforceLeadsComponent),
+    path: 'leads',
+    loadComponent: () => import('./pages/leads/leads.page').then(m => m.LeadsPage),
     canActivate: [systemAdminGuard]
   },
   

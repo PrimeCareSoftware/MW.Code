@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
 using MedicSoft.Domain.Common;
 
 namespace MedicSoft.Domain.Entities.CRM
 {
     /// <summary>
     /// Represents a lead captured from abandoned registration flows
-    /// to be synced with Salesforce for follow-up campaigns
+    /// for internal follow-up and conversion campaigns
     /// </summary>
-    public class SalesforceLead : BaseEntity
+    public class Lead : BaseEntity
     {
         /// <summary>
         /// Session identifier from SalesFunnelMetric
@@ -65,7 +66,7 @@ namespace MedicSoft.Domain.Entities.CRM
         public string LeadSource { get; private set; }
 
         /// <summary>
-        /// Lead status: New, Contacted, Qualified, Converted, Lost
+        /// Lead status: New, Contacted, Qualified, Converted, Lost, Nurturing
         /// </summary>
         public LeadStatus Status { get; private set; }
 
@@ -100,43 +101,64 @@ namespace MedicSoft.Domain.Entities.CRM
         public DateTime? LastActivityAt { get; private set; }
 
         /// <summary>
-        /// Salesforce Lead ID after sync (null if not yet synced)
+        /// User ID of the person assigned to follow up this lead
         /// </summary>
-        public string? SalesforceLeadId { get; private set; }
+        public Guid? AssignedToUserId { get; private set; }
 
         /// <summary>
-        /// Whether this lead has been synced to Salesforce
+        /// Date/time when assigned
         /// </summary>
-        public bool IsSyncedToSalesforce { get; private set; }
+        public DateTime? AssignedAt { get; private set; }
 
         /// <summary>
-        /// Date/time when synced to Salesforce
+        /// Next scheduled follow-up date
         /// </summary>
-        public DateTime? SyncedAt { get; private set; }
+        public DateTime? NextFollowUpDate { get; private set; }
 
         /// <summary>
-        /// Number of sync attempts (for retry logic)
+        /// Lead score (0-100) based on engagement and data quality
         /// </summary>
-        public int SyncAttempts { get; private set; }
+        public int Score { get; private set; }
 
         /// <summary>
-        /// Last sync error message if any
+        /// Tags for lead categorization (comma-separated)
         /// </summary>
-        public string? LastSyncError { get; private set; }
+        public string? Tags { get; private set; }
+
+        /// <summary>
+        /// Notes about this lead
+        /// </summary>
+        public string? Notes { get; private set; }
 
         /// <summary>
         /// Additional metadata in JSON format
         /// </summary>
         public string? Metadata { get; private set; }
 
-        private SalesforceLead()
+        /// <summary>
+        /// Soft delete flag
+        /// </summary>
+        public bool IsDeleted { get; private set; }
+
+        /// <summary>
+        /// Soft delete timestamp
+        /// </summary>
+        public DateTime? DeletedAt { get; private set; }
+
+        /// <summary>
+        /// Navigation property for activities
+        /// </summary>
+        public virtual ICollection<LeadActivity> Activities { get; private set; }
+
+        private Lead()
         {
             // EF Constructor
             SessionId = null!;
             LeadSource = null!;
+            Activities = new List<LeadActivity>();
         }
 
-        public SalesforceLead(
+        public Lead(
             string sessionId,
             string leadSource,
             int lastStepReached,
@@ -181,8 +203,8 @@ namespace MedicSoft.Domain.Entities.CRM
             Metadata = metadata;
             Status = LeadStatus.New;
             CapturedAt = DateTime.UtcNow;
-            IsSyncedToSalesforce = false;
-            SyncAttempts = 0;
+            Score = CalculateInitialScore();
+            Activities = new List<LeadActivity>();
         }
 
         /// <summary>
@@ -194,52 +216,150 @@ namespace MedicSoft.Domain.Entities.CRM
             Email = email;
             Phone = phone;
             LastActivityAt = DateTime.UtcNow;
+            RecalculateScore();
             UpdateTimestamp();
         }
 
         /// <summary>
         /// Update lead status
         /// </summary>
-        public void UpdateStatus(LeadStatus newStatus)
+        public void UpdateStatus(LeadStatus newStatus, string? notes = null)
         {
             Status = newStatus;
+            LastActivityAt = DateTime.UtcNow;
+            
+            if (!string.IsNullOrWhiteSpace(notes))
+            {
+                Notes = string.IsNullOrWhiteSpace(Notes) 
+                    ? notes 
+                    : $"{Notes}\n---\n{notes}";
+            }
+            
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Assign lead to a user
+        /// </summary>
+        public void AssignTo(Guid userId)
+        {
+            AssignedToUserId = userId;
+            AssignedAt = DateTime.UtcNow;
             LastActivityAt = DateTime.UtcNow;
             UpdateTimestamp();
         }
 
         /// <summary>
-        /// Mark lead as synced with Salesforce
+        /// Unassign lead
         /// </summary>
-        public void MarkAsSynced(string salesforceLeadId)
+        public void Unassign()
         {
-            if (string.IsNullOrWhiteSpace(salesforceLeadId))
-                throw new ArgumentException("Salesforce Lead ID cannot be empty", nameof(salesforceLeadId));
-
-            SalesforceLeadId = salesforceLeadId;
-            IsSyncedToSalesforce = true;
-            SyncedAt = DateTime.UtcNow;
-            LastSyncError = null;
+            AssignedToUserId = null;
+            AssignedAt = null;
+            LastActivityAt = DateTime.UtcNow;
             UpdateTimestamp();
         }
 
         /// <summary>
-        /// Record a failed sync attempt
+        /// Schedule next follow-up
         /// </summary>
-        public void RecordSyncFailure(string errorMessage)
+        public void ScheduleFollowUp(DateTime followUpDate)
         {
-            SyncAttempts++;
-            LastSyncError = errorMessage;
+            if (followUpDate < DateTime.UtcNow)
+                throw new ArgumentException("Follow-up date cannot be in the past", nameof(followUpDate));
+
+            NextFollowUpDate = followUpDate;
+            LastActivityAt = DateTime.UtcNow;
             UpdateTimestamp();
         }
 
         /// <summary>
-        /// Reset sync attempts counter
+        /// Clear follow-up date
         /// </summary>
-        public void ResetSyncAttempts()
+        public void ClearFollowUp()
         {
-            SyncAttempts = 0;
-            LastSyncError = null;
+            NextFollowUpDate = null;
             UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Update lead score manually or trigger recalculation
+        /// </summary>
+        public void UpdateScore(int score)
+        {
+            if (score < 0 || score > 100)
+                throw new ArgumentException("Score must be between 0 and 100", nameof(score));
+
+            Score = score;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Add or update tags
+        /// </summary>
+        public void SetTags(string? tags)
+        {
+            Tags = tags;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Add notes
+        /// </summary>
+        public void AddNotes(string notes)
+        {
+            if (string.IsNullOrWhiteSpace(notes))
+                return;
+
+            Notes = string.IsNullOrWhiteSpace(Notes) 
+                ? notes 
+                : $"{Notes}\n---\n{notes}";
+            
+            LastActivityAt = DateTime.UtcNow;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Calculate initial score based on captured data quality
+        /// </summary>
+        private int CalculateInitialScore()
+        {
+            int score = 50; // Base score
+
+            // Email presence (most important)
+            if (!string.IsNullOrWhiteSpace(Email)) score += 20;
+
+            // Phone presence
+            if (!string.IsNullOrWhiteSpace(Phone)) score += 15;
+
+            // Company name
+            if (!string.IsNullOrWhiteSpace(CompanyName)) score += 10;
+
+            // Contact name
+            if (!string.IsNullOrWhiteSpace(ContactName)) score += 5;
+
+            // Location data
+            if (!string.IsNullOrWhiteSpace(City)) score += 5;
+            if (!string.IsNullOrWhiteSpace(State)) score += 5;
+
+            // Plan selection (shows serious interest)
+            if (!string.IsNullOrWhiteSpace(PlanId)) score += 10;
+
+            // Steps reached (the further, the better)
+            score += LastStepReached * 2;
+
+            // UTM tracking (shows targeted campaign)
+            if (!string.IsNullOrWhiteSpace(UtmCampaign)) score += 5;
+
+            return Math.Min(score, 100);
+        }
+
+        /// <summary>
+        /// Recalculate score based on current data
+        /// </summary>
+        private void RecalculateScore()
+        {
+            Score = CalculateInitialScore();
         }
     }
 
