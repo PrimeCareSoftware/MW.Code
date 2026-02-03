@@ -1,0 +1,544 @@
+/**
+ * Omni Care Site Styles
+ * Healthcare-focused design system with teal/blue palette
+ * ISOLATED from main mediwarehouse-app styles
+ * 
+ * This stylesheet is specifically for the Omni Care public site
+ * and should not affect the main application UI
+ */
+
+/* ============================================
+   SCOPE: All omni-care styles are scoped under .omni-care-site class
+   ============================================ */
+
+.omni-care-site {
+  /* ============================================
+     DESIGN TOKENS - Healthcare Theme
+     ============================================ */
+  
+  /* Core Healthcare Colors - Teal/Blue palette */
+  --omni-background: 180 20% 99%;
+  --omni-foreground: 200 50% 10%;
+  
+  --omni-card: 0 0% 100%;
+  --omni-card-foreground: 200 50% 10%;
+  
+  --omni-popover: 0 0% 100%;
+  --omni-popover-foreground: 200 50% 10%;
+  
+  /* Primary - Healthcare Teal */
+  --omni-primary: 174 72% 40%;
+  --omni-primary-foreground: 0 0% 100%;
+  
+  /* Secondary - Soft Blue */
+  --omni-secondary: 200 30% 96%;
+  --omni-secondary-foreground: 200 50% 20%;
+  
+  /* Muted tones */
+  --omni-muted: 180 15% 95%;
+  --omni-muted-foreground: 200 15% 45%;
+  
+  /* Accent - Vibrant Teal */
+  --omni-accent: 174 85% 45%;
+  --omni-accent-foreground: 0 0% 100%;
+  
+  /* Healthcare success green */
+  --omni-success: 158 64% 45%;
+  --omni-success-foreground: 0 0% 100%;
+  
+  --omni-destructive: 0 84% 60%;
+  --omni-destructive-foreground: 0 0% 100%;
+  
+  --omni-border: 200 20% 90%;
+  --omni-input: 200 20% 90%;
+  --omni-ring: 174 72% 40%;
+  
+  --omni-radius: 0.75rem;
+  
+  /* Custom Omni Care tokens */
+  --omni-hero-gradient-start: 174 72% 40%;
+  --omni-hero-gradient-end: 200 60% 45%;
+  --omni-card-shadow: 200 30% 80%;
+  --omni-glow: 174 85% 55%;
+  
+  /* Typography */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Base styling */
+  background-color: hsl(var(--omni-background));
+  color: hsl(var(--omni-foreground));
+  
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+    font-size: 3rem;
+    @media (min-width: 768px) {
+      font-size: 3.75rem;
+    }
+    @media (min-width: 1024px) {
+      font-size: 4.5rem;
+    }
+  }
+  
+  h2 {
+    font-size: 2.25rem;
+    @media (min-width: 768px) {
+      font-size: 3rem;
+    }
+  }
+  
+  h3 {
+    font-size: 1.875rem;
+    @media (min-width: 768px) {
+      font-size: 2.25rem;
+    }
+  }
+  
+  p {
+    line-height: 1.75;
+    margin-bottom: 1rem;
+  }
+  
+  /* ============================================
+     UTILITY CLASSES
+     ============================================ */
+  
+  .hero-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--omni-hero-gradient-start)) 0%,
+      hsl(var(--omni-hero-gradient-end)) 100%
+    );
+  }
+  
+  .card-elevated {
+    background-color: hsl(var(--omni-card));
+    border-radius: var(--omni-radius);
+    border: 1px solid hsl(var(--omni-border) / 0.5);
+    box-shadow: 0 4px 20px -4px hsl(var(--omni-card-shadow) / 0.15);
+    transition: box-shadow 0.3s ease;
+    
+    &:hover {
+      box-shadow: 0 8px 30px -6px hsl(var(--omni-card-shadow) / 0.25);
+    }
+  }
+  
+  .glow-effect {
+    box-shadow: 0 0 40px -10px hsl(var(--omni-glow) / 0.4);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--omni-primary)) 0%,
+      hsl(var(--omni-accent)) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  
+  .btn-glow {
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: linear-gradient(
+        135deg,
+        hsl(var(--omni-glow) / 0.3) 0%,
+        hsl(var(--omni-primary) / 0.1) 100%
+      );
+    }
+    
+    &:hover::before {
+      opacity: 1;
+    }
+  }
+  
+  .section-padding {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    
+    @media (min-width: 768px) {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+    
+    @media (min-width: 1024px) {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+  
+  .container-custom {
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    
+    @media (min-width: 640px) {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    
+    @media (min-width: 1024px) {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  /* ============================================
+     ANIMATIONS
+     ============================================ */
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px -5px hsl(var(--omni-glow) / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px -5px hsl(var(--omni-glow) / 0.5);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.5s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  /* ============================================
+     BUTTONS
+     ============================================ */
+  
+  .omni-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: calc(var(--omni-radius) - 2px);
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    
+    &:focus {
+      outline: 2px solid hsl(var(--omni-ring));
+      outline-offset: 2px;
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  .omni-btn-primary {
+    background-color: hsl(var(--omni-primary));
+    color: hsl(var(--omni-primary-foreground));
+    
+    &:hover:not(:disabled) {
+      background-color: hsl(var(--omni-primary) / 0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px -2px hsl(var(--omni-primary) / 0.5);
+    }
+  }
+  
+  .omni-btn-secondary {
+    background-color: hsl(var(--omni-secondary));
+    color: hsl(var(--omni-secondary-foreground));
+    border: 1px solid hsl(var(--omni-border));
+    
+    &:hover:not(:disabled) {
+      background-color: hsl(var(--omni-secondary) / 0.8);
+    }
+  }
+  
+  .omni-btn-accent {
+    background-color: hsl(var(--omni-accent));
+    color: hsl(var(--omni-accent-foreground));
+    
+    &:hover:not(:disabled) {
+      background-color: hsl(var(--omni-accent) / 0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px -2px hsl(var(--omni-accent) / 0.5);
+    }
+  }
+  
+  /* ============================================
+     FORMS
+     ============================================ */
+  
+  .omni-input,
+  .omni-textarea,
+  .omni-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid hsl(var(--omni-input));
+    border-radius: calc(var(--omni-radius) - 2px);
+    background-color: hsl(var(--omni-card));
+    color: hsl(var(--omni-foreground));
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: hsl(var(--omni-ring));
+      box-shadow: 0 0 0 3px hsl(var(--omni-ring) / 0.1);
+    }
+    
+    &::placeholder {
+      color: hsl(var(--omni-muted-foreground));
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  .omni-textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+  
+  .omni-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: hsl(var(--omni-foreground));
+  }
+  
+  .omni-form-error {
+    color: hsl(var(--omni-destructive));
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* ============================================
+     CARDS & CONTENT
+     ============================================ */
+  
+  .omni-card {
+    background-color: hsl(var(--omni-card));
+    border: 1px solid hsl(var(--omni-border));
+    border-radius: var(--omni-radius);
+    padding: 1.5rem;
+  }
+  
+  .omni-card-header {
+    margin-bottom: 1rem;
+  }
+  
+  .omni-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .omni-card-description {
+    color: hsl(var(--omni-muted-foreground));
+    font-size: 0.875rem;
+  }
+  
+  /* ============================================
+     BADGES & TAGS
+     ============================================ */
+  
+  .omni-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  
+  .omni-badge-primary {
+    background-color: hsl(var(--omni-primary) / 0.1);
+    color: hsl(var(--omni-primary));
+  }
+  
+  .omni-badge-success {
+    background-color: hsl(var(--omni-success) / 0.1);
+    color: hsl(var(--omni-success));
+  }
+  
+  .omni-badge-accent {
+    background-color: hsl(var(--omni-accent) / 0.1);
+    color: hsl(var(--omni-accent));
+  }
+  
+  /* ============================================
+     RESPONSIVE GRID
+     ============================================ */
+  
+  .omni-grid {
+    display: grid;
+    gap: 2rem;
+    
+    &.cols-1 {
+      grid-template-columns: repeat(1, 1fr);
+    }
+    
+    &.cols-2 {
+      grid-template-columns: repeat(1, 1fr);
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    &.cols-3 {
+      grid-template-columns: repeat(1, 1fr);
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    &.cols-4 {
+      grid-template-columns: repeat(1, 1fr);
+      @media (min-width: 640px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  }
+  
+  /* ============================================
+     DARK MODE SUPPORT
+     ============================================ */
+  
+  &.dark {
+    --omni-background: 200 50% 5%;
+    --omni-foreground: 180 20% 98%;
+    
+    --omni-card: 200 40% 8%;
+    --omni-card-foreground: 180 20% 98%;
+    
+    --omni-popover: 200 40% 8%;
+    --omni-popover-foreground: 180 20% 98%;
+    
+    --omni-primary: 174 72% 50%;
+    --omni-primary-foreground: 200 50% 5%;
+    
+    --omni-secondary: 200 30% 15%;
+    --omni-secondary-foreground: 180 20% 98%;
+    
+    --omni-muted: 200 30% 15%;
+    --omni-muted-foreground: 200 20% 65%;
+    
+    --omni-accent: 174 85% 50%;
+    --omni-accent-foreground: 200 50% 5%;
+    
+    --omni-success: 158 64% 50%;
+    --omni-success-foreground: 200 50% 5%;
+    
+    --omni-destructive: 0 62% 30%;
+    --omni-destructive-foreground: 180 20% 98%;
+    
+    --omni-border: 200 30% 18%;
+    --omni-input: 200 30% 18%;
+    --omni-ring: 174 72% 50%;
+    
+    --omni-hero-gradient-start: 174 72% 35%;
+    --omni-hero-gradient-end: 200 60% 35%;
+    --omni-card-shadow: 200 30% 10%;
+    --omni-glow: 174 85% 45%;
+  }
+}
