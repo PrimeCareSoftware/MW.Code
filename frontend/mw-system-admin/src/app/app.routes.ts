@@ -80,6 +80,13 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Salesforce Leads Management
+  {
+    path: 'salesforce-leads',
+    loadComponent: () => import('./pages/salesforce-leads/salesforce-leads').then(m => m.SalesforceLeadsComponent),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Medications Management
   {
     path: 'medications',

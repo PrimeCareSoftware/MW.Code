@@ -555,6 +555,10 @@ builder.Services.AddSingleton<MedicSoft.ML.Services.IPrevisaoNoShowService, Medi
 builder.Services.Configure<MedicSoft.Api.Configuration.MessagingConfiguration>(
     builder.Configuration.GetSection(MedicSoft.Api.Configuration.MessagingConfiguration.SectionName));
 
+// Configure Salesforce integration
+builder.Services.Configure<MedicSoft.Application.DTOs.CRM.SalesforceConfiguration>(
+    builder.Configuration.GetSection("Salesforce"));
+
 // CRM Advanced - Email Template Repository
 builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
 
@@ -602,6 +606,10 @@ else
 
 // CRM Advanced - Complaint/Ouvidoria System
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IComplaintService, MedicSoft.Api.Services.CRM.ComplaintService>();
+
+// CRM Advanced - Salesforce Lead Management
+builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISalesforceLeadService, MedicSoft.Api.Services.CRM.SalesforceLeadService>();
+builder.Services.AddHostedService<MedicSoft.Api.Services.CRM.SalesforceLeadSyncHostedService>();
 
 // CRM Advanced - Patient Journey
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IPatientJourneyService, MedicSoft.Api.Services.CRM.PatientJourneyService>();
