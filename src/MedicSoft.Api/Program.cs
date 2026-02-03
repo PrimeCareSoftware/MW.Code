@@ -609,6 +609,7 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IComplaintService,
 
 // CRM Advanced - Salesforce Lead Management
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ISalesforceLeadService, MedicSoft.Api.Services.CRM.SalesforceLeadService>();
+builder.Services.AddHostedService<MedicSoft.Api.Services.CRM.SalesforceLeadSyncHostedService>();
 
 // CRM Advanced - Patient Journey
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IPatientJourneyService, MedicSoft.Api.Services.CRM.PatientJourneyService>();
