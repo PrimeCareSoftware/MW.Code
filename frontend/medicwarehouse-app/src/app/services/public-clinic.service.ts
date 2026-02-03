@@ -18,6 +18,9 @@ export interface PublicClinicDto {
   isAcceptingNewPatients: boolean;
   clinicType: string; // Medical, Dental, Nutritionist, etc.
   whatsAppNumber?: string;
+  rating?: number;
+  reviewCount?: number;
+  professionalCount?: number;
 }
 
 export interface SearchClinicsRequest {
