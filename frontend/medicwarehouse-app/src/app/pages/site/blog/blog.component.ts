@@ -1,149 +1,97 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
-import { BlogService, BlogArticle, BlogCategory, BlogFilters, PaginatedBlogResponse } from '../../../services/blog/blog.service';
-import { SeoService } from '../../../services/seo/seo.service';
-import { WebsiteAnalyticsService } from '../../../services/analytics/website-analytics.service';
+
+interface BlogPost {
+  id: number;
+  title: string;
+  excerpt: string;
+  category: string;
+  date: string;
+  readTime: string;
+  image?: string;
+}
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })
-export class BlogComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  
-  articles: BlogArticle[] = [];
-  categories: BlogCategory[] = [];
-  popularArticles: BlogArticle[] = [];
-  
-  isLoading = true;
-  currentPage = 1;
-  totalPages = 1;
-  selectedCategory: string | null = null;
-  searchTerm = '';
-  
-  constructor(
-    private blogService: BlogService,
-    private seo: SeoService,
-    private analytics: WebsiteAnalyticsService
-  ) {}
+export class BlogComponent implements OnInit {
+  posts: BlogPost[] = [
+    {
+      id: 1,
+      title: "Como a telemedicina está transformando o atendimento pós-pandemia",
+      excerpt: "Descubra como clínicas de todo o Brasil estão adotando a telemedicina para oferecer atendimento mais acessível e conveniente aos pacientes.",
+      category: "Telemedicina",
+      date: "2024-01-15",
+      readTime: "5 min",
+      image: "/placeholder.svg",
+    },
+    {
+      id: 2,
+      title: "5 dicas para reduzir faltas de pacientes na sua clínica",
+      excerpt: "Estratégias comprovadas para diminuir o número de no-shows e otimizar a agenda da sua clínica médica.",
+      category: "Gestão",
+      date: "2024-01-10",
+      readTime: "4 min",
+      image: "/placeholder.svg",
+    },
+    {
+      id: 3,
+      title: "LGPD na saúde: o que sua clínica precisa saber",
+      excerpt: "Guia completo sobre como adequar sua clínica às normas da Lei Geral de Proteção de Dados e proteger informações dos pacientes.",
+      category: "Compliance",
+      date: "2024-01-05",
+      readTime: "8 min",
+      image: "/placeholder.svg",
+    },
+    {
+      id: 4,
+      title: "Prontuário eletrônico: benefícios além da organização",
+      excerpt: "Conheça as vantagens de adotar um prontuário eletrônico e como ele pode melhorar a qualidade do atendimento.",
+      category: "Tecnologia",
+      date: "2024-01-01",
+      readTime: "6 min",
+      image: "/placeholder.svg",
+    },
+    {
+      id: 5,
+      title: "Marketing digital para clínicas: por onde começar",
+      excerpt: "Estratégias de marketing digital específicas para profissionais da saúde atraírem mais pacientes.",
+      category: "Marketing",
+      date: "2023-12-28",
+      readTime: "7 min",
+      image: "/placeholder.svg",
+    },
+    {
+      id: 6,
+      title: "Inteligência artificial na medicina: tendências para 2024",
+      excerpt: "Como a IA está revolucionando diagnósticos, tratamentos e a gestão de clínicas médicas.",
+      category: "Inovação",
+      date: "2023-12-20",
+      readTime: "5 min",
+      image: "/placeholder.svg",
+    },
+  ];
+
+  featuredPost: BlogPost | null = null;
+  remainingPosts: BlogPost[] = [];
   
   ngOnInit(): void {
-    this.setupSEO();
-    this.loadArticles();
-    this.loadCategories();
-    this.loadPopularArticles();
-    
-    // Track page view
-    this.analytics.trackPageView('/blog', 'PrimeCare Blog - Conteúdo para Profissionais de Saúde');
+    this.featuredPost = this.posts[0];
+    this.remainingPosts = this.posts.slice(1);
   }
-  
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-  
-  private setupSEO(): void {
-    this.seo.updateMetadata({
-      title: 'Blog PrimeCare - Dicas e Novidades para Clínicas Médicas',
-      description: 'Artigos sobre gestão clínica, tecnologia em saúde, prontuário eletrônico e muito mais. Conteúdo exclusivo para profissionais de saúde.',
-      keywords: ['blog médico', 'gestão clínica', 'tecnologia em saúde', 'prontuário eletrônico', 'dicas clínica'],
-      type: 'website',
-      url: window.location.href
+
+  formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString("pt-BR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     });
-  }
-  
-  loadArticles(): void {
-    this.isLoading = true;
-    
-    const filters: BlogFilters = {
-      page: this.currentPage,
-      perPage: 9
-    };
-    
-    if (this.selectedCategory) {
-      filters.category = this.selectedCategory;
-    }
-    
-    if (this.searchTerm) {
-      filters.search = this.searchTerm;
-    }
-    
-    this.blogService.getArticles(filters)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response: PaginatedBlogResponse) => {
-          this.articles = response.articles;
-          this.totalPages = response.totalPages;
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error loading articles:', error);
-          this.isLoading = false;
-        }
-      });
-  }
-  
-  loadCategories(): void {
-    this.blogService.getCategories()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (categories: BlogCategory[]) => {
-          this.categories = categories;
-        },
-        error: (error) => {
-          console.error('Error loading categories:', error);
-        }
-      });
-  }
-  
-  loadPopularArticles(): void {
-    this.blogService.getPopularArticles(3)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (articles: BlogArticle[]) => {
-          this.popularArticles = articles;
-        },
-        error: (error) => {
-          console.error('Error loading popular articles:', error);
-        }
-      });
-  }
-  
-  onCategorySelect(categorySlug: string | null): void {
-    this.selectedCategory = categorySlug;
-    this.currentPage = 1;
-    this.loadArticles();
-    
-    // Track category filter
-    if (categorySlug) {
-      this.analytics.trackButtonClick(`Filter: ${categorySlug}`, 'blog');
-    }
-  }
-  
-  onSearch(): void {
-    this.currentPage = 1;
-    this.loadArticles();
-    
-    // Track search
-    this.analytics.trackSearch(this.searchTerm, this.articles.length);
-  }
-  
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.loadArticles();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  
-  trackArticleClick(article: BlogArticle): void {
-    this.analytics.trackNavigation(`/blog/${article.slug}`, 'blog-list');
   }
 }
