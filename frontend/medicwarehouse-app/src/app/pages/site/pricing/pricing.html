@@ -1,220 +1,121 @@
 <app-header></app-header>
-<div class="pricing">
-  <section class="pricing-header">
-    <div class="container">
-      <div class="mvp-badge">🚀 Lançamento MVP - Oferta Especial Early Adopters</div>
-      <h1>Escolha o Plano Ideal</h1>
-      <p>Seja um dos primeiros clientes e garanta preço especial <strong>vitalício</strong>!</p>
-      <p class="trial-info">✨ Todos os planos incluem 14 dias de teste gratuito. Sem cartão de crédito.</p>
-    </div>
-  </section>
 
-  <section class="pricing-plans">
-    <div class="container">
-      <div class="plans-grid">
-        <div class="plan-card" *ngFor="let plan of plans" [class.recommended]="plan.isRecommended" [class.mvp]="plan.isMvp" [hidden]="!plan.isActive">
-          <div class="plan-badge" *ngIf="plan.isRecommended">
-            ⭐ Mais Indicado
-          </div>
+<main class="omni-care-site">
+  <section class="section-padding">
+    <div class="container-custom">
+      <!-- Header -->
+      <div class="pricing-header">
+        <span class="section-badge">Planos e Preços</span>
+        <h1 class="section-title">
+          Escolha o plano ideal <span class="text-gradient">para sua clínica</span>
+        </h1>
+        <p class="section-description">
+          Planos flexíveis que crescem com você. Cancele quando quiser.
+        </p>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <p>Carregando planos...</p>
+      </div>
+
+      <!-- Plans Grid -->
+      <div class="omni-grid cols-3" *ngIf="!loading">
+        <div *ngFor="let plan of plans; let i = index" 
+             [hidden]="!plan.isActive"
+             class="plan-card animate-fade-in-up"
+             [class.plan-highlighted]="plan.isRecommended"
+             [style.animation-delay]="(i * 0.1) + 's'">
           
-          <div class="mvp-indicator" *ngIf="plan.isMvp">
-            <span class="mvp-tag">MVP Launch</span>
+          <!-- Popular Badge -->
+          <div class="plan-badge hero-gradient" *ngIf="plan.isRecommended">
+            <span class="material-icons">star</span>
+            Mais Popular
           </div>
-          
+
+          <!-- Plan Header -->
           <div class="plan-header">
-            <h2>{{ plan.name }}</h2>
+            <h3 class="plan-name">{{ plan.name }}</h3>
             <p class="plan-description">{{ plan.description }}</p>
           </div>
 
-          <div class="plan-price" *ngIf="plan.isMvp && plan.earlyAdopterPrice">
-            <div class="price-comparison">
-              <div class="early-adopter-price">
-                <span class="label">Early Adopter</span>
-                <div class="amount-wrapper">
-                  <span class="currency">R$</span>
-                  <span class="amount">{{ plan.earlyAdopterPrice }}</span>
-                  <span class="period">/mês</span>
-                </div>
+          <!-- Pricing -->
+          <div class="plan-pricing">
+            <!-- MVP Campaign Price -->
+            <div *ngIf="plan.isMvp && plan.earlyAdopterPrice" class="campaign-pricing">
+              <div class="current-price">
+                <span class="currency">R$</span>
+                <span class="amount">{{ plan.earlyAdopterPrice }}</span>
+                <span class="period">/mês</span>
               </div>
-              <div class="future-price">
-                <span class="label">Preço Futuro</span>
-                <div class="crossed-price">
-                  <span class="currency">R$</span>
-                  <span class="amount">{{ plan.futurePrice }}</span>
-                  <span class="period">/mês</span>
-                </div>
+              <div class="original-price" *ngIf="plan.futurePrice">
+                <span>De: R$ {{ plan.futurePrice }}/mês</span>
+              </div>
+              <div class="savings-badge" *ngIf="plan.savingsPercentage">
+                💰 Economize {{ plan.savingsPercentage }}%
               </div>
             </div>
-            <div class="savings" *ngIf="plan.savingsPercentage">
-              💰 Economize {{ plan.savingsPercentage }}% (R$ {{ plan.futurePrice! - plan.earlyAdopterPrice! }}/mês)
+
+            <!-- Regular Price -->
+            <div *ngIf="!plan.isMvp" class="regular-pricing">
+              <span class="currency" *ngIf="plan.monthlyPrice > 0">R$</span>
+              <span class="amount" *ngIf="plan.monthlyPrice > 0">{{ plan.monthlyPrice }}</span>
+              <span class="amount custom-price" *ngIf="plan.monthlyPrice === 0">Sob consulta</span>
+              <span class="period" *ngIf="plan.monthlyPrice > 0">/mês</span>
             </div>
           </div>
 
-          <div class="plan-price" *ngIf="!plan.isMvp">
-            <span class="currency" *ngIf="plan.monthlyPrice > 0">R$</span>
-            <span class="amount" *ngIf="plan.monthlyPrice > 0">{{ plan.monthlyPrice }}</span>
-            <span class="amount custom-price" *ngIf="plan.monthlyPrice === 0">Sob Consulta</span>
-            <span class="period" *ngIf="plan.monthlyPrice > 0">/mês</span>
-          </div>
+          <!-- Call to Action Button -->
+          <button class="omni-btn" 
+                  [class.omni-btn-primary]="!plan.isRecommended"
+                  [class.hero-gradient]="plan.isRecommended"
+                  (click)="selectPlan(plan)">
+            <span *ngIf="plan.monthlyPrice > 0 && plan.isMvp">🚀 Garantir Preço Early Adopter</span>
+            <span *ngIf="plan.monthlyPrice > 0 && !plan.isMvp">Assinar Agora</span>
+            <span *ngIf="plan.monthlyPrice === 0">Falar com Vendas</span>
+          </button>
 
-          <div class="trial-info" *ngIf="plan.trialDays > 0">
-            ✨ {{ plan.trialDays }} dias grátis
-          </div>
+          <!-- Features -->
+          <ul class="plan-features">
+            <li *ngFor="let feature of plan.features" class="feature-item">
+              <span class="material-icons feature-icon success">check_circle</span>
+              {{ feature }}
+            </li>
+          </ul>
 
-          <div class="features-section">
-            <h3>✅ Recursos Disponíveis</h3>
+          <!-- Features In Development -->
+          <div *ngIf="plan.featuresInDevelopment && plan.featuresInDevelopment.length > 0" class="features-development">
+            <h4 class="features-title">🔄 Em Desenvolvimento</h4>
             <ul class="plan-features">
-              <li *ngFor="let feature of plan.features">
-                <span class="check">✓</span>
+              <li *ngFor="let feature of plan.featuresInDevelopment" class="feature-item development">
+                <span class="material-icons feature-icon">schedule</span>
                 {{ feature }}
               </li>
             </ul>
           </div>
 
-          <div class="features-section in-development" *ngIf="plan.featuresInDevelopment && plan.featuresInDevelopment.length > 0">
-            <h3>🔄 Em Desenvolvimento</h3>
+          <!-- Early Adopter Benefits -->
+          <div *ngIf="plan.earlyAdopterBenefits && plan.earlyAdopterBenefits.length > 0" class="early-adopter-benefits">
+            <h4 class="features-title">🎁 Benefícios Early Adopter</h4>
             <ul class="plan-features">
-              <li *ngFor="let feature of plan.featuresInDevelopment">
-                <span class="check development">⏳</span>
-                {{ feature }}
-              </li>
-            </ul>
-          </div>
-
-          <div class="early-adopter-benefits" *ngIf="plan.earlyAdopterBenefits && plan.earlyAdopterBenefits.length > 0">
-            <h3>🎁 Benefícios Early Adopter</h3>
-            <ul class="benefit-list">
-              <li *ngFor="let benefit of plan.earlyAdopterBenefits">
-                <span class="star">⭐</span>
+              <li *ngFor="let benefit of plan.earlyAdopterBenefits" class="feature-item benefit">
+                <span class="material-icons feature-icon">card_giftcard</span>
                 {{ benefit }}
               </li>
             </ul>
           </div>
-
-          <button class="btn btn-plan" (click)="selectPlan(plan)" [class.btn-recommended]="plan.isRecommended">
-            <span *ngIf="plan.monthlyPrice > 0 && plan.isMvp">🚀 Garantir Preço Early Adopter</span>
-            <span *ngIf="plan.monthlyPrice > 0 && !plan.isMvp">Começar Agora</span>
-            <span *ngIf="plan.monthlyPrice === 0">Fale Conosco</span>
-          </button>
         </div>
+      </div>
+
+      <!-- FAQ CTA -->
+      <div class="pricing-cta">
+        <p class="cta-question">Tem dúvidas sobre qual plano escolher?</p>
+        <a routerLink="/site/contact" class="omni-btn omni-btn-secondary">
+          Fale com um Especialista
+        </a>
       </div>
     </div>
   </section>
+</main>
 
-  <section class="early-adopter-guarantee">
-    <div class="container">
-      <h2>🏆 Garantia Early Adopter</h2>
-      <div class="guarantee-grid">
-        <div class="guarantee-item">
-          <div class="icon">💰</div>
-          <h3>Preço Fixo Vitalício</h3>
-          <p>Seu preço de early adopter é mantido para sempre. Você nunca pagará mais, independente de reajustes futuros!</p>
-        </div>
-        <div class="guarantee-item">
-          <div class="icon">🎯</div>
-          <h3>Prioridade em Novos Recursos</h3>
-          <p>Acesse recursos beta antes de todos, teste funcionalidades e influencie o desenvolvimento do produto.</p>
-        </div>
-        <div class="guarantee-item">
-          <div class="icon">🎁</div>
-          <h3>R$ 100 em Créditos</h3>
-          <p>Créditos para usar em SMS, WhatsApp API e assinatura digital quando disponíveis.</p>
-        </div>
-        <div class="guarantee-item">
-          <div class="icon">🏅</div>
-          <h3>Badge de Fundador</h3>
-          <p>Reconhecimento especial como Cliente Fundador e acesso ao grupo VIP de early adopters.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="roadmap-section">
-    <div class="container">
-      <h2>📅 Roadmap de Desenvolvimento</h2>
-      <p class="subtitle">Veja o que está por vir nos próximos meses</p>
-      <div class="roadmap-timeline">
-        <div class="roadmap-phase">
-          <div class="phase-badge completed">✅ Concluído</div>
-          <h3>Fase 1: MVP Launch</h3>
-          <ul>
-            <li>Sistema core funcional</li>
-            <li>Planos Starter, Professional e Enterprise</li>
-            <li>Portal do paciente</li>
-            <li>Sistema de pagamento (PIX/Boleto)</li>
-          </ul>
-        </div>
-        <div class="roadmap-phase">
-          <div class="phase-badge in-progress">🔄 Em Andamento</div>
-          <h3>Fase 2: Validação (Mês 3-4)</h3>
-          <ul>
-            <li>Onboarding de primeiros clientes</li>
-            <li>Coleta de feedback</li>
-            <li>Ajustes de UX/UI</li>
-          </ul>
-        </div>
-        <div class="roadmap-phase">
-          <div class="phase-badge planned">📋 Planejado</div>
-          <h3>Fase 3: Recursos Essenciais (Mês 5-7)</h3>
-          <ul>
-            <li>Integração WhatsApp Business API</li>
-            <li>Lembretes automáticos (Email/SMS)</li>
-            <li>Dashboard Analytics básico</li>
-            <li>Relatórios customizáveis</li>
-          </ul>
-        </div>
-        <div class="roadmap-phase">
-          <div class="phase-badge planned">📋 Planejado</div>
-          <h3>Fase 4: Recursos Avançados (Mês 8-10)</h3>
-          <ul>
-            <li>Assinatura digital ICP-Brasil</li>
-            <li>Exportação TISS completa</li>
-            <li>CRM integrado</li>
-            <li>API pública para integrações</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="pricing-faq">
-    <div class="container">
-      <h2>Perguntas Frequentes</h2>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h3>Como funciona o período de teste?</h3>
-          <p>Você tem 14 dias para testar todas as funcionalidades do plano escolhido sem qualquer cobrança. Não é necessário cartão de crédito para começar.</p>
-        </div>
-        <div class="faq-item">
-          <h3>O que significa "preço vitalício"?</h3>
-          <p>Como early adopter, o preço que você paga hoje será mantido para sempre, mesmo quando aumentarmos os valores dos planos. É nossa forma de agradecer por acreditar no projeto desde o início!</p>
-        </div>
-        <div class="faq-item">
-          <h3>Posso mudar de plano depois?</h3>
-          <p>Sim! Você pode fazer upgrade a qualquer momento. O downgrade também é possível, mas você perderá o benefício de preço vitalício do plano atual.</p>
-        </div>
-        <div class="faq-item">
-          <h3>E se um recurso "em desenvolvimento" ainda não estiver pronto?</h3>
-          <p>Você pagará apenas pelos recursos já disponíveis. Quando os recursos em desenvolvimento ficarem prontos, você terá acesso automaticamente sem custo adicional!</p>
-        </div>
-        <div class="faq-item">
-          <h3>Há taxa de cancelamento?</h3>
-          <p>Não cobramos nenhuma taxa de cancelamento. Você pode cancelar seu plano a qualquer momento sem custo adicional.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Os dados ficam seguros?</h3>
-          <p>Sim! Utilizamos criptografia de ponta a ponta e backup diário automático. Todos os dados são armazenados em servidores seguros em conformidade com a LGPD.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Como usar os R$ 100 em créditos?</h3>
-          <p>Os créditos serão creditados automaticamente na sua conta e poderão ser usados para envio de SMS, uso da API do WhatsApp e assinatura digital quando esses recursos estiverem disponíveis.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Quantos early adopters serão aceitos?</h3>
-          <p>Estamos limitando a oferta early adopter aos primeiros 100 clientes de cada plano para garantir qualidade no atendimento e suporte.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
 <app-footer></app-footer>
