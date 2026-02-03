@@ -251,16 +251,12 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Obter lista de senhas aguardando atendimento
         /// </summary>
-        [AllowAnonymous]
         [HttpGet("{filaId}/senhas/aguardando")]
-        public async Task<ActionResult<List<SenhaFilaDto>>> GetSenhasAguardando(Guid filaId, [FromQuery] string tenantId)
+        public async Task<ActionResult<List<SenhaFilaDto>>> GetSenhasAguardando(Guid filaId)
         {
-            if (string.IsNullOrWhiteSpace(tenantId))
-                return BadRequest("TenantId é obrigatório");
-
             try
             {
-                var senhas = await _filaService.GetSenhasAguardandoAsync(filaId, tenantId);
+                var senhas = await _filaService.GetSenhasAguardandoAsync(filaId, GetTenantId());
                 return Ok(senhas);
             }
             catch (Exception ex)
@@ -272,19 +268,14 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Obter histórico das últimas senhas chamadas
         /// </summary>
-        [AllowAnonymous]
         [HttpGet("{filaId}/senhas/ultimas-chamadas")]
         public async Task<ActionResult<List<SenhaFilaDto>>> GetUltimasChamadas(
             Guid filaId, 
-            [FromQuery] int quantidade = 5,
-            [FromQuery] string tenantId = "")
+            [FromQuery] int quantidade = 5)
         {
-            if (string.IsNullOrWhiteSpace(tenantId))
-                return BadRequest("TenantId é obrigatório");
-
             try
             {
-                var senhas = await _filaService.GetUltimasChamadasAsync(filaId, quantidade, tenantId);
+                var senhas = await _filaService.GetUltimasChamadasAsync(filaId, quantidade, GetTenantId());
                 return Ok(senhas);
             }
             catch (Exception ex)

@@ -303,31 +303,17 @@ namespace MedicSoft.Application.Services
         {
             var senhas = await _senhaRepository.GetAguardandoByFilaAsync(filaId, tenantId);
             
-            var senhasDto = new List<SenhaFilaDto>();
-            foreach (var senha in senhas)
-            {
-                var posicao = await _senhaRepository.GetPosicaoNaFilaAsync(senha.Id, tenantId);
-                var tempoEstimado = await CalcularTempoEsperaInternoAsync(senha.Id, tenantId);
-                senhasDto.Add(MapSenhaToDto(senha, posicao, tempoEstimado));
-            }
-            
-            return senhasDto;
+            // For waiting queue display, we don't need detailed position/time calculations
+            // as these are for simple listing on the TV panel
+            return senhas.Select(senha => MapSenhaToDto(senha, 0, 0)).ToList();
         }
 
         public async Task<List<SenhaFilaDto>> GetUltimasChamadasAsync(Guid filaId, int quantidade, string tenantId)
         {
             var senhas = await _senhaRepository.GetUltimasChamadasAsync(filaId, quantidade, tenantId);
             
-            var senhasDto = new List<SenhaFilaDto>();
-            foreach (var senha in senhas)
-            {
-                // For called passwords, position doesn't matter
-                var posicao = 0;
-                var tempoEstimado = 0;
-                senhasDto.Add(MapSenhaToDto(senha, posicao, tempoEstimado));
-            }
-            
-            return senhasDto;
+            // For call history display, position and estimated time are not relevant
+            return senhas.Select(senha => MapSenhaToDto(senha, 0, 0)).ToList();
         }
 
         private static SenhaFilaDto MapSenhaToDto(SenhaFila senha, int posicao, int tempoEstimado)

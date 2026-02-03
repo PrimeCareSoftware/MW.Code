@@ -167,5 +167,15 @@ namespace MedicSoft.Repository.Repositories
                 .Take(quantidade)
                 .ToListAsync();
         }
+
+        public async Task<List<SenhaFila>> GetSenhasByFilaAndDateRangeAsync(Guid filaId, DateTime dataInicio, DateTime dataFim, string tenantId)
+        {
+            return await _dbSet
+                .Where(s => s.FilaId == filaId && 
+                           s.TenantId == tenantId &&
+                           s.DataHoraEntrada >= dataInicio &&
+                           s.DataHoraEntrada <= dataFim)
+                .ToListAsync();
+        }
     }
 }

@@ -139,21 +139,27 @@ namespace MedicSoft.Application.Services
         public async Task<double> GetTempoMedioEsperaFilaAsync(Guid filaId, string tenantId)
         {
             var hoje = DateTime.Today;
-            var todasSenhas = await _senhaRepository.GetByFilaIdAsync(filaId, tenantId);
+            var amanha = hoje.AddDays(1);
             
-            var senhasHoje = todasSenhas
-                .Where(s => s.DataHoraEntrada.Date == hoje && 
-                           (s.Status == StatusSenha.Atendido || s.Status == StatusSenha.EmAtendimento))
+            // Get today's completed/in-progress passwords for this specific queue using optimized query
+            var senhasHoje = await _senhaRepository.GetSenhasByFilaAndDateRangeAsync(
+                filaId, 
+                hoje, 
+                amanha, 
+                tenantId);
+            
+            var senhasRelevantes = senhasHoje
+                .Where(s => s.Status == StatusSenha.Atendido || s.Status == StatusSenha.EmAtendimento)
                 .ToList();
 
-            if (!senhasHoje.Any())
+            if (!senhasRelevantes.Any())
             {
                 // If no data today, get average wait time from the queue configuration
                 var fila = await _filaRepository.GetByIdAsync(filaId, tenantId);
                 return fila?.TempoMedioAtendimento ?? 15; // Default 15 minutes
             }
 
-            return senhasHoje.Average(s => s.TempoEsperaMinutos);
+            return senhasRelevantes.Average(s => s.TempoEsperaMinutos);
         }
 
         /// <summary>

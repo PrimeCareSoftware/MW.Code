@@ -17,5 +17,6 @@ namespace MedicSoft.Domain.Interfaces
         Task<int> GetPosicaoNaFilaAsync(Guid senhaId, string tenantId);
         Task<int> CountSenhasAFrenteAsync(Guid senhaId, string tenantId);
         Task<List<SenhaFila>> GetUltimasChamadasAsync(Guid filaId, int quantidade, string tenantId);
+        Task<List<SenhaFila>> GetSenhasByFilaAndDateRangeAsync(Guid filaId, DateTime dataInicio, DateTime dataFim, string tenantId);
     }
 }

@@ -93,18 +93,14 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Obter tempo médio de espera para uma fila específica
         /// </summary>
-        [AllowAnonymous]
         [HttpGet("{filaId}/tempo-medio-espera")]
-        public async Task<ActionResult<double>> GetTempoMedioEsperaFila(Guid filaId, [FromQuery] string tenantId)
+        public async Task<ActionResult<double>> GetTempoMedioEsperaFila(Guid filaId)
         {
-            if (string.IsNullOrWhiteSpace(tenantId))
-                return BadRequest("TenantId é obrigatório");
-
             try
             {
                 var tempo = await _analyticsService.GetTempoMedioEsperaFilaAsync(
                     filaId,
-                    tenantId);
+                    GetTenantId());
                 
                 return Ok(tempo);
             }
