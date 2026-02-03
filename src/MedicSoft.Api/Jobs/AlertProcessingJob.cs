@@ -111,11 +111,13 @@ namespace MedicSoft.Api.Jobs
                 _logger.LogInformation("Verificando consultas atrasadas...");
 
                 var now = DateTime.UtcNow;
+                var today = now.Date;
+                var tomorrow = today.AddDays(1);
                 var threshold = now.AddMinutes(-15); // 15 minutos de tolerância
 
                 var overdueAppointments = await _context.Appointments
                     .Where(a => a.Status == Domain.Entities.AppointmentStatus.Scheduled)
-                    .Where(a => a.AppointmentDate.Date == now.Date)
+                    .Where(a => a.AppointmentDate >= today && a.AppointmentDate < tomorrow) // Date range for today
                     .Where(a => a.AppointmentDate < threshold)
                     .Include(a => a.Patient)
                     .Include(a => a.Doctor)
@@ -176,7 +178,7 @@ namespace MedicSoft.Api.Jobs
                 var now = DateTime.UtcNow.Date;
 
                 var overdueReceivables = await _context.AccountsReceivable
-                    .Where(ar => ar.Status == "Pending")
+                    .Where(ar => ar.Status == "Pending") // Status from domain entity
                     .Where(ar => ar.DueDate < now)
                     .Include(ar => ar.Patient)
                     .ToListAsync();

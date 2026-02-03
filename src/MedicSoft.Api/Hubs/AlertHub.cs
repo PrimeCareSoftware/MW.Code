@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace MedicSoft.Api.Hubs
     [Authorize]
     public class AlertHub : Hub
     {
-        private static readonly Dictionary<string, List<string>> UserConnections = new();
-        private static readonly object ConnectionsLock = new();
+        // Using ConcurrentDictionary for thread-safe connection tracking
+        private static readonly ConcurrentDictionary<string, List<string>> UserConnections = new();
 
         /// <summary>
         /// Enviar alerta para usuários específicos
@@ -59,14 +60,15 @@ namespace MedicSoft.Api.Hubs
 
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    // Adicionar conexão ao dicionário
-                    lock (ConnectionsLock)
-                    {
-                        if (!UserConnections.ContainsKey(userId))
-                            UserConnections[userId] = new List<string>();
-                        
-                        UserConnections[userId].Add(Context.ConnectionId);
-                    }
+                    // Add connection using ConcurrentDictionary
+                    UserConnections.AddOrUpdate(
+                        userId,
+                        new List<string> { Context.ConnectionId },
+                        (key, existing) =>
+                        {
+                            existing.Add(Context.ConnectionId);
+                            return existing;
+                        });
                 }
 
                 // Adicionar aos grupos
@@ -93,16 +95,20 @@ namespace MedicSoft.Api.Hubs
             
             if (!string.IsNullOrEmpty(userId))
             {
-                lock (ConnectionsLock)
-                {
-                    if (UserConnections.ContainsKey(userId))
+                // Remove connection using ConcurrentDictionary
+                UserConnections.AddOrUpdate(
+                    userId,
+                    new List<string>(),
+                    (key, existing) =>
                     {
-                        UserConnections[userId].Remove(Context.ConnectionId);
-                        if (UserConnections[userId].Count == 0)
-                        {
-                            UserConnections.Remove(userId);
-                        }
-                    }
+                        existing.Remove(Context.ConnectionId);
+                        return existing.Count == 0 ? new List<string>() : existing;
+                    });
+
+                // Clean up empty entries
+                if (UserConnections.TryGetValue(userId, out var connections) && connections.Count == 0)
+                {
+                    UserConnections.TryRemove(userId, out _);
                 }
             }
 
@@ -127,10 +133,7 @@ namespace MedicSoft.Api.Hubs
         /// </summary>
         public static int GetActiveConnectionCount()
         {
-            lock (ConnectionsLock)
-            {
-                return UserConnections.Values.Sum(connections => connections.Count);
-            }
+            return UserConnections.Values.Sum(connections => connections.Count);
         }
 
         /// <summary>
@@ -138,10 +141,7 @@ namespace MedicSoft.Api.Hubs
         /// </summary>
         public static int GetActiveUserCount()
         {
-            lock (ConnectionsLock)
-            {
-                return UserConnections.Count;
-            }
+            return UserConnections.Count;
         }
     }
 }
