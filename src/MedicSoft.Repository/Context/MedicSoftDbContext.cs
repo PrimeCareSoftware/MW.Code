@@ -177,7 +177,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<MedicSoft.Domain.Entities.CRM.EmailTemplate> EmailTemplates { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.CRM.WebhookSubscription> WebhookSubscriptions { get; set; } = null!;
         public DbSet<MedicSoft.Domain.Entities.CRM.WebhookDelivery> WebhookDeliveries { get; set; } = null!;
-        public DbSet<MedicSoft.Domain.Entities.CRM.SalesforceLead> SalesforceLeads { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.CRM.Lead> Leads { get; set; } = null!;
+        public DbSet<MedicSoft.Domain.Entities.CRM.LeadActivity> LeadActivities { get; set; } = null!;
 
         // Fiscal Management - Tax and Accounting
         public DbSet<MedicSoft.Domain.Entities.Fiscal.ConfiguracaoFiscal> ConfiguracoesFiscais { get; set; } = null!;
