@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -8,57 +8,110 @@ import { HeaderComponent } from '../../../components/site/header/header';
 import { FooterComponent } from '../../../components/site/footer/footer';
 import { WebsiteAnalyticsService } from '../../../services/analytics/website-analytics.service';
 
+interface Service {
+  icon: string;
+  title: string;
+  description: string;
+  features: string[];
+}
+
+interface Testimonial {
+  name: string;
+  role: string;
+  clinic: string;
+  content: string;
+  rating: number;
+  initials: string;
+}
+
 @Component({
   selector: 'app-home',
   imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+export class HomeComponent implements OnInit, OnDestroy {
   whatsappNumber = environment.whatsappNumber;
-  stars = [1, 2, 3, 4, 5]; // Array for star rating (avoid creating new array on each change detection)
-  private observer?: IntersectionObserver;
   private pageStartTime = Date.now();
   private scrollDepthTracked = { 25: false, 50: false, 75: false, 100: false };
   private scrollSubject = new Subject<void>();
   private destroy$ = new Subject<void>();
   
-  // Video configuration
-  // TODO: Replace with actual video URL when video is produced
-  // IMPORTANT: Only use trusted video hosting services (YouTube, Vimeo) to prevent XSS
-  // Accepted URL patterns:
-  // - YouTube: https://www.youtube.com/embed/VIDEO_ID
-  // - Vimeo: https://player.vimeo.com/video/VIDEO_ID
-  demoVideoUrl: string = ''; // Empty = show placeholder
+  benefits = [
+    'Gestão completa em uma única plataforma',
+    'Telemedicina integrada e segura',
+    'Suporte 24/7 para sua equipe'
+  ];
+
+  services: Service[] = [
+    {
+      icon: 'business',
+      title: 'Gerenciamento de Clínicas',
+      description: 'Controle completo de múltiplas unidades, profissionais, salas e equipamentos em uma única plataforma.',
+      features: ['Multi-unidades', 'Controle de estoque', 'Relatórios gerenciais']
+    },
+    {
+      icon: 'calendar_month',
+      title: 'Agendamento de Consultas',
+      description: 'Sistema inteligente de agendamentos com lembretes automáticos e confirmação por WhatsApp.',
+      features: ['Agenda online 24/7', 'Lembretes automáticos', 'Lista de espera']
+    },
+    {
+      icon: 'videocam',
+      title: 'Telemedicina',
+      description: 'Consultas por vídeo com segurança, integração de prontuário e prescrição digital.',
+      features: ['Videochamadas HD', 'Prontuário integrado', 'Prescrição digital']
+    },
+    {
+      icon: 'layers',
+      title: 'Integração com Sistemas',
+      description: 'Conecte-se com laboratórios, convênios e sistemas de pagamento de forma simplificada.',
+      features: ['APIs abertas', 'Integração PIX', 'Convênios']
+    }
+  ];
+
+  testimonials: Testimonial[] = [
+    {
+      name: 'Dra. Mariana Silva',
+      role: 'Cardiologista',
+      clinic: 'Clínica Coração Saudável',
+      content: 'O Omni Care revolucionou a forma como gerencio minha clínica. A telemedicina integrada me permite atender pacientes de todo o Brasil.',
+      rating: 5,
+      initials: 'MS'
+    },
+    {
+      name: 'Dr. Ricardo Mendes',
+      role: 'Diretor Clínico',
+      clinic: 'Centro Médico Vida',
+      content: 'Reduzimos em 40% as faltas de pacientes com os lembretes automáticos. O sistema de agendamento online é simplesmente perfeito.',
+      rating: 5,
+      initials: 'RM'
+    },
+    {
+      name: 'Dra. Ana Paula Costa',
+      role: 'Dermatologista',
+      clinic: 'Dermato Estética',
+      content: 'A integração com laboratórios e a prescrição digital economizam horas do meu dia. Consigo focar no que realmente importa: meus pacientes.',
+      rating: 5,
+      initials: 'AC'
+    }
+  ];
+
+  companies = ['Hospital A', 'Clínica B', 'Centro C', 'Lab D', 'Plano E'];
   
   constructor(private analytics: WebsiteAnalyticsService) {}
-  
-  get hasVideo(): boolean {
-    return this.demoVideoUrl.trim().length > 0;
-  }
 
   ngOnInit(): void {
-    this.setupIntersectionObserver();
-    
     // Track page view
     this.analytics.trackPageView('/home', 'PrimeCare Software - Home');
     
     // Setup throttled scroll tracking
     this.scrollSubject
-      .pipe(throttleTime(500)) // Throttle to once every 500ms
+      .pipe(throttleTime(500))
       .subscribe(() => this.trackScrollDepth());
   }
 
-  ngAfterViewInit(): void {
-    // Setup observers after view is fully initialized to avoid missing elements
-    this.observeElements();
-  }
-
   ngOnDestroy(): void {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-    
     // Complete subjects
     this.scrollSubject.complete();
     this.destroy$.next();
@@ -75,23 +128,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.scrollSubject.next();
   }
   
-  /**
-   * Track scroll depth at key milestones (throttled)
-   */
   private trackScrollDepth(): void {
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = window.innerHeight;
     const scrollTop = window.scrollY;
     
-    // Prevent division by zero
     const scrollableHeight = scrollHeight - clientHeight;
     if (scrollableHeight <= 0) {
-      return; // Page is not scrollable
+      return;
     }
     
     const scrollPercent = Math.round((scrollTop / scrollableHeight) * 100);
     
-    // Track at 25%, 50%, 75%, and 100%
     const milestones = [25, 50, 75, 100] as const;
     milestones.forEach(milestone => {
       if (scrollPercent >= milestone && !this.scrollDepthTracked[milestone]) {
@@ -101,34 +149,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   
-  /**
-   * Track CTA clicks
-   */
   trackCTA(ctaName: string, ctaLocation: string = 'hero'): void {
     this.analytics.trackCTAClick(ctaName, ctaLocation);
     this.analytics.trackConversion('trial_signup');
   }
   
-  /**
-   * Track navigation clicks
-   */
   trackNavigation(destination: string): void {
     this.analytics.trackNavigation(destination, 'home');
-  }
-  
-  /**
-   * Track video engagement
-   */
-  onVideoPlay(): void {
-    this.analytics.trackVideoEngagement('home-demo-video', 'play');
-  }
-  
-  onVideoPause(): void {
-    this.analytics.trackVideoEngagement('home-demo-video', 'pause');
-  }
-  
-  onVideoComplete(): void {
-    this.analytics.trackVideoEngagement('home-demo-video', 'complete');
   }
 
   openWhatsApp(): void {
@@ -137,28 +164,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     window.open(`https://wa.me/${this.whatsappNumber}`, '_blank');
   }
 
-  private setupIntersectionObserver(): void {
-    // Setup Intersection Observer for scroll animations
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Add visible class when element enters viewport
-          // Note: We don't remove the class when leaving viewport (reveal-once behavior)
-          entry.target.classList.add('visible');
-        }
-      });
-    }, options);
-  }
-
-  private observeElements(): void {
-    // Observe all elements with animate-on-scroll class
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    elements.forEach(el => this.observer?.observe(el));
+  createRange(num: number): number[] {
+    return Array(num).fill(0).map((_, i) => i);
   }
 }
