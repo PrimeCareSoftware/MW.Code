@@ -7,7 +7,7 @@ namespace PatientPortal.Application.Services;
 /// <summary>
 /// Service for checking clinic settings and configurations
 /// </summary>
-public class ClinicSettingsService
+public class ClinicSettingsService : IClinicSettingsService
 {
     private readonly IMainDatabaseContext _mainDatabase;
     private readonly ILogger<ClinicSettingsService> _logger;

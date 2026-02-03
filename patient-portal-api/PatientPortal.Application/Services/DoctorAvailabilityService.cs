@@ -12,7 +12,7 @@ namespace PatientPortal.Application.Services;
 public class DoctorAvailabilityService : IDoctorAvailabilityService
 {
     private readonly IMainDatabaseContext _mainDatabase;
-    private readonly ClinicSettingsService _clinicSettings;
+    private readonly IClinicSettingsService _clinicSettings;
     private readonly ILogger<DoctorAvailabilityService> _logger;
 
     // Default working hours (can be overridden by doctor schedule)
@@ -22,7 +22,7 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
 
     public DoctorAvailabilityService(
         IMainDatabaseContext mainDatabase,
-        ClinicSettingsService clinicSettings,
+        IClinicSettingsService clinicSettings,
         ILogger<DoctorAvailabilityService> logger)
     {
         _mainDatabase = mainDatabase;

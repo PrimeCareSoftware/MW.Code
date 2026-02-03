@@ -247,14 +247,12 @@ namespace MedicSoft.Domain.Entities
 
         public void EnableOnlineScheduling()
         {
-            EnableOnlineAppointmentScheduling = true;
-            UpdateTimestamp();
+            UpdateOnlineSchedulingSetting(true);
         }
 
         public void DisableOnlineScheduling()
         {
-            EnableOnlineAppointmentScheduling = false;
-            UpdateTimestamp();
+            UpdateOnlineSchedulingSetting(false);
         }
 
         public void UpdateOnlineSchedulingSetting(bool enable)

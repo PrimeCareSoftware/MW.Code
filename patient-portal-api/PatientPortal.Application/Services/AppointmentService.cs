@@ -13,7 +13,7 @@ public class AppointmentService : IAppointmentService
     private readonly IAppointmentViewRepository _appointmentViewRepository;
     private readonly IPatientUserRepository _patientUserRepository;
     private readonly IMainDatabaseContext _mainDatabase;
-    private readonly ClinicSettingsService _clinicSettings;
+    private readonly IClinicSettingsService _clinicSettings;
     private readonly INotificationService _notificationService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AppointmentService> _logger;
@@ -22,7 +22,7 @@ public class AppointmentService : IAppointmentService
         IAppointmentViewRepository appointmentViewRepository,
         IPatientUserRepository patientUserRepository,
         IMainDatabaseContext mainDatabase,
-        ClinicSettingsService clinicSettings,
+        IClinicSettingsService clinicSettings,
         INotificationService notificationService,
         IConfiguration configuration,
         ILogger<AppointmentService> logger)
