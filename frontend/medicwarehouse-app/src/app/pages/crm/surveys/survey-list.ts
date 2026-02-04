@@ -2,6 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
+import { SurveyService } from '../../../services/crm';
+import { Survey } from '../../../models/crm';
 
 @Component({
   selector: 'app-survey-list',
@@ -10,28 +12,34 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './survey-list.scss'
 })
 export class SurveyList implements OnInit {
-  surveys = signal<any[]>([]);
+  surveys = signal<Survey[]>([]);
   isLoading = signal<boolean>(false);
+  errorMessage = signal<string>('');
+
+  constructor(private surveyService: SurveyService) {}
 
   ngOnInit(): void {
     this.loadSurveys();
   }
 
-  async loadSurveys(): Promise<void> {
+  loadSurveys(): void {
     this.isLoading.set(true);
-    try {
-      // TODO: Integrate with SurveyService when API is connected
-      // For now, just set empty array
-      this.surveys.set([]);
-    } catch (error) {
-      console.error('Error loading surveys:', error);
-    } finally {
-      this.isLoading.set(false);
-    }
+    this.errorMessage.set('');
+    
+    this.surveyService.getAll().subscribe({
+      next: (surveys) => {
+        this.surveys.set(surveys);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading surveys:', error);
+        this.errorMessage.set(error.message || 'Erro ao carregar pesquisas');
+        this.isLoading.set(false);
+      }
+    });
   }
 
   onNewSurvey(): void {
-    // TODO: Open modal or navigate to survey creation form
     console.log('Nova Pesquisa clicked');
     alert('Funcionalidade "Nova Pesquisa" será implementada em breve.');
   }
