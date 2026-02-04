@@ -51,8 +51,8 @@ public class AppointmentReminderService : BackgroundService
             }
             catch (Exception ex)
             {
-                // Log as warning instead of error since SendRemindersAsync already handles expected exceptions
-                _logger.LogWarning(ex, "Unexpected error in appointment reminder service cycle");
+                // Log as error since SendRemindersAsync should handle all expected exceptions internally
+                _logger.LogError(ex, "Critical error in appointment reminder service cycle");
             }
 
             try
@@ -140,17 +140,17 @@ public class AppointmentReminderService : BackgroundService
         {
             // Authentication failure - log as warning since this is a configuration issue, not a code issue
             _logger.LogWarning("Database authentication failed. Please check connection string configuration. " +
-                             "Service will retry on next interval. Error: {ErrorMessage}", ex.Message);
+                             "Service will retry on next interval.");
         }
         catch (Npgsql.NpgsqlException ex)
         {
             // Other database connection issues - log as warning and continue
-            _logger.LogWarning(ex, "Database connection failed. Service will retry on next interval. Error: {ErrorMessage}", ex.Message);
+            _logger.LogWarning(ex, "Database connection failed. Service will retry on next interval.");
         }
         catch (Exception ex)
         {
-            // Unexpected errors - log but don't crash the service
-            _logger.LogWarning(ex, "Unexpected error in SendRemindersAsync. Service will continue running.");
+            // Unexpected errors - log as error since these are not expected transient failures
+            _logger.LogError(ex, "Unexpected error in SendRemindersAsync. Service will continue running.");
         }
     }
 
