@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
@@ -159,6 +160,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<MarketingAutomationDto?> GetByIdAsync(Guid id, string tenantId)
         {
             var automation = await _context.MarketingAutomations
+                .AsNoTracking()
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
                 .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
@@ -169,6 +171,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<MarketingAutomationDto>> GetAllAsync(string tenantId)
         {
             var automations = await _context.MarketingAutomations
+                .AsNoTracking()
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
                 .Where(a => a.TenantId == tenantId)
@@ -181,6 +184,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<MarketingAutomationDto>> GetActiveAsync(string tenantId)
         {
             var automations = await _context.MarketingAutomations
+                .AsNoTracking()
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
                 .Where(a => a.TenantId == tenantId && a.IsActive)
@@ -188,6 +192,48 @@ namespace MedicSoft.Api.Services.CRM
                 .ToListAsync();
 
             return automations.Select(MapToDto);
+        }
+
+        public async Task<PagedResult<MarketingAutomationDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.MarketingAutomations
+                .AsNoTracking()
+                .Where(a => a.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var automations = await baseQuery
+                .Include(a => a.Actions)
+                .ThenInclude(a => a.EmailTemplate)
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var automationDtos = automations.Select(MapToDto).ToList();
+
+            return new PagedResult<MarketingAutomationDto>(automationDtos, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<PagedResult<MarketingAutomationDto>> GetActivePagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.MarketingAutomations
+                .AsNoTracking()
+                .Where(a => a.TenantId == tenantId && a.IsActive);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var automations = await baseQuery
+                .Include(a => a.Actions)
+                .ThenInclude(a => a.EmailTemplate)
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var automationDtos = automations.Select(MapToDto).ToList();
+
+            return new PagedResult<MarketingAutomationDto>(automationDtos, totalCount, pageNumber, pageSize);
         }
 
         public async Task<bool> ActivateAsync(Guid id, string tenantId)
@@ -227,6 +273,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<MarketingAutomationMetricsDto?> GetMetricsAsync(Guid id, string tenantId)
         {
             var automation = await _context.MarketingAutomations
+                .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
 
             if (automation == null)

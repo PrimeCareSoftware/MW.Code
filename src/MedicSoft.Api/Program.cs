@@ -52,6 +52,25 @@ builder.Host.UseSerilog();
 // Add services to the container.
 builder.Services.AddHttpClient(); // Add HttpClient factory for microservice proxying
 builder.Services.AddSignalR(); // Add SignalR for real-time communication
+
+// Configure Response Compression for CRM endpoints
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.BrotliCompressionProvider>();
+    options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.GzipCompressionProvider>();
+});
+
+builder.Services.Configure<Microsoft.AspNetCore.ResponseCompression.BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = System.IO.Compression.CompressionLevel.Optimal;
+});
+
+builder.Services.Configure<Microsoft.AspNetCore.ResponseCompression.GzipCompressionProviderOptions>(options =>
+{
+    options.Level = System.IO.Compression.CompressionLevel.Optimal;
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -697,6 +716,9 @@ else
 
 // Add global exception handler (should be first to catch all exceptions)
 app.UseGlobalExceptionHandler();
+
+// Add Response Compression (before other middleware to compress responses)
+app.UseResponseCompression();
 
 // Add request logging middleware (logs all requests with timing)
 if (builder.Configuration.GetValue<bool>("Monitoring:EnableRequestLogging", true))

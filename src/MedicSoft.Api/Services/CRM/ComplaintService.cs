@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
@@ -85,6 +86,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<ComplaintDto?> GetByIdAsync(Guid id, string tenantId)
         {
             var complaint = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == tenantId);
@@ -95,6 +97,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetAllAsync(string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.TenantId == tenantId)
@@ -188,6 +191,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<ComplaintDto?> GetByProtocolNumberAsync(string protocolNumber, string tenantId)
         {
             var complaint = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .FirstOrDefaultAsync(c => c.ProtocolNumber == protocolNumber && c.TenantId == tenantId);
@@ -198,6 +202,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetByCategoryAsync(ComplaintCategory category, string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.Category == category && c.TenantId == tenantId)
@@ -210,6 +215,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetByStatusAsync(ComplaintStatus status, string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.Status == status && c.TenantId == tenantId)
@@ -222,6 +228,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetByPriorityAsync(ComplaintPriority priority, string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.Priority == priority && c.TenantId == tenantId)
@@ -231,9 +238,94 @@ namespace MedicSoft.Api.Services.CRM
             return await Task.WhenAll(complaints.Select(MapToDtoAsync));
         }
 
+        public async Task<PagedResult<ComplaintDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.Complaints
+                .AsNoTracking()
+                .Where(c => c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
+                .Include(c => c.Patient)
+                .Include(c => c.Interactions)
+                .OrderByDescending(c => c.ReceivedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var complaintDtos = await Task.WhenAll(complaints.Select(MapToDtoAsync));
+
+            return new PagedResult<ComplaintDto>(complaintDtos.ToList(), totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<PagedResult<ComplaintDto>> GetByCategoryPagedAsync(ComplaintCategory category, string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.Complaints
+                .AsNoTracking()
+                .Where(c => c.Category == category && c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
+                .Include(c => c.Patient)
+                .Include(c => c.Interactions)
+                .OrderByDescending(c => c.ReceivedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var complaintDtos = await Task.WhenAll(complaints.Select(MapToDtoAsync));
+
+            return new PagedResult<ComplaintDto>(complaintDtos.ToList(), totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<PagedResult<ComplaintDto>> GetByStatusPagedAsync(ComplaintStatus status, string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.Complaints
+                .AsNoTracking()
+                .Where(c => c.Status == status && c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
+                .Include(c => c.Patient)
+                .Include(c => c.Interactions)
+                .OrderByDescending(c => c.ReceivedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var complaintDtos = await Task.WhenAll(complaints.Select(MapToDtoAsync));
+
+            return new PagedResult<ComplaintDto>(complaintDtos.ToList(), totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<PagedResult<ComplaintDto>> GetByPriorityPagedAsync(ComplaintPriority priority, string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.Complaints
+                .AsNoTracking()
+                .Where(c => c.Priority == priority && c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
+                .Include(c => c.Patient)
+                .Include(c => c.Interactions)
+                .OrderByDescending(c => c.ReceivedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var complaintDtos = await Task.WhenAll(complaints.Select(MapToDtoAsync));
+
+            return new PagedResult<ComplaintDto>(complaintDtos.ToList(), totalCount, pageNumber, pageSize);
+        }
+
         public async Task<ComplaintDashboardDto> GetDashboardMetricsAsync(string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Where(c => c.TenantId == tenantId)
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)

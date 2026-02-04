@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
@@ -137,6 +138,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<SurveyDto?> GetByIdAsync(Guid id, string tenantId)
         {
             var survey = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Questions)
                 .FirstOrDefaultAsync(s => s.Id == id && s.TenantId == tenantId);
 
@@ -146,6 +148,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<SurveyDto>> GetAllAsync(string tenantId)
         {
             var surveys = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Questions)
                 .Where(s => s.TenantId == tenantId)
                 .OrderByDescending(s => s.CreatedAt)
@@ -154,15 +157,56 @@ namespace MedicSoft.Api.Services.CRM
             return surveys.Select(MapToDto).ToList();
         }
 
+        public async Task<PagedResult<SurveyDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.Surveys
+                .AsNoTracking()
+                .Where(s => s.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var surveys = await baseQuery
+                .Include(s => s.Questions)
+                .OrderByDescending(s => s.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var surveyDtos = surveys.Select(MapToDto).ToList();
+
+            return new PagedResult<SurveyDto>(surveyDtos, totalCount, pageNumber, pageSize);
+        }
+
         public async Task<IEnumerable<SurveyDto>> GetActiveAsync(string tenantId)
         {
             var surveys = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Questions)
                 .Where(s => s.TenantId == tenantId && s.IsActive)
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
 
             return surveys.Select(MapToDto).ToList();
+        }
+
+        public async Task<PagedResult<SurveyDto>> GetActivePagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var baseQuery = _context.Surveys
+                .AsNoTracking()
+                .Where(s => s.TenantId == tenantId && s.IsActive);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var surveys = await baseQuery
+                .Include(s => s.Questions)
+                .OrderByDescending(s => s.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var surveyDtos = surveys.Select(MapToDto).ToList();
+
+            return new PagedResult<SurveyDto>(surveyDtos, totalCount, pageNumber, pageSize);
         }
 
         public async Task<bool> ActivateAsync(Guid id, string tenantId)
@@ -282,6 +326,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<SurveyResponseDto>> GetPatientResponsesAsync(Guid patientId, string tenantId)
         {
             var responses = await _context.SurveyResponses
+                .AsNoTracking()
                 .Include(r => r.Survey)
                 .Include(r => r.Patient)
                 .Include(r => r.QuestionResponses)
@@ -296,6 +341,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<SurveyResponseDto>> GetSurveyResponsesAsync(Guid surveyId, string tenantId)
         {
             var responses = await _context.SurveyResponses
+                .AsNoTracking()
                 .Include(r => r.Survey)
                 .Include(r => r.Patient)
                 .Include(r => r.QuestionResponses)
@@ -310,6 +356,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<SurveyAnalyticsDto?> GetAnalyticsAsync(Guid surveyId, string tenantId)
         {
             var survey = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Responses)
                     .ThenInclude(r => r.QuestionResponses)
                 .Include(s => s.Responses)

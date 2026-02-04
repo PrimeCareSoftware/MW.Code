@@ -46,6 +46,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<PatientJourneyDto?> GetJourneyByIdAsync(Guid journeyId, string tenantId)
         {
             var journey = await _context.PatientJourneys
+                .AsNoTracking()
                 .Include(j => j.Stages)
                     .ThenInclude(s => s.Touchpoints)
                 .FirstOrDefaultAsync(j => j.Id == journeyId && j.TenantId == tenantId);
@@ -56,6 +57,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<PatientJourneyDto?> GetJourneyByPatientIdAsync(Guid pacienteId, string tenantId)
         {
             var journey = await _context.PatientJourneys
+                .AsNoTracking()
                 .Include(j => j.Stages)
                     .ThenInclude(s => s.Touchpoints)
                 .FirstOrDefaultAsync(j => j.PacienteId == pacienteId && j.TenantId == tenantId);
@@ -141,6 +143,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<PatientJourneyMetricsDto?> GetMetricsAsync(Guid pacienteId, string tenantId)
         {
             var journey = await _context.PatientJourneys
+                .AsNoTracking()
                 .Include(j => j.Stages)
                     .ThenInclude(s => s.Touchpoints)
                 .FirstOrDefaultAsync(j => j.PacienteId == pacienteId && j.TenantId == tenantId);

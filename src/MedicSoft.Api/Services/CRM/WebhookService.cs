@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
@@ -68,6 +69,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<WebhookSubscriptionDto?> GetSubscriptionAsync(Guid id, string tenantId)
         {
             var subscription = await _context.WebhookSubscriptions
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id && s.TenantId == tenantId);
 
             return subscription == null ? null : MapToDto(subscription);
@@ -76,10 +78,30 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<List<WebhookSubscriptionDto>> GetAllSubscriptionsAsync(string tenantId)
         {
             var subscriptions = await _context.WebhookSubscriptions
+                .AsNoTracking()
                 .Where(s => s.TenantId == tenantId)
                 .ToListAsync();
 
             return subscriptions.Select(MapToDto).ToList();
+        }
+
+        public async Task<PagedResult<WebhookSubscriptionDto>> GetAllSubscriptionsPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var query = _context.WebhookSubscriptions
+                .AsNoTracking()
+                .Where(s => s.TenantId == tenantId)
+                .OrderByDescending(s => s.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+            
+            var subscriptions = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var subscriptionDtos = subscriptions.Select(MapToDto).ToList();
+
+            return new PagedResult<WebhookSubscriptionDto>(subscriptionDtos, totalCount, pageNumber, pageSize);
         }
 
         public async Task<WebhookSubscriptionDto> UpdateSubscriptionAsync(
