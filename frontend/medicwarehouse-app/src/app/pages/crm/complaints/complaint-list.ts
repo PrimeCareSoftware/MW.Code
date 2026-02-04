@@ -2,6 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
+import { ComplaintService } from '../../../services/crm';
+import { Complaint } from '../../../models/crm';
 
 @Component({
   selector: 'app-complaint-list',
@@ -10,28 +12,34 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './complaint-list.scss'
 })
 export class ComplaintList implements OnInit {
-  complaints = signal<any[]>([]);
+  complaints = signal<Complaint[]>([]);
   isLoading = signal<boolean>(false);
+  errorMessage = signal<string>('');
+
+  constructor(private complaintService: ComplaintService) {}
 
   ngOnInit(): void {
     this.loadComplaints();
   }
 
-  async loadComplaints(): Promise<void> {
+  loadComplaints(): void {
     this.isLoading.set(true);
-    try {
-      // TODO: Integrate with ComplaintService when API is connected
-      // For now, just set empty array
-      this.complaints.set([]);
-    } catch (error) {
-      console.error('Error loading complaints:', error);
-    } finally {
-      this.isLoading.set(false);
-    }
+    this.errorMessage.set('');
+    
+    this.complaintService.getAll().subscribe({
+      next: (complaints) => {
+        this.complaints.set(complaints);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading complaints:', error);
+        this.errorMessage.set(error.message || 'Erro ao carregar reclamações');
+        this.isLoading.set(false);
+      }
+    });
   }
 
   onNewComplaint(): void {
-    // TODO: Open modal or navigate to complaint creation form
     console.log('Nova Reclamação clicked');
     alert('Funcionalidade "Nova Reclamação" será implementada em breve.');
   }

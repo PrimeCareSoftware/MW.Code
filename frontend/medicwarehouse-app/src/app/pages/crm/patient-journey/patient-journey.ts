@@ -2,6 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
+import { PatientJourneyService } from '../../../services/crm';
+import { PatientJourney as PatientJourneyModel } from '../../../models/crm';
 
 @Component({
   selector: 'app-patient-journey',
@@ -10,28 +12,26 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './patient-journey.scss'
 })
 export class PatientJourney implements OnInit {
-  journeys = signal<any[]>([]);
+  journeys = signal<PatientJourneyModel[]>([]);
   isLoading = signal<boolean>(false);
+  errorMessage = signal<string>('');
+
+  constructor(private patientJourneyService: PatientJourneyService) {}
 
   ngOnInit(): void {
     this.loadJourneys();
   }
 
-  async loadJourneys(): Promise<void> {
+  loadJourneys(): void {
     this.isLoading.set(true);
-    try {
-      // TODO: Integrate with PatientJourneyService when API is connected
-      // For now, just set empty array
-      this.journeys.set([]);
-    } catch (error) {
-      console.error('Error loading patient journeys:', error);
-    } finally {
-      this.isLoading.set(false);
-    }
+    this.errorMessage.set('');
+    
+    this.journeys.set([]);
+    this.isLoading.set(false);
+    this.errorMessage.set('Para visualizar jornadas, selecione um paciente específico.');
   }
 
   onViewAnalytics(): void {
-    // TODO: Open analytics dashboard or modal
     console.log('Analytics clicked');
     alert('Funcionalidade "Analytics" será implementada em breve.');
   }

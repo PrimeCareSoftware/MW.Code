@@ -2,6 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
+import { MarketingAutomationService } from '../../../services/crm';
+import { MarketingAutomation as MarketingAutomationModel } from '../../../models/crm';
 
 @Component({
   selector: 'app-marketing-automation',
@@ -10,28 +12,34 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './marketing-automation.scss'
 })
 export class MarketingAutomation implements OnInit {
-  campaigns = signal<any[]>([]);
+  campaigns = signal<MarketingAutomationModel[]>([]);
   isLoading = signal<boolean>(false);
+  errorMessage = signal<string>('');
+
+  constructor(private marketingAutomationService: MarketingAutomationService) {}
 
   ngOnInit(): void {
     this.loadCampaigns();
   }
 
-  async loadCampaigns(): Promise<void> {
+  loadCampaigns(): void {
     this.isLoading.set(true);
-    try {
-      // TODO: Integrate with MarketingAutomationService when API is connected
-      // For now, just set empty array
-      this.campaigns.set([]);
-    } catch (error) {
-      console.error('Error loading marketing campaigns:', error);
-    } finally {
-      this.isLoading.set(false);
-    }
+    this.errorMessage.set('');
+    
+    this.marketingAutomationService.getAll().subscribe({
+      next: (campaigns) => {
+        this.campaigns.set(campaigns);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading marketing campaigns:', error);
+        this.errorMessage.set(error.message || 'Erro ao carregar campanhas');
+        this.isLoading.set(false);
+      }
+    });
   }
 
   onNewCampaign(): void {
-    // TODO: Open modal or navigate to campaign creation form
     console.log('Nova Campanha clicked');
     alert('Funcionalidade "Nova Campanha" será implementada em breve.');
   }
