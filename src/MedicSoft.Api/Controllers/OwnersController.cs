@@ -28,6 +28,22 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Gets the current user's identity for audit logging
+        /// </summary>
+        private string GetPerformedBy()
+        {
+            return User?.Identity?.Name ?? User?.FindFirst("sub")?.Value ?? "UNKNOWN";
+        }
+
+        /// <summary>
+        /// Gets the client's IP address for audit logging
+        /// </summary>
+        private string GetClientIpAddress()
+        {
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        }
+
+        /// <summary>
         /// Get all owners (SystemAdmin only)
         /// </summary>
         [HttpGet]
@@ -117,8 +133,8 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                var performedBy = User?.Identity?.Name ?? User?.FindFirst("sub")?.Value ?? "UNKNOWN";
-                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
                 
                 var owner = await _ownerService.CreateOwnerAsync(
                     request.Username,
@@ -163,8 +179,8 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                var performedBy = User?.Identity?.Name ?? User?.FindFirst("sub")?.Value ?? "UNKNOWN";
-                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
                 
                 await _ownerService.UpdateOwnerProfileAsync(
                     id,
@@ -195,8 +211,8 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                var performedBy = User?.Identity?.Name ?? User?.FindFirst("sub")?.Value ?? "UNKNOWN";
-                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
                 
                 await _ownerService.ActivateOwnerAsync(id, tenantId, performedBy, ipAddress);
                 return Ok(new { message = "Owner activated successfully" });
@@ -216,8 +232,8 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                var performedBy = User?.Identity?.Name ?? User?.FindFirst("sub")?.Value ?? "UNKNOWN";
-                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
                 
                 await _ownerService.DeactivateOwnerAsync(id, tenantId, performedBy, ipAddress);
                 return Ok(new { message = "Owner deactivated successfully" });

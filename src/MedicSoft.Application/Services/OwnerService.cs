@@ -57,33 +57,30 @@ namespace MedicSoft.Application.Services
             
             await _ownerRepository.AddAsync(owner);
             
-            // Audit log - Owner creation
-            if (_auditService != null)
-            {
-                await _auditService.LogDataModificationAsync(
-                    userId: performedBy ?? "SYSTEM",
-                    userName: performedBy ?? "SYSTEM",
-                    userEmail: "",
-                    entityType: "Owner",
-                    entityId: owner.Id.ToString(),
-                    entityDisplayName: $"{fullName} ({username})",
-                    oldValues: new { },
-                    newValues: new { 
-                        Username = username, 
-                        Email = email, 
-                        FullName = fullName,
-                        IsSystemOwner = !clinicId.HasValue,
-                        ClinicId = clinicId
-                    },
-                    ipAddress: ipAddress ?? "unknown",
-                    userAgent: "API",
-                    requestPath: "/api/owners",
-                    httpMethod: "POST",
-                    tenantId: tenantId,
-                    dataCategory: DataCategory.PERSONAL,
-                    purpose: LgpdPurpose.LEGAL_OBLIGATION
-                );
-            }
+            // Audit log - Owner creation (REQUIRED for security compliance)
+            await _auditService.LogDataModificationAsync(
+                userId: performedBy ?? "SYSTEM",
+                userName: performedBy ?? "SYSTEM_AUTO",
+                userEmail: "",
+                entityType: "Owner",
+                entityId: owner.Id.ToString(),
+                entityDisplayName: $"{fullName} ({username})",
+                oldValues: new { },
+                newValues: new { 
+                    Username = username, 
+                    Email = email, 
+                    FullName = fullName,
+                    IsSystemOwner = !clinicId.HasValue,
+                    ClinicId = clinicId
+                },
+                ipAddress: ipAddress ?? "unknown",
+                userAgent: "API",
+                requestPath: "/api/owners",
+                httpMethod: "POST",
+                tenantId: tenantId,
+                dataCategory: DataCategory.PERSONAL,
+                purpose: LgpdPurpose.LEGAL_OBLIGATION
+            );
             
             return owner;
         }
@@ -135,34 +132,31 @@ namespace MedicSoft.Application.Services
             owner.UpdateProfile(email, fullName, phone, professionalId, specialty);
             await _ownerRepository.UpdateAsync(owner);
             
-            // Audit log - Owner update
-            if (_auditService != null)
-            {
-                await _auditService.LogDataModificationAsync(
-                    userId: performedBy ?? "SYSTEM",
-                    userName: performedBy ?? "SYSTEM",
-                    userEmail: "",
-                    entityType: "Owner",
-                    entityId: owner.Id.ToString(),
-                    entityDisplayName: $"{fullName} ({owner.Username})",
-                    oldValues: oldValues,
-                    newValues: new
-                    {
-                        Email = email,
-                        FullName = fullName,
-                        Phone = phone,
-                        ProfessionalId = professionalId,
-                        Specialty = specialty
-                    },
-                    ipAddress: ipAddress ?? "unknown",
-                    userAgent: "API",
-                    requestPath: $"/api/owners/{id}",
-                    httpMethod: "PUT",
-                    tenantId: tenantId,
-                    dataCategory: DataCategory.PERSONAL,
-                    purpose: LgpdPurpose.LEGAL_OBLIGATION
-                );
-            }
+            // Audit log - Owner update (REQUIRED for security compliance)
+            await _auditService.LogDataModificationAsync(
+                userId: performedBy ?? "SYSTEM",
+                userName: performedBy ?? "SYSTEM_AUTO",
+                userEmail: "",
+                entityType: "Owner",
+                entityId: owner.Id.ToString(),
+                entityDisplayName: $"{fullName} ({owner.Username})",
+                oldValues: oldValues,
+                newValues: new
+                {
+                    Email = email,
+                    FullName = fullName,
+                    Phone = phone,
+                    ProfessionalId = professionalId,
+                    Specialty = specialty
+                },
+                ipAddress: ipAddress ?? "unknown",
+                userAgent: "API",
+                requestPath: $"/api/owners/{id}",
+                httpMethod: "PUT",
+                tenantId: tenantId,
+                dataCategory: DataCategory.PERSONAL,
+                purpose: LgpdPurpose.LEGAL_OBLIGATION
+            );
         }
 
         public async Task ActivateOwnerAsync(Guid id, string tenantId, string? performedBy = null, string? ipAddress = null)
@@ -175,27 +169,24 @@ namespace MedicSoft.Application.Services
             owner.Activate();
             await _ownerRepository.UpdateAsync(owner);
             
-            // Audit log - Owner activation
-            if (_auditService != null)
-            {
-                await _auditService.LogDataModificationAsync(
-                    userId: performedBy ?? "SYSTEM",
-                    userName: performedBy ?? "SYSTEM",
-                    userEmail: "",
-                    entityType: "Owner",
-                    entityId: owner.Id.ToString(),
-                    entityDisplayName: $"{owner.FullName} ({owner.Username})",
-                    oldValues: new { IsActive = wasActive },
-                    newValues: new { IsActive = true },
-                    ipAddress: ipAddress ?? "unknown",
-                    userAgent: "API",
-                    requestPath: $"/api/owners/{id}/activate",
-                    httpMethod: "POST",
-                    tenantId: tenantId,
-                    dataCategory: DataCategory.PERSONAL,
-                    purpose: LgpdPurpose.LEGAL_OBLIGATION
-                );
-            }
+            // Audit log - Owner activation (REQUIRED for security compliance)
+            await _auditService.LogDataModificationAsync(
+                userId: performedBy ?? "SYSTEM",
+                userName: performedBy ?? "SYSTEM_AUTO",
+                userEmail: "",
+                entityType: "Owner",
+                entityId: owner.Id.ToString(),
+                entityDisplayName: $"{owner.FullName} ({owner.Username})",
+                oldValues: new { IsActive = wasActive },
+                newValues: new { IsActive = true },
+                ipAddress: ipAddress ?? "unknown",
+                userAgent: "API",
+                requestPath: $"/api/owners/{id}/activate",
+                httpMethod: "POST",
+                tenantId: tenantId,
+                dataCategory: DataCategory.PERSONAL,
+                purpose: LgpdPurpose.LEGAL_OBLIGATION
+            );
         }
 
         public async Task DeactivateOwnerAsync(Guid id, string tenantId, string? performedBy = null, string? ipAddress = null)
@@ -208,27 +199,24 @@ namespace MedicSoft.Application.Services
             owner.Deactivate();
             await _ownerRepository.UpdateAsync(owner);
             
-            // Audit log - Owner deactivation (CRITICAL SECURITY EVENT)
-            if (_auditService != null)
-            {
-                await _auditService.LogDataModificationAsync(
-                    userId: performedBy ?? "SYSTEM",
-                    userName: performedBy ?? "SYSTEM",
-                    userEmail: "",
-                    entityType: "Owner",
-                    entityId: owner.Id.ToString(),
-                    entityDisplayName: $"{owner.FullName} ({owner.Username})",
-                    oldValues: new { IsActive = wasActive },
-                    newValues: new { IsActive = false },
-                    ipAddress: ipAddress ?? "unknown",
-                    userAgent: "API",
-                    requestPath: $"/api/owners/{id}/deactivate",
-                    httpMethod: "POST",
-                    tenantId: tenantId,
-                    dataCategory: DataCategory.PERSONAL,
-                    purpose: LgpdPurpose.LEGAL_OBLIGATION
-                );
-            }
+            // Audit log - Owner deactivation (CRITICAL SECURITY EVENT - REQUIRED for compliance)
+            await _auditService.LogDataModificationAsync(
+                userId: performedBy ?? "SYSTEM",
+                userName: performedBy ?? "SYSTEM_AUTO",
+                userEmail: "",
+                entityType: "Owner",
+                entityId: owner.Id.ToString(),
+                entityDisplayName: $"{owner.FullName} ({owner.Username})",
+                oldValues: new { IsActive = wasActive },
+                newValues: new { IsActive = false },
+                ipAddress: ipAddress ?? "unknown",
+                userAgent: "API",
+                requestPath: $"/api/owners/{id}/deactivate",
+                httpMethod: "POST",
+                tenantId: tenantId,
+                dataCategory: DataCategory.PERSONAL,
+                purpose: LgpdPurpose.LEGAL_OBLIGATION
+            );
         }
 
         public async Task<bool> ExistsByUsernameAsync(string username, string tenantId)

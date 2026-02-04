@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
 using MedicSoft.Application.DTOs;
@@ -26,6 +27,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSelectionService _clinicSelectionService;
         private readonly ITwoFactorAuthService _twoFactorAuthService;
         private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
         public AuthController(
             IAuthService authService, 
@@ -33,7 +35,8 @@ namespace MedicSoft.Api.Controllers
             ILogger<AuthController> logger,
             IClinicSelectionService clinicSelectionService,
             ITwoFactorAuthService twoFactorAuthService,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IConfiguration configuration)
         {
             _authService = authService;
             _jwtTokenService = jwtTokenService;
@@ -41,6 +44,7 @@ namespace MedicSoft.Api.Controllers
             _clinicSelectionService = clinicSelectionService;
             _twoFactorAuthService = twoFactorAuthService;
             _userRepository = userRepository;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -742,8 +746,8 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                // Get the registration token from configuration (environment variable)
-                var validRegistrationToken = Environment.GetEnvironmentVariable("SYSTEM_OWNER_REGISTRATION_TOKEN");
+                // Get the registration token from configuration
+                var validRegistrationToken = _configuration["SYSTEM_OWNER_REGISTRATION_TOKEN"];
                 
                 if (string.IsNullOrWhiteSpace(validRegistrationToken))
                 {
@@ -754,8 +758,9 @@ namespace MedicSoft.Api.Controllers
                 // Validate the registration token
                 if (request.RegistrationToken != validRegistrationToken)
                 {
-                    _logger.LogWarning("Invalid system owner registration token provided. Username: {Username}", request.Username);
-                    return Unauthorized(new { message = "Token de registro inválido." });
+                    var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                    _logger.LogWarning("Invalid system owner registration token provided. IP: {IpAddress}", ipAddress);
+                    return StatusCode(403, new { message = "Token de registro inválido." });
                 }
 
                 // Validate request
