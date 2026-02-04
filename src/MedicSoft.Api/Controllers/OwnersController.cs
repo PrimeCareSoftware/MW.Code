@@ -1,16 +1,22 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 
 namespace MedicSoft.Api.Controllers
 {
     /// <summary>
     /// Controller for owner management - create, update, activate/deactivate owners
+    /// SECURITY: This controller is restricted to SystemAdmin role only.
+    /// Clinic owners (who contract the medicwarehouse-app service) should NOT have access.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = RoleNames.SystemAdmin)]
+    [RequireSystemOwner]
     public class OwnersController : BaseController
     {
         private readonly IOwnerService _ownerService;
