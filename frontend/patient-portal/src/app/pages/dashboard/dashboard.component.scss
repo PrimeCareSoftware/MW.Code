@@ -1,13 +1,13 @@
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+  background: hsl(var(--background));
 }
 
 .dashboard-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, hsl(var(--hero-gradient-start)) 0%, hsl(var(--hero-gradient-end)) 100%);
+  color: hsl(var(--primary-foreground));
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-lg);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -22,7 +22,7 @@
     .header-left {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: var(--spacing-4);
 
       .header-logo {
         font-size: 36px;
@@ -33,9 +33,9 @@
 
       h1 {
         margin: 0;
-        font-size: 28px;
-        font-weight: 700;
-        letter-spacing: -0.5px;
+        font-size: var(--text-3xl);
+        font-weight: var(--font-bold);
+        letter-spacing: -0.025em;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
     }
@@ -43,27 +43,27 @@
     .user-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: var(--spacing-3);
 
       .welcome-text {
-        font-size: 16px;
+        font-size: var(--text-base);
         display: none;
-        font-weight: 500;
+        font-weight: var(--font-medium);
 
         @media (min-width: 768px) {
           display: inline;
         }
         
         strong {
-          font-weight: 600;
+          font-weight: var(--font-semibold);
         }
       }
 
       button {
-        color: white;
+        color: hsl(var(--primary-foreground));
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
+        transition: all var(--transition-base);
         
         &:hover {
           background: rgba(255, 255, 255, 0.2);
@@ -77,23 +77,23 @@
 .dashboard-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: var(--spacing-10) var(--spacing-6);
 }
 
 .error-banner {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border-left: 4px solid #ff9800;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);
-  animation: slideIn 0.3s ease-out;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-5);
+  margin-bottom: var(--spacing-6);
+  background: hsl(var(--warning) / 0.1);
+  border-left: 4px solid hsl(var(--warning));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  animation: slideIn var(--transition-base) ease-out;
 
   mat-icon {
-    color: #f57c00;
+    color: hsl(var(--warning));
   }
 
   button {
@@ -115,27 +115,28 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: var(--spacing-6);
+  margin-bottom: var(--spacing-10);
 
   .stat-card {
     cursor: default;
-    transition: all 0.3s ease;
-    border-radius: 16px;
+    transition: all var(--transition-base);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-md);
 
     &:hover {
       transform: translateY(-8px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-xl);
     }
 
     mat-card-content {
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding: 28px !important;
+      gap: var(--spacing-5);
+      padding: var(--spacing-7) !important;
 
       .stat-icon-wrapper {
         display: flex;
@@ -143,14 +144,15 @@
         justify-content: center;
         width: 72px;
         height: 72px;
-        border-radius: 20px;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(102, 126, 234, 0.2) 100%);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        border-radius: var(--radius-lg);
+        background: hsl(var(--primary) / 0.1);
+        box-shadow: 0 4px 12px hsl(var(--primary) / 0.2);
 
         mat-icon {
           font-size: 40px;
           width: 40px;
           height: 40px;
+          color: hsl(var(--primary));
         }
       }
 
@@ -159,35 +161,30 @@
 
         .stat-number {
           margin: 0;
-          font-size: 44px;
-          font-weight: 800;
-          line-height: 1;
-          color: #667eea; // Fallback for browsers that don't support gradient text
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          
-          // Fallback for browsers without gradient text support
-          @supports not (-webkit-background-clip: text) {
-            color: #667eea;
-          }
+          font-size: var(--text-5xl);
+          font-weight: var(--font-extrabold);
+          line-height: var(--leading-none);
+          color: hsl(var(--primary));
         }
 
         .stat-label {
-          margin: 10px 0 0 0;
-          font-size: 16px;
-          color: #718096;
-          font-weight: 600;
-          letter-spacing: 0.3px;
+          margin: var(--spacing-2) 0 0 0;
+          font-size: var(--text-base);
+          color: hsl(var(--muted-foreground));
+          font-weight: var(--font-semibold);
+          letter-spacing: 0.015em;
         }
       }
     }
 
     &.stat-card-documents {
       .stat-icon-wrapper {
-        background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(244, 67, 54, 0.2) 100%);
-        box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
+        background: hsl(var(--destructive) / 0.1);
+        box-shadow: 0 4px 12px hsl(var(--destructive) / 0.2);
+
+        mat-icon {
+          color: hsl(var(--destructive));
+        }
       }
     }
   }
