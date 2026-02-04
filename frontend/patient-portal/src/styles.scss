@@ -3,296 +3,181 @@
 /* Import Material Icons locally */
 @import 'material-icons/iconfont/material-icons.css';
 
-/* Design Tokens - Premium Healthcare Design System */
-:root {
-  /* Primary Colors - Deep Medical Blue */
-  --primary-50: #f0f4ff;
-  --primary-100: #e0e9ff;
-  --primary-200: #c7d7fe;
-  --primary-300: #a5b8fc;
-  --primary-400: #8898f8;
-  --primary-500: #1e40af;
-  --primary-600: #1e3a8a;
-  --primary-700: #1a3170;
-  --primary-800: #1e293b;
-  --primary-900: #0f172a;
-  
-  /* Neutral Colors */
-  --gray-50: #fafafa;
-  --gray-100: #f5f5f5;
-  --gray-200: #e5e5e5;
-  --gray-300: #d4d4d4;
-  --gray-400: #a3a3a3;
-  --gray-500: #737373;
-  --gray-600: #525252;
-  --gray-700: #404040;
-  --gray-800: #262626;
-  --gray-900: #171717;
-  
-  /* Semantic Colors */
-  --success-500: #22c55e;
-  --success-600: #16a34a;
-  --warning-500: #f59e0b;
-  --warning-600: #d97706;
-  --error-500: #ef4444;
-  --error-600: #dc2626;
-  --info-500: #3b82f6;
-  --info-600: #2563eb;
-  
-  /* Primary Color - Default value (can be overridden dynamically) */
-  --primary-color: #1e3a8a;  /* default to primary-600 */
-  --primary-color-hover: #1a3170;  /* default to primary-700 */
-  --primary-color-light: #e0e9ff;  /* default to primary-100 */
-  --primary-color-dark: #1a3170;  /* default to primary-700 */
-  --primary-color-alpha: rgba(30, 58, 138, 0.2);  /* primary-600 with alpha */
-  
-  /* Border Radius */
-  --radius: 0.5rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
+/* Import Google Fonts for Omni Care Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
-  /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Theme Variables - Default (Light) */
-  --bg-primary: #ffffff;
-  --bg-secondary: #fafafa;
-  --bg-tertiary: #f5f5f5;
-  --text-primary: #171717;
-  --text-secondary: #525252;
-  --text-tertiary: #737373;
-  --border-color: #e5e5e5;
-  --border-color-hover: #d4d4d4;
-}
-
-/* Dark Theme */
-body.theme-dark {
-  /* Dark Theme Colors */
-  --primary-50: #1e3a8a;
-  --primary-100: #1e40af;
-  --primary-200: #3b82f6;
-  --primary-300: #60a5fa;
-  --primary-400: #93c5fd;
-  --primary-500: #3b82f6;
-  --primary-600: #60a5fa;
-  --primary-700: #93c5fd;
-  
-  --gray-50: #171717;
-  --gray-100: #262626;
-  --gray-200: #404040;
-  --gray-300: #525252;
-  --gray-400: #737373;
-  --gray-500: #a3a3a3;
-  --gray-600: #d4d4d4;
-  --gray-700: #e5e5e5;
-  --gray-800: #f5f5f5;
-  --gray-900: #fafafa;
-  
-  /* Dark Mode Backgrounds */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #94a3b8;
-  --border-color: #334155;
-  --border-color-hover: #475569;
-  
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-
-  /* Fix autofill in dark theme */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active,
-  textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover,
-  textarea:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--text-primary, #f1f5f9) !important;
-    -webkit-box-shadow: 0 0 0px 1000px var(--bg-tertiary, #334155) inset !important;
-    box-shadow: 0 0 0px 1000px var(--bg-tertiary, #334155) inset !important;
-    caret-color: var(--text-primary, #f1f5f9) !important;
-  }
-}
-
-/* High Contrast Theme */
-body.theme-high-contrast {
-  /* High Contrast Colors - Maximum contrast for accessibility */
-  --primary-50: #ffffff;
-  --primary-100: #ffffff;
-  --primary-200: #ffff00;
-  --primary-300: #ffff00;
-  --primary-400: #ffff00;
-  --primary-500: #ffff00;
-  --primary-600: #ffff00;
-  --primary-700: #ffffff;
-  
-  --gray-50: #000000;
-  --gray-100: #000000;
-  --gray-200: #333333;
-  --gray-300: #666666;
-  --gray-400: #999999;
-  --gray-500: #cccccc;
-  --gray-600: #ffffff;
-  --gray-700: #ffffff;
-  --gray-800: #ffffff;
-  --gray-900: #ffffff;
-  
-  /* High Contrast Backgrounds */
-  --bg-primary: #000000;
-  --bg-secondary: #000000;
-  --bg-tertiary: #1a1a1a;
-  --text-primary: #ffffff;
-  --text-secondary: #ffffff;
-  --text-tertiary: #cccccc;
-  --border-color: #ffffff;
-  --border-color-hover: #ffff00;
-  
-  /* High contrast semantic colors */
-  --success-500: #00ff00;
-  --success-600: #00ff00;
-  --warning-500: #ffff00;
-  --warning-600: #ffff00;
-  --error-500: #ff0000;
-  --error-600: #ff0000;
-  --info-500: #00ffff;
-  --info-600: #00ffff;
-  
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-  
-  /* Force all borders to be visible */
-  * {
-    border-color: var(--border-color) !important;
-  }
-  
-  /* Ensure all text is readable */
-  h1, h2, h3, h4, h5, h6, p, span, div, a, button, label, input, textarea, select {
-    color: var(--text-primary) !important;
-  }
-  
-  /* Make focus indicators very prominent */
-  *:focus-visible {
-    outline: 3px solid #ffff00 !important;
-    outline-offset: 2px;
-  }
-}
+/* Import Omni Care Design Tokens */
+@import './styles/design-tokens';
 
 /* Global styles */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
   height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--text-primary, var(--gray-900));
-  background-color: var(--bg-primary, var(--gray-50));
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  font-weight: var(--font-normal);
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
   transition: background-color var(--transition-base), color var(--transition-base);
 }
 
-/* Material Snackbar Custom Styles */
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: var(--text-5xl);
+}
+
+h2 {
+  font-size: var(--text-3xl);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+}
+
+h4 {
+  font-size: var(--text-xl);
+}
+
+h5 {
+  font-size: var(--text-lg);
+}
+
+h6 {
+  font-size: var(--text-base);
+}
+
+/* Material Snackbar Custom Styles using Omni Care colors */
 .snackbar-success {
-  background-color: var(--success-600) !important;
-  color: white !important;
+  background-color: hsl(var(--success)) !important;
+  color: hsl(var(--success-foreground)) !important;
 
   .mat-mdc-snack-bar-label {
-    color: white !important;
+    color: hsl(var(--success-foreground)) !important;
   }
 
   .mat-mdc-button {
-    color: white !important;
+    color: hsl(var(--success-foreground)) !important;
   }
 }
 
 .snackbar-error {
-  background-color: var(--error-600) !important;
-  color: white !important;
+  background-color: hsl(var(--destructive)) !important;
+  color: hsl(var(--destructive-foreground)) !important;
 
   .mat-mdc-snack-bar-label {
-    color: white !important;
+    color: hsl(var(--destructive-foreground)) !important;
   }
 
   .mat-mdc-button {
-    color: white !important;
+    color: hsl(var(--destructive-foreground)) !important;
   }
 }
 
 .snackbar-warning {
-  background-color: var(--warning-600) !important;
-  color: white !important;
+  background-color: hsl(var(--warning)) !important;
+  color: hsl(var(--warning-foreground)) !important;
 
   .mat-mdc-snack-bar-label {
-    color: white !important;
+    color: hsl(var(--warning-foreground)) !important;
   }
 
   .mat-mdc-button {
-    color: white !important;
+    color: hsl(var(--warning-foreground)) !important;
   }
 }
 
 .snackbar-info {
-  background-color: var(--info-600) !important;
-  color: white !important;
+  background-color: hsl(var(--info)) !important;
+  color: hsl(var(--info-foreground)) !important;
 
   .mat-mdc-snack-bar-label {
-    color: white !important;
+    color: hsl(var(--info-foreground)) !important;
   }
 
   .mat-mdc-button {
-    color: white !important;
+    color: hsl(var(--info-foreground)) !important;
   }
 }
 
-/* Utility classes */
+/* Utility classes using Omni Care design system */
 .text-center {
   text-align: center;
 }
 
 .mb-16 {
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-4);
 }
 
 .mt-16 {
-  margin-top: 16px;
+  margin-top: var(--spacing-4);
 }
 
 .full-width {
   width: 100%;
 }
 
-/* Scrollbar styling */
+/* Card styles from Omni Care */
+.card-elevated {
+  background: hsl(var(--card));
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border) / 0.5);
+  box-shadow: 0 4px 20px -4px hsl(var(--card-shadow) / 0.15);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+
+  &:hover {
+    box-shadow: 0 8px 30px -6px hsl(var(--card-shadow) / 0.25);
+    transform: translateY(-2px);
+  }
+}
+
+/* Hero gradient from Omni Care */
+.hero-gradient {
+  background: linear-gradient(135deg, hsl(var(--hero-gradient-start)) 0%, hsl(var(--hero-gradient-end)) 100%);
+}
+
+/* Glow effect from Omni Care */
+.glow-effect {
+  box-shadow: 0 0 40px -10px hsl(var(--glow) / 0.4);
+}
+
+/* Scrollbar styling using Omni Care design */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--gray-100);
+  background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-400);
-  border-radius: 4px;
+  background: hsl(var(--muted-foreground));
+  border-radius: calc(var(--radius) / 2);
+  
+  &:hover {
+    background: hsl(var(--foreground) / 0.6);
+  }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-500);
-}
-
-/* Fix input autofill styles - prevents browser from making text invisible */
+/* Fix input autofill styles using Omni Care colors */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -303,28 +188,28 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--text-primary, #1a202c) !important;
-  -webkit-box-shadow: 0 0 0px 1000px var(--bg-tertiary, #f7fafc) inset !important;
-  box-shadow: 0 0 0px 1000px var(--bg-tertiary, #f7fafc) inset !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+  -webkit-box-shadow: 0 0 0px 1000px hsl(var(--muted)) inset !important;
+  box-shadow: 0 0 0px 1000px hsl(var(--muted)) inset !important;
   transition: background-color 5000s ease-in-out 0s;
-  caret-color: var(--text-primary, #1a202c) !important;
+  caret-color: hsl(var(--foreground)) !important;
 }
 
 /* Ensure all input and textarea elements have proper text color */
 input,
 textarea,
 select {
-  color: var(--text-primary, #1a202c) !important;
+  color: hsl(var(--foreground)) !important;
 }
 
-/* Material Design input fixes */
+/* Material Design input fixes using Omni Care colors */
 .mat-mdc-input-element {
-  color: var(--text-primary, #1a202c) !important;
-  caret-color: var(--primary-color, #1e3a8a) !important;
+  color: hsl(var(--foreground)) !important;
+  caret-color: hsl(var(--primary)) !important;
 }
 
 .mat-mdc-input-element::placeholder {
-  color: var(--text-tertiary, #a0aec0) !important;
+  color: hsl(var(--muted-foreground)) !important;
   opacity: 1 !important;
 }
 
