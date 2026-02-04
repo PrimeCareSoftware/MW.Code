@@ -264,6 +264,24 @@ mat-card {
       .mat-mdc-form-field-focus-overlay {
         background-color: transparent;
       }
+      
+      .mat-mdc-input-element {
+        color: #1a202c;
+        
+        &::placeholder {
+          color: #a0aec0;
+        }
+        
+        // Fix for autofill
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus {
+          -webkit-text-fill-color: #1a202c !important;
+          -webkit-box-shadow: 0 0 0px 1000px #f7fafc inset !important;
+          box-shadow: 0 0 0px 1000px #f7fafc inset !important;
+          caret-color: #1a202c !important;
+        }
+      }
     }
   }
 

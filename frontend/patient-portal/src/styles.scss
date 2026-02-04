@@ -102,6 +102,20 @@ body.theme-dark {
   
   color: var(--text-primary);
   background-color: var(--bg-primary);
+
+  /* Fix autofill in dark theme */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text-primary, #f1f5f9) !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--bg-tertiary, #334155) inset !important;
+    box-shadow: 0 0 0px 1000px var(--bg-tertiary, #334155) inset !important;
+    caret-color: var(--text-primary, #f1f5f9) !important;
+  }
 }
 
 /* High Contrast Theme */
@@ -276,5 +290,41 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gray-500);
+}
+
+/* Fix input autofill styles - prevents browser from making text invisible */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-primary, #1a202c) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--bg-tertiary, #f7fafc) inset !important;
+  box-shadow: 0 0 0px 1000px var(--bg-tertiary, #f7fafc) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: var(--text-primary, #1a202c) !important;
+}
+
+/* Ensure all input and textarea elements have proper text color */
+input,
+textarea,
+select {
+  color: var(--text-primary, #1a202c) !important;
+}
+
+/* Material Design input fixes */
+.mat-mdc-input-element {
+  color: var(--text-primary, #1a202c) !important;
+  caret-color: var(--primary-color, #1e3a8a) !important;
+}
+
+.mat-mdc-input-element::placeholder {
+  color: var(--text-tertiary, #a0aec0) !important;
+  opacity: 1 !important;
 }
 
