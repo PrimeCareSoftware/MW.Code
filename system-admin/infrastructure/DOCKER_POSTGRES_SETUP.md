@@ -244,6 +244,28 @@ openssl rand -base64 32
 POSTGRES_PASSWORD=sua_senha_super_forte_aqui
 ```
 
+### Usuários de Aplicação (Recomendado)
+
+⚠️ **IMPORTANTE**: Não use o usuário `postgres` nas connection strings da aplicação!
+
+Por segurança e compliance, crie usuários de aplicação dedicados:
+
+```bash
+# Criar usuários de aplicação com permissões mínimas
+cd scripts
+./create-postgres-app-users.sh
+```
+
+**Documentação completa:**
+- 📘 [Guia Completo de Usuários de Aplicação](../seguranca/POSTGRES_APP_USER_GUIDE.md)
+- 🚀 [Guia Rápido de Migração](../seguranca/POSTGRES_APP_USER_QUICKSTART.md)
+
+**Benefícios:**
+- ✅ Princípio do menor privilégio
+- ✅ Melhor auditoria
+- ✅ Compliance (LGPD/HIPAA)
+- ✅ Isolamento de segurança
+
 ### Restrições de Acesso
 
 Para produção, não exponha a porta 5432 diretamente:
