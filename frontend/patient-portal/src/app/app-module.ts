@@ -10,6 +10,7 @@ import { authInterceptor } from './interceptors/auth.interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { OfflineIndicatorComponent } from './shared/components/offline-indicator/offline-indicator';
 import { InstallPromptComponent } from './shared/components/install-prompt/install-prompt';
+import { BottomNavComponent } from './shared/components/bottom-nav/bottom-nav.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { InstallPromptComponent } from './shared/components/install-prompt/insta
     CommonModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    BottomNavComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
