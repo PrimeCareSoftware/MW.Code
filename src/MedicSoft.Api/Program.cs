@@ -332,6 +332,8 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IAccessProfileRepository, AccessProfileRepository>();
 builder.Services.AddScoped<IClinicCustomizationRepository, ClinicCustomizationRepository>();
 builder.Services.AddScoped<ISalesFunnelMetricRepository, SalesFunnelMetricRepository>();
+// Also register as generic IRepository for DI compatibility
+builder.Services.AddScoped<IRepository<MedicSoft.Domain.Entities.SalesFunnelMetric>>(sp => sp.GetRequiredService<ISalesFunnelMetricRepository>());
 builder.Services.AddScoped<IModuleConfigurationRepository, ModuleConfigurationRepository>();
 
 // System Admin - Notification repositories
@@ -608,8 +610,6 @@ builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IComplaintService,
 // Register CRM entity repositories for Lead Management
 builder.Services.AddScoped<IRepository<MedicSoft.Domain.Entities.CRM.Lead>, LeadRepository>();
 builder.Services.AddScoped<IRepository<MedicSoft.Domain.Entities.CRM.LeadActivity>, LeadActivityRepository>();
-builder.Services.AddScoped<IRepository<MedicSoft.Domain.Entities.SalesFunnelMetric>>(sp => 
-    sp.GetRequiredService<ISalesFunnelMetricRepository>());
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ILeadManagementService, MedicSoft.Api.Services.CRM.LeadManagementService>();
 builder.Services.AddHostedService<MedicSoft.Api.Services.CRM.LeadCaptureHostedService>();
 
