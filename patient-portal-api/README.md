@@ -212,6 +212,11 @@ O frontend estará disponível em: `http://localhost:4200`
 
 ### appsettings.json (Backend)
 
+O backend suporta múltiplos ambientes com arquivos de configuração específicos:
+- `appsettings.json` - Configuração base (Production)
+- `appsettings.Development.json` - Desenvolvimento local
+- `appsettings.Testing.json` - Testes automatizados/CI
+
 ```json
 {
   "ConnectionStrings": {
@@ -224,6 +229,11 @@ O frontend estará disponível em: `http://localhost:4200`
     "AccessTokenExpirationMinutes": 15,
     "RefreshTokenExpirationDays": 7
   },
+  "AppointmentReminder": {
+    "Enabled": true,
+    "CheckIntervalMinutes": 60,
+    "AdvanceNoticeHours": 24
+  },
   "RateLimiting": {
     "EnableRateLimiting": true,
     "PermitLimit": 100,
@@ -231,6 +241,8 @@ O frontend estará disponível em: `http://localhost:4200`
   }
 }
 ```
+
+**Nota:** Para testes (ASPNETCORE_ENVIRONMENT=Testing), o serviço de lembretes é desabilitado automaticamente via `appsettings.Testing.json` para evitar dependências do banco de dados principal.
 
 ### environment.ts (Frontend)
 

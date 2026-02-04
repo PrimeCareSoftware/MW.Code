@@ -735,6 +735,23 @@ POSTGRES_PASSWORD=nova_senha
 - Continuar rodando e tentar novamente no próximo intervalo
 - Não crashar a aplicação se o banco estiver temporariamente indisponível
 
+**5. Configuração para ambiente de testes (Testing):**
+
+Para evitar erros de conexão durante testes automatizados, use o arquivo `appsettings.Testing.json` que desabilita o serviço de lembretes:
+
+```json
+{
+  "AppointmentReminder": {
+    "Enabled": false
+  }
+}
+```
+
+Isso é especialmente útil quando:
+- Rodando testes de integração/performance sem banco de dados completo
+- O banco de teste não tem as tabelas do sistema principal (Appointments, Patients, etc.)
+- Executando em ambientes CI/CD com recursos limitados
+
 ### 2. Migration falha
 
 **Sintomas:**
