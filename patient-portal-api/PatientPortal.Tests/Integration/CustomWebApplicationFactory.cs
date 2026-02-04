@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using PatientPortal.Infrastructure.Data;
 using PatientPortal.Application.Interfaces;
 using Moq;
@@ -33,6 +34,16 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
             {
                 options.UseInMemoryDatabase("InMemoryTestDb");
             });
+            
+            // Remove the AppointmentReminderService background service
+            // This prevents it from trying to connect to PostgreSQL during tests
+            var hostedServiceDescriptor = services.FirstOrDefault(
+                d => d.ServiceType == typeof(IHostedService) &&
+                     d.ImplementationType?.Name == "AppointmentReminderService");
+            if (hostedServiceDescriptor != null)
+            {
+                services.Remove(hostedServiceDescriptor);
+            }
             
             // Replace the notification service with a mock that doesn't actually send emails
             var notificationDescriptor = services.SingleOrDefault(
