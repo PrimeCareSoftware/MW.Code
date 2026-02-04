@@ -173,13 +173,18 @@ builder.Services.AddScoped<IDocumentViewRepository, DocumentViewRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-// Enable Swagger in all environments for API documentation
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+// Enable Swagger - configurable via SwaggerSettings:Enabled (default: true)
+// Note: In production, consider restricting Swagger access via network policies or authentication
+var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled") ?? true;
+if (enableSwagger)
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Patient Portal API v1");
-    c.RoutePrefix = string.Empty; // Set Swagger UI at root
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Patient Portal API v1");
+        c.RoutePrefix = string.Empty; // Set Swagger UI at root
+    });
+}
 
 app.UseHttpsRedirection();
 
