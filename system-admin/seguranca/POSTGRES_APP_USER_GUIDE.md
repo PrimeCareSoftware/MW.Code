@@ -342,7 +342,7 @@ ALTER USER omnicare_app WITH PASSWORD 'NovaSenhaForte!2025';
 -- Reiniciar aplicação
 ```
 
-**Recomendação**: Rodar senhas a cada 90 dias
+**Recomendação**: Rotacionar senhas a cada 90 dias
 
 ### 3. Conexões SSL/TLS
 
