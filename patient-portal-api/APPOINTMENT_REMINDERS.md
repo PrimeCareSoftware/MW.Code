@@ -34,12 +34,23 @@ Indexes created for optimal query performance.
 
 ## Configuration
 
-### appsettings.json
+### Important: Service Disabled by Default
+
+The Appointment Reminder Service is **disabled by default** in all environments to prevent database authentication errors when the service is not properly configured or when running in test/CI environments.
+
+To enable the service in production:
+
+1. Create or update `appsettings.Production.json`
+2. Set `AppointmentReminder:Enabled` to `true`
+3. Ensure database connection string is properly configured
+4. Configure email settings for notifications
+
+### appsettings.json (Base Configuration)
 
 ```json
 {
   "AppointmentReminder": {
-    "Enabled": true,
+    "Enabled": false,
     "CheckIntervalMinutes": 60,
     "AdvanceNoticeHours": 24
   },
@@ -58,6 +69,18 @@ Indexes created for optimal query performance.
 }
 ```
 
+### Production Configuration (appsettings.Production.json)
+
+```json
+{
+  "AppointmentReminder": {
+    "Enabled": true,
+    "CheckIntervalMinutes": 60,
+    "AdvanceNoticeHours": 24
+  }
+}
+```
+
 ### Development Settings
 
 For local development, use a local SMTP server like Papercut or MailHog:
@@ -65,6 +88,7 @@ For local development, use a local SMTP server like Papercut or MailHog:
 ```json
 {
   "AppointmentReminder": {
+    "Enabled": false,
     "CheckIntervalMinutes": 5
   },
   "Email": {

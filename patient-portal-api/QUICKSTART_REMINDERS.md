@@ -19,7 +19,9 @@ psql -h localhost -U postgres -d primecare -f patient-portal-api/migrations/001_
 
 ### 2. Configure Email Settings
 
-**appsettings.json:**
+**IMPORTANT**: The Appointment Reminder Service is **disabled by default** to prevent database connection issues in non-production environments. You must explicitly enable it in your production configuration.
+
+**appsettings.Production.json:**
 ```json
 {
   "AppointmentReminder": {
@@ -41,6 +43,8 @@ psql -h localhost -U postgres -d primecare -f patient-portal-api/migrations/001_
   }
 }
 ```
+
+**For Development/Testing**: Set `Enabled: false` to avoid database connection attempts when not needed.
 
 ### 3. For Gmail (Development/Testing)
 
