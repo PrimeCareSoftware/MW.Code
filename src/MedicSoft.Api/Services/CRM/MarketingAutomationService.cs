@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
@@ -191,6 +192,48 @@ namespace MedicSoft.Api.Services.CRM
                 .ToListAsync();
 
             return automations.Select(MapToDto);
+        }
+
+        public async Task<PagedResult<MarketingAutomationDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var query = _context.MarketingAutomations
+                .AsNoTracking()
+                .Include(a => a.Actions)
+                .ThenInclude(a => a.EmailTemplate)
+                .Where(a => a.TenantId == tenantId)
+                .OrderByDescending(a => a.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+            
+            var automations = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var automationDtos = automations.Select(MapToDto).ToList();
+
+            return new PagedResult<MarketingAutomationDto>(automationDtos, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<PagedResult<MarketingAutomationDto>> GetActivePagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var query = _context.MarketingAutomations
+                .AsNoTracking()
+                .Include(a => a.Actions)
+                .ThenInclude(a => a.EmailTemplate)
+                .Where(a => a.TenantId == tenantId && a.IsActive)
+                .OrderByDescending(a => a.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+            
+            var automations = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var automationDtos = automations.Select(MapToDto).ToList();
+
+            return new PagedResult<MarketingAutomationDto>(automationDtos, totalCount, pageNumber, pageSize);
         }
 
         public async Task<bool> ActivateAsync(Guid id, string tenantId)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 using MedicSoft.Domain.Entities.CRM;
 
 namespace MedicSoft.Application.Services.CRM
@@ -15,6 +16,7 @@ namespace MedicSoft.Application.Services.CRM
         Task<WebhookSubscriptionDto> CreateSubscriptionAsync(CreateWebhookSubscriptionDto dto, string tenantId);
         Task<WebhookSubscriptionDto?> GetSubscriptionAsync(Guid id, string tenantId);
         Task<List<WebhookSubscriptionDto>> GetAllSubscriptionsAsync(string tenantId);
+        Task<PagedResult<WebhookSubscriptionDto>> GetAllSubscriptionsPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25);
         Task<WebhookSubscriptionDto> UpdateSubscriptionAsync(Guid id, UpdateWebhookSubscriptionDto dto, string tenantId);
         Task DeleteSubscriptionAsync(Guid id, string tenantId);
         Task<WebhookSubscriptionDto> ActivateSubscriptionAsync(Guid id, string tenantId);

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 using MedicSoft.Application.Services.CRM;
 using MedicSoft.Domain.Entities.CRM;
 using MedicSoft.Repository.Context;
@@ -156,6 +157,26 @@ namespace MedicSoft.Api.Services.CRM
             return surveys.Select(MapToDto).ToList();
         }
 
+        public async Task<PagedResult<SurveyDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var query = _context.Surveys
+                .AsNoTracking()
+                .Include(s => s.Questions)
+                .Where(s => s.TenantId == tenantId)
+                .OrderByDescending(s => s.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+            
+            var surveys = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var surveyDtos = surveys.Select(MapToDto).ToList();
+
+            return new PagedResult<SurveyDto>(surveyDtos, totalCount, pageNumber, pageSize);
+        }
+
         public async Task<IEnumerable<SurveyDto>> GetActiveAsync(string tenantId)
         {
             var surveys = await _context.Surveys
@@ -166,6 +187,26 @@ namespace MedicSoft.Api.Services.CRM
                 .ToListAsync();
 
             return surveys.Select(MapToDto).ToList();
+        }
+
+        public async Task<PagedResult<SurveyDto>> GetActivePagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
+        {
+            var query = _context.Surveys
+                .AsNoTracking()
+                .Include(s => s.Questions)
+                .Where(s => s.TenantId == tenantId && s.IsActive)
+                .OrderByDescending(s => s.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+            
+            var surveys = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var surveyDtos = surveys.Select(MapToDto).ToList();
+
+            return new PagedResult<SurveyDto>(surveyDtos, totalCount, pageNumber, pageSize);
         }
 
         public async Task<bool> ActivateAsync(Guid id, string tenantId)

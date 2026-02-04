@@ -1,4 +1,5 @@
 using MedicSoft.Application.DTOs.CRM;
+using MedicSoft.Application.DTOs.Common;
 
 namespace MedicSoft.Application.Services.CRM
 {
@@ -10,7 +11,9 @@ namespace MedicSoft.Application.Services.CRM
         Task<bool> DeleteAsync(Guid id, string tenantId);
         Task<SurveyDto?> GetByIdAsync(Guid id, string tenantId);
         Task<IEnumerable<SurveyDto>> GetAllAsync(string tenantId);
+        Task<PagedResult<SurveyDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25);
         Task<IEnumerable<SurveyDto>> GetActiveAsync(string tenantId);
+        Task<PagedResult<SurveyDto>> GetActivePagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25);
         
         // Activation
         Task<bool> ActivateAsync(Guid id, string tenantId);
