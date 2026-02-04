@@ -159,15 +159,15 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<SurveyDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.Surveys
+            var baseQuery = _context.Surveys
                 .AsNoTracking()
-                .Include(s => s.Questions)
-                .Where(s => s.TenantId == tenantId)
-                .OrderByDescending(s => s.CreatedAt);
+                .Where(s => s.TenantId == tenantId);
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await baseQuery.CountAsync();
             
-            var surveys = await query
+            var surveys = await baseQuery
+                .Include(s => s.Questions)
+                .OrderByDescending(s => s.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -191,15 +191,15 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<SurveyDto>> GetActivePagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.Surveys
+            var baseQuery = _context.Surveys
                 .AsNoTracking()
-                .Include(s => s.Questions)
-                .Where(s => s.TenantId == tenantId && s.IsActive)
-                .OrderByDescending(s => s.CreatedAt);
+                .Where(s => s.TenantId == tenantId && s.IsActive);
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await baseQuery.CountAsync();
             
-            var surveys = await query
+            var surveys = await baseQuery
+                .Include(s => s.Questions)
+                .OrderByDescending(s => s.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

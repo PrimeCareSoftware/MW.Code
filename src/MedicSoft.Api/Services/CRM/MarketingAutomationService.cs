@@ -196,16 +196,16 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<MarketingAutomationDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.MarketingAutomations
+            var baseQuery = _context.MarketingAutomations
                 .AsNoTracking()
+                .Where(a => a.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var automations = await baseQuery
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
-                .Where(a => a.TenantId == tenantId)
-                .OrderByDescending(a => a.CreatedAt);
-
-            var totalCount = await query.CountAsync();
-            
-            var automations = await query
+                .OrderByDescending(a => a.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -217,16 +217,16 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<MarketingAutomationDto>> GetActivePagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.MarketingAutomations
+            var baseQuery = _context.MarketingAutomations
                 .AsNoTracking()
+                .Where(a => a.TenantId == tenantId && a.IsActive);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var automations = await baseQuery
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
-                .Where(a => a.TenantId == tenantId && a.IsActive)
-                .OrderByDescending(a => a.CreatedAt);
-
-            var totalCount = await query.CountAsync();
-            
-            var automations = await query
+                .OrderByDescending(a => a.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

@@ -240,16 +240,16 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<ComplaintDto>> GetAllPagedAsync(string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.Complaints
+            var baseQuery = _context.Complaints
                 .AsNoTracking()
+                .Where(c => c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
-                .Where(c => c.TenantId == tenantId)
-                .OrderByDescending(c => c.ReceivedAt);
-
-            var totalCount = await query.CountAsync();
-            
-            var complaints = await query
+                .OrderByDescending(c => c.ReceivedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -261,16 +261,16 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<ComplaintDto>> GetByCategoryPagedAsync(ComplaintCategory category, string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.Complaints
+            var baseQuery = _context.Complaints
                 .AsNoTracking()
+                .Where(c => c.Category == category && c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
-                .Where(c => c.Category == category && c.TenantId == tenantId)
-                .OrderByDescending(c => c.ReceivedAt);
-
-            var totalCount = await query.CountAsync();
-            
-            var complaints = await query
+                .OrderByDescending(c => c.ReceivedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -282,16 +282,16 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<ComplaintDto>> GetByStatusPagedAsync(ComplaintStatus status, string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.Complaints
+            var baseQuery = _context.Complaints
                 .AsNoTracking()
+                .Where(c => c.Status == status && c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
-                .Where(c => c.Status == status && c.TenantId == tenantId)
-                .OrderByDescending(c => c.ReceivedAt);
-
-            var totalCount = await query.CountAsync();
-            
-            var complaints = await query
+                .OrderByDescending(c => c.ReceivedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -303,16 +303,16 @@ namespace MedicSoft.Api.Services.CRM
 
         public async Task<PagedResult<ComplaintDto>> GetByPriorityPagedAsync(ComplaintPriority priority, string tenantId, int pageNumber = 1, int pageSize = 25)
         {
-            var query = _context.Complaints
+            var baseQuery = _context.Complaints
                 .AsNoTracking()
+                .Where(c => c.Priority == priority && c.TenantId == tenantId);
+
+            var totalCount = await baseQuery.CountAsync();
+            
+            var complaints = await baseQuery
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
-                .Where(c => c.Priority == priority && c.TenantId == tenantId)
-                .OrderByDescending(c => c.ReceivedAt);
-
-            var totalCount = await query.CountAsync();
-            
-            var complaints = await query
+                .OrderByDescending(c => c.ReceivedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
