@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
 using MedicSoft.Application.DTOs;
@@ -26,6 +27,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSelectionService _clinicSelectionService;
         private readonly ITwoFactorAuthService _twoFactorAuthService;
         private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
         public AuthController(
             IAuthService authService, 
@@ -33,7 +35,8 @@ namespace MedicSoft.Api.Controllers
             ILogger<AuthController> logger,
             IClinicSelectionService clinicSelectionService,
             ITwoFactorAuthService twoFactorAuthService,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IConfiguration configuration)
         {
             _authService = authService;
             _jwtTokenService = jwtTokenService;
@@ -41,6 +44,7 @@ namespace MedicSoft.Api.Controllers
             _clinicSelectionService = clinicSelectionService;
             _twoFactorAuthService = twoFactorAuthService;
             _userRepository = userRepository;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -730,6 +734,83 @@ namespace MedicSoft.Api.Controllers
                 return StatusCode(500, new { message = "Erro ao reenviar código de verificação" });
             }
         }
+
+        /// <summary>
+        /// Register the first system owner (organization owner) - PRODUCTION ONLY
+        /// This endpoint is secured with a special registration token that must be set in environment variables.
+        /// Use this endpoint once to create the initial system administrator account.
+        /// After creating the account, remove or rotate the SYSTEM_OWNER_REGISTRATION_TOKEN for security.
+        /// </summary>
+        [HttpPost("register-system-owner")]
+        public async Task<ActionResult> RegisterSystemOwner([FromBody] RegisterSystemOwnerRequest request)
+        {
+            try
+            {
+                // Get the registration token from configuration
+                var validRegistrationToken = _configuration["SYSTEM_OWNER_REGISTRATION_TOKEN"];
+                
+                if (string.IsNullOrWhiteSpace(validRegistrationToken))
+                {
+                    _logger.LogError("System owner registration attempted but SYSTEM_OWNER_REGISTRATION_TOKEN not configured");
+                    return StatusCode(503, new { message = "System owner registration is not configured. Contact support." });
+                }
+
+                // Validate the registration token
+                if (request.RegistrationToken != validRegistrationToken)
+                {
+                    var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                    _logger.LogWarning("Invalid system owner registration token provided. IP: {IpAddress}", ipAddress);
+                    return StatusCode(403, new { message = "Token de registro inválido." });
+                }
+
+                // Validate request
+                if (string.IsNullOrWhiteSpace(request.Username) || 
+                    string.IsNullOrWhiteSpace(request.Password) ||
+                    string.IsNullOrWhiteSpace(request.Email) ||
+                    string.IsNullOrWhiteSpace(request.FullName) ||
+                    string.IsNullOrWhiteSpace(request.TenantId))
+                {
+                    return BadRequest(new { message = "Todos os campos são obrigatórios." });
+                }
+
+                // Check if a system owner already exists (security check)
+                var existingSystemOwner = await _authService.GetSystemOwnerAsync(request.TenantId);
+                if (existingSystemOwner != null)
+                {
+                    _logger.LogWarning("Attempt to create system owner when one already exists. TenantId: {TenantId}", request.TenantId);
+                    return BadRequest(new { message = "Um administrador do sistema já existe. Use o endpoint de gerenciamento de owners para criar owners adicionais." });
+                }
+
+                // Create the system owner (ClinicId = null makes it a system owner)
+                var owner = await _authService.CreateSystemOwnerAsync(
+                    request.Username,
+                    request.Password,
+                    request.Email,
+                    request.FullName,
+                    request.Phone ?? "",
+                    request.TenantId
+                );
+
+                _logger.LogInformation("System owner created successfully. OwnerId: {OwnerId}, Username: {Username}", 
+                    owner.Id, owner.Username);
+
+                return Ok(new { 
+                    message = "Administrador do sistema criado com sucesso. Por favor, faça login.",
+                    ownerId = owner.Id,
+                    username = owner.Username
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "System owner registration failed due to validation: {Message}", ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error during system owner registration");
+                return StatusCode(500, new { message = "Erro ao criar administrador do sistema. Por favor, tente novamente." });
+            }
+        }
     }
 
     public class LoginRequest
@@ -798,5 +879,16 @@ namespace MedicSoft.Api.Controllers
     public class ResendTwoFactorEmailRequest
     {
         public string TempToken { get; set; } = string.Empty;
+    }
+
+    public class RegisterSystemOwnerRequest
+    {
+        public string RegistrationToken { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string? Phone { get; set; }
+        public string TenantId { get; set; } = string.Empty;
     }
 }

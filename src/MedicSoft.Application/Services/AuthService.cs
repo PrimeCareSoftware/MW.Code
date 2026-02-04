@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MedicSoft.Application.Configuration;
@@ -15,6 +16,8 @@ namespace MedicSoft.Application.Services
         Task<string> RecordOwnerLoginAsync(Guid ownerId, string tenantId);
         Task<bool> ValidateUserSessionAsync(Guid userId, string sessionId, string tenantId);
         Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId);
+        Task<Owner?> GetSystemOwnerAsync(string tenantId);
+        Task<Owner> CreateSystemOwnerAsync(string username, string password, string email, string fullName, string phone, string tenantId);
     }
 
     public class AuthService : IAuthService
@@ -148,6 +151,47 @@ namespace MedicSoft.Application.Services
             // This allows sessions created before the migration to still work
             var legacySessionValid = owner.IsSessionValid(sessionId);
             return legacySessionValid;
+        }
+
+        public async Task<Owner?> GetSystemOwnerAsync(string tenantId)
+        {
+            // Get the first owner with no clinic ID (system owner)
+            var owners = await _ownerRepository.GetAllAsync(tenantId);
+            return owners.FirstOrDefault(o => !o.ClinicId.HasValue);
+        }
+
+        public async Task<Owner> CreateSystemOwnerAsync(string username, string password, string email, string fullName, string phone, string tenantId)
+        {
+            // Check if username already exists
+            var usernameExists = await _ownerRepository.ExistsByUsernameAsync(username, tenantId);
+            if (usernameExists)
+            {
+                throw new InvalidOperationException("Nome de usuário já está em uso.");
+            }
+
+            // Check if email already exists
+            var emailExists = await _ownerRepository.ExistsByEmailAsync(email, tenantId);
+            if (emailExists)
+            {
+                throw new InvalidOperationException("Email já está em uso.");
+            }
+
+            // Hash the password
+            var passwordHash = _passwordHasher.HashPassword(password);
+
+            // Create the system owner (ClinicId = null)
+            var systemOwner = new Owner(
+                username: username,
+                email: email,
+                passwordHash: passwordHash,
+                fullName: fullName,
+                phone: phone,
+                tenantId: tenantId,
+                clinicId: null  // NULL clinic ID makes this a system owner
+            );
+
+            await _ownerRepository.AddAsync(systemOwner);
+            return systemOwner;
         }
     }
 }

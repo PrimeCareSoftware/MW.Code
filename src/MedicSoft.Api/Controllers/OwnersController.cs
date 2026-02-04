@@ -1,16 +1,22 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
+using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 
 namespace MedicSoft.Api.Controllers
 {
     /// <summary>
     /// Controller for owner management - create, update, activate/deactivate owners
+    /// SECURITY: This controller is restricted to SystemAdmin role only.
+    /// Clinic owners (who contract the medicwarehouse-app service) should NOT have access.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = RoleNames.SystemAdmin)]
+    [RequireSystemOwner]
     public class OwnersController : BaseController
     {
         private readonly IOwnerService _ownerService;
@@ -19,6 +25,22 @@ namespace MedicSoft.Api.Controllers
             : base(tenantContext)
         {
             _ownerService = ownerService;
+        }
+
+        /// <summary>
+        /// Gets the current user's identity for audit logging
+        /// </summary>
+        private string GetPerformedBy()
+        {
+            return User?.Identity?.Name ?? User?.FindFirst("sub")?.Value ?? "UNKNOWN";
+        }
+
+        /// <summary>
+        /// Gets the client's IP address for audit logging
+        /// </summary>
+        private string GetClientIpAddress()
+        {
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
         }
 
         /// <summary>
@@ -111,6 +133,9 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
+                
                 var owner = await _ownerService.CreateOwnerAsync(
                     request.Username,
                     request.Email,
@@ -120,7 +145,9 @@ namespace MedicSoft.Api.Controllers
                     tenantId,
                     request.ClinicId,
                     request.ProfessionalId,
-                    request.Specialty
+                    request.Specialty,
+                    performedBy,
+                    ipAddress
                 );
 
                 return CreatedAtAction(nameof(GetOwner), new { id = owner.Id }, new OwnerDto
@@ -152,6 +179,9 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
+                
                 await _ownerService.UpdateOwnerProfileAsync(
                     id,
                     request.Email,
@@ -159,7 +189,9 @@ namespace MedicSoft.Api.Controllers
                     request.Phone,
                     tenantId,
                     request.ProfessionalId,
-                    request.Specialty
+                    request.Specialty,
+                    performedBy,
+                    ipAddress
                 );
 
                 return Ok(new { message = "Owner updated successfully" });
@@ -179,7 +211,10 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                await _ownerService.ActivateOwnerAsync(id, tenantId);
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
+                
+                await _ownerService.ActivateOwnerAsync(id, tenantId, performedBy, ipAddress);
                 return Ok(new { message = "Owner activated successfully" });
             }
             catch (InvalidOperationException ex)
@@ -197,7 +232,10 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var tenantId = GetTenantId();
-                await _ownerService.DeactivateOwnerAsync(id, tenantId);
+                var performedBy = GetPerformedBy();
+                var ipAddress = GetClientIpAddress();
+                
+                await _ownerService.DeactivateOwnerAsync(id, tenantId, performedBy, ipAddress);
                 return Ok(new { message = "Owner deactivated successfully" });
             }
             catch (InvalidOperationException ex)
