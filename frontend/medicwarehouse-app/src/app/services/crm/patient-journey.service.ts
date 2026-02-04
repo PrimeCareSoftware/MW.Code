@@ -25,17 +25,28 @@ export class PatientJourneyService {
     });
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Ocorreu um erro desconhecido';
+  private handleError(error: HttpErrorResponse & { userMessage?: string }): Observable<never> {
+    // Preserve the original HttpErrorResponse so that any normalized fields
+    // (e.g., userMessage, status) added by the global error interceptor are not lost.
+    const anyError = error as any;
+    
+    // Respect userMessage already defined by errorInterceptor
+    let fallbackMessage = 'Ocorreu um erro desconhecido';
     
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `Erro: ${error.error.message}`;
+      fallbackMessage = `Erro: ${error.error.message}`;
     } else {
-      errorMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
+      fallbackMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
+    }
+    
+    // If interceptor hasn't set userMessage yet, define a fallback
+    if (!anyError.userMessage) {
+      anyError.userMessage = fallbackMessage;
     }
     
     console.error('Patient Journey Service Error:', error);
-    return throwError(() => new Error(errorMessage));
+    // Rethrow original HTTP error to preserve status and additional fields
+    return throwError(() => error);
   }
 
   getOrCreateJourney(patientId: string): Observable<PatientJourney> {

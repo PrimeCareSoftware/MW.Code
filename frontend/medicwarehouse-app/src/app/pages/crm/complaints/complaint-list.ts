@@ -33,7 +33,8 @@ export class ComplaintList implements OnInit {
       },
       error: (error) => {
         console.error('Error loading complaints:', error);
-        this.errorMessage.set(error.message || 'Erro ao carregar reclamações');
+        this.errorMessage.set(error.userMessage || error.message || 'Erro ao carregar reclamações');
+        this.complaints.set([]);
         this.isLoading.set(false);
       }
     });

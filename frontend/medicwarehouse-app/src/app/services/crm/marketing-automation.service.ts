@@ -24,17 +24,34 @@ export class MarketingAutomationService {
     });
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Ocorreu um erro desconhecido';
+  private handleError(error: HttpErrorResponse & { userMessage?: string }): Observable<never> {
+    // Preserve the original HttpErrorResponse so that any normalized fields
+    // (e.g., userMessage, status) added by the global error interceptor are not lost.
+    const anyError = error as any;
+    const backendError: any = error?.error;
     
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Erro: ${error.error.message}`;
-    } else {
-      errorMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
+    // Prioritize userMessage from error interceptor
+    const userMessage: string | undefined =
+      backendError?.userMessage ?? anyError.userMessage;
+    
+    let resolvedMessage = userMessage || 'Ocorreu um erro desconhecido';
+    
+    if (!userMessage) {
+      if (error.error instanceof ErrorEvent) {
+        resolvedMessage = `Erro: ${error.error.message}`;
+      } else {
+        resolvedMessage = backendError?.message || `Erro ${error.status}: ${error.statusText}`;
+      }
+    }
+    
+    // Ensure userMessage exists for consistent consumption
+    if (!anyError.userMessage && resolvedMessage) {
+      anyError.userMessage = resolvedMessage;
     }
     
     console.error('Marketing Automation Service Error:', error);
-    return throwError(() => new Error(errorMessage));
+    // Return original error to preserve context from interceptor
+    return throwError(() => error);
   }
 
   getAll(): Observable<MarketingAutomation[]> {

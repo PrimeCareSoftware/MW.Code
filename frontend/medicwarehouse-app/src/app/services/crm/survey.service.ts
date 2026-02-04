@@ -26,17 +26,26 @@ export class SurveyService {
     });
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Ocorreu um erro desconhecido';
+  private handleError(error: HttpErrorResponse & { userMessage?: string }): Observable<never> {
+    // Preserve the original HttpErrorResponse so that any normalized fields
+    // (e.g., userMessage, status) added by the global error interceptor are not lost.
+    const anyError = error as any;
     
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Erro: ${error.error.message}`;
-    } else {
-      errorMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
+    // Use userMessage from error interceptor if available
+    let errorMessage = anyError.userMessage || 'Ocorreu um erro desconhecido';
+    
+    if (!anyError.userMessage) {
+      if (error.error instanceof ErrorEvent) {
+        errorMessage = `Erro: ${error.error.message}`;
+      } else {
+        errorMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
+      }
+      // Set userMessage for consistent consumption
+      anyError.userMessage = errorMessage;
     }
     
     console.error('Survey Service Error:', error);
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => error);
   }
 
   getAll(): Observable<Survey[]> {

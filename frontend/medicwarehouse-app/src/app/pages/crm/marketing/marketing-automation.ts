@@ -33,7 +33,8 @@ export class MarketingAutomation implements OnInit {
       },
       error: (error) => {
         console.error('Error loading marketing campaigns:', error);
-        this.errorMessage.set(error.message || 'Erro ao carregar campanhas');
+        this.errorMessage.set(error.userMessage || error.message || 'Erro ao carregar campanhas');
+        this.campaigns.set([]);
         this.isLoading.set(false);
       }
     });

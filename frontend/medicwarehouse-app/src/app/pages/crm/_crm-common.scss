@@ -78,7 +78,9 @@
 }
 
 .loading-state,
-.empty-state {
+.empty-state,
+.error-state,
+.info-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,6 +109,41 @@
   .text-muted {
     color: var(--text-tertiary);
     font-size: 0.9rem;
+  }
+
+  button {
+    margin-top: 1.5rem;
+  }
+}
+
+.error-state {
+  svg {
+    color: #ef4444;
+  }
+
+  h3 {
+    color: #dc2626;
+  }
+}
+
+.info-state {
+  svg {
+    color: #3b82f6;
+  }
+
+  h3 {
+    color: #2563eb;
+  }
+}
+
+.btn-secondary {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+
+  &:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
   }
 }
 
