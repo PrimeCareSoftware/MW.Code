@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using PatientPortal.Infrastructure.Data;
 using PatientPortal.Application.Interfaces;
+using PatientPortal.Infrastructure.Services;
 using Moq;
 
 namespace PatientPortal.Tests.Integration;
@@ -39,7 +40,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
             // This prevents it from trying to connect to PostgreSQL during tests
             var hostedServiceDescriptor = services.FirstOrDefault(
                 d => d.ServiceType == typeof(IHostedService) &&
-                     d.ImplementationType?.Name == "AppointmentReminderService");
+                     d.ImplementationType == typeof(AppointmentReminderService));
             if (hostedServiceDescriptor != null)
             {
                 services.Remove(hostedServiceDescriptor);
