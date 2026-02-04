@@ -78,14 +78,16 @@ Based on a 4px grid system for consistent spacing:
 
 ### Border Radius
 
-Consistent rounded corners throughout:
+Consistent rounded corners throughout (based on 12px default):
 
 ```scss
---radius: 0.75rem;                    /* 12px - base */
---radius-sm: calc(var(--radius) - 4px);  /* 8px */
+--radius: 0.75rem;                       /* 12px - base */
+--radius-sm: calc(var(--radius) - 4px);  /* 8px (when base is 12px) */
 --radius-md: var(--radius);              /* 12px */
---radius-lg: calc(var(--radius) + 4px);  /* 16px */
+--radius-lg: calc(var(--radius) + 4px);  /* 16px (when base is 12px) */
 ```
+
+*Note: The pixel values in comments reflect the default base radius of 12px and will scale proportionally if the base changes.*
 
 ### Shadows
 
