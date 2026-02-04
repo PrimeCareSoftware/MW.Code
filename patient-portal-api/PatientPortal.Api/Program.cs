@@ -173,7 +173,10 @@ builder.Services.AddScoped<IDocumentViewRepository, DocumentViewRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+// Enable Swagger - configurable via SwaggerSettings:Enabled (default: true)
+// Note: In production, consider restricting Swagger access via network policies or authentication
+var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled") ?? true;
+if (enableSwagger)
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
