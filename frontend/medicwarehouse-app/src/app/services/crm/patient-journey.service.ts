@@ -28,7 +28,6 @@ export class PatientJourneyService {
   private handleError(error: HttpErrorResponse & { userMessage?: string }): Observable<never> {
     // Preserve the original HttpErrorResponse so that any normalized fields
     // (e.g., userMessage, status) added by the global error interceptor are not lost.
-    const anyError = error as any;
     
     // Respect userMessage already defined by errorInterceptor
     let fallbackMessage = 'Ocorreu um erro desconhecido';
@@ -40,8 +39,8 @@ export class PatientJourneyService {
     }
     
     // If interceptor hasn't set userMessage yet, define a fallback
-    if (!anyError.userMessage) {
-      anyError.userMessage = fallbackMessage;
+    if (!error.userMessage) {
+      error.userMessage = fallbackMessage;
     }
     
     console.error('Patient Journey Service Error:', error);
