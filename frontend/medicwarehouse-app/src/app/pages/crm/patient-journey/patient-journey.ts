@@ -14,7 +14,8 @@ import { PatientJourney as PatientJourneyModel } from '../../../models/crm';
 export class PatientJourney implements OnInit {
   journeys = signal<PatientJourneyModel[]>([]);
   isLoading = signal<boolean>(false);
-  errorMessage = signal<string>('');
+  // This holds informational messages, not errors, since this page requires patient selection
+  infoMessage = signal<string>('');
 
   constructor(private patientJourneyService: PatientJourneyService) {}
 
@@ -24,11 +25,13 @@ export class PatientJourney implements OnInit {
 
   loadJourneys(): void {
     this.isLoading.set(true);
-    this.errorMessage.set('');
+    this.infoMessage.set('');
     
+    // Patient journey requires a patient ID to function.
+    // This informational message guides the user on next steps.
     this.journeys.set([]);
     this.isLoading.set(false);
-    this.errorMessage.set('Para visualizar jornadas, selecione um paciente específico.');
+    this.infoMessage.set('Para visualizar jornadas, selecione um paciente específico.');
   }
 
   onViewAnalytics(): void {

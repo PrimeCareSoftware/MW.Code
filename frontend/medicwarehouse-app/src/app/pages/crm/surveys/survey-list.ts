@@ -33,7 +33,8 @@ export class SurveyList implements OnInit {
       },
       error: (error) => {
         console.error('Error loading surveys:', error);
-        this.errorMessage.set(error.message || 'Erro ao carregar pesquisas');
+        this.errorMessage.set(error.userMessage || error.message || 'Erro ao carregar pesquisas');
+        this.surveys.set([]);
         this.isLoading.set(false);
       }
     });
