@@ -85,6 +85,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<ComplaintDto?> GetByIdAsync(Guid id, string tenantId)
         {
             var complaint = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == tenantId);
@@ -95,6 +96,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetAllAsync(string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.TenantId == tenantId)
@@ -188,6 +190,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<ComplaintDto?> GetByProtocolNumberAsync(string protocolNumber, string tenantId)
         {
             var complaint = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .FirstOrDefaultAsync(c => c.ProtocolNumber == protocolNumber && c.TenantId == tenantId);
@@ -198,6 +201,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetByCategoryAsync(ComplaintCategory category, string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.Category == category && c.TenantId == tenantId)
@@ -210,6 +214,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetByStatusAsync(ComplaintStatus status, string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.Status == status && c.TenantId == tenantId)
@@ -222,6 +227,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<ComplaintDto>> GetByPriorityAsync(ComplaintPriority priority, string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)
                 .Where(c => c.Priority == priority && c.TenantId == tenantId)
@@ -234,6 +240,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<ComplaintDashboardDto> GetDashboardMetricsAsync(string tenantId)
         {
             var complaints = await _context.Complaints
+                .AsNoTracking()
                 .Where(c => c.TenantId == tenantId)
                 .Include(c => c.Patient)
                 .Include(c => c.Interactions)

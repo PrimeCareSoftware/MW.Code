@@ -137,6 +137,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<SurveyDto?> GetByIdAsync(Guid id, string tenantId)
         {
             var survey = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Questions)
                 .FirstOrDefaultAsync(s => s.Id == id && s.TenantId == tenantId);
 
@@ -146,6 +147,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<SurveyDto>> GetAllAsync(string tenantId)
         {
             var surveys = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Questions)
                 .Where(s => s.TenantId == tenantId)
                 .OrderByDescending(s => s.CreatedAt)
@@ -157,6 +159,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<SurveyDto>> GetActiveAsync(string tenantId)
         {
             var surveys = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Questions)
                 .Where(s => s.TenantId == tenantId && s.IsActive)
                 .OrderByDescending(s => s.CreatedAt)
@@ -282,6 +285,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<SurveyResponseDto>> GetPatientResponsesAsync(Guid patientId, string tenantId)
         {
             var responses = await _context.SurveyResponses
+                .AsNoTracking()
                 .Include(r => r.Survey)
                 .Include(r => r.Patient)
                 .Include(r => r.QuestionResponses)
@@ -296,6 +300,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<SurveyResponseDto>> GetSurveyResponsesAsync(Guid surveyId, string tenantId)
         {
             var responses = await _context.SurveyResponses
+                .AsNoTracking()
                 .Include(r => r.Survey)
                 .Include(r => r.Patient)
                 .Include(r => r.QuestionResponses)
@@ -310,6 +315,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<SurveyAnalyticsDto?> GetAnalyticsAsync(Guid surveyId, string tenantId)
         {
             var survey = await _context.Surveys
+                .AsNoTracking()
                 .Include(s => s.Responses)
                     .ThenInclude(r => r.QuestionResponses)
                 .Include(s => s.Responses)

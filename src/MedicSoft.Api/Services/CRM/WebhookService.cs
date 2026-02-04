@@ -68,6 +68,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<WebhookSubscriptionDto?> GetSubscriptionAsync(Guid id, string tenantId)
         {
             var subscription = await _context.WebhookSubscriptions
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id && s.TenantId == tenantId);
 
             return subscription == null ? null : MapToDto(subscription);
@@ -76,6 +77,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<List<WebhookSubscriptionDto>> GetAllSubscriptionsAsync(string tenantId)
         {
             var subscriptions = await _context.WebhookSubscriptions
+                .AsNoTracking()
                 .Where(s => s.TenantId == tenantId)
                 .ToListAsync();
 

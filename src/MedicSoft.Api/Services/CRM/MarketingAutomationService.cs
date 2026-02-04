@@ -159,6 +159,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<MarketingAutomationDto?> GetByIdAsync(Guid id, string tenantId)
         {
             var automation = await _context.MarketingAutomations
+                .AsNoTracking()
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
                 .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
@@ -169,6 +170,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<MarketingAutomationDto>> GetAllAsync(string tenantId)
         {
             var automations = await _context.MarketingAutomations
+                .AsNoTracking()
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
                 .Where(a => a.TenantId == tenantId)
@@ -181,6 +183,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<IEnumerable<MarketingAutomationDto>> GetActiveAsync(string tenantId)
         {
             var automations = await _context.MarketingAutomations
+                .AsNoTracking()
                 .Include(a => a.Actions)
                 .ThenInclude(a => a.EmailTemplate)
                 .Where(a => a.TenantId == tenantId && a.IsActive)
@@ -227,6 +230,7 @@ namespace MedicSoft.Api.Services.CRM
         public async Task<MarketingAutomationMetricsDto?> GetMetricsAsync(Guid id, string tenantId)
         {
             var automation = await _context.MarketingAutomations
+                .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId);
 
             if (automation == null)
