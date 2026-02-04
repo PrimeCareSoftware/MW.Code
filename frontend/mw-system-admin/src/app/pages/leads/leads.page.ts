@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 import { LeadService } from '../../services/lead.service';
 import {
   Lead,
@@ -14,13 +13,14 @@ import {
   getLeadScoreColor,
   getActivityTypeLabel
 } from '../../models/lead.model';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-leads',
   templateUrl: './leads.page.html',
   styleUrls: ['./leads.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [CommonModule, FormsModule, Navbar]
 })
 export class LeadsPage implements OnInit {
   leads: Lead[] = [];
@@ -97,7 +97,7 @@ export class LeadsPage implements OnInit {
 
   async loadStatistics() {
     try {
-      this.statistics = await this.leadService.getStatistics().toPromise();
+      this.statistics = await this.leadService.getStatistics().toPromise() || null;
     } catch (error) {
       console.error('Error loading statistics:', error);
     }
