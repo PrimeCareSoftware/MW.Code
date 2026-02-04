@@ -4,6 +4,16 @@
 
 Este documento descreve todas as medidas de segurança implementadas no sistema Omni Care Software para proteger contra ataques comuns como SQL Injection, XSS, CSRF, e outras ameaças.
 
+## 📚 Documentação de Segurança
+
+### Guias Disponíveis
+
+- **[Guia Geral de Segurança](SECURITY_GUIDE.md)** - Este documento
+- **[Usuários de Aplicação PostgreSQL](POSTGRES_APP_USER_GUIDE.md)** - Guia completo para criar usuários de banco com permissões mínimas
+- **[Quick Start PostgreSQL](POSTGRES_APP_USER_QUICKSTART.md)** - Guia rápido de 5 minutos para migrar usuários
+- **[Criptografia em Produção](PRODUCTION_ENCRYPTION_GUIDE.md)** - Guia de criptografia de dados
+- **[Rotação de Chaves](KEY_ROTATION_GUIDE.md)** - Processo de rotação de chaves de segurança
+
 ## 🔒 Medidas de Segurança Implementadas
 
 ### 1. Autenticação e Autorização
@@ -42,7 +52,28 @@ ClockSkew = TimeSpan.Zero
 - Pelo menos 1 caractere especial
 - Não pode conter padrões fracos comuns (ex: "Password", "12345678")
 
-### 2. Proteção contra Injeção
+### 2. Segurança de Banco de Dados
+
+#### Usuários de Aplicação PostgreSQL
+
+⚠️ **NUNCA use o usuário master (postgres) nas connection strings!**
+
+**Por que?**
+- Privilégios excessivos
+- Dificulta auditoria
+- Viola princípio do menor privilégio
+- Não atende compliance (LGPD/HIPAA)
+
+**Solução:**
+```bash
+# Criar usuários de aplicação com permissões mínimas
+cd scripts
+./create-postgres-app-users.sh
+```
+
+**Documentação completa:**
+- 📘 [POSTGRES_APP_USER_GUIDE.md](POSTGRES_APP_USER_GUIDE.md) - Guia completo
+- 🚀 [POSTGRES_APP_USER_QUICKSTART.md](POSTGRES_APP_USER_QUICKSTART.md) - Guia rápido
 
 #### SQL Injection
 **Proteção**: Entity Framework Core com queries parametrizadas
