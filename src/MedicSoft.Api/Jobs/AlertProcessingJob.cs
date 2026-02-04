@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using MedicSoft.Api.Hubs;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Interfaces;
+using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Repository.Context;
 
@@ -116,12 +117,16 @@ namespace MedicSoft.Api.Jobs
                 var threshold = now.AddMinutes(-15); // 15 minutos de tolerância
 
                 var overdueAppointments = await _context.Appointments
-                    .Where(a => a.Status == Domain.Entities.AppointmentStatus.Scheduled)
-                    .Where(a => a.AppointmentDate >= today && a.AppointmentDate < tomorrow) // Date range for today
-                    .Where(a => a.AppointmentDate < threshold)
+                    .Where(a => a.Status == AppointmentStatus.Scheduled)
+                    .Where(a => a.ScheduledDate >= today && a.ScheduledDate < tomorrow) // Date range for today
                     .Include(a => a.Patient)
-                    .Include(a => a.Doctor)
+                    .Include(a => a.Professional)
                     .ToListAsync();
+
+                // Filter by actual appointment time (date + time)
+                overdueAppointments = overdueAppointments
+                    .Where(a => a.GetScheduledDateTime() < threshold)
+                    .ToList();
 
                 foreach (var appointment in overdueAppointments)
                 {
@@ -134,29 +139,33 @@ namespace MedicSoft.Api.Jobs
 
                     if (!existingAlert)
                     {
+                        var appointmentTime = appointment.GetScheduledDateTime();
                         var alert = await _alertService.CreateAlertAsync(new CreateAlertDto
                         {
                             Category = AlertCategory.AppointmentOverdue,
                             Priority = AlertPriority.High,
                             Title = "Consulta Atrasada",
-                            Message = $"Consulta com {appointment.Patient?.Name} está atrasada. Horário: {appointment.AppointmentDate:HH:mm}",
+                            Message = $"Consulta com {appointment.Patient?.Name} está atrasada. Horário: {appointmentTime:HH:mm}",
                             ActionUrl = $"/appointments/{appointment.Id}",
                             SuggestedAction = AlertAction.ViewDetails,
                             ActionLabel = "Ver Consulta",
                             RecipientType = AlertRecipientType.User,
-                            UserId = appointment.DoctorId,
+                            UserId = appointment.ProfessionalId,
                             RelatedEntityType = "Appointment",
                             RelatedEntityId = appointment.Id,
                             ExpiresAt = now.AddHours(24)
                         }, appointment.TenantId);
 
                         // Enviar via SignalR
-                        await _alertHub.Clients.User(appointment.DoctorId.ToString())
-                            .SendAsync("ReceiveAlert", alert);
+                        if (appointment.ProfessionalId.HasValue)
+                        {
+                            await _alertHub.Clients.User(appointment.ProfessionalId.ToString())
+                                .SendAsync("ReceiveAlert", alert);
+                        }
                     }
                 }
 
-                _logger.LogInformation($"Verificadas {overdueAppointments.Count} consultas atrasadas");
+                _logger.LogInformation("Verificadas {Count} consultas atrasadas", overdueAppointments.Count());
             }
             catch (Exception ex)
             {
@@ -178,7 +187,7 @@ namespace MedicSoft.Api.Jobs
                 var now = DateTime.UtcNow.Date;
 
                 var overdueReceivables = await _context.AccountsReceivable
-                    .Where(ar => ar.Status == "Pending") // Status from domain entity
+                    .Where(ar => ar.Status == ReceivableStatus.Pending) // Status from domain entity
                     .Where(ar => ar.DueDate < now)
                     .Include(ar => ar.Patient)
                     .ToListAsync();
@@ -203,26 +212,26 @@ namespace MedicSoft.Api.Jobs
                             Category = AlertCategory.PaymentOverdue,
                             Priority = priority,
                             Title = "Pagamento Vencido",
-                            Message = $"Pagamento de {receivable.Patient?.Name ?? "Cliente"} venceu há {daysOverdue} dias. Valor: R$ {receivable.Amount:N2}",
+                            Message = $"Pagamento de {receivable.Patient?.Name ?? "Cliente"} venceu há {daysOverdue} dias. Valor: R$ {receivable.TotalAmount:N2}",
                             ActionUrl = $"/financial/receivables/{receivable.Id}",
                             SuggestedAction = AlertAction.Contact,
                             ActionLabel = "Contatar Paciente",
                             RecipientType = AlertRecipientType.Clinic,
-                            ClinicId = receivable.ClinicId,
+                            ClinicId = Guid.TryParse(receivable.TenantId, out var clinicId) ? clinicId : (Guid?)null,
                             RelatedEntityType = "AccountsReceivable",
                             RelatedEntityId = receivable.Id
                         }, receivable.TenantId);
 
                         // Enviar via SignalR para toda a clínica
-                        if (receivable.ClinicId.HasValue)
+                        if (Guid.TryParse(receivable.TenantId, out var tenantGuid))
                         {
-                            await _alertHub.Clients.Group($"clinic_{receivable.ClinicId}")
+                            await _alertHub.Clients.Group($"clinic_{tenantGuid}")
                                 .SendAsync("ReceiveAlert", alert);
                         }
                     }
                 }
 
-                _logger.LogInformation($"Verificados {overdueReceivables.Count} pagamentos vencidos");
+                _logger.LogInformation("Verificados {Count} pagamentos vencidos", overdueReceivables.Count());
             }
             catch (Exception ex)
             {
@@ -243,7 +252,7 @@ namespace MedicSoft.Api.Jobs
 
                 var lowStockMaterials = await _context.Materials
                     .Where(m => m.IsActive)
-                    .Where(m => m.CurrentStock <= m.MinimumStock)
+                    .Where(m => m.StockQuantity <= m.MinimumStock)
                     .ToListAsync();
 
                 foreach (var material in lowStockMaterials)
@@ -257,32 +266,32 @@ namespace MedicSoft.Api.Jobs
 
                     if (!existingAlert)
                     {
-                        var isOutOfStock = material.CurrentStock == 0;
+                        var isOutOfStock = material.StockQuantity == 0;
                         var alert = await _alertService.CreateAlertAsync(new CreateAlertDto
                         {
                             Category = isOutOfStock ? AlertCategory.OutOfStock : AlertCategory.LowStock,
                             Priority = isOutOfStock ? AlertPriority.Critical : AlertPriority.High,
                             Title = isOutOfStock ? "Material sem Estoque" : "Estoque Baixo",
-                            Message = $"{material.Name}: {material.CurrentStock} unidades (mínimo: {material.MinimumStock})",
+                            Message = $"{material.Name}: {material.StockQuantity} unidades (mínimo: {material.MinimumStock})",
                             ActionUrl = $"/inventory/materials/{material.Id}",
                             SuggestedAction = AlertAction.Restock,
                             ActionLabel = "Reabastecer",
                             RecipientType = AlertRecipientType.Clinic,
-                            ClinicId = material.ClinicId,
+                            ClinicId = Guid.TryParse(material.TenantId, out var clinicId) ? clinicId : (Guid?)null,
                             RelatedEntityType = "Material",
                             RelatedEntityId = material.Id
                         }, material.TenantId);
 
                         // Enviar via SignalR
-                        if (material.ClinicId.HasValue)
+                        if (Guid.TryParse(material.TenantId, out var tenantGuid))
                         {
-                            await _alertHub.Clients.Group($"clinic_{material.ClinicId}")
+                            await _alertHub.Clients.Group($"clinic_{tenantGuid}")
                                 .SendAsync("ReceiveAlert", alert);
                         }
                     }
                 }
 
-                _logger.LogInformation($"Verificados {lowStockMaterials.Count} materiais com estoque baixo");
+                _logger.LogInformation("Verificados {Count} materiais com estoque baixo", lowStockMaterials.Count());
             }
             catch (Exception ex)
             {
@@ -339,7 +348,7 @@ namespace MedicSoft.Api.Jobs
                         }, subscription.TenantId);
 
                         // Enviar via SignalR
-                        if (subscription.ClinicId.HasValue)
+                        if (subscription.ClinicId != Guid.Empty)
                         {
                             await _alertHub.Clients.Group($"clinic_{subscription.ClinicId}")
                                 .SendAsync("ReceiveAlert", alert);
