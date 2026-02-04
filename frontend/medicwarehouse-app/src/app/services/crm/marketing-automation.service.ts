@@ -28,25 +28,18 @@ export class MarketingAutomationService {
     // Preserve the original HttpErrorResponse so that any normalized fields
     // (e.g., userMessage, status) added by the global error interceptor are not lost.
     const anyError = error as any;
-    const backendError: any = error?.error;
     
-    // Prioritize userMessage from error interceptor
-    const userMessage: string | undefined =
-      backendError?.userMessage ?? anyError.userMessage;
+    // Use userMessage from error interceptor if available
+    let errorMessage = anyError.userMessage || 'Ocorreu um erro desconhecido';
     
-    let resolvedMessage = userMessage || 'Ocorreu um erro desconhecido';
-    
-    if (!userMessage) {
+    if (!anyError.userMessage) {
       if (error.error instanceof ErrorEvent) {
-        resolvedMessage = `Erro: ${error.error.message}`;
+        errorMessage = `Erro: ${error.error.message}`;
       } else {
-        resolvedMessage = backendError?.message || `Erro ${error.status}: ${error.statusText}`;
+        errorMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
       }
-    }
-    
-    // Ensure userMessage exists for consistent consumption
-    if (!anyError.userMessage && resolvedMessage) {
-      anyError.userMessage = resolvedMessage;
+      // Set userMessage for consistent consumption
+      anyError.userMessage = errorMessage;
     }
     
     console.error('Marketing Automation Service Error:', error);
