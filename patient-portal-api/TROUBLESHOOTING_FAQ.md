@@ -1,8 +1,8 @@
 # ❓ Portal do Paciente - FAQ e Troubleshooting
 
 > **Guia de Resolução de Problemas**  
-> **Última Atualização:** 26 de Janeiro de 2026  
-> **Versão:** 1.0
+> **Última Atualização:** 04 de Fevereiro de 2026  
+> **Versão:** 1.1
 
 ---
 
@@ -666,7 +666,76 @@ services.AddHostedService<AppointmentReminderService>();
 
 ## 💾 Problemas de Banco de Dados
 
-### 1. Migration falha
+### 1. "Password authentication failed for user postgres"
+
+**Sintomas:**
+- Erro `28P01: password authentication failed for user "postgres"`
+- Serviço de lembretes de consulta não funciona
+- Logs mostram múltiplos erros de autenticação do PostgreSQL
+
+**Causas Comuns:**
+- Connection string com credenciais incorretas
+- Banco de dados não está rodando
+- Senha do PostgreSQL mudou mas configuração não foi atualizada
+- Usuário PostgreSQL não existe ou não tem permissões
+
+**Solução:**
+
+**1. Verificar credenciais no appsettings.json:**
+
+```json
+// appsettings.Development.json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=medicwarehouse;Username=postgres;Password=postgres;Include Error Detail=true"
+  }
+}
+```
+
+**2. Verificar se PostgreSQL está rodando:**
+
+```bash
+# Docker
+docker ps | grep postgres
+
+# Serviço local
+sudo systemctl status postgresql  # Linux
+brew services list | grep postgres  # Mac
+Get-Service postgresql*  # Windows PowerShell
+```
+
+**3. Testar conexão manualmente:**
+
+```bash
+# psql
+psql -h localhost -p 5432 -U postgres -d medicwarehouse
+
+# Se falhar com mesmo erro, resetar senha:
+# Docker
+docker exec -it patient-portal-postgres psql -U postgres
+ALTER USER postgres WITH PASSWORD 'nova_senha';
+
+# Serviço local
+sudo -u postgres psql
+ALTER USER postgres WITH PASSWORD 'nova_senha';
+```
+
+**4. Atualizar configuração:**
+
+```bash
+# .env file (se usando docker-compose)
+POSTGRES_PASSWORD=nova_senha
+
+# appsettings.json
+"DefaultConnection": "Host=localhost;Port=5432;Database=medicwarehouse;Username=postgres;Password=nova_senha"
+```
+
+**Nota:** O serviço de lembretes agora lida graciosamente com falhas de conexão do banco de dados. Ele irá:
+- Logar um aviso ao invés de um erro
+- Continuar rodando e tentar novamente no próximo intervalo
+- Não crashar a aplicação se o banco estiver temporariamente indisponível
+
+### 2. Migration falha
 
 **Sintomas:**
 - `dotnet ef database update` retorna erro
@@ -928,6 +997,6 @@ A: Sandbox é grátis (teste). Produção: pay-per-message (~$0.005/msg).
 
 ---
 
-**Última Atualização:** 26 de Janeiro de 2026  
+**Última Atualização:** 04 de Fevereiro de 2026  
 **Mantido por:** Equipe Omni Care  
 **Contribua:** Abra uma issue no GitHub com sugestões de melhorias
