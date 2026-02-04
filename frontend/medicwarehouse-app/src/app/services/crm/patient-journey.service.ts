@@ -29,18 +29,17 @@ export class PatientJourneyService {
     // Preserve the original HttpErrorResponse so that any normalized fields
     // (e.g., userMessage, status) added by the global error interceptor are not lost.
     
-    // Respect userMessage already defined by errorInterceptor
-    let fallbackMessage = 'Ocorreu um erro desconhecido';
+    // Use userMessage from error interceptor if available
+    let errorMessage = error.userMessage || 'Ocorreu um erro desconhecido';
     
-    if (error.error instanceof ErrorEvent) {
-      fallbackMessage = `Erro: ${error.error.message}`;
-    } else {
-      fallbackMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
-    }
-    
-    // If interceptor hasn't set userMessage yet, define a fallback
     if (!error.userMessage) {
-      error.userMessage = fallbackMessage;
+      if (error.error instanceof ErrorEvent) {
+        errorMessage = `Erro: ${error.error.message}`;
+      } else {
+        errorMessage = error.error?.message || `Erro ${error.status}: ${error.statusText}`;
+      }
+      // Set userMessage for consistent consumption
+      error.userMessage = errorMessage;
     }
     
     console.error('Patient Journey Service Error:', error);
