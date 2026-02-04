@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 
@@ -138,6 +138,4 @@ export class BottomNavComponent {
     { label: 'Documentos', icon: 'description', route: '/documents' },
     { label: 'Perfil', icon: 'person', route: '/profile' }
   ];
-
-  constructor(public router: Router) {}
 }

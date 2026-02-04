@@ -78,10 +78,10 @@ export class SkeletonLoaderComponent {
   @Input() height?: string;
   @Input() shape: 'default' | 'circle' | 'rounded' = 'default';
 
-  getStyles() {
-    const styles: any = {};
-    if (this.width) styles.width = this.width;
-    if (this.height) styles.height = this.height;
+  getStyles(): Record<string, string> {
+    const styles: Record<string, string> = {};
+    if (this.width) styles['width'] = this.width;
+    if (this.height) styles['height'] = this.height;
     return styles;
   }
 }

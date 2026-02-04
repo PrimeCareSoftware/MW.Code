@@ -23,7 +23,7 @@ export class AnimatedCounterComponent implements OnInit, OnDestroy {
   @Input() suffix = '';
 
   displayValue = '0';
-  private animationFrame?: number;
+  private animationFrame: number | null = null;
   private startTime?: number;
   private startValue = 0;
 
@@ -32,7 +32,7 @@ export class AnimatedCounterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.animationFrame) {
+    if (this.animationFrame !== null) {
       cancelAnimationFrame(this.animationFrame);
     }
   }
