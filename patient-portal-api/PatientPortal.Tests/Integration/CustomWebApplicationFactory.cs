@@ -40,6 +40,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
             // This prevents it from trying to connect to PostgreSQL during tests
             var hostedServiceDescriptor = services.FirstOrDefault(
                 d => d.ServiceType == typeof(IHostedService) &&
+                     d.ImplementationType != null &&
                      d.ImplementationType == typeof(AppointmentReminderService));
             if (hostedServiceDescriptor != null)
             {
