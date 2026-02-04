@@ -16,6 +16,10 @@ import { User } from '../../models/auth.model';
 import { Appointment } from '../../models/appointment.model';
 import { Document } from '../../models/document.model';
 import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.component';
+import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader/skeleton-loader.component';
+import { AnimatedCounterComponent } from '../../shared/components/animated-counter/animated-counter.component';
+import { AnimatedCardComponent } from '../../shared/components/animated-card/animated-card.component';
+import { FabButtonComponent } from '../../shared/components/fab-button/fab-button.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +33,11 @@ import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.com
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatChipsModule,
-    ThemeToggleComponent
+    ThemeToggleComponent,
+    SkeletonLoaderComponent,
+    AnimatedCounterComponent,
+    AnimatedCardComponent,
+    FabButtonComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']

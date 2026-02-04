@@ -120,60 +120,53 @@
 
   .stat-card {
     cursor: default;
-    transition: all var(--transition-base);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    box-shadow: var(--shadow-md);
 
-    &:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-xl);
+    app-animated-card {
+      display: block;
     }
 
-    mat-card-content {
+    ::ng-deep .animated-card mat-card-content {
       display: flex;
       align-items: center;
       gap: var(--spacing-5);
       padding: var(--spacing-7) !important;
+    }
 
-      .stat-icon-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 72px;
-        height: 72px;
-        border-radius: var(--radius-lg);
-        background: hsl(var(--primary) / 0.1);
-        box-shadow: 0 4px 12px hsl(var(--primary) / 0.2);
+    .stat-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-lg);
+      background: hsl(var(--primary) / 0.1);
+      box-shadow: 0 4px 12px hsl(var(--primary) / 0.2);
 
-        mat-icon {
-          font-size: 40px;
-          width: 40px;
-          height: 40px;
-          color: hsl(var(--primary));
-        }
+      mat-icon {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+        color: hsl(var(--primary));
+      }
+    }
+
+    .stat-info {
+      flex: 1;
+
+      .stat-number {
+        margin: 0;
+        font-size: var(--text-5xl);
+        font-weight: var(--font-extrabold);
+        line-height: var(--leading-none);
+        color: hsl(var(--primary));
       }
 
-      .stat-info {
-        flex: 1;
-
-        .stat-number {
-          margin: 0;
-          font-size: var(--text-5xl);
-          font-weight: var(--font-extrabold);
-          line-height: var(--leading-none);
-          color: hsl(var(--primary));
-        }
-
-        .stat-label {
-          margin: var(--spacing-2) 0 0 0;
-          font-size: var(--text-base);
-          color: hsl(var(--muted-foreground));
-          font-weight: var(--font-semibold);
-          letter-spacing: 0.015em;
-        }
+      .stat-label {
+        margin: var(--spacing-2) 0 0 0;
+        font-size: var(--text-base);
+        color: hsl(var(--muted-foreground));
+        font-weight: var(--font-semibold);
+        letter-spacing: 0.015em;
       }
     }
 
@@ -277,19 +270,12 @@
 
 .appointment-card {
   margin-bottom: var(--spacing-5);
-  transition: all var(--transition-base);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  box-shadow: var(--shadow-md);
 
-  &:hover {
-    transform: translateX(8px);
-    box-shadow: var(--shadow-xl);
+  app-animated-card {
+    display: block;
   }
 
-  mat-card-content {
+  ::ng-deep .animated-card mat-card-content {
     padding: var(--spacing-6) !important;
   }
 
@@ -398,19 +384,12 @@
 
 .document-card {
   margin-bottom: var(--spacing-5);
-  transition: all var(--transition-base);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  box-shadow: var(--shadow-md);
 
-  &:hover {
-    transform: translateX(8px);
-    box-shadow: var(--shadow-xl);
+  app-animated-card {
+    display: block;
   }
 
-  mat-card-content {
+  ::ng-deep .animated-card mat-card-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -522,19 +501,34 @@
   align-items: center;
   justify-content: center;
   min-height: 500px;
-  gap: var(--spacing-7);
 
-  mat-spinner {
-    ::ng-deep circle {
-      stroke: hsl(var(--primary));
+  .skeleton-content {
+    width: 100%;
+    max-width: 1200px;
+    padding: var(--spacing-10) var(--spacing-6);
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-6);
+      margin-bottom: var(--spacing-10);
     }
-  }
 
-  .loading-text {
-    color: hsl(var(--muted-foreground));
-    font-size: var(--text-lg);
-    font-weight: var(--font-semibold);
-    letter-spacing: 0.015em;
+    .skeleton-section {
+      margin-bottom: var(--spacing-12);
+
+      .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-5);
+        margin-top: var(--spacing-6);
+      }
+
+      app-skeleton-loader {
+        display: block;
+        margin-bottom: var(--spacing-5);
+      }
+    }
   }
 }
 

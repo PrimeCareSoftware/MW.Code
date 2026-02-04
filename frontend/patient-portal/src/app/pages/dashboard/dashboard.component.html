@@ -26,31 +26,31 @@
       <button mat-button (click)="retry()">Tentar novamente</button>
     </div>
 
-    <!-- Stats Cards -->
+    <!-- Stats Cards with Animated Counter -->
     <div class="stats-grid">
-      <mat-card class="stat-card stat-card-appointments">
-        <mat-card-content>
-          <div class="stat-icon-wrapper">
-            <mat-icon color="primary">event</mat-icon>
-          </div>
-          <div class="stat-info">
-            <h2 class="stat-number">{{ appointmentsCount }}</h2>
-            <p class="stat-label">Consultas</p>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <app-animated-card class="stat-card stat-card-appointments" [hoverable]="true">
+        <div class="stat-icon-wrapper">
+          <mat-icon color="primary">event</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h2 class="stat-number">
+            <app-animated-counter [value]="appointmentsCount" [duration]="1200"></app-animated-counter>
+          </h2>
+          <p class="stat-label">Consultas</p>
+        </div>
+      </app-animated-card>
 
-      <mat-card class="stat-card stat-card-documents">
-        <mat-card-content>
-          <div class="stat-icon-wrapper">
-            <mat-icon color="accent">description</mat-icon>
-          </div>
-          <div class="stat-info">
-            <h2 class="stat-number">{{ documentsCount }}</h2>
-            <p class="stat-label">Documentos</p>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <app-animated-card class="stat-card stat-card-documents" [hoverable]="true">
+        <div class="stat-icon-wrapper">
+          <mat-icon color="accent">description</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h2 class="stat-number">
+            <app-animated-counter [value]="documentsCount" [duration]="1200"></app-animated-counter>
+          </h2>
+          <p class="stat-label">Documentos</p>
+        </div>
+      </app-animated-card>
     </div>
 
     <!-- Quick Actions -->
@@ -87,34 +87,32 @@
       </div>
 
       <div *ngIf="upcomingAppointments.length > 0; else noAppointments">
-        <mat-card *ngFor="let appointment of upcomingAppointments" class="appointment-card">
-          <mat-card-content>
-            <div class="appointment-info">
-              <div class="appointment-details">
-                <h3>{{ appointment.doctorName }}</h3>
-                <p class="specialty">
-                  <mat-icon>medical_services</mat-icon>
-                  {{ appointment.doctorSpecialty }}
-                </p>
-                <p class="clinic">
-                  <mat-icon>location_on</mat-icon>
-                  {{ appointment.clinicName }}
-                </p>
-              </div>
-              <div class="appointment-datetime">
-                <p class="date">{{ formatDate(appointment.appointmentDate) }}</p>
-                <p class="time">{{ formatTime(appointment.startTime) }}</p>
-              </div>
+        <app-animated-card *ngFor="let appointment of upcomingAppointments" class="appointment-card">
+          <div class="appointment-info">
+            <div class="appointment-details">
+              <h3>{{ appointment.doctorName }}</h3>
+              <p class="specialty">
+                <mat-icon>medical_services</mat-icon>
+                {{ appointment.doctorSpecialty }}
+              </p>
+              <p class="clinic">
+                <mat-icon>location_on</mat-icon>
+                {{ appointment.clinicName }}
+              </p>
             </div>
-            <div class="appointment-badges">
-              <mat-chip [class.telehealth]="appointment.isTelehealth">
-                <mat-icon>{{ appointment.isTelehealth ? 'videocam' : 'place' }}</mat-icon>
-                {{ appointment.isTelehealth ? 'Telemedicina' : 'Presencial' }}
-              </mat-chip>
-              <mat-chip class="status-chip">{{ appointment.status }}</mat-chip>
+            <div class="appointment-datetime">
+              <p class="date">{{ formatDate(appointment.appointmentDate) }}</p>
+              <p class="time">{{ formatTime(appointment.startTime) }}</p>
             </div>
-          </mat-card-content>
-        </mat-card>
+          </div>
+          <div class="appointment-badges">
+            <mat-chip [class.telehealth]="appointment.isTelehealth">
+              <mat-icon>{{ appointment.isTelehealth ? 'videocam' : 'place' }}</mat-icon>
+              {{ appointment.isTelehealth ? 'Telemedicina' : 'Presencial' }}
+            </mat-chip>
+            <mat-chip class="status-chip">{{ appointment.status }}</mat-chip>
+          </div>
+        </app-animated-card>
       </div>
 
       <ng-template #noAppointments>
@@ -139,25 +137,23 @@
       </div>
 
       <div *ngIf="recentDocuments.length > 0; else noDocuments">
-        <mat-card *ngFor="let document of recentDocuments" class="document-card">
-          <mat-card-content>
-            <div class="document-info">
-              <div class="document-icon">
-                <mat-icon>description</mat-icon>
-              </div>
-              <div class="document-details">
-                <h3>{{ document.title }}</h3>
-                <p class="document-meta">{{ document.documentType }} - {{ document.doctorName }}</p>
-                <p class="date">{{ formatDate(document.issuedDate) }}</p>
-              </div>
+        <app-animated-card *ngFor="let document of recentDocuments" class="document-card">
+          <div class="document-info">
+            <div class="document-icon">
+              <mat-icon>description</mat-icon>
             </div>
-            <button mat-icon-button color="primary" 
-                    [routerLink]="['/documents', document.id]"
-                    [matTooltip]="'Visualizar documento'">
-              <mat-icon>visibility</mat-icon>
-            </button>
-          </mat-card-content>
-        </mat-card>
+            <div class="document-details">
+              <h3>{{ document.title }}</h3>
+              <p class="document-meta">{{ document.documentType }} - {{ document.doctorName }}</p>
+              <p class="date">{{ formatDate(document.issuedDate) }}</p>
+            </div>
+          </div>
+          <button mat-icon-button color="primary" 
+                  [routerLink]="['/documents', document.id]"
+                  [matTooltip]="'Visualizar documento'">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </app-animated-card>
       </div>
 
       <ng-template #noDocuments>
@@ -174,8 +170,39 @@
 
   <ng-template #loadingTemplate>
     <div class="loading-container">
-      <mat-spinner diameter="64"></mat-spinner>
-      <p class="loading-text">Carregando seus dados...</p>
+      <div class="skeleton-content">
+        <!-- Skeleton Stats Cards -->
+        <div class="stats-grid">
+          <app-skeleton-loader variant="card" height="140px"></app-skeleton-loader>
+          <app-skeleton-loader variant="card" height="140px"></app-skeleton-loader>
+        </div>
+
+        <!-- Skeleton Quick Actions -->
+        <div class="skeleton-section">
+          <app-skeleton-loader variant="title" width="200px"></app-skeleton-loader>
+          <div class="actions-grid">
+            <app-skeleton-loader variant="button" height="72px"></app-skeleton-loader>
+            <app-skeleton-loader variant="button" height="72px"></app-skeleton-loader>
+            <app-skeleton-loader variant="button" height="72px"></app-skeleton-loader>
+            <app-skeleton-loader variant="button" height="72px"></app-skeleton-loader>
+          </div>
+        </div>
+
+        <!-- Skeleton Appointments -->
+        <div class="skeleton-section">
+          <app-skeleton-loader variant="title" width="250px"></app-skeleton-loader>
+          <app-skeleton-loader variant="card" height="180px"></app-skeleton-loader>
+          <app-skeleton-loader variant="card" height="180px"></app-skeleton-loader>
+        </div>
+      </div>
     </div>
   </ng-template>
+
+  <!-- Floating Action Button for Quick Appointment Booking -->
+  <app-fab-button 
+    icon="add" 
+    tooltip="Agendar Consulta" 
+    link="/appointments/book"
+    color="primary">
+  </app-fab-button>
 </div>
