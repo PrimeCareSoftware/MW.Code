@@ -8,6 +8,8 @@
 
 > 💰 **NOVO!** Plano Financeiro Mensal Completo! Estratégia de precificação unificada multi-especialidades com projeções de receita e análise de break-even. [→ Ver Plano Financeiro](PLANO_FINANCEIRO_MENSAL.md) | [→ Guia de Implementação](GUIA_IMPLEMENTACAO_PLANO_FINANCEIRO.md)
 
+> 🔧 **NOVO!** Documentação Completa de Serviços Externos! Análise detalhada de todos os serviços que o sistema usa, custos mensais e prioridades de contratação para o MVP. [→ Ver Documentação Completa](SERVICOS_EXTERNOS_DOCUMENTACAO.md) | [→ Resumo Executivo](RESUMO_EXECUTIVO_SERVICOS_EXTERNOS.md)
+
 > 🛡️ **COMPLETO!** Fase 9 - AUDITORIA COMPLETA (LGPD)! Backend 100% implementado, documentação completa para compliance total com Lei 13.709/2018. [→ Ver Relatório Final](FASE9_AUDITORIA_COMPLETA_FINAL.md) | [→ Checklist 100%](LGPD_COMPLIANCE_CHECKLIST_100.md) | [→ Guia do Usuário](USER_GUIDE_LGPD.md) | [→ Guia do Admin](LGPD_ADMIN_GUIDE.md)
 
 > 📚 **NOVO!** Toda a documentação foi reorganizada! [→ Ver Mapa de Documentação](DOCUMENTATION_MAP.md) | [→ Ver Central de Documentação](system-admin/README.md) | [→ Ver Índice Completo](system-admin/INDICE.md)
