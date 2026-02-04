@@ -605,6 +605,11 @@ else
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.IComplaintService, MedicSoft.Api.Services.CRM.ComplaintService>();
 
 // CRM Advanced - Lead Management (Standalone, no Salesforce dependency)
+// Register CRM entity repositories for Lead Management
+builder.Services.AddScoped<IRepository<MedicSoft.Domain.Entities.CRM.Lead>, LeadRepository>();
+builder.Services.AddScoped<IRepository<MedicSoft.Domain.Entities.CRM.LeadActivity>, LeadActivityRepository>();
+builder.Services.AddScoped<IRepository<MedicSoft.Domain.Entities.SalesFunnelMetric>>(sp => 
+    sp.GetRequiredService<ISalesFunnelMetricRepository>());
 builder.Services.AddScoped<MedicSoft.Application.Services.CRM.ILeadManagementService, MedicSoft.Api.Services.CRM.LeadManagementService>();
 builder.Services.AddHostedService<MedicSoft.Api.Services.CRM.LeadCaptureHostedService>();
 
