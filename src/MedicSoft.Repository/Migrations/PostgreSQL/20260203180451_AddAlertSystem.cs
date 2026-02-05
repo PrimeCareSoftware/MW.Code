@@ -4408,11 +4408,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     { new Guid("8e5dc434-76da-4ea8-b090-f02ed5b0dddd"), "clinical", new DateTime(2026, 2, 3, 18, 4, 48, 607, DateTimeKind.Utc).AddTicks(398), "{\"xAxis\":\"clinic\",\"yAxis\":\"patient_count\",\"color\":\"#f97316\"}", "\nSELECT \n    c.\"TradeName\" as clinic,\n    COUNT(p.\"Id\") as patient_count\nFROM \"Patients\" p\nINNER JOIN \"Clinics\" c ON p.\"ClinicId\" = c.\"Id\"\nGROUP BY c.\"TradeName\"\nORDER BY patient_count DESC\nLIMIT 10", "Patient distribution across clinics", "bar_chart", true, "Patients by Clinic", "", "bar", null },
                     { new Guid("f3d62217-d2b8-42bd-af4c-ebd14c473842"), "customer", new DateTime(2026, 2, 3, 18, 4, 48, 606, DateTimeKind.Utc).AddTicks(9972), "{\"format\":\"percent\",\"icon\":\"warning\",\"color\":\"#ef4444\",\"threshold\":{\"warning\":5,\"critical\":10}}", "\nSELECT \n    ROUND(\n        CAST(COUNT(CASE WHEN \"Status\" = 'Cancelled' AND \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END) AS DECIMAL) / \n        NULLIF(COUNT(CASE WHEN \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END), 0) * 100,\n        2\n    ) as value\nFROM \"ClinicSubscriptions\"", "Monthly customer churn percentage", "warning", true, "Churn Rate", "", "metric", null }
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Alerts_UserId",
-                table: "Alerts",
-                column: "UserId");
         }
 
         /// <inheritdoc />
