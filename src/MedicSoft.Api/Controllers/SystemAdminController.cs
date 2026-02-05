@@ -1334,6 +1334,7 @@ namespace MedicSoft.Api.Controllers
 
     public class UpdatePlanModulesRequest
     {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "EnabledModules cannot be null")]
         public string[] EnabledModules { get; set; } = Array.Empty<string>();
     }
 
