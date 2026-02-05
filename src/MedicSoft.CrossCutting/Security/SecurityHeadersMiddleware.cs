@@ -19,8 +19,8 @@ namespace MedicSoft.CrossCutting.Security
         {
             // Skip security headers for Swagger UI to prevent blank page issues
             // Swagger UI requires 'unsafe-inline' for scripts and styles, and blob: for workers
-            var path = context.Request.Path.Value?.ToLowerInvariant() ?? string.Empty;
-            if (path.StartsWith("/swagger"))
+            var path = context.Request.Path.Value ?? string.Empty;
+            if (path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase))
             {
                 await _next(context);
                 return;
