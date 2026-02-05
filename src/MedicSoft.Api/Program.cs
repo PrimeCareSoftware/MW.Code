@@ -695,8 +695,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Configure the HTTP request pipeline
+// Enable Swagger - configurable via SwaggerSettings:Enabled (default: true in Development, false in Production)
+// Note: In production, consider restricting Swagger access via network policies or authentication
+var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled") 
+    ?? app.Environment.IsDevelopment(); // Default to true in Development, false otherwise
+
+if (enableSwagger)
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -704,7 +709,10 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Omni Care Software API v1");
         c.RoutePrefix = "swagger"; // Set Swagger UI at /swagger
     });
-    
+}
+
+if (app.Environment.IsDevelopment())
+{
     // Enable static files for local development tools (ONLY in Development)
     app.UseStaticFiles();
 }
