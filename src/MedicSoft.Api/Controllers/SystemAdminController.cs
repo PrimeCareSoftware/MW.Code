@@ -829,6 +829,32 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Update enabled modules for a subscription plan
+        /// </summary>
+        [HttpPut("subscription-plans/{id}/modules")]
+        public async Task<ActionResult> UpdatePlanModules(Guid id, [FromBody] UpdatePlanModulesRequest request)
+        {
+            var plan = await _context.SubscriptionPlans
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (plan == null)
+                return NotFound(new { message = "Plano não encontrado" });
+
+            try
+            {
+                plan.SetEnabledModules(request.EnabledModules);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Módulos do plano atualizados com sucesso" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Delete a subscription plan
         /// </summary>
         [HttpDelete("subscription-plans/{id}")]
@@ -1304,6 +1330,12 @@ namespace MedicSoft.Api.Controllers
         public List<string>? EarlyAdopterBenefits { get; set; }
         public List<string>? FeaturesAvailable { get; set; }
         public List<string>? FeaturesInDevelopment { get; set; }
+    }
+
+    public class UpdatePlanModulesRequest
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "EnabledModules cannot be null")]
+        public string[] EnabledModules { get; set; } = Array.Empty<string>();
     }
 
     public class CreateSubdomainRequest

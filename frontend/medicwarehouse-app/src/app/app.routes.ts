@@ -338,13 +338,6 @@ export const routes: Routes = [
     canActivate: [authGuard, ownerGuard]
   },
   
-  // Documentation route
-  { 
-    path: 'documentation', 
-    loadComponent: () => import('./pages/documentation/documentation').then(m => m.Documentation),
-    canActivate: [authGuard]
-  },
-  
   { 
     path: 'tiss/dashboards/glosas', 
     loadComponent: () => import('./pages/tiss/dashboards/glosas-dashboard').then(m => m.GlosasDashboard),
