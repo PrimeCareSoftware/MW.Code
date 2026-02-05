@@ -11,169 +11,139 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Create CustomDashboards table
-            migrationBuilder.CreateTable(
-                name: "CustomDashboards",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                    Layout = table.Column<string>(type: "TEXT", nullable: true),
-                    IsDefault = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    IsPublic = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    CreatedBy = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomDashboards", x => x.Id);
-                });
+            // Create CustomDashboards table only if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                        CREATE TABLE ""CustomDashboards"" (
+                            ""Id"" uuid NOT NULL,
+                            ""Name"" character varying(200) NOT NULL,
+                            ""Description"" character varying(1000),
+                            ""Layout"" TEXT,
+                            ""IsDefault"" boolean NOT NULL DEFAULT false,
+                            ""IsPublic"" boolean NOT NULL DEFAULT false,
+                            ""CreatedBy"" character varying(450) NOT NULL,
+                            ""CreatedAt"" timestamp without time zone NOT NULL,
+                            ""UpdatedAt"" timestamp without time zone,
+                            CONSTRAINT ""PK_CustomDashboards"" PRIMARY KEY (""Id"")
+                        );
+                        
+                        CREATE INDEX ""IX_CustomDashboards_CreatedBy"" ON ""CustomDashboards"" (""CreatedBy"");
+                        CREATE INDEX ""IX_CustomDashboards_IsDefault"" ON ""CustomDashboards"" (""IsDefault"");
+                        CREATE INDEX ""IX_CustomDashboards_IsPublic"" ON ""CustomDashboards"" (""IsPublic"");
+                    END IF;
+                END $$;
+            ");
 
-            // Create DashboardWidgets table
-            migrationBuilder.CreateTable(
-                name: "DashboardWidgets",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DashboardId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Config = table.Column<string>(type: "TEXT", nullable: false),
-                    Query = table.Column<string>(type: "TEXT", nullable: true),
-                    RefreshInterval = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    GridX = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    GridY = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    GridWidth = table.Column<int>(type: "integer", nullable: false, defaultValue: 4),
-                    GridHeight = table.Column<int>(type: "integer", nullable: false, defaultValue: 3),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DashboardWidgets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DashboardWidgets_CustomDashboards_DashboardId",
-                        column: x => x.DashboardId,
-                        principalTable: "CustomDashboards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            // Create DashboardWidgets table only if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                        CREATE TABLE ""DashboardWidgets"" (
+                            ""Id"" uuid NOT NULL,
+                            ""DashboardId"" uuid NOT NULL,
+                            ""Type"" character varying(50) NOT NULL,
+                            ""Title"" character varying(200) NOT NULL,
+                            ""Config"" TEXT NOT NULL,
+                            ""Query"" TEXT,
+                            ""RefreshInterval"" integer NOT NULL DEFAULT 0,
+                            ""GridX"" integer NOT NULL DEFAULT 0,
+                            ""GridY"" integer NOT NULL DEFAULT 0,
+                            ""GridWidth"" integer NOT NULL DEFAULT 4,
+                            ""GridHeight"" integer NOT NULL DEFAULT 3,
+                            ""CreatedAt"" timestamp without time zone NOT NULL,
+                            ""UpdatedAt"" timestamp without time zone,
+                            CONSTRAINT ""PK_DashboardWidgets"" PRIMARY KEY (""Id"")
+                        );
+                        
+                        CREATE INDEX ""IX_DashboardWidgets_DashboardId"" ON ""DashboardWidgets"" (""DashboardId"");
+                        CREATE INDEX ""IX_DashboardWidgets_Type"" ON ""DashboardWidgets"" (""Type"");
+                    END IF;
+                END $$;
+            ");
+            
+            // Add FK constraint separately after both tables exist, only if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 FROM pg_constraint 
+                        WHERE conname = 'FK_DashboardWidgets_CustomDashboards_DashboardId'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" 
+                        ADD CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" 
+                        FOREIGN KEY (""DashboardId"") 
+                        REFERENCES ""CustomDashboards"" (""Id"") ON DELETE CASCADE;
+                    END IF;
+                END $$;
+            ");
 
-            // Create WidgetTemplates table
-            migrationBuilder.CreateTable(
-                name: "WidgetTemplates",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                    Category = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    DefaultConfig = table.Column<string>(type: "TEXT", nullable: true),
-                    DefaultQuery = table.Column<string>(type: "TEXT", nullable: true),
-                    IsSystem = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    Icon = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WidgetTemplates", x => x.Id);
-                });
+            // Create WidgetTemplates table only if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'WidgetTemplates' AND table_schema = 'public') THEN
+                        CREATE TABLE ""WidgetTemplates"" (
+                            ""Id"" uuid NOT NULL,
+                            ""Name"" character varying(200) NOT NULL,
+                            ""Description"" character varying(1000),
+                            ""Category"" character varying(50) NOT NULL,
+                            ""Type"" character varying(50) NOT NULL,
+                            ""DefaultConfig"" TEXT,
+                            ""DefaultQuery"" TEXT,
+                            ""IsSystem"" boolean NOT NULL DEFAULT false,
+                            ""Icon"" character varying(50),
+                            ""CreatedAt"" timestamp without time zone NOT NULL,
+                            ""UpdatedAt"" timestamp without time zone,
+                            CONSTRAINT ""PK_WidgetTemplates"" PRIMARY KEY (""Id"")
+                        );
+                        
+                        CREATE INDEX ""IX_WidgetTemplates_Category"" ON ""WidgetTemplates"" (""Category"");
+                        CREATE INDEX ""IX_WidgetTemplates_Type"" ON ""WidgetTemplates"" (""Type"");
+                        CREATE INDEX ""IX_WidgetTemplates_IsSystem"" ON ""WidgetTemplates"" (""IsSystem"");
+                    END IF;
+                END $$;
+            ");
 
-            // Create ReportTemplates table
-            migrationBuilder.CreateTable(
-                name: "ReportTemplates",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                    Category = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Configuration = table.Column<string>(type: "TEXT", nullable: true),
-                    Query = table.Column<string>(type: "TEXT", nullable: true),
-                    IsSystem = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    Icon = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    SupportedFormats = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReportTemplates", x => x.Id);
-                });
-
-            // Create indexes for CustomDashboards
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomDashboards_CreatedBy",
-                table: "CustomDashboards",
-                column: "CreatedBy");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomDashboards_IsDefault",
-                table: "CustomDashboards",
-                column: "IsDefault");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomDashboards_IsPublic",
-                table: "CustomDashboards",
-                column: "IsPublic");
-
-            // Create indexes for DashboardWidgets
-            migrationBuilder.CreateIndex(
-                name: "IX_DashboardWidgets_DashboardId",
-                table: "DashboardWidgets",
-                column: "DashboardId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DashboardWidgets_Type",
-                table: "DashboardWidgets",
-                column: "Type");
-
-            // Create indexes for WidgetTemplates
-            migrationBuilder.CreateIndex(
-                name: "IX_WidgetTemplates_Category",
-                table: "WidgetTemplates",
-                column: "Category");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WidgetTemplates_Type",
-                table: "WidgetTemplates",
-                column: "Type");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WidgetTemplates_IsSystem",
-                table: "WidgetTemplates",
-                column: "IsSystem");
-
-            // Create indexes for ReportTemplates
-            migrationBuilder.CreateIndex(
-                name: "IX_ReportTemplates_Category",
-                table: "ReportTemplates",
-                column: "Category");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReportTemplates_IsSystem",
-                table: "ReportTemplates",
-                column: "IsSystem");
+            // Create ReportTemplates table only if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'ReportTemplates' AND table_schema = 'public') THEN
+                        CREATE TABLE ""ReportTemplates"" (
+                            ""Id"" uuid NOT NULL,
+                            ""Name"" character varying(200) NOT NULL,
+                            ""Description"" character varying(1000),
+                            ""Category"" character varying(50) NOT NULL,
+                            ""Configuration"" TEXT,
+                            ""Query"" TEXT,
+                            ""IsSystem"" boolean NOT NULL DEFAULT false,
+                            ""Icon"" character varying(50),
+                            ""SupportedFormats"" character varying(100),
+                            ""CreatedAt"" timestamp without time zone NOT NULL,
+                            ""UpdatedAt"" timestamp without time zone,
+                            CONSTRAINT ""PK_ReportTemplates"" PRIMARY KEY (""Id"")
+                        );
+                        
+                        CREATE INDEX ""IX_ReportTemplates_Category"" ON ""ReportTemplates"" (""Category"");
+                        CREATE INDEX ""IX_ReportTemplates_IsSystem"" ON ""ReportTemplates"" (""IsSystem"");
+                    END IF;
+                END $$;
+            ");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "DashboardWidgets");
-
-            migrationBuilder.DropTable(
-                name: "WidgetTemplates");
-
-            migrationBuilder.DropTable(
-                name: "ReportTemplates");
-
-            migrationBuilder.DropTable(
-                name: "CustomDashboards");
+            // Drop tables only if they exist
+            migrationBuilder.Sql(@"
+                DROP TABLE IF EXISTS ""DashboardWidgets"";
+                DROP TABLE IF EXISTS ""WidgetTemplates"";
+                DROP TABLE IF EXISTS ""ReportTemplates"";
+                DROP TABLE IF EXISTS ""CustomDashboards"";
+            ");
         }
     }
 }
