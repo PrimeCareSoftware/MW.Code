@@ -69,8 +69,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 DO $$
                 BEGIN
                     IF NOT EXISTS (
-                        SELECT 1 FROM pg_constraint 
-                        WHERE conname = 'FK_DashboardWidgets_CustomDashboards_DashboardId'
+                        SELECT 1 FROM pg_constraint c
+                        INNER JOIN pg_namespace n ON c.connamespace = n.oid
+                        WHERE c.conname = 'FK_DashboardWidgets_CustomDashboards_DashboardId'
+                        AND n.nspname = 'public'
                     ) THEN
                         ALTER TABLE ""DashboardWidgets"" 
                         ADD CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" 
