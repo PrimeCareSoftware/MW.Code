@@ -5296,14 +5296,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
-                        AND column_name = 'UpdatedAt'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp without time zone'
-                    ) THEN
-                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'DashboardWidgets' 
+                            AND column_name = 'UpdatedAt'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp without time zone'
+                        ) THEN
+                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                        END IF;
                     END IF;
                 END $$;
             ");
@@ -5311,14 +5313,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
-                        AND column_name = 'CreatedAt'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp without time zone'
-                    ) THEN
-                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'DashboardWidgets' 
+                            AND column_name = 'CreatedAt'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp without time zone'
+                        ) THEN
+                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                        END IF;
                     END IF;
                 END $$;
             ");
@@ -12330,14 +12334,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
-                        AND column_name = 'UpdatedAt'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp with time zone'
-                    ) THEN
-                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'DashboardWidgets' 
+                            AND column_name = 'UpdatedAt'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp with time zone'
+                        ) THEN
+                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                        END IF;
                     END IF;
                 END $$;
             ");
@@ -12345,14 +12351,16 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
-                        AND column_name = 'CreatedAt'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp with time zone'
-                    ) THEN
-                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE table_name = 'DashboardWidgets' 
+                            AND column_name = 'CreatedAt'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp with time zone'
+                        ) THEN
+                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                        END IF;
                     END IF;
                 END $$;
             ");
