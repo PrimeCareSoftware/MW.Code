@@ -700,6 +700,21 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
+// Enable Swagger - configurable via SwaggerSettings:Enabled (default: true in Development, false in Production)
+// Swagger is placed early in the pipeline to bypass authentication/authorization
+// This ensures the swagger.json endpoint is accessible without authentication
+var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled") 
+    ?? app.Environment.IsDevelopment(); // Default to true in Development, false otherwise
+
+if (enableSwagger)
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Omni Care Software API v1");
+        c.RoutePrefix = "swagger"; // Set Swagger UI at /swagger
+    });
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -752,22 +767,6 @@ app.UseTenantResolution();
 // Enable authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Enable Swagger - configurable via SwaggerSettings:Enabled (default: true in Development, false in Production)
-// Note: In production, consider restricting Swagger access via network policies or authentication
-// Swagger must be placed after UseAuthorization() to properly work with [AllowAnonymous] attributes
-var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled") 
-    ?? app.Environment.IsDevelopment(); // Default to true in Development, false otherwise
-
-if (enableSwagger)
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Omni Care Software API v1");
-        c.RoutePrefix = "swagger"; // Set Swagger UI at /swagger
-    });
-}
 
 // Hangfire Dashboard (only in Development or with proper authentication)
 if (app.Environment.IsDevelopment())
