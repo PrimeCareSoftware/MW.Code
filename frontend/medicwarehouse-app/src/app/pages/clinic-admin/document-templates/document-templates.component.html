@@ -1,0 +1,160 @@
+<div class="document-templates-container">
+  <div class="page-header">
+    <h1>Templates de Impressão</h1>
+    <p class="subtitle">Gerencie templates para prontuários, atestados, receitas e outros documentos</p>
+  </div>
+
+  <!-- Notifications -->
+  <div *ngIf="error" class="notification error">
+    <span class="icon">⚠️</span>
+    <span>{{ error }}</span>
+    <button class="close-btn" (click)="error = null">×</button>
+  </div>
+
+  <div *ngIf="success" class="notification success">
+    <span class="icon">✓</span>
+    <span>{{ success }}</span>
+    <button class="close-btn" (click)="success = null">×</button>
+  </div>
+
+  <!-- Filters and Actions -->
+  <div class="toolbar">
+    <div class="filters">
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Buscar templates..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="applyFilters()"
+      />
+      
+      <select 
+        class="filter-select" 
+        [(ngModel)]="filterSpecialty"
+        (ngModelChange)="applyFilters()"
+      >
+        <option [ngValue]="null">Todas as especialidades</option>
+        <option *ngFor="let spec of specialties" [ngValue]="spec.value">
+          {{ spec.label }}
+        </option>
+      </select>
+      
+      <select 
+        class="filter-select" 
+        [(ngModel)]="filterType"
+        (ngModelChange)="applyFilters()"
+      >
+        <option [ngValue]="null">Todos os tipos</option>
+        <option *ngFor="let type of templateTypes" [ngValue]="type.value">
+          {{ type.label }}
+        </option>
+      </select>
+      
+      <select 
+        class="filter-select" 
+        [(ngModel)]="filterActive"
+        (ngModelChange)="applyFilters()"
+      >
+        <option [ngValue]="null">Todos os status</option>
+        <option [ngValue]="true">Ativos</option>
+        <option [ngValue]="false">Inativos</option>
+      </select>
+      
+      <button class="btn btn-link" (click)="clearFilters()" type="button">
+        Limpar filtros
+      </button>
+    </div>
+
+    <button class="btn btn-primary" (click)="createNew()" type="button">
+      ➕ Novo Template
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Carregando templates...</p>
+  </div>
+
+  <!-- Templates Grid -->
+  <div *ngIf="!loading" class="templates-grid">
+    <div *ngIf="filteredTemplates.length === 0" class="empty-state">
+      <p class="empty-icon">📄</p>
+      <h3>Nenhum template encontrado</h3>
+      <p>Crie um novo template ou ajuste os filtros</p>
+      <button class="btn btn-primary" (click)="createNew()" type="button">
+        Criar Primeiro Template
+      </button>
+    </div>
+
+    <div 
+      *ngFor="let template of filteredTemplates" 
+      class="template-card"
+      [class.inactive]="!template.isActive"
+      [class.system]="template.isSystem"
+      (click)="viewTemplate(template.id)"
+    >
+      <div class="card-header">
+        <div class="card-title-section">
+          <h3 class="card-title">{{ template.name }}</h3>
+          <span class="badge" [class.badge-system]="template.isSystem" [class.badge-custom]="!template.isSystem">
+            {{ template.isSystem ? 'Sistema' : 'Personalizado' }}
+          </span>
+        </div>
+        <div class="card-actions" (click)="$event.stopPropagation()">
+          <button 
+            class="btn-icon"
+            [class.active]="template.isActive"
+            [class.inactive]="!template.isActive"
+            (click)="toggleActive(template, $event)"
+            [title]="template.isActive ? 'Desativar' : 'Ativar'"
+            type="button"
+          >
+            {{ template.isActive ? '✓' : '○' }}
+          </button>
+          <button 
+            class="btn-icon"
+            (click)="editTemplate(template.id); $event.stopPropagation()"
+            title="Editar"
+            type="button"
+          >
+            ✏️
+          </button>
+          <button 
+            *ngIf="!template.isSystem"
+            class="btn-icon btn-danger"
+            (click)="deleteTemplate(template, $event)"
+            title="Excluir"
+            type="button"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      <p class="card-description">{{ template.description || 'Sem descrição' }}</p>
+
+      <div class="card-meta">
+        <div class="meta-item">
+          <span class="meta-label">Especialidade:</span>
+          <span class="meta-value">{{ getSpecialtyLabel(template.specialty) }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Tipo:</span>
+          <span class="meta-value">{{ getTypeLabel(template.type) }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Status:</span>
+          <span class="meta-value" [class.active-text]="template.isActive" [class.inactive-text]="!template.isActive">
+            {{ template.isActive ? 'Ativo' : 'Inativo' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <small>Criado em: {{ template.createdAt | date:'dd/MM/yyyy HH:mm' }}</small>
+        <small *ngIf="template.updatedAt">Atualizado: {{ template.updatedAt | date:'dd/MM/yyyy HH:mm' }}</small>
+      </div>
+    </div>
+  </div>
+</div>

@@ -44,6 +44,10 @@ export const CLINIC_ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./template-editor/template-editor.component').then(m => m.TemplateEditorComponent)
       },
       {
+        path: 'document-templates',
+        loadComponent: () => import('./document-templates/document-templates.component').then(m => m.DocumentTemplatesComponent)
+      },
+      {
         path: '',
         redirectTo: 'info',
         pathMatch: 'full'
