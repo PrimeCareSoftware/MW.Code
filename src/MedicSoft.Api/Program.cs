@@ -421,6 +421,7 @@ builder.Services.AddScoped<IConsultationFormProfileRepository, ConsultationFormP
 builder.Services.AddScoped<IConsultationFormConfigurationRepository, ConsultationFormConfigurationRepository>();
 builder.Services.AddScoped<IBusinessConfigurationRepository, BusinessConfigurationRepository>();
 builder.Services.AddScoped<IDocumentTemplateRepository, DocumentTemplateRepository>();
+builder.Services.AddScoped<IExternalServiceConfigurationRepository, ExternalServiceConfigurationRepository>();
 
 // Register application services
 builder.Services.AddScoped<IPatientService, PatientService>();
@@ -477,6 +478,7 @@ builder.Services.AddScoped<IMedicalRecordAuditService, MedicalRecordAuditService
 // Consultation Form Configuration - Services
 builder.Services.AddScoped<IConsultationFormConfigurationService, ConsultationFormConfigurationService>();
 builder.Services.AddScoped<BusinessConfigurationService>();
+builder.Services.AddScoped<ExternalServiceConfigurationService>();
 
 // Module Configuration Services
 builder.Services.AddScoped<IModuleConfigurationService, ModuleConfigurationService>();
