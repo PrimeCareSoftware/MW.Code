@@ -1,0 +1,241 @@
+<div class="template-editor-container">
+  <div class="page-header">
+    <h1>
+      {{ isViewMode ? 'Visualizar Template' : (isEditMode ? 'Editar Template' : 'Novo Template') }}
+    </h1>
+    <p class="subtitle">
+      {{ isViewMode ? 'Detalhes do template de impressão' : 'Configure o template com variáveis personalizáveis' }}
+    </p>
+  </div>
+
+  <!-- Notifications -->
+  <div *ngIf="error" class="notification error">
+    <span class="icon">⚠️</span>
+    <span>{{ error }}</span>
+    <button class="close-btn" (click)="error = null">×</button>
+  </div>
+
+  <div *ngIf="success" class="notification success">
+    <span class="icon">✓</span>
+    <span>{{ success }}</span>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Carregando template...</p>
+  </div>
+
+  <!-- Editor Form -->
+  <form [formGroup]="form" *ngIf="!loading" class="editor-form">
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label for="name">Nome do Template *</label>
+        <input 
+          type="text" 
+          id="name" 
+          formControlName="name" 
+          class="form-control"
+          placeholder="Ex: Receita Médica Padrão"
+          [readOnly]="isViewMode"
+        />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="specialty">Especialidade *</label>
+        <select 
+          id="specialty" 
+          formControlName="specialty" 
+          class="form-control"
+          [disabled]="isEditMode || isViewMode"
+        >
+          <option [ngValue]="null">Selecione uma especialidade</option>
+          <option *ngFor="let spec of specialties" [ngValue]="spec.value">
+            {{ spec.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="type">Tipo de Documento *</label>
+        <select 
+          id="type" 
+          formControlName="type" 
+          class="form-control"
+          [disabled]="isEditMode || isViewMode"
+        >
+          <option [ngValue]="null">Selecione um tipo</option>
+          <option *ngFor="let type of templateTypes" [ngValue]="type.value">
+            {{ type.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label for="description">Descrição</label>
+        <input 
+          type="text" 
+          id="description" 
+          formControlName="description" 
+          class="form-control"
+          placeholder="Breve descrição do template"
+          [readOnly]="isViewMode"
+        />
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <div class="section-header">
+        <h3>Conteúdo do Template</h3>
+        <p class="help-text">
+          Use variáveis no formato <code>{{patientName}}</code> para inserir dados dinâmicos
+        </p>
+      </div>
+
+      <div class="editor-layout">
+        <!-- Variables Sidebar -->
+        <div class="variables-sidebar">
+          <h4>Variáveis Disponíveis</h4>
+          <p class="sidebar-help">Clique para inserir no conteúdo</p>
+          
+          <div class="variables-list">
+            <button 
+              *ngFor="let variable of variablesFormArray.controls; let i = index"
+              type="button"
+              class="variable-btn"
+              (click)="insertVariable(variable.value.key)"
+              [disabled]="isViewMode"
+            >
+              <span class="variable-key">{{variable.value.key}}</span>
+              <span class="variable-label">{{ variable.value.label }}</span>
+              <span *ngIf="variable.value.isRequired" class="required-badge">*</span>
+            </button>
+          </div>
+
+          <button 
+            type="button" 
+            class="btn btn-secondary btn-sm"
+            (click)="addVariable()"
+            *ngIf="!isViewMode"
+          >
+            ➕ Nova Variável
+          </button>
+
+          <button 
+            type="button" 
+            class="btn btn-link btn-sm"
+            (click)="resetToCommonVariables()"
+            *ngIf="!isViewMode"
+          >
+            🔄 Resetar Padrão
+          </button>
+        </div>
+
+        <!-- Content Editor -->
+        <div class="content-editor">
+          <textarea 
+            formControlName="content"
+            class="content-textarea"
+            placeholder="Digite o conteúdo do template aqui...
+
+Exemplo:
+RECEITA MÉDICA
+
+Paciente: {{patientName}}
+Data: {{consultationDate}}
+
+Prescrevo:
+[Escreva aqui a prescrição]
+
+_______________
+{{professionalName}}
+{{professionalRegistration}}"
+            rows="20"
+            [readOnly]="isViewMode"
+          ></textarea>
+
+          <div class="content-info">
+            <small>
+              💡 Dica: Use o formato {{variableName}} para inserir variáveis dinâmicas
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variables Configuration -->
+    <div class="variables-config" *ngIf="!isViewMode">
+      <h3>Configuração de Variáveis</h3>
+      <p class="help-text">Personalize as variáveis disponíveis para este template</p>
+
+      <div class="variables-table">
+        <div class="table-header">
+          <div class="col">Chave</div>
+          <div class="col">Rótulo</div>
+          <div class="col">Tipo</div>
+          <div class="col">Obrigatória</div>
+          <div class="col">Ações</div>
+        </div>
+
+        <div 
+          *ngFor="let variable of variablesFormArray.controls; let i = index"
+          class="table-row"
+          [formGroup]="variable"
+        >
+          <div class="col">
+            <input type="text" formControlName="key" class="form-control-sm" />
+          </div>
+          <div class="col">
+            <input type="text" formControlName="label" class="form-control-sm" />
+          </div>
+          <div class="col">
+            <select formControlName="type" class="form-control-sm">
+              <option value="text">Texto</option>
+              <option value="date">Data</option>
+              <option value="number">Número</option>
+              <option value="boolean">Sim/Não</option>
+            </select>
+          </div>
+          <div class="col">
+            <input type="checkbox" formControlName="isRequired" />
+          </div>
+          <div class="col">
+            <button 
+              type="button" 
+              class="btn-icon btn-danger"
+              (click)="removeVariable(i)"
+              title="Remover"
+            >
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="btn btn-secondary"
+        (click)="cancel()"
+      >
+        {{ isViewMode ? 'Voltar' : 'Cancelar' }}
+      </button>
+
+      <button 
+        *ngIf="!isViewMode"
+        type="button" 
+        class="btn btn-primary"
+        (click)="save()"
+        [disabled]="saving || form.invalid"
+      >
+        {{ saving ? 'Salvando...' : (isEditMode ? 'Atualizar Template' : 'Criar Template') }}
+      </button>
+    </div>
+  </form>
+</div>

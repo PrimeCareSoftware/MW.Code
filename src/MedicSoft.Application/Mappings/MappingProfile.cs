@@ -246,6 +246,9 @@ namespace MedicSoft.Application.Mappings
                 .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic != null ? src.Clinic.Name : null))
                 .ForMember(dest => dest.ProfessionalName, opt => opt.MapFrom(src => src.Professional != null ? src.Professional.FullName : null))
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient != null ? src.Patient.Name : null));
+
+            // Document Templates for Print
+            CreateMap<DocumentTemplate, DTOs.DocumentTemplates.DocumentTemplateDto>();
         }
     }
 }
