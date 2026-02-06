@@ -508,6 +508,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
   }
 
   trackByTimeSlot(index: number, row: CalendarSlot[]): string {
-    return row[0]?.timeSlot?.time || index.toString();
+    // Always use the time slot as the unique identifier
+    // This should never be null for a valid row
+    return row[0]?.timeSlot?.time || '';
   }
 }

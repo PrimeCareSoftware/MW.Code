@@ -26,7 +26,10 @@ export class AppointmentService {
   create(appointment: CreateAppointment): Observable<Appointment> {
     return this.http.post<Appointment>(this.apiUrl, appointment)
       .pipe(
-        tap(() => this.invalidateCache(appointment.clinicId, appointment.scheduledDate.toString().split('T')[0]))
+        tap(() => {
+          const dateStr = new Date(appointment.scheduledDate).toISOString().split('T')[0];
+          this.invalidateCache(appointment.clinicId, dateStr);
+        })
       );
   }
 

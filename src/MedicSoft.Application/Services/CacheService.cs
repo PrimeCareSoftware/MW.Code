@@ -68,8 +68,13 @@ namespace MedicSoft.Application.Services
         public async Task<T> GetOrCreateAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null)
         {
             var cached = await GetAsync<T>(key);
-            if (cached != null)
-                return cached;
+            // For reference types, check if we got a value from cache
+            // For value types, default will be returned if not in cache
+            if (cached != null || typeof(T).IsValueType)
+            {
+                if (cached != null)
+                    return cached;
+            }
 
             var value = await factory();
             await SetAsync(key, value, expiration);
