@@ -64,6 +64,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     useTrial: true
   };
   
+  // For CPF (physical person), allow optional company/clinic fields
+  enableCompanyFields = false;
+  
   passwordConfirm = '';
   isSubmitting = false;
   submitError = '';
@@ -244,9 +247,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
       case 1:
         // Check if either clinicCNPJ (legacy) or clinicDocument (new) is filled
         const hasDocument = !!(this.model.clinicCNPJ || this.model.clinicDocument);
-        // Company name is now required
-        return !!(this.model.companyName && hasDocument && 
-                  this.model.clinicPhone && this.model.clinicEmail);
+        
+        // For physical person (CPF) without company fields enabled, document is enough
+        // For legal entity (CNPJ) or CPF with company fields, company name is required
+        if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+          return !!(hasDocument && this.model.clinicPhone && this.model.clinicEmail);
+        } else {
+          return !!(this.model.companyName && hasDocument && 
+                    this.model.clinicPhone && this.model.clinicEmail);
+        }
       case 2:
         return !!(this.model.street && this.model.number && this.model.neighborhood && 
                   this.model.city && this.model.state && this.model.zipCode);
@@ -280,10 +289,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
     // Prepare registration data with new document structure
     const registrationData: RegistrationRequest = {
       ...this.model,
-      // If clinicName is not provided, use companyName as the first clinic name
-      // companyName is validated as required in validateStep(), so it should always have a value
-      // Using defensive fallback to empty string for extra safety
-      clinicName: this.model.clinicName || this.model.companyName || '',
+      // For physical person without company fields, use owner name as company/clinic name
+      // For legal entity or physical person with company fields, use provided names (with validation)
+      companyName: (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) 
+        ? this.model.ownerName 
+        : (this.model.companyName || ''),  // Empty string if not provided, backend will validate
+      clinicName: (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields)
+        ? this.model.ownerName
+        : (this.model.clinicName || this.model.companyName || ''),
       clinicDocument: this.model.clinicDocument || this.model.clinicCNPJ, // Use new field or fall back to legacy
       clinicDocumentType: this.clinicDocumentType,
       sessionId: this.salesFunnelTracking.getSessionId()
@@ -425,5 +438,27 @@ export class RegisterComponent implements OnInit, OnDestroy {
     // Clear the document field when switching types
     this.model.clinicDocument = '';
     this.model.clinicCNPJ = '';
+    
+    // When switching to CNPJ, automatically enable company fields
+    if (type === 'CNPJ') {
+      this.enableCompanyFields = true;
+    } else {
+      // When switching to CPF, disable company fields by default
+      this.enableCompanyFields = false;
+      // Clear company/clinic fields when disabled
+      this.model.companyName = '';
+      this.model.clinicName = '';
+    }
+  }
+  
+  /**
+   * Handle company fields checkbox change for CPF
+   */
+  onEnableCompanyFieldsChange(): void {
+    // If disabling company fields, clear them
+    if (!this.enableCompanyFields) {
+      this.model.companyName = '';
+      this.model.clinicName = '';
+    }
   }
 }

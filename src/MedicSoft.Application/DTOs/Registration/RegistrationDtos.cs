@@ -2,6 +2,9 @@ namespace MedicSoft.Application.DTOs.Registration
 {
     public class RegistrationRequestDto
     {
+        // Company Information (optional for physical persons without company)
+        public string? CompanyName { get; set; } // Optional - can be derived from owner name for CPF
+        
         // Clinic Information
         public string ClinicName { get; set; } = string.Empty;
         public string ClinicCNPJ { get; set; } = string.Empty; // Keep for backward compatibility

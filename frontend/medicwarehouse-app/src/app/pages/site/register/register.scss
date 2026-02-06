@@ -770,6 +770,22 @@
   }
 }
 
+// Highlight document type selector at the top
+.document-type-selector {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 2px solid #dee2e6;
+  margin-bottom: 2rem;
+  
+  label:first-child {
+    color: #667eea;
+    font-weight: 800;
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+  }
+}
+
 .hint {
   display: block;
   color: #7f8c8d;
