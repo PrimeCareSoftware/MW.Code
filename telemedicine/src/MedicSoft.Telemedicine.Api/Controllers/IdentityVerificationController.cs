@@ -15,15 +15,18 @@ public class IdentityVerificationController : ControllerBase
 {
     private readonly ITelemedicineService _telemedicineService;
     private readonly IFileStorageService _fileStorageService;
+    private readonly ICfmValidationService _cfmValidationService;
     private readonly ILogger<IdentityVerificationController> _logger;
 
     public IdentityVerificationController(
         ITelemedicineService telemedicineService,
         IFileStorageService fileStorageService,
+        ICfmValidationService cfmValidationService,
         ILogger<IdentityVerificationController> logger)
     {
         _telemedicineService = telemedicineService ?? throw new ArgumentNullException(nameof(telemedicineService));
         _fileStorageService = fileStorageService ?? throw new ArgumentNullException(nameof(fileStorageService));
+        _cfmValidationService = cfmValidationService ?? throw new ArgumentNullException(nameof(cfmValidationService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -258,4 +261,66 @@ public class IdentityVerificationController : ControllerBase
             return StatusCode(500, "An error occurred while verifying identity");
         }
     }
+
+    /// <summary>
+    /// Validates CRM with CFM API before creating identity verification
+    /// </summary>
+    [HttpPost("validate-crm")]
+    [ProducesResponseType(typeof(CfmCrmValidationResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CfmCrmValidationResult>> ValidateCrmWithCfm(
+        [FromBody] ValidateCrmRequest request)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(request.CrmNumber))
+                return BadRequest("CRM number is required");
+
+            if (string.IsNullOrWhiteSpace(request.CrmState))
+                return BadRequest("CRM state is required");
+
+            var result = await _cfmValidationService.ValidateCrmAsync(request.CrmNumber, request.CrmState);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error validating CRM with CFM");
+            return StatusCode(500, "An error occurred while validating CRM");
+        }
+    }
+
+    /// <summary>
+    /// Validates CPF with CFM API
+    /// </summary>
+    [HttpPost("validate-cpf")]
+    [ProducesResponseType(typeof(CfmCpfValidationResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CfmCpfValidationResult>> ValidateCpfWithCfm(
+        [FromBody] ValidateCpfRequest request)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(request.Cpf))
+                return BadRequest("CPF is required");
+
+            var result = await _cfmValidationService.ValidateCpfAsync(request.Cpf);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error validating CPF with CFM");
+            return StatusCode(500, "An error occurred while validating CPF");
+        }
+    }
+}
+
+public class ValidateCrmRequest
+{
+    public string CrmNumber { get; set; } = string.Empty;
+    public string CrmState { get; set; } = string.Empty;
+}
+
+public class ValidateCpfRequest
+{
+    public string Cpf { get; set; } = string.Empty;
 }

@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\MedicSoft.Telemedicine.Domain\MedicSoft.Telemedicine.Domain.csproj" />
     <ProjectReference Include="..\..\src\MedicSoft.Telemedicine.Application\MedicSoft.Telemedicine.Application.csproj" />
+    <ProjectReference Include="..\..\src\MedicSoft.Telemedicine.Infrastructure\MedicSoft.Telemedicine.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
