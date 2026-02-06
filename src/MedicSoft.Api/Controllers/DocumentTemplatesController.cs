@@ -241,7 +241,6 @@ namespace MedicSoft.Api.Controllers
         [HttpPost("{id}/deactivate")]
         [RequirePermissionKey(PermissionKeys.FormConfigurationManage)]
         [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public async Task<ActionResult> Deactivate(Guid id)
         {
@@ -253,7 +252,7 @@ namespace MedicSoft.Api.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return NotFound(new { message = ex.Message });
             }
         }
     }
