@@ -48,6 +48,19 @@ export const CLINIC_ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./document-templates/document-templates.component').then(m => m.DocumentTemplatesComponent)
       },
       {
+        path: 'document-templates/new',
+        loadComponent: () => import('./document-templates/document-template-editor.component').then(m => m.DocumentTemplateEditorComponent)
+      },
+      {
+        path: 'document-templates/edit/:id',
+        loadComponent: () => import('./document-templates/document-template-editor.component').then(m => m.DocumentTemplateEditorComponent)
+      },
+      {
+        path: 'document-templates/view/:id',
+        loadComponent: () => import('./document-templates/document-template-editor.component').then(m => m.DocumentTemplateEditorComponent),
+        data: { mode: 'view' }
+      },
+      {
         path: '',
         redirectTo: 'info',
         pathMatch: 'full'
