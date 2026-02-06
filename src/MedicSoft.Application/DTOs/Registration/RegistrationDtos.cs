@@ -39,6 +39,9 @@ namespace MedicSoft.Application.DTOs.Registration
         // Trial
         public bool UseTrial { get; set; }
         
+        // Clinic Type/Specialty
+        public string? ClinicType { get; set; } // e.g., "Medical", "Dental", "Psychology", etc.
+        
         // Sales Funnel Tracking (optional)
         public string? SessionId { get; set; }
     }

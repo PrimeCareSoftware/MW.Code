@@ -61,11 +61,26 @@ export class RegisterComponent implements OnInit, OnDestroy {
     password: '',
     planId: '',
     acceptTerms: false,
-    useTrial: true
+    useTrial: true,
+    clinicType: this.DEFAULT_CLINIC_TYPE
   };
   
   // For CPF (physical person), allow optional company/clinic fields
   enableCompanyFields = false;
+  
+  // Available clinic types for selection
+  clinicTypes = [
+    { value: 'Medical', label: 'Clínica Médica', description: 'Atendimento médico geral e especialidades médicas' },
+    { value: 'Dental', label: 'Clínica Odontológica', description: 'Atendimento odontológico e tratamentos dentários' },
+    { value: 'Psychology', label: 'Clínica de Psicologia', description: 'Atendimento psicológico e psicoterapia' },
+    { value: 'Nutritionist', label: 'Clínica de Nutrição', description: 'Atendimento nutricional e orientação alimentar' },
+    { value: 'PhysicalTherapy', label: 'Clínica de Fisioterapia', description: 'Atendimento fisioterapêutico e reabilitação' },
+    { value: 'Veterinary', label: 'Clínica Veterinária', description: 'Atendimento veterinário para animais' },
+    { value: 'Other', label: 'Outra Especialidade', description: 'Outras áreas de atendimento em saúde' }
+  ];
+  
+  // Default clinic type - Medical is the most common
+  private readonly DEFAULT_CLINIC_TYPE = 'Medical';
   
   passwordConfirm = '';
   isSubmitting = false;
@@ -257,15 +272,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
                     this.model.clinicPhone && this.model.clinicEmail);
         }
       case 2:
+        // Specialty selection - clinicType is required
+        return !!this.model.clinicType;
+      case 3:
         return !!(this.model.street && this.model.number && this.model.neighborhood && 
                   this.model.city && this.model.state && this.model.zipCode);
-      case 3:
+      case 4:
         return !!(this.model.ownerName && this.model.ownerCPF && 
                   this.model.ownerPhone && this.model.ownerEmail);
-      case 4:
+      case 5:
         return !!(this.model.username && this.model.password && 
                   this.passwordConfirm && this.model.password === this.passwordConfirm);
-      case 5:
+      case 6:
         return !!(this.selectedPlan && this.model.planId);
       default:
         return true;
@@ -396,30 +414,34 @@ export class RegisterComponent implements OnInit, OnDestroy {
           clinicPhone: this.model.clinicPhone,
           clinicEmail: this.model.clinicEmail
         };
-      case 2: // Address
+      case 2: // Specialty Selection
+        return {
+          clinicType: this.model.clinicType
+        };
+      case 3: // Address
         return {
           zipCode: this.model.zipCode,
           city: this.model.city,
           state: this.model.state,
           neighborhood: this.model.neighborhood
         };
-      case 3: // Owner Info
+      case 4: // Owner Info
         return {
           ownerName: this.model.ownerName,
           ownerCPF: this.model.ownerCPF ? '***' : '', // Masked for privacy
           ownerEmail: this.model.ownerEmail
         };
-      case 4: // Login Credentials
+      case 5: // Login Credentials
         return {
           username: this.model.username,
           hasPassword: !!this.model.password
         };
-      case 5: // Plan Selection
+      case 6: // Plan Selection
         return {
           planId: this.model.planId,
           planName: this.selectedPlan?.name
         };
-      case 6: // Confirmation
+      case 7: // Confirmation
         return {
           acceptTerms: this.model.acceptTerms,
           planId: this.model.planId
@@ -460,5 +482,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.model.companyName = '';
       this.model.clinicName = '';
     }
+  }
+
+  /**
+   * Get the label for a clinic type value
+   */
+  getClinicTypeLabel(value?: string): string {
+    if (!value) return 'Não selecionado';
+    const clinicType = this.clinicTypes.find(t => t.value === value);
+    return clinicType ? clinicType.label : value;
   }
 }
