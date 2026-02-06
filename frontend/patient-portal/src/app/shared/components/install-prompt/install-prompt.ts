@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { PwaService } from '../../../services/pwa.service';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-install-prompt',
   templateUrl: './install-prompt.html',
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule],
   styleUrls: ['./install-prompt.scss']
 })
 export class InstallPromptComponent implements OnInit {
