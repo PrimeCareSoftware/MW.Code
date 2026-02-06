@@ -137,13 +137,13 @@ namespace MedicSoft.Application.Services
             
             // Encrypt sensitive data before storing
             var encryptedApiKey = !string.IsNullOrWhiteSpace(apiKey) 
-                ? await _encryptionService.EncryptAsync(apiKey) 
+                ? _encryptionService.Encrypt(apiKey) 
                 : null;
             var encryptedApiSecret = !string.IsNullOrWhiteSpace(apiSecret) 
-                ? await _encryptionService.EncryptAsync(apiSecret) 
+                ? _encryptionService.Encrypt(apiSecret) 
                 : null;
             var encryptedClientSecret = !string.IsNullOrWhiteSpace(clientSecret) 
-                ? await _encryptionService.EncryptAsync(clientSecret) 
+                ? _encryptionService.Encrypt(clientSecret) 
                 : null;
             
             config.UpdateApiCredentials(
@@ -168,10 +168,10 @@ namespace MedicSoft.Application.Services
             
             // Encrypt tokens before storing
             var encryptedAccessToken = !string.IsNullOrWhiteSpace(accessToken) 
-                ? await _encryptionService.EncryptAsync(accessToken) 
+                ? _encryptionService.Encrypt(accessToken) 
                 : null;
             var encryptedRefreshToken = !string.IsNullOrWhiteSpace(refreshToken) 
-                ? await _encryptionService.EncryptAsync(refreshToken) 
+                ? _encryptionService.Encrypt(refreshToken) 
                 : null;
             
             config.UpdateTokens(encryptedAccessToken, encryptedRefreshToken, expiresAt);
@@ -207,7 +207,7 @@ namespace MedicSoft.Application.Services
             if (config == null)
                 throw new InvalidOperationException($"External service configuration with ID {id} not found");
             
-            await _repository.DeleteAsync(config);
+            await _repository.DeleteAsync(config.Id, tenantId);
         }
         
         public async Task RecordSyncAsync(Guid id, string tenantId)
@@ -230,14 +230,14 @@ namespace MedicSoft.Application.Services
             await _repository.UpdateAsync(config);
         }
         
-        private async Task DecryptSensitiveFieldsAsync(ExternalServiceConfiguration config)
+        private Task DecryptSensitiveFieldsAsync(ExternalServiceConfiguration config)
         {
             // Note: In practice, you may want to decrypt these fields only when specifically requested
             // For security, consider not decrypting in the general GetById method
             // This is a placeholder to show where decryption would occur
             
             // For now, we'll leave them encrypted and only show masked values in DTOs
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }
