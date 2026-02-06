@@ -17,5 +17,18 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<Appointment>> GetUpcomingAppointmentsAsync(string tenantId, int days = 7);
         Task<IEnumerable<TimeSpan>> GetAvailableSlotsAsync(DateTime date, Guid clinicId, 
             int durationMinutes, string tenantId);
+        
+        // Optimized methods for performance
+        Task<IEnumerable<Appointment>> GetDailyAgendaWithIncludesAsync(
+            DateTime date, 
+            Guid clinicId, 
+            string tenantId, 
+            Guid? professionalId = null);
+        
+        Task<int> GetDailyAppointmentCountAsync(
+            DateTime date, 
+            Guid clinicId, 
+            string tenantId, 
+            Guid? professionalId = null);
     }
 }

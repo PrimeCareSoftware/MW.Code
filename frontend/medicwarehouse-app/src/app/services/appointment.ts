@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap, shareReplay } from 'rxjs/operators';
 import { 
   Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, AvailableSlot, Professional,
   BlockedTimeSlot, CreateBlockedTimeSlot, UpdateBlockedTimeSlot, 
@@ -16,22 +17,44 @@ export class AppointmentService {
   private usersApiUrl = `${environment.apiUrl}/users`;
   private blockedSlotsApiUrl = `${environment.apiUrl}/blocked-time-slots`;
   private recurringApiUrl = `${environment.apiUrl}/recurring-appointments`;
+  
+  // Cache for API requests
+  private cache = new Map<string, Observable<any>>();
 
   constructor(private http: HttpClient) { }
 
   create(appointment: CreateAppointment): Observable<Appointment> {
-    return this.http.post<Appointment>(this.apiUrl, appointment);
+    return this.http.post<Appointment>(this.apiUrl, appointment)
+      .pipe(
+        tap(() => {
+          const dateStr = new Date(appointment.scheduledDate).toISOString().split('T')[0];
+          this.invalidateCache(appointment.clinicId, dateStr);
+        })
+      );
   }
 
   update(id: string, appointment: UpdateAppointment): Observable<Appointment> {
-    return this.http.put<Appointment>(`${this.apiUrl}/${id}`, appointment);
+    return this.http.put<Appointment>(`${this.apiUrl}/${id}`, appointment)
+      .pipe(
+        tap(() => this.invalidateCache())
+      );
   }
 
   cancel(id: string, cancellationReason: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/cancel`, { cancellationReason });
+    return this.http.put<void>(`${this.apiUrl}/${id}/cancel`, { cancellationReason })
+      .pipe(
+        tap(() => this.invalidateCache())
+      );
   }
 
   getDailyAgenda(clinicId: string, date: string, professionalId?: string): Observable<DailyAgenda> {
+    const cacheKey = `agenda_${clinicId}_${date}_${professionalId || 'all'}`;
+    
+    // Return from cache if exists
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)!;
+    }
+
     let params = new HttpParams()
       .set('clinicId', clinicId)
       .set('date', date);
@@ -40,7 +63,34 @@ export class AppointmentService {
       params = params.set('professionalId', professionalId);
     }
     
-    return this.http.get<DailyAgenda>(`${this.apiUrl}/agenda`, { params });
+    // ShareReplay to avoid multiple simultaneous requests
+    const request$ = this.http.get<DailyAgenda>(`${this.apiUrl}/agenda`, { params })
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true })
+      );
+
+    this.cache.set(cacheKey, request$);
+    
+    // Clear cache after 5 minutes
+    setTimeout(() => this.cache.delete(cacheKey), 5 * 60 * 1000);
+    
+    return request$;
+  }
+
+  // Invalidate cache when creating/updating appointments
+  invalidateCache(clinicId?: string, date?: string): void {
+    if (clinicId && date) {
+      // Invalidate specific cache
+      const prefix = `agenda_${clinicId}_${date}`;
+      for (const key of this.cache.keys()) {
+        if (key.startsWith(prefix)) {
+          this.cache.delete(key);
+        }
+      }
+    } else {
+      // Clear all cache
+      this.cache.clear();
+    }
   }
 
   getAvailableSlots(clinicId: string, date: string, duration: number): Observable<AvailableSlot[]> {
@@ -56,11 +106,17 @@ export class AppointmentService {
   }
 
   markAsPaid(id: string, paymentReceiverType: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${id}/mark-as-paid`, { paymentReceiverType });
+    return this.http.post<void>(`${this.apiUrl}/${id}/mark-as-paid`, { paymentReceiverType })
+      .pipe(
+        tap(() => this.invalidateCache())
+      );
   }
 
   complete(id: string, notes?: string, registerPayment: boolean = false): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${id}/complete`, { notes, registerPayment });
+    return this.http.post<void>(`${this.apiUrl}/${id}/complete`, { notes, registerPayment })
+      .pipe(
+        tap(() => this.invalidateCache())
+      );
   }
 
   getProfessionals(): Observable<Professional[]> {

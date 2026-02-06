@@ -1,8 +1,10 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels } from '../../../models/appointment.model';
@@ -40,9 +42,10 @@ interface CalendarSlot {
   standalone: true,
   imports: [CommonModule, RouterLink, Navbar, HelpButtonComponent],
   templateUrl: './appointment-calendar.html',
-  styleUrl: './appointment-calendar.scss'
+  styleUrl: './appointment-calendar.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppointmentCalendar implements OnInit {
+export class AppointmentCalendar implements OnInit, OnDestroy {
   currentWeekStart = signal<Date>(this.getWeekStart(new Date()));
   weekDays = signal<DayColumn[]>([]);
   timeSlots = signal<TimeSlot[]>([]);
@@ -53,6 +56,9 @@ export class AppointmentCalendar implements OnInit {
   selectedDoctorId = signal<string | null>(null);
   professionals = signal<Professional[]>([]);
   
+  // Subject for debounced filter changes
+  private filterChange$ = new Subject<{ date?: Date; professionalId?: string | null }>();
+  
   // Clinic ID will be retrieved from authenticated user
   clinicId: string | null = null;
 
@@ -61,7 +67,8 @@ export class AppointmentCalendar implements OnInit {
     private router: Router,
     private auth: Auth,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -76,7 +83,36 @@ export class AppointmentCalendar implements OnInit {
     this.generateTimeSlots();
     this.generateWeekDays();
     this.loadProfessionals();
+    
+    // Set up debounced filter changes (300ms debounce)
+    this.filterChange$.pipe(
+      debounceTime(300),
+      distinctUntilChanged((prev, curr) => 
+        prev.date?.getTime() === curr.date?.getTime() && 
+        prev.professionalId === curr.professionalId
+      ),
+      switchMap(() => {
+        this.isLoading.set(true);
+        this.cdr.markForCheck();
+        return Promise.resolve(this.loadWeekAppointments());
+      })
+    ).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Error loading appointments:', error);
+        this.isLoading.set(false);
+        this.cdr.markForCheck();
+      }
+    });
+    
     this.loadWeekAppointments();
+  }
+
+  ngOnDestroy(): void {
+    this.filterChange$.complete();
   }
 
   getWeekStart(date: Date): Date {
@@ -197,10 +233,12 @@ export class AppointmentCalendar implements OnInit {
       this.weekDays.set([...days]);
       this.generateCalendarGrid();
       this.isLoading.set(false);
+      this.cdr.markForCheck(); // Notify change detection
     } catch (error) {
       console.error('Error loading appointments:', error);
       this.errorMessage.set('Erro ao carregar agendamentos');
       this.isLoading.set(false);
+      this.cdr.markForCheck(); // Notify change detection
     }
   }
 
@@ -218,7 +256,8 @@ export class AppointmentCalendar implements OnInit {
 
   onDoctorFilterChange(doctorId: string | null): void {
     this.selectedDoctorId.set(doctorId);
-    this.loadWeekAppointments();
+    // Emit filter change (will be debounced)
+    this.filterChange$.next({ professionalId: doctorId });
   }
 
   generateCalendarGrid(): void {
@@ -365,6 +404,7 @@ export class AppointmentCalendar implements OnInit {
           'Fechar',
           { duration: 3000 }
         );
+        this.cdr.markForCheck(); // Notify change detection
       }
     });
   }
@@ -379,7 +419,8 @@ export class AppointmentCalendar implements OnInit {
     newStart.setDate(current.getDate() - 7);
     this.currentWeekStart.set(newStart);
     this.generateWeekDays();
-    this.loadWeekAppointments();
+    // Emit filter change (will be debounced)
+    this.filterChange$.next({ date: newStart });
   }
 
   nextWeek(): void {
@@ -388,13 +429,16 @@ export class AppointmentCalendar implements OnInit {
     newStart.setDate(current.getDate() + 7);
     this.currentWeekStart.set(newStart);
     this.generateWeekDays();
-    this.loadWeekAppointments();
+    // Emit filter change (will be debounced)
+    this.filterChange$.next({ date: newStart });
   }
 
   goToToday(): void {
-    this.currentWeekStart.set(this.getWeekStart(new Date()));
+    const newStart = this.getWeekStart(new Date());
+    this.currentWeekStart.set(newStart);
     this.generateWeekDays();
-    this.loadWeekAppointments();
+    // Emit filter change (will be debounced)
+    this.filterChange$.next({ date: newStart });
   }
 
   getWeekRange(): string {
@@ -444,5 +488,28 @@ export class AppointmentCalendar implements OnInit {
     }
     
     return colors[Math.abs(hash) % colors.length];
+  }
+
+  // TrackBy functions for performance optimization
+  trackByAppointmentId(index: number, appointment: Appointment): string {
+    return appointment.id;
+  }
+
+  trackByProfessionalId(index: number, professional: Professional): string {
+    return professional.id;
+  }
+
+  trackByDayDate(index: number, day: DayColumn): number {
+    return day.date.getTime();
+  }
+
+  trackBySlotKey(index: number, slot: CalendarSlot): string {
+    return `${slot.dayColumn.date.getTime()}_${slot.timeSlot.time}`;
+  }
+
+  trackByTimeSlot(index: number, row: CalendarSlot[]): string {
+    // Always use the time slot as the unique identifier
+    // This should never be null for a valid row
+    return row[0]?.timeSlot?.time || '';
   }
 }

@@ -4,6 +4,8 @@ using MedicSoft.Application.Queries.Appointments;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.Services;
+using MedicSoft.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicSoft.Application.Handlers.Queries.Appointments
 {
@@ -13,35 +15,44 @@ namespace MedicSoft.Application.Handlers.Queries.Appointments
         private readonly IClinicRepository _clinicRepository;
         private readonly AppointmentSchedulingService _schedulingService;
         private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
 
         public GetDailyAgendaQueryHandler(
             IAppointmentRepository appointmentRepository,
             IClinicRepository clinicRepository,
             AppointmentSchedulingService schedulingService,
-            IMapper mapper)
+            IMapper mapper,
+            ICacheService cacheService)
         {
             _appointmentRepository = appointmentRepository;
             _clinicRepository = clinicRepository;
             _schedulingService = schedulingService;
             _mapper = mapper;
+            _cacheService = cacheService;
         }
 
         public async Task<DailyAgendaDto> Handle(GetDailyAgendaQuery request, CancellationToken cancellationToken)
         {
-            var clinic = await _clinicRepository.GetByIdAsync(request.ClinicId, request.TenantId);
+            // Cache clinic data (rarely changes)
+            var cacheKey = $"clinic:{request.ClinicId}";
+            var clinic = await _cacheService.GetOrCreateAsync(cacheKey, async () =>
+            {
+                return await _clinicRepository.GetByIdAsync(request.ClinicId, request.TenantId);
+            }, TimeSpan.FromHours(1));
+
             if (clinic == null)
             {
                 throw new InvalidOperationException("Clinic not found");
             }
 
-            var appointments = await _appointmentRepository.GetDailyAgendaAsync(request.Date, request.ClinicId, request.TenantId);
+            // Use optimized repository method with Include and filtering at database level
+            var appointments = await _appointmentRepository.GetDailyAgendaWithIncludesAsync(
+                request.Date, 
+                request.ClinicId, 
+                request.TenantId,
+                request.ProfessionalId);
             
-            // Filter by professional if specified
-            if (request.ProfessionalId.HasValue)
-            {
-                appointments = appointments.Where(a => a.ProfessionalId == request.ProfessionalId.Value);
-            }
-            
+            // Calculate available slots
             var availableSlots = await _schedulingService.GetAvailableSlotsAsync(
                 request.Date, request.ClinicId, clinic.AppointmentDurationMinutes, request.TenantId);
 
