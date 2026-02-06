@@ -107,8 +107,8 @@ public class CfmValidationController : ControllerBase
 
             await Task.WhenAll(crmTask, cpfTask);
 
-            var crmResult = await crmTask;
-            var cpfResult = await cpfTask;
+            var crmResult = crmTask.Result;
+            var cpfResult = cpfTask.Result;
 
             var result = new CfmIdentityValidationResult
             {

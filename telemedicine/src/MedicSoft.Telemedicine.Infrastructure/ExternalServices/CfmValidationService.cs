@@ -58,7 +58,10 @@ public class CfmValidationService : ICfmValidationService
             _logger.LogInformation("Validating CRM {CrmNumber}-{CrmState} with CFM API", cleanCrmNumber, cleanCrmState);
 
             // CFM API endpoint for CRM validation
-            // The actual endpoint may vary - this is a common pattern for Brazilian government APIs
+            // Note: The actual CFM API endpoint structure should be confirmed with official documentation
+            // at https://siem-servicos-api.cfm.org.br/swagger-ui/index.html
+            // This implementation uses a common pattern for Brazilian government APIs
+            // TODO: Verify and update endpoint path once CFM API documentation is accessible
             var url = $"/api/consulta-crm?numero={cleanCrmNumber}&uf={cleanCrmState}";
             
             var response = await _httpClient.GetAsync(url);
@@ -158,6 +161,9 @@ public class CfmValidationService : ICfmValidationService
             _logger.LogInformation("Validating CPF with CFM API (masked for security)");
 
             // CFM API endpoint for CPF validation
+            // Note: The actual CFM API endpoint structure should be confirmed with official documentation
+            // at https://siem-servicos-api.cfm.org.br/swagger-ui/index.html
+            // TODO: Verify and update endpoint path once CFM API documentation is accessible
             var url = $"/api/consulta-cpf?cpf={cleanCpf}";
             
             var response = await _httpClient.GetAsync(url);
