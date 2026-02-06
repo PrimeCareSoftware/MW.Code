@@ -11,6 +11,8 @@
 ### 🎯 Início Rápido
 - **[DEVELOPER_QUICKSTART.md](./DEVELOPER_QUICKSTART.md)** ⚡ - Setup e primeiros passos (< 30 min)
 - **[TROUBLESHOOTING_FAQ.md](./TROUBLESHOOTING_FAQ.md)** 🔧 - Resolução de problemas comuns
+- **[DOCUMENTACAO_DATA_SEED.md](./DOCUMENTACAO_DATA_SEED.md)** 🌱 - Data Seeder (criar dados demo)
+- **[DATA_SEEDER_TESTING_GUIDE.md](./DATA_SEEDER_TESTING_GUIDE.md)** 🧪 - Guia de testes do data seeder
 
 ### 📖 Documentação Principal
 - **[PATIENT_PORTAL_ARCHITECTURE.md](../system-admin/regras-negocio/PATIENT_PORTAL_ARCHITECTURE.md)** - Arquitetura DDD/Clean Architecture
@@ -193,6 +195,27 @@ dotnet run --project PatientPortal.Api
 ```
 
 A API estará disponível em: `https://localhost:7000`
+
+#### 🌱 Dados Demo (Opcional)
+
+Para popular o banco com dados de teste:
+
+```bash
+# 1. Certifique-se que a API principal está com dados demo
+curl -X POST http://localhost:5000/api/data-seeder/seed-demo
+
+# 2. Popular portal do paciente
+curl -X POST http://localhost:7000/api/data-seeder/seed-demo
+
+# 3. Ver informações dos usuários criados
+curl -X GET http://localhost:7000/api/data-seeder/demo-info
+```
+
+**Credenciais de Teste:**
+- **Senha padrão:** `Patient@123`
+- **Login:** Use qualquer email ou CPF de paciente
+
+📖 Ver documentação completa: [DOCUMENTACAO_DATA_SEED.md](./DOCUMENTACAO_DATA_SEED.md)
 
 ### Frontend
 

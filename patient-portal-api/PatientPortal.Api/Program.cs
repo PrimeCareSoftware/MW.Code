@@ -157,6 +157,7 @@ builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ITwoFactorService, TwoFactorService>();
 builder.Services.AddScoped<IMainDatabaseContext, PatientPortal.Infrastructure.Services.MainDatabaseContext>();
+builder.Services.AddScoped<PatientPortalSeederService>();
 
 // Register Background Services
 builder.Services.AddHostedService<PatientPortal.Infrastructure.Services.AppointmentReminderService>();
