@@ -266,6 +266,8 @@ namespace MedicSoft.Application.Services
                     if (Enum.TryParse<ClinicType>(request.ClinicType, true, out var clinicType))
                     {
                         // Update clinic type using the existing method
+                        // Note: ShowOnPublicSite is set to false by default - clinics must explicitly opt-in
+                        // to public display after verifying their information in the system settings
                         clinic.UpdatePublicSiteSettings(false, clinicType, null);
                     }
                 }

@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     planId: '',
     acceptTerms: false,
     useTrial: true,
-    clinicType: 'Medical' // Default to Medical
+    clinicType: this.DEFAULT_CLINIC_TYPE
   };
   
   // For CPF (physical person), allow optional company/clinic fields
@@ -78,6 +78,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     { value: 'Veterinary', label: 'Clínica Veterinária', description: 'Atendimento veterinário para animais' },
     { value: 'Other', label: 'Outra Especialidade', description: 'Outras áreas de atendimento em saúde' }
   ];
+  
+  // Default clinic type - Medical is the most common
+  private readonly DEFAULT_CLINIC_TYPE = 'Medical';
   
   passwordConfirm = '';
   isSubmitting = false;
