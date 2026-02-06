@@ -38,6 +38,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   hasSavedData = false;
   clinicDocumentType: 'CPF' | 'CNPJ' = 'CNPJ'; // Default to CNPJ for traditional clinics
   
+  // Default clinic type - Medical is the most common
+  private readonly DEFAULT_CLINIC_TYPE = 'Medical';
+  
   model: RegistrationRequest = {
     companyName: '',
     clinicName: '',
@@ -78,9 +81,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     { value: 'Veterinary', label: 'Clínica Veterinária', description: 'Atendimento veterinário para animais' },
     { value: 'Other', label: 'Outra Especialidade', description: 'Outras áreas de atendimento em saúde' }
   ];
-  
-  // Default clinic type - Medical is the most common
-  private readonly DEFAULT_CLINIC_TYPE = 'Medical';
   
   passwordConfirm = '';
   isSubmitting = false;
