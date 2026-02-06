@@ -51,7 +51,12 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddHttpClient(); // Add HttpClient factory for microservice proxying
-builder.Services.AddSignalR(); // Add SignalR for real-time communication
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+}); // Add SignalR for real-time communication
 
 // Configure Response Compression for CRM endpoints
 builder.Services.AddResponseCompression(options =>
@@ -249,6 +254,23 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         RequireExpirationTime = true,
         ClockSkew = TimeSpan.FromMinutes(5) // Allow 5 minutes tolerance for time sync issues
+    };
+    
+    // Configure JWT for SignalR
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+            
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -448,6 +470,10 @@ builder.Services.AddSingleton<IInAppNotificationService, InAppNotificationServic
 builder.Services.AddScoped<IAlertService, AlertService>();
 builder.Services.AddScoped<DataSeederService>();
 builder.Services.AddScoped<ISalesFunnelService, SalesFunnelService>();
+
+// Chat System Services
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IPresenceService, PresenceService>();
 
 // System Admin - Phase 1 Services
 builder.Services.AddScoped<MedicSoft.Application.Services.SystemAdmin.ISaasMetricsService, MedicSoft.Application.Services.SystemAdmin.SaasMetricsService>();
@@ -802,6 +828,7 @@ app.MapControllers();
 app.MapHub<MedicSoft.Api.Hubs.FilaHub>("/hubs/fila");
 app.MapHub<MedicSoft.Api.Hubs.SystemNotificationHub>("/hubs/system-notifications");
 app.MapHub<MedicSoft.Api.Hubs.AlertHub>("/hubs/alerts");
+app.MapHub<MedicSoft.Api.Hubs.ChatHub>("/hubs/chat");
 
 // Initialize MediatR License
 using (var scope = app.Services.CreateScope())

@@ -225,6 +225,13 @@ namespace MedicSoft.Repository.Context
         // External Services Configuration
         public DbSet<ExternalServiceConfiguration> ExternalServiceConfigurations { get; set; } = null!;
 
+        // Internal Chat System
+        public DbSet<ChatConversation> ChatConversations { get; set; } = null!;
+        public DbSet<ChatMessage> ChatMessages { get; set; } = null!;
+        public DbSet<ChatParticipant> ChatParticipants { get; set; } = null!;
+        public DbSet<MessageReadReceipt> MessageReadReceipts { get; set; } = null!;
+        public DbSet<UserPresence> UserPresences { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
