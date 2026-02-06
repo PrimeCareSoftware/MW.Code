@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   // Default API URL (for backward compatibility)
-  apiUrl: 'http://localhost:5293/api',
+  apiUrl: 'http://localhost:5000/api',
   
   // App URL (for marketing site redirects)
   appUrl: 'http://localhost:4200',

@@ -56,7 +56,7 @@ export interface PaginatedBlogResponse {
   providedIn: 'root'
 })
 export class BlogService {
-  private readonly apiUrl = `${environment.apiUrl}/api/blog`;
+  private readonly apiUrl = `${environment.apiUrl}/blog`;
   private readonly mockEnabled = true; // Set to false when backend is ready
 
   constructor(private http: HttpClient) {}

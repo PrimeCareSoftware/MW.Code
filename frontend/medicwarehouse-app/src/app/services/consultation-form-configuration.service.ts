@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class ConsultationFormConfigurationService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/api/consultation-form-configurations`;
+  private readonly baseUrl = `${environment.apiUrl}/consultation-form-configurations`;
 
   /**
    * Get active consultation form configuration for a clinic

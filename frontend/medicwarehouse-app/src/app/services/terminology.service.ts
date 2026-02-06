@@ -30,7 +30,7 @@ export enum ProfessionalSpecialty {
 })
 export class TerminologyService {
   private readonly baseUrl = '/api/BusinessConfiguration';
-  private readonly terminologyUrl = `${environment.apiUrl}/api/consultation-form-configurations/terminology`;
+  private readonly terminologyUrl = `${environment.apiUrl}/consultation-form-configurations/terminology`;
   private terminologyCache$ = new BehaviorSubject<TerminologyMap | null>(null);
   private specialtyTerminologyCache = new Map<string, Observable<TerminologyMap>>();
   private loading = false;

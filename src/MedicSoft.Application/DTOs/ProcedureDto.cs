@@ -7,41 +7,41 @@ namespace MedicSoft.Application.DTOs
     public class ProcedureDto
     {
         public Guid Id { get; set; }
-        
+
         [Required(ErrorMessage = "Nome é obrigatório")]
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Nome deve ter entre 3 e 200 caracteres")]
         public string Name { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Código é obrigatório")]
         [StringLength(50, ErrorMessage = "Código deve ter no máximo 50 caracteres")]
         public string Code { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Descrição é obrigatória")]
         [StringLength(1000, MinimumLength = 10, ErrorMessage = "Descrição deve ter entre 10 e 1000 caracteres")]
         public string Description { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Categoria é obrigatória")]
         public ProcedureCategory Category { get; set; }
-        
+
         [Required(ErrorMessage = "Preço é obrigatório")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Preço deve ser maior que zero")]
         public decimal Price { get; set; }
-        
+
         [Required(ErrorMessage = "Duração é obrigatória")]
         [Range(5, 480, ErrorMessage = "Duração deve estar entre 5 e 480 minutos")]
         public int DurationMinutes { get; set; }
-        
+
         public bool RequiresMaterials { get; set; }
         public bool IsActive { get; set; }
-        
+
         public Guid? ClinicId { get; set; }
-        
+
         [StringLength(500, ErrorMessage = "Lista de convênios deve ter no máximo 500 caracteres")]
         public string? AcceptedHealthInsurances { get; set; }
-        
+
         public bool AllowInMedicalAttendance { get; set; } = true;
         public bool AllowInExclusiveProcedureAttendance { get; set; }
-        
+
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
@@ -51,33 +51,33 @@ namespace MedicSoft.Application.DTOs
         [Required(ErrorMessage = "Nome é obrigatório")]
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Nome deve ter entre 3 e 200 caracteres")]
         public string Name { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Código é obrigatório")]
         [StringLength(50, ErrorMessage = "Código deve ter no máximo 50 caracteres")]
         public string Code { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Descrição é obrigatória")]
         [StringLength(1000, MinimumLength = 10, ErrorMessage = "Descrição deve ter entre 10 e 1000 caracteres")]
         public string Description { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Categoria é obrigatória")]
         public ProcedureCategory Category { get; set; }
-        
+
         [Required(ErrorMessage = "Preço é obrigatório")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Preço deve ser maior que zero")]
         public decimal Price { get; set; }
-        
+
         [Required(ErrorMessage = "Duração é obrigatória")]
         [Range(5, 480, ErrorMessage = "Duração deve estar entre 5 e 480 minutos")]
         public int DurationMinutes { get; set; }
-        
+
         public bool RequiresMaterials { get; set; }
-        
+
         public Guid? ClinicId { get; set; }
-        
+
         [StringLength(500, ErrorMessage = "Lista de convênios deve ter no máximo 500 caracteres")]
         public string? AcceptedHealthInsurances { get; set; }
-        
+
         public bool AllowInMedicalAttendance { get; set; } = true;
         public bool AllowInExclusiveProcedureAttendance { get; set; }
     }
@@ -87,29 +87,29 @@ namespace MedicSoft.Application.DTOs
         [Required(ErrorMessage = "Nome é obrigatório")]
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Nome deve ter entre 3 e 200 caracteres")]
         public string Name { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Descrição é obrigatória")]
         [StringLength(1000, MinimumLength = 10, ErrorMessage = "Descrição deve ter entre 10 e 1000 caracteres")]
         public string Description { get; set; } = null!;
-        
+
         [Required(ErrorMessage = "Categoria é obrigatória")]
         public ProcedureCategory Category { get; set; }
-        
+
         [Required(ErrorMessage = "Preço é obrigatório")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Preço deve ser maior que zero")]
         public decimal Price { get; set; }
-        
+
         [Required(ErrorMessage = "Duração é obrigatória")]
         [Range(5, 480, ErrorMessage = "Duração deve estar entre 5 e 480 minutos")]
         public int DurationMinutes { get; set; }
-        
+
         public bool RequiresMaterials { get; set; }
-        
+
         public Guid? ClinicId { get; set; }
-        
+
         [StringLength(500, ErrorMessage = "Lista de convênios deve ter no máximo 500 caracteres")]
         public string? AcceptedHealthInsurances { get; set; }
-        
+
         public bool AllowInMedicalAttendance { get; set; } = true;
         public bool AllowInExclusiveProcedureAttendance { get; set; }
     }
@@ -131,10 +131,10 @@ namespace MedicSoft.Application.DTOs
     {
         [Required(ErrorMessage = "ID do procedimento é obrigatório")]
         public Guid ProcedureId { get; set; }
-        
+
         [Range(0.01, double.MaxValue, ErrorMessage = "Preço customizado deve ser maior que zero")]
         public decimal? CustomPrice { get; set; }
-        
+
         [StringLength(500, ErrorMessage = "Notas devem ter no máximo 500 caracteres")]
         public string? Notes { get; set; }
     }

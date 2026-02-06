@@ -18,7 +18,7 @@ import {
   providedIn: 'root'
 })
 export class ModuleConfigService {
-  private apiUrl = `${environment.apiUrl}/api/module-config`;
+  private apiUrl = `${environment.apiUrl}/module-config`;
 
   constructor(private http: HttpClient) {}
 
