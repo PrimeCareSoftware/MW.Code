@@ -159,6 +159,10 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+
+    // Add operation filter to respect [AllowAnonymous] and [Authorize] attributes
+    // This ensures swagger.json is accessible without authentication
+    c.OperationFilter<MedicSoft.Api.Filters.AuthorizeCheckOperationFilter>();
 });
 
 // Configure database with auto-detection for SQL Server or PostgreSQL
@@ -697,7 +701,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline
 // Enable Swagger - configurable via SwaggerSettings:Enabled (default: true in Development, false in Production)
-// Note: In production, consider restricting Swagger access via network policies or authentication
+// Swagger is placed early in the pipeline to bypass authentication/authorization
+// This ensures the swagger.json endpoint is accessible without authentication
 var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled") 
     ?? app.Environment.IsDevelopment(); // Default to true in Development, false otherwise
 
