@@ -28,8 +28,8 @@ body {
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   font-weight: var(--font-normal);
-  color: hsl(var(--foreground));
-  background-color: hsl(var(--background));
+  color: var(--foreground);
+  background-color: var(--background);
   transition: background-color var(--transition-base), color var(--transition-base);
 }
 
@@ -67,54 +67,54 @@ h6 {
 
 /* Material Snackbar Custom Styles using Omni Care colors */
 .snackbar-success {
-  background-color: hsl(var(--success)) !important;
-  color: hsl(var(--success-foreground)) !important;
+  background-color: var(--success) !important;
+  color: var(--success-foreground) !important;
 
   .mat-mdc-snack-bar-label {
-    color: hsl(var(--success-foreground)) !important;
+    color: var(--success-foreground) !important;
   }
 
   .mat-mdc-button {
-    color: hsl(var(--success-foreground)) !important;
+    color: var(--success-foreground) !important;
   }
 }
 
 .snackbar-error {
-  background-color: hsl(var(--destructive)) !important;
-  color: hsl(var(--destructive-foreground)) !important;
+  background-color: var(--destructive) !important;
+  color: var(--destructive-foreground) !important;
 
   .mat-mdc-snack-bar-label {
-    color: hsl(var(--destructive-foreground)) !important;
+    color: var(--destructive-foreground) !important;
   }
 
   .mat-mdc-button {
-    color: hsl(var(--destructive-foreground)) !important;
+    color: var(--destructive-foreground) !important;
   }
 }
 
 .snackbar-warning {
-  background-color: hsl(var(--warning)) !important;
-  color: hsl(var(--warning-foreground)) !important;
+  background-color: var(--warning) !important;
+  color: var(--warning-foreground) !important;
 
   .mat-mdc-snack-bar-label {
-    color: hsl(var(--warning-foreground)) !important;
+    color: var(--warning-foreground) !important;
   }
 
   .mat-mdc-button {
-    color: hsl(var(--warning-foreground)) !important;
+    color: var(--warning-foreground) !important;
   }
 }
 
 .snackbar-info {
-  background-color: hsl(var(--info)) !important;
-  color: hsl(var(--info-foreground)) !important;
+  background-color: var(--info) !important;
+  color: var(--info-foreground) !important;
 
   .mat-mdc-snack-bar-label {
-    color: hsl(var(--info-foreground)) !important;
+    color: var(--info-foreground) !important;
   }
 
   .mat-mdc-button {
-    color: hsl(var(--info-foreground)) !important;
+    color: var(--info-foreground) !important;
   }
 }
 
@@ -137,26 +137,26 @@ h6 {
 
 /* Card styles from Omni Care */
 .card-elevated {
-  background: hsl(var(--card));
+  background: var(--card);
   border-radius: var(--radius-lg);
-  border: 1px solid hsl(var(--border) / 0.5);
-  box-shadow: 0 4px 20px -4px hsl(var(--card-shadow) / 0.15);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.15);
   transition: box-shadow var(--transition-base), transform var(--transition-base);
 
   &:hover {
-    box-shadow: 0 8px 30px -6px hsl(var(--card-shadow) / 0.25);
+    box-shadow: 0 8px 30px -6px rgba(0, 0, 0, 0.25);
     transform: translateY(-2px);
   }
 }
 
 /* Hero gradient from Omni Care */
 .hero-gradient {
-  background: linear-gradient(135deg, hsl(var(--hero-gradient-start)) 0%, hsl(var(--hero-gradient-end)) 100%);
+  background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
 }
 
 /* Glow effect from Omni Care */
 .glow-effect {
-  box-shadow: 0 0 40px -10px hsl(var(--glow) / 0.4);
+  box-shadow: 0 0 40px -10px rgba(30, 64, 175, 0.4);
 }
 
 /* Scrollbar styling using Omni Care design */
@@ -166,15 +166,16 @@ h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
+  background: var(--muted);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground));
+  background: var(--muted-foreground);
   border-radius: calc(var(--radius) / 2);
   
   &:hover {
-    background: hsl(var(--foreground) / 0.6);
+    background: var(--foreground);
+    opacity: 0.6;
   }
 }
 
@@ -189,28 +190,27 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color: hsl(var(--foreground)) !important;
-  -webkit-box-shadow: 0 0 0px 1000px hsl(var(--muted)) inset !important;
-  box-shadow: 0 0 0px 1000px hsl(var(--muted)) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--muted) inset !important;
+  box-shadow: 0 0 0px 1000px var(--muted) inset !important;
   transition: background-color 5000s ease-in-out 0s;
-  caret-color: hsl(var(--foreground)) !important;
+  caret-color: var(--foreground) !important;
 }
 
 /* Ensure all input and textarea elements have proper text color */
 input,
 textarea,
 select {
-  color: hsl(var(--foreground)) !important;
+  color: var(--foreground) !important;
 }
 
 /* Material Design input fixes using Omni Care colors */
 .mat-mdc-input-element {
-  color: hsl(var(--foreground)) !important;
-  caret-color: hsl(var(--primary)) !important;
+  color: var(--foreground) !important;
+  caret-color: var(--primary) !important;
 }
 
 .mat-mdc-input-element::placeholder {
-  color: hsl(var(--muted-foreground)) !important;
+  color: var(--muted-foreground) !important;
   opacity: 1 !important;
 }
-

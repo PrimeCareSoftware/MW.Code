@@ -1,0 +1,11 @@
+/**
+ * MedicWarehouse Shared Design System
+ * Import this file in all projects
+ * 
+ * Usage:
+ * @use '../shared-styles' as *;
+ */
+
+@forward 'design-tokens';
+@forward 'components';
+@forward 'utilities';
