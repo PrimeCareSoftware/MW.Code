@@ -128,5 +128,52 @@ namespace MedicSoft.Repository.Repositories
             // Return the scheduled times of existing appointments (to be used by domain service)
             return existingAppointments.Select(a => a.ScheduledTime);
         }
+
+        public async Task<IEnumerable<Appointment>> GetDailyAgendaWithIncludesAsync(
+            DateTime date, 
+            Guid clinicId, 
+            string tenantId, 
+            Guid? professionalId = null)
+        {
+            var query = _dbSet
+                .AsNoTracking()
+                .Where(a => a.ClinicId == clinicId 
+                         && a.TenantId == tenantId
+                         && a.ScheduledDate.Date == date.Date
+                         && a.Status != AppointmentStatus.Cancelled);
+
+            if (professionalId.HasValue)
+            {
+                query = query.Where(a => a.ProfessionalId == professionalId.Value);
+            }
+
+            return await query
+                .Include(a => a.Patient)
+                .Include(a => a.Professional)
+                .Include(a => a.Clinic)
+                .OrderBy(a => a.ScheduledTime)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetDailyAppointmentCountAsync(
+            DateTime date, 
+            Guid clinicId, 
+            string tenantId, 
+            Guid? professionalId = null)
+        {
+            var query = _dbSet
+                .AsNoTracking()
+                .Where(a => a.ClinicId == clinicId 
+                         && a.TenantId == tenantId
+                         && a.ScheduledDate.Date == date.Date
+                         && a.Status != AppointmentStatus.Cancelled);
+
+            if (professionalId.HasValue)
+            {
+                query = query.Where(a => a.ProfessionalId == professionalId.Value);
+            }
+
+            return await query.CountAsync();
+        }
     }
 }

@@ -58,6 +58,27 @@ builder.Services.AddSignalR(options =>
     options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
 }); // Add SignalR for real-time communication
 
+// Configure Distributed Cache (Redis or Memory)
+var redisConnection = builder.Configuration.GetConnectionString("Redis");
+if (!string.IsNullOrEmpty(redisConnection))
+{
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConnection;
+        options.InstanceName = "MedicSoft:";
+    });
+    Log.Information("Redis distributed cache configured");
+}
+else
+{
+    // Fallback to in-memory cache for development
+    builder.Services.AddDistributedMemoryCache();
+    Log.Warning("Using in-memory cache. Configure Redis for production environments.");
+}
+
+// Configure Response Caching
+builder.Services.AddResponseCaching();
+
 // Configure Response Compression for CRM endpoints
 builder.Services.AddResponseCompression(options =>
 {
@@ -446,6 +467,7 @@ builder.Services.AddScoped<IDocumentTemplateRepository, DocumentTemplateReposito
 builder.Services.AddScoped<IExternalServiceConfigurationRepository, ExternalServiceConfigurationRepository>();
 
 // Register application services
+builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
