@@ -1,14 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Import Omni Care Design Tokens using @use for Dart Sass 3.0 compatibility */
+@use './styles/design-tokens' as *;
+
 /* Import Material Icons locally */
 @import 'material-icons/iconfont/material-icons.css';
 
 /* Import Google Fonts for Omni Care Design System */
 /* Commented out due to build environment network restrictions */
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap'); */
-
-/* Import Omni Care Design Tokens */
-@import './styles/design-tokens';
 
 /* Global styles */
 * {
@@ -31,11 +31,6 @@ body {
   color: hsl(var(--foreground));
   background-color: hsl(var(--background));
   transition: background-color var(--transition-base), color var(--transition-base);
-  
-  /* Add padding for mobile bottom navigation */
-  @media (max-width: 768px) {
-    padding-bottom: 64px;
-  }
 }
 
 /* Typography */

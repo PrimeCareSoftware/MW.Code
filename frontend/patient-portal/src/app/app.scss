@@ -5,13 +5,14 @@
   min-height: 100vh;
 }
 
-/* Router outlet styling */
-router-outlet {
-  display: none;
-}
-
-router-outlet + * {
+/* App content wrapper to properly handle routing */
+.app-content {
   display: block;
   width: 100%;
   min-height: 100vh;
+  
+  /* Add padding for mobile bottom navigation */
+  @media (max-width: 768px) {
+    padding-bottom: 64px;
+  }
 }

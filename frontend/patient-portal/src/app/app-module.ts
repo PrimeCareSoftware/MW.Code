@@ -14,15 +14,15 @@ import { BottomNavComponent } from './shared/components/bottom-nav/bottom-nav.co
 
 @NgModule({
   declarations: [
-    App,
-    OfflineIndicatorComponent,
-    InstallPromptComponent
+    App
   ],
   imports: [
     BrowserModule,
     CommonModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    OfflineIndicatorComponent,
+    InstallPromptComponent,
     BottomNavComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +10,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AppointmentService } from '../../services/appointment.service';
 import { NotificationService } from '../../services/notification.service';
 import { Appointment } from '../../models/appointment.model';
@@ -49,6 +50,8 @@ export class AppointmentsComponent implements OnInit {
   loadingError = false;
   selectedTab = 0;
 
+  private destroyRef = inject(DestroyRef);
+
   constructor(
     private appointmentService: AppointmentService,
     private notificationService: NotificationService,
@@ -63,19 +66,21 @@ export class AppointmentsComponent implements OnInit {
     this.loading = true;
     this.loadingError = false;
     
-    this.appointmentService.getMyAppointments().subscribe({
-      next: (appointments) => {
-        this.appointments = appointments;
-        this.filterAppointments(this.selectedTab);
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading appointments:', error);
-        this.loadingError = true;
-        this.loading = false;
-        this.notificationService.error('Erro ao carregar consultas');
-      }
-    });
+    this.appointmentService.getMyAppointments()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (appointments) => {
+          this.appointments = appointments;
+          this.filterAppointments(this.selectedTab);
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading appointments:', error);
+          this.loadingError = true;
+          this.loading = false;
+          this.notificationService.error('Erro ao carregar consultas');
+        }
+      });
   }
 
   onTabChange(index: number): void {
@@ -151,7 +156,7 @@ export class AppointmentsComponent implements OnInit {
 
   cancelAppointment(appointment: Appointment): void {
     const dialogRef = this.dialog.open(CancelDialogComponent, {
-      width: '500px',
+      width: 'min(500px, 95vw)',
       maxWidth: '95vw',
       data: { appointment }
     });
@@ -174,7 +179,7 @@ export class AppointmentsComponent implements OnInit {
 
   rescheduleAppointment(appointment: Appointment): void {
     const dialogRef = this.dialog.open(RescheduleDialogComponent, {
-      width: '600px',
+      width: 'min(600px, 95vw)',
       maxWidth: '95vw',
       data: { appointment }
     });
