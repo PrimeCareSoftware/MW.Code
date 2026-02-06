@@ -180,6 +180,13 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // External Services Configuration
+  {
+    path: 'external-services',
+    loadComponent: () => import('./pages/external-services/external-services').then(m => m.ExternalServicesPage),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Phase 5: Help Center
   {
     path: 'help',
