@@ -323,5 +323,4 @@ public class ValidateCrmRequest
 public class ValidateCpfRequest
 {
     public string Cpf { get; set; } = string.Empty;
-    }
 }
