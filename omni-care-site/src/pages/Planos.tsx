@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Check, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout/Layout";
@@ -57,6 +58,8 @@ const plans = [
 ];
 
 const Planos = () => {
+  const [selectedPlan, setSelectedPlan] = useState<string | null>("Profissional");
+
   return (
     <Layout>
       <section className="section-padding">
@@ -77,73 +80,77 @@ const Planos = () => {
 
           {/* Plans Grid */}
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {plans.map((plan, index) => (
-              <div
-                key={plan.name}
-                className={`relative rounded-2xl p-6 lg:p-8 animate-fade-in-up ${
-                  plan.highlighted
-                    ? "bg-foreground text-background border-2 border-foreground"
-                    : "card-elevated"
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {plan.highlighted && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full hero-gradient text-primary-foreground text-sm font-medium flex items-center gap-1">
-                    <Sparkles className="w-4 h-4" />
-                    Mais Popular
-                  </div>
-                )}
-
-                <div className="mb-6">
-                  <h3 className={`font-display font-bold text-xl mb-2 ${plan.highlighted ? "text-background" : "text-foreground"}`}>
-                    {plan.name}
-                  </h3>
-                  <p className={`text-sm ${plan.highlighted ? "text-background/70" : "text-muted-foreground"}`}>
-                    {plan.description}
-                  </p>
-                </div>
-
-                <div className="mb-6">
-                  <span className={`font-display font-bold text-4xl ${plan.highlighted ? "text-background" : "text-foreground"}`}>
-                    {plan.price.includes("consulta") ? "" : "R$"}
-                    {plan.price}
-                  </span>
-                  <span className={plan.highlighted ? "text-background/70" : "text-muted-foreground"}>
-                    {plan.period}
-                  </span>
-                </div>
-
-                <Button
-                  className={`w-full mb-6 ${
-                    plan.highlighted
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : "hero-gradient text-primary-foreground hover:opacity-90"
+            {plans.map((plan, index) => {
+              const isSelected = selectedPlan === plan.name;
+              return (
+                <div
+                  key={plan.name}
+                  onClick={() => setSelectedPlan(plan.name)}
+                  className={`relative rounded-2xl p-6 lg:p-8 animate-fade-in-up cursor-pointer transition-all duration-300 ${
+                    isSelected
+                      ? "bg-primary text-primary-foreground border-2 border-primary ring-2 ring-primary/20 scale-105"
+                      : "card-elevated hover:shadow-lg"
                   }`}
-                  size="lg"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  {plan.price.includes("consulta") ? "Falar com Vendas" : "Assinar Agora"}
-                </Button>
+                  {plan.highlighted && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full hero-gradient text-primary-foreground text-sm font-medium flex items-center gap-1">
+                      <Sparkles className="w-4 h-4" />
+                      Mais Popular
+                    </div>
+                  )}
 
-                <ul className="space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature.name} className="flex items-center gap-3">
-                      {feature.included ? (
-                        <Check className={`w-5 h-5 ${plan.highlighted ? "text-primary" : "text-success"}`} />
-                      ) : (
-                        <X className={`w-5 h-5 ${plan.highlighted ? "text-background/30" : "text-muted-foreground/50"}`} />
-                      )}
-                      <span className={`text-sm ${
-                        feature.included
-                          ? plan.highlighted ? "text-background" : "text-foreground"
-                          : plan.highlighted ? "text-background/40" : "text-muted-foreground"
-                      }`}>
-                        {feature.name}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+                  <div className="mb-6">
+                    <h3 className={`font-display font-bold text-xl mb-2 ${isSelected ? "text-primary-foreground" : "text-foreground"}`}>
+                      {plan.name}
+                    </h3>
+                    <p className={`text-sm ${isSelected ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                      {plan.description}
+                    </p>
+                  </div>
+
+                  <div className="mb-6">
+                    <span className={`font-display font-bold text-4xl ${isSelected ? "text-primary-foreground" : "text-foreground"}`}>
+                      {plan.price.includes("consulta") ? "" : "R$"}
+                      {plan.price}
+                    </span>
+                    <span className={isSelected ? "text-primary-foreground/80" : "text-muted-foreground"}>
+                      {plan.period}
+                    </span>
+                  </div>
+
+                  <Button
+                    className={`w-full mb-6 ${
+                      isSelected
+                        ? "bg-background text-foreground hover:bg-background/90"
+                        : "hero-gradient text-primary-foreground hover:opacity-90"
+                    }`}
+                    size="lg"
+                  >
+                    {plan.price.includes("consulta") ? "Falar com Vendas" : "Assinar Agora"}
+                  </Button>
+
+                  <ul className="space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature.name} className="flex items-center gap-3">
+                        {feature.included ? (
+                          <Check className={`w-5 h-5 ${isSelected ? "text-primary-foreground" : "text-success"}`} />
+                        ) : (
+                          <X className={`w-5 h-5 ${isSelected ? "text-primary-foreground/30" : "text-muted-foreground/50"}`} />
+                        )}
+                        <span className={`text-sm ${
+                          feature.included
+                            ? isSelected ? "text-primary-foreground" : "text-foreground"
+                            : isSelected ? "text-primary-foreground/50" : "text-muted-foreground"
+                        }`}>
+                          {feature.name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
 
           {/* FAQ CTA */}
