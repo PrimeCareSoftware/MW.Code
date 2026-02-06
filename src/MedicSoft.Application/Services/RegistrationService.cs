@@ -106,10 +106,17 @@ namespace MedicSoft.Application.Services
             }
 
             // Determine company and clinic names based on document type and provided data
+            // For CNPJ, company name is required (validation should enforce this)
             // For CPF without company name, use owner name
             var companyName = !string.IsNullOrWhiteSpace(request.CompanyName) 
                 ? request.CompanyName 
                 : (companyDocumentType == DocumentType.CPF ? request.OwnerName : request.ClinicName);
+            
+            // Validate that CNPJ registrations have a company name
+            if (companyDocumentType == DocumentType.CNPJ && string.IsNullOrWhiteSpace(companyName))
+            {
+                return RegistrationResult.CreateFailure("Company name is required for CNPJ registration");
+            }
             
             var clinicName = !string.IsNullOrWhiteSpace(request.ClinicName) 
                 ? request.ClinicName 

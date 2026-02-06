@@ -290,10 +290,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
     const registrationData: RegistrationRequest = {
       ...this.model,
       // For physical person without company fields, use owner name as company/clinic name
-      // For legal entity or physical person with company fields, use provided names
+      // For legal entity or physical person with company fields, use provided names (with validation)
       companyName: (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) 
         ? this.model.ownerName 
-        : this.model.companyName,
+        : (this.model.companyName || ''),  // Empty string if not provided, backend will validate
       clinicName: (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields)
         ? this.model.ownerName
         : (this.model.clinicName || this.model.companyName || ''),

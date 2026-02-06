@@ -145,7 +145,7 @@
               <span>Desejo cadastrar nome de empresa/clínica (opcional)</span>
             </label>
             <small class="hint">
-              Como pessoa física, você pode optar por cadastrar somente seus dados pessoais ou também informar nome de empresa/clínica
+              Como pessoa física, você pode optar por cadastrar somente seus dados pessoais ou também informar nome de empresa/clínica.
             </small>
           </div>
 
@@ -157,7 +157,13 @@
           <!-- Company Name - only shown for CNPJ or when checkbox is enabled for CPF -->
           <div class="form-group" *ngIf="clinicDocumentType === 'CNPJ' || enableCompanyFields">
             <label>Nome da Empresa *</label>
-            <input type="text" [(ngModel)]="model.companyName" name="companyName" required placeholder="Ex: Clínica São Paulo LTDA" />
+            <input 
+              type="text" 
+              [(ngModel)]="model.companyName" 
+              name="companyName" 
+              [required]="clinicDocumentType === 'CNPJ' || enableCompanyFields"
+              placeholder="Ex: Clínica São Paulo LTDA" 
+            />
             <small class="hint">Este é o nome da sua empresa/razão social</small>
           </div>
 
