@@ -36,6 +36,9 @@ export interface RegistrationRequest {
   // Trial
   useTrial: boolean;
   
+  // Clinic Type/Specialty
+  clinicType?: string; // e.g., "Medical", "Dental", "Psychology", etc.
+  
   // Sales Funnel Tracking (optional)
   sessionId?: string;
 }

@@ -259,6 +259,16 @@ namespace MedicSoft.Application.Services
                 );
                 
                 clinic.SetSubdomain(subdomain); // Clinic can have subdomain for backward compatibility
+                
+                // Set clinic type/specialty if provided
+                if (!string.IsNullOrWhiteSpace(request.ClinicType))
+                {
+                    if (Enum.TryParse<ClinicType>(request.ClinicType, true, out var clinicType))
+                    {
+                        // Update clinic type using the existing method
+                        clinic.UpdatePublicSiteSettings(false, clinicType, null);
+                    }
+                }
 
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
 
