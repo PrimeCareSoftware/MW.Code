@@ -64,6 +64,7 @@ builder.Services.AddScoped<ITelemedicineRecordingRepository, TelemedicineRecordi
 
 // Register Infrastructure Services
 builder.Services.AddHttpClient<IVideoCallService, DailyCoVideoService>();
+builder.Services.AddHttpClient<ICfmValidationService, CfmValidationService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>
