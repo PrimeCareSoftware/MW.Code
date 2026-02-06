@@ -105,9 +105,19 @@ namespace MedicSoft.Application.Services
                 return RegistrationResult.CreateFailure("Invalid subscription plan");
             }
 
+            // Determine company and clinic names based on document type and provided data
+            // For CPF without company name, use owner name
+            var companyName = !string.IsNullOrWhiteSpace(request.CompanyName) 
+                ? request.CompanyName 
+                : (companyDocumentType == DocumentType.CPF ? request.OwnerName : request.ClinicName);
+            
+            var clinicName = !string.IsNullOrWhiteSpace(request.ClinicName) 
+                ? request.ClinicName 
+                : companyName;
+
             // Generate friendly subdomain from company/clinic name - this will be used as tenantId
             // In the new architecture, Company owns the subdomain/tenantId
-            var baseSubdomain = GenerateFriendlySubdomain(request.ClinicName);
+            var baseSubdomain = GenerateFriendlySubdomain(clinicName);
             var subdomain = baseSubdomain;
             
             // Ensure subdomain uniqueness at Company level
@@ -150,7 +160,7 @@ namespace MedicSoft.Application.Services
                     return await _clinicRepository.ExecuteInTransactionAsync(async () =>
                     {
                         return await RegisterClinicWithCampaignAsync(request, plan, tenantId, subdomain, 
-                            companyDocument, companyDocumentType, ownerDocumentType);
+                            companyDocument, companyDocumentType, ownerDocumentType, companyName, clinicName);
                     });
                 }
                 catch (DbUpdateConcurrencyException) when (attempt < MaxCampaignJoinRetries)
@@ -188,7 +198,9 @@ namespace MedicSoft.Application.Services
             string subdomain,
             string companyDocument,
             DocumentType companyDocumentType,
-            DocumentType? ownerDocumentType)
+            DocumentType? ownerDocumentType,
+            string companyName,
+            string clinicName)
         {
             return await _clinicRepository.ExecuteInTransactionAsync(async () =>
             {
@@ -205,11 +217,11 @@ namespace MedicSoft.Application.Services
                 }
 
                 // Step 1: Create Company (the new tenant entity)
-                // NOTE: Initially using clinic name for company name. In a future phase,
-                // the registration form will have separate fields for company and clinic names.
+                // For CPF (physical person): use owner name if company name not provided
+                // For CNPJ (legal entity): use provided company/clinic name
                 var company = new Company(
-                    request.ClinicName,  // Company name (using clinic name during migration)
-                    request.ClinicName,  // Trade name (same as name during migration)
+                    companyName,     // Company name
+                    companyName,     // Trade name (same as name)
                     companyDocument,
                     companyDocumentType,
                     request.ClinicPhone,
@@ -225,8 +237,8 @@ namespace MedicSoft.Application.Services
 
                 // Step 2: Create the first clinic linked to this company
                 var clinic = new Clinic(
-                    request.ClinicName,
-                    request.ClinicName, // TradeName same as Name
+                    clinicName,
+                    clinicName,         // TradeName same as Name
                     companyDocument,    // For now, clinic uses same document as company
                     request.ClinicPhone,
                     request.ClinicEmail,
