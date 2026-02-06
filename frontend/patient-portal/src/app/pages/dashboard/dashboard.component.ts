@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { forkJoin } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../services/auth.service';
 import { AppointmentService } from '../../services/appointment.service';
 import { DocumentService } from '../../services/document.service';
@@ -51,6 +52,8 @@ export class DashboardComponent implements OnInit {
   documentsCount = 0;
   loadingError = false;
 
+  private destroyRef = inject(DestroyRef);
+
   constructor(
     private authService: AuthService,
     private appointmentService: AppointmentService,
@@ -73,13 +76,15 @@ export class DashboardComponent implements OnInit {
     const appointmentsCount$ = this.appointmentService.getAppointmentsCount();
     const documentsCount$ = this.documentService.getDocumentsCount();
 
-    // Combine all requests
+    // Combine all requests with automatic unsubscribe
     forkJoin({
       appointments: appointments$,
       documents: documents$,
       appointmentsCount: appointmentsCount$,
       documentsCount: documentsCount$
-    }).subscribe({
+    })
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
       next: (results) => {
         this.upcomingAppointments = results.appointments;
         this.recentDocuments = results.documents;
