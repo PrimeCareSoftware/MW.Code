@@ -104,7 +104,7 @@ namespace MedicSoft.Application.Handlers.Commands.DocumentTemplates
                 throw new InvalidOperationException("Cannot delete system templates");
             }
 
-            await _repository.DeleteAsync(template);
+            await _repository.DeleteAsync(request.Id, request.TenantId);
             return Unit.Value;
         }
     }
