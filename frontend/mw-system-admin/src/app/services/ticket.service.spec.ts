@@ -22,7 +22,7 @@ describe('TicketService', () => {
     const mockAuth = createMockAuth(isAuthenticated);
     
     mockApiConfig = jasmine.createSpyObj('ApiConfigService', [], {
-      systemAdminUrl: 'http://localhost:5293/api'
+      systemAdminUrl: 'http://localhost:5000/api'
     });
 
     TestBed.configureTestingModule({
@@ -53,7 +53,7 @@ describe('TicketService', () => {
     // Wait for any potential async operations
     setTimeout(() => {
       // Verify no HTTP requests were made automatically
-      httpMock.expectNone('http://localhost:5293/api/tickets/unread-count');
+      httpMock.expectNone('http://localhost:5000/api/tickets/unread-count');
       done();
     }, 10);
   });
@@ -67,7 +67,7 @@ describe('TicketService', () => {
     // Wait for HTTP request
     setTimeout(() => {
       // Verify HTTP request was made
-      const req = httpMock.expectOne('http://localhost:5293/api/tickets/unread-count');
+      const req = httpMock.expectOne('http://localhost:5000/api/tickets/unread-count');
       expect(req.request.method).toBe('GET');
       
       // Respond with mock data

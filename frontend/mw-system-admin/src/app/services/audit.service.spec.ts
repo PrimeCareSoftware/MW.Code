@@ -33,7 +33,7 @@ describe('AuditService', () => {
     service.queryAuditLogs(filter).subscribe();
 
     // Verify the URL does NOT have duplicate /api
-    const req = httpMock.expectOne('http://localhost:5293/api/audit/query');
+    const req = httpMock.expectOne('http://localhost:5000/api/audit/query');
     expect(req.request.method).toBe('POST');
     expect(req.request.url).not.toContain('/api/api/');
     
@@ -45,7 +45,7 @@ describe('AuditService', () => {
 
     service.getUserActivity(userId).subscribe();
 
-    const req = httpMock.expectOne('http://localhost:5293/api/audit/user/user123');
+    const req = httpMock.expectOne('http://localhost:5000/api/audit/user/user123');
     expect(req.request.method).toBe('GET');
     expect(req.request.url).not.toContain('/api/api/');
     
@@ -58,7 +58,7 @@ describe('AuditService', () => {
 
     service.getEntityHistory(entityType, entityId).subscribe();
 
-    const req = httpMock.expectOne('http://localhost:5293/api/audit/entity/Patient/patient123');
+    const req = httpMock.expectOne('http://localhost:5000/api/audit/entity/Patient/patient123');
     expect(req.request.method).toBe('GET');
     expect(req.request.url).not.toContain('/api/api/');
     
@@ -68,7 +68,7 @@ describe('AuditService', () => {
   it('should construct correct URL for getSecurityEvents', () => {
     service.getSecurityEvents().subscribe();
 
-    const req = httpMock.expectOne('http://localhost:5293/api/audit/security-events');
+    const req = httpMock.expectOne('http://localhost:5000/api/audit/security-events');
     expect(req.request.method).toBe('GET');
     expect(req.request.url).not.toContain('/api/api/');
     
@@ -80,7 +80,7 @@ describe('AuditService', () => {
 
     service.getLgpdReport(userId).subscribe();
 
-    const req = httpMock.expectOne('http://localhost:5293/api/audit/lgpd-report/user123');
+    const req = httpMock.expectOne('http://localhost:5000/api/audit/lgpd-report/user123');
     expect(req.request.method).toBe('GET');
     expect(req.request.url).not.toContain('/api/api/');
     
