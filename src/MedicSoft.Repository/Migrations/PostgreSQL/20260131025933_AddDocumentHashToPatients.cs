@@ -1521,6 +1521,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 DO $$
                 BEGIN
                     IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
                         WHERE table_name = 'SystemNotifications' 
                         AND column_name = 'UpdatedAt'
@@ -1536,6 +1540,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 DO $$
                 BEGIN
                     IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
                         WHERE table_name = 'SystemNotifications' 
                         AND column_name = 'ReadAt'
@@ -1551,6 +1559,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 DO $$
                 BEGIN
                     IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
                         WHERE table_name = 'SystemNotifications' 
                         AND column_name = 'CreatedAt'
@@ -8531,6 +8543,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 DO $$
                 BEGIN
                     IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
                         WHERE table_name = 'SystemNotifications' 
                         AND column_name = 'UpdatedAt'
@@ -8546,6 +8562,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 DO $$
                 BEGIN
                     IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
                         WHERE table_name = 'SystemNotifications' 
                         AND column_name = 'ReadAt'
@@ -8561,6 +8581,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 DO $$
                 BEGIN
                     IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SystemNotifications' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
                         WHERE table_name = 'SystemNotifications' 
                         AND column_name = 'CreatedAt'
