@@ -152,7 +152,8 @@ builder.Services.AddSwaggerGen(c =>
     }
 
     // Configure Swagger to use fully qualified names to avoid schema ID conflicts
-    c.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
+    // Fallback to Name if FullName is null to prevent Swagger generation failures
+    c.CustomSchemaIds(type => type.FullName?.Replace("+", ".") ?? type.Name);
 
     // Configure Swagger to handle IFormFile in multipart/form-data properly
     c.MapType<IFormFile>(() => new OpenApiSchema
