@@ -187,6 +187,13 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Cross-Tenant User Management
+  {
+    path: 'cross-tenant-users',
+    loadComponent: () => import('./pages/cross-tenant-users/cross-tenant-users').then(m => m.CrossTenantUsers),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Phase 5: Help Center
   {
     path: 'help',
