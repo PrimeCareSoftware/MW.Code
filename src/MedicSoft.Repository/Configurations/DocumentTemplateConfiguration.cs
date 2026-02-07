@@ -75,6 +75,9 @@ namespace MedicSoft.Repository.Configurations
                 
             builder.HasIndex(x => x.IsSystem)
                 .HasDatabaseName("IX_DocumentTemplates_IsSystem");
+                
+            builder.HasIndex(x => x.GlobalTemplateId)
+                .HasDatabaseName("ix_documenttemplates_globaltemplateid");
             
             // Relationships
             builder.HasOne(x => x.Clinic)
