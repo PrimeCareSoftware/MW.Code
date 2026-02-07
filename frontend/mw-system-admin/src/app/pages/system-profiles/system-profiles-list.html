@@ -1,0 +1,119 @@
+<app-navbar></app-navbar>
+
+<div class="system-profiles-list">
+  <div class="header">
+    <div>
+      <h1>Perfis Padrão do Sistema</h1>
+      <p class="subtitle">Visualize os perfis padrão disponíveis para todas as clínicas</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Buscar por nome ou descrição..."
+        class="filter-input"
+        (keyup.enter)="applyFilters()"
+      />
+      <select [(ngModel)]="selectedClinicType" class="filter-select">
+        <option value="">Todos os tipos de clínica</option>
+        @for (type of clinicTypes(); track type.value) {
+          <option [value]="type.value">{{ type.name }}</option>
+        }
+      </select>
+      <button class="btn btn-secondary" (click)="applyFilters()" aria-label="Filtrar perfis">🔍 Filtrar</button>
+      <button class="btn btn-secondary" (click)="clearFilters()" aria-label="Limpar filtros">✖️ Limpar</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Carregando perfis padrão...</div>
+  } @else if (error()) {
+    <div class="error">
+      <p>Erro: {{ error() }}</p>
+      <button (click)="loadData()" class="btn-retry">Tentar novamente</button>
+    </div>
+  } @else {
+    <div class="profiles-grid">
+      @for (template of filteredTemplates(); track template.name) {
+        <div class="profile-card">
+          <div class="profile-header">
+            <h3>{{ template.name }}</h3>
+            <button class="btn-detail" (click)="viewDetails(template)" aria-label="Ver detalhes do perfil">👁️ Ver Detalhes</button>
+          </div>
+          <p class="profile-description">{{ template.description }}</p>
+          <div class="profile-info">
+            <div class="info-item">
+              <span class="info-label">Permissões:</span>
+              <span class="info-value">{{ template.permissions.length }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Tipos de Clínica:</span>
+              <span class="info-value clinic-types">{{ getClinicTypeNames(template.applicableClinicTypes) }}</span>
+            </div>
+          </div>
+        </div>
+      }
+      
+      @if (filteredTemplates().length === 0) {
+        <div class="no-results">
+          <p>Nenhum perfil encontrado com os filtros aplicados.</p>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Detail Modal -->
+@if (showDetailModal && selectedTemplate) {
+  <div class="modal-overlay" (click)="closeDetailModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ selectedTemplate.name }}</h2>
+        <button class="btn-close" (click)="closeDetailModal()" aria-label="Fechar modal">✖️</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="detail-section">
+          <h3>Descrição</h3>
+          <p>{{ selectedTemplate.description }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h3>Tipos de Clínica Aplicáveis</h3>
+          <div class="clinic-types-list">
+            @for (type of selectedTemplate.applicableClinicTypes; track type) {
+              <span class="clinic-type-badge">{{ getClinicTypeNames([type]) }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Permissões ({{ selectedTemplate.permissions.length }})</h3>
+          <div class="permissions-list">
+            @for (entry of getPermissionsByCategory() | keyvalue; track entry.key) {
+              <div class="permission-category">
+                <h4>{{ entry.key }}</h4>
+                <ul>
+                  @for (permission of entry.value; track permission) {
+                    <li>
+                      <code>{{ permission }}</code>
+                      <span class="permission-desc">{{ getPermissionDescription(permission) }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeDetailModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+}

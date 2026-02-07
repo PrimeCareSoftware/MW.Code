@@ -101,6 +101,13 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // System Default Profiles Management
+  {
+    path: 'system-profiles',
+    loadComponent: () => import('./pages/system-profiles/system-profiles-list').then(m => m.SystemProfilesList),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Audit Logs
   {
     path: 'audit-logs',
