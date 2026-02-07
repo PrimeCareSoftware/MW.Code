@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap, shareReplay } from 'rxjs/operators';
 import { 
-  Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, AvailableSlot, Professional,
+  Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, WeekAgenda, AvailableSlot, Professional,
   BlockedTimeSlot, CreateBlockedTimeSlot, UpdateBlockedTimeSlot, 
   RecurringAppointmentPattern, CreateRecurringBlockedSlots
 } from '../models/appointment.model';
@@ -77,6 +77,37 @@ export class AppointmentService {
     return request$;
   }
 
+  getWeekAgenda(clinicId: string, startDate: string, endDate: string, professionalId?: string): Observable<WeekAgenda> {
+    const cacheKey = `week_agenda_${clinicId}_${startDate}_${endDate}_${professionalId || 'all'}`;
+    
+    // Return from cache if exists
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)!;
+    }
+
+    let params = new HttpParams()
+      .set('clinicId', clinicId)
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+    
+    if (professionalId) {
+      params = params.set('professionalId', professionalId);
+    }
+    
+    // ShareReplay to avoid multiple simultaneous requests
+    const request$ = this.http.get<WeekAgenda>(`${this.apiUrl}/week-agenda`, { params })
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true })
+      );
+
+    this.cache.set(cacheKey, request$);
+    
+    // Clear cache after 5 minutes
+    setTimeout(() => this.cache.delete(cacheKey), 5 * 60 * 1000);
+    
+    return request$;
+  }
+
   // Invalidate cache when creating/updating appointments
   invalidateCache(clinicId?: string, date?: string): void {
     if (clinicId && date) {
@@ -125,17 +156,26 @@ export class AppointmentService {
 
   // Blocked Time Slots Methods
   createBlockedTimeSlot(blockedSlot: CreateBlockedTimeSlot): Observable<BlockedTimeSlot> {
-    return this.http.post<BlockedTimeSlot>(this.blockedSlotsApiUrl, blockedSlot);
+    return this.http.post<BlockedTimeSlot>(this.blockedSlotsApiUrl, blockedSlot)
+      .pipe(
+        tap(() => this.invalidateCache())
+      );
   }
 
   updateBlockedTimeSlot(id: string, blockedSlot: UpdateBlockedTimeSlot, updateSeries: boolean = false): Observable<BlockedTimeSlot> {
     const params = new HttpParams().set('updateSeries', updateSeries.toString());
-    return this.http.put<BlockedTimeSlot>(`${this.blockedSlotsApiUrl}/${id}`, blockedSlot, { params });
+    return this.http.put<BlockedTimeSlot>(`${this.blockedSlotsApiUrl}/${id}`, blockedSlot, { params })
+      .pipe(
+        tap(() => this.invalidateCache())
+      );
   }
 
   deleteBlockedTimeSlot(id: string, deleteSeries: boolean = false): Observable<void> {
     const params = new HttpParams().set('deleteSeries', deleteSeries.toString());
-    return this.http.delete<void>(`${this.blockedSlotsApiUrl}/${id}`, { params });
+    return this.http.delete<void>(`${this.blockedSlotsApiUrl}/${id}`, { params })
+      .pipe(
+        tap(() => this.invalidateCache())
+      );
   }
 
   getBlockedTimeSlotsByDate(date: string, clinicId: string, professionalId?: string): Observable<BlockedTimeSlot[]> {

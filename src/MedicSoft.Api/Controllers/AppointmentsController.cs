@@ -127,6 +127,28 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Get week agenda for a clinic (requires appointments.view permission)
+        /// </summary>
+        [HttpGet("week-agenda")]
+        [RequirePermissionKey(PermissionKeys.AppointmentsView)]
+        public async Task<ActionResult<WeekAgendaDto>> GetWeekAgenda(
+            [FromQuery] DateTime startDate, 
+            [FromQuery] DateTime endDate, 
+            [FromQuery] Guid clinicId, 
+            [FromQuery] Guid? professionalId = null)
+        {
+            try
+            {
+                var agenda = await _appointmentService.GetWeekAgendaAsync(startDate, endDate, clinicId, GetTenantId(), professionalId);
+                return Ok(agenda);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get appointment by ID (requires appointments.view permission)
         /// </summary>
         [HttpGet("{id}")]

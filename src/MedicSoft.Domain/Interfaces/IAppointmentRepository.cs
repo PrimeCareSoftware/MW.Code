@@ -30,5 +30,12 @@ namespace MedicSoft.Domain.Interfaces
             Guid clinicId, 
             string tenantId, 
             Guid? professionalId = null);
+        
+        Task<IEnumerable<Appointment>> GetWeekAgendaWithIncludesAsync(
+            DateTime startDate,
+            DateTime endDate,
+            Guid clinicId,
+            string tenantId,
+            Guid? professionalId = null);
     }
 }

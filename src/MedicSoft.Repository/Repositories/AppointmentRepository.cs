@@ -175,5 +175,38 @@ namespace MedicSoft.Repository.Repositories
 
             return await query.CountAsync();
         }
+
+        public async Task<IEnumerable<Appointment>> GetWeekAgendaWithIncludesAsync(
+            DateTime startDate,
+            DateTime endDate,
+            Guid clinicId,
+            string tenantId,
+            Guid? professionalId = null)
+        {
+            // Normalize dates to avoid time component issues
+            var normalizedStartDate = startDate.Date;
+            var normalizedEndDate = endDate.Date;
+            
+            var query = _dbSet
+                .AsNoTracking()
+                .Where(a => a.ClinicId == clinicId 
+                         && a.TenantId == tenantId
+                         && a.ScheduledDate.Date >= normalizedStartDate
+                         && a.ScheduledDate.Date <= normalizedEndDate
+                         && a.Status != AppointmentStatus.Cancelled);
+
+            if (professionalId.HasValue)
+            {
+                query = query.Where(a => a.ProfessionalId == professionalId.Value);
+            }
+
+            return await query
+                .Include(a => a.Patient)
+                .Include(a => a.Professional)
+                .Include(a => a.Clinic)
+                .OrderBy(a => a.ScheduledDate)
+                .ThenBy(a => a.ScheduledTime)
+                .ToListAsync();
+        }
     }
 }

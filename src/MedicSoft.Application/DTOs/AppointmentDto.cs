@@ -139,4 +139,13 @@ namespace MedicSoft.Application.DTOs
         public int DurationMinutes { get; set; }
         public bool IsAvailable { get; set; }
     }
+
+    public class WeekAgendaDto
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public Guid ClinicId { get; set; }
+        public string ClinicName { get; set; } = string.Empty;
+        public List<AppointmentDto> Appointments { get; set; } = new();
+    }
 }
