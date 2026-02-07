@@ -65,9 +65,77 @@
       </button>
     </div>
 
-    <button class="btn btn-primary" (click)="createNew()" type="button">
-      ➕ Novo Template
-    </button>
+    <div class="action-buttons">
+      <button class="btn btn-secondary" (click)="toggleGlobalTemplates()" type="button">
+        {{ showGlobalTemplates ? '📋 Ocultar Templates Globais' : '🌐 Mostrar Templates Globais' }}
+      </button>
+      <button class="btn btn-primary" (click)="createNew()" type="button">
+        ➕ Novo Template
+      </button>
+    </div>
+  </div>
+
+  <!-- Global Templates Section -->
+  <div *ngIf="showGlobalTemplates" class="global-templates-section">
+    <div class="section-header">
+      <h2>🌐 Templates Globais Disponíveis</h2>
+      <p class="section-subtitle">Utilize templates pré-configurados como base para criar seus próprios templates</p>
+    </div>
+
+    <!-- Loading State for Global Templates -->
+    <div *ngIf="loadingGlobal" class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando templates globais...</p>
+    </div>
+
+    <!-- Global Templates Grid -->
+    <div *ngIf="!loadingGlobal" class="templates-grid">
+      <div *ngIf="filteredGlobalTemplates.length === 0" class="empty-state">
+        <p class="empty-icon">🌐</p>
+        <h3>Nenhum template global encontrado</h3>
+        <p>Não há templates globais disponíveis no momento</p>
+      </div>
+
+      <div 
+        *ngFor="let template of filteredGlobalTemplates" 
+        class="template-card global-template"
+      >
+        <div class="card-header">
+          <div class="card-title-section">
+            <h3 class="card-title">{{ template.name }}</h3>
+            <span class="badge badge-global">🌐 Global</span>
+          </div>
+        </div>
+
+        <p class="card-description">{{ template.description || 'Sem descrição' }}</p>
+
+        <div class="card-meta">
+          <div class="meta-item">
+            <span class="meta-label">Especialidade:</span>
+            <span class="meta-value">{{ getSpecialtyLabel(template.specialty) }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Tipo:</span>
+            <span class="meta-value">{{ getTypeLabel(template.type) }}</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button 
+            class="btn btn-primary btn-use-template" 
+            (click)="useGlobalTemplate(template)"
+            type="button"
+          >
+            ✨ Usar como Base
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div *ngIf="showGlobalTemplates" class="section-divider">
+    <h2>📋 Seus Templates</h2>
   </div>
 
   <!-- Loading State -->

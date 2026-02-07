@@ -251,6 +251,23 @@ export const routes: Routes = [
     ]
   },
   
+  // Global Document Templates
+  {
+    path: 'global-templates',
+    loadComponent: () => import('./pages/global-templates/global-template-list.component').then(m => m.GlobalTemplateListComponent),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'global-templates/new',
+    loadComponent: () => import('./pages/global-templates/global-template-editor.component').then(m => m.GlobalTemplateEditorComponent),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'global-templates/edit/:id',
+    loadComponent: () => import('./pages/global-templates/global-template-editor.component').then(m => m.GlobalTemplateEditorComponent),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];

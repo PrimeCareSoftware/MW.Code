@@ -250,6 +250,42 @@
   resize: vertical;
 }
 
+/* Quill Editor Styles */
+.quill-editor-custom {
+  width: 100%;
+  min-height: 400px;
+  
+  ::ng-deep .ql-container {
+    min-height: 350px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+
+  ::ng-deep .ql-editor {
+    min-height: 350px;
+    padding: 1rem;
+  }
+
+  ::ng-deep .ql-toolbar {
+    background-color: #f8f9fa;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border: 1px solid #d1d5db;
+  }
+
+  ::ng-deep .ql-container {
+    border: 1px solid #d1d5db;
+    border-top: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+
+  ::ng-deep .ql-editor.ql-blank::before {
+    color: #9ca3af;
+    font-style: normal;
+  }
+}
+
 .content-textarea:focus {
   outline: none;
   border-color: #3b82f6;
