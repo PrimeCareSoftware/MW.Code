@@ -145,22 +145,22 @@
 Exemplo:
 RECEITA MÉDICA
 
-Paciente: {{patientName}}
-Data: {{consultationDate}}
+Paciente: {{ '{{patientName}}' }}
+Data: {{ '{{consultationDate}}' }}
 
 Prescrevo:
 [Escreva aqui a prescrição]
 
 _______________
-{{professionalName}}
-{{professionalRegistration}}"
+{{ '{{professionalName}}' }}
+{{ '{{professionalRegistration}}' }}"
             class="quill-editor-custom"
             [readOnly]="isViewMode"
           ></quill-editor>
 
           <div class="content-info">
             <small>
-              💡 Dica: Use o formato {{variableName}} para inserir variáveis dinâmicas
+              💡 Dica: Use o formato {{ '{{variableName}}' }} para inserir variáveis dinâmicas
             </small>
           </div>
         </div>
