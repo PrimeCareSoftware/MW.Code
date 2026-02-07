@@ -44,8 +44,27 @@ export class NavigationConfigService {
 
   /**
    * Update navigation configuration (useful for multi-language support)
+   * Validates input before setting
    */
   setNavItems(items: NavItem[]): void {
+    if (!Array.isArray(items)) {
+      console.error('setNavItems: items must be an array');
+      return;
+    }
+    
+    // Validate each item has required properties
+    const isValid = items.every(item => 
+      item && 
+      typeof item.label === 'string' && 
+      typeof item.icon === 'string' && 
+      typeof item.route === 'string'
+    );
+    
+    if (!isValid) {
+      console.error('setNavItems: all items must have label, icon, and route properties');
+      return;
+    }
+    
     this.navItems = items;
   }
 }

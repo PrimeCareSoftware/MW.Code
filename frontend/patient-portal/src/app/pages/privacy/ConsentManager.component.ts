@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
@@ -38,7 +38,7 @@ interface Consent {
   templateUrl: './ConsentManager.component.html',
   styleUrls: ['./privacy.scss']
 })
-export class ConsentManagerComponent implements OnInit {
+export class ConsentManagerComponent implements OnInit, OnDestroy {
   loading = true;
   error: string | null = null;
   consents: Consent[] = [];
@@ -48,6 +48,11 @@ export class ConsentManagerComponent implements OnInit {
   private updatingConsentIds = new Set<number>();
 
   constructor(private http: HttpClient) {}
+  
+  ngOnDestroy(): void {
+    // Clear updating consents to prevent memory leaks
+    this.updatingConsentIds.clear();
+  }
 
   ngOnInit(): void {
     this.loadConsents();

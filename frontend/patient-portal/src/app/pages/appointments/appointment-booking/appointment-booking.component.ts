@@ -157,8 +157,8 @@ export class AppointmentBookingComponent implements OnInit {
 
     this.appointmentService.getDoctors(this.clinicId, specialty).subscribe({
       next: (doctors) => {
-        // Add null safety checks
-        this.doctors = (doctors || []).filter(d => d && d.availableForOnlineBooking === true);
+        // Add null safety checks - simplified boolean check
+        this.doctors = (doctors || []).filter(d => d && d.availableForOnlineBooking);
         this.loadingDoctors = false;
         
         if (this.doctors.length === 0) {

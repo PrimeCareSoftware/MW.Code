@@ -16,6 +16,8 @@ import { NotificationService } from '../../services/notification.service';
 import { Appointment, AppointmentStatus } from '../../models/appointment.model';
 import { CancelDialogComponent } from './cancel-dialog/cancel-dialog.component';
 import { RescheduleDialogComponent } from './reschedule-dialog/reschedule-dialog.component';
+import { ResponsiveDialog } from '../../shared/constants/responsive-sizing';
+import { ErrorLoggingService } from '../../shared/services/error-logging.service';
 
 enum TabFilter {
   All = 0,
@@ -55,7 +57,8 @@ export class AppointmentsComponent implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private notificationService: NotificationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private errorLogger: ErrorLoggingService
   ) {}
 
   ngOnInit(): void {
@@ -156,8 +159,7 @@ export class AppointmentsComponent implements OnInit {
 
   cancelAppointment(appointment: Appointment): void {
     const dialogRef = this.dialog.open(CancelDialogComponent, {
-      width: 'min(500px, 95vw)',
-      maxWidth: '95vw',
+      ...ResponsiveDialog.SMALL,
       data: { appointment }
     });
 
@@ -169,7 +171,7 @@ export class AppointmentsComponent implements OnInit {
             this.loadAppointments();
           },
           error: (error) => {
-            console.error('Error cancelling appointment:', error);
+            this.errorLogger.logHttpError(error, 'AppointmentCancel');
             this.notificationService.error('Erro ao cancelar consulta');
           }
         });
@@ -179,8 +181,7 @@ export class AppointmentsComponent implements OnInit {
 
   rescheduleAppointment(appointment: Appointment): void {
     const dialogRef = this.dialog.open(RescheduleDialogComponent, {
-      width: 'min(600px, 95vw)',
-      maxWidth: '95vw',
+      ...ResponsiveDialog.MEDIUM,
       data: { appointment }
     });
 
