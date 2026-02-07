@@ -736,7 +736,10 @@
   gap: 8px;
 
   &.btn-primary {
-    background: linear-gradient(135deg, var(--primary-500) 0%, #764ba2 100%);
+    // Note: Using primary-500 for solid color instead of gradient
+    // Original gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+    // Simplified to solid color per design system standardization
+    background: var(--primary-500);
     color: white;
 
     &:hover:not(:disabled) {

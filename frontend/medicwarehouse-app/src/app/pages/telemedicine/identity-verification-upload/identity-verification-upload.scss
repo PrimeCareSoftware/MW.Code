@@ -12,6 +12,9 @@
 }
 
 .card-header {
+  /* Note: Simplified from gradient to solid color per design system
+   * Original: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+   * New: Solid Medical Blue for consistency across the system */
   background: var(--primary-500);
   color: white;
   padding: var(--spacing-8);
