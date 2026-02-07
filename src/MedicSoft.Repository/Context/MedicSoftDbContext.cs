@@ -406,6 +406,12 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new DocumentTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ExternalServiceConfigurationConfiguration());
 
+            // Internal Chat System
+            modelBuilder.ApplyConfiguration(new ChatConversationConfiguration());
+            modelBuilder.ApplyConfiguration(new ChatMessageConfiguration());
+            modelBuilder.ApplyConfiguration(new ChatParticipantConfiguration());
+            modelBuilder.ApplyConfiguration(new MessageReadReceiptConfiguration());
+
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.
             // To enable global query filters in the future:
