@@ -298,6 +298,35 @@ namespace MedicSoft.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Set or update the consultation form profile for an access profile (Owner only)
+        /// </summary>
+        [HttpPut("{id}/consultation-form-profile")]
+        public async Task<ActionResult<AccessProfileDto>> SetConsultationFormProfile(Guid id, [FromBody] SetConsultationFormProfileDto request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var clinicId = GetClinicIdFromToken();
+
+                // Verify user is owner
+                if (!IsOwner())
+                    return Forbid();
+
+                // Verify profile exists and belongs to clinic (combined check to avoid information disclosure)
+                var profile = await _profileService.GetByIdAsync(id, tenantId);
+                if (profile == null || profile.ClinicId != clinicId)
+                    return NotFound(new { message = "Profile not found" });
+
+                var updatedProfile = await _profileService.SetConsultationFormProfileAsync(id, request.ConsultationFormProfileId, tenantId);
+                return Ok(updatedProfile);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         private Guid GetClinicIdFromToken()
         {
             var clinicIdClaim = User.FindFirst("clinic_id")?.Value;

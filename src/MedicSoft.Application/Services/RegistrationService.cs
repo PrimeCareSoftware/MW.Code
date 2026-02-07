@@ -24,6 +24,7 @@ namespace MedicSoft.Application.Services
         private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly IClinicSubscriptionRepository _clinicSubscriptionRepository;
         private readonly IAccessProfileRepository _accessProfileRepository;
+        private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ICompanyRepository _companyRepository;
         private readonly IUserClinicLinkRepository _userClinicLinkRepository;
@@ -38,6 +39,7 @@ namespace MedicSoft.Application.Services
             ISubscriptionPlanRepository subscriptionPlanRepository,
             IClinicSubscriptionRepository clinicSubscriptionRepository,
             IAccessProfileRepository accessProfileRepository,
+            IConsultationFormProfileRepository consultationFormProfileRepository,
             IPasswordHasher passwordHasher,
             ICompanyRepository companyRepository,
             IUserClinicLinkRepository userClinicLinkRepository)
@@ -48,6 +50,7 @@ namespace MedicSoft.Application.Services
             _subscriptionPlanRepository = subscriptionPlanRepository;
             _clinicSubscriptionRepository = clinicSubscriptionRepository;
             _accessProfileRepository = accessProfileRepository;
+            _consultationFormProfileRepository = consultationFormProfileRepository;
             _passwordHasher = passwordHasher;
             _companyRepository = companyRepository;
             _userClinicLinkRepository = userClinicLinkRepository;
@@ -323,11 +326,22 @@ namespace MedicSoft.Application.Services
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
 
-                // Step 6: Create default access profiles for the clinic based on clinic type
+                // Step 6: Get the appropriate consultation form profile for this clinic type
+                var specialty = AccessProfile.GetProfessionalSpecialtyForClinicType(clinicType);
+                var allSystemProfiles = await _consultationFormProfileRepository.GetSystemDefaultProfilesAsync("system");
+                var consultationFormProfile = allSystemProfiles.FirstOrDefault(p => p.Specialty == specialty);
+
+                // Step 7: Create default access profiles for the clinic based on clinic type
                 var defaultProfiles = AccessProfile.GetDefaultProfilesForClinicType(tenantId, clinic.Id, clinicType);
 
                 foreach (var profile in defaultProfiles)
                 {
+                    // Link consultation form profile to professional profiles only
+                    if (consultationFormProfile != null && profile.IsProfessionalProfile())
+                    {
+                        profile.SetConsultationFormProfile(consultationFormProfile.Id);
+                    }
+                    
                     await _accessProfileRepository.AddAsync(profile);
                 }
 

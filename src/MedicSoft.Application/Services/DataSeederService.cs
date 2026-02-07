@@ -2891,6 +2891,70 @@ RETORNO: {{return_date}}",
             );
             profiles.Add(fonoaudiologoProfile);
 
+            // 9. Veterinário (Veterinarian)
+            var veterinarioProfile = new ConsultationFormProfile(
+                "Veterinário - Atendimento Veterinário",
+                "Perfil para veterinários com foco em atendimento de animais",
+                ProfessionalSpecialty.Veterinario,
+                _demoTenantId,
+                showChiefComplaint: true,
+                showHistoryOfPresentIllness: true,
+                showPastMedicalHistory: true,
+                showFamilyHistory: false, // Usually not applicable for animals
+                showLifestyleHabits: true, // Diet, exercise for animals
+                showCurrentMedications: true,
+                customFields: new List<CustomField>
+                {
+                    new CustomField(
+                        "especie_animal",
+                        "Espécie do Animal",
+                        CustomFieldType.TextoSimples,
+                        isRequired: true,
+                        displayOrder: 1,
+                        helpText: "Ex: Cão, Gato, Ave, etc."
+                    ),
+                    new CustomField(
+                        "raca",
+                        "Raça",
+                        CustomFieldType.TextoSimples,
+                        isRequired: false,
+                        displayOrder: 2
+                    ),
+                    new CustomField(
+                        "idade_animal",
+                        "Idade do Animal",
+                        CustomFieldType.TextoSimples,
+                        isRequired: true,
+                        displayOrder: 3,
+                        helpText: "Ex: 3 anos, 6 meses"
+                    ),
+                    new CustomField(
+                        "peso",
+                        "Peso (kg)",
+                        CustomFieldType.Numero,
+                        isRequired: true,
+                        displayOrder: 4
+                    ),
+                    new CustomField(
+                        "vacinacao_atualizada",
+                        "Vacinação Atualizada?",
+                        CustomFieldType.SimNao,
+                        isRequired: true,
+                        displayOrder: 5
+                    ),
+                    new CustomField(
+                        "condicao_corporal",
+                        "Condição Corporal",
+                        CustomFieldType.SelecaoUnica,
+                        isRequired: true,
+                        displayOrder: 6,
+                        options: new List<string> { "Muito magro", "Magro", "Ideal", "Acima do peso", "Obeso" }
+                    )
+                },
+                isSystemDefault: true
+            );
+            profiles.Add(veterinarioProfile);
+
             return profiles;
         }
 

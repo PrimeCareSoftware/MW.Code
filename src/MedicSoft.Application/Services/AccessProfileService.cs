@@ -7,6 +7,7 @@ using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicSoft.Application.Services
 {
@@ -22,19 +23,23 @@ namespace MedicSoft.Application.Services
         Task AssignProfileToUserAsync(Guid userId, Guid profileId, string tenantId);
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesAsync(Guid clinicId, string tenantId);
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType);
+        Task<AccessProfileDto> SetConsultationFormProfileAsync(Guid profileId, Guid? consultationFormProfileId, string tenantId);
     }
 
     public class AccessProfileService : IAccessProfileService
     {
         private readonly IAccessProfileRepository _profileRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
 
         public AccessProfileService(
             IAccessProfileRepository profileRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IConsultationFormProfileRepository consultationFormProfileRepository)
         {
             _profileRepository = profileRepository;
             _userRepository = userRepository;
+            _consultationFormProfileRepository = consultationFormProfileRepository;
         }
 
         public async Task<AccessProfileDto?> GetByIdAsync(Guid id, string tenantId)
@@ -187,6 +192,11 @@ namespace MedicSoft.Application.Services
 
         public async Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType)
         {
+            // Get the appropriate consultation form profile for this clinic type
+            var specialty = AccessProfile.GetProfessionalSpecialtyForClinicType(clinicType);
+            var allSystemProfiles = await _consultationFormProfileRepository.GetSystemDefaultProfilesAsync("system");
+            var consultationFormProfile = allSystemProfiles.FirstOrDefault(p => p.Specialty == specialty);
+
             var profiles = AccessProfile.GetDefaultProfilesForClinicType(tenantId, clinicId, clinicType);
 
             var createdProfiles = new List<AccessProfileDto>();
@@ -196,6 +206,12 @@ namespace MedicSoft.Application.Services
                 var existing = await _profileRepository.GetByNameAsync(profile.Name, clinicId, tenantId);
                 if (existing == null)
                 {
+                    // Link consultation form profile to professional profiles only
+                    if (consultationFormProfile != null && profile.IsProfessionalProfile())
+                    {
+                        profile.SetConsultationFormProfile(consultationFormProfile.Id);
+                    }
+                    
                     await _profileRepository.AddAsync(profile);
                     createdProfiles.Add(MapToDto(profile));
                 }
@@ -206,6 +222,32 @@ namespace MedicSoft.Application.Services
             }
 
             return createdProfiles;
+        }
+
+        public async Task<AccessProfileDto> SetConsultationFormProfileAsync(Guid profileId, Guid? consultationFormProfileId, string tenantId)
+        {
+            var profile = await _profileRepository.GetByIdAsync(profileId, tenantId);
+            if (profile == null)
+                throw new InvalidOperationException("Profile not found");
+
+            // Validate consultation form profile exists if provided
+            if (consultationFormProfileId.HasValue)
+            {
+                // Check both system and clinic-specific profiles in a single query
+                var formProfile = await _consultationFormProfileRepository
+                    .GetAllQueryable()
+                    .Where(p => p.Id == consultationFormProfileId.Value && 
+                               (p.TenantId == "system" || p.TenantId == tenantId))
+                    .FirstOrDefaultAsync();
+                
+                if (formProfile == null)
+                    throw new InvalidOperationException("Consultation form profile not found");
+            }
+
+            profile.SetConsultationFormProfile(consultationFormProfileId);
+            await _profileRepository.UpdateAsync(profile);
+
+            return MapToDto(profile);
         }
 
         private AccessProfileDto MapToDto(AccessProfile profile)
@@ -219,6 +261,8 @@ namespace MedicSoft.Application.Services
                 IsActive = profile.IsActive,
                 ClinicId = profile.ClinicId,
                 ClinicName = profile.Clinic?.Name,
+                ConsultationFormProfileId = profile.ConsultationFormProfileId,
+                ConsultationFormProfileName = profile.ConsultationFormProfile?.Name,
                 CreatedAt = profile.CreatedAt,
                 UpdatedAt = profile.UpdatedAt,
                 Permissions = profile.GetPermissionKeys().ToList()

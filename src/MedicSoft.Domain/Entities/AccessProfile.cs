@@ -17,9 +17,11 @@ namespace MedicSoft.Domain.Entities
         public bool IsDefault { get; private set; }
         public bool IsActive { get; private set; }
         public Guid? ClinicId { get; private set; }
+        public Guid? ConsultationFormProfileId { get; private set; }
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }
+        public ConsultationFormProfile? ConsultationFormProfile { get; private set; }
         private readonly List<ProfilePermission> _permissions = new();
         public IReadOnlyCollection<ProfilePermission> Permissions => _permissions.AsReadOnly();
 
@@ -31,7 +33,7 @@ namespace MedicSoft.Domain.Entities
         }
 
         public AccessProfile(string name, string description, string tenantId, 
-            Guid? clinicId = null, bool isDefault = false) : base(tenantId)
+            Guid? clinicId = null, bool isDefault = false, Guid? consultationFormProfileId = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Profile name cannot be empty", nameof(name));
@@ -44,6 +46,7 @@ namespace MedicSoft.Domain.Entities
             ClinicId = clinicId;
             IsDefault = isDefault;
             IsActive = true;
+            ConsultationFormProfileId = consultationFormProfileId;
         }
 
         public void Update(string name, string description)
@@ -118,6 +121,22 @@ namespace MedicSoft.Domain.Entities
         public IEnumerable<string> GetPermissionKeys()
         {
             return _permissions.Where(p => p.IsActive).Select(p => p.PermissionKey);
+        }
+
+        public void SetConsultationFormProfile(Guid? consultationFormProfileId)
+        {
+            ConsultationFormProfileId = consultationFormProfileId;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Determines if this is a professional profile (not Owner, Reception, or Financial)
+        /// </summary>
+        public bool IsProfessionalProfile()
+        {
+            return !Name.Contains("Proprietário") && 
+                   !Name.Contains("Recepção") && 
+                   !Name.Contains("Financeiro");
         }
 
         /// <summary>
@@ -482,6 +501,24 @@ namespace MedicSoft.Domain.Entities
             }
 
             return profiles;
+        }
+
+        /// <summary>
+        /// Maps a ClinicType to its corresponding ProfessionalSpecialty
+        /// </summary>
+        public static ProfessionalSpecialty GetProfessionalSpecialtyForClinicType(ClinicType clinicType)
+        {
+            return clinicType switch
+            {
+                ClinicType.Medical => ProfessionalSpecialty.Medico,
+                ClinicType.Dental => ProfessionalSpecialty.Dentista,
+                ClinicType.Nutritionist => ProfessionalSpecialty.Nutricionista,
+                ClinicType.Psychology => ProfessionalSpecialty.Psicologo,
+                ClinicType.PhysicalTherapy => ProfessionalSpecialty.Fisioterapeuta,
+                ClinicType.Veterinary => ProfessionalSpecialty.Veterinario,
+                ClinicType.Other => ProfessionalSpecialty.Outro,
+                _ => ProfessionalSpecialty.Medico // Default to medical
+            };
         }
     }
 }
