@@ -874,6 +874,21 @@ using (var scope = app.Services.CreateScope())
     
     try
     {
+        // Check for pending migrations before applying
+        var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+        if (pendingMigrations.Any())
+        {
+            Log.Warning("Existem {Count} migrações pendentes que serão aplicadas: {Migrations}", 
+                pendingMigrations.Count(), 
+                string.Join(", ", pendingMigrations));
+            
+            Log.Information("Aplicando {Count} migrações pendentes...", pendingMigrations.Count());
+        }
+        else
+        {
+            Log.Information("Nenhuma migração pendente encontrada. Verificando estado do banco...");
+        }
+        
         Log.Information("Aplicando migrações do banco de dados...");
         context.Database.Migrate();
         Log.Information("Migrações do banco de dados aplicadas com sucesso");
@@ -892,29 +907,33 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Npgsql.PostgresException pgEx) when (pgEx.SqlState == "42P01") // Table does not exist
     {
-        Log.Fatal(pgEx, "ERRO CRÍTICO: Tabelas do CRM não existem no banco de dados. " +
-            "Isso indica que as migrações não foram aplicadas corretamente. " +
-            "Tabela faltando: {TableName}", pgEx.TableName ?? "desconhecida");
-        Console.WriteLine("═══════════════════════════════════════════════════════════════");
-        Console.WriteLine("❌ ERRO CRÍTICO: Tabelas do CRM não encontradas no banco de dados");
-        Console.WriteLine("═══════════════════════════════════════════════════════════════");
-        Console.WriteLine("");
-        Console.WriteLine("As migrações foram executadas mas as tabelas do CRM não existem.");
-        Console.WriteLine("Isso pode acontecer se:");
+        var tableName = pgEx.TableName ?? "desconhecida";
+        Log.Fatal(pgEx, "ERRO CRÍTICO: Tabela '{TableName}' não existe no banco de dados. " +
+            "Isso indica que as migrações não foram aplicadas corretamente.", tableName);
+        
+        Console.WriteLine("════════════════════════════════════════════════════════════");
+        Console.WriteLine($"❌ ERRO: Tabela '{tableName}' não encontrada no banco de dados");
+        Console.WriteLine("════════════════════════════════════════════════════════════");
+        Console.WriteLine();
+        Console.WriteLine("Existem migrações pendentes que precisam ser aplicadas.");
+        Console.WriteLine();
+        Console.WriteLine("POSSÍVEIS CAUSAS:");
         Console.WriteLine("  1. As migrações foram revertidas manualmente");
         Console.WriteLine("  2. O banco de dados foi recriado sem aplicar as migrações");
-        Console.WriteLine("  3. Há um problema de permissões ao criar o schema 'crm'");
-        Console.WriteLine("");
-        Console.WriteLine("Solução:");
-        Console.WriteLine("  Execute o script de migrações:");
-        Console.WriteLine("  ./run-all-migrations.sh");
-        Console.WriteLine("");
-        Console.WriteLine("  Ou aplique manualmente:");
-        Console.WriteLine("  cd src/MedicSoft.Api");
-        Console.WriteLine("  dotnet ef database update");
-        Console.WriteLine("");
-        Console.WriteLine("Tabela faltando: {0}", pgEx.TableName ?? "desconhecida");
-        Console.WriteLine("═══════════════════════════════════════════════════════════════");
+        Console.WriteLine("  3. Há um problema de permissões ao criar schemas/tabelas");
+        Console.WriteLine("  4. A migração que cria esta tabela não foi aplicada");
+        Console.WriteLine();
+        Console.WriteLine("SOLUÇÕES:");
+        Console.WriteLine("  1. Reinicie a aplicação (migrações são aplicadas automaticamente)");
+        Console.WriteLine("  2. Execute manualmente: dotnet ef database update");
+        Console.WriteLine("  3. Use o script: ./run-all-migrations.sh");
+        Console.WriteLine();
+        Console.WriteLine($"Tabela faltando: {tableName}");
+        Console.WriteLine("════════════════════════════════════════════════════════════");
+        Console.WriteLine();
+        Console.WriteLine("Para mais informações, consulte: TROUBLESHOOTING_MIGRATIONS.md");
+        Console.WriteLine();
+        
         throw; // Halt application startup
     }
     catch (Npgsql.PostgresException pgEx)

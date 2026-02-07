@@ -2,6 +2,8 @@
 
 Este guia explica como aplicar e gerenciar migrações do Entity Framework Core no Omni Care Software.
 
+> **💡 Tendo problemas com migrações?** Consulte o [Guia de Troubleshooting](TROUBLESHOOTING_MIGRATIONS.md) para soluções detalhadas de problemas comuns.
+
 ## ⚡ Início Rápido
 
 ### Aplicar Todas as Migrações (Recomendado)
@@ -129,8 +131,20 @@ As seguintes migrações criam as tabelas do CRM que são mencionadas nos erros:
 |----------|------|-----------|
 | `20260127205215_AddCRMEntities` | 27/01/2026 | Cria schema `crm` e todas as tabelas CRM principais |
 | `20260127211405_AddPatientJourneyTagsAndEngagement` | 27/01/2026 | Adiciona tags e engagement ao CRM |
+| `20260129200623_AddModuleConfigurationHistoryAndEnhancedModules` | 29/01/2026 | Cria tabela SystemNotifications e outras melhorias |
+| `20260206145542_AddChatSystem` | 06/02/2026 | Adiciona sistema de chat interno |
 
 ## 🚨 Troubleshooting
+
+> **📖 Para soluções detalhadas de problemas comuns, consulte o [Guia de Troubleshooting](TROUBLESHOOTING_MIGRATIONS.md)**
+
+### Erros Comuns - Links Rápidos
+
+- **[Tabela não existe (42P01)](TROUBLESHOOTING_MIGRATIONS.md#tabela-não-existe-42p01)** - Erro mais comum
+- **[SystemNotifications não existe](TROUBLESHOOTING_MIGRATIONS.md#systemnotifications-não-existe)** - Migração específica não aplicada
+- **[Migrações pendentes](TROUBLESHOOTING_MIGRATIONS.md#migrações-pendentes)** - Como detectar e aplicar
+- **[Timeout durante migração](TROUBLESHOOTING_MIGRATIONS.md#timeout-durante-migração)** - Migrações demoradas
+- **[Erro de permissão](TROUBLESHOOTING_MIGRATIONS.md#erro-de-permissão)** - Problemas de acesso ao banco
 
 ### Problema: Migration falha com erro de permissão
 
@@ -314,12 +328,14 @@ using (var scope = app.Services.CreateScope())
 
 Se você continuar tendo problemas com migrações:
 
-1. Verifique os logs da aplicação em `logs/`
-2. Verifique se todas as dependências estão instaladas
-3. Abra uma issue no GitHub com os logs de erro
+1. **Consulte o [Guia de Troubleshooting](TROUBLESHOOTING_MIGRATIONS.md)** para soluções detalhadas
+2. Verifique os logs da aplicação em `logs/`
+3. Verifique se todas as dependências estão instaladas
+4. Abra uma issue no GitHub com os logs de erro
 
 ## 🔗 Links Úteis
 
+- **[Troubleshooting de Migrações](TROUBLESHOOTING_MIGRATIONS.md)** - Guia completo de resolução de problemas
 - [Entity Framework Core Migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Npgsql - PostgreSQL .NET Driver](https://www.npgsql.org/)
