@@ -43,6 +43,9 @@ export class ConsentManagerComponent implements OnInit {
   error: string | null = null;
   consents: Consent[] = [];
   displayedColumns: string[] = ['type', 'description', 'grantedDate', 'status', 'actions'];
+  
+  // Track which consent is being updated to prevent duplicate operations
+  private updatingConsentIds = new Set<number>();
 
   constructor(private http: HttpClient) {}
 
@@ -70,11 +73,14 @@ export class ConsentManagerComponent implements OnInit {
   }
 
   toggleConsent(consent: Consent): void {
-    if (consent.required) {
+    if (consent.required || this.updatingConsentIds.has(consent.id)) {
       return;
     }
 
     const newStatus = consent.status === 'active' ? 'revoked' : 'active';
+    
+    // Mark as updating
+    this.updatingConsentIds.add(consent.id);
     
     this.http
       .patch(`${environment.apiUrl}/patient-portal/consents/${consent.id}`, {
@@ -83,10 +89,12 @@ export class ConsentManagerComponent implements OnInit {
       .subscribe({
         next: () => {
           consent.status = newStatus;
+          this.updatingConsentIds.delete(consent.id);
         },
         error: (error) => {
           console.error('Error toggling consent:', error);
           this.error = 'Erro ao atualizar consentimento. Tente novamente.';
+          this.updatingConsentIds.delete(consent.id);
           setTimeout(() => {
             this.error = null;
           }, 5000);
@@ -95,13 +103,16 @@ export class ConsentManagerComponent implements OnInit {
   }
 
   revokeConsent(consent: Consent): void {
-    if (consent.required || consent.status === 'revoked') {
+    if (consent.required || consent.status === 'revoked' || this.updatingConsentIds.has(consent.id)) {
       return;
     }
 
     if (!confirm(`Tem certeza que deseja revogar o consentimento para "${consent.type}"?`)) {
       return;
     }
+
+    // Mark as updating
+    this.updatingConsentIds.add(consent.id);
 
     this.http
       .patch(`${environment.apiUrl}/patient-portal/consents/${consent.id}`, {
@@ -110,15 +121,22 @@ export class ConsentManagerComponent implements OnInit {
       .subscribe({
         next: () => {
           consent.status = 'revoked';
+          this.updatingConsentIds.delete(consent.id);
         },
         error: (error) => {
           console.error('Error revoking consent:', error);
           this.error = 'Erro ao revogar consentimento. Tente novamente.';
+          this.updatingConsentIds.delete(consent.id);
           setTimeout(() => {
             this.error = null;
           }, 5000);
         }
       });
+  }
+  
+  // Helper method to check if a consent is being updated
+  isConsentUpdating(consent: Consent): boolean {
+    return this.updatingConsentIds.has(consent.id);
   }
 
   formatDate(date: string): string {

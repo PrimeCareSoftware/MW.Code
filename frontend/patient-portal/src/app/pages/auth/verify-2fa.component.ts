@@ -133,8 +133,9 @@ export class VerifyTwoFactorComponent implements OnInit, OnDestroy {
   }
 
   // Helper method to format code input
-  onCodeInput(event: any): void {
-    const value = event.target.value;
+  onCodeInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const value = target.value;
     // Only allow digits
     const digitsOnly = value.replace(/\D/g, '');
     this.verifyForm.patchValue({ code: digitsOnly });

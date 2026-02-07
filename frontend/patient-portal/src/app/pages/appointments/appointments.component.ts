@@ -13,7 +13,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AppointmentService } from '../../services/appointment.service';
 import { NotificationService } from '../../services/notification.service';
-import { Appointment } from '../../models/appointment.model';
+import { Appointment, AppointmentStatus } from '../../models/appointment.model';
 import { CancelDialogComponent } from './cancel-dialog/cancel-dialog.component';
 import { RescheduleDialogComponent } from './reschedule-dialog/reschedule-dialog.component';
 
@@ -205,6 +205,6 @@ export class AppointmentsComponent implements OnInit {
   }
 
   canConfirm(appointment: Appointment): boolean {
-    return appointment.status === 'Scheduled' || appointment.status === 'Agendado';
+    return appointment.status === 'Scheduled' || appointment.status === AppointmentStatus.Scheduled;
   }
 }
