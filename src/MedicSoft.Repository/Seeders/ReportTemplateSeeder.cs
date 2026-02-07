@@ -231,10 +231,11 @@ SELECT
     COUNT(p.""Id"") as total_patients,
     COUNT(CASE WHEN p.""Gender"" = 'Male' THEN 1 END) as male_count,
     COUNT(CASE WHEN p.""Gender"" = 'Female' THEN 1 END) as female_count,
-    AVG(EXTRACT(YEAR FROM AGE(p.""BirthDate""))) as average_age
+    AVG(EXTRACT(YEAR FROM AGE(p.""DateOfBirth""))) as average_age
 FROM ""Patients"" p
-INNER JOIN ""Clinics"" c ON p.""ClinicId"" = c.""Id""
-WHERE (@clinicId IS NULL OR p.""ClinicId"" = @clinicId)
+INNER JOIN ""PatientClinicLinks"" pcl ON p.""Id"" = pcl.""PatientId"" AND pcl.""IsActive"" = true
+INNER JOIN ""Clinics"" c ON pcl.""ClinicId"" = c.""Id""
+WHERE (@clinicId IS NULL OR pcl.""ClinicId"" = @clinicId)
 GROUP BY c.""TradeName""
 ORDER BY total_patients DESC"
                 },
@@ -262,12 +263,12 @@ SELECT
     COUNT(cs.""Id"") as active_subscriptions,
     COUNT(u.""Id"") as active_users,
     COUNT(a.""Id"") as total_appointments,
-    COUNT(p.""Id"") as total_patients
+    COUNT(DISTINCT pcl.""PatientId"") as total_patients
 FROM ""Clinics"" c
 LEFT JOIN ""ClinicSubscriptions"" cs ON c.""Id"" = cs.""ClinicId"" AND cs.""Status"" = 'Active'
 LEFT JOIN ""Users"" u ON c.""Id"" = u.""ClinicId"" AND u.""IsActive"" = true
 LEFT JOIN ""Appointments"" a ON c.""Id"" = a.""ClinicId"" AND a.""AppointmentDate"" >= @startDate AND a.""AppointmentDate"" <= @endDate
-LEFT JOIN ""Patients"" p ON c.""Id"" = p.""ClinicId""
+LEFT JOIN ""PatientClinicLinks"" pcl ON c.""Id"" = pcl.""ClinicId"" AND pcl.""IsActive"" = true
 WHERE c.""IsActive"" = true
 GROUP BY c.""TradeName""
 ORDER BY active_subscriptions DESC"
