@@ -174,4 +174,10 @@ export class AuthService {
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
+
+  getUserClinicId(): string {
+    const user = this.getCurrentUser();
+    // Return user's clinic ID if available, otherwise fall back to environment default
+    return user?.clinicId || environment.defaultClinicId;
+  }
 }

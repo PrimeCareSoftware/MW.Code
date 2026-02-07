@@ -11,6 +11,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AppointmentService } from '../../../services/appointment.service';
+import { AuthService } from '../../../services/auth.service';
 import { Appointment, TimeSlot } from '../../../models/appointment.model';
 import { environment } from '../../../../environments/environment';
 
@@ -47,13 +48,14 @@ export class RescheduleDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<RescheduleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { appointment: Appointment },
     private formBuilder: FormBuilder,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private authService: AuthService
   ) {
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
-    // Use clinic ID from appointment if available, otherwise fall back to environment default
-    this.clinicId = this.data.appointment.clinicId || environment.defaultClinicId;
+    // Use clinic ID from appointment if available, otherwise from authenticated user
+    this.clinicId = this.data.appointment.clinicId || this.authService.getUserClinicId();
 
     this.rescheduleForm = this.formBuilder.group({
       newDate: ['', Validators.required],
