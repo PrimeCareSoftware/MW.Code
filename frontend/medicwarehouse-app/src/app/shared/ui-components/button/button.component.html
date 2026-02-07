@@ -1,0 +1,17 @@
+<button 
+  *ngIf="!routerLink"
+  [type]="type"
+  [disabled]="disabled"
+  [class]="getButtonClasses()"
+  (click)="onClick($event)">
+  <ng-content></ng-content>
+</button>
+
+<a 
+  *ngIf="routerLink"
+  [routerLink]="routerLink"
+  [class]="getButtonClasses()"
+  role="button"
+  [attr.aria-disabled]="disabled">
+  <ng-content></ng-content>
+</a>

@@ -1,0 +1,104 @@
+// Button component styles - Migrated from clinic-harmony-ui-main
+// Uses design system variables from shared-styles
+
+:host {
+  display: inline-block;
+}
+
+button, a {
+  // SVG icon styles
+  ::ng-deep svg {
+    pointer-events: none;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+}
+
+// Primary variant
+.bg-primary {
+  background-color: var(--primary-500);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--primary-600);
+  }
+}
+
+.bg-primary-hover {
+  background-color: var(--primary-600);
+}
+
+// Destructive variant
+.bg-destructive {
+  background-color: var(--error-500);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--error-600);
+  }
+}
+
+.bg-destructive-hover {
+  background-color: var(--error-600);
+}
+
+// Secondary variant
+.bg-secondary {
+  background-color: var(--secondary-100);
+  color: var(--secondary-900);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--secondary-200);
+  }
+}
+
+.bg-secondary-hover {
+  background-color: var(--secondary-200);
+}
+
+// Outline variant
+.border-input {
+  border-color: var(--border);
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.text-accent-foreground {
+  color: var(--accent-foreground);
+}
+
+// Ghost variant - no default background
+
+// Link variant
+.text-primary {
+  color: var(--primary-500);
+}
+
+.underline-offset-4 {
+  text-underline-offset: 4px;
+}
+
+// Common styles
+.ring-offset-background {
+  --tw-ring-offset-color: var(--background);
+}
+
+.focus-visible\:ring-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+.disabled\:pointer-events-none:disabled {
+  pointer-events: none;
+}
+
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
+}
