@@ -6,7 +6,7 @@ This directory contains Angular components migrated from the React-based `clinic
 
 ## Migration Status
 
-### ✅ Completed Components (4/62)
+### ✅ Completed Components (11/62)
 
 1. **Button** - Full-featured button component with variants (default, destructive, outline, secondary, ghost, link) and sizes (default, sm, lg, icon)
 2. **Card** - Card container with sub-components (CardHeader, CardTitle, CardDescription, CardContent, CardFooter)

@@ -53,7 +53,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/f
   ]
 })
 export class CheckboxComponent implements ControlValueAccessor {
-  @Input() id: string = `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+  @Input() id: string = `checkbox-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
   @Input() disabled: boolean = false;
   @Input() className?: string;
   @Input() ariaLabel?: string;
