@@ -46,7 +46,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/shepherd.js/dist/css/shepherd.css"
+              "node_modules/shepherd.js/dist/css/shepherd.css",
+              "node_modules/quill/dist/quill.snow.css"
             ],
             "serviceWorker": false
           },

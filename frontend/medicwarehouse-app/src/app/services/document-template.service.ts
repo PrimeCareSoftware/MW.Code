@@ -9,6 +9,7 @@ import {
   DocumentTemplateType,
   ProfessionalSpecialty
 } from '../models/document-template.model';
+import { GlobalDocumentTemplate } from '../models/global-document-template.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -115,8 +116,13 @@ export class DocumentTemplateService {
 
   /**
    * Get all global document templates
+   * Note: This endpoint needs backend support. Currently calling system-admin endpoint
+   * which may require proper authorization setup or a dedicated clinic-accessible endpoint.
    */
-  getGlobalTemplates(specialty?: ProfessionalSpecialty, type?: DocumentTemplateType): Observable<any[]> {
+  getGlobalTemplates(specialty?: ProfessionalSpecialty, type?: DocumentTemplateType): Observable<GlobalDocumentTemplate[]> {
+    // TODO: This should ideally use a clinic-accessible endpoint like:
+    // const globalApiUrl = `${this.apiUrl}/global-templates`;
+    // For now, using the system-admin endpoint (may need authorization adjustments)
     const globalApiUrl = `${environment.apiUrl}/system-admin/global-templates`;
     let params = new HttpParams();
     
@@ -128,7 +134,7 @@ export class DocumentTemplateService {
     }
     params = params.set('isActive', 'true'); // Only get active global templates
     
-    return this.http.get<any[]>(globalApiUrl, { params });
+    return this.http.get<GlobalDocumentTemplate[]>(globalApiUrl, { params });
   }
 
   /**
