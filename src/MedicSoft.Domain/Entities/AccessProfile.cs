@@ -505,7 +505,7 @@ namespace MedicSoft.Domain.Entities
                 ClinicType.Nutritionist => ProfessionalSpecialty.Nutricionista,
                 ClinicType.Psychology => ProfessionalSpecialty.Psicologo,
                 ClinicType.PhysicalTherapy => ProfessionalSpecialty.Fisioterapeuta,
-                ClinicType.Veterinary => ProfessionalSpecialty.Outro, // Veterinary doesn't have a direct match, use Other
+                ClinicType.Veterinary => ProfessionalSpecialty.Veterinario,
                 ClinicType.Other => ProfessionalSpecialty.Outro,
                 _ => ProfessionalSpecialty.Medico // Default to medical
             };

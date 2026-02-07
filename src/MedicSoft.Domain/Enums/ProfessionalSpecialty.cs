@@ -46,6 +46,11 @@ namespace MedicSoft.Domain.Enums
         Fonoaudiologo = 8,
         
         /// <summary>
+        /// Veterinarian
+        /// </summary>
+        Veterinario = 9,
+        
+        /// <summary>
         /// Custom/Other specialty
         /// </summary>
         Outro = 99
