@@ -52,4 +52,9 @@ namespace MedicSoft.Application.DTOs
         public Guid UserId { get; set; }
         public Guid ProfileId { get; set; }
     }
+
+    public class SetConsultationFormProfileDto
+    {
+        public Guid? ConsultationFormProfileId { get; set; }
+    }
 }

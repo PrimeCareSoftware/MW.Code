@@ -23,6 +23,7 @@ namespace MedicSoft.Application.Services
         Task AssignProfileToUserAsync(Guid userId, Guid profileId, string tenantId);
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesAsync(Guid clinicId, string tenantId);
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType);
+        Task<AccessProfileDto> SetConsultationFormProfileAsync(Guid profileId, Guid? consultationFormProfileId, string tenantId);
     }
 
     public class AccessProfileService : IAccessProfileService
@@ -224,6 +225,32 @@ namespace MedicSoft.Application.Services
             }
 
             return createdProfiles;
+        }
+
+        public async Task<AccessProfileDto> SetConsultationFormProfileAsync(Guid profileId, Guid? consultationFormProfileId, string tenantId)
+        {
+            var profile = await _profileRepository.GetByIdAsync(profileId, tenantId);
+            if (profile == null)
+                throw new InvalidOperationException("Profile not found");
+
+            // Validate consultation form profile exists if provided
+            if (consultationFormProfileId.HasValue)
+            {
+                // System default profiles have tenantId "system", but could also be clinic-specific
+                var formProfile = await _consultationFormProfileRepository.GetByIdAsync(consultationFormProfileId.Value, "system");
+                if (formProfile == null)
+                {
+                    // Try with the clinic's tenant id
+                    formProfile = await _consultationFormProfileRepository.GetByIdAsync(consultationFormProfileId.Value, tenantId);
+                    if (formProfile == null)
+                        throw new InvalidOperationException("Consultation form profile not found");
+                }
+            }
+
+            profile.SetConsultationFormProfile(consultationFormProfileId);
+            await _profileRepository.UpdateAsync(profile);
+
+            return MapToDto(profile);
         }
 
         private AccessProfileDto MapToDto(AccessProfile profile)
