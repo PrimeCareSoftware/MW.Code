@@ -124,7 +124,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
 
             try
             {
-                var createdBy = GetUserId();
+                var createdBy = GetUserId().ToString();
                 var command = new CreateGlobalTemplateCommand(dto, GetTenantId(), createdBy);
                 var result = await _mediator.Send(command);
                 return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
