@@ -89,47 +89,73 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_CreatedBy"" ON ""ScheduledReports"" (""CreatedBy"");
             ");
 
-            // Create SystemNotifications table if it doesn't exist
-            migrationBuilder.Sql(@"
-                CREATE TABLE IF NOT EXISTS ""SystemNotifications"" (
-                    ""Id"" uuid NOT NULL,
-                    ""Type"" text NOT NULL,
-                    ""Category"" text NOT NULL,
-                    ""Title"" text NOT NULL,
-                    ""Message"" text NOT NULL,
-                    ""ActionUrl"" text,
-                    ""ActionLabel"" text,
-                    ""IsRead"" boolean NOT NULL DEFAULT false,
-                    ""ReadAt"" timestamp with time zone,
-                    ""Data"" text,
-                    ""CreatedAt"" timestamp with time zone NOT NULL,
-                    ""UpdatedAt"" timestamp with time zone,
-                    ""TenantId"" text NOT NULL DEFAULT '',
-                    CONSTRAINT ""PK_SystemNotifications"" PRIMARY KEY (""Id"")
-                );
-                
-                CREATE INDEX IF NOT EXISTS ""IX_SystemNotifications_Category"" ON ""SystemNotifications"" (""Category"");
-                CREATE INDEX IF NOT EXISTS ""IX_SystemNotifications_IsRead"" ON ""SystemNotifications"" (""IsRead"");
-                CREATE INDEX IF NOT EXISTS ""IX_SystemNotifications_CreatedAt"" ON ""SystemNotifications"" (""CreatedAt"");
-            ");
+            // Create SystemNotifications table using EF Core's CreateTable for proper migration order
+            migrationBuilder.CreateTable(
+                name: "SystemNotifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    Category = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Message = table.Column<string>(type: "text", nullable: false),
+                    ActionUrl = table.Column<string>(type: "text", nullable: true),
+                    ActionLabel = table.Column<string>(type: "text", nullable: true),
+                    IsRead = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    ReadAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Data = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    TenantId = table.Column<string>(type: "text", nullable: false, defaultValue: "")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemNotifications", x => x.Id);
+                });
 
-            // Create NotificationRules table if it doesn't exist
-            migrationBuilder.Sql(@"
-                CREATE TABLE IF NOT EXISTS ""NotificationRules"" (
-                    ""Id"" uuid NOT NULL,
-                    ""Trigger"" text NOT NULL,
-                    ""IsEnabled"" boolean NOT NULL DEFAULT true,
-                    ""Conditions"" text,
-                    ""Actions"" text,
-                    ""CreatedAt"" timestamp with time zone NOT NULL,
-                    ""UpdatedAt"" timestamp with time zone,
-                    ""TenantId"" text NOT NULL DEFAULT '',
-                    CONSTRAINT ""PK_NotificationRules"" PRIMARY KEY (""Id"")
-                );
-                
-                CREATE INDEX IF NOT EXISTS ""IX_NotificationRules_Trigger"" ON ""NotificationRules"" (""Trigger"");
-                CREATE INDEX IF NOT EXISTS ""IX_NotificationRules_IsEnabled"" ON ""NotificationRules"" (""IsEnabled"");
-            ");
+            migrationBuilder.CreateIndex(
+                name: "IX_SystemNotifications_Category",
+                table: "SystemNotifications",
+                column: "Category");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SystemNotifications_IsRead",
+                table: "SystemNotifications",
+                column: "IsRead");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SystemNotifications_CreatedAt",
+                table: "SystemNotifications",
+                column: "CreatedAt");
+
+            // Create NotificationRules table using EF Core's CreateTable for proper migration order
+            migrationBuilder.CreateTable(
+                name: "NotificationRules",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Trigger = table.Column<string>(type: "text", nullable: false),
+                    IsEnabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    Conditions = table.Column<string>(type: "text", nullable: true),
+                    Actions = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    TenantId = table.Column<string>(type: "text", nullable: false, defaultValue: "")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationRules", x => x.Id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotificationRules_Trigger",
+                table: "NotificationRules",
+                column: "Trigger");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotificationRules_IsEnabled",
+                table: "NotificationRules",
+                column: "IsEnabled");
 
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
@@ -342,6 +368,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         {
             migrationBuilder.DropTable(
                 name: "ModuleConfigurationHistories");
+
+            migrationBuilder.DropTable(
+                name: "SystemNotifications");
+
+            migrationBuilder.DropTable(
+                name: "NotificationRules");
 
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
