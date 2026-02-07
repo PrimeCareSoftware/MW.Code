@@ -39,6 +39,8 @@
     "apexcharts": "^5.3.6",
     "date-fns": "^4.1.0",
     "ng-apexcharts": "^2.0.4",
+    "ngx-quill": "^28.0.2",
+    "quill": "^2.0.2",
     "rxjs": "~7.8.0",
     "shepherd.js": "^14.5.1",
     "tslib": "^2.3.0",

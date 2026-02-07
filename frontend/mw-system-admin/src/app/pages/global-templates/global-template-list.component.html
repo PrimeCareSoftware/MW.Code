@@ -1,0 +1,161 @@
+<div class="global-templates-container">
+  <div class="page-header">
+    <h1>📝 Templates Globais de Documentos</h1>
+    <p class="subtitle">Gerencie templates globais disponíveis para todas as clínicas</p>
+  </div>
+
+  <!-- Success/Error Messages -->
+  @if (success()) {
+    <div class="alert alert-success">
+      {{ success() }}
+    </div>
+  }
+
+  @if (error()) {
+    <div class="alert alert-error">
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filters-row">
+      <div class="filter-group">
+        <label for="filterType">Tipo de Documento</label>
+        <select 
+          id="filterType" 
+          [ngModel]="filterType()" 
+          (ngModelChange)="filterType.set($event); onFilterChange()"
+          class="filter-select">
+          <option value="">Todos os Tipos</option>
+          @for (type of templateTypes; track type.value) {
+            <option [value]="type.value">{{ type.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filterSpecialty">Especialidade</label>
+        <select 
+          id="filterSpecialty"
+          [ngModel]="filterSpecialty()" 
+          (ngModelChange)="filterSpecialty.set($event); onFilterChange()"
+          class="filter-select">
+          <option value="">Todas as Especialidades</option>
+          @for (specialty of specialties; track specialty.value) {
+            <option [value]="specialty.value">{{ specialty.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filterActive">Status</label>
+        <select 
+          id="filterActive"
+          [ngModel]="filterActive()" 
+          (ngModelChange)="filterActive.set($event); onFilterChange()"
+          class="filter-select">
+          <option value="">Todos</option>
+          <option value="true">Ativos</option>
+          <option value="false">Inativos</option>
+        </select>
+      </div>
+
+      <div class="filter-group flex-grow">
+        <label for="searchText">Buscar</label>
+        <input
+          type="text"
+          id="searchText"
+          [ngModel]="searchText()"
+          (ngModelChange)="searchText.set($event); onFilterChange()"
+          placeholder="Buscar por nome ou descrição..."
+          class="filter-input"
+        />
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-clear" (click)="clearFilters()">Limpar Filtros</button>
+        <button class="btn-primary" (click)="createNew()">
+          <span>➕</span> Novo Template
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Carregando templates...</p>
+    </div>
+  }
+
+  <!-- Templates Grid -->
+  @if (!loading()) {
+    @if (filteredTemplates().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <h3>Nenhum template encontrado</h3>
+        <p>Crie um novo template ou ajuste os filtros para ver resultados</p>
+        <button class="btn-primary" (click)="createNew()">Criar Primeiro Template</button>
+      </div>
+    } @else {
+      <div class="templates-grid">
+        @for (template of filteredTemplates(); track template.id) {
+          <div class="template-card" (click)="editTemplate(template.id)">
+            <div class="card-header">
+              <div class="card-title">
+                <h3>{{ template.name }}</h3>
+                <span class="badge" [class.badge-active]="template.isActive" [class.badge-inactive]="!template.isActive">
+                  {{ template.isActive ? 'Ativo' : 'Inativo' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <p class="card-description">{{ template.description }}</p>
+
+              <div class="card-meta">
+                <div class="meta-item">
+                  <span class="meta-label">Tipo:</span>
+                  <span class="meta-value">{{ getTypeLabel(template.type) }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Especialidade:</span>
+                  <span class="meta-value">{{ getSpecialtyLabel(template.specialty) }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Criado em:</span>
+                  <span class="meta-value">{{ template.createdAt | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button 
+                class="btn-action btn-edit" 
+                (click)="editTemplate(template.id); $event.stopPropagation()"
+                title="Editar template">
+                ✏️ Editar
+              </button>
+              <button 
+                class="btn-action" 
+                [class.btn-activate]="!template.isActive"
+                [class.btn-deactivate]="template.isActive"
+                (click)="toggleActive(template, $event)"
+                [title]="template.isActive ? 'Desativar template' : 'Ativar template'">
+                {{ template.isActive ? '🔴 Desativar' : '🟢 Ativar' }}
+              </button>
+              <button 
+                class="btn-action btn-delete" 
+                (click)="deleteTemplate(template, $event)"
+                title="Excluir template">
+                🗑️ Excluir
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
