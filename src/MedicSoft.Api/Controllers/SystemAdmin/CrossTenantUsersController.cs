@@ -87,7 +87,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// Toggle user activation status
         /// </summary>
         [HttpPost("{id:guid}/toggle-status")]
-        public async Task<ActionResult> ToggleActivation(Guid id)
+        public async Task<ActionResult> ToggleStatus(Guid id)
         {
             var success = await _userService.ToggleUserActivation(id);
             
