@@ -50,7 +50,8 @@ export class RescheduleDialogComponent implements OnInit {
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
-    this.clinicId = environment.defaultClinicId;
+    // Use clinic ID from appointment if available, otherwise fall back to environment default
+    this.clinicId = this.data.appointment.clinicId || environment.defaultClinicId;
 
     this.rescheduleForm = this.formBuilder.group({
       newDate: ['', Validators.required],
@@ -77,8 +78,9 @@ export class RescheduleDialogComponent implements OnInit {
     const doctorId = this.extractDoctorId();
 
     if (!doctorId) {
-      console.error('Cannot extract doctor ID from appointment');
+      console.error('Doctor ID is missing from appointment data');
       this.loadingSlots = false;
+      // Show error to user - could add a snackbar service here
       return;
     }
 
@@ -88,16 +90,16 @@ export class RescheduleDialogComponent implements OnInit {
         this.loadingSlots = false;
       },
       error: (error) => {
-        console.error('Error loading slots:', error);
+        console.error('Error loading available slots:', error);
         this.loadingSlots = false;
+        // Error handling could be improved with user notification
       }
     });
   }
 
   extractDoctorId(): string {
-    // In a real scenario, the appointment would have a doctorId field
-    // For now, we'll return a placeholder or handle it differently
-    return (this.data.appointment as any).doctorId || '';
+    // Extract doctor ID from the appointment
+    return this.data.appointment.doctorId;
   }
 
   formatDate(date: Date): string {
