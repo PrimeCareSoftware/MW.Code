@@ -101,8 +101,9 @@ namespace MedicSoft.Test.Controllers
                 .Setup(r => r.GetByClinicIdAsync(_testClinicId, _testTenantId))
                 .ReturnsAsync(subscription);
 
+            // Subscription plans are system-wide, so use GetByIdWithoutTenantAsync
             _mockPlanRepository
-                .Setup(r => r.GetByIdAsync(planId, _testTenantId))
+                .Setup(r => r.GetByIdWithoutTenantAsync(planId))
                 .ReturnsAsync(plan);
 
             // Act
@@ -140,8 +141,9 @@ namespace MedicSoft.Test.Controllers
                 .Setup(r => r.GetByClinicIdAsync(_testClinicId, _testTenantId))
                 .ReturnsAsync(subscription);
 
+            // Subscription plans are system-wide, so use GetByIdWithoutTenantAsync
             _mockPlanRepository
-                .Setup(r => r.GetByIdAsync(planId, _testTenantId))
+                .Setup(r => r.GetByIdWithoutTenantAsync(planId))
                 .ReturnsAsync((SubscriptionPlan?)null);
 
             // Act
@@ -175,8 +177,9 @@ namespace MedicSoft.Test.Controllers
                 .Setup(r => r.GetByClinicIdAsync(_testClinicId, _testTenantId))
                 .ReturnsAsync(subscription);
 
+            // Subscription plans are system-wide, so use GetByIdWithoutTenantAsync
             _mockPlanRepository
-                .Setup(r => r.GetByIdAsync(planId, _testTenantId))
+                .Setup(r => r.GetByIdWithoutTenantAsync(planId))
                 .ReturnsAsync(plan);
 
             // Act
@@ -223,8 +226,9 @@ namespace MedicSoft.Test.Controllers
                 .Setup(r => r.GetByClinicIdAsync(_testClinicId, _testTenantId))
                 .ReturnsAsync(subscription);
 
+            // Subscription plans are system-wide, so use GetByIdWithoutTenantAsync
             _mockPlanRepository
-                .Setup(r => r.GetByIdAsync(planId, _testTenantId))
+                .Setup(r => r.GetByIdWithoutTenantAsync(planId))
                 .ReturnsAsync(plan);
 
             // Act
@@ -259,8 +263,9 @@ namespace MedicSoft.Test.Controllers
                 .Setup(r => r.GetByClinicIdAsync(_testClinicId, _testTenantId))
                 .ReturnsAsync(subscription);
 
+            // Subscription plans are system-wide, so use GetByIdWithoutTenantAsync
             _mockPlanRepository
-                .Setup(r => r.GetByIdAsync(planId, _testTenantId))
+                .Setup(r => r.GetByIdWithoutTenantAsync(planId))
                 .ReturnsAsync(plan);
 
             // Act
