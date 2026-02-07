@@ -122,9 +122,9 @@ export class GlobalTemplateListComponent implements OnInit {
   }
 
   clearFilters(): void {
-    this.filterSpecialty.set('');
-    this.filterType.set('');
-    this.filterActive.set('');
+    this.filterSpecialty.set(null);
+    this.filterType.set(null);
+    this.filterActive.set(null);
     this.searchText.set('');
     this.applyFilters();
   }
