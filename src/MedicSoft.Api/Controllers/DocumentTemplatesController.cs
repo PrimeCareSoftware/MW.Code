@@ -255,5 +255,35 @@ namespace MedicSoft.Api.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Create a document template from a global template
+        /// </summary>
+        /// <param name="globalTemplateId">Global template ID to copy from</param>
+        /// <returns>Created document template</returns>
+        [HttpPost("from-global/{globalTemplateId}")]
+        [RequirePermissionKey(PermissionKeys.FormConfigurationManage)]
+        [ProducesResponseType(typeof(DocumentTemplateDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<DocumentTemplateDto>> CreateFromGlobal(Guid globalTemplateId)
+        {
+            var clinicId = GetClinicId();
+            if (!clinicId.HasValue)
+            {
+                return BadRequest(new { message = "ClinicId não encontrado no contexto do usuário" });
+            }
+
+            try
+            {
+                var command = new CreateDocumentTemplateFromGlobalCommand(globalTemplateId, GetTenantId(), clinicId.Value);
+                var result = await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

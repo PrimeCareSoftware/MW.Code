@@ -465,6 +465,7 @@ builder.Services.AddScoped<IConsultationFormProfileRepository, ConsultationFormP
 builder.Services.AddScoped<IConsultationFormConfigurationRepository, ConsultationFormConfigurationRepository>();
 builder.Services.AddScoped<IBusinessConfigurationRepository, BusinessConfigurationRepository>();
 builder.Services.AddScoped<IDocumentTemplateRepository, DocumentTemplateRepository>();
+builder.Services.AddScoped<IGlobalDocumentTemplateRepository, GlobalDocumentTemplateRepository>();
 builder.Services.AddScoped<IExternalServiceConfigurationRepository, ExternalServiceConfigurationRepository>();
 
 // Register application services

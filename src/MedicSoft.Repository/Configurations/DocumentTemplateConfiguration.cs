@@ -47,6 +47,9 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(x => x.ClinicId)
                 .IsRequired(false);
                 
+            builder.Property(x => x.GlobalTemplateId)
+                .IsRequired(false);
+                
             builder.Property(x => x.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -77,6 +80,12 @@ namespace MedicSoft.Repository.Configurations
             builder.HasOne(x => x.Clinic)
                 .WithMany()
                 .HasForeignKey(x => x.ClinicId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
+                
+            builder.HasOne(x => x.GlobalTemplate)
+                .WithMany()
+                .HasForeignKey(x => x.GlobalTemplateId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired(false);
         }

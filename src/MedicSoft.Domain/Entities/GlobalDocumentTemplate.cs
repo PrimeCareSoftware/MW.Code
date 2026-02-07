@@ -5,45 +5,39 @@ using MedicSoft.Domain.Enums;
 namespace MedicSoft.Domain.Entities
 {
     /// <summary>
-    /// Represents a document template for a specific professional specialty
+    /// Represents a global document template available for all clinics in the system
+    /// System admins can create and manage these templates
     /// </summary>
-    public class DocumentTemplate : BaseEntity
+    public class GlobalDocumentTemplate : BaseEntity
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public ProfessionalSpecialty Specialty { get; private set; }
         public DocumentTemplateType Type { get; private set; }
-        public string Content { get; private set; }
-        public string Variables { get; private set; } // JSON string with available variables
+        public ProfessionalSpecialty Specialty { get; private set; }
+        public string Content { get; private set; } // HTML rico
+        public string Variables { get; private set; } // JSON com variáveis disponíveis
         public bool IsActive { get; private set; }
-        public bool IsSystem { get; private set; } // System templates cannot be deleted
-        public Guid? ClinicId { get; private set; } // Null for system templates, set for custom clinic templates
-        public Guid? GlobalTemplateId { get; private set; } // Reference to global template if created from one
+        public string CreatedBy { get; private set; }
         
-        // Navigation properties
-        public Clinic? Clinic { get; private set; }
-        public GlobalDocumentTemplate? GlobalTemplate { get; private set; }
-        
-        private DocumentTemplate()
+        private GlobalDocumentTemplate()
         {
             // EF Constructor
             Name = null!;
             Description = null!;
             Content = null!;
             Variables = null!;
+            CreatedBy = null!;
         }
         
-        public DocumentTemplate(
+        public GlobalDocumentTemplate(
             string name,
             string description,
-            ProfessionalSpecialty specialty,
             DocumentTemplateType type,
+            ProfessionalSpecialty specialty,
             string content,
             string variables,
             string tenantId,
-            Guid? clinicId = null,
-            bool isSystem = false,
-            Guid? globalTemplateId = null) : base(tenantId)
+            string createdBy) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
@@ -57,23 +51,21 @@ namespace MedicSoft.Domain.Entities
             if (string.IsNullOrWhiteSpace(variables))
                 throw new ArgumentException("Variables cannot be empty", nameof(variables));
             
+            if (string.IsNullOrWhiteSpace(createdBy))
+                throw new ArgumentException("CreatedBy cannot be empty", nameof(createdBy));
+            
             Name = name.Trim();
             Description = description.Trim();
-            Specialty = specialty;
             Type = type;
+            Specialty = specialty;
             Content = content.Trim();
             Variables = variables.Trim();
-            ClinicId = clinicId;
-            IsSystem = isSystem;
-            GlobalTemplateId = globalTemplateId;
+            CreatedBy = createdBy.Trim();
             IsActive = true;
         }
         
         public void Update(string name, string description, string content, string variables)
         {
-            if (IsSystem)
-                throw new InvalidOperationException("Cannot modify system templates");
-            
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty", nameof(name));
             
@@ -93,18 +85,9 @@ namespace MedicSoft.Domain.Entities
             UpdateTimestamp();
         }
         
-        public void Activate()
+        public void SetActiveStatus(bool isActive)
         {
-            IsActive = true;
-            UpdateTimestamp();
-        }
-        
-        public void Deactivate()
-        {
-            if (IsSystem)
-                throw new InvalidOperationException("Cannot deactivate system templates");
-            
-            IsActive = false;
+            IsActive = isActive;
             UpdateTimestamp();
         }
     }

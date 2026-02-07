@@ -221,6 +221,7 @@ namespace MedicSoft.Repository.Context
         // Business Configuration
         public DbSet<BusinessConfiguration> BusinessConfigurations { get; set; } = null!;
         public DbSet<DocumentTemplate> DocumentTemplates { get; set; } = null!;
+        public DbSet<GlobalDocumentTemplate> GlobalDocumentTemplates { get; set; } = null!;
         
         // External Services Configuration
         public DbSet<ExternalServiceConfiguration> ExternalServiceConfigurations { get; set; } = null!;
@@ -404,6 +405,7 @@ namespace MedicSoft.Repository.Context
             // Business Configuration
             modelBuilder.ApplyConfiguration(new BusinessConfigurationConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentTemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new GlobalDocumentTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ExternalServiceConfigurationConfiguration());
 
             // Internal Chat System

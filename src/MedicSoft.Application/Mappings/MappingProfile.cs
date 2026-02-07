@@ -249,6 +249,9 @@ namespace MedicSoft.Application.Mappings
 
             // Document Templates for Print
             CreateMap<DocumentTemplate, DTOs.DocumentTemplates.DocumentTemplateDto>();
+            
+            // Global Document Templates
+            CreateMap<GlobalDocumentTemplate, DTOs.GlobalDocumentTemplates.GlobalDocumentTemplateDto>();
         }
     }
 }
