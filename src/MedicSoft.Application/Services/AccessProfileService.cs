@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Services
@@ -20,6 +21,7 @@ namespace MedicSoft.Application.Services
         Task<IEnumerable<PermissionCategoryDto>> GetAllPermissionsAsync();
         Task AssignProfileToUserAsync(Guid userId, Guid profileId, string tenantId);
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesAsync(Guid clinicId, string tenantId);
+        Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType);
     }
 
     public class AccessProfileService : IAccessProfileService
@@ -163,6 +165,29 @@ namespace MedicSoft.Application.Services
                 AccessProfile.CreateDefaultReceptionProfile(tenantId, clinicId),
                 AccessProfile.CreateDefaultFinancialProfile(tenantId, clinicId)
             };
+
+            var createdProfiles = new List<AccessProfileDto>();
+            foreach (var profile in profiles)
+            {
+                // Check if default profile already exists
+                var existing = await _profileRepository.GetByNameAsync(profile.Name, clinicId, tenantId);
+                if (existing == null)
+                {
+                    await _profileRepository.AddAsync(profile);
+                    createdProfiles.Add(MapToDto(profile));
+                }
+                else
+                {
+                    createdProfiles.Add(MapToDto(existing));
+                }
+            }
+
+            return createdProfiles;
+        }
+
+        public async Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType)
+        {
+            var profiles = AccessProfile.GetDefaultProfilesForClinicType(tenantId, clinicId, clinicType);
 
             var createdProfiles = new List<AccessProfileDto>();
             foreach (var profile in profiles)

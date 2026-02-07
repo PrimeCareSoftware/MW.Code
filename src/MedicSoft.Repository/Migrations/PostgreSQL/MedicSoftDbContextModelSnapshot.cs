@@ -412,7 +412,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Alerts");
+                    b.ToTable("Alerts", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.AlertConfiguration", b =>
@@ -497,7 +497,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("AlertConfigurations");
+                    b.ToTable("AlertConfigurations", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.AnamnesisResponse", b =>
@@ -1160,7 +1160,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("RecurringPatternId");
 
-                    b.ToTable("BlockedTimeSlots");
+                    b.ToTable("BlockedTimeSlots", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.BusinessConfiguration", b =>
@@ -1734,7 +1734,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("Leads");
+                    b.ToTable("Leads", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.CRM.LeadActivity", b =>
@@ -1791,7 +1791,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("LeadId");
 
-                    b.ToTable("LeadActivities");
+                    b.ToTable("LeadActivities", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.CRM.MarketingAutomation", b =>
@@ -3130,7 +3130,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConsultasDiarias");
+                    b.ToTable("ConsultasDiarias", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.ConsultationFormConfiguration", b =>
@@ -3702,7 +3702,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("DataAccessLogs");
+                    b.ToTable("DataAccessLogs", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.DataConsentLog", b =>
@@ -3775,7 +3775,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("DataConsentLogs");
+                    b.ToTable("DataConsentLogs", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.DataDeletionRequest", b =>
@@ -3855,7 +3855,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("DataDeletionRequests");
+                    b.ToTable("DataDeletionRequests", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.DataProcessingConsent", b =>
@@ -6639,7 +6639,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MedicalRecordAccessLogs");
+                    b.ToTable("MedicalRecordAccessLogs", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.MedicalRecordSignature", b =>
@@ -6686,7 +6686,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("SignedById");
 
-                    b.ToTable("MedicalRecordSignatures");
+                    b.ToTable("MedicalRecordSignatures", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.MedicalRecordTemplate", b =>
@@ -6797,7 +6797,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("MedicalRecordId");
 
-                    b.ToTable("MedicalRecordVersions");
+                    b.ToTable("MedicalRecordVersions", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.Medication", b =>
@@ -7304,7 +7304,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("NotificationRules");
+                    b.ToTable("NotificationRules", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.Owner", b =>
@@ -8321,7 +8321,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("ProfessionalId");
 
-                    b.ToTable("RecurringAppointmentPatterns");
+                    b.ToTable("RecurringAppointmentPatterns", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.ReportTemplate", b =>
@@ -9204,7 +9204,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasIndex("SubscriptionId");
 
-                    b.ToTable("SubscriptionCredits");
+                    b.ToTable("SubscriptionCredits", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.SubscriptionPlan", b =>
@@ -9463,7 +9463,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemNotifications");
+                    b.ToTable("SystemNotifications", (string)null);
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.Tag", b =>
@@ -12189,7 +12189,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasForeignKey("GuardianId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.OwnsOne("MedicSoft.Domain.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("MedicSoft.Domain.Entities.Patient.Address#MedicSoft.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("PatientId")
                                 .HasColumnType("uuid");
@@ -12243,13 +12243,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                             b1.HasKey("PatientId");
 
-                            b1.ToTable("Patients");
+                            b1.ToTable("Patients", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("PatientId");
                         });
 
-                    b.OwnsOne("MedicSoft.Domain.ValueObjects.Email", "Email", b1 =>
+                    b.OwnsOne("MedicSoft.Domain.Entities.Patient.Email#MedicSoft.Domain.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("PatientId")
                                 .HasColumnType("uuid");
@@ -12262,13 +12262,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                             b1.HasKey("PatientId");
 
-                            b1.ToTable("Patients");
+                            b1.ToTable("Patients", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("PatientId");
                         });
 
-                    b.OwnsOne("MedicSoft.Domain.ValueObjects.Phone", "Phone", b1 =>
+                    b.OwnsOne("MedicSoft.Domain.Entities.Patient.Phone#MedicSoft.Domain.ValueObjects.Phone", "Phone", b1 =>
                         {
                             b1.Property<Guid>("PatientId")
                                 .HasColumnType("uuid");
@@ -12287,7 +12287,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                             b1.HasKey("PatientId");
 
-                            b1.ToTable("Patients");
+                            b1.ToTable("Patients", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("PatientId");
@@ -12588,7 +12588,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsOne("MedicSoft.Domain.ValueObjects.AssessmentData", "Assessment", b1 =>
+                    b.OwnsOne("MedicSoft.Domain.Entities.SoapRecord.Assessment#MedicSoft.Domain.ValueObjects.AssessmentData", "Assessment", b1 =>
                         {
                             b1.Property<Guid>("SoapRecordId")
                                 .HasColumnType("uuid");
@@ -12610,14 +12610,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                             b1.HasKey("SoapRecordId");
 
-                            b1.ToTable("SoapRecords");
+                            b1.ToTable("SoapRecords", (string)null);
 
                             b1.ToJson("Assessment");
 
                             b1.WithOwner()
                                 .HasForeignKey("SoapRecordId");
 
-                            b1.OwnsMany("MedicSoft.Domain.ValueObjects.DifferentialDiagnosis", "DifferentialDiagnoses", b2 =>
+                            b1.OwnsMany("MedicSoft.Domain.Entities.SoapRecord.Assessment#MedicSoft.Domain.ValueObjects.AssessmentData.DifferentialDiagnoses#MedicSoft.Domain.ValueObjects.DifferentialDiagnosis", "DifferentialDiagnoses", b2 =>
                                 {
                                     b2.Property<Guid>("AssessmentDataSoapRecordId")
                                         .HasColumnType("uuid");
@@ -12641,7 +12641,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                                     b2.HasKey("AssessmentDataSoapRecordId", "Id");
 
-                                    b2.ToTable("SoapRecords");
+                                    b2.ToTable("SoapRecords", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("AssessmentDataSoapRecordId");
@@ -12650,7 +12650,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             b1.Navigation("DifferentialDiagnoses");
                         });
 
-                    b.OwnsOne("MedicSoft.Domain.ValueObjects.ObjectiveData", "Objective", b1 =>
+                    b.OwnsOne("MedicSoft.Domain.Entities.SoapRecord.Objective#MedicSoft.Domain.ValueObjects.ObjectiveData", "Objective", b1 =>
                         {
                             b1.Property<Guid>("SoapRecordId")
                                 .HasColumnType("uuid");
@@ -12666,14 +12666,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                             b1.HasKey("SoapRecordId");
 
-                            b1.ToTable("SoapRecords");
+                            b1.ToTable("SoapRecords", (string)null);
 
                             b1.ToJson("Objective");
 
                             b1.WithOwner()
                                 .HasForeignKey("SoapRecordId");
 
-                            b1.OwnsOne("MedicSoft.Domain.ValueObjects.PhysicalExamination", "PhysicalExam", b2 =>
+                            b1.OwnsOne("MedicSoft.Domain.Entities.SoapRecord.Objective#MedicSoft.Domain.ValueObjects.ObjectiveData.PhysicalExam#MedicSoft.Domain.ValueObjects.PhysicalExamination", "PhysicalExam", b2 =>
                                 {
                                     b2.Property<Guid>("ObjectiveDataSoapRecordId")
                                         .HasColumnType("uuid");
@@ -12722,13 +12722,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                                     b2.HasKey("ObjectiveDataSoapRecordId");
 
-                                    b2.ToTable("SoapRecords");
+                                    b2.ToTable("SoapRecords", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("ObjectiveDataSoapRecordId");
                                 });
 
-                            b1.OwnsOne("MedicSoft.Domain.ValueObjects.VitalSigns", "VitalSigns", b2 =>
+                            b1.OwnsOne("MedicSoft.Domain.Entities.SoapRecord.Objective#MedicSoft.Domain.ValueObjects.ObjectiveData.VitalSigns#MedicSoft.Domain.ValueObjects.VitalSigns", "VitalSigns", b2 =>
                                 {
                                     b2.Property<Guid>("ObjectiveDataSoapRecordId")
                                         .HasColumnType("uuid");
@@ -12765,7 +12765,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                                     b2.HasKey("ObjectiveDataSoapRecordId");
 
-                                    b2.ToTable("SoapRecords");
+                                    b2.ToTable("SoapRecords", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("ObjectiveDataSoapRecordId");
@@ -12776,7 +12776,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             b1.Navigation("VitalSigns");
                         });
 
-                    b.OwnsOne("MedicSoft.Domain.ValueObjects.PlanData", "Plan", b1 =>
+                    b.OwnsOne("MedicSoft.Domain.Entities.SoapRecord.Plan#MedicSoft.Domain.ValueObjects.PlanData", "Plan", b1 =>
                         {
                             b1.Property<Guid>("SoapRecordId")
                                 .HasColumnType("uuid");
@@ -12801,14 +12801,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                             b1.HasKey("SoapRecordId");
 
-                            b1.ToTable("SoapRecords");
+                            b1.ToTable("SoapRecords", (string)null);
 
                             b1.ToJson("Plan");
 
                             b1.WithOwner()
                                 .HasForeignKey("SoapRecordId");
 
-                            b1.OwnsMany("MedicSoft.Domain.ValueObjects.SoapExamRequest", "ExamRequests", b2 =>
+                            b1.OwnsMany("MedicSoft.Domain.Entities.SoapRecord.Plan#MedicSoft.Domain.ValueObjects.PlanData.ExamRequests#MedicSoft.Domain.ValueObjects.SoapExamRequest", "ExamRequests", b2 =>
                                 {
                                     b2.Property<Guid>("PlanDataSoapRecordId")
                                         .HasColumnType("uuid");
@@ -12832,13 +12832,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                                     b2.HasKey("PlanDataSoapRecordId", "Id");
 
-                                    b2.ToTable("SoapRecords");
+                                    b2.ToTable("SoapRecords", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("PlanDataSoapRecordId");
                                 });
 
-                            b1.OwnsMany("MedicSoft.Domain.ValueObjects.SoapPrescription", "Prescriptions", b2 =>
+                            b1.OwnsMany("MedicSoft.Domain.Entities.SoapRecord.Plan#MedicSoft.Domain.ValueObjects.PlanData.Prescriptions#MedicSoft.Domain.ValueObjects.SoapPrescription", "Prescriptions", b2 =>
                                 {
                                     b2.Property<Guid>("PlanDataSoapRecordId")
                                         .HasColumnType("uuid");
@@ -12865,13 +12865,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                                     b2.HasKey("PlanDataSoapRecordId", "Id");
 
-                                    b2.ToTable("SoapRecords");
+                                    b2.ToTable("SoapRecords", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("PlanDataSoapRecordId");
                                 });
 
-                            b1.OwnsMany("MedicSoft.Domain.ValueObjects.SoapProcedure", "Procedures", b2 =>
+                            b1.OwnsMany("MedicSoft.Domain.Entities.SoapRecord.Plan#MedicSoft.Domain.ValueObjects.PlanData.Procedures#MedicSoft.Domain.ValueObjects.SoapProcedure", "Procedures", b2 =>
                                 {
                                     b2.Property<Guid>("PlanDataSoapRecordId")
                                         .HasColumnType("uuid");
@@ -12892,13 +12892,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                                     b2.HasKey("PlanDataSoapRecordId", "Id");
 
-                                    b2.ToTable("SoapRecords");
+                                    b2.ToTable("SoapRecords", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("PlanDataSoapRecordId");
                                 });
 
-                            b1.OwnsMany("MedicSoft.Domain.ValueObjects.SoapReferral", "Referrals", b2 =>
+                            b1.OwnsMany("MedicSoft.Domain.Entities.SoapRecord.Plan#MedicSoft.Domain.ValueObjects.PlanData.Referrals#MedicSoft.Domain.ValueObjects.SoapReferral", "Referrals", b2 =>
                                 {
                                     b2.Property<Guid>("PlanDataSoapRecordId")
                                         .HasColumnType("uuid");
@@ -12919,7 +12919,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                                     b2.HasKey("PlanDataSoapRecordId", "Id");
 
-                                    b2.ToTable("SoapRecords");
+                                    b2.ToTable("SoapRecords", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("PlanDataSoapRecordId");
@@ -12934,7 +12934,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             b1.Navigation("Referrals");
                         });
 
-                    b.OwnsOne("MedicSoft.Domain.ValueObjects.SubjectiveData", "Subjective", b1 =>
+                    b.OwnsOne("MedicSoft.Domain.Entities.SoapRecord.Subjective#MedicSoft.Domain.ValueObjects.SubjectiveData", "Subjective", b1 =>
                         {
                             b1.Property<Guid>("SoapRecordId")
                                 .HasColumnType("uuid");
@@ -12979,7 +12979,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
                             b1.HasKey("SoapRecordId");
 
-                            b1.ToTable("SoapRecords");
+                            b1.ToTable("SoapRecords", (string)null);
 
                             b1.ToJson("Subjective");
 
@@ -13157,7 +13157,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.TwoFactorAuth", b =>
                 {
-                    b.OwnsMany("MedicSoft.Domain.Entities.BackupCode", "BackupCodes", b1 =>
+                    b.OwnsMany("MedicSoft.Domain.Entities.TwoFactorAuth.BackupCodes#MedicSoft.Domain.Entities.BackupCode", "BackupCodes", b1 =>
                         {
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()

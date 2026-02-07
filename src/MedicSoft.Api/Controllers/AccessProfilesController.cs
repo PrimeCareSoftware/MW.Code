@@ -4,6 +4,7 @@ using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Interfaces;
 using System.Security.Claims;
 
 namespace MedicSoft.Api.Controllers
@@ -17,12 +18,15 @@ namespace MedicSoft.Api.Controllers
     public class AccessProfilesController : BaseController
     {
         private readonly IAccessProfileService _profileService;
+        private readonly IClinicRepository _clinicRepository;
 
         public AccessProfilesController(
             ITenantContext tenantContext,
-            IAccessProfileService profileService) : base(tenantContext)
+            IAccessProfileService profileService,
+            IClinicRepository clinicRepository) : base(tenantContext)
         {
             _profileService = profileService;
+            _clinicRepository = clinicRepository;
         }
 
         /// <summary>
@@ -256,6 +260,36 @@ namespace MedicSoft.Api.Controllers
                     return Forbid();
 
                 var profiles = await _profileService.CreateDefaultProfilesAsync(clinicId, tenantId);
+                return Ok(profiles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Create default profiles for the clinic based on clinic type (Owner only)
+        /// This endpoint will create appropriate profiles based on the clinic specialty
+        /// </summary>
+        [HttpPost("create-defaults-by-type")]
+        public async Task<ActionResult<IEnumerable<AccessProfileDto>>> CreateDefaultProfilesByClinicType()
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var clinicId = GetClinicIdFromToken();
+
+                // Verify user is owner
+                if (!IsOwner())
+                    return Forbid();
+
+                // Get clinic to determine type
+                var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+                if (clinic == null)
+                    return NotFound(new { message = "Clinic not found" });
+
+                var profiles = await _profileService.CreateDefaultProfilesForClinicTypeAsync(clinicId, tenantId, clinic.ClinicType);
                 return Ok(profiles);
             }
             catch (Exception ex)

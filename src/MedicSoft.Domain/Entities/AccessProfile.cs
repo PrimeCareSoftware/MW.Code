@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Domain.Entities
 {
@@ -265,6 +266,222 @@ namespace MedicSoft.Domain.Entities
 
             profile.SetPermissions(financialPermissions);
             return profile;
+        }
+
+        public static AccessProfile CreateDefaultDentistProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Dentista",
+                "Acesso odontológico - atendimento, odontograma e procedimentos dentários",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var dentistPermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view and perform)
+                "procedures.view", "procedures.create",
+                // Medications and prescriptions
+                "medications.view", "prescriptions.create",
+                // Exams
+                "exams.view", "exams.request",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view"
+            };
+
+            profile.SetPermissions(dentistPermissions);
+            return profile;
+        }
+
+        public static AccessProfile CreateDefaultNutritionistProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Nutricionista",
+                "Acesso nutricional - atendimento, planos alimentares e avaliação antropométrica",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var nutritionistPermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view only)
+                "procedures.view",
+                // Exams
+                "exams.view", "exams.request",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view"
+            };
+
+            profile.SetPermissions(nutritionistPermissions);
+            return profile;
+        }
+
+        public static AccessProfile CreateDefaultPsychologistProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Psicólogo",
+                "Acesso psicológico - atendimento, anotações de sessão e avaliação terapêutica",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var psychologistPermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view only)
+                "procedures.view",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view"
+            };
+
+            profile.SetPermissions(psychologistPermissions);
+            return profile;
+        }
+
+        public static AccessProfile CreateDefaultPhysicalTherapistProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Fisioterapeuta",
+                "Acesso fisioterapêutico - atendimento, avaliação de movimento e exercícios",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var physicalTherapistPermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view and perform)
+                "procedures.view", "procedures.create",
+                // Exams
+                "exams.view", "exams.request",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view"
+            };
+
+            profile.SetPermissions(physicalTherapistPermissions);
+            return profile;
+        }
+
+        public static AccessProfile CreateDefaultVeterinarianProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Veterinário",
+                "Acesso veterinário - atendimento, prontuário animal e procedimentos veterinários",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var veterinarianPermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view and perform)
+                "procedures.view", "procedures.create",
+                // Medications and prescriptions
+                "medications.view", "prescriptions.create",
+                // Exams
+                "exams.view", "exams.request",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view"
+            };
+
+            profile.SetPermissions(veterinarianPermissions);
+            return profile;
+        }
+
+        /// <summary>
+        /// Gets the appropriate default profiles for a specific clinic type
+        /// </summary>
+        public static List<AccessProfile> GetDefaultProfilesForClinicType(string tenantId, Guid clinicId, ClinicType clinicType)
+        {
+            var profiles = new List<AccessProfile>
+            {
+                // Common profiles for all clinic types
+                CreateDefaultOwnerProfile(tenantId, clinicId),
+                CreateDefaultReceptionProfile(tenantId, clinicId),
+                CreateDefaultFinancialProfile(tenantId, clinicId)
+            };
+
+            // Add clinic-type-specific professional profile
+            switch (clinicType)
+            {
+                case ClinicType.Medical:
+                    profiles.Add(CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Dental:
+                    profiles.Add(CreateDefaultDentistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Nutritionist:
+                    profiles.Add(CreateDefaultNutritionistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Psychology:
+                    profiles.Add(CreateDefaultPsychologistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.PhysicalTherapy:
+                    profiles.Add(CreateDefaultPhysicalTherapistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Veterinary:
+                    profiles.Add(CreateDefaultVeterinarianProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Other:
+                default:
+                    // For "Other" or unknown types, default to medical profile
+                    profiles.Add(CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+            }
+
+            return profiles;
         }
     }
 }

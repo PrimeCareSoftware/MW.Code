@@ -261,10 +261,12 @@ namespace MedicSoft.Application.Services
                 clinic.SetSubdomain(subdomain); // Clinic can have subdomain for backward compatibility
                 
                 // Set clinic type/specialty if provided
+                ClinicType clinicType = ClinicType.Medical; // Default to Medical
                 if (!string.IsNullOrWhiteSpace(request.ClinicType))
                 {
-                    if (Enum.TryParse<ClinicType>(request.ClinicType, true, out var clinicType))
+                    if (Enum.TryParse<ClinicType>(request.ClinicType, true, out var parsedClinicType))
                     {
+                        clinicType = parsedClinicType;
                         // Update clinic type using the existing method
                         // Note: ShowOnPublicSite is set to false by default - clinics must explicitly opt-in
                         // to public display after verifying their information in the system settings
@@ -321,14 +323,8 @@ namespace MedicSoft.Application.Services
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
 
-                // Step 6: Create default access profiles for the clinic
-                var defaultProfiles = new[]
-                {
-                    AccessProfile.CreateDefaultOwnerProfile(tenantId, clinic.Id),
-                    AccessProfile.CreateDefaultMedicalProfile(tenantId, clinic.Id),
-                    AccessProfile.CreateDefaultReceptionProfile(tenantId, clinic.Id),
-                    AccessProfile.CreateDefaultFinancialProfile(tenantId, clinic.Id)
-                };
+                // Step 6: Create default access profiles for the clinic based on clinic type
+                var defaultProfiles = AccessProfile.GetDefaultProfilesForClinicType(tenantId, clinic.Id, clinicType);
 
                 foreach (var profile in defaultProfiles)
                 {
