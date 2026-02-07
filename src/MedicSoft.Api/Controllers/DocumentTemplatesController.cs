@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.Commands.DocumentTemplates;
 using MedicSoft.Application.DTOs.DocumentTemplates;
+using MedicSoft.Application.DTOs.GlobalDocumentTemplates;
 using MedicSoft.Application.Queries.DocumentTemplates;
+using MedicSoft.Application.Queries.GlobalDocumentTemplates;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
@@ -254,6 +256,35 @@ namespace MedicSoft.Api.Controllers
             {
                 return NotFound(new { message = ex.Message });
             }
+        }
+
+        /// <summary>
+        /// Get all available global document templates (active templates only)
+        /// This endpoint is accessible to clinic users to browse global templates they can use
+        /// </summary>
+        /// <param name="specialty">Filter by professional specialty (optional)</param>
+        /// <param name="type">Filter by document type (optional)</param>
+        /// <param name="searchTerm">Search term for name or description (optional)</param>
+        /// <returns>List of active global document templates</returns>
+        [HttpGet("global-templates")]
+        [RequirePermissionKey(PermissionKeys.FormConfigurationView)]
+        [ProducesResponseType(typeof(List<GlobalDocumentTemplateDto>), 200)]
+        public async Task<ActionResult<List<GlobalDocumentTemplateDto>>> GetGlobalTemplates(
+            [FromQuery] ProfessionalSpecialty? specialty = null,
+            [FromQuery] DocumentTemplateType? type = null,
+            [FromQuery] string? searchTerm = null)
+        {
+            var filter = new GlobalDocumentTemplateFilterDto
+            {
+                Type = type,
+                Specialty = specialty,
+                IsActive = true, // Only return active templates for clinic users
+                SearchTerm = searchTerm
+            };
+
+            var query = new GetAllGlobalTemplatesQuery(GetTenantId(), filter);
+            var templates = await _mediator.Send(query);
+            return Ok(templates);
         }
 
         /// <summary>

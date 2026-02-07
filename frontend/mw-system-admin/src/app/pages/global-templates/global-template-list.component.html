@@ -27,9 +27,9 @@
           [ngModel]="filterType()" 
           (ngModelChange)="filterType.set($event); onFilterChange()"
           class="filter-select">
-          <option value="">Todos os Tipos</option>
+          <option [ngValue]="null">Todos os Tipos</option>
           @for (type of templateTypes; track type.value) {
-            <option [value]="type.value">{{ type.label }}</option>
+            <option [ngValue]="type.value">{{ type.label }}</option>
           }
         </select>
       </div>
@@ -41,9 +41,9 @@
           [ngModel]="filterSpecialty()" 
           (ngModelChange)="filterSpecialty.set($event); onFilterChange()"
           class="filter-select">
-          <option value="">Todas as Especialidades</option>
+          <option [ngValue]="null">Todas as Especialidades</option>
           @for (specialty of specialties; track specialty.value) {
-            <option [value]="specialty.value">{{ specialty.label }}</option>
+            <option [ngValue]="specialty.value">{{ specialty.label }}</option>
           }
         </select>
       </div>
@@ -55,9 +55,9 @@
           [ngModel]="filterActive()" 
           (ngModelChange)="filterActive.set($event); onFilterChange()"
           class="filter-select">
-          <option value="">Todos</option>
-          <option value="true">Ativos</option>
-          <option value="false">Inativos</option>
+          <option [ngValue]="null">Todos</option>
+          <option [ngValue]="true">Ativos</option>
+          <option [ngValue]="false">Inativos</option>
         </select>
       </div>
 

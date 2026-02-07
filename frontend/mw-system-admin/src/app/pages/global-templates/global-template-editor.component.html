@@ -68,7 +68,7 @@
                 [class.input-error]="getFieldError('type')"
               >
                 @for (type of templateTypes; track type.value) {
-                  <option [value]="type.value">{{ type.label }}</option>
+                  <option [ngValue]="type.value">{{ type.label }}</option>
                 }
               </select>
               @if (getFieldError('type')) {
@@ -86,7 +86,7 @@
                 [class.input-error]="getFieldError('specialty')"
               >
                 @for (specialty of specialties; track specialty.value) {
-                  <option [value]="specialty.value">{{ specialty.label }}</option>
+                  <option [ngValue]="specialty.value">{{ specialty.label }}</option>
                 }
               </select>
               @if (getFieldError('specialty')) {

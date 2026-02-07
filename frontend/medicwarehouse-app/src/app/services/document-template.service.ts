@@ -9,6 +9,7 @@ import {
   DocumentTemplateType,
   ProfessionalSpecialty
 } from '../models/document-template.model';
+import { GlobalDocumentTemplate } from '../models/global-document-template.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -114,10 +115,11 @@ export class DocumentTemplateService {
   }
 
   /**
-   * Get all global document templates
+   * Get all global document templates available to clinic users
+   * Returns only active global templates
    */
-  getGlobalTemplates(specialty?: ProfessionalSpecialty, type?: DocumentTemplateType): Observable<any[]> {
-    const globalApiUrl = `${environment.apiUrl}/system-admin/global-templates`;
+  getGlobalTemplates(specialty?: ProfessionalSpecialty, type?: DocumentTemplateType): Observable<GlobalDocumentTemplate[]> {
+    const globalApiUrl = `${this.apiUrl}/global-templates`;
     let params = new HttpParams();
     
     if (specialty !== undefined) {
@@ -126,9 +128,8 @@ export class DocumentTemplateService {
     if (type !== undefined) {
       params = params.set('type', type.toString());
     }
-    params = params.set('isActive', 'true'); // Only get active global templates
     
-    return this.http.get<any[]>(globalApiUrl, { params });
+    return this.http.get<GlobalDocumentTemplate[]>(globalApiUrl, { params });
   }
 
   /**

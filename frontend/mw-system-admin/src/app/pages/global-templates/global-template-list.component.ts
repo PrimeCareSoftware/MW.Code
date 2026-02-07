@@ -27,9 +27,9 @@ export class GlobalTemplateListComponent implements OnInit {
   success = signal<string | null>(null);
 
   // Filter options
-  filterSpecialty = signal<ProfessionalSpecialty | ''>('');
-  filterType = signal<DocumentTemplateType | ''>('');
-  filterActive = signal<string>('');
+  filterSpecialty = signal<ProfessionalSpecialty | null>(null);
+  filterType = signal<DocumentTemplateType | null>(null);
+  filterActive = signal<boolean | null>(null);
   searchText = signal('');
 
   // Enums for template
@@ -88,19 +88,18 @@ export class GlobalTemplateListComponent implements OnInit {
 
     const filtered = templates.filter(template => {
       // Filter by specialty
-      if (filterSpecialty !== '' && template.specialty !== filterSpecialty) {
+      if (filterSpecialty !== null && template.specialty !== filterSpecialty) {
         return false;
       }
 
       // Filter by type
-      if (filterType !== '' && template.type !== filterType) {
+      if (filterType !== null && template.type !== filterType) {
         return false;
       }
 
       // Filter by active status
-      if (filterActive !== '') {
-        const isActive = filterActive === 'true';
-        if (template.isActive !== isActive) {
+      if (filterActive !== null) {
+        if (template.isActive !== filterActive) {
           return false;
         }
       }
@@ -123,9 +122,9 @@ export class GlobalTemplateListComponent implements OnInit {
   }
 
   clearFilters(): void {
-    this.filterSpecialty.set('');
-    this.filterType.set('');
-    this.filterActive.set('');
+    this.filterSpecialty.set(null);
+    this.filterType.set(null);
+    this.filterActive.set(null);
     this.searchText.set('');
     this.applyFilters();
   }

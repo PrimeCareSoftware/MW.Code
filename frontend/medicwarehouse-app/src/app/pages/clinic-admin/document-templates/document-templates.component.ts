@@ -9,6 +9,7 @@ import {
   DocumentTemplateTypeLabels,
   ProfessionalSpecialtyLabels
 } from '../../../models/document-template.model';
+import { GlobalDocumentTemplate } from '../../../models/global-document-template.model';
 import { DocumentTemplateService } from '../../../services/document-template.service';
 
 @Component({
@@ -21,8 +22,8 @@ import { DocumentTemplateService } from '../../../services/document-template.ser
 export class DocumentTemplatesComponent implements OnInit {
   templates: DocumentTemplate[] = [];
   filteredTemplates: DocumentTemplate[] = [];
-  globalTemplates: any[] = [];
-  filteredGlobalTemplates: any[] = [];
+  globalTemplates: GlobalDocumentTemplate[] = [];
+  filteredGlobalTemplates: GlobalDocumentTemplate[] = [];
   showGlobalTemplates = false;
   loading = false;
   loadingGlobal = false;
