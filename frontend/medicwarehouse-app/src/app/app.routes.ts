@@ -576,6 +576,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/fila-espera/painel-tv/painel-tv.component').then(m => m.PainelTvComponent)
   },
   
+  // Chat system
+  {
+    path: 'chat',
+    loadComponent: () => import('./pages/chat/chat.component').then(m => m.ChatComponent),
+    canActivate: [authGuard]
+  },
+  
   ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes

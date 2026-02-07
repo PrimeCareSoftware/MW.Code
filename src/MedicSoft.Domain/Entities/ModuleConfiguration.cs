@@ -76,6 +76,7 @@ namespace MedicSoft.Domain.Entities
         public const string UserManagement = "UserManagement";
         public const string WaitingQueue = "WaitingQueue";
         public const string DoctorFieldsConfig = "DoctorFieldsConfig";
+        public const string Chat = "Chat";
 
         /// <summary>
         /// Get detailed information about all available modules
@@ -224,6 +225,17 @@ namespace MedicSoft.Domain.Entities
                 IsCore = false,
                 RequiredModules = new[] { MedicalRecords },
                 MinimumPlan = SubscriptionPlanType.Premium
+            },
+            [Chat] = new ModuleInfo
+            {
+                Name = Chat,
+                DisplayName = "Chat Interno",
+                Description = "Sistema de mensagens instantâneas para comunicação entre usuários da clínica",
+                Category = "Core",
+                Icon = "chat",
+                IsCore = true,
+                RequiredModules = Array.Empty<string>(),
+                MinimumPlan = SubscriptionPlanType.Basic
             }
         };
 
