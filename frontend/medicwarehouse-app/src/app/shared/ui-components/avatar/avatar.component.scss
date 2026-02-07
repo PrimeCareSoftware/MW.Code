@@ -1,0 +1,57 @@
+// Avatar component styles
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.bg-muted {
+  background-color: var(--muted);
+}
+
+img {
+  object-fit: cover;
+}

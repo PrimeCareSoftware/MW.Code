@@ -9,9 +9,12 @@ export * from './badge';
 export * from './checkbox';
 export * from './label';
 export * from './textarea';
+export * from './avatar';
+export * from './separator';
+export * from './skeleton';
+export * from './alert';
 
 // TODO: Add remaining components as they are migrated
-// - Avatar
 // - Select
 // - Switch
 // - Radio Group
@@ -28,6 +31,5 @@ export * from './textarea';
 // - Popover
 // - Dropdown Menu
 // - Toast
-// - Alert
 // - Sidebar
 // - Layout components
