@@ -1,0 +1,18 @@
+// Label component styles - Migrated from clinic-harmony-ui-main
+
+label {
+  display: inline-block;
+  color: var(--foreground);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.font-medium {
+  font-weight: var(--font-medium);
+}
+
+.leading-none {
+  line-height: 1;
+}

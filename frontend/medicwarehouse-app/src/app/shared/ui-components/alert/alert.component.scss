@@ -1,0 +1,92 @@
+// Alert component styles
+
+div[role="alert"] {
+  &.bg-background {
+    background-color: var(--background);
+  }
+  
+  &.text-foreground {
+    color: var(--foreground);
+  }
+  
+  &.border-destructive-light {
+    border-color: rgba(var(--error-500-rgb, 239, 68, 68), 0.5);
+  }
+  
+  &.text-destructive {
+    color: var(--error-600);
+    
+    ::ng-deep svg {
+      color: var(--error-600);
+    }
+  }
+  
+  // Icon positioning
+  ::ng-deep svg {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    color: var(--foreground);
+  }
+  
+  // Content with icon
+  ::ng-deep svg ~ * {
+    padding-left: 1.75rem;
+  }
+  
+  ::ng-deep svg + div {
+    transform: translateY(-3px);
+  }
+}
+
+h5 {
+  margin-bottom: 0.25rem;
+  font-weight: var(--font-medium);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+  
+  ::ng-deep p {
+    line-height: 1.625;
+  }
+}
+
+// Utility classes
+.relative {
+  position: relative;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.border {
+  border-width: 1px;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.font-medium {
+  font-weight: var(--font-medium);
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}

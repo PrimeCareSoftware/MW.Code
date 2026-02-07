@@ -1,0 +1,108 @@
+// Card component styles - Migrated from clinic-harmony-ui-main
+
+.card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.card-title {
+  font-weight: var(--font-semibold);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.card-description {
+  color: var(--muted-foreground);
+}
+
+.card-content {
+  // Content styles
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+}
+
+// Spacing utilities
+.space-y-1\.5 > * + * {
+  margin-top: 0.375rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.pt-0 {
+  padding-top: 0;
+}
+
+// Flexbox utilities
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+// Border utilities
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.border {
+  border-width: 1px;
+}
+
+// Background utilities
+.bg-card {
+  background-color: var(--card);
+}
+
+// Text utilities
+.text-card-foreground {
+  color: var(--card-foreground);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.text-2xl {
+  font-size: var(--font-size-2xl);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
+// Font utilities
+.font-semibold {
+  font-weight: var(--font-semibold);
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+// Shadow utilities
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}

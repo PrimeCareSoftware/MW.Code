@@ -1,0 +1,104 @@
+// Badge component styles - Migrated from clinic-harmony-ui-main
+
+:host {
+  display: inline-block;
+}
+
+div {
+  // Variant styles
+  &.bg-primary {
+    background-color: var(--primary-500);
+    color: white;
+    
+    &:hover {
+      background-color: var(--primary-600);
+    }
+  }
+  
+  &.bg-secondary {
+    background-color: var(--secondary-100);
+    color: var(--secondary-900);
+    
+    &:hover {
+      background-color: var(--secondary-200);
+    }
+  }
+  
+  &.bg-destructive {
+    background-color: var(--error-500);
+    color: white;
+    
+    &:hover {
+      background-color: var(--error-600);
+    }
+  }
+  
+  &.text-foreground {
+    color: var(--foreground);
+  }
+  
+  &.border-border {
+    border-color: var(--border);
+  }
+  
+  &.border-transparent {
+    border-color: transparent;
+  }
+}
+
+// Utility classes
+.inline-flex {
+  display: inline-flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.px-2\.5 {
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+.py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.text-xs {
+  font-size: var(--font-size-xs);
+}
+
+.font-semibold {
+  font-weight: var(--font-semibold);
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+.focus\:outline-none:focus {
+  outline: none;
+}
+
+.focus\:ring-2:focus {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.focus\:ring-ring:focus {
+  --tw-ring-color: var(--ring);
+}
+
+.focus\:ring-offset-2:focus {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}

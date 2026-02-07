@@ -1,0 +1,95 @@
+// Textarea component styles - Migrated from clinic-harmony-ui-main
+
+textarea {
+  font-family: inherit;
+  resize: vertical;
+  
+  &::placeholder {
+    color: var(--muted-foreground);
+  }
+  
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+// Utility classes
+.flex {
+  display: flex;
+}
+
+.min-h-\[80px\] {
+  min-height: 80px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.rounded-md {
+  border-radius: var(--radius);
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-input {
+  border-color: var(--border);
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.ring-offset-background {
+  --tw-ring-offset-color: var(--background);
+}
+
+.placeholder\:text-muted-foreground::placeholder {
+  color: var(--muted-foreground);
+}
+
+.focus-visible\:outline-none:focus-visible {
+  outline: none;
+}
+
+.focus-visible\:ring-2:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.focus-visible\:ring-ring:focus-visible {
+  --tw-ring-color: var(--ring);
+}
+
+.focus-visible\:ring-offset-2:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+.disabled\:cursor-not-allowed:disabled {
+  cursor: not-allowed;
+}
+
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
+}

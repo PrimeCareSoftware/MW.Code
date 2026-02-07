@@ -1,0 +1,29 @@
+// Separator component styles
+
+div[role="separator"] {
+  background-color: var(--border);
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.bg-border {
+  background-color: var(--border);
+}
+
+.h-\[1px\] {
+  height: 1px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.w-\[1px\] {
+  width: 1px;
+}
