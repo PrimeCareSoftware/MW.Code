@@ -54,8 +54,8 @@ export class RescheduleDialogComponent implements OnInit {
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
-    // Use clinic ID from appointment if available, otherwise from authenticated user
-    this.clinicId = this.data.appointment.clinicId || this.authService.getUserClinicId();
+    // Use clinic ID from appointment (required field)
+    this.clinicId = this.data.appointment.clinicId;
 
     this.rescheduleForm = this.formBuilder.group({
       newDate: ['', Validators.required],
@@ -114,7 +114,8 @@ export class RescheduleDialogComponent implements OnInit {
 
   extractDoctorId(): string {
     // Extract doctor ID from the appointment
-    return this.data.appointment.doctorId;
+    // Return empty string if not available to trigger error handling
+    return this.data.appointment.doctorId || '';
   }
 
   formatDate(date: Date): string {
