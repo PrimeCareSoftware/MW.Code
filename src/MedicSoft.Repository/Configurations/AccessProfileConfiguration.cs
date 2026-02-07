@@ -49,7 +49,7 @@ namespace MedicSoft.Repository.Configurations
             builder.HasOne(ap => ap.ConsultationFormProfile)
                 .WithMany()
                 .HasForeignKey(ap => ap.ConsultationFormProfileId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(ap => ap.Permissions)
                 .WithOne(pp => pp.Profile)

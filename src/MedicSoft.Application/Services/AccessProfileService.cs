@@ -206,11 +206,8 @@ namespace MedicSoft.Application.Services
                 var existing = await _profileRepository.GetByNameAsync(profile.Name, clinicId, tenantId);
                 if (existing == null)
                 {
-                    // Link consultation form profile to the professional profile (not to Owner, Reception, or Financial)
-                    if (consultationFormProfile != null && 
-                        !profile.Name.Contains("Proprietário") && 
-                        !profile.Name.Contains("Recepção") && 
-                        !profile.Name.Contains("Financeiro"))
+                    // Link consultation form profile to professional profiles only
+                    if (consultationFormProfile != null && profile.IsProfessionalProfile())
                     {
                         profile.SetConsultationFormProfile(consultationFormProfile.Id);
                     }
@@ -236,15 +233,15 @@ namespace MedicSoft.Application.Services
             // Validate consultation form profile exists if provided
             if (consultationFormProfileId.HasValue)
             {
-                // System default profiles have tenantId "system", but could also be clinic-specific
-                var formProfile = await _consultationFormProfileRepository.GetByIdAsync(consultationFormProfileId.Value, "system");
+                // Check both system and clinic-specific profiles in a single query
+                var formProfile = await _consultationFormProfileRepository
+                    .GetAllQueryable()
+                    .Where(p => p.Id == consultationFormProfileId.Value && 
+                               (p.TenantId == "system" || p.TenantId == tenantId))
+                    .FirstOrDefaultAsync();
+                
                 if (formProfile == null)
-                {
-                    // Try with the clinic's tenant id
-                    formProfile = await _consultationFormProfileRepository.GetByIdAsync(consultationFormProfileId.Value, tenantId);
-                    if (formProfile == null)
-                        throw new InvalidOperationException("Consultation form profile not found");
-                }
+                    throw new InvalidOperationException("Consultation form profile not found");
             }
 
             profile.SetConsultationFormProfile(consultationFormProfileId);

@@ -336,11 +336,8 @@ namespace MedicSoft.Application.Services
 
                 foreach (var profile in defaultProfiles)
                 {
-                    // Link consultation form profile to the professional profile (not to Owner, Reception, or Financial)
-                    if (consultationFormProfile != null && 
-                        !profile.Name.Contains("Proprietário") && 
-                        !profile.Name.Contains("Recepção") && 
-                        !profile.Name.Contains("Financeiro"))
+                    // Link consultation form profile to professional profiles only
+                    if (consultationFormProfile != null && profile.IsProfessionalProfile())
                     {
                         profile.SetConsultationFormProfile(consultationFormProfile.Id);
                     }

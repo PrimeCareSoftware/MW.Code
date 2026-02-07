@@ -130,6 +130,16 @@ namespace MedicSoft.Domain.Entities
         }
 
         /// <summary>
+        /// Determines if this is a professional profile (not Owner, Reception, or Financial)
+        /// </summary>
+        public bool IsProfessionalProfile()
+        {
+            return !Name.Contains("Proprietário") && 
+                   !Name.Contains("Recepção") && 
+                   !Name.Contains("Financeiro");
+        }
+
+        /// <summary>
         /// Creates default profile templates with standard permissions
         /// </summary>
         public static AccessProfile CreateDefaultOwnerProfile(string tenantId, Guid clinicId)

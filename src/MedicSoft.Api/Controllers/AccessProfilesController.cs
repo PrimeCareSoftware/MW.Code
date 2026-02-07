@@ -313,13 +313,10 @@ namespace MedicSoft.Api.Controllers
                 if (!IsOwner())
                     return Forbid();
 
-                // Verify profile exists and belongs to clinic
+                // Verify profile exists and belongs to clinic (combined check to avoid information disclosure)
                 var profile = await _profileService.GetByIdAsync(id, tenantId);
-                if (profile == null)
+                if (profile == null || profile.ClinicId != clinicId)
                     return NotFound(new { message = "Profile not found" });
-
-                if (profile.ClinicId != clinicId)
-                    return Forbid();
 
                 var updatedProfile = await _profileService.SetConsultationFormProfileAsync(id, request.ConsultationFormProfileId, tenantId);
                 return Ok(updatedProfile);
