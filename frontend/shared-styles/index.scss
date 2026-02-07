@@ -1,6 +1,7 @@
 /**
  * MedicWarehouse Shared Design System
  * Import this file in all projects
+ * Clinic Harmony inspired - Apple-style Healthcare Design
  * 
  * Usage:
  * @use '../shared-styles' as *;
@@ -9,3 +10,4 @@
 @forward 'design-tokens';
 @forward 'components';
 @forward 'utilities';
+@forward 'material-theme';

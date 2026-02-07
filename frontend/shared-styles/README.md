@@ -4,14 +4,24 @@
 
 This design system provides a unified visual identity across all MedicWarehouse systems. It normalizes colors, typography, components, and themes to ensure consistency and maintainability.
 
+**Latest Update (February 2026):** Design system updated to align with **Clinic Harmony UI** - an Apple-inspired minimalist healthcare design featuring softer colors, subtle shadows, and smooth animations.
+
 ## 🎨 Color Palette
 
-### Primary - Medical Blue
-- **Base Color**: `#1e40af` (primary-500)
+### Primary - Soft Medical Blue (Clinic Harmony inspired)
+- **Base Color**: `#4A9FDE` (primary-500) - HSL: 211 84% 55%
+- **Previous**: `#1e40af` (darker blue)
+- **Change**: Softer, more approachable medical blue
 - **Usage**: Primary actions, links, focus states
 - **Shades**: 50-900 scale available
 
-### Secondary - Subtle Purple
+### Accent - Subtle Teal (NEW from Clinic Harmony)
+- **Base Color**: `#14b8a6` (accent-500) - HSL: 174 62% 47%
+- **Usage**: Highlights, interactive elements, secondary actions
+- **Previous**: Purple accent (#a855f7)
+- **Change**: Teal provides better contrast and modern feel
+
+### Secondary - Subtle Purple (Maintained)
 - **Base Color**: `#a855f7` (secondary-500)
 - **Usage**: Secondary actions, highlights, premium features
 
