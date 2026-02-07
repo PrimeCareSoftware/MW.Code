@@ -28,10 +28,21 @@ namespace PatientPortal.Infrastructure.Migrations
                             ""UsedAt"" timestamp with time zone,
                             CONSTRAINT ""PK_EmailVerificationTokens"" PRIMARY KEY (""Id"")
                         );
-                        
+                    END IF;
+                    
+                    -- Create indexes if they don't exist
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'EmailVerificationTokens' 
+                                  AND indexname = 'IX_EmailVerificationTokens_Token') THEN
                         CREATE UNIQUE INDEX ""IX_EmailVerificationTokens_Token"" 
                             ON ""EmailVerificationTokens"" (""Token"");
-                        
+                    END IF;
+                    
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'EmailVerificationTokens' 
+                                  AND indexname = 'IX_EmailVerificationTokens_PatientUserId_ExpiresAt') THEN
                         CREATE INDEX ""IX_EmailVerificationTokens_PatientUserId_ExpiresAt"" 
                             ON ""EmailVerificationTokens"" (""PatientUserId"", ""ExpiresAt"");
                     END IF;
@@ -56,10 +67,21 @@ namespace PatientPortal.Infrastructure.Migrations
                             ""CreatedByIp"" character varying(50),
                             CONSTRAINT ""PK_PasswordResetTokens"" PRIMARY KEY (""Id"")
                         );
-                        
+                    END IF;
+                    
+                    -- Create indexes if they don't exist
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'PasswordResetTokens' 
+                                  AND indexname = 'IX_PasswordResetTokens_Token') THEN
                         CREATE UNIQUE INDEX ""IX_PasswordResetTokens_Token"" 
                             ON ""PasswordResetTokens"" (""Token"");
-                        
+                    END IF;
+                    
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'PasswordResetTokens' 
+                                  AND indexname = 'IX_PasswordResetTokens_PatientUserId_ExpiresAt') THEN
                         CREATE INDEX ""IX_PasswordResetTokens_PatientUserId_ExpiresAt"" 
                             ON ""PasswordResetTokens"" (""PatientUserId"", ""ExpiresAt"");
                     END IF;

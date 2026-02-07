@@ -895,7 +895,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                                   AND table_name = 'SystemNotifications' 
                                   AND column_name = 'CreatedAt'
                                   AND data_type = 'timestamp with time zone') THEN
-                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone;
                         END IF;
                     END IF;
                 END $$;
@@ -5342,7 +5342,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                                   AND table_name = 'SystemNotifications' 
                                   AND column_name = 'CreatedAt'
                                   AND data_type = 'timestamp without time zone') THEN
-                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
                         END IF;
                     END IF;
                 END $$;
