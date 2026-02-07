@@ -1,15 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
-
-interface NavItem {
-  label: string;
-  icon: string;
-  route: string;
-  badge?: number;
-}
+import { NavigationConfigService, NavItem } from '../../services/navigation-config.service';
 
 @Component({
   selector: 'app-bottom-nav',
@@ -131,11 +125,12 @@ interface NavItem {
     }
   `]
 })
-export class BottomNavComponent {
-  navItems: NavItem[] = [
-    { label: 'Início', icon: 'home', route: '/dashboard' },
-    { label: 'Consultas', icon: 'event', route: '/appointments' },
-    { label: 'Documentos', icon: 'description', route: '/documents' },
-    { label: 'Perfil', icon: 'person', route: '/profile' }
-  ];
+export class BottomNavComponent implements OnInit {
+  navItems: NavItem[] = [];
+
+  constructor(private navigationConfig: NavigationConfigService) {}
+
+  ngOnInit(): void {
+    this.navItems = this.navigationConfig.getNavItems();
+  }
 }
