@@ -1,17 +1,21 @@
 /**
  * MedicWarehouse App - Main Styles
  * Imports shared design system and adds app-specific styles
+ * Updated: February 2026 - Clinic Harmony inspired design
  */
 
 /* Import shared design system tokens and components */
 @use '../../shared-styles' as *;
 
+/* TODO: Import Angular Material theme (Clinic Harmony inspired) after fixing import issues */
+/* @use '../../shared-styles/material-theme'; */
+
 /* App-specific design tokens */
 :root {
-  /* Shadows - Extended set for this app */
+  /* Shadows - Extended set for this app (updated for new primary color) */
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-  --shadow-primary: 0 8px 24px -6px rgba(30, 64, 175, 0.25);
+  --shadow-primary: 0 8px 24px -6px rgba(74, 159, 222, 0.25);  // Updated for new primary
   --shadow-success: 0 8px 24px -6px rgba(34, 197, 94, 0.25);
   --shadow-error: 0 8px 24px -6px rgba(239, 68, 68, 0.25);
   

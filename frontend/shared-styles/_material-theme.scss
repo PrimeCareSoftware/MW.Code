@@ -4,6 +4,8 @@
  * 
  * This file provides Material component theming aligned with the
  * Apple-inspired minimalist healthcare design from clinic-harmony
+ * 
+ * Uses Angular Material v20+ M2 (Material Design 2) theming API
  */
 
 @use '@angular/material' as mat;
@@ -95,33 +97,33 @@ $clinic-harmony-warn: (
 // TYPOGRAPHY CONFIGURATION
 // ============================================
 
-$clinic-harmony-typography: mat.define-typography-config(
+$clinic-harmony-typography: mat.m2-define-typography-config(
   $font-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  $headline-1: mat.define-typography-level(3rem, 3.5rem, 600),      // 48px
-  $headline-2: mat.define-typography-level(2.25rem, 2.75rem, 600),  // 36px
-  $headline-3: mat.define-typography-level(1.875rem, 2.25rem, 600), // 30px
-  $headline-4: mat.define-typography-level(1.5rem, 2rem, 600),      // 24px
-  $headline-5: mat.define-typography-level(1.25rem, 1.75rem, 600),  // 20px
-  $headline-6: mat.define-typography-level(1.125rem, 1.5rem, 600),  // 18px
-  $subtitle-1: mat.define-typography-level(1rem, 1.5rem, 500),      // 16px medium
-  $subtitle-2: mat.define-typography-level(0.875rem, 1.25rem, 500), // 14px medium
-  $body-1: mat.define-typography-level(1rem, 1.5rem, 400),          // 16px normal
-  $body-2: mat.define-typography-level(0.875rem, 1.25rem, 400),     // 14px normal
-  $caption: mat.define-typography-level(0.75rem, 1rem, 400),        // 12px
-  $button: mat.define-typography-level(0.875rem, 1.25rem, 500),     // 14px medium
+  $headline-1: mat.m2-define-typography-level(3rem, 3.5rem, 600),      // 48px
+  $headline-2: mat.m2-define-typography-level(2.25rem, 2.75rem, 600),  // 36px
+  $headline-3: mat.m2-define-typography-level(1.875rem, 2.25rem, 600), // 30px
+  $headline-4: mat.m2-define-typography-level(1.5rem, 2rem, 600),      // 24px
+  $headline-5: mat.m2-define-typography-level(1.25rem, 1.75rem, 600),  // 20px
+  $headline-6: mat.m2-define-typography-level(1.125rem, 1.5rem, 600),  // 18px
+  $subtitle-1: mat.m2-define-typography-level(1rem, 1.5rem, 500),      // 16px medium
+  $subtitle-2: mat.m2-define-typography-level(0.875rem, 1.25rem, 500), // 14px medium
+  $body-1: mat.m2-define-typography-level(1rem, 1.5rem, 400),          // 16px normal
+  $body-2: mat.m2-define-typography-level(0.875rem, 1.25rem, 400),     // 14px normal
+  $caption: mat.m2-define-typography-level(0.75rem, 1rem, 400),        // 12px
+  $button: mat.m2-define-typography-level(0.875rem, 1.25rem, 500),     // 14px medium
 );
 
 // ============================================
 // THEME CREATION
 // ============================================
 
-// Define palettes
-$primary-palette: mat.define-palette($clinic-harmony-primary, 500);
-$accent-palette: mat.define-palette($clinic-harmony-accent, 500);
-$warn-palette: mat.define-palette($clinic-harmony-warn, 500);
+// Define palettes using M2 API
+$primary-palette: mat.m2-define-palette($clinic-harmony-primary, 500);
+$accent-palette: mat.m2-define-palette($clinic-harmony-accent, 500);
+$warn-palette: mat.m2-define-palette($clinic-harmony-warn, 500);
 
-// Create light theme
-$clinic-harmony-theme: mat.define-light-theme((
+// Create light theme using M2 API
+$clinic-harmony-theme: mat.m2-define-light-theme((
   color: (
     primary: $primary-palette,
     accent: $accent-palette,
@@ -381,11 +383,11 @@ $clinic-harmony-theme: mat.define-light-theme((
 // ============================================
 
 body.theme-dark {
-  $dark-primary-palette: mat.define-palette($clinic-harmony-primary, 400);
-  $dark-accent-palette: mat.define-palette($clinic-harmony-accent, 400);
-  $dark-warn-palette: mat.define-palette($clinic-harmony-warn, 400);
+  $dark-primary-palette: mat.m2-define-palette($clinic-harmony-primary, 400);
+  $dark-accent-palette: mat.m2-define-palette($clinic-harmony-accent, 400);
+  $dark-warn-palette: mat.m2-define-palette($clinic-harmony-warn, 400);
   
-  $clinic-harmony-dark-theme: mat.define-dark-theme((
+  $clinic-harmony-dark-theme: mat.m2-define-dark-theme((
     color: (
       primary: $dark-primary-palette,
       accent: $dark-accent-palette,

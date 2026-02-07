@@ -5,9 +5,11 @@
  * 
  * Usage:
  * @use '../shared-styles' as *;
+ * 
+ * For Angular Material projects, also import:
+ * @use '../shared-styles/material-theme';
  */
 
 @forward 'design-tokens';
 @forward 'components';
 @forward 'utilities';
-@forward 'material-theme';
