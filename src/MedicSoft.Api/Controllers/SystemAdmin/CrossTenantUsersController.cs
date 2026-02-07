@@ -13,7 +13,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     /// Controller for managing users across all tenants
     /// </summary>
     [ApiController]
-    [Route("api/system-admin/users")]
+    [Route("api/system-admin/cross-tenant-users")]
     [Authorize(Roles = "SystemAdmin")]
     public class CrossTenantUsersController : BaseController
     {
@@ -86,8 +86,8 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
         /// <summary>
         /// Toggle user activation status
         /// </summary>
-        [HttpPost("{id:guid}/toggle-activation")]
-        public async Task<ActionResult> ToggleActivation(Guid id)
+        [HttpPost("{id:guid}/toggle-status")]
+        public async Task<ActionResult> ToggleStatus(Guid id)
         {
             var success = await _userService.ToggleUserActivation(id);
             
