@@ -883,15 +883,14 @@ using (var scope = app.Services.CreateScope())
                 string.Join(", ", pendingMigrations));
             
             Log.Information("Aplicando {Count} migrações pendentes...", pendingMigrations.Count());
+            context.Database.Migrate();
+            Log.Information("Migrações do banco de dados aplicadas com sucesso");
         }
         else
         {
             Log.Information("Nenhuma migração pendente encontrada. Verificando estado do banco...");
+            context.Database.Migrate(); // Ensure we're at the latest version
         }
-        
-        Log.Information("Aplicando migrações do banco de dados...");
-        context.Database.Migrate();
-        Log.Information("Migrações do banco de dados aplicadas com sucesso");
         
         // Verify critical CRM tables exist to prevent runtime errors
         Log.Information("Verificando existência de tabelas críticas do CRM...");

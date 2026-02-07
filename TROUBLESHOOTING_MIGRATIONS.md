@@ -536,4 +536,4 @@ Se você tentou todas as soluções acima e ainda está com problemas:
 
 ---
 
-Última atualização: {{ date }}
+Última atualização: 2026-02-07
