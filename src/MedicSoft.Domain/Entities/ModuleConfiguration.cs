@@ -233,7 +233,7 @@ namespace MedicSoft.Domain.Entities
                 Description = "Sistema de mensagens instantâneas para comunicação entre usuários da clínica",
                 Category = "Core",
                 Icon = "chat",
-                IsCore = true,
+                IsCore = false,
                 RequiredModules = Array.Empty<string>(),
                 MinimumPlan = SubscriptionPlanType.Basic
             }

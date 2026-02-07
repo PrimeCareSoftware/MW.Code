@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, signal, computed, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
 import { HubConnectionState } from '@microsoft/signalr';
 import { ChatService } from './services/chat.service';
 import { ChatHubService } from './services/chat-hub.service';
@@ -21,9 +21,12 @@ import {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('messagesContainer', { read: ElementRef }) messagesContainer?: ElementRef;
+  
   private destroy$ = new Subject<void>();
   private typingSubject = new Subject<string>();
+  private typingTimeouts = new Map<string, number>();
   
   // Signals for reactive state
   conversations = signal<Conversation[]>([]);
@@ -93,9 +96,17 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Clear all typing timeouts
+    this.typingTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    this.typingTimeouts.clear();
+    
     this.destroy$.next();
     this.destroy$.complete();
     this.chatHubService.stopConnection();
+  }
+
+  ngAfterViewInit(): void {
+    // View is initialized - we can now safely scroll
   }
 
   private async initializeChat(): Promise<void> {
@@ -167,7 +178,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   private async loadConversations(): Promise<void> {
     try {
       this.isLoadingConversations.set(true);
-      const response = await this.chatService.getConversations().toPromise();
+      const response = await firstValueFrom(this.chatService.getConversations());
       if (response) {
         this.conversations.set(response.conversations);
       }
@@ -180,7 +191,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private async loadUsers(): Promise<void> {
     try {
-      const users = await this.chatService.getClinicUsers().toPromise();
+      const users = await firstValueFrom(this.chatService.getClinicUsers());
       if (users) {
         // Filter out current user
         const filteredUsers = users.filter(u => u.userId !== this.currentUserId());
@@ -212,7 +223,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   private async loadMessages(conversationId: string): Promise<void> {
     try {
       this.isLoadingMessages.set(true);
-      const response = await this.chatService.getMessages(conversationId).toPromise();
+      const response = await firstValueFrom(this.chatService.getMessages(conversationId));
       if (response) {
         this.messages.set(response.messages);
         // Scroll to bottom after messages load
@@ -250,7 +261,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   async startConversation(user: UserPresence): Promise<void> {
     try {
-      const conversation = await this.chatService.createDirectConversation(user.userId).toPromise();
+      const conversation = await firstValueFrom(this.chatService.createDirectConversation(user.userId));
       if (conversation) {
         // Add to conversations list if not already there
         const exists = this.conversations().find(c => c.id === conversation.id);
@@ -320,17 +331,28 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private onUserTyping(indicator: TypingIndicator): void {
-    // Show typing indicator for 3 seconds
     const userId = indicator.userId;
+    
+    // Clear existing timeout for this user if it exists
+    const existingTimeout = this.typingTimeouts.get(userId);
+    if (existingTimeout) {
+      clearTimeout(existingTimeout);
+    }
+    
+    // Show typing indicator
     this.typingUsers.update(users => new Set(users).add(userId));
     
-    setTimeout(() => {
+    // Set new timeout to hide after 3 seconds
+    const timeoutId = window.setTimeout(() => {
       this.typingUsers.update(users => {
         const newSet = new Set(users);
         newSet.delete(userId);
         return newSet;
       });
+      this.typingTimeouts.delete(userId);
     }, 3000);
+    
+    this.typingTimeouts.set(userId, timeoutId);
   }
 
   private onPresenceChanged(event: any): void {
@@ -366,9 +388,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private scrollToBottom(): void {
-    const messagesContainer = document.querySelector('.messages-container');
-    if (messagesContainer) {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    if (this.messagesContainer?.nativeElement) {
+      const element = this.messagesContainer.nativeElement;
+      element.scrollTop = element.scrollHeight;
     }
   }
 
