@@ -4424,6 +4424,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<Guid?>("GlobalTemplateId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -4457,6 +4460,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.HasKey("Id");
 
                     b.HasIndex("ClinicId");
+
+                    b.HasIndex("GlobalTemplateId")
+                        .HasDatabaseName("ix_documenttemplates_globaltemplateid");
 
                     b.HasIndex("IsSystem")
                         .HasDatabaseName("IX_DocumentTemplates_IsSystem");
@@ -12087,7 +12093,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         .HasForeignKey("ClinicId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("MedicSoft.Domain.Entities.GlobalDocumentTemplate", "GlobalTemplate")
+                        .WithMany()
+                        .HasForeignKey("GlobalTemplateId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Clinic");
+
+                    b.Navigation("GlobalTemplate");
                 });
 
             modelBuilder.Entity("MedicSoft.Domain.Entities.ElectronicInvoice", b =>
