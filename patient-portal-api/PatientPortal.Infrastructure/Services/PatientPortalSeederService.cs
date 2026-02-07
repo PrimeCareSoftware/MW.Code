@@ -106,21 +106,24 @@ public class PatientPortalSeederService
     private async Task<List<PatientData>> FetchPatientsFromMainDatabaseAsync()
     {
         // Query the main database Patients table using raw SQL
+        // Join with PatientClinicLinks to get the ClinicId since Patients don't have direct ClinicId
         var sql = @"
             SELECT 
                 p.""Id"" as ""PatientId"",
-                p.""ClinicId"",
-                p.""CPF"",
+                pcl.""ClinicId"",
+                p.""Document"" as ""CPF"",
                 p.""Name"" as ""FullName"",
                 p.""Email"",
-                p.""Phone"" as ""PhoneNumber"",
-                p.""BirthDate"" as ""DateOfBirth""
+                p.""PhoneNumber"",
+                p.""DateOfBirth""
             FROM ""Patients"" p
-            WHERE p.""ClinicId""::text = {0}
+            INNER JOIN ""PatientClinicLinks"" pcl ON p.""Id"" = pcl.""PatientId""
+            WHERE pcl.""ClinicId""::text = {0}
+            AND pcl.""IsActive"" = true
             AND p.""Email"" IS NOT NULL 
             AND p.""Email"" != ''
-            AND p.""CPF"" IS NOT NULL 
-            AND p.""CPF"" != ''
+            AND p.""Document"" IS NOT NULL 
+            AND p.""Document"" != ''
             ORDER BY p.""CreatedAt"" DESC
             LIMIT 10";
 
