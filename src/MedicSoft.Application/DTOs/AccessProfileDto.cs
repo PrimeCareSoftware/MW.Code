@@ -12,6 +12,8 @@ namespace MedicSoft.Application.DTOs
         public bool IsActive { get; set; }
         public Guid? ClinicId { get; set; }
         public string? ClinicName { get; set; }
+        public Guid? ConsultationFormProfileId { get; set; }
+        public string? ConsultationFormProfileName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public List<string> Permissions { get; set; } = new();

@@ -28,6 +28,8 @@ namespace MedicSoft.Repository.Configurations
 
             builder.Property(ap => ap.ClinicId);
 
+            builder.Property(ap => ap.ConsultationFormProfileId);
+
             builder.Property(ap => ap.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -42,6 +44,11 @@ namespace MedicSoft.Repository.Configurations
             builder.HasOne(ap => ap.Clinic)
                 .WithMany()
                 .HasForeignKey(ap => ap.ClinicId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(ap => ap.ConsultationFormProfile)
+                .WithMany()
+                .HasForeignKey(ap => ap.ConsultationFormProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(ap => ap.Permissions)

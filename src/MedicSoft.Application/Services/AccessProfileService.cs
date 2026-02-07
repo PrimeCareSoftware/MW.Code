@@ -7,6 +7,7 @@ using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicSoft.Application.Services
 {
@@ -28,13 +29,16 @@ namespace MedicSoft.Application.Services
     {
         private readonly IAccessProfileRepository _profileRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
 
         public AccessProfileService(
             IAccessProfileRepository profileRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IConsultationFormProfileRepository consultationFormProfileRepository)
         {
             _profileRepository = profileRepository;
             _userRepository = userRepository;
+            _consultationFormProfileRepository = consultationFormProfileRepository;
         }
 
         public async Task<AccessProfileDto?> GetByIdAsync(Guid id, string tenantId)
@@ -187,6 +191,11 @@ namespace MedicSoft.Application.Services
 
         public async Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType)
         {
+            // Get the appropriate consultation form profile for this clinic type
+            var specialty = AccessProfile.GetProfessionalSpecialtyForClinicType(clinicType);
+            var allSystemProfiles = await _consultationFormProfileRepository.GetSystemDefaultProfilesAsync("system");
+            var consultationFormProfile = allSystemProfiles.FirstOrDefault(p => p.Specialty == specialty);
+
             var profiles = AccessProfile.GetDefaultProfilesForClinicType(tenantId, clinicId, clinicType);
 
             var createdProfiles = new List<AccessProfileDto>();
@@ -196,6 +205,15 @@ namespace MedicSoft.Application.Services
                 var existing = await _profileRepository.GetByNameAsync(profile.Name, clinicId, tenantId);
                 if (existing == null)
                 {
+                    // Link consultation form profile to the professional profile (not to Owner, Reception, or Financial)
+                    if (consultationFormProfile != null && 
+                        !profile.Name.Contains("Proprietário") && 
+                        !profile.Name.Contains("Recepção") && 
+                        !profile.Name.Contains("Financeiro"))
+                    {
+                        profile.SetConsultationFormProfile(consultationFormProfile.Id);
+                    }
+                    
                     await _profileRepository.AddAsync(profile);
                     createdProfiles.Add(MapToDto(profile));
                 }
@@ -219,6 +237,8 @@ namespace MedicSoft.Application.Services
                 IsActive = profile.IsActive,
                 ClinicId = profile.ClinicId,
                 ClinicName = profile.Clinic?.Name,
+                ConsultationFormProfileId = profile.ConsultationFormProfileId,
+                ConsultationFormProfileName = profile.ConsultationFormProfile?.Name,
                 CreatedAt = profile.CreatedAt,
                 UpdatedAt = profile.UpdatedAt,
                 Permissions = profile.GetPermissionKeys().ToList()
