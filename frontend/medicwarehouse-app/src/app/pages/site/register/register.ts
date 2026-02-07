@@ -205,6 +205,27 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Auto-fill owner data from clinic data for physical persons (CPF)
+   * This eliminates duplicate data entry
+   */
+  private autoFillOwnerDataFromClinicData(): void {
+    if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+      // Auto-fill owner data from clinic data collected in Step 1
+      this.model.ownerCPF = this.model.clinicDocument || '';
+      this.model.ownerPhone = this.model.clinicPhone;
+      this.model.ownerEmail = this.model.clinicEmail;
+      
+      // Use owner name as company/clinic name if not provided
+      if (!this.model.companyName && this.model.ownerName) {
+        this.model.companyName = this.model.ownerName;
+      }
+      if (!this.model.clinicName && this.model.ownerName) {
+        this.model.clinicName = this.model.ownerName;
+      }
+    }
+  }
+
+  /**
    * Clear saved data (called on successful registration)
    */
   private clearSavedData(): void {
@@ -213,6 +234,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   nextStep(): void {
     if (this.validateStep(this.currentStep)) {
+      // Auto-fill owner data after Step 1 for PF
+      if (this.currentStep === 1 && this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+        this.autoFillOwnerDataFromClinicData();
+      }
+      
       // Track step completion
       this.salesFunnelTracking.trackStepCompleted(
         this.currentStep,
@@ -221,6 +247,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
       );
       
       this.currentStep++;
+      
+      // Skip Step 4 (Owner Data) for PF without company
+      if (this.currentStep === 4 && this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+        this.currentStep++; // Jump to Step 5 (Access)
+      }
       
       // Track entering next step
       this.salesFunnelTracking.trackStepEntered(
@@ -236,6 +267,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   prevStep(): void {
     this.currentStep--;
+    
+    // Skip Step 4 (Owner Data) when going back for PF without company
+    if (this.currentStep === 4 && this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+      this.currentStep--; // Go back to Step 3 (Address)
+    }
     
     // Track entering previous step
     this.salesFunnelTracking.trackStepEntered(
@@ -263,13 +299,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
         // Check if either clinicCNPJ (legacy) or clinicDocument (new) is filled
         const hasDocument = !!(this.model.clinicCNPJ || this.model.clinicDocument);
         
-        // For physical person (CPF) without company fields enabled, document is enough
-        // For legal entity (CNPJ) or CPF with company fields, company name is required
+        // For PF without company, validate: owner name, document, phone, email
         if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
-          return !!(hasDocument && this.model.clinicPhone && this.model.clinicEmail);
+          return !!(
+            this.model.ownerName &&  // Name collected in Step 1 for PF
+            hasDocument && 
+            this.model.clinicPhone && 
+            this.model.clinicEmail
+          );
         } else {
-          return !!(this.model.companyName && hasDocument && 
-                    this.model.clinicPhone && this.model.clinicEmail);
+          // For legal entity or PF with company: validate company name
+          return !!(
+            this.model.companyName && 
+            hasDocument && 
+            this.model.clinicPhone && 
+            this.model.clinicEmail
+          );
         }
       case 2:
         // Specialty selection - clinicType is required
@@ -278,13 +323,45 @@ export class RegisterComponent implements OnInit, OnDestroy {
         return !!(this.model.street && this.model.number && this.model.neighborhood && 
                   this.model.city && this.model.state && this.model.zipCode);
       case 4:
-        return !!(this.model.ownerName && this.model.ownerCPF && 
-                  this.model.ownerPhone && this.model.ownerEmail);
+        // For PF without company, this is Access step (skip Owner data)
+        if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+          // Validate access credentials (username, password)
+          return !!(
+            this.model.username && 
+            this.model.password && 
+            this.passwordConfirm && 
+            this.model.password === this.passwordConfirm
+          );
+        }
+        // For legal entity or PF with company, validate owner data
+        return !!(
+          this.model.ownerName && 
+          this.model.ownerCPF && 
+          this.model.ownerPhone && 
+          this.model.ownerEmail
+        );
       case 5:
-        return !!(this.model.username && this.model.password && 
-                  this.passwordConfirm && this.model.password === this.passwordConfirm);
+        // For PF without company, this is Plan step
+        if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+          return !!(this.selectedPlan && this.model.planId);
+        }
+        // For legal entity, validate access credentials
+        return !!(
+          this.model.username && 
+          this.model.password && 
+          this.passwordConfirm && 
+          this.model.password === this.passwordConfirm
+        );
       case 6:
+        // For PF without company, this is Confirmation step
+        if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
+          return true; // Confirmation step always valid
+        }
+        // For legal entity, this is Plan step
         return !!(this.selectedPlan && this.model.planId);
+      case 7:
+        // Only for legal entity or PF with company
+        return true; // Confirmation step always valid
       default:
         return true;
     }
@@ -481,6 +558,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (!this.enableCompanyFields) {
       this.model.companyName = '';
       this.model.clinicName = '';
+      // Also clear owner name since it will be collected in Step 1 for PF
+      this.model.ownerName = '';
     }
   }
 
