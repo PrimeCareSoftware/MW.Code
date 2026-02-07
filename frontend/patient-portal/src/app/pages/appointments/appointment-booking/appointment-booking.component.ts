@@ -18,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
 import { AppointmentService } from '../../../services/appointment.service';
 import { NotificationService } from '../../../services/notification.service';
+import { AuthService } from '../../../services/auth.service';
 import { Specialty, Doctor, TimeSlot, BookAppointmentRequest } from '../../../models/appointment.model';
 import { environment } from '../../../../environments/environment';
 
@@ -79,19 +80,21 @@ export class AppointmentBookingComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
 
-  // Clinic ID from environment config
+  // Clinic ID - dynamically retrieved from authenticated user
   private readonly clinicId: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private appointmentService: AppointmentService,
     private notificationService: NotificationService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
-    this.clinicId = environment.defaultClinicId;
+    // Get clinic ID from authenticated user, with fallback to environment default
+    this.clinicId = this.authService.getUserClinicId();
   }
 
   ngOnInit(): void {

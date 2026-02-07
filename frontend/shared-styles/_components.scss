@@ -10,7 +10,8 @@
 
 /* Import Inter font for Apple-inspired typography */
 /* Note: For production, consider self-hosting or using <link rel="preconnect"> in HTML for better performance */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Commented out due to build environment network restrictions - fonts will fall back to system fonts */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); */
 
 * {
   border-color: var(--border);

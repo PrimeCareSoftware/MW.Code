@@ -10,8 +10,10 @@ describe('AppointmentService', () => {
   const mockAppointments: Appointment[] = [
     {
       id: '1',
+      doctorId: 'doc-123',
       doctorName: 'Dr. Smith',
       doctorSpecialty: 'General Practice',
+      clinicId: 'clinic-001',
       clinicName: 'Health Clinic',
       appointmentDate: new Date('2026-02-01T10:00:00Z'),
       startTime: '10:00',
@@ -25,8 +27,10 @@ describe('AppointmentService', () => {
     },
     {
       id: '2',
+      doctorId: 'doc-456',
       doctorName: 'Dr. Johnson',
       doctorSpecialty: 'Cardiology',
+      clinicId: 'clinic-001',
       clinicName: 'Health Clinic',
       appointmentDate: new Date('2026-01-20T14:00:00Z'),
       startTime: '14:00',

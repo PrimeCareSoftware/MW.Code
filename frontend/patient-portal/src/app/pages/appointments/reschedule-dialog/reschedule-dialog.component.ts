@@ -11,6 +11,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AppointmentService } from '../../../services/appointment.service';
+import { AuthService } from '../../../services/auth.service';
 import { Appointment, TimeSlot } from '../../../models/appointment.model';
 import { environment } from '../../../../environments/environment';
 
@@ -37,6 +38,8 @@ export class RescheduleDialogComponent implements OnInit {
   rescheduleForm: FormGroup;
   availableSlots: TimeSlot[] = [];
   loadingSlots = false;
+  slotsError = false;
+  slotsErrorMessage = '';
   minDate: Date;
   maxDate: Date;
   private readonly clinicId: string;
@@ -45,12 +48,14 @@ export class RescheduleDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<RescheduleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { appointment: Appointment },
     private formBuilder: FormBuilder,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private authService: AuthService
   ) {
     this.minDate = new Date();
     this.maxDate = new Date();
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
-    this.clinicId = environment.defaultClinicId;
+    // Use clinic ID from appointment (required field)
+    this.clinicId = this.data.appointment.clinicId;
 
     this.rescheduleForm = this.formBuilder.group({
       newDate: ['', Validators.required],
@@ -71,14 +76,17 @@ export class RescheduleDialogComponent implements OnInit {
   loadAvailableSlots(date: Date): void {
     this.loadingSlots = true;
     this.availableSlots = [];
+    this.slotsError = false;
     this.rescheduleForm.patchValue({ newTime: '' });
 
     const dateStr = this.formatDate(date);
     const doctorId = this.extractDoctorId();
 
     if (!doctorId) {
-      console.error('Cannot extract doctor ID from appointment');
+      console.error('Doctor ID is missing from appointment data');
       this.loadingSlots = false;
+      this.slotsError = true;
+      this.slotsErrorMessage = 'Erro: Identificação do médico não encontrada.';
       return;
     }
 
@@ -86,18 +94,28 @@ export class RescheduleDialogComponent implements OnInit {
       next: (response) => {
         this.availableSlots = response.slots.filter(slot => slot.isAvailable);
         this.loadingSlots = false;
+        this.slotsError = false;
       },
       error: (error) => {
-        console.error('Error loading slots:', error);
+        console.error('Error loading available slots:', error);
         this.loadingSlots = false;
+        this.slotsError = true;
+        this.slotsErrorMessage = 'Não foi possível carregar os horários disponíveis. Tente novamente.';
       }
     });
   }
 
+  retryLoadSlots(): void {
+    const selectedDate = this.rescheduleForm.get('newDate')?.value;
+    if (selectedDate) {
+      this.loadAvailableSlots(selectedDate);
+    }
+  }
+
   extractDoctorId(): string {
-    // In a real scenario, the appointment would have a doctorId field
-    // For now, we'll return a placeholder or handle it differently
-    return (this.data.appointment as any).doctorId || '';
+    // Extract doctor ID from the appointment
+    // Return empty string if not available to trigger error handling
+    return this.data.appointment.doctorId || '';
   }
 
   formatDate(date: Date): string {

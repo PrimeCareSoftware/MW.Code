@@ -5,6 +5,7 @@ export interface User {
   cpf: string;
   phoneNumber: string;
   dateOfBirth: Date;
+  clinicId?: string; // Optional clinic ID for multi-tenant support
   twoFactorEnabled: boolean;
 }
 
