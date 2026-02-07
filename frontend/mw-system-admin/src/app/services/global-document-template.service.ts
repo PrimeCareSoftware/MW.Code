@@ -87,6 +87,7 @@ export class GlobalDocumentTemplateService {
 
   /**
    * Set active status of a global template
+   * Note: Backend expects raw boolean value, not an object wrapper
    */
   setActiveStatus(id: string, isActive: boolean): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/active`, isActive);
