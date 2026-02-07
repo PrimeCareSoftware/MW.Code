@@ -94,11 +94,13 @@ namespace MedicSoft.Application.Services
         {
             var conversations = await _context.ChatParticipants
                 .Where(p => p.UserId == userId && p.TenantId == tenantId && p.IsActive)
-                .Select(p => p.Conversation)
-                .Include(c => c.Participants.Where(p => p.IsActive))
+                .Include(p => p.Conversation)
+                    .ThenInclude(c => c.Participants.Where(p => p.IsActive))
                     .ThenInclude(p => p.User)
-                .Include(c => c.LastMessage)
+                .Include(p => p.Conversation)
+                    .ThenInclude(c => c.LastMessage)
                     .ThenInclude(m => m.Sender)
+                .Select(p => p.Conversation)
                 .OrderByDescending(c => c.LastMessageAt ?? c.CreatedAt)
                 .ToListAsync();
 
