@@ -177,6 +177,14 @@
           </svg>
           <span class="nav-text">Prontuários SOAP</span>
         </a>
+        <a routerLink="/referral" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="8.5" cy="7" r="4"/>
+            <polyline points="17 11 19 13 23 9"/>
+          </svg>
+          <span class="nav-text">Encaminhamentos</span>
+        </a>
         <a routerLink="/anamnesis/templates" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -354,6 +362,15 @@
             <path d="M9 21V9"/>
           </svg>
           <span class="nav-text">Dashboard Fiscal</span>
+        </a>
+        <a routerLink="/financial/tax-dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <path d="M3 12h18"/>
+            <path d="M3 18h18"/>
+          </svg>
+          <span class="nav-text">Dashboard Tributário</span>
         </a>
         <a routerLink="/financial/reports/dre" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
