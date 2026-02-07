@@ -6,11 +6,15 @@ export * from './button';
 export * from './card';
 export * from './input';
 export * from './badge';
+export * from './checkbox';
+export * from './label';
+export * from './textarea';
 
 // TODO: Add remaining components as they are migrated
 // - Avatar
-// - Checkbox
 // - Select
+// - Switch
+// - Radio Group
 // - Form components
 // - Dialog
 // - Sheet
