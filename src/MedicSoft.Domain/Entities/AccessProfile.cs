@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Domain.Entities
 {
@@ -437,6 +438,50 @@ namespace MedicSoft.Domain.Entities
 
             profile.SetPermissions(veterinarianPermissions);
             return profile;
+        }
+
+        /// <summary>
+        /// Gets the appropriate default profiles for a specific clinic type
+        /// </summary>
+        public static List<AccessProfile> GetDefaultProfilesForClinicType(string tenantId, Guid clinicId, ClinicType clinicType)
+        {
+            var profiles = new List<AccessProfile>
+            {
+                // Common profiles for all clinic types
+                CreateDefaultOwnerProfile(tenantId, clinicId),
+                CreateDefaultReceptionProfile(tenantId, clinicId),
+                CreateDefaultFinancialProfile(tenantId, clinicId)
+            };
+
+            // Add clinic-type-specific professional profile
+            switch (clinicType)
+            {
+                case ClinicType.Medical:
+                    profiles.Add(CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Dental:
+                    profiles.Add(CreateDefaultDentistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Nutritionist:
+                    profiles.Add(CreateDefaultNutritionistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Psychology:
+                    profiles.Add(CreateDefaultPsychologistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.PhysicalTherapy:
+                    profiles.Add(CreateDefaultPhysicalTherapistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Veterinary:
+                    profiles.Add(CreateDefaultVeterinarianProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Other:
+                default:
+                    // For "Other" or unknown types, default to medical profile
+                    profiles.Add(CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+            }
+
+            return profiles;
         }
     }
 }
