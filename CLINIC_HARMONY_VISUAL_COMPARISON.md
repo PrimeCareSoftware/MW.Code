@@ -4,7 +4,7 @@
 
 ### Cor Primária
 
-**ANTES:** `#1e40af` (Azul escuro, HSL: 225, 73%, 40%)  
+**ANTES:** `#1e40af` (Azul escuro)  
 **DEPOIS:** `#3D9DED` (Soft Medical Blue, HSL: 211, 84%, 55%)
 
 A nova cor é mais clara, suave e acessível, inspirada no design minimalista da Apple para saúde.
