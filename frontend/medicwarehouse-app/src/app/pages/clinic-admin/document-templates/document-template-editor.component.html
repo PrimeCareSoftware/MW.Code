@@ -92,7 +92,7 @@
       <div class="section-header">
         <h3>Conteúdo do Template</h3>
         <p class="help-text">
-          Use variáveis no formato <code>{{patientName}}</code> para inserir dados dinâmicos
+          Use variáveis no formato <code>{{'{{patientName}}'}}</code> para inserir dados dinâmicos
         </p>
       </div>
 
@@ -145,22 +145,22 @@
 Exemplo:
 RECEITA MÉDICA
 
-Paciente: {{patientName}}
-Data: {{consultationDate}}
+Paciente: {{ '{{patientName}}' }}
+Data: {{ '{{consultationDate}}' }}
 
 Prescrevo:
 [Escreva aqui a prescrição]
 
 _______________
-{{professionalName}}
-{{professionalRegistration}}"
+{{ '{{professionalName}}' }}
+{{ '{{professionalRegistration}}' }}"
             rows="20"
             [readOnly]="isViewMode"
           ></textarea>
 
           <div class="content-info">
             <small>
-              💡 Dica: Use o formato {{variableName}} para inserir variáveis dinâmicas
+              💡 Dica: Use o formato {{'{{variableName}}'}} para inserir variáveis dinâmicas
             </small>
           </div>
         </div>
@@ -184,7 +184,7 @@ _______________
         <div 
           *ngFor="let variable of variablesFormArray.controls; let i = index"
           class="table-row"
-          [formGroup]="variable"
+          [formGroup]="$any(variable)"
         >
           <div class="col">
             <input type="text" formControlName="key" class="form-control-sm" />
