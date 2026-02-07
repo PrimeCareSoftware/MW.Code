@@ -432,7 +432,7 @@ export class SystemAdminService {
    */
   transferOwnership(currentOwnerId: string, newOwnerId: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
-      `${this.apiUrl}/users/transfer-ownership`,
+      `${this.apiUrl}/cross-tenant-users/transfer-ownership`,
       { currentOwnerId, newOwnerId }
     );
   }
