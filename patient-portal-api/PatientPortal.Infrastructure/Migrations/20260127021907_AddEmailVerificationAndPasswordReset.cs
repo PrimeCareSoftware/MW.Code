@@ -11,72 +11,95 @@ namespace PatientPortal.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "EmailVerificationTokens",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    PatientUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Token = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsUsed = table.Column<bool>(type: "boolean", nullable: false),
-                    UsedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmailVerificationTokens", x => x.Id);
-                });
+            // Create EmailVerificationTokens table only if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables 
+                                  WHERE table_schema = 'public' 
+                                  AND table_name = 'emailverificationtokens') THEN
+                        CREATE TABLE ""EmailVerificationTokens"" (
+                            ""Id"" uuid NOT NULL,
+                            ""PatientUserId"" uuid NOT NULL,
+                            ""Token"" character varying(512) NOT NULL,
+                            ""ExpiresAt"" timestamp with time zone NOT NULL,
+                            ""CreatedAt"" timestamp with time zone NOT NULL,
+                            ""IsUsed"" boolean NOT NULL,
+                            ""UsedAt"" timestamp with time zone,
+                            CONSTRAINT ""PK_EmailVerificationTokens"" PRIMARY KEY (""Id"")
+                        );
+                    END IF;
+                    
+                    -- Create indexes if they don't exist
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'emailverificationtokens' 
+                                  AND indexname = 'ix_emailverificationtokens_token') THEN
+                        CREATE UNIQUE INDEX ""IX_EmailVerificationTokens_Token"" 
+                            ON ""EmailVerificationTokens"" (""Token"");
+                    END IF;
+                    
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'emailverificationtokens' 
+                                  AND indexname = 'ix_emailverificationtokens_patientuserid_expiresat') THEN
+                        CREATE INDEX ""IX_EmailVerificationTokens_PatientUserId_ExpiresAt"" 
+                            ON ""EmailVerificationTokens"" (""PatientUserId"", ""ExpiresAt"");
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.CreateTable(
-                name: "PasswordResetTokens",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    PatientUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Token = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsUsed = table.Column<bool>(type: "boolean", nullable: false),
-                    UsedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedByIp = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PasswordResetTokens", x => x.Id);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmailVerificationTokens_PatientUserId_ExpiresAt",
-                table: "EmailVerificationTokens",
-                columns: new[] { "PatientUserId", "ExpiresAt" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmailVerificationTokens_Token",
-                table: "EmailVerificationTokens",
-                column: "Token",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PasswordResetTokens_PatientUserId_ExpiresAt",
-                table: "PasswordResetTokens",
-                columns: new[] { "PatientUserId", "ExpiresAt" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PasswordResetTokens_Token",
-                table: "PasswordResetTokens",
-                column: "Token",
-                unique: true);
+            // Create PasswordResetTokens table only if it doesn't exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables 
+                                  WHERE table_schema = 'public' 
+                                  AND table_name = 'passwordresettokens') THEN
+                        CREATE TABLE ""PasswordResetTokens"" (
+                            ""Id"" uuid NOT NULL,
+                            ""PatientUserId"" uuid NOT NULL,
+                            ""Token"" character varying(512) NOT NULL,
+                            ""ExpiresAt"" timestamp with time zone NOT NULL,
+                            ""CreatedAt"" timestamp with time zone NOT NULL,
+                            ""IsUsed"" boolean NOT NULL,
+                            ""UsedAt"" timestamp with time zone,
+                            ""CreatedByIp"" character varying(50),
+                            CONSTRAINT ""PK_PasswordResetTokens"" PRIMARY KEY (""Id"")
+                        );
+                    END IF;
+                    
+                    -- Create indexes if they don't exist
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'passwordresettokens' 
+                                  AND indexname = 'ix_passwordresettokens_token') THEN
+                        CREATE UNIQUE INDEX ""IX_PasswordResetTokens_Token"" 
+                            ON ""PasswordResetTokens"" (""Token"");
+                    END IF;
+                    
+                    IF NOT EXISTS (SELECT 1 FROM pg_indexes 
+                                  WHERE schemaname = 'public' 
+                                  AND tablename = 'passwordresettokens' 
+                                  AND indexname = 'ix_passwordresettokens_patientuserid_expiresat') THEN
+                        CREATE INDEX ""IX_PasswordResetTokens_PatientUserId_ExpiresAt"" 
+                            ON ""PasswordResetTokens"" (""PatientUserId"", ""ExpiresAt"");
+                    END IF;
+                END $$;
+            ");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "EmailVerificationTokens");
+            // Drop tables only if they exist
+            migrationBuilder.Sql(@"
+                DROP TABLE IF EXISTS ""EmailVerificationTokens"";
+            ");
 
-            migrationBuilder.DropTable(
-                name: "PasswordResetTokens");
+            migrationBuilder.Sql(@"
+                DROP TABLE IF EXISTS ""PasswordResetTokens"";
+            ");
         }
     }
 }
