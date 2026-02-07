@@ -24,8 +24,8 @@
           <option [value]="type.value">{{ type.name }}</option>
         }
       </select>
-      <button class="btn btn-secondary" (click)="applyFilters()">🔍 Filtrar</button>
-      <button class="btn btn-secondary" (click)="clearFilters()">✖️ Limpar</button>
+      <button class="btn btn-secondary" (click)="applyFilters()" aria-label="Filtrar perfis">🔍 Filtrar</button>
+      <button class="btn btn-secondary" (click)="clearFilters()" aria-label="Limpar filtros">✖️ Limpar</button>
     </div>
   </div>
 
@@ -42,7 +42,7 @@
         <div class="profile-card">
           <div class="profile-header">
             <h3>{{ template.name }}</h3>
-            <button class="btn-detail" (click)="viewDetails(template)">👁️ Ver Detalhes</button>
+            <button class="btn-detail" (click)="viewDetails(template)" aria-label="Ver detalhes do perfil">👁️ Ver Detalhes</button>
           </div>
           <p class="profile-description">{{ template.description }}</p>
           <div class="profile-info">
@@ -73,7 +73,7 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h2>{{ selectedTemplate.name }}</h2>
-        <button class="btn-close" (click)="closeDetailModal()">✖️</button>
+        <button class="btn-close" (click)="closeDetailModal()" aria-label="Fechar modal">✖️</button>
       </div>
       
       <div class="modal-body">

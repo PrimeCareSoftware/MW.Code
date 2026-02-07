@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { SystemProfilesService, DefaultProfileTemplate, ClinicType, PermissionCategory } from '../../services/system-profiles.service';
 import { Navbar } from '../../shared/navbar/navbar';
 
@@ -40,9 +41,9 @@ export class SystemProfilesList implements OnInit {
 
     // Load all data in parallel
     Promise.all([
-      this.systemProfilesService.getDefaultTemplates().toPromise(),
-      this.systemProfilesService.getClinicTypes().toPromise(),
-      this.systemProfilesService.getAllPermissions().toPromise()
+      firstValueFrom(this.systemProfilesService.getDefaultTemplates()),
+      firstValueFrom(this.systemProfilesService.getClinicTypes()),
+      firstValueFrom(this.systemProfilesService.getAllPermissions())
     ]).then(([templates, clinicTypes, permissions]) => {
       this.templates.set(templates || []);
       this.filteredTemplates.set(templates || []);
