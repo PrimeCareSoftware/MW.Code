@@ -214,14 +214,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.model.ownerCPF = this.model.clinicDocument || '';
       this.model.ownerPhone = this.model.clinicPhone;
       this.model.ownerEmail = this.model.clinicEmail;
-      
-      // Use owner name as company/clinic name if not provided
-      if (!this.model.companyName && this.model.ownerName) {
-        this.model.companyName = this.model.ownerName;
-      }
-      if (!this.model.clinicName && this.model.ownerName) {
-        this.model.clinicName = this.model.ownerName;
-      }
     }
   }
 
@@ -323,16 +315,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         return !!(this.model.street && this.model.number && this.model.neighborhood && 
                   this.model.city && this.model.state && this.model.zipCode);
       case 4:
-        // For PF without company, this is Access step (skip Owner data)
-        if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
-          // Validate access credentials (username, password)
-          return !!(
-            this.model.username && 
-            this.model.password && 
-            this.passwordConfirm && 
-            this.model.password === this.passwordConfirm
-          );
-        }
         // For legal entity or PF with company, validate owner data
         return !!(
           this.model.ownerName && 
@@ -341,11 +323,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.model.ownerEmail
         );
       case 5:
-        // For PF without company, this is Plan step
-        if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
-          return !!(this.selectedPlan && this.model.planId);
-        }
-        // For legal entity, validate access credentials
+        // Validate access credentials (username, password)
         return !!(
           this.model.username && 
           this.model.password && 
@@ -353,15 +331,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.model.password === this.passwordConfirm
         );
       case 6:
-        // For PF without company, this is Confirmation step
-        if (this.clinicDocumentType === 'CPF' && !this.enableCompanyFields) {
-          return true; // Confirmation step always valid
-        }
-        // For legal entity, this is Plan step
+        // Validate plan selection
         return !!(this.selectedPlan && this.model.planId);
       case 7:
-        // Only for legal entity or PF with company
-        return true; // Confirmation step always valid
+        // Confirmation step always valid
+        return true;
       default:
         return true;
     }
