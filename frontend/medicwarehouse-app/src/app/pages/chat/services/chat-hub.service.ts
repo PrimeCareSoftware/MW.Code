@@ -35,8 +35,10 @@ export class ChatHubService {
     }
 
     try {
+      const hubUrl = environment.apiUrl.replace('/api', '/hubs/chat');
+      
       this.hubConnection = new HubConnectionBuilder()
-        .withUrl(`${environment.apiUrl}/hubs/chat`, {
+        .withUrl(hubUrl, {
           accessTokenFactory: () => accessToken,
           withCredentials: false
         })
