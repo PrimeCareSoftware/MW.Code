@@ -38,8 +38,17 @@
         <span>Carregando horários...</span>
       </div>
 
+      <div *ngIf="slotsError" class="error-message">
+        <mat-icon>error_outline</mat-icon>
+        <p>{{ slotsErrorMessage }}</p>
+        <button mat-button color="primary" (click)="retryLoadSlots()">
+          <mat-icon>refresh</mat-icon>
+          Tentar Novamente
+        </button>
+      </div>
+
       <mat-form-field appearance="outline" class="full-width" 
-                      *ngIf="!loadingSlots && availableSlots.length > 0">
+                      *ngIf="!loadingSlots && !slotsError && availableSlots.length > 0">
         <mat-label>Novo Horário</mat-label>
         <mat-select formControlName="newTime">
           <mat-option *ngFor="let slot of availableSlots" [value]="slot.startTime">
@@ -52,7 +61,7 @@
         </mat-error>
       </mat-form-field>
 
-      <div *ngIf="!loadingSlots && rescheduleForm.get('newDate')?.value && availableSlots.length === 0" 
+      <div *ngIf="!loadingSlots && !slotsError && rescheduleForm.get('newDate')?.value && availableSlots.length === 0" 
            class="no-slots-message">
         <mat-icon>event_busy</mat-icon>
         <p>Nenhum horário disponível para esta data</p>

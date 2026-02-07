@@ -37,6 +37,8 @@ export class RescheduleDialogComponent implements OnInit {
   rescheduleForm: FormGroup;
   availableSlots: TimeSlot[] = [];
   loadingSlots = false;
+  slotsError = false;
+  slotsErrorMessage = '';
   minDate: Date;
   maxDate: Date;
   private readonly clinicId: string;
@@ -72,6 +74,7 @@ export class RescheduleDialogComponent implements OnInit {
   loadAvailableSlots(date: Date): void {
     this.loadingSlots = true;
     this.availableSlots = [];
+    this.slotsError = false;
     this.rescheduleForm.patchValue({ newTime: '' });
 
     const dateStr = this.formatDate(date);
@@ -80,7 +83,8 @@ export class RescheduleDialogComponent implements OnInit {
     if (!doctorId) {
       console.error('Doctor ID is missing from appointment data');
       this.loadingSlots = false;
-      // Show error to user - could add a snackbar service here
+      this.slotsError = true;
+      this.slotsErrorMessage = 'Erro: Identificação do médico não encontrada.';
       return;
     }
 
@@ -88,13 +92,22 @@ export class RescheduleDialogComponent implements OnInit {
       next: (response) => {
         this.availableSlots = response.slots.filter(slot => slot.isAvailable);
         this.loadingSlots = false;
+        this.slotsError = false;
       },
       error: (error) => {
         console.error('Error loading available slots:', error);
         this.loadingSlots = false;
-        // Error handling could be improved with user notification
+        this.slotsError = true;
+        this.slotsErrorMessage = 'Não foi possível carregar os horários disponíveis. Tente novamente.';
       }
     });
+  }
+
+  retryLoadSlots(): void {
+    const selectedDate = this.rescheduleForm.get('newDate')?.value;
+    if (selectedDate) {
+      this.loadAvailableSlots(selectedDate);
+    }
   }
 
   extractDoctorId(): string {
