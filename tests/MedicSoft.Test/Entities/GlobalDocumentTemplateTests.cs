@@ -343,31 +343,7 @@ namespace MedicSoft.Test.Entities
         }
 
         [Fact]
-        public void SetActiveStatus_ToTrue_UpdatesIsActive()
-        {
-            // Arrange
-            var template = new GlobalDocumentTemplate(
-                "Name", 
-                "Description", 
-                DocumentTemplateType.MedicalCertificate, 
-                ProfessionalSpecialty.Medico, 
-                "Content", 
-                "{}", 
-                _tenantId, 
-                _createdBy);
-
-            // Initially true
-            Assert.True(template.IsActive);
-
-            // Act
-            template.SetActiveStatus(false);
-
-            // Assert
-            Assert.False(template.IsActive);
-        }
-
-        [Fact]
-        public void SetActiveStatus_ToFalse_UpdatesIsActive()
+        public void SetActiveStatus_FromFalseToTrue_UpdatesIsActive()
         {
             // Arrange
             var template = new GlobalDocumentTemplate(
@@ -388,6 +364,30 @@ namespace MedicSoft.Test.Entities
 
             // Assert
             Assert.True(template.IsActive);
+        }
+
+        [Fact]
+        public void SetActiveStatus_ToFalse_UpdatesIsActive()
+        {
+            // Arrange
+            var template = new GlobalDocumentTemplate(
+                "Name", 
+                "Description", 
+                DocumentTemplateType.MedicalCertificate, 
+                ProfessionalSpecialty.Medico, 
+                "Content", 
+                "{}", 
+                _tenantId, 
+                _createdBy);
+
+            // Initially true
+            Assert.True(template.IsActive);
+
+            // Act
+            template.SetActiveStatus(false);
+
+            // Assert
+            Assert.False(template.IsActive);
         }
 
         [Fact]

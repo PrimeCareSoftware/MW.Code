@@ -172,7 +172,7 @@ namespace MedicSoft.Test.Handlers.Queries.GlobalDocumentTemplates
             _mockMapper
                 .Setup(m => m.Map<List<GlobalDocumentTemplateDto>>(It.IsAny<List<GlobalDocumentTemplate>>()))
                 .Returns((List<GlobalDocumentTemplate> source) => 
-                    source.Select(t => new GlobalDocumentTemplateDto { Id = Guid.NewGuid(), Name = t.Name }).ToList());
+                    source.Select(t => new GlobalDocumentTemplateDto { Id = Guid.NewGuid(), Name = t.Name, Description = t.Description }).ToList());
 
             var query = new GetAllGlobalTemplatesQuery(_tenantId, filter);
 
@@ -182,6 +182,7 @@ namespace MedicSoft.Test.Handlers.Queries.GlobalDocumentTemplates
             // Assert
             Assert.NotNull(result);
             Assert.Single(result);
+            Assert.Equal("Medical Template", result[0].Name);
         }
     }
 
