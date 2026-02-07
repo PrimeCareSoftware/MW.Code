@@ -111,7 +111,9 @@ namespace MedicSoft.Api.Controllers
                 if (subscription == null)
                     return BadRequest(new { message = "No active subscription found" });
 
-                var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+                // Subscription plans are system-wide entities with tenantId="system"
+                // Use GetByIdWithoutTenantAsync to retrieve them
+                var plan = await _planRepository.GetByIdWithoutTenantAsync(subscription.SubscriptionPlanId);
                 if (plan == null)
                     return BadRequest(new { message = "Invalid subscription plan" });
 
