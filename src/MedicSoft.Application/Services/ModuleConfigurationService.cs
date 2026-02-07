@@ -66,7 +66,9 @@ namespace MedicSoft.Application.Services
 
             if (subscription != null)
             {
-                var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+                // Subscription plans are system-wide entities with tenantId="system"
+                // Use GetByIdWithoutTenantAsync to retrieve them
+                var plan = await _planRepository.GetByIdWithoutTenantAsync(subscription.SubscriptionPlanId);
                 isAvailableInPlan = plan != null && SystemModules.IsModuleAvailableInPlan(moduleName, plan);
             }
 
@@ -98,7 +100,9 @@ namespace MedicSoft.Application.Services
             SubscriptionPlan? plan = null;
             if (subscription != null)
             {
-                plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+                // Subscription plans are system-wide entities with tenantId="system"
+                // Use GetByIdWithoutTenantAsync to retrieve them
+                plan = await _planRepository.GetByIdWithoutTenantAsync(subscription.SubscriptionPlanId);
             }
 
             // Fetch all module configurations for this clinic in one query
@@ -432,7 +436,9 @@ namespace MedicSoft.Application.Services
             if (subscription == null)
                 return new ModuleValidationResult(false, "Clinic has no active subscription");
 
-            var plan = await _planRepository.GetByIdAsync(subscription.SubscriptionPlanId, tenantId);
+            // Subscription plans are system-wide entities with tenantId="system"
+            // Use GetByIdWithoutTenantAsync to retrieve them
+            var plan = await _planRepository.GetByIdWithoutTenantAsync(subscription.SubscriptionPlanId);
             if (plan == null)
                 return new ModuleValidationResult(false, "Invalid subscription plan");
 
