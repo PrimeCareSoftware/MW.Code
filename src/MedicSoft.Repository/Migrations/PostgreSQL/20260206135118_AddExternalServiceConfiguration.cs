@@ -850,14 +850,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp with time zone");
 
             // Use conditional SQL to alter SystemNotifications columns only if table exists
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
                               AND table_name = 'SystemNotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
-                                  WHERE table_name = 'SystemNotifications' 
+                                  WHERE table_schema = 'public'
+                                  AND table_name = 'SystemNotifications' 
                                   AND column_name = 'UpdatedAt'
                                   AND data_type = 'timestamp with time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
@@ -866,14 +867,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
                               AND table_name = 'SystemNotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
-                                  WHERE table_name = 'SystemNotifications' 
+                                  WHERE table_schema = 'public'
+                                  AND table_name = 'SystemNotifications' 
                                   AND column_name = 'ReadAt'
                                   AND data_type = 'timestamp with time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp without time zone;
@@ -882,14 +884,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
                               AND table_name = 'SystemNotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
-                                  WHERE table_name = 'SystemNotifications' 
+                                  WHERE table_schema = 'public'
+                                  AND table_name = 'SystemNotifications' 
                                   AND column_name = 'CreatedAt'
                                   AND data_type = 'timestamp with time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
@@ -5294,14 +5297,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp without time zone");
 
             // Use conditional SQL to revert SystemNotifications columns only if table exists
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
                               AND table_name = 'SystemNotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
-                                  WHERE table_name = 'SystemNotifications' 
+                                  WHERE table_schema = 'public'
+                                  AND table_name = 'SystemNotifications' 
                                   AND column_name = 'UpdatedAt'
                                   AND data_type = 'timestamp without time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
@@ -5310,14 +5314,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
                               AND table_name = 'SystemNotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
-                                  WHERE table_name = 'SystemNotifications' 
+                                  WHERE table_schema = 'public'
+                                  AND table_name = 'SystemNotifications' 
                                   AND column_name = 'ReadAt'
                                   AND data_type = 'timestamp without time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp with time zone;
@@ -5326,14 +5331,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
                               AND table_name = 'SystemNotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
-                                  WHERE table_name = 'SystemNotifications' 
+                                  WHERE table_schema = 'public'
+                                  AND table_name = 'SystemNotifications' 
                                   AND column_name = 'CreatedAt'
                                   AND data_type = 'timestamp without time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
