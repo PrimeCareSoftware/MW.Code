@@ -65,7 +65,7 @@ export default function Index() {
               Contato
             </a>
           </nav>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => navigate("/login")}>
             Entrar
           </Button>
         </div>
