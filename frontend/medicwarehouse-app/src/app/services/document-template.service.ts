@@ -115,15 +115,11 @@ export class DocumentTemplateService {
   }
 
   /**
-   * Get all global document templates
-   * Note: This endpoint needs backend support. Currently calling system-admin endpoint
-   * which may require proper authorization setup or a dedicated clinic-accessible endpoint.
+   * Get all global document templates available to clinic users
+   * Returns only active global templates
    */
   getGlobalTemplates(specialty?: ProfessionalSpecialty, type?: DocumentTemplateType): Observable<GlobalDocumentTemplate[]> {
-    // TODO: This should ideally use a clinic-accessible endpoint like:
-    // const globalApiUrl = `${this.apiUrl}/global-templates`;
-    // For now, using the system-admin endpoint (may need authorization adjustments)
-    const globalApiUrl = `${environment.apiUrl}/system-admin/global-templates`;
+    const globalApiUrl = `${this.apiUrl}/global-templates`;
     let params = new HttpParams();
     
     if (specialty !== undefined) {
@@ -132,7 +128,6 @@ export class DocumentTemplateService {
     if (type !== undefined) {
       params = params.set('type', type.toString());
     }
-    params = params.set('isActive', 'true'); // Only get active global templates
     
     return this.http.get<GlobalDocumentTemplate[]>(globalApiUrl, { params });
   }
