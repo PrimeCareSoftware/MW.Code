@@ -82,4 +82,21 @@ namespace MedicSoft.Application.Commands.DocumentTemplates
             TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
         }
     }
+    
+    /// <summary>
+    /// Command to create a document template from a global template
+    /// </summary>
+    public class CreateDocumentTemplateFromGlobalCommand : IRequest<DocumentTemplateDto>
+    {
+        public Guid GlobalTemplateId { get; }
+        public string TenantId { get; }
+        public Guid ClinicId { get; }
+
+        public CreateDocumentTemplateFromGlobalCommand(Guid globalTemplateId, string tenantId, Guid clinicId)
+        {
+            GlobalTemplateId = globalTemplateId;
+            TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
+            ClinicId = clinicId;
+        }
+    }
 }

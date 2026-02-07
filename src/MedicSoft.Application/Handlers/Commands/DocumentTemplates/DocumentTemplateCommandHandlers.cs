@@ -162,4 +162,55 @@ namespace MedicSoft.Application.Handlers.Commands.DocumentTemplates
             return Unit.Value;
         }
     }
+    
+    /// <summary>
+    /// Handler for creating a document template from a global template
+    /// </summary>
+    public class CreateDocumentTemplateFromGlobalCommandHandler : IRequestHandler<CreateDocumentTemplateFromGlobalCommand, DocumentTemplateDto>
+    {
+        private readonly IDocumentTemplateRepository _repository;
+        private readonly IGlobalDocumentTemplateRepository _globalRepository;
+        private readonly IMapper _mapper;
+
+        public CreateDocumentTemplateFromGlobalCommandHandler(
+            IDocumentTemplateRepository repository,
+            IGlobalDocumentTemplateRepository globalRepository,
+            IMapper mapper)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _globalRepository = globalRepository ?? throw new ArgumentNullException(nameof(globalRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+        public async Task<DocumentTemplateDto> Handle(CreateDocumentTemplateFromGlobalCommand request, CancellationToken cancellationToken)
+        {
+            var globalTemplate = await _globalRepository.GetByIdAsync(request.GlobalTemplateId, request.TenantId);
+            
+            if (globalTemplate == null)
+            {
+                throw new InvalidOperationException($"Template global com ID {request.GlobalTemplateId} não foi encontrado");
+            }
+            
+            if (!globalTemplate.IsActive)
+            {
+                throw new InvalidOperationException($"Não é possível criar um template a partir de um template global inativo");
+            }
+
+            var template = new DocumentTemplate(
+                name: globalTemplate.Name,
+                description: globalTemplate.Description,
+                specialty: globalTemplate.Specialty,
+                type: globalTemplate.Type,
+                content: globalTemplate.Content,
+                variables: globalTemplate.Variables,
+                tenantId: request.TenantId,
+                clinicId: request.ClinicId,
+                isSystem: false,
+                globalTemplateId: request.GlobalTemplateId
+            );
+
+            var created = await _repository.AddAsync(template);
+            return _mapper.Map<DocumentTemplateDto>(created);
+        }
+    }
 }
