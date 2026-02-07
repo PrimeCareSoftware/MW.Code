@@ -12,7 +12,7 @@
     h1 {
       margin: 0;
       font-size: 2rem;
-      color: #1a1a1a;
+      color: var(--gray-900);
     }
 
     .subtitle {
@@ -31,19 +31,19 @@
   }
 
   .error {
-    color: #dc3545;
+    color: var(--error-500);
 
     .btn-retry {
       margin-top: 1rem;
       padding: 0.5rem 1.5rem;
-      background: #007bff;
+      background: var(--info-600);
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
 
       &:hover {
-        background: #0056b3;
+        background: var(--info-700);
       }
     }
   }
@@ -60,24 +60,24 @@
     border-collapse: collapse;
 
     thead {
-      background: #f8f9fa;
+      background: var(--gray-50);
       
       th {
         text-align: left;
         padding: 1rem;
         font-weight: 600;
         color: #495057;
-        border-bottom: 2px solid #dee2e6;
+        border-bottom: 2px solid var(--gray-200);
       }
     }
 
     tbody {
       tr {
-        border-bottom: 1px solid #dee2e6;
+        border-bottom: 1px solid var(--gray-200);
         transition: background-color 0.2s;
 
         &:hover {
-          background: #f8f9fa;
+          background: var(--gray-50);
         }
       }
 
@@ -91,7 +91,7 @@
   .workflow-info {
     .workflow-name {
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--gray-900);
       margin-bottom: 0.25rem;
     }
 
@@ -115,7 +115,7 @@
     .action-count {
       display: block;
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--gray-900);
       margin-bottom: 0.25rem;
     }
 
@@ -159,7 +159,7 @@
 
   .btn-icon {
     padding: 0.5rem;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--gray-200);
     background: white;
     border-radius: 4px;
     cursor: pointer;
@@ -168,21 +168,21 @@
     transition: all 0.2s;
 
     &:hover {
-      background: #f8f9fa;
+      background: var(--gray-50);
       border-color: #adb5bd;
     }
 
     &.btn-danger {
       &:hover {
         background: #f8d7da;
-        border-color: #dc3545;
+        border-color: var(--error-500);
       }
     }
 
     &.btn-success {
       &:hover {
         background: #d4edda;
-        border-color: #28a745;
+        border-color: var(--success-600);
       }
     }
   }
@@ -197,11 +197,11 @@
     transition: all 0.2s;
 
     &.btn-primary {
-      background: #007bff;
+      background: var(--info-600);
       color: white;
 
       &:hover {
-        background: #0056b3;
+        background: var(--info-700);
       }
     }
   }

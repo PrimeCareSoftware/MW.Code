@@ -5,74 +5,74 @@
 }
 
 .page-header {
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-8);
 
   h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 0.5rem;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-semibold);
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-2);
   }
 
   .subtitle {
-    color: #666;
+    color: var(--gray-500);
   }
 }
 
 .alert {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-6);
 
   &.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background-color: var(--error-100);
+    color: var(--error-700);
+    border: 1px solid var(--error-200);
   }
 }
 
 .form-section {
   background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-6);
+  box-shadow: var(--shadow-md);
 
   h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 1rem;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-semibold);
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-4);
   }
 
   .section-subtitle {
-    color: #666;
-    margin-bottom: 1.5rem;
+    color: var(--gray-500);
+    margin-bottom: var(--spacing-6);
   }
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-6);
 
   label {
     display: block;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 0.5rem;
+    font-weight: var(--font-medium);
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-2);
   }
 
   .form-control {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+    padding: var(--spacing-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-base);
 
     &:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: var(--primary-500);
+      box-shadow: var(--focus-ring);
     }
   }
 
@@ -82,14 +82,14 @@
   }
 
   .error-message {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
+    color: var(--error-500);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-1);
   }
 }
 
 .permission-category {
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-8);
 
   &:last-child {
     margin-bottom: 0;
@@ -99,26 +99,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-2);
+    border-bottom: 2px solid var(--gray-200);
 
     h4 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #555;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-semibold);
+      color: var(--gray-700);
       margin: 0;
     }
 
     .category-actions {
       display: flex;
-      gap: 1rem;
+      gap: var(--spacing-4);
 
       .btn-link {
         background: none;
         border: none;
-        color: #667eea;
-        font-size: 0.875rem;
+        color: var(--primary-500);
+        font-size: var(--font-size-sm);
         cursor: pointer;
         padding: 0;
 
@@ -132,20 +132,20 @@
   .permissions-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 0.75rem;
+    gap: var(--spacing-3);
   }
 
   .permission-checkbox {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2);
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.2s ease;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
 
     &:hover {
-      background-color: #f5f5f5;
+      background-color: var(--gray-100);
     }
 
     input[type="checkbox"] {
@@ -155,8 +155,8 @@
     }
 
     .permission-label {
-      font-size: 0.9rem;
-      color: #555;
+      font-size: var(--font-size-sm);
+      color: var(--gray-700);
     }
   }
 }
@@ -164,36 +164,36 @@
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-8);
 
   .btn {
-    padding: 0.75rem 2rem;
-    border-radius: 8px;
+    padding: var(--spacing-3) var(--spacing-8);
+    border-radius: var(--radius-md);
     border: none;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: var(--font-medium);
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
+    gap: var(--spacing-2);
+    transition: all var(--transition-base);
 
     &.btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--primary-500);
       color: white;
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        box-shadow: var(--shadow-primary);
       }
     }
 
     &.btn-secondary {
-      background-color: #f0f0f0;
-      color: #333;
+      background-color: var(--gray-100);
+      color: var(--gray-900);
 
       &:hover:not(:disabled) {
-        background-color: #e0e0e0;
+        background-color: var(--gray-200);
       }
     }
 
@@ -206,10 +206,10 @@
 
 .loading {
   text-align: center;
-  padding: 3rem;
-  color: #666;
+  padding: var(--spacing-12);
+  color: var(--gray-500);
 
   i {
-    margin-right: 0.5rem;
+    margin-right: var(--spacing-2);
   }
 }

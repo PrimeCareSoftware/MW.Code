@@ -16,12 +16,12 @@
 h1 {
   font-size: 32px;
   font-weight: 700;
-  color: #1a202c;
+  color: var(--gray-900);
   margin: 0 0 8px 0;
 }
 
 .subtitle {
-  color: #718096;
+  color: var(--gray-500);
   font-size: 16px;
   margin: 0;
 }
@@ -44,7 +44,7 @@ h1 {
   flex: 2;
   min-width: 300px;
   padding: 12px 16px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--gray-200);
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.2s;
@@ -52,14 +52,14 @@ h1 {
 
 .filter-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--primary-500);
 }
 
 .filter-select {
   flex: 1;
   min-width: 200px;
   padding: 12px 16px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--gray-200);
   border-radius: 8px;
   font-size: 14px;
   background: white;
@@ -78,23 +78,23 @@ h1 {
 }
 
 .btn-primary {
-  background: #667eea;
+  background: var(--primary-500);
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #5568d3;
+  background: var(--primary-600);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .btn-secondary {
-  background: #e2e8f0;
-  color: #2d3748;
+  background: var(--gray-200);
+  color: var(--gray-800);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #cbd5e0;
+  background: var(--gray-300);
 }
 
 .btn:disabled {
@@ -105,17 +105,17 @@ h1 {
 .loading, .error {
   text-align: center;
   padding: 48px 24px;
-  color: #718096;
+  color: var(--gray-500);
 }
 
 .error {
-  color: #c53030;
+  color: var(--error-600);
 }
 
 .btn-retry {
   margin-top: 16px;
   padding: 12px 24px;
-  background: #667eea;
+  background: var(--primary-500);
   color: white;
   border: none;
   border-radius: 8px;
@@ -138,7 +138,7 @@ h1 {
 }
 
 .exams-table thead {
-  background: #f7fafc;
+  background: var(--gray-50);
 }
 
 .exams-table th {
@@ -146,21 +146,21 @@ h1 {
   text-align: left;
   font-size: 13px;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--gray-800);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--gray-200);
   white-space: nowrap;
 }
 
 .exams-table td {
   padding: 16px;
-  border-bottom: 1px solid #e2e8f0;
-  color: #2d3748;
+  border-bottom: 1px solid var(--gray-200);
+  color: var(--gray-800);
 }
 
 .exams-table tbody tr:hover {
-  background: #f7fafc;
+  background: var(--gray-50);
 }
 
 .exam-info {
@@ -171,17 +171,17 @@ h1 {
 
 .exam-name {
   font-weight: 600;
-  color: #1a202c;
+  color: var(--gray-900);
 }
 
 .exam-desc {
   font-size: 12px;
-  color: #718096;
+  color: var(--gray-500);
 }
 
 .exam-synonyms {
   font-size: 11px;
-  color: #a0aec0;
+  color: var(--gray-400);
   font-style: italic;
 }
 
@@ -191,8 +191,8 @@ h1 {
   border-radius: 12px;
   font-size: 12px;
   font-weight: 600;
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--info-100);
+  color: var(--info-700);
   white-space: nowrap;
 }
 
@@ -203,19 +203,19 @@ h1 {
   font-size: 12px;
   font-weight: 600;
   font-family: 'Courier New', monospace;
-  background: #f0fdf4;
-  color: #166534;
+  background: var(--success-50);
+  color: var(--success-700);
 }
 
 .no-code,
 .no-prep {
-  color: #a0aec0;
+  color: var(--gray-400);
   font-size: 13px;
 }
 
 .preparation {
   font-size: 13px;
-  color: #2d3748;
+  color: var(--gray-800);
   max-width: 300px;
   line-height: 1.4;
 }
@@ -229,13 +229,13 @@ h1 {
 }
 
 .status-badge.active {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--success-100);
+  color: var(--success-700);
 }
 
 .status-badge.inactive {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--error-100);
+  color: var(--error-700);
 }
 
 .actions {
@@ -246,7 +246,7 @@ h1 {
 .btn-icon {
   padding: 8px 12px;
   border: none;
-  background: #f7fafc;
+  background: var(--gray-50);
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
@@ -254,22 +254,22 @@ h1 {
 }
 
 .btn-icon:hover {
-  background: #e2e8f0;
+  background: var(--gray-200);
   transform: translateY(-2px);
 }
 
 .btn-icon.btn-danger:hover {
-  background: #fee2e2;
+  background: var(--error-100);
 }
 
 .btn-icon.btn-success:hover {
-  background: #d1fae5;
+  background: var(--success-100);
 }
 
 .no-data {
   text-align: center;
   padding: 48px 24px;
-  color: #718096;
+  color: var(--gray-500);
 }
 
 /* Modal Styles */
@@ -303,7 +303,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--gray-200);
   position: sticky;
   top: 0;
   background: white;
@@ -313,7 +313,7 @@ h1 {
 .modal-header h2 {
   font-size: 20px;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--gray-900);
   margin: 0;
 }
 
@@ -321,7 +321,7 @@ h1 {
   background: none;
   border: none;
   font-size: 28px;
-  color: #718096;
+  color: var(--gray-500);
   cursor: pointer;
   padding: 0;
   width: 32px;
@@ -334,8 +334,8 @@ h1 {
 }
 
 .btn-close:hover {
-  background: #f7fafc;
-  color: #1a202c;
+  background: var(--gray-50);
+  color: var(--gray-900);
 }
 
 .modal-body {
@@ -362,16 +362,16 @@ h1 {
 .form-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--gray-800);
 }
 
 .required {
-  color: #e53e3e;
+  color: var(--error-500);
 }
 
 .form-control {
   padding: 12px 16px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--gray-200);
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.2s;
@@ -381,7 +381,7 @@ h1 {
 
 .form-control:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--primary-500);
 }
 
 textarea.form-control {
@@ -396,9 +396,9 @@ textarea.form-control {
 }
 
 .alert-error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
+  background: var(--error-100);
+  color: var(--error-700);
+  border: 1px solid var(--error-200);
 }
 
 .modal-footer {
@@ -406,7 +406,7 @@ textarea.form-control {
   gap: 12px;
   justify-content: flex-end;
   padding: 24px;
-  border-top: 2px solid #e2e8f0;
+  border-top: 2px solid var(--gray-200);
   position: sticky;
   bottom: 0;
   background: white;

@@ -16,12 +16,12 @@
     h1 {
       font-size: 32px;
       font-weight: 700;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 8px 0;
     }
 
     .subtitle {
-      color: #718096;
+      color: var(--gray-500);
       font-size: 16px;
       margin: 0;
     }
@@ -36,12 +36,12 @@
     }
 
     .btn-primary {
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: #5568d3;
+      background: var(--primary-600);
       transform: translateY(-2px);
     }
 
@@ -53,11 +53,11 @@
     .loading, .error {
       text-align: center;
       padding: 48px 24px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .error {
-      color: #c53030;
+      color: var(--error-600);
     }
 
     .table-container {
@@ -73,7 +73,7 @@
     }
 
     .subdomains-table thead {
-      background: #f7fafc;
+      background: var(--gray-50);
     }
 
     .subdomains-table th {
@@ -81,33 +81,33 @@
       text-align: left;
       font-size: 13px;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--gray-800);
       text-transform: uppercase;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid var(--gray-200);
     }
 
     .subdomains-table td {
       padding: 16px;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--gray-200);
       font-size: 14px;
-      color: #2d3748;
+      color: var(--gray-800);
     }
 
     .subdomains-table tbody tr:hover {
-      background: #f7fafc;
+      background: var(--gray-50);
     }
 
     .subdomain-code {
-      background: #f7fafc;
+      background: var(--gray-50);
       padding: 4px 8px;
       border-radius: 4px;
       font-family: monospace;
       font-size: 13px;
-      color: #667eea;
+      color: var(--primary-500);
     }
 
     code {
-      background: #f7fafc;
+      background: var(--gray-50);
       padding: 2px 6px;
       border-radius: 4px;
       font-family: monospace;
@@ -122,27 +122,27 @@
     }
 
     .status-badge.active {
-      background: #d1fae5;
-      color: #065f46;
+      background: var(--success-100);
+      color: var(--success-700);
     }
 
     .btn-icon {
       padding: 8px 12px;
       border: none;
-      background: #f7fafc;
+      background: var(--gray-50);
       border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
     }
 
     .btn-icon.btn-danger:hover {
-      background: #fee2e2;
+      background: var(--error-100);
     }
 
     .empty-state {
       text-align: center;
       padding: 48px 24px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .modal-overlay {
@@ -171,13 +171,13 @@
       justify-content: space-between;
       align-items: center;
       padding: 24px;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid var(--gray-200);
     }
 
     .modal-header h2 {
       font-size: 20px;
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0;
     }
 
@@ -185,7 +185,7 @@
       background: none;
       border: none;
       font-size: 24px;
-      color: #718096;
+      color: var(--gray-500);
       cursor: pointer;
     }
 
@@ -194,7 +194,7 @@
     }
 
     .modal-body p {
-      color: #718096;
+      color: var(--gray-500);
       margin-bottom: 20px;
     }
 
@@ -208,12 +208,12 @@
     .form-group label {
       font-size: 14px;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--gray-800);
     }
 
     .form-group small {
       font-size: 12px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .subdomain-input {
@@ -225,36 +225,36 @@
     .subdomain-input input {
       flex: 1;
       padding: 12px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       border-radius: 8px 0 0 8px;
       font-size: 14px;
     }
 
     .domain-suffix {
       padding: 12px;
-      background: #f7fafc;
-      border: 2px solid #e2e8f0;
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
       border-left: none;
       border-radius: 0 8px 8px 0;
       font-size: 14px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     input:focus, select:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: var(--primary-500);
     }
 
     select {
       padding: 12px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       border-radius: 8px;
       font-size: 14px;
     }
 
     .error-message {
-      background: #fee2e2;
-      color: #991b1b;
+      background: var(--error-100);
+      color: var(--error-700);
       padding: 12px;
       border-radius: 8px;
     }
@@ -264,10 +264,10 @@
       gap: 12px;
       justify-content: flex-end;
       padding: 24px;
-      border-top: 2px solid #e2e8f0;
+      border-top: 2px solid var(--gray-200);
     }
 
     .btn-secondary {
-      background: #e2e8f0;
-      color: #2d3748;
+      background: var(--gray-200);
+      color: var(--gray-800);
     }

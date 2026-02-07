@@ -72,13 +72,13 @@
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--success-100);
+  color: var(--success-700);
 }
 
 .connection-status.error {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--error-100);
+  color: var(--error-700);
 }
 
 .stats-grid {
@@ -275,8 +275,8 @@
 .step-badge {
   display: inline-block;
   padding: 0.25rem 0.5rem;
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--info-100);
+  color: var(--info-700);
   border-radius: 0.25rem;
   font-weight: 600;
   font-size: 0.75rem;
@@ -299,11 +299,11 @@
 }
 
 .sync-status.success {
-  color: #065f46;
+  color: var(--success-700);
 }
 
 .sync-status.pending {
-  color: #92400e;
+  color: var(--warning-700);
 }
 
 .sync-status svg {
@@ -364,16 +364,16 @@
 }
 
 /* Utility classes for status colors */
-.bg-blue-100 { background: #dbeafe; }
-.text-blue-800 { color: #1e40af; }
-.bg-yellow-100 { background: #fef3c7; }
-.text-yellow-800 { color: #92400e; }
+.bg-blue-100 { background: var(--info-100); }
+.text-blue-800 { color: var(--info-700); }
+.bg-yellow-100 { background: var(--warning-100); }
+.text-yellow-800 { color: var(--warning-700); }
 .bg-purple-100 { background: #e9d5ff; }
 .text-purple-800 { color: #6b21a8; }
-.bg-green-100 { background: #d1fae5; }
-.text-green-800 { color: #065f46; }
-.bg-red-100 { background: #fee2e2; }
-.text-red-800 { color: #991b1b; }
+.bg-green-100 { background: var(--success-100); }
+.text-green-800 { color: var(--success-700); }
+.bg-red-100 { background: var(--error-100); }
+.text-red-800 { color: var(--error-700); }
 .bg-indigo-100 { background: #e0e7ff; }
 .text-indigo-800 { color: #3730a3; }
 .bg-gray-100 { background: #f3f4f6; }

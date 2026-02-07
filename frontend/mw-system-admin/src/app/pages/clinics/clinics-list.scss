@@ -16,12 +16,12 @@
     h1 {
       font-size: 32px;
       font-weight: 700;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 8px 0;
     }
 
     .subtitle {
-      color: #718096;
+      color: var(--gray-500);
       font-size: 16px;
       margin: 0;
     }
@@ -37,12 +37,12 @@
     }
 
     .btn-primary {
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
     }
 
     .btn-primary:hover {
-      background: #5568d3;
+      background: var(--primary-600);
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
@@ -56,41 +56,41 @@
 
     .filter-btn {
       padding: 10px 20px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       background: white;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--gray-800);
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .filter-btn:hover {
-      border-color: #667eea;
-      color: #667eea;
+      border-color: var(--primary-500);
+      color: var(--primary-500);
     }
 
     .filter-btn.active {
-      background: #667eea;
-      border-color: #667eea;
+      background: var(--primary-500);
+      border-color: var(--primary-500);
       color: white;
     }
 
     .loading, .error {
       text-align: center;
       padding: 48px 24px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .error {
-      color: #c53030;
+      color: var(--error-600);
     }
 
     .btn-retry {
       margin-top: 16px;
       padding: 12px 24px;
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
       border: none;
       border-radius: 8px;
@@ -112,7 +112,7 @@
     }
 
     .clinics-table thead {
-      background: #f7fafc;
+      background: var(--gray-50);
     }
 
     .clinics-table th {
@@ -120,21 +120,21 @@
       text-align: left;
       font-size: 13px;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--gray-800);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid var(--gray-200);
     }
 
     .clinics-table td {
       padding: 16px;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--gray-200);
       font-size: 14px;
-      color: #2d3748;
+      color: var(--gray-800);
     }
 
     .clinics-table tbody tr:hover {
-      background: #f7fafc;
+      background: var(--gray-50);
     }
 
     .clinic-info {
@@ -145,12 +145,12 @@
 
     .clinic-name {
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
     }
 
     .clinic-date {
       font-size: 12px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .badge {
@@ -167,18 +167,18 @@
     }
 
     .badge.badge-active {
-      background: #d1fae5;
-      color: #065f46;
+      background: var(--success-100);
+      color: var(--success-700);
     }
 
     .badge.badge-trial {
-      background: #fef3c7;
-      color: #92400e;
+      background: var(--warning-100);
+      color: var(--warning-700);
     }
 
     .badge.badge-expired {
-      background: #fee2e2;
-      color: #991b1b;
+      background: var(--error-100);
+      color: var(--error-700);
     }
 
     .badge.badge-suspended {
@@ -199,13 +199,13 @@
     }
 
     .status-badge.active {
-      background: #d1fae5;
-      color: #065f46;
+      background: var(--success-100);
+      color: var(--success-700);
     }
 
     .status-badge.inactive {
-      background: #fee2e2;
-      color: #991b1b;
+      background: var(--error-100);
+      color: var(--error-700);
     }
 
     .actions {
@@ -216,7 +216,7 @@
     .btn-icon {
       padding: 8px 12px;
       border: none;
-      background: #f7fafc;
+      background: var(--gray-50);
       border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
@@ -224,22 +224,22 @@
     }
 
     .btn-icon:hover {
-      background: #e2e8f0;
+      background: var(--gray-200);
       transform: translateY(-2px);
     }
 
     .btn-icon.btn-danger:hover {
-      background: #fee2e2;
+      background: var(--error-100);
     }
 
     .btn-icon.btn-success:hover {
-      background: #d1fae5;
+      background: var(--success-100);
     }
 
     .empty-state {
       text-align: center;
       padding: 48px 24px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .pagination {
@@ -252,7 +252,7 @@
 
     .btn-page {
       padding: 10px 16px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       background: white;
       border-radius: 8px;
       font-size: 14px;
@@ -262,8 +262,8 @@
     }
 
     .btn-page:hover:not(:disabled) {
-      border-color: #667eea;
-      color: #667eea;
+      border-color: var(--primary-500);
+      color: var(--primary-500);
     }
 
     .btn-page:disabled {
@@ -273,7 +273,7 @@
 
     .page-info {
       font-size: 14px;
-      color: #2d3748;
+      color: var(--gray-800);
       font-weight: 600;
     }
 
@@ -312,12 +312,12 @@
 
     .btn-filters {
       padding: 10px 20px;
-      border: 2px solid #667eea;
+      border: 2px solid var(--primary-500);
       background: white;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
-      color: #667eea;
+      color: var(--primary-500);
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
@@ -326,12 +326,12 @@
     }
 
     .btn-filters:hover {
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
     }
 
     .filter-count {
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
       padding: 2px 8px;
       border-radius: 12px;
@@ -341,12 +341,12 @@
 
     .btn-filters:hover .filter-count {
       background: white;
-      color: #667eea;
+      color: var(--primary-500);
     }
 
     .advanced-filters {
-      background: #f7fafc;
-      border: 2px solid #e2e8f0;
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
       border-radius: 12px;
       padding: 24px;
       margin-bottom: 24px;
@@ -388,10 +388,10 @@
     .filter-group input,
     .filter-group select {
       padding: 10px 12px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       border-radius: 8px;
       font-size: 14px;
-      color: #1a202c;
+      color: var(--gray-900);
       background: white;
       transition: border-color 0.2s;
     }
@@ -399,7 +399,7 @@
     .filter-group input:focus,
     .filter-group select:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: var(--primary-500);
     }
 
     .tags-filter {
@@ -432,7 +432,7 @@
 
     .btn-secondary {
       padding: 10px 20px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       background: white;
       border-radius: 8px;
       font-size: 14px;
@@ -443,8 +443,8 @@
     }
 
     .btn-secondary:hover {
-      border-color: #cbd5e0;
-      background: #f7fafc;
+      border-color: var(--gray-300);
+      background: var(--gray-50);
     }
 
     .segment-chips {
@@ -456,7 +456,7 @@
 
     .segment-chip {
       padding: 10px 16px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       background: white;
       border-radius: 20px;
       font-size: 14px;
@@ -476,29 +476,29 @@
 
     .segment-chip.warning {
       border-color: #f59e0b;
-      color: #92400e;
+      color: var(--warning-700);
     }
 
     .segment-chip.warning:hover {
-      background: #fef3c7;
+      background: var(--warning-100);
     }
 
     .segment-chip.success {
       border-color: #10b981;
-      color: #065f46;
+      color: var(--success-700);
     }
 
     .segment-chip.success:hover {
-      background: #d1fae5;
+      background: var(--success-100);
     }
 
     .segment-chip.info {
       border-color: #3b82f6;
-      color: #1e40af;
+      color: var(--info-700);
     }
 
     .segment-chip.info:hover {
-      background: #dbeafe;
+      background: var(--info-100);
     }
 
     .chip-count {
@@ -514,7 +514,7 @@
       padding: 1rem;
       background: white;
       border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--gray-200);
     }
 
     .view-switcher {
@@ -524,7 +524,7 @@
 
     .view-btn {
       padding: 0.5rem 1rem;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--gray-200);
       background: white;
       border-radius: 6px;
       font-size: 0.875rem;
@@ -558,7 +558,7 @@
 
     .btn-sm {
       padding: 0.5rem 1rem;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--gray-200);
       background: white;
       border-radius: 6px;
       font-size: 0.875rem;
@@ -616,7 +616,7 @@
       top: 100%;
       right: 0;
       background: white;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--gray-200);
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       margin-top: 0.5rem;

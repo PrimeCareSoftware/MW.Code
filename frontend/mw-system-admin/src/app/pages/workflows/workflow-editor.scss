@@ -12,7 +12,7 @@
     h1 {
       margin: 0;
       font-size: 2rem;
-      color: #1a1a1a;
+      color: var(--gray-900);
     }
 
     .subtitle {
@@ -55,7 +55,7 @@
 
   .section {
     padding: 2rem;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--gray-200);
 
     &:last-child {
       border-bottom: none;
@@ -64,7 +64,7 @@
     h2 {
       margin: 0 0 1.5rem;
       font-size: 1.5rem;
-      color: #1a1a1a;
+      color: var(--gray-900);
     }
 
     .section-header {
@@ -101,7 +101,7 @@
 
       &:focus {
         outline: none;
-        border-color: #007bff;
+        border-color: var(--info-600);
         box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
       }
 
@@ -148,7 +148,7 @@
   }
 
   .action-card {
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--gray-200);
     border-radius: 8px;
     overflow: hidden;
 
@@ -157,8 +157,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem;
-      background: #f8f9fa;
-      border-bottom: 1px solid #dee2e6;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
 
       .action-title {
         display: flex;
@@ -203,11 +203,11 @@
     }
 
     &.btn-primary {
-      background: #007bff;
+      background: var(--info-600);
       color: white;
 
       &:hover:not(:disabled) {
-        background: #0056b3;
+        background: var(--info-700);
       }
     }
 
@@ -221,18 +221,18 @@
     }
 
     &.btn-success {
-      background: #28a745;
+      background: var(--success-600);
       color: white;
 
       &:hover:not(:disabled) {
-        background: #218838;
+        background: var(--success-700);
       }
     }
   }
 
   .btn-icon {
     padding: 0.5rem;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--gray-200);
     background: white;
     border-radius: 4px;
     cursor: pointer;
@@ -241,7 +241,7 @@
     transition: all 0.2s;
 
     &:hover:not(:disabled) {
-      background: #f8f9fa;
+      background: var(--gray-50);
       border-color: #adb5bd;
     }
 
@@ -252,13 +252,13 @@
 
     &.btn-danger:hover:not(:disabled) {
       background: #f8d7da;
-      border-color: #dc3545;
+      border-color: var(--error-500);
     }
   }
 
   .form-actions {
     padding: 1.5rem 2rem;
-    background: #f8f9fa;
+    background: var(--gray-50);
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;

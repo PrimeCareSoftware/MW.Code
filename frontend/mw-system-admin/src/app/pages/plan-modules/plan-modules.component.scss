@@ -9,12 +9,12 @@
     h1 {
       font-size: 32px;
       font-weight: 700;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 8px 0;
     }
     
     .subtitle {
-      color: #718096;
+      color: var(--gray-500);
       font-size: 16px;
       margin: 0;
     }
@@ -23,7 +23,7 @@
   .loading-container {
     text-align: center;
     padding: 48px 24px;
-    color: #718096;
+    color: var(--gray-500);
   }
 
   .content {
@@ -44,7 +44,7 @@
       mat-card-title {
         font-size: 18px;
         font-weight: 600;
-        color: #2d3748;
+        color: var(--gray-800);
       }
     }
     
@@ -56,17 +56,17 @@
     .plan-info {
       margin-top: 16px;
       padding: 16px;
-      background-color: #f7fafc;
+      background-color: var(--gray-50);
       border-radius: 8px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
 
       p {
         margin: 8px 0;
         font-size: 14px;
-        color: #2d3748;
+        color: var(--gray-800);
         
         strong {
-          color: #1a202c;
+          color: var(--gray-900);
           font-weight: 600;
         }
       }
@@ -80,17 +80,17 @@
     
     mat-card-header {
       padding: 16px 24px;
-      background: #f7fafc;
-      border-bottom: 2px solid #e2e8f0;
+      background: var(--gray-50);
+      border-bottom: 2px solid var(--gray-200);
       
       mat-card-title {
         font-size: 18px;
         font-weight: 600;
-        color: #2d3748;
+        color: var(--gray-800);
       }
       
       mat-card-subtitle {
-        color: #718096;
+        color: var(--gray-500);
         font-size: 14px;
       }
     }
@@ -105,10 +105,10 @@
       .category-title {
         font-size: 18px;
         font-weight: 600;
-        color: #2d3748;
+        color: var(--gray-800);
         margin: 0 0 16px 0;
         padding-bottom: 8px;
-        border-bottom: 2px solid #e2e8f0;
+        border-bottom: 2px solid var(--gray-200);
       }
 
       .modules-grid {
@@ -118,14 +118,14 @@
 
         .module-item {
           padding: 12px;
-          border: 1px solid #e2e8f0;
+          border: 1px solid var(--gray-200);
           border-radius: 8px;
           background: white;
           transition: all 0.2s;
 
           &:hover:not(.disabled) {
-            background-color: #f7fafc;
-            border-color: #cbd5e0;
+            background-color: var(--gray-50);
+            border-color: var(--gray-300);
           }
 
           &.disabled {
@@ -143,7 +143,7 @@
             gap: 12px;
 
             .module-icon {
-              color: #667eea;
+              color: var(--primary-500);
               font-size: 24px;
               width: 24px;
               height: 24px;
@@ -159,12 +159,12 @@
               .module-name {
                 font-weight: 600;
                 font-size: 14px;
-                color: #1a202c;
+                color: var(--gray-900);
               }
 
               .module-description {
                 font-size: 12px;
-                color: #718096;
+                color: var(--gray-500);
                 line-height: 1.4;
               }
 
@@ -196,8 +196,8 @@
     display: flex;
     gap: 12px;
     padding: 24px;
-    border-top: 2px solid #e2e8f0;
-    background: #f7fafc;
+    border-top: 2px solid var(--gray-200);
+    background: var(--gray-50);
 
     button {
       padding: 12px 24px;
