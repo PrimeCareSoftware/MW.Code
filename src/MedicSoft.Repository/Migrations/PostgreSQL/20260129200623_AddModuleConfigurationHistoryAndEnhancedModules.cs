@@ -89,6 +89,48 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 CREATE INDEX IF NOT EXISTS ""IX_ScheduledReports_CreatedBy"" ON ""ScheduledReports"" (""CreatedBy"");
             ");
 
+            // Create SystemNotifications table if it doesn't exist
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""SystemNotifications"" (
+                    ""Id"" uuid NOT NULL,
+                    ""Type"" text NOT NULL,
+                    ""Category"" text NOT NULL,
+                    ""Title"" text NOT NULL,
+                    ""Message"" text NOT NULL,
+                    ""ActionUrl"" text,
+                    ""ActionLabel"" text,
+                    ""IsRead"" boolean NOT NULL DEFAULT false,
+                    ""ReadAt"" timestamp with time zone,
+                    ""Data"" text,
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_SystemNotifications"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_SystemNotifications_Category"" ON ""SystemNotifications"" (""Category"");
+                CREATE INDEX IF NOT EXISTS ""IX_SystemNotifications_IsRead"" ON ""SystemNotifications"" (""IsRead"");
+                CREATE INDEX IF NOT EXISTS ""IX_SystemNotifications_CreatedAt"" ON ""SystemNotifications"" (""CreatedAt"");
+            ");
+
+            // Create NotificationRules table if it doesn't exist
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS ""NotificationRules"" (
+                    ""Id"" uuid NOT NULL,
+                    ""Trigger"" text NOT NULL,
+                    ""IsEnabled"" boolean NOT NULL DEFAULT true,
+                    ""Conditions"" text,
+                    ""Actions"" text,
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    ""UpdatedAt"" timestamp with time zone,
+                    ""TenantId"" text NOT NULL DEFAULT '',
+                    CONSTRAINT ""PK_NotificationRules"" PRIMARY KEY (""Id"")
+                );
+                
+                CREATE INDEX IF NOT EXISTS ""IX_NotificationRules_Trigger"" ON ""NotificationRules"" (""Trigger"");
+                CREATE INDEX IF NOT EXISTS ""IX_NotificationRules_IsEnabled"" ON ""NotificationRules"" (""IsEnabled"");
+            ");
+
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
                 keyColumn: "Id",
