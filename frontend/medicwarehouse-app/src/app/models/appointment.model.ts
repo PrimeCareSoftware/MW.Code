@@ -64,6 +64,14 @@ export interface DailyAgenda {
   availableSlots: string[];
 }
 
+export interface WeekAgenda {
+  startDate: string;
+  endDate: string;
+  clinicId: string;
+  clinicName: string;
+  appointments: Appointment[];
+}
+
 export interface AvailableSlot {
   date: string;
   time: string;

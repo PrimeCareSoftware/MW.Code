@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap, shareReplay } from 'rxjs/operators';
 import { 
-  Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, AvailableSlot, Professional,
+  Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, WeekAgenda, AvailableSlot, Professional,
   BlockedTimeSlot, CreateBlockedTimeSlot, UpdateBlockedTimeSlot, 
   RecurringAppointmentPattern, CreateRecurringBlockedSlots
 } from '../models/appointment.model';
@@ -77,7 +77,7 @@ export class AppointmentService {
     return request$;
   }
 
-  getWeekAgenda(clinicId: string, startDate: string, endDate: string, professionalId?: string): Observable<{ startDate: string; endDate: string; clinicId: string; clinicName: string; appointments: Appointment[] }> {
+  getWeekAgenda(clinicId: string, startDate: string, endDate: string, professionalId?: string): Observable<WeekAgenda> {
     const cacheKey = `week_agenda_${clinicId}_${startDate}_${endDate}_${professionalId || 'all'}`;
     
     // Return from cache if exists
@@ -95,7 +95,7 @@ export class AppointmentService {
     }
     
     // ShareReplay to avoid multiple simultaneous requests
-    const request$ = this.http.get<{ startDate: string; endDate: string; clinicId: string; clinicName: string; appointments: Appointment[] }>(`${this.apiUrl}/week-agenda`, { params })
+    const request$ = this.http.get<WeekAgenda>(`${this.apiUrl}/week-agenda`, { params })
       .pipe(
         shareReplay({ bufferSize: 1, refCount: true })
       );

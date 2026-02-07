@@ -183,12 +183,16 @@ namespace MedicSoft.Repository.Repositories
             string tenantId,
             Guid? professionalId = null)
         {
+            // Normalize dates to avoid time component issues
+            var normalizedStartDate = startDate.Date;
+            var normalizedEndDate = endDate.Date;
+            
             var query = _dbSet
                 .AsNoTracking()
                 .Where(a => a.ClinicId == clinicId 
                          && a.TenantId == tenantId
-                         && a.ScheduledDate.Date >= startDate.Date
-                         && a.ScheduledDate.Date <= endDate.Date
+                         && a.ScheduledDate.Date >= normalizedStartDate
+                         && a.ScheduledDate.Date <= normalizedEndDate
                          && a.Status != AppointmentStatus.Cancelled);
 
             if (professionalId.HasValue)
