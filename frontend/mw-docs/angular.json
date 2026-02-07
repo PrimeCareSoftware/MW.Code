@@ -29,6 +29,7 @@
             "inlineStyleLanguage": "scss",
             "stylePreprocessorOptions": {
               "includePaths": [
+                "..",
                 "."
               ]
             },
@@ -113,6 +114,7 @@
             "inlineStyleLanguage": "scss",
             "stylePreprocessorOptions": {
               "includePaths": [
+                "..",
                 "."
               ]
             },
