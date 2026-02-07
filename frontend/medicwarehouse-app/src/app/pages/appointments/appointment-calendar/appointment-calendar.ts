@@ -183,32 +183,41 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     const doctorId = this.selectedDoctorId(); // Get selected doctor filter
     
     try {
-      // Load appointments for each day
-      const appointmentPromises = days.map(day => {
-        const dateStr = day.date.toISOString().split('T')[0];
-        return this.appointmentService.getDailyAgenda(clinicId, dateStr, doctorId || undefined).toPromise();
-      });
-      
-      // Load blocked slots for the week
+      // Use optimized week agenda endpoint instead of 7 separate daily requests
       const startDateStr = weekStart.toISOString().split('T')[0];
       const endDateStr = weekEnd.toISOString().split('T')[0];
-      const blockedSlotsPromise = this.appointmentService.getBlockedTimeSlotsByDateRange(
-        startDateStr,
-        endDateStr,
-        clinicId
-      ).toPromise();
       
-      const [appointmentResults, blockedSlots] = await Promise.all([
-        Promise.all(appointmentPromises),
-        blockedSlotsPromise
+      const [weekAgenda, blockedSlots] = await Promise.all([
+        this.appointmentService.getWeekAgenda(clinicId, startDateStr, endDateStr, doctorId || undefined).toPromise(),
+        this.appointmentService.getBlockedTimeSlotsByDateRange(
+          startDateStr,
+          endDateStr,
+          clinicId
+        ).toPromise()
       ]);
       
-      // Update day columns with appointments
-      appointmentResults.forEach((agenda, index) => {
-        if (agenda && agenda.appointments) {
-          days[index].appointments = agenda.appointments;
-        }
+      // Clear existing appointments
+      days.forEach(day => {
+        day.appointments = [];
+        day.blockedSlots = [];
       });
+      
+      // Distribute appointments to their respective days
+      if (weekAgenda && weekAgenda.appointments) {
+        weekAgenda.appointments.forEach(appointment => {
+          const appointmentDate = new Date(appointment.scheduledDate);
+          appointmentDate.setHours(0, 0, 0, 0);
+          const dayIndex = days.findIndex(d => {
+            const dayDate = new Date(d.date);
+            dayDate.setHours(0, 0, 0, 0);
+            return dayDate.getTime() === appointmentDate.getTime();
+          });
+          
+          if (dayIndex >= 0) {
+            days[dayIndex].appointments.push(appointment);
+          }
+        });
+      }
       
       // Update day columns with blocked slots
       if (blockedSlots) {
