@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { HubConnectionState } from '@microsoft/signalr';
 import { ChatService } from './services/chat.service';
 import { ChatHubService } from './services/chat-hub.service';
 import { Auth } from '../../services/auth';
@@ -86,7 +87,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       return;
     }
     
-    this.currentUserId.set(user.id || '');
+    // Use username as userId since there's no id field in UserInfo
+    this.currentUserId.set(user.username || '');
     this.initializeChat();
   }
 
@@ -158,7 +160,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatHubService.connectionState$
       .pipe(takeUntil(this.destroy$))
       .subscribe(state => {
-        this.isConnected.set(state === 1); // HubConnectionState.Connected = 1
+        this.isConnected.set(state === HubConnectionState.Connected);
       });
   }
 
