@@ -17,7 +17,7 @@ namespace PatientPortal.Infrastructure.Migrations
                 BEGIN
                     IF NOT EXISTS (SELECT 1 FROM information_schema.tables 
                                   WHERE table_schema = 'public' 
-                                  AND table_name = 'EmailVerificationTokens') THEN
+                                  AND table_name = 'emailverificationtokens') THEN
                         CREATE TABLE ""EmailVerificationTokens"" (
                             ""Id"" uuid NOT NULL,
                             ""PatientUserId"" uuid NOT NULL,
@@ -33,16 +33,16 @@ namespace PatientPortal.Infrastructure.Migrations
                     -- Create indexes if they don't exist
                     IF NOT EXISTS (SELECT 1 FROM pg_indexes 
                                   WHERE schemaname = 'public' 
-                                  AND tablename = 'EmailVerificationTokens' 
-                                  AND indexname = 'IX_EmailVerificationTokens_Token') THEN
+                                  AND tablename = 'emailverificationtokens' 
+                                  AND indexname = 'ix_emailverificationtokens_token') THEN
                         CREATE UNIQUE INDEX ""IX_EmailVerificationTokens_Token"" 
                             ON ""EmailVerificationTokens"" (""Token"");
                     END IF;
                     
                     IF NOT EXISTS (SELECT 1 FROM pg_indexes 
                                   WHERE schemaname = 'public' 
-                                  AND tablename = 'EmailVerificationTokens' 
-                                  AND indexname = 'IX_EmailVerificationTokens_PatientUserId_ExpiresAt') THEN
+                                  AND tablename = 'emailverificationtokens' 
+                                  AND indexname = 'ix_emailverificationtokens_patientuserid_expiresat') THEN
                         CREATE INDEX ""IX_EmailVerificationTokens_PatientUserId_ExpiresAt"" 
                             ON ""EmailVerificationTokens"" (""PatientUserId"", ""ExpiresAt"");
                     END IF;
@@ -55,7 +55,7 @@ namespace PatientPortal.Infrastructure.Migrations
                 BEGIN
                     IF NOT EXISTS (SELECT 1 FROM information_schema.tables 
                                   WHERE table_schema = 'public' 
-                                  AND table_name = 'PasswordResetTokens') THEN
+                                  AND table_name = 'passwordresettokens') THEN
                         CREATE TABLE ""PasswordResetTokens"" (
                             ""Id"" uuid NOT NULL,
                             ""PatientUserId"" uuid NOT NULL,
@@ -72,16 +72,16 @@ namespace PatientPortal.Infrastructure.Migrations
                     -- Create indexes if they don't exist
                     IF NOT EXISTS (SELECT 1 FROM pg_indexes 
                                   WHERE schemaname = 'public' 
-                                  AND tablename = 'PasswordResetTokens' 
-                                  AND indexname = 'IX_PasswordResetTokens_Token') THEN
+                                  AND tablename = 'passwordresettokens' 
+                                  AND indexname = 'ix_passwordresettokens_token') THEN
                         CREATE UNIQUE INDEX ""IX_PasswordResetTokens_Token"" 
                             ON ""PasswordResetTokens"" (""Token"");
                     END IF;
                     
                     IF NOT EXISTS (SELECT 1 FROM pg_indexes 
                                   WHERE schemaname = 'public' 
-                                  AND tablename = 'PasswordResetTokens' 
-                                  AND indexname = 'IX_PasswordResetTokens_PatientUserId_ExpiresAt') THEN
+                                  AND tablename = 'passwordresettokens' 
+                                  AND indexname = 'ix_passwordresettokens_patientuserid_expiresat') THEN
                         CREATE INDEX ""IX_PasswordResetTokens_PatientUserId_ExpiresAt"" 
                             ON ""PasswordResetTokens"" (""PatientUserId"", ""ExpiresAt"");
                     END IF;

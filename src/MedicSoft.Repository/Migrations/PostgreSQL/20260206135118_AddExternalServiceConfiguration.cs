@@ -855,11 +855,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SystemNotifications') THEN
+                              AND table_name = 'systemnotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
                                   WHERE table_schema = 'public'
-                                  AND table_name = 'SystemNotifications' 
-                                  AND column_name = 'UpdatedAt'
+                                  AND table_name = 'systemnotifications' 
+                                  AND column_name = 'updatedat'
                                   AND data_type = 'timestamp with time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
                         END IF;
@@ -872,11 +872,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SystemNotifications') THEN
+                              AND table_name = 'systemnotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
                                   WHERE table_schema = 'public'
-                                  AND table_name = 'SystemNotifications' 
-                                  AND column_name = 'ReadAt'
+                                  AND table_name = 'systemnotifications' 
+                                  AND column_name = 'readat'
                                   AND data_type = 'timestamp with time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp without time zone;
                         END IF;
@@ -889,11 +889,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SystemNotifications') THEN
+                              AND table_name = 'systemnotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
                                   WHERE table_schema = 'public'
-                                  AND table_name = 'SystemNotifications' 
-                                  AND column_name = 'CreatedAt'
+                                  AND table_name = 'systemnotifications' 
+                                  AND column_name = 'createdat'
                                   AND data_type = 'timestamp with time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone;
                         END IF;
@@ -5302,11 +5302,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SystemNotifications') THEN
+                              AND table_name = 'systemnotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
                                   WHERE table_schema = 'public'
-                                  AND table_name = 'SystemNotifications' 
-                                  AND column_name = 'UpdatedAt'
+                                  AND table_name = 'systemnotifications' 
+                                  AND column_name = 'updatedat'
                                   AND data_type = 'timestamp without time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
                         END IF;
@@ -5319,11 +5319,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SystemNotifications') THEN
+                              AND table_name = 'systemnotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
                                   WHERE table_schema = 'public'
-                                  AND table_name = 'SystemNotifications' 
-                                  AND column_name = 'ReadAt'
+                                  AND table_name = 'systemnotifications' 
+                                  AND column_name = 'readat'
                                   AND data_type = 'timestamp without time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp with time zone;
                         END IF;
@@ -5336,11 +5336,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT 1 FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SystemNotifications') THEN
+                              AND table_name = 'systemnotifications') THEN
                         IF EXISTS (SELECT 1 FROM information_schema.columns 
                                   WHERE table_schema = 'public'
-                                  AND table_name = 'SystemNotifications' 
-                                  AND column_name = 'CreatedAt'
+                                  AND table_name = 'systemnotifications' 
+                                  AND column_name = 'createdat'
                                   AND data_type = 'timestamp without time zone') THEN
                             ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
                         END IF;
