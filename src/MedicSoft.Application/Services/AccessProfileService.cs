@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Services
@@ -20,6 +21,7 @@ namespace MedicSoft.Application.Services
         Task<IEnumerable<PermissionCategoryDto>> GetAllPermissionsAsync();
         Task AssignProfileToUserAsync(Guid userId, Guid profileId, string tenantId);
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesAsync(Guid clinicId, string tenantId);
+        Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType);
     }
 
     public class AccessProfileService : IAccessProfileService
@@ -163,6 +165,63 @@ namespace MedicSoft.Application.Services
                 AccessProfile.CreateDefaultReceptionProfile(tenantId, clinicId),
                 AccessProfile.CreateDefaultFinancialProfile(tenantId, clinicId)
             };
+
+            var createdProfiles = new List<AccessProfileDto>();
+            foreach (var profile in profiles)
+            {
+                // Check if default profile already exists
+                var existing = await _profileRepository.GetByNameAsync(profile.Name, clinicId, tenantId);
+                if (existing == null)
+                {
+                    await _profileRepository.AddAsync(profile);
+                    createdProfiles.Add(MapToDto(profile));
+                }
+                else
+                {
+                    createdProfiles.Add(MapToDto(existing));
+                }
+            }
+
+            return createdProfiles;
+        }
+
+        public async Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType)
+        {
+            var profiles = new List<AccessProfile>
+            {
+                // Common profiles for all clinic types
+                AccessProfile.CreateDefaultOwnerProfile(tenantId, clinicId),
+                AccessProfile.CreateDefaultReceptionProfile(tenantId, clinicId),
+                AccessProfile.CreateDefaultFinancialProfile(tenantId, clinicId)
+            };
+
+            // Add clinic-type-specific professional profile
+            switch (clinicType)
+            {
+                case ClinicType.Medical:
+                    profiles.Add(AccessProfile.CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Dental:
+                    profiles.Add(AccessProfile.CreateDefaultDentistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Nutritionist:
+                    profiles.Add(AccessProfile.CreateDefaultNutritionistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Psychology:
+                    profiles.Add(AccessProfile.CreateDefaultPsychologistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.PhysicalTherapy:
+                    profiles.Add(AccessProfile.CreateDefaultPhysicalTherapistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Veterinary:
+                    profiles.Add(AccessProfile.CreateDefaultVeterinarianProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Other:
+                default:
+                    // For "Other" or unknown types, default to medical profile
+                    profiles.Add(AccessProfile.CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+            }
 
             var createdProfiles = new List<AccessProfileDto>();
             foreach (var profile in profiles)

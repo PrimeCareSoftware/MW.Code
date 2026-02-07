@@ -261,10 +261,12 @@ namespace MedicSoft.Application.Services
                 clinic.SetSubdomain(subdomain); // Clinic can have subdomain for backward compatibility
                 
                 // Set clinic type/specialty if provided
+                ClinicType clinicType = ClinicType.Medical; // Default to Medical
                 if (!string.IsNullOrWhiteSpace(request.ClinicType))
                 {
-                    if (Enum.TryParse<ClinicType>(request.ClinicType, true, out var clinicType))
+                    if (Enum.TryParse<ClinicType>(request.ClinicType, true, out var parsedClinicType))
                     {
+                        clinicType = parsedClinicType;
                         // Update clinic type using the existing method
                         // Note: ShowOnPublicSite is set to false by default - clinics must explicitly opt-in
                         // to public display after verifying their information in the system settings
@@ -321,14 +323,8 @@ namespace MedicSoft.Application.Services
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
 
-                // Step 6: Create default access profiles for the clinic
-                var defaultProfiles = new[]
-                {
-                    AccessProfile.CreateDefaultOwnerProfile(tenantId, clinic.Id),
-                    AccessProfile.CreateDefaultMedicalProfile(tenantId, clinic.Id),
-                    AccessProfile.CreateDefaultReceptionProfile(tenantId, clinic.Id),
-                    AccessProfile.CreateDefaultFinancialProfile(tenantId, clinic.Id)
-                };
+                // Step 6: Create default access profiles for the clinic based on clinic type
+                var defaultProfiles = GetDefaultProfilesForClinicType(tenantId, clinic.Id, clinicType);
 
                 foreach (var profile in defaultProfiles)
                 {
@@ -349,6 +345,47 @@ namespace MedicSoft.Application.Services
                     owner.Username
                 );
             });
+        }
+
+        private static List<AccessProfile> GetDefaultProfilesForClinicType(string tenantId, Guid clinicId, ClinicType clinicType)
+        {
+            var profiles = new List<AccessProfile>
+            {
+                // Common profiles for all clinic types
+                AccessProfile.CreateDefaultOwnerProfile(tenantId, clinicId),
+                AccessProfile.CreateDefaultReceptionProfile(tenantId, clinicId),
+                AccessProfile.CreateDefaultFinancialProfile(tenantId, clinicId)
+            };
+
+            // Add clinic-type-specific professional profile
+            switch (clinicType)
+            {
+                case ClinicType.Medical:
+                    profiles.Add(AccessProfile.CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Dental:
+                    profiles.Add(AccessProfile.CreateDefaultDentistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Nutritionist:
+                    profiles.Add(AccessProfile.CreateDefaultNutritionistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Psychology:
+                    profiles.Add(AccessProfile.CreateDefaultPsychologistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.PhysicalTherapy:
+                    profiles.Add(AccessProfile.CreateDefaultPhysicalTherapistProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Veterinary:
+                    profiles.Add(AccessProfile.CreateDefaultVeterinarianProfile(tenantId, clinicId));
+                    break;
+                case ClinicType.Other:
+                default:
+                    // For "Other" or unknown types, default to medical profile
+                    profiles.Add(AccessProfile.CreateDefaultMedicalProfile(tenantId, clinicId));
+                    break;
+            }
+
+            return profiles;
         }
 
         public async Task<bool> CheckCNPJExistsAsync(string cnpj)
