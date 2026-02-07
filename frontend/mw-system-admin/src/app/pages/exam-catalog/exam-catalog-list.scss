@@ -366,7 +366,7 @@ h1 {
 }
 
 .required {
-  color: #e53e3e;
+  color: var(--error-500);
 }
 
 .form-control {
@@ -398,7 +398,7 @@ textarea.form-control {
 .alert-error {
   background: var(--error-100);
   color: var(--error-700);
-  border: 1px solid #fca5a5;
+  border: 1px solid var(--error-200);
 }
 
 .modal-footer {
