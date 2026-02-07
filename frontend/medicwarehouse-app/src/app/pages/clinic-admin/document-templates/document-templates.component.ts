@@ -21,7 +21,11 @@ import { DocumentTemplateService } from '../../../services/document-template.ser
 export class DocumentTemplatesComponent implements OnInit {
   templates: DocumentTemplate[] = [];
   filteredTemplates: DocumentTemplate[] = [];
+  globalTemplates: any[] = [];
+  filteredGlobalTemplates: any[] = [];
+  showGlobalTemplates = false;
   loading = false;
+  loadingGlobal = false;
   error: string | null = null;
   success: string | null = null;
   
@@ -78,6 +82,73 @@ export class DocumentTemplatesComponent implements OnInit {
     });
   }
 
+  toggleGlobalTemplates(): void {
+    this.showGlobalTemplates = !this.showGlobalTemplates;
+    if (this.showGlobalTemplates && this.globalTemplates.length === 0) {
+      this.loadGlobalTemplates();
+    }
+  }
+
+  loadGlobalTemplates(): void {
+    this.loadingGlobal = true;
+    this.error = null;
+
+    this.templateService.getGlobalTemplates().subscribe({
+      next: (templates) => {
+        this.globalTemplates = templates;
+        this.applyGlobalFilters();
+        this.loadingGlobal = false;
+      },
+      error: (err) => {
+        this.error = 'Erro ao carregar templates globais: ' + (err.error?.message || err.message);
+        this.loadingGlobal = false;
+      }
+    });
+  }
+
+  applyGlobalFilters(): void {
+    this.filteredGlobalTemplates = this.globalTemplates.filter(template => {
+      // Filter by specialty
+      if (this.filterSpecialty !== null && template.specialty !== this.filterSpecialty) {
+        return false;
+      }
+      
+      // Filter by type
+      if (this.filterType !== null && template.type !== this.filterType) {
+        return false;
+      }
+      
+      // Filter by search text
+      if (this.searchText) {
+        const search = this.searchText.toLowerCase();
+        return template.name.toLowerCase().includes(search) ||
+               template.description.toLowerCase().includes(search);
+      }
+      
+      return true;
+    });
+  }
+
+  useGlobalTemplate(globalTemplate: any): void {
+    if (!confirm(`Deseja criar um template baseado em "${globalTemplate.name}"?`)) {
+      return;
+    }
+
+    this.loading = true;
+    this.templateService.createFromGlobalTemplate(globalTemplate.id).subscribe({
+      next: (newTemplate) => {
+        this.showSuccess('Template criado com sucesso a partir do template global!');
+        this.templates = [newTemplate, ...this.templates];
+        this.applyFilters();
+        this.loading = false;
+      },
+      error: (err) => {
+        this.showError('Erro ao criar template: ' + (err.error?.message || err.message));
+        this.loading = false;
+      }
+    });
+  }
+
   applyFilters(): void {
     this.filteredTemplates = this.templates.filter(template => {
       // Filter by specialty
@@ -104,6 +175,11 @@ export class DocumentTemplatesComponent implements OnInit {
       
       return true;
     });
+
+    // Also apply filters to global templates if shown
+    if (this.showGlobalTemplates) {
+      this.applyGlobalFilters();
+    }
   }
 
   clearFilters(): void {

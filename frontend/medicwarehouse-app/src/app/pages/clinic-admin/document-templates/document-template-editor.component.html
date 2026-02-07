@@ -137,30 +137,30 @@
 
         <!-- Content Editor -->
         <div class="content-editor">
-          <textarea 
+          <quill-editor
             formControlName="content"
-            class="content-textarea"
+            [modules]="quillModules"
             placeholder="Digite o conteúdo do template aqui...
 
 Exemplo:
 RECEITA MÉDICA
 
-Paciente: {{ '{{patientName}}' }}
-Data: {{ '{{consultationDate}}' }}
+Paciente: {{patientName}}
+Data: {{consultationDate}}
 
 Prescrevo:
 [Escreva aqui a prescrição]
 
 _______________
-{{ '{{professionalName}}' }}
-{{ '{{professionalRegistration}}' }}"
-            rows="20"
+{{professionalName}}
+{{professionalRegistration}}"
+            class="quill-editor-custom"
             [readOnly]="isViewMode"
-          ></textarea>
+          ></quill-editor>
 
           <div class="content-info">
             <small>
-              💡 Dica: Use o formato {{'{{variableName}}'}} para inserir variáveis dinâmicas
+              💡 Dica: Use o formato {{variableName}} para inserir variáveis dinâmicas
             </small>
           </div>
         </div>

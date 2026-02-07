@@ -112,4 +112,29 @@ export class DocumentTemplateService {
   deactivate(id: string): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/deactivate`, {});
   }
+
+  /**
+   * Get all global document templates
+   */
+  getGlobalTemplates(specialty?: ProfessionalSpecialty, type?: DocumentTemplateType): Observable<any[]> {
+    const globalApiUrl = `${environment.apiUrl}/system-admin/global-templates`;
+    let params = new HttpParams();
+    
+    if (specialty !== undefined) {
+      params = params.set('specialty', specialty.toString());
+    }
+    if (type !== undefined) {
+      params = params.set('type', type.toString());
+    }
+    params = params.set('isActive', 'true'); // Only get active global templates
+    
+    return this.http.get<any[]>(globalApiUrl, { params });
+  }
+
+  /**
+   * Create a document template from a global template
+   */
+  createFromGlobalTemplate(globalTemplateId: string): Observable<DocumentTemplate> {
+    return this.http.post<DocumentTemplate>(`${this.apiUrl}/from-global/${globalTemplateId}`, {});
+  }
 }

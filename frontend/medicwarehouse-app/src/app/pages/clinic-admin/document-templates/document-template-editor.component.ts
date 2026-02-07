@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { QuillEditorComponent } from 'ngx-quill';
 import { 
   DocumentTemplate,
   CreateDocumentTemplateDto,
@@ -17,7 +18,7 @@ import { DocumentTemplateService } from '../../../services/document-template.ser
 @Component({
   selector: 'app-document-template-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, QuillEditorComponent],
   templateUrl: './document-template-editor.component.html',
   styleUrls: ['./document-template-editor.component.scss']
 })
@@ -30,6 +31,18 @@ export class DocumentTemplateEditorComponent implements OnInit {
   saving = false;
   error: string | null = null;
   success: string | null = null;
+  
+  // Quill editor configuration
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }],
+      ['clean']
+    ]
+  };
   
   // Enums for template
   DocumentTemplateType = DocumentTemplateType;
