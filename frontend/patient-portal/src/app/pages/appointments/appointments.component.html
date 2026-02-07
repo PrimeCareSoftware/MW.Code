@@ -1,53 +1,54 @@
-<div class="appointments-container">
+<div class="appointments-container" role="main">
   <header class="page-header">
-    <button mat-icon-button routerLink="/dashboard" [matTooltip]="'Voltar ao Dashboard'">
+    <button mat-icon-button routerLink="/dashboard" [matTooltip]="'Voltar ao Dashboard'" aria-label="Voltar ao Dashboard">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1>Minhas Consultas</h1>
-    <button mat-icon-button (click)="retry()" [matTooltip]="'Atualizar'" *ngIf="!loading">
+    <button mat-icon-button (click)="retry()" [matTooltip]="'Atualizar'" aria-label="Atualizar lista de consultas" *ngIf="!loading">
       <mat-icon>refresh</mat-icon>
     </button>
   </header>
 
   <div class="appointments-content" *ngIf="!loading; else loadingTemplate">
     <!-- Error State -->
-    <div *ngIf="loadingError" class="error-banner">
+    <div *ngIf="loadingError" class="error-banner" role="alert" aria-live="polite">
       <mat-icon>error_outline</mat-icon>
       <span>Não foi possível carregar suas consultas.</span>
-      <button mat-button color="primary" (click)="retry()">Tentar novamente</button>
+      <button mat-button color="primary" (click)="retry()" aria-label="Tentar carregar consultas novamente">Tentar novamente</button>
     </div>
 
     <!-- Tabs for filtering -->
-    <mat-tab-group (selectedIndexChange)="onTabChange($event)" [selectedIndex]="selectedTab" class="appointments-tabs">
-      <mat-tab label="Todas">
+    <mat-tab-group (selectedIndexChange)="onTabChange($event)" [selectedIndex]="selectedTab" class="appointments-tabs" aria-label="Filtrar consultas por status">
+      <mat-tab label="Todas" aria-label="Mostrar todas as consultas">
         <ng-container *ngTemplateOutlet="appointmentsList"></ng-container>
       </mat-tab>
-      <mat-tab label="Próximas">
+      <mat-tab label="Próximas" aria-label="Mostrar próximas consultas">
         <ng-container *ngTemplateOutlet="appointmentsList"></ng-container>
       </mat-tab>
-      <mat-tab label="Passadas">
+      <mat-tab label="Passadas" aria-label="Mostrar consultas passadas">
         <ng-container *ngTemplateOutlet="appointmentsList"></ng-container>
       </mat-tab>
-      <mat-tab label="Canceladas">
+      <mat-tab label="Canceladas" aria-label="Mostrar consultas canceladas">
         <ng-container *ngTemplateOutlet="appointmentsList"></ng-container>
       </mat-tab>
     </mat-tab-group>
 
     <!-- Appointments List Template -->
     <ng-template #appointmentsList>
-      <div class="appointments-list">
+      <div class="appointments-list" role="region" aria-label="Lista de consultas">
         <div *ngIf="filteredAppointments.length > 0; else noAppointments">
-          <mat-card *ngFor="let appointment of filteredAppointments" class="appointment-card">
+          <mat-card *ngFor="let appointment of filteredAppointments" class="appointment-card" 
+                    [attr.aria-label]="'Consulta com ' + appointment.doctorName + ' em ' + formatDate(appointment.appointmentDate)">
             <mat-card-content>
-              <div class="appointment-header">
+              <section class="appointment-header" aria-label="Informações do médico e horário">
                 <div class="doctor-info">
-                  <div class="avatar">
+                  <div class="avatar" aria-hidden="true">
                     <mat-icon>person</mat-icon>
                   </div>
                   <div>
                     <h2>{{ appointment.doctorName }}</h2>
                     <p class="specialty">
-                      <mat-icon>medical_services</mat-icon>
+                      <mat-icon aria-hidden="true">medical_services</mat-icon>
                       {{ appointment.doctorSpecialty }}
                     </p>
                   </div>
@@ -56,50 +57,53 @@
                   <p class="date">{{ formatDate(appointment.appointmentDate) }}</p>
                   <p class="time">{{ formatTime(appointment.startTime) }} - {{ formatTime(appointment.endTime) }}</p>
                 </div>
-              </div>
+              </section>
 
               <mat-divider class="divider"></mat-divider>
 
-              <div class="appointment-details">
+              <section class="appointment-details" aria-label="Detalhes da consulta">
                 <div class="detail-item">
-                  <mat-icon>location_on</mat-icon>
+                  <mat-icon aria-hidden="true">location_on</mat-icon>
                   <span>{{ appointment.clinicName }}</span>
                 </div>
                 <div class="detail-item">
-                  <mat-icon>event</mat-icon>
+                  <mat-icon aria-hidden="true">event</mat-icon>
                   <span>{{ appointment.appointmentType }}</span>
                 </div>
                 <div class="detail-item" *ngIf="appointment.isTelehealth">
-                  <mat-icon>videocam</mat-icon>
+                  <mat-icon aria-hidden="true">videocam</mat-icon>
                   <span>Telemedicina</span>
                 </div>
-              </div>
+              </section>
 
               <div class="appointment-footer">
-                <mat-chip [class]="'status-' + getStatusColor(appointment.status)">
+                <mat-chip [class]="'status-' + getStatusColor(appointment.status)" [attr.aria-label]="'Status: ' + appointment.status">
                   {{ appointment.status }}
                 </mat-chip>
-                <div class="actions" *ngIf="appointment.canCancel || appointment.canReschedule || canConfirm(appointment)">
+                <div class="actions" *ngIf="appointment.canCancel || appointment.canReschedule || canConfirm(appointment)" role="group" aria-label="Ações da consulta">
                   <button mat-stroked-button color="accent" *ngIf="canConfirm(appointment)"
-                          (click)="confirmAppointment(appointment)">
-                    <mat-icon>check_circle</mat-icon>
+                          (click)="confirmAppointment(appointment)"
+                          [attr.aria-label]="'Confirmar consulta com ' + appointment.doctorName">
+                    <mat-icon aria-hidden="true">check_circle</mat-icon>
                     Confirmar
                   </button>
                   <button mat-stroked-button color="primary" *ngIf="appointment.canReschedule"
-                          (click)="rescheduleAppointment(appointment)">
-                    <mat-icon>event</mat-icon>
+                          (click)="rescheduleAppointment(appointment)"
+                          [attr.aria-label]="'Reagendar consulta com ' + appointment.doctorName">
+                    <mat-icon aria-hidden="true">event</mat-icon>
                     Reagendar
                   </button>
                   <button mat-stroked-button color="warn" *ngIf="appointment.canCancel"
-                          (click)="cancelAppointment(appointment)">
-                    <mat-icon>cancel</mat-icon>
+                          (click)="cancelAppointment(appointment)"
+                          [attr.aria-label]="'Cancelar consulta com ' + appointment.doctorName">
+                    <mat-icon aria-hidden="true">cancel</mat-icon>
                     Cancelar
                   </button>
                 </div>
               </div>
 
-              <div class="notes" *ngIf="appointment.notes">
-                <mat-icon>note</mat-icon>
+              <div class="notes" *ngIf="appointment.notes" role="note" aria-label="Observações da consulta">
+                <mat-icon aria-hidden="true">note</mat-icon>
                 <p><strong>Observações:</strong> {{ appointment.notes }}</p>
               </div>
             </mat-card-content>
@@ -120,7 +124,7 @@
   </div>
 
   <ng-template #loadingTemplate>
-    <div class="loading-container">
+    <div class="loading-container" role="status" aria-live="polite" aria-label="Carregando">
       <mat-spinner diameter="64"></mat-spinner>
       <p class="loading-text">Carregando consultas...</p>
     </div>

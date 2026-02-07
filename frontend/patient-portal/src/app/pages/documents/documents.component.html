@@ -1,50 +1,51 @@
-<div class="documents-container">
+<div class="documents-container" role="main">
   <header class="page-header">
-    <button mat-icon-button routerLink="/dashboard" [matTooltip]="'Voltar ao Dashboard'">
+    <button mat-icon-button routerLink="/dashboard" [matTooltip]="'Voltar ao Dashboard'" aria-label="Voltar ao Dashboard">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1>Meus Documentos</h1>
-    <button mat-icon-button (click)="retry()" [matTooltip]="'Atualizar'" *ngIf="!loading">
+    <button mat-icon-button (click)="retry()" [matTooltip]="'Atualizar'" aria-label="Atualizar lista de documentos" *ngIf="!loading">
       <mat-icon>refresh</mat-icon>
     </button>
   </header>
 
   <div class="documents-content" *ngIf="!loading; else loadingTemplate">
     <!-- Error State -->
-    <div *ngIf="loadingError" class="error-banner">
+    <div *ngIf="loadingError" class="error-banner" role="alert" aria-live="polite">
       <mat-icon>error_outline</mat-icon>
       <span>Não foi possível carregar seus documentos.</span>
-      <button mat-button color="primary" (click)="retry()">Tentar novamente</button>
+      <button mat-button color="primary" (click)="retry()" aria-label="Tentar carregar documentos novamente">Tentar novamente</button>
     </div>
 
-    <div *ngIf="documents.length > 0; else noDocuments">
-      <mat-card *ngFor="let document of documents" class="document-card">
+    <section *ngIf="documents.length > 0; else noDocuments" role="region" aria-label="Lista de documentos">
+      <mat-card *ngFor="let document of documents" class="document-card"
+                [attr.aria-label]="document.title + ' - ' + document.documentType + ' - Emitido por ' + document.doctorName">
         <mat-card-content>
-          <div class="document-icon">
+          <div class="document-icon" aria-hidden="true">
             <mat-icon>description</mat-icon>
           </div>
           
           <div class="document-info">
             <h2>{{ document.title }}</h2>
             <div class="document-meta">
-              <mat-chip [class]="'type-' + getDocumentTypeColor(document.documentType)">
+              <mat-chip [class]="'type-' + getDocumentTypeColor(document.documentType)" [attr.aria-label]="'Tipo: ' + document.documentType">
                 {{ document.documentType }}
               </mat-chip>
-              <span class="separator">•</span>
+              <span class="separator" aria-hidden="true">•</span>
               <span class="doctor-name">
-                <mat-icon>person</mat-icon>
+                <mat-icon aria-hidden="true">person</mat-icon>
                 {{ document.doctorName }}
               </span>
             </div>
             <p class="document-date">
-              <mat-icon>calendar_today</mat-icon>
+              <mat-icon aria-hidden="true">calendar_today</mat-icon>
               Emitido em {{ formatDate(document.issuedDate) }}
             </p>
             <p class="document-description" *ngIf="document.description">
               {{ document.description }}
             </p>
             <div class="document-file-info" *ngIf="document.fileName">
-              <mat-icon>attach_file</mat-icon>
+              <mat-icon aria-hidden="true">attach_file</mat-icon>
               <span class="file-name">{{ document.fileName }}</span>
               <span *ngIf="document.fileSizeFormatted" class="file-size">
                 ({{ document.fileSizeFormatted }})
@@ -56,22 +57,23 @@
             <button mat-raised-button color="primary" 
                     [disabled]="!document.isAvailable || isDownloading(document.id)"
                     (click)="downloadDocument(document)"
-                    [matTooltip]="!document.isAvailable ? 'Documento indisponível' : 'Baixar documento'">
-              <mat-spinner *ngIf="isDownloading(document.id)" diameter="20"></mat-spinner>
+                    [matTooltip]="!document.isAvailable ? 'Documento indisponível' : 'Baixar documento'"
+                    [attr.aria-label]="'Baixar ' + document.title">
+              <mat-spinner *ngIf="isDownloading(document.id)" diameter="20" aria-label="Baixando"></mat-spinner>
               <span *ngIf="!isDownloading(document.id)">
-                <mat-icon>download</mat-icon>
+                <mat-icon aria-hidden="true">download</mat-icon>
                 Baixar
               </span>
             </button>
           </div>
         </mat-card-content>
       </mat-card>
-    </div>
+    </section>
 
     <ng-template #noDocuments>
-      <mat-card class="empty-state">
+      <mat-card class="empty-state" role="status">
         <mat-card-content>
-          <mat-icon>description</mat-icon>
+          <mat-icon aria-hidden="true">description</mat-icon>
           <h2>Nenhum documento encontrado</h2>
           <p>Você ainda não tem documentos disponíveis</p>
         </mat-card-content>
@@ -80,7 +82,7 @@
   </div>
 
   <ng-template #loadingTemplate>
-    <div class="loading-container">
+    <div class="loading-container" role="status" aria-live="polite" aria-label="Carregando">
       <mat-spinner diameter="64"></mat-spinner>
       <p class="loading-text">Carregando documentos...</p>
     </div>
