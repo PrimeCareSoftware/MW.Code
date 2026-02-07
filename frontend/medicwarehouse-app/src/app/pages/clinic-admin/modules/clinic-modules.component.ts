@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ModuleConfigService } from '../../../services/module-config.service';
 import { ModuleConfig } from '../../../models/module-config.model';
 import { ModuleConfigDialogComponent } from './module-config-dialog/module-config-dialog.component';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 /**
  * Component for managing clinic modules
@@ -27,7 +28,8 @@ import { ModuleConfigDialogComponent } from './module-config-dialog/module-confi
     MatIconModule,
     MatChipsModule,
     MatDialogModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    Navbar
   ],
   templateUrl: './clinic-modules.component.html',
   styleUrls: ['./clinic-modules.component.scss']
