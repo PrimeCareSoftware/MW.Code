@@ -16,12 +16,12 @@
     h1 {
       font-size: 32px;
       font-weight: 700;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 8px 0;
     }
 
     .subtitle {
-      color: #718096;
+      color: var(--gray-500);
       font-size: 16px;
       margin: 0;
     }
@@ -37,12 +37,12 @@
     }
 
     .btn-primary {
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: #5568d3;
+      background: var(--primary-600);
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
@@ -55,17 +55,17 @@
     .loading, .error {
       text-align: center;
       padding: 48px 24px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .error {
-      color: #c53030;
+      color: var(--error-600);
     }
 
     .btn-retry {
       margin-top: 16px;
       padding: 12px 24px;
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
       border: none;
       border-radius: 8px;
@@ -87,7 +87,7 @@
     }
 
     .plans-table thead {
-      background: #f7fafc;
+      background: var(--gray-50);
     }
 
     .plans-table th {
@@ -95,21 +95,21 @@
       text-align: left;
       font-size: 13px;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--gray-800);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid var(--gray-200);
     }
 
     .plans-table td {
       padding: 16px;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--gray-200);
       font-size: 14px;
-      color: #2d3748;
+      color: var(--gray-800);
     }
 
     .plans-table tbody tr:hover {
-      background: #f7fafc;
+      background: var(--gray-50);
     }
 
     .plan-info {
@@ -120,12 +120,12 @@
 
     .plan-name {
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
     }
 
     .plan-desc {
       font-size: 12px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .status-badge {
@@ -136,13 +136,13 @@
     }
 
     .status-badge.active {
-      background: #d1fae5;
-      color: #065f46;
+      background: var(--success-100);
+      color: var(--success-700);
     }
 
     .status-badge.inactive {
-      background: #fee2e2;
-      color: #991b1b;
+      background: var(--error-100);
+      color: var(--error-700);
     }
 
     .actions {
@@ -153,7 +153,7 @@
     .btn-icon {
       padding: 8px 12px;
       border: none;
-      background: #f7fafc;
+      background: var(--gray-50);
       border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
@@ -161,22 +161,22 @@
     }
 
     .btn-icon:hover {
-      background: #e2e8f0;
+      background: var(--gray-200);
       transform: translateY(-2px);
     }
 
     .btn-icon.btn-danger:hover {
-      background: #fee2e2;
+      background: var(--error-100);
     }
 
     .btn-icon.btn-success:hover {
-      background: #d1fae5;
+      background: var(--success-100);
     }
 
     .empty-state {
       text-align: center;
       padding: 48px 24px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .modal-overlay {
@@ -207,7 +207,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 24px;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid var(--gray-200);
       position: sticky;
       top: 0;
       background: white;
@@ -217,7 +217,7 @@
     .modal-header h2 {
       font-size: 20px;
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0;
     }
 
@@ -225,7 +225,7 @@
       background: none;
       border: none;
       font-size: 24px;
-      color: #718096;
+      color: var(--gray-500);
       cursor: pointer;
       padding: 0;
       width: 32px;
@@ -237,8 +237,8 @@
     }
 
     .btn-close:hover {
-      background: #f7fafc;
-      color: #1a202c;
+      background: var(--gray-50);
+      color: var(--gray-900);
     }
 
     .modal-body {
@@ -255,12 +255,12 @@
     .form-group label {
       font-size: 14px;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--gray-800);
     }
 
     input, select, textarea {
       padding: 12px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
       border-radius: 8px;
       font-size: 14px;
       transition: border-color 0.2s;
@@ -268,7 +268,7 @@
 
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: var(--primary-500);
     }
 
     .form-grid {
@@ -278,8 +278,8 @@
     }
 
     .error-message {
-      background: #fee2e2;
-      color: #991b1b;
+      background: var(--error-100);
+      color: var(--error-700);
       padding: 12px;
       border-radius: 8px;
       margin-top: 16px;
@@ -290,19 +290,19 @@
       gap: 12px;
       justify-content: flex-end;
       padding: 24px;
-      border-top: 2px solid #e2e8f0;
+      border-top: 2px solid var(--gray-200);
       position: sticky;
       bottom: 0;
       background: white;
     }
 
     .btn-secondary {
-      background: #e2e8f0;
-      color: #2d3748;
+      background: var(--gray-200);
+      color: var(--gray-800);
     }
 
     .btn-secondary:hover {
-      background: #cbd5e0;
+      background: var(--gray-300);
     }
 
     @media (max-width: 1024px) {
@@ -323,13 +323,13 @@
     .campaign-section {
       margin-top: 32px;
       padding-top: 24px;
-      border-top: 2px solid #e2e8f0;
+      border-top: 2px solid var(--gray-200);
     }
     
     .section-title {
       font-size: 16px;
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 20px 0;
     }
     
@@ -346,7 +346,7 @@
         
         .btn-add {
           padding: 12px 16px;
-          background: #667eea;
+          background: var(--primary-500);
           color: white;
           border: none;
           border-radius: 8px;
@@ -357,7 +357,7 @@
           transition: all 0.2s;
           
           &:hover {
-            background: #5568d3;
+            background: var(--primary-600);
           }
         }
       }
@@ -375,20 +375,20 @@
           align-items: center;
           justify-content: space-between;
           padding: 10px 12px;
-          background: #f7fafc;
+          background: var(--gray-50);
           border-radius: 6px;
-          border: 1px solid #e2e8f0;
+          border: 1px solid var(--gray-200);
           
           span {
             flex: 1;
             font-size: 14px;
-            color: #2d3748;
+            color: var(--gray-800);
           }
           
           .btn-remove {
             padding: 4px 8px;
-            background: #fee2e2;
-            color: #991b1b;
+            background: var(--error-100);
+            color: var(--error-700);
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -413,7 +413,7 @@
       .campaign-badge {
         font-size: 12px;
         font-weight: 600;
-        color: #667eea;
+        color: var(--primary-500);
       }
       
       .campaign-price {
@@ -424,11 +424,11 @@
       
       .campaign-slots {
         font-size: 11px;
-        color: #718096;
+        color: var(--gray-500);
       }
     }
     
     .no-campaign {
-      color: #cbd5e0;
+      color: var(--gray-300);
       font-size: 16px;
     }

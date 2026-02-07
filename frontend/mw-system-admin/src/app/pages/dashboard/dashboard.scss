@@ -17,12 +17,12 @@
         h1 {
           font-size: 32px;
           font-weight: 700;
-          color: #1a202c;
+          color: var(--gray-900);
           margin: 0 0 8px 0;
         }
 
         p {
-          color: #718096;
+          color: var(--gray-500);
           font-size: 16px;
           margin: 0;
         }
@@ -34,7 +34,7 @@
           align-items: center;
           gap: 8px;
           padding: 12px 24px;
-          background: #667eea;
+          background: var(--primary-500);
           color: white;
           border: none;
           border-radius: 8px;
@@ -49,7 +49,7 @@
           }
 
           &:hover {
-            background: #5568d3;
+            background: var(--primary-600);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
           }
@@ -60,17 +60,17 @@
     .loading, .error {
       text-align: center;
       padding: 48px 24px;
-      color: #718096;
+      color: var(--gray-500);
     }
 
     .error {
-      color: #c53030;
+      color: var(--error-600);
     }
 
     .btn-retry {
       margin-top: 16px;
       padding: 12px 24px;
-      background: #667eea;
+      background: var(--primary-500);
       color: white;
       border: none;
       border-radius: 8px;
@@ -80,7 +80,7 @@
     }
 
     .btn-retry:hover {
-      background: #5568d3;
+      background: var(--primary-600);
     }
 
     // Phase 1: SaaS Metrics Section
@@ -91,7 +91,7 @@
     .section-title {
       font-size: 24px;
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 20px 0;
     }
 
@@ -135,7 +135,7 @@
 
     .stat-card {
       &.stat-clinics::before {
-        background: linear-gradient(90deg, #667eea, #764ba2);
+        background: linear-gradient(90deg, var(--primary-500), #764ba2);
       }
 
       &.stat-users::before {
@@ -177,13 +177,13 @@
         .stat-value {
           font-size: 36px;
           font-weight: 700;
-          color: #1a202c;
+          color: var(--gray-900);
           line-height: 1;
         }
 
         .stat-label {
           font-size: 14px;
-          color: #718096;
+          color: var(--gray-500);
           font-weight: 500;
         }
       }
@@ -195,7 +195,7 @@
     }
 
     .card.highlight {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--primary-500) 0%, #764ba2 100%);
       color: white;
     }
 
@@ -215,7 +215,7 @@
       h3 {
         font-size: 16px;
         font-weight: 600;
-        color: #2d3748;
+        color: var(--gray-800);
         margin: 0;
       }
 
@@ -250,7 +250,7 @@
     }
 
     .stat-label {
-      color: #718096;
+      color: var(--gray-500);
       font-weight: 500;
     }
 
@@ -283,7 +283,7 @@
     .section h2 {
       font-size: 20px;
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 20px 0;
     }
 
@@ -300,8 +300,8 @@
         align-items: center;
         gap: 16px;
         padding: 16px;
-        background: #f7fafc;
-        border: 2px solid #e2e8f0;
+        background: var(--gray-50);
+        border: 2px solid var(--gray-200);
         border-radius: 12px;
         text-decoration: none;
         cursor: pointer;
@@ -332,7 +332,7 @@
 
         &:hover {
           background: white;
-          border-color: #667eea;
+          border-color: var(--primary-500);
           box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
           transform: translateY(-4px);
 
@@ -346,7 +346,7 @@
 
           .quick-arrow {
             transform: translateX(4px);
-            color: #667eea;
+            color: var(--primary-500);
           }
         }
 
@@ -357,8 +357,8 @@
           &:hover {
             transform: none;
             box-shadow: none;
-            border-color: #e2e8f0;
-            background: #f7fafc;
+            border-color: var(--gray-200);
+            background: var(--gray-50);
 
             .quick-icon {
               transform: none;
@@ -383,11 +383,11 @@
 
           &.clinics {
             background: #e0e7ff;
-            color: #667eea;
+            color: var(--primary-500);
           }
 
           &.plans {
-            background: #dbeafe;
+            background: var(--info-100);
             color: #3b82f6;
           }
 
@@ -397,7 +397,7 @@
           }
 
           &.subdomains {
-            background: #d1fae5;
+            background: var(--success-100);
             color: #10b981;
           }
 
@@ -419,13 +419,13 @@
           h3 {
             font-size: 16px;
             font-weight: 600;
-            color: #1a202c;
+            color: var(--gray-900);
             margin: 0 0 4px 0;
           }
 
           p {
             font-size: 14px;
-            color: #718096;
+            color: var(--gray-500);
             margin: 0;
           }
 
@@ -433,7 +433,7 @@
             display: inline-block;
             margin-top: 8px;
             padding: 4px 12px;
-            background: #e2e8f0;
+            background: var(--gray-200);
             color: #64748b;
             font-size: 12px;
             font-weight: 600;
@@ -444,7 +444,7 @@
         .quick-arrow {
           width: 20px;
           height: 20px;
-          color: #cbd5e0;
+          color: var(--gray-300);
           transition: all 0.3s;
           flex-shrink: 0;
         }
@@ -460,21 +460,21 @@
     .distribution-card {
       text-align: center;
       padding: 20px;
-      background: #f7fafc;
+      background: var(--gray-50);
       border-radius: 8px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--gray-200);
     }
 
     .distribution-value {
       font-size: 32px;
       font-weight: 700;
-      color: #667eea;
+      color: var(--primary-500);
       margin-bottom: 8px;
     }
 
     .distribution-label {
       font-size: 13px;
-      color: #718096;
+      color: var(--gray-500);
       font-weight: 500;
     }
 
@@ -491,8 +491,8 @@
         align-items: center;
         gap: 16px;
         padding: 20px;
-        background: #f7fafc;
-        border: 2px solid #e2e8f0;
+        background: var(--gray-50);
+        border: 2px solid var(--gray-200);
         border-radius: 12px;
         transition: all 0.3s;
 
@@ -500,7 +500,7 @@
           border-left: 4px solid #10b981;
 
           .health-icon {
-            background: #d1fae5;
+            background: var(--success-100);
             color: #10b981;
           }
 
@@ -526,7 +526,7 @@
           border-left: 4px solid #ef4444;
 
           .health-icon {
-            background: #fee2e2;
+            background: var(--error-100);
             color: #ef4444;
           }
 
@@ -561,7 +561,7 @@
           h3 {
             font-size: 16px;
             font-weight: 600;
-            color: #1a202c;
+            color: var(--gray-900);
             margin: 0 0 4px 0;
           }
 
@@ -583,7 +583,7 @@
     .quick-actions h2 {
       font-size: 20px;
       font-weight: 600;
-      color: #1a202c;
+      color: var(--gray-900);
       margin: 0 0 20px 0;
     }
 
@@ -599,16 +599,16 @@
       align-items: center;
       gap: 12px;
       padding: 24px;
-      background: #f7fafc;
-      border: 2px solid #e2e8f0;
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .action-btn:hover {
-      background: #667eea;
-      border-color: #667eea;
+      background: var(--primary-500);
+      border-color: var(--primary-500);
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
@@ -625,7 +625,7 @@
     .action-text {
       font-size: 14px;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--gray-800);
       text-align: center;
     }
 
