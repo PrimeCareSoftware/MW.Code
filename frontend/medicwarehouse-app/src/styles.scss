@@ -12,10 +12,10 @@
 
 /* App-specific design tokens */
 :root {
-  /* Shadows - Extended set for this app (updated for new primary color) */
+  /* Shadows - Extended set for this app (updated for Clinic Harmony primary color) */
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-  --shadow-primary: 0 8px 24px -6px rgba(74, 159, 222, 0.25);  // Updated for new primary
+  --shadow-primary: 0 8px 24px -6px rgba(61, 157, 237, 0.25);  // Updated for Clinic Harmony primary #3D9DED
   --shadow-success: 0 8px 24px -6px rgba(34, 197, 94, 0.25);
   --shadow-error: 0 8px 24px -6px rgba(239, 68, 68, 0.25);
   

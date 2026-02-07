@@ -1,7 +1,80 @@
 /**
  * Reusable UI Components
  * Based on Design System
+ * Clinic Harmony Inspired - Apple-style Healthcare Design
  */
+
+/* ============================================
+   BASE STYLES - Clinic Harmony Typography
+   ============================================ */
+
+/* Import Inter font for Apple-inspired typography */
+/* Note: For production, consider self-hosting or using <link rel="preconnect"> in HTML for better performance */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-semibold);
+  letter-spacing: -0.02em; /* Tight tracking like Clinic Harmony */
+  margin: 0;
+  line-height: var(--line-height-tight);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+}
+
+h4 {
+  font-size: var(--font-size-xl);
+}
+
+h5 {
+  font-size: var(--font-size-lg);
+}
+
+h6 {
+  font-size: var(--font-size-base);
+}
+
+p {
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-base);
+
+  &:hover {
+    color: var(--primary-color-hover);
+  }
+}
 
 /* ============================================
    BUTTONS
