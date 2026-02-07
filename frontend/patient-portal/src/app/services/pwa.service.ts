@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+// Type definition for BeforeInstallPromptEvent
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PwaService {
-  private promptEvent: any = null;
+  private promptEvent: BeforeInstallPromptEvent | null = null;
   private isInstallable$ = new BehaviorSubject<boolean>(false);
   
   constructor() {
@@ -14,12 +24,12 @@ export class PwaService {
   
   private setupInstallPrompt(): void {
     // Listen for the beforeinstallprompt event
-    window.addEventListener('beforeinstallprompt', (event: any) => {
+    window.addEventListener('beforeinstallprompt', (event: Event) => {
       console.log('PWA: beforeinstallprompt event fired');
       // Prevent the default install prompt
       event.preventDefault();
       // Store the event for later use
-      this.promptEvent = event;
+      this.promptEvent = event as BeforeInstallPromptEvent;
       // Update installable state
       this.isInstallable$.next(true);
     });

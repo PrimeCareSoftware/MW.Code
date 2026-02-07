@@ -1,35 +1,35 @@
-<div class="dashboard-container">
+<div class="dashboard-container" role="main">
   <header class="dashboard-header">
     <div class="header-content">
       <div class="header-left">
-        <mat-icon class="header-logo">local_hospital</mat-icon>
+        <mat-icon class="header-logo" aria-hidden="true">local_hospital</mat-icon>
         <h1>Portal do Paciente</h1>
       </div>
-      <div class="user-info">
+      <nav class="user-info" aria-label="Menu de usuário">
         <app-theme-toggle></app-theme-toggle>
         <span class="welcome-text">Olá, <strong>{{ currentUser?.fullName }}</strong></span>
-        <button mat-icon-button [matTooltip]="'Perfil'" routerLink="/profile">
+        <button mat-icon-button [matTooltip]="'Perfil'" routerLink="/profile" aria-label="Ir para perfil">
           <mat-icon>person</mat-icon>
         </button>
-        <button mat-icon-button [matTooltip]="'Sair'" (click)="logout()">
+        <button mat-icon-button [matTooltip]="'Sair'" (click)="logout()" aria-label="Sair do sistema">
           <mat-icon>logout</mat-icon>
         </button>
-      </div>
+      </nav>
     </div>
   </header>
 
   <div class="dashboard-content" *ngIf="!loading; else loadingTemplate">
     <!-- Error State -->
-    <div *ngIf="loadingError" class="error-banner">
+    <div *ngIf="loadingError" class="error-banner" role="alert" aria-live="polite">
       <mat-icon>error_outline</mat-icon>
       <span>Alguns dados não puderam ser carregados.</span>
-      <button mat-button (click)="retry()">Tentar novamente</button>
+      <button mat-button (click)="retry()" aria-label="Tentar carregar dados novamente">Tentar novamente</button>
     </div>
 
     <!-- Stats Cards with Animated Counter -->
-    <div class="stats-grid">
-      <app-animated-card class="stat-card stat-card-appointments" [hoverable]="true">
-        <div class="stat-icon-wrapper">
+    <section class="stats-grid" role="region" aria-label="Estatísticas rápidas">
+      <app-animated-card class="stat-card stat-card-appointments" [hoverable]="true" aria-label="Número de consultas">
+        <div class="stat-icon-wrapper" aria-hidden="true">
           <mat-icon color="primary">event</mat-icon>
         </div>
         <div class="stat-info">
@@ -40,8 +40,8 @@
         </div>
       </app-animated-card>
 
-      <app-animated-card class="stat-card stat-card-documents" [hoverable]="true">
-        <div class="stat-icon-wrapper">
+      <app-animated-card class="stat-card stat-card-documents" [hoverable]="true" aria-label="Número de documentos">
+        <div class="stat-icon-wrapper" aria-hidden="true">
           <mat-icon color="accent">description</mat-icon>
         </div>
         <div class="stat-info">
@@ -51,52 +51,53 @@
           <p class="stat-label">Documentos</p>
         </div>
       </app-animated-card>
-    </div>
+    </section>
 
     <!-- Quick Actions -->
-    <section class="quick-actions">
+    <section class="quick-actions" aria-label="Acesso rápido">
       <h2>Acesso Rápido</h2>
-      <div class="actions-grid">
-        <button mat-raised-button color="primary" routerLink="/appointments/book" class="action-button book-button">
-          <mat-icon>add</mat-icon>
+      <nav class="actions-grid" aria-label="Ações principais">
+        <button mat-raised-button color="primary" routerLink="/appointments/book" class="action-button book-button" aria-label="Agendar nova consulta">
+          <mat-icon aria-hidden="true">add</mat-icon>
           <span>Agendar Consulta</span>
         </button>
-        <button mat-raised-button color="primary" routerLink="/appointments" class="action-button">
-          <mat-icon>event</mat-icon>
+        <button mat-raised-button color="primary" routerLink="/appointments" class="action-button" aria-label="Ver todas as consultas">
+          <mat-icon aria-hidden="true">event</mat-icon>
           <span>Ver Consultas</span>
         </button>
-        <button mat-raised-button color="accent" routerLink="/documents" class="action-button">
-          <mat-icon>description</mat-icon>
+        <button mat-raised-button color="accent" routerLink="/documents" class="action-button" aria-label="Ver meus documentos">
+          <mat-icon aria-hidden="true">description</mat-icon>
           <span>Meus Documentos</span>
         </button>
-        <button mat-raised-button routerLink="/profile" class="action-button">
-          <mat-icon>person</mat-icon>
+        <button mat-raised-button routerLink="/profile" class="action-button" aria-label="Ver meu perfil">
+          <mat-icon aria-hidden="true">person</mat-icon>
           <span>Meu Perfil</span>
         </button>
-      </div>
+      </nav>
     </section>
 
     <!-- Upcoming Appointments -->
-    <section class="section">
+    <section class="section" aria-labelledby="upcoming-appointments-heading">
       <div class="section-header">
-        <h2>Próximas Consultas</h2>
-        <a mat-button routerLink="/appointments" class="view-all-link">
+        <h2 id="upcoming-appointments-heading">Próximas Consultas</h2>
+        <a mat-button routerLink="/appointments" class="view-all-link" aria-label="Ver todas as consultas">
           Ver Todas
-          <mat-icon>arrow_forward</mat-icon>
+          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
         </a>
       </div>
 
       <div *ngIf="upcomingAppointments.length > 0; else noAppointments">
-        <app-animated-card *ngFor="let appointment of upcomingAppointments" class="appointment-card">
+        <app-animated-card *ngFor="let appointment of upcomingAppointments" class="appointment-card"
+                          [attr.aria-label]="'Consulta com ' + appointment.doctorName + ' em ' + formatDate(appointment.appointmentDate)">
           <div class="appointment-info">
             <div class="appointment-details">
               <h3>{{ appointment.doctorName }}</h3>
               <p class="specialty">
-                <mat-icon>medical_services</mat-icon>
+                <mat-icon aria-hidden="true">medical_services</mat-icon>
                 {{ appointment.doctorSpecialty }}
               </p>
               <p class="clinic">
-                <mat-icon>location_on</mat-icon>
+                <mat-icon aria-hidden="true">location_on</mat-icon>
                 {{ appointment.clinicName }}
               </p>
             </div>
@@ -106,19 +107,19 @@
             </div>
           </div>
           <div class="appointment-badges">
-            <mat-chip [class.telehealth]="appointment.isTelehealth">
-              <mat-icon>{{ appointment.isTelehealth ? 'videocam' : 'place' }}</mat-icon>
+            <mat-chip [class.telehealth]="appointment.isTelehealth" [attr.aria-label]="appointment.isTelehealth ? 'Telemedicina' : 'Presencial'">
+              <mat-icon aria-hidden="true">{{ appointment.isTelehealth ? 'videocam' : 'place' }}</mat-icon>
               {{ appointment.isTelehealth ? 'Telemedicina' : 'Presencial' }}
             </mat-chip>
-            <mat-chip class="status-chip">{{ appointment.status }}</mat-chip>
+            <mat-chip class="status-chip" [attr.aria-label]="'Status: ' + appointment.status">{{ appointment.status }}</mat-chip>
           </div>
         </app-animated-card>
       </div>
 
       <ng-template #noAppointments>
-        <mat-card class="empty-state">
+        <mat-card class="empty-state" role="status">
           <mat-card-content>
-            <mat-icon>event_busy</mat-icon>
+            <mat-icon aria-hidden="true">event_busy</mat-icon>
             <h3>Nenhuma consulta agendada</h3>
             <p>Você não tem consultas agendadas no momento</p>
           </mat-card-content>
@@ -127,19 +128,20 @@
     </section>
 
     <!-- Recent Documents -->
-    <section class="section">
+    <section class="section" aria-labelledby="recent-documents-heading">
       <div class="section-header">
-        <h2>Documentos Recentes</h2>
-        <a mat-button routerLink="/documents" class="view-all-link">
+        <h2 id="recent-documents-heading">Documentos Recentes</h2>
+        <a mat-button routerLink="/documents" class="view-all-link" aria-label="Ver todos os documentos">
           Ver Todos
-          <mat-icon>arrow_forward</mat-icon>
+          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
         </a>
       </div>
 
       <div *ngIf="recentDocuments.length > 0; else noDocuments">
-        <app-animated-card *ngFor="let document of recentDocuments" class="document-card">
+        <app-animated-card *ngFor="let document of recentDocuments" class="document-card"
+                          [attr.aria-label]="document.title + ' - ' + document.documentType">
           <div class="document-info">
-            <div class="document-icon">
+            <div class="document-icon" aria-hidden="true">
               <mat-icon>description</mat-icon>
             </div>
             <div class="document-details">
@@ -150,16 +152,17 @@
           </div>
           <button mat-icon-button color="primary" 
                   [routerLink]="['/documents', document.id]"
-                  [matTooltip]="'Visualizar documento'">
+                  [matTooltip]="'Visualizar documento'"
+                  [attr.aria-label]="'Visualizar ' + document.title">
             <mat-icon>visibility</mat-icon>
           </button>
         </app-animated-card>
       </div>
 
       <ng-template #noDocuments>
-        <mat-card class="empty-state">
+        <mat-card class="empty-state" role="status">
           <mat-card-content>
-            <mat-icon>description</mat-icon>
+            <mat-icon aria-hidden="true">description</mat-icon>
             <h3>Nenhum documento disponível</h3>
             <p>Você não tem documentos médicos no momento</p>
           </mat-card-content>
@@ -169,7 +172,7 @@
   </div>
 
   <ng-template #loadingTemplate>
-    <div class="loading-container">
+    <div class="loading-container" role="status" aria-live="polite" aria-label="Carregando">
       <div class="skeleton-content">
         <!-- Skeleton Stats Cards -->
         <div class="stats-grid">

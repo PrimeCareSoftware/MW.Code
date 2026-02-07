@@ -21,6 +21,7 @@ import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader
 import { AnimatedCounterComponent } from '../../shared/components/animated-counter/animated-counter.component';
 import { AnimatedCardComponent } from '../../shared/components/animated-card/animated-card.component';
 import { FabButtonComponent } from '../../shared/components/fab-button/fab-button.component';
+import { LocaleService } from '../../shared/services/locale.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -58,7 +59,8 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private appointmentService: AppointmentService,
     private documentService: DocumentService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private localeService: LocaleService
   ) {}
 
   ngOnInit(): void {
@@ -101,11 +103,7 @@ export class DashboardComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    });
+    return this.localeService.formatDate(date);
   }
 
   formatTime(time: string): string {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
@@ -7,7 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
-import { firstValueFrom } from 'rxjs';
+import { forkJoin } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
 
 interface PersonalData {
@@ -57,6 +58,8 @@ export class DataViewerComponent implements OnInit {
   personalData: PersonalData | null = null;
   medicalRecords: MedicalRecord[] = [];
   appointments: Appointment[] = [];
+  
+  private destroyRef = inject(DestroyRef);
 
   constructor(private http: HttpClient) {}
 
@@ -68,40 +71,25 @@ export class DataViewerComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    Promise.all([
-      this.loadPersonalData(),
-      this.loadMedicalRecords(),
-      this.loadAppointments()
-    ])
-      .then(() => {
-        this.loading = false;
-      })
-      .catch((error) => {
-        this.error = 'Erro ao carregar dados. Tente novamente mais tarde.';
-        this.loading = false;
-        console.error('Error loading data:', error);
+    forkJoin({
+      personalData: this.http.get<PersonalData>(`${environment.apiUrl}/patient-portal/personal-data`),
+      medicalRecords: this.http.get<MedicalRecord[]>(`${environment.apiUrl}/patient-portal/medical-records`),
+      appointments: this.http.get<Appointment[]>(`${environment.apiUrl}/patient-portal/appointments`)
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (results) => {
+          this.personalData = results.personalData || null;
+          this.medicalRecords = results.medicalRecords || [];
+          this.appointments = results.appointments || [];
+          this.loading = false;
+        },
+        error: (error) => {
+          this.error = 'Erro ao carregar dados. Tente novamente mais tarde.';
+          this.loading = false;
+          console.error('Error loading data:', error);
+        }
       });
-  }
-
-  private async loadPersonalData(): Promise<void> {
-    const data = await firstValueFrom(
-      this.http.get<PersonalData>(`${environment.apiUrl}/patient-portal/personal-data`)
-    );
-    this.personalData = data || null;
-  }
-
-  private async loadMedicalRecords(): Promise<void> {
-    const data = await firstValueFrom(
-      this.http.get<MedicalRecord[]>(`${environment.apiUrl}/patient-portal/medical-records`)
-    );
-    this.medicalRecords = data || [];
-  }
-
-  private async loadAppointments(): Promise<void> {
-    const data = await firstValueFrom(
-      this.http.get<Appointment[]>(`${environment.apiUrl}/patient-portal/appointments`)
-    );
-    this.appointments = data || [];
   }
 
   formatDate(date: string): string {

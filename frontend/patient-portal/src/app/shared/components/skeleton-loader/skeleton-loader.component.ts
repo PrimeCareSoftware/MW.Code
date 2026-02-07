@@ -13,9 +13,9 @@ import { CommonModule } from '@angular/common';
   styles: [`
     .skeleton-loader {
       position: relative;
-      background: hsl(var(--muted));
+      background: hsl(var(--muted, 220 13% 91%));
       overflow: hidden;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-md, 0.375rem);
     }
 
     .skeleton-shimmer {
@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
       background: linear-gradient(
         90deg,
         transparent,
-        hsl(var(--background) / 0.6),
+        hsl(var(--background, 0 0% 100%) / 0.6),
         transparent
       );
       animation: shimmer 1.5s infinite;
@@ -68,7 +68,7 @@ import { CommonModule } from '@angular/common';
     }
 
     .rounded {
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-lg, 0.5rem);
     }
   `]
 })
