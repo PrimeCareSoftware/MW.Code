@@ -6045,6 +6045,76 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     b.ToTable("PlanoContas", (string)null);
                 });
 
+            modelBuilder.Entity("MedicSoft.Domain.Entities.GlobalDocumentTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("Specialty")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Variables")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_globaldocumenttemplates_isactive");
+
+                    b.HasIndex("Specialty")
+                        .HasDatabaseName("ix_globaldocumenttemplates_specialty");
+
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("ix_globaldocumenttemplates_tenantid");
+
+                    b.HasIndex("Type")
+                        .HasDatabaseName("ix_globaldocumenttemplates_type");
+
+                    b.HasIndex("Name", "Type", "TenantId")
+                        .HasDatabaseName("ix_globaldocumenttemplates_name_type_tenantid");
+
+                    b.ToTable("globaldocumenttemplates", (string)null);
+                });
+
             modelBuilder.Entity("MedicSoft.Domain.Entities.HealthInsuranceOperator", b =>
                 {
                     b.Property<Guid>("Id")
