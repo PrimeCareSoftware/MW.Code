@@ -75,6 +75,11 @@ namespace MedicSoft.Repository.Configurations
                 
             builder.HasIndex(x => x.IsSystem)
                 .HasDatabaseName("IX_DocumentTemplates_IsSystem");
+                
+            // Note: Uses lowercase naming as defined in migration 20260207205000_AddGlobalDocumentTemplates
+            // This differs from other indexes but matches the existing database schema from PR 737
+            builder.HasIndex(x => x.GlobalTemplateId)
+                .HasDatabaseName("ix_documenttemplates_globaltemplateid");
             
             // Relationships
             builder.HasOne(x => x.Clinic)
