@@ -26,6 +26,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         FROM information_schema.table_constraints 
                         WHERE constraint_name = 'FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId'
                         AND table_name = 'DocumentTemplates'
+                        AND table_schema = current_schema()
                     ) THEN
                         ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"";
                     END IF;
@@ -4655,6 +4656,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         FROM information_schema.table_constraints 
                         WHERE constraint_name = 'FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId'
                         AND table_name = 'DocumentTemplates'
+                        AND table_schema = current_schema()
                     ) THEN
                         ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"";
                     END IF;
