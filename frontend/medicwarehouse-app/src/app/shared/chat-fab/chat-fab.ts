@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../pages/chat/services/chat.service';
 import { ChatHubService } from '../../pages/chat/services/chat-hub.service';
 import { Conversation, ChatMessage } from '../../pages/chat/models/chat.models';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -20,7 +20,7 @@ interface SimpleUser {
   templateUrl: './chat-fab.html',
   styleUrl: './chat-fab.scss'
 })
-export class ChatFab implements OnInit, OnDestroy, AfterViewInit {
+export class ChatFabComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('messagesContainer') messagesContainer?: ElementRef<HTMLDivElement>;
 
   showWidget = signal<boolean>(false);
@@ -45,6 +45,9 @@ export class ChatFab implements OnInit, OnDestroy, AfterViewInit {
   // Typing state
   typingUsers = signal<Set<string>>(new Set());
   private typingTimeout?: ReturnType<typeof setTimeout>;
+  
+  // Subscriptions
+  private subscriptions: Subscription[] = [];
   
   // Current user ID
   private currentUserId: string = '';
@@ -80,6 +83,9 @@ export class ChatFab implements OnInit, OnDestroy, AfterViewInit {
     if (this.typingTimeout) {
       clearTimeout(this.typingTimeout);
     }
+    
+    // Unsubscribe from all subscriptions
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   private async initializeHub(): Promise<void> {
@@ -91,17 +97,19 @@ export class ChatFab implements OnInit, OnDestroy, AfterViewInit {
       this.isConnected.set(this.chatHubService.isConnected());
 
       // Subscribe to connection state
-      this.chatHubService.connectionState$.subscribe(state => {
+      const connectionSub = this.chatHubService.connectionState$.subscribe(state => {
         this.isConnected.set(state === 'Connected');
       });
+      this.subscriptions.push(connectionSub);
 
       // Subscribe to new messages
-      this.chatHubService.messageReceived$.subscribe(message => {
+      const messagesSub = this.chatHubService.messageReceived$.subscribe(message => {
         this.onMessageReceived(message);
       });
+      this.subscriptions.push(messagesSub);
 
       // Subscribe to typing indicators
-      this.chatHubService.userTyping$.subscribe(indicator => {
+      const typingSub = this.chatHubService.userTyping$.subscribe(indicator => {
         if (indicator.conversationId === this.selectedConversation()?.id) {
           const users = new Set(this.typingUsers());
           users.add(indicator.userId);
@@ -115,9 +123,10 @@ export class ChatFab implements OnInit, OnDestroy, AfterViewInit {
           }, 3000);
         }
       });
+      this.subscriptions.push(typingSub);
 
       // Subscribe to message read events
-      this.chatHubService.messageRead$.subscribe(event => {
+      const readSub = this.chatHubService.messageRead$.subscribe(event => {
         const msgs = this.messages();
         const message = msgs.find(m => m.id === event.messageId);
         if (message && !message.readBy.includes(event.readBy)) {
@@ -125,6 +134,7 @@ export class ChatFab implements OnInit, OnDestroy, AfterViewInit {
           this.messages.set([...msgs]);
         }
       });
+      this.subscriptions.push(readSub);
     } catch (error) {
       console.error('Failed to initialize chat hub:', error);
     }
