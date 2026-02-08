@@ -2768,7 +2768,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.tables 
-                        WHERE LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                        WHERE LOWER(table_name) = 'globaldocumenttemplates'
                         AND table_schema = current_schema()
                     ) THEN
                         ALTER TABLE ""GlobalDocumentTemplates"" 
@@ -7547,7 +7547,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.tables 
-                        WHERE LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                        WHERE LOWER(table_name) = 'globaldocumenttemplates'
                         AND table_schema = current_schema()
                     ) THEN
                         ALTER TABLE ""GlobalDocumentTemplates"" 
