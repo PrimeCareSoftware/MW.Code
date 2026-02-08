@@ -18,12 +18,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 table: "AccessProfiles");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_DocumentTemplates_globaldocumenttemplates_GlobalTemplateId",
+                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
                 table: "DocumentTemplates");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_globaldocumenttemplates",
-                table: "globaldocumenttemplates");
+                name: "PK_GlobalDocumentTemplates",
+                table: "GlobalDocumentTemplates");
 
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
@@ -130,9 +130,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 keyColumn: "Id",
                 keyValue: new Guid("f1ecc0a6-c73b-4d81-b4ac-4c58133d64a6"));
 
-            migrationBuilder.RenameTable(
-                name: "globaldocumenttemplates",
-                newName: "GlobalDocumentTemplates");
+            // Note: Table was already created as "GlobalDocumentTemplates" in previous migration
+            // No rename needed
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -4749,9 +4748,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 keyColumn: "Id",
                 keyValue: new Guid("f7ac8253-bca4-45c1-87d0-2681d0d0edd7"));
 
-            migrationBuilder.RenameTable(
-                name: "GlobalDocumentTemplates",
-                newName: "globaldocumenttemplates");
+            // Note: Table remains as "GlobalDocumentTemplates" 
+            // No rename needed as it was never lowercased
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -7286,7 +7284,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
-                table: "globaldocumenttemplates",
+                table: "GlobalDocumentTemplates",
                 type: "timestamp with time zone",
                 nullable: true,
                 oldClrType: typeof(DateTime),
@@ -7295,7 +7293,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedAt",
-                table: "globaldocumenttemplates",
+                table: "GlobalDocumentTemplates",
                 type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTime),
@@ -9192,8 +9190,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp without time zone");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_globaldocumenttemplates",
-                table: "globaldocumenttemplates",
+                name: "PK_GlobalDocumentTemplates",
+                table: "GlobalDocumentTemplates",
                 column: "Id");
 
             migrationBuilder.InsertData(
@@ -9239,10 +9237,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_DocumentTemplates_globaldocumenttemplates_GlobalTemplateId",
+                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
                 table: "DocumentTemplates",
                 column: "GlobalTemplateId",
-                principalTable: "globaldocumenttemplates",
+                principalTable: "GlobalDocumentTemplates",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
