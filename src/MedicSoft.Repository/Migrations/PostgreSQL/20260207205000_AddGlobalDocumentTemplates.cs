@@ -11,9 +11,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Create GlobalDocumentTemplates table with lowercase name for PostgreSQL compatibility
+            // Create GlobalDocumentTemplates table with PascalCase name to match other tables
             migrationBuilder.CreateTable(
-                name: "globaldocumenttemplates",
+                name: "GlobalDocumentTemplates",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -31,32 +31,32 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_globaldocumenttemplates", x => x.Id);
+                    table.PrimaryKey("PK_GlobalDocumentTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_globaldocumenttemplates_tenantid",
-                table: "globaldocumenttemplates",
+                name: "IX_GlobalDocumentTemplates_TenantId",
+                table: "GlobalDocumentTemplates",
                 column: "TenantId");
 
             migrationBuilder.CreateIndex(
-                name: "ix_globaldocumenttemplates_type",
-                table: "globaldocumenttemplates",
+                name: "IX_GlobalDocumentTemplates_Type",
+                table: "GlobalDocumentTemplates",
                 column: "Type");
 
             migrationBuilder.CreateIndex(
-                name: "ix_globaldocumenttemplates_specialty",
-                table: "globaldocumenttemplates",
+                name: "IX_GlobalDocumentTemplates_Specialty",
+                table: "GlobalDocumentTemplates",
                 column: "Specialty");
 
             migrationBuilder.CreateIndex(
-                name: "ix_globaldocumenttemplates_isactive",
-                table: "globaldocumenttemplates",
+                name: "IX_GlobalDocumentTemplates_IsActive",
+                table: "GlobalDocumentTemplates",
                 column: "IsActive");
 
             migrationBuilder.CreateIndex(
-                name: "ix_globaldocumenttemplates_name_type_tenantid",
-                table: "globaldocumenttemplates",
+                name: "IX_GlobalDocumentTemplates_Name_Type_TenantId",
+                table: "GlobalDocumentTemplates",
                 columns: new[] { "Name", "Type", "TenantId" });
 
             // Add GlobalTemplateId column to DocumentTemplates table
@@ -67,15 +67,15 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_documenttemplates_globaltemplateid",
+                name: "IX_DocumentTemplates_GlobalTemplateId",
                 table: "DocumentTemplates",
                 column: "GlobalTemplateId");
 
             migrationBuilder.AddForeignKey(
-                name: "fk_documenttemplates_globaldocumenttemplates_globaltemplateid",
+                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
                 table: "DocumentTemplates",
                 column: "GlobalTemplateId",
-                principalTable: "globaldocumenttemplates",
+                principalTable: "GlobalDocumentTemplates",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
@@ -84,11 +84,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "fk_documenttemplates_globaldocumenttemplates_globaltemplateid",
+                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
                 table: "DocumentTemplates");
 
             migrationBuilder.DropIndex(
-                name: "ix_documenttemplates_globaltemplateid",
+                name: "IX_DocumentTemplates_GlobalTemplateId",
                 table: "DocumentTemplates");
 
             migrationBuilder.DropColumn(
@@ -96,7 +96,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 table: "DocumentTemplates");
 
             migrationBuilder.DropTable(
-                name: "globaldocumenttemplates");
+                name: "GlobalDocumentTemplates");
         }
     }
 }

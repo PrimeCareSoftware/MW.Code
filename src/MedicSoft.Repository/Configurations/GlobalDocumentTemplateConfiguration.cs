@@ -8,9 +8,8 @@ namespace MedicSoft.Repository.Configurations
     {
         public void Configure(EntityTypeBuilder<GlobalDocumentTemplate> builder)
         {
-            // Use lowercase table name for PostgreSQL compatibility
-            // PostgreSQL is case-sensitive and treats unquoted identifiers as lowercase
-            builder.ToTable("globaldocumenttemplates");
+            // Use PascalCase table name to match other tables in the system
+            builder.ToTable("GlobalDocumentTemplates");
             
             builder.HasKey(x => x.Id);
             
@@ -60,19 +59,19 @@ namespace MedicSoft.Repository.Configurations
             
             // Indexes
             builder.HasIndex(x => x.TenantId)
-                .HasDatabaseName("ix_globaldocumenttemplates_tenantid");
+                .HasDatabaseName("IX_GlobalDocumentTemplates_TenantId");
                 
             builder.HasIndex(x => x.Type)
-                .HasDatabaseName("ix_globaldocumenttemplates_type");
+                .HasDatabaseName("IX_GlobalDocumentTemplates_Type");
                 
             builder.HasIndex(x => x.Specialty)
-                .HasDatabaseName("ix_globaldocumenttemplates_specialty");
+                .HasDatabaseName("IX_GlobalDocumentTemplates_Specialty");
                 
             builder.HasIndex(x => x.IsActive)
-                .HasDatabaseName("ix_globaldocumenttemplates_isactive");
+                .HasDatabaseName("IX_GlobalDocumentTemplates_IsActive");
                 
             builder.HasIndex(x => new { x.Name, x.Type, x.TenantId })
-                .HasDatabaseName("ix_globaldocumenttemplates_name_type_tenantid");
+                .HasDatabaseName("IX_GlobalDocumentTemplates_Name_Type_TenantId");
         }
     }
 }
