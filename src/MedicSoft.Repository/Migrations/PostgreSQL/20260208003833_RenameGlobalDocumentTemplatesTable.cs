@@ -4780,13 +4780,40 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 principalColumn: "Id",
                 onDelete: ReferentialAction.SetNull);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
-                table: "DocumentTemplates",
-                column: "GlobalTemplateId",
-                principalTable: "GlobalDocumentTemplates",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            // Conditionally add foreign key constraint if GlobalDocumentTemplates table exists
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.tables 
+                        WHERE LOWER(table_name) = 'globaldocumenttemplates'
+                        AND table_schema = current_schema()
+                    ) THEN
+                        IF EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'documenttemplates'
+                            AND LOWER(column_name) = 'globaltemplateid'
+                            AND table_schema = current_schema()
+                        ) THEN
+                            IF NOT EXISTS (
+                                SELECT 1 
+                                FROM information_schema.table_constraints 
+                                WHERE LOWER(constraint_name) = LOWER('FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId')
+                                AND LOWER(table_name) = LOWER('DocumentTemplates')
+                                AND table_schema = current_schema()
+                            ) THEN
+                                ALTER TABLE ""DocumentTemplates"" 
+                                ADD CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"" 
+                                FOREIGN KEY (""GlobalTemplateId"") 
+                                REFERENCES ""GlobalDocumentTemplates""(""Id"") 
+                                ON DELETE RESTRICT;
+                            END IF;
+                        END IF;
+                    END IF;
+                END $$;
+            ");
         }
 
         /// <inheritdoc />
@@ -9558,13 +9585,40 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 principalTable: "ConsultationFormProfiles",
                 principalColumn: "Id");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
-                table: "DocumentTemplates",
-                column: "GlobalTemplateId",
-                principalTable: "GlobalDocumentTemplates",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            // Conditionally add foreign key constraint if GlobalDocumentTemplates table exists (for rollback)
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.tables 
+                        WHERE LOWER(table_name) = 'globaldocumenttemplates'
+                        AND table_schema = current_schema()
+                    ) THEN
+                        IF EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'documenttemplates'
+                            AND LOWER(column_name) = 'globaltemplateid'
+                            AND table_schema = current_schema()
+                        ) THEN
+                            IF NOT EXISTS (
+                                SELECT 1 
+                                FROM information_schema.table_constraints 
+                                WHERE LOWER(constraint_name) = LOWER('FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId')
+                                AND LOWER(table_name) = LOWER('DocumentTemplates')
+                                AND table_schema = current_schema()
+                            ) THEN
+                                ALTER TABLE ""DocumentTemplates"" 
+                                ADD CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"" 
+                                FOREIGN KEY (""GlobalTemplateId"") 
+                                REFERENCES ""GlobalDocumentTemplates""(""Id"") 
+                                ON DELETE RESTRICT;
+                            END IF;
+                        END IF;
+                    END IF;
+                END $$;
+            ");
         }
     }
 }
