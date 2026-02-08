@@ -29,7 +29,7 @@ export interface MessageListResponse {
 })
 export class ChatService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/chat`;
+  private apiUrl = `${environment.apiUrl}/chat`;
 
   /**
    * Obter todas as conversas do usuário
