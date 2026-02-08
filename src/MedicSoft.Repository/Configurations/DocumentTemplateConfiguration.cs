@@ -48,7 +48,8 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired(false);
                 
             builder.Property(x => x.GlobalTemplateId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("GlobalTemplateId");
                 
             builder.Property(x => x.TenantId)
                 .IsRequired()
