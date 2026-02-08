@@ -24,11 +24,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.table_constraints 
-                        WHERE constraint_name = 'FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId'
-                        AND table_name = 'DocumentTemplates'
+                        WHERE LOWER(constraint_name) = LOWER('FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId')
+                        AND LOWER(table_name) = LOWER('DocumentTemplates')
                         AND table_schema = current_schema()
                     ) THEN
-                        ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"";
+                        ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT IF EXISTS ""fk_documenttemplates_globaldocumenttemplates_globaltemplateid"";
                     END IF;
                 END $$;
             ");
@@ -4654,11 +4654,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.table_constraints 
-                        WHERE constraint_name = 'FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId'
-                        AND table_name = 'DocumentTemplates'
+                        WHERE LOWER(constraint_name) = LOWER('FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId')
+                        AND LOWER(table_name) = LOWER('DocumentTemplates')
                         AND table_schema = current_schema()
                     ) THEN
-                        ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"";
+                        ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT IF EXISTS ""fk_documenttemplates_globaldocumenttemplates_globaltemplateid"";
                     END IF;
                 END $$;
             ");
