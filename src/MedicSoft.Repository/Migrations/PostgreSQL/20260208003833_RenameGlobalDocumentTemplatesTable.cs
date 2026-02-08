@@ -4800,8 +4800,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             IF NOT EXISTS (
                                 SELECT 1 
                                 FROM information_schema.table_constraints 
-                                WHERE LOWER(constraint_name) = LOWER('FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId')
-                                AND LOWER(table_name) = LOWER('DocumentTemplates')
+                                WHERE LOWER(constraint_name) = 'fk_documenttemplates_globaldocumenttemplates_globaltemplateid'
+                                AND LOWER(table_name) = 'documenttemplates'
                                 AND table_schema = current_schema()
                             ) THEN
                                 ALTER TABLE ""DocumentTemplates"" 
@@ -9605,8 +9605,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             IF NOT EXISTS (
                                 SELECT 1 
                                 FROM information_schema.table_constraints 
-                                WHERE LOWER(constraint_name) = LOWER('FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId')
-                                AND LOWER(table_name) = LOWER('DocumentTemplates')
+                                WHERE LOWER(constraint_name) = 'fk_documenttemplates_globaldocumenttemplates_globaltemplateid'
+                                AND LOWER(table_name) = 'documenttemplates'
                                 AND table_schema = current_schema()
                             ) THEN
                                 ALTER TABLE ""DocumentTemplates"" 
