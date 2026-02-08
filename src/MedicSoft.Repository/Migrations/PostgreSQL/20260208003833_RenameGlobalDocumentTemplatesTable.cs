@@ -17,9 +17,20 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 name: "FK_AccessProfiles_ConsultationFormProfiles_ConsultationFormPro~",
                 table: "AccessProfiles");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
-                table: "DocumentTemplates");
+            // Conditionally drop the foreign key constraint if it exists
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.table_constraints 
+                        WHERE constraint_name = 'FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId'
+                        AND table_name = 'DocumentTemplates'
+                    ) THEN
+                        ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"";
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_GlobalDocumentTemplates",
@@ -4635,9 +4646,20 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 name: "FK_AccessProfiles_ConsultationFormProfiles_ConsultationFormPro~",
                 table: "AccessProfiles");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId",
-                table: "DocumentTemplates");
+            // Conditionally drop the foreign key constraint if it exists
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.table_constraints 
+                        WHERE constraint_name = 'FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId'
+                        AND table_name = 'DocumentTemplates'
+                    ) THEN
+                        ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT ""FK_DocumentTemplates_GlobalDocumentTemplates_GlobalTemplateId"";
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_GlobalDocumentTemplates",
