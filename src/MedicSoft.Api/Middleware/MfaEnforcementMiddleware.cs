@@ -32,7 +32,8 @@ namespace MedicSoft.Api.Middleware
             "/api/password-recovery",
             "/swagger",
             "/health",
-            "/api/public"
+            "/api/public",
+            "/hubs"
         };
 
         public MfaEnforcementMiddleware(
