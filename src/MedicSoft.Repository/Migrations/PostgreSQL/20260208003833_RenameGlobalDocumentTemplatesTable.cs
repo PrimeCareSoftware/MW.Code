@@ -33,9 +33,28 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_GlobalDocumentTemplates",
-                table: "GlobalDocumentTemplates");
+            // Conditionally drop the primary key constraint if table exists
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.tables 
+                        WHERE LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                        AND table_schema = current_schema()
+                    ) THEN
+                        IF EXISTS (
+                            SELECT 1 
+                            FROM information_schema.table_constraints 
+                            WHERE LOWER(constraint_name) = LOWER('PK_GlobalDocumentTemplates')
+                            AND LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                            AND table_schema = current_schema()
+                        ) THEN
+                            ALTER TABLE ""GlobalDocumentTemplates"" DROP CONSTRAINT ""PK_GlobalDocumentTemplates"";
+                        END IF;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
@@ -4583,10 +4602,28 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_GlobalDocumentTemplates",
-                table: "GlobalDocumentTemplates",
-                column: "Id");
+            // Conditionally add the primary key constraint if table exists and doesn't have PK
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.tables 
+                        WHERE LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                        AND table_schema = current_schema()
+                    ) THEN
+                        IF NOT EXISTS (
+                            SELECT 1 
+                            FROM information_schema.table_constraints 
+                            WHERE LOWER(constraint_name) = LOWER('PK_GlobalDocumentTemplates')
+                            AND LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                            AND table_schema = current_schema()
+                        ) THEN
+                            ALTER TABLE ""GlobalDocumentTemplates"" ADD CONSTRAINT ""PK_GlobalDocumentTemplates"" PRIMARY KEY (""Id"");
+                        END IF;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.InsertData(
                 table: "ReportTemplates",
@@ -4663,9 +4700,28 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 END $$;
             ");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_GlobalDocumentTemplates",
-                table: "GlobalDocumentTemplates");
+            // Conditionally drop the primary key constraint if table exists
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.tables 
+                        WHERE LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                        AND table_schema = current_schema()
+                    ) THEN
+                        IF EXISTS (
+                            SELECT 1 
+                            FROM information_schema.table_constraints 
+                            WHERE LOWER(constraint_name) = LOWER('PK_GlobalDocumentTemplates')
+                            AND LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                            AND table_schema = current_schema()
+                        ) THEN
+                            ALTER TABLE ""GlobalDocumentTemplates"" DROP CONSTRAINT ""PK_GlobalDocumentTemplates"";
+                        END IF;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.DeleteData(
                 table: "ReportTemplates",
@@ -9213,10 +9269,28 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp without time zone");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_GlobalDocumentTemplates",
-                table: "GlobalDocumentTemplates",
-                column: "Id");
+            // Conditionally add the primary key constraint if table exists and doesn't have PK
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 
+                        FROM information_schema.tables 
+                        WHERE LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                        AND table_schema = current_schema()
+                    ) THEN
+                        IF NOT EXISTS (
+                            SELECT 1 
+                            FROM information_schema.table_constraints 
+                            WHERE LOWER(constraint_name) = LOWER('PK_GlobalDocumentTemplates')
+                            AND LOWER(table_name) = LOWER('GlobalDocumentTemplates')
+                            AND table_schema = current_schema()
+                        ) THEN
+                            ALTER TABLE ""GlobalDocumentTemplates"" ADD CONSTRAINT ""PK_GlobalDocumentTemplates"" PRIMARY KEY (""Id"");
+                        END IF;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.InsertData(
                 table: "ReportTemplates",
