@@ -17,6 +17,11 @@ namespace MedicSoft.Application.Services
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly IClinicRepository _clinicRepository;
+        private readonly IAppointmentProcedureRepository _appointmentProcedureRepository;
+        private readonly IProcedureRepository _procedureRepository;
+        private readonly IClinicPricingConfigurationRepository _clinicPricingConfigurationRepository;
+        private readonly IProcedurePricingConfigurationRepository _procedurePricingConfigurationRepository;
+        private readonly ITissGuideService _tissGuideService;
         private readonly ILogger<PaymentFlowService> _logger;
 
         public PaymentFlowService(
@@ -25,6 +30,11 @@ namespace MedicSoft.Application.Services
             IInvoiceRepository invoiceRepository,
             IPatientRepository patientRepository,
             IClinicRepository clinicRepository,
+            IAppointmentProcedureRepository appointmentProcedureRepository,
+            IProcedureRepository procedureRepository,
+            IClinicPricingConfigurationRepository clinicPricingConfigurationRepository,
+            IProcedurePricingConfigurationRepository procedurePricingConfigurationRepository,
+            ITissGuideService tissGuideService,
             ILogger<PaymentFlowService> logger)
         {
             _appointmentRepository = appointmentRepository;
@@ -32,6 +42,11 @@ namespace MedicSoft.Application.Services
             _invoiceRepository = invoiceRepository;
             _patientRepository = patientRepository;
             _clinicRepository = clinicRepository;
+            _appointmentProcedureRepository = appointmentProcedureRepository;
+            _procedureRepository = procedureRepository;
+            _clinicPricingConfigurationRepository = clinicPricingConfigurationRepository;
+            _procedurePricingConfigurationRepository = procedurePricingConfigurationRepository;
+            _tissGuideService = tissGuideService;
             _logger = logger;
         }
 
@@ -103,12 +118,25 @@ namespace MedicSoft.Application.Services
                 }
 
                 // 7. Create TISS guide if health insurance
-                // TODO (GitHub Issue #TBD): Implement automatic TISS Guide creation for health insurance appointments
-                // This requires:
-                // - Configured TUSS procedures
-                // - Prior authorization from operator (when applicable)
-                // - Batch processing for sending to ANS
-                // Target: Q2 2026
+                if (appointment.PaymentType == PaymentType.HealthInsurance && appointment.HealthInsurancePlanId.HasValue)
+                {
+                    try
+                    {
+                        result.TissGuideId = await CreateTissGuideForAppointmentAsync(appointment, payment, tenantId);
+                        
+                        // Link TISS guide to invoice if both exist
+                        if (invoice != null && result.TissGuideId.HasValue)
+                        {
+                            invoice.LinkToTissGuide(result.TissGuideId.Value);
+                            await _invoiceRepository.UpdateAsync(invoice);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to create TISS guide for appointment {AppointmentId}", appointmentId);
+                        // Don't fail the entire flow if TISS creation fails
+                    }
+                }
 
                 result.Success = true;
                 return result;
@@ -220,6 +248,208 @@ namespace MedicSoft.Application.Services
             var timePart = timestamp.ToString("HHmmss");
             var randomSuffix = Guid.NewGuid().ToString("N")[..4].ToUpper();
             return $"INV-{datePart}-{timePart}-{randomSuffix}";
+        }
+        
+        /// <summary>
+        /// Registers payment for a specific procedure performed during an appointment
+        /// </summary>
+        public async Task<PaymentFlowResultDto> RegisterProcedurePaymentAsync(
+            Guid appointmentProcedureId,
+            Guid paidByUserId,
+            string paymentMethod,
+            string tenantId,
+            string? notes = null)
+        {
+            var result = new PaymentFlowResultDto
+            {
+                ProcessedAt = DateTime.UtcNow
+            };
+
+            try
+            {
+                // Get appointment procedure
+                var appointmentProcedure = await _appointmentProcedureRepository.GetByIdAsync(appointmentProcedureId, tenantId);
+                if (appointmentProcedure == null)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Appointment procedure not found";
+                    return result;
+                }
+
+                // Get appointment
+                var appointment = await _appointmentRepository.GetByIdAsync(appointmentProcedure.AppointmentId, tenantId);
+                if (appointment == null)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Appointment not found";
+                    return result;
+                }
+
+                if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
+                {
+                    result.Success = false;
+                    result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
+                    return result;
+                }
+
+                // Create Payment entity for procedure
+                var payment = new Payment(
+                    appointmentProcedure.PriceCharged,
+                    method,
+                    tenantId,
+                    appointmentProcedureId: appointmentProcedureId,
+                    notes: notes
+                );
+                await _paymentRepository.AddAsync(payment);
+                result.PaymentId = payment.Id;
+
+                // Mark payment as processed
+                payment.MarkAsPaid(transactionId: $"PROC-{appointmentProcedureId:N}");
+                await _paymentRepository.UpdateAsync(payment);
+
+                // Create Invoice
+                var invoice = await CreateInvoiceForProcedurePaymentAsync(payment, appointmentProcedure, appointment, tenantId);
+                if (invoice != null)
+                {
+                    result.InvoiceId = invoice.Id;
+                }
+
+                result.Success = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.ErrorMessage = $"Error processing procedure payment: {ex.Message}";
+                return result;
+            }
+        }
+        
+        private async Task<Invoice?> CreateInvoiceForProcedurePaymentAsync(
+            Payment payment,
+            AppointmentProcedure appointmentProcedure,
+            Appointment appointment,
+            string tenantId)
+        {
+            try
+            {
+                var patient = await _patientRepository.GetByIdAsync(appointment.PatientId, tenantId);
+                if (patient == null)
+                {
+                    return null;
+                }
+
+                var invoiceNumber = GenerateInvoiceNumber(appointment.ClinicId, tenantId);
+                var taxRate = 0.0m;
+                var taxAmount = payment.Amount * taxRate;
+
+                var invoice = new Invoice(
+                    invoiceNumber: invoiceNumber,
+                    paymentId: payment.Id,
+                    type: InvoiceType.Service,
+                    amount: payment.Amount,
+                    taxAmount: taxAmount,
+                    dueDate: DateTime.UtcNow,
+                    customerName: patient.Name,
+                    tenantId: tenantId,
+                    description: $"Procedimento - {appointment.ScheduledDate:dd/MM/yyyy}",
+                    customerDocument: patient.Document
+                );
+
+                await _invoiceRepository.AddAsync(invoice);
+
+                invoice.Issue();
+                invoice.MarkAsPaid(DateTime.UtcNow);
+                await _invoiceRepository.UpdateAsync(invoice);
+
+                return invoice;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create invoice for procedure payment {PaymentId}", payment.Id);
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Creates a TISS guide for a health insurance appointment
+        /// </summary>
+        private async Task<Guid?> CreateTissGuideForAppointmentAsync(
+            Appointment appointment,
+            Payment payment,
+            string tenantId)
+        {
+            // TODO: Implement automatic TISS guide creation
+            // For now, TISS guides must be created manually through the UI
+            // This will be enhanced in a future update to automatically:
+            // 1. Check if patient has active health insurance
+            // 2. Create TISS batch if needed
+            // 3. Create TISS guide with appointment procedures
+            // 4. Link guide to invoice
+            _logger.LogInformation("TISS guide creation for appointment {AppointmentId} is not yet automated", appointment.Id);
+            return await Task.FromResult<Guid?>(null);
+        }
+        
+        /// <summary>
+        /// Calculates the total amount to charge based on consultation and procedures with pricing configuration
+        /// </summary>
+        public async Task<decimal> CalculateTotalAmountAsync(
+            Guid appointmentId,
+            List<Guid> procedureIds,
+            string tenantId)
+        {
+            var appointment = await _appointmentRepository.GetByIdAsync(appointmentId, tenantId);
+            if (appointment == null)
+            {
+                throw new ArgumentException("Appointment not found", nameof(appointmentId));
+            }
+
+            // Get pricing configuration
+            var pricingConfig = await _clinicPricingConfigurationRepository.GetByClinicIdAsync(appointment.ClinicId, tenantId);
+            
+            decimal totalAmount = 0;
+
+            // Calculate consultation price
+            if (pricingConfig != null)
+            {
+                var consultationPrice = pricingConfig.GetConsultationPrice(appointment.Type, appointment.Mode);
+                
+                // If procedures are being performed, apply the procedure policy
+                if (procedureIds != null && procedureIds.Any())
+                {
+                    consultationPrice = pricingConfig.GetConsultationPriceWithProcedure(consultationPrice);
+                }
+                
+                totalAmount += consultationPrice;
+            }
+
+            // Add procedure prices
+            if (procedureIds != null && procedureIds.Any())
+            {
+                foreach (var procedureId in procedureIds)
+                {
+                    // Get procedure-specific configuration if exists
+                    var procedureConfig = await _procedurePricingConfigurationRepository
+                        .GetByProcedureAndClinicAsync(procedureId, appointment.ClinicId, tenantId);
+                    
+                    // Use custom price if configuration exists and custom price is set
+                    if (procedureConfig?.CustomPrice != null)
+                    {
+                        totalAmount += procedureConfig.CustomPrice.Value;
+                    }
+                    else
+                    {
+                        // Otherwise, load procedure to get default price
+                        var procedure = await _procedureRepository.GetByIdAsync(procedureId, tenantId);
+                        if (procedure != null)
+                        {
+                            totalAmount += procedure.Price;
+                        }
+                    }
+                }
+            }
+
+            return totalAmount;
         }
     }
 }

@@ -42,6 +42,7 @@ namespace MedicSoft.Domain.Entities
     {
         public string InvoiceNumber { get; private set; } = null!;
         public Guid PaymentId { get; private set; }
+        public Guid? TissGuideId { get; private set; }
         public InvoiceType Type { get; private set; }
         public InvoiceStatus Status { get; private set; }
         public DateTime IssueDate { get; private set; }
@@ -63,6 +64,7 @@ namespace MedicSoft.Domain.Entities
 
         // Navigation properties
         public Payment Payment { get; private set; } = null!;
+        public TissGuide? TissGuide { get; private set; }
 
         private Invoice()
         {
@@ -73,7 +75,7 @@ namespace MedicSoft.Domain.Entities
             decimal amount, decimal taxAmount, DateTime dueDate,
             string customerName, string tenantId,
             string? description = null, string? customerDocument = null,
-            string? customerAddress = null) : base(tenantId)
+            string? customerAddress = null, Guid? tissGuideId = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(invoiceNumber))
                 throw new ArgumentException("Invoice number is required", nameof(invoiceNumber));
@@ -92,6 +94,7 @@ namespace MedicSoft.Domain.Entities
 
             InvoiceNumber = invoiceNumber.Trim();
             PaymentId = paymentId;
+            TissGuideId = tissGuideId;
             Type = type;
             Status = InvoiceStatus.Draft;
             IssueDate = DateTime.UtcNow;
@@ -161,6 +164,15 @@ namespace MedicSoft.Domain.Entities
             Status = InvoiceStatus.Cancelled;
             CancellationReason = reason.Trim();
             CancellationDate = DateTime.UtcNow;
+            UpdateTimestamp();
+        }
+
+        public void LinkToTissGuide(Guid tissGuideId)
+        {
+            if (tissGuideId == Guid.Empty)
+                throw new ArgumentException("TISS Guide ID cannot be empty", nameof(tissGuideId));
+            
+            TissGuideId = tissGuideId;
             UpdateTimestamp();
         }
 

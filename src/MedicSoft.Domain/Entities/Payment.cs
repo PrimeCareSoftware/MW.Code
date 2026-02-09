@@ -31,6 +31,7 @@ namespace MedicSoft.Domain.Entities
     {
         public Guid? AppointmentId { get; private set; }
         public Guid? ClinicSubscriptionId { get; private set; }
+        public Guid? AppointmentProcedureId { get; private set; }
         public decimal Amount { get; private set; }
         public PaymentMethod Method { get; private set; }
         public PaymentStatus Status { get; private set; }
@@ -49,6 +50,7 @@ namespace MedicSoft.Domain.Entities
         // Navigation properties
         public Appointment? Appointment { get; private set; }
         public ClinicSubscription? ClinicSubscription { get; private set; }
+        public AppointmentProcedure? AppointmentProcedure { get; private set; }
         public Invoice? Invoice { get; private set; }
 
         private Payment()
@@ -58,13 +60,13 @@ namespace MedicSoft.Domain.Entities
 
         public Payment(decimal amount, PaymentMethod method, string tenantId,
             Guid? appointmentId = null, Guid? clinicSubscriptionId = null,
-            string? notes = null) : base(tenantId)
+            Guid? appointmentProcedureId = null, string? notes = null) : base(tenantId)
         {
             if (amount <= 0)
                 throw new ArgumentException("Payment amount must be greater than zero", nameof(amount));
 
-            if (appointmentId == null && clinicSubscriptionId == null)
-                throw new ArgumentException("Payment must be associated with either an appointment or a subscription");
+            if (appointmentId == null && clinicSubscriptionId == null && appointmentProcedureId == null)
+                throw new ArgumentException("Payment must be associated with at least one entity: appointment, subscription, or procedure");
 
             if (appointmentId != null && appointmentId == Guid.Empty)
                 throw new ArgumentException("Invalid appointment ID", nameof(appointmentId));
@@ -72,12 +74,16 @@ namespace MedicSoft.Domain.Entities
             if (clinicSubscriptionId != null && clinicSubscriptionId == Guid.Empty)
                 throw new ArgumentException("Invalid subscription ID", nameof(clinicSubscriptionId));
 
+            if (appointmentProcedureId != null && appointmentProcedureId == Guid.Empty)
+                throw new ArgumentException("Invalid appointment procedure ID", nameof(appointmentProcedureId));
+
             Amount = amount;
             Method = method;
             Status = PaymentStatus.Pending;
             PaymentDate = DateTime.UtcNow;
             AppointmentId = appointmentId;
             ClinicSubscriptionId = clinicSubscriptionId;
+            AppointmentProcedureId = appointmentProcedureId;
             Notes = notes?.Trim();
         }
 
