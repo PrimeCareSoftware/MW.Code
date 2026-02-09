@@ -1,5 +1,6 @@
 using System;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Domain.Entities
 {

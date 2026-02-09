@@ -57,6 +57,8 @@ namespace MedicSoft.Repository.Context
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Procedure> Procedures { get; set; } = null!;
         public DbSet<AppointmentProcedure> AppointmentProcedures { get; set; } = null!;
+        public DbSet<ClinicPricingConfiguration> ClinicPricingConfigurations { get; set; } = null!;
+        public DbSet<ProcedurePricingConfiguration> ProcedurePricingConfigurations { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<ProcedureMaterial> ProcedureMaterials { get; set; } = null!;
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
