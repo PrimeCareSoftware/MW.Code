@@ -21,7 +21,11 @@ import {
   RecordClosurePayment,
   DREReport,
   CashFlowForecast,
-  ProfitabilityAnalysis
+  ProfitabilityAnalysis,
+  ClinicPricingConfiguration,
+  CreateClinicPricingConfiguration,
+  ProcedurePricingConfiguration,
+  CreateProcedurePricingConfiguration
 } from '../models/financial.model';
 
 @Injectable({
@@ -369,5 +373,82 @@ export class FinancialService {
       .set('startDate', startDate)
       .set('endDate', endDate);
     return this.http.get<ProfitabilityAnalysis>(`${this.apiUrl}/reports/profitability`, { params });
+  }
+
+  // ===== PRICING CONFIGURATION (PR 752) =====
+
+  /**
+   * Get pricing configuration for a clinic
+   * @param clinicId Clinic ID
+   * @returns Clinic pricing configuration
+   */
+  getClinicPricingConfiguration(clinicId: string): Observable<ClinicPricingConfiguration> {
+    return this.http.get<ClinicPricingConfiguration>(
+      `${this.apiUrl}/ClinicPricingConfiguration/clinic/${clinicId}`
+    );
+  }
+
+  /**
+   * Create or update pricing configuration for a clinic
+   * @param data Clinic pricing configuration data
+   * @returns Created/updated configuration
+   */
+  createOrUpdateClinicPricingConfiguration(
+    data: CreateClinicPricingConfiguration
+  ): Observable<ClinicPricingConfiguration> {
+    return this.http.post<ClinicPricingConfiguration>(
+      `${this.apiUrl}/ClinicPricingConfiguration`,
+      data
+    );
+  }
+
+  /**
+   * Get procedure pricing configuration for a specific procedure at a clinic
+   * @param procedureId Procedure ID
+   * @param clinicId Clinic ID
+   * @returns Procedure pricing configuration
+   */
+  getProcedurePricingConfiguration(
+    procedureId: string,
+    clinicId: string
+  ): Observable<ProcedurePricingConfiguration> {
+    return this.http.get<ProcedurePricingConfiguration>(
+      `${this.apiUrl}/ProcedurePricingConfiguration/procedure/${procedureId}/clinic/${clinicId}`
+    );
+  }
+
+  /**
+   * Get all procedure pricing configurations for a clinic
+   * @param clinicId Clinic ID
+   * @returns List of procedure pricing configurations
+   */
+  getProcedurePricingConfigurationsByClinic(
+    clinicId: string
+  ): Observable<ProcedurePricingConfiguration[]> {
+    return this.http.get<ProcedurePricingConfiguration[]>(
+      `${this.apiUrl}/ProcedurePricingConfiguration/clinic/${clinicId}`
+    );
+  }
+
+  /**
+   * Create or update procedure pricing configuration
+   * @param data Procedure pricing configuration data
+   * @returns Created/updated configuration
+   */
+  createOrUpdateProcedurePricingConfiguration(
+    data: CreateProcedurePricingConfiguration
+  ): Observable<ProcedurePricingConfiguration> {
+    return this.http.post<ProcedurePricingConfiguration>(
+      `${this.apiUrl}/ProcedurePricingConfiguration`,
+      data
+    );
+  }
+
+  /**
+   * Delete procedure pricing configuration
+   * @param id Configuration ID
+   */
+  deleteProcedurePricingConfiguration(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/ProcedurePricingConfiguration/${id}`);
   }
 }

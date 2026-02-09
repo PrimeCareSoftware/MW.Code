@@ -460,3 +460,55 @@ export interface ProfitabilityByInsurance {
   averageValue: number;
   percentage: number;
 }
+
+// ===== PRICING CONFIGURATION MODELS (PR 752) =====
+
+export enum ProcedureConsultationPolicy {
+  ChargeConsultation = 1,
+  DiscountOnConsultation = 2,
+  NoCharge = 3
+}
+
+export interface ClinicPricingConfiguration {
+  id: string;
+  clinicId: string;
+  defaultConsultationPrice: number;
+  followUpConsultationPrice?: number;
+  telemedicineConsultationPrice?: number;
+  defaultProcedurePolicy: ProcedureConsultationPolicy;
+  consultationDiscountPercentage?: number;
+  consultationDiscountFixedAmount?: number;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
+export interface CreateClinicPricingConfiguration {
+  clinicId: string;
+  defaultConsultationPrice: number;
+  followUpConsultationPrice?: number;
+  telemedicineConsultationPrice?: number;
+  defaultProcedurePolicy: ProcedureConsultationPolicy;
+  consultationDiscountPercentage?: number;
+  consultationDiscountFixedAmount?: number;
+}
+
+export interface ProcedurePricingConfiguration {
+  id: string;
+  procedureId: string;
+  clinicId: string;
+  consultationPolicy?: ProcedureConsultationPolicy;
+  consultationDiscountPercentage?: number;
+  consultationDiscountFixedAmount?: number;
+  customPrice?: number;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
+export interface CreateProcedurePricingConfiguration {
+  procedureId: string;
+  clinicId: string;
+  consultationPolicy?: ProcedureConsultationPolicy;
+  consultationDiscountPercentage?: number;
+  consultationDiscountFixedAmount?: number;
+  customPrice?: number;
+}
