@@ -45,10 +45,12 @@ namespace MedicSoft.Repository.Configurations
                 .IsRequired();
                 
             builder.Property(x => x.ClinicId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("ClinicId");
                 
             builder.Property(x => x.GlobalTemplateId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("GlobalTemplateId");
                 
             builder.Property(x => x.TenantId)
                 .IsRequired()
