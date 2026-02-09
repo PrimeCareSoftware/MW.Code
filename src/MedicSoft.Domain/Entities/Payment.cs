@@ -66,7 +66,7 @@ namespace MedicSoft.Domain.Entities
                 throw new ArgumentException("Payment amount must be greater than zero", nameof(amount));
 
             if (appointmentId == null && clinicSubscriptionId == null && appointmentProcedureId == null)
-                throw new ArgumentException("Payment must be associated with either an appointment, subscription, or procedure");
+                throw new ArgumentException("Payment must be associated with at least one entity: appointment, subscription, or procedure");
 
             if (appointmentId != null && appointmentId == Guid.Empty)
                 throw new ArgumentException("Invalid appointment ID", nameof(appointmentId));

@@ -432,14 +432,14 @@ namespace MedicSoft.Application.Services
                     var procedureConfig = await _procedurePricingConfigurationRepository
                         .GetByProcedureAndClinicAsync(procedureId, appointment.ClinicId, tenantId);
                     
+                    // Use custom price if configuration exists and custom price is set
                     if (procedureConfig?.CustomPrice != null)
                     {
-                        // Use custom price if configured
                         totalAmount += procedureConfig.CustomPrice.Value;
                     }
                     else
                     {
-                        // Load procedure to get default price
+                        // Otherwise, load procedure to get default price
                         var procedure = await _procedureRepository.GetByIdAsync(procedureId, tenantId);
                         if (procedure != null)
                         {
