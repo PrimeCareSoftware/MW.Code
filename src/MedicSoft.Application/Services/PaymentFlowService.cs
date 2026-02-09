@@ -18,6 +18,7 @@ namespace MedicSoft.Application.Services
         private readonly IPatientRepository _patientRepository;
         private readonly IClinicRepository _clinicRepository;
         private readonly IAppointmentProcedureRepository _appointmentProcedureRepository;
+        private readonly IProcedureRepository _procedureRepository;
         private readonly IClinicPricingConfigurationRepository _clinicPricingConfigurationRepository;
         private readonly IProcedurePricingConfigurationRepository _procedurePricingConfigurationRepository;
         private readonly ITissGuideService _tissGuideService;
@@ -30,6 +31,7 @@ namespace MedicSoft.Application.Services
             IPatientRepository patientRepository,
             IClinicRepository clinicRepository,
             IAppointmentProcedureRepository appointmentProcedureRepository,
+            IProcedureRepository procedureRepository,
             IClinicPricingConfigurationRepository clinicPricingConfigurationRepository,
             IProcedurePricingConfigurationRepository procedurePricingConfigurationRepository,
             ITissGuideService tissGuideService,
@@ -41,6 +43,7 @@ namespace MedicSoft.Application.Services
             _patientRepository = patientRepository;
             _clinicRepository = clinicRepository;
             _appointmentProcedureRepository = appointmentProcedureRepository;
+            _procedureRepository = procedureRepository;
             _clinicPricingConfigurationRepository = clinicPricingConfigurationRepository;
             _procedurePricingConfigurationRepository = procedurePricingConfigurationRepository;
             _tissGuideService = tissGuideService;
@@ -425,13 +428,24 @@ namespace MedicSoft.Application.Services
             {
                 foreach (var procedureId in procedureIds)
                 {
+                    // Get procedure-specific configuration if exists
                     var procedureConfig = await _procedurePricingConfigurationRepository
                         .GetByProcedureAndClinicAsync(procedureId, appointment.ClinicId, tenantId);
                     
-                    // Use configured price or default
-                    // This would require loading the Procedure entity to get default price
-                    // For now, simplified approach
-                    totalAmount += procedureConfig?.CustomPrice ?? 0;
+                    if (procedureConfig?.CustomPrice != null)
+                    {
+                        // Use custom price if configured
+                        totalAmount += procedureConfig.CustomPrice.Value;
+                    }
+                    else
+                    {
+                        // Load procedure to get default price
+                        var procedure = await _procedureRepository.GetByIdAsync(procedureId, tenantId);
+                        if (procedure != null)
+                        {
+                            totalAmount += procedure.Price;
+                        }
+                    }
                 }
             }
 
