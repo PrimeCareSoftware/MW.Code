@@ -39,5 +39,23 @@ namespace MedicSoft.Application.Services
             string paymentMethod,
             string tenantId,
             string? notes = null);
+        
+        /// <summary>
+        /// Register payment for a specific procedure performed during an appointment
+        /// </summary>
+        Task<PaymentFlowResultDto> RegisterProcedurePaymentAsync(
+            Guid appointmentProcedureId,
+            Guid paidByUserId,
+            string paymentMethod,
+            string tenantId,
+            string? notes = null);
+        
+        /// <summary>
+        /// Calculate the total amount to charge based on consultation and procedures with pricing configuration
+        /// </summary>
+        Task<decimal> CalculateTotalAmountAsync(
+            Guid appointmentId,
+            List<Guid> procedureIds,
+            string tenantId);
     }
 }
