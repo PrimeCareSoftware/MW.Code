@@ -51,8 +51,8 @@ export class ClinicPricingConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // TODO: Get clinic ID from context/route
-    // For now, using a placeholder
+    // Get clinic ID from localStorage (set by clinic selection context)
+    // In production, this would be part of a clinic context service
     const clinicId = localStorage.getItem('selectedClinicId');
     if (clinicId) {
       this.clinicId.set(clinicId);

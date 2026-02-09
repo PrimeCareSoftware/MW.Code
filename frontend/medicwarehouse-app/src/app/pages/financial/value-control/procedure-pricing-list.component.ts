@@ -63,7 +63,7 @@ export class ProcedurePricingListComponent implements OnInit {
     });
   }
 
-  getPolicyLabel(policy?: number): string {
+  getPolicyLabel(policy?: number | null): string {
     switch (policy) {
       case 1:
         return 'Cobrar Consulta';
