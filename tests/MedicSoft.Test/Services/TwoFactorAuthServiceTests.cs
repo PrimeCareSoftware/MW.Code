@@ -11,8 +11,8 @@ namespace MedicSoft.Test.Services
     public class TwoFactorAuthServiceTests
     {
         private readonly Mock<ITwoFactorAuthRepository> _mockRepository;
-        private readonly Mock<IEncryptionService> _mockEncryption;
-        private readonly Mock<ISmsService> _mockSmsService;
+        private readonly Mock<IDataEncryptionService> _mockEncryption;
+        private readonly Mock<ISmsNotificationService> _mockSmsService;
         private readonly Mock<IUserRepository> _mockUserRepository;
         private readonly ITwoFactorAuthService _service;
         private const string TestUserId = "550e8400-e29b-41d4-a716-446655440000";
@@ -21,8 +21,8 @@ namespace MedicSoft.Test.Services
         public TwoFactorAuthServiceTests()
         {
             _mockRepository = new Mock<ITwoFactorAuthRepository>();
-            _mockEncryption = new Mock<IEncryptionService>();
-            _mockSmsService = new Mock<ISmsService>();
+            _mockEncryption = new Mock<IDataEncryptionService>();
+            _mockSmsService = new Mock<ISmsNotificationService>();
             _mockUserRepository = new Mock<IUserRepository>();
             
             _service = new TwoFactorAuthService(
