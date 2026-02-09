@@ -376,27 +376,15 @@ namespace MedicSoft.Application.Services
             Payment payment,
             string tenantId)
         {
-            try
-            {
-                if (appointment.PaymentType != PaymentType.HealthInsurance || !appointment.HealthInsurancePlanId.HasValue)
-                {
-                    return null;
-                }
-
-                // Delegate to TISS Guide Service
-                var tissGuide = await _tissGuideService.CreateGuideForAppointmentAsync(
-                    appointment.Id,
-                    appointment.PatientId,
-                    appointment.HealthInsurancePlanId.Value,
-                    tenantId);
-
-                return tissGuide?.Id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to create TISS guide for appointment {AppointmentId}", appointment.Id);
-                return null;
-            }
+            // TODO: Implement automatic TISS guide creation
+            // For now, TISS guides must be created manually through the UI
+            // This will be enhanced in a future update to automatically:
+            // 1. Check if patient has active health insurance
+            // 2. Create TISS batch if needed
+            // 3. Create TISS guide with appointment procedures
+            // 4. Link guide to invoice
+            _logger.LogInformation("TISS guide creation for appointment {AppointmentId} is not yet automated", appointment.Id);
+            return await Task.FromResult<Guid?>(null);
         }
         
         /// <summary>

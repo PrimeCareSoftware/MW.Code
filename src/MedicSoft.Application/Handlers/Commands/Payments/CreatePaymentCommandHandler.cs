@@ -51,6 +51,7 @@ namespace MedicSoft.Application.Handlers.Commands.Payments
                 request.TenantId,
                 request.Payment.AppointmentId,
                 request.Payment.ClinicSubscriptionId,
+                null, // appointmentProcedureId
                 request.Payment.Notes
             );
 
