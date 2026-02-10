@@ -6,9 +6,13 @@ The application was failing to start with the following error:
 
 ```
 Npgsql.PostgresException (0x80004005): 42P01: relation "SystemNotifications" does not exist
+Failed executing DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+ALTER TABLE "SystemNotifications" ALTER COLUMN "UpdatedAt" TYPE timestamp with time zone;
 ```
 
-This occurred when trying to apply migration `20260131025933_AddDocumentHashToPatients` which attempted to ALTER columns in the SystemNotifications table before verifying the table existed.
+This occurred in two places:
+1. Migration `20260131025933_AddDocumentHashToPatients` - case-sensitivity issue (FIXED)
+2. Migration `20260208154714_FixGlobalTemplateIdColumnCasing` - unconditional AlterColumn calls (FIXED in this PR)
 
 ## Root Cause Analysis
 
@@ -114,7 +118,66 @@ To prevent similar issues in the future:
 
 ## Files Changed
 
+### Previous Fix (Case Sensitivity)
 - `src/MedicSoft.Repository/Migrations/PostgreSQL/20260131025933_AddDocumentHashToPatients.cs`
+
+### This Fix (Unconditional AlterColumn)
+- `src/MedicSoft.Repository/Migrations/PostgreSQL/20260208154714_FixGlobalTemplateIdColumnCasing.cs`
+  - Lines 993-1033 (Up method): Replaced 3 unconditional AlterColumn calls with conditional SQL
+  - Lines 5704-5744 (Down method): Replaced 3 unconditional AlterColumn calls with conditional SQL
+
+## Fix #2: Unconditional AlterColumn Issue
+
+### Problem
+Migration `20260208154714_FixGlobalTemplateIdColumnCasing.cs` used direct `migrationBuilder.AlterColumn()` calls without checking if the SystemNotifications table existed first. This caused failures on fresh databases.
+
+### Solution
+Replaced unconditional EF Core AlterColumn calls with conditional SQL that:
+1. Checks if SystemNotifications table exists
+2. Checks if column has wrong type (timestamp without time zone)
+3. Only performs ALTER if both conditions are met
+
+### Before (Lines 993-1017)
+```csharp
+migrationBuilder.AlterColumn<DateTime>(
+    name: "UpdatedAt",
+    table: "SystemNotifications",
+    type: "timestamp with time zone",
+    nullable: true,
+    oldClrType: typeof(DateTime),
+    oldType: "timestamp without time zone",
+    oldNullable: true);
+```
+
+### After (Lines 993-1033)
+```csharp
+migrationBuilder.Sql(@"
+    DO $$
+    BEGIN
+        IF EXISTS (
+            SELECT 1 FROM information_schema.tables 
+            WHERE LOWER(table_name) = 'systemnotifications' 
+            AND table_schema = 'public'
+        ) THEN
+            IF EXISTS (
+                SELECT 1 FROM information_schema.columns 
+                WHERE LOWER(table_name) = 'systemnotifications' 
+                AND LOWER(column_name) = 'updatedat'
+                AND table_schema = 'public'
+                AND data_type = 'timestamp without time zone'
+            ) THEN
+                ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+            END IF;
+        END IF;
+    END $$;
+");
+```
+
+This approach:
+- ✅ Prevents errors when table doesn't exist
+- ✅ Checks column type before altering
+- ✅ Follows patterns used in other migrations
+- ✅ More robust than previous implementations
 
 ## Related Documentation
 
