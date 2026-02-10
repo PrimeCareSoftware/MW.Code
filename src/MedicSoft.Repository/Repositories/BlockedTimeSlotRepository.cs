@@ -110,10 +110,47 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
-        public async Task DeleteByRecurringPatternIdAsync(Guid recurringPatternId, string tenantId)
+        public async Task<IEnumerable<BlockedTimeSlot>> GetByRecurringSeriesIdAsync(Guid recurringSeriesId, string tenantId)
+        {
+            return await _dbSet
+                .Include(b => b.Clinic)
+                .Include(b => b.Professional)
+                .Where(b => b.RecurringSeriesId == recurringSeriesId && 
+                           b.TenantId == tenantId)
+                .OrderBy(b => b.Date)
+                .ThenBy(b => b.StartTime)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<BlockedTimeSlot>> GetFutureOccurrencesAsync(Guid recurringSeriesId, DateTime fromDate, string tenantId)
+        {
+            return await _dbSet
+                .Include(b => b.Clinic)
+                .Include(b => b.Professional)
+                .Where(b => b.RecurringSeriesId == recurringSeriesId && 
+                           b.Date.Date >= fromDate.Date &&
+                           b.TenantId == tenantId)
+                .OrderBy(b => b.Date)
+                .ThenBy(b => b.StartTime)
+                .ToListAsync();
+        }
+
+        public async Task DeleteByRecurringSeriesIdAsync(Guid recurringSeriesId, string tenantId)
         {
             var blocksToDelete = await _dbSet
-                .Where(b => b.RecurringPatternId == recurringPatternId && 
+                .Where(b => b.RecurringSeriesId == recurringSeriesId && 
+                           b.TenantId == tenantId)
+                .ToListAsync();
+
+            _dbSet.RemoveRange(blocksToDelete);
+            // Note: SaveChanges will be called by the unit of work/calling code
+        }
+
+        public async Task DeleteFutureOccurrencesAsync(Guid recurringSeriesId, DateTime fromDate, string tenantId)
+        {
+            var blocksToDelete = await _dbSet
+                .Where(b => b.RecurringSeriesId == recurringSeriesId && 
+                           b.Date.Date >= fromDate.Date &&
                            b.TenantId == tenantId)
                 .ToListAsync();
 
