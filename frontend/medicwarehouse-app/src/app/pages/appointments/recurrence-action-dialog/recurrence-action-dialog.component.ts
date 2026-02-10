@@ -4,11 +4,20 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RecurringDeleteScope, RecurringDeleteScopeLabels, RecurringDeleteScopeDescriptions } from '../../../models/appointment.model';
 
 export interface RecurrenceActionDialogData {
   action: 'update' | 'delete';
   blockDate: Date;
+  totalOccurrences?: number;
+}
+
+export interface RecurrenceActionDialogResult {
+  scope: RecurringDeleteScope;
+  reason?: string;
 }
 
 export type RecurrenceAction = 'single' | 'series';
@@ -22,40 +31,68 @@ export type RecurrenceAction = 'single' | 'series';
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatRadioModule
+    MatRadioModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   template: `
     <h2 mat-dialog-title>
       <mat-icon>{{ data.action === 'delete' ? 'delete' : 'edit' }}</mat-icon>
-      {{ data.action === 'delete' ? 'Excluir Bloqueio' : 'Editar Bloqueio' }}
+      {{ data.action === 'delete' ? 'Excluir Bloqueio Recorrente' : 'Editar Bloqueio' }}
     </h2>
     
     <mat-dialog-content>
-      <p class="info-text">
-        Este bloqueio faz parte de uma série recorrente.
-      </p>
+      <div class="info-message">
+        <mat-icon>info</mat-icon>
+        <span>
+          Este bloqueio faz parte de uma série recorrente.
+          Como deseja proceder?
+        </span>
+      </div>
       
       <form [formGroup]="actionForm">
-        <mat-radio-group formControlName="action" class="action-options">
-          <mat-radio-button value="single">
-            <div class="option-content">
-              <strong>Apenas este bloqueio</strong>
-              <span class="option-description">
-                {{ data.action === 'delete' ? 'Remove' : 'Altera' }} somente o bloqueio do dia 
-                {{ formatDate(data.blockDate) }}
-              </span>
-            </div>
-          </mat-radio-button>
-          
-          <mat-radio-button value="series">
-            <div class="option-content">
-              <strong>Toda a série</strong>
-              <span class="option-description">
-                {{ data.action === 'delete' ? 'Remove' : 'Altera' }} todos os bloqueios desta série recorrente
-              </span>
-            </div>
-          </mat-radio-button>
-        </mat-radio-group>
+        <div class="scope-options">
+          <mat-radio-group formControlName="scope">
+            <mat-radio-button [value]="RecurringDeleteScope.ThisOccurrence">
+              <div class="option-content">
+                <strong>{{ getScopeLabel(RecurringDeleteScope.ThisOccurrence) }}</strong>
+                <span class="description">
+                  {{ getScopeDescription(RecurringDeleteScope.ThisOccurrence) }}
+                </span>
+              </div>
+            </mat-radio-button>
+            
+            <mat-radio-button [value]="RecurringDeleteScope.ThisAndFuture">
+              <div class="option-content">
+                <strong>{{ getScopeLabel(RecurringDeleteScope.ThisAndFuture) }}</strong>
+                <span class="description">
+                  {{ getScopeDescription(RecurringDeleteScope.ThisAndFuture) }}
+                </span>
+              </div>
+            </mat-radio-button>
+            
+            <mat-radio-button [value]="RecurringDeleteScope.AllInSeries">
+              <div class="option-content">
+                <strong>{{ getScopeLabel(RecurringDeleteScope.AllInSeries) }}</strong>
+                <span class="description">
+                  {{ getScopeDescription(RecurringDeleteScope.AllInSeries) }}
+                </span>
+              </div>
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width reason-field">
+          <mat-label>Motivo (opcional)</mat-label>
+          <textarea 
+            matInput 
+            formControlName="reason"
+            rows="3"
+            placeholder="Informe o motivo para auditoria..."
+            maxlength="500">
+          </textarea>
+          <mat-hint align="end">{{ actionForm.get('reason')?.value?.length || 0 }} / 500</mat-hint>
+        </mat-form-field>
       </form>
     </mat-dialog-content>
 
@@ -65,11 +102,11 @@ export type RecurrenceAction = 'single' | 'series';
       </button>
       <button 
         mat-raised-button 
-        [color]="data.action === 'delete' ? 'warn' : 'primary'"
+        color="warn"
         (click)="onConfirm()"
         [disabled]="!actionForm.valid">
-        <mat-icon>{{ data.action === 'delete' ? 'delete' : 'check' }}</mat-icon>
-        {{ data.action === 'delete' ? 'Excluir' : 'Confirmar' }}
+        <mat-icon>delete</mat-icon>
+        Excluir
       </button>
     </mat-dialog-actions>
   `,
@@ -84,16 +121,36 @@ export type RecurrenceAction = 'single' | 'series';
       }
     }
 
-    .info-text {
+    .info-message {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
       margin-bottom: 24px;
-      color: rgba(0, 0, 0, 0.6);
-      font-size: 14px;
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      border-radius: 4px;
+      
+      mat-icon {
+        color: #2196f3;
+      }
+      
+      span {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.87);
+      }
     }
 
-    .action-options {
+    .scope-options {
       display: flex;
       flex-direction: column;
       gap: 16px;
+      margin-bottom: 24px;
+      
+      mat-radio-button {
+        display: flex;
+        align-items: flex-start;
+      }
     }
 
     .option-content {
@@ -103,14 +160,25 @@ export type RecurrenceAction = 'single' | 'series';
       margin-left: 8px;
     }
 
-    .option-description {
+    .description {
       font-size: 13px;
       color: rgba(0, 0, 0, 0.54);
+      line-height: 1.4;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .reason-field {
+      margin-top: 8px;
     }
 
     mat-dialog-content {
-      min-width: 450px;
+      min-width: 550px;
       padding: 20px 24px;
+      overflow-y: auto;
+      max-height: 70vh;
     }
 
     mat-dialog-actions {
@@ -126,6 +194,7 @@ export type RecurrenceAction = 'single' | 'series';
   `]
 })
 export class RecurrenceActionDialogComponent {
+  RecurringDeleteScope = RecurringDeleteScope;
   actionForm: FormGroup;
 
   constructor(
@@ -134,8 +203,17 @@ export class RecurrenceActionDialogComponent {
     private fb: FormBuilder
   ) {
     this.actionForm = this.fb.group({
-      action: ['single', Validators.required]
+      scope: [RecurringDeleteScope.ThisOccurrence, Validators.required],
+      reason: ['']
     });
+  }
+
+  getScopeLabel(scope: RecurringDeleteScope): string {
+    return RecurringDeleteScopeLabels[scope];
+  }
+
+  getScopeDescription(scope: RecurringDeleteScope): string {
+    return RecurringDeleteScopeDescriptions[scope];
   }
 
   formatDate(date: Date): string {
@@ -152,8 +230,11 @@ export class RecurrenceActionDialogComponent {
 
   onConfirm(): void {
     if (this.actionForm.valid) {
-      const action = this.actionForm.get('action')?.value as RecurrenceAction;
-      this.dialogRef.close(action);
+      const result: RecurrenceActionDialogResult = {
+        scope: this.actionForm.get('scope')?.value,
+        reason: this.actionForm.get('reason')?.value?.trim() || undefined
+      };
+      this.dialogRef.close(result);
     }
   }
 }
