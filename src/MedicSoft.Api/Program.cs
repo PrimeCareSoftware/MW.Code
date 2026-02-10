@@ -361,6 +361,7 @@ builder.Services.AddScoped<IUserClinicLinkRepository, UserClinicLinkRepository>(
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IBlockedTimeSlotRepository, BlockedTimeSlotRepository>();
 builder.Services.AddScoped<IRecurringAppointmentPatternRepository, RecurringAppointmentPatternRepository>();
+builder.Services.AddScoped<IRecurrenceExceptionRepository, RecurrenceExceptionRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<ISoapRecordRepository, SoapRecordRepository>();
 builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
