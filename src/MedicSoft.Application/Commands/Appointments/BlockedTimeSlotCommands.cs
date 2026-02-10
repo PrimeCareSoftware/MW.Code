@@ -15,6 +15,11 @@ namespace MedicSoft.Application.Commands.Appointments
         }
     }
 
+    /// <summary>
+    /// DEPRECATED: Use DeleteRecurringScopeCommand instead for better control over recurring deletions.
+    /// This command may delete multiple series accidentally when using DeleteSeries=true.
+    /// </summary>
+    [Obsolete("Use DeleteRecurringScopeCommand instead to avoid deleting multiple series. This will be removed in a future version.")]
     public class DeleteBlockedTimeSlotCommand : IRequest<bool>
     {
         public Guid Id { get; }
