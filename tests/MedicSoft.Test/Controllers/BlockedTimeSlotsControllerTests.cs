@@ -311,9 +311,6 @@ namespace MedicSoft.Test.Controllers
 
             // Assert
             result.Should().BeOfType<NoContentResult>();
-            var noContentResult = result as NoContentResult;
-            noContentResult.Should().NotBeNull();
-            noContentResult!.StatusCode.Should().Be(204);
         }
 
         #endregion
