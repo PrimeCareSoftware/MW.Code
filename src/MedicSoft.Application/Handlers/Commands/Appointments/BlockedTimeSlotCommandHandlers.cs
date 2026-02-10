@@ -62,6 +62,14 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
         }
     }
 
+    /// <summary>
+    /// DEPRECATED: This handler uses the old RecurringPatternId-based deletion which can accidentally
+    /// delete multiple series that share the same pattern. Use DeleteRecurringScopeCommandHandler instead.
+    /// 
+    /// WARNING: DeleteByRecurringPatternIdAsync may delete ALL blocks with the same pattern,
+    /// even if they belong to different series created at different times.
+    /// </summary>
+    [Obsolete("Use DeleteRecurringScopeCommandHandler instead to avoid deleting multiple series. This will be removed in a future version.")]
     public class DeleteBlockedTimeSlotCommandHandler : IRequestHandler<DeleteBlockedTimeSlotCommand, bool>
     {
         private readonly IBlockedTimeSlotRepository _blockedTimeSlotRepository;
@@ -78,9 +86,12 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 return false;
 
             // If DeleteSeries is true and this is a recurring block, delete all instances
+            // WARNING: This may delete multiple series with the same pattern!
             if (request.DeleteSeries && blockedTimeSlot.IsRecurring && blockedTimeSlot.RecurringPatternId.HasValue)
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 await _blockedTimeSlotRepository.DeleteByRecurringPatternIdAsync(blockedTimeSlot.RecurringPatternId.Value, request.TenantId);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
             else
             {
