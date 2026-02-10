@@ -20,5 +20,9 @@ namespace MedicSoft.Domain.Interfaces
         Task<IEnumerable<BlockedTimeSlot>> GetFutureOccurrencesAsync(Guid recurringSeriesId, DateTime fromDate, string tenantId);
         Task DeleteByRecurringSeriesIdAsync(Guid recurringSeriesId, string tenantId);
         Task DeleteFutureOccurrencesAsync(Guid recurringSeriesId, DateTime fromDate, string tenantId);
+        
+        // Deprecated - use DeleteByRecurringSeriesIdAsync instead
+        [Obsolete("Use DeleteByRecurringSeriesIdAsync instead to avoid deleting multiple series")]
+        Task DeleteByRecurringPatternIdAsync(Guid recurringPatternId, string tenantId);
     }
 }

@@ -157,5 +157,17 @@ namespace MedicSoft.Repository.Repositories
             _dbSet.RemoveRange(blocksToDelete);
             // Note: SaveChanges will be called by the unit of work/calling code
         }
+
+        [Obsolete("Use DeleteByRecurringSeriesIdAsync instead to avoid deleting multiple series")]
+        public async Task DeleteByRecurringPatternIdAsync(Guid recurringPatternId, string tenantId)
+        {
+            var blocksToDelete = await _dbSet
+                .Where(b => b.RecurringPatternId == recurringPatternId && 
+                           b.TenantId == tenantId)
+                .ToListAsync();
+
+            _dbSet.RemoveRange(blocksToDelete);
+            // Note: SaveChanges will be called by the unit of work/calling code
+        }
     }
 }

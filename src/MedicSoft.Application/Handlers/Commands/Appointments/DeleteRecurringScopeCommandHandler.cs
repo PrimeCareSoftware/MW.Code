@@ -18,18 +18,15 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
         private readonly IBlockedTimeSlotRepository _blockedTimeSlotRepository;
         private readonly IRecurrenceExceptionRepository _exceptionRepository;
         private readonly IRecurringAppointmentPatternRepository _patternRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public DeleteRecurringScopeCommandHandler(
             IBlockedTimeSlotRepository blockedTimeSlotRepository,
             IRecurrenceExceptionRepository exceptionRepository,
-            IRecurringAppointmentPatternRepository patternRepository,
-            IUnitOfWork unitOfWork)
+            IRecurringAppointmentPatternRepository patternRepository)
         {
             _blockedTimeSlotRepository = blockedTimeSlotRepository;
             _exceptionRepository = exceptionRepository;
             _patternRepository = patternRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task<bool> Handle(DeleteRecurringScopeCommand request, CancellationToken cancellationToken)
@@ -42,7 +39,6 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             if (!blockedSlot.IsRecurring || !blockedSlot.RecurringSeriesId.HasValue)
             {
                 await _blockedTimeSlotRepository.DeleteAsync(request.BlockedSlotId, request.TenantId);
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
                 return true;
             }
 
@@ -91,7 +87,6 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             // Remove the blocked slot (hard delete from table)
             await _blockedTimeSlotRepository.DeleteAsync(blockedSlot.Id, tenantId);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return true;
         }
 
@@ -122,7 +117,6 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
             // Delete all future occurrences (including this one)
             await _blockedTimeSlotRepository.DeleteFutureOccurrencesAsync(seriesId, blockedSlot.Date, tenantId);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return true;
         }
 
@@ -157,7 +151,6 @@ namespace MedicSoft.Application.Handlers.Commands.Appointments
                 await _exceptionRepository.DeleteAsync(exception.Id, tenantId);
             }
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return true;
         }
     }
