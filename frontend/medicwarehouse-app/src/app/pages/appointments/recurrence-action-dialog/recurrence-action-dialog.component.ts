@@ -53,29 +53,29 @@ export type RecurrenceAction = 'single' | 'series';
       <form [formGroup]="actionForm">
         <div class="scope-options">
           <mat-radio-group formControlName="scope">
-            <mat-radio-button [value]="RecurringDeleteScope.ThisOccurrence">
+            <mat-radio-button [value]="DeleteScopes.ThisOccurrence">
               <div class="option-content">
-                <strong>{{ getScopeLabel(RecurringDeleteScope.ThisOccurrence) }}</strong>
+                <strong>{{ getScopeLabel(DeleteScopes.ThisOccurrence) }}</strong>
                 <span class="description">
-                  {{ getScopeDescription(RecurringDeleteScope.ThisOccurrence) }}
+                  {{ getScopeDescription(DeleteScopes.ThisOccurrence) }}
                 </span>
               </div>
             </mat-radio-button>
             
-            <mat-radio-button [value]="RecurringDeleteScope.ThisAndFuture">
+            <mat-radio-button [value]="DeleteScopes.ThisAndFuture">
               <div class="option-content">
-                <strong>{{ getScopeLabel(RecurringDeleteScope.ThisAndFuture) }}</strong>
+                <strong>{{ getScopeLabel(DeleteScopes.ThisAndFuture) }}</strong>
                 <span class="description">
-                  {{ getScopeDescription(RecurringDeleteScope.ThisAndFuture) }}
+                  {{ getScopeDescription(DeleteScopes.ThisAndFuture) }}
                 </span>
               </div>
             </mat-radio-button>
             
-            <mat-radio-button [value]="RecurringDeleteScope.AllInSeries">
+            <mat-radio-button [value]="DeleteScopes.AllInSeries">
               <div class="option-content">
-                <strong>{{ getScopeLabel(RecurringDeleteScope.AllInSeries) }}</strong>
+                <strong>{{ getScopeLabel(DeleteScopes.AllInSeries) }}</strong>
                 <span class="description">
-                  {{ getScopeDescription(RecurringDeleteScope.AllInSeries) }}
+                  {{ getScopeDescription(DeleteScopes.AllInSeries) }}
                 </span>
               </div>
             </mat-radio-button>
@@ -194,7 +194,8 @@ export type RecurrenceAction = 'single' | 'series';
   `]
 })
 export class RecurrenceActionDialogComponent {
-  RecurringDeleteScope = RecurringDeleteScope;
+  // Enum reference for template use
+  readonly DeleteScopes = RecurringDeleteScope;
   actionForm: FormGroup;
 
   constructor(
