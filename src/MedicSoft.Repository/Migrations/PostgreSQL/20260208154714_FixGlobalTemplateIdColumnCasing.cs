@@ -990,31 +990,47 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp without time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SystemNotifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // Use conditional SQL to alter SystemNotifications columns only if table exists
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND table_schema = 'public'
+                    ) THEN
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'systemnotifications' 
+                            AND LOWER(column_name) = 'updatedat'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp without time zone'
+                        ) THEN
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                        END IF;
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReadAt",
-                table: "SystemNotifications",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'systemnotifications' 
+                            AND LOWER(column_name) = 'readat'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp without time zone'
+                        ) THEN
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp with time zone;
+                        END IF;
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SystemNotifications",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'systemnotifications' 
+                            AND LOWER(column_name) = 'createdat'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp without time zone'
+                        ) THEN
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                        END IF;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -5686,31 +5702,47 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "SystemNotifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            // Use conditional SQL to revert SystemNotifications columns only if table exists
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND table_schema = 'public'
+                    ) THEN
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'systemnotifications' 
+                            AND LOWER(column_name) = 'updatedat'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp with time zone'
+                        ) THEN
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                        END IF;
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "ReadAt",
-                table: "SystemNotifications",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'systemnotifications' 
+                            AND LOWER(column_name) = 'readat'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp with time zone'
+                        ) THEN
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""ReadAt"" TYPE timestamp without time zone;
+                        END IF;
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "SystemNotifications",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+                        IF EXISTS (
+                            SELECT 1 FROM information_schema.columns 
+                            WHERE LOWER(table_name) = 'systemnotifications' 
+                            AND LOWER(column_name) = 'createdat'
+                            AND table_schema = 'public'
+                            AND data_type = 'timestamp with time zone'
+                        ) THEN
+                            ALTER TABLE ""SystemNotifications"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone;
+                        END IF;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
