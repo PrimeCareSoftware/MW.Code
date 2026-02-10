@@ -125,13 +125,27 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Delete a blocked time slot (requires appointments.delete permission)
+        /// Delete a blocked time slot with recurrence scope options (requires appointments.delete permission)
         /// </summary>
+        /// <param name="id">Blocked slot ID</param>
+        /// <param name="scope">Delete scope: 1=ThisOccurrence (default), 2=ThisAndFuture, 3=AllInSeries</param>
+        /// <param name="reason">Optional deletion reason for audit trail</param>
+        /// <param name="deleteSeries">Deprecated - use 'scope' parameter instead</param>
         [HttpDelete("{id}")]
         [RequirePermissionKey(PermissionKeys.AppointmentsDelete)]
-        public async Task<ActionResult> Delete(Guid id, [FromQuery] bool deleteSeries = false)
+        public async Task<ActionResult> Delete(
+            Guid id, 
+            [FromQuery] RecurringDeleteScope scope = RecurringDeleteScope.ThisOccurrence,
+            [FromQuery] string? reason = null,
+            [FromQuery] bool? deleteSeries = null)
         {
-            var command = new DeleteBlockedTimeSlotCommand(id, GetTenantId(), deleteSeries);
+            // Handle backward compatibility: if deleteSeries is true, treat as AllInSeries
+            if (deleteSeries.HasValue && deleteSeries.Value)
+            {
+                scope = RecurringDeleteScope.AllInSeries;
+            }
+
+            var command = new DeleteRecurringScopeCommand(id, scope, GetTenantId(), reason);
             var result = await _mediator.Send(command);
             
             if (!result)
