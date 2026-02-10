@@ -7,11 +7,11 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
-import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels } from '../../../models/appointment.model';
+import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels, RecurringDeleteScope, RecurringDeleteScopeLabels } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
-import { RecurrenceActionDialogComponent } from '../recurrence-action-dialog/recurrence-action-dialog.component';
+import { RecurrenceActionDialogComponent, RecurrenceActionDialogResult } from '../recurrence-action-dialog/recurrence-action-dialog.component';
 
 interface TimeSlot {
   time: string;
@@ -371,39 +371,46 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
   onDeleteBlock(event: Event, blockedSlot: BlockedTimeSlot): void {
     event.stopPropagation();
     
-    // If this is a recurring block, ask user if they want to delete single or series
-    if (blockedSlot.isRecurring && blockedSlot.recurringPatternId) {
+    // If this is a recurring block, show dialog with 3 scope options
+    if (blockedSlot.isRecurring && blockedSlot.recurringSeriesId) {
       const dialogRef = this.dialog.open(RecurrenceActionDialogComponent, {
-        width: '500px',
+        width: '550px',
         data: {
           action: 'delete',
           blockDate: new Date(blockedSlot.date)
         }
       });
 
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe((result: RecurrenceActionDialogResult | null) => {
         if (result) {
-          const deleteSeries = result === 'series';
-          this.performDelete(blockedSlot.id, deleteSeries);
+          this.performDelete(blockedSlot.id, result.scope, result.reason);
         }
       });
     } else {
       // Non-recurring block, use simple confirmation
-      const confirmDelete = confirm(`Tem certeza que deseja remover este bloqueio?`);
+      const confirmDelete = confirm('Tem certeza que deseja remover este bloqueio?');
       if (confirmDelete) {
-        this.performDelete(blockedSlot.id, false);
+        this.performDelete(blockedSlot.id, RecurringDeleteScope.ThisOccurrence);
       }
     }
   }
 
-  private performDelete(blockId: string, deleteSeries: boolean): void {
-    this.appointmentService.deleteBlockedTimeSlot(blockId, deleteSeries).subscribe({
+  private performDelete(blockId: string, scope: RecurringDeleteScope, reason?: string): void {
+    this.appointmentService.deleteBlockedTimeSlot(blockId, scope, reason).subscribe({
       next: () => {
-        const message = deleteSeries ? 'Série de bloqueios removida com sucesso' : 'Bloqueio removido com sucesso';
+        const messages: { [key: number]: string } = {
+          [RecurringDeleteScope.ThisOccurrence]: 'Bloqueio removido com sucesso',
+          [RecurringDeleteScope.ThisAndFuture]: 'Bloqueio e ocorrências futuras removidos com sucesso',
+          [RecurringDeleteScope.AllInSeries]: 'Série completa removida com sucesso'
+        };
+
+        const message = messages[scope] || 'Bloqueio removido com sucesso';
+        
         this.snackBar.open(message, 'Fechar', {
           duration: 3000,
           panelClass: ['success-snackbar']
         });
+        
         this.loadWeekAppointments();
       },
       error: (error) => {
