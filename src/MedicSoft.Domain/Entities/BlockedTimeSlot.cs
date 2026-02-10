@@ -18,6 +18,9 @@ namespace MedicSoft.Domain.Entities
         public string? Reason { get; private set; }
         public bool IsRecurring { get; private set; }
         public Guid? RecurringPatternId { get; private set; }  // Link to recurring pattern if applicable
+        public Guid? RecurringSeriesId { get; private set; }  // Unique identifier for this specific series
+        public DateTime? OriginalOccurrenceDate { get; private set; }  // Original date for modified occurrences
+        public bool IsException { get; private set; }  // Flag indicating this is an exception
         
         // Navigation properties
         public Clinic Clinic { get; private set; } = null!;
@@ -39,7 +42,8 @@ namespace MedicSoft.Domain.Entities
             Guid? professionalId = null,
             string? reason = null,
             bool isRecurring = false,
-            Guid? recurringPatternId = null) : base(tenantId)
+            Guid? recurringPatternId = null,
+            Guid? recurringSeriesId = null) : base(tenantId)
         {
             if (clinicId == Guid.Empty)
                 throw new ArgumentException("Clinic ID cannot be empty", nameof(clinicId));
@@ -59,6 +63,8 @@ namespace MedicSoft.Domain.Entities
             Reason = reason?.Trim();
             IsRecurring = isRecurring;
             RecurringPatternId = recurringPatternId;
+            RecurringSeriesId = recurringSeriesId;
+            IsException = false;
         }
 
         public void UpdateTimeSlot(TimeSpan startTime, TimeSpan endTime)
@@ -91,6 +97,28 @@ namespace MedicSoft.Domain.Entities
         public bool IsOverlappingWithDate(DateTime date, TimeSpan start, TimeSpan end)
         {
             return Date == date && IsOverlapping(start, end);
+        }
+
+        /// <summary>
+        /// Marks this blocked time slot as an exception (soft delete or modification)
+        /// </summary>
+        public void MarkAsException(DateTime? originalDate = null)
+        {
+            IsException = true;
+            if (originalDate.HasValue)
+            {
+                OriginalOccurrenceDate = originalDate.Value;
+            }
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Updates the recurring series ID for this blocked time slot
+        /// </summary>
+        public void UpdateSeriesId(Guid seriesId)
+        {
+            RecurringSeriesId = seriesId;
+            UpdateTimestamp();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace MedicSoft.Domain.Entities
         public int? DayOfMonth { get; private set; }  // For monthly recurrence (1-31)
         public DateTime StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
+        public DateTime? EffectiveEndDate { get; private set; }  // For split series (ThisAndFuture deletion)
         public int? OccurrencesCount { get; private set; }  // Alternative to EndDate
         public TimeSpan StartTime { get; private set; }
         public TimeSpan EndTime { get; private set; }
@@ -26,11 +27,13 @@ namespace MedicSoft.Domain.Entities
         public BlockedTimeSlotType? BlockedSlotType { get; private set; }  // If for blocks
         public string? Notes { get; private set; }
         public bool IsActive { get; private set; } = true;
+        public Guid? ParentPatternId { get; private set; }  // Reference to parent pattern if this is a split
         
         // Navigation properties
         public Clinic Clinic { get; private set; } = null!;
         public User? Professional { get; private set; }
         public Patient? Patient { get; private set; }
+        public RecurringAppointmentPattern? ParentPattern { get; private set; }
 
         private RecurringAppointmentPattern() 
         { 
@@ -154,6 +157,64 @@ namespace MedicSoft.Domain.Entities
         public bool IsForBlockedSlots()
         {
             return BlockedSlotType.HasValue;
+        }
+
+        /// <summary>
+        /// Sets the effective end date for this pattern (used when splitting a series)
+        /// </summary>
+        public void SetEffectiveEndDate(DateTime effectiveEndDate)
+        {
+            if (effectiveEndDate < StartDate)
+                throw new ArgumentException("Effective end date must be after start date", nameof(effectiveEndDate));
+
+            EffectiveEndDate = effectiveEndDate;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Creates a split pattern starting from the specified date
+        /// Used when deleting "this and future occurrences"
+        /// </summary>
+        public RecurringAppointmentPattern CreateSplit(DateTime splitDate, string tenantId)
+        {
+            if (splitDate <= StartDate)
+                throw new ArgumentException("Split date must be after pattern start date", nameof(splitDate));
+
+            // Set the effective end date for this pattern to the day before split
+            SetEffectiveEndDate(splitDate.AddDays(-1));
+
+            // Create new pattern starting from split date
+            var splitPattern = new RecurringAppointmentPattern(
+                ClinicId,
+                Frequency,
+                splitDate,
+                StartTime,
+                EndTime,
+                tenantId,
+                Interval,
+                ProfessionalId,
+                PatientId,
+                DaysOfWeek,
+                DayOfMonth,
+                EndDate,
+                OccurrencesCount,
+                DurationMinutes,
+                AppointmentType,
+                BlockedSlotType,
+                Notes);
+
+            // Link back to parent
+            splitPattern.SetParentPattern(this.Id);
+
+            return splitPattern;
+        }
+
+        /// <summary>
+        /// Sets the parent pattern ID (internal use for split patterns)
+        /// </summary>
+        internal void SetParentPattern(Guid parentPatternId)
+        {
+            ParentPatternId = parentPatternId;
         }
     }
 }
