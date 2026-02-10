@@ -36,6 +36,7 @@ namespace MedicSoft.Repository.Context
         public DbSet<Appointment> Appointments { get; set; } = null!;
         public DbSet<BlockedTimeSlot> BlockedTimeSlots { get; set; } = null!;
         public DbSet<RecurringAppointmentPattern> RecurringAppointmentPatterns { get; set; } = null!;
+        public DbSet<RecurrenceException> RecurrenceExceptions { get; set; } = null!;
         public DbSet<HealthInsurancePlan> HealthInsurancePlans { get; set; } = null!;
         public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
         public DbSet<PatientClinicLink> PatientClinicLinks { get; set; } = null!;
@@ -244,6 +245,9 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ClinicConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new BlockedTimeSlotConfiguration());
+            modelBuilder.ApplyConfiguration(new RecurringAppointmentPatternConfiguration());
+            modelBuilder.ApplyConfiguration(new RecurrenceExceptionConfiguration());
             modelBuilder.ApplyConfiguration(new HealthInsurancePlanConfiguration());
             modelBuilder.ApplyConfiguration(new MedicalRecordConfiguration());
             modelBuilder.ApplyConfiguration(new PatientClinicLinkConfiguration());
