@@ -178,30 +178,61 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 keyColumn: "Id",
                 keyValue: new Guid("f7ac8253-bca4-45c1-87d0-2681d0d0edd7"));
 
-            migrationBuilder.RenameIndex(
-                name: "ix_globaldocumenttemplates_type",
-                table: "GlobalDocumentTemplates",
-                newName: "IX_GlobalDocumentTemplates_Type");
+            // Conditionally rename indexes only if lowercase versions exist
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    -- Rename ix_globaldocumenttemplates_type to IX_GlobalDocumentTemplates_Type if lowercase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'ix_globaldocumenttemplates_type'
+                    ) THEN
+                        ALTER INDEX ix_globaldocumenttemplates_type RENAME TO ""IX_GlobalDocumentTemplates_Type"";
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "ix_globaldocumenttemplates_tenantid",
-                table: "GlobalDocumentTemplates",
-                newName: "IX_GlobalDocumentTemplates_TenantId");
+                    -- Rename ix_globaldocumenttemplates_tenantid to IX_GlobalDocumentTemplates_TenantId if lowercase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'ix_globaldocumenttemplates_tenantid'
+                    ) THEN
+                        ALTER INDEX ix_globaldocumenttemplates_tenantid RENAME TO ""IX_GlobalDocumentTemplates_TenantId"";
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "ix_globaldocumenttemplates_specialty",
-                table: "GlobalDocumentTemplates",
-                newName: "IX_GlobalDocumentTemplates_Specialty");
+                    -- Rename ix_globaldocumenttemplates_specialty to IX_GlobalDocumentTemplates_Specialty if lowercase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'ix_globaldocumenttemplates_specialty'
+                    ) THEN
+                        ALTER INDEX ix_globaldocumenttemplates_specialty RENAME TO ""IX_GlobalDocumentTemplates_Specialty"";
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "ix_globaldocumenttemplates_name_type_tenantid",
-                table: "GlobalDocumentTemplates",
-                newName: "IX_GlobalDocumentTemplates_Name_Type_TenantId");
+                    -- Rename ix_globaldocumenttemplates_name_type_tenantid to IX_GlobalDocumentTemplates_Name_Type_TenantId if lowercase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'ix_globaldocumenttemplates_name_type_tenantid'
+                    ) THEN
+                        ALTER INDEX ix_globaldocumenttemplates_name_type_tenantid RENAME TO ""IX_GlobalDocumentTemplates_Name_Type_TenantId"";
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "ix_globaldocumenttemplates_isactive",
-                table: "GlobalDocumentTemplates",
-                newName: "IX_GlobalDocumentTemplates_IsActive");
+                    -- Rename ix_globaldocumenttemplates_isactive to IX_GlobalDocumentTemplates_IsActive if lowercase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'ix_globaldocumenttemplates_isactive'
+                    ) THEN
+                        ALTER INDEX ix_globaldocumenttemplates_isactive RENAME TO ""IX_GlobalDocumentTemplates_IsActive"";
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -4843,30 +4874,61 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 keyColumn: "Id",
                 keyValue: new Guid("f41b82ef-b241-4c6e-87d1-81659e479f39"));
 
-            migrationBuilder.RenameIndex(
-                name: "IX_GlobalDocumentTemplates_Type",
-                table: "GlobalDocumentTemplates",
-                newName: "ix_globaldocumenttemplates_type");
+            // Conditionally rename indexes back to lowercase only if PascalCase versions exist
+            migrationBuilder.Sql(@"
+                DO $$ 
+                BEGIN
+                    -- Rename IX_GlobalDocumentTemplates_Type to ix_globaldocumenttemplates_type if PascalCase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'IX_GlobalDocumentTemplates_Type'
+                    ) THEN
+                        ALTER INDEX ""IX_GlobalDocumentTemplates_Type"" RENAME TO ix_globaldocumenttemplates_type;
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "IX_GlobalDocumentTemplates_TenantId",
-                table: "GlobalDocumentTemplates",
-                newName: "ix_globaldocumenttemplates_tenantid");
+                    -- Rename IX_GlobalDocumentTemplates_TenantId to ix_globaldocumenttemplates_tenantid if PascalCase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'IX_GlobalDocumentTemplates_TenantId'
+                    ) THEN
+                        ALTER INDEX ""IX_GlobalDocumentTemplates_TenantId"" RENAME TO ix_globaldocumenttemplates_tenantid;
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "IX_GlobalDocumentTemplates_Specialty",
-                table: "GlobalDocumentTemplates",
-                newName: "ix_globaldocumenttemplates_specialty");
+                    -- Rename IX_GlobalDocumentTemplates_Specialty to ix_globaldocumenttemplates_specialty if PascalCase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'IX_GlobalDocumentTemplates_Specialty'
+                    ) THEN
+                        ALTER INDEX ""IX_GlobalDocumentTemplates_Specialty"" RENAME TO ix_globaldocumenttemplates_specialty;
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "IX_GlobalDocumentTemplates_Name_Type_TenantId",
-                table: "GlobalDocumentTemplates",
-                newName: "ix_globaldocumenttemplates_name_type_tenantid");
+                    -- Rename IX_GlobalDocumentTemplates_Name_Type_TenantId to ix_globaldocumenttemplates_name_type_tenantid if PascalCase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'IX_GlobalDocumentTemplates_Name_Type_TenantId'
+                    ) THEN
+                        ALTER INDEX ""IX_GlobalDocumentTemplates_Name_Type_TenantId"" RENAME TO ix_globaldocumenttemplates_name_type_tenantid;
+                    END IF;
 
-            migrationBuilder.RenameIndex(
-                name: "IX_GlobalDocumentTemplates_IsActive",
-                table: "GlobalDocumentTemplates",
-                newName: "ix_globaldocumenttemplates_isactive");
+                    -- Rename IX_GlobalDocumentTemplates_IsActive to ix_globaldocumenttemplates_isactive if PascalCase exists
+                    IF EXISTS (
+                        SELECT 1 FROM pg_indexes 
+                        WHERE schemaname = current_schema() 
+                        AND tablename = 'GlobalDocumentTemplates' 
+                        AND indexname = 'IX_GlobalDocumentTemplates_IsActive'
+                    ) THEN
+                        ALTER INDEX ""IX_GlobalDocumentTemplates_IsActive"" RENAME TO ix_globaldocumenttemplates_isactive;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
